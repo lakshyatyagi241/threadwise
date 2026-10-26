@@ -207,6 +207,12 @@ export const bulkTaskIdsSchema = z.object({
 });
 export type BulkTaskIdsInput = z.infer<typeof bulkTaskIdsSchema>;
 
+/** Bulk complete / reopen: the ids, plus an optional outcome to record on every one (an active outcome; `null` clears it; absent keeps each task's own). */
+export const bulkTaskTransitionSchema = bulkTaskIdsSchema.extend({
+  outcomeId: uuidSchema.nullish(),
+});
+export type BulkTaskTransitionInput = z.infer<typeof bulkTaskTransitionSchema>;
+
 export const bulkAssignTasksSchema = z.object({
   ids: z.array(uuidSchema).min(1).max(TASK_BULK_MAX),
   /** An active member, or `null` to unassign. */

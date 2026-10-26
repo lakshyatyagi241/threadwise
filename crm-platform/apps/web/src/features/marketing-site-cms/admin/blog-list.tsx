@@ -57,7 +57,7 @@ export function BlogList() {
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }),
     [locale, timeZone],
   );
-  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale, timeZone]);
+  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale]);
 
   const toggle = useMutation({
     mutationFn: (p: BlogPostAdmin) =>

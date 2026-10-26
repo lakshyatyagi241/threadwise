@@ -54,6 +54,14 @@ export function WebLauncherCard({
           onChange={(e) => set({ buttonImageUrl: e.target.value })}
           className={INPUT}
         />
+        <div className="mt-2">
+          <ImageUpload
+            id="wgt-f-buttonImageFile"
+            value={s.buttonImageUrl}
+            upload={upload}
+            onChange={(v) => set({ buttonImageUrl: v })}
+          />
+        </div>
         <p className="mt-1 text-[11.5px] text-muted-foreground">{ti('iconHint')}</p>
       </div>
 

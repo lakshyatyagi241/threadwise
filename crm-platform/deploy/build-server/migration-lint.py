@@ -28,6 +28,8 @@ RULES = [
      re.compile(r"\bTRUNCATE\b", re.I)),
 ]
 NAMED_DROP = re.compile(r"\bDROP\s+(CONSTRAINT|TRIGGER)\s+(IF\s+EXISTS\s+)?(\w+)", re.I)
+TEMP_TABLE = re.compile(r"\bCREATE\s+(?:GLOBAL\s+|LOCAL\s+)?TEMP(?:ORARY)?\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(\w+)", re.I)
+DROP_ONE_TABLE = re.compile(r"DROP\s+TABLE\s+(?:IF\s+EXISTS\s+)?(\w+)", re.I)  # shortcut: a list of tables is never exempt, so each drop is judged alone
 NOT_NULL_ADD = re.compile(r"\bADD\s+(COLUMN\s+)?\w+\s[^,]*\bNOT\s+NULL\b", re.I)
 
 
@@ -49,10 +51,14 @@ def findings(sql: str):
         return []
     clean = strip_comments(sql)
     replaced = added_names(clean)
+    temps = {n.lower() for n in TEMP_TABLE.findall(clean)}  # session-local: the live slot never sees them, so dropping one removes nothing
     out = []
     for stmt in clean.split(";"):
         stmt = " ".join(stmt.split())
         if not stmt:
+            continue
+        dropped = DROP_ONE_TABLE.fullmatch(stmt)
+        if dropped and dropped.group(1).lower() in temps:
             continue
         for name, pat in RULES:
             if pat.search(stmt):
@@ -113,6 +119,13 @@ def selftest() -> None:
     assert not findings(refresh)
     assert not findings("-- bluegreen-ok: removes the old column once the code stopped reading it\nALTER TABLE t DROP COLUMN c;")
     assert not findings("-- DROP TABLE t;\n/* TRUNCATE t; */ CREATE TABLE t (id bigint);")
+    # a TEMP table created in the same file is session-local: the live slot never sees it, so dropping it is not a removal (2030_msg_feed_deletes)
+    temp = "CREATE TEMP TABLE tmp_a ON COMMIT DROP AS SELECT 1;\nDROP TABLE tmp_a;"
+    assert not findings(temp)
+    assert not findings("CREATE TEMPORARY TABLE IF NOT EXISTS tmp_a (x int);\nDROP TABLE IF EXISTS tmp_a;")
+    assert findings("CREATE TEMP TABLE tmp_a (x int);\nDROP TABLE t;")  # a different, persistent table is still caught
+    assert findings("DROP TABLE tmp_a;")  # no CREATE TEMP in this file: still caught
+    assert findings("CREATE TEMP TABLE tmp_a (x int);\nDROP TABLE tmp_a, t;")  # a list of tables is not exempt
     print("migration-lint selftest ok")
 
 

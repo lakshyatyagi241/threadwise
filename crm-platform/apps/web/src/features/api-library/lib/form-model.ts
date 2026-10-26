@@ -111,29 +111,64 @@ function parsedBody(text: string): ApiLibraryBody | undefined {
   }
 }
 
-/** Every `{{token}}` the URL, header values and payload use. A payload that is not valid JSON yet is scanned as plain text. */
-export function usedTokens(state: ApiFormState): string[] {
-  const hasBody = apiLibraryMethodHasBody(state.method);
-  let bodyTokens: string[] = [];
-  let body: ApiLibraryBody = null;
-  if (hasBody && state.payloadType === 'multipart/form-data') {
-    body = Object.fromEntries(
-      state.fieldRows.filter((r) => r.key.trim() !== '').map((r) => [r.key.trim(), r.value]),
-    );
-  } else if (hasBody) {
-    const parsed = parsedBody(state.bodyText);
-    if (parsed === undefined) bodyTokens = apiLibraryTokensOf(state.bodyText);
-    else body = parsed;
+/**
+ * The payload the form holds, whatever the method is: its value, or (text that is not JSON yet) the tokens scanned as plain text.
+ * Multipart form fields are always a value.
+ */
+function heldPayload(state: ApiFormState): { body: ApiLibraryBody; textTokens: string[] } {
+  if (state.payloadType === 'multipart/form-data') {
+    const rows = state.fieldRows.filter((r) => r.key.trim() !== '');
+    return { body: Object.fromEntries(rows.map((r) => [r.key.trim(), r.value])), textTokens: [] };
   }
+  const parsed = parsedBody(state.bodyText);
+  return parsed === undefined
+    ? { body: null, textTokens: apiLibraryTokensOf(state.bodyText) }
+    : { body: parsed, textTokens: [] };
+}
+
+/** Every `{{token}}` the request sends: the URL, the header values and, for a method that carries a payload, the payload. */
+export function sentTokens(state: ApiFormState): string[] {
+  const hasBody = apiLibraryMethodHasBody(state.method);
+  const held = heldPayload(state);
   const out = apiLibraryDefinitionTokens({
     url: state.url,
     headers: state.headers
       .filter((h) => h.key.trim() !== '')
       .map((h) => ({ key: h.key, value: h.value, secret: h.secret })),
-    body,
+    body: hasBody ? held.body : null,
   });
-  for (const t of bodyTokens) if (!out.includes(t)) out.push(t);
+  if (hasBody) for (const t of held.textTokens) if (!out.includes(t)) out.push(t);
   return out;
+}
+
+/**
+ * Every `{{token}}` the form holds: the sent ones, and those in a payload the method does not send. A GET keeps its payload in the
+ * form (only the request leaves it out), so the variables of that payload keep their defaults for when the method changes back.
+ */
+export function usedTokens(state: ApiFormState): string[] {
+  const out = sentTokens(state);
+  const held = heldPayload(state);
+  const hidden = [
+    ...apiLibraryDefinitionTokens({ url: '', headers: [], body: held.body }),
+    ...held.textTokens,
+  ];
+  for (const t of hidden) if (!out.includes(t)) out.push(t);
+  return out;
+}
+
+/** The declared variables the request sends. The others (used only by a payload the method does not send) stay in the form, hidden. */
+export function sentVariables(state: ApiFormState): ApiLibraryVariable[] {
+  const sent = new Set(sentTokens(state).map((t) => t.toLowerCase()));
+  return state.variables.filter((v) => sent.has(v.name.toLowerCase()));
+}
+
+/** Writes the rows the form showed back into its variables. The hidden ones keep their values. */
+export function withSentVariables(
+  state: ApiFormState,
+  shown: ApiLibraryVariable[],
+): ApiLibraryVariable[] {
+  const byName = new Map(shown.map((v) => [v.name.toLowerCase(), v]));
+  return state.variables.map((v) => byName.get(v.name.toLowerCase()) ?? v);
 }
 
 /**
@@ -282,7 +317,7 @@ function definitionOf(state: ApiFormState) {
       method: state.method,
       url: state.url.trim(),
       payloadType,
-      variables: state.variables.map((v) => ({
+      variables: sentVariables(state).map((v) => ({
         name: v.name,
         source: v.source,
         defaultValue: v.defaultValue,
@@ -306,7 +341,7 @@ function definitionOf(state: ApiFormState) {
 }
 
 export interface FormErrors {
-  /** By field: `name`, `method`, `url`, `body`, `functionCode`, `payloadType`, `header:<rowId>`, `variable:<name>`, `mapping:<rowId>`. */
+  /** By field: `name`, `method`, `url`, `body`, `functionCode`, `payloadType`, `header:<rowId>`, `variable:<name>`, `mapping:<rowId>` (the path), `mappingProperty:<rowId>` (the contact property). */
   fields: Record<string, string>;
   /** Problems with no single field (shown above the buttons). */
   general: string[];
@@ -330,7 +365,10 @@ function mapIssues(issues: ZodIssue[], state: ApiFormState, headerRowIds: string
       put(`variable:${state.variables[n]!.name.toLowerCase()}`, issue.message);
     else if (head === 'variables') out.general.push(issue.message);
     else if (head === 'mapping' && n >= 0 && mappingRows[n])
-      put(`mapping:${mappingRows[n]!.id}`, issue.message);
+      put(
+        `${leaf === 'contactProperty' ? 'mappingProperty' : 'mapping'}:${mappingRows[n]!.id}`,
+        issue.message,
+      );
     else if (head === 'responseVariables') out.general.push(issue.message);
     else if (
       typeof head === 'string' &&
@@ -344,12 +382,39 @@ function mapIssues(issues: ZodIssue[], state: ApiFormState, headerRowIds: string
 
 export type Built<T> = { ok: true; input: T } | { ok: false; errors: FormErrors };
 
-function bodyErrors(problem: BodyProblem): FormErrors {
+/**
+ * Where JSON text stops making sense, as a 1-based line and column, or null when the text parses (or the engine names no place:
+ * then the end of the text is the best guess, which is what "unexpected end" means).
+ */
+export function jsonErrorAt(text: string): { line: number; column: number } | null {
+  try {
+    JSON.parse(text);
+    return null;
+  } catch (e) {
+    const m = e instanceof Error ? e.message : '';
+    const ff = /line (\d+) column (\d+)/.exec(m);
+    if (ff) return { line: Number(ff[1]), column: Number(ff[2]) };
+    const at = /position (\d+)/.exec(m);
+    const pos = Math.min(at ? Number(at[1]) : text.length, text.length);
+    const before = text.slice(0, pos).split('\n');
+    return { line: before.length, column: before[before.length - 1]!.length + 1 };
+  }
+}
+
+/** The one sentence for a payload that is not JSON: says where it breaks. */
+export function jsonProblemMessage(text: string): string {
+  const at = jsonErrorAt(text.trim());
+  return at
+    ? `This is not valid JSON (it breaks near line ${at.line}, column ${at.column}).`
+    : 'This is not valid JSON.';
+}
+
+function bodyErrors(problem: BodyProblem, text: string): FormErrors {
   return {
     fields: {
       body:
         problem === 'json'
-          ? 'The payload is not valid JSON.'
+          ? jsonProblemMessage(text)
           : 'The payload must be a JSON object or list.',
     },
     general: [],
@@ -359,7 +424,7 @@ function bodyErrors(problem: BodyProblem): FormErrors {
 /** The create body, or the problems to show (the same shared rules the API runs again on save). */
 export function buildCreate(state: ApiFormState): Built<CreateApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = createApiLibraryApiSchema.safeParse({ name: state.name, ...d.def });
   return r.success
     ? { ok: true, input: r.data }
@@ -371,7 +436,7 @@ export function buildUpdate(
   rowVersion: number,
 ): Built<UpdateApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = updateApiLibraryApiSchema.safeParse({ ...d.def, rowVersion });
   return r.success
     ? { ok: true, input: r.data }
@@ -381,7 +446,7 @@ export function buildUpdate(
 /** The test body. `apiId` lets a header held as the mask use the stored secret (same address only). */
 export function buildTest(state: ApiFormState, apiId?: string): Built<TestApiLibraryApiInput> {
   const d = definitionOf(state);
-  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem) };
+  if (d.bodyProblem) return { ok: false, errors: bodyErrors(d.bodyProblem, state.bodyText) };
   const r = testApiLibraryApiSchema.safeParse({
     ...d.def,
     ...(state.name.trim() !== '' ? { name: state.name.trim() } : {}),
@@ -449,3 +514,13 @@ export function keptSecretsAtRisk(savedUrl: string, state: ApiFormState): boolea
 /** A header is secret when ticked or when its name reads like one (the API decides the same way). */
 export const headerIsSecret = (h: Pick<HeaderRow, 'key' | 'secret'>): boolean =>
   h.secret || apiLibraryIsSensitiveName(h.key);
+
+/**
+ * A password-like header (an Authorization header, an API key, or one ticked secret) going to a plain `http://` address would cross
+ * the network readable by anyone on the way. True when the form is about to do that; it only warns, because some servers on a
+ * private network have no https.
+ */
+export function secretOverPlainHttp(state: ApiFormState): boolean {
+  if (!/^http:\/\//i.test(state.url.trim())) return false;
+  return state.headers.some((h) => h.key.trim() !== '' && headerIsSecret(h));
+}

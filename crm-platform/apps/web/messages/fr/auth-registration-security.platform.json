@@ -1349,13 +1349,17 @@
             "details": "Détails et tarification",
             "features": "Fonctionnalités",
             "limits": "Limites",
-            "addons": "Modules complémentaires"
+            "addons": "Modules complémentaires",
+            "integrations": "Intégrations",
+            "miniApps": "Mini-applications"
           },
           "tabSummary": {
             "features": "{count} fonctionnalités sur {total} activées",
             "limits": "{count} limites sur {total} définies",
-            "addons": "{count} modules complémentaires sélectionnés",
-            "error": "Erreurs à corriger"
+            "addons": "{count, plural, one {# module complémentaire inclus ou proposé} many {# modules complémentaires inclus ou proposés} other {# modules complémentaires inclus ou proposés}}",
+            "error": "Erreurs à corriger",
+            "integrations": "Intégrations incluses ou proposées : {count}",
+            "miniApps": "Mini-applications incluses ou proposées : {count}"
           },
           "featuresUi": {
             "intro": "Désactivez ce que cette offre n’inclut pas. Un espace de travail sur cette offre ne peut pas ouvrir une zone dont la fonctionnalité est désactivée.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Tout activer",
             "disableAll": "Tout désactiver",
             "noMatch": "Aucune fonctionnalité ne correspond à votre recherche.",
-            "groupCount": "{count} sur {total} activées"
+            "groupCount": "{count} sur {total} activées",
+            "lockedBy": "Défini par le module complémentaire {addon} dans l’onglet Modules complémentaires"
           },
           "limitsUi": {
             "intro": "Un plafond arrête l’action une fois atteint par l’espace de travail. Cochez Illimité pour supprimer le plafond.",
@@ -1385,12 +1390,8 @@
             "total": "au total"
           },
           "addons": {
-            "intro": "Les modules complémentaires activés sont présentés aux espaces de travail de cette offre dans leur Marketplace ; ils ne sont utilisables qu’après achat par l’espace de travail.",
             "search": "Rechercher des modules complémentaires",
             "searchPlaceholder": "Rechercher des modules complémentaires ou des applications",
-            "selectAll": "Tout sélectionner",
-            "clear": "Effacer",
-            "selected": "{count} sur {total} sélectionnés",
             "loading": "Chargement des modules complémentaires",
             "empty": "Aucun module complémentaire payant n’existe encore",
             "emptyHint": "Les modules complémentaires sont créés dans le catalogue Marketplace de la console opérateur. Dès qu’une application a un pack payant, elle est listée ici.",
@@ -1404,7 +1405,8 @@
             "packInactive": "Le pack du module complémentaire est désactivé, personne ne peut donc l’acheter.",
             "appUnpublished": "L’application n’est pas publiée, les espaces de travail ne peuvent donc pas encore la voir.",
             "appLabel": "Application : {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# module complémentaire inclus ou proposé} many {# modules complémentaires inclus ou proposés} other {# modules complémentaires inclus ou proposés}}"
           },
           "featureHints": {
             "automation": "Le créateur de flux et les automatisations qui répondent aux conversations et agissent dessus.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "Marque blanche : l’espace de travail peut masquer la marque de la plateforme dans son pied de message.",
             "sales_pipeline": "Affaires, tâches et pipelines, et les chiffres du pipeline sur le tableau de bord.",
             "appointment_booking": "Types de réservation, rendez-vous et pages de réservation publiques. L’application payante Rendez-vous gère cet interrupteur.",
+            "appointment_confirm_buttons": "Ajoute les boutons Confirmer, Reporter et Annuler au rappel de rendez-vous envoyé sur WhatsApp.",
+            "appointment_rebook_steps": "Messages de suivi envoyés après un rendez-vous terminé, qui invitent le contact à reprendre rendez-vous.",
             "chatbot_widgets": "Le créateur de widgets de chatbot pour site web.",
             "wa_storefront": "La zone du catalogue et de la boutique WhatsApp.",
             "inbox_sla": "Politiques et échéances SLA dans la boîte de réception d’équipe.",
-            "inbox_routing": "Règles de routage qui attribuent automatiquement les conversations de la boîte de réception.",
+            "inbox_routing": "Attribution automatique des nouvelles conversations : règles de routage, Tous les autres et minuteurs de la file d'attente. Fait partie du module Routage intelligent.",
             "waba_calling": "Appels WhatsApp depuis la boîte de réception : numéros d’appel, autorisations d’appel, émission et réponse aux appels.",
             "inbox_kanban": "La vue tableau Kanban de la boîte de réception d’équipe.",
             "team_performance": "Les rapports de performance de l’équipe.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
             "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
             "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
-            "inbox_assignment_sticky": "Assignation propriétaire d’abord et synchronisée entre le propriétaire du contact et le responsable du chat, fenêtre des contacts récurrents et invite de réassignation. Fonctionne avec le routage de la boîte de réception."
+            "inbox_assignment_sticky": "Attribution propriétaire d'abord et synchronisée, fenêtre de contact récurrent et invite de réattribution. Fait partie du module Routage intelligent.",
+            "agent_status_bar": "Le contrôle de statut Disponible / Absent dans la barre du haut et en tête de la Boîte de réception, avec Passer en absent / disponible et le lien vers Congés. L’interrupteur Disponible / Absent du menu du compte est ouvert à toutes les offres.",
+            "agent_status_automation": "Heures de travail personnelles avec fuseau horaire, Absent en dehors, l’avis Hors des heures de travail et une attribution qui ignore les personnes hors de leurs heures. Nécessaire pour enregistrer un horaire ; sans lui, un horaire enregistré est conservé mais ignoré."
           },
           "units": {
             "days": "Jours",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "Boîtes e-mail",
             "email_monthly": "E-mails par mois",
             "storage_gb": "Stockage (Go)",
-            "teams": "Équipes"
+            "teams": "Équipes",
+            "webbot_messages": "Messages gratuits du chatbot du site par mois"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1609,10 +1616,12 @@
             "remove_branding": "Marque blanche (supprime la marque de la plateforme)",
             "sales_pipeline": "Pipeline de vente (affaires et tâches)",
             "appointment_booking": "Rendez-vous et pages de réservation",
+            "appointment_confirm_buttons": "Boutons du rappel : Confirmer, Reporter et Annuler",
+            "appointment_rebook_steps": "Étapes de relance après un rendez-vous",
             "chatbot_widgets": "Widgets de chatbot pour site web",
             "wa_storefront": "Boutique et catalogue WhatsApp",
             "inbox_sla": "Politiques SLA de la boîte de réception",
-            "inbox_routing": "Règles de routage de la boîte de réception et horaires d’ouverture",
+            "inbox_routing": "Routage intelligent: attribution automatique et règles",
             "waba_calling": "Passer et recevoir des appels WhatsApp depuis la boîte de réception",
             "inbox_kanban": "Tableau Kanban de la boîte de réception",
             "team_performance": "Rapports de performance de l’équipe",
@@ -1638,7 +1647,9 @@
             "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
             "team_hierarchy": "Hiérarchie des équipes et managers",
             "custom_roles": "Rôles personnalisés et périmètres",
-            "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
+            "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré",
+            "agent_status_bar": "Barre de statut : contrôle Disponible / Absent dans la barre du haut et la Boîte de réception",
+            "agent_status_automation": "Automatiser le statut : heures de travail personnelles et Absent automatique"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "Une offre ne peut pas être à la fois gratuite et sur devis.",
             "paid_needs_price": "Définissez un prix supérieur à 0, ou marquez l’offre comme gratuite.",
             "offer_not_lower": "Le prix promotionnel doit être inférieur au prix de l’offre.",
-            "default_needs_active": "L’offre par défaut à l’inscription doit être active."
+            "default_needs_active": "L’offre par défaut à l’inscription doit être active.",
+            "addonPriceZero": "Laissez le prix vide pour utiliser celui du module complémentaire, ou choisissez Inclus.",
+            "addonGone": "Ce module complémentaire n’existe plus. Rechargez la page et enregistrez à nouveau."
           },
           "limitHints": {
             "monthly_messages": "Messages sortants envoyés dans le mois calendaire. Au-delà du quota, le portefeuille est débité.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
             "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
             "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
-            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées.",
+            "webbot_messages": "Messages du chatbot du site inclus gratuitement chaque mois civil. Chaque message au-delà est débité du portefeuille. Vide ou 0 = aucun inclus."
           },
           "productLines": {
             "chat": "Chat",
             "crm": "CRM commercial",
             "platform": "Partagé par les deux"
+          },
+          "offers": {
+            "readOnly": "Vous pouvez consulter ce forfait mais pas le modifier, ces commandes sont donc verrouillées.",
+            "featureTitle": "Modules complémentaires de fonctionnalités",
+            "featureIntro": "Modules complémentaires qui débloquent une partie du produit. Inclus : les espaces de travail de ce forfait l’obtiennent sans frais et sa carte indique « Inclus dans votre offre ». Payant : ils peuvent l’acheter, au prix propre à ce forfait si vous en définissez un. Masqué : ils ne le voient jamais. Les fonctionnalités du module dans l’onglet Fonctionnalités suivent ce choix.",
+            "capacityTitle": "Modules complémentaires de capacité",
+            "capacityIntro": "Modules complémentaires qui augmentent seulement une limite, comme un siège supplémentaire. Dans un forfait, ils sont payants ou masqués ; les plafonds propres au forfait se définissent dans l’onglet Limites.",
+            "noFeaturePacks": "Aucun module complémentaire de fonctionnalités pour l’instant.",
+            "adds": "Ajoute : {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} : illimité",
+            "modeLabel": "Comment {name} est proposé dans ce forfait",
+            "modes": {
+              "included": "Inclus",
+              "paid": "Payant",
+              "hidden": "Masqué"
+            },
+            "noIncluded": "Ce module complémentaire n’ajoute que des limites, il ne peut donc pas être inclus. Définissez le plafond propre à ce forfait dans l’onglet Limites.",
+            "priceLabel": "Prix dans ce forfait ({currency})",
+            "priceHint": "Laissez vide pour utiliser le prix propre au module complémentaire.",
+            "includedCapacityNote": "Seules ses fonctionnalités sont incluses. Les limites supplémentaires ({limits}) restent en vente pour les espaces de travail de ce forfait.",
+            "hiddenNote": "Les espaces de travail de ce forfait ne voient pas ce module complémentaire et ne peuvent pas l’acheter. Un espace de travail qui l’a déjà acheté le conserve jusqu’à la fin de sa période.",
+            "offNote": "N’est plus inclus : les espaces de travail de ce forfait perdent ces fonctionnalités, sauf s’ils achètent le module complémentaire. Leurs paramètres sont conservés et reviennent lorsqu’il est réactivé.",
+            "loading": "Chargement des modules complémentaires",
+            "loadFailed": "Impossible de charger les modules complémentaires. Rien n’a été modifié.",
+            "empty": "Aucun module complémentaire pour l’instant",
+            "emptyHint": "Les modules comme Routage intelligent et Équipes et autorisations se créent sous Modules complémentaires dans la console opérateur.",
+            "noPrice": "Aucun prix défini",
+            "gives": "Donne : {features}",
+            "unlistedNote": "Certaines de ses fonctionnalités ({features}) ne figurent pas dans la liste standard des modules. Elles peuvent quand même être activées pour le forfait ; seul l’achat de ce module en tant que pack fonctionne différemment.",
+            "inactiveNote": "Ce module est un brouillon ou désactivé, personne ne peut donc encore l’acheter. L’inclure dans le forfait fonctionne quand même.",
+            "impactCount": "{count, plural, one {# espace de travail paie déjà ce module.} other {# espaces de travail paient déjà ce module.}} Leur renouvellement s’arrêtera à la fin de la période en cours, rien n’est remboursé et rien n’est annulé aujourd’hui.",
+            "impactUnknown": "Les espaces de travail de ce forfait qui paient déjà ce module ne le renouvelleront plus à la fin de leur période en cours. Rien n’est remboursé et rien n’est annulé aujourd’hui. Le nombre n’a pas pu être chargé.",
+            "partlyNote": "Ce forfait donne déjà une partie de ce module ({features}). Cela reste ainsi tant que vous ne choisissez pas Inclus, Payant ou Masqué ici.",
+            "needsFeatures": "Ajoutez d’abord les fonctionnalités qu’il débloque dans Modules complémentaires > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Les mini-applications sont des applications qu’un espace de travail installe depuis le Marketplace. Inclus : gratuit pour les espaces de travail de ce forfait. Payant : ils peuvent l’acheter au prix propre de l’application. Masqué : ils ne la voient jamais. Inclus active aussi les fonctionnalités du forfait que l’application apporte.",
+            "introIntegrations": "Les intégrations connectent un service externe. Inclus : gratuit pour les espaces de travail de ce forfait. Payant : ils peuvent l’acheter au prix propre de l’intégration. Masqué : ils ne la voient jamais. Inclus active aussi les fonctionnalités du forfait qu’elle apporte.",
+            "setAll": "Définir tous les éléments affichés sur",
+            "summary": "{count} sur {total} inclus ou proposés",
+            "priceHint": "Les applications du Marketplace gardent leur propre prix ; définissez-le dans la fiche de l’application.",
+            "emptyIntegrations": "Aucune intégration payante pour le moment",
+            "emptyIntegrationsHint": "Les intégrations gratuites n’ont besoin d’aucun réglage ici ; Shopify et WooCommerce s’activent dans l’onglet Fonctionnalités."
           }
         }
       },

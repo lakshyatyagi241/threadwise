@@ -8,8 +8,13 @@ route:
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
+  routes:
+    # Watchdog is an always-firing heartbeat: never page or post it. Add a heartbeat receiver here for a dead-man's-switch (runbook: Watchdog).
+    - matchers: [alertname="Watchdog"]
+      receiver: blackhole
 
 receivers:
+  - name: blackhole
   - name: default
     slack_configs:
       - api_url_file: /run/secrets/alert_webhook_url

@@ -14,12 +14,12 @@ window on the author's site; the flow answers. One bot, one channel, chosen when
 
 Screens and routes:
 
-| Where | What |
-| --- | --- |
-| Flows, **New bot**, Website chat | create a website bot (Simple or Advanced builder, by workspace setting) |
-| Settings, Channels, **Website chat** | list of website bots with their widget state |
-| `/flows/simple/<id>` and `/flows/builder/<id>` | the builder, tabs **Build, FAQs, Customize, Deploy** |
-| `/ai-studio` | landing page that links to flows, FAQs and the bot channels |
+| Where                                          | What                                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------------- |
+| Flows, **New bot**, Website chat               | create a website bot (Simple or Advanced builder, by workspace setting) |
+| Settings, Channels, **Website chat**           | list of website bots with their widget state                            |
+| `/flows/simple/<id>` and `/flows/builder/<id>` | the builder, tabs **Build, FAQs, Customize, Deploy**                    |
+| `/ai-studio`                                   | landing page that links to flows, FAQs and the bot channels             |
 
 Customize and Deploy are locked until the bot has been saved once. Publish is the only action that makes it live, and it is refused
 until Customize has been saved once (server side for web bots).
@@ -38,6 +38,7 @@ letters and numbers, date; phone can verify by one-time code), ask for file, lin
 buttons, condition (AND / OR rules), delay, webhook, AI reply, FAQ answer, end. Anything else is left off the palette for web.
 
 Buttons:
+
 - reply buttons (up to 3, longer menus are numbered text), link buttons (up to 3), carousel cards (up to 10, 2 buttons each);
 - a button can **hand over to a person** (a team and a note);
 - on a website bot a reply or link button can carry an **icon** (optional). The picture is uploaded to the bot (slot `bi<8 hex>`)
@@ -53,14 +54,14 @@ All look settings live in `chatbot_widgets.launcher` (jsonb, contract `widgetLau
 resolved into the public config. Adding an option never needs a migration: add a key with a default in the schema, read it in the chat
 page or loader, give the screen a control.
 
-| Section | Settings |
-| --- | --- |
-| Brand | company logo, chatbot avatar, chat background, bot name, primary colour (header, launcher, buttons together), header background (solid, diagonal, vivid, dusk, soft sweep), body corners, per-colour fine tuning |
-| Window | size (compact, standard, tall, wide), reply button fill and shape, typeface, text size, hover colour, text direction, round icons, copy and thumbs, expand |
-| Conversation tools | notification block (bell, 4 styles, up to 5 cards), quick menu (lists or blocks, up to 5), banner (up to 5 pictures or videos), quick replies (up to 4); each has an enable switch |
-| Launcher | side, gaps from the edge (desktop and phone), launcher icon, callout (5 styles, text, picture), animation, unread dot |
-| Behaviour | opening line, intake (name, email, phone), open by itself after N seconds, sound and volume, voice conversation, read aloud, devices (desktop, tablet, phone), only on these websites, floating chat window |
-| Launch | send button label and colours |
+| Section            | Settings                                                                                                                                                                                                         |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand              | company logo, chatbot avatar, chat background, bot name, primary colour (header, launcher, buttons together), header background (solid, diagonal, vivid, dusk, soft sweep), body corners, per-colour fine tuning |
+| Window             | size (compact, standard, tall, wide), reply button fill and shape, typeface, text size, hover colour, text direction, round icons, copy and thumbs, expand                                                       |
+| Conversation tools | notification block (bell, 4 styles, up to 5 cards), quick menu (lists or blocks, up to 5), banner (up to 5 pictures or videos), quick replies (up to 4); each has an enable switch                               |
+| Launcher           | side, gaps from the edge (desktop and phone), launcher icon, callout (5 styles, text, picture), animation, unread dot                                                                                            |
+| Behaviour          | opening line, intake (name, email, phone), open by itself after N seconds, sound and volume, voice conversation, read aloud, devices (desktop, tablet, phone), only on these websites, floating chat window      |
+| Launch             | send button label and colours                                                                                                                                                                                    |
 
 **Link to flow**: a quick reply, menu entry or banner slide can start the bot at one of its steps. The tap sends a message whose
 `tap_id` is `go:<flow uuid>:<node id>`; the inbound listener (`FlowInboundService.startAt`) checks the flow is live on this channel
@@ -116,14 +117,14 @@ Contracts: `packages/contracts/src/chatbot-widget/` (`launcher.ts`, `widget.ts`)
 
 ## 7. Where the code is
 
-| Piece | Path |
-| --- | --- |
-| Customize screen | `apps/web/src/features/chatbot-widget/components/flow-widget-customize.tsx` and `web-*.tsx` cards |
-| Builder screens | `apps/web/src/features/flow-builder-editor/builder/` (`simple/simple-screen.tsx`, `builder-screen.tsx`, `web-bot-tabs.tsx`) |
-| Simple model | `apps/web/src/features/flow-builder-editor/lib/simple-model.ts` |
-| Chat page, loader | `apps/api/src/modules/chatbot-widget/chat-page.ts`, `embed-script.ts` |
-| Assets | `asset-slots.ts`, `svg-safe.ts`, `widgets.service.ts` (`uploadAsset`) |
-| Runtime | `apps/api/src/modules/flow-runtime-engine/` (`nodes.ts`, `flow-sender.service.ts`, `reply-router.ts`, `triggers/inbound.service.ts`) |
+| Piece             | Path                                                                                                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Customize screen  | `apps/web/src/features/chatbot-widget/components/flow-widget-customize.tsx` and `web-*.tsx` cards                                    |
+| Builder screens   | `apps/web/src/features/flow-builder-editor/builder/` (`simple/simple-screen.tsx`, `builder-screen.tsx`, `web-bot-tabs.tsx`)          |
+| Simple model      | `apps/web/src/features/flow-builder-editor/lib/simple-model.ts`                                                                      |
+| Chat page, loader | `apps/api/src/modules/chatbot-widget/chat-page.ts`, `embed-script.ts`                                                                |
+| Assets            | `asset-slots.ts`, `apps/api/src/common/svg-safe.ts`, `widgets.service.ts` (`uploadAsset`)                                            |
+| Runtime           | `apps/api/src/modules/flow-runtime-engine/` (`nodes.ts`, `flow-sender.service.ts`, `reply-router.ts`, `triggers/inbound.service.ts`) |
 
 ## 8. Testing
 

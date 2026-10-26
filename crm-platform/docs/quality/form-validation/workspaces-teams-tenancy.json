@@ -1,0 +1,2112 @@
+{
+  "module": "workspaces-teams-tenancy",
+  "tier": "P0",
+  "schemas": [
+    {
+      "schema": "acceptWspInviteSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/invitations.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "token",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (16)",
+          "value": "\"aaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (16)",
+          "value": "\"aaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (256)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (256)",
+          "value": "\"a\" x 257",
+          "priority": "P0"
+        },
+        {
+          "field": "token",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (256)",
+          "value": "\"😀\" x 256",
+          "priority": "P1"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P0"
+        },
+        {
+          "field": "orgSlug",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "password",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (8)",
+          "value": "\"aaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (8)",
+          "value": "\"aaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createMemberLeaveSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "startsOn",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "startsOn",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "startsOn",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateMemberLeaveSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "startsOn",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "startsOn",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "startsOn",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "endsOn",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "setMemberDelegateSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "delegateId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "delegateId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "delegateId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "wspHandoverSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/member-handover.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "mode",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (leave)",
+          "value": "\"leave\"",
+          "priority": "P0"
+        },
+        {
+          "field": "userId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "userId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "userId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "setWspAvailabilitySchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "status",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (offline)",
+          "value": "\"offline\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "changeWspMemberRoleSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "roleId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "roleId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "roleId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateWspMemberDetailsSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "phone",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"!!!\"",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "1000",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1000)",
+          "value": "1001",
+          "priority": "P0"
+        },
+        {
+          "field": "chatLimit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateOrgRetentionPolicySchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspace-lifecycle.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "archiveAfterDays",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (60)",
+          "value": "60",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (60)",
+          "value": "59",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (3650)",
+          "value": "3650",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (3650)",
+          "value": "3651",
+          "priority": "P0"
+        },
+        {
+          "field": "archiveAfterDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (120)",
+          "value": "120",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (120)",
+          "value": "119",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (7300)",
+          "value": "7300",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (7300)",
+          "value": "7301",
+          "priority": "P0"
+        },
+        {
+          "field": "deleteAfterDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "setOrgRetentionExemptSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspace-lifecycle.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "body is a ZodDiscriminatedUnion, not an object",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "setOrgLegalHoldSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspace-lifecycle.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "legalHold",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "legalHold",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "restoreOrgSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspace-lifecycle.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "suspendWorkspaceHubRequestSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createWspTeamSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/teams.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "color",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "color",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "color",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P1"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (sticky)",
+          "value": "\"sticky\"",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 500 items",
+          "value": "array of 500",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (500) items",
+          "value": "array of 501",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 200 items",
+          "value": "array of 200",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (200) items",
+          "value": "array of 201",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesConversations",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesConversations",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesRecords",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesRecords",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "color",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "businessHours",
+          "reason": "optional object that the base body leaves out: its fields are not exercised",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "max boundary was refused by another rule (timezone: Not an IANA timezone.)",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "unicode boundary was refused by another rule (timezone: Not an IANA timezone.)",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateWspTeamSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/teams.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "color",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "color",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "color",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "description",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P1"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "assignmentStrategy",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (sticky)",
+          "value": "\"sticky\"",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "defaultAssigneeId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 500 items",
+          "value": "array of 500",
+          "priority": "P0"
+        },
+        {
+          "field": "memberIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (500) items",
+          "value": "array of 501",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 200 items",
+          "value": "array of 200",
+          "priority": "P0"
+        },
+        {
+          "field": "deviceIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (200) items",
+          "value": "array of 201",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "parentId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "leadId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesConversations",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesConversations",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesRecords",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "receivesRecords",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "color",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "businessHours",
+          "reason": "optional object that the base body leaves out: its fields are not exercised",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "max boundary was refused by another rule (timezone: Not an IANA timezone.)",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "unicode boundary was refused by another rule (timezone: Not an IANA timezone.)",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "addWspTeamMemberSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/teams.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "userId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "userId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "userId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "role",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "role",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "role",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (lead)",
+          "value": "\"lead\"",
+          "priority": "P0"
+        },
+        {
+          "field": "isPrimary",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "isPrimary",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateWspTeamMemberSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/teams.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "role",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "role",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "role",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (lead)",
+          "value": "\"lead\"",
+          "priority": "P0"
+        },
+        {
+          "field": "isPrimary",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "isPrimary",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "startImpersonationRequestSchema",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/workspace-impersonation.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (8)",
+          "value": "\"aaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (8)",
+          "value": "\"aaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "readOnly",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "readOnly",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

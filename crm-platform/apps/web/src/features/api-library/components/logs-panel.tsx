@@ -2,10 +2,17 @@
 
 import { useTranslations } from 'next-intl';
 import { useDeferredValue, useState } from 'react';
+import type { ApiLibraryLogApi } from '@crm/contracts';
 import { EmptyState, cn } from '@crm/ui';
 import { useApiLogs } from '../api/hooks';
-import { errorKey } from '../lib/errors';
-import { EMPTY_LOG_FILTERS, hasLogFilters, logQuery, type LogFilterForm } from '../lib/log-filters';
+import { errorKey, serverFieldProblems } from '../lib/errors';
+import {
+  EMPTY_LOG_FILTERS,
+  hasLogFilters,
+  logQuery,
+  searchTooLong,
+  type LogFilterForm,
+} from '../lib/log-filters';
 import { LogDetailDrawer } from './log-detail-drawer';
 import { LogFiltersBar } from './log-filters-bar';
 import { LogsTable } from './logs-table';
@@ -27,7 +34,7 @@ export function LogsPanel({
   apiId?: string;
   /** Where the page and size live: the URL on the full page, the drawer's own state on a list row. */
   paging: Paging;
-  apis?: Array<{ id: string; name: string }>;
+  apis?: ApiLibraryLogApi[];
   enabled?: boolean;
 }) {
   const t = useTranslations('api-library.logs');
@@ -36,14 +43,18 @@ export function LogsPanel({
   const [open, setOpen] = useState<string | null>(null);
   // Typing in the search box must not fire a request per keystroke.
   const deferred = useDeferredValue(filters);
+  // A search over the limit is not sent: the query stays off and the last results stay on screen, with the field marked.
+  const tooLong = searchTooLong(deferred);
   const q = useApiLogs(
     logQuery(deferred, apiId),
     { page: paging.page, limit: paging.limit },
-    enabled,
+    enabled && !tooLong,
   );
   useFallBackToLastPage(paging, q.data, q.isSuccess && !q.isPlaceholderData);
   const items = q.data?.data ?? [];
   const filtered = hasLogFilters(filters);
+  // The API refused the search field (the page checks the same limit first, so this should not happen). Show the field message, not the red bar.
+  const searchRefused = q.isError && serverFieldProblems(q.error).some((e) => e.path === 'search');
 
   return (
     <div className="space-y-4">
@@ -56,9 +67,10 @@ export function LogsPanel({
             if (paging.page > 1) paging.setPage(1, { replace: true });
           }}
           apis={apis}
+          searchInvalid={tooLong || searchRefused}
         />
       </div>
-      {q.isError ? (
+      {q.isError && !searchRefused ? (
         <LoadError message={te(errorKey(q.error))} onRetry={() => void q.refetch()} />
       ) : q.data && q.data.total === 0 ? (
         <EmptyState

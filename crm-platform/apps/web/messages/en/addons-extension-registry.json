@@ -45,7 +45,8 @@
         "period": "Period",
         "grants": "Grants",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "plans": "Plans"
       },
       "price": {
         "free": "Free",
@@ -84,7 +85,13 @@
         "title": "Delete {name}?",
         "body": "Delete this add-on? Workspaces that bought it keep it until it expires.",
         "confirm": "Delete",
-        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}"
+        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}",
+        "errors": {
+          "refused": "This add-on has purchases, including ended ones, so it cannot be deleted. Disable it instead.",
+          "forbidden": "Only a super admin can delete add-ons.",
+          "notFound": "This add-on no longer exists.",
+          "failed": "The add-on could not be deleted."
+        }
       },
       "errors": {
         "generic": "The add-on could not be saved.",
@@ -124,7 +131,8 @@
           "billingMode": "Billing",
           "sortOrder": "Sort order",
           "isActive": "Active",
-          "isLifetime": "Lifetime (one-time)"
+          "isLifetime": "Lifetime (one-time)",
+          "period": "Billing period"
         },
         "modes": {
           "one_time": "One-time (buy again after it ends)",
@@ -144,9 +152,78 @@
           "billingDuration": "Enter a whole number of 1 or more.",
           "sortOrder": "Enter a whole number.",
           "limits": "Limits are whole numbers, or -1 for unlimited.",
-          "form": "Check the highlighted fields."
-        }
-      }
+          "form": "Check the highlighted fields.",
+          "amountPositive": "Add-ons are monthly or yearly subscriptions, so the price must be above zero.",
+          "features": "Tick at least one feature, or make this a capacity add-on.",
+          "limitsNeeded": "Enter at least one limit above zero, or make this a feature add-on."
+        },
+        "legacy": {
+          "title": "Legacy pack",
+          "body": "This pack was created before add-ons became subscriptions. It keeps selling exactly as before (its billing is shown but cannot be changed), and workspaces that own it are not affected. You can still edit its name, price, features and limits, or put it off sale. New packs are monthly or yearly subscriptions."
+        },
+        "periods": {
+          "months": "Monthly subscription",
+          "years": "Yearly subscription"
+        },
+        "periodHint": "Add-ons are subscriptions. Workspaces on an online gateway are renewed automatically; with bank transfer or offline payment they pay again when the term ends.",
+        "planOffers": {
+          "title": "Plans",
+          "hint": "How each plan offers this add-on. Included: no charge, the plan carries its features. Paid: workspaces buy it, at the plan's own price if you set one. Hidden: workspaces on the plan never see it.",
+          "noIncluded": "This add-on only adds to limits, so no plan can include it. A plan sets its own caps on its Limits tab.",
+          "empty": "No plans exist yet.",
+          "freePlan": "Free plan",
+          "inactivePlan": "Inactive",
+          "modeLabel": "How {plan} offers this add-on",
+          "modes": {
+            "included": "Included",
+            "paid": "Paid",
+            "hidden": "Hidden"
+          },
+          "priceLabel": "Price on this plan",
+          "priceHint": "Empty = the add-on's own price.",
+          "freePlanNote": "Shown on the free plan, but a workspace needs a paid plan to buy it.",
+          "hiddenNote": "Not shown to workspaces on this plan. A workspace that already bought it keeps it until its term ends.",
+          "problems": {
+            "money": "Enter an amount such as 19 or 19.99.",
+            "zero": "Leave the price empty to use the add-on's price, or choose Included."
+          },
+          "errors": {
+            "generic": "The plan offers could not be saved.",
+            "forbidden": "Only a super admin can change plan offers.",
+            "notFound": "This add-on no longer exists."
+          },
+          "saved": "Plan offers saved.",
+          "changed": "{count, plural, one {# plan changed} other {# plans changed}}",
+          "save": "Save plan offers",
+          "needFeatures": "Add the features it unlocks above first"
+        },
+        "type": {
+          "title": "Type",
+          "hint": "Choose what this add-on does. Only a feature add-on can be included in a plan.",
+          "feature": {
+            "title": "Feature add-on",
+            "body": "Unlocks part of the product; can also add capacity."
+          },
+          "capacity": {
+            "title": "Capacity add-on",
+            "body": "Only adds to a limit (seats, contacts...)."
+          }
+        },
+        "noFeaturesNotice": "This add-on unlocks nothing yet. Tick the features it gives so plans can include it.",
+        "limitsHintCapacity": "A capacity add-on only adds to limits. Enter a number to ADD on top of the plan (for example +2 seats). Use -1 for unlimited. At least one limit is required."
+      },
+      "kind": {
+        "feature": "Feature",
+        "capacity": "Capacity"
+      },
+      "plans": {
+        "included": "Included: {plans}",
+        "paid": "Paid: {plans}",
+        "hidden": "Hidden: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "No plans"
+      },
+      "noFeatures": "No features yet"
     },
     "extensions": {
       "crumbHere": "Add-ons",
@@ -258,16 +335,6 @@
     "workspace": {
       "title": "Add-ons",
       "description": "Extra feature packs you buy on top of your subscription.",
-      "needPlanTitle": "Add-ons need an active plan",
-      "needPlanBody": "Add-ons are extra feature packs you buy on top of your subscription. Choose a plan first, then come back here to add features.",
-      "viewPlans": "View plans",
-      "noneTitle": "No add-ons available",
-      "noneBody": "There are no add-ons offered right now. Check back later.",
-      "ownedTitle": "Your add-ons",
-      "ownedBody": "Active packs merged onto your current plan.",
-      "ends": "Ends {date}",
-      "lifetime": "Lifetime",
-      "autoRenews": "Auto-renews",
       "renewal": {
         "cancel": "Cancel renewal",
         "confirmTitle": "Cancel renewal?",
@@ -277,34 +344,105 @@
         "forbidden": "You don't have permission to change the plan.",
         "none": "There is no active subscription to cancel.",
         "failed": "We couldn't cancel the renewal. Please try again."
-      },
-      "active": "Active",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-ons",
-      "catalogBody": "Unlock extra features on top of your current plan. No plan change needed.",
-      "count": "{count, plural, one {# add-on} other {# add-ons}}",
-      "free": "Free",
-      "lifetimePrice": "one-time",
-      "per": "/ {unit}",
-      "units": {
-        "days": "days",
-        "weeks": "weeks",
-        "months": "months",
-        "years": "years"
-      },
-      "buy": "Add to plan",
-      "buyAgain": "Buy again",
-      "owned": "Owned ×{count} · buying again adds more",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Unlimited {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "The add-ons could not be loaded."
+      }
     },
     "planFields": {
       "fromModule": "from an installed module",
       "unlimited": "Unlimited"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-ons need an active paid plan",
+        "free_plan": "You are on a free plan. Add-ons are extras you buy on top of a paid plan.",
+        "plan_expired": "Your paid plan has ended, so add-ons are paused. Renew your plan to buy or renew add-ons.",
+        "no_plan": "Your workspace has no plan yet. Choose a paid plan to use add-ons.",
+        "cta": "View plans"
+      },
+      "unavailableCard": "Needs an active paid plan",
+      "empty": {
+        "title": "No add-ons on sale",
+        "body": "There are no add-ons offered right now. Check back later."
+      },
+      "listLabel": "Add-ons on sale",
+      "owned": {
+        "title": "Add-ons you own",
+        "renews": "Renews on {date}",
+        "ends": "Active until {date}. It will not renew automatically.",
+        "lifetime": "Lifetime"
+      },
+      "state": {
+        "included": "Included in your plan",
+        "includedSupport": "Enabled by your account manager.",
+        "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
+        "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
+        "active": "Active",
+        "ownedCount": "Owned ×{count} · buying again adds more",
+        "turnedOff": "Turned off"
+      },
+      "price": {
+        "free": "Free",
+        "oneTime": "one-time",
+        "per": {
+          "days": "{count, plural, one {/ day} other {/ {count} days}}",
+          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
+          "months": "{count, plural, one {/ month} other {/ {count} months}}",
+          "years": "{count, plural, one {/ year} other {/ {count} years}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Renews every term. Paid automatically with card payments; with bank transfer or offline payment you pay again when the term ends.",
+        "oneTime": "One-time purchase. It does not renew."
+      },
+      "buy": "Buy add-on",
+      "buyAgain": "Buy again",
+      "cannotBuyHint": "Ask your account owner. Only people who can buy for this workspace can start a purchase.",
+      "bullets": {
+        "unlimited": "Unlimited {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Need message credits? Top up your wallet instead; credits are not an add-on.",
+      "walletLink": "Top up wallet",
+      "groups": {
+        "feature": "Feature add-ons",
+        "capacity": "Capacity add-ons"
+      },
+      "activation": {
+        "turnedOffNote": "Turned off for this workspace. Its settings are kept.",
+        "turnOff": "Turn off",
+        "turnOn": "Turn on",
+        "askOwner": "Ask your account owner to turn this on or off.",
+        "doneOn": "{name} is turned on.",
+        "errors": {
+          "notToggleable": "{name} can't be turned on or off here. Only an add-on your plan includes can be switched.",
+          "forbidden": "You don't have permission to turn add-ons on or off.",
+          "generic": "We couldn't change {name}. Please try again."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Turn off {name}?",
+      "lead": "Here is what changes. You can turn it back on at any time.",
+      "cancel": "Cancel",
+      "confirm": "Turn off {name}",
+      "done": "{name} is turned off. Its settings are kept.",
+      "typeLabel": "Type {name} to confirm",
+      "typeHint": "Customer chats or people are affected, so type the name to confirm.",
+      "groups": {
+        "stops": "What stops",
+        "kept": "What is kept",
+        "people": "People"
+      },
+      "items": {
+        "features_off": "These features stop working: {names}.",
+        "dependents_off": "These features need them, so they stop too: {names}.",
+        "roles_dormant": "{count, plural, one {# role holds permissions of this add-on. It keeps them, but they are inactive until you turn it back on.} other {# roles hold permissions of this add-on. They keep them, but they are inactive until you turn it back on.}}",
+        "waiting_chats": "{count, plural, one {# chat is waiting for an agent. It will not be routed automatically, so someone has to claim it.} other {# chats are waiting for an agent. They will not be routed automatically, so someone has to claim them.}}",
+        "routing_rules": "{count, plural, one {# routing rule stops assigning chats.} other {# routing rules stop assigning chats.}}",
+        "auto_teams": "{count, plural, one {# team is set to assign chats automatically and stops doing so.} other {# teams are set to assign chats automatically and stop doing so.}}",
+        "teams": "{count, plural, one {# team is kept, with its members.} other {# teams are kept, with their members.}}",
+        "custom_role_holders": "{count, plural, one {# person holds a custom role. Their role is kept, but the permissions of this add-on stop applying.} other {# people hold a custom role. Their roles are kept, but the permissions of this add-on stop applying.}}",
+        "kept": "Your settings and data are kept. They come back as you left them when you turn it on again."
+      }
     }
   }
 }

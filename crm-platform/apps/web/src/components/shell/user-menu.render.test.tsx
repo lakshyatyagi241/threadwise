@@ -30,7 +30,9 @@ afterEach(() => {
   host.remove();
 });
 
-const render = (theme: 'light' | 'dark' = 'light') =>
+const render = (theme: 'light' | 'dark' = 'light') => {
+  // The theme row starts from the page's theme attribute, which the header's theme button also sets.
+  document.documentElement.dataset.theme = theme;
   act(() => {
     root.render(
       <NextIntlClientProvider locale="en" messages={loadMessages('en')}>
@@ -43,6 +45,7 @@ const render = (theme: 'light' | 'dark' = 'light') =>
       </NextIntlClientProvider>,
     );
   });
+};
 
 const open = () => {
   act(() => {

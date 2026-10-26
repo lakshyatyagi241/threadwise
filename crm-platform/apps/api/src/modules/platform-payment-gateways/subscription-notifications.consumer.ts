@@ -24,6 +24,7 @@ import {
 export const SUBSCRIPTION_NOTIFY_EVENTS = [
   'paygw.subscription.past_due',
   'paygw.subscription.canceled',
+  'paygw.addon.renewal_stopped',
 ] as const;
 
 const str = (v: unknown): string | null => (typeof v === 'string' && v !== '' ? v : null);
@@ -62,7 +63,8 @@ export class SubscriptionNotificationsConsumer implements OutboxSubscriber, OnMo
 
   async handle(event: OutboxEvent): Promise<void> {
     const failed = event.eventType === 'paygw.subscription.past_due';
-    const slug = str(event.payload.plan);
+    const stopped = event.eventType === 'paygw.addon.renewal_stopped';
+    const slug = stopped ? null : str(event.payload.plan);
     const pending: WrittenNotification[] = [];
     const owners: Array<{ id: number; email: string }> = [];
     let name = slug ?? 'subscription';
@@ -84,17 +86,25 @@ export class SubscriptionNotificationsConsumer implements OutboxSubscriber, OnMo
         this.logger.warn({ orgId: event.orgId }, 'subscription notification has no owner to tell');
         return;
       }
-      const copy = failed
+      const packName = str(event.payload.packName) ?? 'The add-on';
+      const planName = str(event.payload.plan) ?? 'current';
+      const copy = stopped
         ? {
-            type: 'billing_payment_failed',
-            title: 'Subscription payment failed',
-            body: `The payment for ${name} did not go through. Check your payment method; your plan stays active for a few days while it is retried.`,
+            type: 'billing_addon_included',
+            title: `${packName} is now included in your plan`,
+            body: `${packName} is now included in your ${planName} plan, so your add-on will not renew. Nothing changes for you and you will not be charged again for it.`,
           }
-        : {
-            type: 'billing_subscription_canceled',
-            title: 'Subscription cancelled',
-            body: `Your ${name} subscription was cancelled by the payment provider. It will not renew; the period you paid for keeps running.`,
-          };
+        : failed
+          ? {
+              type: 'billing_payment_failed',
+              title: 'Subscription payment failed',
+              body: `The payment for ${name} did not go through. Check your payment method; your plan stays active for a few days while it is retried.`,
+            }
+          : {
+              type: 'billing_subscription_canceled',
+              title: 'Subscription cancelled',
+              body: `Your ${name} subscription was cancelled by the payment provider. It will not renew; the period you paid for keeps running.`,
+            };
       for (const o of owners) {
         const written = await this.notifications.insertReturning(tx, event.orgId, {
           userId: o.id,
@@ -102,7 +112,7 @@ export class SubscriptionNotificationsConsumer implements OutboxSubscriber, OnMo
           title: copy.title,
           body: copy.body,
           link: '/billing/subscriptions',
-          data: { eventType: event.eventType, plan: slug },
+          data: { eventType: event.eventType, plan: slug, pack: str(event.payload.pack) },
           dedupeKey: `${event.eventType}:${event.id}`,
         });
         if (written) pending.push(written);
@@ -110,6 +120,36 @@ export class SubscriptionNotificationsConsumer implements OutboxSubscriber, OnMo
     });
     for (const row of pending) await this.publisher?.created(event.orgId, row);
     if (failed) await this.mailAll(event, owners, name);
+    if (stopped) await this.mailStopped(event, owners);
+  }
+
+  /** One email per billing admin that the add-on will not renew because the plan now includes it. Claimed per event and address. */
+  private async mailStopped(
+    event: OutboxEvent,
+    owners: Array<{ id: number; email: string }>,
+  ): Promise<void> {
+    if (!this.mail) return;
+    const packName = str(event.payload.packName) ?? 'The add-on';
+    const planName = str(event.payload.plan) ?? 'current';
+    for (const o of owners) {
+      const key = `paygw:addon-mail:${event.id}:${createHash('sha256').update(o.email).digest('hex').slice(0, 20)}`;
+      try {
+        const claimed = await this.redis.set(key, '1', 'EX', 7 * 86_400, 'NX');
+        if (claimed !== 'OK') continue;
+        await this.mail.send({
+          to: o.email,
+          subject: `[${this.brand}] ${packName} is now included in your plan`,
+          text: [
+            `${packName} is now included in your ${planName} plan, so your add-on will not renew.`,
+            'Nothing changes for you and you will not be charged again for it. The add-on stays active until the end of the term you already paid for.',
+            '',
+            `See your subscriptions: ${this.webUrl}/billing/subscriptions`,
+          ].join('\n'),
+        });
+      } catch (err) {
+        this.logger.warn({ err }, 'add-on included mail failed; the notification is written');
+      }
+    }
   }
 
   private async mailAll(

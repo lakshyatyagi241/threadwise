@@ -1,24 +1,15 @@
 // Browser run of the catalog and product screens against a running web app + API (docs/threadwise-port/parity/catalog-products.md).
 //   WEB=http://localhost:3108 API=http://localhost:53108 node catalog-flows.e2e.mjs
 // Needs the API started with CAT_PROVIDER_MODE=fixture (an in-memory Meta and Node bridge, nothing leaves the machine),
-// `playwright` from the parity harness (bootstrap.sh installs it) and docker with the dev Postgres (psql runs through
+// `@playwright/test` (an apps/web dependency) and docker with the dev Postgres (psql runs through
 // `docker exec crm-postgres`; override with PSQL='["psql","-U","crm","-d","crm_cat","-tAc"]').
 // It signs up its own organisation (fresh e-mail per run), turns the wa_storefront plan flag on for it, inserts one connected
 // device and two reviews with SQL (there is no other way to make them: the public shop and the device pairing belong to other
 // domains) and removes nothing else: every row it creates belongs to that throw-away organisation.
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const here = dirname(fileURLToPath(import.meta.url));
-const require = createRequire(
-  process.env.PW_MODULES ??
-    `${resolve(here, '../../../../.claude/skills/threadwise-playwright-parity/harness')}/`,
-);
-const { chromium } = require('playwright');
+import { chromium } from '@playwright/test';
 
 const WEB = process.env.WEB ?? 'http://localhost:3108';
 const API = process.env.API ?? 'http://localhost:53108';

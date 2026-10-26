@@ -5,6 +5,7 @@ import { ChatConversationsModule } from '../chat-conversations';
 import { CompanyBriefsModule } from '../company-briefs';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WorkspacesTeamsTenancyModule } from '../workspaces-teams-tenancy';
 import { AiCrmActionsRepository } from './ai-crm-actions.repository';
 import { AiCrmController } from './ai-crm.controller';
@@ -25,6 +26,7 @@ import { AiCrmToolkitService } from './ai-crm-toolkit.service';
     CompanyBriefsModule,
     ChatConversationsModule,
     WorkspacesTeamsTenancyModule,
+    WalletMessageBillingModule,
   ],
   controllers: [AiCrmController],
   providers: [AiCrmActionsRepository, AiCrmToolkitService, AiCrmCopilotService],

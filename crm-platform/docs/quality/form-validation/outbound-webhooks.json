@@ -1,0 +1,430 @@
+{
+  "module": "outbound-webhooks",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "createWebhookSchema",
+      "file": "apps/api/src/modules/outbound-webhooks/webhooks.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "url",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2048)",
+          "value": "\"a\" x 2048",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2048)",
+          "value": "\"a\" x 2049",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2048)",
+          "value": "\"😀\" x 2048",
+          "priority": "P2"
+        },
+        {
+          "field": "events",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 12 items",
+          "value": "array of 12",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (12) items",
+          "value": "array of 13",
+          "priority": "P1"
+        },
+        {
+          "field": "secret",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "active",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "active",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateWebhookSchema",
+      "file": "apps/api/src/modules/outbound-webhooks/webhooks.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "url",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2048)",
+          "value": "\"a\" x 2048",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2048)",
+          "value": "\"a\" x 2049",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2048)",
+          "value": "\"😀\" x 2048",
+          "priority": "P2"
+        },
+        {
+          "field": "events",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 12 items",
+          "value": "array of 12",
+          "priority": "P1"
+        },
+        {
+          "field": "events",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (12) items",
+          "value": "array of 13",
+          "priority": "P1"
+        },
+        {
+          "field": "secret",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "secret",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "clearSecret",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "clearSecret",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "active",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "active",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

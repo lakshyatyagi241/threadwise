@@ -48,7 +48,8 @@
       "email_mailboxes": "이메일 메일함",
       "email_monthly": "월간 이메일",
       "storage_gb": "저장 공간 (GB)",
-      "teams": "팀"
+      "teams": "팀",
+      "webbot_messages": "월별 무료 웹사이트 챗봇 메시지"
     },
     "features": {
       "automation": "자동화",
@@ -60,10 +61,12 @@
       "remove_branding": "브랜딩 제거",
       "sales_pipeline": "영업 파이프라인",
       "appointment_booking": "예약 접수",
+      "appointment_confirm_buttons": "리마인더 버튼 (확인 / 일정 변경 / 취소)",
+      "appointment_rebook_steps": "재예약(리콜) 단계",
       "chatbot_widgets": "챗봇 위젯",
       "wa_storefront": "WhatsApp 카탈로그",
       "inbox_sla": "SLA 정책",
-      "inbox_routing": "라우팅 규칙",
+      "inbox_routing": "스마트 라우팅: 자동 배정 및 규칙",
       "waba_calling": "WhatsApp 통화",
       "inbox_kanban": "칸반 보기",
       "team_performance": "팀 성과",
@@ -89,7 +92,9 @@
       "record_assignment": "레코드 배정 규칙",
       "team_hierarchy": "팀 계층 및 매니저",
       "custom_roles": "사용자 지정 역할 및 범위",
-      "inbox_assignment_sticky": "연락처 담당자와 고정 배정"
+      "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원",
+      "agent_status_bar": "상태 표시줄: 상단 표시줄과 받은 편지함의 응대 가능 / 자리 비움 컨트롤",
+      "agent_status_automation": "상태 자동화: 개인 근무 시간과 자동 자리 비움"
     },
     "limitGroups": {
       "messaging": "메시징",
@@ -144,7 +149,8 @@
       "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
       "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한.",
       "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다.",
-      "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다."
+      "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다.",
+      "webbot_messages": "매 달력 월마다 무료로 포함되는 웹사이트 챗봇 메시지 수입니다. 초과하는 메시지는 지갑에서 차감됩니다. 비워 두거나 0 = 무료 메시지 없음."
     },
     "planAddons": {
       "title": "요금제에서 이용 가능한 추가 기능",
@@ -245,20 +251,7 @@
         "title": "자주 묻는 질문"
       },
       "addons": {
-        "title": "추가 기능",
-        "owned": "보유한 추가 기능",
-        "oneTime": "일회성",
-        "buy": "추가 기능 구매",
-        "buyAgain": "다시 구매",
-        "active": "활성",
-        "unlimitedBullet": "{label} 무제한",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count}일}}",
-          "weeks": "{count, plural, other {/ {count}주}}",
-          "months": "{count, plural, other {/ {count}개월}}",
-          "years": "{count, plural, other {/ {count}년}}"
-        }
+        "title": "추가 기능"
       },
       "renewal": {
         "renewsOn": "요금제는 {date}에 자동 갱신됩니다.",
@@ -578,7 +571,30 @@
       "back": "뒤로 가기",
       "compare": "모든 요금제 비교",
       "appHint": "{feature}은(는) 마켓플레이스에서 앱으로도 판매됩니다.",
-      "appLink": "앱 보기"
+      "appLink": "앱 보기",
+      "addonHint": "{addon} 애드온으로 현재 요금제에 추가할 수도 있습니다.",
+      "addonLink": "애드온 보기",
+      "addonsTabHint": "부가 기능은 요금제에 마켓플레이스가 없어도 쓸 수 있습니다. 요금제 및 부가 기능에서 보유 현황을 보고 부가 기능을 구매할 수 있습니다.",
+      "addonsTabLink": "요금제 및 부가 기능 열기",
+      "addonHintGeneric": "요금제에서 애드온으로도 제공될 수 있습니다."
+    },
+    "lock": {
+      "link": "요금제 및 애드온 보기",
+      "offTitle": "요금제에 포함되지 않음",
+      "offLead": "이 부분은 현재 워크스페이스 요금제에 포함되어 있지 않습니다.",
+      "buyTitle": "{price}에 {addon} 추가",
+      "buyLead": "요금제에서 {addon}을(를) 애드온으로 제공합니다. 추가하면 이 부분이 켜집니다.",
+      "buyLink": "애드온 보기",
+      "askOwner": "계정 소유자에게 추가를 요청하세요.",
+      "unavailableTitle": "{addon}을(를) 사용하려면 활성 유료 요금제가 필요합니다",
+      "unavailableLead": "먼저 유료 요금제를 선택한 다음 {addon}을(를) 추가할 수 있습니다.",
+      "viewPlans": "요금제 보기",
+      "disabledTitle": "{addon}이(가) 꺼져 있습니다",
+      "disabledLead": "요금제에 {addon}이(가) 포함되어 있지만 이 워크스페이스에서는 꺼져 있습니다. 설정은 그대로 유지됩니다.",
+      "disabledAsk": "계정 소유자에게 켜 달라고 요청하세요.",
+      "turnOn": "켜기",
+      "turnOnForbidden": "켤 권한이 없습니다. 계정 소유자에게 요청하세요.",
+      "turnOnFailed": "{addon}을(를) 켜지 못했습니다. 다시 시도해 주세요."
     }
   }
 }

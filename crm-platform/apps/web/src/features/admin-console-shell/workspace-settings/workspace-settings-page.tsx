@@ -50,7 +50,7 @@ export function WorkspaceSettingsPage() {
     <section className="space-y-5">
       <header className="space-y-1">
         <h1 className="text-3xl font-semibold tracking-tight">
-          {t('titleLead')} <span className="italic text-primary">{t('titleTail')}</span>
+          {t('titleLead')} <span className="not-italic text-primary">{t('titleTail')}</span>
         </h1>
         <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
       </header>

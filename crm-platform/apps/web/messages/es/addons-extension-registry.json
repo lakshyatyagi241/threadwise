@@ -45,7 +45,8 @@
         "period": "Periodo",
         "grants": "Otorga",
         "status": "Estado",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "plans": "Planes"
       },
       "price": {
         "free": "Gratis",
@@ -124,7 +125,8 @@
           "billingMode": "Facturación",
           "sortOrder": "Orden",
           "isActive": "Activo",
-          "isLifetime": "De por vida (pago único)"
+          "isLifetime": "De por vida (pago único)",
+          "period": "Periodo de facturación"
         },
         "modes": {
           "one_time": "Pago único (se vuelve a comprar al terminar)",
@@ -144,9 +146,78 @@
           "billingDuration": "Introduce un número entero igual o mayor que 1.",
           "sortOrder": "Introduce un número entero.",
           "limits": "Los límites son números enteros, o -1 para ilimitado.",
-          "form": "Revisa los campos resaltados."
-        }
-      }
+          "form": "Revisa los campos resaltados.",
+          "amountPositive": "Los complementos son suscripciones mensuales o anuales, así que el precio debe ser mayor que cero.",
+          "features": "Marca al menos una función o conviértelo en un complemento de capacidad.",
+          "limitsNeeded": "Introduce al menos un límite mayor que cero o conviértelo en un complemento de función."
+        },
+        "legacy": {
+          "title": "Paquete heredado",
+          "body": "Este paquete se creó antes de que los complementos fueran suscripciones. Sigue vendiéndose exactamente igual (su facturación se muestra pero no se puede cambiar) y los espacios de trabajo que lo tienen no se ven afectados. Aún puedes editar su nombre, precio, funciones y límites, o retirarlo de la venta. Los paquetes nuevos son suscripciones mensuales o anuales."
+        },
+        "periods": {
+          "months": "Suscripción mensual",
+          "years": "Suscripción anual"
+        },
+        "periodHint": "Los complementos son suscripciones. Los espacios de trabajo con una pasarela en línea se renuevan automáticamente; con transferencia bancaria o pago manual pagan de nuevo al terminar el periodo.",
+        "planOffers": {
+          "title": "Planes",
+          "hint": "Cómo ofrece cada plan este complemento. Incluido: sin coste, el plan aporta sus funciones. De pago: los espacios de trabajo lo compran, al precio propio del plan si defines uno. Oculto: los espacios de trabajo del plan nunca lo ven.",
+          "noIncluded": "Este complemento solo amplía límites, así que ningún plan puede incluirlo. Cada plan define sus propios topes en su pestaña Límites.",
+          "empty": "Aún no hay planes.",
+          "freePlan": "Plan gratuito",
+          "inactivePlan": "Inactivo",
+          "modeLabel": "Cómo ofrece {plan} este complemento",
+          "modes": {
+            "included": "Incluido",
+            "paid": "De pago",
+            "hidden": "Oculto"
+          },
+          "priceLabel": "Precio en este plan",
+          "priceHint": "Vacío = el precio propio del complemento.",
+          "freePlanNote": "Se muestra en el plan gratuito, pero un espacio de trabajo necesita un plan de pago para comprarlo.",
+          "hiddenNote": "No se muestra a los espacios de trabajo de este plan. Un espacio de trabajo que ya lo compró lo conserva hasta que termine su periodo.",
+          "problems": {
+            "money": "Introduce un importe como 19 o 19.99.",
+            "zero": "Deja el precio vacío para usar el precio del complemento, o elige Incluido."
+          },
+          "errors": {
+            "generic": "No se pudieron guardar las ofertas de los planes.",
+            "forbidden": "Solo un superadministrador puede cambiar las ofertas de los planes.",
+            "notFound": "Este complemento ya no existe."
+          },
+          "saved": "Ofertas de los planes guardadas.",
+          "changed": "{count, plural, one {# plan cambiado} other {# planes cambiados}}",
+          "save": "Guardar ofertas de los planes",
+          "needFeatures": "Primero añade arriba las funciones que desbloquea"
+        },
+        "type": {
+          "title": "Tipo",
+          "hint": "Elige qué hace este complemento. Solo un complemento de función puede incluirse en un plan.",
+          "feature": {
+            "title": "Complemento de función",
+            "body": "Desbloquea una parte del producto; también puede añadir capacidad."
+          },
+          "capacity": {
+            "title": "Complemento de capacidad",
+            "body": "Solo suma a un límite (puestos, contactos...)."
+          }
+        },
+        "noFeaturesNotice": "Este complemento aún no desbloquea nada. Marca las funciones que ofrece para que los planes puedan incluirlo.",
+        "limitsHintCapacity": "Un complemento de capacidad solo suma a los límites. Introduce un número para SUMAR al plan (por ejemplo +2 puestos). Usa -1 para ilimitado. Se requiere al menos un límite."
+      },
+      "kind": {
+        "feature": "Función",
+        "capacity": "Capacidad"
+      },
+      "plans": {
+        "included": "Incluido: {plans}",
+        "paid": "De pago: {plans}",
+        "hidden": "Oculto: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Ningún plan"
+      },
+      "noFeatures": "Aún sin funciones"
     },
     "extensions": {
       "crumbHere": "Complementos",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Complementos",
       "description": "Paquetes de funciones adicionales que compras además de tu suscripción.",
-      "needPlanTitle": "Los complementos requieren un plan activo",
-      "needPlanBody": "Los complementos son paquetes de funciones adicionales que compras además de tu suscripción. Elige primero un plan y luego vuelve aquí para añadir funciones.",
-      "viewPlans": "Ver planes",
-      "noneTitle": "No hay complementos disponibles",
-      "noneBody": "Ahora mismo no hay complementos en oferta. Vuelve a consultar más tarde.",
-      "ownedTitle": "Tus complementos",
-      "ownedBody": "Paquetes activos combinados con tu plan actual.",
-      "ends": "Termina el {date}",
-      "lifetime": "De por vida",
-      "autoRenews": "Se renueva automáticamente",
       "renewal": {
         "cancel": "Cancelar renovación",
         "confirmTitle": "¿Cancelar la renovación?",
@@ -277,34 +338,105 @@
         "forbidden": "No tienes permiso para cambiar el plan.",
         "none": "No hay ninguna suscripción activa que cancelar.",
         "failed": "No pudimos cancelar la renovación. Inténtalo de nuevo."
-      },
-      "active": "Activo",
-      "cardEyebrow": "Complemento",
-      "catalogTitle": "Complementos",
-      "catalogBody": "Desbloquea funciones adicionales sobre tu plan actual. No necesitas cambiar de plan.",
-      "count": "{count, plural, one {# complemento} many {# complementos} other {# complementos}}",
-      "free": "Gratis",
-      "lifetimePrice": "pago único",
-      "per": "/ {unit}",
-      "units": {
-        "days": "días",
-        "weeks": "semanas",
-        "months": "meses",
-        "years": "años"
-      },
-      "buy": "Añadir al plan",
-      "buyAgain": "Comprar de nuevo",
-      "owned": "Tienes ×{count} · comprar de nuevo suma más",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "{name} ilimitado",
-        "add": "+{amount} {name}"
-      },
-      "error": "No se pudieron cargar los complementos."
+      }
     },
     "planFields": {
       "fromModule": "desde un módulo instalado",
       "unlimited": "Ilimitado"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Los complementos necesitan un plan de pago activo",
+        "free_plan": "Estás en un plan gratuito. Los complementos son extras que compras sobre un plan de pago.",
+        "plan_expired": "Tu plan de pago ha terminado, así que los complementos están en pausa. Renueva tu plan para comprar o renovar complementos.",
+        "no_plan": "Tu espacio de trabajo aún no tiene plan. Elige un plan de pago para usar complementos.",
+        "cta": "Ver planes"
+      },
+      "unavailableCard": "Necesita un plan de pago activo",
+      "empty": {
+        "title": "No hay complementos a la venta",
+        "body": "Ahora mismo no se ofrece ningún complemento. Vuelve a mirar más tarde."
+      },
+      "listLabel": "Complementos a la venta",
+      "owned": {
+        "title": "Complementos que tienes",
+        "renews": "Se renueva el {date}",
+        "ends": "Activo hasta el {date}. No se renovará automáticamente.",
+        "lifetime": "De por vida"
+      },
+      "state": {
+        "included": "Incluido en tu plan",
+        "includedSupport": "Activado por tu gestor de cuenta.",
+        "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
+        "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
+        "active": "Activo",
+        "ownedCount": "Tienes ×{count} · comprar de nuevo suma más",
+        "turnedOff": "Desactivado"
+      },
+      "price": {
+        "free": "Gratis",
+        "oneTime": "pago único",
+        "per": {
+          "days": "{count, plural, one {/ día} other {/ {count} días}}",
+          "weeks": "{count, plural, one {/ semana} other {/ {count} semanas}}",
+          "months": "{count, plural, one {/ mes} other {/ {count} meses}}",
+          "years": "{count, plural, one {/ año} other {/ {count} años}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Se renueva en cada periodo. Se paga automáticamente con tarjeta; con transferencia bancaria o pago manual vuelves a pagar cuando termina el periodo.",
+        "oneTime": "Compra única. No se renueva."
+      },
+      "buy": "Comprar complemento",
+      "buyAgain": "Comprar de nuevo",
+      "cannotBuyHint": "Pregunta al propietario de tu cuenta. Solo quien puede comprar para este espacio de trabajo puede iniciar una compra.",
+      "bullets": {
+        "unlimited": "{name} ilimitado",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "¿Necesitas créditos de mensajes? Recarga tu monedero; los créditos no son un complemento.",
+      "walletLink": "Recargar monedero",
+      "groups": {
+        "feature": "Complementos de funciones",
+        "capacity": "Complementos de capacidad"
+      },
+      "activation": {
+        "turnedOffNote": "Desactivado para este espacio de trabajo. Su configuración se conserva.",
+        "turnOff": "Desactivar",
+        "turnOn": "Activar",
+        "askOwner": "Pide al propietario de la cuenta que lo active o lo desactive.",
+        "doneOn": "{name} está activado.",
+        "errors": {
+          "notToggleable": "{name} no se puede activar ni desactivar aquí. Solo se puede cambiar un complemento incluido en tu plan.",
+          "forbidden": "No tienes permiso para activar ni desactivar complementos.",
+          "generic": "No pudimos cambiar {name}. Inténtalo de nuevo."
+        }
+      }
+    },
+    "toggle": {
+      "title": "¿Desactivar {name}?",
+      "lead": "Esto es lo que cambia. Puedes volver a activarlo cuando quieras.",
+      "cancel": "Cancelar",
+      "confirm": "Desactivar {name}",
+      "done": "{name} está desactivado. Su configuración se conserva.",
+      "typeLabel": "Escribe {name} para confirmar",
+      "typeHint": "Esto afecta a chats de clientes o a personas, así que escribe el nombre para confirmar.",
+      "groups": {
+        "stops": "Qué se detiene",
+        "kept": "Qué se conserva",
+        "people": "Personas"
+      },
+      "items": {
+        "features_off": "Estas funciones dejan de funcionar: {names}.",
+        "dependents_off": "Estas funciones dependen de ellas, así que también se detienen: {names}.",
+        "roles_dormant": "{count, plural, one {# rol tiene permisos de este complemento. Los conserva, pero quedan inactivos hasta que lo vuelvas a activar.} other {# roles tienen permisos de este complemento. Los conservan, pero quedan inactivos hasta que lo vuelvas a activar.}}",
+        "waiting_chats": "{count, plural, one {# chat espera a un agente. No se enrutará automáticamente, así que alguien tiene que tomarlo.} other {# chats esperan a un agente. No se enrutarán automáticamente, así que alguien tiene que tomarlos.}}",
+        "routing_rules": "{count, plural, one {# regla de enrutamiento deja de asignar chats.} other {# reglas de enrutamiento dejan de asignar chats.}}",
+        "auto_teams": "{count, plural, one {# equipo está configurado para asignar chats automáticamente y deja de hacerlo.} other {# equipos están configurados para asignar chats automáticamente y dejan de hacerlo.}}",
+        "teams": "{count, plural, one {# equipo se conserva, con sus miembros.} other {# equipos se conservan, con sus miembros.}}",
+        "custom_role_holders": "{count, plural, one {# persona tiene un rol personalizado. Su rol se conserva, pero los permisos de este complemento dejan de aplicarse.} other {# personas tienen un rol personalizado. Sus roles se conservan, pero los permisos de este complemento dejan de aplicarse.}}",
+        "kept": "Tu configuración y tus datos se conservan. Vuelven como los dejaste cuando lo actives de nuevo."
+      }
     }
   }
 }

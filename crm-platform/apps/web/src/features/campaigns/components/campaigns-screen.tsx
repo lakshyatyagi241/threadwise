@@ -221,7 +221,7 @@ export function CampaignsScreen() {
                 {t('workspace')} · {session.org.name}
               </div>
               <h1 className="text-[32px] leading-none tracking-tight">
-                {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+                {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
               </h1>
               <p className="mt-1 hidden max-w-xl text-sm font-semibold text-muted-foreground xl:block">
                 {t('intro')}
@@ -338,6 +338,7 @@ export function CampaignsScreen() {
               <div className="relative">
                 <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
                 <Input
+                  type="search"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder={t('search')}

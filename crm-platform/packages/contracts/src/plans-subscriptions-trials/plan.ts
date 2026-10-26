@@ -172,6 +172,38 @@ const offerSchema = z.preprocess((v) => {
     : blank;
 }, moneySchema.nullable());
 
+/**
+ * How a plan offers a plain add-on (docs/specs/addons-plan-offers.md): `included` (no charge; the plan carries the add-on's features, feature add-ons
+ * only), `paid` (buyable; `amount` null = the add-on's own price) or `hidden` (not listed, not buyable). No row = paid at the add-on's price.
+ */
+export const PLAN_ADDON_OFFER_MODES = ['included', 'paid', 'hidden'] as const;
+export const planAddonOfferModeSchema = z.enum(PLAN_ADDON_OFFER_MODES);
+export type PlanAddonOfferMode = z.infer<typeof planAddonOfferModeSchema>;
+
+export const planAddonOfferSchema = z
+  .object({
+    /** The plain add-on's id (uuid), as `GET platform/addons` lists it. */
+    addonId: uuidSchema,
+    mode: planAddonOfferModeSchema,
+    /** The plan's own price for a paid offer; null or blank = the add-on's price. */
+    amount: z.preprocess(blankToNull, moneySchema.nullable()).default(null),
+  })
+  .superRefine((o, ctx) => {
+    if (o.amount !== null && o.mode !== 'paid')
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['amount'],
+        message: 'Only a paid add-on has a price.',
+      });
+    if (o.amount !== null && moneyCents(o.amount) === 0)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['amount'],
+        message: 'Leave the price empty to use the add-on price, or choose Included.',
+      });
+  });
+export type PlanAddonOffer = z.output<typeof planAddonOfferSchema>;
+
 const planFieldsShape = {
   name: z.string().trim().min(1).max(120),
   subtitle: z.preprocess(blankToNull, z.string().trim().max(191).nullable()).default(null),
@@ -213,6 +245,18 @@ const planFieldsShape = {
     .array(uuidSchema)
     .max(500)
     .refine((ids) => new Set(ids).size === ids.length, 'List each add-on once.')
+    .default([]),
+  /**
+   * How this plan offers each plain add-on (see `planAddonOfferSchema`). Every add-on named here is written (and its features set on the plan:
+   * true when included, false otherwise); an add-on not named keeps its stored offer. Omit it to keep them all.
+   */
+  addonOffers: z
+    .array(planAddonOfferSchema)
+    .max(200)
+    .refine(
+      (offers) => new Set(offers.map((o) => o.addonId)).size === offers.length,
+      'List each add-on once.',
+    )
     .default([]),
 };
 
@@ -278,6 +322,16 @@ export const planAdminItemSchema = z.object({
   moduleLimits: z.record(moduleKeySchema, cap),
   /** Ids (uuid) of the Marketplace add-on packs this plan makes visible (see `planAddonOptionSchema`). */
   visibleAddons: z.array(uuidSchema),
+  /** The stored offers of plain add-ons (an add-on with no row is paid at its own price). */
+  addonOffers: z
+    .array(
+      z.object({
+        addonId: uuidSchema,
+        mode: planAddonOfferModeSchema,
+        amount: z.string().nullable(),
+      }),
+    )
+    .default([]),
   /** Organizations whose plan is this one (the delete guard, TW-PLAN-005). */
   inUse: z.number().int().nonnegative(),
   /** True when the registration policy names this plan as the signup default. */
@@ -320,12 +374,23 @@ export const planAddonOptionSchema = z.object({
     name: z.string(),
     /** The listing's state: only `published` apps are listed to workspaces. */
     status: z.string(),
+    /** `mini_app` or `integration`: the plan editor lists them on their own tabs. */
+    kind: z.string().default('mini_app'),
   }),
 });
 export type PlanAddonOption = z.infer<typeof planAddonOptionSchema>;
 
 export const planAddonOptionsResponseSchema = z.object({ data: z.array(planAddonOptionSchema) });
 export type PlanAddonOptionsResponse = z.infer<typeof planAddonOptionsResponseSchema>;
+
+/**
+ * The operator's "what happens if I include this add-on" figure (plan editor, Add-ons tab): for one plan, how many of its workspaces hold
+ * each plain add-on pack with a subscription that still renews. Packs nobody renews are absent. A count only, no workspace is named.
+ */
+export const planAddonImpactResponseSchema = z.object({
+  data: z.array(z.object({ packId: uuidSchema, renewing: z.number().int().positive() })),
+});
+export type PlanAddonImpactResponse = z.infer<typeof planAddonImpactResponseSchema>;
 
 /** One Marketplace add-on a workspace's plan makes visible, with whether the workspace already owns (bought or was granted) it. */
 export const visibleAddonSchema = z.object({

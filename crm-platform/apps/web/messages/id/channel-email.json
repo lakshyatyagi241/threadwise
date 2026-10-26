@@ -197,6 +197,8 @@
       "date": "Tanggal",
       "imagesBlocked": "Gambar dari internet disembunyikan.",
       "loadImages": "Muat gambar",
+      "showQuoted": "Tampilkan teks kutipan",
+      "hideQuoted": "Sembunyikan teks kutipan",
       "frameTitle": "Email: {subject}",
       "truncated": "Email ini panjang, sehingga hanya bagian pertama yang ditampilkan.",
       "noBody": "Email ini tidak memiliki teks.",

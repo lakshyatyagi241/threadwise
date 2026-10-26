@@ -5,7 +5,7 @@ import { Field, Select } from '@crm/ui';
 import type { TaskOutcomeRef } from '../api/schemas';
 import { useActivitySettings } from '@/features/sales-activities';
 import { useTaskOutcomes } from '../api/hooks';
-import { outcomeChoices } from '../lib/outcomes';
+import { clampOutcomeLabel, outcomeChoices } from '../lib/outcomes';
 
 /**
  * The picker for a task's outcome: the workspace's active outcomes, "No outcome", and the outcome the task already carries when it
@@ -53,7 +53,7 @@ export function OutcomeSelect({
         <option value="">{t('none')}</option>
         {choices.map((o) => (
           <option key={o.id} value={o.id}>
-            {o.isActive ? o.name : t('hiddenName', { name: o.name })}
+            {clampOutcomeLabel(o.isActive ? o.name : t('hiddenName', { name: o.name }))}
           </option>
         ))}
       </Select>
@@ -80,7 +80,7 @@ export function CompleteWithOutcome({
   return (
     <Select
       aria-label={t('completeWith')}
-      className="h-9 w-auto min-w-44"
+      className="h-9 w-auto min-w-44 max-w-56"
       disabled={disabled}
       value=""
       onChange={(e) => {
@@ -89,8 +89,8 @@ export function CompleteWithOutcome({
     >
       <option value="">{t('completeWith')}</option>
       {list.map((o) => (
-        <option key={o.id} value={o.id}>
-          {o.name}
+        <option key={o.id} value={o.id} title={o.name}>
+          {clampOutcomeLabel(o.name)}
         </option>
       ))}
     </Select>

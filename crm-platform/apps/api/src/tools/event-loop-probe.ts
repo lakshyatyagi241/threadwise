@@ -7,6 +7,8 @@
  *   PROBE_TARGETS           name=url pairs, default `health=http://api:3000/health,ready=http://api:3000/ready`
  *   PROBE_INTERVAL_SECONDS  default 10
  *   PROBE_TIMEOUT_SECONDS   default 10
+ *   PROBE_FILES             name=/path marker files whose age is exported (crm_probe_file_age_seconds)
+ *   PROBE_REACHABLE         target names for which any HTTP answer counts as up (object store)
  *   OBS_METRICS_PORT        default 9464   (the probe's own /metrics, same variables as the API and worker)
  *   OBS_METRICS_HOST        default 127.0.0.1; anything else needs OBS_METRICS_TOKEN or the listener stays closed
  *   OBS_METRICS_TOKEN       bearer token for /metrics
@@ -16,6 +18,7 @@
 import { startMetricsServer } from '@crm/observability';
 import {
   Prober,
+  parseProbeFiles,
   parseProbeTargets,
 } from '../modules/platform-infrastructure/observability/event-loop/probe';
 import { metricsListenerDecision } from '@crm/observability';
@@ -39,6 +42,8 @@ function main(): void {
   const prober = new Prober(targets, {
     intervalSeconds: seconds('PROBE_INTERVAL_SECONDS', 10),
     timeoutSeconds: seconds('PROBE_TIMEOUT_SECONDS', 10),
+    files: parseProbeFiles(process.env.PROBE_FILES ?? ''),
+    reachableNames: (process.env.PROBE_REACHABLE ?? '').split(',').map((x) => x.trim()).filter(Boolean),
   });
   const port = Number(process.env.OBS_METRICS_PORT ?? 9464);
   const host = process.env.OBS_METRICS_HOST ?? '127.0.0.1';

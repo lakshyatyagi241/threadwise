@@ -185,7 +185,6 @@ export const teamMembers = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.teamId, t.userId] }),
     index('idx_team_members_user').on(t.orgId, t.userId),
-    index('idx_team_members_team').on(t.orgId, t.teamId),
     uniqueIndex('uq_team_members_one_primary')
       .on(t.orgId, t.userId)
       .where(sql`${t.isPrimary}`),

@@ -7,6 +7,7 @@ import {
   type OnModuleInit,
 } from '@nestjs/common';
 import { ERROR_CODES, isBuiltinWhatsappProviderKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
 import { WABA_ENV, type WabaEnv } from '../../config/domains/whatsapp-cloud-api-waba.env';
@@ -213,8 +214,10 @@ export class WhatsAppProviderResolver implements OnModuleInit, OnModuleDestroy {
    */
   async payloadProviders(
     phoneNumberIds: string[],
+    /** Where the key lookup runs; the webhook passes its own small pool so a flood cannot take the shared one. */
+    run: <T>(fn: (tx: Tx) => Promise<T>) => Promise<T> = (fn) => this.store.tx(fn),
   ): Promise<{ custom: WabaRegistryProvider[]; hasBuiltin: boolean }> {
-    const keys = await this.store.tx((tx) => this.store.keysOfPhones(tx, phoneNumberIds));
+    const keys = await run((tx) => this.store.keysOfPhones(tx, phoneNumberIds));
     const custom: WabaRegistryProvider[] = [];
     let hasBuiltin = false;
     for (const key of keys) {

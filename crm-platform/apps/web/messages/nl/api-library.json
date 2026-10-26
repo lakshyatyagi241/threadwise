@@ -137,7 +137,9 @@
         "allSources": "Alle bronnen",
         "from": "Van",
         "to": "Tot",
-        "clear": "Filters wissen"
+        "clear": "Filters wissen",
+        "deletedApi": "{name} (verwijderd)",
+        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken."
       },
       "detail": {
         "title": "Details API-log",
@@ -168,7 +170,8 @@
         "openContact": "Open het contact",
         "user": "Uitgevoerd door (gebruikers-ID)",
         "noContext": "Er was geen flow of contact bij betrokken."
-      }
+      },
+      "unsaved": "Niet opgeslagen"
     },
     "variables": {
       "insertFor": "Een variabele invoegen in {label}",
@@ -218,7 +221,8 @@
         "empty": "Leeg laten om geen payload te verzenden.",
         "invalid": "Dit is geen geldige JSON.",
         "shape": "De payload moet een JSON-object of een lijst zijn.",
-        "format": "JSON opmaken"
+        "format": "JSON opmaken",
+        "invalidAt": "Dit is geen geldige JSON (het breekt bij regel {line}, kolom {column})."
       },
       "responseVarsHint": "Velden van het antwoord die flows kunnen lezen als '{{'APINaam.veld'}}'. Kies ze uit het testantwoord.",
       "mappingHint": "Sla bij elke uitvoering van deze API in een flow een veld van het antwoord op in een contacteigenschap.",
@@ -300,7 +304,11 @@
         "choose": "Kies een eigenschap",
         "removeN": "Rij {n} verwijderen",
         "pick": "Kies een pad uit het laatste testantwoord",
-        "add": "Rij toevoegen"
+        "add": "Rij toevoegen",
+        "propertyDuplicate": "Een andere rij slaat op in deze eigenschap. In een veld past maar één waarde, dus kies een andere eigenschap.",
+        "propertyRequired": "Kies de contacteigenschap waarin deze rij opslaat.",
+        "numberText": "Een getalveld accepteert alleen getallen. De laatste test gaf hier “{value}” terug, en die tekst wordt zo opgeslagen.",
+        "numberUntested": "Voer een test uit om te controleren of dit antwoordveld een getal geeft."
       },
       "responseVars": {
         "none": "Nog geen velden beschikbaar voor flows.",
@@ -313,7 +321,8 @@
       "tested": "Test geslaagd",
       "requestHint": "De naam, methode en het adres van de aanroep.",
       "payloadHint": "Wat in de body wordt verzonden. Gebruik de knop '{ }' om een variabele in een waarde te zetten.",
-      "functionHint": "Pas de payload met JavaScript aan voordat hij wordt verzonden. Optioneel."
+      "functionHint": "Pas de payload met JavaScript aan voordat hij wordt verzonden. Optioneel.",
+      "plainHttpWarning": "Dit adres begint met http://, dus het wachtwoord of de sleutel in uw headers zou onversleuteld worden verzonden. Gebruik https:// als de server dat ondersteunt."
     },
     "test": {
       "title": "Antwoord",
@@ -366,7 +375,8 @@
       "result": "Resultaat",
       "status": "Status",
       "time": "Tijd",
-      "size": "Grootte"
+      "size": "Grootte",
+      "truncatedShown": "Het eerste deel van een antwoord van {kb} KB wordt getoond"
     },
     "pagination": {
       "label": "Paginering",

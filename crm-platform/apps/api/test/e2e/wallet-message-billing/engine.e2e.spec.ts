@@ -251,7 +251,7 @@ describe('settleDelivered (TW-WALLET-009)', () => {
     expect(await h.api.events(t.orgId, 'wallet.low_balance')).toHaveLength(1);
   });
 
-  it('records a service message free with its Meta cost known and no ledger entry', async () => {
+  it('charges a service message the minimum, never free, with its Meta cost known', async () => {
     const t = await tenant('s5');
     await fund(h, t.orgId, 1000);
     await h.owner.query(
@@ -262,11 +262,11 @@ describe('settleDelivered (TW-WALLET-009)', () => {
     rates.invalidate();
     try {
       const out = await settle(t.orgId, { category: 'service' });
-      expect(out).toMatchObject({ status: 'free', reason: 'rate_is_zero' });
+      expect(out).toMatchObject({ status: 'charged', chargedMinor: 1 });
       const c = (await charges(h, t.orgId))[0];
-      expect(c).toMatchObject({ status: 'free', credits: 0, free_reason: 'rate_is_zero' });
+      expect(c).toMatchObject({ status: 'charged', credits: 1 });
       expect(Number(c.cost_micros)).toBe(4000);
-      expect((await ledgerRows(h, t.orgId)).filter((r) => r.type === 'spend')).toHaveLength(0);
+      expect((await ledgerRows(h, t.orgId)).filter((r) => r.type === 'spend')).toHaveLength(1);
     } finally {
       await h.owner.query(
         `UPDATE message_rates SET meta_cost_micros = NULL, meta_cost_minor = NULL WHERE country_code = '' AND category = 'service'`,
@@ -322,18 +322,13 @@ describe('settleDelivered (TW-WALLET-009)', () => {
 });
 
 describe('plan allowance (TW-WALLET-010)', () => {
-  it('lets the first N messages of the month through free, then charges the wallet', async () => {
+  it('the first N messages of the month are free inside the allowance, then charged', async () => {
     const t = await tenant('q1', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 2 });
     await fund(h, t.orgId, 5000);
-    expect(await settle(t.orgId)).toMatchObject({
-      status: 'free',
-      reason: 'within_plan_free_quota',
-    });
-    expect(await settle(t.orgId)).toMatchObject({
-      status: 'free',
-      reason: 'within_plan_free_quota',
-    });
+    const free = { status: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject(free);
     expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
     expect((await charges(h, t.orgId)).map((c) => c.billing_mode)).toEqual([
       'plan',
@@ -354,12 +349,12 @@ describe('plan allowance (TW-WALLET-010)', () => {
     expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
   });
 
-  it('never touches the wallet of an unlimited plan', async () => {
+  it('charges an unlimited plan too: there is no allowance to spend from', async () => {
     const t = await tenant('q3', { reseller: false });
-    await setPlan(h, t.orgId, {});
+    await setPlan(h, t.orgId, { monthly: 0 }); // 0 = unlimited, whatever the plan row itself carries
     await fund(h, t.orgId, 5000);
     for (let i = 0; i < 3; i++) await settle(t.orgId);
-    expect(await balanceMinor(h, t.orgId)).toBe(5000);
+    expect(await balanceMinor(h, t.orgId)).toBe(5000 - 3 * 1200);
   });
 
   it('ignores the allowance for a pay-per-message workspace', async () => {
@@ -369,7 +364,7 @@ describe('plan allowance (TW-WALLET-010)', () => {
     expect(await settle(t.orgId)).toMatchObject({ status: 'charged' });
   });
 
-  it('counts concurrent deliveries at the boundary exactly: of 5 racing for 3 free places, 3 are free', async () => {
+  it('counts concurrent deliveries exactly once each: 5 racing against an allowance of 3 leave 3 free and 2 charged', async () => {
     const t = await tenant('q5', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 3 });
     await fund(h, t.orgId, 50_000);
@@ -413,7 +408,8 @@ describe('settleFailed (TW-WALLET-011)', () => {
   });
 
   it('moves no money for a free message, an unknown id or a message never charged', async () => {
-    const t = await tenant('f3');
+    const t = await tenant('f3', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 1000 }); // inside the allowance the message is free
     await fund(h, t.orgId, 1000);
     const id = wamid();
     await settle(t.orgId, { id, category: 'service' });
@@ -427,6 +423,43 @@ describe('settleFailed (TW-WALLET-011)', () => {
       refundedMinor: 0,
     });
     expect(await balanceMinor(h, t.orgId)).toBe(1000);
+  });
+
+  it('gives the place in the plan allowance back when a free message fails, once', async () => {
+    const t = await tenant('f5', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 2 });
+    await fund(h, t.orgId, 5000);
+    const free = { status: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };
+    const id = wamid();
+    expect(await settle(t.orgId, { id })).toMatchObject(free);
+    const month = () =>
+      h.owner
+        .query(`SELECT messages FROM wallet_usage_months WHERE org_id = $1`, [t.orgId])
+        .then((r) => r.rows[0].messages);
+    expect(await month()).toBe(1);
+
+    const { billing } = services(h);
+    // Meta did not bill it, so it is not counted: nothing to give back in money, one place back in the allowance.
+    expect(await billing.settleFailed(t.orgId, id)).toMatchObject({
+      refunded: false,
+      refundedMinor: 0,
+    });
+    expect(await month()).toBe(0);
+    expect(await billing.settleFailed(t.orgId, id)).toMatchObject({ refunded: false });
+    expect(await month()).toBe(0);
+    expect((await charges(h, t.orgId))[0]).toMatchObject({ status: 'refunded' });
+    // A `sent` that arrives after the failure cannot count it again.
+    expect(await settle(t.orgId, { id })).toMatchObject({
+      status: 'replayed',
+      chargeStatus: 'refunded',
+    });
+    expect(await month()).toBe(0);
+
+    // Both free places are still there, and the third message pays.
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject(free);
+    expect(await settle(t.orgId)).toMatchObject({ status: 'charged', chargedMinor: 1200 });
+    expect(await balanceMinor(h, t.orgId)).toBe(5000 - 1200);
   });
 
   it('a later delivery report of a refunded message does not charge it again', async () => {
@@ -492,7 +525,7 @@ describe('the delivery subscriber (TW-WALLET-012)', () => {
     payload,
   });
 
-  it('charges on delivered, ignores sent for the Cloud API, refunds on failed', async () => {
+  it('charges a Cloud API message from sent, once, however delivered and read follow, and refunds on failed', async () => {
     const t = await tenant('d1');
     await fund(h, t.orgId, 10_000);
     const id = wamid();
@@ -504,10 +537,13 @@ describe('the delivery subscriber (TW-WALLET-012)', () => {
       category: 'marketing',
       source: 'campaign',
     };
+    // A message counts against the wallet from `sent` (isBillableStatus), so a run cannot spend money that is still in flight.
     await c.handle(event(t.orgId, { ...base, status: 'sent' }));
-    expect(await charges(h, t.orgId)).toHaveLength(0);
+    expect(await charges(h, t.orgId)).toHaveLength(1);
+    expect(await balanceMinor(h, t.orgId)).toBe(8800);
     await c.handle(event(t.orgId, { ...base, status: 'delivered' }));
     await c.handle(event(t.orgId, { ...base, status: 'read' }));
+    expect(await charges(h, t.orgId)).toHaveLength(1);
     expect(await balanceMinor(h, t.orgId)).toBe(8800);
     await c.handle(event(t.orgId, { ...base, status: 'failed' }));
     expect(await balanceMinor(h, t.orgId)).toBe(10_000);
@@ -583,17 +619,20 @@ describe('the launch gate (TW-WALLET-013)', () => {
     ).resolves.toBeUndefined();
   });
 
-  it('lets a classic workspace inside its free allowance launch with an empty wallet, but not past it', async () => {
+  it('lets a classic workspace launch on an empty wallet while its allowance covers every recipient', async () => {
     const t = await tenant('g4', { reseller: false });
     await setPlan(h, t.orgId, { monthly: 1000 });
     await expect(
       services(h).gate.assertCanLaunch({ orgId: t.orgId, source: 'broadcast', recipients: 100 }),
     ).resolves.toBeUndefined();
+  });
+
+  it('refuses a classic launch that runs past the allowance on an empty wallet', async () => {
+    const t = await tenant('g6', { reseller: false });
+    await setPlan(h, t.orgId, { monthly: 1000 });
     await expect(
-      services(h).gate.assertCanLaunch({ orgId: t.orgId, source: 'broadcast', recipients: 5000 }),
-    ).rejects.toMatchObject({
-      code: ERROR_CODES.WALLET_EMPTY,
-    });
+      services(h).gate.assertCanLaunch({ orgId: t.orgId, source: 'broadcast', recipients: 1001 }),
+    ).rejects.toMatchObject({ code: ERROR_CODES.WALLET_EMPTY });
   });
 
   it('never blocks a platform-owned workspace', async () => {
@@ -616,7 +655,7 @@ describe('the launch gate (TW-WALLET-013)', () => {
 });
 
 describe('billing mode (TW-WALLET-008)', () => {
-  it('a reseller workspace is wallet-billed with the global switch off; a direct one only while it is on', async () => {
+  it('a reseller workspace is wallet-billed with the global switch off; a direct one only while it is on (inside its allowance it is free)', async () => {
     const reseller = await tenant('m1');
     const direct = await tenant('m2', { reseller: false });
     await setPlan(h, direct.orgId, { monthly: 1000 });

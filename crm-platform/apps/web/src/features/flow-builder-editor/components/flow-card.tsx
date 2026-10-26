@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { purposeOf, relativeTime } from '../lib/list-model';
 import { useFlb, useMsg } from '../lib/msg';
 import { flowTypeLabel } from '../lib/contract-text';
-import { openHref } from '../lib/builder-mode';
+import { openHref, type BuilderMode } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
   live: { pill: 'bg-primary/10 text-brand border-primary/30', dot: 'bg-primary' },
@@ -59,7 +59,13 @@ const NEUTRAL = { icon: 'M2 4h12v8H2zM2 7h12', bg: 'bg-muted', text: 'text-foreg
 export const categoryStyle = (c: string | null) => CATEGORY_STYLE[c ?? ''] ?? NEUTRAL;
 
 /** Reference's global `.pill`: mono 9.5px uppercase, 1px 7px padding, 1px border. */
-export const PILL =
+export /** The WhatsApp mark as one filled shape (a bubble with its handset cut out), so nothing overlaps. */
+const WHATSAPP_MARK =
+  'M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z';
+const GLOBE_MARK =
+  'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z';
+
+const PILL =
   'inline-flex items-center gap-1 rounded-full border px-[7px] py-px font-mono text-[9.5px] font-semibold uppercase tracking-[0.04em]';
 
 const Check = () => (
@@ -127,6 +133,8 @@ export interface CardActions {
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
   can: { update: boolean; create: boolean; remove: boolean };
+  /** The workspace's builder. On Advanced every flow is an automation: no bot picture or channel mark, and Open goes to the canvas. */
+  builderMode?: BuilderMode;
 }
 
 export function triggerLabelKey(
@@ -144,6 +152,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
   const tf = useFlb();
   const m = useMsg();
   const tl = useTranslations('flb.list.state');
+  const tk = useTranslations('flb.list.create');
   const sty = STATE_STYLE[flow.state];
   const cat = categoryStyle(flow.category);
   const hasSubs =
@@ -171,7 +180,8 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
               <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
             </svg>
           </div>
-        ) : flow.flowType === 'web' || flow.flowType === 'chat' ? (
+        ) : (flow.flowType === 'web' || flow.flowType === 'chat') &&
+          actions.builderMode !== 'advanced' ? (
           // A WhatsApp or website bot's flow wears the bot picture where the others have their category icon.
           <div
             data-testid="flow-card-bot"
@@ -224,17 +234,37 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.state)}
           </span>
-          {flow.flowType === 'chat' ? (
+          {flow.flowType === 'chat' && flow.builder === 'advanced' ? (
+            <span
+              data-testid="flow-card-automation"
+              title={tk('messaging')}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground"
+            >
+              {/* A messaging flow built on the canvas: connected steps. */}
+              <svg
+                viewBox="0 0 16 16"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2.5 2.5h3.5v3.5H2.5zM10 2.5h3.5v3.5H10zM6.2 10h3.6v3.5H6.2zM4.2 6v1.5a1 1 0 0 0 1 1h2.8M11.8 6v1.5a1 1 0 0 1-1 1H8v1.5" />
+              </svg>
+            </span>
+          ) : flow.flowType === 'chat' && actions.builderMode !== 'advanced' ? (
             <span
               title={flowTypeLabel(tf, 'chat')}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white"
             >
               {/* The WhatsApp mark as one filled shape (a bubble with its handset cut out), so nothing overlaps. */}
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                <path d={WHATSAPP_MARK} />
               </svg>
             </span>
-          ) : flow.flowType === 'web' ? (
+          ) : flow.flowType === 'web' && actions.builderMode !== 'advanced' ? (
             <span
               title={flowTypeLabel(tf, 'web')}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-500 text-white"
@@ -247,7 +277,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
                 strokeWidth="1.3"
                 aria-hidden="true"
               >
-                <path d="M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z" />
+                <path d={GLOBE_MARK} />
               </svg>
             </span>
           ) : null}
@@ -293,7 +323,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mt-4 flex items-center gap-2">
         <Link
-          href={openHref(flow.id, flow.flowType)}
+          href={openHref(flow.id, flow.flowType, flow.builder)}
           className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
         >
           {t('openBuilder')}
@@ -373,6 +403,7 @@ const NODE_KIND: Record<string, string> = {
 /** The big card for the workspace's featured flow, with a mini preview of its first nodes. */
 export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: CardActions }) {
   const t = useTranslations('flb.featured');
+  const tf = useFlb();
   const m = useMsg();
   const tl = useTranslations('flb.list.state');
   // `ucfirst(str_replace('-', ' ', category))`, "Flow" when there is none; the pill style upper-cases it.
@@ -405,6 +436,37 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
             </svg>
             {t('mostUsed')}
           </span>
+          {actions.builderMode === 'advanced' ? null : (
+            <span
+              data-testid="featured-flow-type"
+              className={cn(
+                PILL,
+                flow.flowType === 'web'
+                  ? 'border-sky-500/40 bg-sky-50 text-sky-700'
+                  : flow.flowType === 'chat'
+                    ? 'border-[#25D366]/40 bg-[#25D366]/10 text-[#128C7E]'
+                    : 'border-border bg-muted text-muted-foreground',
+              )}
+            >
+              {flow.flowType === 'chat' ? (
+                <svg viewBox="0 0 24 24" className="h-3 w-3" fill="currentColor" aria-hidden="true">
+                  <path d={WHATSAPP_MARK} />
+                </svg>
+              ) : flow.flowType === 'web' ? (
+                <svg
+                  viewBox="0 0 16 16"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  aria-hidden="true"
+                >
+                  <path d={GLOBE_MARK} />
+                </svg>
+              ) : null}
+              {flowTypeLabel(tf, flow.flowType)}
+            </span>
+          )}
           <span
             className={cn(
               PILL,
@@ -447,7 +509,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={openHref(flow.id, flow.flowType)}
+            href={openHref(flow.id, flow.flowType, flow.builder)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}

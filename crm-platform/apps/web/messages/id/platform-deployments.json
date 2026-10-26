@@ -91,6 +91,7 @@
       "empty": "Belum ada rilis yang tercatat. Rilis akan tampil di sini mulai dari deployment berikutnya.",
       "cols": {
         "tag": "Tag",
+        "changes": "Perubahan",
         "state": "Status",
         "step": "Langkah",
         "started": "Mulai",
@@ -104,7 +105,8 @@
         "ok": "Aktif",
         "failed": "Gagal",
         "rolled_back": "Dikembalikan"
-      }
+      },
+      "by": "oleh {author}"
     }
   }
 }

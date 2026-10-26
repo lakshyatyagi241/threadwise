@@ -16,7 +16,7 @@ This page is for platform operators. It shows what the platform is deploying: th
 
 ## Product releases
 
-The first view, **Product releases**, is the release history of the product itself, desk.wabo.ai.
+The first view, **Product releases**, is the release history of the product itself.
 
 - **Live now** names the release that is serving customers and when it went live.
 - **In progress** means an attempt is building, shipping or releasing right now.
@@ -27,14 +27,14 @@ A **Stalled** badge means an attempt has not changed for 45 minutes. The build o
 
 ## Flow publishes
 
-The first view, **Flow publishes**, lists every time a flow was published, with the state the worker has left it in:
+The first view, **Flow publishes**, lists every time a flow was published, with its current state:
 
-- **Queued**: the publish is waiting for the worker.
-- **Running**: the worker is handling it now.
-- **Failed**: the worker ran out of retries. The **Error** column shows the last reason, cut to 300 characters.
+- **Queued**: the publish is waiting its turn.
+- **Running**: it is being handled now.
+- **Failed**: it ran out of retries. The **Error** column shows the last reason, cut to 300 characters.
 - **Done**: the publish was handled. Done publishes older than 30 days are not listed.
 
-The **Attempts** column counts the tries the worker has made. **Finished at** stays empty until the publish is done or failed.
+The **Attempts** column counts the tries made. **Finished at** stays empty until the publish is done or failed.
 
 ## Geta console
 
@@ -49,10 +49,10 @@ The second view, **Geta console**, lists the flows pushed live to the Geta conso
 
 The list refreshes every few seconds on its own. Pick a status above the table to show only that status. Running and queued items are listed first, then failed, then done or live.
 
-A **Stalled** badge means the item has not moved for 10 minutes. The worker most likely stopped, or the queue is not being emptied. Check the worker before retrying anything.
+A **Stalled** badge means the item has not moved for 10 minutes. Background processing most likely stopped. Ask the platform team to check it before retrying anything.
 
 ## What to do about a failed item
 
-The page is read-only. A failed Geta publish is retried by the workspace from the flow editor. If the same step keeps failing, the error text says why: a 401 or 403 means the Geta tokens expired, and a 4xx on the configuration update means the chatbot record is not what Geta expects.
+The page is read-only. A failed Geta publish is retried by the workspace from the flow editor. If the same step keeps failing, the error text says why: a sign-in or permission error means the Geta access has expired, and a refusal of the configuration update means the chatbot record is not what Geta expects.
 
 > Only the first 200 items of a view are listed. When more exist, the page says so; pick a status to narrow the list.

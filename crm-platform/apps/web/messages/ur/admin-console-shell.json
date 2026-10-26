@@ -24,7 +24,7 @@
         "noWorkspaces": "کوئی ورک اسپیس نہیں"
       },
       "labels": {
-        "addonPacks": "ایڈ آن پیکس",
+        "addonPacks": "ایڈ آنز",
         "extensions": "ایکسٹینشنز",
         "trackingCode": "ٹریکنگ کوڈ",
         "planPricingSettings": "پلان قیمتوں کی سیٹنگز",
@@ -282,7 +282,9 @@
           "save": "محفوظ کریں",
           "saved": "ترجیح محفوظ ہو گئی۔",
           "saveFailed": "ترجیح محفوظ نہیں ہو سکی۔"
-        }
+        },
+        "timezoneSearch": "ٹائم زونز تلاش کریں",
+        "timezoneNoMatch": "کوئی ٹائم زون مماثل نہیں۔"
       },
       "notifications": {
         "title": "ورک اسپیس اطلاعات",

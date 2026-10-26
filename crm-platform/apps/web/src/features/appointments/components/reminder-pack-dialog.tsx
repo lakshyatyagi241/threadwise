@@ -33,7 +33,7 @@ import { WA_TONE, type WhatsappState } from '../lib/reminder-timeline';
 import { chipClass } from './editor-shared';
 import { ChevronDownIcon } from './icons';
 import { ErrorLine, ToneChip } from './parts';
-import { UpgradeHint, useSequencePlan } from './reminder-step-parts';
+import { UpgradeHint, UpgradeLink, useSequencePlan } from './reminder-step-parts';
 
 /** The names of the message languages, each in its own script (the same on every screen language). */
 const LANGUAGE_NAME: Record<ReminderPackLanguage, string> = { en: 'English', hi: 'हिन्दी' };
@@ -541,6 +541,23 @@ function ResultView({
           {t('result.summary', { added: result.added, replaced: result.replaced })}
         </p>
       </Alert>
+      {result.withheld.length > 0 && (
+        <Alert tone="warning" className="space-y-1">
+          <p className="font-medium">{t('result.withheldTitle')}</p>
+          <ul className="ms-4 list-disc text-xs">
+            {result.withheld.map((w) => (
+              <li key={`${w.stepKind}:${w.part}`}>
+                {t(w.part === 'buttons' ? 'result.withheldButtons' : 'result.withheldRebook', {
+                  step: tr(`timeline.step.${w.stepKind}`),
+                })}
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs">
+            <UpgradeLink />
+          </p>
+        </Alert>
+      )}
       <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-semibold">{t('result.templatesTitle')}</h3>

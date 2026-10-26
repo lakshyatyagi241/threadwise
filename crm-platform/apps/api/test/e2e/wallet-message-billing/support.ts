@@ -1,7 +1,10 @@
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { PlatformSettingsService } from '../../../src/modules/auth';
 import {
+  AiChargeService,
   MessageBillingService,
+  UsageBillingService,
+  UsageSettingsService,
   WalletGateService,
   WalletLedgerService,
 } from '../../../src/modules/wallet-message-billing';
@@ -21,6 +24,8 @@ export const WALLET_SETTING_KEYS = [
   'billing.pay_per_message',
   // A suite that turns margin pricing on must not leave it on for the next one.
   'wallet.pricing_mode',
+  // Prices of SMS, email, calls, AI and the other usages.
+  'wallet.usage_rates',
 ];
 
 /** Typed handles on the services the engine tests drive directly. */
@@ -31,6 +36,9 @@ export function services(h: BspHarness) {
     ledger: h.app.get(WalletLedgerService, opts),
     billing: h.app.get(MessageBillingService, opts),
     gate: h.app.get(WalletGateService, opts),
+    usage: h.app.get(UsageBillingService, opts),
+    usageSettings: h.app.get(UsageSettingsService, opts),
+    ai: h.app.get(AiChargeService, opts),
     settings: h.app.get(PlatformSettingsService, opts),
   };
 }
@@ -76,7 +84,7 @@ export async function ledgerRows(h: BspHarness, orgId: number) {
 
 export async function charges(h: BspHarness, orgId: number) {
   const r = await h.owner.query(
-    `SELECT wamid, status, credits, price_credits, shortfall_credits, free_reason, billing_mode, to_country, category, cost_minor, cost_micros
+    `SELECT wamid, kind, units, status, credits, price_credits, shortfall_credits, free_reason, billing_mode, to_country, category, cost_minor, cost_micros
      FROM usage_charges WHERE org_id = $1 ORDER BY id`,
     [orgId],
   );
@@ -104,7 +112,7 @@ export async function setReseller(h: BspHarness, orgId: number, on: boolean) {
 export async function setPlan(
   h: BspHarness,
   orgId: number,
-  p: { monthly?: number; planEndsAt?: string | null; platformOwned?: boolean },
+  p: { monthly?: number; webbot?: number; planEndsAt?: string | null; platformOwned?: boolean },
 ) {
   await h.owner.query(
     `INSERT INTO org_plan_state (org_id, overrides, plan_ends_at, platform_owned)
@@ -112,16 +120,24 @@ export async function setPlan(
      ON CONFLICT (org_id) DO UPDATE SET overrides = EXCLUDED.overrides, plan_ends_at = EXCLUDED.plan_ends_at, platform_owned = EXCLUDED.platform_owned`,
     [
       orgId,
-      JSON.stringify({ limits: p.monthly === undefined ? {} : { monthly_messages: p.monthly } }),
+      JSON.stringify({
+        limits: {
+          ...(p.monthly === undefined ? {} : { monthly_messages: p.monthly }),
+          ...(p.webbot === undefined ? {} : { webbot_messages: p.webbot }),
+        },
+      }),
       p.planEndsAt ?? null,
       p.platformOwned ?? false,
     ],
   );
 }
 
-/** Typed prices, the mode the engine tests assume: margin pricing off, whatever an earlier run left behind. */
+/** Typed prices, the mode the engine tests assume: margin pricing off (it is the default now, so the choice is stored), whatever an earlier run left behind. */
 export async function fixedPricing(h: BspHarness) {
-  await h.owner.query(`DELETE FROM platform_settings WHERE key = 'wallet.pricing_mode'`);
+  await h.owner.query(
+    `INSERT INTO platform_settings (key, value, is_secret) VALUES ('wallet.pricing_mode', '"fixed"'::jsonb, false)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+  );
   services(h).settings.invalidate();
 }
 
@@ -129,6 +145,7 @@ export async function fixedPricing(h: BspHarness) {
 export async function cleanWallet(h: BspHarness, startedAt: Date) {
   await h.owner.query(`DELETE FROM platform_settings WHERE key = ANY($1)`, [WALLET_SETTING_KEYS]);
   await h.owner.query(`DELETE FROM message_rates WHERE country_code IN ('QQ', 'ZZ', 'LI')`);
+  services(h).usageSettings.invalidate();
   await h.owner.query(`SELECT set_config('app.privileged', 'on', false)`);
   await h.owner.query(`DELETE FROM wallet_platform_log WHERE created_at >= $1`, [
     startedAt.toISOString(),

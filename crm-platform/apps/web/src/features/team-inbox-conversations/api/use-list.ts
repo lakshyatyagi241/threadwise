@@ -5,7 +5,14 @@ import { REALTIME_EVENT } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent, useResync } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
-import { EMPTY_LIST, filtersKey, listReducer, type ListFilters, type ListState } from '../lib/list';
+import {
+  EMPTY_LIST,
+  filtersKey,
+  listReducer,
+  narrowsCounts,
+  type ListFilters,
+  type ListState,
+} from '../lib/list';
 import { usePublishCounts } from './counts';
 import { inboxApi } from './service';
 import type { ConversationSummary } from '@crm/contracts';
@@ -36,8 +43,8 @@ export interface ConversationList {
  */
 export function useConversationList(filters: ListFilters, meId: string | null): ConversationList {
   const [state, dispatch] = useReducer(listReducer, EMPTY_LIST);
-  // The menu's Inbox badge reads the same numbers the tabs show.
-  usePublishCounts(state.counts);
+  // The menu's Inbox badge is the whole inbox's unread count, so only unfiltered badges may take its place.
+  usePublishCounts(narrowsCounts(filters) ? null : state.counts);
   const key = filtersKey(filters);
   const latest = useRef({ state, filters, meId });
   const generation = useRef(0);
@@ -97,9 +104,15 @@ export function useConversationList(filters: ListFilters, meId: string | null): 
   const refreshCounts = useCallback(() => {
     if (countsTimer.current) clearTimeout(countsTimer.current);
     countsTimer.current = setTimeout(() => {
+      // The badges count the filters on screen. An answer for filters that have since changed is dropped: the reload of those
+      // filters brings its own counts.
+      const asked = latest.current.filters;
+      const askedKey = filtersKey(asked);
       inboxApi
-        .counts()
-        .then((counts) => dispatch({ type: 'counts', counts }))
+        .counts(asked)
+        .then((counts) => {
+          if (filtersKey(latest.current.filters) === askedKey) dispatch({ type: 'counts', counts });
+        })
         .catch(() => undefined);
     }, COUNTS_DEBOUNCE_MS);
   }, []);

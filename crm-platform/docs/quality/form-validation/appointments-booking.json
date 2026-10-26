@@ -1,0 +1,7094 @@
+{
+  "module": "appointments-booking",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "updateAppointmentChannelSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointment-channels.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "enabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "enabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "defaultSenderId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "defaultSenderId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "defaultSenderId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "adoptAppointmentTemplateSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointment-channels.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "key",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P0"
+        },
+        {
+          "field": "key",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "channel",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "channel",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "channel",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (whatsapp)",
+          "value": "\"whatsapp\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "connectionId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "connectionId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "connectionId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "submit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "submit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createAppointmentTemplateSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointment-channels.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "kind",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (rebook)",
+          "value": "\"rebook\"",
+          "priority": "P1"
+        },
+        {
+          "field": "channel",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "channel",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "not the allowed literal",
+          "value": "\"__not_the_literal__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "subject",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "body",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4000)",
+          "value": "\"a\" x 4000",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4000)",
+          "value": "\"a\" x 4001",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4000)",
+          "value": "\"😀\" x 4000",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateAppointmentTemplateSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointment-channels.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "subject",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "subject",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "body",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4000)",
+          "value": "\"a\" x 4000",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4000)",
+          "value": "\"a\" x 4001",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4000)",
+          "value": "\"😀\" x 4000",
+          "priority": "P2"
+        },
+        {
+          "field": "isActive",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "submit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "submit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createAppointmentSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "bookingTypeId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "inviteeTimezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "inviteeTimezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "inviteeTimezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "inviteeTimezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "answers",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ignoreAvailability",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "ignoreAvailability",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.email",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "inviteeTimezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "inviteeTimezone",
+          "reason": "max boundary was refused by another rule (inviteeTimezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        },
+        {
+          "field": "inviteeTimezone",
+          "reason": "unicode boundary was refused by another rule (inviteeTimezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateAppointmentSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "title",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "title",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "description",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "location",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "location",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "location",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P1"
+        },
+        {
+          "field": "location",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P1"
+        },
+        {
+          "field": "location",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "notes",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "hostId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "contactId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "invitee.name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.email",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "invitee.phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "invitee.email",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "rescheduleAppointmentSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "startsAt",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ignoreAvailability",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "ignoreAvailability",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "cancelAppointmentSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "notify",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "appointmentActionSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "notify",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notify",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "recordAppointmentPaymentSchema",
+      "file": "apps/api/src/modules/appointments-booking/appointments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "amount",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "amount",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "amount",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "method",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "method",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "method",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (60)",
+          "value": "\"a\" x 60",
+          "priority": "P1"
+        },
+        {
+          "field": "method",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (60)",
+          "value": "\"a\" x 61",
+          "priority": "P1"
+        },
+        {
+          "field": "method",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (60)",
+          "value": "\"😀\" x 60",
+          "priority": "P2"
+        },
+        {
+          "field": "reference",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reference",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "reference",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "reference",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "reference",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateBookingPageThemeSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-page-themes.controller.ts",
+      "coercedFields": 12,
+      "scenarios": [
+        {
+          "field": "primaryColor",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "accentColor",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "backgroundColor",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "backgroundStyle",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "backgroundStyle",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (image)",
+          "value": "\"image\"",
+          "priority": "P1"
+        },
+        {
+          "field": "pageTitle",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P1"
+        },
+        {
+          "field": "pageTitle",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P1"
+        },
+        {
+          "field": "pageTitle",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (600)",
+          "value": "\"a\" x 600",
+          "priority": "P1"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (600)",
+          "value": "\"a\" x 601",
+          "priority": "P1"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (600)",
+          "value": "\"😀\" x 600",
+          "priority": "P2"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (40)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (40)",
+          "value": "\"a\" x 41",
+          "priority": "P1"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (40)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "font",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "font",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (humanist)",
+          "value": "\"humanist\"",
+          "priority": "P1"
+        },
+        {
+          "field": "cornerStyle",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "cornerStyle",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (pill)",
+          "value": "\"pill\"",
+          "priority": "P1"
+        },
+        {
+          "field": "colorMode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "colorMode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (auto)",
+          "value": "\"auto\"",
+          "priority": "P1"
+        },
+        {
+          "field": "showPoweredBy",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "showLanguageSwitch",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "useWorkspaceBrand",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "useWorkspaceBrand",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateBookingTypePageThemeSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-page-themes.controller.ts",
+      "coercedFields": 5,
+      "scenarios": [
+        {
+          "field": "primaryColor",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "accentColor",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "backgroundStyle",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "backgroundStyle",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (image)",
+          "value": "\"image\"",
+          "priority": "P1"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (600)",
+          "value": "\"a\" x 600",
+          "priority": "P1"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (600)",
+          "value": "\"a\" x 601",
+          "priority": "P1"
+        },
+        {
+          "field": "welcomeText",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (600)",
+          "value": "\"😀\" x 600",
+          "priority": "P2"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (40)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (40)",
+          "value": "\"a\" x 41",
+          "priority": "P1"
+        },
+        {
+          "field": "buttonLabel",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (40)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "previewSlotsSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-types.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "draft",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "draft",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.durationMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.incrementMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferBeforeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.bufferAfterMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (525600)",
+          "value": "525600",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (525600)",
+          "value": "525601",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.minNoticeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (365)",
+          "value": "365",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (365)",
+          "value": "366",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxAdvanceDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.maxPerDay",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.capacity",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.availability",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.availability",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.overrides",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.overrides",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (14)",
+          "value": "14",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (14)",
+          "value": "15",
+          "priority": "P1"
+        },
+        {
+          "field": "days",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "draft.timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.availability",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "reason": "max boundary was refused by another rule (draft.timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        },
+        {
+          "field": "draft.timezone",
+          "reason": "unicode boundary was refused by another rule (draft.timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "createBookingTypeSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-types.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "slug",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "description",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "locationType",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "locationType",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "locationType",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (whatsapp)",
+          "value": "\"whatsapp\"",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "color",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "color",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "color",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "approvalRequired",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "approvalRequired",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (100000)",
+          "value": "100000",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (100000)",
+          "value": "100001",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (525600)",
+          "value": "525600",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (525600)",
+          "value": "525601",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (365)",
+          "value": "365",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (365)",
+          "value": "366",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "overrides",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "overrides",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 20 items",
+          "value": "array of 20",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (20) items",
+          "value": "array of 21",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 20 items",
+          "value": "array of 20",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (20) items",
+          "value": "array of 21",
+          "priority": "P1"
+        },
+        {
+          "field": "payment",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.currency",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the exact length (3)",
+          "value": "\"aa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "payment.currency",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the exact length (3)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (full)",
+          "value": "\"full\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.autoSendLink",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.autoSendLink",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (525600)",
+          "value": "525600",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (525600)",
+          "value": "525601",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "calendar.createMeet",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.createMeet",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "reason": "2 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.currency",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "max boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "reason": "unicode boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateBookingTypeSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-types.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "slug",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "slug",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "description",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "description",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "locationType",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "locationType",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "locationType",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (whatsapp)",
+          "value": "\"whatsapp\"",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P1"
+        },
+        {
+          "field": "locationValue",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "color",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "color",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "color",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P1"
+        },
+        {
+          "field": "introMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "approvalRequired",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "approvalRequired",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (100000)",
+          "value": "100000",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (100000)",
+          "value": "100001",
+          "priority": "P1"
+        },
+        {
+          "field": "sortOrder",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "hostId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "durationMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "5",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (5)",
+          "value": "4",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "incrementMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferBeforeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1440)",
+          "value": "1440",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1440)",
+          "value": "1441",
+          "priority": "P1"
+        },
+        {
+          "field": "bufferAfterMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (525600)",
+          "value": "525600",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (525600)",
+          "value": "525601",
+          "priority": "P1"
+        },
+        {
+          "field": "minNoticeMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (365)",
+          "value": "365",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (365)",
+          "value": "366",
+          "priority": "P1"
+        },
+        {
+          "field": "maxAdvanceDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "maxPerDay",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "capacity",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "overrides",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "overrides",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 20 items",
+          "value": "array of 20",
+          "priority": "P1"
+        },
+        {
+          "field": "questions",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (20) items",
+          "value": "array of 21",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 20 items",
+          "value": "array of 20",
+          "priority": "P1"
+        },
+        {
+          "field": "templates",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (20) items",
+          "value": "array of 21",
+          "priority": "P1"
+        },
+        {
+          "field": "payment",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.currency",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the exact length (3)",
+          "value": "\"aa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "payment.currency",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the exact length (3)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.fee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.taxPercent",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.gatewaySlug",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.depositMode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (full)",
+          "value": "\"full\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.deposit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.autoSendLink",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.autoSendLink",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelFee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.noShowFee",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (525600)",
+          "value": "525600",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (525600)",
+          "value": "525601",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.cancelWindowMinutes",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.calendarId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "calendar.createMeet",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.createMeet",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.spreadsheetId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "calendar.sheetRange",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "availability",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "reminders",
+          "reason": "2 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "payment.currency",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "max boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "reason": "unicode boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "upsertOverrideSchema",
+      "file": "apps/api/src/modules/appointments-booking/booking-types.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "createIcsFeedInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/calendar-feeds.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "url",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (8)",
+          "value": "\"aaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (8)",
+          "value": "\"aaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "blockAllDay",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "blockAllDay",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateIcsFeedInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/calendar-feeds.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "isActive",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isActive",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "blockAllDay",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "blockAllDay",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "calendarConnectStartInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/microsoft-calendar.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "returnTo",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "returnTo",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "selectCalendarInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/microsoft-calendar.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "calendarId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (300)",
+          "value": "\"a\" x 300",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (300)",
+          "value": "\"a\" x 301",
+          "priority": "P1"
+        },
+        {
+          "field": "calendarId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (300)",
+          "value": "\"😀\" x 300",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "microsoftCalendarConfirmInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/microsoft-calendar.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "ticket",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (20)",
+          "value": "\"aaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (20)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4096)",
+          "value": "\"a\" x 4096",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4096)",
+          "value": "\"a\" x 4097",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4096)",
+          "value": "\"😀\" x 4096",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "setCalendarProviderInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/microsoft-calendar.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "provider",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "provider",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "provider",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (microsoft)",
+          "value": "\"microsoft\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "publicBookInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "startsAt",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "email",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "email",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "email",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (5)",
+          "value": "\"aaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (5)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "timezone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P1"
+        },
+        {
+          "field": "notes",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "answers",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.given",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.given",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "email",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "timezone",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "reason": "max boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        },
+        {
+          "field": "timezone",
+          "reason": "unicode boundary was refused by another rule (timezone: timezone must be an IANA zone such as \"Asia/Kolkata\")",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "publicRescheduleInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "startsAt",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "startsAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "publicCancelInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "reminderPackPreviewInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/reminder-sequence.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "bookingTypeId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (hi)",
+          "value": "\"hi\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "reminderPackAdoptInputSchema",
+      "file": "apps/api/src/modules/appointments-booking/reminder-sequence.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "bookingTypeId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bookingTypeId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "language",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (hi)",
+          "value": "\"hi\"",
+          "priority": "P1"
+        },
+        {
+          "field": "confirmReplace",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "confirmReplace",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "submitToMeta",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "submitToMeta",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

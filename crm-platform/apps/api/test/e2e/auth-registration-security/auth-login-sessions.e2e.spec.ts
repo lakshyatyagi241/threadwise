@@ -778,6 +778,22 @@ describe('platform operators (TW-AUTH-032/033/034/018)', () => {
       .set(headers)
       .send({ email: SUPPORT, password: OPERATOR_PASSWORD });
 
+  it('challenges a super admin who has two-factor on even while the super-admin switch is off', async () => {
+    // The harness turns the switch on for the suites that need it; this check turns it off and restores it.
+    await setPolicy({ requireMfaForSuperAdmins: false });
+    try {
+      const res = await api()
+        .post('/v2/platform/auth/login')
+        .set('x-forwarded-for', nextIp())
+        .send({ email: OPERATOR_EMAIL, password: OPERATOR_PASSWORD });
+      expect(res.status, JSON.stringify(res.body)).toBe(201);
+      expect(res.body.status).toBe('mfa_required');
+      expect(res.body.tokens).toBeUndefined();
+    } finally {
+      await setPolicy({ requireMfaForSuperAdmins: true });
+    }
+  });
+
   it('caps operator sessions like user sessions', async () => {
     await setPolicy({ maxConcurrentSessions: 2 });
     try {

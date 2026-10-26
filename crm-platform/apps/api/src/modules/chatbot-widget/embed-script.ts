@@ -81,6 +81,12 @@ function calloutScript(w: EmbedWidget, colour: string, side: string): string {
   var X = JSON.parse(${jsString(JSON.stringify(cfg))});
   var extras = [];
   function hideExtras() { extras.forEach(function (e) { e.style.display = 'none'; }); }
+  // Closing the window (minimize, end or restart) puts the launcher back as it looked at first: the callout and the dot, unless the
+  // visitor sent the callout away with its cross.
+  function showExtras() {
+    try { if (sessionStorage.getItem(${jsString(seen)}) === '1') return; } catch (e) {}
+    extras.forEach(function (e) { e.style.display = ''; });
+  }
   (function () {
     var css = '';
     if (X.animation === 'bounce') css += '@keyframes wgtBounce{0%,60%,100%{transform:none}20%{transform:translateY(-12px)}40%{transform:translateY(-5px)}}';
@@ -95,8 +101,7 @@ function calloutScript(w: EmbedWidget, colour: string, side: string): string {
     btn.style.position = 'relative';
     if (X.badge) {
       var dot = d.createElement('span');
-      dot.textContent = '1';
-      dot.style.cssText = 'position:absolute;top:-3px;' + (X.side === 'left' ? 'left' : 'right') + ':-3px;min-width:20px;height:20px;border-radius:999px;background:#ff4d5e;color:#fff;font:700 11px system-ui,sans-serif;display:grid;place-items:center;border:2px solid #fff';
+      dot.style.cssText = 'position:absolute;top:0;' + (X.side === 'left' ? 'left' : 'right') + ':0;width:14px;height:14px;border-radius:999px;background:#ff4d5e;border:2px solid #fff';
       btn.appendChild(dot);
       extras.push(dot);
     }
@@ -310,7 +315,9 @@ ${
     ? `  var img = d.createElement('img');
   img.src = ${jsString(image)};
   img.alt = '';
-  img.style.cssText = 'width:36px;height:36px;border-radius:50%';
+  // The picture is the whole button: no ring of the button colour around it.
+  img.style.cssText = 'width:100%;height:100%;border-radius:50%;object-fit:cover;display:block';
+  btn.style.background = 'transparent';
   btn.appendChild(img);`
     : `  btn.innerHTML = ${jsString(CHAT_GLYPH)};`
 }
@@ -347,19 +354,38 @@ ${
     ? `  function toggle() {
     var opening = panel.style.display === 'none';
     panel.style.display = opening ? 'block' : 'none';
+    // A flow bot starts by itself the first time its window is opened.
+    if (opening) { try { frame.contentWindow.postMessage({ wgt: 'opened' }, '*'); } catch (e) {} }
     if (opening) {
-      panel.style.animation = 'wgtIn .22s cubic-bezier(.2,.7,.3,1) both';
+      // The opening animation ends on transform:none, which would undo the centring of an expanded window.
+      if (!panel._corner) panel.style.animation = 'wgtIn .22s cubic-bezier(.2,.7,.3,1) both';
       hideExtras();
     }
   }
   // The chat window's own close button asks the page to hide the panel.
   window.addEventListener('message', function (e) {
     if (e.source !== frame.contentWindow || !e.data) return;
-    if (e.data.wgt === 'close') panel.style.display = 'none';
+    if (e.data.wgt === 'close') {
+      panel.style.display = 'none';
+      if (typeof showExtras === 'function') showExtras();
+    }
     if (e.data.wgt === 'expand') {
       var big = e.data.on === true;
-      panel.style.width = big ? 'min(880px,calc(100vw - 32px))' : '${size.w}px';
-      panel.style.height = big ? 'min(720px,calc(100vh - 124px))' : '${size.h}px';
+      var ps = panel.style;
+      // Expanded, the window sits in the middle of the page; shrunk, it goes back to the corner it came from.
+      if (big && !panel._corner) panel._corner = { l: ps.left, r: ps.right, b: ps.bottom, t: ps.top, w: ps.width, h: ps.height, m: ps.maxHeight };
+      if (big) {
+        ps.animation = 'none';
+        ps.left = '50%'; ps.right = 'auto'; ps.bottom = 'auto'; ps.top = '50%';
+        ps.transform = 'translate(-50%,-50%)';
+        ps.width = 'min(880px,calc(100vw - 32px))';
+        ps.height = 'min(720px,calc(100vh - 48px))';
+        ps.maxHeight = 'calc(100vh - 48px)';
+      } else if (panel._corner) {
+        var c = panel._corner;
+        ps.transform = ''; ps.left = c.l; ps.right = c.r; ps.bottom = c.b; ps.top = c.t; ps.width = c.w; ps.height = c.h; ps.maxHeight = c.m;
+        panel._corner = null;
+      }
     }
   });
 ${w.launcher.chat.pip ? PIP_SCRIPT : ''}`

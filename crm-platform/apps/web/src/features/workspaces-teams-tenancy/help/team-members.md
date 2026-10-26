@@ -27,7 +27,8 @@ keywords:
     phone,
     last login,
     available,
-    offline,
+    away,
+    working hours,
     availability,
     more menu,
   ]
@@ -54,9 +55,12 @@ The old address `/team-members` now opens this screen, and the link in the "went
 
 - **Concurrent chats** is the most open chats automatic assignment gives one agent at once. When an agent already holds that many open chats, round robin and least busy skip them until one is resolved or moved. Empty means no limit. Picking someone by hand is still allowed.
 - **Last login** is read only. It is the last time the person signed in, shown in your workspace time zone (set in your account settings). **Never** means they have not signed in yet.
-- **Available / Offline.** Open the account menu (your avatar at the top right) and use the **Availability** switch. While you are **Offline**, nothing is assigned to you automatically; chats you already have stay yours. Switch back to **Available** to receive new chats again.
+- **Available / Away.** Open the account menu (your avatar at the top right) and use the **Availability** switch, or the status pill next to the bell (see [Your status](help:agent-status-bar)). While you are **Away**, nothing is assigned to you automatically; chats you already have stay yours. Switch back to **Available** to receive new chats again.
+- **Working hours.** On plans with automatic status, the clock icon on a person's row opens their working hours: the days and times they are available, their time zone and whether their status follows them. See [Working hours and automatic status](help:agent-status-automation).
 
 ## Leave, delegate and reassigning work
+
+**Your own time off.** Open the account menu (your avatar at the top right) and choose **Time off**. It opens the same leave dialog for yourself: first and last day (or no end date), an optional reason, a delegate, and **End leave now** while you are away. While you are away the row reads **On leave until** with your last day. Every role can do this, including Viewers and custom roles that cannot open Team members, because it needs only the leave permission, not access to the Team settings.
 
 Someone who is **on leave** is skipped by automatic assignment. Dates are days in your workspace calendar, so "until 20 Oct" means the whole of the 20th, and the person is back on the 21st. A leave can start today or later, have no end date yet, and be ended early with **End leave now**. Only the person and their managers see the reason.
 
@@ -67,7 +71,7 @@ Someone who is **on leave** is skipped by automatic assignment. Dates are days i
 
 ## Plan and access
 
-Setting your own leave needs no special rights; setting someone else's, naming their delegate and reassigning their work need the leave management permission with the "all" scope (Managers and above) and, for moving contacts and deals, the permission to edit them. Changing a phone number or chat limit, resending an invite, resetting a password and removing members need the permission to invite members. The Available / Offline switch is only ever yours. You cannot act on yourself or on someone of a higher role, and only an Owner can act on an Owner.
+Setting your own leave (from **Time off** in the account menu, or from this screen) needs no special rights and no access to Team settings; setting someone else's, naming their delegate and reassigning their work need the leave management permission with the "all" scope (Managers and above) and, for moving contacts and deals, the permission to edit them. Changing a phone number or chat limit, resending an invite, resetting a password and removing members need the permission to invite members. Your own Available / Away choice is only ever yours; working hours can be set for anyone you may manage leave for. You cannot act on yourself or on someone of a higher role, and only an Owner can act on an Owner.
 
 ## If something looks wrong
 

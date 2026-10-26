@@ -133,6 +133,7 @@ export function FlowsScreen() {
 
   const actions: CardActions = {
     can: { update: canUpdate, create: canCreate, remove: canDelete },
+    builderMode,
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);
@@ -150,7 +151,7 @@ export function FlowsScreen() {
       try {
         const copy = await flowsApi.duplicate(f.id);
         flash(tt('duplicated'));
-        router.push(openHref(copy.id, copy.flowType));
+        router.push(openHref(copy.id, copy.flowType, copy.builder));
       } catch (e) {
         duplicating.current.delete(f.id);
         fail(e);
@@ -221,7 +222,7 @@ export function FlowsScreen() {
           : {},
       );
       flash(tt('imported'));
-      router.push(openHref(created.id, created.flowType));
+      router.push(openHref(created.id, created.flowType, created.builder));
     } catch (e) {
       setImportError(e instanceof ApiError ? e.message : t('importFailed'));
     } finally {
@@ -348,7 +349,7 @@ export function FlowsScreen() {
                 {t('workspace')} · {orgName}
               </div>
               <h1 className="text-[32px] leading-[1.05] tracking-tight">
-                {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>.
+                {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>.
               </h1>
               <p className="mt-2 max-w-2xl text-[13px] font-semibold text-muted-foreground">
                 {t('subtitle')}

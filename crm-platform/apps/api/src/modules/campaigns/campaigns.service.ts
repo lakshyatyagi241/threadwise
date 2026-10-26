@@ -46,7 +46,8 @@ import {
   emailCampaignProblems,
   emailCleared,
   isEmailProvider,
-  isWalletFree,
+  isUsageBilled,
+  usageKindOf,
 } from './email-campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
@@ -127,10 +128,12 @@ export class CampaignsService {
       if (resolved.provider === 'sms') await this.entitlements.assertFeature(orgId, 'sms');
       const email = await this.forEmail(orgId, resolved.provider, input);
       // A launch needs a funded wallet (TW-WALLET-013), checked before the campaign or any recipient row exists. A draft launches
-      // nothing, so it is not checked until it is started. SMS and email are never charged to the wallet (TW-SMS-027), so they are not
-      // checked either.
-      if (status !== 'draft' && !isWalletFree(resolved.provider)) {
-        await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
+      // nothing, so it is not checked until it is started. SMS and email are priced by usage billing, not the WhatsApp card, so they
+      // are checked at their own price: the balance must cover every recipient.
+      if (status !== 'draft') {
+        if (isUsageBilled(resolved.provider))
+          await this.wallet.precheckUsage(orgId, usageKindOf(resolved.provider), contactIds.length);
+        else await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
       }
       const id = await this.repo.insert(tx, orgId, {
         ...form,

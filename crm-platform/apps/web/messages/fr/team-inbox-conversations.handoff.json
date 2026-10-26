@@ -33,12 +33,20 @@
         "done": "Vous avez pris cette conversation.",
         "doneOwner": "Vous avez pris cette conversation et vous êtes maintenant le propriétaire du contact.",
         "failed": "Impossible de prendre la conversation.",
-        "taken": "Quelqu’un d’autre a pris cette conversation en premier."
+        "taken": "Quelqu’un d’autre a pris cette conversation en premier.",
+        "overLimitTitle": "Vous avez atteint votre limite de conversations",
+        "overLimitMessage": "Vous avez déjà {open} conversations ouvertes et votre limite est de {limit}. Prendre celle-ci quand même ?",
+        "overLimitConfirm": "La prendre quand même",
+        "overLimitCancel": "Annuler"
       },
       "giveBack": {
         "button": "Rendre au bot",
         "done": "Le bot répond de nouveau à cette conversation.",
-        "failed": "Impossible de rendre la conversation au bot."
+        "failed": "Impossible de rendre la conversation au bot.",
+        "doneFlow": "Le bot poursuit le flux.",
+        "doneNextLive": "Le bot répondra au prochain message du client.",
+        "doneNextDefault": "Le bot est de nouveau actif. Il ne répondra au prochain message que si un flux par défaut est défini.",
+        "already": "Le bot a déjà cette conversation."
       },
       "send": {
         "button": "Envoyer dans la file",
@@ -50,7 +58,7 @@
         "intro": "Le bot cesse de répondre à ce contact. La conversation va à la personne ou à l’équipe que vous choisissez, ou attend dans la file que quelqu’un la prenne.",
         "where": "Envoyer à",
         "whereRules": "Les règles d’assignation, sinon la file d’attente",
-        "whereQueueOnly": "La file d’attente (les règles d’assignation ne sont pas incluses dans votre offre)",
+        "whereQueueOnly": "La file d'attente (les règles d'attribution nécessitent le module Routage intelligent)",
         "whereTeam": "Une équipe",
         "wherePerson": "Une personne",
         "team": "Équipe",
@@ -78,14 +86,16 @@
         "priority": "Priorité",
         "summary": "Résumé",
         "answers": "Ce que le contact a dit au bot",
-        "trace": "Comment elle a été assignée"
+        "trace": "Comment elle a été assignée",
+        "timers": "Étapes de la file d'attente"
       },
       "source": {
         "flow": "Un flux",
         "ai_agent": "Un agent IA",
         "keyword": "Demande du contact lui-même",
         "bot_failure": "Un bot qui n’a pas pu aider",
-        "manual": "Un collègue"
+        "manual": "Un collègue",
+        "arrival": "Le routage : personne n'a pu la prendre"
       },
       "reason": {
         "customer_asked": "Le contact a demandé une personne",
@@ -105,6 +115,42 @@
         "chosen": "Choisi",
         "skipped": "Ignoré",
         "info": "Note"
+      },
+      "botLine": {
+        "system": "le système",
+        "pressed": {
+          "flow": "Le bot est de retour, rendu par {name}. Le flux continue.",
+          "nextLive": "Le bot est de retour, rendu par {name}. Il répondra au prochain message du client.",
+          "nextDefault": "Le bot est de retour, rendu par {name}. Il ne répondra au prochain message que si un flux par défaut est défini."
+        },
+        "result": {
+          "continued": "Le flux a continué par la sortie « rendue ».",
+          "claimed_again": "Le flux n’a pas repris : une personne a de nouveau pris la conversation.",
+          "flow_not_live": "Le flux n’a pas repris : il n’est plus actif.",
+          "start_failed": "Le flux n’a pas pu reprendre."
+        },
+        "customer": {
+          "sent": "Le message au client a été envoyé.",
+          "window_closed": "Le message au client a été ignoré : la fenêtre de 24 heures est fermée.",
+          "no_consent": "Le message au client a été ignoré : pas de consentement.",
+          "failed": "Le message au client n’a pas pu être envoyé.",
+          "channel_unavailable": "Le message au client a été ignoré : le canal est indisponible."
+        }
+      },
+      "timers": {
+        "reminded": "Rappel à {at}",
+        "offered": "Proposé à cette équipe à {at}",
+        "messaged": "Message envoyé au client à {at}",
+        "gaveBack": "Rendu au bot à {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Rendue au bot par {actor}",
+          "bot_resumed": "Le bot a poursuivi le flux",
+          "bot_resume_skipped": "Le flux n’a pas repris"
+        }
       }
     }
   }

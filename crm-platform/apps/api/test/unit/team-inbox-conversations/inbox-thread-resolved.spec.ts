@@ -10,7 +10,7 @@ const CONV = '6f1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e10';
 const CLIENT = '9b1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e12';
 const ctx: RequestContext = { requestId: 'r', orgId: 1, actorType: 'user', actorId: 5, userId: 5 };
 
-function setup(status: string) {
+function setup(status: string, erased = false) {
   const enqueueOutbound = vi.fn().mockResolvedValue({ message: { id: 'm1' } });
   const retryOutbound = vi.fn().mockResolvedValue({ id: 'm1' });
   const record = async () => ({
@@ -19,6 +19,7 @@ function setup(status: string) {
     assigneeUserId: 5,
     assigneeTeamId: null,
     channelOwnerUserId: null,
+    erased,
   });
   const service = new InboxThreadService(
     { tx: (fn: (t: unknown) => unknown) => fn({}) } as never,
@@ -79,5 +80,26 @@ describe('an agent message to a resolved thread', () => {
     const { service, run, enqueueOutbound } = setup(status);
     await run(() => service.send(CONV, text));
     expect(enqueueOutbound).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("an agent message to an erased contact's thread", () => {
+  it('is refused whatever the kind, and nothing is queued', async () => {
+    const { service, run, enqueueOutbound } = setup('open', true);
+    for (const input of [text, reaction]) {
+      await expect(run(() => service.send(CONV, input))).rejects.toMatchObject({
+        code: ERROR_CODES.CONVERSATION_ERASED,
+        status: 422,
+      });
+    }
+    expect(enqueueOutbound).not.toHaveBeenCalled();
+  });
+
+  it('is refused for a retry as well', async () => {
+    const { service, run, retryOutbound } = setup('open', true);
+    await expect(run(() => service.retry(CLIENT))).rejects.toMatchObject({
+      code: ERROR_CODES.CONVERSATION_ERASED,
+    });
+    expect(retryOutbound).not.toHaveBeenCalled();
   });
 });

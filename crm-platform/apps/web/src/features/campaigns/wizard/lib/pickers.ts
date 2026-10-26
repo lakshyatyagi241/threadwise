@@ -50,6 +50,14 @@ export interface CalendarDay {
 const pad = (n: number) => String(n).padStart(2, '0');
 export const isoOf = (y: number, m0: number, d: number) => `${y}-${pad(m0 + 1)}-${pad(d)}`;
 
+/** Today's date (`YYYY-MM-DD`) on this device: where an empty calendar opens. */
+export const todayIso = (now: Date = new Date()) =>
+  isoOf(now.getFullYear(), now.getMonth(), now.getDate());
+
+/** A day the calendar cannot pick: before `min` or after `max` (both `YYYY-MM-DD`, each optional). */
+export const dayOff = (iso: string, min?: string, max?: string) =>
+  (min !== undefined && iso < min) || (max !== undefined && iso > max);
+
 /** The weeks of a month (Sunday first), padded with the neighbouring months' days: always whole weeks. */
 export function monthGrid(year: number, month0: number): CalendarDay[][] {
   const first = new Date(Date.UTC(year, month0, 1));

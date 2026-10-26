@@ -37,7 +37,8 @@
       "statusStage": "Die status hoort bij een andere fase. Kies een status die past bij de fase van het contact.",
       "stageScope": "Een status kan alleen aan één van je levenscyclusfases worden gekoppeld.",
       "planLimit": "Je hebt de limiet van je abonnement bereikt van {limit, plural, one {# contact} other {# contacten}}. Upgrade je abonnement om er meer toe te voegen, of verwijder een bestaand contact om ruimte vrij te maken.",
-      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd."
+      "legalHold": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "assignedToOther": "Deze chat is aan een andere agent toegewezen. Wijs hem eerst aan jezelf toe om een bericht te sturen."
     },
     "list": {
       "title": "Contact Hub",
@@ -282,8 +283,6 @@
       "shortEmail": "E-mail",
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Aangemaakt",
-      "shortModified": "Gewijzigd",
       "firstRun": {
         "title": "Voeg je eerste contacten toe",
         "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",
@@ -296,7 +295,9 @@
       "teamLabel": "Team",
       "teamFilter": "Filteren op team",
       "allTeams": "Alle teams",
-      "teamFormer": "Voormalig team"
+      "teamFormer": "Voormalig team",
+      "unhideColumn": "Kolom tonen",
+      "resizeColumn": "Sleep om {column} te vergroten of verkleinen; dubbelklik om te herstellen"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -346,7 +347,25 @@
       "assignOwner": "Eigenaar toewijzen",
       "changeStage": "Fase wijzigen",
       "more": "Meer",
-      "held": "Dit record is beschermd en kan momenteel niet worden verwijderd."
+      "held": "Dit record is beschermd en kan momenteel niet worden verwijderd.",
+      "consent": "Marketingtoestemming",
+      "consentTitle": "Marketingtoestemming",
+      "consentChannel": "Kanaal",
+      "consentAction": "Wijzigen",
+      "consentSubscribe": "Inschrijven",
+      "consentUnsubscribe": "Uitschrijven",
+      "consentNote": "Hoe de contacten hebben ingestemd",
+      "consentNotePlaceholder": "Wat ze zeiden of ondertekenden, en waar",
+      "consentNoteRequired": "Geef aan hoe de contacten hebben ingestemd voordat je ze inschrijft.",
+      "consentContinue": "Doorgaan",
+      "consentBack": "Terug",
+      "consentConfirm": "Toestemming vastleggen",
+      "consentSummary": "Markeer {count, plural, one {# contact} other {# contacten}} als {change} op {channel}. Elk krijgt een vermelding in de toestemmingsgeschiedenis.",
+      "consentChangeGranted": "ingeschreven",
+      "consentChangeWithdrawn": "uitgeschreven",
+      "consentAllMatching": "Dit geldt voor alle contacten die het filter vindt.",
+      "consentSubscribed": "{count, plural, one {# contact ingeschreven} other {# contacten ingeschreven}}",
+      "consentUnsubscribed": "{count, plural, one {# contact uitgeschreven} other {# contacten uitgeschreven}}"
     },
     "form": {
       "addEyebrow": "Nieuw contact",
@@ -448,7 +467,8 @@
       "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
       "searchOptions": "Opties zoeken",
       "searchOptionsFor": "Zoeken in de opties van {field}",
-      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht."
+      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht.",
+      "cascadeWaiting": "Kies eerst {parent} om de keuzes te zien."
     },
     "tags": {
       "title": "Tags",
@@ -497,7 +517,6 @@
       "loading": "Groepen laden...",
       "unavailableTitle": "Groepen zijn nog niet beschikbaar",
       "unavailableMessage": "De service voor contactgroepen is niet live op deze server, dus groepen kunnen nog niet worden getoond of gemaakt.",
-      "contacts": "contacten",
       "viewContacts": "Contacten bekijken",
       "edit": "Groep bewerken",
       "editNamed": "Groep {name} bewerken",
@@ -505,8 +524,6 @@
       "deleteNamed": "Groep {name} verwijderen",
       "deleteTitle": "Deze groep verwijderen?",
       "deleteMessage": "\"{name}\" wordt verwijderd bij elk contact dat erin zit. De contacten zelf blijven bewaard.",
-      "createTile": "Nieuwe groep maken",
-      "createTileHint": "Deel contacten in op segment, funnelfase of interesse.",
       "emptyTitle": "Nog geen groepen",
       "emptyMessage": "Vraag een workspace-manager om de eerste groep te maken.",
       "helpKicker": "Hulp - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "Er bestaat al een groep met deze naam, dus er is niets nieuws gemaakt.",
       "import": "Contacten importeren",
-      "importInto": "Importeren"
+      "importInto": "Importeren",
+      "colName": "Naam",
+      "colMembers": "Leden",
+      "colCreatedBy": "Gemaakt door",
+      "colCreatedAt": "Aangemaakt op",
+      "colModifiedBy": "Gewijzigd door",
+      "colUpdatedAt": "Bijgewerkt op",
+      "colActions": "Acties",
+      "tableLabel": "Contactgroepen",
+      "search": "Groepen zoeken",
+      "searchPlaceholder": "Zoeken op naam",
+      "count": "{count, plural, =0 {Geen groepen} one {# groep} other {# groepen}}",
+      "noResultsTitle": "Geen groepen gevonden",
+      "noResults": "Geen groepsnaam bevat wat u heeft getypt.",
+      "clearSearch": "Zoekopdracht wissen"
     },
     "import": {
       "eyebrow": "Bulkimport",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "geboortedatum is geen datum met het jaar eerst die een geboortedatum kan zijn",
         "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij",
         "invalid_timezone": "ongeldige tijdzone",
-        "legal_hold": "beschermd record, niet gewijzigd"
+        "legal_hold": "beschermd record, niet gewijzigd",
+        "invalid_property_value": "de waarde van de aangepaste eigenschap past niet bij het type of de opties ervan",
+        "invalid_property_value_column": "kolom \"{column}\": de waarde past niet bij het type of de opties ervan"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -634,12 +667,15 @@
       "limitExceeded": "Boven abonnementslimiet",
       "limitExceededNote": "Sommige nieuwe contacten zijn niet geïmporteerd omdat de contactlimiet van je abonnement is bereikt.",
       "rejectsFailed": "De afgewezen rijen konden niet worden gedownload.",
+      "sampleFailed": "Het voorbeeldbestand kon niet worden gedownload. Probeer het opnieuw.",
       "groupRequired": "Deze contacten toevoegen aan",
       "groupExisting": "Een bestaande groep",
       "groupNew": "Een nieuwe groep",
       "groupPick": "Kies een groep",
       "groupNewPlaceholder": "Naam van nieuwe groep",
-      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt."
+      "groupRequiredHint": "Elk geïmporteerd contact komt in deze ene groep. De groepskolom in het bestand wordt genegeerd, tenzij je die hierboven koppelt.",
+      "customProperties": "Aangepaste eigenschappen",
+      "customPropertiesHint": "Een kolom waarvan de kop de naam van de eigenschap is (of attr:key, zoals de export die schrijft), vult die eigenschap. Een lege cel behoudt de waarde die het contact al heeft."
     },
     "detail": {
       "back": "Alle contacten",
@@ -1087,7 +1123,8 @@
         "moveDown": "{name} omlaag verplaatsen",
         "edit": "{name} bewerken",
         "deactivate": "{name} deactiveren",
-        "reactivate": "Opnieuw activeren"
+        "reactivate": "Opnieuw activeren",
+        "dependsOn": "Keuzes hangen af van {field}"
       },
       "toast": {
         "conflict": "Iemand anders heeft dit gewijzigd. De lijst is vernieuwd; probeer het opnieuw.",
@@ -1243,6 +1280,34 @@
         "manageStages": "Fasen beheren",
         "manageGroups": "Groepen beheren",
         "locked": "Vast"
+      },
+      "cascade": {
+        "open": "Afhankelijke velden",
+        "title": "Afhankelijke velden",
+        "close": "Sluiten",
+        "intro": "Een afhankelijk veld wordt altijd getoond. De keuzes ervan hangen af van de keuze in het bovenliggende veld: vink voor elke keuze van het bovenliggende veld de keuzes van het afhankelijke veld aan die erbij horen.",
+        "empty": "Nog geen afhankelijke velden.",
+        "add": "Afhankelijk veld toevoegen",
+        "needTwoChoiceFields": "Afhankelijke velden hebben minstens twee eigenschappen met een keuzelijst nodig (keuzemenu, meervoudige keuze of radio).",
+        "dependsOn": "hangt af van {parent}",
+        "editLabel": "{name} bewerken",
+        "removeLabel": "{name} verwijderen",
+        "parent": "Bovenliggende eigenschap",
+        "child": "Afhankelijke eigenschap",
+        "pickParent": "Kies de bovenliggende eigenschap",
+        "pickChild": "Kies de afhankelijke eigenschap",
+        "allowed": "Keuzes van {child} die per keuze van {parent} zijn toegestaan",
+        "noParentChoices": "De bovenliggende eigenschap heeft nog geen keuzes.",
+        "noChildChoices": "De afhankelijke eigenschap heeft nog geen keuzes.",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saved": "Afhankelijk veld opgeslagen.",
+        "cycle": "Die afhankelijkheid zou twee eigenschappen op elkaar laten wachten.",
+        "removeTitle": "{name} uit de afhankelijke velden verwijderen?",
+        "removeMessage": "Alle keuzes worden weer getoond. De koppeling met de bovenliggende eigenschap wordt vergeten; de waarden van contacten blijven bewaard.",
+        "removeConfirm": "Verwijderen",
+        "removed": "Afhankelijk veld verwijderd.",
+        "removeFailed": "Het afhankelijke veld kon niet worden verwijderd. Probeer het opnieuw."
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "Sluiten",
         "changed": "Te wijzigen eigenschappen",
         "clear": "Wissen",
-        "keep": "Behouden",
+        "remove": "{name} verwijderen",
         "setValue": "Waarde instellen",
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",
@@ -1399,7 +1464,8 @@
       "template": "WhatsApp-sjabloon",
       "templatePlaceholder": "Selecteer een sjabloon",
       "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
-      "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
+      "openInInbox": "Chat openen in de inbox",
+      "notSendable": "Dit sjabloon kan hier niet worden verzonden.",
       "variables": "Sjabloonvariabelen",
       "preview": "Voorbeeld",
       "slot": "Variabele {key}",
@@ -1515,7 +1581,9 @@
         "selected": "Geselecteerde kolommen",
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
-        "remove": "{name} verwijderen"
+        "remove": "{name} verwijderen",
+        "nameShort": "De naam van de weergave moet minstens {min} tekens hebben.",
+        "nameLong": "De naam van de weergave mag hoogstens {max} tekens hebben."
       },
       "presets": {
         "myContacts": "Mijn contacten",

@@ -234,7 +234,29 @@
         "ends": "Berakhir",
         "limits": "Batas efektif",
         "edit": "Edit & ubah paket",
-        "overrideNote": "Workspace ini memiliki batasnya sendiri yang menggantikan batas paket."
+        "overrideNote": "Workspace ini memiliki batasnya sendiri yang menggantikan batas paket.",
+        "addons": {
+          "title": "Add-on",
+          "intro": "Apa yang dimiliki ruang kerja ini dari setiap add-on, dan alasannya.",
+          "empty": "Tidak ada add-on yang dijual.",
+          "kind": {
+            "feature": "Add-on fitur",
+            "capacity": "Add-on kapasitas"
+          },
+          "source": {
+            "plan": "Termasuk dalam paket",
+            "override": "Diaktifkan oleh penimpaan",
+            "platform": "Ruang kerja milik platform",
+            "bought": "Dibeli",
+            "buy": "Bisa dibeli",
+            "unavailable": "Perlu paket berbayar",
+            "hidden": "Disembunyikan di paket ini"
+          },
+          "renews": "Diperpanjang {date}",
+          "ends": "Berakhir {date}",
+          "lifetime": "Tanpa tanggal akhir",
+          "overrides": "{count} penimpaan fitur mengalahkan paket: {keys}. Hapus di Edit & ganti paket."
+        }
       },
       "walletTab": {
         "open": "Buka dompet lengkap",

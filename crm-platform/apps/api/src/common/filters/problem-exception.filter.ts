@@ -71,6 +71,14 @@ export class ProblemExceptionFilter implements ExceptionFilter {
 
     if (problem.code === ERROR_CODES.SERVICE_UNAVAILABLE) response.setHeader('Retry-After', '5');
 
+    // A refusal that names its wait in the body (`errors[].path === 'retryAfterSeconds'`, as every limiter inside a service does)
+    // says it in the header too, so a client that reads only headers can back off. A limiter that already set its own keeps it.
+    if (problem.status === 429 && !response.getHeader('Retry-After')) {
+      const wait = problem.errors?.find((e) => e.path === 'retryAfterSeconds')?.message;
+      if (wait !== undefined && /^\d+$/.test(wait) && Number(wait) >= 1)
+        response.setHeader('Retry-After', wait);
+    }
+
     const path = request.path ?? request.url;
     for (const { prefix, render } of problemRenderers) {
       if (path.startsWith(prefix) && render(problem, request, response)) return;

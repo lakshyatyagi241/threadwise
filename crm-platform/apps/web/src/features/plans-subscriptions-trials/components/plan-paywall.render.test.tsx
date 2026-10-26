@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
+import type { FeatureAddon } from '@crm/contracts';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 import en from '../../../../messages/en/plans-subscriptions-trials.json';
 import ar from '../../../../messages/ar/plans-subscriptions-trials.json';
 
@@ -13,6 +15,8 @@ import { PlanPaywall } from './plan-paywall';
 const GATES = [
   { href: '/ai-crm', feature: 'ai_crm_copilot' },
   { href: '/analytics', feature: 'analytics' },
+  { href: '/auto-assignment/new', feature: 'inbox_routing' },
+  { href: '/marketplace', feature: 'marketplace' },
 ];
 
 function render(
@@ -20,16 +24,67 @@ function render(
   enabled: string[] | null,
   canBrowseApps: boolean,
   locale: 'en' | 'ar' = 'en',
+  featureAddons: FeatureAddon[] | null = null,
 ) {
   nav.path = path;
   return renderToStaticMarkup(
     <NextIntlClientProvider locale={locale} messages={locale === 'en' ? en : ar} timeZone="UTC">
-      <QueryClientProvider client={new QueryClient()}>
-        <PlanPaywall gates={GATES} enabled={enabled} canBrowseApps={canBrowseApps} />
-      </QueryClientProvider>
+      <PlanFeaturesProvider features={enabled} featureAddons={featureAddons}>
+        <QueryClientProvider client={new QueryClient()}>
+          <PlanPaywall gates={GATES} enabled={enabled} canBrowseApps={canBrowseApps} />
+        </QueryClientProvider>
+      </PlanFeaturesProvider>
     </NextIntlClientProvider>,
   );
 }
+const routingAddon = (
+  offer: FeatureAddon['offer'],
+  addonName = 'Smart routing',
+): FeatureAddon[] => [
+  {
+    feature: 'inbox_routing',
+    addonSlug: 'smart_routing',
+    addonName,
+    offer,
+    amount: '199.00',
+    currency: 'INR',
+    billingUnit: 'months',
+    billingDuration: 1,
+  },
+];
+
+describe('the paywall of a feature that is sold as an add-on', () => {
+  it('names the add-on from the entitlements data and links to the plans and add-ons page', () => {
+    const html = render(
+      '/auto-assignment/new',
+      ['marketplace'],
+      false,
+      'en',
+      routingAddon('buy', 'Routing Pro'),
+    );
+    expect(html).toContain('data-testid="paywall-addon"');
+    expect(html).toContain('Routing Pro add-on');
+    expect(html).toContain('href="/account/plans"');
+  });
+
+  it('adds no add-on line when the plan does not offer the add-on, or needs a paid plan first', () => {
+    for (const offer of ['hidden', 'unavailable'] as const)
+      expect(
+        render('/auto-assignment/new', ['marketplace'], false, 'en', routingAddon(offer)),
+      ).not.toContain('paywall-addon');
+  });
+
+  it('without add-on data keeps a generic line for a feature a pack may grant', () => {
+    const html = render('/auto-assignment/new', ['marketplace'], false);
+    expect(html).toContain('data-testid="paywall-addon"');
+    expect(html).toContain('may also offer it as an add-on');
+    expect(html).not.toContain('Smart routing add-on');
+  });
+
+  it('shows no add-on line for a feature no pack grants', () => {
+    expect(render('/analytics', ['marketplace'], false)).not.toContain('paywall-addon');
+  });
+});
 
 describe('the paywall of a feature that is also sold as an app', () => {
   it('links to the app page for a person who may open the Marketplace', () => {
@@ -62,5 +117,43 @@ describe('the paywall of a feature that is also sold as an app', () => {
   it('shows nothing when the workspace has the feature, or while the plan is unknown', () => {
     expect(render('/ai-crm', ['ai_crm_copilot'], true)).toBe('');
     expect(render('/ai-crm', null, true)).toBe('');
+  });
+});
+
+describe('the paywall of a plan without the Marketplace', () => {
+  it('covers every tab, and on Add-ons points to Plans and add-ons, where the same list stays available', () => {
+    for (const path of [
+      '/marketplace/apps',
+      '/marketplace/integrations',
+      '/marketplace/addons',
+      '/marketplace/developer',
+    ]) {
+      expect(render(path, [], false)).toContain('data-testid="plan-paywall"');
+    }
+    const addons = render('/marketplace/addons', [], false);
+    expect(addons).toContain('data-testid="paywall-addons-tab"');
+    expect(addons).toContain('Open Plans and add-ons');
+    expect(addons).toContain('href="/account/plans"');
+  });
+
+  it('says that only on the Add-ons tab', () => {
+    for (const path of [
+      '/marketplace/apps',
+      '/marketplace/integrations',
+      '/marketplace/developer',
+    ]) {
+      expect(render(path, [], false)).not.toContain('paywall-addons-tab');
+    }
+  });
+
+  it('shows nothing on any tab when the plan has the Marketplace', () => {
+    expect(render('/marketplace/addons', ['marketplace'], false)).toBe('');
+    expect(render('/marketplace/developer', ['marketplace'], false)).toBe('');
+  });
+
+  it('says it in Arabic too', () => {
+    const html = render('/marketplace/addons', [], false, 'ar');
+    expect(html).toContain('paywall-addons-tab');
+    expect(html).not.toContain('Open Plans and add-ons');
   });
 });

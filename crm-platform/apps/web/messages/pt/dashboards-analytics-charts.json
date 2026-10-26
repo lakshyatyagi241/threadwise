@@ -320,8 +320,9 @@
         "replyRate": "Taxa de resposta",
         "received": "Mensagens recebidas",
         "conversationsOpen": "Conversas abertas",
+        "conversationsResolved": "Conversas resolvidas",
         "conversationsClosed": "Conversas encerradas",
-        "conversationsAssigned": "Atribuídas",
+        "conversationsAssigned": "Atribuídas a alguém",
         "conversationsUnassigned": "Não atribuídas",
         "conversationsTotal": "{count, plural, one {# conversa} other {# conversas}}"
       },

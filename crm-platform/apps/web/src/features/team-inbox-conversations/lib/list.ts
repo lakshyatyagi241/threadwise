@@ -7,6 +7,14 @@ import {
   type InboxTab,
 } from '@crm/contracts';
 
+/** True when the row is assigned to this person (never when nobody is signed in). */
+export function isMine(
+  row: Pick<ConversationSummary, 'assignment'>,
+  meId: string | null | undefined,
+): boolean {
+  return !!meId && row.assignment.user?.id === meId;
+}
+
 /**
  * The conversation list as a pure reducer: what is loaded, how a row that changed over a socket is placed, and which tab a row
  * belongs to. The server is the authority (scope, row-level security); this only keeps the rows already on screen in the order
@@ -23,6 +31,8 @@ export interface ListFilters {
   /** The trimmed search text. */
   q: string;
   archived: boolean;
+  /** The erased-contacts view: threads whose contact was erased with its history kept. It ignores the tab, the status and `archived`. */
+  erased: boolean;
   /** Tag ids: threads with ANY of them (kept in the address as `?tags=a,b`; `?labels=` is its original name and is still read). */
   tags: string[];
   /** Whether `tags` is matched on the conversation's own tags or on the tags of its contact (`?tagScope=`). */
@@ -51,6 +61,7 @@ export const DEFAULT_FILTERS: ListFilters = {
   channelIds: [],
   q: '',
   archived: false,
+  erased: false,
   tags: [],
   tagScope: 'conversation',
   statuses: [],
@@ -86,6 +97,7 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
     channelIds: f.channelIds.length > 0 ? f.channelIds.join(',') : undefined,
     q: f.q || undefined,
     archived: f.archived || undefined,
+    erased: f.erased || undefined,
     tags: f.tags.length > 0 ? f.tags.join(',') : undefined,
     tagScope: f.tags.length > 0 && f.tagScope === 'contact' ? 'contact' : undefined,
     statuses: f.statuses.length > 0 ? f.statuses.join(',') : undefined,
@@ -95,6 +107,14 @@ export function listQuery(f: ListFilters): Record<string, string | boolean | und
     from: f.from || undefined,
     to: f.to || undefined,
   };
+}
+
+/** The query string of `GET /inbox/counts`: the list's filters without the tab and the sort, since a badge counts every tab. */
+export function countsQuery(f: ListFilters): Record<string, string | boolean | undefined> {
+  const q = listQuery(f);
+  delete q.tab;
+  delete q.sort;
+  return q;
 }
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -121,6 +141,7 @@ export const filtersKey = (f: ListFilters) =>
     f.channelIds.join(','),
     f.q,
     f.archived ? 1 : 0,
+    f.erased ? 1 : 0,
     f.tags.join(','),
     f.tagScope,
     f.statuses.join(','),
@@ -138,12 +159,28 @@ export function isFiltered(f: ListFilters): boolean {
     f.channelId !== null ||
     f.q !== '' ||
     f.archived ||
+    f.erased ||
     f.tags.length > 0 ||
     windowFilterCount(f) > 0
   );
 }
 
+/**
+ * Whether a filter narrows the badges. The tab and the sort never do (a badge counts the same rows in any order), so only the other
+ * filters count. This decides whether the screen's counts may stand for the whole inbox (the menu's Inbox badge takes them only then).
+ */
+export function narrowsCounts(f: ListFilters): boolean {
+  return isFiltered({ ...f, sort: DEFAULT_FILTERS.sort });
+}
+
 const norm = (s: string | null | undefined) => (s ?? '').toLocaleLowerCase();
+
+/**
+ * The statuses one choice of the status box or the Filters window shows. Resolved stands for resolved and closed: one thing to an agent,
+ * and the server's list (`statusCondition`) lists both under it, so a socket row must match the same way.
+ */
+const statusesOf = (s: ConversationStatus): ConversationStatus[] =>
+  s === 'resolved' ? ['resolved', 'closed'] : [s];
 
 /**
  * Whether a row belongs in the list for these filters, for deciding what to do with a row a socket event changed.
@@ -155,13 +192,18 @@ export function matchesFilters(
   f: ListFilters,
   meId: string | null,
 ): boolean {
-  if (row.archived !== f.archived) return false;
-  if (f.statuses.length > 0) {
-    const ok = f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s]));
-    if (!ok.includes(row.status)) return false;
-  } else if (f.status === 'open') {
-    if (row.status !== 'open') return false;
-  } else if (f.status !== 'all' && row.status !== f.status) return false;
+  // The erased view is its own list: it takes every erased thread, whatever its tab, status or archive flag (the server's rule too).
+  if (f.erased) {
+    if (!row.erased) return false;
+  } else {
+    if (row.archived !== f.archived) return false;
+    if (f.statuses.length > 0) {
+      const ok = f.statuses.flatMap(statusesOf);
+      if (!ok.includes(row.status)) return false;
+    } else if (f.status === 'open') {
+      if (row.status !== 'open') return false;
+    } else if (f.status !== 'all' && !statusesOf(f.status).includes(row.status)) return false;
+  }
   if (f.channelId && row.channel.id !== f.channelId) return false;
   if (f.channelIds.length > 0 && !f.channelIds.includes(row.channel.id)) return false;
   // A row does not carry its contact's tags, so under the contact scope the server's answer stands (see the `upsert` case).
@@ -183,9 +225,9 @@ export function matchesFilters(
     const at = row.lastMessageAt ? row.lastMessageAt.slice(0, 10) : '';
     if ((f.from && at < f.from) || (f.to && at > f.to)) return false;
   }
-  switch (f.tab) {
+  switch (f.erased ? 'all' : f.tab) {
     case 'mine':
-      if (!meId || row.assignment.user?.id !== meId) return false;
+      if (!isMine(row, meId)) return false;
       break;
     case 'unassigned':
       if (row.assignment.user) return false;

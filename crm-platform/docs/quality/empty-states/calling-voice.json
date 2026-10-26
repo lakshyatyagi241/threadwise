@@ -1,0 +1,91 @@
+{
+  "feature": "calling-voice",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-calling-voice-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/call-analytics-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-log-detail-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-logs-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/calling-voice/components/call-logs.render.test.tsx",
+          "match": "empty: no calls yet, and no calls match the filters"
+        },
+        {
+          "file": "apps/web/src/features/calling-voice/lib/sdp.test.ts",
+          "match": "returns an empty list when there is no Opus"
+        }
+      ]
+    },
+    {
+      "id": "EM-calling-voice-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/call-logs-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-calling-voice-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/call-analytics-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-log-detail-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-logs-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/calling-voice/components/recording.render.test.tsx",
+          "match": "says so while loading and when the rules cannot be loaded"
+        }
+      ]
+    },
+    {
+      "id": "EM-calling-voice-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/api/call-logs.ts",
+        "apps/web/src/features/calling-voice/api/calling.ts",
+        "apps/web/src/features/calling-voice/api/readiness.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-calling-voice-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/calling-provider.tsx",
+        "apps/web/src/features/calling-voice/components/recording-player.tsx",
+        "apps/web/src/features/calling-voice/components/recording-settings-panel.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

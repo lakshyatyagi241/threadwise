@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ruleReducer } from './builder';
+import { ruleReducer, withFieldCondition } from './builder';
 import { buildCatalog, type Lookups } from './fields';
 import { conditionsOf, emptyRoot, type Condition, type Group } from './model';
 import { leavingTarget } from './guard';
@@ -121,5 +121,25 @@ describe('unsaved-changes guard: which clicks leave the page', () => {
     ).toBeNull();
     expect(leavingTarget(click, null, here)).toBeNull();
     expect(leavingTarget(click, a('not a url'), here)).toBeNull();
+  });
+});
+
+describe('opening the builder for one field', () => {
+  it('adds one condition on that field, and only one', () => {
+    const r = withFieldCondition(emptyRoot(), 'phone', catalog);
+    expect(conditionsOf(r).map((c) => c.field)).toEqual(['phone']);
+    expect(withFieldCondition(r, 'phone', catalog)).toBe(r);
+  });
+
+  it('keeps the conditions already there and adds the field after them', () => {
+    const r0 = emptyRoot();
+    const r1 = run(r0, { type: 'addCondition', groupId: r0.id });
+    const r = withFieldCondition(r1, 'email', catalog);
+    expect(conditionsOf(r).map((c) => c.field)).toEqual(['lifecycleStage', 'email']);
+  });
+
+  it('leaves the rules alone for a field the catalog does not have', () => {
+    const r0 = emptyRoot();
+    expect(withFieldCondition(r0, 'nope', catalog)).toBe(r0);
   });
 });

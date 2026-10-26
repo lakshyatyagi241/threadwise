@@ -37,7 +37,8 @@
       "statusStage": "そのステータスは別のステージに属しています。連絡先のステージに合ったステータスを選択してください。",
       "stageScope": "ステータスは、ライフサイクルステージのうち1つにのみ限定できます。",
       "planLimit": "プランの上限である{limit, plural, other {#件の連絡先}}に達しました。プランをアップグレードして追加するか、既存の連絡先を削除して空きを作ってください。",
-      "legalHold": "このレコードは保護されており、現時点では削除できません。"
+      "legalHold": "このレコードは保護されており、現時点では削除できません。",
+      "assignedToOther": "このチャットは別の担当者に割り当てられています。メッセージを送るには、先に自分に割り当ててください。"
     },
     "list": {
       "title": "連絡先ハブ",
@@ -282,8 +283,6 @@
       "shortEmail": "メール",
       "shortStage": "ステージ",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "作成日",
-      "shortModified": "更新日",
       "firstRun": {
         "title": "最初の連絡先を追加しましょう",
         "message": "やり取りしている相手を取り込みましょう。連絡先はメッセージ、キャンペーン、タスク、取引に使われます。",
@@ -296,7 +295,9 @@
       "teamLabel": "チーム",
       "teamFilter": "チームで絞り込む",
       "allTeams": "すべてのチーム",
-      "teamFormer": "以前のチーム"
+      "teamFormer": "以前のチーム",
+      "unhideColumn": "列を再表示",
+      "resizeColumn": "ドラッグして「{column}」の幅を変更、ダブルクリックでリセット"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -346,7 +347,25 @@
       "assignOwner": "担当者を割り当て",
       "changeStage": "ステージを変更",
       "more": "その他",
-      "held": "このレコードは保護されており、現時点では削除できません。"
+      "held": "このレコードは保護されており、現時点では削除できません。",
+      "consent": "マーケティング同意",
+      "consentTitle": "マーケティング同意",
+      "consentChannel": "チャネル",
+      "consentAction": "変更",
+      "consentSubscribe": "購読する",
+      "consentUnsubscribe": "購読を解除",
+      "consentNote": "連絡先が同意した方法",
+      "consentNotePlaceholder": "何と言ったか、何に署名したか、どこでか",
+      "consentNoteRequired": "購読する前に、連絡先が同意した方法を入力してください。",
+      "consentContinue": "次へ",
+      "consentBack": "戻る",
+      "consentConfirm": "同意を記録",
+      "consentSummary": "{count, plural, other {# 件の連絡先}} を {channel} で {change} にします。それぞれの同意履歴に記録が残ります。",
+      "consentChangeGranted": "購読済み",
+      "consentChangeWithdrawn": "購読解除済み",
+      "consentAllMatching": "これは、フィルターに一致するすべての連絡先に適用されます。",
+      "consentSubscribed": "{count, plural, other {# 件の連絡先を購読させました}}",
+      "consentUnsubscribed": "{count, plural, other {# 件の連絡先の購読を解除しました}}"
     },
     "form": {
       "addEyebrow": "新規連絡先",
@@ -448,7 +467,8 @@
       "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。",
       "searchOptions": "選択肢を検索",
       "searchOptionsFor": "{field}の選択肢を検索",
-      "noOptionsFound": "検索に一致する選択肢はありません。"
+      "noOptionsFound": "検索に一致する選択肢はありません。",
+      "cascadeWaiting": "選択肢を表示するには、先に {parent} を選んでください。"
     },
     "tags": {
       "title": "タグ",
@@ -497,7 +517,6 @@
       "loading": "グループを読み込み中...",
       "unavailableTitle": "グループはまだ利用できません",
       "unavailableMessage": "連絡先グループのサービスがこのサーバーでは稼働していないため、グループの一覧表示や作成はまだできません。",
-      "contacts": "件の連絡先",
       "viewContacts": "連絡先を表示",
       "edit": "グループを編集",
       "editNamed": "グループ{name}を編集",
@@ -505,8 +524,6 @@
       "deleteNamed": "グループ{name}を削除",
       "deleteTitle": "このグループを削除しますか?",
       "deleteMessage": "「{name}」は、所属するすべての連絡先から削除されます。連絡先自体は保持されます。",
-      "createTile": "新しいグループを作成",
-      "createTileHint": "セグメント、ファネルのステージ、関心ごとに連絡先をまとめます。",
       "emptyTitle": "グループはまだありません",
       "emptyMessage": "最初のグループの作成をワークスペースのマネージャーに依頼してください。",
       "helpKicker": "ヘルプ - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "この名前のグループはすでに存在するため、新規作成されませんでした。",
       "import": "連絡先をインポート",
-      "importInto": "インポート"
+      "importInto": "インポート",
+      "colName": "名前",
+      "colMembers": "メンバー数",
+      "colCreatedBy": "作成者",
+      "colCreatedAt": "作成日時",
+      "colModifiedBy": "更新者",
+      "colUpdatedAt": "更新日時",
+      "colActions": "操作",
+      "tableLabel": "連絡先グループ",
+      "search": "グループを検索",
+      "searchPlaceholder": "名前で検索",
+      "count": "{count, plural, =0 {グループなし} one {# 件のグループ} other {# 件のグループ}}",
+      "noResultsTitle": "一致するグループはありません",
+      "noResults": "入力した文字を含むグループ名はありません。",
+      "clearSearch": "検索をクリア"
     },
     "import": {
       "eyebrow": "一括インポート",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "生年月日が、生年月日として成立する年が先頭の日付ではありません",
         "duplicate_in_file": "重複した番号、前の行に統合",
         "invalid_timezone": "タイムゾーンが無効です",
-        "legal_hold": "保護されたレコードのため変更されませんでした"
+        "legal_hold": "保護されたレコードのため変更されませんでした",
+        "invalid_property_value": "カスタムプロパティの値が、その型または選択肢に合いません",
+        "invalid_property_value_column": "列「{column}」: 値が列の形式または選択肢に合いません"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
       "queued": "開始を待機中...",
@@ -634,12 +667,15 @@
       "limitExceeded": "プランの上限超過",
       "limitExceededNote": "プランの連絡先上限に達したため、一部の新規連絡先はインポートされませんでした。",
       "rejectsFailed": "却下された行をダウンロードできませんでした。",
+      "sampleFailed": "サンプルファイルをダウンロードできませんでした。もう一度お試しください。",
       "groupRequired": "これらの連絡先の追加先",
       "groupExisting": "既存のグループ",
       "groupNew": "新しいグループ",
       "groupPick": "グループを選択",
       "groupNewPlaceholder": "新しいグループ名",
-      "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。"
+      "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。",
+      "customProperties": "カスタムプロパティ",
+      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。"
     },
     "detail": {
       "back": "すべての連絡先",
@@ -1087,7 +1123,8 @@
         "moveDown": "{name}を下に移動",
         "edit": "{name}を編集",
         "deactivate": "{name}を無効化",
-        "reactivate": "再有効化"
+        "reactivate": "再有効化",
+        "dependsOn": "選択肢は {field} に依存"
       },
       "toast": {
         "conflict": "他のユーザーが変更しました。リストを更新したので、もう一度お試しください。",
@@ -1243,6 +1280,34 @@
         "manageStages": "ステージを管理",
         "manageGroups": "グループを管理",
         "locked": "固定"
+      },
+      "cascade": {
+        "open": "依存フィールド",
+        "title": "依存フィールド",
+        "close": "閉じる",
+        "intro": "依存フィールドは常に表示されます。その選択肢は親プロパティで選んだ値によって決まります。親の選択肢ごとに、許可する依存フィールドの選択肢にチェックを入れてください。",
+        "empty": "依存フィールドはまだありません。",
+        "add": "依存フィールドを追加",
+        "needTwoChoiceFields": "依存フィールドには、選択肢のリストを持つプロパティ（ドロップダウン、複数選択、ラジオ）が少なくとも2つ必要です。",
+        "dependsOn": "依存先: {parent}",
+        "editLabel": "{name} を編集",
+        "removeLabel": "{name} を削除",
+        "parent": "親プロパティ",
+        "child": "依存プロパティ",
+        "pickParent": "親プロパティを選択",
+        "pickChild": "依存プロパティを選択",
+        "allowed": "{parent} の各選択肢で許可される {child} の選択肢",
+        "noParentChoices": "親プロパティにはまだ選択肢がありません。",
+        "noChildChoices": "依存プロパティにはまだ選択肢がありません。",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saved": "依存フィールドを保存しました。",
+        "cycle": "その依存関係だと、2つのプロパティが互いを待つことになります。",
+        "removeTitle": "{name} を依存フィールドから削除しますか？",
+        "removeMessage": "すべての選択肢が再び表示されます。親プロパティの下での選択肢設定は失われますが、連絡先が保持している値はそのまま残ります。",
+        "removeConfirm": "削除",
+        "removed": "依存フィールドを削除しました。",
+        "removeFailed": "依存フィールドを削除できませんでした。もう一度お試しください。"
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "閉じる",
         "changed": "変更するプロパティ",
         "clear": "クリア",
-        "keep": "変更しない",
+        "remove": "{name}を削除",
         "setValue": "値を設定",
         "willClear": "{count, plural, other {選択したすべての#件の連絡先}}で空になります。",
         "requiredNoClear": "必須プロパティはクリアできません。",
@@ -1399,7 +1464,8 @@
       "template": "WhatsAppテンプレート",
       "templatePlaceholder": "テンプレートを選択",
       "noTemplates": "この番号で承認済みのテンプレートがありません。",
-      "notSendable": "このテンプレートはここでは入力できません（{reason}）。",
+      "openInInbox": "受信トレイでチャットを開く",
+      "notSendable": "このテンプレートはここから送信できません。",
       "variables": "テンプレート変数",
       "preview": "プレビュー",
       "slot": "変数 {key}",
@@ -1515,7 +1581,9 @@
         "selected": "選択した列",
         "selectAll": "すべて選択",
         "reorder": "ドラッグして列の順序を変更",
-        "remove": "{name} を削除"
+        "remove": "{name} を削除",
+        "nameShort": "ビュー名は{min}文字以上で入力してください。",
+        "nameLong": "ビュー名は{max}文字以内で入力してください。"
       },
       "presets": {
         "myContacts": "自分の連絡先",

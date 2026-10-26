@@ -66,10 +66,10 @@
       "pending": "pendente",
       "you": "Você",
       "presence": {
-        "online": "Online",
-        "away": "Ausente",
+        "online": "Disponível",
+        "away": "Ausente, fora do horário de trabalho",
         "busy": "Ocupado",
-        "offline": "Offline"
+        "offline": "Ausente"
       },
       "inactive": "Inativo",
       "roleFor": "Função de {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Disponibilidade",
       "available": "Disponível",
-      "offline": "Offline",
-      "hint": "Enquanto você estiver offline, nenhum chat novo é atribuído a você automaticamente. Os chats que você já tem continuam seus.",
+      "offline": "Ausente",
+      "hint": "Enquanto você estiver ausente, nenhum chat novo é atribuído a você automaticamente. Os chats que você já tem continuam seus.",
       "failed": "Não foi possível alterar"
+    },
+    "myLeave": {
+      "label": "Folga",
+      "onLeaveUntil": "De licença até {date}",
+      "onLeaveOpen": "De licença",
+      "hint": "Avise sua equipe de que você está ausente. Durante a licença, nenhuma conversa nova é atribuída a você automaticamente.",
+      "title": "Sua folga"
     },
     "deactivate": {
       "eyebrow": "Membros da equipe",

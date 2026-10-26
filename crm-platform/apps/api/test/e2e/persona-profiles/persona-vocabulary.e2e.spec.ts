@@ -29,15 +29,34 @@ const put = (t: string, body: unknown, locale = 'en') =>
     .query({ locale })
     .set(bearer(t))
     .send(body as object);
+/** A noun of GET and PUT /v2/persona/vocabulary, as these specs read it. */
+interface NounRow {
+  noun: string;
+  effective: { one: string; other: string } | null;
+  source: string;
+  workspace: { one: string; other: string } | null;
+  workspaceLocales: string[];
+}
+/** The fields of GET /v2/auth/session these specs read. */
+interface SessionView {
+  permissions: unknown;
+  org: {
+    persona: {
+      rev: number;
+      modules: Record<string, { visible: boolean; locked: boolean }>;
+      nouns: Record<string, Record<string, { one: string; other: string }>>;
+    };
+  };
+}
+
 const session = async (token: string) => {
   const res = await api.http().get('/v2/auth/session').set(bearer(token));
   expect(res.status, JSON.stringify(res.body)).toBe(200);
-  return res.body as Record<string, any>;
+  return res.body as SessionView;
 };
 const row = async (orgId: number) =>
   (await h.owner.query(`SELECT * FROM workspace_persona WHERE org_id = $1`, [orgId])).rows[0];
-const noun = (body: Record<string, any>, name: string) =>
-  (body.nouns as Array<Record<string, any>>).find((n) => n.noun === name)!;
+const noun = (body: { nouns: NounRow[] }, name: string) => body.nouns.find((n) => n.noun === name)!;
 
 /** The operator columns can only be written on the privileged path (a trigger); the owner connection must say so too. */
 async function asOperator(sql: string, params: unknown[] = []) {
@@ -68,7 +87,7 @@ describe('reading the words', () => {
     const res = await get(a.admin);
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body).toMatchObject({ locale: 'en', rev: 1, personaKey: 'generic' });
-    expect(res.body.nouns.map((n: Record<string, any>) => n.noun)).toEqual([
+    expect(res.body.nouns.map((n: NounRow) => n.noun)).toEqual([
       'contact',
       'appointment',
       'deal',
@@ -168,7 +187,7 @@ describe('saving the words', () => {
     });
     expect(saved.status).toBe(200);
     const after = await session(a.admin);
-    const strip = (s: Record<string, any>) => ({
+    const strip = (s: SessionView) => ({
       ...s,
       org: { ...s.org, persona: { ...s.org.persona, nouns: undefined, rev: undefined } },
     });

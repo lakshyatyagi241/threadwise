@@ -153,7 +153,10 @@
         "hours": "{count}시간",
         "days": "{count}일"
       },
-      "unsnoozesAt": "{time}에 다시 열림"
+      "unsnoozesAt": "{time}에 다시 열림",
+      "erased": "삭제된 연락처",
+      "erasedHint": "이 연락처는 삭제되었으며, 대화는 사람의 정보와 메시지 내용 없이 보관됩니다. 삭제 날짜는 기록되지 않으므로 시간은 마지막 메시지를 나타냅니다.",
+      "erasedTitle": "삭제된 연락처"
     },
     "status": {
       "received": "수신됨",
@@ -328,9 +331,16 @@
       },
       "readOnly": "이 대화는 볼 수 있지만 답장할 권한이 없습니다.",
       "resolvedBanner": "이 대화는 해결되었습니다. 답장하려면 다시 여세요.",
+      "resolvedWebchatBanner": "이 웹 채팅은 해결되어 다시 열 수 없습니다.",
       "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
+      "session": {
+        "header": "{range} · {count, plural, other {메시지 #개}}",
+        "span": "{date} {from} – {to}",
+        "moment": "{date} {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "이전 메시지 불러오기",
       "empty": "이 대화에는 아직 메시지가 없습니다.",
       "newMessageAnnounce": "새 메시지: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "일치 항목 없음",
       "searchPrev": "이전 결과",
       "searchNext": "다음 결과",
-      "searchClose": "검색 닫기"
+      "searchClose": "검색 닫기",
+      "erasedBadge": "삭제됨",
+      "erasedBanner": "이 연락처는 삭제되었습니다. 메시지 본문과 미디어가 제거되어 아무것도 보낼 수 없습니다. 타임라인과 시간은 유지됩니다."
     },
     "groupThread": {
       "openGroup": "그룹 열기",
@@ -542,17 +554,17 @@
         "onLeave": "휴가 중",
         "onLeaveUntil": "{date}까지 휴가 중",
         "availability": {
-          "online": "온라인",
-          "away": "자리 비움",
+          "online": "응대 가능",
+          "away": "자리 비움, 근무 시간 외",
           "busy": "바쁨",
-          "offline": "오프라인"
+          "offline": "자리 비움"
         }
       },
       "presence": {
-        "online": "온라인",
-        "away": "자리 비움",
+        "online": "응대 가능",
+        "away": "자리 비움, 근무 시간 외",
         "busy": "바쁨",
-        "offline": "오프라인"
+        "offline": "자리 비움"
       },
       "notes": {
         "tab": "연락처 메모",
@@ -584,7 +596,11 @@
           "sla_breach": "응답 기한 초과",
           "spam_flagged": "{actor}님이 스팸으로 표시",
           "escalated": "에스컬레이션됨",
-          "unknown": "{actor} 님: {what}"
+          "unknown": "{actor} 님: {what}",
+          "handoff_requested": "{actor} 님이 사람에게 인계",
+          "queue_reminded": "팀에 알렸습니다",
+          "queue_offered": "다른 팀에 제안했습니다",
+          "queue_customer_message": "고객에게 메시지를 보냈습니다"
         },
         "actors": {
           "user": "팀원",
@@ -711,6 +727,7 @@
         "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다.",
         "paused": "WhatsApp에서 일시 중지되었습니다. 중지가 해제되면 다시 보낼 수 있습니다.",
         "media_header": "이미지, 동영상 또는 문서 헤더가 있어 아직 수신함에서 보낼 수 없습니다.",
+        "carousel": "캐러셀(이미지 카드)이라서 아직 받은편지함에서 보낼 수 없습니다.",
         "header_variable": "헤더에 변수가 있어 아직 수신함에서 입력할 수 없습니다.",
         "dynamic_button": "변수가 있는 버튼 링크가 있어 아직 수신함에서 입력할 수 없습니다.",
         "authentication": "일회용 비밀번호(OTP) 템플릿은 수신함이 아닌 시스템에서 발송됩니다.",
@@ -805,6 +822,7 @@
         "onlyStatus": "{status} 메시지만",
         "requestedAt": "요청일 {date}",
         "lines": "{count, plural, other {#줄}}",
+        "noLines": "이 기간에는 이벤트가 없습니다",
         "until": "{date}까지 사용 가능",
         "download": "다운로드",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "시뮬레이터(테스트)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "웹사이트 채팅",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "이메일",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "시뮬레이터(테스트)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "웹사이트 채팅",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "이메일",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "연락처",
         "agent": "나",
@@ -1054,7 +1072,10 @@
       "tagRemove": "태그 제거",
       "onLeave": "휴가 중",
       "onLeaveUntil": "{date}까지 휴가 중",
-      "spam": "스팸으로 표시"
+      "spam": "스팸으로 표시",
+      "markUnread": "읽지 않음으로 표시",
+      "unsnooze": "다시 알림 취소",
+      "notSpam": "스팸 아님으로 표시"
     },
     "tags": {
       "tag": "태그",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "받은편지함으로 돌아가기",
-        "title": "대화 태그",
+        "title": "태그",
         "intro": "대화 태그는 스레드(결제, 환불, 긴급 등)에 붙여 팀이 받은편지함을 정렬하고 필터링할 수 있게 해 줍니다. 사람을 설명하는 연락처 태그와 같은 태그 라이브러리를 사용합니다.",
         "newTitle": "새 태그",
         "editTitle": "태그 편집",

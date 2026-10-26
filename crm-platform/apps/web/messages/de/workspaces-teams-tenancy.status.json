@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Verfügbar",
+        "away": "Nicht verfügbar",
+        "onLeaveUntil": "Abwesend bis {date}",
+        "onLeaveOpen": "Abwesend",
+        "awayHours": "Nicht verfügbar außerhalb der Arbeitszeit",
+        "label": "Dein Status"
+      },
+      "menu": {
+        "title": "Statusmenü",
+        "update": "Status aktualisieren",
+        "setAway": "Als nicht verfügbar setzen",
+        "setAvailable": "Als verfügbar setzen",
+        "failed": "Dein Status konnte nicht geändert werden.",
+        "automate": "Status automatisieren",
+        "manage": "Arbeitszeiten und Abwesenheit verwalten",
+        "workingHours": "Arbeitszeiten",
+        "timeOff": "Abwesenheit",
+        "outsideNotice": "Außerhalb der Arbeitszeit",
+        "locked": "Die Statusleiste ist in einem höheren Tarif enthalten. Der Schalter Verfügbar / Nicht verfügbar im Kontomenü funktioniert weiterhin."
+      },
+      "hours": {
+        "title": "Deine Arbeitszeiten",
+        "titleFor": "Arbeitszeiten von {name}",
+        "lead": "Lege fest, wann du verfügbar bist. Außerhalb dieser Zeiten wechselt dein Status automatisch auf Nicht verfügbar.",
+        "leadOther": "Lege fest, wann diese Person verfügbar ist. Außerhalb dieser Zeiten wechselt ihr Status automatisch auf Nicht verfügbar.",
+        "locked": "Der automatische Status nach Arbeitszeiten ist in einem höheren Tarif enthalten.",
+        "viewOnly": "Du kannst diese Zeiten sehen, aber nicht ändern.",
+        "automate": "Meinen Status automatisieren",
+        "automateHint": "Außerhalb dieser Zeiten nicht verfügbar, innerhalb verfügbar. Ein von Hand gesetzter Status gilt bis zum nächsten Wechsel der Zeiten.",
+        "emptyWarning": "Kein Tag ist geöffnet, du wirst also immer als Verfügbar angezeigt. Öffne mindestens einen Tag.",
+        "timezone": "Zeitzone",
+        "timezoneHint": "Ausgangspunkt ist die Zeitzone deines Arbeitsbereichs ({zone}).",
+        "useWorkspaceZone": "Zeitzone des Arbeitsbereichs verwenden"
+      },
+      "members": {
+        "hoursAction": "Arbeitszeiten"
+      }
+    }
+  }
+}

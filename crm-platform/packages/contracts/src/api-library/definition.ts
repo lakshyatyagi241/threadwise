@@ -56,12 +56,27 @@ export function apiLibraryTokensOf(text: string): string[] {
   return out;
 }
 
-/** Replaces every token through `lookup`; a token `lookup` has no answer for becomes an empty string (as in the flow engine). */
-export function apiLibraryRender(
-  text: string,
+/** Where the part of a URL template that holds the host ends: tokens up to there are not percent-encoded, so `{{base_url}}/x` still works. */
+function apiLibraryAuthorityEnd(template: string): number {
+  const scheme = template.indexOf('://');
+  const start = scheme >= 0 ? scheme + 3 : 0;
+  const rest = template.slice(start).search(/[/?#]/);
+  return rest < 0 ? template.length : start + rest;
+}
+
+/**
+ * Fills a URL template the way the API sends it: a value in the host part goes in as typed, one in the path or the query string is
+ * percent-encoded (so `A B` becomes `A%20B`, not a broken address). A token `lookup` has no answer for becomes an empty string.
+ */
+export function apiLibraryRenderUrl(
+  template: string,
   lookup: (name: string) => string | undefined,
 ): string {
-  return text.replace(API_LIBRARY_TOKEN_RE, (_m, raw: string) => lookup(raw.trim()) ?? '');
+  const hostEnd = apiLibraryAuthorityEnd(template);
+  return template.replace(API_LIBRARY_TOKEN_RE, (_m, raw: string, offset: number) => {
+    const v = lookup(raw.trim()) ?? '';
+    return offset < hostEnd ? v : encodeURIComponent(v);
+  });
 }
 
 /** The string leaves of a JSON value (object values, array items), for token scanning and rendering. */
@@ -109,7 +124,7 @@ export const apiLibraryVariableSourceSchema = z.enum(API_LIBRARY_VARIABLE_SOURCE
 
 export const apiLibraryVariableSchema = z.object({
   /** What is between the braces: `phone`, `order_id`, or `OtherApi.data.id` for another saved API's response field. */
-  name: z.string().trim().min(1).max(160),
+  name: z.string().trim().min(1, 'Enter the variable name.').max(160),
   source: apiLibraryVariableSourceSchema.default('contact'),
   /** Used by a test run, and by a flow that has no value for the name. Required, as in the old console. */
   defaultValue: z.string().min(1, 'A default value is required').max(2000),
@@ -158,7 +173,11 @@ export type ApiLibraryMapping = z.infer<typeof apiLibraryMappingSchema>;
 const definitionFields = {
   method: apiLibraryMethodSchema,
   /** May hold tokens. http or https; no credentials in the URL (use a header). */
-  url: z.string().trim().min(1).max(API_LIBRARY_URL_MAX),
+  url: z
+    .string()
+    .trim()
+    .min(1, 'Enter the address (URL) the request goes to.')
+    .max(API_LIBRARY_URL_MAX),
   payloadType: apiLibraryPayloadTypeSchema.default('application/json'),
   variables: z.array(apiLibraryVariableSchema).max(API_LIBRARY_MAX_VARIABLES).default([]),
   headers: z.array(apiLibraryHeaderInputSchema).max(API_LIBRARY_MAX_HEADERS).default([]),
@@ -214,6 +233,22 @@ export function apiLibraryDefinitionTokens(
   return out;
 }
 
+/**
+ * The mapping rows whose contact property another row also saves into. Only one value can land in a field, so the other would be
+ * lost without a word. A row with no property is not compared (it is refused on its own).
+ */
+export function apiLibraryDuplicateMappingRows(
+  mapping: ReadonlyArray<{ contactProperty: string }>,
+): number[] {
+  const out: number[] = [];
+  mapping.forEach((m, i) => {
+    const key = m.contactProperty.trim();
+    if (key !== '' && mapping.some((o, j) => j !== i && o.contactProperty.trim() === key))
+      out.push(i);
+  });
+  return out;
+}
+
 /** The cross-field rules, as `[path, message]` problems (empty when the definition is acceptable). Pure: the API runs it again on save. */
 export function apiLibraryDefinitionProblems(
   d: ApiLibraryDefinitionShape,
@@ -234,7 +269,7 @@ export function apiLibraryDefinitionProblems(
   }
 
   const lookup = (n: string) => declared.get(n.toLowerCase())?.defaultValue;
-  const rendered = apiLibraryRender(d.url, lookup);
+  const rendered = apiLibraryRenderUrl(d.url, lookup);
   // Not `new URL`: the contracts package has no DOM/Node lib. The server parses the rendered URL again before it connects.
   const m = /^(https?):\/\/([^\s/?#]*)([/?#]\S*)?$/i.exec(rendered);
   if (!m || m[2] === '') {
@@ -293,6 +328,8 @@ export function apiLibraryDefinitionProblems(
     if (paths.has(m.path)) problems.push([`mapping.${i}.path`, `"${m.path}" is mapped twice`]);
     paths.add(m.path);
   });
+  for (const i of apiLibraryDuplicateMappingRows(d.mapping))
+    problems.push([`mapping.${i}.contactProperty`, 'Two rows save into the same contact property']);
   return problems;
 }
 

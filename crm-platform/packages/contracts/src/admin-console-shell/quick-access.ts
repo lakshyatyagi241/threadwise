@@ -77,13 +77,7 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     url: '/analytics',
     icon: 'analytics',
   },
-  {
-    key: 'auto-reply',
-    label: 'Auto Reply',
-    desc: 'Keyword and out-of-hours replies',
-    url: '/auto-reply',
-    icon: 'reply',
-  },
+  // The Auto Reply page is not built yet (/auto-reply is a 404): it is offered here again when the screen ships.
   {
     key: 'devices',
     label: 'Devices',

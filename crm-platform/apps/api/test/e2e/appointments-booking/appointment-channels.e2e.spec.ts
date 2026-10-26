@@ -19,7 +19,14 @@ import { AppointmentRemindersRepository } from '../../../src/modules/appointment
 import { AppointmentsRepository } from '../../../src/modules/appointments-booking/appointments.repository';
 import { AppointmentsSupport } from '../../../src/modules/appointments-booking/appointments.support';
 import { BookingTypesRepository } from '../../../src/modules/appointments-booking/booking-types.repository';
-import { AppointmentsApi, bearer, buildReminderService, startHarness, type Harness, type Tenant } from './support';
+import {
+  AppointmentsApi,
+  bearer,
+  buildReminderService,
+  startHarness,
+  type Harness,
+  type Tenant,
+} from './support';
 
 /**
  * Owner-enabled appointment channels and the predefined message library end to end (BL-350..BL-352): the real API, a real Postgres with

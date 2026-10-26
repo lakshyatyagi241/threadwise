@@ -5,11 +5,13 @@ import { GoogleAccountModule } from '../google-account';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
+import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { FlowRuntimeEngineModule } from './flow-runtime-engine.module';
 import { CampaignFlowStarterImpl } from './runtime/campaign-flow-starter';
 import { CatalogProductsModule } from '../catalog-products';
 import { CatalogConciergeListener } from './runtime/nodes/commerce/catalog-concierge.listener';
 import { CatalogCartResume, CommerceResume } from './runtime/nodes/commerce/commerce-resume';
+import { TemplateStatusResume } from './runtime/nodes/commerce/template-status-resume';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.consumer';
 import { FlowRunProcessor } from './runtime/flow-run.processor';
@@ -19,6 +21,7 @@ import { GoogleFormPollService } from './runtime/nodes/integrations/google-form-
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
 import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
+import { HandoffReturnConsumer } from './triggers/handoff-return.consumer';
 import { RoutingFlowConsumer } from './triggers/routing-flow.consumer';
 import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
 
@@ -38,6 +41,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     CrmModule,
     GoogleAccountModule,
     ShopifyWoocommerceModule,
+    TeamInboxConversationsModule,
   ],
   providers: [
     FlowRunProcessor,
@@ -47,9 +51,11 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowInboundService,
     FlowTriggerEventsConsumer,
     RoutingFlowConsumer,
+    HandoffReturnConsumer,
     LeadFlowConsumer,
     FlowScheduleSweeper,
     CommerceResume,
+    TemplateStatusResume,
     CatalogCartResume,
     CatalogConciergeListener,
     SocialHandoffConsumer,

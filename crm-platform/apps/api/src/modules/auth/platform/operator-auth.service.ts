@@ -219,11 +219,9 @@ export class OperatorAuthService {
     }
     await this.rate.reset(lockKey);
 
-    // A super admin is challenged only while the switch is on, even if they enrolled earlier.
-    if (
-      operator.mfa_enabled &&
-      (operator.role !== 'super_admin' || (await this.mfaRequired(operator)))
-    ) {
+    // An operator with a second factor enrolled is always asked for it. The policy switches decide who must enrol; they do not
+    // decide whether an enrolled factor counts (a super admin's factor protected nothing while the switch was off).
+    if (operator.mfa_enabled) {
       const token = randomToken(32);
       await this.redis.setex(
         AuthKeys.mfaChallenge(token),

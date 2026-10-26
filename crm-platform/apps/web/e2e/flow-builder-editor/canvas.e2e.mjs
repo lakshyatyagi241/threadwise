@@ -1,10 +1,10 @@
 // Browser run of the flow builder canvas against a running web app + API (TW-FLB-014..018, 022): real mouse drags from the
 // palette onto the canvas, wiring, pan / zoom, undo and redo, the pre-save popup, save, reload, publish.
 //   WEB=http://localhost:3110 FLB_EMAIL=... FLB_PASSWORD=... FLB_ORG=... CHROME=/path/to/chrome node canvas.e2e.mjs
-// Needs `playwright-core` and a workspace admin with the flow permissions. It creates one throw-away flow named
+// Needs `@playwright/test` (an apps/web dependency) and a workspace admin with the flow permissions. It creates one throw-away flow named
 // "zz-e2e-canvas-<time>" and deletes it at the end (also when a check fails).
 import assert from 'node:assert/strict';
-import { chromium } from 'playwright-core';
+import { chromium } from '@playwright/test';
 
 const WEB = process.env.WEB ?? 'http://localhost:3110';
 const EMAIL = process.env.FLB_EMAIL ?? 'flb-demo@example.com';

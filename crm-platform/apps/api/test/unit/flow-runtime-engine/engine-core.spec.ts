@@ -408,6 +408,44 @@ describe('List and Poll', () => {
     expect(bodies(byTitle.sent).slice(-1)).toEqual(['B']);
   });
 
+  describe('a list stays tappable after a leaf branch', () => {
+    const mk = (extra: Record<string, unknown> = {}) =>
+      newRun({
+        nodes: [
+          n('l', 'list', {
+            prompt: 'Main Menu',
+            button: 'Open',
+            options: [{ title: 'Website bot' }, { title: 'Campaigns' }, { title: 'WhatsApp bot' }],
+            ...extra,
+          }),
+          n('a', 'message', { text: 'website info' }),
+          n('b', 'message', { text: 'campaign info' }),
+          n('g', 'message', { text: 'whatsapp info' }),
+        ],
+        edges: [e('l', 'a', 'p0'), e('l', 'b', 'p1'), e('l', 'g', 'p2')],
+      });
+
+    it('a second and third pick on the same list still continue the flow', async () => {
+      const run = mk();
+      const h = harness(run);
+      await h.start();
+      const t1 = await h.reply(tap('list_l_p0', 'Website bot'));
+      expect(t1.t).toBe('wait'); // the branch ran out of nodes: the list is re-armed, not ended
+      expect(run.status).toBe('waiting');
+      await h.reply(tap('list_l_p1', 'Campaigns'));
+      await h.reply(tap('list_l_p2', 'WhatsApp bot'));
+      expect(bodies(h.sent).slice(1)).toEqual(['website info', 'campaign info', 'whatsapp info']);
+    });
+
+    it('ends on the first pick when the author turned keepMenuOpen off', async () => {
+      const run = mk({ keepMenuOpen: false });
+      const h = harness(run);
+      await h.start();
+      const t1 = await h.reply(tap('list_l_p0', 'Website bot'));
+      expect(t1).toMatchObject({ t: 'end', status: 'completed' });
+    });
+  });
+
   it('a poll routes the chosen option', async () => {
     const run = newRun({
       nodes: [
@@ -453,6 +491,52 @@ describe('CTA and Location', () => {
     expect((h.sent[0] as { body: string }).body).toContain('☏ Call: +911234');
   });
 
+  it('three web links are three buttons on WhatsApp, in three messages', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Pick a page',
+          ctaActions: [
+            { type: 'url', label: 'Pricing', value: 'https://x.test/pricing' },
+            { type: 'url', label: 'Docs', value: 'https://x.test/docs' },
+            { type: 'url', label: 'Blog', value: 'https://x.test/blog' },
+          ],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    expect(h.sent.map((m) => (m as { text?: string }).text)).toEqual(['Pricing', 'Docs', 'Blog']);
+  });
+
+  it('every web link of a CTA is a button on WhatsApp: the first with the message, each other in a message of its own', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Pick a page',
+          ctaActions: [
+            { type: 'url', label: 'Pricing', value: 'https://x.test/pricing' },
+            { type: 'phone', label: 'Call', value: 'tel:+911234' },
+            { type: 'url', label: 'Docs', value: 'https://x.test/docs' },
+          ],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    const buttons = h.sent.filter((m) => m.kind === 'cta_url');
+    expect(buttons.map((m) => (m as { text: string }).text)).toEqual(['Pricing', 'Docs']);
+    expect(buttons.map((m) => (m as { url: string }).url)).toEqual([
+      'https://x.test/pricing',
+      'https://x.test/docs',
+    ]);
+    // The call cannot be a button: it stays a line in the first message, and no web link is repeated as text.
+    expect((buttons[0] as { body: string }).body).toContain('☏ Call: +911234');
+    expect((buttons[0] as { body: string }).body).not.toContain('x.test/docs');
+  });
+
   it('a location falls back to a maps link when the pin cannot be sent', async () => {
     const run = newRun({
       nodes: [n('l', 'location', { latitude: 1.5, longitude: 2.5, title: 'HQ' })],
@@ -495,6 +579,46 @@ describe('Location: coordinates and optional name / address', () => {
   it('sends the pin with no name or address when both are left out', async () => {
     const { sent } = await sendOf({ lat: '18.5204', lng: '73.8567', title: '', address: '' });
     expect(sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
+  });
+
+  it('a link-mode step sends its pin with the coordinates only, then the name and address as a text', async () => {
+    const { sent } = await sendOf({
+      locMode: 'link',
+      mapsUrl: 'https://maps.app.goo.gl/AbCd123',
+      lat: '18.5204',
+      lng: '73.8567',
+      title: 'Our office',
+      address: 'MG Road',
+    });
+    expect(sent).toEqual([
+      { kind: 'location', latitude: 18.5204, longitude: 73.8567 },
+      { kind: 'text', body: '📍 *Our office*\nMG Road' },
+    ]);
+    // Nothing to follow: the pin goes alone.
+    const bare = await sendOf({
+      locMode: 'link',
+      mapsUrl: 'https://maps.app.goo.gl/AbCd123',
+      lat: '18.5204',
+      lng: '73.8567',
+    });
+    expect(bare.sent).toEqual([{ kind: 'location', latitude: 18.5204, longitude: 73.8567 }]);
+    // Typed coordinates still go as a pin with the name.
+    const typed = await sendOf({ locMode: 'coords', lat: '18.5204', lng: '73.8567', title: 'HQ' });
+    expect(typed.sent[0]).toMatchObject({ kind: 'location', name: 'HQ' });
+  });
+
+  it('a coordinate pair pasted into the link box is still a coordinates-only pin, the name following as a text', async () => {
+    const { sent } = await sendOf({
+      locMode: 'link',
+      mapsUrl: '18.5204, 73.8567',
+      lat: '18.5204',
+      lng: '73.8567',
+      title: 'Our office',
+    });
+    expect(sent).toEqual([
+      { kind: 'location', latitude: 18.5204, longitude: 73.8567 },
+      { kind: 'text', body: '📍 *Our office*' },
+    ]);
   });
 
   it('reads a decimal comma the way the builder does', async () => {

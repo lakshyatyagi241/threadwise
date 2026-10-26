@@ -153,7 +153,10 @@
         "hours": "{count} jam",
         "days": "{count} hari"
       },
-      "unsnoozesAt": "Dibuka lagi {time}"
+      "unsnoozesAt": "Dibuka lagi {time}",
+      "erased": "Kontak yang dihapus",
+      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi dan teks pesan. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
+      "erasedTitle": "Kontak yang dihapus"
     },
     "status": {
       "received": "Diterima",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Anda dapat membaca percakapan ini tetapi tidak memiliki izin untuk membalas.",
       "resolvedBanner": "Percakapan ini sudah diselesaikan. Buka kembali untuk membalas.",
+      "resolvedWebchatBanner": "Chat web ini sudah diselesaikan dan tidak dapat dibuka kembali.",
       "assignedToOther": "Obrolan ini ditugaskan ke agen lain. Tugaskan ke diri Anda terlebih dahulu untuk membalas.",
       "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
       "messagesLabel": "Pesan",
+      "session": {
+        "header": "{range} · {count, plural, other {# pesan}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Muat pesan sebelumnya",
       "empty": "Belum ada pesan dalam percakapan ini.",
       "newMessageAnnounce": "Pesan baru: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Tidak ada yang cocok",
       "searchPrev": "Hasil sebelumnya",
       "searchNext": "Hasil berikutnya",
-      "searchClose": "Tutup pencarian"
+      "searchClose": "Tutup pencarian",
+      "erasedBadge": "Dihapus",
+      "erasedBanner": "Kontak ini telah dihapus. Teks dan media pesan sudah dihapus, sehingga tidak ada yang bisa dikirim. Linimasa dan waktu tetap disimpan."
     },
     "groupThread": {
       "openGroup": "Buka grup",
@@ -542,17 +554,17 @@
         "onLeave": "Sedang cuti",
         "onLeaveUntil": "Cuti hingga {date}",
         "availability": {
-          "online": "Online",
-          "away": "Pergi",
+          "online": "Tersedia",
+          "away": "Tidak di tempat, di luar jam kerja",
           "busy": "Sibuk",
-          "offline": "Offline"
+          "offline": "Tidak di tempat"
         }
       },
       "presence": {
-        "online": "Daring",
-        "away": "Tidak di tempat",
+        "online": "Tersedia",
+        "away": "Tidak di tempat, di luar jam kerja",
         "busy": "Sibuk",
-        "offline": "Luring"
+        "offline": "Tidak di tempat"
       },
       "notes": {
         "tab": "Catatan kontak",
@@ -584,7 +596,11 @@
           "sla_breach": "Tenggat respons terlewat",
           "spam_flagged": "Ditandai spam oleh {actor}",
           "escalated": "Dieskalasi",
-          "unknown": "{what} oleh {actor}"
+          "unknown": "{what} oleh {actor}",
+          "handoff_requested": "Diserahkan ke orang oleh {actor}",
+          "queue_reminded": "Tim sudah diingatkan",
+          "queue_offered": "Ditawarkan ke tim lain",
+          "queue_customer_message": "Pesan dikirim ke pelanggan"
         },
         "actors": {
           "user": "Seorang anggota tim",
@@ -711,6 +727,7 @@
         "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya.",
         "paused": "Dijeda oleh WhatsApp. Dapat dikirim lagi setelah jeda berakhir.",
         "media_header": "Memiliki header gambar, video, atau dokumen, yang belum dapat dikirim dari inbox.",
+        "carousel": "Ini carousel (kartu dengan gambar) dan belum bisa dikirim dari kotak masuk.",
         "header_variable": "Memiliki variabel di header, yang belum dapat diisi dari inbox.",
         "dynamic_button": "Memiliki tautan tombol dengan variabel, yang belum dapat diisi dari inbox.",
         "authentication": "Templat kata sandi sekali pakai dikirim oleh sistem, bukan dari inbox.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Hanya pesan {status}",
         "requestedAt": "Diminta {date}",
         "lines": "{count, plural, other {# baris}}",
+        "noLines": "Tidak ada peristiwa pada rentang ini",
         "until": "Tersedia hingga {date}",
         "download": "Unduh",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (pengujian)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Obrolan situs web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Email",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (pengujian)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Obrolan situs web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Email",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kontak",
         "agent": "Anda",
@@ -1054,7 +1072,10 @@
       "tagRemove": "Hapus tag",
       "onLeave": "sedang cuti",
       "onLeaveUntil": "cuti hingga {date}",
-      "spam": "Tandai sebagai spam"
+      "spam": "Tandai sebagai spam",
+      "markUnread": "Tandai belum dibaca",
+      "unsnooze": "Batalkan tunda",
+      "notSpam": "Tandai sebagai bukan spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Kembali ke kotak masuk",
-        "title": "Tag percakapan",
+        "title": "Tag",
         "intro": "Tag percakapan menandai sebuah utas (tagihan, pengembalian dana, mendesak) agar tim Anda dapat mengurutkan dan memfilter kotak masuk. Tag ini berasal dari pustaka yang sama dengan tag kontak, yang menggambarkan orangnya.",
         "newTitle": "Tag baru",
         "editTitle": "Edit tag",

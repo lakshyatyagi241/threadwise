@@ -89,11 +89,13 @@ async function device(t: Tenant, phone = '9812345678'): Promise<string> {
   return r.rows[0].uuid as string;
 }
 
-async function shop(
-  t: Tenant,
-  name = 'Media City Threads',
-  deviceId?: string,
-): Promise<Record<string, any>> {
+/** The shop fields the tests read off a created shop. */
+interface ShopRow {
+  id: string;
+  slug: string;
+}
+
+async function shop(t: Tenant, name = 'Media City Threads', deviceId?: string): Promise<ShopRow> {
   const res = await api
     .as(t.admin)
     .post('/v2/store/shops')
@@ -155,7 +157,7 @@ async function orderRow(orderNo: number) {
   return r.rows[0];
 }
 
-async function setShipping(m: { t: Tenant; s: any }, body: Record<string, unknown>) {
+async function setShipping(m: { t: Tenant; s: ShopRow }, body: Record<string, unknown>) {
   const cur = (await api.as(m.t.admin).get(`/v2/store/shops/${m.s.id}`)).body;
   const res = await api
     .as(m.t.admin)
@@ -309,7 +311,7 @@ describe('shops and the wizard', () => {
     ).toBe(404);
     expect((await api.as(b.t.admin).delete(`/v2/store/shops/${a.s.id}`)).status).toBe(404);
     const list = await api.as(b.t.admin).get('/v2/store/shops');
-    expect(list.body.shops.map((x: any) => x.id)).not.toContain(a.s.id);
+    expect(list.body.shops.map((x: { id: string }) => x.id)).not.toContain(a.s.id);
     const ov = await api.as(b.t.admin).get(`/v2/store/overview?shopId=${a.s.id}`);
     expect(ov.body.shop.id).toBe(b.s.id);
   });
@@ -548,7 +550,7 @@ describe('public shop pages', () => {
     expect(res.status).toBe(200);
     expect(res.body.products).toHaveLength(48);
     expect(res.body).toMatchObject({ total: 50, hasMore: true, page: 1 });
-    expect(res.body.products.map((p: any) => p.name)).not.toContain('Draft');
+    expect(res.body.products.map((p: { name: string }) => p.name)).not.toContain('Draft');
     expect(res.body.shop).toMatchObject({
       slug: m.slug,
       themeKey: 'aurora',
@@ -574,9 +576,12 @@ describe('public shop pages', () => {
     await product(m.t, { name: 'Shared', price: 100 });
     await product(m.t, { name: 'OnlySecond', price: 100, storefrontId: otherId });
     const first = await pub(`/${m.slug}/home`);
-    expect(first.body.products.map((p: any) => p.name)).toEqual(['Shared']);
+    expect(first.body.products.map((p: { name: string }) => p.name)).toEqual(['Shared']);
     const second = await pub(`/${other.slug}/home`);
-    expect(second.body.products.map((p: any) => p.name).sort()).toEqual(['OnlySecond', 'Shared']);
+    expect(second.body.products.map((p: { name: string }) => p.name).sort()).toEqual([
+      'OnlySecond',
+      'Shared',
+    ]);
   });
 
   it('an unknown or disabled shop is 404 STORE_NOT_AVAILABLE', async () => {
@@ -618,7 +623,7 @@ describe('public shop pages', () => {
       [m.s.id],
     );
     const res = await pub(`/${m.slug}/home`);
-    const byName = Object.fromEntries(res.body.products.map((p: any) => [p.name, p]));
+    const byName = Object.fromEntries(res.body.products.map((p: { name: string }) => [p.name, p]));
     expect(byName.Fresh).toMatchObject({ isNew: true, tags: [], weightGrams: null });
     expect(byName.Old).toMatchObject({ isNew: false, tags: ['a', 'b'], weightGrams: 250 });
     // Reference shows top_strip when set and hero_sub even when it is empty
@@ -656,7 +661,7 @@ describe('public shop pages', () => {
       priceDisplay: '₹ 199',
       stockQty: 3,
     });
-    expect(res.body.related.map((r: any) => r.name)).toEqual(['Cap']);
+    expect(res.body.related.map((r: { name: string }) => r.name)).toEqual(['Cap']);
     expect(res.body.reviews).toHaveLength(2);
     expect(res.body).toMatchObject({ ratingAvg: 4.5, ratingCount: 2 });
     expect((await pub(`/${m.slug}/products/missing`)).status).toBe(404);
@@ -1280,7 +1285,7 @@ describe('abandoned-cart recovery', () => {
       get(mods.STOREFRONT_ENV),
     );
   }
-  async function enableRecovery(m: { t: Tenant; s: any }, extra: Record<string, unknown> = {}) {
+  async function enableRecovery(m: { t: Tenant; s: ShopRow }, extra: Record<string, unknown> = {}) {
     await setShipping(m, { cartRecoveryEnabled: true, cartRecoveryDelayMin: 15, ...extra });
   }
   const beacon = (slug: string, p: { uuid: string }, phone = buyer.phone) =>

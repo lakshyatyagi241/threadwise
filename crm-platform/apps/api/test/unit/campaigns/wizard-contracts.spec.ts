@@ -3,6 +3,7 @@ import {
   EMPTY_WIZARD_AUDIENCE,
   EMPTY_WIZARD_DRAFT,
   firstRunInstant,
+  pacingOutOfRange,
   parseTestRecipients,
   retryInstant,
   retryWindowCloses,
@@ -11,6 +12,9 @@ import {
   wizardAudienceHasSource,
   wizardDraftSchema,
   wizardLaunchIssues,
+  wizardRetryEndMax,
+  wizardRetryEndRange,
+  wizardVariableNeedsFallback,
   wizardScheduleSchema,
   wizardStepIssues,
   wizardVariableSourceSchema,
@@ -169,7 +173,7 @@ describe('step validation (the web before Next, the API at launch)', () => {
     templateId: T,
     senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
     audience: { ...EMPTY_WIZARD_AUDIENCE, groupIds: [T] },
-    variables: { 'body.1': { kind: 'field', field: 'first_name' } },
+    variables: { 'body.1': { kind: 'field', field: 'first_name', fallback: 'there' } },
   });
 
   it('step 1 needs a name and a template', () => {
@@ -249,6 +253,34 @@ describe('step validation (the web before Next, the API at launch)', () => {
         { now: NOW },
       ),
     ).toEqual([]);
+    // At most 7 days from today (2026-10-06): the 13th is the last day.
+    const withEnd = (endDate: string) =>
+      wizardStepIssues(
+        4,
+        draft({ ...base, retries: { enabled: true, endDate, timezone: 'UTC' } }),
+        { now: NOW },
+      ).map((i) => i.code);
+    expect(withEnd('2026-10-13')).toEqual([]);
+    expect(withEnd('2026-10-14')).toEqual(['retry_end_too_far']);
+    expect(wizardRetryEndMax(NOW, 'UTC')).toBe('2026-10-13');
+    // The calendar offers exactly the same days: today to the 13th.
+    expect(
+      wizardRetryEndRange(draft({ ...base, retries: { enabled: true, timezone: 'UTC' } }), NOW),
+    ).toEqual({ min: '2026-10-06', max: '2026-10-13' });
+    // A later first send moves the first day to the send's day: the window must close after it.
+    const later = {
+      schedule: { mode: 'scheduled' as const, date: '2026-10-10', time: '09:00', timezone: 'UTC' },
+    };
+    expect(
+      wizardRetryEndRange(draft({ ...later, retries: { enabled: true, timezone: 'UTC' } }), NOW),
+    ).toEqual({ min: '2026-10-10', max: '2026-10-13' });
+    expect(
+      wizardStepIssues(
+        4,
+        draft({ ...later, retries: { enabled: true, endDate: '2026-10-09', timezone: 'UTC' } }),
+        { now: NOW },
+      ).map((i) => i.code),
+    ).toContain('retry_end_before_send');
     // Retries off: the end date is not looked at.
     expect(
       wizardStepIssues(4, draft({ ...base, retries: { enabled: false, endDate: '2020-01-01' } }), {
@@ -321,5 +353,67 @@ describe('the retry window', () => {
     const first = new Date('2026-10-06T10:17:42Z');
     expect(retryInstant(first, 1).toISOString()).toBe('2026-10-07T10:17:42.000Z');
     expect(retryInstant(first, 3).toISOString()).toBe('2026-10-09T10:17:42.000Z');
+  });
+});
+
+describe('a contact-field variable needs a fallback', () => {
+  const field = (fallback: string | null) => ({ kind: 'field' as const, field: 'name', fallback });
+  it('says so for a field with no fallback, not for fixed text or a filled fallback', () => {
+    expect(wizardVariableNeedsFallback(field(null))).toBe(true);
+    expect(wizardVariableNeedsFallback(field('  '))).toBe(true);
+    expect(wizardVariableNeedsFallback(field('there'))).toBe(false);
+    expect(wizardVariableNeedsFallback({ kind: 'fixed', text: 'Hi' })).toBe(false);
+  });
+
+  it('blocks the variables step until each field mapping has one', () => {
+    const slots = ['body.1', 'body.2'];
+    const codes = (d: WizardDraft) =>
+      wizardStepIssues(3, d, { slots, now: NOW }).map((i) => i.code);
+    expect(
+      codes(
+        draft({ variables: { 'body.1': field(null), 'body.2': { kind: 'fixed', text: 'x' } } }),
+      ),
+    ).toEqual(['variable_fallback_required']);
+    expect(
+      codes(
+        draft({ variables: { 'body.1': field('there'), 'body.2': { kind: 'fixed', text: 'x' } } }),
+      ),
+    ).toEqual([]);
+    expect(codes(draft({ variables: { 'body.2': { kind: 'fixed', text: 'x' } } }))).toEqual([
+      'variable_unmapped',
+    ]);
+  });
+});
+
+describe('A/B test and Smart Delivery rules', () => {
+  const base = {
+    name: 'Offer',
+    templateId: T,
+    senderKey: 'waba:3f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a11',
+    audience: { ...EMPTY_WIZARD_AUDIENCE, groupIds: [T] },
+  };
+  const U = '4f2b8c1e-7c1d-4a55-9d10-0d0a6f0f9a22';
+  const codes = (step: 1 | 4, d: WizardDraft) =>
+    wizardStepIssues(step, d, { now: NOW }).map((i) => i.code);
+
+  it('variant B must be a different template from variant A', () => {
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: null }))).toContain(
+      'template_b_required',
+    );
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: T }))).toEqual([
+      'template_b_same',
+    ]);
+    expect(codes(1, draft({ ...base, abTesting: true, templateIdB: U }))).toEqual([]);
+    expect(codes(1, draft({ ...base, abTesting: false, templateIdB: T }))).toEqual([]);
+  });
+
+  it('flags a Smart Delivery number outside its range', () => {
+    expect(pacingOutOfRange('dailyLimit', 0)).toBe(true);
+    expect(pacingOutOfRange('dailyLimit', 100_000)).toBe(false);
+    expect(pacingOutOfRange('batchPauseMin', 1441)).toBe(true);
+    expect(pacingOutOfRange('batchSize', null)).toBe(false);
+    expect(pacingOutOfRange('throttleMinSec', 1.5)).toBe(true);
+    const d = { ...draft({ ...base }), pacing: { dailyLimit: 0 } } as WizardDraft;
+    expect(codes(4, d)).toContain('pacing_out_of_range');
   });
 });

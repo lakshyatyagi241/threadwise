@@ -33,12 +33,20 @@
         "done": "Anda mengambil percakapan ini.",
         "doneOwner": "Anda mengambil percakapan ini dan sekarang menjadi pemilik kontak.",
         "failed": "Percakapan tidak dapat diambil.",
-        "taken": "Orang lain mengambil percakapan ini lebih dulu."
+        "taken": "Orang lain mengambil percakapan ini lebih dulu.",
+        "overLimitTitle": "Anda sudah mencapai batas chat",
+        "overLimitMessage": "Anda sudah memegang {open} percakapan terbuka dan batas Anda {limit}. Tetap ambil yang ini?",
+        "overLimitConfirm": "Tetap ambil",
+        "overLimitCancel": "Batal"
       },
       "giveBack": {
         "button": "Kembalikan ke bot",
         "done": "Bot kembali menjawab percakapan ini.",
-        "failed": "Percakapan tidak dapat dikembalikan ke bot."
+        "failed": "Percakapan tidak dapat dikembalikan ke bot.",
+        "doneFlow": "Bot melanjutkan alur.",
+        "doneNextLive": "Bot akan menjawab pesan berikutnya dari pelanggan.",
+        "doneNextDefault": "Bot aktif kembali. Bot hanya menjawab pesan berikutnya jika ada alur default.",
+        "already": "Bot sudah menangani percakapan ini."
       },
       "send": {
         "button": "Kirim ke antrean",
@@ -50,7 +58,7 @@
         "intro": "Bot berhenti menjawab kontak ini. Percakapan dikirim ke orang atau tim yang Anda pilih, atau menunggu di antrean sampai ada yang mengambilnya.",
         "where": "Kirim ke",
         "whereRules": "Aturan penugasan, jika tidak ada maka antrean tunggu",
-        "whereQueueOnly": "Antrean tunggu (aturan penugasan tidak ada di paket Anda)",
+        "whereQueueOnly": "Antrean tunggu (aturan penugasan memerlukan add-on Perutean cerdas)",
         "whereTeam": "Sebuah tim",
         "wherePerson": "Satu orang",
         "team": "Tim",
@@ -78,14 +86,16 @@
         "priority": "Prioritas",
         "summary": "Ringkasan",
         "answers": "Yang disampaikan kontak kepada bot",
-        "trace": "Cara penugasan"
+        "trace": "Cara penugasan",
+        "timers": "Langkah antrean tunggu"
       },
       "source": {
         "flow": "Sebuah alur",
         "ai_agent": "Agen AI",
         "keyword": "Permintaan kontak sendiri",
         "bot_failure": "Bot yang tidak dapat membantu",
-        "manual": "Seorang rekan tim"
+        "manual": "Seorang rekan tim",
+        "arrival": "Perutean: tidak ada yang bisa mengambil"
       },
       "reason": {
         "customer_asked": "Kontak meminta bicara dengan orang",
@@ -105,6 +115,42 @@
         "chosen": "Dipilih",
         "skipped": "Dilewati",
         "info": "Catatan"
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot kembali, dikembalikan oleh {name}. Alur dilanjutkan.",
+          "nextLive": "Bot kembali, dikembalikan oleh {name}. Bot akan menjawab pesan berikutnya dari pelanggan.",
+          "nextDefault": "Bot kembali, dikembalikan oleh {name}. Bot hanya menjawab pesan berikutnya jika ada alur default."
+        },
+        "result": {
+          "continued": "Alur dilanjutkan dari jalur keluar “dikembalikan”.",
+          "claimed_again": "Alur tidak dilanjutkan: seseorang mengambil chat lagi.",
+          "flow_not_live": "Alur tidak dilanjutkan: alur sudah tidak aktif.",
+          "start_failed": "Alur tidak dapat dilanjutkan."
+        },
+        "customer": {
+          "sent": "Pesan ke pelanggan terkirim.",
+          "window_closed": "Pesan ke pelanggan dilewati: jendela 24 jam tertutup.",
+          "no_consent": "Pesan ke pelanggan dilewati: tidak ada persetujuan.",
+          "failed": "Pesan ke pelanggan tidak dapat dikirim.",
+          "channel_unavailable": "Pesan ke pelanggan dilewati: kanal tidak tersedia."
+        }
+      },
+      "timers": {
+        "reminded": "Diingatkan pukul {at}",
+        "offered": "Ditawarkan ke tim ini pukul {at}",
+        "messaged": "Pesan ke pelanggan dikirim pukul {at}",
+        "gaveBack": "Dikembalikan ke bot pukul {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Dikembalikan ke bot oleh {actor}",
+          "bot_resumed": "Bot melanjutkan alur",
+          "bot_resume_skipped": "Alur tidak dilanjutkan"
+        }
       }
     }
   }

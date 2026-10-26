@@ -59,6 +59,12 @@ describe('problems', () => {
     expect(problems({ ...ok, windowStart: '09:00' })).toEqual(['window']);
     expect(problems({ ...ok, windowStart: '09:00', windowEnd: '18:00' })).toEqual([]);
     expect(problems({ ...ok, throttleMinSec: '9', throttleMaxSec: '5' })).toEqual(['throttle']);
+    expect(problems({ ...ok, throttleMaxSec: '4000' })).toEqual(['pacing']);
+    expect(problems({ ...ok, dailyLimit: '0' })).toEqual(['pacing']);
+    expect(problems({ ...ok, batchSize: '2.5' })).toEqual(['pacing']);
+    expect(
+      problems({ ...ok, batchSize: '10000', batchPauseMin: '1440', dailyLimit: '100000' }),
+    ).toEqual([]);
     expect(problems({ ...ok, mediaUrl: 'ftp://x' })).toEqual(['media']);
     expect(problems({ ...ok, mediaUrl: 'https://cdn.test/a.png' })).toEqual([]);
   });

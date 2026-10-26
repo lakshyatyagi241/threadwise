@@ -24,7 +24,7 @@
         "noWorkspaces": "Çalışma alanı yok"
       },
       "labels": {
-        "addonPacks": "Eklenti paketleri",
+        "addonPacks": "Eklentiler",
         "extensions": "Uzantılar",
         "trackingCode": "İzleme kodu",
         "planPricingSettings": "Plan fiyatlandırma ayarları",
@@ -282,7 +282,9 @@
           "save": "Kaydet",
           "saved": "Tercih kaydedildi.",
           "saveFailed": "Tercih kaydedilemedi."
-        }
+        },
+        "timezoneSearch": "Saat dilimi ara",
+        "timezoneNoMatch": "Eşleşen saat dilimi yok."
       },
       "notifications": {
         "title": "Çalışma alanı bildirimleri",

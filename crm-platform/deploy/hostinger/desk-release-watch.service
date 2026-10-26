@@ -1,0 +1,17 @@
+[Unit]
+Description=Desk release watcher (posts deployment messages to Google Chat)
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/desk/desk-release-watch.sh
+Restart=always
+RestartSec=10
+# The formatter sits next to the script; the GitHub read token is read from /opt/desk/secrets/github_read_token (mode 640 root).
+NoNewPrivileges=true
+ProtectHome=true
+StateDirectory=desk-release-watch
+
+[Install]
+WantedBy=multi-user.target

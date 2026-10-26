@@ -19,13 +19,16 @@ export function CategoryList({
   kind,
   categories,
   filters,
+  extra,
 }: {
   kind: MarketAppKind;
   categories: readonly MarketCategory[];
   filters: BrowseFilters;
+  /** Rows per category that are not listings (the built-in connectors), added to the counts. */
+  extra?: Readonly<Record<string, number>>;
 }) {
   const t = useTranslations('marketplace.browse');
-  const items = categoryItems(kind, categories, filters);
+  const items = categoryItems(kind, categories, filters, extra);
   return (
     <nav aria-label={t('categoriesLabel')}>
       <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0">

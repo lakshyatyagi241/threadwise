@@ -1,14 +1,23 @@
+import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
 import { API_LIBRARY_SECRET_MASK } from '@crm/contracts';
 import {
   applyMapping,
   buildMultipart,
   extractByPath,
+  isProcessedPayload,
+  logFilterApis,
+  logResponseText,
   maskHeaders,
   maskJson,
   maskJsonText,
   maskResponseHeaders,
   maskUrl,
+  looksBinary,
+  readAnswer,
+  scrubSecretHeaders,
+  scrubSecretValues,
+  secretValuesOf,
   renderBody,
   renderHeaders,
   renderText,
@@ -91,6 +100,17 @@ describe('rendering', () => {
   });
 });
 
+describe('what a processing function must hand back', () => {
+  it('is the payload only when it is an object or a list', () => {
+    expect(isProcessedPayload({ a: 1 })).toBe(true);
+    expect(isProcessedPayload([1])).toBe(true);
+    expect(isProcessedPayload(undefined)).toBe(false);
+    expect(isProcessedPayload(null)).toBe(false);
+    expect(isProcessedPayload('text')).toBe(false);
+    expect(isProcessedPayload(3)).toBe(false);
+  });
+});
+
 describe('where a kept secret may go', () => {
   it('compares scheme, host and port, not the path', () => {
     expect(sameOrigin('https://a.test/x?y=1', 'https://a.test/other')).toBe(true);
@@ -119,6 +139,16 @@ describe('masking', () => {
       `https://x.test/p?a=1&api_key=${API_LIBRARY_SECRET_MASK}&token=${API_LIBRARY_SECRET_MASK}#frag`,
     );
     expect(maskUrl('https://x.test/p')).toBe('https://x.test/p');
+    // A user and password in the address are hidden in what is stored and shown; the path and query are kept
+    expect(maskUrl('https://qauser:FAKE@httpbin.org/basic-auth/qauser/FAKE')).toBe(
+      `https://${API_LIBRARY_SECRET_MASK}@httpbin.org/basic-auth/qauser/FAKE`,
+    );
+    expect(maskUrl('https://u@x.test:8443/p?q=a@b')).toBe(
+      `https://${API_LIBRARY_SECRET_MASK}@x.test:8443/p?q=a@b`,
+    );
+    expect(maskUrl('https://x.test/p/a@b?api_key=K')).toBe(
+      `https://x.test/p/a@b?api_key=${API_LIBRARY_SECRET_MASK}`,
+    );
     expect(
       maskJson({ user: 'u', password: 'p', nested: { accessToken: 't', list: [{ secret: 's' }] } }),
     ).toEqual({
@@ -230,6 +260,36 @@ describe('response paths', () => {
   });
 });
 
+describe('the answer a log keeps', () => {
+  const answer = (bodyText: string, extra: Partial<Parameters<typeof logResponseText>[0]> = {}) =>
+    logResponseText({
+      bodyText,
+      contentType: null,
+      headers: {},
+      sizeBytes: Buffer.byteLength(bodyText),
+      ...extra,
+    });
+
+  it('keeps a text answer as it is', () => {
+    expect(answer('{"id":7}', { contentType: 'application/json' })).toBe('{"id":7}');
+  });
+
+  it('replaces an answer with a NUL character (a binary body) by a note of its size and type', () => {
+    const bodyText = '\u0089PNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR';
+    const note = answer(bodyText, { contentType: 'image/png', sizeBytes: 163 });
+    expect(note).toBe('[binary answer: 163 bytes, image/png]');
+    expect(note).not.toContain('\u0000');
+  });
+
+  it('says so when the binary answer names no content type and was sent compressed', () => {
+    const note = answer('\u001f\u008b\u0008\u0000\u0000\u0000', {
+      sizeBytes: 26,
+      headers: { 'content-encoding': 'gzip' },
+    });
+    expect(note).toBe('[binary answer: 26 bytes, no content type, content-encoding gzip]');
+  });
+});
+
 describe('numbered pages', () => {
   it('derives the totals: at least one page, hasMore until the last, empty beyond it', async () => {
     const { numberedPage } = await import('../../../src/modules/api-library/api-library.mapper');
@@ -251,5 +311,132 @@ describe('numbered pages', () => {
     expect(numberedPage(['e'], 5, 3, 2).page.hasMore).toBe(false);
     expect(numberedPage([], 5, 9, 2)).toMatchObject({ data: [], total: 5, totalPages: 3 });
     expect(numberedPage([], 0, 1, 25)).toMatchObject({ total: 0, totalPages: 1 });
+  });
+});
+
+describe('readAnswer', () => {
+  it('unpacks a gzip answer and counts the real bytes', () => {
+    const text = JSON.stringify({ hello: 'world' });
+    const out = readAnswer(
+      gzipSync(text),
+      { 'content-encoding': 'gzip', 'content-type': 'application/json' },
+      1 << 20,
+    );
+    expect(out).toEqual({ text, isText: true, sizeBytes: text.length });
+  });
+
+  it('names a file instead of printing it as symbols, with its byte size', () => {
+    const png = Buffer.alloc(102_400, 7);
+    const out = readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
+    expect(out.isText).toBe(false);
+    expect(out.sizeBytes).toBe(102_400);
+    expect(out.text).toContain('image/png');
+    expect(out.text).toContain('102400 bytes');
+  });
+
+  it('treats a NUL byte as binary even with a text type, and plain text as text', () => {
+    expect(looksBinary('text/plain', Buffer.from([65, 0, 66]))).toBe(true);
+    expect(readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100).isText).toBe(
+      true,
+    );
+  });
+
+  it('does not throw on a broken compressed answer', () => {
+    const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
+    expect(out.isText).toBe(false);
+    expect(out.text).toContain('could not be unpacked');
+  });
+});
+
+describe('secrets the other server repeats back', () => {
+  const url = 'https://httpbin.org/get?api_key=QAFAKEKEY777&token=QAFAKETOK888&page=2';
+  const secrets = secretValuesOf(url, [
+    { key: 'Authorization', value: 'Bearer abcd1234', secret: true },
+    { key: 'Accept', value: 'application/json', secret: false },
+  ]);
+
+  it('collects secret query values and secret header values, not ordinary ones', () => {
+    expect(secrets).toEqual(
+      expect.arrayContaining(['QAFAKEKEY777', 'QAFAKETOK888', 'Bearer abcd1234', 'abcd1234']),
+    );
+    expect(secrets).not.toContain('2');
+    expect(secrets).not.toContain('application/json');
+  });
+
+  it('takes the password of an address as a secret, and hides it where the address is repeated', () => {
+    const creds = secretValuesOf('https://qauser:QAFAKEPASS9@httpbin.org/basic-auth/qauser/x', []);
+    expect(creds).toEqual(['QAFAKEPASS9']);
+    expect(
+      scrubSecretValues('{"url":"https://qauser:QAFAKEPASS9@httpbin.org"}', creds),
+    ).not.toContain('QAFAKEPASS9');
+    expect(secretValuesOf('https://httpbin.org/x', [])).toEqual([]);
+  });
+
+  it('hides them wherever the reply repeats them, encoded or not', () => {
+    const reply = JSON.stringify({
+      args: { api_key: 'QAFAKEKEY777', token: 'QAFAKETOK888', page: '2' },
+      url: 'https://httpbin.org/get?token=QAFAKETOK888',
+      auth: 'Bearer abcd1234',
+    });
+    const out = scrubSecretValues(reply, secrets);
+    expect(out).not.toContain('QAFAKEKEY777');
+    expect(out).not.toContain('QAFAKETOK888');
+    expect(out).not.toContain('abcd1234');
+    expect(out).toContain('"page":"2"');
+    expect(
+      scrubSecretValues('a%20b%2Bc', secretValuesOf('https://x.test/?token=a%20b%2Bc', [])),
+    ).toBe(scrubSecretValues('a%20b%2Bc', ['a b+c']));
+  });
+
+  it('hides them in response headers too', () => {
+    const h = scrubSecretHeaders(
+      { 'x-echo': 'token=QAFAKETOK888', 'content-type': 'application/json' },
+      secrets,
+    );
+    expect(h['x-echo']).not.toContain('QAFAKETOK888');
+    expect(h['content-type']).toBe('application/json');
+  });
+});
+
+describe('the logs API filter', () => {
+  const SAVED = '11111111-1111-4111-8111-111111111111';
+  const GONE = '22222222-2222-4222-8222-222222222222';
+  const GONE_TWO = '33333333-3333-4333-8333-333333333333';
+
+  it('lists every saved API as not deleted, in the order given', () => {
+    expect(logFilterApis([{ uuid: SAVED, name: 'orders' }], [])).toEqual([
+      { id: SAVED, name: 'orders', deleted: false },
+    ]);
+  });
+
+  it('adds a deleted API that still has runs, named as its run kept it, after the saved ones', () => {
+    const out = logFilterApis(
+      [{ uuid: SAVED, name: 'orders' }],
+      [{ apiUuid: GONE, apiName: 'qatestapi' }],
+    );
+    expect(out).toEqual([
+      { id: SAVED, name: 'orders', deleted: false },
+      { id: GONE, name: 'qatestapi', deleted: true },
+    ]);
+  });
+
+  it('does not list a saved API twice when its runs are logged too', () => {
+    const out = logFilterApis(
+      [{ uuid: SAVED, name: 'orders' }],
+      [{ apiUuid: SAVED, apiName: 'orders' }],
+    );
+    expect(out).toEqual([{ id: SAVED, name: 'orders', deleted: false }]);
+  });
+
+  it('sorts the deleted APIs by name', () => {
+    const out = logFilterApis(
+      [],
+      [
+        { apiUuid: GONE, apiName: 'zeta' },
+        { apiUuid: GONE_TWO, apiName: 'alpha' },
+      ],
+    );
+    expect(out.map((a) => a.name)).toEqual(['alpha', 'zeta']);
+    expect(out.every((a) => a.deleted)).toBe(true);
   });
 });

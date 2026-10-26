@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   createTaskOutcomeSchema,
+  bulkTaskTransitionSchema,
   createTaskSchema,
   ERROR_CODES,
   listTaskOutcomesQuerySchema,
@@ -56,7 +57,9 @@ describe('task outcome contracts', () => {
   });
   it('needs the row version to update', () => {
     expect(updateTaskOutcomeSchema.safeParse({ name: 'A' }).success).toBe(false);
-    expect(updateTaskOutcomeSchema.safeParse({ isActive: false, rowVersion: 2 }).success).toBe(true);
+    expect(updateTaskOutcomeSchema.safeParse({ isActive: false, rowVersion: 2 }).success).toBe(
+      true,
+    );
   });
   it('reads activeOnly from a query string', () => {
     expect(listTaskOutcomesQuerySchema.parse({ activeOnly: 'true' }).activeOnly).toBe(true);
@@ -146,7 +149,9 @@ describe('TaskOutcomesService', () => {
       byName: async () => undefined,
       update: async () => false,
     });
-    await expect(run(() => svc.update(U1, { isActive: false, rowVersion: 1 }))).rejects.toMatchObject({
+    await expect(
+      run(() => svc.update(U1, { isActive: false, rowVersion: 1 })),
+    ).rejects.toMatchObject({
       code: ERROR_CODES.ROW_VERSION_CONFLICT,
     });
   });
@@ -156,7 +161,9 @@ describe('TaskOutcomesService', () => {
       byUuid: async () => row(),
       byName: async () => row({ id: 9, uuid: U2, name: 'Left message' }),
     });
-    await expect(run(() => svc.update(U1, { name: 'left message', rowVersion: 1 }))).rejects.toMatchObject({
+    await expect(
+      run(() => svc.update(U1, { name: 'left message', rowVersion: 1 })),
+    ).rejects.toMatchObject({
       code: ERROR_CODES.TASK_OUTCOME_NAME_TAKEN,
     });
   });
@@ -172,5 +179,17 @@ describe('TaskOutcomesService', () => {
         code: ERROR_CODES.TASK_OUTCOME_ORDER_INVALID,
       });
     }
+  });
+});
+
+describe('bulkTaskTransitionSchema', () => {
+  it('takes the ids alone, or with an outcome to record (null clears it)', () => {
+    expect(bulkTaskTransitionSchema.safeParse({ ids: [U1] }).success).toBe(true);
+    expect(bulkTaskTransitionSchema.safeParse({ ids: [U1], outcomeId: U2 }).success).toBe(true);
+    expect(bulkTaskTransitionSchema.safeParse({ ids: [U1], outcomeId: null }).success).toBe(true);
+  });
+  it('refuses an outcome that is not an id and an empty selection', () => {
+    expect(bulkTaskTransitionSchema.safeParse({ ids: [U1], outcomeId: 'x' }).success).toBe(false);
+    expect(bulkTaskTransitionSchema.safeParse({ ids: [] }).success).toBe(false);
   });
 });

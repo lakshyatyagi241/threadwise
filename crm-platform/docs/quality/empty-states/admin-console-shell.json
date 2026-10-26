@@ -1,0 +1,95 @@
+{
+  "feature": "admin-console-shell",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-admin-console-shell-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/admin-console-shell/announcements/announcement-bars.tsx",
+        "apps/web/src/features/admin-console-shell/branding/workspace-brand.tsx",
+        "apps/web/src/features/admin-console-shell/console-palette.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-admin-console-shell-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/admin-console-shell/console-palette.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/e2e/admin-console-shell/shell.spec.ts",
+          "match": "the search finds a page by the words of its address, and says so when nothing matches"
+        }
+      ]
+    },
+    {
+      "id": "EM-admin-console-shell-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/admin-console-shell/connect-device/connect-device-sheet.tsx",
+        "apps/web/src/features/admin-console-shell/console-shell.tsx",
+        "apps/web/src/features/admin-console-shell/header/notification-bell.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-admin-console-shell-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/admin-console-shell/console-access.ts",
+        "apps/web/src/features/admin-console-shell/console-counts.ts",
+        "apps/web/src/features/admin-console-shell/console-keywords.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-admin-console-shell-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/admin-console-shell/console-nav.ts",
+        "apps/web/src/features/admin-console-shell/header/notification-bell.tsx",
+        "apps/web/src/features/admin-console-shell/header/notifications-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/admin-console-shell/inbox-bell/logic.test.ts",
+          "match": "hides at zero, and stays dismissed until a newer message or a larger total"
+        },
+        {
+          "file": "apps/web/src/features/admin-console-shell/more/more-stats.test.ts",
+          "match": "shows no change as zero"
+        },
+        {
+          "file": "apps/web/src/features/admin-console-shell/workspace-settings/logic.test.ts",
+          "match": "posts all 18 events and 9 categories with every channel spelled out, like Reference hidden zeros"
+        }
+      ]
+    }
+  ]
+}

@@ -76,7 +76,7 @@
       "unknownPerson": "Cựu thành viên",
       "unknownTeam": "Nhóm đã bị xóa",
       "teamName": "Nhóm: {name}",
-      "skipsOffline": "Bỏ qua người đang ngoại tuyến",
+      "skipsOffline": "Bỏ qua những người đang vắng mặt",
       "reassigns": "Phân công lại khi cập nhật",
       "activeFor": "Quy tắc {name} đang hoạt động",
       "dragHandle": "Kéo {name} để đổi mức ưu tiên",
@@ -136,7 +136,7 @@
         "noPeople": "Không có người nào phù hợp.",
         "removePerson": "Xóa {name}",
         "onLeave": "đang nghỉ phép",
-        "skipOffline": "Bỏ qua người đang ngoại tuyến",
+        "skipOffline": "Bỏ qua những người đang vắng mặt",
         "skipOfflineHint": "Người đang nghỉ phép luôn bị bỏ qua.",
         "reassign": "Phân công lại khi một lần cập nhật khiến quy tắc này bắt đầu khớp",
         "reassignHint": "Chỉ áp dụng cho bản ghi do chính hệ thống này phân công, và chỉ khi chưa ai thay đổi người phụ trách. Mặc định tắt: một bản ghi chỉ được phân công một lần."
@@ -220,7 +220,7 @@
         "disabled": "Phân công bản ghi đang bị tắt cho không gian làm việc này, nên sẽ không có gì xảy ra.",
         "has_owner": "{record} đã có người phụ trách, nên không quy tắc nào chạy. Người phụ trách do con người đặt sẽ không bao giờ bị thay thế.",
         "no_rule": "Không có quy tắc đang hoạt động nào khớp với {record}.",
-        "nobody_available": "Có quy tắc khớp với {record}, nhưng tất cả những người được nêu đều đang nghỉ phép, ngoại tuyến hoặc không còn ở đây.",
+        "nobody_available": "Một quy tắc khớp với {record}, nhưng tất cả những người nó nêu đều đang nghỉ phép, vắng mặt hoặc không còn ở đây.",
         "plan": "Gói của bạn không bao gồm quy tắc phân công bản ghi.",
         "not_found": "Không tìm thấy bản ghi đó. Có thể nó đã bị xóa, hoặc nằm ngoài phạm vi bạn được xem."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: không thể mở loại bản ghi này",
         "inactive": "{name}: không còn hoạt động",
         "on_leave": "{name}: nghỉ phép hôm nay",
-        "offline": "{name}: ngoại tuyến"
+        "offline": "{name}: vắng mặt"
       }
     },
     "log": {

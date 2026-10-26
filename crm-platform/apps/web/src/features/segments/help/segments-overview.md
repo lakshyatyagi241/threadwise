@@ -24,9 +24,16 @@ You can also select **Save as segment** on the Contacts screen after setting fil
 
 ## Options and settings
 
-- Conditions can use stage, status, lead score (only while lead scoring is on for your workspace), people fields, activity dates and your own [contact properties](help:contact-properties). A segment holds up to 50 conditions.
+- Conditions can use stage, status, lead score (only while lead scoring is on for your workspace), people fields, activity dates and your own [contact properties](help:contact-properties). A segment holds up to 50 conditions. A date in a condition means a whole day in your workspace's time zone.
 - The "..." menu on a row offers **Edit rules**, **Duplicate**, **Export members (CSV)**, **Tag members**, **Add members to a group** and **Delete**. Tagging and grouping apply to the people who match right now.
 - **Recount members** refreshes a member count.
+- On a segment's members list, choose the columns you want: the **+** at the end of the header row adds one, and a column's menu has **Hide**. Your choice is kept in this browser and is separate from the Contact Hub's columns until you make it.
+
+## The list and search
+
+- The table shows each segment's rules, members, visibility, **Owner**, **Created by** and **Created at**, **Modified by** and **Updated**. A segment's creator is its owner when it was made. **Modified by** stays empty until someone changes the segment after this column was added.
+- The search box filters the segments you can see by name, description or owner. The **Mine** and **Shared** filters apply on top of it.
+- **Who and when.** Each segment shows who created it, when, who last changed it and when. The names are the people in your workspace.
 
 ## Sharing with specific people
 

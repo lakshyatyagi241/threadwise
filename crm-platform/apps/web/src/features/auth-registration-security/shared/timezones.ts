@@ -1,3 +1,5 @@
+import { MODERN_ZONE } from '@/lib/timezones';
+
 /**
  * IANA timezone helpers for the onboarding and profile pickers (TW-AUTH-008/025).
  * Reference lists every PHP identifier with its UTC offset; here the browser's own
@@ -26,29 +28,9 @@ const FALLBACK_ZONES = [
   'UTC',
 ];
 
-/**
- * ICU lists a few zones under their old canonical names (Asia/Calcutta,
- * Europe/Kiev, ...), so someone searching "Kolkata" would find nothing. Reference
- * hit the same thing and maps the aliases; the modern id is shown and stored,
- * and the old one is still accepted (the server validates with Intl too).
- */
-const MODERN_ID: Readonly<Record<string, string>> = {
-  'America/Buenos_Aires': 'America/Argentina/Buenos_Aires',
-  'America/Godthab': 'America/Nuuk',
-  'America/Indianapolis': 'America/Indiana/Indianapolis',
-  'Asia/Calcutta': 'Asia/Kolkata',
-  'Asia/Katmandu': 'Asia/Kathmandu',
-  'Asia/Rangoon': 'Asia/Yangon',
-  'Asia/Saigon': 'Asia/Ho_Chi_Minh',
-  'Atlantic/Faeroe': 'Atlantic/Faroe',
-  'Europe/Kiev': 'Europe/Kyiv',
-  'Pacific/Ponape': 'Pacific/Pohnpei',
-  'Pacific/Truk': 'Pacific/Chuuk',
-};
-
 /** The modern spelling of a zone id when the engine knows it, else the id unchanged. */
 export function modernZoneId(zone: string): string {
-  const modern = MODERN_ID[zone];
+  const modern = MODERN_ZONE[zone];
   return modern && utcOffsetMinutes(modern) !== null ? modern : zone;
 }
 

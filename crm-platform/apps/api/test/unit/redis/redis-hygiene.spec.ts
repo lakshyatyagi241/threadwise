@@ -129,8 +129,7 @@ describe('Redis hygiene: commands that must not be in application code', () => {
 
 describe('Redis hygiene: every key has a lifetime or a reason', () => {
   // `SET` with no EX/PX/KEEPTTL. Each one is a single fixed key (not a family that can grow).
-  const SET_WITHOUT_TTL_ALLOWED: Record<string, string> = {
-  };
+  const SET_WITHOUT_TTL_ALLOWED: Record<string, string> = {};
   it('has a TTL on every SET/SETEX that can grow (or is a listed single key)', () => {
     const bad: string[] = [];
     const seen = new Set<string>();
@@ -153,8 +152,7 @@ describe('Redis hygiene: every key has a lifetime or a reason', () => {
   });
 
   // Growth commands (INCR, HSET, SADD, ZADD, LPUSH, PFADD, HINCRBY ...) in a file with no EXPIRE/PEXPIRE/TTL'd SET/EVAL at all.
-  const GROWTH_WITHOUT_LIFETIME_ALLOWED: Record<string, string> = {
-  };
+  const GROWTH_WITHOUT_LIFETIME_ALLOWED: Record<string, string> = {};
   it('has a lifetime command beside every counter / hash / set / list / sorted-set write', () => {
     const review = inv.fileRows.filter((r) => r.ttlStatus === 'review').map((r) => r.file);
     const bad = review.filter((f) => !GROWTH_WITHOUT_LIFETIME_ALLOWED[f]);
@@ -342,9 +340,11 @@ describe('Redis hygiene: the inventory is current', () => {
   });
 
   it('keeps the number of Redis calls awaited in a loop from growing', () => {
-    // 16 reviewed sites: per-item dedupe claims (one SET NX per inbound message / recipient / webhook) and a small retry loop. Each is
-    // bounded by the size of one webhook batch or one send; a new site should batch (pipeline) or say why not.
-    expect(inv.sequential.length).toBeLessThanOrEqual(16);
+    // 17 reviewed sites: per-item dedupe claims (one SET NX per inbound message / recipient / webhook / billing address) and a small retry
+    // loop. Each is bounded by the size of one webhook batch, one send or one workspace's billing admins; a new site should batch
+    // (pipeline) or say why not. The 17th is the add-on included mail (platform-payment-gateways/subscription-notifications.consumer), a
+    // per-address claim like its sibling at line 161. The inactivity sweep's per-session reads were batched into one MGET.
+    expect(inv.sequential.length).toBeLessThanOrEqual(17);
   });
 });
 

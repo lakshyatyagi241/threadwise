@@ -63,19 +63,41 @@ describe('a rule in the list', () => {
     const out = row();
     expect(out).toContain('Refund requests');
     expect(out).toContain('Billing agents take refunds');
-    expect(out).toContain('Active');
-    expect(out).toContain('Channel: WhatsApp Cloud API');
-    expect(out).toContain('Message has any of: refund, invoice');
-    expect(out).toContain('Round robin: Asha Rao, Bilal Khan');
+    // one readable sentence: when, then how
+    expect(out).toContain(
+      'Channel: WhatsApp Cloud API, Message has any of: refund, invoice → Round robin: Asha Rao, Bilal Khan',
+    );
     expect(out).toContain('Used 12 times');
     expect(out).toContain('last on');
   });
 
-  it('flags the fallback, a rule that keeps checking and agents that are gone', () => {
-    const out = row({ isFallback: true, stopOnMatch: false, unavailableTargets: 2 });
-    expect(out).toContain('Fallback');
+  it('flags a rule that keeps checking and agents that are gone', () => {
+    const out = row({ stopOnMatch: false, unavailableTargets: 2 });
     expect(out).toContain('Keeps checking');
     expect(out).toContain('2 agents unavailable');
+  });
+
+  it('a rule that applies to every conversation says so whatever conditions it keeps (H13)', () => {
+    const out = row({ appliesToAll: true });
+    expect(out).toContain('Every new conversation → Round robin: Asha Rao, Bilal Khan');
+    expect(out).not.toContain('Channel: WhatsApp Cloud API');
+  });
+
+  it('warns on a rule an earlier catch-all blocks, and on one that can never match (H17)', () => {
+    expect(row({}, { shadowed: true })).toContain('Never runs');
+    const never = row({
+      appliesToAll: false,
+      conditions: { ...rule().conditions, channelKinds: [], keywords: null },
+    });
+    expect(never).toContain('Never matches');
+  });
+
+  it('shows the everyone pool as "all agents"', () => {
+    const out = row({
+      appliesToAll: true,
+      assign: { strategy: 'least_busy', userIds: [], teamIds: [], everyone: true },
+    });
+    expect(out).toContain('Least busy: all agents');
   });
 
   it('a rule that never fired says so, and an unknown agent is not shown by id', () => {
@@ -132,11 +154,39 @@ describe('the rule form', () => {
     expect(out).toContain('Least busy');
     expect(out).toContain('A specific agent');
     expect(out).toContain('Stop when this rule matches');
-    expect(out).toContain('Fallback rule');
     expect(out).toContain('>Save<');
     expect(out).toContain('Save and activate');
-    expect(out).toContain('The contact matches');
+    // no condition is shown until the admin asks for one: the switch is off and the rule applies to every conversation
+    expect(out).toContain('Only for conversations that match...');
+    expect(out).toContain('This rule applies to every new conversation.');
+    expect(out).not.toContain('Message words');
+    expect(out).not.toContain('data-testid="add-condition"');
+    expect(out).not.toContain('Fallback rule');
+  });
+
+  it('a rule with conditions shows only those, each as a card, with the add menu', () => {
+    const out = html(<RuleFormBody rule={rule()} />);
     expect(out).toContain('Message words');
+    expect(out).toContain('Channel');
+    expect(out).toContain('data-testid="add-condition"');
+    expect(out).not.toContain('Customer language');
+    expect(out).not.toContain('New or returning contact');
+    // the channel checkboxes are inside the Channel card only when it was added
+    expect(html(<RuleFormBody />)).not.toContain('Telegram');
+  });
+
+  it('a rule that applies to every conversation keeps its conditions but says they are ignored', () => {
+    const out = html(<RuleFormBody rule={rule({ appliesToAll: true })} />);
+    expect(out).toContain('Your conditions are kept but ignored while this is off.');
+    expect(out).not.toContain('data-testid="add-condition"');
+  });
+
+  it('Everyone else has no When card and can share over all agents', () => {
+    const out = html(<RuleFormBody everyoneElse />);
+    expect(out).not.toContain('Only for conversations that match');
+    expect(out).not.toContain('Stop when this rule matches');
+    expect(out).toContain('Everyone who can open the inbox');
+    expect(out).toContain('value="Everyone else"');
   });
 
   it('an active rule is edited with Save only, and its values are in the form', () => {

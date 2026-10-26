@@ -55,7 +55,7 @@ Every private chat on a linked number, not only business chats, appears in this 
 
 ## Who can do what
 
-You need permission to see the numbers (**wa.devices.read**), and separate permissions to add and rename, to link, to disconnect and to delete. By default only workspace admins have them. If a button is missing, ask an admin.
+You need permission to see the numbers (the permission to see numbers), and separate permissions to add and rename, to link, to disconnect and to delete. By default only workspace admins have them. If a button is missing, ask an admin.
 
 ## If something looks wrong
 

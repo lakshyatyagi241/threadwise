@@ -1,0 +1,63 @@
+{
+  "feature": "whatsapp-throughput",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-whatsapp-throughput-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-throughput/components/number-detail-page.tsx",
+        "apps/web/src/features/whatsapp-throughput/components/throughput-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-whatsapp-throughput-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-whatsapp-throughput-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-throughput/components/number-detail-page.tsx",
+        "apps/web/src/features/whatsapp-throughput/components/settings-form.tsx",
+        "apps/web/src/features/whatsapp-throughput/components/throughput-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-whatsapp-throughput-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-throughput/components/number-detail-page.tsx",
+        "apps/web/src/features/whatsapp-throughput/components/settings-form.tsx",
+        "apps/web/src/features/whatsapp-throughput/components/sparkline.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-throughput/lib/format.test.ts",
+          "match": "is zero without a rate and never above 1.5"
+        }
+      ]
+    }
+  ]
+}

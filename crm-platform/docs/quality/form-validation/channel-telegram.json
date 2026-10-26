@@ -1,0 +1,355 @@
+{
+  "module": "channel-telegram",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "connectBotSchema",
+      "file": "apps/api/src/modules/channel-telegram/bots.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "savePaymentSettingsSchema",
+      "file": "apps/api/src/modules/channel-telegram/bots.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "paymentProviderToken",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "paymentProviderToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "paymentProviderToken",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "paymentProviderToken",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "paymentProviderToken",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "paymentProvider",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "paymentProvider",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "paymentProvider",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "paymentProvider",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "paymentProvider",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "clearPaymentToken",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "clearPaymentToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createTgBroadcastSchema",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "botId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "botId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "botId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "templateId",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "templateId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "templateId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4096)",
+          "value": "\"a\" x 4096",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4096)",
+          "value": "\"a\" x 4097",
+          "priority": "P1"
+        },
+        {
+          "field": "body",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4096)",
+          "value": "\"😀\" x 4096",
+          "priority": "P2"
+        },
+        {
+          "field": "chatIds",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "chatIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "chatIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P1"
+        },
+        {
+          "field": "chatIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 5000 items",
+          "value": "array of 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "chatIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (5000) items",
+          "value": "array of 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "mediaUrl",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "mediaUrl",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "mediaUrl",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a url",
+          "value": "\"not a url\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "mediaUrl",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

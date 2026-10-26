@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Mejorar tu plan",
+      "timeline": {
+        "label": "Calendario de recordatorios",
+        "addMenu": "Añadir un paso",
+        "addStep": "Añadir paso",
+        "count": "{count} de {max} pasos con hora. La confirmación de la reserva y el mensaje por inasistencia no cuentan.",
+        "capReached": "Has alcanzado {max} pasos con hora. Quita uno para añadir otro.",
+        "empty": "Todavía no hay pasos. Añade el primero o empieza con una secuencia lista para usar.",
+        "lane": {
+          "booked": "Cuando se reserva",
+          "before": "Antes de la cita",
+          "after": "Después de la cita"
+        },
+        "laneHint": {
+          "booked": "Se envía en cuanto se hace la reserva.",
+          "before": "Se envía antes de que empiece la cita, nunca después.",
+          "after": "Se envía después de que termine la cita o cuando se marca como inasistencia."
+        },
+        "laneEmpty": "Todavía no hay nada.",
+        "step": {
+          "confirmation": "Confirmación de reserva",
+          "reminder_24h": "Recordatorio de 24 horas",
+          "reminder_2h": "Recordatorio de 2 horas",
+          "reminder_15m": "Recordatorio de 15 minutos",
+          "reminder": "Recordatorio",
+          "after_visit": "Mensaje posterior a la cita",
+          "no_show": "Mensaje por inasistencia",
+          "rebook": "Mensaje para volver a reservar"
+        },
+        "stepHint": {
+          "confirmation": "Se envía justo después de confirmar la reserva.",
+          "reminder_24h": "El día antes. Puede incluir los botones Confirmar, Reprogramar y Cancelar.",
+          "reminder_2h": "Un recordatorio breve unas horas antes.",
+          "reminder_15m": "Solo para citas en línea con enlace de acceso.",
+          "reminder": "Un recordatorio a la hora que elijas.",
+          "after_visit": "Un agradecimiento o seguimiento después de que termine la cita.",
+          "no_show": "Se envía cuando marcas la cita como inasistencia.",
+          "rebook": "Pide al contacto que vuelva a reservar algunos días después de una cita completada. Cuenta como marketing."
+        },
+        "choice": {
+          "confirmation": "Confirmación de reserva",
+          "reminder_24h": "24 horas antes",
+          "reminder_2h": "2 horas antes",
+          "reminder_15m": "15 minutos antes",
+          "custom": "Recordatorio a otra hora",
+          "after_visit": "Mensaje posterior a la cita",
+          "no_show": "Mensaje por inasistencia",
+          "rebook": "Mensaje para volver a reservar, algunos días después"
+        },
+        "choiceHint": {
+          "present": "Ya añadido",
+          "cap": "Límite alcanzado",
+          "online": "Citas en línea",
+          "locked": "Nivel superior: no está en tu plan"
+        },
+        "enabledOf": "Enviar: {step}",
+        "remove": "Quitar: {step}",
+        "offsetOf": "Hora de: {step}",
+        "unitOf": "Unidad de tiempo de: {step}",
+        "beforeStart": "antes de que empiece la cita",
+        "afterEnd": "después de que termine la cita",
+        "setTime": "Escribe una hora",
+        "templateName": "Plantilla de WhatsApp: {name}",
+        "wa": {
+          "none": "Sin plantilla",
+          "draft": "Plantilla no enviada a Meta",
+          "pending": "Esperando la aprobación de Meta",
+          "approved": "Plantilla aprobada",
+          "rejected": "Rechazada por Meta"
+        },
+        "fallback": {
+          "email": "Hasta que la plantilla de WhatsApp esté aprobada, este paso se envía por email.",
+          "window": "WhatsApp es el único canal aquí, así que fuera de la ventana de 24 horas no se envía nada hasta que se apruebe una plantilla. Añade email como alternativa."
+        },
+        "when": {
+          "before": "{amount} antes de que empiece",
+          "after": "{amount} después de que termine"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minuto} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} other {# horas}}",
+          "days": "{count, plural, one {# día} other {# días}}"
+        },
+        "rebookLocked": "Los mensajes para volver a reservar forman parte del nivel superior de Citas, que tu plan no incluye. Puedes configurar el paso, pero seguirá desactivado hasta que tu plan los incluya.",
+        "rebookLockedStep": "Forma parte del nivel superior de Citas: no se puede activar con tu plan actual."
+      },
+      "reasons": {
+        "already_confirmed": "El contacto ya había confirmado.",
+        "no_join_link": "La cita no tiene enlace de acceso.",
+        "already_rebooked": "El contacto ha vuelto a reservar.",
+        "visit_not_completed": "La cita no se completó.",
+        "plan_feature_locked": "Tu plan no incluye este paso.",
+        "not_delivered": "WhatsApp no lo entregó a tiempo, así que se usó el siguiente canal.",
+        "send_failed": "El envío falló, así que se usó el siguiente canal."
+      },
+      "packs": {
+        "open": "Secuencias listas para usar",
+        "eyebrow": "Para {name}",
+        "title": "Secuencias de recordatorios listas para usar",
+        "close": "Cerrar",
+        "intro": "Elige una secuencia para tu tipo de negocio. Configura de una vez la confirmación, los recordatorios, el seguimiento y el mensaje para volver a reservar. Los mensajes de WhatsApp necesitan la aprobación de Meta antes de poder enviarse; mientras tanto, cada paso se envía por email.",
+        "loading": "Cargando las secuencias",
+        "choose": "Elegir una secuencia",
+        "stepsCount": "{count, plural, one {# paso} other {# pasos}}",
+        "language": "Idioma de los mensajes",
+        "machineDraft": "El texto en hindi es un borrador hecho por máquina. Pide a alguien que lea hindi que lo revise antes de activar los pasos.",
+        "previewLoading": "Cargando la vista previa",
+        "previewTitle": "Qué cambiará",
+        "summary": "{add} para añadir, {replace} para reemplazar, {unchanged} ya iguales",
+        "timedOf": "{count} de {max} pasos con hora",
+        "blocked": "Aplicar esta secuencia superaría el límite de {max} pasos con hora. Quita antes un paso.",
+        "confirmTitle": "Esto reemplaza pasos que ya tienes",
+        "confirmBody": "{count, plural, one {# paso de este tipo de reserva} other {# pasos de este tipo de reserva}} se reemplazará por la versión de la secuencia, incluido cualquier texto que hayas escrito.",
+        "confirmCheck": "Reemplazarlos",
+        "action": {
+          "add": "Nuevo",
+          "replace": "Reemplaza el tuyo",
+          "unchanged": "Ya igual"
+        },
+        "starts": {
+          "on": "Empieza activado",
+          "off": "Empieza desactivado"
+        },
+        "category": {
+          "UTILITY": "Mensaje de servicio",
+          "MARKETING": "Mensaje de marketing"
+        },
+        "onlineOnly": "Solo citas en línea",
+        "hasButtons": "Botones Confirmar, Reprogramar y Cancelar",
+        "wa": {
+          "new": "Se enviará a Meta"
+        },
+        "replaceOwnText": "Escribiste tu propio texto para este paso. Se reemplazará.",
+        "planNotes": {
+          "rebook": "El paso para volver a reservar forma parte del nivel superior de Citas, que tu plan no incluye, así que este paso se guarda desactivado.",
+          "buttons": "Los botones Confirmar, Reprogramar y Cancelar forman parte del nivel superior de Citas, que tu plan no incluye, así que se omiten."
+        },
+        "showMessages": "Mostrar mensajes",
+        "hideMessages": "Ocultar mensajes",
+        "kept": "{count, plural, one {# paso que ya tienes no se toca.} other {# pasos que ya tienes no se tocan.}}",
+        "sample": {
+          "title": "Valores de ejemplo",
+          "hint": "Los mensajes se muestran con estos valores inventados. Cámbialos para ver cómo se lee un nombre más largo o otro lugar.",
+          "reset": "Restablecer los valores",
+          "labels": {
+            "name": "Nombre del contacto",
+            "service": "Servicio",
+            "date": "Fecha",
+            "time": "Hora",
+            "place": "Lugar",
+            "join_link": "Enlace de acceso",
+            "manage_link": "Enlace de gestión"
+          }
+        },
+        "submitToMeta": "Enviar ahora los mensajes de WhatsApp a Meta para su aprobación",
+        "submitHint": "{count, plural, one {Se crea # mensaje nuevo de WhatsApp.} other {Se crean # mensajes nuevos de WhatsApp.}} Meta decide cuándo aprobarlos; mientras tanto, el paso se envía por email. Déjalo desactivado para guardarlos como borradores.",
+        "submitHintNone": "Los mensajes de WhatsApp ya existen en tu espacio de trabajo, así que no se crea nada nuevo.",
+        "apply": "Aplicar secuencia",
+        "applying": "Aplicando",
+        "cancel": "Cancelar",
+        "block": {
+          "readOnly": "Puedes ver las secuencias, pero no aplicarlas.",
+          "unsaved": "Guarda o descarta primero los cambios en los pasos de este tipo de reserva.",
+          "cap": "Quita antes un paso: se superaría el límite de pasos con hora.",
+          "confirm": "Marca Reemplazarlos para continuar."
+        },
+        "errors": {
+          "needsConfirm": "Aplicarla reemplazaría un paso, así que necesita tu confirmación. La vista previa se ha recargado.",
+          "cap": "La secuencia superaría el límite de pasos con hora para este tipo de reserva."
+        },
+        "result": {
+          "title": "La secuencia se ha aplicado",
+          "summary": "{added} añadidos, {replaced} reemplazados. Los pasos empiezan como los define la secuencia.",
+          "templatesTitle": "Mensajes de WhatsApp",
+          "templatesNone": "No se creó ningún mensaje de WhatsApp. Conecta un número de WhatsApp Cloud API para usar WhatsApp; mientras tanto se usa email.",
+          "waiting": "Hasta que Meta apruebe un mensaje, ese paso se envía por email.",
+          "metaError": "Meta lo rechazó: {error}",
+          "refresh": "Actualizar estado",
+          "refreshing": "Actualizando",
+          "withheldTitle": "Omitido por tu plan",
+          "withheldButtons": "Los botones Confirmar, Reprogramar y Cancelar de este paso: {step}.",
+          "withheldRebook": "{step}: se guarda desactivado."
+        }
+      },
+      "buttonsLocked": "Los botones Confirmar, Reprogramar y Cancelar forman parte del nivel superior de Citas, que tu plan no incluye.",
+      "test": {
+        "send": "Enviar un correo de prueba",
+        "sending": "Enviando",
+        "hint": "Envía este paso con valores de ejemplo. Deja la dirección vacía para enviarlo a tu propio correo.",
+        "toLabel": "Enviar la prueba a",
+        "toPlaceholder": "Tu propia dirección u otra que escribas",
+        "toInvalid": "Escribe una dirección de correo completa o déjalo vacío.",
+        "wait": {
+          "unsaved": "Guarda primero tus cambios: la prueba envía el paso guardado.",
+          "notSaved": "Guarda primero los recordatorios: este paso es nuevo."
+        },
+        "queued": "El correo de prueba va de camino a {address}. El resultado también llega a tus notificaciones.",
+        "skipped": "No se envió nada: tu usuario no tiene correo electrónico.",
+        "noWhatsapp": "Los mensajes de WhatsApp no se pueden probar desde aquí."
+      },
+      "report": {
+        "title": "Informe de recordatorios",
+        "description": "Lo que hicieron los recordatorios: cuántos se enviaron, entregaron, fallaron u omitieron, y cuántos salieron por otro canal.",
+        "type": "Tipo de reserva",
+        "allTypes": "Todos los tipos de reserva",
+        "range": "Periodo",
+        "ranges": {
+          "7": "Últimos 7 días",
+          "30": "Últimos 30 días",
+          "90": "Últimos 90 días",
+          "custom": "Elegir fechas"
+        },
+        "from": "Desde",
+        "to": "Hasta",
+        "refresh": "Actualizar",
+        "pickDates": "Elige una fecha de inicio y una de fin para ver el informe.",
+        "loading": "Cargando el informe",
+        "empty": "Ningún recordatorio vencía en este periodo. Cuando se envíen recordatorios, sus resultados aparecerán aquí.",
+        "caption": "Resultados de los recordatorios de {name}",
+        "col": {
+          "step": "Paso",
+          "sent": "Enviados",
+          "delivered": "Entregados",
+          "failed": "Fallidos",
+          "fallback": "Enviados por otro canal",
+          "skipped": "Omitidos",
+          "confirmed": "Confirmados",
+          "rescheduled": "Reprogramación pedida",
+          "cancelled": "Cancelados",
+          "total": "Total"
+        },
+        "rates": "De {count, plural, one {# cita} other {# citas}} que recibieron un recordatorio: {confirmed}% confirmadas, {cancelled}% canceladas, {noShow}% ausencias.",
+        "why": "Por qué",
+        "otherReason": "Otro motivo",
+        "buttonsLocked": "Los resultados de los botones Confirmar, Reprogramar y Cancelar pertenecen al nivel superior de Citas, por eso no se cuentan en tu plan.",
+        "emailNote": "«Entregado» solo lo informa WhatsApp: el correo no tiene informe de entrega, así que cuenta como enviado. Solo se muestran recuentos; ningún nombre, número ni mensaje."
+      },
+      "history": {
+        "fallback": "Enviado por {channel} porque el primer canal no pudo entregarlo.",
+        "delivery": {
+          "delivered": "WhatsApp informó de que se entregó.",
+          "failed": "WhatsApp informó de que falló.",
+          "undelivered": "WhatsApp no lo entregó a tiempo."
+        },
+        "tried": "Canales probados, en orden",
+        "attempt": {
+          "sent": "enviado",
+          "skipped": "no usado",
+          "held": "en espera",
+          "failed": "fallido"
+        },
+        "buttons": "Respuestas con los botones",
+        "button": {
+          "confirm": "Tocó Confirmar",
+          "reschedule": "Tocó Reprogramar",
+          "cancel": "Tocó Cancelar"
+        }
+      }
+    }
+  }
+}

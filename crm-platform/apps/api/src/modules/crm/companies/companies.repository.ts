@@ -720,8 +720,13 @@ export class CompaniesRepository {
       options: optionRows
         .filter((o) => Number(o.field_id) === Number(r.id))
         .map((o) => o.value as string),
+      // A cascade link names no option and no value, so it is no condition (see the contact registry's requiredRules).
       conditions: depRows
-        .filter((d) => Number(d.field_id) === Number(r.id))
+        .filter(
+          (d) =>
+            Number(d.field_id) === Number(r.id) &&
+            (d.depends_on_value !== null || d.option_value !== null),
+        )
         .map((d) => ({
           parentKey: d.parent_key as string,
           wanted: s(d.depends_on_value) ?? s(d.option_value),

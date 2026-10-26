@@ -1349,13 +1349,17 @@
             "details": "Detail dan harga",
             "features": "Fitur",
             "limits": "Batas",
-            "addons": "Add-on"
+            "addons": "Add-on",
+            "integrations": "Integrasi",
+            "miniApps": "Aplikasi mini"
           },
           "tabSummary": {
             "features": "{count} dari {total} fitur aktif",
             "limits": "{count} dari {total} batas diatur",
-            "addons": "{count} add-on dipilih",
-            "error": "Ada kesalahan yang perlu diperbaiki"
+            "addons": "{count, plural, one {# add-on disertakan atau ditawarkan} other {# add-on disertakan atau ditawarkan}}",
+            "error": "Ada kesalahan yang perlu diperbaiki",
+            "integrations": "Integrasi yang disertakan atau ditawarkan: {count}",
+            "miniApps": "Aplikasi mini yang disertakan atau ditawarkan: {count}"
           },
           "featuresUi": {
             "intro": "Nonaktifkan yang tidak termasuk dalam paket ini. Ruang kerja pada paket tidak dapat membuka area yang fiturnya nonaktif.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Aktifkan semua",
             "disableAll": "Nonaktifkan semua",
             "noMatch": "Tidak ada fitur yang cocok dengan pencarian Anda.",
-            "groupCount": "{count} dari {total} aktif"
+            "groupCount": "{count} dari {total} aktif",
+            "lockedBy": "Diatur oleh add-on {addon} di tab Add-on"
           },
           "limitsUi": {
             "intro": "Batas menghentikan tindakan setelah ruang kerja mencapainya. Centang Tanpa batas untuk menghapus batas.",
@@ -1385,12 +1390,8 @@
             "total": "secara total"
           },
           "addons": {
-            "intro": "Add-on yang diaktifkan ditampilkan kepada ruang kerja pada paket ini di Marketplace mereka; hanya dapat dipakai setelah ruang kerja membelinya.",
             "search": "Cari add-on",
             "searchPlaceholder": "Cari add-on atau aplikasi",
-            "selectAll": "Pilih semua",
-            "clear": "Hapus pilihan",
-            "selected": "{count} dari {total} dipilih",
             "loading": "Memuat add-on",
             "empty": "Belum ada add-on berbayar",
             "emptyHint": "Add-on dibuat di katalog Marketplace pada konsol operator. Setelah aplikasi memiliki paket berbayar, aplikasi itu tercantum di sini.",
@@ -1404,7 +1405,8 @@
             "packInactive": "Paket add-on dinonaktifkan, jadi tidak ada yang bisa membelinya.",
             "appUnpublished": "Aplikasi belum dipublikasikan, jadi ruang kerja belum dapat melihatnya.",
             "appLabel": "Aplikasi: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on disertakan atau ditawarkan} other {# add-on disertakan atau ditawarkan}}"
           },
           "featureHints": {
             "automation": "Pembuat alur dan otomatisasi yang membalas dan bertindak pada percakapan.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "White-label: ruang kerja dapat menyembunyikan branding platform di footer-nya.",
             "sales_pipeline": "Deal, tugas, dan pipeline, serta angka pipeline di dasbor.",
             "appointment_booking": "Jenis pemesanan, janji temu, dan halaman pemesanan publik. Aplikasi Janji temu berbayar memegang sakelar ini.",
+            "appointment_confirm_buttons": "Menambahkan tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan pada pengingat janji temu yang dikirim lewat WhatsApp.",
+            "appointment_rebook_steps": "Pesan tindak lanjut yang dikirim setelah janji temu selesai, meminta kontak untuk memesan lagi.",
             "chatbot_widgets": "Pembuat widget chatbot situs web.",
             "wa_storefront": "Area katalog dan etalase WhatsApp.",
             "inbox_sla": "Kebijakan dan tenggat SLA di kotak masuk tim.",
-            "inbox_routing": "Aturan perutean yang menugaskan percakapan kotak masuk secara otomatis.",
+            "inbox_routing": "Penugasan otomatis untuk chat baru: aturan perutean, Semua yang lain, dan pengatur waktu antrean tunggu. Bagian dari add-on Perutean cerdas.",
             "waba_calling": "Panggilan WhatsApp dari kotak masuk: nomor panggilan, izin panggilan, melakukan dan menjawab panggilan.",
             "inbox_kanban": "Tampilan papan Kanban dari kotak masuk tim.",
             "team_performance": "Laporan performa tim.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas.",
             "team_hierarchy": "Tim induk, ketua tim, dan manajer yang melihat timnya serta tim di bawahnya.",
             "custom_roles": "Buat dan ubah peran, lalu pilih cakupan (milik sendiri, tim, atau semua data) untuk setiap izin.",
-            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron antara pemilik kontak dan pemilik chat, jendela kontak yang kembali, dan prompt penugasan ulang. Bekerja bersama Perutean inbox."
+            "inbox_assignment_sticky": "Penugasan pemilik lebih dulu dan sinkron, jendela kontak yang kembali, dan pertanyaan saat menugaskan ulang. Bagian dari add-on Perutean cerdas.",
+            "agent_status_bar": "Kontrol status Tersedia / Tidak di tempat di bilah atas dan di bagian atas Kotak Masuk, dengan Setel sebagai tidak di tempat / tersedia dan tautan ke Cuti. Sakelar Tersedia / Tidak di tempat di menu akun terbuka untuk semua paket.",
+            "agent_status_automation": "Jam kerja pribadi dengan zona waktu, Tidak di tempat di luar jam itu, pemberitahuan Di luar jam kerja, dan penugasan yang melewati orang di luar jam kerjanya. Diperlukan untuk menyimpan jadwal; tanpanya jadwal yang tersimpan dipertahankan tetapi diabaikan."
           },
           "units": {
             "days": "Hari",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "Kotak surat email",
             "email_monthly": "Email per bulan",
             "storage_gb": "Penyimpanan (GB)",
-            "teams": "Tim"
+            "teams": "Tim",
+            "webbot_messages": "Pesan chatbot situs web gratis per bulan"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1609,10 +1616,12 @@
             "remove_branding": "White-label (menghapus branding platform)",
             "sales_pipeline": "Pipeline penjualan (deal dan tugas)",
             "appointment_booking": "Janji temu dan halaman pemesanan",
+            "appointment_confirm_buttons": "Tombol pengingat: Konfirmasi, Jadwalkan Ulang, dan Batalkan",
+            "appointment_rebook_steps": "Langkah pemesanan ulang (recall) setelah janji temu",
             "chatbot_widgets": "Widget chatbot situs web",
             "wa_storefront": "Etalase dan katalog WhatsApp",
             "inbox_sla": "Kebijakan SLA kotak masuk",
-            "inbox_routing": "Aturan perutean kotak masuk dan jam kerja",
+            "inbox_routing": "Perutean cerdas: penugasan otomatis dan aturan",
             "waba_calling": "Lakukan dan jawab panggilan WhatsApp dari kotak masuk",
             "inbox_kanban": "Papan Kanban kotak masuk",
             "team_performance": "Laporan performa tim",
@@ -1638,7 +1647,9 @@
             "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)",
             "team_hierarchy": "Hierarki tim dan manajer",
             "custom_roles": "Peran kustom dan cakupan",
-            "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
+            "agent_status_bar": "Bilah status: kontrol Tersedia / Tidak di tempat di bilah atas dan Kotak Masuk",
+            "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "Paket tidak boleh sekaligus gratis dan penawaran kustom.",
             "paid_needs_price": "Atur harga di atas 0, atau tandai paket sebagai gratis.",
             "offer_not_lower": "Harga penawaran harus lebih rendah dari harga paket.",
-            "default_needs_active": "Paket default pendaftaran harus aktif."
+            "default_needs_active": "Paket default pendaftaran harus aktif.",
+            "addonPriceZero": "Kosongkan harga untuk memakai harga add-on, atau pilih Disertakan.",
+            "addonGone": "Add-on ini sudah tidak ada. Muat ulang halaman dan simpan lagi."
           },
           "limitHints": {
             "monthly_messages": "Pesan keluar yang dikirim dalam bulan kalender. Melebihi kuota, dompet ditagih.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
             "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
             "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir.",
-            "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus."
+            "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus.",
+            "webbot_messages": "Pesan chatbot situs web yang termasuk gratis setiap bulan kalender. Setiap pesan setelahnya ditagihkan ke dompet. Kosong atau 0 = tidak ada yang gratis."
           },
           "productLines": {
             "chat": "Obrolan",
             "crm": "CRM Penjualan",
             "platform": "Dipakai bersama"
+          },
+          "offers": {
+            "readOnly": "Anda dapat melihat paket ini tetapi tidak dapat mengubahnya, jadi kontrol ini dikunci.",
+            "featureTitle": "Add-on fitur",
+            "featureIntro": "Add-on yang membuka bagian dari produk. Disertakan: ruang kerja di paket ini mendapatkannya tanpa biaya dan kartunya bertuliskan \"Termasuk dalam paket Anda\". Berbayar: mereka dapat membelinya, dengan harga khusus paket ini jika Anda menetapkannya. Tersembunyi: mereka tidak pernah melihatnya. Fitur add-on di tab Fitur mengikuti pilihan ini.",
+            "capacityTitle": "Add-on kapasitas",
+            "capacityIntro": "Add-on yang hanya menambah batas, seperti kursi pengguna tambahan. Di sebuah paket, add-on ini berbayar atau tersembunyi; batas milik paket diatur di tab Batas.",
+            "noFeaturePacks": "Belum ada add-on fitur.",
+            "adds": "Menambah: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} tanpa batas",
+            "modeLabel": "Cara {name} ditawarkan di paket ini",
+            "modes": {
+              "included": "Disertakan",
+              "paid": "Berbayar",
+              "hidden": "Tersembunyi"
+            },
+            "noIncluded": "Add-on ini hanya menambah batas, jadi tidak dapat disertakan. Atur batas milik paket ini di tab Batas.",
+            "priceLabel": "Harga di paket ini ({currency})",
+            "priceHint": "Kosongkan untuk memakai harga add-on itu sendiri.",
+            "includedCapacityNote": "Hanya fiturnya yang disertakan. Batas ekstra ({limits}) tetap dijual ke ruang kerja di paket ini.",
+            "hiddenNote": "Ruang kerja di paket ini tidak melihat add-on ini dan tidak dapat membelinya. Ruang kerja yang sudah membelinya tetap memilikinya hingga masa berlakunya berakhir.",
+            "offNote": "Tidak lagi disertakan: ruang kerja di paket ini kehilangan fitur-fitur ini kecuali mereka membeli add-on tersebut. Pengaturan mereka disimpan dan kembali saat add-on diaktifkan lagi.",
+            "loading": "Memuat add-on",
+            "loadFailed": "Add-on tidak dapat dimuat. Tidak ada yang diubah.",
+            "empty": "Belum ada add-on",
+            "emptyHint": "Add-on seperti Perutean pintar dan Tim dan izin dibuat di Add-on pada konsol operator.",
+            "noPrice": "Harga belum ditetapkan",
+            "gives": "Memberikan: {features}",
+            "unlistedNote": "Beberapa fiturnya ({features}) berada di luar daftar add-on standar. Fitur tersebut tetap dapat diaktifkan untuk paket; hanya cara membeli add-on ini sebagai paket yang berbeda.",
+            "inactiveNote": "Add-on ini masih draf atau dinonaktifkan, jadi belum ada yang bisa membelinya. Menyertakannya dalam paket tetap berfungsi.",
+            "impactCount": "{count, plural, other {# ruang kerja sudah membayar add-on ini.}} Perpanjangannya akan berhenti di akhir masa berjalan, tidak ada yang dikembalikan dananya, dan tidak ada yang dibatalkan hari ini.",
+            "impactUnknown": "Ruang kerja di paket ini yang sudah membayar add-on ini akan berhenti memperpanjangnya di akhir masa berjalan. Tidak ada yang dikembalikan dananya dan tidak ada yang dibatalkan hari ini. Jumlahnya tidak dapat dimuat.",
+            "partlyNote": "Paket ini sudah memberi sebagian add-on ini ({features}). Tetap begitu sampai Anda memilih Termasuk, Berbayar, atau Tersembunyi di sini.",
+            "needsFeatures": "Tambahkan dulu fitur yang dibukanya di Add-on > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Aplikasi mini adalah aplikasi yang dipasang ruang kerja dari Marketplace. Disertakan: gratis untuk ruang kerja di paket ini. Berbayar: mereka dapat membelinya dengan harga aplikasi itu sendiri. Tersembunyi: mereka tidak pernah melihatnya. Disertakan juga mengaktifkan fitur paket yang diberikan aplikasi.",
+            "introIntegrations": "Integrasi menghubungkan layanan eksternal. Disertakan: gratis untuk ruang kerja di paket ini. Berbayar: mereka dapat membelinya dengan harga integrasi itu sendiri. Tersembunyi: mereka tidak pernah melihatnya. Disertakan juga mengaktifkan fitur paket yang diberikannya.",
+            "setAll": "Atur semua yang ditampilkan ke",
+            "summary": "{count} dari {total} disertakan atau ditawarkan",
+            "priceHint": "Aplikasi Marketplace mempertahankan harganya sendiri; atur di listing aplikasi.",
+            "emptyIntegrations": "Belum ada integrasi berbayar",
+            "emptyIntegrationsHint": "Integrasi gratis tidak memerlukan pengaturan di sini; Shopify dan WooCommerce diaktifkan di tab Fitur."
           }
         }
       },

@@ -116,6 +116,46 @@ describe('the Template node (TW-FLR-026)', () => {
     await untilRun(p, t, f.id, 'completed', (r) => r.status === 'completed');
   });
 
+  it('leaves by the status exit the provider reports: delivered, read, or the customer replying', async () => {
+    const w = await p.api.signup('flrtplst');
+    const ch = await simChannel(p as never, w, {
+      simulator: { latencyMs: { sent: 0, delivered: 200, read: 700 } },
+    });
+    const tpl = await addTemplate(p, w, { name: 'status_probe', body: 'Status probe.' });
+    const make = async (keyword: string, exits: string[]) =>
+      addFlow(p, w, {
+        graph: graph(
+          [
+            node('t', 'trigger', {}, { isStart: true }),
+            node('tp', 'template', { tpl: 'status_probe', tplId: tpl.id, statusExits: true }),
+            ...exits.map((x) => node(`on_${x}`, 'message', { text: `via ${x}` })),
+          ],
+          [edge('t', 'tp'), ...exits.map((x) => edge('tp', `on_${x}`, x))],
+        ),
+        trigger: { kind: 'keyword', keywords: keyword },
+      });
+    // Delivered is wired (read too): the run leaves at the first one that happens.
+    const fd = await make('probe1', ['delivered', 'read']);
+    const peer1 = nextPeer();
+    await simInbound(p, w, ch, { from: peer1, name: 'D', text: 'probe1' });
+    expect(await untilSent(p, w, ch, peer1, 2)).toEqual(['Status probe.', 'via delivered']);
+    await untilRun(p, w, fd.id, 'completed', (r) => r.status === 'completed');
+    // Only Read is wired: the run waits through "delivered" and leaves at "read".
+    const fr = await make('probe2', ['read']);
+    const peer2 = nextPeer();
+    await simInbound(p, w, ch, { from: peer2, name: 'R', text: 'probe2' });
+    expect(await untilSent(p, w, ch, peer2, 2)).toEqual(['Status probe.', 'via read']);
+    await untilRun(p, w, fr.id, 'completed', (r) => r.status === 'completed');
+    // Only Replied is wired: the receipts change nothing; the customer's next message takes the exit.
+    const fp = await make('probe3', ['replied']);
+    const peer3 = nextPeer();
+    await simInbound(p, w, ch, { from: peer3, name: 'P', text: 'probe3' });
+    await untilSent(p, w, ch, peer3, 1);
+    await untilRun(p, w, fp.id, 'still waiting', (r) => r.status === 'waiting');
+    await simInbound(p, w, ch, { from: peer3, name: 'P', text: 'yes please' });
+    expect(await untilSent(p, w, ch, peer3, 2)).toEqual(['Status probe.', 'via replied']);
+  });
+
   it('skips a template that is not approved or not in this workspace, and one of another workspace', async () => {
     const ch = await simChannel(p as never, t);
     await addTemplate(p, t, { name: 'still_pending', body: 'never sent', status: 'pending' });

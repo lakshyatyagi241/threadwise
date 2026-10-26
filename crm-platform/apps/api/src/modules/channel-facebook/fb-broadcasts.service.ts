@@ -26,7 +26,7 @@ import { AUDIENCE_LIMIT, progressPct, windowCutoff } from './broadcast-rules';
 import { FbBroadcastsRepository, type FbBroadcastRow } from './fb-broadcasts.repository';
 import { PagesRepository } from './pages.repository';
 
-const MODULE_KEY = 'facebook_broadcasts';
+export const MODULE_KEY = 'facebook_broadcasts';
 const LIST_LIMIT = 50;
 
 export interface FbBroadcastJob {

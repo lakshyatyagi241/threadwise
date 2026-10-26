@@ -128,11 +128,7 @@ export class RolesRepository {
   }
 
   /** Active members per role who are in no team (the roles editor warns about a team scope for them). */
-  async membersWithoutTeam(
-    tx: Tx,
-    orgId: number,
-    roleIds: number[],
-  ): Promise<Map<number, number>> {
+  async membersWithoutTeam(tx: Tx, orgId: number, roleIds: number[]): Promise<Map<number, number>> {
     if (roleIds.length === 0) return new Map();
     const res = await tx.execute(sql`
       SELECT ur.role_id, count(*)::int AS n

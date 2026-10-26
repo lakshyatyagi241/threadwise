@@ -158,12 +158,21 @@ export async function flowState(o: FlowStateOptions): Promise<void> {
     if (connected > 0 && !o.allowConnected)
       throw new Error(`FLOWSTATE_CHANNEL_CONNECTED: ${connected} WhatsApp channel(s) are connected: a live flow would answer customers. Nothing was written`);
 
-    for (const p of todo)
-      await withTenant(worker.db, { orgId }, (tx) =>
-        tx.execute(sql`
+    // One transaction: arm the flows, then copy the draft into the published copies the runtime reads (2028 and 2029 migrations), as the
+    // publish path does. A live flow never exists without its copy; without one the runtime reads the draft, so a saved edit or a typed
+    // keyword would go live before Publish. The copy also covers flows armed by an earlier run, which have no copy yet.
+    await withTenant(worker.db, { orgId }, async (tx) => {
+      for (const p of todo)
+        await tx.execute(sql`
           UPDATE flows SET is_published = true, is_active = true, published_at = coalesce(${p.at}::timestamptz, now()), row_version = row_version + 1
-          WHERE org_id = ${orgId} AND id = ${Number(p.row.id)}`),
-      );
+          WHERE org_id = ${orgId} AND id = ${Number(p.row.id)}`);
+      if (liveIds.length > 0)
+        await tx.execute(sql`
+          UPDATE flows SET published_flow_data = flow_data, published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
+            published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
+            published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id, published_provider = provider
+          WHERE org_id = ${orgId} AND id = ANY(${liveIds}) AND is_published AND published_flow_data IS NULL`);
+    });
     const armed = plan.filter((p) => p.live).map((p) => p.row.uuid);
     await worker.db.execute(sql`
       INSERT INTO migration.run_log (source_client, collection, step, run_id, last_key, state, counts)

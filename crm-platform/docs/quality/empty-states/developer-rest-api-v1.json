@@ -1,0 +1,85 @@
+{
+  "feature": "developer-rest-api-v1",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-developer-rest-api-v1-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/docs/components/docs-shell.tsx",
+        "apps/web/src/features/developer-rest-api-v1/docs/lib/spec-model.ts",
+        "apps/web/src/features/developer-rest-api-v1/lib/keys-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/components/components.test.tsx",
+          "match": "shows the create form and \"No key yet\" when there is no active key"
+        },
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/docs/components/docs-page.test.tsx",
+          "match": "shows an empty state when the document lists no endpoint"
+        },
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/lib/keys-model.test.ts",
+          "match": "refuses a restricted key with nothing ticked: an empty list would be full access"
+        }
+      ]
+    },
+    {
+      "id": "EM-developer-rest-api-v1-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/docs/components/docs-shell.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-developer-rest-api-v1-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/components/developer-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/components/components.test.tsx",
+          "match": "shows a spinner while loading and an error with Retry when the list fails"
+        }
+      ]
+    },
+    {
+      "id": "EM-developer-rest-api-v1-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/components/copy-button.tsx",
+        "apps/web/src/features/developer-rest-api-v1/components/developer-screen.tsx",
+        "apps/web/src/features/developer-rest-api-v1/docs/components/endpoint-card.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/lib/keys-model.test.ts",
+          "match": "every scope ticked is sent as ticked, nothing invented"
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { SenderHidden, WizardDraftResponse, WizardSender } from '@crm/contracts';
+import {
+  wizardRetryEndRange,
+  type SenderHidden,
+  type WizardDraftResponse,
+  type WizardSender,
+} from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, Field, Select, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { isUsableProperty, useContactFields } from '@/features/contacts-attributes-tags';
@@ -34,7 +39,7 @@ import { WizardFooter } from '../wizard/components/wizard-footer';
 import { VariablesCard } from '../wizard/components/variables-card';
 import { countableAudience } from '../wizard/lib/audience';
 import { launchPreflight } from '../wizard/lib/flow';
-import { stepIssues, type IssueCode, type StepIssue } from '../wizard/lib/issues';
+import { MAPPING_CODES, stepIssues, type IssueCode, type StepIssue } from '../wizard/lib/issues';
 import type { LaunchFailure } from '../wizard/lib/launch-errors';
 import { defaultTimeZone, launchKind } from '../wizard/lib/schedule';
 import type { WizardAction, WizardView } from '../wizard/lib/state';
@@ -235,7 +240,7 @@ export function GuidedCampaign({
       case 'compose':
         return [
           ...v1.filter((i) => i.path === 'templateId' || i.path === 'templateIdB'),
-          ...v3.filter((i) => i.code === 'variable_unmapped' && !isSequencePath(i.path)),
+          ...v3.filter((i) => MAPPING_CODES.includes(i.code) && !isSequencePath(i.path)),
         ];
       case 'recipients':
         // Who is picked, and whether the wallet covers them: the Review step's own balance rule.
@@ -247,7 +252,7 @@ export function GuidedCampaign({
         // The mapping of the sequence's templates sits under the sequence card, so its problems are this step's.
         return [...v4, ...v3.filter((i) => isSequencePath(i.path))];
       case 'review':
-        return v3.filter((i) => i.code !== 'variable_unmapped');
+        return v3.filter((i) => !MAPPING_CODES.includes(i.code));
     }
   };
   const issues = issuesOf(step);
@@ -495,11 +500,13 @@ export function GuidedCampaign({
                               }
                             >
                               <option value="">{tg('pickTemplate')}</option>
-                              {usable.map((x) => (
-                                <option key={x.id} value={x.id}>
-                                  {x.name} · {x.language}
-                                </option>
-                              ))}
+                              {usable
+                                .filter((x) => x.id !== draft.templateId)
+                                .map((x) => (
+                                  <option key={x.id} value={x.id}>
+                                    {x.name} · {x.language}
+                                  </option>
+                                ))}
                             </Select>
                           </Field>
                         </div>
@@ -524,8 +531,13 @@ export function GuidedCampaign({
                             label={`${tg('templateB')} *`}
                             htmlFor="camp-template-b"
                             error={
-                              visible.some((i) => i.path === 'templateIdB')
-                                ? ti('template_b_required')
+                              visible.find((i) => i.path === 'templateIdB')
+                                ? ti(
+                                    visible.find((i) => i.path === 'templateIdB')!.code ===
+                                      'template_b_same'
+                                      ? 'template_b_same'
+                                      : 'template_b_required',
+                                  )
                                 : undefined
                             }
                           >
@@ -642,6 +654,7 @@ export function GuidedCampaign({
                       />
                       <RetriesCard
                         retries={draft.retries}
+                        range={wizardRetryEndRange(draft, new Date())}
                         issues={visible}
                         onRetries={(retries) => act({ type: 'retries', retries })}
                       />

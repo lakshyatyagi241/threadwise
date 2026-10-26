@@ -400,7 +400,9 @@ describe('reminder rules and their delivery (BL-283)', () => {
   });
 
   it('a hold (quiet hours) waits for its time, keeps the preference, and writes the timeline once', async () => {
-    const { a } = await book('Held', [{ offsetMinutes: 60, isActive: true, channels: ['whatsapp'] }]);
+    const { a } = await book('Held', [
+      { offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+    ]);
     const until = new Date(Date.now() + 2 * 3_600_000).toISOString();
     reminderMessenger.result = { status: 'held', reason: 'quiet_hours', holdUntil: until };
     await arrange(a.id, 30, 600);
@@ -550,7 +552,11 @@ describe('reminder rules and their delivery (BL-283)', () => {
     const made = [];
     for (let i = 0; i < 5; i++) {
       made.push(
-        (await book(`Parallel ${i}`, [{ offsetMinutes: 60, isActive: true, channels: ['whatsapp'] }])).a,
+        (
+          await book(`Parallel ${i}`, [
+            { offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+          ])
+        ).a,
       );
     }
     for (const a of made) await arrange(a.id, 30, 600);

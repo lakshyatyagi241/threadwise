@@ -22,7 +22,12 @@ import {
   type OutboundContent,
 } from '../chat-conversations';
 import { EmailTemplatesReader } from '../email-templates';
-import { TemplatesRepository, TemplatesService } from '../message-templates';
+import {
+  BUILDABLE_TYPES,
+  TemplatesRepository,
+  TemplatesService,
+  metaEditBlockOf,
+} from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import {
@@ -31,9 +36,14 @@ import {
   buttonsOf,
   checkVariables,
   cleanVariables,
+  hasBlankCopyCode,
   isApproved,
   renderBody,
+  sendComponentsOf,
   templatePreviewOf,
+  matchTemplateByBody,
+  previewButtonsOf,
+  type MatchCandidate,
 } from './inbox-template-rules';
 import { MediaUploadsRepository } from './media-uploads.repository';
 
@@ -76,7 +86,10 @@ export class InboxThreadService {
       this.access.assertVisible(viewer, record);
     });
     const page = await this.conversations.listMessages(uuid, query);
-    return { ...page, data: await this.withTemplatePreviews(page.data) };
+    return {
+      ...page,
+      data: await this.withMatchedTemplates(await this.withTemplatePreviews(page.data)),
+    };
   }
 
   /**
@@ -112,6 +125,43 @@ export class InboxThreadService {
     return messages.map((m) => {
       const preview = m.template?.templateId ? byUuid.get(m.template.templateId) : undefined;
       return preview && m.template ? { ...m, template: { ...m.template, preview } } : m;
+    });
+  }
+
+  /**
+   * A message the business sent that is not stored as a template message (an imported history, a copy of what it sent from its phone)
+   * keeps no link to its template, so it showed no buttons while the same template sent from here did. When its words are exactly one
+   * approved template's body, the thread gets that template's buttons (`matchedTemplate`). One query for the page, and none when the
+   * page has no such message.
+   */
+  private async withMatchedTemplates(messages: MessageResponse[]): Promise<MessageResponse[]> {
+    const loose = messages.filter(
+      (m) =>
+        m.direction === 'out' &&
+        m.kind !== 'template' &&
+        m.template === null &&
+        (m.body ?? '').trim() !== '' &&
+        (m.kind === 'text' || m.kind === 'image' || m.kind === 'video' || m.kind === 'document'),
+    );
+    if (loose.length === 0) return messages;
+    const orgId = RequestContextStore.orgId();
+    const rows = await this.db.tx((tx) =>
+      this.templates.list(tx, orgId, { limit: 300, statusGroup: 'approved' }),
+    );
+    const candidates: MatchCandidate[] = rows
+      .map((r) => ({
+        name: r.templateName,
+        body: r.templateBody,
+        header: r.header,
+        buttons: previewButtonsOf(r.buttons),
+      }))
+      .filter((c) => c.buttons.length > 0);
+    if (candidates.length === 0) return messages;
+    const looseIds = new Set(loose.map((m) => m.id));
+    return messages.map((m) => {
+      if (!looseIds.has(m.id)) return m;
+      const hit = matchTemplateByBody(m.body, candidates);
+      return hit ? { ...m, matchedTemplate: { name: hit.name, buttons: hit.buttons } } : m;
     });
   }
 
@@ -215,6 +265,11 @@ export class InboxThreadService {
         content,
         replyToMessageId:
           input.kind === 'reaction' ? input.targetMessageId : input.replyToMessageId,
+        // Only the kinds that take `origin` (text, media, template) can come from a contact's drawer.
+        origin:
+          input.kind === 'text' || input.kind === 'media' || input.kind === 'template'
+            ? input.origin
+            : undefined,
       });
       return (await this.withTemplatePreviews([message]))[0]!;
     } catch (err) {
@@ -229,9 +284,10 @@ export class InboxThreadService {
   }
 
   /**
-   * The approved templates of the workspace, for the picker, as Reference lists them. A template that cannot be sent from this
-   * conversation (another WhatsApp number, or the channel is not linked to one) is listed with that reason, disabled; one the inbox
-   * cannot fill in is listed with its reason too. A template that is not approved is left out.
+   * The approved templates of the workspace, for the picker (the inbox's and the contact's send drawer). A template of ANOTHER WhatsApp
+   * number is left out: it can never be sent from this conversation, and nobody edits another number's template from here. When the
+   * channel is not linked to a number every template is listed with that reason, disabled; one the inbox cannot fill in is listed with
+   * its reason too. A template that is not approved is left out.
    */
   async listTemplates(
     uuid: string,
@@ -251,16 +307,13 @@ export class InboxThreadService {
         ...(query.q ? { q: query.q } : {}),
       });
       // Filtered before the page is cut, so a row dropped by `isApproved` never leaves a short page that says there is more.
-      const approved = rows.filter((t) => isApproved(t));
+      const approved = rows.filter(
+        (t) => isApproved(t) && (wabaConfigId === null || t.providerConfigId === wabaConfigId),
+      );
       const hasMore = approved.length > INBOX_TEMPLATE_LIST_MAX;
       const data = approved.slice(0, INBOX_TEMPLATE_LIST_MAX).map((t): InboxTemplateOption => {
         // The same refusals as the send (`templateContent`), checked first so the picker names the real reason.
-        const reason =
-          wabaConfigId === null
-            ? 'not_linked'
-            : t.providerConfigId !== wabaConfigId
-              ? 'other_number'
-              : blockReason(t, now);
+        const reason = wabaConfigId === null ? 'not_linked' : blockReason(t, now);
         return {
           id: t.uuid,
           name: t.templateName,
@@ -273,6 +326,7 @@ export class InboxThreadService {
           slots: bodySlots(t.templateBody, t.variableMap),
           sendable: reason === null,
           reason,
+          editable: BUILDABLE_TYPES.has(t.templateType) && metaEditBlockOf(t, now) === null,
         };
       });
       return { data, hasMore };
@@ -316,6 +370,8 @@ export class InboxThreadService {
     const reason = blockReason(template, new Date());
     if (reason)
       refuse(`That template cannot be sent from the inbox yet (${reason.replace(/_/g, ' ')})`);
+    if (hasBlankCopyCode(template.buttons))
+      refuse('That template has a copy-code button with no code');
 
     const slots = bodySlots(template.templateBody, template.variableMap);
     const problems = checkVariables(slots, input.variables);
@@ -335,6 +391,7 @@ export class InboxThreadService {
       variables,
       body: renderBody(template.templateBody, variables),
       templateId: template.id,
+      components: sendComponentsOf(template, variables),
     };
   }
 
@@ -349,7 +406,7 @@ export class InboxThreadService {
   /** Puts a failed outbound message back in the queue. The message is named, so the conversation is found through it. */
   async retry(messageUuid: string): Promise<MessageResponse> {
     const ctx = RequestContextStore.require();
-    await this.db.tx(async (tx) => {
+    const components = await this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);
       const record = await this.repo.recordByMessageUuid(tx, ctx.orgId, messageUuid);
       if (!record) {
@@ -369,11 +426,40 @@ export class InboxThreadService {
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
       this.assertNotResolved(record);
+      this.assertNotErased(record);
       this.access.assertNotAssignedToOther(ctx, record);
+      return this.rebuiltComponentsOf(tx, ctx.orgId, messageUuid);
     });
     return (
-      await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
+      await this.withTemplatePreviews([
+        await this.conversations.retryOutbound(messageUuid, components),
+      ])
     )[0]!;
+  }
+
+  /**
+   * A template message sent before its Cloud API components were stored carries only its values, so a Retry would send the body without
+   * the copy-code parameter again. Its components are built now, from the template and the values it sent. Undefined when the message
+   * already has them or its template is gone; a template whose copy-code button has no code is refused, as a send is.
+   */
+  private async rebuiltComponentsOf(
+    tx: Tx,
+    orgId: number,
+    messageUuid: string,
+  ): Promise<Record<string, unknown>[] | undefined> {
+    const sent = await this.repo.templateSendOf(tx, orgId, messageUuid);
+    if (!sent || sent.hasComponents || sent.templateId === null) return undefined;
+    const template = await this.templates.findById(tx, orgId, sent.templateId);
+    if (!template) return undefined;
+    if (hasBlankCopyCode(template.buttons)) {
+      throw new AppError(
+        ERROR_CODES.INBOX_TEMPLATE_NOT_SENDABLE,
+        'That template has a copy-code button with no code',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'templateId', message: 'That template has a copy-code button with no code' }],
+      );
+    }
+    return sendComponentsOf(template, sent.variables);
   }
 
   private async assertCanReply(
@@ -387,6 +473,7 @@ export class InboxThreadService {
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
     this.assertNotResolved(record);
+    this.assertNotErased(record);
     this.access.assertNotAssignedToOther(ctx, record);
   }
 
@@ -396,6 +483,17 @@ export class InboxThreadService {
       throw new AppError(
         ERROR_CODES.CONVERSATION_RESOLVED,
         'This conversation is resolved. Reopen it to reply.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
+
+  /** A thread whose contact was erased with its history kept has no person to write to: the peer key is gone (see `ERASED_PEER`). */
+  private assertNotErased(record: { erased: boolean }): void {
+    if (record.erased) {
+      throw new AppError(
+        ERROR_CODES.CONVERSATION_ERASED,
+        'This contact was erased. Nothing can be sent to this conversation.',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }

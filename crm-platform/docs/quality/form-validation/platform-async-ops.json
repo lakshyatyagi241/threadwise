@@ -1,0 +1,182 @@
+{
+  "module": "platform-async-ops",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "outboxReplayRequestSchema",
+      "file": "apps/api/src/modules/platform-async-ops/async-ops.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "eventType",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "eventType",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "eventType",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "eventType",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "eventType",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "1000",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1000)",
+          "value": "1001",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "eventType",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "wabaReplayRequestSchema",
+      "file": "apps/api/src/modules/platform-async-ops/async-ops.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "limit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "500",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (500)",
+          "value": "501",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

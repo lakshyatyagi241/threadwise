@@ -1,7 +1,6 @@
 import { ERROR_CODES, type StatusOptionResponse } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { selectionBody } from '../api/bulk';
-import { sampleCsv } from '../api/import-export';
 import type { ContactRow } from '../api/schemas';
 import { ApiError } from '@/lib/api/errors';
 import { deleteFailure, errorKind, fieldErrors, jobTitleFailure, planLimitOf } from './errors';
@@ -13,6 +12,7 @@ describe('errorKind', () => {
 
   it('branches on the code, never the text', () => {
     expect(errorKind(api(403, ERROR_CODES.FORBIDDEN))).toBe('forbidden');
+    expect(errorKind(api(403, ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER))).toBe('assignedToOther');
     expect(errorKind(api(409, ERROR_CODES.ROW_VERSION_CONFLICT))).toBe('conflict');
     expect(errorKind(api(409, ERROR_CODES.FIELD_KEY_TAKEN))).toBe('keyTaken');
     expect(errorKind(api(409, ERROR_CODES.FIELD_IS_SYSTEM))).toBe('systemField');
@@ -208,15 +208,6 @@ describe('selectionBody (TW-CON-019)', () => {
         imported: undefined,
       },
     });
-  });
-});
-
-describe('sampleCsv (TW-CON-032)', () => {
-  it('is built from the importer header names, with a quoted multi-group cell', () => {
-    const lines = sampleCsv().trim().split('\r\n');
-    expect(lines[0]).toBe('name,last_name,country_code,mobile,email,group,language');
-    expect(lines).toHaveLength(3);
-    expect(lines[1]).toContain('"VIP, New leads"');
   });
 });
 

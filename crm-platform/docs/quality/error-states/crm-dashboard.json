@@ -1,0 +1,72 @@
+{
+  "feature": "crm-dashboard",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-crm-dashboard-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/crm-dashboard/components/crm-dashboard-screen.tsx",
+        "apps/web/src/features/crm-dashboard/revenue/components/revenue-exports.tsx",
+        "apps/web/src/features/crm-dashboard/revenue/components/revenue-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-crm-dashboard-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/crm-dashboard/revenue/components/revenue-screen.tsx",
+        "apps/web/src/features/crm-dashboard/revenue/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-crm-dashboard-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/crm-dashboard/revenue/components/revenue-exports.tsx",
+        "apps/web/src/features/crm-dashboard/revenue/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-crm-dashboard-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/crm-dashboard/nav.ts",
+        "apps/web/src/features/crm-dashboard/revenue/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-crm-dashboard-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/crm-dashboard/revenue/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

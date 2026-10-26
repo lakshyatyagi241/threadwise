@@ -1,10 +1,10 @@
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { UnrecoverableError, type Job } from 'bullmq';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import { QUEUES } from '../../infra/queue/queues';
-import { send } from './send';
+import { send, WEBHOOK_TRANSPORT, type WebhookTransport } from './send';
 import { RetryAfterError, webhookBackoffStrategy, type WebhookDeliveryJob } from './webhook-job';
 import { WebhooksRepository } from './webhooks.repository';
 
@@ -24,6 +24,7 @@ export class WebhookDeliveryProcessor extends WorkerHost {
     private readonly db: DatabaseService,
     private readonly repo: WebhooksRepository,
     private readonly crypto: CryptoService,
+    @Inject(WEBHOOK_TRANSPORT) private readonly transport: WebhookTransport,
   ) {
     super();
   }
@@ -37,7 +38,12 @@ export class WebhookDeliveryProcessor extends WorkerHost {
     if (!target || !target.status) return { statusCode: null };
 
     const secret = target.secret ? this.crypto.decrypt(target.secret) : null;
-    const out = await send(this.crypto.decrypt(target.webhookUrl), secret, envelope);
+    const out = await send(
+      this.crypto.decrypt(target.webhookUrl),
+      secret,
+      envelope,
+      this.transport,
+    );
     const attempt = job.attemptsMade + 1;
     const final = out.ok || out.permanent || attempt >= (job.opts.attempts ?? 1);
 

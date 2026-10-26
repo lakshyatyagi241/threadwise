@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "بند کریں"
     },
+    "list": {
+      "unofficialDisabled": "غیر سرکاری (غیر فعال)"
+    },
     "detail": {
       "back": "واپس",
       "crumb": "براڈکاسٹس / تجزیات / #{ref}",

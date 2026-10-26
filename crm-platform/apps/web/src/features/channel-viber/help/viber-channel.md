@@ -66,7 +66,7 @@ Viber broadcasts send one message to many people who have already opened a chat 
 3. Optionally pick a **Template**. It fills an empty message and brings its buttons. A message you typed is never overwritten.
 4. Write the **Message**, up to 7,000 characters. You can add an **Attachment**: a jpg, png, gif or mp4 file up to 26 MB. Upload one (up to 20 MB) or paste its public address.
 5. Tick the **Recipients**, or **Select all**, then select **Create broadcast**. The list of recipients is fixed at that moment.
-6. On the broadcasts list, select **Start**. A background worker sends it, so you can close the page. Select **Pause** to stop and **Start** to continue with the people not yet sent.
+6. On the broadcasts list, select **Start**. It sends in the background, so you can close the page. Select **Pause** to stop and **Start** to continue with the people not yet sent.
 
 ### What the list shows
 

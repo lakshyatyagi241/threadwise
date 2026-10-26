@@ -1,4 +1,8 @@
-import type { ContactViewResponse } from '@crm/contracts';
+import {
+  CONTACT_VIEW_NAME_MAX,
+  CONTACT_VIEW_NAME_MIN,
+  type ContactViewResponse,
+} from '@crm/contracts';
 import { DEFAULT_FILTERS, type ContactFilters, type PageSize } from '../api/contacts';
 import { filtersToSearch, parseFilters } from './filters';
 
@@ -94,6 +98,11 @@ export function filtersOfView(
   return { ...parseFilters(p, defaultLimit), page: 1 };
 }
 
+/** The default filters ("All contacts") at the person's own page size. */
+export function defaultFiltersOf(defaultLimit: PageSize): ContactFilters {
+  return { ...DEFAULT_FILTERS, limit: defaultLimit };
+}
+
 /** Adds, replaces or removes `view=` on a `?a=b` search string. */
 export function withView(search: string, viewId: string): string {
   const p = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
@@ -101,6 +110,11 @@ export function withView(search: string, viewId: string): string {
   else p.delete(VIEW_PARAM);
   const s = p.toString();
   return s ? `?${s}` : '';
+}
+
+/** The list address that shows a saved view: its saved filters, on page 1, with the view still open. */
+export function searchOfView(filter: Record<string, unknown>, viewId: string): string {
+  return withView(filtersToSearch(filtersOfView(filter), DEFAULT_FILTERS.limit), viewId);
 }
 
 /** True while the list shows what the view saved (the dot on a tab says "changed" when this is false). */
@@ -134,4 +148,13 @@ export function tabViews(
   const pinned = views.filter((v) => v.isFavorite).sort(byOrder);
   const open = views.find((v) => v.id === activeId);
   return open && !open.isFavorite ? [...pinned, open] : pinned;
+}
+
+/** What is wrong with a view name as typed (null when it is fine): nothing, too short or too long, counted after trimming. */
+export function viewNameProblem(name: string): 'needName' | 'nameShort' | 'nameLong' | null {
+  const n = name.trim().length;
+  if (n === 0) return 'needName';
+  if (n < CONTACT_VIEW_NAME_MIN) return 'nameShort';
+  if (n > CONTACT_VIEW_NAME_MAX) return 'nameLong';
+  return null;
 }

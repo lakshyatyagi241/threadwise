@@ -145,7 +145,13 @@ export interface NewMessage {
   senderUserId?: number | null;
   senderAgentId?: number | null;
   body?: string | null;
-  media?: { key: string; mime: string; size: number; name: string; sha256: string } | null;
+  media?: {
+    key: string;
+    mime: string;
+    size: number | null;
+    name: string | null;
+    sha256: string | null;
+  } | null;
   latitude?: number | null;
   longitude?: number | null;
   status: MessageStatus;
@@ -464,24 +470,34 @@ export class MessagesRepository {
     return id === undefined || id === null ? null : Number(id);
   }
 
-  /** The category a template is billed under (Meta's pricing category, else the template's own); null without a template. */
-  async templateCategory(tx: Tx, orgId: number, templateId: number | null): Promise<string | null> {
-    if (templateId === null) return null;
+  /** The category and the name of a template, for the wallet's delivery report; both null for a message with no template. */
+  async templateFacts(
+    tx: Tx,
+    orgId: number,
+    templateId: number | null,
+  ): Promise<{ category: string | null; templateName: string | null }> {
+    if (templateId === null) return { category: null, templateName: null };
     const res = await tx.execute(
-      sql`SELECT coalesce(meta_category, category) AS category FROM wa_templates WHERE org_id = ${orgId} AND id = ${templateId}`,
+      sql`SELECT coalesce(meta_category, category) AS category, template_name FROM wa_templates WHERE org_id = ${orgId} AND id = ${templateId}`,
     );
-    return (rowsOf(res)[0]?.category as string | null | undefined) ?? null;
+    const row = rowsOf(res)[0] as
+      { category: string | null; template_name: string | null } | undefined;
+    return { category: row?.category ?? null, templateName: row?.template_name ?? null };
   }
 
-  /** The agent's Retry: failed -> queued again, with a fresh dispatch generation. False when the message was not failed. */
+  /**
+   * The agent's Retry: failed -> queued again, with a fresh dispatch generation. `patch` is merged into `meta` in the same write (a Retry
+   * that stores the template components it rebuilt). False when the message was not failed.
+   */
   async requeue(
     tx: Tx,
     orgId: number,
     ref: { id: number; createdAt: string },
+    patch: Record<string, unknown> = {},
   ): Promise<{ generation: number } | null> {
     const res = await tx.execute(sql`
       UPDATE messages SET status = 'queued', failure_code = NULL, failure_reason = NULL,
-        meta = jsonb_set(meta, '{dispatchGeneration}', to_jsonb(COALESCE((meta ->> 'dispatchGeneration')::int, 1) + 1))
+        meta = jsonb_set(meta || ${JSON.stringify(patch)}::jsonb, '{dispatchGeneration}', to_jsonb(COALESCE((meta ->> 'dispatchGeneration')::int, 1) + 1))
       WHERE org_id = ${orgId} AND id = ${ref.id} AND created_at = ${ref.createdAt}::timestamptz
         AND direction = 'out' AND status = 'failed'
       RETURNING (meta ->> 'dispatchGeneration')::int AS generation`);

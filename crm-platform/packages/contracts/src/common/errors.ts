@@ -450,6 +450,8 @@ export const ERROR_CODES = {
   CAMP_AI_BAD_JSON: 'CAMP_AI_BAD_JSON',
   /** "Build with AI" picture: the vendor's safety system refused the prompt, or it returned no image. */
   CAMP_AI_IMAGE_REFUSED: 'CAMP_AI_IMAGE_REFUSED',
+  /** "Build with AI" picture: the workspace has no cloud object storage to keep the picture in, so nothing is drawn or charged. */
+  CAMP_AI_STORAGE_REQUIRED: 'CAMP_AI_STORAGE_REQUIRED',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
   /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */

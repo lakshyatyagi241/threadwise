@@ -296,7 +296,6 @@ function ConversationDrawer({
 }) {
   const t = useTranslations(NS);
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const toast = useToast();
   const key = ['support', 'inbox', 'conversation', id] as const;

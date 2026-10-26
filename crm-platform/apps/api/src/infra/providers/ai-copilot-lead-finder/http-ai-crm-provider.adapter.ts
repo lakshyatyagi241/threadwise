@@ -25,7 +25,11 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
     throw new Error(`no AI CRM Copilot adapter for provider ${provider}`);
   }
 
-  private async post(url: string, headers: Record<string, string>, body: unknown): Promise<unknown> {
+  private async post(
+    url: string,
+    headers: Record<string, string>,
+    body: unknown,
+  ): Promise<unknown> {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...headers },
@@ -44,7 +48,9 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
 
   private async openai(input: AiCrmTurnInput): Promise<AiCrmTurnOutcome> {
     const base = this.baseUrl('AICRM_OPENAI_BASE_URL', 'https://api.openai.com/v1');
-    const messages: Array<Record<string, unknown>> = [{ role: 'system', content: input.systemPrompt }];
+    const messages: Array<Record<string, unknown>> = [
+      { role: 'system', content: input.systemPrompt },
+    ];
     for (const h of input.history) messages.push({ role: h.role, content: h.text });
     messages.push({ role: 'user', content: input.message });
 
@@ -57,17 +63,31 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
       const json = (await this.post(
         `${base}/chat/completions`,
         { authorization: `Bearer ${input.apiKey}` },
-        { model: input.model, max_tokens: MAX_TOKENS, temperature: 0.2, messages, tools },
+        {
+          model: input.model,
+          // OpenAI's current models reject `max_tokens` and take `max_completion_tokens`.
+          max_completion_tokens: MAX_TOKENS,
+          temperature: 0.2,
+          messages,
+          tools,
+        },
       )) as {
         choices?: Array<{ message?: { content?: string; tool_calls?: OpenAiToolCall[] } }>;
         usage?: { prompt_tokens?: number; completion_tokens?: number };
       };
       promptTokens += num(json.usage?.prompt_tokens);
       completionTokens += num(json.usage?.completion_tokens);
+      input.onUsage?.({ promptTokens, completionTokens });
       const msg = json.choices?.[0]?.message ?? {};
       const calls = msg.tool_calls ?? [];
       if (calls.length === 0) {
-        return { reply: (msg.content ?? '').trim() || 'Done.', actions, pendingWrite: null, promptTokens, completionTokens };
+        return {
+          reply: (msg.content ?? '').trim() || 'Done.',
+          actions,
+          pendingWrite: null,
+          promptTokens,
+          completionTokens,
+        };
       }
 
       messages.push(msg);
@@ -75,11 +95,21 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
         const name = call.function?.name ?? '';
         const args = parseJsonArgs(call.function?.arguments);
         if (input.isWriteTool(name)) {
-          return { reply: '', actions, pendingWrite: { tool: name, args }, promptTokens, completionTokens };
+          return {
+            reply: '',
+            actions,
+            pendingWrite: { tool: name, args },
+            promptTokens,
+            completionTokens,
+          };
         }
         const result = await input.executeReadTool(name, args);
         actions.push({ tool: name, summary: result.summary });
-        messages.push({ role: 'tool', tool_call_id: call.id ?? '', content: JSON.stringify(result.data ?? result) });
+        messages.push({
+          role: 'tool',
+          tool_call_id: call.id ?? '',
+          content: JSON.stringify(result.data ?? result),
+        });
       }
     }
     return { reply: outOfStepsReply, actions, pendingWrite: null, promptTokens, completionTokens };
@@ -89,10 +119,17 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
 
   private async anthropic(input: AiCrmTurnInput): Promise<AiCrmTurnOutcome> {
     const base = this.baseUrl('AICRM_ANTHROPIC_BASE_URL', 'https://api.anthropic.com');
-    const messages: Array<Record<string, unknown>> = input.history.map((h) => ({ role: h.role, content: h.text }));
+    const messages: Array<Record<string, unknown>> = input.history.map((h) => ({
+      role: h.role,
+      content: h.text,
+    }));
     messages.push({ role: 'user', content: input.message });
 
-    const tools = input.tools.map((d) => ({ name: d.name, description: d.description, input_schema: d.parameters }));
+    const tools = input.tools.map((d) => ({
+      name: d.name,
+      description: d.description,
+      input_schema: d.parameters,
+    }));
     const actions: AiCrmExecutedAction[] = [];
     let promptTokens = 0;
     let completionTokens = 0;
@@ -103,17 +140,33 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
         { 'x-api-key': input.apiKey, 'anthropic-version': '2023-06-01' },
         { model: input.model, max_tokens: MAX_TOKENS, system: input.systemPrompt, messages, tools },
       )) as {
-        content?: Array<{ type?: string; text?: string; id?: string; name?: string; input?: Record<string, unknown> }>;
+        content?: Array<{
+          type?: string;
+          text?: string;
+          id?: string;
+          name?: string;
+          input?: Record<string, unknown>;
+        }>;
         stop_reason?: string;
         usage?: { input_tokens?: number; output_tokens?: number };
       };
       promptTokens += num(json.usage?.input_tokens);
       completionTokens += num(json.usage?.output_tokens);
+      input.onUsage?.({ promptTokens, completionTokens });
       const content = json.content ?? [];
 
       if (json.stop_reason !== 'tool_use') {
-        const text = content.filter((b) => b.type === 'text').map((b) => b.text ?? '').join('');
-        return { reply: text.trim() || 'Done.', actions, pendingWrite: null, promptTokens, completionTokens };
+        const text = content
+          .filter((b) => b.type === 'text')
+          .map((b) => b.text ?? '')
+          .join('');
+        return {
+          reply: text.trim() || 'Done.',
+          actions,
+          pendingWrite: null,
+          promptTokens,
+          completionTokens,
+        };
       }
 
       messages.push({ role: 'assistant', content });
@@ -123,11 +176,21 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
         const name = b.name ?? '';
         const args = b.input ?? {};
         if (input.isWriteTool(name)) {
-          return { reply: '', actions, pendingWrite: { tool: name, args }, promptTokens, completionTokens };
+          return {
+            reply: '',
+            actions,
+            pendingWrite: { tool: name, args },
+            promptTokens,
+            completionTokens,
+          };
         }
         const result = await input.executeReadTool(name, args);
         actions.push({ tool: name, summary: result.summary });
-        results.push({ type: 'tool_result', tool_use_id: b.id ?? '', content: JSON.stringify(result.data ?? result) });
+        results.push({
+          type: 'tool_result',
+          tool_use_id: b.id ?? '',
+          content: JSON.stringify(result.data ?? result),
+        });
       }
       messages.push({ role: 'user', content: results });
     }
@@ -146,7 +209,11 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
 
     const tools = [
       {
-        function_declarations: input.tools.map((d) => ({ name: d.name, description: d.description, parameters: d.parameters })),
+        function_declarations: input.tools.map((d) => ({
+          name: d.name,
+          description: d.description,
+          parameters: d.parameters,
+        })),
       },
     ];
     const actions: AiCrmExecutedAction[] = [];
@@ -169,12 +236,19 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
       };
       promptTokens += num(json.usageMetadata?.promptTokenCount);
       completionTokens += num(json.usageMetadata?.candidatesTokenCount);
+      input.onUsage?.({ promptTokens, completionTokens });
       const parts = json.candidates?.[0]?.content?.parts ?? [];
       const fnCalls = parts.filter((p) => p.functionCall);
 
       if (fnCalls.length === 0) {
         const text = parts.map((p) => p.text ?? '').join('');
-        return { reply: text.trim() || 'Done.', actions, pendingWrite: null, promptTokens, completionTokens };
+        return {
+          reply: text.trim() || 'Done.',
+          actions,
+          pendingWrite: null,
+          promptTokens,
+          completionTokens,
+        };
       }
 
       contents.push({ role: 'model', parts });
@@ -183,11 +257,19 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
         const name = p.functionCall?.name ?? '';
         const args = p.functionCall?.args ?? {};
         if (input.isWriteTool(name)) {
-          return { reply: '', actions, pendingWrite: { tool: name, args }, promptTokens, completionTokens };
+          return {
+            reply: '',
+            actions,
+            pendingWrite: { tool: name, args },
+            promptTokens,
+            completionTokens,
+          };
         }
         const result = await input.executeReadTool(name, args);
         actions.push({ tool: name, summary: result.summary });
-        responseParts.push({ functionResponse: { name, response: toPlainObject(result.data ?? result) } });
+        responseParts.push({
+          functionResponse: { name, response: toPlainObject(result.data ?? result) },
+        });
       }
       // Gemini's generateContent protocol expects a turn carrying functionResponse parts to use role 'function'
       // (not 'user', unlike Anthropic's tool_result shape) — a wrong role here corrupts every multi-step turn.
@@ -197,7 +279,8 @@ export class HttpAiCrmProviderAdapter implements AiCrmProviderPort {
   }
 }
 
-const outOfStepsReply = 'I gathered the data but ran out of steps — please ask again more specifically.';
+const outOfStepsReply =
+  'I gathered the data but ran out of steps — please ask again more specifically.';
 
 interface OpenAiToolCall {
   id?: string;
@@ -210,7 +293,10 @@ interface GeminiPart {
 }
 
 function toOpenAiTool(d: AiCrmToolDef): Record<string, unknown> {
-  return { type: 'function', function: { name: d.name, description: d.description, parameters: d.parameters } };
+  return {
+    type: 'function',
+    function: { name: d.name, description: d.description, parameters: d.parameters },
+  };
 }
 
 function parseJsonArgs(raw: string | undefined): Record<string, unknown> {

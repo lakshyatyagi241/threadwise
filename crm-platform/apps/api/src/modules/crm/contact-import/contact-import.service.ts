@@ -7,8 +7,6 @@ import {
   IMPORT_FIELDS,
   IMPORT_MAX_BYTES,
   IMPORT_MAX_ROWS,
-  IMPORT_SAMPLE_HEADERS,
-  IMPORT_SAMPLE_ROWS,
   IMPORT_SYNC_MAX_ROWS,
   detectImportColumns,
   type ContactImportJob,
@@ -29,12 +27,17 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { csvLine, guardFormula } from '../contact-bulk/csv-writer';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
+import type { PropertyDef } from '../contacts/contact-property-values';
+import { ContactsRepository } from '../contacts/contacts.repository';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactImportEngine } from './contact-import.engine';
 import { toImportJobResponse } from './contact-import.mapper';
 import { ContactImportRepository } from './contact-import.repository';
 import { parseCsv } from './csv-parser';
+import { resolvePropertyColumns, type ImportProperty } from './import-properties';
+import { sampleCsv } from './import-sample';
 import {
+  builtinColumns,
   extractRow,
   missingRequired,
   resolveMapping,
@@ -104,13 +107,6 @@ export function decodeUpload(file: UploadedCsv | undefined): {
   };
 }
 
-/** The sample file, built from the importer's own header names. */
-export function sampleCsv(): string {
-  return (
-    csvLine([...IMPORT_SAMPLE_HEADERS]) + IMPORT_SAMPLE_ROWS.map((r) => csvLine([...r])).join('')
-  );
-}
-
 interface Analysis {
   delimiter: string;
   headers: string[];
@@ -121,10 +117,18 @@ interface Analysis {
   invalidCount: number;
   missing: ReturnType<typeof missingRequired>;
   sampleRows: Array<Record<string, string>>;
+  properties: ImportProperty[];
 }
 
-/** Parse, map and validate a whole file: no database, so the preview and the start share it. */
-export function analyzeCsv(text: string, options: ContactImportOptions): Analysis {
+/**
+ * Parse, map and validate a whole file: no database, so the preview and the start share it. `defs` are the workspace's custom
+ * contact properties (`importableProperties`); a column matching one of them is read into that contact property.
+ */
+export function analyzeCsv(
+  text: string,
+  options: ContactImportOptions,
+  defs: readonly PropertyDef[] = [],
+): Analysis {
   const parsed = parseCsv(text, options.delimiter);
   const header = parsed.records[0];
   if (!header || header.cells.every((c) => c.trim() === ''))
@@ -141,16 +145,30 @@ export function analyzeCsv(text: string, options: ContactImportOptions): Analysi
   }
 
   const mapping = resolveMapping(headers, options.mapping);
+  const properties = resolvePropertyColumns(
+    headers,
+    defs,
+    builtinColumns(mapping),
+    options.propertyMapping,
+  );
   const valid: ParsedRow[] = [];
   const invalid: ImportRowIssue[] = [];
   let invalidCount = 0;
   for (const rec of data) {
-    const r = extractRow(rec, mapping, headers, { defaultCountryCode: options.defaultCountryCode });
+    const r = extractRow(rec, mapping, headers, {
+      defaultCountryCode: options.defaultCountryCode,
+      properties,
+    });
     if (r.ok) valid.push(r.row);
     else {
       invalidCount += 1;
       if (invalid.length < INVALID_SAMPLES) {
-        invalid.push({ row: r.line, reason: r.reason, values: r.values });
+        invalid.push({
+          row: r.line,
+          reason: r.reason,
+          ...(r.column === undefined ? {} : { column: r.column }),
+          values: r.values,
+        });
       }
     }
   }
@@ -171,6 +189,7 @@ export function analyzeCsv(text: string, options: ContactImportOptions): Analysi
     invalidCount,
     missing: missingRequired(mapping),
     sampleRows,
+    properties,
   };
 }
 
@@ -221,6 +240,7 @@ export class ContactImportService {
     private readonly engine: ContactImportEngine,
     private readonly quota: ContactQuotaService,
     private readonly groupsRepo: ContactGroupsRepository,
+    private readonly contacts: ContactsRepository,
     private readonly rbac: RbacService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
@@ -229,13 +249,24 @@ export class ContactImportService {
 
   // --- preview ------------------------------------------------------------------------------
 
+  /** The custom contact properties a file may fill, read in a short transaction of their own. */
+  private importableProperties(): Promise<PropertyDef[]> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx((tx) => this.contacts.importableProperties(tx, ctx.orgId));
+  }
+
+  /** The sample file for this workspace: every built-in column, and a column with an example of each custom property the importer fills. */
+  async sample(): Promise<string> {
+    return sampleCsv(await this.importableProperties());
+  }
+
   async preview(
     file: UploadedCsv | undefined,
     options: ContactImportOptions,
   ): Promise<ContactImportPreview> {
     const ctx = RequestContextStore.require();
     const upload = decodeUpload(file);
-    const a = analyzeCsv(upload.text, options);
+    const a = analyzeCsv(upload.text, options, await this.importableProperties());
 
     return this.db.tx(async (tx) => {
       const keys = [...new Set(a.valid.map((r) => r.phone))];
@@ -257,6 +288,12 @@ export class ContactImportService {
         headers: a.headers,
         detected: detectImportColumns(a.headers),
         mapping,
+        properties: a.properties.map(({ key, label, fieldType, column }) => ({
+          key,
+          label,
+          fieldType,
+          column,
+        })),
         missingRequired: a.missing,
         sampleRows: a.sampleRows,
         totals: {
@@ -329,7 +366,7 @@ export class ContactImportService {
     await this.db.tx((tx) => this.quota.assertCanAddOne(tx, ctx.orgId));
 
     const upload = decodeUpload(file);
-    const a = analyzeCsv(upload.text, options);
+    const a = analyzeCsv(upload.text, options, await this.importableProperties());
     if (a.missing.length > 0) {
       throw fileInvalid(
         `The file has no ${a.missing.join(' or ')} column. Map the columns, or rename the headers.`,
@@ -340,7 +377,7 @@ export class ContactImportService {
       throw fileInvalid(
         'No row in the file could be imported.',
         a.invalid.map((i) => ({
-          path: `row ${i.row}`,
+          path: i.column ? `row ${i.row}, column ${i.column}` : `row ${i.row}`,
           message: i.reason,
         })),
       );
@@ -391,6 +428,7 @@ export class ContactImportService {
           ...options,
           delimiter: a.delimiter,
           mapping: Object.fromEntries(IMPORT_FIELDS.map((f) => [f, a.mapping[f] ?? null])),
+          propertyMapping: Object.fromEntries(a.properties.map((p) => [p.key, p.column])),
         },
         sourceCsv: upload.text,
       });
@@ -473,7 +511,7 @@ export class ContactImportService {
     });
   }
 
-  /** The rejected rows as a CSV: the line, the reason and the original cells, to fix and re-upload. */
+  /** The rejected rows as a CSV: the line, the reason, the column that failed and the original cells, to fix and re-upload. */
   async rejectsCsv(uuid: string): Promise<string> {
     const ctx = RequestContextStore.require();
     const row = await this.db.tx((tx) => this.jobs.findByUuid(tx, ctx.orgId, uuid));
@@ -482,9 +520,15 @@ export class ContactImportService {
     const columns: string[] = [];
     for (const r of row.rejects)
       for (const k of Object.keys(r.values ?? {})) if (!columns.includes(k)) columns.push(k);
-    let out = csvLine(['row', 'reason', ...columns]);
+    // The header names come from the uploaded file, so they are guarded like the cells under them.
+    let out = csvLine(['row', 'reason', 'column', ...columns.map(guardFormula)]);
     for (const r of row.rejects) {
-      out += csvLine([r.row, r.reason, ...columns.map((c) => guardFormula(r.values?.[c] ?? ''))]);
+      out += csvLine([
+        r.row,
+        r.reason,
+        guardFormula(r.column ?? ''),
+        ...columns.map((c) => guardFormula(r.values?.[c] ?? '')),
+      ]);
     }
     return out;
   }

@@ -11,7 +11,7 @@
     "start": "node dist/src/main.js",
     "start:worker": "WORKER_MODE=true node dist/src/worker.js",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
-    "lint": "eslint src test",
+    "lint": "cross-env NODE_OPTIONS=--max-old-space-size=8192 eslint src test",
     "test": "vitest run --dir test/unit",
     "test:coverage": "vitest run --dir test/unit --coverage",
     "test:watch": "vitest --dir test/unit",

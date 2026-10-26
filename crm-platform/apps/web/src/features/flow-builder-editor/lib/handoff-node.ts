@@ -1,4 +1,4 @@
-import { HANDOFF_REASONS } from '@crm/contracts';
+import { HANDOFF_REASONS, HANDOFF_RETURN_MESSAGE_MAX } from '@crm/contracts';
 
 /**
  * The Human handoff node (BL-398), on the `assign` node type. A node saved with `handoff: 2` runs the handoff service (a reason, a
@@ -15,6 +15,7 @@ export const HANDOFF_REASON_CHOICES = HANDOFF_REASONS;
 export const HANDOFF_PRIORITY_CHOICES = ['', 'low', 'normal', 'high', 'urgent'] as const;
 export const HANDOFF_MESSAGE_MAX = 1000;
 export const HANDOFF_NOTE_MAX = 500;
+export const HANDOFF_RETURN_MAX = HANDOFF_RETURN_MESSAGE_MAX;
 
 export type HandoffDestinationKind = 'team' | 'person' | 'rules';
 export const HANDOFF_DESTINATIONS: readonly HandoffDestinationKind[] = ['team', 'person', 'rules'];
@@ -43,6 +44,7 @@ export function upgradeLegacy(d: Bag): Bag {
     summary: '',
     customerMessage: '',
     offHoursMessage: '',
+    returnMessage: '',
   };
 }
 
@@ -62,4 +64,13 @@ export function handoffProblem(d: Bag): 'chooseTeam' | 'choosePerson' | null {
   if (kind === 'team') return str(d.team).trim() ? null : 'chooseTeam';
   if (kind === 'person') return str(d.userId).trim() ? null : 'choosePerson';
   return null;
+}
+
+/**
+ * A "message to the contact when the bot is back" is only ever sent together with the flow continuing from the `returned` exit, so a
+ * message on a step whose exit leads nowhere would never be sent. The editors say so next to the message instead of letting it pass
+ * silently.
+ */
+export function returnMessageHasNoExit(d: Bag, exitWired: boolean): boolean {
+  return isHandoffNode(d) && str(d.returnMessage).trim() !== '' && !exitWired;
 }

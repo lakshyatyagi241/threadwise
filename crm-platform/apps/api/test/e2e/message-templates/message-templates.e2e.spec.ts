@@ -5,6 +5,7 @@ import {
   type FetchLike,
 } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-http';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { pngOfSize } from '../../support/images';
 
 /**
  * WhatsApp message templates end to end (TW-TPL-007, 017, 019, 020, 022, 023, 025, 026, 028): the real API, a real Postgres with
@@ -242,6 +243,76 @@ describe('create and submit (TW-TPL-007, 024, 025)', () => {
     );
   });
 
+  it('creates a carousel template: cards are saved, sent to Meta as a CAROUSEL component and read back with their files', async () => {
+    const t = await api.signup('tcar');
+    const conn = await seedConnection(t);
+    meta = happyMeta({ category: 'MARKETING' });
+    const cards = [
+      {
+        format: 'image',
+        headerHandle: '4::aGFuZGxl',
+        headerSampleUrl: 'https://scontent.example/a.png',
+        body: 'Summer sale',
+        buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/shop' }],
+      },
+      {
+        format: 'image',
+        headerHandle: '4::aGFuZGxl',
+        headerSampleUrl: 'https://scontent.example/b.png',
+        body: 'Winter sale',
+        buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/shop' }],
+      },
+    ];
+    const res = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        name: 'Seasonal Cards',
+        metaCategory: 'MARKETING',
+        templateType: 'carousel',
+        body: 'Our picks for you',
+        variableMap: undefined,
+        cards,
+      }),
+    );
+    expect(res.status, JSON.stringify(res.body)).toBe(201);
+    expect(res.body.template).toMatchObject({ templateType: 'carousel', name: 'seasonal_cards' });
+    expect(res.body.template.cards).toHaveLength(2);
+    expect(res.body.template.cards[0]).toMatchObject({
+      format: 'image',
+      body: 'Summer sale',
+      imageUrl: 'https://scontent.example/a.png',
+    });
+
+    const create = calls.find((c) => c.method === 'POST')!;
+    const components = (create.json as { components: Array<Record<string, unknown>> }).components;
+    expect(components.map((c) => c.type)).toEqual(['BODY', 'CAROUSEL']);
+    expect((components[1] as { cards: unknown[] }).cards).toHaveLength(2);
+
+    const row = (await templateRows(t.orgId))[0];
+    expect(row.template_type).toBe('carousel');
+    expect(row.carousel_data).toHaveLength(2);
+
+    // One card is not a carousel: refused before anything is sent.
+    calls = [];
+    const one = await send(
+      t.admin,
+      'post',
+      '/v2/templates',
+      form(conn.uuid, {
+        name: 'One Card',
+        metaCategory: 'MARKETING',
+        templateType: 'carousel',
+        body: 'Just one',
+        variableMap: undefined,
+        cards: cards.slice(0, 1),
+      }),
+    );
+    expect(one.status).toBe(422);
+    expect(calls).toHaveLength(0);
+  });
+
   it('a draft is saved without calling Meta', async () => {
     const t = await api.signup('td');
     const conn = await seedConnection(t);
@@ -358,7 +429,7 @@ describe('create and submit (TW-TPL-007, 024, 025)', () => {
 });
 
 describe('edit (TW-TPL-018, 019)', () => {
-  it('edits a rejected template, replaces the Meta copy on submit, and checks the row version', async () => {
+  it('edits a rejected template on Meta in place (no replacement), and checks the row version', async () => {
     const t = await api.signup('te');
     const conn = await seedConnection(t);
     const row = await seedTemplate(t, conn, {
@@ -368,6 +439,10 @@ describe('edit (TW-TPL-018, 019)', () => {
       template_name: 'order_update',
     });
     const detail = await api.as(t.admin).get(`/v2/templates/${row.uuid}`);
+    meta = (c) =>
+      c.method === 'POST' && new URL(c.url).pathname.endsWith('/OLD1')
+        ? { status: 200, body: { success: true } }
+        : { status: 404, body: { error: { message: 'unstubbed', code: 1 } } };
 
     const stale = await send(t.admin, 'put', `/v2/templates/${row.uuid}`, {
       ...form(conn.uuid),
@@ -383,13 +458,12 @@ describe('edit (TW-TPL-018, 019)', () => {
       rowVersion: detail.body.rowVersion,
     });
     expect(ok.status, JSON.stringify(ok.body)).toBe(200);
-    expect(ok.body.template).toMatchObject({ status: 'pending', metaTemplateId: 'M1' });
-    const methods = calls.map((c) => c.method);
-    expect(methods.indexOf('DELETE')).toBeGreaterThanOrEqual(0);
-    expect(methods.indexOf('DELETE')).toBeLessThan(methods.indexOf('POST'));
-    expect(new URL(calls.find((c) => c.method === 'DELETE')!.url).searchParams.get('hsm_id')).toBe(
-      'OLD1',
-    );
+    // Meta's edit endpoint takes a rejected template again under the same id; the name cannot change, so nothing is deleted.
+    expect(ok.body.template).toMatchObject({ status: 'pending', metaTemplateId: 'OLD1' });
+    expect(calls.some((c) => c.method === 'DELETE')).toBe(false);
+    expect(
+      calls.some((c) => c.method === 'POST' && new URL(c.url).pathname.endsWith('/OLD1')),
+    ).toBe(true);
   });
 
   it('a disabled template cannot be edited', async () => {
@@ -542,16 +616,44 @@ describe('the library: sort, status tabs and counts', () => {
         (x: { name: string }) => x.name,
       );
     expect(await group('approved')).toEqual(['a_ok']);
-    expect(await group('pending')).toEqual(['b_wait', 'c_draft']);
+    expect(await group('pending')).toEqual(['b_wait']);
+    expect(await group('draft')).toEqual(['c_draft']);
     expect(await group('rejected')).toEqual(['d_no', 'e_paused']);
 
     const counts = await api.as(t.admin).get('/v2/templates/counts?statusGroup=pending');
     expect(counts.status, JSON.stringify(counts.body)).toBe(200);
     expect(counts.body).toEqual({
       categories: { all: 5, UTILITY: 4, MARKETING: 1 },
-      statuses: { all: 5, approved: 1, pending: 2, rejected: 2 },
+      statuses: { all: 5, approved: 1, pending: 1, draft: 1, rejected: 2 },
       filtered: 2,
     });
+  });
+
+  it('filters by creation day: a custom range is whole days, a preset counts back from now', async () => {
+    const t = await api.signup('tld');
+    const conn = await seedConnection(t);
+    await seedTemplate(t, conn, { template_name: 'made_today' });
+    // Two days either side of UTC today: the workspace's own day is within that span whatever its zone or the hour of the run.
+    const day = (offset: number) =>
+      new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+    const names = async (q: string) =>
+      (await api.as(t.admin).get(`/v2/templates?sort=name-asc&${q}`)).body.data.map(
+        (x: { name: string }) => x.name,
+      );
+    expect(await names(`range=custom&from=${day(-2)}&to=${day(2)}`)).toEqual(['made_today']);
+    expect(await names('range=custom&from=2000-01-01&to=2000-01-31')).toEqual([]);
+    expect(await names('range=7d')).toEqual(['made_today']);
+
+    const counts = await api
+      .as(t.admin)
+      .get('/v2/templates/counts?range=custom&from=2000-01-01&to=2000-01-31');
+    expect(counts.body.filtered).toBe(0);
+    expect(counts.body.statuses.all).toBe(1);
+
+    for (const bad of ['from=2026-02-31', 'to=9999-12-31', 'from=0050-01-01']) {
+      const refused = await api.as(t.admin).get(`/v2/templates?range=custom&${bad}`);
+      expect(refused.status, bad).toBeGreaterThanOrEqual(400);
+    }
   });
 
   it('counts only this organization', async () => {
@@ -819,10 +921,7 @@ describe('sync from Meta (TW-TPL-028)', () => {
 });
 
 describe('header media (TW-TPL-009, 025)', () => {
-  const png = Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(32),
-  ]);
+  const png = pngOfSize(8 + 32);
 
   it('uploads the example to Meta and returns the handle', async () => {
     const t = await api.signup('tm');

@@ -80,9 +80,23 @@ async function order(
   return Number(r[0].id);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- response rows are checked field by field below
-const byPhone = (rows: Array<Record<string, any>>, phone: string) =>
-  rows.find((r) => r.phone === phone);
+/** One row of GET /v2/store/customers, with the fields the assertions below read. */
+interface CustomerRow {
+  id: string;
+  phone: string;
+  name: string | null;
+  company: string | null;
+  address: string | null;
+  hasProfile: boolean;
+  hasSavedAddress: boolean;
+  orderCount: number;
+  lifetimeTotals: Array<{ currencyCode: string; totalMinor: number; orders: number }>;
+  lastOrderAt: string | null;
+  contactId: string | null;
+  rowVersion: number;
+}
+
+const byPhone = (rows: CustomerRow[], phone: string) => rows.find((r) => r.phone === phone);
 
 describe('phone key: the SQL the list groups on is the TypeScript the save uses', () => {
   const samples = [
@@ -161,7 +175,7 @@ describe('GET /v2/store/customers: every buyer', () => {
 
     const list = await get(t, '/v2/store/customers');
     expect(list.status, JSON.stringify(list.body)).toBe(200);
-    const rows = list.body.data as Array<Record<string, any>>;
+    const rows = list.body.data as CustomerRow[];
     expect(rows).toHaveLength(3);
 
     const sam = byPhone(rows, '919800001111')!;
@@ -223,9 +237,10 @@ describe('GET /v2/store/customers: every buyer', () => {
     await order(t, { phone: '919810000005', name: 'Epsilon', ageHours: 5 });
 
     const names = async (term: string) =>
-      ((await get(t, `/v2/store/customers?q=${encodeURIComponent(term)}`)).body.data as any[]).map(
-        (c) => c.name,
-      );
+      (
+        (await get(t, `/v2/store/customers?q=${encodeURIComponent(term)}`)).body
+          .data as CustomerRow[]
+      ).map((c) => c.name);
     expect(await names('buyer')).toEqual(['Beta Buyer', 'Gamma Buyer']);
     expect(await names('50% off')).toEqual(['Alpha']);
     expect(await names('%')).toEqual(['Alpha']);
@@ -240,7 +255,7 @@ describe('GET /v2/store/customers: every buyer', () => {
     for (let i = 0; i < 8; i++) {
       const res = await get(t, `/v2/store/customers?limit=2${cursor ? `&cursor=${cursor}` : ''}`);
       expect(res.status).toBe(200);
-      seen.push(...res.body.data.map((c: any) => c.phone));
+      seen.push(...res.body.data.map((c: CustomerRow) => c.phone));
       if (!res.body.page.hasMore) break;
       cursor = res.body.page.nextCursor;
     }
@@ -269,9 +284,9 @@ describe('GET /v2/store/customers: every buyer', () => {
     await order(t, { phone: '919820000003', name: 'In B', shopId: b.id });
     await order(t, { phone: '919820000003', name: 'In B', shopId: a.id });
     const inA = await get(t, `/v2/store/customers?storefrontId=${a.uuid}`);
-    expect(inA.body.data.map((c: any) => c.name).sort()).toEqual(['In A', 'In B']);
+    expect(inA.body.data.map((c: CustomerRow) => c.name).sort()).toEqual(['In A', 'In B']);
     const inB = await get(t, `/v2/store/customers?storefrontId=${b.uuid}`);
-    expect(inB.body.data.map((c: any) => c.name)).toEqual(['In B']);
+    expect(inB.body.data.map((c: CustomerRow) => c.name)).toEqual(['In B']);
     expect(
       (await get(t, '/v2/store/customers?storefrontId=00000000-0000-4000-8000-000000000000')).body
         .data,
@@ -371,21 +386,20 @@ describe('GET /v2/store/customers: every buyer', () => {
     expect((await get(b, '/v2/store/customers')).body.data).toEqual([]);
     expect((await get(b, '/v2/store/customers/phone:919830000001')).status).toBe(404);
     const aList = await get(a, '/v2/store/customers');
-    const savedId = aList.body.data.find((c: any) => c.phone === '919830000002').id;
+    const savedId = aList.body.data.find((c: CustomerRow) => c.phone === '919830000002').id;
     expect((await get(b, `/v2/store/customers/${savedId}`)).status).toBe(404);
     // B can order and save the same numbers independently
     await order(b, { phone: '919830000001', name: 'Only in B' });
     const bList = await get(b, '/v2/store/customers');
-    expect(bList.body.data.map((c: any) => c.name)).toEqual(['Only in B']);
+    expect(bList.body.data.map((c: CustomerRow) => c.name)).toEqual(['Only in B']);
     const edit = await api
       .as(b.admin)
       .put('/v2/store/customers/phone:919830000001')
       .send({ name: 'B edit' });
     expect(edit.status).toBe(200);
-    expect((await get(a, '/v2/store/customers')).body.data.map((c: any) => c.name).sort()).toEqual([
-      'Only in A',
-      'Saved in A',
-    ]);
+    expect(
+      (await get(a, '/v2/store/customers')).body.data.map((c: CustomerRow) => c.name).sort(),
+    ).toEqual(['Only in A', 'Saved in A']);
     expect(await q(`SELECT org_id FROM wa_customer_profiles WHERE phone = '919830000001'`)).toEqual(
       [{ org_id: Number(b.orgId) }],
     );

@@ -15,6 +15,7 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
+import { ContactsRepository } from '../contacts/contacts.repository';
 import {
   ContactConsentService,
   ContactPrivacyService,
@@ -24,7 +25,14 @@ import {
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
-import { extractRow, resolveMapping, type ParsedRow, type ResolvedMapping } from './import-rows';
+import { resolvePropertyColumns, type ImportProperty } from './import-properties';
+import {
+  builtinColumns,
+  extractRow,
+  resolveMapping,
+  type ParsedRow,
+  type ResolvedMapping,
+} from './import-rows';
 import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const { contacts, contactGroupMembers, contactTags } = schema;
@@ -36,6 +44,7 @@ const MAX_NEW_GROUPS = 2000;
 interface Reject {
   row: number;
   reason: string;
+  column?: string;
   values?: Record<string, string>;
 }
 
@@ -93,6 +102,7 @@ export class ContactImportEngine {
     private readonly db: DatabaseService,
     private readonly jobs: ContactImportRepository,
     private readonly groupsRepo: ContactGroupsRepository,
+    private readonly contactsRepo: ContactsRepository,
     private readonly tags: TagsService,
     private readonly quota: ContactQuotaService,
     private readonly displayIds: DisplayIdService,
@@ -138,8 +148,18 @@ export class ContactImportEngine {
     const tenant = { orgId, userId };
     const options = contactImportOptionsSchema.parse(job.options);
     const parsed = parseCsv(job.sourceCsv!, options.delimiter as Delimiter | undefined);
-    const header = parsed.records[0]?.cells ?? [];
+    // Trimmed as the preview and the sync import trim it, so a column is named the same way on every path.
+    const header = (parsed.records[0]?.cells ?? []).map((h) => h.trim());
     const mapping = resolveMapping(header, options.mapping);
+    const catalog = await this.db.txAs(tenant, (tx) =>
+      this.contactsRepo.importableProperties(tx, orgId),
+    );
+    const properties = resolvePropertyColumns(
+      header,
+      catalog,
+      builtinColumns(mapping),
+      options.propertyMapping,
+    );
     const data = parsed.records.slice(1);
 
     const state = await this.db.txAs(tenant, (tx) =>
@@ -149,7 +169,18 @@ export class ContactImportEngine {
     for (let start = job.processedRows; start < data.length; start += BATCH) {
       const slice = data.slice(start, start + BATCH);
       await this.db.txAs(tenant, async (tx) => {
-        await this.processBatch(tx, orgId, userId, job, slice, state, mapping, header, options);
+        await this.processBatch(
+          tx,
+          orgId,
+          userId,
+          job,
+          slice,
+          state,
+          mapping,
+          header,
+          options,
+          properties,
+        );
         await this.jobs.update(tx, orgId, job.id, {
           processedRows: start + slice.length,
           createdCount: state.counters.created,
@@ -353,11 +384,18 @@ export class ContactImportEngine {
     mapping: ResolvedMapping,
     header: string[],
     options: ContactImportOptions,
+    properties: readonly ImportProperty[],
   ): Promise<void> {
-    const reject = (row: number, reason: ImportRejectReason, values?: Record<string, string>) => {
+    const reject = (
+      row: number,
+      reason: ImportRejectReason,
+      values?: Record<string, string>,
+      column?: string,
+    ) => {
       state.counters.invalid += reason === 'plan_limit_reached' ? 0 : 1;
       if (reason === 'plan_limit_reached') state.counters.limitExceeded += 1;
-      if (state.rejects.length < IMPORT_REJECTS_MAX) state.rejects.push({ row, reason, values });
+      if (state.rejects.length < IMPORT_REJECTS_MAX)
+        state.rejects.push({ row, reason, values, ...(column === undefined ? {} : { column }) });
     };
 
     // 1. validate
@@ -365,9 +403,10 @@ export class ContactImportEngine {
     for (const rec of slice) {
       const r = extractRow(rec, mapping, header, {
         defaultCountryCode: options.defaultCountryCode,
+        properties,
       });
       if (r.ok) valid.push(r.row);
-      else reject(r.line, r.reason, r.values);
+      else reject(r.line, r.reason, r.values, r.column);
     }
     if (valid.length === 0) return;
     if (state.remaining !== null) state.remaining = await this.quota.remainingLocked(tx, orgId);
@@ -469,6 +508,7 @@ export class ContactImportEngine {
           source: o.row.source ?? options.source ?? 'import',
           timezone: o.row.timezone ?? null,
           timezoneSource: o.row.timezone ? 'import' : null,
+          data: o.row.properties ?? {},
           importJobId: job.id,
           ownerId: userId,
           createdBy: userId,
@@ -532,6 +572,10 @@ export class ContactImportEngine {
       }
       // The importer's date replaces the stored one: a file is a person's deliberate correction (the sweep reads the new date).
       if (o.row.dateOfBirth) patch.dateOfBirth = o.row.dateOfBirth;
+      // Custom property values merge into the stored ones: the properties the file does not name stay, and a blank cell names none.
+      if (o.row.properties) {
+        patch.data = sql`coalesce(${contacts.data}, '{}'::jsonb) || ${JSON.stringify(o.row.properties)}::jsonb`;
+      }
       await tx
         .update(contacts)
         .set(patch)
@@ -757,5 +801,6 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   if (b.consent) out.consent = b.consent;
   if (b.consentSms) out.consentSms = b.consentSms;
   if (b.consentEmail) out.consentEmail = b.consentEmail;
+  if (b.properties) out.properties = { ...a.properties, ...b.properties };
   return out;
 }

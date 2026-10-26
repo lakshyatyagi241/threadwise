@@ -19,6 +19,7 @@ import {
   GRAPH_TOKEN,
   GRAPH_WABA_ID,
 } from './stubs';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Sign-up, the sign-up code, social sign-in, onboarding and workspace switch (TW-AUTH-004 to 010
@@ -505,10 +506,7 @@ describe('social sign-in', () => {
       provider,
     );
 
-  const PNG = Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(32, 9),
-  ]);
+  const PNG = pngOfSize(8 + 32);
   const profile = (
     subject: string,
     over: Partial<{

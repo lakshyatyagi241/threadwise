@@ -8,6 +8,7 @@ import {
   type AssignmentTraceEntry,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { loadAgentStatuses, type LoadedStatus } from '../../../common/agent-status';
 import { onLeaveOnSql } from '../../../common/workspace-calendar';
 
 type Raw = Record<string, unknown>;
@@ -346,6 +347,7 @@ export class ContactAssignmentRepository {
     subject: AssignmentSubject,
     skipOffline: boolean,
     today: string,
+    statusAutomation = false,
   ): Promise<Candidate[]> {
     if (ids.length === 0) return [];
     const load =
@@ -356,21 +358,31 @@ export class ContactAssignmentRepository {
           : sql`(SELECT count(*)::int FROM deals d WHERE d.org_id = u.org_id AND d.owner_user_id = u.id AND d.status = 'open')`;
     const res = await tx.execute(sql`
       SELECT u.id, u.uuid, u.full_name, ${load} AS load
-      FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
+      FROM users u
       WHERE u.org_id = ${orgId} AND u.status = 'active'
         AND u.id IN (${sql.join(
           ids.map((i) => sql`${i}`),
           sql`, `,
         )})
         AND NOT ${onLeaveOnSql('u', today)}
-        ${skipOffline ? sql`AND COALESCE(s.status, 'online') <> 'offline'` : sql``}
       ORDER BY u.id`);
-    return (res.rows as Raw[]).map((r) => ({
+    const rows = (res.rows as Raw[]).map((r) => ({
       id: Number(r.id),
       uuid: String(r.uuid),
       name: String(r.full_name),
       load: Number(r.load),
     }));
+    if (!skipOffline) return rows;
+    // "Skip people who are offline": Away by their own choice or outside their working hours (the effective status, docs/specs/agent-status-bar.md).
+    const statuses = await loadAgentStatuses(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+      {
+        automationAllowed: statusAutomation,
+      },
+    );
+    return rows.filter((r) => !isAwayForOwnership(statuses.get(r.id)));
   }
 
   /**
@@ -382,20 +394,23 @@ export class ContactAssignmentRepository {
     orgId: number,
     ids: readonly number[],
     today: string,
+    statusAutomation = false,
   ): Promise<
     Map<number, { uuid: string; name: string; active: boolean; onLeave: boolean; offline: boolean }>
   > {
     if (ids.length === 0) return new Map();
     const res = await tx.execute(sql`
       SELECT u.id, u.uuid, u.full_name, (u.status = 'active') AS active,
-             ${onLeaveOnSql('u', today)} AS on_leave,
-             (COALESCE(s.status, 'online') = 'offline') AS offline
-      FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
+             ${onLeaveOnSql('u', today)} AS on_leave
+      FROM users u
       WHERE u.org_id = ${orgId}
         AND u.id IN (${sql.join(
           ids.map((i) => sql`${i}`),
           sql`, `,
         )})`);
+    const statuses = await loadAgentStatuses(tx, orgId, ids, {
+      automationAllowed: statusAutomation,
+    });
     return new Map(
       (res.rows as Raw[]).map((r) => [
         Number(r.id),
@@ -404,7 +419,7 @@ export class ContactAssignmentRepository {
           name: String(r.full_name),
           active: r.active === true,
           onLeave: r.on_leave === true,
-          offline: r.offline === true,
+          offline: isAwayForOwnership(statuses.get(Number(r.id))),
         },
       ]),
     );
@@ -622,4 +637,9 @@ export class ContactAssignmentRepository {
       INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta)
       VALUES (${e.orgId}, NULL, 'system', ${e.module}, ${e.recordId}, ${e.action}, ${JSON.stringify(e.delta)}::jsonb)`);
   }
+}
+
+/** Away by their own choice or by their working hours; on leave is a separate rule here and the legacy `busy` was never skipped. */
+function isAwayForOwnership(s: LoadedStatus | undefined): boolean {
+  return s !== undefined && (s.trace === 'away' || s.trace === 'outside_working_hours');
 }

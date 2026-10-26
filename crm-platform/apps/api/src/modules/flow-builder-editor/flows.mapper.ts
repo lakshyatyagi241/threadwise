@@ -16,6 +16,7 @@ export function toFlowSummary(row: FlowRow): FlowSummary {
     id: row.uuid,
     name: row.name,
     flowType: row.flowType as FlowType,
+    builder: row.builder === 'advanced' ? 'advanced' : 'simple',
     category: row.category,
     state: flowState(row),
     isPublished: row.isPublished,

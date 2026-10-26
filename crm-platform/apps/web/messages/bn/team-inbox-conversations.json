@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# ঘণ্টা} other {# ঘণ্টা}}",
         "days": "{count, plural, one {# দিন} other {# দিন}}"
       },
-      "unsnoozesAt": "{time}-এ আবার খুলবে"
+      "unsnoozesAt": "{time}-এ আবার খুলবে",
+      "erased": "মুছে ফেলা যোগাযোগ",
+      "erasedHint": "এই যোগাযোগগুলো মুছে ফেলা হয়েছে, এবং তাদের কথোপকথন ব্যক্তির তথ্য ও বার্তার লেখা ছাড়া রাখা হয়েছে। সময় শেষ বার্তা দেখায়, কারণ মুছে ফেলার তারিখ লেখা থাকে না।",
+      "erasedTitle": "মুছে ফেলা যোগাযোগ"
     },
     "status": {
       "received": "পাওয়া গেছে",
@@ -328,9 +331,16 @@
       },
       "readOnly": "আপনি এই কথোপকথন পড়তে পারবেন, তবে উত্তর দেওয়ার অনুমতি নেই।",
       "resolvedBanner": "এই কথোপকথনটি সমাধান হয়েছে। উত্তর দিতে এটি আবার খুলুন।",
+      "resolvedWebchatBanner": "এই ওয়েব চ্যাটটি সমাধান হয়ে গেছে, তাই আবার খোলা যাবে না।",
       "assignedToOther": "এই চ্যাটটি অন্য এজেন্টকে অ্যাসাইন করা আছে। উত্তর দিতে আগে এটি নিজের নামে অ্যাসাইন করুন।",
       "typing": "{count, plural, one {একজন সহকর্মী টাইপ করছেন} other {# জন সহকর্মী টাইপ করছেন}}",
       "messagesLabel": "মেসেজ",
+      "session": {
+        "header": "{range} · {count, plural, one {# টি বার্তা} other {# টি বার্তা}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "আগের মেসেজ লোড করুন",
       "empty": "এই কথোপকথনে এখনও কোনো মেসেজ নেই।",
       "newMessageAnnounce": "নতুন মেসেজ: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "কিছু মেলেনি",
       "searchPrev": "আগের ফল",
       "searchNext": "পরের ফল",
-      "searchClose": "অনুসন্ধান বন্ধ করুন"
+      "searchClose": "অনুসন্ধান বন্ধ করুন",
+      "erasedBadge": "মুছে ফেলা",
+      "erasedBanner": "এই যোগাযোগটি মুছে ফেলা হয়েছে। বার্তার লেখা ও মিডিয়া সরিয়ে দেওয়া হয়েছে, তাই কিছু পাঠানো যাবে না। টাইমলাইন ও সময় রাখা আছে।"
     },
     "groupThread": {
       "openGroup": "গ্রুপ খুলুন",
@@ -542,17 +554,17 @@
         "onLeave": "ছুটিতে আছেন",
         "onLeaveUntil": "{date} পর্যন্ত ছুটিতে",
         "availability": {
-          "online": "অনলাইন",
-          "away": "দূরে",
+          "online": "উপলব্ধ",
+          "away": "অনুপস্থিত, কর্মঘণ্টার বাইরে",
           "busy": "ব্যস্ত",
-          "offline": "অফলাইন"
+          "offline": "অনুপস্থিত"
         }
       },
       "presence": {
-        "online": "অনলাইন",
-        "away": "অনুপস্থিত",
+        "online": "উপলব্ধ",
+        "away": "অনুপস্থিত, কর্মঘণ্টার বাইরে",
         "busy": "ব্যস্ত",
-        "offline": "অফলাইন"
+        "offline": "অনুপস্থিত"
       },
       "notes": {
         "tab": "কন্ট্যাক্টের নোট",
@@ -584,7 +596,11 @@
           "sla_breach": "উত্তরের সময়সীমা পেরিয়ে গেছে",
           "spam_flagged": "{actor} স্প্যাম হিসেবে চিহ্নিত করেছেন",
           "escalated": "এস্কেলেট করা হয়েছে",
-          "unknown": "{actor} কর্তৃক {what}"
+          "unknown": "{actor} কর্তৃক {what}",
+          "handoff_requested": "{actor} কর্তৃক একজন ব্যক্তিকে হস্তান্তর করা হয়েছে",
+          "queue_reminded": "টিমকে মনে করানো হয়েছে",
+          "queue_offered": "অন্য টিমকে দেওয়া হয়েছে",
+          "queue_customer_message": "গ্রাহককে একটি বার্তা পাঠানো হয়েছে"
         },
         "actors": {
           "user": "একজন সহকর্মী",
@@ -711,6 +727,7 @@
         "not_linked": "এই কথোপকথনের চ্যানেল কোনো WhatsApp নম্বরের সঙ্গে যুক্ত নয়, তাই এখান থেকে কোনো টেমপ্লেট পাঠানো যাবে না।",
         "paused": "WhatsApp কর্তৃক স্থগিত। স্থগিতের সময় শেষ হলে আবার পাঠানো যাবে।",
         "media_header": "এতে ছবি, ভিডিও বা ডকুমেন্ট হেডার আছে, যা ইনবক্স থেকে এখনও পাঠানো যায় না।",
+        "carousel": "এটি একটি ক্যারোসেল (ছবিসহ কার্ড), যা এখনও ইনবক্স থেকে পাঠানো যায় না।",
         "header_variable": "হেডারে একটি ভেরিয়েবল আছে, যা ইনবক্স থেকে এখনও পূরণ করা যায় না।",
         "dynamic_button": "একটি বাটন লিংকে ভেরিয়েবল আছে, যা ইনবক্স থেকে এখনও পূরণ করা যায় না।",
         "authentication": "ওয়ান-টাইম-পাসওয়ার্ড টেমপ্লেট সিস্টেম পাঠায়, ইনবক্স থেকে নয়।",
@@ -805,6 +822,7 @@
         "onlyStatus": "শুধু {status} মেসেজ",
         "requestedAt": "অনুরোধ করা হয়েছে {date}",
         "lines": "{count, plural, one {# লাইন} other {# লাইন}}",
+        "noLines": "এই সময়সীমায় কোনো ঘটনা নেই",
         "until": "{date} পর্যন্ত পাওয়া যাবে",
         "download": "ডাউনলোড",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "সিমুলেটর (পরীক্ষা)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "ওয়েবসাইট চ্যাট",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "ইমেল",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "সিমুলেটর (পরীক্ষা)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "ওয়েবসাইট চ্যাট",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "ইমেল",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "কন্টাক্ট",
         "agent": "আপনি",
@@ -1054,7 +1072,10 @@
       "tagRemove": "ট্যাগ সরান",
       "onLeave": "ছুটিতে",
       "onLeaveUntil": "{date} পর্যন্ত ছুটিতে",
-      "spam": "স্প্যাম হিসেবে চিহ্নিত করুন"
+      "spam": "স্প্যাম হিসেবে চিহ্নিত করুন",
+      "markUnread": "অপঠিত হিসেবে চিহ্নিত করুন",
+      "unsnooze": "স্থগিত বাতিল করুন",
+      "notSpam": "স্প্যাম নয় হিসেবে চিহ্নিত করুন"
     },
     "tags": {
       "tag": "ট্যাগ",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "ইনবক্সে ফিরে যান",
-        "title": "কথোপকথনের ট্যাগ",
+        "title": "ট্যাগ",
         "intro": "কথোপকথনের ট্যাগ একটি থ্রেডকে চিহ্নিত করে (বিলিং, রিফান্ড, জরুরি), যাতে আপনার টিম ইনবক্স সাজাতে ও ফিল্টার করতে পারে। এগুলো কন্টাক্টের ট্যাগের মতো একই ট্যাগ লাইব্রেরি থেকে আসে, যা ব্যক্তিটিকে বর্ণনা করে।",
         "newTitle": "নতুন ট্যাগ",
         "editTitle": "ট্যাগ সম্পাদনা",

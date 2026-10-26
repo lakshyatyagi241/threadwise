@@ -76,6 +76,16 @@ async function typeDay(el: HTMLInputElement, value: string) {
   });
 }
 
+describe('campaigns list: the search box', () => {
+  it('is a search field, so it gets the clear button while it holds text', async () => {
+    await show('');
+    const box = document.querySelector<HTMLInputElement>(
+      'input[aria-label="Search campaigns"], input[type="search"]',
+    );
+    expect(box?.type).toBe('search');
+  });
+});
+
 describe('campaigns list: the custom date range', () => {
   it('offers Custom range after the presets, and shows no day fields until it is picked', async () => {
     await show('');

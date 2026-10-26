@@ -1,0 +1,1287 @@
+{
+  "module": "ai-agents-training",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "createAiagAssistantSchema",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts",
+      "coercedFields": 5,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (8000)",
+          "value": "\"a\" x 8000",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (8000)",
+          "value": "\"a\" x 8001",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (8000)",
+          "value": "\"😀\" x 8000",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (16)",
+          "value": "\"aaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (16)",
+          "value": "\"aaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (16)",
+          "value": "\"😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (yi)",
+          "value": "\"yi\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (50)",
+          "value": "50",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (50)",
+          "value": "49",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4000)",
+          "value": "4000",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (4000)",
+          "value": "4001",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "temperature",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2)",
+          "value": "2",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (2)",
+          "value": "3",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffEnabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (60)",
+          "value": "\"a\" x 60",
+          "priority": "P0"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (60)",
+          "value": "\"a\" x 61",
+          "priority": "P0"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (60)",
+          "value": "\"😀\" x 60",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (paused)",
+          "value": "\"paused\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateAiagAssistantSchema",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts",
+      "coercedFields": 5,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P2"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "greeting",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (8000)",
+          "value": "\"a\" x 8000",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (8000)",
+          "value": "\"a\" x 8001",
+          "priority": "P2"
+        },
+        {
+          "field": "systemPrompt",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (8000)",
+          "value": "\"😀\" x 8000",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "tone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (16)",
+          "value": "\"aaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (16)",
+          "value": "\"aaaaaaaaaaaaaaaaa\"",
+          "priority": "P2"
+        },
+        {
+          "field": "language",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (16)",
+          "value": "\"😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiProvider",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (yi)",
+          "value": "\"yi\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P2"
+        },
+        {
+          "field": "aiModel",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (50)",
+          "value": "50",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (50)",
+          "value": "49",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4000)",
+          "value": "4000",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (4000)",
+          "value": "4001",
+          "priority": "P0"
+        },
+        {
+          "field": "replyMaxTokens",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "temperature",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2)",
+          "value": "2",
+          "priority": "P2"
+        },
+        {
+          "field": "temperature",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (2)",
+          "value": "3",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "fallbackMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffEnabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (60)",
+          "value": "\"a\" x 60",
+          "priority": "P0"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (60)",
+          "value": "\"a\" x 61",
+          "priority": "P0"
+        },
+        {
+          "field": "handoffKeyword",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (60)",
+          "value": "\"😀\" x 60",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P2"
+        },
+        {
+          "field": "handoffMessage",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "status",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (paused)",
+          "value": "\"paused\"",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "addAiagSourceSchema",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "body is a ZodDiscriminatedUnion, not an object",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "uploadAiagSourceFieldsSchema",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "label",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (200)",
+          "value": "\"a\" x 200",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (200)",
+          "value": "\"a\" x 201",
+          "priority": "P2"
+        },
+        {
+          "field": "label",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (200)",
+          "value": "\"😀\" x 200",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "saveAiagResponderSchema",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "mode",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (meta_agent_then_handoff)",
+          "value": "\"meta_agent_then_handoff\"",
+          "priority": "P2"
+        },
+        {
+          "field": "metaAgentEnabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "metaAgentEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

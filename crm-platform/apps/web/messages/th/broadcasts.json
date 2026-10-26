@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "ปิด"
     },
+    "list": {
+      "unofficialDisabled": "ไม่เป็นทางการ (ปิดใช้งาน)"
+    },
     "detail": {
       "back": "กลับ",
       "crumb": "บรอดแคสต์ / การวิเคราะห์ / #{ref}",

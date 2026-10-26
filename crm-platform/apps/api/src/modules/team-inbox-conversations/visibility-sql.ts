@@ -18,9 +18,16 @@ import { conversationScopeCondition } from '../../kernel/rbac/scope';
  * `byScope` applies), the viewer for their own mailbox (always visible), anyone else's (visible only when `readsPersonalMail`, then by scope).
  */
 export function visibleToSql(viewer: ConversationViewer, alias = 'c'): SQL {
+  return visibleWhen(viewer, alias, channelOwnerSql(alias));
+}
+
+/**
+ * The one visibility rule, written once. `owner` is the channel's personal-mailbox owner as an expression (NULL for a shared
+ * channel), so `visibleToSql` (a correlated sub-select) and `visibleToJoinedSql` (joins) differ only in how they reach the owner.
+ */
+function visibleWhen(viewer: ConversationViewer, alias: string, owner: SQL): SQL {
   if (viewer.scope === null) return sql`FALSE`;
   const byScope = byScopeSql(viewer, alias);
-  const owner = channelOwnerSql(alias);
   const mine = sql`COALESCE(${owner} = ${viewer.userId}, FALSE)`;
   // Others' personal mail, then governed by scope as usual; shared channels (NULL owner) always are.
   if (viewer.readsPersonalMail === true) return sql`(${mine} OR ${byScope})`;
@@ -46,17 +53,10 @@ export function visibleToJoinedSql(
   const joins = sql`
     LEFT JOIN channels vch ON vch.org_id = ${c}.org_id AND vch.id = ${c}.channel_id AND vch.kind = 'email'
     LEFT JOIN mail_mailboxes vmb ON vmb.org_id = vch.org_id AND vmb.uuid::text = vch.external_id`;
-  if (viewer.scope === null) return { joins, where: sql`FALSE` };
-  const byScope = byScopeSql(viewer, alias);
   const owner = sql`(CASE WHEN vch.id IS NULL THEN NULL
                           WHEN vmb.id IS NULL THEN ${PERSONAL_OWNER_GONE}::bigint
                           WHEN vmb.scope = 'personal' THEN vmb.owner_user_id END)`;
-  const mine = sql`COALESCE(${owner} = ${viewer.userId}, FALSE)`;
-  const where =
-    viewer.readsPersonalMail === true
-      ? sql`(${mine} OR ${byScope})`
-      : sql`(${mine} OR (${owner} IS NULL AND ${byScope}))`;
-  return { joins, where };
+  return { joins, where: visibleWhen(viewer, alias, owner) };
 }
 
 const byScopeSql = (viewer: ConversationViewer, alias: string): SQL =>

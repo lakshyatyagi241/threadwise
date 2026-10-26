@@ -23,7 +23,7 @@ Statuses: `todo` → `in-progress` → `backend-done` → `frontend-done` → `d
 from the percentage).
 
 - `done` = code merged, automated tests exist for every acceptance criterion in the entry, `pnpm` gate green.
-- `verified` = compared against the running Reference with the `threadwise-verify-parity` skill and the evidence is linked in the PR.
+- `verified` = compared against Reference before it was removed, with the evidence linked in the PR. No new `verified` rows after the removal.
 
 ## Commands
 
@@ -45,7 +45,7 @@ Set it once: `export THREADWISE_OWNER=<name>`.
 
 - Start of work on a feature: `in-progress`. One feature in progress per person per branch is the norm.
 - Merge of the PR that finishes it: `done` with the PR number. Same PR, not a follow-up.
-- After parity verification: `verified`.
+- After a Reference comparison made before the removal: `verified`.
 - Blocked on another domain: `blocked` with the feature id you are waiting for in the note; tell that owner.
 - Feature turns out not to exist in Reference 1.7.0 (docs-only) or is deliberately dropped: `wontfix` with the reason, and also correct the inventory entry.
 

@@ -41,11 +41,13 @@ describe('task outcomes: schema, constraints and isolation', () => {
       `INSERT INTO organizations (slug, name, plan) VALUES ('ob','B','starter') RETURNING id`,
     );
     outA = await one(
-      `INSERT INTO task_outcomes (org_id, name, sort_order) VALUES ($1,'Interested',0) RETURNING id`,
+      // a new workspace is seeded with the default outcomes (20270201090000_sales_activities), 'Interested' among them
+      `SELECT id FROM task_outcomes WHERE org_id = $1 AND name = 'Interested'`,
       [orgA],
     );
     outB = await one(
-      `INSERT INTO task_outcomes (org_id, name, sort_order) VALUES ($1,'Interested',0) RETURNING id`,
+      // a new workspace is seeded with the default outcomes (20270201090000_sales_activities), 'Interested' among them
+      `SELECT id FROM task_outcomes WHERE org_id = $1 AND name = 'Interested'`,
       [orgB],
     );
     app = new Client({
@@ -82,12 +84,22 @@ describe('task outcomes: schema, constraints and isolation', () => {
               (SELECT count(*) FROM pg_policies p WHERE p.tablename = 'task_outcomes' AND p.policyname = 'tenant_isolation')::int AS policies
          FROM pg_class WHERE relname = 'task_outcomes' AND relkind = 'r'`,
     );
-    expect(res.rows[0]).toMatchObject({ relrowsecurity: true, relforcerowsecurity: true, policies: 1 });
+    expect(res.rows[0]).toMatchObject({
+      relrowsecurity: true,
+      relforcerowsecurity: true,
+      policies: 1,
+    });
   });
 
   it('a workspace sees only its own outcomes, and none without a tenant', async () => {
-    const own = await asOrg(orgA, async () => (await app.query(`SELECT id FROM task_outcomes`)).rows);
-    expect(own.map((r) => Number(r.id))).toEqual([outA]);
+    const own = await asOrg(
+      orgA,
+      async () => (await app.query(`SELECT id FROM task_outcomes`)).rows,
+    );
+    // a workspace is seeded with the default outcomes, so it has several: its own, and never the other workspace's
+    const ids = own.map((r) => Number(r.id));
+    expect(ids).toContain(outA);
+    expect(ids).not.toContain(outB);
     await app.query('BEGIN');
     try {
       expect((await app.query(`SELECT 1 FROM task_outcomes`)).rows).toHaveLength(0);
@@ -106,7 +118,11 @@ describe('task outcomes: schema, constraints and isolation', () => {
   });
 
   it('refuses an empty or over-long name', async () => {
-    await rejects(`INSERT INTO task_outcomes (org_id, name) VALUES ($1,'   ')`, [orgA], /chk_task_outcomes_name/);
+    await rejects(
+      `INSERT INTO task_outcomes (org_id, name) VALUES ($1,'   ')`,
+      [orgA],
+      /chk_task_outcomes_name/,
+    );
     await rejects(
       `INSERT INTO task_outcomes (org_id, name) VALUES ($1,$2)`,
       [orgA, 'x'.repeat(192)],
@@ -123,7 +139,10 @@ describe('task outcomes: schema, constraints and isolation', () => {
   });
 
   it('an outcome a task carries cannot be deleted', async () => {
-    await owner.query(`INSERT INTO tasks (org_id, title, outcome_id) VALUES ($1,'t',$2)`, [orgA, outA]);
+    await owner.query(`INSERT INTO tasks (org_id, title, outcome_id) VALUES ($1,'t',$2)`, [
+      orgA,
+      outA,
+    ]);
     await rejects(
       `DELETE FROM task_outcomes WHERE org_id = $1 AND id = $2`,
       [orgA, outA],
@@ -136,7 +155,10 @@ describe('task outcomes: schema, constraints and isolation', () => {
       `SELECT row_version FROM task_outcomes WHERE org_id = $1 AND id = $2`,
       [orgB, outB],
     );
-    await owner.query(`UPDATE task_outcomes SET is_active = false WHERE org_id = $1 AND id = $2`, [orgB, outB]);
+    await owner.query(`UPDATE task_outcomes SET is_active = false WHERE org_id = $1 AND id = $2`, [
+      orgB,
+      outB,
+    ]);
     const after = await owner.query(
       `SELECT row_version FROM task_outcomes WHERE org_id = $1 AND id = $2`,
       [orgB, outB],

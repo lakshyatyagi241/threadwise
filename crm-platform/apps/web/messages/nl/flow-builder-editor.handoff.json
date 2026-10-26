@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "toegewezen",
         "waitingInQueue": "wacht in wachtrij",
-        "noAgentOutOfHours": "geen medewerker / buiten openingstijden"
+        "noAgentOutOfHours": "geen medewerker / buiten openingstijden",
+        "returnedToBot": "teruggegeven aan de bot"
       }
     },
     "simpleModel": {
@@ -20,26 +21,27 @@
         "nodePreview": {
           "handoffTo": "Overdragen aan",
           "handoffRules": "Toewijzingsregels",
-          "pickAgent": "— kies een persoon —"
+          "pickAgent": "— kies een persoon —",
+          "returnBack": "Als de bot terug is:"
         }
       },
       "handoff": {
         "legacy": "Deze stap is de oudere “Medewerker toewijzen”.",
-        "upgradeHint": "Hij geeft de chat aan een team en gaat verder. Schakel over naar de Overdracht aan medewerker om een reden, een prioriteit, berichten voor het contact en drie uitgangen toe te voegen (toegewezen, wacht in wachtrij, geen medewerker of buiten openingstijden). Koppelingen die je al hebt gemaakt blijven werken.",
+        "upgradeHint": "Dit geeft het gesprek aan een team en gaat verder. Schakel over naar de overdracht aan een mens om een reden, een prioriteit, berichten voor het contact en de uitgangen toe te voegen (toegewezen, in de wachtrij, geen medewerker of buiten openingstijden en een optionele voor als het gesprek teruggaat naar de bot). Verbindingen die u al hebt gemaakt blijven werken.",
         "upgrade": "Overdrachtsfuncties gebruiken",
         "destination": "Het gesprek sturen naar",
         "dest": {
           "team": "Een team",
           "person": "Eén persoon",
           "rules": "De toewijzingsregels",
-          "rulesLocked": "De toewijzingsregels (niet in je abonnement)"
+          "rulesLocked": "De toewijzingsregels (add-on Slimme routering)"
         },
         "destHint": {
           "team": "Het gaat naar iemand in het team of wacht in de wachtrij van het team.",
           "person": "Het gaat naar deze persoon als die het kan overnemen; anders wacht het in de wachtrij.",
           "rules": "Gebruikt je regels voor automatische toewijzing van gesprekken; als geen enkele regel een persoon vindt, wacht het in de wachtrij."
         },
-        "lockHint": "Je abonnement bevat geen toewijzingsregels, dus een hier naartoe gestuurd gesprek wacht in de wachtrij tot een collega het overneemt.",
+        "lockHint": "Toewijzingsregels maken deel uit van de add-on Slimme routering of een hoger abonnement. Een hier verzonden gesprek wacht in de wachtrij tot een collega het claimt.",
         "team": "Team",
         "teamPick": "— kies een team —",
         "teamNone": "Nog geen teams",
@@ -76,7 +78,15 @@
         "exitAssigned": "toegewezen: een persoon heeft het gesprek nu",
         "exitWaiting": "wacht in wachtrij: het wacht tot iemand het overneemt",
         "exitUnavailable": "geen medewerker / buiten openingstijden: niemand kon het overnemen",
-        "simpleExits": "De volgende stap wordt uitgevoerd zodra een persoon het gesprek heeft. Moet het in de wachtrij wachten, of is niemand beschikbaar, dan stopt de bot hier en antwoordt een persoon. Gebruik de geavanceerde builder om de andere uitgangen te volgen."
+        "simpleExits": "De volgende stap wordt uitgevoerd zodra een persoon het gesprek heeft. Moet het in de wachtrij wachten, of is niemand beschikbaar, dan stopt de bot hier en antwoordt een persoon. Gebruik de geavanceerde builder om de andere uitgangen te volgen.",
+        "returnMessage": "Bericht aan het contact als de bot terug is",
+        "returnMessageHint": "Optioneel. Eenmaal verstuurd, namens uw bedrijf, wanneer een collega op Terug naar bot drukt, voordat de flow verdergaat bij de uitgang ‘teruggegeven’. Het wordt niet verstuurd als het venster van 24 uur gesloten is of het contact geen toestemming heeft gegeven. Variabelen zoals '{{'name'}}' werken.",
+        "returnNeedsExit": "Dit bericht wordt alleen verstuurd als de flow verdergaat na Terug naar bot. Verbind de uitgang ‘teruggegeven’ met de stap die daarna moet komen.",
+        "exitReturned": "teruggegeven aan de bot (optioneel): een collega drukte op Terug naar bot; de flow gaat hier verder",
+        "returnedStep": "Als een collega de chat teruggeeft, ga verder bij",
+        "returnedStepHint": "Optioneel. Kies de stap waarmee de flow verdergaat als iemand op Terug naar bot drukt. Laat leeg en de bot wacht op het volgende bericht van het contact.",
+        "returnNone": "Geen stap: wachten op het volgende bericht van het contact",
+        "returnStepOption": "{stage}: {label}"
       }
     }
   }

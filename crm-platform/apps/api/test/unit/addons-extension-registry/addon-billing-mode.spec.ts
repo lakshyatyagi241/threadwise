@@ -10,9 +10,15 @@ const pack = {
 };
 
 describe('add-on billing mode', () => {
-  it('defaults to one-time, so existing packs and clients keep working', () => {
-    const r = createAddonRequestSchema.parse(pack);
-    expect(r.billingMode).toBe('one_time');
+  it('a new priced pack defaults to recurring; lifetime and zero-priced shapes of an older client stay one-time', () => {
+    expect(createAddonRequestSchema.parse(pack).billingMode).toBe('recurring');
+    expect(createAddonRequestSchema.parse({ ...pack, isLifetime: true }).billingMode).toBe(
+      'one_time',
+    );
+    expect(createAddonRequestSchema.parse({ ...pack, amount: '0' }).billingMode).toBe('one_time');
+    expect(createAddonRequestSchema.parse({ ...pack, billingMode: 'one_time' }).billingMode).toBe(
+      'one_time',
+    );
   });
 
   it('accepts a recurring pack', () => {

@@ -91,7 +91,7 @@ export default {
           continue;
         }
         const eq = q.equals ?? [],
-          ord = q.orderBy ?? [],
+          ord = (q.orderBy ?? []).map((o) => o.replace(/\s+(asc|desc)$/i, '')), // direction does not change which index serves it
           rng = new Set(q.range ?? []);
         const idxs = [t.pk, ...t.uniques, ...t.indexes.map((i) => i.cols)].filter(Boolean);
         const ok = idxs.some((c) => {

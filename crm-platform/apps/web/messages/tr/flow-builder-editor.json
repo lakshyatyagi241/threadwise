@@ -555,7 +555,8 @@
           "cardCount": "{count} kart",
           "payLink": "Ödeme bağlantısı",
           "invoice": "Fatura",
-          "faqRetired": "Kullanımdan kalktı · \"eşleşme yok\" ile çıkar"
+          "faqAgent": "{agent} üzerinden yanıtlar",
+          "faqNoAgent": "Bir yapay zeka aracısı seçin"
         },
         "overlays": {
           "startPinned": "Bu başlangıç noktasıdır (sabitlemeyi kaldırmak için tıklayın)",
@@ -746,7 +747,8 @@
           "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
           "actions": "Eylemler",
           "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
-          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez.",
+          "fromSteps": "{stages}. adımdan gelinir"
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
@@ -858,7 +860,13 @@
             "choose": "Bir şablon seçin…",
             "buttons": "Düğmeler",
             "variables": "Kişi bilgisinden doldurulur",
-            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin.",
+            "fills": "Her numaranın neyle doldurulacağı",
+            "fillsHint": "Bir kişi bilgisi veya akış değişkeni seçin ya da kendi metninizi yazın. Şablondaki değeri kullanmak için boş bırakın.",
+            "fillPick": "Bilgi ekle…",
+            "headerMedia": "Üst bilgi dosyası",
+            "headerMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+            "headerMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -897,7 +905,15 @@
               "phone": "Bir numarayı ara",
               "email": "E-posta gönder",
               "agent": "Bir kişiyle konuş"
-            }
+            },
+            "prev": "Önceki kart",
+            "next": "Sonraki kart",
+            "goTo": "Kart {n}",
+            "saveCopy": "Kopyasını kaydet",
+            "saveCopyHint": "Bu resmi sunucumuzda saklar, böylece her ziyaretçinin sohbeti onu gösterebilir. Paylaşıma izin vermeyen bir siteden alınan resim kopyalanamaz: bunun yerine yükleyin.",
+            "saving": "Kaydediliyor…",
+            "copyFailed": "Kopya kaydedilemedi: {message}",
+            "imageFormats": "Kabul edilen biçimler: JPG, JPEG veya PNG."
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
@@ -908,12 +924,16 @@
             "hint": "Ziyaretçi, notunuzla birlikte bu ekibe aktarılır. Bu düğmeden sonra hiçbir şey bağlamanız gerekmez."
           },
           "faq": {
-            "exit": "Şununla devam et",
-            "exitHint": "Akış her zaman buradan devam eder."
+            "exit": "Hiçbir şey eşleşmezse",
+            "exitHint": "Hiçbir kayıt yanıt vermediğinde akışın gideceği yer.",
+            "matched": "Yanıt bulunursa",
+            "matchedHint": "Yanıt gönderildikten sonra akışın gideceği yer."
           }
         },
         "branchAdd": "“{title}” için adım ekle",
-        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder."
+        "faqEnds": "Bu adım bu bölümü bitirir: akış Yanıtlandı ya da Eşleşme yok çıkışından devam eder.",
+        "flowMenu": "{name} seçenekleri",
+        "renameFlow": "Akışı yeniden adlandır"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value} (çalışma alanında değil)",
           "templateLabel": "Onaylı şablon",
           "templateHint": "Yalnızca çalışma alanındaki onaylı şablonlar burada görünür. <link>Yeni bir tane oluşturun →</link>",
+          "statusExits": "Durum çıkışları ekle (Gönderildi, Teslim edildi, Okundu, Yanıtlandı, Başarısız)",
+          "statusExitsHint": "Akış, bağlı bir adımı olan ilk çıkıştan ayrılır: şablon kabul edilir edilmez Gönderildi, WhatsApp bildirince Teslim edildi veya Okundu, müşteri yazınca Yanıtlandı, gönderilemezse Başarısız. Müşterinin dokunduğu düğme kendi çıkışından ayrılır.",
           "type": "Tür",
           "kindText": "Metin",
           "kindImage": "Görsel",
@@ -1364,12 +1386,12 @@
           "stageHint": "Bir fırsat bu satış hattı aşamasına taşındığında, bağlı kişi kaydedilir. Aşamaları /deals panosunda yönetin.",
           "rulesLabel": "Yorum anahtar kelime kurallarına bağla",
           "rulesHint": "Bu akışı başlatması gereken kuralları işaretleyin. Hiçbirini işaretlemezseniz herhangi bir Yorum → DM kuralında çalışır.",
-          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok. <link>/auto-reply</link> üzerinde oluşturun (Instagram · tetikleyici \"Yorum → DM\"), ardından burada seçin.",
+          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok, bu yüzden burada seçilecek bir şey yok.",
           "ruleFallback": "Kural {id}",
           "ruleOff": "kapalı",
           "orderPlaced": "Her yeni sipariş için tetiklenir. Siparişin müşterisi kayıtlı bir kişiyle eşleştirilir ve kaydedilir.",
           "automatic": "Otomatik tetiklenir — ek bir ayar gerekmez.",
-          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Uzakta modunu <link>Otomatik Yanıt</link> sayfasından değiştirin. Her kişi bir kez kaydedilir.",
+          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Her kişi bir kez kaydedilir.",
           "outOfHours": "<b>Çalışma alanınızın iş saatleri dışında</b> gelen her mesajda tetiklenir. İş saatlerini çalışma alanı ayarlarınızda belirleyin. Her kişi bir kez kaydedilir.",
           "manualEnroll": "Kişileri, <link>/flows listesinden</link> bu akışın yanındaki <b>Akışa ekle</b> düğmesiyle elle ekleyeceksiniz.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "Ödenene kadar bekle, sonra devam et"
         },
         "faq": {
-          "retired": "Bu adım kullanımdan kalktı ve artık bir şey aramıyor. Akış her zaman Eşleşme yok ile devam eder. Kendi bilginizle yanıtlamak için bir yapay zeka asistanı adımı kullanın ve bir yapay zeka temsilcisi seçin."
+          "agent": "Yapay zeka aracısı",
+          "agentHint": "Bilgi tabanında arama yapılacak aracı. Sık sorulan soruları Yapay Zeka Eğitimi'nde ekleyin.",
+          "query": "Aranacak metin",
+          "queryHint": "Neyin aranacağı. Genellikle müşterinin son mesajı.",
+          "sendAnswer": "Yanıtı müşteriye gönder",
+          "variable": "Yanıtı şu adla kaydet",
+          "variableHint": "Sonraki adımlar yanıtı bu adla okur, örneğin faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "Akış bölümleri",
         "build": "Oluştur",
+        "faqs": "SSS",
         "customize": "Özelleştir",
         "saveFirst": "Önce akışı kaydedin.",
         "needsCustomizing": "Widget hâlâ varsayılan görünümü kullanıyor. Özelleştir'i açın.",
@@ -1933,6 +1962,13 @@
         "deploy": "Yayına al",
         "customizeFirstWhatsapp": "Yayınlamadan önce WhatsApp düğmenizi özelleştirin ve bir kez kaydedin.",
         "install": "Yükle"
+      },
+      "faqsPanel": {
+        "intro": "SSS, bir yapay zeka aracısının bilgisindeki kayıtlardır. Buradakiler bu akışın yanıt verdiği aracıya aittir: buraya soru ve cevap ekleyin, aracı bunları kullanır.",
+        "noAgent": "Bu akış henüz bir yapay zeka aracısı kullanmıyor. Yapay zeka asistanı veya SSS'den yanıtla adımı ekleyip bir aracı seçin: SSS'leri burada görünür.",
+        "agent": "Yapay zeka aracısı",
+        "openAgent": "Yapay Zeka Eğitimi'nde aç",
+        "unknownAgent": "Yapay zeka aracısı (bulunamadı)"
       },
       "buttonIcon": {
         "label": "Simge (isteğe bağlı)",
@@ -2021,6 +2057,12 @@
           "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
           "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
         }
+      },
+      "flowImage": {
+        "title": "Resim yüklenemedi",
+        "empty": "bağlantı boş",
+        "notAddress": "bağlantı bir web adresi değil (https:// ile başlamalıdır)",
+        "failed": "yüklenemedi (bağlantı yanlış, özel, engellenmiş ya da bir resim olmayabilir)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "Sayı",
         "alphanumeric": "Harfler ve sayılar",
         "date": "Tarih",
+        "datetime": "Tarih ve saat",
+        "time": "Saat",
         "age": "Yaş",
         "date_of_birth": "Doğum tarihi"
       },
@@ -2343,6 +2387,8 @@
         "number": "Lütfen geçerli bir sayı girin",
         "alphanumeric": "Lütfen yalnızca harf ve rakam kullanın",
         "date": "Lütfen geçerli bir tarih girin ({format})",
+        "datetime": "Lütfen geçerli bir tarih ve saat girin ({format} HH:MM)",
+        "time": "Lütfen geçerli bir saat girin (HH:MM)",
         "age": "Lütfen yaşınızı tam sayı olarak girin",
         "date_of_birth": "Lütfen geçerli bir tarih girin ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "Soru",
           "help": "Herhangi bir şey sorun ve yanıtı kaydedin"
         },
-        "askName": {
-          "label": "Ad",
-          "help": "Bir ad isteyin ve doğrulayın"
-        },
-        "askEmail": {
-          "label": "E-posta",
-          "help": "Bir e-posta adresi isteyin ve doğrulayın"
-        },
-        "askPhone": {
-          "label": "Telefon numarası",
-          "help": "Bir telefon numarası isteyin ve doğrulayın"
-        },
-        "askNumber": {
-          "label": "Sayı",
-          "help": "Bir sayı isteyin ve doğrulayın"
-        },
-        "askAlphanumeric": {
-          "label": "Harfler ve sayılar",
-          "help": "Boşluk veya sembol içermeyen bir kimlik veya kod"
-        },
-        "askDate": {
-          "label": "Tarih",
-          "help": "Seçtiğiniz biçimde bir tarih isteyin"
-        },
         "askFile": {
           "label": "Dosya veya görsel",
           "help": "Fotoğraf, belge, video veya ses bekle"
@@ -2617,7 +2639,9 @@
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
-        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin.",
+        "fileLinkInvalid": "Adım {stage}: dosya bağlantısı https:// ile başlamalı"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "locationSkipped": "(konum) atlandı: geçerli koordinat yok",
-      "faqRetired": "(simülasyon) SSS'den yanıtla adımı kullanımdan kalktı: \"eşleşme yok\" seçiliyor."
+      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir.",
+      "carouselNoMatch": "“{value}” düğmelerden biri değil. Birine dokunun ya da metnini aynen yazın."
     }
   }
 }

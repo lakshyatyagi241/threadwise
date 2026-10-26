@@ -1,0 +1,62 @@
+{
+  "feature": "marketing-site-cms",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-marketing-site-cms-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketing-site-cms/admin/announcements.tsx",
+        "apps/web/src/features/marketing-site-cms/admin/blog-list.tsx",
+        "apps/web/src/features/marketing-site-cms/admin/contact-inbox.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-marketing-site-cms-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-marketing-site-cms-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketing-site-cms/admin/announcement-form.tsx",
+        "apps/web/src/features/marketing-site-cms/admin/announcements.tsx",
+        "apps/web/src/features/marketing-site-cms/admin/blog-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-marketing-site-cms-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketing-site-cms/admin/announcement-form.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketing-site-cms/site/pricing-cards.test.ts",
+          "match": "lists at most four volume lines, zero meaning unlimited"
+        }
+      ]
+    }
+  ]
+}

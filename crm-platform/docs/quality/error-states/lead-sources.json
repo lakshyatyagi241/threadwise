@@ -1,0 +1,139 @@
+{
+  "feature": "lead-sources",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-lead-sources-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/event-drawer.tsx",
+        "apps/web/src/features/lead-sources/components/events-panel.tsx",
+        "apps/web/src/features/lead-sources/components/inbox-drawer.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-lead-sources-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/contact-attribution-card.tsx",
+        "apps/web/src/features/lead-sources/components/meta-panel.tsx",
+        "apps/web/src/features/lead-sources/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/lib/errors.test.ts",
+          "match": "maps not found, forbidden and signed-out"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-sources-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/lib/errors.ts",
+        "apps/web/src/features/lead-sources/lib/source-view.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/components/detail.render.test.tsx",
+          "match": "a paused source says its URL answers 404 and offers Resume instead of Pause"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/components/meta.render.test.tsx",
+          "match": "not configured, sync off and form not found each have their own words"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/lib/errors.test.ts",
+          "match": "maps not found, forbidden and signed-out"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-sources-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/events-panel.tsx",
+        "apps/web/src/features/lead-sources/components/lead-inbox-tab.tsx",
+        "apps/web/src/features/lead-sources/components/lead-sources-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-lead-sources-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/lead-sources-screen.tsx",
+        "apps/web/src/features/lead-sources/components/mapping-fields.tsx",
+        "apps/web/src/features/lead-sources/components/source-fields.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/components/screens.render.test.tsx",
+          "match": "a field error of the API is shown as its code in words, with the path it belongs to"
+        },
+        {
+          "file": "apps/web/src/features/lead-sources/lib/errors.test.ts",
+          "match": "maps a duplicate name to a field error on name"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-sources-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/components/meta-mapping-dialog.tsx",
+        "apps/web/src/features/lead-sources/components/meta-rules-dialog.tsx",
+        "apps/web/src/features/lead-sources/components/source-detail-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-sources/lib/errors.test.ts",
+          "match": "asks for a reload on a row version conflict"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-sources-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-sources/lib/errors.ts",
+        "apps/web/src/features/lead-sources/lib/use-settled.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -728,6 +728,12 @@ describe('record assignment rules (BL-340..BL-345)', () => {
         [t.orgId, name, industry, JSON.stringify(data)],
       )
     ).rows[0].uuid as string;
+  /** A row of the assignment run log as this spec reads it: the outcome reason, the record, and the rule trace. */
+  interface RunRow {
+    reason: string;
+    record: unknown;
+    trace: Array<{ ruleId: string; matched: boolean }>;
+  }
   const runs = async (query = '') =>
     (await api.as(mgr.token).get(`/v2/assignment/runs${query}`)).body;
 
@@ -769,16 +775,13 @@ describe('record assignment rules (BL-340..BL-345)', () => {
       .post('/v2/field-sections')
       .send({ moduleKey: 'companies', name: 'Billing' });
     expect(sec.status, JSON.stringify(sec.body)).toBe(201);
-    const prop = await api
-      .as(t.admin)
-      .post('/v2/fields')
-      .send({
-        moduleKey: 'companies',
-        sectionId: sec.body.id,
-        label: 'Tier',
-        key: 'tier',
-        fieldType: 'text',
-      });
+    const prop = await api.as(t.admin).post('/v2/fields').send({
+      moduleKey: 'companies',
+      sectionId: sec.body.id,
+      label: 'Tier',
+      key: 'tier',
+      fieldType: 'text',
+    });
     expect(prop.status, JSON.stringify(prop.body)).toBe(201);
     const key = prop.body.key as string;
 
@@ -963,7 +966,7 @@ describe('record assignment rules (BL-340..BL-345)', () => {
     await assignTo(t, await newContact(t, 'web'));
     await back(t);
 
-    const log = (await runs('?limit=10')).data as Array<Record<string, any>>;
+    const log = (await runs('?limit=10')).data as RunRow[];
     expect(log.map((x) => x.reason)).toEqual([
       'nobody_available',
       'no_rule',

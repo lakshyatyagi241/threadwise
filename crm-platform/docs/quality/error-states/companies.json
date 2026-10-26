@@ -1,0 +1,114 @@
+{
+  "feature": "companies",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-companies-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/components/activity-card.tsx",
+        "apps/web/src/features/companies/components/brief-card.tsx",
+        "apps/web/src/features/companies/components/companies-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-companies-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/api/properties.ts",
+        "apps/web/src/features/companies/components/brief-card.tsx",
+        "apps/web/src/features/companies/components/companies-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-companies-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/components/company-detail.tsx",
+        "apps/web/src/features/companies/components/linked-contacts.tsx",
+        "apps/web/src/features/companies/lib/brief.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/companies/components/components.test.tsx",
+          "match": "a 404 for one company says the company no longer exists"
+        },
+        {
+          "file": "apps/web/src/features/companies/lib/errors.test.ts",
+          "match": "a company that is gone is \"notFound\" for one company, and never for a list"
+        }
+      ]
+    },
+    {
+      "id": "ES-companies-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/api/companies.ts",
+        "apps/web/src/features/companies/components/activity-card.tsx",
+        "apps/web/src/features/companies/components/brief-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-companies-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/components/company-form-modal.tsx",
+        "apps/web/src/features/companies/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-companies-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/api/companies.ts",
+        "apps/web/src/features/companies/components/company-form-modal.tsx",
+        "apps/web/src/features/companies/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-companies-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/companies/components/company-picker.tsx",
+        "apps/web/src/features/companies/lib/brief.ts",
+        "apps/web/src/features/companies/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

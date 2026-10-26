@@ -37,7 +37,8 @@
       "statusStage": "Bu durum farklı bir aşamaya ait. Kişinin aşamasına uygun bir durum seçin.",
       "stageScope": "Bir durum yalnızca yaşam döngüsü aşamalarınızdan biriyle sınırlandırılabilir.",
       "planLimit": "Planınızın {limit, plural, one {# kişi} other {# kişi}} sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya yer açmak için mevcut bir kişiyi silin.",
-      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez."
+      "legalHold": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Mesaj göndermek için önce kendinize atayın."
     },
     "list": {
       "title": "Kişi Merkezi",
@@ -282,8 +283,6 @@
       "shortEmail": "E-posta",
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Oluşturuldu",
-      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
@@ -296,7 +295,9 @@
       "teamLabel": "Ekip",
       "teamFilter": "Ekibe göre filtrele",
       "allTeams": "Tüm ekipler",
-      "teamFormer": "Eski ekip"
+      "teamFormer": "Eski ekip",
+      "unhideColumn": "Sütunu göster",
+      "resizeColumn": "{column} sütununu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -346,7 +347,25 @@
       "assignOwner": "Sahip ata",
       "changeStage": "Aşamayı değiştir",
       "more": "Diğer",
-      "held": "Bu kayıt korunmaktadır ve şu anda silinemez."
+      "held": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "consent": "Pazarlama onayı",
+      "consentTitle": "Pazarlama onayı",
+      "consentChannel": "Kanal",
+      "consentAction": "Değiştir",
+      "consentSubscribe": "Abone yap",
+      "consentUnsubscribe": "Aboneliği kaldır",
+      "consentNote": "Kişiler nasıl onay verdi",
+      "consentNotePlaceholder": "Ne söylediler ya da neyi imzaladılar ve nerede",
+      "consentNoteRequired": "Abone yapmadan önce kişilerin nasıl onay verdiğini yazın.",
+      "consentContinue": "Devam",
+      "consentBack": "Geri",
+      "consentConfirm": "Onayı kaydet",
+      "consentSummary": "{count, plural, one {# kişi} other {# kişi}} için {channel} kanalında {change} durumuna getir. Her biri onay geçmişine bir kayıt alır.",
+      "consentChangeGranted": "abonelik açıldı",
+      "consentChangeWithdrawn": "abonelik kapatıldı",
+      "consentAllMatching": "Bu, filtreyle eşleşen tüm kişiler için geçerlidir.",
+      "consentSubscribed": "{count, plural, one {# kişi abone yapıldı} other {# kişi abone yapıldı}}",
+      "consentUnsubscribed": "{count, plural, one {# kişinin aboneliği kaldırıldı} other {# kişinin aboneliği kaldırıldı}}"
     },
     "form": {
       "addEyebrow": "Yeni kişi",
@@ -448,7 +467,8 @@
       "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
       "searchOptions": "Seçeneklerde ara",
       "searchOptionsFor": "{field} seçeneklerinde ara",
-      "noOptionsFound": "Aramanızla eşleşen seçenek yok."
+      "noOptionsFound": "Aramanızla eşleşen seçenek yok.",
+      "cascadeWaiting": "Seçenekleri görmek için önce {parent} seçin."
     },
     "tags": {
       "title": "Etiketler",
@@ -497,7 +517,6 @@
       "loading": "Gruplar yükleniyor...",
       "unavailableTitle": "Gruplar henüz kullanılamıyor",
       "unavailableMessage": "Kişi grupları hizmeti bu sunucuda canlı değil, bu yüzden gruplar henüz listelenemiyor veya oluşturulamıyor.",
-      "contacts": "kişi",
       "viewContacts": "Kişileri görüntüle",
       "edit": "Grubu düzenle",
       "editNamed": "{name} grubunu düzenle",
@@ -505,8 +524,6 @@
       "deleteNamed": "{name} grubunu sil",
       "deleteTitle": "Bu grup silinsin mi?",
       "deleteMessage": "\"{name}\" grubu içindeki her kişiden kaldırılacak. Kişilerin kendisi korunur.",
-      "createTile": "Yeni grup oluştur",
-      "createTileHint": "Kişileri segmente, satış hunisi aşamasına veya ilgi alanına göre kümeleyin.",
       "emptyTitle": "Henüz grup yok",
       "emptyMessage": "Bir çalışma alanı yöneticisinden ilk grubu oluşturmasını isteyin.",
       "helpKicker": "Yardım - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "Bu ada sahip bir grup zaten var, bu yüzden yeni bir şey oluşturulmadı.",
       "import": "Kişileri içe aktar",
-      "importInto": "İçe aktar"
+      "importInto": "İçe aktar",
+      "colName": "Ad",
+      "colMembers": "Üyeler",
+      "colCreatedBy": "Oluşturan",
+      "colCreatedAt": "Oluşturulma",
+      "colModifiedBy": "Değiştiren",
+      "colUpdatedAt": "Güncellenme",
+      "colActions": "İşlemler",
+      "tableLabel": "Kişi grupları",
+      "search": "Grup ara",
+      "searchPlaceholder": "Ada göre ara",
+      "count": "{count, plural, =0 {Grup yok} one {# grup} other {# grup}}",
+      "noResultsTitle": "Eşleşen grup yok",
+      "noResults": "Yazdığınızı içeren bir grup adı yok.",
+      "clearSearch": "Aramayı temizle"
     },
     "import": {
       "eyebrow": "Toplu içe aktarma",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "doğum tarihi, doğum tarihi olabilecek yıl önce yazılmış bir tarih değil",
         "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi",
         "invalid_timezone": "geçersiz saat dilimi",
-        "legal_hold": "korumalı kayıt, değiştirilmedi"
+        "legal_hold": "korumalı kayıt, değiştirilmedi",
+        "invalid_property_value": "özel özelliğin değeri, türüne ya da seçeneklerine uymuyor",
+        "invalid_property_value_column": "\"{column}\" sütunu: değer, bu sütunun türüne veya seçeneklerine uymuyor"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -634,12 +667,15 @@
       "limitExceeded": "Plan sınırı aşıldı",
       "limitExceededNote": "Planınızın kişi sınırına ulaşıldığı için bazı yeni kişiler içe aktarılmadı.",
       "rejectsFailed": "Reddedilen satırlar indirilemedi.",
+      "sampleFailed": "Örnek dosya indirilemedi. Lütfen tekrar deneyin.",
       "groupRequired": "Bu kişileri şuraya ekle",
       "groupExisting": "Mevcut bir grup",
       "groupNew": "Yeni bir grup",
       "groupPick": "Bir grup seçin",
       "groupNewPlaceholder": "Yeni grup adı",
-      "groupRequiredHint": "İçe aktarılan her kişi bu tek gruba katılır. Yukarıda eşleştirmediğiniz sürece dosyanın kendi grup sütunu yok sayılır."
+      "groupRequiredHint": "İçe aktarılan her kişi bu tek gruba katılır. Yukarıda eşleştirmediğiniz sürece dosyanın kendi grup sütunu yok sayılır.",
+      "customProperties": "Özel özellikler",
+      "customPropertiesHint": "Başlığı özelliğin adı olan (ya da dışa aktarmanın yazdığı biçimiyle attr:key) bir sütun o özelliği doldurur. Boş bir hücre, kişinin zaten sahip olduğu değeri korur."
     },
     "detail": {
       "back": "Tüm kişiler",
@@ -1087,7 +1123,8 @@
         "moveDown": "{name} öğesini aşağı taşı",
         "edit": "{name} öğesini düzenle",
         "deactivate": "{name} öğesini devre dışı bırak",
-        "reactivate": "Yeniden etkinleştir"
+        "reactivate": "Yeniden etkinleştir",
+        "dependsOn": "Seçenekler {field} alanına bağlı"
       },
       "toast": {
         "conflict": "Bunu başka biri değiştirdi. Liste yenilendi; tekrar deneyin.",
@@ -1243,6 +1280,34 @@
         "manageStages": "Aşamaları yönet",
         "manageGroups": "Grupları yönet",
         "locked": "Sabit"
+      },
+      "cascade": {
+        "open": "Bağımlı alanlar",
+        "title": "Bağımlı alanlar",
+        "close": "Kapat",
+        "intro": "Bağımlı bir alan her zaman gösterilir. Seçenekleri üst özellikte yapılan seçime bağlıdır: üst özelliğin her seçeneği için, o seçeneğin izin verdiği bağımlı alan seçeneklerini işaretleyin.",
+        "empty": "Henüz bağımlı alan yok.",
+        "add": "Bağımlı alan ekle",
+        "needTwoChoiceFields": "Bağımlı alanlar için seçenek listesi olan (açılır liste, çoklu seçim veya radyo) en az iki özellik gerekir.",
+        "dependsOn": "{parent} alanına bağlı",
+        "editLabel": "{name} düzenle",
+        "removeLabel": "{name} alanını kaldır",
+        "parent": "Üst özellik",
+        "child": "Bağımlı özellik",
+        "pickParent": "Üst özelliği seçin",
+        "pickChild": "Bağımlı özelliği seçin",
+        "allowed": "{parent} alanının her seçeneği altında izin verilen {child} seçenekleri",
+        "noParentChoices": "Üst özelliğin henüz seçeneği yok.",
+        "noChildChoices": "Bağımlı özelliğin henüz seçeneği yok.",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "saved": "Bağımlı alan kaydedildi.",
+        "cycle": "Bu bağımlılık iki özelliğin birbirini beklemesine yol açardı.",
+        "removeTitle": "{name} bağımlı alanlardan kaldırılsın mı?",
+        "removeMessage": "Tüm seçenekleri yeniden gösterilir. Üst özellik altındaki seçenek eşleşmeleri unutulur; kişilerin sahip olduğu değerler korunur.",
+        "removeConfirm": "Kaldır",
+        "removed": "Bağımlı alan kaldırıldı.",
+        "removeFailed": "Bağımlı alan kaldırılamadı. Tekrar deneyin."
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "Kapat",
         "changed": "Değiştirilecek özellikler",
         "clear": "Temizle",
-        "keep": "Koru",
+        "remove": "{name} alanını kaldır",
         "setValue": "Değer ayarla",
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",
@@ -1399,7 +1464,8 @@
       "template": "WhatsApp şablonu",
       "templatePlaceholder": "Şablon seçin",
       "noTemplates": "Bu numara için onaylı şablon yok.",
-      "notSendable": "Bu şablon burada doldurulamaz ({reason}).",
+      "openInInbox": "Sohbeti gelen kutusunda aç",
+      "notSendable": "Bu şablon buradan gönderilemez.",
       "variables": "Şablon değişkenleri",
       "preview": "Önizleme",
       "slot": "{key} değişkeni",
@@ -1515,7 +1581,9 @@
         "selected": "Seçilen sütunlar",
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
-        "remove": "{name} öğesini kaldır"
+        "remove": "{name} öğesini kaldır",
+        "nameShort": "Görünüm adı en az {min} karakter olmalı.",
+        "nameLong": "Görünüm adı en fazla {max} karakter olabilir."
       },
       "presets": {
         "myContacts": "Kişilerim",

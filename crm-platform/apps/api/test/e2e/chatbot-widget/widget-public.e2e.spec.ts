@@ -688,6 +688,49 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     expect(conv!.preview).toBe('We ship free over 50 dollars.');
   });
 
+  it('bills the bot message to the wallet: reported once for a handled message, and the bot gives its fallback when the plan has no free messages and the wallet is empty', async () => {
+    const reported = async (orgId: number) =>
+      (
+        await h.owner.query(
+          `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'usage.reported'`,
+          [orgId],
+        )
+      ).rows
+        .map((r) => r.payload as { kind?: string; source?: string; units?: number })
+        .filter((p) => p.kind === 'webbot_message');
+    const setAllowance = (orgId: number, n: number) =>
+      h.owner.query(
+        `INSERT INTO org_plan_state (org_id, overrides) VALUES ($1, $2::jsonb)
+         ON CONFLICT (org_id) DO UPDATE SET overrides = EXCLUDED.overrides`,
+        [orgId, JSON.stringify({ limits: { webbot_messages: n } })],
+      );
+    // Free messages left: the bot answers and the message is reported (the wallet's worker settles it as free).
+    await setAllowance(t.orgId, 1000);
+    const { w } = await aiWidget({ name: 'AI fee 1' });
+    const uuid = await api.visitor(w.embedToken);
+    ai.next = 'Sure.';
+    ai.calls.length = 0;
+    const before = (await reported(t.orgId)).length;
+    const ok = await api.pub(w.embedToken).message({ body: 'Hello?', visitor_uuid: uuid });
+    expect(ok.body.reply.body).toBe('Sure.');
+    const after = await reported(t.orgId);
+    expect(after).toHaveLength(before + 1);
+    expect(after.at(-1)).toMatchObject({ source: 'widget', units: 1 });
+
+    // No free messages and nothing in the wallet: the bot does no AI work, answers its fallback and bills nothing.
+    const poor = await api.signup('wgfee');
+    await setAllowance(poor.orgId, 0);
+    const a = await api.assistant(poor, { unfunded: true, fallback: 'A person will reply soon.' });
+    const w2 = await api.widget(poor.admin, { name: 'AI fee 2', mode: 'ai', assistantId: a.uuid });
+    const uuid2 = await api.visitor(w2.embedToken);
+    ai.calls.length = 0;
+    const blocked = await api.pub(w2.embedToken).message({ body: 'Anyone?', visitor_uuid: uuid2 });
+    expect(blocked.status).toBe(200);
+    expect(blocked.body.reply.body).toBe('A person will reply soon.');
+    expect(ai.calls).toHaveLength(0);
+    expect(await reported(poor.orgId)).toHaveLength(0);
+  });
+
   it("TW-WGT-016 rule 4 QUIRK: the history includes the visitor's new line (it is quoted twice)", async () => {
     const { w } = await aiWidget({ name: 'AI 2' });
     const uuid = await api.visitor(w.embedToken);
@@ -774,6 +817,45 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
     expect(
       (await api.pub(w2.embedToken).message({ body: 'hello', visitor_uuid: u2 })).body.reply.body,
     ).toBe("Sorry, I'm having trouble right now. A team member will follow up shortly.");
+  });
+
+  it('the answered reply is charged to the widget\'s workspace wallet: once, as "AI website chatbot" in the expense log', async () => {
+    const { w } = await aiWidget({ name: 'AI pay' });
+    const uuid = await api.visitor(w.embedToken);
+    ai.next = 'A paid reply';
+    const res = await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
+    expect(res.body.reply.body).toBe('A paid reply');
+    const rows = (
+      await h.owner.query(
+        `SELECT source, status, wamid, subject_name FROM usage_charges
+         WHERE org_id = $1 AND kind = 'ai' AND source = 'widget_ai' ORDER BY id DESC LIMIT 1`,
+        [t.orgId],
+      )
+    ).rows;
+    expect(rows[0]).toMatchObject({
+      source: 'widget_ai',
+      status: 'charged',
+      subject_name: 'AI website chatbot',
+    });
+    expect(String(rows[0].wamid)).toMatch(/^widget_ai:\d+$/);
+  });
+
+  it("an empty wallet answers the visitor with the assistant's fallback message and never calls the vendor", async () => {
+    const poor = await api.signup('wgpoor');
+    const a = await api.assistant(poor, { fallback: 'We will reply by email.', unfunded: true });
+    const w = await api.widget(poor.admin, { name: 'AI poor', mode: 'ai', assistantId: a.uuid });
+    const uuid = await api.visitor(w.embedToken);
+    ai.next = 'must not be asked';
+    ai.calls.length = 0;
+    const res = await api.pub(w.embedToken).message({ body: 'hello', visitor_uuid: uuid });
+    expect(res.status).toBe(200);
+    expect(res.body.reply.body).toBe('We will reply by email.');
+    expect(ai.calls).toHaveLength(0);
+    const n = await h.owner.query(
+      `SELECT count(*)::int AS n FROM usage_charges WHERE org_id = $1 AND kind = 'ai'`,
+      [poor.orgId],
+    );
+    expect(n.rows[0].n).toBe(0);
   });
 
   it("TW-WGT-016 rule 5: the assistant's token cap, temperature and model reach the vendor", async () => {

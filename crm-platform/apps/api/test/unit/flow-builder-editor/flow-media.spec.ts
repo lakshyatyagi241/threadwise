@@ -35,8 +35,11 @@ describe('flow media upload (TW-FLB-027)', () => {
     ).toBe('ok');
   });
 
+  // The service stores what validateScanned returns (validate, then the antivirus scan): the fake answers both the same way.
+  const verified = { storedName: '1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png', mime: 'image/png' };
   const policy = {
-    validate: () => ({ storedName: '1700000000_aaaaaaaaaaaaaaaaaaaaaaaa.png', mime: 'image/png' }),
+    validate: () => verified,
+    validateScanned: () => Promise.resolve(verified),
   };
 
   it('a storage that is not available is a 503 with a message the builder can show after "Upload failed:"', async () => {
@@ -44,7 +47,7 @@ describe('flow media upload (TW-FLB-027)', () => {
       put: () => Promise.reject(new Error('ECONNREFUSED objects:9000')),
       get: () => Promise.resolve(null),
     };
-    const svc = new FlowMediaService({} as never, policy as never, store);
+    const svc = new FlowMediaService({} as never, policy as never, store, {} as never);
     const e = (await svc
       .upload({ originalname: 'a.png', buffer: Buffer.from('x') }, 'image', 'org-1')
       .catch((x: unknown) => x)) as AppError;
@@ -61,7 +64,7 @@ describe('flow media upload (TW-FLB-027)', () => {
       put: (_o: string, name: string) => Promise.resolve({ url: `http://x/${name}` }),
       get: () => Promise.resolve(null),
     };
-    const svc = new FlowMediaService({} as never, policy as never, store);
+    const svc = new FlowMediaService({} as never, policy as never, store, {} as never);
     expect(
       await svc.upload({ originalname: 'clip.mp4', buffer: Buffer.from('x') }, 'video', 'org-1'),
     ).toEqual({

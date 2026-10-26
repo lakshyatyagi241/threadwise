@@ -106,7 +106,9 @@ export class FieldOptionsRepository {
       const q = p.q?.trim();
       if (q) {
         const like = `%${escapeLike(q)}%`;
-        conditions.push(or(sql`${fieldOptions.label} ILIKE ${like}`, sql`${fieldOptions.value} ILIKE ${like}`)!);
+        conditions.push(
+          or(sql`${fieldOptions.label} ILIKE ${like}`, sql`${fieldOptions.value} ILIKE ${like}`)!,
+        );
       }
     }
     if (p.cursor) {

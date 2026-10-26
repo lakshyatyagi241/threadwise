@@ -390,9 +390,11 @@ describe('ContactsTable', () => {
         {...handlers()}
       />,
     );
-    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner', 'Created']) {
+    for (const short of ['Phone', 'Email', 'Stage', 'WhatsApp', 'Owner']) {
       expect(out, short).toContain(`<span class="truncate">${short}</span>`);
     }
+    // Created On fits its column, so its heading is the same name as the picker's and the tooltip's
+    expect(out).toContain('<span class="truncate">Created On</span>');
     expect(out).not.toContain('<span class="truncate">Phone Number</span>');
     expect(out).not.toContain('<span class="truncate">Lifecycle Stage</span>');
     // the full label is still one hover away
@@ -723,7 +725,6 @@ describe('ContactsToolbar', () => {
         <ContactsToolbar
           q=""
           onQ={noop}
-          focusSearch={0}
           filter={{
             filters: {
               group: '',
@@ -858,7 +859,7 @@ describe('applied filters and the selection bar', () => {
         <SelectionBar
           count={3}
           busy={false}
-          can={{ update: true, delete: true, export: true, createTags: true }}
+          can={{ update: true, delete: true, export: true, createTags: true, consent: true }}
           onClear={noop}
           onSendCampaign={noop}
           onExport={noop}
@@ -871,6 +872,7 @@ describe('applied filters and the selection bar', () => {
           onPicker={noop}
           onGroup={async () => true}
           onTagApply={async () => true}
+          onConsent={async () => true}
           {...over}
         />
       </QueryClientProvider>,
@@ -897,7 +899,9 @@ describe('applied filters and the selection bar', () => {
   });
 
   it('shows only what the permissions allow', () => {
-    const out = bar({ can: { update: false, delete: false, export: false, createTags: false } });
+    const out = bar({
+      can: { update: false, delete: false, export: false, createTags: false, consent: false },
+    });
     expect(out).toContain('Send campaign');
     for (const gone of ['Assign owner', 'Change stage', '>Tag<', 'Export', 'Delete', '>More<']) {
       expect(out, gone).not.toContain(gone);

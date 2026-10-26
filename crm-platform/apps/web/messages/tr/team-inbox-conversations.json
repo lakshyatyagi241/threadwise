@@ -153,7 +153,10 @@
         "hours": "{count} saat",
         "days": "{count} gün"
       },
-      "unsnoozesAt": "{time} için yeniden açılır"
+      "unsnoozesAt": "{time} için yeniden açılır",
+      "erased": "Silinen kişiler",
+      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri ve mesaj metni olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
+      "erasedTitle": "Silinen kişi"
     },
     "status": {
       "received": "Alındı",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
       "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "resolvedWebchatBanner": "Bu web sohbeti çözüldü ve yeniden açılamaz.",
       "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
+      "session": {
+        "header": "{range} · {count, plural, one {# mesaj} other {# mesaj}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Önceki mesajları yükle",
       "empty": "Bu konuşmada henüz mesaj yok.",
       "newMessageAnnounce": "Yeni mesaj: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Eşleşme yok",
       "searchPrev": "Önceki eşleşme",
       "searchNext": "Sonraki eşleşme",
-      "searchClose": "Aramayı kapat"
+      "searchClose": "Aramayı kapat",
+      "erasedBadge": "Silindi",
+      "erasedBanner": "Bu kişi silindi. Mesaj metni ve medya kaldırıldığı için hiçbir şey gönderilemez. Zaman çizelgesi ve saatler korunur."
     },
     "groupThread": {
       "openGroup": "Grubu aç",
@@ -542,17 +554,17 @@
         "onLeave": "İzinli",
         "onLeaveUntil": "{date} tarihine kadar izinli",
         "availability": {
-          "online": "Çevrimiçi",
-          "away": "Uzakta",
+          "online": "Müsait",
+          "away": "Uzakta, çalışma saatleri dışında",
           "busy": "Meşgul",
-          "offline": "Çevrimdışı"
+          "offline": "Uzakta"
         }
       },
       "presence": {
-        "online": "Çevrimiçi",
-        "away": "Uzakta",
+        "online": "Müsait",
+        "away": "Uzakta, çalışma saatleri dışında",
         "busy": "Meşgul",
-        "offline": "Çevrimdışı"
+        "offline": "Uzakta"
       },
       "notes": {
         "tab": "Kişi notları",
@@ -584,7 +596,11 @@
           "sla_breach": "Yanıt süresi kaçırıldı",
           "spam_flagged": "{actor} tarafından spam olarak işaretlendi",
           "escalated": "Yükseltildi",
-          "unknown": "{actor} tarafından: {what}"
+          "unknown": "{actor} tarafından: {what}",
+          "handoff_requested": "{actor} tarafından bir kişiye devredildi",
+          "queue_reminded": "Ekibe hatırlatıldı",
+          "queue_offered": "Başka bir ekibe önerildi",
+          "queue_customer_message": "Müşteriye mesaj gönderildi"
         },
         "actors": {
           "user": "Bir ekip arkadaşı",
@@ -711,6 +727,7 @@
         "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
         "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
         "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
+        "carousel": "Bir karusel (resimli kartlar) ve henüz gelen kutusundan gönderilemiyor.",
         "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",
         "dynamic_button": "Değişken içeren bir düğme bağlantısı var; bu, gelen kutusundan henüz doldurulamıyor.",
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Yalnızca {status} durumundaki mesajlar",
         "requestedAt": "İstenme: {date}",
         "lines": "{count, plural, one {# satır} other {# satır}}",
+        "noLines": "Bu dönemde olay yok",
         "until": "{date} tarihine kadar kullanılabilir",
         "download": "İndir",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simülatör (test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Web sitesi sohbeti",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-posta",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simülatör (test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Web sitesi sohbeti",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-posta",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kişi",
         "agent": "Siz",
@@ -1054,7 +1072,10 @@
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
       "onLeaveUntil": "{date} tarihine kadar izinli",
-      "spam": "Spam olarak işaretle"
+      "spam": "Spam olarak işaretle",
+      "markUnread": "Okunmadı olarak işaretle",
+      "unsnooze": "Ertelemeyi kaldır",
+      "notSpam": "Spam değil olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Gelen kutusuna dön",
-        "title": "Sohbet etiketleri",
+        "title": "Etiketler",
         "intro": "Sohbet etiketleri, ekibinizin gelen kutusunu sıralayıp filtreleyebilmesi için bir görüşmeyi (faturalama, iade, acil) işaretler. Kişiyi tanımlayan kişi etiketleriyle aynı etiket kitaplığından gelir.",
         "newTitle": "Yeni etiket",
         "editTitle": "Etiketi düzenle",

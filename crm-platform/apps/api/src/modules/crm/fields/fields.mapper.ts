@@ -74,7 +74,9 @@ export function toFieldOptionDependencyResponse(
 ): FieldOptionDependencyResponse {
   return {
     id: row.uuid,
+    parentFieldId: row.parentFieldUuid,
     parentOptionId: row.parentOptionUuid,
+    childFieldId: row.childFieldUuid,
     childOptionId: row.childOptionUuid,
     createdAt: row.createdAt.toISOString(),
   };

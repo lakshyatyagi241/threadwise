@@ -42,6 +42,10 @@ const COLORS = {
   expired: 'var(--warning)',
 } as const;
 
+// The flow leaderboard's headers are centred. TH sets text-start, and in the stylesheet text-start would override a text-center
+// added beside it, so the centred header replaces that class rather than adding to it.
+const BOARD_TH = TH.replace('text-start', 'text-center');
+
 /**
  * `/flow-runtime/analytics`: the KPI band, then four tabs (overview, execution history, error logs, retry records). The period
  * (7, 30, 90 days or all time), the flow scope, the tab and the history's filters all live in the address.
@@ -88,7 +92,7 @@ export function AnalyticsScreen() {
         <div className="min-w-0">
           <div className={`mb-2 ${KICKER}`}>{t('common.workspace')}</div>
           <h1 className="text-3xl font-normal leading-none tracking-tight lg:text-[44px]">
-            {ta('title')} <span className="italic text-brand">{ta('titleAccent')}</span>
+            {ta('title')} <span className="not-italic text-brand">{ta('titleAccent')}</span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{ta('intro')}</p>
         </div>
@@ -458,13 +462,13 @@ function Overview({ d, state, go }: { d: FlowAnalytics; state: AnalyticsState; g
             <table className="w-full min-w-[720px] text-[12.5px]">
               <thead className="border-b border-border bg-muted text-muted-foreground">
                 <tr>
-                  <th className={TH}>{ta('colFlow')}</th>
-                  <th className={`${TH} text-end`}>{ta('colRuns')}</th>
-                  <th className={`${TH} text-end`}>{ta('colCompleted')}</th>
-                  <th className={`${TH} text-end`}>{ta('colFailed')}</th>
-                  <th className={`${TH} text-end`}>{ta('colRate')}</th>
-                  <th className={`${TH} text-end`}>{ta('colFailRate')}</th>
-                  <th className={TH}>
+                  <th className={BOARD_TH}>{ta('colFlow')}</th>
+                  <th className={BOARD_TH}>{ta('colRuns')}</th>
+                  <th className={BOARD_TH}>{ta('colCompleted')}</th>
+                  <th className={BOARD_TH}>{ta('colFailed')}</th>
+                  <th className={BOARD_TH}>{ta('colRate')}</th>
+                  <th className={BOARD_TH}>{ta('colFailRate')}</th>
+                  <th className={BOARD_TH}>
                     <span className="sr-only">{ta('colSubscribers')}</span>
                   </th>
                 </tr>
@@ -475,10 +479,10 @@ function Overview({ d, state, go }: { d: FlowAnalytics; state: AnalyticsState; g
                     key={f.flowId}
                     className={cn('hover:bg-muted/50', f.flowId === state.flowId && 'bg-muted')}
                   >
-                    <td className="max-w-[260px] px-3 py-2.5">
+                    <td className="max-w-[260px] px-3 py-2.5 text-center">
                       <button
                         type="button"
-                        className="block max-w-full truncate text-start font-semibold hover:underline"
+                        className="block max-w-full truncate text-center font-semibold hover:underline"
                         aria-pressed={f.flowId === state.flowId}
                         onClick={() => go({ flowId: f.flowId === state.flowId ? '' : f.flowId })}
                       >
@@ -488,22 +492,22 @@ function Overview({ d, state, go }: { d: FlowAnalytics; state: AnalyticsState; g
                         {ta(`state.${f.state}`)}
                       </span>
                     </td>
-                    <td className="px-3 py-2.5 text-end font-mono tabular-nums">
+                    <td className="px-3 py-2.5 text-center font-mono tabular-nums">
                       {f.runs.toLocaleString()}
                     </td>
-                    <td className="px-3 py-2.5 text-end font-mono tabular-nums">
+                    <td className="px-3 py-2.5 text-center font-mono tabular-nums">
                       {f.completed.toLocaleString()}
                     </td>
-                    <td className="px-3 py-2.5 text-end font-mono tabular-nums">
+                    <td className="px-3 py-2.5 text-center font-mono tabular-nums">
                       {f.failed.toLocaleString()}
                     </td>
-                    <td className="px-3 py-2.5 text-end font-mono tabular-nums">
+                    <td className="px-3 py-2.5 text-center font-mono tabular-nums">
                       {f.completionRate === null ? t('common.noValue') : `${f.completionRate}%`}
                     </td>
-                    <td className="px-3 py-2.5 text-end font-mono tabular-nums">
+                    <td className="px-3 py-2.5 text-center font-mono tabular-nums">
                       {f.failureRate === null ? t('common.noValue') : `${f.failureRate}%`}
                     </td>
-                    <td className="px-3 py-2.5 text-end">
+                    <td className="px-3 py-2.5 text-center">
                       <Link
                         href={`/flow-runtime/flows/${f.flowId}`}
                         className="text-xs font-semibold text-brand hover:underline"

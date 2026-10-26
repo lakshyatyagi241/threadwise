@@ -1,0 +1,44 @@
+{
+  "feature": "waboo-migration",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-waboo-migration-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/waboo-migration/batches-list.tsx",
+        "apps/web/src/features/waboo-migration/lib/org-ids.ts",
+        "apps/web/src/features/waboo-migration/run-parts.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-waboo-migration-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/waboo-migration/batch-detail.tsx",
+        "apps/web/src/features/waboo-migration/batches-list.tsx",
+        "apps/web/src/features/waboo-migration/bulk-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-waboo-migration-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

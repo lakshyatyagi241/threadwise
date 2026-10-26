@@ -2,6 +2,7 @@ import { createServer, type IncomingMessage, type Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import request from 'supertest';
 import { expect } from 'vitest';
+import { fundWallet } from '../../support/fund-wallet';
 import {
   Api,
   PASSWORD,
@@ -71,7 +72,10 @@ export class WidgetApi extends Api {
     return res.body as WidgetJson;
   }
 
-  /** An assistant straight into the table (the AI agents domain owns its screens). */
+  /**
+   * An assistant straight into the table (the AI agents domain owns its screens). Its replies run on the platform's key, which the
+   * workspace's wallet pays for, so the workspace is given money unless the spec asks for an empty wallet (`unfunded`).
+   */
   async assistant(
     t: Tenant,
     over: Partial<{
@@ -83,8 +87,10 @@ export class WidgetApi extends Api {
       model: string;
       tone: string;
       handoffKeyword: string | null;
+      unfunded: boolean;
     }> = {},
   ): Promise<{ id: number; uuid: string }> {
+    if (!over.unfunded) await fundWallet(this.h.app, t.orgId);
     const name = over.name ?? `Assistant ${counter++}`;
     const res = await this.h.owner.query(
       `INSERT INTO ai_chat_assistants (org_id, name, slug, status, system_prompt, fallback_message, ai_provider, ai_model, tone, handoff_keyword)

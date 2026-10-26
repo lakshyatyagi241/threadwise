@@ -40,7 +40,7 @@
       "topup": "Isi ulang",
       "earn": "Pendapatan",
       "refund": "Pengembalian dana",
-      "spend": "Biaya pesan",
+      "spend": "Biaya penggunaan",
       "admin_adjust": "Penyesuaian"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Buka laporan lengkap",
         "emptyTitle": "Belum ada aktivitas",
         "emptyBody": "Isi ulang, biaya pesan, dan pengembalian dana akan muncul di sini."
-      }
+      },
+      "messageExpenses": "Biaya pesan"
     },
     "activity": {
       "description": "Deskripsi",
@@ -145,7 +146,7 @@
         "all": "Semua",
         "topup": "Isi ulang saldo",
         "earn": "Pendapatan",
-        "spend": "Biaya pesan",
+        "spend": "Biaya penggunaan",
         "refund": "Pengembalian dana",
         "admin_adjust": "Penyesuaian"
       },
@@ -164,12 +165,16 @@
         "in": "Uang masuk",
         "out": "Uang keluar",
         "balance": "Saldo",
-        "none": "Tidak ada"
+        "none": "Tidak ada",
+        "channel": "Saluran",
+        "recipient": "Penerima",
+        "template": "Templat",
+        "country": "Negara",
+        "category": "Kategori",
+        "engine": "Mesin"
       },
       "context": {
-        "reason": "Alasan",
-        "to": "Kepada",
-        "template": "Templat"
+        "reason": "Alasan"
       },
       "channels": {
         "campaign": "Kampanye",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Pengeluaran",
+      "subtitle": "Berapa biaya setiap pesan, panggilan, permintaan AI, dan pencarian, serta untuk apa. Total mencakup semua yang cocok dengan filter.",
+      "back": "Kembali ke dompet",
+      "breadcrumbLabel": "Jejak navigasi",
+      "breadcrumbWallet": "Dompet",
+      "breadcrumbExpenses": "Pengeluaran",
+      "fullStatement": "Laporan lengkap",
+      "summary": {
+        "messages": "Item",
+        "charged": "Ditagih",
+        "refunded": "Dikembalikan",
+        "net": "Biaya bersih",
+        "notBilled": "Tidak ditagih"
+      },
+      "filters": {
+        "status": "Status tagihan",
+        "statusAll": "Semua",
+        "statusCharged": "Ditagih",
+        "statusFree": "Tidak ditagih",
+        "statusRefunded": "Dikembalikan",
+        "template": "Templat",
+        "templatePlaceholder": "Nama templat",
+        "channel": "Saluran",
+        "category": "Kategori",
+        "allChannels": "Semua saluran",
+        "allCategories": "Semua kategori",
+        "from": "Dari",
+        "to": "Sampai",
+        "apply": "Terapkan",
+        "reset": "Atur ulang",
+        "rangeInverted": "Tanggal akhir lebih awal dari tanggal mulai.",
+        "kind": "Jenis",
+        "allKinds": "Semua jenis"
+      },
+      "breakdown": {
+        "title": "Biaya menurut",
+        "groupBy": {
+          "template": "Templat",
+          "source": "Saluran",
+          "category": "Kategori",
+          "country": "Negara",
+          "kind": "Jenis"
+        },
+        "group": "Kelompok",
+        "notRecorded": "Tidak tercatat",
+        "truncated": "Menampilkan {count} kelompok terbesar. Persempit tanggal untuk melihat sisanya.",
+        "empty": "Tidak ada yang cocok dengan filter ini."
+      },
+      "columns": {
+        "date": "Tanggal",
+        "template": "Templat",
+        "campaign": "Kampanye, siaran, atau fitur",
+        "channel": "Saluran",
+        "category": "Kategori",
+        "country": "Negara",
+        "status": "Status tagihan",
+        "charged": "Ditagih",
+        "refunded": "Dikembalikan",
+        "net": "Bersih",
+        "messages": "Item",
+        "notBilled": "Tidak ditagih",
+        "type": "Jenis"
+      },
+      "status": {
+        "charged": "Ditagih",
+        "free": "Tidak ditagih",
+        "refunded": "Dikembalikan",
+        "refundedOn": "Dikembalikan {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Termasuk dalam paket Anda",
+        "wallet_empty": "Dompet kosong",
+        "rate_is_zero": "Tarifnya nol",
+        "no_wallet_owner": "Tidak ada pemilik dompet"
+      },
+      "uncollected": "{amount} belum tertagih",
+      "emptyTitle": "Belum ada pengeluaran",
+      "emptyBody": "Pesan, panggilan, permintaan AI, dan penggunaan lain muncul di sini beserta tujuan dan biayanya.",
+      "emptyFiltered": "Tidak ada yang cocok dengan filter ini. Ubah atau atur ulang filter.",
+      "days": {
+        "title": "Log harian",
+        "subtitle": "Pesan dikelompokkan menurut hari, jenis, status, saluran, dan kategori. Buka satu hari untuk melihat setiap pesan.",
+        "messagesOnDay": "{count} pesan",
+        "viewDetails": "Lihat detail",
+        "actions": "Tindakan",
+        "empty": "Tidak ada pesan pada hari-hari ini."
+      },
+      "log": {
+        "title": "Pesan",
+        "forDay": "Pesan pada {date}",
+        "showAllDays": "Tampilkan semua hari"
+      },
+      "units": {
+        "sms": "{count, plural, other {# segmen}}",
+        "whatsapp_call": "{count, plural, other {# menit}}",
+        "voice_call": "{count, plural, other {# menit}}"
+      },
+      "sources": {
+        "lead_first": "Balasan instan untuk lead",
+        "lead": "Balasan instan untuk lead",
+        "test": "Pengiriman uji coba",
+        "appointment": "Pengingat janji temu",
+        "lead_scoring": "Penilaian lead",
+        "lead_digest": "Ringkasan obrolan",
+        "pql_search": "Pencarian kontak",
+        "growth_assistant": "Asisten pertumbuhan",
+        "ai_copilot": "Kopilot AI",
+        "help_agent": "Asisten bantuan",
+        "company_brief": "Ringkasan perusahaan",
+        "inbox_ai": "Asisten balasan",
+        "template_ai": "Pembuat templat",
+        "campaign_ai": "Penulis kampanye",
+        "campaign_ai_image": "Gambar kampanye",
+        "kb_embedding": "Basis pengetahuan",
+        "flow_ai": "Pembuat alur",
+        "widget_ai": "Chatbot situs web",
+        "growth": "Pertumbuhan",
+        "telephony": "Panggilan telepon",
+        "translation": "Terjemahan",
+        "widget": "Chatbot situs web"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "Layanan"
             },
             "problems": "Baris yang dilewati"
+          }
+        },
+        "usage": {
+          "title": "Harga penggunaan lainnya",
+          "subtitle": "Berapa biaya SMS, email, panggilan, pencarian kontak, dan kanal obrolan lain bagi pelanggan Anda, per unit. Harga 0 atau sakelar yang mati tetap dicatat di log pengeluaran dan tidak dikenai biaya.",
+          "perUnit": "Harga per {unit}",
+          "chargeFor": "Kenakan biaya untuk {kind}",
+          "units": {
+            "segment": "segmen SMS",
+            "email": "email",
+            "minute": "menit",
+            "lookup": "pencarian",
+            "message": "pesan"
+          },
+          "hints": {
+            "sms": "Dikenakan di atas tagihan penyedia SMS milik pelanggan sendiri. Satu segmen adalah 160 karakter (70 untuk teks non-Latin).",
+            "email": "Dikenakan di atas kotak surat milik pelanggan sendiri. Setiap email yang dikirim dihitung sekali.",
+            "whatsapp_call": "Setiap menit yang dimulai dari panggilan WhatsApp. Panggilan yang tidak dijawab gratis.",
+            "voice_call": "Setiap menit yang dimulai dari panggilan yang dilaporkan penyedia telepon pelanggan. Log panggilan yang diketik manual tidak pernah dikenai biaya.",
+            "enrichment": "Setiap kontak yang dicari di penyedia data platform.",
+            "chat_message": "Setiap pesan yang dikirim lewat Telegram, Facebook, Instagram, LINE, Viber, atau WeChat. Gratis sampai Anda menetapkan harga.",
+            "webbot_message": "Setiap pesan pengunjung yang ditangani chatbot situs web setelah pesan gratis bulanan paket habis."
+          },
+          "costPlus": {
+            "title": "Dikenakan sesuai biaya vendor ditambah markup",
+            "body": "Permintaan AI dan terjemahan berbayar berjalan dengan kunci vendor milik platform dan dikenai biaya sesuai tagihan vendor, ditambah markup di bawah. Ruang kerja dengan kunci sendiri tidak pernah dikenai biaya."
+          },
+          "markup": "Markup atas biaya vendor",
+          "markupHint": "10 berarti permintaan yang berbiaya 1,00 dikenai 1,10.",
+          "saving": "Menyimpan",
+          "save": "Simpan harga",
+          "saved": "Harga penggunaan disimpan",
+          "problems": {
+            "invalid": "Masukkan jumlah dengan paling banyak 2 desimal",
+            "tooHigh": "Melebihi batas"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Pesan WhatsApp",
+      "sms": "SMS",
+      "email": "Email",
+      "whatsapp_call": "Panggilan WhatsApp",
+      "voice_call": "Panggilan suara",
+      "ai": "AI",
+      "translation": "Terjemahan",
+      "enrichment": "Pencarian kontak",
+      "chat_message": "Pesan obrolan",
+      "webbot_message": "Pesan chatbot situs web"
     }
   }
 }

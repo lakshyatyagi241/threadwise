@@ -119,7 +119,7 @@ export function MessageBubble({
         )}
         <p className="mt-1 flex items-center justify-end gap-1 text-[9px] text-muted-foreground">
           <span>{t('time')}</span>
-          <CheckIcon className="h-3 w-3.5 text-brand" />
+          <CheckIcon className="h-2.5 w-4 text-brand" />
         </p>
       </div>
       {(shown.length > 0 || model.auth) && (

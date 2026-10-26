@@ -49,6 +49,11 @@
         "description": "Verbind je WhatsApp Business-nummer om met klanten te chatten.",
         "keywords": "wa, whatsapp business, cloud api, nummer, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp-bedrijfsprofiel",
+        "description": "Je logo, over-tekst, contactgegevens en de compliancegegevens die Meta vraagt.",
+        "keywords": "bedrijfsprofiel, logo, profielfoto, over, contact, compliance, wettelijke naam, klantenservice, klachtenfunctionaris"
+      },
       "unofficial-whatsapp": {
         "label": "Onofficiële WhatsApp API",
         "description": "Koppel een persoonlijk WhatsApp-nummer via QR-code en warm het op voor veilig verzenden.",
@@ -325,7 +330,7 @@
         "keywords": "toestemming, afmelden, aanmelden, uitschrijven, stop, start, avg, gdpr, compliance, privacy, marketing"
       },
       "inbox-tags": {
-        "label": "Gesprekstags",
+        "label": "Tags",
         "description": "Maak de tags aan die je team op gesprekken zet en waarmee de inbox wordt gefilterd. Het zijn dezelfde tags als bij contacten.",
         "keywords": "tags, categorieën, ordenen, filter, gesprekstags"
       },
@@ -338,11 +343,6 @@
         "label": "Reactiedoelen",
         "description": "Stel in hoe snel je team moet reageren en oplossen (SLA) en krijg een melding wanneer een gesprek zijn doel mist.",
         "keywords": "sla, reactietijd, eerste reactie, oplossing, schending, doelen, kantooruren"
-      },
-      "team-performance": {
-        "label": "Teamprestaties",
-        "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
-        "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
       },
       "privacy-requests": {
         "label": "Gegevensverzoeken",

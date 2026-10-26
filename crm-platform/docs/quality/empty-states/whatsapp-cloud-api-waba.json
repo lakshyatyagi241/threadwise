@@ -1,0 +1,79 @@
+{
+  "feature": "whatsapp-cloud-api-waba",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-whatsapp-cloud-api-waba-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/business-profile-card.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/extras-cards.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/health-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-cloud-api-waba/components/states.test.tsx",
+          "match": "shows the empty state with the primary action when there are no numbers yet"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-cloud-api-waba/groups/groups.render.test.tsx",
+          "match": "says \"No groups yet\" for an empty list"
+        }
+      ]
+    },
+    {
+      "id": "EM-whatsapp-cloud-api-waba-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/business-profile-card.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/connect-embedded-modal.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/connect-manual-modal.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-cloud-api-waba/components/states.test.tsx",
+          "match": "shows a spinner while loading, not the empty state"
+        }
+      ]
+    },
+    {
+      "id": "EM-whatsapp-cloud-api-waba-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-cloud-api-waba/components/health-screen.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/groups/remove-number-warning.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/groups/use-groups-live.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-whatsapp-cloud-api-waba-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-cloud-api-waba/groups/groups-screen.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/groups/remove-number-warning.tsx",
+        "apps/web/src/features/whatsapp-cloud-api-waba/lib/embedded-signup.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

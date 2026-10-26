@@ -34,6 +34,15 @@ export const ROUTING_FLOW_REQUESTED = 'routing.flow_requested';
  */
 export const ROUTING_BLOCKED_BY_LEAVE = 'routing.blocked_by_leave';
 
+/**
+ * "New contact" / "Returning contact" (a condition that is known at arrival): a contact is RETURNING when it has another conversation, or was
+ * saved more than this many minutes before the conversation. A contact the very message created is NEW. Spec decision H16.
+ */
+export const ROUTING_NEW_CONTACT_GRACE_MINUTES = 10;
+export const ROUTING_CONTACT_KINDS = ['any', 'new', 'returning'] as const;
+export const routingContactKindSchema = z.enum(ROUTING_CONTACT_KINDS);
+export type RoutingContactKind = z.infer<typeof routingContactKindSchema>;
+
 export const ROUTING_STRATEGIES = ['round_robin', 'least_busy', 'specific'] as const;
 export const routingStrategySchema = z.enum(ROUTING_STRATEGIES);
 export type RoutingStrategy = z.infer<typeof routingStrategySchema>;
@@ -47,7 +56,13 @@ export const ROUTING_LIST_MAX = 100;
 /** When a rule applies. Every part that is set must hold (AND); an empty part is not a condition. A rule with no condition is a catch-all. */
 export const routingConditionsSchema = z
   .object({
-    /** Fields of the customer's contact, evaluated with the segments rule engine (AND/OR groups, tags, owner, custom fields). */
+    /** Whether the customer is a new or a returning contact. Known at arrival, unlike the saved details below. */
+    contactKind: routingContactKindSchema.default('any'),
+    /**
+     * Fields of the customer's contact that are ALREADY SAVED, evaluated with the segments rule engine (AND/OR groups, tags, owner, custom
+     * fields). A contact created by this very message has nothing saved yet (stage "new", no tags, no owner, no custom field), so a condition
+     * on a saved detail matches only contacts that already have it.
+     */
     contact: segmentRulesSchema.nullable().default(null),
     /** The channel the customer wrote on. */
     channelKinds: z.array(channelKindSchema).max(10).default([]),
@@ -79,9 +94,31 @@ export const routingAssignSchema = z
     strategy: routingStrategySchema,
     userIds: z.array(uuidSchema).max(ROUTING_TARGETS_MAX).default([]),
     teamIds: z.array(uuidSchema).max(ROUTING_TARGETS_MAX).default([]),
+    /**
+     * "Distribute evenly among all agents" (the "Everyone else" row): the pool is every active member who can open the inbox (the lists above
+     * must then be empty). Only available agents are picked: not offline or busy, not on leave, under their chat limit.
+     */
+    everyone: z.boolean().default(false),
   })
   .strict()
   .superRefine((v, ctx) => {
+    if (v.everyone) {
+      if (v.userIds.length + v.teamIds.length > 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['everyone'],
+          message: 'Everyone cannot be combined with a list of agents or teams',
+        });
+      }
+      if (v.strategy === 'specific') {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['strategy'],
+          message: 'Choose round robin or least busy for everyone',
+        });
+      }
+      return;
+    }
     if (new Set(v.userIds).size !== v.userIds.length) {
       ctx.addIssue({ code: 'custom', path: ['userIds'], message: 'Each agent once' });
     }
@@ -202,6 +239,8 @@ export const routingRuleSchema = z.object({
   isActive: z.boolean(),
   /** The one rule that runs when no other rule matched. */
   isFallback: z.boolean(),
+  /** "Only for conversations that match" is off: the rule applies to every conversation and `conditions` (kept) are ignored. */
+  appliesToAll: z.boolean(),
   /** Position in the order rules are tried (1 = first). */
   position: z.number().int().positive(),
   firedCount: z.number().int().nonnegative(),
@@ -232,22 +271,23 @@ export const routingRuleListResponseSchema = z.object({
 export type RoutingRuleListResponse = z.infer<typeof routingRuleListResponseSchema>;
 
 const conditionsRefine = (
-  v: { conditions?: RoutingConditions; isFallback?: boolean },
+  v: { conditions?: RoutingConditions; isFallback?: boolean; appliesToAll?: boolean },
   ctx: z.RefinementCtx,
 ) => {
-  if (v.conditions && !v.isFallback && !hasRoutingConditions(v.conditions)) {
+  if (v.conditions && !v.isFallback && !v.appliesToAll && !hasRoutingConditions(v.conditions)) {
     ctx.addIssue({
       code: 'custom',
       path: ['conditions'],
-      message: 'Add at least one condition, or mark this rule as the fallback.',
+      message: 'Add at least one condition, or let the rule apply to every conversation.',
     });
   }
 };
 
-/** Whether any part of the conditions is set. A rule with none is only valid as the fallback. */
+/** Whether any part of the conditions is set. A rule with none needs `appliesToAll` (or to be the fallback) to ever match. */
 export function hasRoutingConditions(c: RoutingConditions): boolean {
   return (
     c.contact !== null ||
+    c.contactKind !== 'any' ||
     c.channelKinds.length > 0 ||
     c.keywords !== null ||
     c.languages.length > 0 ||
@@ -270,6 +310,8 @@ export const createRoutingRuleSchema = z
     triggerFlowId: uuidSchema.nullable().default(null),
     stopOnMatch: z.boolean().default(true),
     isFallback: z.boolean().default(false),
+    /** Default false: an API client that sends no conditions and no flag is still refused, as before. The screen sends true for "every conversation". */
+    appliesToAll: z.boolean().default(false),
     isActive: z.boolean().default(false),
   })
   .strict()
@@ -301,10 +343,10 @@ export const updateRoutingRuleSchema = z
     triggerFlowId: uuidSchema.nullable().optional(),
     stopOnMatch: z.boolean().optional(),
     isFallback: z.boolean().optional(),
+    appliesToAll: z.boolean().optional(),
     isActive: z.boolean().optional(),
   })
-  .strict()
-  .superRefine(conditionsRefine);
+  .strict();
 export type UpdateRoutingRuleInput = z.infer<typeof updateRoutingRuleSchema>;
 
 /**
@@ -332,3 +374,92 @@ export const routingSettingsSchema = z.object({
 export type RoutingSettings = z.infer<typeof routingSettingsSchema>;
 export const updateRoutingSettingsSchema = routingSettingsSchema.strict();
 export type UpdateRoutingSettingsInput = z.infer<typeof updateRoutingSettingsSchema>;
+
+// --- "Try it": the dry run ---------------------------------------------------------------------------------------------------
+
+/**
+ * `POST /inbox/routing/test`: which step of the arrival pipeline would decide for this contact, channel and message, and why. It runs the
+ * engine's own decision code in a read-only transaction: nothing is assigned, counted, moved or sent. Needs `inbox.settings.read`.
+ */
+export const routingTestRequestSchema = z
+  .object({
+    /** The contact (uuid) the sample conversation belongs to; omitted = a brand-new contact nobody knows yet. */
+    contactId: uuidSchema.nullable().default(null),
+    channelKind: channelKindSchema,
+    messageText: z.string().trim().max(2000).default(''),
+    /** The customer's language, when the sample should have one. */
+    language: z.string().trim().min(2).max(16).nullable().default(null),
+    /** Pretend the message arrives inside/outside business hours; null = decide from the clock and the saved hours now. */
+    outsideHours: z.boolean().nullable().default(null),
+  })
+  .strict();
+export type RoutingTestRequest = z.infer<typeof routingTestRequestSchema>;
+
+export const ROUTING_TEST_PARTS = [
+  'contactKind',
+  'contact',
+  'channel',
+  'keywords',
+  'languages',
+  'businessHours',
+] as const;
+export const routingTestPartSchema = z.enum(ROUTING_TEST_PARTS);
+export type RoutingTestPart = z.infer<typeof routingTestPartSchema>;
+
+export const routingTestConditionSchema = z.object({
+  part: routingTestPartSchema,
+  matched: z.boolean(),
+  /** A machine code the screen words: `no_saved_value`, `no_contact`, `not_same_kind`, `channel_differs`, `no_word`, `language_differs`, `hours_differ`. */
+  why: z.string().nullable(),
+});
+export type RoutingTestCondition = z.infer<typeof routingTestConditionSchema>;
+
+export const ROUTING_TEST_STEP_KINDS = [
+  'switch',
+  'sticky',
+  'rule',
+  'everyone_else',
+  'queue',
+] as const;
+export const routingTestStepSchema = z.object({
+  kind: z.enum(ROUTING_TEST_STEP_KINDS),
+  /** `decided`: this step gave the conversation away. `passed`: it looked and moved on. `info`: a note. */
+  result: z.enum(['decided', 'passed', 'info']),
+  ruleId: uuidSchema.nullable(),
+  ruleName: z.string().nullable(),
+  /** A machine code: `auto_assign_off`, `owner`, `last_handler`, `no_owner`, `no_previous_handler`, `conditions_failed`, `nobody_available`, ... */
+  why: z.string(),
+  conditions: z.array(routingTestConditionSchema),
+});
+export type RoutingTestStep = z.infer<typeof routingTestStepSchema>;
+
+export const routingTestResponseSchema = z.object({
+  /** The step that decided. `queue`: nobody took it, it waits for a claim. `off`: automatic assignment is switched off. */
+  outcome: z.enum(['sticky', 'rule', 'everyone_else', 'queue', 'off']),
+  ruleId: uuidSchema.nullable(),
+  ruleName: z.string().nullable(),
+  assigneeUserId: uuidSchema.nullable(),
+  assigneeTeamId: uuidSchema.nullable(),
+  /** The strategy that picked (`round_robin`, `least_busy`, `specific`, `owner`, `contact_agent`), null when nobody was picked. */
+  how: z.string().nullable(),
+  steps: z.array(routingTestStepSchema),
+  /** Who was left out and why (on leave, offline or at their chat limit), the same lines a handoff records. */
+  trace: z.array(
+    z.object({
+      step: z.string(),
+      who: z.string().nullable().optional(),
+      result: z.string(),
+      why: z.string().nullable().optional(),
+    }),
+  ),
+  contact: z.object({
+    found: z.boolean(),
+    kind: z.enum(['new', 'returning']).nullable(),
+    stage: z.string().nullable(),
+    hasOwner: z.boolean(),
+    tagCount: z.number().int().nonnegative(),
+  }),
+  /** Whether the sample counted as outside business hours. */
+  outsideHours: z.boolean(),
+});
+export type RoutingTestResponse = z.infer<typeof routingTestResponseSchema>;

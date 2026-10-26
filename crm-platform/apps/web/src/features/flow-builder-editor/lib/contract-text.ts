@@ -122,6 +122,7 @@ const PORT_KEYS: Record<string, string> = {
   assigned: 'assigned',
   'waiting in queue': 'waitingInQueue',
   'no agent / out of hours': 'noAgentOutOfHours',
+  'returned to the bot': 'returnedToBot',
 };
 /** What a branch port shows when the author has not named its button / answer / option / row yet. */
 const NUMBERED = /^(Button|Answer|Option|Item) (\d+)$/;

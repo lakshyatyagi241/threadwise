@@ -223,6 +223,30 @@
     {
       "key": "apps/api/src/modules/marketplace/operator-catalogue.store.ts sql.raw(` a.id, a.uuid, a.slug, a.kind, a.category_id, c.slug AS category_slug)",
       "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query(`SELECT count(*)::int AS n FROM ${q(t.table)} WHERE ${where}`",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query( `UPDATE ${q(t.table)} SET ${q(t.plain)} = NULL WHERE ${where} RETURNING 1`,",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query(`SELECT count(*)::int AS n FROM ${q(t.table)} WHERE ${pending(t)}`",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query( `SELECT ${pk}, ${q(t.plain)} AS value FROM ${q(t.table)} WHERE ${pending(t)} ORDER",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query( `UPDATE ${q(t.table)} SET ${q(t.plain)} = $${t.pk.length + 2} WHERE ${where} AND $",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts .query( `UPDATE ${q(t.table)} SET ${q(t.hash!)} = $${t.pk.length + 2}${t.enc ? `, ${q(t.en",
+      "reason": "every ${q(...)} is a table or column name from the SEAL_TARGETS registry; q() quotes it and now throws on anything but a plain identifier (unit test); the identifier is named q, which the checker reads as a request param; reviewed 2026-10-21"
     }
   ],
   "43": [
@@ -761,6 +785,14 @@
     {
       "key": "apps/api/src/modules/storage-quota/storage-quota.repository.ts await tx.execute",
       "reason": "one upsert per storage category of ONE workspace's recount (the rows come from a GROUP BY category, a fixed handful of categories); an operator/cron recount, not request traffic; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts await db.query",
+      "reason": "a maintenance backfill: one statement per registry target, and per page of 500 rows inside a target (keyset paging), run by an operator, never on a request; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/cli/backfill-message-feed.ts await db.query",
+      "reason": "an operator CLI: one statement per workspace and calendar month on purpose, so each statement stays short and a failure is reported per workspace and month; reviewed 2026-10-21"
     }
   ],
   "36": [

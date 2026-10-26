@@ -5,6 +5,7 @@ import {
   aiModelsResponseSchema,
   aiagAssistantSchema,
   aiagResponderSchema,
+  aiagSourcePreviewSchema,
   aiagSourceSchema,
   listAiagAssistantsResponseSchema,
   listAiagSourcesResponseSchema,
@@ -12,6 +13,7 @@ import {
   type AiagAssistant,
   type AiagResponder,
   type AiagSource,
+  type AiagSourcePreview,
   type CreateAiagAssistantInput,
   type ListAiagAssistantsResponse,
   type SaveAiagResponderInput,
@@ -116,6 +118,17 @@ export const addSource = (assistantId: string, body: AddAiagSourceInput): Promis
     body,
     schema: aiagSourceSchema,
   });
+
+/** One entry's text, for the View panel. */
+export function useSourcePreview(id: string | null) {
+  return useQuery({
+    queryKey: ['aiag', 'source-preview', id],
+    enabled: id !== null,
+    staleTime: 30_000,
+    queryFn: ({ signal }): Promise<AiagSourcePreview> =>
+      apiFetch(`${BASE}/sources/${id}`, { schema: aiagSourcePreviewSchema, signal }),
+  });
+}
 
 export const deleteSource = (id: string): Promise<void> =>
   apiFetch(`${BASE}/sources/${id}`, { method: 'DELETE' });

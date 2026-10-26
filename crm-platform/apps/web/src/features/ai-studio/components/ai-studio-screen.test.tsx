@@ -8,7 +8,7 @@ vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
 }));
 
 const hrefOf = (html: string, text: string): string | null => {
-  const m = new RegExp(`<a[^>]*href="([^"]*)"[^>]*>${text}</a>`).exec(html);
+  const m = new RegExp(`<a[^>]*href="([^"]*)"[^>]*>${text}(?:<svg.*?</svg>)?</a>`).exec(html);
   return m ? m[1]! : null;
 };
 

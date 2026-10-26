@@ -36,6 +36,56 @@ export const addonGrantsSchema = z.object({
 });
 export type AddonGrants = z.infer<typeof addonGrantsSchema>;
 
+/**
+ * The two kinds of plain add-on (docs/specs/addons-plan-offers.md 1), derived from what the pack grants: one that grants at least one feature unlocks
+ * a module (`feature`, it may also add capacity, like Teams +10); one that only adds to limits is `capacity` (Extra seat, Contact boost). Only a
+ * feature add-on can be included in a plan.
+ */
+export type AddonKind = 'feature' | 'capacity';
+export const addonKindOf = (grants: { features: readonly string[] }): AddonKind =>
+  grants.features.length > 0 ? 'feature' : 'capacity';
+
+/** One plan's offer of a pack, as the operator's add-on list and pack editor show it (`GET platform/addons`). */
+export const addonPlanOfferSchema = z.object({
+  planId: uuidSchema,
+  planSlug: z.string(),
+  planName: z.string(),
+  planIsActive: z.boolean(),
+  planIsFree: z.boolean(),
+  /** `paid` also when the plan has no stored row (the default). */
+  mode: z.enum(['included', 'paid', 'hidden']),
+  /** The plan's own price for a paid offer, null = the pack's price. */
+  amount: z.string().nullable(),
+  /** False when no row is stored (the default applies). */
+  stored: z.boolean(),
+});
+export type AddonPlanOffer = z.infer<typeof addonPlanOfferSchema>;
+
+/** `PUT platform/addons/:id/plans`: the offers of this pack on the plans named; a plan not named keeps its offer. */
+export const setAddonPlanOffersRequestSchema = z.object({
+  offers: z
+    .array(
+      z
+        .object({
+          planId: uuidSchema,
+          mode: z.enum(['included', 'paid', 'hidden']),
+          amount: z.preprocess(blankToNull, moneySchema.nullable()).default(null),
+        })
+        .superRefine((o, ctx) => {
+          if (o.amount !== null && (o.mode !== 'paid' || moneyCents(o.amount) === 0))
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ['amount'],
+              message: 'Only a paid add-on has a price, and it is above zero.',
+            });
+        }),
+    )
+    .max(500)
+    .refine((o) => new Set(o.map((x) => x.planId)).size === o.length, 'List each plan once.'),
+});
+export type SetAddonPlanOffersRequest = z.input<typeof setAddonPlanOffersRequestSchema>;
+export type SetAddonPlanOffersPayload = z.output<typeof setAddonPlanOffersRequestSchema>;
+
 const limitInputSchema = z.union([z.number().int().min(-1).max(2_000_000_000), z.null()]);
 
 const addonFieldsShape = {
@@ -51,13 +101,22 @@ const addonFieldsShape = {
     .regex(/^[A-Z]{3}$/, 'Use a three-letter currency code.'),
   billingUnit: planBillingUnitSchema.default('months'),
   billingDuration: z.number().int().min(1).max(120).default(1),
-  /** `recurring` renews by autopay; a lifetime or free pack can only be one-time (checked in the request refinement). */
-  billingMode: z.enum(['one_time', 'recurring']).default('one_time'),
+  /**
+   * `recurring` is how an add-on is sold: a monthly or yearly subscription (autopay where the gateway can, otherwise the buyer pays again at the
+   * end of each term). Left out on CREATE it becomes `recurring` for a priced pack and `one_time` only for a lifetime or zero-priced one (the
+   * legacy shapes an older client may still send; see `createAddonRequestSchema`). A lifetime or free pack cannot be recurring.
+   */
+  billingMode: z.enum(['one_time', 'recurring']).optional(),
   isLifetime: z.boolean().default(false),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().min(0).max(100_000).default(0),
   features: z.array(z.string().regex(ADDON_KEY_RE)).max(200).default([]),
   limits: z.record(z.string().regex(ADDON_KEY_RE), limitInputSchema).default({}),
+  /**
+   * `feature` unlocks part of the product (it may also add capacity, like Teams +10); `capacity` only adds to limits. Left out, a pack that
+   * grants a feature is a feature add-on and any other is a capacity add-on with limits, else a feature add-on still to be filled in.
+   */
+  kind: z.enum(['feature', 'capacity']).optional(),
 };
 
 export interface AddonRuleInput {
@@ -87,12 +146,74 @@ export function checkAddonRules(
   return out;
 }
 
-export const createAddonRequestSchema = z.object(addonFieldsShape).superRefine((value, ctx) => {
-  for (const issue of checkAddonRules(value)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
-  }
-});
+/**
+ * New packs are recurring by default (owner decision 2026-10-22). Backward compatible: a client that sends `billingMode` is taken at its word
+ * (so the rules below still apply), and one that sends none gets `recurring` when the pack is priced and not lifetime, and `one_time` for the
+ * legacy lifetime / zero-priced shapes, which could never recur. Existing packs are not touched.
+ */
+export const defaultAddonBillingMode = (p: {
+  amount: string;
+  isLifetime?: boolean;
+}): 'one_time' | 'recurring' =>
+  p.isLifetime || moneyCents(p.amount) === 0 ? 'one_time' : 'recurring';
+
+/** The kind a pack has when the client names none: what its grants say (an empty pack is an unfinished feature add-on). */
+export const derivedAddonKind = (p: {
+  features: readonly string[];
+  limits: Readonly<Record<string, number | null>>;
+}): AddonKind =>
+  p.features.length === 0 && Object.values(p.limits).some((v) => typeof v === 'number' && v !== 0)
+    ? 'capacity'
+    : 'feature';
+
+export const createAddonRequestSchema = z
+  .object(addonFieldsShape)
+  .superRefine((value, ctx) => {
+    for (const issue of checkAddonRules(value)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
+    }
+    // Only a kind the client named is held to its grants: an older client that names none keeps creating packs as before.
+    const kind = value.kind;
+    if (kind === 'feature' && value.features.length === 0)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['features'],
+        message: 'A feature add-on unlocks at least one feature. Tick the features it gives.',
+      });
+    if (kind === 'capacity' && value.features.length > 0)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['features'],
+        message:
+          'A capacity add-on only adds to limits. Untick its features, or make it a feature add-on.',
+      });
+    if (
+      kind === 'capacity' &&
+      !Object.values(value.limits).some((v) => typeof v === 'number' && v !== 0)
+    )
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['limits'],
+        message: 'A capacity add-on adds to at least one limit.',
+      });
+  })
+  .transform((value) => ({
+    ...value,
+    kind: value.kind ?? derivedAddonKind(value),
+    billingMode: value.billingMode ?? defaultAddonBillingMode(value),
+  }));
 export type CreateAddonRequest = z.input<typeof createAddonRequestSchema>;
+
+/** A pack the operator can no longer create but that keeps selling: one-time, lifetime, or on a billing period that is not one month or one year. */
+export const isLegacyAddonPack = (p: {
+  billingMode: 'one_time' | 'recurring';
+  isLifetime: boolean;
+  billingUnit: string;
+  billingDuration: number;
+}): boolean =>
+  p.billingMode !== 'recurring' ||
+  p.isLifetime ||
+  !((p.billingUnit === 'months' || p.billingUnit === 'years') && p.billingDuration === 1);
 export type CreateAddonPayload = z.output<typeof createAddonRequestSchema>;
 
 /** Any subset of the fields; `rowVersion` is the optimistic lock. The service re-checks the merged result. */
@@ -128,6 +249,10 @@ export const addonPackSchema = z.object({
   grants: addonGrantsSchema,
   /** Workspaces holding an active purchase (the delete guard). */
   activePurchases: z.number().int().nonnegative(),
+  /** `feature` or `capacity` (derived from `grants`, see `addonKindOf`). */
+  kind: z.enum(['feature', 'capacity']).default('feature'),
+  /** How every plan offers this pack (every plan, also the ones with no stored row, which read `paid`). */
+  planOffers: z.array(addonPlanOfferSchema).default([]),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -171,10 +296,81 @@ export const addonCardSchema = z.object({
   /** At most five. */
   grantBullets: z.array(addonBulletSchema).max(5),
   ownedCount: z.number().int().nonnegative(),
-  /** buy | active (a feature-only pack already owned) | buy_again (a pack with limits stacks). */
-  state: z.enum(['buy', 'active', 'buy_again']),
+  /** Of the live purchases of this pack: the latest end (null = none, or a lifetime one), and whether any of them still renews. */
+  ownedEndsAt: z.string().datetime().nullable(),
+  ownedRenews: z.boolean(),
+  /**
+   * buy | active (a feature-only pack already owned) | buy_again (a pack with limits stacks) | included (every feature of the pack is
+   * already granted by the plan and the pack adds no cap: nothing to buy; a workspace that owns it may cancel it).
+   * `grantBullets` lists only what the plan does not already give.
+   */
+  state: z.enum(['buy', 'active', 'buy_again', 'included', 'unavailable']),
+  /**
+   * Under `included`: who made it free. `plan` = the plan's own features, `support` = a workspace override or platform-owned status (the card says
+   * "enabled by your account manager"). Null otherwise.
+   */
+  includedVia: z.enum(['plan', 'support']).nullable().default(null),
+  /** `feature` (unlocks a module) or `capacity` (adds to a limit); the list groups the cards by it. */
+  kind: z.enum(['feature', 'capacity']).default('feature'),
+  /**
+   * The workspace's own switch (docs/specs/addons-lifecycle-and-permissions.md). Only an `included` card can be switched: `disabled` means the
+   * workspace turned an add-on its plan includes off (its features do not apply, its settings are kept). `canToggle` is false for every other state.
+   */
+  activation: z.enum(['active', 'disabled']).default('active'),
+  canToggle: z.boolean().default(false),
 });
 export type AddonCard = z.infer<typeof addonCardSchema>;
+
+// --- turning an included add-on off and on (phase 1 of the lifecycle) ----------------------------------------------------------------------
+
+/**
+ * What switching an add-on off (or on) does, in codes the screen words. Every item is data: a count, names, or nothing.
+ *   features_off   the plan features that stop applying (names)
+ *   dependents_off other features that need them and stop with them (names)
+ *   roles_dormant  roles that hold permissions of these features: kept, inactive until it is back on (count)
+ *   waiting_chats / routing_rules / auto_teams   Smart routing: chats waiting for an agent, rules, teams on an automatic method (counts)
+ *   teams / custom_role_holders                  Teams and permissions: teams, people who hold a custom role (counts)
+ *   kept           the settings and data are kept and come back with it
+ */
+export const ADDON_IMPACT_CODES = [
+  'features_off',
+  'dependents_off',
+  'roles_dormant',
+  'waiting_chats',
+  'routing_rules',
+  'auto_teams',
+  'teams',
+  'custom_role_holders',
+  'kept',
+] as const;
+export const addonImpactItemSchema = z.object({
+  code: z.enum(ADDON_IMPACT_CODES),
+  count: z.number().int().nonnegative().default(0),
+  names: z.array(z.string()).default([]),
+  /** Something customer-facing or hard to undo is at risk: the dialog asks for a typed confirmation. */
+  risk: z.boolean().default(false),
+});
+export type AddonImpactItem = z.infer<typeof addonImpactItemSchema>;
+
+export const addonImpactSchema = z.object({
+  addon: z.object({ id: uuidSchema, name: z.string(), slug: z.string() }),
+  action: z.enum(['disable', 'enable']),
+  items: z.array(addonImpactItemSchema),
+  /** True when any item carries a risk. */
+  requiresConfirm: z.boolean(),
+});
+export type AddonImpact = z.infer<typeof addonImpactSchema>;
+
+/** `POST /addons/:id/disable`: the caller has seen the impact and agrees. */
+export const disableAddonRequestSchema = z.object({ confirm: z.literal(true) });
+export type DisableAddonRequest = z.infer<typeof disableAddonRequestSchema>;
+
+export const addonActivationResponseSchema = z.object({
+  addonId: uuidSchema,
+  activation: z.enum(['active', 'disabled']),
+  changedAt: z.string().datetime(),
+});
+export type AddonActivationResponse = z.infer<typeof addonActivationResponseSchema>;
 
 export const ownedAddonSchema = z.object({
   id: uuidSchema,
@@ -188,10 +384,77 @@ export const ownedAddonSchema = z.object({
 });
 export type OwnedAddon = z.infer<typeof ownedAddonSchema>;
 
+/** Why the workspace cannot buy add-ons right now (it is not on an active paid plan). */
+export const ADDON_UNAVAILABLE_REASONS = ['free_plan', 'plan_expired', 'no_plan'] as const;
+export type AddonUnavailableReason = (typeof ADDON_UNAVAILABLE_REASONS)[number];
+
 export const workspaceAddonsResponseSchema = z.object({
-  /** An add-on needs an active paid plan (TW-ADD-033): otherwise the catalogue is withheld. */
+  /**
+   * An add-on is bought on top of an active paid plan (TW-ADD-033). When false, `catalog` still lists the packs on sale, every card in the
+   * `unavailable` state (or `included` when the plan already grants it), and `unavailableReason` says why.
+   */
   eligible: z.boolean(),
+  unavailableReason: z.enum(ADDON_UNAVAILABLE_REASONS).nullable().default(null),
+  /** The caller may start a purchase (`paygw.checkout.create`). Anyone may see the list; without this the buy button is disabled. */
+  canBuy: z.boolean().default(true),
   owned: z.array(ownedAddonSchema),
   catalog: z.array(addonCardSchema),
 });
 export type WorkspaceAddonsResponse = z.infer<typeof workspaceAddonsResponseSchema>;
+
+/**
+ * The operator's view of one workspace's add-ons (Workspaces > a workspace > Plan): the same cards the workspace sees, plus what the workspace does
+ * NOT see (add-ons its plan hides) and the feature overrides that beat the plan, so the operator can tell WHY each add-on is on or off.
+ */
+export const operatorWorkspaceAddonsResponseSchema = workspaceAddonsResponseSchema.extend({
+  hidden: z.array(z.object({ id: uuidSchema, slug: z.string(), name: z.string() })),
+  /** The workspace's own feature overrides (true / false), which win over the plan and every add-on. */
+  featureOverrides: z.record(z.string(), z.boolean()),
+  platformOwned: z.boolean(),
+  planName: z.string().nullable(),
+});
+export type OperatorWorkspaceAddonsResponse = z.infer<typeof operatorWorkspaceAddonsResponseSchema>;
+
+// --- one ownership state for every paid thing --------------------------------------------------------------------------------------------
+
+/**
+ * The four things a workspace can be told about ANYTHING it could pay for (a plain add-on pack, or a paid Marketplace app):
+ *   included    the plan (or an override) already gives everything it gives: no charge, nothing to buy
+ *   owned       the workspace holds a live purchase of it
+ *   buyable     it can be bought now
+ *   unavailable it cannot be bought now (no active paid plan for a plain pack; not on sale for an app)
+ * Order matters and is the whole rule: included beats owned (a held purchase of something the plan now includes is only ending), owned
+ * beats buyable, and unavailable is only what is left when it is neither included nor owned.
+ */
+export type OwnershipState = 'included' | 'owned' | 'buyable' | 'unavailable';
+
+export function resolveOwnership(f: {
+  /** The plan already grants everything the item gives (and the item sells no cap on top). */
+  includedByPlan: boolean;
+  /** The workspace holds a live purchase. */
+  owned: boolean;
+  /** It could be bought if the workspace wanted. */
+  purchasable: boolean;
+}): OwnershipState {
+  if (f.includedByPlan) return 'included';
+  if (f.owned) return 'owned';
+  return f.purchasable ? 'buyable' : 'unavailable';
+}
+
+/** A Marketplace app's `access` (see `accessFor`) as the same four states, so the two lists speak one language. */
+export function ownershipFromAccess(
+  access: 'free' | 'included' | 'entitled' | 'subscription_required' | 'not_for_sale',
+): OwnershipState | 'free' {
+  switch (access) {
+    case 'free':
+      return 'free';
+    case 'included':
+      return 'included';
+    case 'entitled':
+      return 'owned';
+    case 'subscription_required':
+      return 'buyable';
+    case 'not_for_sale':
+      return 'unavailable';
+  }
+}

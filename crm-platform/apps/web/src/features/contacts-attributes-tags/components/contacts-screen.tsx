@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
@@ -22,6 +22,7 @@ import type { ContactTouchChannel } from '@crm/contracts';
 import { bulkSetUncontacted, reportContactTouch } from '../api/lead-handling';
 import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
+  bulkConsent,
   bulkDelete,
   bulkGroupMembership,
   bulkOwner,
@@ -34,7 +35,6 @@ import {
 } from '../api/bulk';
 import {
   contactFilterBody,
-  DEFAULT_FILTERS,
   deleteContact,
   invalidateContacts,
   KEYS,
@@ -69,7 +69,7 @@ import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
 import { presetFilters, type PresetView } from '../lib/preset-views';
-import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
+import { defaultFiltersOf, filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
@@ -91,7 +91,7 @@ import {
   type BulkTarget,
 } from '../lib/selection';
 import { useStoredChoice } from '../lib/use-stored-choice';
-import { type BulkPicker, type TagChoice } from './bulk-bar';
+import { type BulkPicker, type ConsentChoice, type TagChoice } from './bulk-bar';
 import { BulkUpdateDialog } from './bulk-update-dialog';
 import { ContactFormModal } from './contact-form-modal';
 import { ContactQuickView } from './contact-quick-view';
@@ -122,7 +122,7 @@ const STATS_KEY = 'cat:contacts:stats';
 
 const num = (n: number | undefined) => (n === undefined ? '—' : n.toLocaleString());
 
-/** Which part of the Filter panel a column header's "Filter" opens; the name, phone and email columns use the search box instead. */
+/** Which part of the Filter panel a column header's "Filter" opens; the name, phone and email columns open the condition builder on that field instead. */
 const COLUMN_FILTER: Partial<Record<ColumnId, FilterSection>> = {
   stage: 'stage',
   status: 'status',
@@ -165,6 +165,8 @@ export function ContactsScreen() {
   const canMerge = useCan('record.contacts.merge');
   const canCreateGroups = useCan('record.contact-groups.create');
   const canCreateTags = useCan('record.tags.create');
+  // Marketing consent is the consent right (the single contact edit's), on top of the update right the selection needs.
+  const canConsent = useCan('contacts.consent.manage');
   const canReadSegments = useCan('record.segments.read');
   const canCreateSegments = useCan('record.segments.create');
   const canReadViews = useCan('record.contact-views.read');
@@ -202,26 +204,24 @@ export function ContactsScreen() {
     );
   };
 
-  /** The view whose saved filters were last put in the URL (so landing on `?view=` applies them once). */
-  const appliedView = useRef('');
-
   /** A view tab: apply the filters it saved (all defaults for "All contacts"). */
   const selectView = (view: ContactViewResponse | null) => {
-    appliedView.current = view?.id ?? '';
-    const next = view
-      ? filtersOfView(view.filter, sizeDefault)
-      : { ...DEFAULT_FILTERS, limit: sizeDefault };
+    const next = view ? filtersOfView(view.filter, sizeDefault) : defaultFiltersOf(sizeDefault);
     router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
       scroll: false,
     });
   };
 
+  /** Default filters, the open view still showing: "Reset filters" on an empty list keeps the view's tab. */
+  const resetFilters = () =>
+    router.replace(
+      `${pathname}${withView(filtersToSearch(defaultFiltersOf(sizeDefault), sizeDefault), viewId)}`,
+    );
+
   /** A built-in view: the filters it stands for, on top of the defaults, with no saved view open. */
   const selectPreset = (preset: PresetView) => {
-    appliedView.current = '';
     const next = {
-      ...DEFAULT_FILTERS,
-      limit: sizeDefault,
+      ...defaultFiltersOf(sizeDefault),
       ...presetFilters(preset, session.user.id),
     };
     router.replace(`${pathname}${filtersToSearch(next, sizeDefault)}`, { scroll: false });
@@ -340,7 +340,9 @@ export function ContactsScreen() {
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? [])
+        .filter((a) => a.active && !a.hidden)
+        .map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
@@ -353,25 +355,10 @@ export function ContactsScreen() {
   // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
   // screen (a draft) until "Save current filters" stores them in the view.
   const viewsList = useContactViews(canReadViews);
+  // A bare `?view=ID` (no filter params) is not re-applied on landing: it opens every contact under the view's tab, marked
+  // "changed". That keeps a cleared view cleared on reload, and it means a link shared without its filters shows no saved
+  // filters. The saved filters arrive only with the URL (a tab click, or the editor's redirect).
   const activeView = viewId ? viewsList.data?.find((v) => v.id === viewId) : undefined;
-
-  // Landing on `?view=` with no filters in the URL (a fresh create, a reload, a shared link): apply what the view saved. Filters already
-  // in the URL (the tab was clicked, or a link carries them) are left as they are.
-  useEffect(() => {
-    if (!viewId) {
-      appliedView.current = '';
-      return;
-    }
-    if (!activeView || appliedView.current === viewId) return;
-    appliedView.current = viewId;
-    if (hasActiveFilter(filters)) return;
-    router.replace(
-      `${pathname}${withView(filtersToSearch(filtersOfView(activeView.filter, sizeDefault), sizeDefault), viewId)}`,
-      { scroll: false },
-    );
-    // Runs when the open view or its data changes; `filters` is read for the URL as it is now.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewId, activeView]);
 
   const savedViewCols = useMemo(
     () => (activeView ? (viewColumnsOf(activeView.filter) as ColumnId[] | null) : null),
@@ -415,11 +402,12 @@ export function ContactsScreen() {
     section: FilterSection;
     nonce: number;
   } | null>(null);
-  const [focusSearch, setFocusSearch] = useState(0);
+  const [fieldRequest, setFieldRequest] = useState<{ field: string; nonce: number } | null>(null);
   const filterColumn = (id: ColumnId) => {
     const section = COLUMN_FILTER[id];
     if (section) setFilterRequest({ section, nonce: (filterRequest?.nonce ?? 0) + 1 });
-    else setFocusSearch((n) => n + 1);
+    // Name, phone and email have no quick filter: the condition builder opens with that field ready to fill.
+    else setFieldRequest({ field: id, nonce: (fieldRequest?.nonce ?? 0) + 1 });
   };
 
   // selection
@@ -571,6 +559,21 @@ export function ContactsScreen() {
     dispatch({ type: 'clear' });
     await refresh();
     report(tb('updated', { count: out.changed }), out);
+    return true;
+  }
+
+  /** Marketing consent for one channel on the selection (the bulk consent action): a grant or a withdrawal, reported per contact. */
+  async function onBulkConsent(choice: ConsentChoice): Promise<boolean> {
+    const out = await guarded(() => bulkConsent(target(), choice));
+    if (!out) return false;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(
+      tb(choice.action === 'granted' ? 'consentSubscribed' : 'consentUnsubscribed', {
+        count: out.changed,
+      }),
+      out,
+    );
     return true;
   }
 
@@ -808,7 +811,6 @@ export function ContactsScreen() {
           <ContactsToolbar
             q={q}
             onQ={setQ}
-            focusSearch={focusSearch}
             filter={{
               filters,
               onChange: (patch) => setFilters(patch),
@@ -835,6 +837,7 @@ export function ContactsScreen() {
               onAiSummary: (rules, summary) => setAiSummary({ rules, summary }),
               conditionCount: conditions,
               request: filterRequest,
+              fieldRequest,
             }}
             allColumns={allCols}
             columnIds={columnIds}
@@ -875,7 +878,14 @@ export function ContactsScreen() {
           <AppliedFilters
             chips={chips}
             onRemove={removeChip}
-            onClearAll={() => setFilters(clearAllPatch())}
+            onClearAll={() => {
+              // A saved view is a set of filters: clearing them all leaves the view, back to All contacts (the search text stays).
+              if (!viewId) return setFilters(clearAllPatch());
+              router.replace(
+                `${pathname}${withView(filtersToSearch({ ...defaultFiltersOf(sizeDefault), q: filters.q }, sizeDefault), '')}`,
+                { scroll: false },
+              );
+            }}
             onSaveAsSegment={
               canCreateSegments && filtered && !filters.segment && !filters.rules
                 ? () => setSaveSegmentOpen(true)
@@ -892,6 +902,7 @@ export function ContactsScreen() {
                 delete: canDelete,
                 export: canExport,
                 createTags: canCreateTags,
+                consent: canConsent,
               }}
               onClear={() => dispatch({ type: 'clear' })}
               onSendCampaign={() => void onSendCampaign()}
@@ -905,6 +916,7 @@ export function ContactsScreen() {
               onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
               onGroup={onBulkGroup}
               onTagApply={onBulkTag}
+              onConsent={onBulkConsent}
             />
           ) : (
             canReadViews && (
@@ -1046,7 +1058,7 @@ export function ContactsScreen() {
                   actions={
                     <>
                       {filtered && (
-                        <Button variant="secondary" onClick={() => router.replace(pathname)}>
+                        <Button variant="secondary" onClick={resetFilters}>
                           {t('resetFilters')}
                         </Button>
                       )}

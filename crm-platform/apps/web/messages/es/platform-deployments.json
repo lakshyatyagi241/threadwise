@@ -91,6 +91,7 @@
       "empty": "Todavía no se ha registrado ninguna versión. Las versiones aparecen aquí desde el siguiente despliegue.",
       "cols": {
         "tag": "Etiqueta",
+        "changes": "Cambios",
         "state": "Estado",
         "step": "Paso",
         "started": "Inicio",
@@ -104,7 +105,8 @@
         "ok": "Activa",
         "failed": "Fallida",
         "rolled_back": "Revertida"
-      }
+      },
+      "by": "por {author}"
     }
   }
 }

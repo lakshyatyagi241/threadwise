@@ -2,15 +2,19 @@ import { PLAN_LIMIT_KEYS, type PlanAddonOption, type PlanAdminItem } from '@crm/
 import { describe, expect, it } from 'vitest';
 import {
   LIMIT_UNITS,
-  addonRows,
+  PLAN_TABS,
   addonSaleState,
-  filterAddonRows,
+  appOptionsFor,
+  appTabFor,
+  appTabsOf,
+  filterAppOptions,
   filterKeys,
   firstProblemField,
   isPlatformDefaultLimit,
   limitDisabledByPlatform,
   matchesQuery,
   planCounts,
+  staleAppIds,
   tabForField,
   tabsWithProblems,
 } from './plan-editor-view';
@@ -29,6 +33,7 @@ const option = (over: Partial<PlanAddonOption> & { id: string }): PlanAddonOptio
     slug: 'appointments',
     name: 'Appointments',
     status: 'published',
+    kind: 'mini_app',
   },
   ...over,
 });
@@ -43,6 +48,49 @@ describe('tabs and problems', () => {
     expect(tabForField('amount')).toBe('details');
     expect(tabForField('limits.users')).toBe('limits');
     expect(tabForField('visibleAddons')).toBe('addons');
+    // an add-on's plan price, and an offer error the API could not tie to one add-on
+    expect(tabForField('addonOffers.0b5f6f0e-5d1c-4a52-9a41-0f6a4b0c1e01')).toBe('addons');
+    expect(tabForField('addonOffers')).toBe('addons');
+  });
+
+  it('lists the six tabs in order', () => {
+    expect([...PLAN_TABS]).toEqual([
+      'details',
+      'features',
+      'limits',
+      'addons',
+      'integrations',
+      'miniApps',
+    ]);
+  });
+
+  it('opens the tab that holds the app an offer error names; an unknown id opens Add-ons', () => {
+    const integration = {
+      id: B,
+      slug: 'razorpay',
+      name: 'Razorpay',
+      status: 'published',
+      kind: 'integration',
+    };
+    const appTabs = appTabsOf([option({ id: A }), option({ id: B, app: integration })]);
+    expect(tabForField(`addonOffers.${A}`, appTabs)).toBe('miniApps');
+    expect(tabForField(`addonOffers.${B}`, appTabs)).toBe('integrations');
+    expect(tabForField(`addonOffers.${GONE}`, appTabs)).toBe('addons');
+    expect(tabForField(`addonOffers.${A}`)).toBe('addons');
+    const problems = {
+      [`addonOffers.${B}`]: { code: 'server' as const },
+      name: { code: 'required' as const },
+    };
+    expect(tabsWithProblems(problems, appTabs)).toEqual(['details', 'integrations']);
+    expect(firstProblemField({ [`addonOffers.${A}`]: { code: 'server' } }, appTabs)).toBe(
+      `addonOffers.${A}`,
+    );
+    expect(
+      firstProblemField(
+        { [`addonOffers.${B}`]: { code: 'server' }, [`addonOffers.${A}`]: { code: 'server' } },
+        appTabs,
+      ),
+    ).toBe(`addonOffers.${B}`);
   });
 
   it('lists the tabs with a problem in tab order, once each', () => {
@@ -118,46 +166,47 @@ describe('add-on rows', () => {
   it('says whether an add-on can be bought', () => {
     expect(addonSaleState(option({ id: A }))).toBe('onSale');
     expect(addonSaleState(option({ id: A, isActive: false }))).toBe('packInactive');
-    expect(
-      addonSaleState(option({ id: A, app: { id: A, slug: 's', name: 'S', status: 'draft' } })),
-    ).toBe('appUnpublished');
+    const draft = { id: A, slug: 's', name: 'S', status: 'draft', kind: 'mini_app' };
+    expect(addonSaleState(option({ id: A, app: draft }))).toBe('appUnpublished');
     // An inactive pack is reported before an unpublished app.
-    expect(
-      addonSaleState(
-        option({ id: A, isActive: false, app: { id: A, slug: 's', name: 'S', status: 'draft' } }),
-      ),
-    ).toBe('packInactive');
+    expect(addonSaleState(option({ id: A, isActive: false, app: draft }))).toBe('packInactive');
   });
 
-  it('keeps a selected id the options no longer list as an unknown row, listed first', () => {
-    const rows = addonRows([option({ id: A }), option({ id: B })], [B, GONE, GONE]);
-    expect(rows.map((r) => `${r.kind}:${r.id}`)).toEqual([
-      `unknown:${GONE}`,
-      `option:${A}`,
-      `option:${B}`,
-    ]);
+  it('lists integrations on their tab and mini apps on theirs', () => {
+    const integration = {
+      id: B,
+      slug: 'razorpay',
+      name: 'Razorpay',
+      status: 'published',
+      kind: 'integration',
+    };
+    const options = [option({ id: A }), option({ id: B, app: integration })];
+    expect(appOptionsFor(options, 'miniApps').map((o) => o.id)).toEqual([A]);
+    expect(appOptionsFor(options, 'integrations').map((o) => o.id)).toEqual([B]);
+    expect(appTabFor('integration')).toBe('integrations');
+    expect(appTabFor('mini_app')).toBe('miniApps');
+    // a kind this build does not know is still reachable, as a mini app
+    expect(appTabFor('something_new')).toBe('miniApps');
   });
 
-  it('has no unknown rows when every selected id is listed', () => {
-    expect(addonRows([option({ id: A })], [A]).every((r) => r.kind === 'option')).toBe(true);
-    expect(addonRows([], [])).toEqual([]);
+  it('finds the ids no option lists, once each', () => {
+    expect(staleAppIds([option({ id: A }), option({ id: B })], [B, GONE, GONE])).toEqual([GONE]);
+    expect(staleAppIds([option({ id: A })], [A])).toEqual([]);
+    expect(staleAppIds([], [])).toEqual([]);
   });
 
-  it('filters by add-on, app and pack names; unknown rows always stay so they can be unticked', () => {
-    const rows = addonRows(
-      [
-        option({ id: A, name: 'Booking pack' }),
-        option({
-          id: B,
-          name: 'Chat pack',
-          app: { id: B, slug: 'chat', name: 'Live chat', status: 'published' },
-        }),
-      ],
-      [GONE],
-    );
-    expect(filterAddonRows(rows, 'live').map((r) => r.id)).toEqual([GONE, B]);
-    expect(filterAddonRows(rows, 'booking').map((r) => r.id)).toEqual([GONE, A]);
-    expect(filterAddonRows(rows, '').length).toBe(3);
+  it('filters by add-on, app and pack names', () => {
+    const options = [
+      option({ id: A, name: 'Booking pack' }),
+      option({
+        id: B,
+        name: 'Chat pack',
+        app: { id: B, slug: 'chat', name: 'Live chat', status: 'published', kind: 'mini_app' },
+      }),
+    ];
+    expect(filterAppOptions(options, 'live').map((o) => o.id)).toEqual([B]);
+    expect(filterAppOptions(options, 'booking').map((o) => o.id)).toEqual([A]);
+    expect(filterAppOptions(options, '').length).toBe(2);
   });
 });
 
@@ -178,7 +227,8 @@ describe('planCounts', () => {
     limits.contacts = 1000;
     const c = planCounts({ features, limits, visibleAddons: [A, B, GONE] });
     expect(c.featuresTotal).toBe(Object.keys(d.features).length);
-    expect(c.featuresOn).toBe(c.featuresTotal - 2);
+    // the two switched off here, and the six flags a new plan starts without (two Smart routing, two reminder upgrade tier, two agent status)
+    expect(c.featuresOn).toBe(c.featuresTotal - 8);
     expect(c.limitsTotal).toBe(PLAN_LIMIT_KEYS.length);
     expect(c.limitsSet).toBe(2);
     expect(c.addons).toBe(3);

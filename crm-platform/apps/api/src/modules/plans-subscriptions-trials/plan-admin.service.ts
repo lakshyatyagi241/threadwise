@@ -4,6 +4,8 @@ import {
   ERROR_CODES,
   createPlanRequestSchema,
   type CreatePlanPayload,
+  type PlanAddonImpactResponse,
+  type PlanAddonOffer,
   type PlanAddonOptionsResponse,
   type PlanAdminItem,
   type PlanAdminListResponse,
@@ -29,6 +31,13 @@ import {
   visibleAddonIds,
   visibleAddonIdsByPlan,
 } from './plan-visible-addons';
+import { addonRenewalImpact } from './plan-addon-impact';
+import {
+  offersByPlan,
+  offersForPlan,
+  withOfferFeatures,
+  writePlanOffers,
+} from './plan-addon-offers';
 import { planKind, slugifyPlanName, uniquePlanSlug } from './plan-rules';
 import { PlanStore } from './plan-store';
 
@@ -119,16 +128,18 @@ export class PlanAdminService {
 
   async list(): Promise<PlanAdminListResponse> {
     const registrationDefaultSlug = (await this.policy.registration()).defaultPlanId;
-    const { rows, counts, visible } = await this.store.tx(async (tx) => ({
+    const { rows, counts, visible, offers } = await this.store.tx(async (tx) => ({
       rows: await this.catalog.listPlans(tx),
       counts: await this.inUseCounts(tx),
       visible: await visibleAddonIdsByPlan(tx),
+      offers: await offersByPlan(tx),
     }));
     const data = rows.map((row) =>
       toAdminItem(row, {
         inUse: counts.get(row.slug) ?? 0,
         isRegistrationDefault: registrationDefaultSlug === row.slug,
         visibleAddons: visible.get(Number(row.id)) ?? [],
+        addonOffers: offers.get(Number(row.id)) ?? [],
       }),
     );
     return {
@@ -147,6 +158,14 @@ export class PlanAdminService {
   /** The add-on packs a plan may enable, for the plan form (every operator role reads, like the catalogue). */
   async addonOptions(): Promise<PlanAddonOptionsResponse> {
     return { data: await this.store.tx((tx) => addonOptions(tx)) };
+  }
+
+  /** How many of one plan's workspaces still pay for each plain add-on pack (what "include it in this plan" would stop renewing). */
+  async addonImpact(uuid: string): Promise<PlanAddonImpactResponse> {
+    return this.store.tx(async (tx) => {
+      const row = await this.byUuid(tx, uuid);
+      return addonRenewalImpact(tx, row.slug);
+    });
   }
 
   async get(uuid: string): Promise<PlanAdminItem> {
@@ -183,8 +202,9 @@ export class PlanAdminService {
                 ${JSON.stringify(withStoredUnknownFeatures({}, body.features, body.moduleFeatures))}::jsonb)
         RETURNING ${PLAN_COLUMNS}
       `);
-      const row = res.rows[0] as unknown as PlanRow;
+      let row = res.rows[0] as unknown as PlanRow;
       await replaceVisibleAddons(tx, Number(row.id), body.visibleAddons);
+      row = await this.applyOffers(tx, row, body.addonOffers);
       await this.record(tx, 'platform.plan.created', operatorId, {
         slug,
         name: row.name,
@@ -198,6 +218,11 @@ export class PlanAdminService {
         isActive: row.is_active,
         isDefault: row.is_default,
         visibleAddons: body.visibleAddons.length,
+        addonOffers: (body.addonOffers as PlanAddonOffer[]).map((o) => ({
+          addonId: o.addonId,
+          mode: o.mode,
+          amount: o.amount,
+        })),
       });
       return this.item(tx, row, registrationDefaultSlug);
     });
@@ -248,11 +273,19 @@ export class PlanAdminService {
         WHERE id = ${stored.id}
         RETURNING ${PLAN_COLUMNS}
       `);
-      const row = res.rows[0] as unknown as PlanRow;
+      let row = res.rows[0] as unknown as PlanRow;
       if (patch.visibleAddons !== undefined)
         await replaceVisibleAddons(tx, Number(stored.id), after.visibleAddons);
+      const offersBefore = await offersForPlan(tx, Number(stored.id));
+      if (patch.addonOffers !== undefined) row = await this.applyOffers(tx, row, patch.addonOffers);
 
-      const changes = diffFields(before, toFields(row, after.visibleAddons));
+      const changes: Record<string, unknown> = diffFields(
+        before,
+        toFields(row, after.visibleAddons),
+      );
+      const offersAfter = await offersForPlan(tx, Number(stored.id));
+      if (JSON.stringify(offersBefore) !== JSON.stringify(offersAfter))
+        changes.addonOffers = { from: offersBefore, to: offersAfter };
       if (Object.keys(changes).length > 0) {
         await this.record(tx, 'platform.plan.updated', operatorId, {
           slug: row.slug,
@@ -342,7 +375,26 @@ export class PlanAdminService {
       inUse,
       isRegistrationDefault: registrationDefaultSlug === row.slug,
       visibleAddons: await visibleAddonIds(tx, Number(row.id)),
+      addonOffers: await offersForPlan(tx, Number(row.id)),
     });
+  }
+
+  /**
+   * Writes the plain add-on offers named and sets the plan's features to match (included: the add-on's features on; paid / hidden: off), in the same
+   * transaction as the plan. Returns the row as stored afterwards.
+   */
+  private async applyOffers(
+    tx: Tx,
+    row: PlanRow,
+    offers: readonly PlanAddonOffer[],
+  ): Promise<PlanRow> {
+    if (offers.length === 0) return row;
+    const { features } = await writePlanOffers(tx, Number(row.id), offers);
+    if (Object.keys(features).length === 0) return row;
+    const res = await tx.execute(sql`
+      UPDATE plans SET features = ${JSON.stringify(withOfferFeatures(row.features, features))}::jsonb
+      WHERE id = ${row.id} RETURNING ${PLAN_COLUMNS}`);
+    return res.rows[0] as unknown as PlanRow;
   }
 
   private async clearDefault(tx: Tx): Promise<void> {

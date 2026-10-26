@@ -49,7 +49,7 @@ export class HandoffController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(claimConversationSchema)) body: ClaimConversationInput,
   ) {
-    const out = await this.handoff.claim(id, body.rowVersion);
+    const out = await this.handoff.claim(id, body.rowVersion, body.acknowledgeLimit === true);
     return { conversation: out.summary, ownerSet: out.ownerSet };
   }
 
@@ -93,13 +93,14 @@ export class HandoffController {
   @RequirePermission('inbox.conversation.reply')
   @ApiOperation({
     summary: 'Give a conversation back to the bot',
-    description: 'Unassigns it and unmutes the bot; the parked flow answers the next message.',
+    description:
+      "Unassigns it and unmutes the bot. When the handoff came from a flow whose Human handoff step has a 'returned' exit, the flow continues there now; otherwise the bot answers the customer's next message. The answer says which (`resumed`).",
   })
   async returnToBot(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(returnToBotSchema)) body: ReturnToBotInput,
   ) {
-    return { conversation: await this.handoff.returnToBot(id, body.note) };
+    return this.handoff.returnToBot(id, body.note);
   }
 
   @Get('conversations/:id/handoff')

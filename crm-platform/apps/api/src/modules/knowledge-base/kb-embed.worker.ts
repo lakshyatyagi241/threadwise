@@ -7,7 +7,7 @@ import { KbChunkRepository } from './kb-chunk.repository';
 import { KbConfigService } from './kb-config.service';
 import { KbEmbeddingService, KbUnavailableError } from './kb-embedding.service';
 import { KbIndexService } from './kb-index.service';
-import { MAX_EMBED_ATTEMPTS, toVectorLiteral } from './kb.rules';
+import { MAX_EMBED_ATTEMPTS, embedBatchKey, toVectorLiteral } from './kb.rules';
 
 const ORGS_PER_TICK = 10;
 const BATCH = 64;
@@ -20,7 +20,8 @@ const INDEX_PER_PASS = 50;
  * Makes the vectors (worker process). Every few seconds it finds workspaces with `pending` passages and embeds a batch for each:
  * a save never waits for the vendor, and a vendor outage only delays indexing (the agent reads the unindexed text directly meanwhile).
  *
- * - A row is claimed with `FOR UPDATE SKIP LOCKED` and its attempt counted; the vendor is called with no transaction open.
+ * - A row is claimed with `FOR UPDATE SKIP LOCKED` and its attempt counted; the vendor is called with no transaction open. A batch is
+ *   billed to the workspace's wallet once (when the platform's key paid for it); an empty wallet leaves the passages queued, like a used-up allowance.
  * - A Redis lock per workspace keeps two worker pods from embedding the same workspace at once.
  * - The vector is stored only if the text is still what was embedded.
  * - About once a minute: entries that have no passages yet are cut (entries from before the index, the FAQ merge), vectors made with
@@ -101,9 +102,12 @@ export class KbEmbedWorker {
         );
         if (batch.length === 0) break;
         try {
+          // One charge per batch, named by its passages: if the write below fails the batch is claimed and embedded again, and the
+          // wallet recognises it instead of billing the retry.
           const { vectors, model } = await this.embeddings.embedMany(
             orgId,
             batch.map((b) => b.text),
+            embedBatchKey(batch),
           );
           await this.db.txAs({ orgId, userId: null }, async (tx) => {
             for (let k = 0; k < batch.length; k++) {

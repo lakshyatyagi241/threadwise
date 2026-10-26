@@ -12,6 +12,13 @@ export type AddonErrorKey =
   | 'coreTooOld'
   | 'engineConflict';
 
+/** Which sentence a failed delete of an add-on gets: the API refuses while any purchase exists, ended ones included. */
+export function deleteErrorKey(error: unknown): 'refused' | 'forbidden' | 'notFound' | 'failed' {
+  const k = addonErrorKey(error);
+  if (k === 'packInUse') return 'refused';
+  return k === 'forbidden' || k === 'notFound' ? k : 'failed';
+}
+
 /** Which sentence a failed call gets. Branches on the stable `code` and status, never on the API's wording. */
 export function addonErrorKey(error: unknown): AddonErrorKey {
   if (!(error instanceof ApiError)) return 'generic';

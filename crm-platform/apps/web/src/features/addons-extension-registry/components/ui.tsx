@@ -56,7 +56,7 @@ export function Crumbs({ items }: { items: Crumb[] }) {
 
 /** The italic, accented word in a serif page title ("Install an *add-on*."). */
 export function Accent({ children }: { children: ReactNode }) {
-  return <span className="italic text-primary">{children}</span>;
+  return <span className="not-italic text-primary">{children}</span>;
 }
 
 /** Breadcrumb, eyebrow, serif title, one line of explanation and the page's actions; stacks on narrow screens. */

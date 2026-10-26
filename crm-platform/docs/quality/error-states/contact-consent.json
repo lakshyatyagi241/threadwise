@@ -1,0 +1,100 @@
+{
+  "feature": "contact-consent",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-contact-consent-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/components/consent-card.tsx",
+        "apps/web/src/features/contact-consent/components/consent-notice-editor.tsx",
+        "apps/web/src/features/contact-consent/components/consent-settings-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contact-consent/components/states.test.tsx",
+          "match": "shows an error state with a retry when the settings fail to load"
+        }
+      ],
+      "partial": "The settings screen has a retry and is tested; the contact consent card and the notice editor show an alert with no retry."
+    },
+    {
+      "id": "ES-contact-consent-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/components/consent-card.tsx",
+        "apps/web/src/features/contact-consent/components/consent-notice-editor.tsx",
+        "apps/web/src/features/contact-consent/components/consent-settings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-contact-consent-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/components/consent-card.tsx",
+        "apps/web/src/features/contact-consent/components/consent-notice-editor.tsx",
+        "apps/web/src/features/contact-consent/components/consent-settings-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contact-consent/components/states.test.tsx",
+          "match": "keeps the typed values and shows the error when save fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-contact-consent-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-contact-consent-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/components/consent-settings-screen.tsx",
+        "apps/web/src/features/contact-consent/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-contact-consent-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contact-consent/components/unsubscribe-page.tsx",
+        "apps/web/src/features/contact-consent/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

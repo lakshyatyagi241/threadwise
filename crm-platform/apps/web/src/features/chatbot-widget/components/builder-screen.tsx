@@ -275,7 +275,7 @@ function Builder({
               </div>
               <div className="truncate text-xl leading-tight">
                 {editing ? t('titleEdit') : t('titleNew')}{' '}
-                <span className="italic text-brand">{t('titleAccent')}</span>
+                <span className="not-italic text-brand">{t('titleAccent')}</span>
               </div>
             </div>
           </div>

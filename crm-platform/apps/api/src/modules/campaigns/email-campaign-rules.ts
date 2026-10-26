@@ -11,9 +11,17 @@ export const EMAIL_PROVIDER = 'email';
 export const isEmailProvider = (provider: string | null | undefined): boolean =>
   provider === EMAIL_PROVIDER;
 
-/** SMS (TW-SMS-027) and email are never charged to the WhatsApp wallet: they have their own plan caps. */
-export const isWalletFree = (provider: string | null | undefined): boolean =>
+/**
+ * SMS and email are paid per message from the wallet by usage billing (the operator's SMS and email prices), not by the WhatsApp rate
+ * card that the launch and per-recipient wallet checks read. Their engines check the wallet before each send and report each accepted
+ * one, so those two checks are skipped for them.
+ */
+export const isUsageBilled = (provider: string | null | undefined): boolean =>
   provider === 'sms' || provider === EMAIL_PROVIDER;
+
+/** The usage price a usage-billed run is checked at: `sms` for an SMS campaign, else `email` (see `isUsageBilled`). */
+export const usageKindOf = (provider: string | null | undefined): 'sms' | 'email' =>
+  provider === 'sms' ? 'sms' : 'email';
 
 /** Reference's words for a recipient the run cannot mail, stamped on the recipient row. */
 export const NO_EMAIL_ADDRESS = 'No email address on this contact';

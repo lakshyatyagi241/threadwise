@@ -1,0 +1,297 @@
+{
+  "module": "notifications",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "updateNotificationPreferencesRequestSchema",
+      "file": "apps/api/src/modules/notifications/notifications.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "items",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "items",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "items",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P1"
+        },
+        {
+          "field": "items",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (60) items",
+          "value": "array of 61",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "items",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "items",
+          "reason": "size boundary was refused by another rule (items: Each type may appear once)",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "readSubjectRequestSchema",
+      "file": "apps/api/src/modules/notifications/notifications.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "kind",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (device_group)",
+          "value": "\"device_group\"",
+          "priority": "P1"
+        },
+        {
+          "field": "id",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "id",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "id",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "pushSubscriptionInputSchema",
+      "file": "apps/api/src/modules/notifications/push.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "endpoint",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "endpoint",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "endpoint",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a url",
+          "value": "\"not a url\"",
+          "priority": "P1"
+        },
+        {
+          "field": "expirationTime",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "expirationTime",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "keys",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "keys",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (16)",
+          "value": "\"aaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (16)",
+          "value": "\"aaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.p256dh",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (8)",
+          "value": "\"aaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (8)",
+          "value": "\"aaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "endpoint",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "endpoint",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "keys.p256dh",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "keys.auth",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

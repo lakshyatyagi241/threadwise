@@ -76,7 +76,7 @@ export function apiHttpLoggerOptions(level: string): Options {
     serializers: {
       req: (req) => {
         // `query` and `params` repeat the address unmasked, so they are left out: `url` carries the masked query string.
-        const { query: _q, params: _p, ...out } = stdSerializers.req(req) as Record<string, any>;
+        const { query: _q, params: _p, ...out } = stdSerializers.req(req);
         return {
           ...out,
           // A push portal's address carries its secret as the last path segment: never in a log line.
@@ -95,7 +95,15 @@ export function apiHttpLoggerOptions(level: string): Options {
     },
     // A 4xx is the caller's doing (info); a 5xx is already logged once at error by the exception filter, so its access line is a warn.
     customLogLevel: (_req, res) => (res.statusCode >= 500 ? 'warn' : 'info'),
-    // Health probes fire every few seconds; logging them buries everything that matters.
-    autoLogging: { ignore: (req) => req.url === '/health' || req.url === '/ready' },
+    // Health probes fire every few seconds; logging them buries everything that matters. The same goes for provider webhooks: the public
+    // receiver takes about 140 deliveries a second on prod, and a request line with both header sets (about 1.2 KB of JSON each) was a
+    // visible share of that process's CPU. A refusal is still logged by the receiver ('whatsapp webhook refused', at warn), and a failure
+    // by the exception filter; only the success line goes.
+    autoLogging: {
+      ignore: (req) =>
+        req.url === '/health' ||
+        req.url === '/ready' ||
+        (req.url ?? '').startsWith('/v2/public/webhooks/'),
+    },
   };
 }

@@ -1,16 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import type { ContactViewResponse } from '@crm/contracts';
 import { DEFAULT_FILTERS } from '../api/contacts';
+import { filtersToSearch, parseFilters } from './filters';
 import {
   composeViewFilter,
+  defaultFiltersOf,
   filtersOfView,
   pickerViews,
   sameFilters,
+  searchOfView,
   tabViews,
   viewChanged,
   viewColumnsOf,
   viewFilterOf,
   viewIdOf,
+  viewNameProblem,
   viewRulesOf,
   withView,
 } from './views';
@@ -94,6 +98,34 @@ describe('withView / viewIdOf', () => {
   });
 });
 
+describe('searchOfView', () => {
+  it('carries the saved filters and the open view, never the page', () => {
+    const saved = viewFilterOf({ ...DEFAULT_FILTERS, lifecycleStage: 'lead', page: 3 });
+    const search = searchOfView(saved, ID);
+    const p = new URLSearchParams(search);
+    expect(p.get('stage')).toBe('lead');
+    expect(p.get('view')).toBe(ID);
+    expect(p.has('page')).toBe(false);
+  });
+  it('reads back to the same filters the view saved, so the list opens on them', () => {
+    const saved = viewFilterOf({ ...DEFAULT_FILTERS, q: 'asha', sort: 'name', order: 'asc' });
+    const back = parseFilters(new URLSearchParams(searchOfView(saved, ID)), DEFAULT_FILTERS.limit);
+    expect(back).toMatchObject({ q: 'asha', sort: 'name', order: 'asc', page: 1 });
+  });
+  it('is just the view when the view saved no filters', () => {
+    expect(searchOfView({}, ID)).toBe(`?view=${ID}`);
+  });
+});
+
+describe('defaultFiltersOf (Reset filters)', () => {
+  it('is the default filters at the page size the person chose', () => {
+    expect(defaultFiltersOf(25)).toEqual({ ...DEFAULT_FILTERS, limit: 25 });
+  });
+  it('resets to all contacts with only the view still in the address', () => {
+    expect(withView(filtersToSearch(defaultFiltersOf(25), 25), ID)).toBe(`?view=${ID}`);
+  });
+});
+
 describe('pickerViews / tabViews', () => {
   const a = view({ id: 'a', name: 'Leads', isFavorite: true, position: 2 });
   const b = view({ id: 'b', name: 'Customers', isShared: true, position: 1 });
@@ -153,5 +185,17 @@ describe('view columns and the editor filter', () => {
     expect(viewChanged(v, { ...same, q: 'b' }, ['name', 'phone'])).toBe(true);
     const noCols = view({ filter: viewFilterOf(same) });
     expect(viewChanged(noCols, same, ['anything'])).toBe(false);
+  });
+});
+
+describe('view name check', () => {
+  it('asks for a name, then for at least 3 and at most 50 characters, counted after trimming', () => {
+    expect(viewNameProblem('')).toBe('needName');
+    expect(viewNameProblem('   ')).toBe('needName');
+    expect(viewNameProblem('ab')).toBe('nameShort');
+    expect(viewNameProblem('  ab  ')).toBe('nameShort');
+    expect(viewNameProblem('abc')).toBeNull();
+    expect(viewNameProblem('x'.repeat(50))).toBeNull();
+    expect(viewNameProblem('x'.repeat(51))).toBe('nameLong');
   });
 });

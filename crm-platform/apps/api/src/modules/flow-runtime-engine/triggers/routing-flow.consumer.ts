@@ -52,7 +52,7 @@ export class RoutingFlowConsumer implements OutboxSubscriber, OnModuleInit {
 
     const found = await this.db.txAs({ orgId }, async (tx) => {
       const conv = (await tx.execute(sql`
-        SELECT id, channel_id, peer_key, contact_id, archived FROM conversations
+        SELECT id, channel_id, peer_key, contact_id, archived, status FROM conversations
         WHERE org_id = ${orgId} AND uuid = ${conversationUuid}::uuid`)) as unknown as Rows;
       const flow = (await tx.execute(sql`
         SELECT id, is_active FROM flows WHERE org_id = ${orgId} AND uuid = ${flowUuid}::uuid`)) as unknown as Rows;
@@ -66,7 +66,8 @@ export class RoutingFlowConsumer implements OutboxSubscriber, OnModuleInit {
       return { c, f, already: (started?.rows.length ?? 0) > 0 };
     });
     const { c, f } = found;
-    if (!c || c.archived === true) return;
+    // A spam thread gets no bot, the same rule as the inbound mute: a rule that marked it spam in the same pass does not start its flow.
+    if (!c || c.archived === true || c.status === 'spam') return;
     if (!f || f.is_active !== true) {
       this.logger.warn(
         { orgId, flow: flowUuid, rule: p.ruleId },

@@ -4,6 +4,7 @@
  * `ContactNotesSection` is the contact's Notes list and composer (the inbox's side panel shows it).
  * The lookups and `ContactsReadonlyTable` serve the segments screens (the rule builder's pickers, a segment's members).
  */
+export { NewPropertyDialog } from './components/new-property-dialog';
 export { SlashTextarea } from './components/slash-picker';
 export { NotesSection as ContactNotesSection } from './components/contact/notes-section';
 export { ContactsReadonlyTable } from './components/contacts-readonly-table';

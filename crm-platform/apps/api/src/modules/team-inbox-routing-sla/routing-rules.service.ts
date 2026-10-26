@@ -8,6 +8,8 @@ import {
   type RoutingAssign,
   type RoutingRule,
   type RoutingRuleListResponse,
+  type RoutingTestRequest,
+  type RoutingTestResponse,
   type RoutingSettings,
   type UpdateRoutingRuleInput,
   type UpdateRoutingSettingsInput,
@@ -21,6 +23,7 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MemberDirectory, PERM_CONVERSATION_READ } from '../../realtime';
 import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import { decodeActions, encodeActions, toRoutingRule } from './routing-rules.mapper';
+import { RoutingEngine } from './routing-engine.service';
 import { RoutingRulesRepository, type RuleRow } from './routing-rules.repository';
 
 const MODULE_KEY = 'routing_rules';
@@ -45,7 +48,14 @@ export class RoutingRulesService {
     private readonly directory: MemberDirectory,
     private readonly usage: PlanUsageService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly engine: RoutingEngine,
   ) {}
+
+  /** "Try it": the arrival decision for a sample, with no side effect (see `RoutingEngine.dryRun`). */
+  test(input: RoutingTestRequest): Promise<RoutingTestResponse> {
+    const { orgId } = RequestContextStore.require();
+    return this.engine.dryRun(orgId, input);
+  }
 
   async list(query: ListRoutingRulesQuery): Promise<RoutingRuleListResponse> {
     const { orgId } = RequestContextStore.require();
@@ -110,6 +120,7 @@ export class RoutingRulesService {
         stopOnMatch: input.stopOnMatch,
         isActive: input.isActive,
         isFallback: input.isFallback,
+        appliesToAll: input.appliesToAll,
         sort: await this.repo.nextSort(tx, orgId),
       });
       if (input.isFallback) await this.repo.clearOtherFallbacks(tx, orgId, created.id);
@@ -181,14 +192,15 @@ export class RoutingRulesService {
       }
       const nextConditions = input.conditions ?? before.conditions;
       const isFallback = input.isFallback ?? before.isFallback;
-      // The fallback is the catch-all: a normal rule without any condition would catch everything, so it is refused here too.
-      if (!isFallback && !hasRoutingConditions(nextConditions)) {
+      const appliesToAll = input.appliesToAll ?? before.appliesToAll;
+      // A rule that is neither the fallback nor switched to "every conversation" needs a condition, or it would never match (H13).
+      if (!isFallback && !appliesToAll && !hasRoutingConditions(nextConditions)) {
         throw AppError.validation(
-          'Add at least one condition, or mark this rule as the fallback.',
+          'Add at least one condition, or let the rule apply to every conversation.',
           [
             {
               path: 'conditions',
-              message: 'Add at least one condition, or mark this rule as the fallback.',
+              message: 'Add at least one condition, or let the rule apply to every conversation.',
             },
           ],
         );
@@ -226,6 +238,7 @@ export class RoutingRulesService {
         ...(input.stopOnMatch !== undefined ? { stopOnMatch: input.stopOnMatch } : {}),
         ...(input.isActive !== undefined ? { isActive: input.isActive } : {}),
         ...(input.isFallback !== undefined ? { isFallback: input.isFallback } : {}),
+        ...(input.appliesToAll !== undefined ? { appliesToAll: input.appliesToAll } : {}),
       });
       if (!ok) throw AppError.rowVersionConflict('Routing rule');
       if (input.isFallback) await this.repo.clearOtherFallbacks(tx, orgId, Number(row.id));
@@ -237,6 +250,7 @@ export class RoutingRulesService {
           description: before.description,
           isActive: before.isActive,
           isFallback: before.isFallback,
+          appliesToAll: before.appliesToAll,
           stopOnMatch: before.stopOnMatch,
           conditions: before.conditions,
           assign: before.assign,
@@ -252,6 +266,7 @@ export class RoutingRulesService {
           description: after.description,
           isActive: after.isActive,
           isFallback: after.isFallback,
+          appliesToAll: after.appliesToAll,
           stopOnMatch: after.stopOnMatch,
           conditions: after.conditions,
           assign: after.assign,
@@ -324,6 +339,7 @@ export class RoutingRulesService {
         stopOnMatch: src.stopOnMatch,
         isActive: false,
         isFallback: false,
+        appliesToAll: src.appliesToAll,
         sort: await this.repo.nextSort(tx, orgId),
       });
       await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
@@ -414,7 +430,8 @@ export class RoutingRulesService {
   private async present(tx: Tx, orgId: number, rows: RuleRow[]): Promise<RoutingRule[]> {
     const decoded = rows.map((r) => decodeActions(r.actions));
     const actions = decoded.map(
-      (d) => d.assign ?? { strategy: 'round_robin' as const, userIds: [], teamIds: [] },
+      (d) =>
+        d.assign ?? { strategy: 'round_robin' as const, userIds: [], teamIds: [], everyone: false },
     );
     const flows = await this.repo.flowsByUuid(tx, orgId, [
       ...new Set(decoded.flatMap((d) => (d.triggerFlowId ? [d.triggerFlowId] : []))),

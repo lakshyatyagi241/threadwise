@@ -264,3 +264,11 @@ export function memberChanges(form: TeamForm, saved: WspTeam): MemberChange[] {
   }
   return out;
 }
+
+/**
+ * Whether a team method option is closed to this workspace: round robin, least loaded (and the other automatic ones) are automatic
+ * assignment, which is the `inbox_routing` feature (the Smart routing add-on). Manual is always open, and so is the method the team already
+ * stores, so a workspace that lost the feature can still open and save its teams.
+ */
+export const isMethodLocked = (autoInPlan: boolean, method: string, stored: string): boolean =>
+  !autoInPlan && method !== 'manual' && method !== stored;

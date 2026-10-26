@@ -13,6 +13,8 @@ import {
   type ImportMapping,
   type ImportRejectReason,
 } from '@crm/contracts';
+import { coercePropertyValue } from '../contacts/contact-property-values';
+import { cellToPropertyValue, type ImportProperty } from './import-properties';
 
 /** A row that passed validation, with every cell already normalised. */
 export interface ParsedRow {
@@ -52,11 +54,20 @@ export interface ParsedRow {
   consentEmail?: Exclude<ImportConsentValue, 'blank'>;
   consentEmailColumn?: boolean;
   consentEmailRaw?: string;
+  /** Custom property values by key, only the cells that hold something (a blank cell never clears a value). */
+  properties?: Record<string, unknown>;
 }
 
 export type RowResult =
   | { ok: true; row: ParsedRow }
-  | { ok: false; line: number; reason: ImportRejectReason; values: Record<string, string> };
+  | {
+      ok: false;
+      line: number;
+      reason: ImportRejectReason;
+      /** The header of the one column that failed, for the reasons that name one. */
+      column?: string;
+      values: Record<string, string>;
+    };
 
 export type ResolvedMapping = Partial<Record<ImportField, number>>;
 
@@ -72,6 +83,11 @@ export function resolveMapping(
     else if (v !== undefined && v < headers.length) mapping[field] = v;
   }
   return mapping;
+}
+
+/** The columns the built-in fields read, so a custom property never takes one of them. */
+export function builtinColumns(mapping: ResolvedMapping): Set<number> {
+  return new Set(Object.values(mapping).filter((v): v is number => v !== undefined));
 }
 
 /** What the file needs for any row to be importable: a phone and some way to name the contact. */
@@ -107,29 +123,39 @@ export function splitList(cell: string): string[] {
 function rejectValues(
   headers: readonly string[],
   cells: readonly string[],
+  failed?: number,
 ): Record<string, string> {
   const out: Record<string, string> = {};
-  headers.slice(0, 20).forEach((h, i) => {
-    out[h || `column_${i + 1}`] = (cells[i] ?? '').slice(0, 200);
-  });
+  const keep = (i: number) => {
+    out[columnName(headers, i)] = (cells[i] ?? '').slice(0, 200);
+  };
+  headers.slice(0, 20).forEach((_, i) => keep(i));
+  // The column that failed is kept wherever it is: a custom property usually sits after the built-in columns, past the first 20.
+  if (failed !== undefined) keep(failed);
   return out;
+}
+
+/** A column's header as the rejection names it; a blank header falls back to `column_N`, the name the rejected-rows report uses. */
+export function columnName(headers: readonly string[], index: number): string {
+  return headers[index]?.trim() || `column_${index + 1}`;
 }
 
 export function extractRow(
   record: { line: number; cells: string[] },
   mapping: ResolvedMapping,
   headers: readonly string[],
-  opts: { defaultCountryCode?: string },
+  opts: { defaultCountryCode?: string; properties?: readonly ImportProperty[] },
 ): RowResult {
   const cell = (field: ImportField): string => {
     const idx = mapping[field];
     return idx === undefined ? '' : (record.cells[idx] ?? '').trim();
   };
-  const reject = (reason: ImportRejectReason): RowResult => ({
+  const reject = (reason: ImportRejectReason, column?: number): RowResult => ({
     ok: false,
     line: record.line,
     reason,
-    values: rejectValues(headers, record.cells),
+    ...(column === undefined ? {} : { column: columnName(headers, column) }),
+    values: rejectValues(headers, record.cells, column),
   });
 
   const name = composeDisplayName({
@@ -173,6 +199,17 @@ export function extractRow(
   const consentSms = smsColumn ? parseImportConsent(cell('consentSms')) : undefined;
   const emailColumn = mapping.consentEmail !== undefined;
   const consentEmail = emailColumn ? parseImportConsent(cell('consentEmail')) : undefined;
+
+  const properties: Record<string, unknown> = {};
+  for (const p of opts.properties ?? []) {
+    if (p.column === null) continue;
+    const value = cellToPropertyValue(p, record.cells[p.column] ?? '');
+    if (value === undefined) continue;
+    const checked = coercePropertyValue(p, value);
+    if (!checked.ok) return reject('invalid_property_value', p.column);
+    properties[p.key] = checked.value;
+  }
+
   return {
     ok: true,
     row: {
@@ -205,6 +242,7 @@ export function extractRow(
       ...(consentEmail === 'unrecognised'
         ? { consentEmailRaw: cell('consentEmail').slice(0, 40) }
         : {}),
+      ...(Object.keys(properties).length > 0 ? { properties } : {}),
     },
   };
 }

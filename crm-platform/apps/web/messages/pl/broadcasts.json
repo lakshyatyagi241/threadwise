@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Zamknij"
     },
+    "list": {
+      "unofficialDisabled": "Nieoficjalne (wyłączone)"
+    },
     "detail": {
       "back": "Wstecz",
       "crumb": "Wiadomości masowe / Analityka / #{ref}",

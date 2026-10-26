@@ -12,6 +12,8 @@ const seg = (over: Partial<Segment>): Segment => ({
   sharedWith: { users: [], teams: [] },
   ownerId: 'u1',
   ownerName: 'Asha',
+  createdBy: { id: 'u1', name: 'Asha' },
+  updatedBy: null,
   rules: {
     type: 'group',
     combinator: 'and',

@@ -29,13 +29,15 @@ export function parseBusinessHours(raw: unknown): BusinessHours | null {
   }
 }
 
-/** Day and "HH:mm" of an instant in a time zone; an unknown zone falls back to UTC. */
-export function localParts(
-  at: Date,
-  timeZone: string,
-): { day: (typeof DAY_KEYS)[number]; hhmm: string; date: string } {
-  const read = (tz: string) =>
-    new Intl.DateTimeFormat('en-US', {
+const FORMATTERS = new Map<string, Intl.DateTimeFormat>();
+/**
+ * One formatter per zone: building an `Intl.DateTimeFormat` costs about seven times what formatting with it does, and the personal-hours
+ * status check runs it for every candidate of a routing decision. An unknown zone throws and is never cached.
+ */
+function localFormatter(tz: string): Intl.DateTimeFormat {
+  let f = FORMATTERS.get(tz);
+  if (!f) {
+    f = new Intl.DateTimeFormat('en-US', {
       timeZone: tz,
       weekday: 'short',
       year: 'numeric',
@@ -44,7 +46,18 @@ export function localParts(
       hour: '2-digit',
       minute: '2-digit',
       hourCycle: 'h23',
-    }).formatToParts(at);
+    });
+    FORMATTERS.set(tz, f);
+  }
+  return f;
+}
+
+/** Day and "HH:mm" of an instant in a time zone; an unknown zone falls back to UTC. */
+export function localParts(
+  at: Date,
+  timeZone: string,
+): { day: (typeof DAY_KEYS)[number]; hhmm: string; date: string } {
+  const read = (tz: string) => localFormatter(tz).formatToParts(at);
   let parts: Intl.DateTimeFormatPart[];
   try {
     parts = read(timeZone || 'UTC');

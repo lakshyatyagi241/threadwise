@@ -23,7 +23,7 @@ import { ChannelsRepository } from './channels.repository';
 import { mediaKindFor } from './viber-message';
 import { VibBroadcastsRepository, type VibBroadcastRow } from './vib-broadcasts.repository';
 
-const MODULE_KEY = 'viber_broadcasts';
+export const MODULE_KEY = 'viber_broadcasts';
 const LIST_LIMIT = 50;
 
 export interface VibBroadcastJob {

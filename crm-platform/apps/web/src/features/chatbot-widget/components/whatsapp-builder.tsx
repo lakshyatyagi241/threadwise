@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   DEFAULT_LAUNCHER_AVATAR,
@@ -31,6 +31,7 @@ import {
 } from '../lib/builder-model';
 import { BackIcon, ChevronDownIcon, ChevronUpIcon, CopyIcon, WhatsappGlyph } from './icons';
 import { LauncherPreview, type PreviewDevice } from './launcher-preview';
+import { FullPageButton, FullPageView } from './preview-full-page';
 import { ImageUpload } from './image-upload';
 import { PhoneField } from './phone-field';
 
@@ -81,6 +82,7 @@ export interface WhatsappBuilderProps {
  */
 export function WhatsappBuilder(p: WhatsappBuilderProps) {
   const { s, set, flash } = p;
+  const [fullPage, setFullPage] = useState(false);
   const t = useTranslations('chatbotWidget.whatsappBuilder');
   const setup = useTranslations('chatbotWidget.builder.setup');
   const b = useTranslations('chatbotWidget.builder');
@@ -163,7 +165,8 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
                   {b('crumb')} / {t('crumb')}
                 </div>
                 <h1 className="truncate text-xl leading-tight">
-                  {t('title')} <span className="italic text-emerald-700">{t('titleAccent')}</span>
+                  {t('title')}{' '}
+                  <span className="not-italic text-emerald-700">{t('titleAccent')}</span>
                 </h1>
               </div>
             </div>
@@ -320,7 +323,37 @@ export function WhatsappBuilder(p: WhatsappBuilderProps) {
             )}
           </div>
 
+          <div className="flex justify-end">
+            <FullPageButton open={fullPage} onToggle={() => setFullPage((on) => !on)} />
+          </div>
           <LauncherPreview s={s} device={p.device} />
+          {fullPage ? (
+            <FullPageView
+              onClose={() => setFullPage(false)}
+              label={t('preview.title')}
+              header={
+                <div className="flex w-fit gap-0.5 rounded-full border border-border bg-background p-1">
+                  {(['desktop', 'mobile'] as const).map((d) => (
+                    <button
+                      key={d}
+                      type="button"
+                      aria-pressed={p.device === d}
+                      onClick={() => p.onDevice(d)}
+                      className={
+                        p.device === d
+                          ? 'rounded-full bg-brand px-3.5 py-1.5 text-[12.5px] font-bold text-brand-foreground'
+                          : 'rounded-full px-3.5 py-1.5 text-[12.5px] font-bold text-muted-foreground hover:bg-muted'
+                      }
+                    >
+                      {t(`preview.${d}`)}
+                    </button>
+                  ))}
+                </div>
+              }
+            >
+              <LauncherPreview s={s} device={p.device} />
+            </FullPageView>
+          ) : null}
         </div>
       </section>
     </>

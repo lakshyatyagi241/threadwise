@@ -24,7 +24,7 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { isAssetSlot, isWindowSlot } from './asset-slots';
-import { isSafeSvg } from './svg-safe';
+import { isSafeSvg } from '../../common/svg-safe';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage, decodeCursor } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -527,7 +527,7 @@ export class WidgetsService {
         ]);
       mime = 'image/svg+xml';
     } else {
-      const checked = this.uploads.validate({
+      const checked = await this.uploads.validateScanned({
         filename: file.originalname,
         buffer: file.buffer,
         allow: ['image'],

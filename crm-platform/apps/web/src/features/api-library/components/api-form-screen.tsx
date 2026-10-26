@@ -46,10 +46,14 @@ import {
   fullSignature,
   jsonStatus,
   keptSecretsAtRisk,
+  jsonErrorAt,
+  secretOverPlainHttp,
   newRowId,
   noErrors,
   requestSignature,
+  sentVariables,
   syncVariables,
+  withSentVariables,
   type ApiFormState,
   type Built,
   type FormErrors,
@@ -233,7 +237,11 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
   const guard = useLeaveGuard(dirty && !save.isSuccess);
 
   function runTest() {
+    // A new run replaces the earlier outcome, even when it stops before a request is sent. Otherwise an old pass stays on screen under the new error.
+    setResult(null);
+    setTestedSig(null);
     setBlocked(null);
+    setTestFailure(null);
     const b = buildTest(form, saved?.id);
     if (!b.ok) {
       setShowErrors(true);
@@ -244,7 +252,6 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
       setBlocked(tt('runCodeFirst'));
       return;
     }
-    setTestFailure(null);
     run.mutate({ input: b.input, sig });
   }
 
@@ -433,15 +440,16 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
               hint={t('variablesHint')}
             >
               <VariablesPanel
-                variables={form.variables}
+                variables={sentVariables(form)}
                 errors={errors}
                 disabled={disabled}
-                onChange={(v) => update({ variables: v })}
+                onChange={(v) => update({ variables: withSentVariables(form, v) })}
               />
             </SectionCard>
 
             <SectionCard id="alib-s-headers" title={t('sections.headers')} hint={t('headersHint')}>
               {addressAtRisk && <SecretAddressWarning />}
+              {secretOverPlainHttp(form) && <Alert tone="warning">{t('plainHttpWarning')}</Alert>}
               <HeadersEditor
                 rows={form.headers}
                 errors={errors}
@@ -502,9 +510,14 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
                       onChange={(v) => update({ bodyText: v })}
                     />
                     <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs">
-                      {body === 'invalid' && (
+                      {body === 'invalid' && errors.fields.body === undefined && (
                         <span role="alert" className="text-danger">
-                          {t('json.invalid')}
+                          {(() => {
+                            const at = jsonErrorAt(form.bodyText.trim());
+                            return at
+                              ? t('json.invalidAt', { line: at.line, column: at.column })
+                              : t('json.invalid');
+                          })()}
                         </span>
                       )}
                       {body === 'shape' && (

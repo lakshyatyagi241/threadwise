@@ -153,7 +153,10 @@
         "hours": "{count}時間",
         "days": "{count}日"
       },
-      "unsnoozesAt": "{time} に再開"
+      "unsnoozesAt": "{time} に再開",
+      "erased": "削除済みの連絡先",
+      "erasedHint": "これらの連絡先は削除され、会話は相手の情報やメッセージ本文を除いて保存されています。削除日は記録されていないため、時刻は最後のメッセージを表示します。",
+      "erasedTitle": "削除済みの連絡先"
     },
     "status": {
       "received": "受信済み",
@@ -328,9 +331,16 @@
       },
       "readOnly": "この会話は閲覧できますが、返信する権限がありません。",
       "resolvedBanner": "この会話は解決済みです。返信するには再開してください。",
+      "resolvedWebchatBanner": "このWebチャットは解決済みのため、再開できません。",
       "assignedToOther": "このチャットは別の担当者に割り当てられています。返信するには、先に自分に割り当ててください。",
       "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
       "messagesLabel": "メッセージ",
+      "session": {
+        "header": "{range} · {count, plural, other {# 件のメッセージ}}",
+        "span": "{date} {from} – {to}",
+        "moment": "{date} {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "以前のメッセージを読み込む",
       "empty": "この会話にはまだメッセージがありません。",
       "newMessageAnnounce": "新しいメッセージ: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "一致なし",
       "searchPrev": "前の一致",
       "searchNext": "次の一致",
-      "searchClose": "検索を閉じる"
+      "searchClose": "検索を閉じる",
+      "erasedBadge": "削除済み",
+      "erasedBanner": "この連絡先は削除されました。メッセージの本文とメディアは削除されているため、送信はできません。タイムラインと時刻は保持されています。"
     },
     "groupThread": {
       "openGroup": "グループを開く",
@@ -542,17 +554,17 @@
         "onLeave": "休暇中",
         "onLeaveUntil": "{date}まで休暇中",
         "availability": {
-          "online": "オンライン",
-          "away": "離席中",
+          "online": "対応可能",
+          "away": "離席中（勤務時間外）",
           "busy": "取り込み中",
-          "offline": "オフライン"
+          "offline": "離席中"
         }
       },
       "presence": {
-        "online": "オンライン",
-        "away": "離席中",
+        "online": "対応可能",
+        "away": "離席中（勤務時間外）",
         "busy": "取り込み中",
-        "offline": "オフライン"
+        "offline": "離席中"
       },
       "notes": {
         "tab": "連絡先のメモ",
@@ -584,7 +596,11 @@
           "sla_breach": "返信期限を超過しました",
           "spam_flagged": "{actor} がスパムとしてマーク",
           "escalated": "エスカレートしました",
-          "unknown": "{actor} による{what}"
+          "unknown": "{actor} による{what}",
+          "handoff_requested": "{actor} が担当者に引き継ぎ",
+          "queue_reminded": "チームに通知しました",
+          "queue_offered": "別のチームに回しました",
+          "queue_customer_message": "顧客にメッセージを送りました"
         },
         "actors": {
           "user": "チームメイト",
@@ -711,6 +727,7 @@
         "not_linked": "この会話のチャネルはWhatsApp番号に接続されていないため、テンプレートを送信できません。",
         "paused": "WhatsApp により一時停止されています。一時停止が解除されると再送信できます。",
         "media_header": "画像、動画、ドキュメントのヘッダーがあります。受信箱からはまだ送信できません。",
+        "carousel": "カルーセル（画像付きカード）のため、受信トレイからはまだ送信できません。",
         "header_variable": "ヘッダーに変数があります。受信箱からはまだ入力できません。",
         "dynamic_button": "変数を含むボタンリンクがあります。受信箱からはまだ入力できません。",
         "authentication": "ワンタイムパスワードのテンプレートはシステムが送信するもので、受信箱からは送信しません。",
@@ -805,6 +822,7 @@
         "onlyStatus": "{status} のメッセージのみ",
         "requestedAt": "リクエスト日時 {date}",
         "lines": "{count, plural, other {# 行}}",
+        "noLines": "この期間のイベントはありません",
         "until": "{date} まで利用可能",
         "download": "ダウンロード",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "シミュレーター（テスト）",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp（QR）",
+      "webchat": "ウェブサイトチャット",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "メール",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "シミュレーター（テスト）",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp（QR）",
-        "webchat": "ウェブサイトチャット",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "メール",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "連絡先",
         "agent": "あなた",
@@ -1054,7 +1072,10 @@
       "tagRemove": "タグを外す",
       "onLeave": "休暇中",
       "onLeaveUntil": "{date}まで休暇中",
-      "spam": "スパムとしてマーク"
+      "spam": "スパムとしてマーク",
+      "markUnread": "未読にする",
+      "unsnooze": "スヌーズを解除",
+      "notSpam": "スパムではないとマーク"
     },
     "tags": {
       "tag": "タグ",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "受信トレイに戻る",
-        "title": "会話タグ",
+        "title": "タグ",
         "intro": "会話タグはスレッド(請求、返金、至急など)に付けて、チームが受信トレイを並べ替えたり絞り込んだりするためのものです。相手その人を表す連絡先タグと同じタグライブラリを使います。",
         "newTitle": "新しいタグ",
         "editTitle": "タグを編集",

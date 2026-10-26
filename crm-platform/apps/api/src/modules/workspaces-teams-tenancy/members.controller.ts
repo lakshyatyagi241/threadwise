@@ -17,14 +17,17 @@ import {
   changeWspMemberRoleSchema,
   listWspMembersQuerySchema,
   setWspAvailabilitySchema,
+  updateMemberWorkingHoursSchema,
   updateWspMemberDetailsSchema,
   type ChangeWspMemberRoleInput,
   type ListWspMembersQuery,
   type SetWspAvailabilityInput,
+  type UpdateMemberWorkingHoursInput,
   type UpdateWspMemberDetailsInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { AgentStatusService } from './agent-status.service';
 import { MembersService } from './members.service';
 
 /**
@@ -37,7 +40,10 @@ import { MembersService } from './members.service';
 @ActorKinds('user')
 @Controller({ path: 'workspace/members', version: '2' })
 export class MembersController {
-  constructor(private readonly members: MembersService) {}
+  constructor(
+    private readonly members: MembersService,
+    private readonly status: AgentStatusService,
+  ) {}
 
   @Get()
   @ApiOperation({
@@ -59,21 +65,69 @@ export class MembersController {
 
   @Get('me/availability')
   @ApiOperation({
-    summary:
-      "The caller's own availability (Available / Offline), as automatic assignment reads it",
+    summary: "The caller's own status: Available or Away, and why (manual, leave, working hours)",
+    description:
+      '`status` keeps the old two words (`online` / `offline`) and now carries the EFFECTIVE state: manual choice, then leave, then working hours (only when the person automates and the plan has `agent_status_automation`), then Available.',
   })
   async myAvailability() {
-    return this.members.myAvailability();
+    return this.status.mine();
   }
 
   @Put('me/availability')
   @ApiOperation({
-    summary:
-      "Set the caller's own availability: offline agents are skipped by automatic assignment",
-    description: 'Only the caller can change it. Chats the agent already holds stay with them.',
+    summary: "Set the caller's own status: Away agents are skipped by automatic assignment",
+    description:
+      'Only the caller can change it. A manual choice beats leave and the schedule; while the person automates it lasts until the next schedule boundary, otherwise until changed. Chats the agent already holds stay with them. Open to every member, whatever the plan.',
   })
   async setMyAvailability(@Body(zodPipe(setWspAvailabilitySchema)) body: SetWspAvailabilityInput) {
-    return this.members.setMyAvailability(body);
+    return this.status.setMine(body);
+  }
+
+  @Get('me/working-hours')
+  @ApiOperation({
+    summary: "The caller's own working hours (the schedule that can set their status to Away)",
+    description:
+      'Own data, open to every member. Without a saved schedule the days are the Mon-Fri 09:00-18:00 suggestion and the zone is the workspace zone. `entitled` says whether the plan allows saving.',
+  })
+  async myWorkingHours() {
+    return this.status.hoursOfMe();
+  }
+
+  @Put('me/working-hours')
+  @RequirePermission('team.leave.manage')
+  @ApiOperation({
+    summary: "Save the caller's own working hours and the Automate my status switch",
+    description:
+      'Needs the plan feature `agent_status_automation` (422 PLAN_FEATURE_LOCKED) and `team.leave.manage` (scope own is enough).',
+  })
+  async saveMyWorkingHours(
+    @Body(zodPipe(updateMemberWorkingHoursSchema)) body: UpdateMemberWorkingHoursInput,
+  ) {
+    return this.status.saveMine(body);
+  }
+
+  @Get(':id/working-hours')
+  @RequirePermission('team.leave.read')
+  @ApiOperation({
+    summary:
+      "A member's working hours (read with team.leave.read; `canEdit` says whether the caller may change them)",
+  })
+  async workingHours(@Param('id', ParseUUIDPipe) id: string) {
+    return this.status.hoursOfMember(id);
+  }
+
+  @Put(':id/working-hours')
+  @RequirePermission('team.leave.manage')
+  @ApiOperation({
+    summary: "Save a member's working hours (Settings > Team > More > Working hours)",
+    description:
+      'Needs `agent_status_automation` (422 PLAN_FEATURE_LOCKED) and `team.leave.manage` at a scope that reaches this person (own = yourself, all = anyone, team = teammates).',
+  })
+  async saveWorkingHours(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(updateMemberWorkingHoursSchema)) body: UpdateMemberWorkingHoursInput,
+  ) {
+    return this.status.saveMember(id, body);
   }
 
   @Post('invite')

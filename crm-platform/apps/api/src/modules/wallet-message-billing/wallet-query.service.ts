@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
-import { WALLET_CATEGORIES, walletExactAmount, walletExactSubtract } from '@crm/contracts';
+import { sql, type SQL } from 'drizzle-orm';
+import {
+  STATEMENT_DETAIL_COLUMNS,
+  WALLET_CATEGORIES,
+  normalizeWalletCategory,
+  walletExactAmount,
+  walletExactSubtract,
+} from '@crm/contracts';
 import type {
   MessagePricing,
+  StatementDetailColumn,
   StatementQuery,
   StatementResponse,
   StatementRow,
@@ -267,6 +274,76 @@ export class WalletQueryService {
     return sql.join(parts, sql` AND `);
   }
 
+  /**
+   * The optional columns with a value on at least one row of the WHOLE filtered set, in CSV order. The CSV passes its row cap, so the
+   * columns come from the rows it writes: the same first `maxRows` rows, oldest first, that `exportRows` returns.
+   */
+  async detailColumns(query: StatementQuery, maxRows?: number): Promise<StatementDetailColumn[]> {
+    const orgId = RequestContextStore.require().orgId;
+    const platform = await this.settings.currency();
+    return this.db.tx(async (tx) => {
+      const unit = await this.billing.forOrg(tx, orgId);
+      const where = this.filter(orgId, query, inUnit(unit, platform));
+      return this.detailFlags(tx, orgId, where, maxRows);
+    });
+  }
+
+  /**
+   * One query for all six checks. A value counts only when it is not empty, the same test `contexts()`, the CSV and the table apply. A
+   * campaign contact counts only where no broadcast contact carries the same message, as `names()` resolves it. The CTEs are materialised,
+   * so the cost grows with the filtered history, as the totals query in `statement()` already does.
+   */
+  private async detailFlags(
+    tx: Tx,
+    orgId: number,
+    where: SQL,
+    maxRows?: number,
+  ): Promise<StatementDetailColumn[]> {
+    const window =
+      maxRows === undefined ? sql`` : sql`ORDER BY created_at ASC, id ASC LIMIT ${maxRows}`;
+    const res = await tx.execute(sql`
+      WITH picked AS (SELECT id, type, meta FROM wallet_transactions WHERE ${where} ${window}),
+      linked AS (
+        SELECT c.wamid, c.source, c.to_country, c.category, c.provider FROM usage_charges c
+        WHERE c.org_id = ${orgId}
+          AND (c.wallet_tx_id IN (SELECT id FROM picked WHERE type = 'spend')
+            OR c.refund_tx_id IN (SELECT id FROM picked WHERE type = 'refund'))
+      ),
+      named AS (
+        SELECT bc.whatsapp_message_id AS wamid, b.name, c.phone, t.template_name AS template
+        FROM broadcast_contacts bc
+        JOIN broadcasts b ON b.org_id = bc.org_id AND b.id = bc.broadcast_id
+        LEFT JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
+        LEFT JOIN wa_templates t ON t.org_id = b.org_id AND t.id = b.template_id
+        WHERE bc.org_id = ${orgId} AND bc.whatsapp_message_id IN (SELECT wamid FROM linked)
+        UNION ALL
+        SELECT cc.whatsapp_message_id, w.campaign_name, COALESCE(cc.phone_number, c.phone), t.template_name
+        FROM wp_campaign_contacts cc
+        JOIN wpcampaigns w ON w.org_id = cc.org_id AND w.id = cc.campaign_id
+        LEFT JOIN contacts c ON c.org_id = cc.org_id AND c.id = cc.contact_id
+        LEFT JOIN wa_templates t ON t.org_id = w.org_id AND t.id = w.template_id
+        WHERE cc.org_id = ${orgId} AND cc.whatsapp_message_id IN (SELECT wamid FROM linked)
+          AND NOT EXISTS (
+            SELECT 1 FROM broadcast_contacts bc2
+            JOIN broadcasts b2 ON b2.org_id = bc2.org_id AND b2.id = bc2.broadcast_id
+            WHERE bc2.org_id = cc.org_id AND bc2.whatsapp_message_id = cc.whatsapp_message_id
+          )
+      )
+      SELECT
+        (EXISTS (SELECT 1 FROM linked WHERE source <> '')
+          OR EXISTS (SELECT 1 FROM named WHERE name <> '')) AS channel,
+        EXISTS (SELECT 1 FROM named WHERE phone <> '') AS recipient,
+        EXISTS (SELECT 1 FROM named WHERE template <> '') AS template,
+        EXISTS (SELECT 1 FROM linked WHERE to_country <> '') AS country,
+        (EXISTS (SELECT 1 FROM linked WHERE category <> '')
+          OR EXISTS (SELECT 1 FROM picked
+            WHERE type IN ('spend', 'refund')
+              AND lower(btrim(meta->'legacy'->'waboo'->>'category')) = ANY(${pgArray(WALLET_CATEGORIES, 'text')}))) AS category,
+        EXISTS (SELECT 1 FROM linked WHERE provider <> '') AS engine`);
+    const flags = res.rows[0] as Record<StatementDetailColumn, boolean>;
+    return STATEMENT_DETAIL_COLUMNS.filter((c) => flags[c]);
+  }
+
   async statement(query: StatementQuery): Promise<StatementResponse> {
     const orgId = RequestContextStore.require().orgId;
     const cur = decodeCursor(query.cursor);
@@ -288,6 +365,8 @@ export class WalletQueryService {
       const rows = (res.rows as unknown as Parameters<typeof toLedger>[0][]).map(toLedger);
       const hasMore = rows.length > query.limit;
       const pageRows = rows.slice(0, query.limit);
+      // Before `contexts()`: it swallows a failed lookup, and a failed statement aborts the transaction for every query after it.
+      const detailColumns = await this.detailFlags(tx, orgId, where);
       const contexts = await this.contexts(tx, orgId, pageRows);
       const moneyIn = decimalToMinor(t.money_in);
       const moneyOut = decimalToMinor(t.money_out);
@@ -308,6 +387,7 @@ export class WalletQueryService {
           netExact: walletExactSubtract(inExact, outExact),
           count: t.n,
         },
+        detailColumns,
         data: pageRows.map<StatementRow>((r) => ({
           ...toTransaction(r),
           ...splitExact(r),
@@ -389,6 +469,26 @@ export class WalletQueryService {
           category: c.category,
           engine: c.provider ? (ENGINE_LABELS[c.provider] ?? c.provider) : null,
         });
+      }
+      // A migrated Waboo row has no billing link, but Waboo's own category is kept on the ledger row (tools/migration/credits/history.ts).
+      // It fills Category only where the billing row has none.
+      const legacy = await tx.execute(sql`
+        SELECT id, meta->'legacy'->'waboo'->>'category' AS category FROM wallet_transactions
+        WHERE org_id = ${orgId} AND id = ANY(${pgArray([...spendIds, ...refundIds], 'bigint')})
+          AND meta->'legacy'->'waboo'->>'category' IS NOT NULL`);
+      for (const r of legacy.rows as unknown as Array<{ id: string; category: string }>) {
+        const category = normalizeWalletCategory(r.category);
+        const id = Number(r.id);
+        const c = out.get(id) ?? {
+          channel: null,
+          campaignName: null,
+          recipient: null,
+          template: null,
+          country: null,
+          category: null,
+          engine: null,
+        };
+        if (category && c.category === null) out.set(id, { ...c, category });
       }
     } catch {
       // Context is a nicety: a missing table or a bad row never breaks the statement.

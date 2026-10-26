@@ -122,7 +122,7 @@ export function ComposeScreen() {
           </div>
           <h1 className="mt-1 text-[26px] leading-none sm:text-[32px]">
             {t('title')}{' '}
-            <span className="italic" style={{ color: VIBER }}>
+            <span className="not-italic" style={{ color: VIBER }}>
               {t('titleAccent')}
             </span>
           </h1>

@@ -2,11 +2,14 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import type { ReactNode, RefObject } from 'react';
+import { useSyncExternalStore, useTransition, type ReactNode, type RefObject } from 'react';
 import { cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { useBrandName } from './brand';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
+import { setTheme } from './actions';
+import { AgentStatusMenu } from '@/features/workspaces-teams-tenancy/components/agent-status-menu';
+import { useOptionalShellData } from './shell-data';
 import { UserMenu, type ShellUser } from './user-menu';
 
 export interface WalletChipData {
@@ -31,6 +34,39 @@ export function AnnouncementPill({ children, href }: { children: ReactNode; href
     </Link>
   ) : (
     <span className={cls}>{children}</span>
+  );
+}
+
+/** The page's theme lives on <html data-theme>; this follows it, including a change made from the account menu. */
+function subscribeTheme(onChange: () => void): () => void {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  return () => observer.disconnect();
+}
+const currentTheme = (): 'light' | 'dark' =>
+  document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+
+/** A one-click light / dark switch beside the bell: the same cookie and action as the account menu's theme row. */
+function ThemeToggle({ initial }: { initial: 'light' | 'dark' }) {
+  const t = useTranslations('shell');
+  const [, start] = useTransition();
+  const theme = useSyncExternalStore(subscribeTheme, currentTheme, () => initial);
+  const next = theme === 'dark' ? 'light' : 'dark';
+  const label = `${t('theme')}: ${theme === 'dark' ? t('themeDark') : t('themeLight')}`;
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        document.documentElement.dataset.theme = next;
+        start(() => void setTheme(next));
+      }}
+      aria-label={label}
+      title={label}
+      data-testid="theme-toggle"
+      className="relative flex size-9 items-center justify-center rounded-full text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+    >
+      <NavIcon name={theme === 'dark' ? 'moon' : 'sun'} className="size-5" />
+    </button>
   );
 }
 
@@ -126,6 +162,8 @@ export function TopBar({
 }: TopBarProps) {
   const t = useTranslations();
   const brand = useBrandName();
+  // The status pill needs the real shell (query client, workspace session), like the account menu's Availability row.
+  const shellData = useOptionalShellData();
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-background px-3 sm:gap-3 sm:px-4">
       <button
@@ -166,6 +204,8 @@ export function TopBar({
           ))}
         {pageHelp}
         {pageSettings}
+        {shellData && <AgentStatusMenu variant="topbar" />}
+        <ThemeToggle initial={theme} />
         {bell ?? (
           <IconLink
             href={notificationsHref}

@@ -68,7 +68,6 @@ export function AttachDialog({
 }) {
   const t = useTranslations(`${NS}.operator.dialog`);
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const tg = useTranslations(`${EDITOR}.limitGroups`);
   const tl = useTranslations(`${EDITOR}.limitKeys`);
   const th = useTranslations(`${EDITOR}.limitHints`);

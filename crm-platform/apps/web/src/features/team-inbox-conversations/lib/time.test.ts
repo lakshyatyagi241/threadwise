@@ -11,6 +11,7 @@ import {
   humanSize,
   initials,
   listTime,
+  sessionRangeMessage,
 } from './time';
 
 const NOW = new Date(2026, 9, 2, 15, 0, 0).getTime();
@@ -131,5 +132,42 @@ describe('snoozeLeft: how long a snooze still has', () => {
       key: 'snoozeLeft.hours',
       values: { count: 3 },
     });
+  });
+});
+
+describe('sessionRangeMessage', () => {
+  it('names a single moment when the session is one instant', () => {
+    expect(
+      sessionRangeMessage('2026-10-01T10:05:00.000Z', '2026-10-01T10:05:00.000Z', 'en', 'UTC'),
+    ).toEqual({ key: 'session.moment', values: { date: 'Oct 1, 2026', time: '10:05 AM' } });
+  });
+
+  it('names the span within one day', () => {
+    expect(
+      sessionRangeMessage('2026-10-01T10:05:00.000Z', '2026-10-01T12:40:00.000Z', 'en', 'UTC'),
+    ).toEqual({
+      key: 'session.span',
+      values: { date: 'Oct 1, 2026', from: '10:05 AM', to: '12:40 PM' },
+    });
+  });
+
+  it('gives both ends with their dates across midnight', () => {
+    const r = sessionRangeMessage(
+      '2026-10-01T23:30:00.000Z',
+      '2026-10-02T09:15:00.000Z',
+      'en',
+      'UTC',
+    );
+    expect(r.key).toBe('session.across');
+    expect(r.values.from).toContain('Oct 1, 2026');
+    expect(r.values.to).toContain('Oct 2, 2026');
+  });
+
+  it('reads the day in the zone the person sees', () => {
+    // 18:00 and 19:00 UTC are the same day in UTC, but 23:30 and 00:30 IST: across midnight in Kolkata.
+    const from = '2026-10-01T18:00:00.000Z';
+    const to = '2026-10-01T19:00:00.000Z';
+    expect(sessionRangeMessage(from, to, 'en', 'UTC').key).toBe('session.span');
+    expect(sessionRangeMessage(from, to, 'en', 'Asia/Kolkata').key).toBe('session.across');
   });
 });

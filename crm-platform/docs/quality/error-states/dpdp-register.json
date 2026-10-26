@@ -1,0 +1,71 @@
+{
+  "feature": "dpdp-register",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-dpdp-register-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dpdp-register/platform/attest-dialog.tsx",
+        "apps/web/src/features/dpdp-register/platform/dpdp-register-page.tsx",
+        "apps/web/src/features/dpdp-register/platform/history-list.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-dpdp-register-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dpdp-register/platform/logic.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-dpdp-register-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dpdp-register/platform/attest-dialog.tsx",
+        "apps/web/src/features/dpdp-register/platform/dpdp-register-page.tsx",
+        "apps/web/src/features/dpdp-register/platform/history-list.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-dpdp-register-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dpdp-register/platform/logic.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-dpdp-register-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dpdp-register/platform/logic.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -38,6 +38,8 @@ function driver(
 function build(
   drivers: TranslationDriver[],
   policy: RoutePolicy = { lockdown: false, residency: 'any' },
+  /** Which providers the workspace's wallet may use (the real gate answers false for a paid one when the wallet is empty). */
+  canUse: (slug: string) => boolean = () => true,
 ) {
   const recorded: Array<{ orgId: number | null; e: UsageEntry }> = [];
   const router = {
@@ -46,6 +48,7 @@ function build(
   } as unknown as ProviderRouterService;
   const usage = {
     record: async (orgId: number | null, e: UsageEntry) => void recorded.push({ orgId, e }),
+    canUse: async (_orgId: number | null, slug: string) => canUse(slug),
   } as unknown as TranslationUsageService;
   const cache = new MemoryTranslationStores();
   return { svc: new TranslationService(router, usage, cache), recorded, cache };
@@ -146,7 +149,7 @@ describe('TranslationService.translate', () => {
     };
     const svc2 = new TranslationService(
       router as never,
-      { record: async () => undefined } as never,
+      { record: async () => undefined, canUse: async () => true } as never,
       a.cache,
     );
     expect(await svc2.translate('A longer sentence here', 'en', 'es', ctx)).toBe('estricto');
@@ -282,5 +285,79 @@ describe('TranslationService.fanOut', () => {
       it: 'Where is my parcel:it',
     });
     expect(peak).toBeLessThanOrEqual(2);
+  });
+});
+
+/** A paid provider is used only by a workspace whose wallet can pay for it; a cache hit never asks the wallet. */
+describe('TranslationService and the wallet', () => {
+  const paidOnly = (slug: string) => slug !== 'deepl' && slug !== 'google_cloud';
+
+  it('skips a paid provider for a workspace that cannot pay and answers from the next one', async () => {
+    const paid = driver('deepl', () => 'de pago');
+    const free = driver('google_gtx', () => 'gratis');
+    const { svc, recorded } = build([paid.d, free.d], undefined, paidOnly);
+    expect(await svc.translate('Where is my order', 'en', 'es', ctx)).toBe('gratis');
+    expect(paid.calls.translate).toBe(0);
+    // The free provider answered first as far as the ledger can tell: not a fallback, because the paid one was never tried.
+    expect(recorded[0]!.e).toMatchObject({ providerSlug: 'google_gtx', wasFallback: false });
+  });
+
+  it('gives null, and does not cache the refusal, when only a paid provider is left', async () => {
+    const paid = driver('deepl', () => 'de pago');
+    const poor = build([paid.d], undefined, paidOnly);
+    expect(await poor.svc.translate('Where is my order', 'en', 'es', ctx)).toBeNull();
+    // The cache is shared with workspaces that CAN pay: one with money asks the provider and is answered.
+    const rich = new TranslationService(
+      {
+        policy: async () => ({ lockdown: false, residency: 'any' }),
+        drivers: async () => [paid.d],
+      } as never,
+      { record: async () => undefined, canUse: async () => true } as never,
+      poor.cache,
+    );
+    expect(await rich.translate('Where is my order', 'en', 'es', ctx)).toBe('de pago');
+  });
+
+  it('does not ask the wallet for a cache hit', async () => {
+    const paid = driver('deepl', () => 'de pago');
+    const asked: string[] = [];
+    const { svc } = build([paid.d], undefined, (slug) => {
+      asked.push(slug);
+      return true;
+    });
+    await svc.translate('Where is my order', 'en', 'es', ctx);
+    await svc.translate('Where is my order', 'en', 'es', ctx);
+    expect(asked).toEqual(['deepl']);
+    expect(paid.calls.translate).toBe(1);
+  });
+
+  it('names a recorded call by a fingerprint of the text, the same for the same text', async () => {
+    const a = driver('deepl', () => 'uno');
+    const { svc, recorded } = build([a.d]);
+    await svc.translate('Where is my order', 'en', 'es', ctx);
+    await svc.translate('Where is my parcel', 'en', 'es', ctx);
+    expect(recorded[0]!.e.textHash).toMatch(/^[0-9a-f]{32}$/);
+    expect(recorded[0]!.e.textHash).not.toBe(recorded[1]!.e.textHash);
+  });
+
+  it('skips a paid provider in detect-and-translate too, and records the free one that served', async () => {
+    const paid = driver(
+      'google_cloud',
+      () => null,
+      () => ({ language: 'es', text: 'Where is my order?' }),
+    );
+    const free = driver(
+      'mymemory',
+      () => null,
+      () => ({ language: 'es', text: 'Where is my order?' }),
+    );
+    const { svc, recorded } = build([paid.d, free.d], undefined, paidOnly);
+    expect(await svc.detectAndTranslate('Dónde está mi pedido', 'en', ctx)).toEqual({
+      language: 'es',
+      text: 'Where is my order?',
+    });
+    expect(paid.calls.detect).toBe(0);
+    expect(recorded).toHaveLength(1);
+    expect(recorded[0]!.e.providerSlug).toBe('mymemory');
   });
 });

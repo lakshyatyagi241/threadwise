@@ -5,9 +5,11 @@ import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.
 import { FLOW_MEDIA_STORE } from '../../infra/providers/flow-builder-editor/flow-media.port';
 import { HttpFlowAiAdapter } from '../../infra/providers/flow-builder-editor/http-flow-ai.adapter';
 import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor/local-flow-media.adapter';
+import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { FlowRuntimeEngineModule } from '../flow-runtime-engine';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
 import { FlowMediaController } from './flow-media.controller';
@@ -36,7 +38,14 @@ import { MapsLinkService } from './maps-link.service';
  * through BOT_PUBLISH_PORT.
  */
 @Module({
-  imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule, GoogleAccountModule],
+  imports: [
+    PlansCoreModule,
+    PlatformSettingsModule,
+    FlowRuntimeEngineModule,
+    GoogleAccountModule,
+    // AiChargeService: "Generate with AI" on the platform's key is charged to the workspace's wallet.
+    WalletMessageBillingModule,
+  ],
   controllers: [
     FlowsController,
     GetaPublishController,
@@ -51,6 +60,7 @@ import { MapsLinkService } from './maps-link.service';
     BuilderContextService,
     FlowAiService,
     FlowMediaService,
+    SafeFetch,
     FlowTemplatesAdminService,
     TestWebhookService,
     MapsLinkService,

@@ -1,0 +1,108 @@
+{
+  "feature": "api-library",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-api-library-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/delete-api-dialog.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/components/components.test.tsx",
+          "match": "shows loading and error states"
+        }
+      ]
+    },
+    {
+      "id": "ES-api-library-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/logs-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/components/components.test.tsx",
+          "match": "says there is no access without the read permission"
+        }
+      ]
+    },
+    {
+      "id": "ES-api-library-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/curl-import-modal.tsx",
+        "apps/web/src/features/api-library/components/function-editor.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-api-library-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/lib/errors.ts",
+        "apps/web/src/features/api-library/lib/form-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/lib/errors.test.ts",
+          "match": "hands over the field problems of a 422 only"
+        }
+      ]
+    },
+    {
+      "id": "ES-api-library-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/delete-api-dialog.tsx",
+        "apps/web/src/features/api-library/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-api-library-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/parts.tsx",
+        "apps/web/src/features/api-library/lib/curl.ts",
+        "apps/web/src/features/api-library/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

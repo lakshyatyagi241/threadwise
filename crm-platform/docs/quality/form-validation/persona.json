@@ -1,0 +1,19 @@
+{
+  "module": "persona",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "saveWorkspaceVocabularySchema",
+      "file": "apps/api/src/modules/persona/persona.controller.ts",
+      "scenarios": [],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "no valid body could be built from the schema (cross-field or pattern rule)",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

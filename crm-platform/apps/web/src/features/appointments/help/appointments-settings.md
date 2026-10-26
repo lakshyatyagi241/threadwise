@@ -33,7 +33,7 @@ Appointment settings holds what every booking in your workspace shares: the Goog
 
 ## How to use it
 
-1. Open **Settings**, then **Appointment settings**, or open **Google Calendar** on the **Add-ons** tab of the **Marketplace**. Both open this screen.
+1. Open **Settings**, then **Appointment settings**, or open **Google Calendar** on the **Integrations** tab of the **Marketplace**. Both open this screen.
 2. To connect Google Calendar, select **Connect Google Calendar**. Google asks you to choose an account and allow calendar access. You come back here with the result.
 3. Once connected, select **Choose calendar** to pick the calendar confirmed bookings are written to.
 4. To use Outlook or Microsoft 365 instead, or as well, select **Connect Outlook** on the **Outlook / Microsoft 365** card. Microsoft asks you to choose an account and allow calendar access. You come back here and a box asks you to confirm the connection: press **Connect** only if you started it yourself. Then choose the calendar the same way.

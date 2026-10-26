@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { EXPORT_HEADER, lastEventOf } from '../../../src/modules/campaigns/campaigns-actions.service';
+import {
+  EXPORT_HEADER,
+  lastEventOf,
+} from '../../../src/modules/campaigns/campaigns-actions.service';
 
 const none = {
   status: 'queued',
@@ -34,9 +37,9 @@ describe('lastEventOf', () => {
   });
 
   it('reports the newest event that happened, in order', () => {
-    expect(lastEventOf({ ...none, status: 'responded', sentAt: at, readAt: at, respondedAt: at })).toBe(
-      'Reply',
-    );
+    expect(
+      lastEventOf({ ...none, status: 'responded', sentAt: at, readAt: at, respondedAt: at }),
+    ).toBe('Reply');
     expect(lastEventOf({ ...none, status: 'read', sentAt: at, readAt: at, clickedAt: at })).toBe(
       'Button tap',
     );

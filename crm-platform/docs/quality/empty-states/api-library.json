@@ -1,0 +1,94 @@
+{
+  "feature": "api-library",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-api-library-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/delete-api-dialog.tsx",
+        "apps/web/src/features/api-library/components/logs-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/components/components.test.tsx",
+          "match": "shows the empty state with Create API, and none for a role that cannot create"
+        }
+      ]
+    },
+    {
+      "id": "EM-api-library-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/logs-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-api-library-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/delete-api-dialog.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-api-library-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/api-form-screen.tsx",
+        "apps/web/src/features/api-library/components/api-list-screen.tsx",
+        "apps/web/src/features/api-library/components/function-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/components/components.test.tsx",
+          "match": "says there is no access without the read permission"
+        }
+      ]
+    },
+    {
+      "id": "EM-api-library-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/api-library/components/delete-api-dialog.tsx",
+        "apps/web/src/features/api-library/components/variable-field.tsx",
+        "apps/web/src/features/api-library/lib/pagination.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/api-library/api/service.test.ts",
+          "match": "lists a numbered page with the search and method, and flattens the totals"
+        }
+      ]
+    }
+  ]
+}

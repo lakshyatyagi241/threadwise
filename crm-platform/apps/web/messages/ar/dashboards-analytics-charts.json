@@ -320,8 +320,9 @@
         "replyRate": "معدل الرد",
         "received": "الرسائل المستلمة",
         "conversationsOpen": "المحادثات المفتوحة",
+        "conversationsResolved": "المحادثات المحلولة",
         "conversationsClosed": "المحادثات المغلقة",
-        "conversationsAssigned": "المعيّنة",
+        "conversationsAssigned": "مسندة إلى أي شخص",
         "conversationsUnassigned": "غير المعيّنة",
         "conversationsTotal": "{count, plural, zero {لا محادثات} one {محادثة واحدة} two {محادثتان} few {# محادثات} many {# محادثة} other {# محادثة}}"
       },

@@ -1,0 +1,316 @@
+{
+  "addons-extension-registry": {
+    "notGenerated": 3,
+    "failing": 0
+  },
+  "admin": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "admin-console-shell": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "ai-agents-training": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "ai-copilot-lead-finder": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "ai-keys-usage-admin": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "api-library": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "appointments-booking": {
+    "notGenerated": 30,
+    "failing": 0
+  },
+  "audit-log": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "auth": {
+    "notGenerated": 28,
+    "failing": 0
+  },
+  "bsp-billing-engine": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "calling-voice": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "campaigns": {
+    "notGenerated": 65,
+    "failing": 0
+  },
+  "catalog-products": {
+    "notGenerated": 5,
+    "failing": 0
+  },
+  "channel-email": {
+    "notGenerated": 8,
+    "failing": 0
+  },
+  "channel-facebook": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "channel-instagram": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "channel-line": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "channel-sms": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "channel-telegram": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "channel-viber": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "channel-wechat": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "chat-conversations": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "checkout-orders-merchant-payments": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "company-briefs": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "compliance-center": {
+    "notGenerated": 10,
+    "failing": 0
+  },
+  "contact-consent": {
+    "notGenerated": 10,
+    "failing": 0
+  },
+  "contacts-pql": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "coupons-credits-referral-currency": {
+    "notGenerated": 4,
+    "failing": 0
+  },
+  "crm": {
+    "notGenerated": 121,
+    "failing": 0
+  },
+  "dashboards-analytics-charts": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "developer-rest-api-v1": {
+    "notGenerated": 21,
+    "failing": 0
+  },
+  "dpdp-register": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "email-templates": {
+    "notGenerated": 8,
+    "failing": 0
+  },
+  "failed-operations": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "flow-builder-editor": {
+    "notGenerated": 15,
+    "failing": 0
+  },
+  "flow-runtime-engine": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "forms-builder": {
+    "notGenerated": 18,
+    "failing": 0
+  },
+  "forms-links-groups": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "google-account": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "growth-pilot": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "help-agent": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "install-update-licensing": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "lead-scoring": {
+    "notGenerated": 2,
+    "failing": 0
+  },
+  "leads": {
+    "notGenerated": 50,
+    "failing": 0
+  },
+  "localization-translation": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "marketing-site-cms": {
+    "notGenerated": 8,
+    "failing": 0
+  },
+  "marketplace": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "meeting-conferencing": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "message-templates": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "node-bridge-runtime": {
+    "notGenerated": 6,
+    "failing": 0
+  },
+  "notifications": {
+    "notGenerated": 6,
+    "failing": 0
+  },
+  "outbound-webhooks": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "partner": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "persona": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "plans-subscriptions-trials": {
+    "notGenerated": 8,
+    "failing": 0
+  },
+  "platform-async-ops": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "platform-data-retention": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "platform-payment-gateways": {
+    "notGenerated": 6,
+    "failing": 0
+  },
+  "platform-settings-branding-storage": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "platform-support-desk": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "privacy": {
+    "notGenerated": 5,
+    "failing": 0
+  },
+  "public-api": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "roles-permissions": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "scheduled-queue-warmer": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "shopify-woocommerce": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "storefront-builder": {
+    "notGenerated": 3,
+    "failing": 0
+  },
+  "team-chat": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "team-inbox-conversations": {
+    "notGenerated": 12,
+    "failing": 0
+  },
+  "team-inbox-routing-sla": {
+    "notGenerated": 24,
+    "failing": 0
+  },
+  "waboo-migration": {
+    "notGenerated": 0,
+    "failing": 0
+  },
+  "wallet-message-billing": {
+    "notGenerated": 8,
+    "failing": 0
+  },
+  "webhook-fanout": {
+    "notGenerated": 5,
+    "failing": 0
+  },
+  "whatsapp-cloud-api-waba": {
+    "notGenerated": 12,
+    "failing": 0
+  },
+  "whatsapp-devices-baileys": {
+    "notGenerated": 9,
+    "failing": 0
+  },
+  "whatsapp-provider-admin": {
+    "notGenerated": 1,
+    "failing": 0
+  },
+  "workspaces-teams-tenancy": {
+    "notGenerated": 21,
+    "failing": 0
+  },
+  "_unresolved": [
+    "auth/clerkSessionSchema",
+    "auth/partnerLoginSchema",
+    "bsp-billing-engine/revokeBodySchema",
+    "marketing-site-cms/categoryBodySchema"
+  ]
+}

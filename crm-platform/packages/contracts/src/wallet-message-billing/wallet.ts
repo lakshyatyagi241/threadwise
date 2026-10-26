@@ -117,6 +117,21 @@ export const messageContextSchema = z.object({
 });
 export type MessageContext = z.infer<typeof messageContextSchema>;
 
+/**
+ * The optional columns of the statement, in CSV order. A column is shown on screen and written to the CSV only when at least one row of
+ * the filtered set has a value in it, so a blank column never appears.
+ */
+export const STATEMENT_DETAIL_COLUMNS = [
+  'channel',
+  'recipient',
+  'template',
+  'country',
+  'category',
+  'engine',
+] as const;
+export const statementDetailColumnSchema = z.enum(STATEMENT_DETAIL_COLUMNS);
+export type StatementDetailColumn = z.infer<typeof statementDetailColumnSchema>;
+
 export const statementRowSchema = walletTransactionSchema.extend({
   moneyInMinor: z.number().int(),
   moneyInExact: exactAmountSchema.optional(),
@@ -140,6 +155,8 @@ export const statementResponseSchema = z.object({
     netExact: exactAmountSchema.optional(),
     count: z.number().int(),
   }),
+  /** The optional columns with a value on at least one row of the WHOLE filtered set, in CSV order (the CSV has the same ones). */
+  detailColumns: z.array(statementDetailColumnSchema),
   data: z.array(statementRowSchema),
   page: pageInfoSchema,
 });

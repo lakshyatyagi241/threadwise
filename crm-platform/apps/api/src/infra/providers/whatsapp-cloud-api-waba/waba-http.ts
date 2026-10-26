@@ -66,6 +66,12 @@ export interface WabaRequest {
 
 export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>;
 
+export interface MediaUpload {
+  bytes: Uint8Array;
+  fileName: string;
+  mimeType: string;
+}
+
 /**
  * The one place that talks HTTP to Meta Graph and Interakt: base URL, version, auth headers, timeout, JSON decoding and error
  * normalisation. Nothing above the provider adapters builds a URL or a header.

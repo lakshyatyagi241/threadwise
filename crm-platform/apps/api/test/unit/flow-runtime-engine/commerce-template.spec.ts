@@ -13,6 +13,7 @@ import {
   templateComponents,
   templateText,
   templateValues,
+  withOverrides,
 } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-rules';
 import { TemplateNode } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-node';
 import { FlowRefResolver } from '../../../src/modules/flow-runtime-engine/runtime/nodes/flow-refs';
@@ -51,6 +52,49 @@ const render = (vars: Record<string, string>) => (t: string) =>
   t.replace(/\{\{\s*([^{}\s]+)\s*\}\}/g, (_m, k: string) => vars[k] ?? '');
 
 describe('template rules (TW-FLR-026)', () => {
+  it('lets the flow fill a placeholder itself, with merge tags, and set the header file', () => {
+    const mine = withOverrides(
+      tpl(),
+      { 'body:1': 'Order {{order_id}}', 'header:1': 'Gold' },
+      'https://cdn.example/pic.png',
+      render({ order_id: 'A12', name: 'Ann', ship_date: 'Mon' }),
+    );
+    expect(templateValues(mine.tpl, 'body', mine.render)).toEqual({
+      '1': 'Order A12',
+      '2': 'Mon',
+    });
+    expect(templateValues(mine.tpl, 'header', mine.render)).toEqual({ '1': 'Gold' });
+    expect(mine.tpl.headerMediaUrl).toBe('https://cdn.example/pic.png');
+    // Nothing set: the template maps as before.
+    const none = withOverrides(tpl(), {}, '', render({ order_id: 'A12' }));
+    expect(templateValues(none.tpl, 'body', none.render)).toEqual({
+      '1': 'A12',
+      '2': EMPTY_PARAMETER,
+    });
+  });
+
+  it('the node keeps only well-formed fills from the builder', () => {
+    const g = compileGraph({
+      flowNodes: [
+        {
+          id: 'a',
+          type: 'template',
+          data: {
+            tpl: 'x',
+            tplVars: { 'body:1': ' Gold ', bad: 'z', 'body:2': '' },
+            tplMedia: ' https://a.b/c.png ',
+          },
+        },
+      ],
+      flowEdges: [],
+    } as never);
+    const node = Object.values(
+      (g as unknown as { nodes: Record<string, { props: Record<string, unknown> }> }).nodes,
+    )[0]!;
+    expect(node.props.variableOverrides).toEqual({ 'body:1': 'Gold' });
+    expect(node.props.headerMediaUrl).toBe('https://a.b/c.png');
+  });
+
   it('fills slots from the run variables and sends an empty one as a dash', () => {
     const v = templateValues(tpl(), 'body', render({ order_id: 'A12' }));
     expect(v).toEqual({ '1': 'A12', '2': EMPTY_PARAMETER });
@@ -134,6 +178,40 @@ describe('a template with a media header or a button value', () => {
         { type: 'text', text: 'A12' },
         { type: 'text', text: 'Fri' },
       ],
+    });
+  });
+
+  it('a carousel goes out with its cards: each card a picture link and its own button values', () => {
+    const t = tpl({
+      header: null,
+      buttons: [],
+      templateType: 'carousel',
+      body: 'Our picks for you',
+      variableMap: { body: [] },
+      cards: [
+        {
+          image: 'https://files.example/a.png',
+          format: 'image',
+          body: 'Summer sale',
+          buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/a' }],
+        },
+        {
+          image: 'https://files.example/b.png',
+          format: 'image',
+          body: 'Winter sale',
+          buttons: [{ type: 'URL', text: 'Shop', url: 'https://example.com/b' }],
+        },
+      ],
+    });
+    const parts = richComponents(t, r);
+    const carousel = parts?.find((c) => c.type === 'carousel') as
+      | { cards: Array<{ card_index: number; components: Array<Record<string, unknown>> }> }
+      | undefined;
+    expect(carousel?.cards).toHaveLength(2);
+    expect(carousel?.cards[1]!.card_index).toBe(1);
+    expect(carousel?.cards[0]!.components[0]).toEqual({
+      type: 'header',
+      parameters: [{ type: 'image', image: { link: 'https://files.example/a.png' } }],
     });
   });
 

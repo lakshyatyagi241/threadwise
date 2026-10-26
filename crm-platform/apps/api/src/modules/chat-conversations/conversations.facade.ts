@@ -54,6 +54,20 @@ export interface RecordOutboundInput {
    * customer read. Ignored on a `system` line. Without it the line is plain text, as before.
    */
   template?: RecordOutboundTemplate;
+  /**
+   * A file the other domain sent, already in the chat media store: the line is then that file's message (an image, a video, ...) with
+   * `body` as its caption, so the bubble draws the file. Ignored on a `system` line.
+   */
+  media?: RecordOutboundMedia;
+}
+
+export interface RecordOutboundMedia {
+  mediaKind: 'image' | 'video' | 'audio' | 'document';
+  key: string;
+  mime: string;
+  size: number | null;
+  name: string | null;
+  sha256: string | null;
 }
 
 export interface RecordOutboundTemplate {
@@ -140,6 +154,8 @@ export interface EnqueueOutboundInput {
   replyToMessageId?: string;
   /** Who wrote it. Defaults to the caller (`agent`). */
   sender?: { kind: 'agent' | 'bot'; userId?: number | null; agentId?: number | null };
+  /** Where a person sent it from (`contact`: a contact's drawer). Stored as `meta.source` for the Source column of Message History. */
+  origin?: 'contact';
 }
 
 export interface EnqueueOutboundResult {
@@ -171,8 +187,14 @@ export interface ConversationsFacade {
    *
    * Also the Retry of a customer's message whose file failed to download (`mediaState: 'failed'`): the download is queued again and the
    * message comes back `mediaState: 'pending'`. An inbound message with no failed file is `MESSAGE_NOT_RETRYABLE`.
+   *
+   * `templateComponents` (optional) are the Cloud API components rebuilt for a template message sent before they were stored; they are
+   * stored with the message before it is queued again.
    */
-  retryOutbound(messageId: string): Promise<MessageResponse>;
+  retryOutbound(
+    messageId: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse>;
 
   /**
    * `GET /inbox/conversations/:id/messages`: a thread page, ascending by `seq`, gap-free. Media carry a short-lived authenticated
@@ -185,6 +207,12 @@ export interface ConversationsFacade {
    * arrived while the agent was reading stays unread. Tells the caller's other tabs by realtime (`inbox.unread`).
    */
   markRead(conversationId: string, upToSeq: number): Promise<{ unreadCount: number }>;
+
+  /**
+   * The bulk "Mark as unread": `unread_count` goes to at least one, so the thread shows unread until it is read again. Tells the
+   * caller's other tabs by realtime (`inbox.unread`).
+   */
+  markUnread(conversationId: string): Promise<{ unreadCount: number }>;
 }
 
 export const CONVERSATIONS_FACADE = Symbol('CONVERSATIONS_FACADE');

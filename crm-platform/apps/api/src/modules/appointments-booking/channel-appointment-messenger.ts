@@ -89,7 +89,9 @@ const toResult = (o: ChannelOutcome, until?: string): BookingMessageResult => {
  *    inside the 24 hour window, so outside it the message needs an approved template; without one WhatsApp is skipped (the run then
  *    falls to its next channel). A QR (unofficial) number sends text anywhere.
  *  - Email goes through the engine the broadcast screens use (`EngineSenderRegistry`), which enforces the sender's connection and the
- *    plan's cap and the bounce list. SMS is not a channel of appointment messages (DLT and per-country rules make it unreliable).
+ *    plan's cap and the bounce list, and charges the platform's per-mail fee to the workspace's wallet (an empty wallet holds the
+ *    message, like a mailbox that is out of room). SMS is not a channel of appointment messages (DLT and per-country rules make it
+ *    unreliable).
  *
  * Before anything is delivered, in this order: the address exists, the quiet hours (reminders and follow-ups only: HOLD, never deny, and a
  * reminder they would push past the booking is skipped instead), and the ConsentGate (withdrawn consent, do-not-call, minors). A
@@ -258,7 +260,8 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
             text: m.body,
             header: m.subject,
             clientReference: `appt-msg-${uuidOfKey(m.idempotencyKey).slice(0, 18)}`,
-            screen: { bulk: false, source: 'appointment' },
+            // The engine bills the mail as the platform's per-mail fee and shows this as its source in the expense log.
+            screen: { bulk: false, source: m.isTest ? 'test' : 'appointment' },
           });
           return { status: 'sent' };
         } catch (err) {

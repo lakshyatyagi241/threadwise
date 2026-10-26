@@ -1,0 +1,103 @@
+{
+  "feature": "checkout-orders-merchant-payments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-checkout-orders-merchant-payments-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/api/store-invoices.ts",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-checkout-orders-merchant-payments-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/parts.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/store-invoices-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/orders.render.test.tsx",
+          "match": "shows a skeleton while loading and no access without read"
+        }
+      ]
+    },
+    {
+      "id": "ES-checkout-orders-merchant-payments-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/customers-form-modal.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-checkout-orders-merchant-payments-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/customers-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/gateway-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-checkout-orders-merchant-payments-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/groups-code-editor.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/order-status-form.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-checkout-orders-merchant-payments-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/customers-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/gateway-drawer.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/lib/foundation.test.ts",
+          "match": "treats a missing route as unavailable and a thrown non-API error as a network failure"
+        }
+      ]
+    }
+  ]
+}

@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  IMPORT_SAMPLE_HEADERS,
-  IMPORT_SAMPLE_ROWS,
-  type ContactImportOptions,
-  type ImportField,
-} from '@crm/contracts';
+import type { ContactImportOptions, ImportField } from '@crm/contracts';
 import { toApiError } from '@/lib/api/errors';
 import { apiFetch } from '@/lib/api/client';
 import {
@@ -23,7 +18,7 @@ import {
 
 export type ImportOptions = Pick<
   ContactImportOptions,
-  'mapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
+  'mapping' | 'propertyMapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
 > & {
   consentConfirmed?: boolean;
   /** The notice the file's contacts agreed under, and its version (kept as proof with each recorded consent). */
@@ -98,11 +93,17 @@ export async function downloadRejects(jobId: string): Promise<Blob> {
   return res.blob();
 }
 
-/** The sample file, built from the importer's own header names (the same constants the API serves). */
-export function sampleCsv(): string {
-  const line = (cells: readonly string[]) =>
-    `${cells.map((c) => (/[",\r\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(',')}\r\n`;
-  return line(IMPORT_SAMPLE_HEADERS) + IMPORT_SAMPLE_ROWS.map(line).join('');
+/**
+ * The sample file for this workspace: every built-in column and an example of each custom property the importer fills, in the
+ * format it reads. The API builds it, since the custom properties are the workspace's own.
+ */
+export async function downloadSampleCsv(): Promise<Blob> {
+  const res = await fetch('/api/v2/contacts/import/sample', {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) throw toApiError(res.status, undefined, res.headers.get('x-request-id'));
+  return res.blob();
 }
 
 export type { ContactImportPreview, ImportField };

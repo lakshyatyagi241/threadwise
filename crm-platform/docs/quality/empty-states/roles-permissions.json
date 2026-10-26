@@ -1,0 +1,109 @@
+{
+  "feature": "roles-permissions",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-roles-permissions-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/matrix.ts",
+        "apps/web/src/features/roles-permissions/permissions-page.tsx",
+        "apps/web/src/features/roles-permissions/roles-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "shows the empty state with a link to create the first permission when there are none yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-roles-permissions-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/permissions-page.tsx",
+        "apps/web/src/features/roles-permissions/roles-page.tsx",
+        "apps/web/src/features/roles-permissions/workspace/members-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "shows no results, not the first-use message, when the filters match nothing"
+        }
+      ]
+    },
+    {
+      "id": "EM-roles-permissions-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/permission-create.tsx",
+        "apps/web/src/features/roles-permissions/permissions-page.tsx",
+        "apps/web/src/features/roles-permissions/role-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "shows a spinner while loading, not the empty state"
+        }
+      ]
+    },
+    {
+      "id": "EM-roles-permissions-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/api.ts",
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/lib/matrix.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "shows the empty state with a link to create the first role when there are no roles yet"
+        },
+        {
+          "file": "apps/web/src/features/roles-permissions/workspace/lib/matrix.test.ts",
+          "match": "serialises sorted and forces scope all where a key has no scope"
+        },
+        {
+          "file": "apps/web/src/features/roles-permissions/workspace/lib/members.test.ts",
+          "match": "noTeamMeetsTeamScope (BL-382: a person in no team and a team-scoped role)"
+        }
+      ]
+    },
+    {
+      "id": "EM-roles-permissions-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/role-editor.tsx",
+        "apps/web/src/features/roles-permissions/workspace/lib/members.ts",
+        "apps/web/src/features/roles-permissions/workspace/members-page.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

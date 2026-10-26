@@ -48,7 +48,8 @@
       "email_mailboxes": "Boîtes e-mail",
       "email_monthly": "E-mails par mois",
       "storage_gb": "Stockage (Go)",
-      "teams": "Équipes"
+      "teams": "Équipes",
+      "webbot_messages": "Messages gratuits du chatbot du site par mois"
     },
     "features": {
       "automation": "Automatisation",
@@ -60,10 +61,12 @@
       "remove_branding": "Supprimer la marque",
       "sales_pipeline": "Pipeline commercial",
       "appointment_booking": "Prise de rendez-vous",
+      "appointment_confirm_buttons": "Boutons du rappel (Confirmer / Reporter / Annuler)",
+      "appointment_rebook_steps": "Étapes de relance pour reprendre rendez-vous",
       "chatbot_widgets": "Widgets chatbot",
       "wa_storefront": "Catalogue WhatsApp",
       "inbox_sla": "Politiques SLA",
-      "inbox_routing": "Règles de routage",
+      "inbox_routing": "Routage intelligent: attribution automatique et règles",
       "waba_calling": "Appels WhatsApp",
       "inbox_kanban": "Vue Kanban",
       "team_performance": "Performance de l’équipe",
@@ -89,7 +92,9 @@
       "record_assignment": "Règles d'attribution des enregistrements",
       "team_hierarchy": "Hiérarchie des équipes et managers",
       "custom_roles": "Rôles personnalisés et périmètres",
-      "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
+      "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré",
+      "agent_status_bar": "Barre de statut : contrôle Disponible / Absent dans la barre du haut et la Boîte de réception",
+      "agent_status_automation": "Automatiser le statut : heures de travail personnelles et Absent automatique"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
       "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
       "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
-      "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+      "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées.",
+      "webbot_messages": "Messages du chatbot du site inclus gratuitement chaque mois civil. Chaque message au-delà est débité du portefeuille. Vide ou 0 = aucun inclus."
     },
     "planAddons": {
       "title": "Modules complémentaires disponibles avec votre forfait",
@@ -245,20 +251,7 @@
         "title": "Questions fréquentes"
       },
       "addons": {
-        "title": "Modules complémentaires",
-        "owned": "Modules complémentaires acquis",
-        "oneTime": "unique",
-        "buy": "Acheter le module",
-        "buyAgain": "Racheter",
-        "active": "Actif",
-        "unlimitedBullet": "Illimité : {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ jour} other {/ {count} jours}}",
-          "weeks": "{count, plural, one {/ semaine} other {/ {count} semaines}}",
-          "months": "{count, plural, one {/ mois} other {/ {count} mois}}",
-          "years": "{count, plural, one {/ an} other {/ {count} ans}}"
-        }
+        "title": "Modules complémentaires"
       },
       "renewal": {
         "renewsOn": "Votre forfait se renouvelle automatiquement le {date}.",
@@ -578,7 +571,30 @@
       "back": "Retour",
       "compare": "Comparer tous les forfaits",
       "appHint": "{feature} est aussi vendu comme application dans le Marketplace.",
-      "appLink": "Voir l’application"
+      "appLink": "Voir l’application",
+      "addonHint": "Vous pouvez aussi l'ajouter à votre offre actuelle avec le module {addon}.",
+      "addonLink": "Voir les modules",
+      "addonsTabHint": "Les modules complémentaires n’exigent pas le Marketplace dans votre offre. Vous pouvez quand même voir ce que vous possédez et en acheter depuis Offres et modules complémentaires.",
+      "addonsTabLink": "Ouvrir Offres et modules complémentaires",
+      "addonHintGeneric": "Votre offre le propose peut-être aussi en module complémentaire."
+    },
+    "lock": {
+      "link": "Voir les offres et modules",
+      "offTitle": "Non inclus dans votre offre",
+      "offLead": "Cette partie n’est pas incluse pour le moment dans l’offre de votre espace de travail.",
+      "buyTitle": "Ajoutez {addon} pour {price}",
+      "buyLead": "Votre offre propose {addon} en module complémentaire. Ajoutez-le pour activer cette partie.",
+      "buyLink": "Voir les modules",
+      "askOwner": "Demandez au propriétaire du compte de l’ajouter.",
+      "unavailableTitle": "{addon} nécessite une offre payante active",
+      "unavailableLead": "Choisissez d’abord une offre payante, puis vous pourrez y ajouter {addon}.",
+      "viewPlans": "Voir les offres",
+      "disabledTitle": "{addon} est désactivé",
+      "disabledLead": "Votre offre inclut {addon}, mais il est désactivé pour cet espace de travail. Ses paramètres sont conservés.",
+      "disabledAsk": "Demandez au propriétaire du compte de l’activer.",
+      "turnOn": "L’activer",
+      "turnOnForbidden": "Vous n’avez pas l’autorisation de l’activer. Demandez au propriétaire du compte.",
+      "turnOnFailed": "Nous n’avons pas pu activer {addon}. Veuillez réessayer."
     }
   }
 }

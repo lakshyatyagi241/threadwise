@@ -24,7 +24,7 @@
         "noWorkspaces": "कोई वर्कस्पेस नहीं"
       },
       "labels": {
-        "addonPacks": "ऐड-ऑन पैक",
+        "addonPacks": "ऐड-ऑन",
         "extensions": "एक्सटेंशन",
         "trackingCode": "ट्रैकिंग कोड",
         "planPricingSettings": "प्लान प्राइसिंग सेटिंग्स",
@@ -282,7 +282,9 @@
           "save": "सहेजें",
           "saved": "पसंद सहेजी गई।",
           "saveFailed": "पसंद सहेजी नहीं जा सकी।"
-        }
+        },
+        "timezoneSearch": "समय क्षेत्र खोजें",
+        "timezoneNoMatch": "कोई मेल खाता समय क्षेत्र नहीं है।"
       },
       "notifications": {
         "title": "वर्कस्पेस सूचनाएं",

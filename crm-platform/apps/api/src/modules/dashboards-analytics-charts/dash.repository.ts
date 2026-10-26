@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { RawCounts } from './dash-metrics';
+import type { BreakdownRow } from './dash-breakdown';
 
 type Raw = Record<string, unknown>;
 
@@ -15,10 +16,10 @@ type Raw = Record<string, unknown>;
  * A message that is only `sent` counts as delivered, as in Reference. A migrated message carries no receipt (the chat history has
  * none; chat-delivery finds no billing-log match), so all migrated outbound history reads `sent`: without this its delivered rate is 0.
  */
-const DELIVERED = sql.raw(
+export const DELIVERED = sql.raw(
   `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
 );
-const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
+export const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
 /** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */
 const FAILED = sql.raw(
   `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`,
@@ -46,48 +47,80 @@ export class DashRepository {
     return ((res.rows[0] as Raw | undefined)?.tz as string | null | undefined) ?? null;
   }
 
-  /**
-   * Headline counts of one window. `contactsReplied` is a funnel stage, so it only counts conversations messaged in this window
-   * (never above `contactsMessaged`); `repliers` is every conversation that wrote in, messaged or not.
-   */
+  /** Headline counts of one window: `countsMany` with a single window. */
   async counts(tx: Tx, orgId: number, from: Date, to: Date): Promise<RawCounts> {
-    // One pass over the window's messages, counted per conversation; the headline numbers are then sums and counts of those rows. The
-    // distinct counts and the "conversation also has an outbound message" test are plain per-conversation flags this way, instead of a
-    // DISTINCT sort per filter and a sub-select per row (280 ms to 99 ms on 90,000 messages, same result).
+    return (await this.countsMany(tx, orgId, [{ from, to }]))[0]!;
+  }
+
+  /**
+   * Headline counts of several windows in one statement, in the order given (a window with no messages gives zeros).
+   * `contactsReplied` is a funnel stage, so it only counts conversations messaged in this window (never above `contactsMessaged`);
+   * `repliers` is every conversation that wrote in, messaged or not.
+   */
+  async countsMany(
+    tx: Tx,
+    orgId: number,
+    windows: ReadonlyArray<{ from: Date; to: Date }>,
+  ): Promise<RawCounts[]> {
+    if (windows.length === 0) return [];
+    // One pass over the messages of every window together, counted per conversation; the headline numbers are then sums and counts of
+    // those rows. The distinct counts and the "conversation also has an outbound message" test are plain per-conversation flags this way,
+    // instead of a DISTINCT sort per filter and a sub-select per row (280 ms to 99 ms on 90,000 messages, same result). Each window is a
+    // set of FILTER columns over one range scan with fixed bounds, so partitions are pruned and the index range is used. (Joining the
+    // windows as a VALUES list instead made Postgres read the workspace's whole history once per window.)
+    const f = (i: number) => {
+      const w = windows[i]!;
+      return sql`(created_at >= ${w.from.toISOString()}::timestamptz AND created_at < ${w.to.toISOString()}::timestamptz)`;
+    };
+    const perWindow = windows.map(
+      (_, i) => sql`
+          count(*) FILTER (WHERE ${f(i)} AND direction = 'out') AS ${sql.identifier(`sent${i}`)},
+          count(*) FILTER (WHERE ${f(i)} AND direction = 'out' AND ${DELIVERED}) AS ${sql.identifier(`delivered${i}`)},
+          count(*) FILTER (WHERE ${f(i)} AND direction = 'out' AND ${FAILED}) AS ${sql.identifier(`failed${i}`)},
+          count(*) FILTER (WHERE ${f(i)} AND direction = 'out' AND ${READ}) AS ${sql.identifier(`read${i}`)},
+          count(*) FILTER (WHERE ${f(i)} AND direction = 'in') AS ${sql.identifier(`replies${i}`)}`,
+    );
+    const sums = windows.map((_, i) => {
+      const c = (k: string) => sql.identifier(`${k}${i}`);
+      return sql`
+        SELECT ${i}::int AS w_i,
+          coalesce(sum(${c('sent')}), 0)::int AS sent,
+          coalesce(sum(${c('delivered')}), 0)::int AS delivered,
+          coalesce(sum(${c('failed')}), 0)::int AS failed,
+          coalesce(sum(${c('read')}), 0)::int AS read,
+          coalesce(sum(${c('replies')}), 0)::int AS replies,
+          count(*) FILTER (WHERE ${c('replies')} > 0)::int AS repliers,
+          count(*) FILTER (WHERE ${c('sent')} > 0)::int AS contacts_messaged,
+          count(*) FILTER (WHERE ${c('delivered')} > 0)::int AS contacts_delivered,
+          count(*) FILTER (WHERE ${c('replies')} > 0 AND ${c('sent')} > 0)::int AS contacts_replied
+        FROM per`;
+    });
+    const lo = new Date(Math.min(...windows.map((w) => w.from.getTime())));
+    const hi = new Date(Math.max(...windows.map((w) => w.to.getTime())));
     const res = await tx.execute(sql`
       WITH per AS (
-        SELECT conversation_id,
-          count(*) FILTER (WHERE direction = 'out') AS sent,
-          count(*) FILTER (WHERE direction = 'out' AND ${DELIVERED}) AS delivered,
-          count(*) FILTER (WHERE direction = 'out' AND ${FAILED}) AS failed,
-          count(*) FILTER (WHERE direction = 'out' AND ${READ}) AS read,
-          count(*) FILTER (WHERE direction = 'in') AS replies
-        FROM ${stream(orgId, from, to)}
+        SELECT conversation_id, ${sql.join(perWindow, sql`, `)}
+        FROM ${stream(orgId, lo, hi)}
         GROUP BY conversation_id)
-      SELECT
-        coalesce(sum(sent), 0)::int AS sent,
-        coalesce(sum(delivered), 0)::int AS delivered,
-        coalesce(sum(failed), 0)::int AS failed,
-        coalesce(sum(read), 0)::int AS read,
-        coalesce(sum(replies), 0)::int AS replies,
-        count(*) FILTER (WHERE replies > 0)::int AS repliers,
-        count(*) FILTER (WHERE sent > 0)::int AS contacts_messaged,
-        count(*) FILTER (WHERE delivered > 0)::int AS contacts_delivered,
-        count(*) FILTER (WHERE replies > 0 AND sent > 0)::int AS contacts_replied
-      FROM per`);
-    const r = (res.rows[0] ?? {}) as Raw;
-    return {
-      contactsGoalCompleted: await this.goalCompleted(tx, orgId, from, to),
-      sent: n(r.sent),
-      delivered: n(r.delivered),
-      failed: n(r.failed),
-      read: n(r.read),
-      replies: n(r.replies),
-      repliers: n(r.repliers),
-      contactsMessaged: n(r.contacts_messaged),
-      contactsDelivered: n(r.contacts_delivered),
-      contactsReplied: n(r.contacts_replied),
-    };
+      ${sql.join(sums, sql` UNION ALL `)}`);
+    const byWindow = new Map((res.rows as Raw[]).map((r) => [n(r.w_i), r]));
+    const out: RawCounts[] = [];
+    for (const [i, w] of windows.entries()) {
+      const r = byWindow.get(i) ?? {};
+      out.push({
+        contactsGoalCompleted: await this.goalCompleted(tx, orgId, w.from, w.to),
+        sent: n(r.sent),
+        delivered: n(r.delivered),
+        failed: n(r.failed),
+        read: n(r.read),
+        replies: n(r.replies),
+        repliers: n(r.repliers),
+        contactsMessaged: n(r.contacts_messaged),
+        contactsDelivered: n(r.contacts_delivered),
+        contactsReplied: n(r.contacts_replied),
+      });
+    }
+    return out;
   }
 
   /**
@@ -149,32 +182,10 @@ export class DashRepository {
     );
   }
 
-  /** Outbound by display type; template wins over media (TW-DASH-027 rule 7). */
-  async types(
-    tx: Tx,
-    orgId: number,
-    from: Date,
-    to: Date,
-  ): Promise<Array<{ key: string; count: number; delivered: number }>> {
-    const res = await tx.execute(sql`
-      SELECT CASE
-          WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template'
-          WHEN kind IN ('image','video','audio','voice','document','sticker') THEN 'media'
-          WHEN kind = 'location' THEN 'location'
-          WHEN kind IN ('contact','interactive') THEN 'interactive'
-          ELSE 'text' END AS k, count(*)::int AS c,
-          count(*) FILTER (WHERE ${DELIVERED})::int AS d
-      FROM ${stream(orgId, from, to)} WHERE direction = 'out' GROUP BY 1`);
-    return (res.rows as Raw[]).map((r) => ({
-      key: r.k as string,
-      count: n(r.c),
-      delivered: n(r.d),
-    }));
-  }
-
   /**
-   * Conversations whose last message falls in [from, to), split open / closed (resolved counts as closed) and assigned / unassigned
-   * (a person, a team or an AI agent holds it). Archived chats are left out, as the inbox does.
+   * Conversations with activity in [from, to) (a message, or a resolve / close in the window), split open / resolved / closed and
+   * assigned / unassigned (a person, a team or an AI agent holds it). Resolving does not touch the last message, so a chat resolved
+   * today counts as resolved today even when its last message is older. Archived chats are left out, as the inbox does.
    */
   async conversationStates(
     tx: Tx,
@@ -184,38 +195,74 @@ export class DashRepository {
   ): Promise<{
     total: number;
     open: number;
+    resolved: number;
     closed: number;
     assigned: number;
     unassigned: number;
   }> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS total,
-        count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed,
+        count(*) FILTER (WHERE status = 'resolved')::int AS resolved,
+        count(*) FILTER (WHERE status = 'closed')::int AS closed,
         count(*) FILTER (
           WHERE assignee_user_id IS NOT NULL OR assignee_team_id IS NOT NULL OR assignee_agent_id IS NOT NULL
         )::int AS assigned
       FROM conversations
       WHERE org_id = ${orgId} AND NOT archived
-        AND last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz`);
+        AND (
+          (last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz)
+          OR (resolved_at >= ${from.toISOString()}::timestamptz AND resolved_at < ${to.toISOString()}::timestamptz)
+        )`);
     const r = (res.rows[0] ?? {}) as Raw;
     const total = n(r.total);
+    const resolved = n(r.resolved);
+    const closed = n(r.closed);
     return {
       total,
-      open: total - n(r.closed),
-      closed: n(r.closed),
+      open: total - resolved - closed,
+      resolved,
+      closed,
       assigned: n(r.assigned),
       unassigned: total - n(r.assigned),
     };
   }
 
-  /** Message volume by weekday (Sunday 0) and hour in the zone, both directions (TW-DASH-031). */
-  async heatmap(tx: Tx, orgId: number, from: Date, to: Date, tz: string): Promise<number[][]> {
+  /**
+   * The window's messages grouped once by local day, weekday, hour, direction and display type (template wins over media,
+   * TW-DASH-027 rule 7), each with its delivered and failed counts. The overview's daily series, type mix and weekday-by-hour heatmap
+   * are all sums of these few hundred rows (`foldBreakdown`), so they cost one pass over the messages, not three.
+   */
+  async breakdown(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+    kind: { fromDate: string; tz: string },
+  ): Promise<BreakdownRow[]> {
     const res = await tx.execute(sql`
-      SELECT extract(dow FROM created_at AT TIME ZONE ${tz})::int AS d,
-             extract(hour FROM created_at AT TIME ZONE ${tz})::int AS h, count(*)::int AS c
-      FROM ${stream(orgId, from, to)} GROUP BY 1, 2`);
-    const grid = Array.from({ length: 7 }, () => new Array<number>(24).fill(0));
-    for (const r of res.rows as Raw[]) grid[n(r.d)]![n(r.h)] = n(r.c);
-    return grid;
+      SELECT ((created_at AT TIME ZONE ${kind.tz})::date - ${kind.fromDate}::date)::int AS d,
+        extract(dow FROM created_at AT TIME ZONE ${kind.tz})::int AS dow,
+        extract(hour FROM created_at AT TIME ZONE ${kind.tz})::int AS h,
+        direction,
+        CASE
+          WHEN template_id IS NOT NULL OR kind = 'template' THEN 'template'
+          WHEN kind IN ('image','video','audio','voice','document','sticker') THEN 'media'
+          WHEN kind = 'location' THEN 'location'
+          WHEN kind IN ('contact','interactive') THEN 'interactive'
+          ELSE 'text' END AS k,
+        count(*)::int AS c,
+        count(*) FILTER (WHERE ${DELIVERED})::int AS delivered,
+        count(*) FILTER (WHERE ${FAILED})::int AS failed
+      FROM ${stream(orgId, from, to)} GROUP BY 1, 2, 3, 4, 5`);
+    return (res.rows as Raw[]).map((r) => ({
+      day: n(r.d),
+      dow: n(r.dow),
+      hour: n(r.h),
+      direction: String(r.direction),
+      type: String(r.k),
+      count: n(r.c),
+      delivered: n(r.delivered),
+      failed: n(r.failed),
+    }));
   }
 }

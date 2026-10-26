@@ -12,6 +12,20 @@ describe('toggleMark', () => {
   it('puts a pair at the caret when nothing is selected', () => {
     expect(toggleMark('hi ', 3, 3, '_')).toEqual({ text: 'hi __', start: 4, end: 4 });
   });
+  it('marks the whole word when the selection covers part of one', () => {
+    expect(toggleMark('Hello wonderful world', 9, 12, '*')).toEqual({
+      text: 'Hello *wonderful* world',
+      start: 7,
+      end: 16,
+    });
+  });
+  it('takes the mark off the whole word when only part of it is selected', () => {
+    expect(toggleMark('Hello *wonderful* world', 10, 13, '*')).toEqual({
+      text: 'Hello wonderful world',
+      start: 6,
+      end: 15,
+    });
+  });
   it('takes the mark off when the selection or its surroundings carry it', () => {
     expect(toggleMark('a *b* c', 2, 5, '*')).toEqual({ text: 'a b c', start: 2, end: 3 });
     expect(toggleMark('a *b* c', 3, 4, '*')).toEqual({ text: 'a b c', start: 2, end: 3 });

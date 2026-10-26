@@ -1,0 +1,117 @@
+# promtool tests for slow-query.rules.yml (docker run --rm -v "<repo>/crm-platform/deploy/observability:/r" --entrypoint promtool prom/prometheus:v2.55.0 test rules /r/slow-query.rules.test.yml)
+rule_files:
+  - slow-query.rules.yml
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'crm_slow_query_events_total{kind="running",job="crm-chat-bridge"}'
+        values: '0+1x30'
+      - series: 'crm_chat_bridge_failed_total{channel="slowquery",job="crm-chat-bridge"}'
+        values: '0 0 0 0 0 1 2 2 2 2 2'
+      - series: 'crm_chat_bridge_failed_total{channel="critical",job="crm-chat-bridge"}'
+        values: '0x10'
+      - series: 'crm_chat_bridge_last_watchdog_timestamp_seconds{job="crm-chat-bridge"}'
+        values: '60x200'
+      - series: 'crm_slow_query_watcher_last_poll_timestamp{job="crm-chat-bridge"}'
+        values: '60x200'
+      - series: 'up{job="crm-chat-bridge"}'
+        values: '1x200'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: SlowQueryBurst
+        exp_alerts:
+          - exp_labels: { severity: warning, group: slow_query }
+            exp_annotations:
+              summary: '10 slow-query events in 10 min'
+              description: 'The watcher saw many running or slow statements. See the slow-query cards in Slow Queries & Warnings and docs/runbooks/google-chat-alerts.md.'
+              runbook_url: docs/runbooks/google-chat-alerts.md#slowqueryburst
+      - eval_time: 8m
+        alertname: ChatBridgeDeliveryFailing
+        exp_alerts:
+          - exp_labels: { severity: critical, channel: slowquery }
+            exp_annotations:
+              summary: 'Google Chat delivery failing for channel slowquery'
+              description: 'Messages could not be delivered after retries (bad or revoked webhook URL, or Chat is down).'
+              runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgedeliveryfailing
+      # stale watchdog (value 60 vs time()) fires after 15 m + for; poll timestamp is also stale
+      - eval_time: 3h
+        alertname: ChatBridgeNoWatchdog
+        exp_alerts:
+          - exp_labels: { severity: critical, job: crm-chat-bridge }
+            exp_annotations:
+              summary: 'The Watchdog heartbeat has not reached the bridge for 15 min'
+              description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'
+              runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgenowatchdog
+      - eval_time: 3h
+        alertname: SlowQueryWatcherDown
+        exp_alerts:
+          - exp_labels: { severity: warning, group: slow_query, job: crm-chat-bridge }
+            exp_annotations:
+              summary: 'Slow-query watcher is not polling'
+              description: 'No successful poll for over 2 minutes (database unreachable, wrong role, or the bridge is down).'
+              runbook_url: docs/runbooks/google-chat-alerts.md#slowquerywatcherdown
+      - eval_time: 1m
+        alertname: Watchdog
+        exp_alerts:
+          - exp_labels: { severity: none, group: meta }
+            exp_annotations:
+              summary: 'Dead-man heartbeat: always firing'
+              runbook_url: docs/runbooks/google-chat-alerts.md#watchdog
+      # must-not-fire: healthy early on
+      - eval_time: 3m
+        alertname: ChatBridgeNoWatchdog
+        exp_alerts: []
+
+  # Watchdog gap cases: heartbeat every 5 m; the gauge keeps its last value (= unix time of last beat) while silent. Fires when silent > 15 m for 5 m.
+  - interval: 1m
+    input_series:
+      - series: 'crm_chat_bridge_last_watchdog_timestamp_seconds{job="crm-chat-bridge"}'
+        values: '0+60x5 300x6 720+60x40'   # last beat 5 m, bridge restart gap of 6 min, beats resume at 12 m
+    alert_rule_test:
+      - { eval_time: 11m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }
+      - { eval_time: 30m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }
+  - interval: 1m
+    input_series:
+      - series: 'crm_chat_bridge_last_watchdog_timestamp_seconds{job="crm-chat-bridge"}'
+        values: '0+60x5 300x24 1800+60x30'   # last beat 5 m, silent 25 min (until 30 m), then resumes
+    alert_rule_test:
+      - { eval_time: 22m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }   # gap 17 m > 15 m but inside `for: 5m`
+      - eval_time: 28m   # gap 23 m, condition true since gap passed 15 m (20 m) for more than 5 m
+        alertname: ChatBridgeNoWatchdog
+        exp_alerts:
+          - exp_labels: { severity: critical, job: crm-chat-bridge }
+            exp_annotations:
+              summary: 'The Watchdog heartbeat has not reached the bridge for 15 min'
+              description: 'Alerts may not be reaching Google Chat: check Prometheus, Alertmanager and the bridge. Delivered through Grafana contact points if configured.'
+              runbook_url: docs/runbooks/google-chat-alerts.md#chatbridgenowatchdog
+      - { eval_time: 32m, alertname: ChatBridgeNoWatchdog, exp_alerts: [] }   # heartbeat resumed: resolved
+  # ---- NEGATIVE and lifecycle cases: the rules must stay silent below threshold, during `for`, and must resolve ----
+  - interval: 1m
+    input_series:
+      - series: 'crm_slow_query_events_total{kind="running",job="crm-chat-bridge"}'
+        values: '0 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2'   # only 2 events: below the burst threshold of 5
+      - series: 'crm_slow_query_watcher_last_poll_timestamp{job="crm-chat-bridge"}'
+        values: '60x200'                                              # stale from ~3 m, alert needs 5 m more
+      - series: 'up{job="crm-chat-bridge"}'
+        values: '1x200'
+      - series: 'crm_chat_bridge_failed_total{channel="slowquery",job="crm-chat-bridge"}'
+        values: '0x30'
+    alert_rule_test:
+      - { eval_time: 12m, alertname: SlowQueryBurst, exp_alerts: [] }            # below threshold: no alert
+      - { eval_time: 6m, alertname: SlowQueryWatcherDown, exp_alerts: [] }       # condition true but shorter than `for: 5m`: no alert
+      - { eval_time: 12m, alertname: ChatBridgeDeliveryFailing, exp_alerts: [] } # no failures: no alert
+  - interval: 1m
+    input_series:
+      - series: 'crm_slow_query_events_total{kind="statement",job="crm-chat-bridge"}'
+        values: '0+1x6 6x40'                                          # burst of 6 in 6 min, then quiet
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: SlowQueryBurst
+        exp_alerts:
+          - exp_labels: { severity: warning, group: slow_query }
+            exp_annotations:
+              summary: '6 slow-query events in 10 min'
+              description: 'The watcher saw many running or slow statements. See the slow-query cards in Slow Queries & Warnings and docs/runbooks/google-chat-alerts.md.'
+              runbook_url: docs/runbooks/google-chat-alerts.md#slowqueryburst
+      - { eval_time: 25m, alertname: SlowQueryBurst, exp_alerts: [] }            # window moved past the burst: it RESOLVES

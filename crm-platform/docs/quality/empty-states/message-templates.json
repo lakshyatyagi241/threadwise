@@ -1,0 +1,90 @@
+{
+  "feature": "message-templates",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-message-templates-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-templates/components/buttons-editor.tsx",
+        "apps/web/src/features/message-templates/components/detail-screen.tsx",
+        "apps/web/src/features/message-templates/components/gallery-view.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/message-templates/components/components.test.tsx",
+          "match": "says when there is no body yet"
+        },
+        {
+          "file": "apps/web/src/features/message-templates/components/template-ai-modal.dom.test.tsx",
+          "match": "shows the empty state and keeps Generate off when no provider is enabled"
+        }
+      ]
+    },
+    {
+      "id": "EM-message-templates-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-templates/components/templates-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/message-templates/components/gallery-view.render.test.tsx",
+          "match": "says so while it loads, when it fails, and when nothing matches"
+        }
+      ]
+    },
+    {
+      "id": "EM-message-templates-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-templates/components/delete-dialog.tsx",
+        "apps/web/src/features/message-templates/components/detail-screen.tsx",
+        "apps/web/src/features/message-templates/components/gallery-view.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-message-templates-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-templates/components/template-card.tsx",
+        "apps/web/src/features/message-templates/components/template-form-screen.tsx",
+        "apps/web/src/features/message-templates/components/variables-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-message-templates-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-templates/components/templates-screen.tsx",
+        "apps/web/src/features/message-templates/lib/form-model.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

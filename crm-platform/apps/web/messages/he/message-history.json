@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "תיבת דואר",
+      "contact": "איש קשר",
       "flow": "זרימה",
       "auto_reply": "מענה אוטומטי",
+      "automation": "אוטומציה",
       "ai": "עוזר בינה מלאכותית",
       "api": "API",
       "broadcast": "שידור",
+      "broadcast_test": "שליחת בדיקה של שידור",
       "campaign": "קמפיין",
       "scheduled": "מתוזמן",
       "other": "אחר"
@@ -171,6 +174,7 @@
         "contact": "איש קשר",
         "message": "הודעה",
         "type": "סוג",
+        "source": "מקור",
         "status": "סטטוס",
         "open": "פתיחה"
       },
@@ -228,11 +232,13 @@
       "source": "נשלח על ידי",
       "sourceValue": {
         "inbox": "תיבת דואר",
+        "contact": "איש קשר",
         "flow": "זרימה",
         "auto_reply": "מענה אוטומטי",
         "ai": "עוזר בינה מלאכותית",
         "api": "API",
         "broadcast": "שידור",
+        "broadcast_test": "שליחת בדיקה של שידור",
         "campaign": "קמפיין",
         "scheduled": "הודעה מתוזמנת",
         "other": "אחר"

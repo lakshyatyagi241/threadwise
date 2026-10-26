@@ -6,6 +6,7 @@ import {
   cleanVariables,
   isApproved,
   renderBody,
+  sendComponentsOf,
   type TemplateFacts,
 } from '../../../src/modules/team-inbox-conversations/inbox-template-rules';
 
@@ -107,6 +108,66 @@ describe('checkVariables', () => {
     expect(checkVariables(slots, { '1': 'a\tb', '2': 'x' })).toHaveLength(1);
     expect(checkVariables(slots, { '1': 'a    b', '2': 'x' })).toHaveLength(1);
     expect(checkVariables(slots, { '1': 'a  b', '2': 'x' })).toEqual([]);
+  });
+});
+
+describe('sendComponentsOf', () => {
+  const buttons = [
+    { type: 'QUICK_REPLY', text: 'Hey' },
+    { type: 'COPY_CODE', example: 'TEST30' },
+  ];
+
+  it('sends the body values, then the copy-code button with the code the template holds', () => {
+    expect(sendComponentsOf({ buttons }, { '1': 'Ana', '2': '1042' })).toEqual([
+      {
+        type: 'body',
+        parameters: [
+          { type: 'text', text: 'Ana' },
+          { type: 'text', text: '1042' },
+        ],
+      },
+      {
+        type: 'button',
+        sub_type: 'copy_code',
+        index: 1,
+        parameters: [{ type: 'coupon_code', coupon_code: 'TEST30' }],
+      },
+    ]);
+  });
+
+  it('reads the example when Meta keeps it as a list', () => {
+    expect(sendComponentsOf({ buttons: [{ type: 'COPY_CODE', example: ['SAVE10'] }] }, {})).toEqual(
+      [
+        {
+          type: 'button',
+          sub_type: 'copy_code',
+          index: 0,
+          parameters: [{ type: 'coupon_code', coupon_code: 'SAVE10' }],
+        },
+      ],
+    );
+  });
+
+  it('never sends an empty code: a copy-code button with no example sends "-"', () => {
+    expect(sendComponentsOf({ buttons: [{ type: 'COPY_CODE' }] }, {})).toEqual([
+      {
+        type: 'button',
+        sub_type: 'copy_code',
+        index: 0,
+        parameters: [{ type: 'coupon_code', coupon_code: '-' }],
+      },
+    ]);
+  });
+
+  it('sends only the body when no button takes a parameter, and nothing when there is neither', () => {
+    const fixed = [
+      { type: 'QUICK_REPLY', text: 'Hey' },
+      { type: 'URL', text: 'Shop', url: 'https://shop.example.com' },
+    ];
+    expect(sendComponentsOf({ buttons: fixed }, { '1': 'Ana' })).toEqual([
+      { type: 'body', parameters: [{ type: 'text', text: 'Ana' }] },
+    ]);
+    expect(sendComponentsOf({ buttons: [] }, {})).toEqual([]);
   });
 });
 

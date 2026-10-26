@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Descartar"
     },
+    "list": {
+      "unofficialDisabled": "No oficial (desactivado)"
+    },
     "detail": {
       "back": "Atrás",
       "crumb": "Difusiones / Analíticas / #{ref}",

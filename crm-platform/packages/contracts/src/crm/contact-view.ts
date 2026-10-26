@@ -62,9 +62,14 @@ const SELECTED_NEEDS_PEOPLE = {
   path: ['userIds'],
 };
 
+/** How long a saved view's name may be: short enough to read in the views bar, long enough to say what the view is. */
+export const CONTACT_VIEW_NAME_MIN = 3;
+export const CONTACT_VIEW_NAME_MAX = 50;
+const viewName = z.string().trim().min(CONTACT_VIEW_NAME_MIN).max(CONTACT_VIEW_NAME_MAX);
+
 export const createContactViewSchema = z
   .object({
-    name: z.string().min(1).max(255),
+    name: viewName,
     filter: z.record(z.unknown()).default({}),
     isShared: z.boolean().default(false),
     position: z.number().int().optional(),
@@ -75,7 +80,7 @@ export type CreateContactViewInput = z.infer<typeof createContactViewSchema>;
 
 export const updateContactViewSchema = z
   .object({
-    name: z.string().min(1).max(255).optional(),
+    name: viewName.optional(),
     filter: z.record(z.unknown()).optional(),
     isShared: z.boolean().optional(),
     ...sharingShape,

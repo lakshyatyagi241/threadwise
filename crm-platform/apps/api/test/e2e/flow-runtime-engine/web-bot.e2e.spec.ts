@@ -315,6 +315,193 @@ describe('a website chat bot answers its visitor', () => {
     expect(rows.rows[0]).toMatchObject({ kind: 'image', media_name: 'my-id.png' });
   });
 
+  it("keeps the visitor's rating when they end the chat, once, and refuses a rating outside 1 to 5", async () => {
+    const { token } = await liveBot(
+      'Rated bot',
+      graph([trigger(), node('m', 'message', { text: 'Hello' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    await linesUntil(token, visitor, 'the bot greets', (all) =>
+      all.some((l) => l.body === 'Hello'),
+    );
+    const rate = (body: object) =>
+      request(p.h.app.getHttpServer())
+        .post(`/widget/${token}/api/rating?visitor_uuid=${visitor}`)
+        .send(body);
+    expect((await rate({ rating: 9 })).status).toBe(422);
+    expect((await rate({ rating: 4, comment: 'Quick and clear' })).status).toBe(200);
+    expect((await rate({ rating: 1 })).status).toBe(200);
+    const rows = await api.h.owner.query(
+      `SELECT m.body, m.direction FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.meta->>'source' = 'rating'`,
+      [t.orgId, visitor],
+    );
+    expect(rows.rows).toEqual([{ body: 'Rated this chat 4/5: Quick and clear', direction: 'in' }]);
+  });
+
+  it('starts by itself when the window opens on an empty thread, once, without a line for the visitor', async () => {
+    const { token } = await liveBot(
+      'Opens itself bot',
+      graph([trigger(), node('m', 'message', { text: 'Welcome aboard' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    const start = () =>
+      request(p.h.app.getHttpServer()).post(`/widget/${token}/api/start?visitor_uuid=${visitor}`);
+    expect((await start()).status).toBe(200);
+    const lines = await linesUntil(token, visitor, 'the bot opens', (all) =>
+      all.some((l) => l.body === 'Welcome aboard'),
+    );
+    // The window shows the bot's own lines only: the opening tap is kept for the team, not drawn.
+    expect(lines.some((l) => l.body === 'Opened the chat')).toBe(false);
+    const rows = await api.h.owner.query(
+      `SELECT count(*)::int AS n FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = 'Opened the chat'`,
+      [t.orgId, visitor],
+    );
+    expect(rows.rows[0]).toEqual({ n: 1 });
+    // A second open does not start the bot again.
+    expect((await start()).status).toBe(200);
+    const again = await api.h.owner.query(
+      `SELECT count(*)::int AS n FROM messages m
+         JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+        WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = 'Welcome aboard'`,
+      [t.orgId, visitor],
+    );
+    expect(again.rows[0]).toEqual({ n: 1 });
+  });
+
+  it("asks for the visitor's location, takes the pin they share, and sends a pin as a map link", async () => {
+    const { token } = await liveBot(
+      'Location bot',
+      graph(
+        [
+          trigger(),
+          node('l', 'ask_location', { prompt: 'Where are you?', var: 'where' }),
+          node('p', 'location', { lat: 18.5204, lng: 73.8567, title: 'Our office' }),
+          node('done', 'message', { text: 'Thanks, see {{where_latitude}}' }),
+        ],
+        [edge('t', 'l'), edge('l', 'p'), edge('p', 'done')],
+      ),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    const asked = await linesUntil(token, visitor, 'the bot asks for the location', (all) =>
+      all.some((l) => l.input?.type === 'location'),
+    );
+    // The question is the plain question: the window draws the share button, so no WhatsApp "tap the + button" hint.
+    expect(asked.find((l) => l.input?.type === 'location')!.body).toBe('Where are you?');
+    const share = (body: object) =>
+      request(p.h.app.getHttpServer())
+        .post(`/widget/${token}/api/location?visitor_uuid=${visitor}`)
+        .send(body);
+    expect((await share({ latitude: 120, longitude: 10 })).status).toBe(422);
+    expect((await share({ latitude: 18.52, longitude: 73.85 })).status).toBe(200);
+    const lines = await linesUntil(token, visitor, 'the flow carries on', (all) =>
+      all.some((l) => /^Thanks, see 18\.52/.test(l.body ?? '')),
+    );
+    expect(
+      lines.some((l) => (l.body ?? '').includes('https://maps.google.com/?q=18.5204,73.8567')),
+    ).toBe(true);
+  });
+
+  it('a saved edit to a published bot goes live only when it is published again', async () => {
+    const { flowId, token } = await liveBot(
+      'Draft vs live bot',
+      graph([trigger(), node('m', 'message', { text: 'Version A' })], [edge('t', 'm')]),
+    );
+    const says = async (word: string) => {
+      const visitor = await api.visitor(token);
+      await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+      return linesUntil(token, visitor, `the bot says ${word}`, (all) =>
+        all.some((l) => /^Version /.test(l.body ?? '')),
+      ).then((all) => all.find((l) => /^Version /.test(l.body ?? ''))!.body);
+    };
+    expect(await says('A')).toBe('Version A');
+
+    const current = await api.as(t.admin).get(`/v2/flows/${flowId}`);
+    expect(current.status).toBe(200);
+    const saved = await api
+      .as(t.admin)
+      .put(`/v2/flows/${flowId}`)
+      .send({
+        name: 'Draft vs live bot',
+        graph: graph([trigger(), node('m', 'message', { text: 'Version B' })], [edge('t', 'm')]),
+        rowVersion: current.body.rowVersion,
+      });
+    expect(saved.status, JSON.stringify(saved.body)).toBe(200);
+    // Saved but not published: customers still get the published version.
+    expect(await says('still A')).toBe('Version A');
+
+    expect((await api.as(t.admin).post(`/v2/flows/${flowId}/publish`).send({})).status).toBe(200);
+    expect(await says('B')).toBe('Version B');
+  });
+
+  it('ending the chat resolves the thread, leaving closes it until the visitor is back, and a restart stays in the same thread', async () => {
+    const { token } = await liveBot(
+      'Sessions bot',
+      graph([trigger(), node('m', 'message', { text: 'Hello again' })], [edge('t', 'm')]),
+    );
+    const visitor = await api.visitor(token);
+    await api.pub(token).message({ body: 'hi', visitor_uuid: visitor });
+    await linesUntil(token, visitor, 'the bot greets', (all) =>
+      all.some((l) => l.body === 'Hello again'),
+    );
+    const post = (path: string) =>
+      request(p.h.app.getHttpServer()).post(
+        `/widget/${token}/api/${path}${path.includes('?') ? '&' : '?'}visitor_uuid=${visitor}`,
+      );
+    const state = async () =>
+      (
+        await api.h.owner.query(
+          `SELECT c.status, c.routing_meta->>'closedBy' AS closed_by FROM conversations c
+             JOIN chatbot_widget_visitors v ON v.org_id = c.org_id AND v.conversation_id = c.id
+            WHERE c.org_id = $1 AND v.visitor_uuid = $2`,
+          [t.orgId, visitor],
+        )
+      ).rows[0];
+    const lines = async (like: string) =>
+      (
+        await api.h.owner.query(
+          `SELECT count(*)::int AS n FROM messages m
+             JOIN chatbot_widget_visitors v ON v.org_id = m.org_id AND v.conversation_id = m.conversation_id
+            WHERE m.org_id = $1 AND v.visitor_uuid = $2 AND m.body = $3`,
+          [t.orgId, visitor, like],
+        )
+      ).rows[0].n as number;
+
+    expect((await post('end?reason=nonsense')).status).toBe(422);
+    // The page closes: the thread is resolved with no line, and the visitor loading the chat again has it open.
+    expect((await post('end?reason=left')).status).toBe(200);
+    expect(await state()).toEqual({ status: 'resolved', closed_by: 'left' });
+    expect(await lines('Ended the chat')).toBe(0);
+    expect(
+      (
+        await request(p.h.app.getHttpServer()).get(
+          `/widget/${token}/api/config?visitor_uuid=${visitor}`,
+        )
+      ).status,
+    ).toBe(200);
+    expect(await state()).toEqual({ status: 'open', closed_by: null });
+
+    // Restart: the same thread, with a line for the team, and the window shows nothing from before it.
+    const same = await post('restart');
+    expect(same.status).toBe(200);
+    expect(same.body.visitor_uuid).toBe(visitor);
+    expect(await lines('Restarted the chat')).toBe(1);
+    const fresh = await api.pub(token).history(visitor, 0);
+    expect(((fresh.body.messages ?? []) as Line[]).some((l) => l.body === 'Hello again')).toBe(
+      false,
+    );
+
+    // Ending the chat resolves the thread and says so.
+    expect((await post('end?reason=ended')).status).toBe(200);
+    expect((await state()).status).toBe('resolved');
+    expect(await lines('Ended the chat')).toBe(1);
+  });
+
   it('shows link, call and email buttons on a bot line, and drops any address a browser must not open', async () => {
     const { token } = await liveBot(
       'Links bot',

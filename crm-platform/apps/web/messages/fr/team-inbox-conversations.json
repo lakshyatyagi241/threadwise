@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# heure} other {# heures}}",
         "days": "{count, plural, one {# jour} other {# jours}}"
       },
-      "unsnoozesAt": "Revient {time}"
+      "unsnoozesAt": "Revient {time}",
+      "erased": "Contacts effacés",
+      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles ni le texte des messages. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
+      "erasedTitle": "Contact effacé"
     },
     "status": {
       "received": "Reçu",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Vous pouvez lire cette conversation, mais vous n’avez pas l’autorisation d’y répondre.",
       "resolvedBanner": "Cette conversation est résolue. Rouvrez-la pour répondre.",
+      "resolvedWebchatBanner": "Ce chat web est résolu et ne peut pas être rouvert.",
       "assignedToOther": "Ce chat est attribué à un autre agent. Attribuez-le-vous d'abord pour répondre.",
       "typing": "{count, plural, one {Un collègue est en train d’écrire} other {# collègues sont en train d’écrire}}",
       "messagesLabel": "Messages",
+      "session": {
+        "header": "{range} · {count, plural, one {# message} other {# messages}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Charger les messages précédents",
       "empty": "Aucun message dans cette conversation pour le moment.",
       "newMessageAnnounce": "Nouveau message : {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Aucun résultat",
       "searchPrev": "Résultat précédent",
       "searchNext": "Résultat suivant",
-      "searchClose": "Fermer la recherche"
+      "searchClose": "Fermer la recherche",
+      "erasedBadge": "Effacé",
+      "erasedBanner": "Ce contact a été effacé. Le texte et les médias des messages ont été supprimés, donc aucun envoi n'est possible. La chronologie et les heures sont conservées."
     },
     "groupThread": {
       "openGroup": "Ouvrir le groupe",
@@ -542,17 +554,17 @@
         "onLeave": "En congé",
         "onLeaveUntil": "En congé jusqu’au {date}",
         "availability": {
-          "online": "En ligne",
-          "away": "Absent",
+          "online": "Disponible",
+          "away": "Absent, hors des heures de travail",
           "busy": "Occupé",
-          "offline": "Hors ligne"
+          "offline": "Absent"
         }
       },
       "presence": {
-        "online": "En ligne",
-        "away": "Absent",
+        "online": "Disponible",
+        "away": "Absent, hors des heures de travail",
         "busy": "Occupé",
-        "offline": "Hors ligne"
+        "offline": "Absent"
       },
       "notes": {
         "tab": "Notes du contact",
@@ -584,7 +596,11 @@
           "sla_breach": "Délai de réponse dépassé",
           "spam_flagged": "Marquée comme spam par {actor}",
           "escalated": "Escaladée",
-          "unknown": "{what} par {actor}"
+          "unknown": "{what} par {actor}",
+          "handoff_requested": "Confiée à une personne par {actor}",
+          "queue_reminded": "L'équipe a été relancée",
+          "queue_offered": "Proposé à une autre équipe",
+          "queue_customer_message": "Un message a été envoyé au client"
         },
         "actors": {
           "user": "Un collègue",
@@ -711,6 +727,7 @@
         "not_linked": "Le canal de cette conversation n’est lié à aucun numéro WhatsApp : aucun modèle ne peut y être envoyé.",
         "paused": "Suspendu par WhatsApp. Il pourra être renvoyé une fois la suspension terminée.",
         "media_header": "Comporte un en-tête image, vidéo ou document, qui ne peut pas encore être envoyé depuis la boîte de réception.",
+        "carousel": "C'est un carrousel (cartes avec images) qui ne peut pas encore être envoyé depuis la boîte de réception.",
         "header_variable": "Comporte une variable dans l’en-tête, qui ne peut pas encore être renseignée depuis la boîte de réception.",
         "dynamic_button": "Comporte un lien de bouton avec une variable, qui ne peut pas encore être renseignée depuis la boîte de réception.",
         "authentication": "Les modèles de mot de passe à usage unique sont envoyés par le système, pas depuis la boîte de réception.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Uniquement les messages {status}",
         "requestedAt": "Demandé {date}",
         "lines": "{count, plural, one {# ligne} many {# lignes} other {# lignes}}",
+        "noLines": "Aucun événement sur cette période",
         "until": "Disponible jusqu'au {date}",
         "download": "Télécharger",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulateur (test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat du site web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulateur (test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat du site web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contact",
         "agent": "Vous",
@@ -1054,7 +1072,10 @@
       "tagRemove": "Retirer une étiquette",
       "onLeave": "en congé",
       "onLeaveUntil": "en congé jusqu’au {date}",
-      "spam": "Marquer comme spam"
+      "spam": "Marquer comme spam",
+      "markUnread": "Marquer comme non lu",
+      "unsnooze": "Réactiver",
+      "notSpam": "Marquer comme non spam"
     },
     "tags": {
       "tag": "Étiquette",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Retour à la boîte de réception",
-        "title": "Étiquettes de conversation",
+        "title": "Étiquettes",
         "intro": "Les étiquettes de conversation marquent un échange (facturation, remboursement, urgent) pour que votre équipe puisse trier et filtrer la boîte de réception. Elles viennent de la même bibliothèque que les étiquettes de contact, qui décrivent la personne.",
         "newTitle": "Nouvelle étiquette",
         "editTitle": "Modifier l’étiquette",

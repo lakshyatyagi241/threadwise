@@ -37,7 +37,8 @@
       "statusStage": "Quello stato appartiene a un'altra fase. Scegli uno stato adatto alla fase del contatto.",
       "stageScope": "Uno stato può essere limitato solo a una delle tue fasi del ciclo di vita.",
       "planLimit": "Hai raggiunto il limite del tuo piano di {limit, plural, one {# contatto} other {# contatti}}. Passa a un piano superiore per aggiungerne altri, oppure elimina un contatto esistente per liberare spazio.",
-      "legalHold": "Questo record è protetto e al momento non può essere eliminato."
+      "legalHold": "Questo record è protetto e al momento non può essere eliminato.",
+      "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnatela prima a te per inviare un messaggio."
     },
     "list": {
       "title": "Contact Hub",
@@ -282,8 +283,6 @@
       "shortEmail": "Email",
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Creato",
-      "shortModified": "Modificato",
       "firstRun": {
         "title": "Aggiungi i tuoi primi contatti",
         "message": "Porta dentro le persone con cui parli. I contatti servono per messaggi, campagne, attività e trattative.",
@@ -296,7 +295,9 @@
       "teamLabel": "Team",
       "teamFilter": "Filtra per team",
       "allTeams": "Tutti i team",
-      "teamFormer": "Team precedente"
+      "teamFormer": "Team precedente",
+      "unhideColumn": "Mostra colonna",
+      "resizeColumn": "Trascina per ridimensionare {column}; doppio clic per ripristinare"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -346,7 +347,25 @@
       "assignOwner": "Assegna responsabile",
       "changeStage": "Cambia fase",
       "more": "Altro",
-      "held": "Questo record è protetto e al momento non può essere eliminato."
+      "held": "Questo record è protetto e al momento non può essere eliminato.",
+      "consent": "Consenso marketing",
+      "consentTitle": "Consenso marketing",
+      "consentChannel": "Canale",
+      "consentAction": "Modifica",
+      "consentSubscribe": "Iscrivi",
+      "consentUnsubscribe": "Disiscrivi",
+      "consentNote": "Come hanno dato il consenso i contatti",
+      "consentNotePlaceholder": "Cosa hanno detto o firmato, e dove",
+      "consentNoteRequired": "Indica come hanno dato il consenso i contatti prima di iscriverli.",
+      "consentContinue": "Continua",
+      "consentBack": "Indietro",
+      "consentConfirm": "Registra consenso",
+      "consentSummary": "Segna {count, plural, one {# contatto} other {# contatti}} come {change} su {channel}. Ognuno riceve una voce nella cronologia del consenso.",
+      "consentChangeGranted": "iscritti",
+      "consentChangeWithdrawn": "disiscritti",
+      "consentAllMatching": "Questo vale per tutti i contatti che corrispondono al filtro.",
+      "consentSubscribed": "{count, plural, one {# contatto iscritto} other {# contatti iscritti}}",
+      "consentUnsubscribed": "{count, plural, one {# contatto disiscritto} other {# contatti disiscritti}}"
     },
     "form": {
       "addEyebrow": "Nuovo contatto",
@@ -448,7 +467,8 @@
       "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo.",
       "searchOptions": "Cerca opzioni",
       "searchOptionsFor": "Cerca tra le opzioni di {field}",
-      "noOptionsFound": "Nessuna opzione corrisponde alla ricerca."
+      "noOptionsFound": "Nessuna opzione corrisponde alla ricerca.",
+      "cascadeWaiting": "Scegli prima {parent} per vedere le scelte."
     },
     "tags": {
       "title": "Tag",
@@ -497,7 +517,6 @@
       "loading": "Caricamento dei gruppi...",
       "unavailableTitle": "I gruppi non sono ancora disponibili",
       "unavailableMessage": "Il servizio dei gruppi di contatti non è attivo su questo server, quindi i gruppi non possono ancora essere elencati né creati.",
-      "contacts": "contatti",
       "viewContacts": "Visualizza contatti",
       "edit": "Modifica gruppo",
       "editNamed": "Modifica il gruppo {name}",
@@ -505,8 +524,6 @@
       "deleteNamed": "Elimina il gruppo {name}",
       "deleteTitle": "Eliminare questo gruppo?",
       "deleteMessage": "«{name}» verrà rimosso da ogni contatto che ne fa parte. I contatti stessi vengono conservati.",
-      "createTile": "Crea nuovo gruppo",
-      "createTileHint": "Raggruppa i contatti per segmento, fase del funnel o interesse.",
       "emptyTitle": "Ancora nessun gruppo",
       "emptyMessage": "Chiedi a un responsabile del Workspace di creare il primo gruppo.",
       "helpKicker": "Aiuto - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "Esiste già un gruppo con questo nome, quindi non è stato creato nulla di nuovo.",
       "import": "Importa contatti",
-      "importInto": "Importa"
+      "importInto": "Importa",
+      "colName": "Nome",
+      "colMembers": "Membri",
+      "colCreatedBy": "Creato da",
+      "colCreatedAt": "Creato il",
+      "colModifiedBy": "Modificato da",
+      "colUpdatedAt": "Aggiornato il",
+      "colActions": "Azioni",
+      "tableLabel": "Gruppi di contatti",
+      "search": "Cerca gruppi",
+      "searchPlaceholder": "Cerca per nome",
+      "count": "{count, plural, =0 {Nessun gruppo} one {# gruppo} other {# gruppi}}",
+      "noResultsTitle": "Nessun gruppo corrisponde",
+      "noResults": "Nessun nome di gruppo contiene ciò che hai scritto.",
+      "clearSearch": "Cancella ricerca"
     },
     "import": {
       "eyebrow": "Importazione in blocco",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "la data di nascita non è una data con l'anno per primo che possa essere una data di nascita",
         "duplicate_in_file": "numero ripetuto, unito a una riga precedente",
         "invalid_timezone": "fuso orario non valido",
-        "legal_hold": "record protetto, non modificato"
+        "legal_hold": "record protetto, non modificato",
+        "invalid_property_value": "il valore della proprietà personalizzata non corrisponde al suo tipo o alle sue opzioni",
+        "invalid_property_value_column": "colonna \"{column}\": il valore non corrisponde al suo tipo o alle sue opzioni"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -634,12 +667,15 @@
       "limitExceeded": "Oltre il limite del piano",
       "limitExceededNote": "Alcuni nuovi contatti non sono stati importati perché è stato raggiunto il limite di contatti del tuo piano.",
       "rejectsFailed": "Non è stato possibile scaricare le righe rifiutate.",
+      "sampleFailed": "Impossibile scaricare il file di esempio. Riprova.",
       "groupRequired": "Aggiungi questi contatti a",
       "groupExisting": "Un gruppo esistente",
       "groupNew": "Un nuovo gruppo",
       "groupPick": "Scegli un gruppo",
       "groupNewPlaceholder": "Nome del nuovo gruppo",
-      "groupRequiredHint": "Ogni contatto importato entra in questo unico gruppo. La colonna dei gruppi del file viene ignorata, a meno che tu non la associ qui sopra."
+      "groupRequiredHint": "Ogni contatto importato entra in questo unico gruppo. La colonna dei gruppi del file viene ignorata, a meno che tu non la associ qui sopra.",
+      "customProperties": "Proprietà personalizzate",
+      "customPropertiesHint": "Una colonna la cui intestazione è il nome della proprietà, o attr:key come lo scrive l'esportazione, compila quella proprietà. Una cella vuota mantiene il valore che il contatto ha già."
     },
     "detail": {
       "back": "Tutti i contatti",
@@ -1087,7 +1123,8 @@
         "moveDown": "Sposta {name} giù",
         "edit": "Modifica {name}",
         "deactivate": "Disattiva {name}",
-        "reactivate": "Riattiva"
+        "reactivate": "Riattiva",
+        "dependsOn": "Scelte dipendenti da {field}"
       },
       "toast": {
         "conflict": "Qualcun altro ha modificato questo elemento. L'elenco è stato aggiornato; riprova.",
@@ -1243,6 +1280,34 @@
         "manageStages": "Gestisci fasi",
         "manageGroups": "Gestisci gruppi",
         "locked": "Fisso"
+      },
+      "cascade": {
+        "open": "Campi dipendenti",
+        "title": "Campi dipendenti",
+        "close": "Chiudi",
+        "intro": "Un campo dipendente è sempre visibile. Le sue scelte dipendono dalla scelta fatta nel campo genitore: per ogni scelta del genitore, seleziona le scelte del campo dipendente che consente.",
+        "empty": "Nessun campo dipendente per ora.",
+        "add": "Aggiungi campo dipendente",
+        "needTwoChoiceFields": "I campi dipendenti richiedono almeno due proprietà con un elenco di scelte (menu a tendina, selezione multipla o radio).",
+        "dependsOn": "dipende da {parent}",
+        "editLabel": "Modifica {name}",
+        "removeLabel": "Rimuovi {name}",
+        "parent": "Proprietà genitore",
+        "child": "Proprietà dipendente",
+        "pickParent": "Scegli la proprietà genitore",
+        "pickChild": "Scegli la proprietà dipendente",
+        "allowed": "Scelte di {child} consentite per ogni scelta di {parent}",
+        "noParentChoices": "La proprietà genitore non ha ancora scelte.",
+        "noChildChoices": "La proprietà dipendente non ha ancora scelte.",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "saved": "Campo dipendente salvato.",
+        "cycle": "Questa dipendenza farebbe attendere due proprietà l'una dall'altra.",
+        "removeTitle": "Rimuovere {name} dai campi dipendenti?",
+        "removeMessage": "Mostrerà di nuovo tutte le sue scelte. Le scelte associate al genitore vengono dimenticate; i valori dei contatti restano invariati.",
+        "removeConfirm": "Rimuovi",
+        "removed": "Campo dipendente rimosso.",
+        "removeFailed": "Impossibile rimuovere il campo dipendente. Riprova."
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "Chiudi",
         "changed": "Proprietà da modificare",
         "clear": "Svuota",
-        "keep": "Mantieni",
+        "remove": "Rimuovi {name}",
         "setValue": "Imposta un valore",
         "willClear": "Verrà svuotata su {count, plural, one {il contatto selezionato} other {tutti i # contatti selezionati}}.",
         "requiredNoClear": "Una proprietà obbligatoria non può essere svuotata.",
@@ -1399,7 +1464,8 @@
       "template": "Template WhatsApp",
       "templatePlaceholder": "Seleziona un template",
       "noTemplates": "Nessun template approvato per questo numero.",
-      "notSendable": "Questo template non può essere compilato qui ({reason}).",
+      "openInInbox": "Apri la chat nella posta in arrivo",
+      "notSendable": "Questo template non può essere inviato da qui.",
       "variables": "Variabili del template",
       "preview": "Anteprima",
       "slot": "Variabile {key}",
@@ -1515,7 +1581,9 @@
         "selected": "Colonne selezionate",
         "selectAll": "Seleziona tutto",
         "reorder": "Trascina per riordinare le colonne",
-        "remove": "Rimuovi {name}"
+        "remove": "Rimuovi {name}",
+        "nameShort": "Il nome della vista deve avere almeno {min} caratteri.",
+        "nameLong": "Il nome della vista può avere al massimo {max} caratteri."
       },
       "presets": {
         "myContacts": "I miei contatti",

@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "关闭"
     },
+    "list": {
+      "unofficialDisabled": "非官方（已禁用）"
+    },
     "detail": {
       "back": "返回",
       "crumb": "群发 / 分析 / #{ref}",

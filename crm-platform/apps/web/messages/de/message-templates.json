@@ -33,8 +33,10 @@
       "TPL_LINT_FAILED": "Die Prüfungen haben Probleme gefunden, die Meta ablehnen würde. Es wurde nichts gesendet. Beheben Sie die rechts aufgeführten Fehler.",
       "TPL_META_REJECTED": "Meta hat die Vorlage abgelehnt. Der Grund steht unten; die Vorlage wird als Entwurf gespeichert, damit Sie sie korrigieren und erneut senden können.",
       "TPL_NO_CONNECTION": "Dieser Vorlage ist keine verbundene WhatsApp-Nummer zum Einreichen zugeordnet. Verbinden Sie zuerst eine Nummer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Kopfzeilen-Dateien benötigen Cloud-Objektspeicher. Bitten Sie den Plattform-Administrator, ihn einzuschalten.",
       "TPL_IN_USE": "Diese Vorlage kann nicht gelöscht werden, weil sie in einem laufenden oder geplanten Broadcast verwendet wird.",
       "TPL_NOT_EDITABLE": "Nur eine Vorlage, die Meta noch nicht genehmigt hat, oder eine abgelehnte Vorlage kann bearbeitet werden.",
+      "TPL_EDIT_LIMIT": "Meta erlaubt bei einer genehmigten Vorlage eine Bearbeitung in 24 Stunden und zehn in 30 Tagen. Versuchen Sie es später erneut.",
       "ROW_VERSION_CONFLICT": "Jemand hat diese Vorlage geändert, während Sie sie bearbeitet haben. Laden Sie neu, um die neueste Version zu sehen, und wenden Sie Ihre Änderung dann erneut an.",
       "VALIDATION_FAILED": "Einige Felder sind ungültig. Prüfen Sie die Felder unten.",
       "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut."
@@ -57,12 +59,18 @@
       "moreButtons": "{count, plural, one {+# weitere Schaltfläche} other {+# weitere Schaltflächen}}",
       "live": "Live-Vorschau",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Karten des Karussells",
+      "cardEmpty": "Text von Karte {n}",
+      "offerExpires": "Endet bald",
+      "offerTextEmpty": "Angebotsüberschrift"
     },
     "card": {
       "rejected": "Abgelehnt: {reason}",
       "view": "Ansehen",
       "edit": "Bearbeiten",
+      "duplicate": "Vorlage duplizieren",
+      "duplicateNamed": "{name} duplizieren",
       "delete": "Löschen",
       "curl": "cURL: diese Vorlage per API senden",
       "curlNamed": "cURL zum Senden von {name}",
@@ -117,7 +125,8 @@
         "all": "Alle",
         "approved": "Genehmigt",
         "pending": "In Prüfung",
-        "rejected": "Abgelehnt"
+        "rejected": "Abgelehnt",
+        "draft": "Entwurf"
       },
       "quickStartTitle": "Schnellstart",
       "quickStart": "Lesen Sie die <link>Vorlagenrichtlinien</link>, bevor Sie bei Meta einreichen, damit die Genehmigung unter 24 Std. bleibt.",
@@ -132,6 +141,16 @@
         "name-asc": "Name A→Z",
         "name-desc": "Name Z→A"
       },
+      "dateRange": "Zeitraum",
+      "range": {
+        "all": "Gesamte Zeit",
+        "7d": "7 Tage",
+        "30d": "30 Tage",
+        "90d": "90 Tage",
+        "custom": "Benutzerdefinierter Zeitraum",
+        "from": "Von-Datum",
+        "to": "Bis-Datum"
+      },
       "showing": "Angezeigt werden",
       "of": "von",
       "filteredTemplates": "gefilterte Vorlagen",
@@ -139,7 +158,8 @@
       "legend": {
         "approved": "Genehmigt",
         "pending": "In Prüfung",
-        "rejected": "Abgelehnt"
+        "rejected": "Abgelehnt",
+        "draft": "Entwurf"
       },
       "helpLabel": "Hilfe - 0{n}",
       "help": {
@@ -163,7 +183,8 @@
       "confirm": "Vorlage löschen",
       "cancel": "Abbrechen",
       "done": "„{name}“ gelöscht.",
-      "inUseHelp": "Öffnen Sie den Broadcast, der diese Vorlage verwendet, und brechen Sie ihn ab oder wählen Sie eine andere Vorlage. Löschen Sie danach diese Vorlage."
+      "inUseHelp": "Öffnen Sie den Broadcast, der diese Vorlage verwendet, und brechen Sie ihn ab oder wählen Sie eine andere Vorlage. Löschen Sie danach diese Vorlage.",
+      "messageDraft": "„{name}“ löschen? Die Vorlage wurde nie an Meta gesendet, daher wird sie nur hier entfernt."
     },
     "lint": {
       "title": "Prüfungen vor dem Einreichen",
@@ -182,7 +203,8 @@
         "body": "Text",
         "footer": "Fußzeile",
         "buttons": "Schaltflächen",
-        "template": "Vorlage"
+        "template": "Vorlage",
+        "cards": "Karten"
       }
     },
     "form": {
@@ -265,7 +287,7 @@
         "uploading": "Wird hochgeladen",
         "keptSample": "Das gespeicherte Beispiel bleibt erhalten. Wählen Sie eine Datei, um es zu ersetzen.",
         "noFile": "Keine Datei ausgewählt",
-        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 100 MB.",
+        "limits": "Bild bis 5 MB, Video bis 16 MB, PDF bis 10 MB.",
         "replace": "Datei ersetzen",
         "choose": "Beispieldatei auswählen",
         "tooBig": "Dieses {kind} ist {size} MB groß. WhatsApp akzeptiert bis zu {max} MB. Wählen Sie eine kleinere Datei.",
@@ -309,14 +331,18 @@
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Telefonnummer anrufen",
-          "copy_code": "Code kopieren"
+          "copy_code": "Code kopieren",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Schnellantwort",
           "url": "Website besuchen",
           "phone": "Anrufen",
           "copy_code": "Code kopieren",
-          "other": "Sonstige"
+          "other": "Sonstige",
+          "form": "Formular",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} Schaltflächen",
         "limitReached": "Höchstens {max} dieser Art.",
@@ -345,8 +371,17 @@
           "codeRequired": "Geben Sie einen Beispielcode ein.",
           "quickReplyVariable": "Eine Schnellantwort darf keine Variable enthalten.",
           "urlExampleRequired": "Geben Sie einen Beispielwert für die URL-Variable an.",
-          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen."
-        }
+          "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen.",
+          "flowIdRequired": "Geben Sie die Flow-ID ein.",
+          "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
+          "screenRequired": "Geben Sie die Bildschirm-ID ein.",
+          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
+        },
+        "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
+        "flowId": "WhatsApp-Flow-ID",
+        "flowIdHint": "Die numerische ID eines veröffentlichten WhatsApp Flows aus dem Flows-Manager von Meta.",
+        "screen": "Startbildschirm",
+        "screenHint": "Die ID des Bildschirms, mit dem sich das Formular öffnet, zum Beispiel WELCOME."
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",
@@ -360,6 +395,46 @@
         "open": "Mit KI erstellen",
         "applied": "Vorlagenentwurf von der KI ausgefüllt. Prüfen Sie ihn, bevor Sie ihn einreichen.",
         "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
+      },
+      "type": {
+        "label": "Schaltflächentyp",
+        "standard": "Standard",
+        "carousel": "Karussell",
+        "hint": "Wählen Sie, womit die Nachricht endet. Ein Karussell ist eine Reihe von Karten; ein zeitlich begrenztes Angebot hat eine Angebotsüberschrift mit optionalem Countdown und eine Schaltfläche zum Kopieren eines Codes oder zum Öffnen einer Website.",
+        "none": "Keine",
+        "buttons": "Code kopieren, Website, Schnellantworten usw.",
+        "lto": "Zeitlich begrenztes Angebot",
+        "catalogue": "Katalog",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Karten",
+        "hint": "2 bis 10 Karten. Alle Karten verwenden dieselbe Dateiart und dieselben Schaltflächen.",
+        "format": "Die Karten zeigen",
+        "formatImage": "Bilder",
+        "formatVideo": "Videos",
+        "count": "{used}/{max} Karten",
+        "add": "Karte hinzufügen",
+        "needTwo": "Ein Karussell braucht mindestens {min} Karten.",
+        "card": "Karte {n}",
+        "remove": "Karte {n} entfernen",
+        "noFile": "Keine Datei gewählt",
+        "uploading": "Wird hochgeladen",
+        "text": "Kartentext",
+        "textCounter": "{used}/{max}",
+        "buttons": "Schaltflächen",
+        "buttonText": "Text der Schaltfläche",
+        "buttonUrl": "Website-URL",
+        "buttonPhone": "Telefonnummer"
+      },
+      "offer": {
+        "title": "Zeitlich begrenztes Angebot",
+        "hint": "Wird unter dem Bild oder Video angezeigt: eine Überschrift und, wenn Sie möchten, ein Countdown bis zum Ende des Angebots.",
+        "text": "Angebotsüberschrift",
+        "textHint": "{used}/{max}",
+        "placeholder": "Angebot läuft bald ab!",
+        "countdown": "Countdown anzeigen",
+        "countdownHint": "WhatsApp zeigt die verbleibende Zeit bis zum Ende des Angebots."
       }
     },
     "detail": {
@@ -449,6 +524,9 @@
       },
       "refreshNow": "Jetzt aktualisieren",
       "editTemplate": "Vorlage bearbeiten",
+      "editBlockedTitle": "Diese Vorlage kann im Moment nicht bearbeitet werden",
+      "editBlocked": "{reason, select, in_review {Meta prüft diese Vorlage. Sie kann erst nach Abschluss der Prüfung wieder bearbeitet werden.} daily_limit {Meta erlaubt bei einer genehmigten Vorlage eine Bearbeitung in 24 Stunden. Sie kann nach {when} wieder bearbeitet werden.} monthly_limit {Meta erlaubt bei einer genehmigten Vorlage zehn Bearbeitungen in 30 Tagen. Sie kann nach {when} wieder bearbeitet werden.} other {}}",
+      "duplicateTemplate": "Vorlage duplizieren",
       "editResubmit": "Bearbeiten und erneut einreichen",
       "submitToMeta": "Bei Meta einreichen",
       "wabaAccount": "WhatsApp-Business-Konto",
@@ -460,7 +538,6 @@
       "crumbTemplates": "Vorlagen",
       "crumbDetail": "Details",
       "notSubmittedPill": "Nicht eingereicht",
-      "qualityPill": "Qualität · {quality}",
       "preview": {
         "title": "Vorschau",
         "hint": "So erscheint es in WhatsApp"

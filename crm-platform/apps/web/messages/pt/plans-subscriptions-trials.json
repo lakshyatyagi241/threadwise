@@ -48,7 +48,8 @@
       "email_mailboxes": "Caixas de e-mail",
       "email_monthly": "E-mails por mês",
       "storage_gb": "Armazenamento (GB)",
-      "teams": "Equipes"
+      "teams": "Equipes",
+      "webbot_messages": "Mensagens gratuitas do chatbot do site por mês"
     },
     "features": {
       "automation": "Automação",
@@ -60,10 +61,12 @@
       "remove_branding": "Remover marca",
       "sales_pipeline": "Funil de vendas",
       "appointment_booking": "Agendamento de reservas",
+      "appointment_confirm_buttons": "Botões do lembrete (Confirmar / Reagendar / Cancelar)",
+      "appointment_rebook_steps": "Etapas de novo agendamento (reativação)",
       "chatbot_widgets": "Widgets de chatbot",
       "wa_storefront": "Catálogo do WhatsApp",
       "inbox_sla": "Políticas de SLA",
-      "inbox_routing": "Regras de roteamento",
+      "inbox_routing": "Roteamento inteligente: atribuição automática e regras",
       "waba_calling": "Chamadas do WhatsApp",
       "inbox_kanban": "Visualização Kanban",
       "team_performance": "Desempenho da equipe",
@@ -89,7 +92,9 @@
       "record_assignment": "Regras de atribuição de registros",
       "team_hierarchy": "Hierarquia de equipes e gestores",
       "custom_roles": "Funções personalizadas e escopos",
-      "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+      "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo",
+      "agent_status_bar": "Barra de status: controle Disponível / Ausente na barra superior e na Caixa de entrada",
+      "agent_status_automation": "Automatizar status: horário de trabalho pessoal e Ausente automático"
     },
     "limitGroups": {
       "messaging": "Mensagens",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado.",
       "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado.",
       "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda.",
-      "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas."
+      "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas.",
+      "webbot_messages": "Mensagens do chatbot do site incluídas gratuitamente em cada mês civil. Cada mensagem além disso é cobrada da carteira. Em branco ou 0 = nenhuma incluída."
     },
     "planAddons": {
       "title": "Complementos disponíveis no seu plano",
@@ -245,20 +251,7 @@
         "title": "Perguntas frequentes"
       },
       "addons": {
-        "title": "Complementos",
-        "owned": "Complementos que você possui",
-        "oneTime": "pagamento único",
-        "buy": "Comprar complemento",
-        "buyAgain": "Comprar novamente",
-        "active": "Ativo",
-        "unlimitedBullet": "{label} ilimitados",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ dia} other {/ {count} dias}}",
-          "weeks": "{count, plural, one {/ semana} other {/ {count} semanas}}",
-          "months": "{count, plural, one {/ mês} other {/ {count} meses}}",
-          "years": "{count, plural, one {/ ano} other {/ {count} anos}}"
-        }
+        "title": "Complementos"
       },
       "renewal": {
         "renewsOn": "Seu plano é renovado automaticamente em {date}.",
@@ -578,7 +571,30 @@
       "back": "Voltar",
       "compare": "Comparar todos os planos",
       "appHint": "{feature} também é vendido como app no Marketplace.",
-      "appLink": "Ver o app"
+      "appLink": "Ver o app",
+      "addonHint": "Você também pode adicioná-lo ao seu plano atual com o complemento {addon}.",
+      "addonLink": "Ver complementos",
+      "addonsTabHint": "Os complementos não exigem o Marketplace no seu plano. Você ainda pode ver o que tem e comprar complementos em Planos e complementos.",
+      "addonsTabLink": "Abrir Planos e complementos",
+      "addonHintGeneric": "Seu plano também pode oferecer isso como complemento."
+    },
+    "lock": {
+      "link": "Ver planos e complementos",
+      "offTitle": "Não incluído no seu plano",
+      "offLead": "Esta parte não está incluída no plano do seu espaço de trabalho no momento.",
+      "buyTitle": "Adicione {addon} por {price}",
+      "buyLead": "Seu plano oferece {addon} como complemento. Adicione para ativar esta parte.",
+      "buyLink": "Ver complementos",
+      "askOwner": "Peça ao proprietário da conta para adicioná-lo.",
+      "unavailableTitle": "{addon} precisa de um plano pago ativo",
+      "unavailableLead": "Escolha primeiro um plano pago; depois você pode adicionar {addon} a ele.",
+      "viewPlans": "Ver planos",
+      "disabledTitle": "{addon} está desativado",
+      "disabledLead": "Seu plano inclui {addon}, mas ele está desativado para este espaço de trabalho. As configurações foram mantidas.",
+      "disabledAsk": "Peça ao proprietário da conta para ativá-lo.",
+      "turnOn": "Ativar",
+      "turnOnForbidden": "Você não tem permissão para ativá-lo. Peça ao proprietário da conta.",
+      "turnOnFailed": "Não foi possível ativar {addon}. Tente novamente."
     }
   }
 }

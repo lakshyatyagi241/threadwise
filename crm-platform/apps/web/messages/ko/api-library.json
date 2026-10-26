@@ -137,7 +137,9 @@
         "allSources": "모든 출처",
         "from": "시작",
         "to": "종료",
-        "clear": "필터 지우기"
+        "clear": "필터 지우기",
+        "deletedApi": "{name} (삭제됨)",
+        "searchTooLong": "검색은 최대 {max}자까지 입력할 수 있습니다. 검색하려면 줄여 주세요."
       },
       "detail": {
         "title": "API 로그 상세",
@@ -168,7 +170,8 @@
         "openContact": "연락처 열기",
         "user": "실행한 사용자(사용자 ID)",
         "noContext": "관련된 플로우나 연락처가 없습니다."
-      }
+      },
+      "unsaved": "저장되지 않음"
     },
     "variables": {
       "insertFor": "{label}에 변수 삽입",
@@ -218,7 +221,8 @@
         "empty": "페이로드를 보내지 않으려면 비워 두세요.",
         "invalid": "올바른 JSON이 아닙니다.",
         "shape": "페이로드는 JSON 객체 또는 목록이어야 합니다.",
-        "format": "JSON 정리"
+        "format": "JSON 정리",
+        "invalidAt": "올바른 JSON이 아닙니다 (줄 {line}, 열 {column} 부근에서 깨집니다)."
       },
       "responseVarsHint": "플로우가 '{{'ApiName.field'}}' 형태로 읽을 수 있는 응답 필드입니다. 테스트 응답에서 선택하세요.",
       "mappingHint": "플로우가 이 API를 실행할 때마다 응답의 필드 값을 연락처 속성에 저장합니다.",
@@ -300,7 +304,11 @@
         "choose": "속성 선택",
         "removeN": "{n}행 삭제",
         "pick": "마지막 테스트 응답에서 경로 선택",
-        "add": "행 추가"
+        "add": "행 추가",
+        "propertyDuplicate": "다른 행도 이 속성에 저장합니다. 필드 하나에는 값 하나만 들어가므로 다른 속성을 고르세요.",
+        "propertyRequired": "이 행이 저장할 연락처 속성을 고르세요.",
+        "numberText": "숫자 필드에는 숫자만 들어갈 수 있습니다. 마지막 테스트에서 여기 “{value}”이(가) 나왔고, 이 텍스트는 그대로 저장됩니다.",
+        "numberUntested": "테스트를 실행해 이 응답 필드가 숫자를 주는지 확인하세요."
       },
       "responseVars": {
         "none": "플로우에 노출된 필드가 아직 없습니다.",
@@ -313,7 +321,8 @@
       "tested": "테스트 통과",
       "requestHint": "호출의 이름, 메서드, 주소입니다.",
       "payloadHint": "본문에 보낼 내용입니다. '{ }' 버튼을 사용해 값에 변수를 넣을 수 있습니다.",
-      "functionHint": "보내기 전에 JavaScript로 페이로드 형태를 바꿉니다. 선택 사항입니다."
+      "functionHint": "보내기 전에 JavaScript로 페이로드 형태를 바꿉니다. 선택 사항입니다.",
+      "plainHttpWarning": "이 주소는 http://로 시작하므로 헤더의 비밀번호나 키가 암호화되지 않은 채 전송됩니다. 서버가 지원하면 https://를 사용하세요."
     },
     "test": {
       "title": "응답",
@@ -366,7 +375,8 @@
       "result": "결과",
       "status": "상태",
       "time": "시간",
-      "size": "크기"
+      "size": "크기",
+      "truncatedShown": "{kb} KB 응답의 첫 부분을 표시하는 중"
     },
     "pagination": {
       "label": "페이지 나누기",

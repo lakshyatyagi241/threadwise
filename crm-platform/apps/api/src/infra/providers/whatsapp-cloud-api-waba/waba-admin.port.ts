@@ -1,5 +1,6 @@
 import type { WabaApiError } from './waba-errors';
 import type { WabaAuth, WabaProviderKind, WabaRegistryAuth } from './waba-http';
+import type { MediaUpload } from './waba-http';
 
 /**
  * Account-level operations on a WhatsApp Business Account: everything between "the customer finished Embedded Signup" and
@@ -74,6 +75,25 @@ export interface BusinessProfile {
   profilePictureUrl: string | null;
   websites: string[];
   vertical: string | null;
+}
+
+/** Meta's business compliance record. `entityType` is the Meta value (`PRIVATE_COMPANY`), never the form's wording. */
+export interface BusinessComplianceInfo {
+  entityName: string | null;
+  entityType: string | null;
+  entityTypeCustom: string | null;
+  isRegistered: boolean | null;
+  customerCare: {
+    email: string | null;
+    mobileNumber: string | null;
+    landlineNumber: string | null;
+  };
+  grievanceOfficer: {
+    name: string | null;
+    email: string | null;
+    mobileNumber: string | null;
+    landlineNumber: string | null;
+  };
 }
 
 /** The WhatsApp Business Account node (TW-WABA-021). Every field is optional: Meta fails the whole read for one unreadable field. */
@@ -210,6 +230,12 @@ export interface WabaAdminPort {
     conn: WabaConnection,
     patch: Partial<BusinessProfile> & { profilePictureHandle?: string },
   ): Promise<void>;
+  /** Uploads a profile picture and returns the handle `updateBusinessProfile` takes as `profilePictureHandle`. */
+  uploadProfilePicture(conn: WabaConnection, media: MediaUpload): Promise<string>;
+  /** Meta's compliance record for the number (India): the entity, the registration answer and the two contact sides. */
+  getBusinessComplianceInfo(conn: WabaConnection): Promise<BusinessComplianceInfo>;
+  /** Saves the whole compliance record in one call (Meta takes the same fields as one POST). */
+  updateBusinessComplianceInfo(conn: WabaConnection, info: BusinessComplianceInfo): Promise<void>;
 }
 
 export const WABA_ADMIN = Symbol('WABA_ADMIN');

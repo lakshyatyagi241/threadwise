@@ -129,6 +129,11 @@ export interface PaymentDriver {
   listSubscriptionCharges?(ref: SubscriptionRef): Promise<SubscriptionCharge[] | null>;
   /** Return money for one captured payment (all of it, or `amountMinor`). Never throws for a provider failure. */
   refundPayment?(req: RefundRequest): Promise<RefundResult>;
+  /**
+   * The refunds the provider holds for one payment, newest first; null = cannot tell (no such call, or it failed). The reconciler asks
+   * this about a refund of ours that never got its answer recorded.
+   */
+  listPaymentRefunds?(paymentId: string): Promise<ProviderRefund[] | null>;
   /** Recurring (TW-PAYGW-012/029/030). A driver that leaves these out is always charged one-time. */
   supportsRecurring?(): boolean;
   createSubscription?(order: DriverOrder, urls: DriverUrls): Promise<PaymentResult>;
@@ -184,6 +189,20 @@ export interface RefundRequest {
   /** Omitted = the whole payment. */
   amountMinor?: bigint;
   note?: string;
+  /** Our refund row's uuid. A provider that supports it answers a repeat of the same key with the first refund, never a second. */
+  idempotencyKey?: string;
+  /** Stored on the provider's refund (its notes), so a later list can be matched back to our row. */
+  reference?: string;
+}
+
+export interface ProviderRefund {
+  id: string;
+  amountMinor: bigint;
+  /** `processed` or `pending` as the provider says it. */
+  status: string;
+  createdAt: Date;
+  /** The `reference` we sent, when the provider kept it. */
+  reference: string | null;
 }
 
 export interface RefundResult {

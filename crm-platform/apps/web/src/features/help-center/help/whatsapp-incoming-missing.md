@@ -56,7 +56,7 @@ Opening the number's Health page needs the right to view WhatsApp numbers. **Fix
 
 - **A warning says neither the number nor the platform has an app secret.** The platform cannot prove that a signed update comes from Meta. Ask your platform administrator to add the app secret in the platform settings.
 - **Meta cannot verify the callback.** The verify token must match exactly. Copy it again from the Health page, where it is shown while inbound is not confirmed.
-- **Updates that arrived while the connection was broken are missing.** This build has no screen that lists or replays past updates. New ones arrive once the connection works, so ask the customer to write again if needed.
+- **Updates that arrived while the connection was broken are missing.** There is no screen that lists or replays past updates. New ones arrive once the connection works, so ask the customer to write again if needed.
 - **Connecting says the number is already connected to another workspace.** A number can be connected to one workspace at a time, so disconnect it in the other workspace first.
 
 > Sending events from this platform to your own systems is not available yet. This guide is only about WhatsApp updates arriving here.

@@ -102,6 +102,16 @@ export const reminderPackPreviewStepSchema = z.object({
 });
 export type ReminderPackPreviewStep = z.infer<typeof reminderPackPreviewStepSchema>;
 
+/**
+ * A part of a pack the workspace's plan does not include, so applying the pack leaves it out (the buttons of a step, or the whole rebook
+ * step switched on). The pack still applies; this says what it does without. Both belong to the Appointments upgrade tier.
+ */
+export const reminderPackWithheldSchema = z.object({
+  stepKind: bookingReminderStepKindSchema,
+  part: z.enum(['buttons', 'rebook']),
+});
+export type ReminderPackWithheld = z.infer<typeof reminderPackWithheldSchema>;
+
 export const reminderPackPreviewSchema = z.object({
   pack: reminderPackSchema,
   language: reminderPackLanguageSchema,
@@ -121,6 +131,8 @@ export const reminderPackPreviewSchema = z.object({
   blocked: z.enum(['cap_exceeded']).nullable(),
   /** Some step would replace something the owner wrote or changed: the owner has to confirm it. */
   needsConfirm: z.boolean(),
+  /** What the plan does not include, so the pack leaves it out. */
+  withheld: z.array(reminderPackWithheldSchema).default([]),
 });
 export type ReminderPackPreview = z.infer<typeof reminderPackPreviewSchema>;
 
@@ -147,6 +159,8 @@ export const reminderPackAdoptResultSchema = z.object({
   ),
   added: z.number().int(),
   replaced: z.number().int(),
+  /** What was left out because the plan does not include it (the buttons, the rebook step). Empty on a plan that has both. */
+  withheld: z.array(reminderPackWithheldSchema).default([]),
 });
 export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSchema>;
 
@@ -156,6 +170,12 @@ export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSche
  * An email-only test of one step, sent to the signed-in user's own address. There is no WhatsApp test-send. The email is sent by the
  * worker a moment later (`queued`); the result comes back as a notification. `skipped`: the signed-in user has no email address.
  */
+export const reminderTestSendInputSchema = z.object({
+  /** Another address to send the test to (a colleague, a mailbox that renders email differently); left out = the signed-in user's own. */
+  to: z.string().trim().toLowerCase().email().max(254).optional(),
+});
+export type ReminderTestSendInput = z.infer<typeof reminderTestSendInputSchema>;
+
 export const reminderTestSendResultSchema = z.object({
   status: z.enum(['queued', 'skipped']),
   reason: z.string().nullable(),
@@ -177,12 +197,27 @@ export type ReminderReportQuery = z.infer<typeof reminderReportQuerySchema>;
 /** A rate is null when nothing was sent (no denominator), never 0. */
 const rate = z.number().min(0).max(1).nullable();
 
+/** What customers did with the Confirm / Reschedule / Cancel buttons of a step (taps that did something, each button once per message). */
+export const reminderReportButtonsSchema = z.object({
+  confirmed: z.number().int(),
+  rescheduled: z.number().int(),
+  cancelled: z.number().int(),
+});
+export type ReminderReportButtons = z.infer<typeof reminderReportButtonsSchema>;
+
 export const reminderReportStepSchema = z.object({
   stepKind: bookingReminderStepKindSchema,
   sent: z.number().int(),
   delivered: z.number().int(),
   failed: z.number().int(),
   skipped: z.number().int(),
+  /** Of the steps that were sent: how many went on a later channel than the first one the step tried (the email fallback). */
+  fallbackUsed: z.number().int().default(0),
+  /**
+   * Button taps of the step. `null` when the workspace's plan does not include `appointment_confirm_buttons` (the API does not count what
+   * the plan does not have), and for older servers.
+   */
+  buttons: reminderReportButtonsSchema.nullable().default(null),
   /** Why steps were skipped: reason code to count. */
   skippedReasons: z.record(z.string(), z.number().int()),
   /** Of the bookings this step was sent for: how many later confirmed, cancelled or became no-shows. */
@@ -206,6 +241,8 @@ export type ReminderReportType = z.infer<typeof reminderReportTypeSchema>;
 export const reminderReportSchema = z.object({
   from: z.string().datetime(),
   to: z.string().datetime(),
+  /** Whether the plan includes the buttons, so the screen shows the buttons column or a locked note. */
+  buttonsIncluded: z.boolean().default(false),
   data: z.array(reminderReportTypeSchema),
 });
 export type ReminderReport = z.infer<typeof reminderReportSchema>;

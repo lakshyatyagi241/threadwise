@@ -54,11 +54,14 @@ export const sequencesApi = {
       ...(idempotencyKey ? { idempotencyKey } : {}),
     });
   },
-  /** Sends one saved step as an email to the signed-in user's own address. The worker sends it; the result arrives as a notification. */
-  testEmail(typeId: string, reminderId: string): Promise<ReminderTestSendResult> {
+  /**
+   * Sends one saved step as an email to the signed-in user's own address, or to `to` when one is typed. The worker sends it; the result
+   * arrives as a notification.
+   */
+  testEmail(typeId: string, reminderId: string, to?: string): Promise<ReminderTestSendResult> {
     return call(`/booking-types/${typeId}/reminders/${reminderId}/test-email`, {
       method: 'POST',
-      body: {},
+      body: to ? { to } : {},
       schema: reminderTestSendResultSchema,
     });
   },

@@ -5,8 +5,14 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { isPlanFeatureKey, type BillingPlan, type PlanFeatureKey } from '@crm/contracts';
+import {
+  PACK_GRANTABLE_FEATURES,
+  isPlanFeatureKey,
+  type BillingPlan,
+  type PlanFeatureKey,
+} from '@crm/contracts';
 import { listingPathFor } from '@/features/_registry/app-listings';
+import { useFeatureAddon } from '@/lib/plan-features';
 import { fetchBillingPlans } from '../api';
 import { PLANS_PATH, SALES_PATH, formatMoney } from '../lib/format';
 
@@ -58,6 +64,12 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
   const tf = useTranslations('plans-subscriptions-trials.features');
   const locale = useLocale();
   const ref = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  // The Marketplace's Add-ons tab sits behind the Marketplace feature, but the add-ons list does not (it is also on the Plans page):
+  // say so there, so a plan without the Marketplace is not left thinking add-ons are out of reach.
+  const onAddonsTab =
+    feature === 'marketplace' &&
+    (pathname === '/marketplace/addons' || pathname.startsWith('/marketplace/addons/'));
   const q = useQuery({
     queryKey: ['billing', 'plans', 'unlocks', feature],
     queryFn: ({ signal }) => fetchBillingPlans(signal, feature),
@@ -66,6 +78,17 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
   useEffect(() => ref.current?.focus(), []);
   const plans: BillingPlan[] = q.data?.data ?? [];
   const listing = canBrowseApps ? listingPathFor(feature) : null;
+  // The add-on that sells the feature comes from the entitlements (`featureAddons`), named and priced for this plan: "buy" names it; an
+  // add-on the plan does not offer (hidden), or one that needs a paid plan first, adds no line. Unknown data keeps a generic line for a
+  // feature a pack may grant, so nothing is guessed.
+  const featureAddon = useFeatureAddon(feature);
+  const addonLine: 'named' | 'generic' | null = featureAddon
+    ? featureAddon.offer === 'buy'
+      ? 'named'
+      : null
+    : PACK_GRANTABLE_FEATURES.includes(feature)
+      ? 'generic'
+      : null;
 
   return (
     <div
@@ -134,6 +157,24 @@ function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseA
               </div>
             ))}
           </div>
+        )}
+        {onAddonsTab && (
+          <p className="text-sm text-muted-foreground" data-testid="paywall-addons-tab">
+            {t('addonsTabHint')}{' '}
+            <Link href={PLANS_PATH} className="font-medium text-primary hover:underline">
+              {t('addonsTabLink')}
+            </Link>
+          </p>
+        )}
+        {addonLine && (
+          <p className="text-sm text-muted-foreground" data-testid="paywall-addon">
+            {addonLine === 'named' && featureAddon
+              ? t('addonHint', { addon: featureAddon.addonName })
+              : t('addonHintGeneric')}{' '}
+            <Link href={PLANS_PATH} className="font-medium text-primary hover:underline">
+              {t('addonLink')}
+            </Link>
+          </p>
         )}
         {listing && (
           <p className="text-sm text-muted-foreground" data-testid="paywall-app">

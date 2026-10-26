@@ -1,0 +1,140 @@
+{
+  "feature": "flow-builder-editor",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-flow-builder-editor-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/api-library.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/commerce.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/google.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/states.test.tsx",
+          "match": "shows an error state with a refresh when the saved APIs fail to load"
+        }
+      ]
+    },
+    {
+      "id": "ES-flow-builder-editor-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/builder-route.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/simple/simple-route.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/simple/simple-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-flow-builder-editor-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/builder-screen.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/flow-image.tsx",
+        "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/api-library.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-channels/api-library.test.tsx",
+          "match": "keeps a deleted API visible as not found, and says so while loading"
+        },
+        {
+          "file": "apps/web/src/features/flow-builder-editor/lib/graph-ops.test.ts",
+          "match": "a wire that no longer exists has no focus"
+        }
+      ]
+    },
+    {
+      "id": "ES-flow-builder-editor-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/api/flows.ts",
+        "apps/web/src/features/flow-builder-editor/builder/ai-generate-error.ts",
+        "apps/web/src/features/flow-builder-editor/builder/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/states.test.tsx",
+          "match": "words the field error when create fails with a validation code"
+        }
+      ],
+      "partial": "Only the error text helper is tested; no click-driven save failure shows typed values kept."
+    },
+    {
+      "id": "ES-flow-builder-editor-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/builder/ai-generate-error.ts",
+        "apps/web/src/features/flow-builder-editor/components/admin-template-form.tsx",
+        "apps/web/src/features/flow-builder-editor/components/flows-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/states.test.tsx",
+          "match": "words the field error when create fails with a validation code"
+        }
+      ]
+    },
+    {
+      "id": "ES-flow-builder-editor-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/components/admin-template-form.tsx",
+        "apps/web/src/features/flow-builder-editor/components/flows-screen.tsx",
+        "apps/web/src/features/flow-builder-editor/lib/simple-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-flow-builder-editor-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-builder-editor/api/flows.ts",
+        "apps/web/src/features/flow-builder-editor/builder/ai-generate-error.ts",
+        "apps/web/src/features/flow-builder-editor/builder/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-builder-editor/builder/ai-generate-error.test.ts",
+          "match": "a network failure shows the browser message, else \"Network error\""
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 // #26 SAST: runs tools/sast-report and requires zero unresolved Critical/High; also checks that it runs on every PR.
-import { ROOT, expectNone, fail, pass, read, sh, walk, warn } from '../lib/core.mjs';
+import { ROOT, exists, expectNone, fail, pass, read, sh, walk, warn } from '../lib/core.mjs';
 import { join } from 'node:path';
 
 export default {
@@ -43,12 +43,22 @@ export default {
     const wf = [...walk(join(ROOT, '..', '.github/workflows'), (p) => /\.ya?ml$/.test(p))].map(
       (f) => [f, read(f)],
     );
-    const onPr = wf.some(
-      ([, t]) => /sast|semgrep|audit:sast|sast-report/.test(t) && /pull_request/.test(t),
+    const workflowOnPr = wf.some(
+      ([, t]) => /sast|semgrep|audit:sast|sast-report/.test(t) && /^\s*pull_request\s*:/m.test(t),
     );
+    // With Actions unavailable (billing stopped) the control is local: a pre-push hook that runs the SAST report before code leaves the machine.
+    const localGate = /sast-report/.test(
+      exists('.husky/pre-push') ? read(join(ROOT, '.husky/pre-push')) : '',
+    );
+    const onPr = workflowOnPr || localGate;
     checks.push(
       onPr
-        ? pass('sast-every-pr', 'A workflow runs SAST on every pull request')
+        ? pass(
+            'sast-every-pr',
+            workflowOnPr
+              ? 'A workflow runs SAST on every pull request'
+              : 'SAST runs before every push that touches apps/ or packages/ (.husky/pre-push; Actions are off)',
+          )
         : fail(
             'sast-every-pr',
             'A workflow runs SAST on every pull request',

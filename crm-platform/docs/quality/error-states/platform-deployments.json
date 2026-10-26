@@ -1,0 +1,39 @@
+{
+  "feature": "platform-deployments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-platform-deployments-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-deployments/components/geta-deployments-view.tsx",
+        "apps/web/src/features/platform-deployments/components/publishes-view.tsx",
+        "apps/web/src/features/platform-deployments/components/releases-view.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-deployments-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-deployments-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

@@ -6,9 +6,15 @@ import { Button, Field, Modal, Select, Spinner } from '@crm/ui';
 import { useStatusOptions } from '../api/attributes';
 import { useOwners } from '../api/owners';
 import type { BulkUpdateValues } from '../api/bulk';
-import { useContactFields } from '../api/properties';
 import {
+  useContactFields,
+  useFieldDependencies,
+  useFieldOptionDependencies,
+} from '../api/properties';
+import {
+  bulkBuiltInValues,
   bulkCustomFields,
+  builtInFields,
   bulkPropertyProblems,
   type BulkPropertyChanges,
 } from '../lib/bulk-properties';
@@ -107,11 +113,15 @@ function Form({
   const [reason, setReason] = useState<LostReasonAnswer>({ pick: '', text: '' });
   const [showProblems, setShowProblems] = useState(false);
   const registry = useContactFields();
+  const dependencies = useFieldDependencies();
+  const optionDependencies = useFieldOptionDependencies();
   const [changes, setChanges] = useState<BulkPropertyChanges>({});
-  const fieldsByKey = useMemo(
-    () => new Map((registry.data ?? []).map((f) => [f.key, f])),
-    [registry.data],
+  // The built-in text properties come first, then the workspace's own, in one list.
+  const allFields = useMemo(
+    () => [...builtInFields((k) => tf(k)), ...(registry.data ?? [])],
+    [registry.data, tf],
   );
+  const fieldsByKey = useMemo(() => new Map(allFields.map((f) => [f.key, f])), [allFields]);
   const propertyProblems = useMemo(
     () => bulkPropertyProblems(changes, fieldsByKey),
     [changes, fieldsByKey],
@@ -143,6 +153,7 @@ function Form({
       ...(owner !== KEEP ? { ownerId: owner === UNASSIGN ? null : owner } : {}),
       ...(zone !== KEEP ? { timezone: zone === CLEAR_ZONE ? null : zone } : {}),
       ...(lost ? lostReasonPayload(reason, reasons.length > 0) : {}),
+      ...bulkBuiltInValues(changes, fieldsByKey),
       ...(customFields ? { customFields } : {}),
     };
     if (await onApply(values)) onClose();
@@ -225,7 +236,9 @@ function Form({
       )}
       {!ownerOnly && (
         <BulkPropertiesSection
-          fields={registry.data ?? []}
+          fields={allFields}
+          dependencies={dependencies.data ?? []}
+          optionDependencies={optionDependencies.data ?? []}
           changes={changes}
           problems={showProblems ? propertyProblems : {}}
           count={count ?? 0}

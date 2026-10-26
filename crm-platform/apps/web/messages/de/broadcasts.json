@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Schließen"
     },
+    "list": {
+      "unofficialDisabled": "Inoffiziell (deaktiviert)"
+    },
     "detail": {
       "back": "Zurück",
       "crumb": "Broadcasts / Analyse / #{ref}",

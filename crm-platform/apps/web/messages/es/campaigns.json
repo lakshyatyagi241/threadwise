@@ -241,7 +241,8 @@
         "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
         "media": "Introduce una dirección completa que empiece por http:// o https://.",
         "sender": "Elige un remitente.",
-        "subject": "Acorta el asunto a 150 caracteres o menos."
+        "subject": "Acorta el asunto a 150 caracteres o menos.",
+        "pacing": "Revisa la entrega inteligente: cada número debe ser un entero dentro de su rango permitido."
       },
       "submit": {
         "save": "Guardar cambios",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "La espera más larga antes de un mensaje.",
         "batchPauseHint": "Minutos de pausa tras cada lote.",
         "retryFailed": "Reintentar automáticamente los mensajes fallidos",
-        "retryFailedHint": "Un mensaje que falla por un motivo temporal se reintenta varias veces, con una pausa entre intentos. Desactívalo para enviar cada mensaje una sola vez."
+        "retryFailedHint": "Un mensaje que falla por un motivo temporal se reintenta varias veces, con una pausa entre intentos. Desactívalo para enviar cada mensaje una sola vez.",
+        "range": "Introduce un número entero de {min} a {max}."
       },
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "draftChip": "Borrador / sin guardar",
@@ -595,7 +597,8 @@
           "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
           "media": "Introduce una dirección completa que empiece por http:// o https://.",
           "sender": "Elige un remitente.",
-          "subject": "Acorta el asunto a 150 caracteres o menos."
+          "subject": "Acorta el asunto a 150 caracteres o menos.",
+          "pacing": "Revisa la entrega inteligente: cada número debe ser un entero dentro de su rango permitido."
         },
         "from": "De",
         "subject": "Asunto",
@@ -686,6 +689,7 @@
             "providerFailed": "El servicio de imágenes no respondió. Inténtalo de nuevo en un momento.",
             "badJson": "El servicio de imágenes devolvió una respuesta inesperada. Inténtalo de nuevo.",
             "imageRefused": "OpenAI se negó a generar esta imagen. Cambia el producto, la oferta o las notas e inténtalo de nuevo.",
+            "storageRequired": "Las imágenes necesitan almacenamiento de objetos en la nube: pide al administrador de la plataforma que lo active. El texto de la campaña se conserva.",
             "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
             "forbidden": "No tienes permiso para crear campañas.",
             "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Los seguimientos solo funcionan con un número de WhatsApp Cloud API. Elige uno en el paso 1 o quita los seguimientos.",
         "sequence_not_recurring": "Las plantillas por turnos solo funcionan con una campaña recurrente. Elige una programación recurrente o quita las plantillas adicionales.",
         "sequence_with_ab": "Las plantillas por turnos no se pueden combinar con una prueba A/B. Desactiva la prueba A/B o quita las plantillas adicionales.",
-        "sequence_template_required": "Elige una plantilla para cada paso del orden o quita los vacíos."
+        "sequence_template_required": "Elige una plantilla para cada paso del orden o quita los vacíos.",
+        "variable_fallback_required": "Escribe un valor de respaldo para cada variable que viene de un campo del contacto: se usa para los contactos que no tienen valor.",
+        "retry_end_too_far": "Los reintentos pueden durar como máximo 7 días desde hoy. Elige una fecha de fin más cercana.",
+        "template_b_same": "La variante B necesita una plantilla distinta de la variante A.",
+        "pacing_out_of_range": "Revisa la entrega inteligente: un número está fuera de su rango permitido."
       },
       "template": {
         "previewOnline": "en línea",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Versión del aviso: {version}.",
         "modePrevious": "Enviar a envíos anteriores",
         "previousHint": "Vuelve a dirigirte a las personas a las que llegaron difusiones y campañas anteriores, opcionalmente solo quienes lo leyeron, no lo leyeron, respondieron o hicieron clic.",
-        "chipPrevious": "{count, plural, one {# envío anterior} many {# de envíos anteriores} other {# envíos anteriores}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# envío anterior} many {# de envíos anteriores} other {# envíos anteriores}} ({outcome})",
+        "filterNoConditions": "Añade una condición para ver cuántos contactos coinciden."
       },
       "review": {
         "intro": "Revisa el coste, indica con qué se rellena cada variable de la plantilla y comprueba la difusión.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Envíos anteriores: {names} ({outcome})",
         "sumSplit": "Reparto entre números",
         "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatarios}} ({percent}%)",
-        "sumSplitPercent": "{percent}% de la audiencia"
+        "sumSplitPercent": "{percent}% de la audiencia",
+        "sumCostCharged": "Se cobra de tu saldo: {amount} (tu plan cubre el resto)"
       },
       "test": {
         "title": "Enviar un mensaje de prueba de WhatsApp",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Activar reintentos",
         "retriesToggle": "Reintenta los mensajes que Meta retiene",
         "retryEnd": "Define una fecha de fin",
+        "retryEndPlaceholder": "Desde ahora, hasta {days} días",
         "retriesInfoWhy": "Los reintentos son solo para los mensajes que fallan por el límite de frecuencia de Meta (error {code}).",
         "retriesInfoWhen": "Se ejecutan exactamente a intervalos de {hours} horas hasta la fecha de fin.",
         "retriesInfoCost": "Sin coste extra: solo se cobra un mensaje cuando se entrega.",
         "recurringTitle": "Difusión recurrente",
         "recurringHint": "Envía esto de forma recurrente",
-        "occurrences": "ejecuciones"
+        "occurrences": "ejecuciones",
+        "recurringWarning": "Esta difusión se repite según su programación. Cada ejecución llega a la audiencia tal como está en ese momento, y cada mensaje se cobra de tu saldo.",
+        "repeatRange": "Introduce un número entero de 1 a {max}."
       },
       "words": {
         "now": "Se envía de inmediato, una vez.",

@@ -33,8 +33,10 @@
       "TPL_LINT_FAILED": "Pemeriksaan menemukan masalah yang akan ditolak Meta. Tidak ada yang dikirim. Perbaiki kesalahan yang tercantum di sebelah kanan.",
       "TPL_META_REJECTED": "Meta menolak templat. Alasannya ada di bawah; templat disimpan sebagai draf agar Anda dapat memperbaikinya dan mencoba lagi.",
       "TPL_NO_CONNECTION": "Templat ini tidak memiliki nomor WhatsApp yang terhubung untuk dikirim. Hubungkan nomor terlebih dahulu.",
+      "TPL_HEADER_STORAGE_REQUIRED": "File header memerlukan penyimpanan objek cloud. Minta admin platform untuk mengaktifkannya.",
       "TPL_IN_USE": "Templat ini tidak dapat dihapus karena sedang dipakai broadcast yang berjalan atau terjadwal.",
       "TPL_NOT_EDITABLE": "Hanya templat yang belum disetujui Meta atau yang ditolak yang dapat diedit.",
+      "TPL_EDIT_LIMIT": "Meta mengizinkan satu edit dalam 24 jam dan sepuluh dalam 30 hari untuk template yang disetujui. Coba lagi nanti.",
       "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
       "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
       "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi."
@@ -57,12 +59,18 @@
       "moreButtons": "{count, plural, other {+# tombol lainnya}}",
       "live": "Pratinjau langsung",
       "business": "Bloomly",
-      "online": "daring"
+      "online": "daring",
+      "cards": "Kartu carousel",
+      "cardEmpty": "Teks kartu {n}",
+      "offerExpires": "Segera berakhir",
+      "offerTextEmpty": "Judul penawaran"
     },
     "card": {
       "rejected": "Ditolak: {reason}",
       "view": "Lihat",
       "edit": "Edit",
+      "duplicate": "Duplikat template",
+      "duplicateNamed": "Duplikat {name}",
       "delete": "Hapus",
       "curl": "cURL: kirim templat ini dengan API",
       "curlNamed": "cURL untuk mengirim {name}",
@@ -117,7 +125,8 @@
         "all": "Semua",
         "approved": "Disetujui",
         "pending": "Dalam tinjauan",
-        "rejected": "Ditolak"
+        "rejected": "Ditolak",
+        "draft": "Draf"
       },
       "quickStartTitle": "Mulai cepat",
       "quickStart": "Baca <link>Panduan Template</link> sebelum mengirim ke Meta agar waktu persetujuan tetap di bawah 24 jam.",
@@ -132,6 +141,16 @@
         "name-asc": "Nama A→Z",
         "name-desc": "Nama Z→A"
       },
+      "dateRange": "Rentang tanggal",
+      "range": {
+        "all": "Sepanjang waktu",
+        "7d": "7 hari",
+        "30d": "30 hari",
+        "90d": "90 hari",
+        "custom": "Rentang kustom",
+        "from": "Dari tanggal",
+        "to": "Sampai tanggal"
+      },
       "showing": "Menampilkan",
       "of": "dari",
       "filteredTemplates": "template yang difilter",
@@ -139,7 +158,8 @@
       "legend": {
         "approved": "Disetujui",
         "pending": "Dalam tinjauan",
-        "rejected": "Ditolak"
+        "rejected": "Ditolak",
+        "draft": "Draf"
       },
       "helpLabel": "Bantuan - 0{n}",
       "help": {
@@ -163,7 +183,8 @@
       "confirm": "Hapus templat",
       "cancel": "Batal",
       "done": "\"{name}\" dihapus.",
-      "inUseHelp": "Buka broadcast yang memakai templat ini lalu batalkan atau pilih templat lain, kemudian hapus templat ini."
+      "inUseHelp": "Buka broadcast yang memakai templat ini lalu batalkan atau pilih templat lain, kemudian hapus templat ini.",
+      "messageDraft": "Hapus “{name}”? Templat ini belum pernah dikirim ke Meta, jadi hanya akan dihapus di sini."
     },
     "lint": {
       "title": "Pemeriksaan sebelum kirim",
@@ -182,7 +203,8 @@
         "body": "Isi",
         "footer": "Footer",
         "buttons": "Tombol",
-        "template": "Templat"
+        "template": "Templat",
+        "cards": "Kartu"
       }
     },
     "form": {
@@ -265,7 +287,7 @@
         "uploading": "Mengunggah",
         "keptSample": "Contoh yang tersimpan tetap ada. Pilih file untuk menggantinya.",
         "noFile": "Belum ada file dipilih",
-        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 100 MB.",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB, PDF hingga 10 MB.",
         "replace": "Ganti file",
         "choose": "Pilih file contoh",
         "tooBig": "{kind} ini berukuran {size} MB. WhatsApp menerima hingga {max} MB. Pilih file yang lebih kecil.",
@@ -309,14 +331,18 @@
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
-          "copy_code": "Salin kode"
+          "copy_code": "Salin kode",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Balasan cepat",
           "url": "Kunjungi situs",
           "phone": "Telepon",
           "copy_code": "Salin kode",
-          "other": "Lainnya"
+          "other": "Lainnya",
+          "form": "Formulir",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} tombol",
         "limitReached": "Maksimal {max} untuk jenis ini.",
@@ -345,8 +371,17 @@
           "codeRequired": "Masukkan kode contoh.",
           "quickReplyVariable": "Balasan cepat tidak boleh berisi variabel.",
           "urlExampleRequired": "Berikan nilai contoh untuk variabel URL.",
-          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol."
-        }
+          "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol.",
+          "flowIdRequired": "Masukkan ID Flow.",
+          "flowIdInvalid": "ID Flow berupa angka.",
+          "screenRequired": "Masukkan ID layar.",
+          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
+        },
+        "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "ID numerik WhatsApp Flow yang sudah dipublikasikan, dari pengelola Flows Meta.",
+        "screen": "Layar pembuka",
+        "screenHint": "ID layar tempat formulir dibuka, misalnya WELCOME."
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
@@ -360,6 +395,46 @@
         "open": "Buat dengan AI",
         "applied": "Draf templat diisi dari AI. Tinjau sebelum Anda mengirimkannya.",
         "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
+      },
+      "type": {
+        "label": "Jenis tombol",
+        "standard": "Standar",
+        "carousel": "Carousel",
+        "hint": "Pilih bagaimana pesan berakhir. Carousel adalah barisan kartu; penawaran waktu terbatas memiliki judul penawaran dengan hitung mundur opsional dan tombol salin kode atau situs web.",
+        "none": "Tidak ada",
+        "buttons": "Salin kode, situs web, balasan cepat, dll.",
+        "lto": "Penawaran waktu terbatas",
+        "catalogue": "Katalog",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Kartu",
+        "hint": "2 sampai 10 kartu. Semua kartu memakai jenis berkas dan tombol yang sama.",
+        "format": "Kartu menampilkan",
+        "formatImage": "Gambar",
+        "formatVideo": "Video",
+        "count": "{used}/{max} kartu",
+        "add": "Tambah kartu",
+        "needTwo": "Carousel memerlukan minimal {min} kartu.",
+        "card": "Kartu {n}",
+        "remove": "Hapus kartu {n}",
+        "noFile": "Belum ada berkas dipilih",
+        "uploading": "Mengunggah",
+        "text": "Teks kartu",
+        "textCounter": "{used}/{max}",
+        "buttons": "Tombol",
+        "buttonText": "Teks tombol",
+        "buttonUrl": "URL situs web",
+        "buttonPhone": "Nomor telepon"
+      },
+      "offer": {
+        "title": "Penawaran waktu terbatas",
+        "hint": "Muncul di bawah gambar atau video: judul dan, jika mau, hitung mundur hingga penawaran berakhir.",
+        "text": "Judul penawaran",
+        "textHint": "{used}/{max}",
+        "placeholder": "Penawaran segera berakhir!",
+        "countdown": "Tampilkan hitung mundur",
+        "countdownHint": "WhatsApp menampilkan sisa waktu hingga penawaran berakhir."
       }
     },
     "detail": {
@@ -449,6 +524,9 @@
       },
       "refreshNow": "Segarkan sekarang",
       "editTemplate": "Edit template",
+      "editBlockedTitle": "Template ini tidak bisa diedit sekarang",
+      "editBlocked": "{reason, select, in_review {Meta sedang meninjau template ini. Template bisa diedit lagi setelah peninjauan selesai.} daily_limit {Meta mengizinkan satu edit dalam 24 jam untuk template yang disetujui. Template bisa diedit lagi setelah {when}.} monthly_limit {Meta mengizinkan sepuluh edit dalam 30 hari untuk template yang disetujui. Template bisa diedit lagi setelah {when}.} other {}}",
+      "duplicateTemplate": "Duplikat template",
       "editResubmit": "Edit & kirim ulang",
       "submitToMeta": "Kirim ke Meta",
       "wabaAccount": "Akun WhatsApp Business",
@@ -460,7 +538,6 @@
       "crumbTemplates": "Template",
       "crumbDetail": "Detail",
       "notSubmittedPill": "Belum dikirim",
-      "qualityPill": "Kualitas · {quality}",
       "preview": {
         "title": "Pratinjau",
         "hint": "Tampilannya di WhatsApp"

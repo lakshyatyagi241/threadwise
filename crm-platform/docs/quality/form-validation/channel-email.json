@@ -1,0 +1,2050 @@
+{
+  "module": "channel-email",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "uploadMailAttachmentFieldsSchema",
+      "file": "apps/api/src/modules/channel-email/mail-outbound-attachments.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "conversationId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "conversationId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "conversationId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateMailWorkspaceSettingsSchema",
+      "file": "apps/api/src/modules/channel-email/mail-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "personalMailboxesEnabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "personalMailboxesEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "whoMayConnectPersonal",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "whoMayConnectPersonal",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "whoMayConnectPersonal",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (agents)",
+          "value": "\"agents\"",
+          "priority": "P1"
+        },
+        {
+          "field": "adminsCanReadPersonal",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "adminsCanReadPersonal",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createMailSignatureSchema",
+      "file": "apps/api/src/modules/channel-email/mail-signatures.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "scope",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (20000)",
+          "value": "\"a\" x 20000",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (20000)",
+          "value": "\"a\" x 20001",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (20000)",
+          "value": "\"😀\" x 20000",
+          "priority": "P2"
+        },
+        {
+          "field": "bodyText",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "isDefault",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isDefault",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "reason": "enum boundary was refused by another rule (mailboxId: mailboxId is required for a mailbox signature and not allow)",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateMailSignatureSchema",
+      "file": "apps/api/src/modules/channel-email/mail-signatures.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (20000)",
+          "value": "\"a\" x 20000",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (20000)",
+          "value": "\"a\" x 20001",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyHtml",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (20000)",
+          "value": "\"😀\" x 20000",
+          "priority": "P2"
+        },
+        {
+          "field": "bodyText",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "\"a\" x 5000",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (5000)",
+          "value": "\"a\" x 5001",
+          "priority": "P1"
+        },
+        {
+          "field": "bodyText",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (5000)",
+          "value": "\"😀\" x 5000",
+          "priority": "P2"
+        },
+        {
+          "field": "isDefault",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "isDefault",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "startMailboxConnectSchema",
+      "file": "apps/api/src/modules/channel-email/mailboxes.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "provider",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "provider",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "provider",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (imap)",
+          "value": "\"imap\"",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (personal)",
+          "value": "\"personal\"",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "returnTo",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "connectImapMailboxSchema",
+      "file": "apps/api/src/modules/channel-email/mailboxes.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "scope",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "scope",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (personal)",
+          "value": "\"personal\"",
+          "priority": "P1"
+        },
+        {
+          "field": "address",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "address",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "address",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "imap",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (65535)",
+          "value": "65535",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (65535)",
+          "value": "65536",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (none)",
+          "value": "\"none\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (320)",
+          "value": "\"a\" x 320",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (320)",
+          "value": "\"a\" x 321",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (320)",
+          "value": "\"😀\" x 320",
+          "priority": "P2"
+        },
+        {
+          "field": "imap.password",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1024)",
+          "value": "\"a\" x 1024",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1024)",
+          "value": "\"a\" x 1025",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1024)",
+          "value": "\"😀\" x 1024",
+          "priority": "P2"
+        },
+        {
+          "field": "smtp",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (65535)",
+          "value": "65535",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (65535)",
+          "value": "65536",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (none)",
+          "value": "\"none\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (320)",
+          "value": "\"a\" x 320",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (320)",
+          "value": "\"a\" x 321",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (320)",
+          "value": "\"😀\" x 320",
+          "priority": "P2"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1024)",
+          "value": "\"a\" x 1024",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1024)",
+          "value": "\"a\" x 1025",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1024)",
+          "value": "\"😀\" x 1024",
+          "priority": "P2"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "mailboxId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "address",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "testImapMailboxSchema",
+      "file": "apps/api/src/modules/channel-email/mailboxes.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "imap",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.host",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (65535)",
+          "value": "65535",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (65535)",
+          "value": "65536",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.port",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.security",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (none)",
+          "value": "\"none\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (320)",
+          "value": "\"a\" x 320",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (320)",
+          "value": "\"a\" x 321",
+          "priority": "P1"
+        },
+        {
+          "field": "imap.username",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (320)",
+          "value": "\"😀\" x 320",
+          "priority": "P2"
+        },
+        {
+          "field": "imap.password",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1024)",
+          "value": "\"a\" x 1024",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1024)",
+          "value": "\"a\" x 1025",
+          "priority": "P0"
+        },
+        {
+          "field": "imap.password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1024)",
+          "value": "\"😀\" x 1024",
+          "priority": "P2"
+        },
+        {
+          "field": "smtp",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (65535)",
+          "value": "65535",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (65535)",
+          "value": "65536",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.port",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.security",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (none)",
+          "value": "\"none\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (320)",
+          "value": "\"a\" x 320",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (320)",
+          "value": "\"a\" x 321",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.username",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (320)",
+          "value": "\"😀\" x 320",
+          "priority": "P2"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1024)",
+          "value": "\"a\" x 1024",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1024)",
+          "value": "\"a\" x 1025",
+          "priority": "P0"
+        },
+        {
+          "field": "smtp.password",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1024)",
+          "value": "\"😀\" x 1024",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "imap.host",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "smtp.host",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateMailboxSchema",
+      "file": "apps/api/src/modules/channel-email/mailboxes.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "displayName",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (80)",
+          "value": "\"a\" x 80",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (80)",
+          "value": "\"a\" x 81",
+          "priority": "P1"
+        },
+        {
+          "field": "displayName",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (80)",
+          "value": "\"😀\" x 80",
+          "priority": "P2"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (10000)",
+          "value": "10000",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (10000)",
+          "value": "10001",
+          "priority": "P1"
+        },
+        {
+          "field": "sendLimitPerHour",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

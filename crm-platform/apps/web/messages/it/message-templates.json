@@ -33,8 +33,10 @@
       "TPL_LINT_FAILED": "I controlli hanno trovato problemi che Meta rifiuterebbe. Non è stato inviato nulla. Correggi gli errori elencati a destra.",
       "TPL_META_REJECTED": "Meta ha rifiutato il template. Il motivo è qui sotto; il template è conservato come bozza così puoi correggerlo e riprovare.",
       "TPL_NO_CONNECTION": "Questo template non ha un numero WhatsApp collegato con cui inviarlo. Collega prima un numero.",
+      "TPL_HEADER_STORAGE_REQUIRED": "I file di intestazione richiedono l'archiviazione di oggetti cloud. Chiedi all'amministratore della piattaforma di attivarla.",
       "TPL_IN_USE": "Questo template non può essere eliminato perché lo usa un broadcast in corso o programmato.",
       "TPL_NOT_EDITABLE": "Si può modificare solo un template che Meta non ha ancora approvato, o uno che ha rifiutato.",
+      "TPL_EDIT_LIMIT": "Meta consente una modifica ogni 24 ore e dieci in 30 giorni per un modello approvato. Riprova più tardi.",
       "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo template mentre lo stavi modificando. Ricarica la pagina per vedere la versione più recente, poi applica di nuovo la modifica.",
       "VALIDATION_FAILED": "Alcuni campi non sono validi. Controlla i campi qui sotto.",
       "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco."
@@ -57,12 +59,18 @@
       "moreButtons": "{count, plural, one {+# altro pulsante} other {+# altri pulsanti}}",
       "live": "Anteprima live",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Schede del carosello",
+      "cardEmpty": "Testo della scheda {n}",
+      "offerExpires": "Termina presto",
+      "offerTextEmpty": "Titolo dell’offerta"
     },
     "card": {
       "rejected": "Rifiutato: {reason}",
       "view": "Visualizza",
       "edit": "Modifica",
+      "duplicate": "Duplica modello",
+      "duplicateNamed": "Duplica {name}",
       "delete": "Elimina",
       "curl": "cURL: invia questo modello con l'API",
       "curlNamed": "cURL per inviare {name}",
@@ -117,7 +125,8 @@
         "all": "Tutti",
         "approved": "Approvato",
         "pending": "In revisione",
-        "rejected": "Rifiutato"
+        "rejected": "Rifiutato",
+        "draft": "Bozza"
       },
       "quickStartTitle": "Guida rapida",
       "quickStart": "Leggi le <link>Linee guida dei template</link> prima di inviare a Meta per mantenere i tempi di approvazione sotto le 24 ore.",
@@ -132,6 +141,16 @@
         "name-asc": "Nome A→Z",
         "name-desc": "Nome Z→A"
       },
+      "dateRange": "Intervallo di date",
+      "range": {
+        "all": "Sempre",
+        "7d": "7 giorni",
+        "30d": "30 giorni",
+        "90d": "90 giorni",
+        "custom": "Intervallo personalizzato",
+        "from": "Data di inizio",
+        "to": "Data di fine"
+      },
       "showing": "Visualizzati",
       "of": "di",
       "filteredTemplates": "template filtrati",
@@ -139,7 +158,8 @@
       "legend": {
         "approved": "Approvati",
         "pending": "In revisione",
-        "rejected": "Rifiutati"
+        "rejected": "Rifiutati",
+        "draft": "Bozza"
       },
       "helpLabel": "Aiuto - 0{n}",
       "help": {
@@ -163,7 +183,8 @@
       "confirm": "Elimina template",
       "cancel": "Annulla",
       "done": "«{name}» eliminato.",
-      "inUseHelp": "Apri il broadcast che usa questo template e annullalo oppure scegli un altro template, poi elimina questo."
+      "inUseHelp": "Apri il broadcast che usa questo template e annullalo oppure scegli un altro template, poi elimina questo.",
+      "messageDraft": "Eliminare “{name}”? Non è mai stato inviato a Meta, quindi viene rimosso solo qui."
     },
     "lint": {
       "title": "Controlli prima dell’invio",
@@ -182,7 +203,8 @@
         "body": "Corpo",
         "footer": "Piè di pagina",
         "buttons": "Pulsanti",
-        "template": "Template"
+        "template": "Template",
+        "cards": "Schede"
       }
     },
     "form": {
@@ -265,7 +287,7 @@
         "uploading": "Caricamento",
         "keptSample": "Il campione salvato viene mantenuto. Scegli un file per sostituirlo.",
         "noFile": "Nessun file scelto",
-        "limits": "Immagine fino a 5 MB, video fino a 16 MB, PDF fino a 100 MB.",
+        "limits": "Immagine fino a 5 MB, video fino a 16 MB, PDF fino a 10 MB.",
         "replace": "Sostituisci file",
         "choose": "Scegli file di esempio",
         "tooBig": "Questo {kind} pesa {size} MB. WhatsApp accetta fino a {max} MB. Scegli un file più piccolo.",
@@ -309,14 +331,18 @@
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
-          "copy_code": "Copia codice"
+          "copy_code": "Copia codice",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "kind": {
           "quick_reply": "Risposta rapida",
           "url": "Visita il sito",
           "phone": "Chiama",
           "copy_code": "Copia codice",
-          "other": "Altro"
+          "other": "Altro",
+          "form": "Modulo",
+          "catalog": "Catalogo"
         },
         "count": "{used}/{max} pulsanti",
         "limitReached": "Al massimo {max} di questo tipo.",
@@ -345,8 +371,17 @@
           "codeRequired": "Inserisci un codice di esempio.",
           "quickReplyVariable": "Una risposta rapida non può contenere una variabile.",
           "urlExampleRequired": "Inserisci un valore di esempio per la variabile dell’URL.",
-          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti."
-        }
+          "quickReplyPosition": "Le risposte rapide devono stare insieme, all’inizio o alla fine dei pulsanti.",
+          "flowIdRequired": "Inserisci l’ID del Flow.",
+          "flowIdInvalid": "L’ID del Flow è un numero.",
+          "screenRequired": "Inserisci l’ID della schermata.",
+          "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti."
+        },
+        "catalogHint": "Apre il tuo catalogo WhatsApp. Il pulsante riporta «Vedi catalogo» e deve essere l’unico pulsante.",
+        "flowId": "ID del WhatsApp Flow",
+        "flowIdHint": "L’ID numerico di un WhatsApp Flow pubblicato, dal gestore Flows di Meta.",
+        "screen": "Schermata iniziale",
+        "screenHint": "L’ID della schermata con cui si apre il modulo, ad esempio WELCOME."
       },
       "result": {
         "metaRefused": "Salvato, ma Meta ha rifiutato il template.",
@@ -360,6 +395,46 @@
         "open": "Crea con AI",
         "applied": "Bozza del template compilata dall'AI. Rivedila prima di inviarla.",
         "authHint": "I template di autenticazione hanno un testo fisso, quindi non c'è nulla da redigere."
+      },
+      "type": {
+        "label": "Tipo di pulsante",
+        "standard": "Standard",
+        "carousel": "Carosello",
+        "hint": "Scegli come finisce il messaggio. Un carosello è una fila di schede; un’offerta a tempo limitato ha un titolo dell’offerta con conto alla rovescia facoltativo e un pulsante per copiare un codice o aprire un sito.",
+        "none": "Nessuno",
+        "buttons": "Copia codice, sito web, risposte rapide ecc.",
+        "lto": "Offerta a tempo limitato",
+        "catalogue": "Catalogo",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Schede",
+        "hint": "Da 2 a 10 schede. Tutte usano lo stesso tipo di file e gli stessi pulsanti.",
+        "format": "Le schede mostrano",
+        "formatImage": "Immagini",
+        "formatVideo": "Video",
+        "count": "{used}/{max} schede",
+        "add": "Aggiungi scheda",
+        "needTwo": "Un carosello richiede almeno {min} schede.",
+        "card": "Scheda {n}",
+        "remove": "Rimuovi la scheda {n}",
+        "noFile": "Nessun file scelto",
+        "uploading": "Caricamento",
+        "text": "Testo della scheda",
+        "textCounter": "{used}/{max}",
+        "buttons": "Pulsanti",
+        "buttonText": "Testo del pulsante",
+        "buttonUrl": "URL del sito web",
+        "buttonPhone": "Numero di telefono"
+      },
+      "offer": {
+        "title": "Offerta a tempo limitato",
+        "hint": "Mostrato sotto l’immagine o il video: un titolo e, se vuoi, un conto alla rovescia fino alla fine dell’offerta.",
+        "text": "Titolo dell’offerta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offerta in scadenza!",
+        "countdown": "Mostra il conto alla rovescia",
+        "countdownHint": "WhatsApp mostra il tempo rimasto prima della fine dell’offerta."
       }
     },
     "detail": {
@@ -449,6 +524,9 @@
       },
       "refreshNow": "Aggiorna ora",
       "editTemplate": "Modifica template",
+      "editBlockedTitle": "Questo modello non può essere modificato al momento",
+      "editBlocked": "{reason, select, in_review {Meta sta esaminando questo modello. Potrà essere modificato di nuovo al termine della revisione.} daily_limit {Meta consente una modifica ogni 24 ore per un modello approvato. Potrà essere modificato di nuovo dopo {when}.} monthly_limit {Meta consente dieci modifiche in 30 giorni per un modello approvato. Potrà essere modificato di nuovo dopo {when}.} other {}}",
+      "duplicateTemplate": "Duplica modello",
       "editResubmit": "Modifica e reinvia",
       "submitToMeta": "Invia a Meta",
       "wabaAccount": "Account WhatsApp Business",
@@ -460,7 +538,6 @@
       "crumbTemplates": "Template",
       "crumbDetail": "Dettaglio",
       "notSubmittedPill": "Non inviato",
-      "qualityPill": "Qualità · {quality}",
       "preview": {
         "title": "Anteprima",
         "hint": "Come appare su WhatsApp"

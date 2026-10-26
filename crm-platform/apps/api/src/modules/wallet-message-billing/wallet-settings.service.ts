@@ -18,6 +18,8 @@ export const SETTING_KEYS = {
   perCountry: 'wallet.per_country_enabled',
   payPerMessage: 'billing.pay_per_message',
   pricingMode: 'wallet.pricing_mode',
+  /** What SMS, email, calls, AI and the other usages cost: per-unit prices and the markup on a vendor cost (UsageSettingsService). */
+  usageRates: 'wallet.usage_rates',
 } as const;
 
 interface Economics {
@@ -89,8 +91,8 @@ export class WalletSettingsService {
       ),
       perCountryEnabled: perCountry === true,
       payPerMessage: pay === true,
-      // Upgrades change nothing until an operator turns margin pricing on.
-      pricingMode: mode === 'margin' ? 'margin' : 'fixed',
+      // WhatsApp is priced as Meta's cost plus the plan's margin unless an operator chose fixed prices (a stored 'fixed' is kept).
+      pricingMode: mode === 'fixed' ? 'fixed' : 'margin',
     };
   }
 

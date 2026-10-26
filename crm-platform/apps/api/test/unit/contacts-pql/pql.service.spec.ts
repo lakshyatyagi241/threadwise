@@ -12,6 +12,7 @@ function make(opts: {
   source?: 'admin' | 'workspace' | 'none';
   text?: string;
   error?: Error;
+  costUsd?: number | null;
 }) {
   const db = {
     txAs: async (_c: unknown, fn: (tx: unknown) => unknown) =>
@@ -40,17 +41,27 @@ function make(opts: {
   const ai = {
     complete: vi.fn(async () => {
       if (opts.error) throw opts.error;
-      return { text: opts.text ?? '', promptTokens: 10, completionTokens: 5, costUsd: null };
+      return {
+        text: opts.text ?? '',
+        promptTokens: 10,
+        completionTokens: 5,
+        costUsd: opts.costUsd ?? null,
+      };
     }),
+  };
+  const wallet = {
+    guardCall: vi.fn(async () => undefined),
+    chargeCall: vi.fn(async () => 0),
   };
   const svc = new PqlService(
     db as never,
     keys as never,
     meter as never,
     { can: () => ({ allowed: false }) } as never,
+    wallet as never,
     ai as never,
   );
-  return { svc, keys, meter, ai };
+  return { svc, keys, meter, ai, wallet };
 }
 const run = <T>(fn: () => Promise<T>) => RequestContextStore.run(ctx, fn);
 
@@ -72,6 +83,46 @@ describe('PqlService.translate', () => {
       1,
       expect.objectContaining({ billedAgainst: 'admin', provider: 'openrouter' }),
     );
+  });
+
+  it('refuses before the vendor is called when the wallet cannot pay for the platform key', async () => {
+    const { svc, ai, wallet } = make({});
+    wallet.guardCall.mockRejectedValueOnce(
+      Object.assign(new Error('empty'), { code: 'WALLET_EMPTY', status: 422 }),
+    );
+    await expect(run(() => svc.translate({ query: 'vip' }))).rejects.toMatchObject({
+      code: 'WALLET_EMPTY',
+    });
+    expect(wallet.guardCall).toHaveBeenCalledWith(1, 'admin');
+    expect(ai.complete).not.toHaveBeenCalled();
+  });
+
+  it('charges the answered call to the wallet with a fresh id and the vendor cost', async () => {
+    const text = JSON.stringify({ rules: null, summary: '', ignored: ['x'] });
+    const { svc, wallet } = make({ text, costUsd: 0.0004 });
+    await run(() => svc.translate({ query: 'asdf' }));
+    await run(() => svc.translate({ query: 'asdf' }));
+    expect(wallet.chargeCall).toHaveBeenCalledTimes(2);
+    const [first, second] = wallet.chargeCall.mock.calls.map((c) => (c as unknown[])[0]) as Array<{
+      usageId: string;
+    }>;
+    expect(first).toMatchObject({
+      orgId: 1,
+      keySource: 'admin',
+      label: 'AI contact search',
+      source: 'pql_search',
+      promptTokens: 10,
+      completionTokens: 5,
+      reportedCostUsd: 0.0004,
+    });
+    expect(first!.usageId).toMatch(/^pql:1:/);
+    expect(first!.usageId).not.toBe(second!.usageId);
+  });
+
+  it('does not charge when the vendor gave no answer', async () => {
+    const { svc, wallet } = make({ error: new LeadScoringAiError('timeout', 'x') });
+    await expect(run(() => svc.translate({ query: 'a' }))).rejects.toMatchObject({ status: 502 });
+    expect(wallet.chargeCall).not.toHaveBeenCalled();
   });
 
   it('maps a refused key to 422 and a busy vendor to 502', async () => {
@@ -103,6 +154,54 @@ describe('PqlService.translate', () => {
     expect(r.summary).toBe('');
     expect(r.ignored).toContain('unknown tags');
     expect(r.rules?.children).toHaveLength(1);
+  });
+
+  it('keeps the good conditions when one is malformed instead of failing the search', async () => {
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [
+        { type: 'condition', field: 'tags', operator: 'has_any', value: ['vip'] },
+        { type: 'condition', field: 'name', operator: 'contains', value: 'a' },
+      ],
+    };
+    const { svc } = make({
+      text: JSON.stringify({ rules, summary: 'Contacts named a', ignored: [] }),
+    });
+    const r = await run(() => svc.translate({ query: 'vip contacts named a' }));
+    expect(r.rules?.children).toEqual([
+      { type: 'condition', field: 'name', operator: 'contains', value: 'a' },
+    ]);
+    expect(r.summary).toBe('');
+    expect(r.ignored).toContain('unknown tags');
+  });
+
+  it('answers with nothing to apply, not an error, when a condition has no value', async () => {
+    const rules = {
+      type: 'group',
+      combinator: 'and',
+      children: [{ type: 'condition', field: 'name', operator: 'contains' }],
+    };
+    const { svc } = make({ text: JSON.stringify({ rules, summary: 'x', ignored: [] }) });
+    const r = await run(() =>
+      svc.translate({ query: 'make a filter of contact names containing' }),
+    );
+    expect(r.rules).toBeNull();
+    expect(r.ignored).toContain('unknown name');
+  });
+
+  it('caps a long summary and ignored list so the answer still fits the contract', async () => {
+    const { svc } = make({
+      text: JSON.stringify({
+        rules: null,
+        summary: 'x'.repeat(400),
+        ignored: Array.from({ length: 12 }, () => 'y'.repeat(200)),
+      }),
+    });
+    const r = await run(() => svc.translate({ query: 'a' }));
+    expect(r.summary.length).toBeLessThanOrEqual(300);
+    expect(r.ignored).toHaveLength(10);
+    expect(r.ignored.every((s) => s.length <= 120)).toBe(true);
   });
 
   it('limits one user to 30 searches a minute', async () => {

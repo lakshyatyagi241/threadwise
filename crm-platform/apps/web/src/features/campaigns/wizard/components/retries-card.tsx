@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import {
   FREQUENCY_CAP_ERROR_CODE,
   WIZARD_RETRY_INTERVAL_HOURS,
+  WIZARD_RETRY_MAX_DAYS,
   type WizardRetries,
 } from '@crm/contracts';
 import { Alert, Field, Switch } from '@crm/ui';
@@ -15,11 +16,14 @@ import { DatePicker } from './pickers';
 /** "Activate Retries": try again every 24 hours, until an end date, the messages Meta refused for frequency capping. */
 export function RetriesCard({
   retries,
+  range,
   issues,
   disabled,
   onRetries,
 }: {
   retries: WizardRetries;
+  /** The end dates the calendar offers (`YYYY-MM-DD`), from `wizardRetryEndRange`. */
+  range: { min: string; max: string };
   issues: StepIssue[];
   disabled?: boolean;
   onRetries: (r: WizardRetries) => void;
@@ -53,8 +57,11 @@ export function RetriesCard({
             <DatePicker
               id={`${uid}-end`}
               value={retries.endDate ?? ''}
+              min={range.min}
+              max={range.max}
               disabled={disabled}
               invalid={Boolean(issue)}
+              placeholder={t('retryEndPlaceholder', { days: WIZARD_RETRY_MAX_DAYS })}
               onChange={(endDate) => onRetries({ ...retries, endDate: endDate || null })}
             />
           </Field>

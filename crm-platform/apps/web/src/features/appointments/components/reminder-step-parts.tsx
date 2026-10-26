@@ -46,14 +46,20 @@ export function useSequencePlan(): { buttons: boolean; rebook: boolean } {
 
 /** A line that tells the owner a plan feature is missing, with the way to the plans. Never a hidden control. */
 export function UpgradeHint({ children }: { children: React.ReactNode }) {
-  const t = useTranslations('appointments.reminders');
   return (
     <p className="text-xs text-warning">
-      {children}{' '}
-      <Link href={PLAN_UPGRADE_PATH} className="font-medium underline">
-        {t('upgrade')}
-      </Link>
+      {children} <UpgradeLink />
     </p>
+  );
+}
+
+/** The way to the plans, worded the same everywhere a locked part is shown. */
+export function UpgradeLink() {
+  const t = useTranslations('appointments.reminders');
+  return (
+    <Link href={PLAN_UPGRADE_PATH} className="font-medium underline">
+      {t('upgrade')}
+    </Link>
   );
 }
 

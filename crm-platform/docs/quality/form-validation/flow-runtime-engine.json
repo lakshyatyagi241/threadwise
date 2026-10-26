@@ -1,0 +1,1115 @@
+{
+  "module": "flow-runtime-engine",
+  "tier": "P0",
+  "schemas": [
+    {
+      "schema": "enrollOneInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime-public.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "contactId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "contactId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "contactId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (3)",
+          "value": "\"aa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (3)",
+          "value": "\"aaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "retryManyInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "subscriberIds",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "subscriberIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "subscriberIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P0"
+        },
+        {
+          "field": "subscriberIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 50 items",
+          "value": "array of 50",
+          "priority": "P0"
+        },
+        {
+          "field": "subscriberIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (50) items",
+          "value": "array of 51",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "enrollContactsInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "contactIds",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "contactIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "contactIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 500 items",
+          "value": "array of 500",
+          "priority": "P0"
+        },
+        {
+          "field": "contactIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (500) items",
+          "value": "array of 501",
+          "priority": "P0"
+        },
+        {
+          "field": "groupId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "groupId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "groupId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "startFlowOnConversationInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/flow-runtime.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "flowId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "flowId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "flowId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "orderParseInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "customer_phone",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        },
+        {
+          "field": "text",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4000)",
+          "value": "\"a\" x 4000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4000)",
+          "value": "\"a\" x 4001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4000)",
+          "value": "\"😀\" x 4000",
+          "priority": "P1"
+        },
+        {
+          "field": "group_code",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "group_code",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "group_code",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (48)",
+          "value": "\"a\" x 48",
+          "priority": "P0"
+        },
+        {
+          "field": "group_code",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (48)",
+          "value": "\"a\" x 49",
+          "priority": "P0"
+        },
+        {
+          "field": "group_code",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (48)",
+          "value": "\"😀\" x 48",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "orderShippingInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "customer_phone",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        },
+        {
+          "field": "text",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "use_saved",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "use_saved",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "orderConfirmInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "customer_phone",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ship_text",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "ship_text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "ship_text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "ship_text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "ship_text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "notify_group",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "notify_group",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (120)",
+          "value": "\"a\" x 120",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (120)",
+          "value": "\"a\" x 121",
+          "priority": "P0"
+        },
+        {
+          "field": "model",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (120)",
+          "value": "\"😀\" x 120",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "orderCancelInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "customer_phone",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        },
+        {
+          "field": "text",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "orderReplyInputSchema",
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "customer_phone",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (32)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "customer_phone",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (32)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P1"
+        },
+        {
+          "field": "text",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "notify_group",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "notify_group",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

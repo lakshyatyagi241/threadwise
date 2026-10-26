@@ -34,7 +34,7 @@ export const SYSTEM_ATTRIBUTES = [
   { key: 'today', name: 'Today', description: "Today's date" },
 ] as const;
 
-/** Every key that already means something at send time. */
+/** Every key that already means something at send time, or is a built-in property of the contact page. */
 export const RESERVED_ATTRIBUTE_KEYS: ReadonlySet<string> = new Set([
   ...SYSTEM_ATTRIBUTES.map((a) => a.key),
   'middle_name',
@@ -50,6 +50,9 @@ export const RESERVED_ATTRIBUTE_KEYS: ReadonlySet<string> = new Set([
   'uuid',
   'tags',
   'owner',
+  'memo',
+  'lifecycle_stage',
+  'opt_out',
 ]);
 
 export const attributeKeySchema = z
@@ -157,6 +160,8 @@ export const attributePickerFeedSchema = z.object({
       name: z.string(),
       description: z.string().nullable(),
       value: z.string().nullable(),
+      /** The attribute's field type (`decimal`, `text`, ...). Optional: older callers do not send it. */
+      type: z.string().optional(),
     }),
   ),
 });

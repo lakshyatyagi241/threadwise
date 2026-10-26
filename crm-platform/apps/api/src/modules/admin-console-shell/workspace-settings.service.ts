@@ -261,10 +261,11 @@ export class WorkspaceSettingsService {
     files: { logo?: UploadedImage; favicon?: UploadedImage },
   ): Promise<WorkspaceBrandingResponse> {
     const { orgId, userId } = this.actor();
-    const checked = (['logo', 'favicon'] as const).flatMap((slot) => {
+    const checked: { slot: 'logo' | 'favicon'; mime: string; buffer: Buffer }[] = [];
+    for (const slot of ['logo', 'favicon'] as const) {
       const f = files[slot];
-      if (!f) return [];
-      const ok = this.uploads.validate({
+      if (!f) continue;
+      const ok = await this.uploads.validateScanned({
         filename: f.originalname,
         buffer: f.buffer,
         allow: ['image'],
@@ -275,8 +276,8 @@ export class WorkspaceSettingsService {
           { path: slot, message: 'Not a supported image.' },
         ]);
       }
-      return [{ slot, mime: ok.mime, buffer: f.buffer }];
-    });
+      checked.push({ slot, mime: ok.mime, buffer: f.buffer });
+    }
     await this.db.txAs({ orgId, userId }, async (tx) => {
       const row = await this.org(tx, orgId, userId);
       this.mustOwn(row);

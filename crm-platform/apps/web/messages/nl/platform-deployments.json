@@ -91,6 +91,7 @@
       "empty": "Nog geen release vastgelegd. Releases verschijnen hier vanaf de volgende deployment.",
       "cols": {
         "tag": "Tag",
+        "changes": "Wijzigingen",
         "state": "Status",
         "step": "Stap",
         "started": "Gestart",
@@ -104,7 +105,8 @@
         "ok": "Live",
         "failed": "Mislukt",
         "rolled_back": "Teruggedraaid"
-      }
+      },
+      "by": "door {author}"
     }
   }
 }

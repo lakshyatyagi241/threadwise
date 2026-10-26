@@ -43,6 +43,7 @@ export function MemberLeaveDialog({
   open,
   onClose,
   focusReassign = false,
+  self = false,
 }: {
   memberId: string | null;
   memberName: string;
@@ -50,6 +51,8 @@ export function MemberLeaveDialog({
   onClose: () => void;
   /** Opened from the "went on leave" notice: scroll to the reassign part. */
   focusReassign?: boolean;
+  /** Opened from the account menu for yourself: the reassign part (a manager's tool) is not offered. */
+  self?: boolean;
 }) {
   const t = useTranslations('workspaces-teams-tenancy.leave');
   const tc = useTranslations('workspaces-teams-tenancy.common');
@@ -62,7 +65,12 @@ export function MemberLeaveDialog({
       closeLabel={tc('close')}
     >
       {open && memberId && (
-        <LeaveBody memberId={memberId} focusReassign={focusReassign} onClose={onClose} />
+        <LeaveBody
+          memberId={memberId}
+          focusReassign={focusReassign}
+          self={self}
+          onClose={onClose}
+        />
       )}
     </Modal>
   );
@@ -71,10 +79,12 @@ export function MemberLeaveDialog({
 function LeaveBody({
   memberId,
   focusReassign,
+  self,
   onClose,
 }: {
   memberId: string;
   focusReassign: boolean;
+  self: boolean;
   onClose: () => void;
 }) {
   const t = useTranslations('workspaces-teams-tenancy.leave');
@@ -197,7 +207,7 @@ function LeaveBody({
         }
       />
 
-      {o.can.manage && o.workload && (
+      {!self && o.can.manage && o.workload && (
         <ReassignSection
           memberId={memberId}
           memberName={o.memberName}

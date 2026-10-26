@@ -116,6 +116,24 @@ describe('refundPayment', () => {
     });
   });
 
+  it('sends our refund uuid as the idempotency key and as a note, so a repeat cannot refund twice and a list can be matched back', async () => {
+    const http = vi.fn<HttpFetch>(async () => res(200, { id: 'rfnd_1', status: 'pending' }));
+    await driver(http).refundPayment!({
+      paymentId: 'pay_9',
+      note: 'Duplicate charge',
+      idempotencyKey: '6f1c0c1e-0000-4000-8000-000000000001',
+      reference: '6f1c0c1e-0000-4000-8000-000000000001',
+    });
+    const init = http.mock.calls[0]![1]!;
+    expect((init.headers as Record<string, string>)['X-Refund-Idempotency']).toBe(
+      '6f1c0c1e-0000-4000-8000-000000000001',
+    );
+    expect(body(http).notes).toEqual({
+      reason: 'Duplicate charge',
+      ref: '6f1c0c1e-0000-4000-8000-000000000001',
+    });
+  });
+
   it('says why when Razorpay refuses', async () => {
     const http = vi.fn<HttpFetch>(async () =>
       res(400, { error: { description: 'The payment has been fully refunded already' } }),
@@ -123,6 +141,55 @@ describe('refundPayment', () => {
     const out = await driver(http).refundPayment!({ paymentId: 'pay_9' });
     expect(out.ok).toBe(false);
     expect(out.reason).toContain('fully refunded');
+  });
+});
+
+describe('listPaymentRefunds', () => {
+  it('lists the refunds of a payment with the reference we stored on them', async () => {
+    const http = vi.fn<HttpFetch>(async () =>
+      res(200, {
+        items: [
+          {
+            id: 'rfnd_2',
+            amount: 25000,
+            status: 'processed',
+            created_at: 1_795_000_100,
+            notes: { ref: 'uuid-2' },
+          },
+          { id: 'rfnd_1', amount: 5000, status: 'pending', created_at: 1_795_000_000 },
+          { id: 'bad', status: 'processed' },
+        ],
+      }),
+    );
+    const out = await driver(http).listPaymentRefunds!('pay_9');
+    expect(http.mock.calls[0]![0]).toBe(
+      'https://api.razorpay.com/v1/payments/pay_9/refunds?count=100',
+    );
+    expect(out).toEqual([
+      {
+        id: 'rfnd_2',
+        amountMinor: 25000n,
+        status: 'processed',
+        createdAt: new Date(1_795_000_100_000),
+        reference: 'uuid-2',
+      },
+      {
+        id: 'rfnd_1',
+        amountMinor: 5000n,
+        status: 'pending',
+        createdAt: new Date(1_795_000_000_000),
+        reference: null,
+      },
+    ]);
+  });
+
+  it('answers null (cannot tell), never an empty list, when the call fails', async () => {
+    const failing = vi.fn<HttpFetch>(async () => res(500, { error: { description: 'oops' } }));
+    expect(await driver(failing).listPaymentRefunds!('pay_9')).toBeNull();
+    const thrown = vi.fn<HttpFetch>(async () => {
+      throw new Error('socket hang up');
+    });
+    expect(await driver(thrown).listPaymentRefunds!('pay_9')).toBeNull();
   });
 });
 

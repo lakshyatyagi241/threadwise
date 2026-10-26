@@ -1,0 +1,95 @@
+{
+  "feature": "storefront-builder",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-storefront-builder-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/api/hooks.ts",
+        "apps/web/src/features/storefront-builder/admin/components/dashboard-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/shop-form.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/storefront-builder/admin/api/overview.test.ts",
+          "match": "raises \"no shop yet\" from the shop list without asking for the overview"
+        }
+      ]
+    },
+    {
+      "id": "EM-storefront-builder-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/public/components/catalog.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-storefront-builder-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/connect-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/dashboard-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/parts.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-storefront-builder-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/dashboard-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/sidebar.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-storefront-builder-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/sales-chart.tsx",
+        "apps/web/src/features/storefront-builder/admin/lib/chart.ts",
+        "apps/web/src/features/storefront-builder/admin/lib/format.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/storefront-builder/admin/lib/chart.test.ts",
+          "match": "spaces ticks evenly from zero"
+        },
+        {
+          "file": "apps/web/src/features/storefront-builder/admin/lib/settings-form.test.ts",
+          "match": "refuses a delay the integer rule refuses: exponent, leading zeros"
+        },
+        {
+          "file": "apps/web/src/features/storefront-builder/admin/lib/slug.test.ts",
+          "match": "turns Arabic letters into Latin ones and zero-width characters into a break, like the server"
+        }
+      ]
+    }
+  ]
+}

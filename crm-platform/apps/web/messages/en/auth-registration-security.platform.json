@@ -1349,13 +1349,17 @@
             "details": "Details and pricing",
             "features": "Features",
             "limits": "Limits",
-            "addons": "Add-ons"
+            "addons": "Add-ons",
+            "integrations": "Integrations",
+            "miniApps": "Mini apps"
           },
           "tabSummary": {
             "features": "{count} of {total} features on",
             "limits": "{count} of {total} limits set",
-            "addons": "{count} add-ons selected",
-            "error": "Has errors to fix"
+            "addons": "{count, plural, one {# add-on included or offered} other {# add-ons included or offered}}",
+            "error": "Has errors to fix",
+            "integrations": "Integrations included or offered: {count}",
+            "miniApps": "Mini apps included or offered: {count}"
           },
           "featuresUi": {
             "intro": "Switch off what this plan does not include. A workspace on the plan cannot open an area whose feature is off.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Enable all",
             "disableAll": "Disable all",
             "noMatch": "No features match your search.",
-            "groupCount": "{count} of {total} on"
+            "groupCount": "{count} of {total} on",
+            "lockedBy": "Set by the {addon} add-on on the Add-ons tab"
           },
           "limitsUi": {
             "intro": "A cap stops the action once the workspace reaches it. Tick Unlimited to remove the cap.",
@@ -1385,12 +1390,8 @@
             "total": "in total"
           },
           "addons": {
-            "intro": "Enabled add-ons are shown to workspaces on this plan in their Marketplace; they can only be used after the workspace buys them.",
             "search": "Search add-ons",
             "searchPlaceholder": "Search add-ons or apps",
-            "selectAll": "Select all",
-            "clear": "Clear",
-            "selected": "{count} of {total} selected",
             "loading": "Loading add-ons",
             "empty": "No paid add-ons exist yet",
             "emptyHint": "Add-ons are created in the Marketplace catalogue of the operator console. Once an app has a paid pack it is listed here.",
@@ -1404,7 +1405,8 @@
             "packInactive": "The add-on pack is switched off, so nobody can buy it.",
             "appUnpublished": "The app is not published, so workspaces cannot see it yet.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# add-on included or offered} other {# add-ons included or offered}}"
           },
           "featureHints": {
             "automation": "The flow builder and automations that reply to and act on conversations.",
@@ -1416,11 +1418,15 @@
             "remove_branding": "White-label: the workspace can hide the platform branding in its footer.",
             "sales_pipeline": "Deals, tasks and pipelines, and the pipeline figures on the dashboard.",
             "appointment_booking": "Booking types, appointments and the public booking pages. The paid Appointments app owns this switch.",
+            "appointment_confirm_buttons": "Adds Confirm, Reschedule and Cancel buttons to the WhatsApp reminder sent before an appointment.",
+            "appointment_rebook_steps": "Follow-up messages sent after a completed appointment that ask the contact to book again.",
             "chatbot_widgets": "The website chatbot widget builder.",
             "wa_storefront": "The WhatsApp catalog and storefront area.",
             "inbox_sla": "SLA policies and deadlines in the team inbox.",
-            "inbox_routing": "Routing rules that assign inbox conversations automatically.",
-            "inbox_assignment_sticky": "Owner-first and keep-in-sync assignment between the contact owner and the chat owner, the returning-contact window and the reassign prompt. Works together with Inbox routing.",
+            "inbox_routing": "Automatic assignment of new chats: routing rules, Everyone else and waiting-queue timers. Part of the Smart routing add-on.",
+            "inbox_assignment_sticky": "Owner-first and keep-in-sync assignment, the returning-contact window and the reassign prompt. Part of the Smart routing add-on.",
+            "agent_status_bar": "Status bar: the Available / Away control in the top bar and the Inbox.",
+            "agent_status_automation": "Automate status: personal working hours and automatic Away.",
             "waba_calling": "WhatsApp calling from the inbox: calling numbers, call permissions, placing and answering calls.",
             "inbox_kanban": "The Kanban board view of the team inbox.",
             "team_performance": "The team performance reports.",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "Email mailboxes",
             "email_monthly": "Emails per month",
             "storage_gb": "Storage (GB)",
-            "teams": "Teams"
+            "teams": "Teams",
+            "webbot_messages": "Free website chatbot messages per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1609,11 +1616,15 @@
             "remove_branding": "White-label (removes platform branding)",
             "sales_pipeline": "Sales pipeline (deals and tasks)",
             "appointment_booking": "Appointments and booking pages",
+            "appointment_confirm_buttons": "Reminder buttons: Confirm, Reschedule and Cancel",
+            "appointment_rebook_steps": "Rebook (recall) steps after an appointment",
             "chatbot_widgets": "Website chatbot widgets",
             "wa_storefront": "WhatsApp storefront and catalog",
             "inbox_sla": "Inbox SLA policies",
-            "inbox_routing": "Inbox routing rules and business hours",
-            "inbox_assignment_sticky": "Contact owner and sticky agent",
+            "inbox_routing": "Smart routing: auto-assignment and rules",
+            "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
+            "agent_status_bar": "Agent status bar",
+            "agent_status_automation": "Automatic status from working hours",
             "waba_calling": "Place and answer WhatsApp calls from the inbox",
             "inbox_kanban": "Inbox Kanban board",
             "team_performance": "Team performance reports",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "A plan cannot be both free and custom quote.",
             "paid_needs_price": "Set a price above 0, or mark the plan as free.",
             "offer_not_lower": "The offer price must be lower than the plan price.",
-            "default_needs_active": "The signup default plan must be active."
+            "default_needs_active": "The signup default plan must be active.",
+            "addonPriceZero": "Leave the price empty to use the add-on's price, or choose Included.",
+            "addonGone": "This add-on no longer exists. Reload the page and save again."
           },
           "limitHints": {
             "monthly_messages": "Outbound messages sent in the calendar month. Beyond the allowance the wallet is charged.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
             "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
             "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
-            "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
+            "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed.",
+            "webbot_messages": "Website chatbot messages included free each calendar month. Every message beyond that is charged to the wallet. Blank or 0 = none included."
           },
           "productLines": {
             "chat": "Chat",
             "crm": "Sales CRM",
             "platform": "Shared by both"
+          },
+          "offers": {
+            "readOnly": "You can view this plan but not change it, so these controls are locked.",
+            "featureTitle": "Feature add-ons",
+            "featureIntro": "Add-ons that unlock a part of the product. Included: workspaces on this plan get it at no charge and its card says \"Included in your plan\". Paid: they can buy it, at this plan's own price if you set one. Hidden: they never see it. The add-on's features on the Features tab follow this choice.",
+            "capacityTitle": "Capacity add-ons",
+            "capacityIntro": "Add-ons that only add to a limit, such as an extra seat. On a plan they are paid or hidden; the plan's own caps are set on the Limits tab.",
+            "noFeaturePacks": "No feature add-ons exist yet.",
+            "adds": "Adds: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "Unlimited {name}",
+            "modeLabel": "How {name} is offered on this plan",
+            "modes": {
+              "included": "Included",
+              "paid": "Paid",
+              "hidden": "Hidden"
+            },
+            "noIncluded": "This add-on only adds to limits, so it cannot be included. Set this plan's own cap on the Limits tab.",
+            "priceLabel": "Price on this plan ({currency})",
+            "priceHint": "Leave empty to use the add-on's own price.",
+            "includedCapacityNote": "Only its features are included. The extra limits ({limits}) stay on sale for workspaces on this plan.",
+            "hiddenNote": "Workspaces on this plan do not see this add-on and cannot buy it. A workspace that already bought it keeps it until its term ends.",
+            "offNote": "No longer included: workspaces on this plan lose these features unless they buy the add-on. Their settings are kept and come back when it is on again.",
+            "loading": "Loading add-ons",
+            "loadFailed": "The add-ons could not be loaded. Nothing was changed.",
+            "empty": "No add-ons exist yet",
+            "emptyHint": "Add-ons such as Smart routing and Teams and permissions are created under Add-ons in the operator console.",
+            "noPrice": "No price set",
+            "gives": "Gives: {features}",
+            "unlistedNote": "Some of its features ({features}) are outside the standard add-on list. They can still be switched on for the plan; only buying this add-on as a pack works differently.",
+            "inactiveNote": "This add-on is a draft or switched off, so nobody can buy it yet. Including it in the plan still works.",
+            "impactCount": "{count, plural, one {# workspace already pays for this add-on.} other {# workspaces already pay for this add-on.}} Their renewal will stop at the end of the current term, nothing is refunded and nothing is cancelled today.",
+            "impactUnknown": "Workspaces on this plan that already pay for this add-on will stop renewing it at the end of their current term. Nothing is refunded and nothing is cancelled today. The number could not be loaded.",
+            "partlyNote": "This plan already gives part of this add-on ({features}). It stays as it is until you choose Included, Paid or Hidden here.",
+            "needsFeatures": "Add the features it unlocks in Add-ons > {name} first"
+          },
+          "apps": {
+            "introMiniApps": "Mini apps are apps a workspace installs from the Marketplace. Included: free for workspaces on this plan. Paid: they can buy it at the app's own price. Hidden: they never see it. Included also switches on the plan features the app gives.",
+            "introIntegrations": "Integrations connect an outside service. Included: free for workspaces on this plan. Paid: they can buy it at the integration's own price. Hidden: they never see it. Included also switches on the plan features the integration gives.",
+            "setAll": "Set all shown to",
+            "summary": "{count} of {total} included or offered",
+            "priceHint": "Marketplace apps keep their own price; set it on the app's listing.",
+            "emptyIntegrations": "No paid integrations yet",
+            "emptyIntegrationsHint": "Free integrations need no setting here; Shopify and WooCommerce are switched on the Features tab."
           }
         }
       },

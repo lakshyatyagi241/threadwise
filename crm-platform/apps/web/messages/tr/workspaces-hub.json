@@ -234,7 +234,29 @@
         "ends": "Bitiş",
         "limits": "Geçerli limitler",
         "edit": "Düzenle ve planı değiştir",
-        "overrideNote": "Bu çalışma alanının, planın yerine geçen kendi limitleri var."
+        "overrideNote": "Bu çalışma alanının, planın yerine geçen kendi limitleri var.",
+        "addons": {
+          "title": "Eklentiler",
+          "intro": "Bu çalışma alanının her eklentiden neye sahip olduğu ve nedeni.",
+          "empty": "Satışta eklenti yok.",
+          "kind": {
+            "feature": "Özellik eklentisi",
+            "capacity": "Kapasite eklentisi"
+          },
+          "source": {
+            "plan": "Plana dahil",
+            "override": "Geçersiz kılma ile açık",
+            "platform": "Platformun çalışma alanı",
+            "bought": "Satın alındı",
+            "buy": "Satın alınabilir",
+            "unavailable": "Ücretli plan gerekir",
+            "hidden": "Bu planda gizli"
+          },
+          "renews": "{date} tarihinde yenilenir",
+          "ends": "{date} tarihinde biter",
+          "lifetime": "Bitiş tarihi yok",
+          "overrides": "{count} özellik geçersiz kılması planın önünde: {keys}. Planı düzenle ve değiştir bölümünden kaldırın."
+        }
       },
       "walletTab": {
         "open": "Tam cüzdanı aç",

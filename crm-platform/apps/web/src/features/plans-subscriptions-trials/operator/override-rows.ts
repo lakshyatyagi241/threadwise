@@ -53,7 +53,9 @@ export type PlanValueView =
 /** The plan's own cap, for reference next to the override. */
 export function planValueView(key: string, planValue: number): PlanValueView {
   if (limitZeroIsNone(key)) {
-    return isUnlimitedFor(key, planValue) ? { kind: 'unlimited' } : { kind: 'value', value: planValue };
+    return isUnlimitedFor(key, planValue)
+      ? { kind: 'unlimited' }
+      : { kind: 'value', value: planValue };
   }
   if (planValue === 0) {
     return key === PLATFORM_DEFAULT_KEY ? { kind: 'platformDefault' } : { kind: 'unlimited' };

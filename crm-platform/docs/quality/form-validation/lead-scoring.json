@@ -1,0 +1,477 @@
+{
+  "module": "lead-scoring",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "updateLscPlatformConfigSchema",
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring-platform.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "platformEnabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "platformEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (3)",
+          "value": "\"aa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (3)",
+          "value": "\"aaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (100000)",
+          "value": "100000",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (100000)",
+          "value": "100001",
+          "priority": "P1"
+        },
+        {
+          "field": "scoresPerHour",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (7)",
+          "value": "7",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (7)",
+          "value": "6",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (730)",
+          "value": "730",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (730)",
+          "value": "731",
+          "priority": "P1"
+        },
+        {
+          "field": "retentionDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P1"
+        },
+        {
+          "field": "model",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P1"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateLscSettingsSchema",
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "enabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "enabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "autoScore",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "autoScore",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "chatDigest",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "chatDigest",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "stageSuggestions",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "stageSuggestions",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "stageAutoApply",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "stageAutoApply",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "lscBackfillSchema",
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "limit",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (5000)",
+          "value": "5000",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (5000)",
+          "value": "5001",
+          "priority": "P1"
+        },
+        {
+          "field": "limit",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "lscSuggestionDecisionSchema",
+      "file": "apps/api/src/modules/lead-scoring/lead-scoring.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "action",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (dismiss)",
+          "value": "\"dismiss\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ids",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "ids",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P1"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 100 items",
+          "value": "array of 100",
+          "priority": "P1"
+        },
+        {
+          "field": "ids",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (100) items",
+          "value": "array of 101",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

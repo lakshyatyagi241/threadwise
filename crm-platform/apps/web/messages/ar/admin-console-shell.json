@@ -69,7 +69,7 @@
       },
       "overview": "الرئيسية",
       "labels": {
-        "addonPacks": "حزم الإضافات",
+        "addonPacks": "الإضافات",
         "extensions": "الامتدادات",
         "trackingCode": "كود التتبع",
         "planPricingSettings": "إعدادات تسعير الباقات",
@@ -334,7 +334,9 @@
           "save": "حفظ",
           "saved": "تم حفظ التفضيل.",
           "saveFailed": "تعذّر حفظ التفضيل."
-        }
+        },
+        "timezoneSearch": "ابحث عن المناطق الزمنية",
+        "timezoneNoMatch": "لا توجد منطقة زمنية مطابقة."
       },
       "notifications": {
         "title": "إشعارات مساحة العمل",

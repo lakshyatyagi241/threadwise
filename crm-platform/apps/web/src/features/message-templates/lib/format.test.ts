@@ -16,6 +16,14 @@ describe('template text', () => {
     expect(wrapSelection('', 0, 0, '_', 'text')).toEqual({ value: '_text_', start: 1, end: 5 });
   });
 
+  it('marks the whole word when the selection covers part of one', () => {
+    expect(toggleSelection('hello wonderful', 9, 12, '*')).toEqual({
+      value: 'hello *wonderful*',
+      start: 7,
+      end: 16,
+    });
+  });
+
   it('removes a marker when the selection already includes it', () => {
     expect(toggleSelection('hello *world*', 6, 13, '*')).toEqual({
       value: 'hello world',

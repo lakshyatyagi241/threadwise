@@ -1,0 +1,86 @@
+{
+  "feature": "invoicing",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-invoicing-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/aging-report.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-payment.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/invoicing/lib/profile-form.test.ts",
+          "match": "sends extra fields as a whole list without blank or half-filled rows, and an empty list clears them"
+        },
+        {
+          "file": "apps/web/src/features/invoicing/list.messages.test.ts",
+          "match": "has a label for every status, tab, empty state and column"
+        }
+      ]
+    },
+    {
+      "id": "EM-invoicing-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/pick-invoice-dialog.tsx",
+        "apps/web/src/features/invoicing/components/sales-order-quote-picker.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-invoicing-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/aging-report.tsx",
+        "apps/web/src/features/invoicing/components/bulk-bar.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-gateway.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-invoicing-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/business-profile-numbering.tsx",
+        "apps/web/src/features/invoicing/components/contact-picker.tsx",
+        "apps/web/src/features/invoicing/components/credit-notes-builder.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/invoicing/lib/builder.test.ts",
+          "match": "a zero total cannot be issued"
+        },
+        {
+          "file": "apps/web/src/features/invoicing/lib/payments.test.ts",
+          "match": "refuses a missing, malformed or zero amount"
+        },
+        {
+          "file": "apps/web/src/features/invoicing/lib/sales-orders.test.ts",
+          "match": "defaults each line to what is left and drops zero lines"
+        }
+      ]
+    }
+  ]
+}

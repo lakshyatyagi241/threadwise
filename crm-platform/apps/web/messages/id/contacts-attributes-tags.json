@@ -37,7 +37,8 @@
       "statusStage": "Status itu milik tahap yang berbeda. Pilih status yang sesuai dengan tahap kontak.",
       "stageScope": "Status hanya dapat dibatasi ke salah satu tahap siklus hidup Anda.",
       "planLimit": "Anda telah mencapai batas paket sebanyak {limit, plural, other {# kontak}}. Upgrade paket untuk menambah, atau hapus kontak yang ada untuk mengosongkan ruang.",
-      "legalHold": "Catatan ini dilindungi dan saat ini tidak dapat dihapus."
+      "legalHold": "Catatan ini dilindungi dan saat ini tidak dapat dihapus.",
+      "assignedToOther": "Chat ini ditugaskan ke agen lain. Tugaskan ke diri Anda dulu untuk mengirim pesan."
     },
     "list": {
       "title": "Contact Hub",
@@ -282,8 +283,6 @@
       "shortEmail": "Email",
       "shortStage": "Tahap",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Dibuat",
-      "shortModified": "Diubah",
       "firstRun": {
         "title": "Tambahkan kontak pertama Anda",
         "message": "Bawa masuk orang-orang yang Anda ajak bicara. Kontak dipakai untuk pesan, kampanye, tugas, dan deal.",
@@ -296,7 +295,9 @@
       "teamLabel": "Tim",
       "teamFilter": "Filter menurut tim",
       "allTeams": "Semua tim",
-      "teamFormer": "Tim sebelumnya"
+      "teamFormer": "Tim sebelumnya",
+      "unhideColumn": "Tampilkan kolom",
+      "resizeColumn": "Seret untuk mengubah lebar {column}; klik dua kali untuk mengatur ulang"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -346,7 +347,25 @@
       "assignOwner": "Tetapkan pemilik",
       "changeStage": "Ubah tahap",
       "more": "Lainnya",
-      "held": "Catatan ini dilindungi dan saat ini tidak dapat dihapus."
+      "held": "Catatan ini dilindungi dan saat ini tidak dapat dihapus.",
+      "consent": "Persetujuan pemasaran",
+      "consentTitle": "Persetujuan pemasaran",
+      "consentChannel": "Saluran",
+      "consentAction": "Ubah",
+      "consentSubscribe": "Berlangganan",
+      "consentUnsubscribe": "Berhenti berlangganan",
+      "consentNote": "Cara kontak menyetujui",
+      "consentNotePlaceholder": "Apa yang mereka katakan atau tanda tangani, dan di mana",
+      "consentNoteRequired": "Tulis cara kontak menyetujui sebelum mendaftarkan mereka.",
+      "consentContinue": "Lanjutkan",
+      "consentBack": "Kembali",
+      "consentConfirm": "Catat persetujuan",
+      "consentSummary": "Tandai {count, plural, other {# kontak}} sebagai {change} di {channel}. Setiap kontak mendapat catatan di riwayat persetujuannya.",
+      "consentChangeGranted": "berlangganan",
+      "consentChangeWithdrawn": "berhenti berlangganan",
+      "consentAllMatching": "Ini berlaku untuk semua kontak yang cocok dengan filter.",
+      "consentSubscribed": "{count, plural, other {# kontak berlangganan}}",
+      "consentUnsubscribed": "{count, plural, other {# kontak berhenti berlangganan}}"
     },
     "form": {
       "addEyebrow": "Kontak baru",
@@ -448,7 +467,8 @@
       "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom.",
       "searchOptions": "Cari opsi",
       "searchOptionsFor": "Cari opsi {field}",
-      "noOptionsFound": "Tidak ada opsi yang cocok dengan pencarian Anda."
+      "noOptionsFound": "Tidak ada opsi yang cocok dengan pencarian Anda.",
+      "cascadeWaiting": "Pilih {parent} dulu untuk melihat pilihan."
     },
     "tags": {
       "title": "Tag",
@@ -497,7 +517,6 @@
       "loading": "Memuat grup...",
       "unavailableTitle": "Grup belum tersedia",
       "unavailableMessage": "Layanan grup kontak belum aktif di server ini, sehingga grup belum dapat didaftar atau dibuat.",
-      "contacts": "kontak",
       "viewContacts": "Lihat kontak",
       "edit": "Edit grup",
       "editNamed": "Edit grup {name}",
@@ -505,8 +524,6 @@
       "deleteNamed": "Hapus grup {name}",
       "deleteTitle": "Hapus grup ini?",
       "deleteMessage": "\"{name}\" akan dihapus dari setiap kontak yang ada di dalamnya. Kontaknya sendiri tetap disimpan.",
-      "createTile": "Buat grup baru",
-      "createTileHint": "Kelompokkan kontak berdasarkan segmen, tahap funnel, atau minat.",
       "emptyTitle": "Belum ada grup",
       "emptyMessage": "Minta manajer workspace untuk membuat grup pertama.",
       "helpKicker": "Bantuan - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "Grup dengan nama ini sudah ada, sehingga tidak ada yang baru dibuat.",
       "import": "Impor kontak",
-      "importInto": "Impor"
+      "importInto": "Impor",
+      "colName": "Nama",
+      "colMembers": "Anggota",
+      "colCreatedBy": "Dibuat oleh",
+      "colCreatedAt": "Dibuat pada",
+      "colModifiedBy": "Diubah oleh",
+      "colUpdatedAt": "Diperbarui pada",
+      "colActions": "Tindakan",
+      "tableLabel": "Grup kontak",
+      "search": "Cari grup",
+      "searchPlaceholder": "Cari berdasarkan nama",
+      "count": "{count, plural, =0 {Tidak ada grup} one {# grup} other {# grup}}",
+      "noResultsTitle": "Tidak ada grup yang cocok",
+      "noResults": "Tidak ada nama grup yang mengandung kata yang Anda ketik.",
+      "clearSearch": "Hapus pencarian"
     },
     "import": {
       "eyebrow": "Impor massal",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "tanggal lahir bukan tanggal berformat tahun lebih dulu yang bisa menjadi tanggal lahir",
         "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya",
         "invalid_timezone": "zona waktu tidak valid",
-        "legal_hold": "catatan dilindungi, tidak diubah"
+        "legal_hold": "catatan dilindungi, tidak diubah",
+        "invalid_property_value": "nilai properti kustom tidak sesuai dengan tipe atau opsinya",
+        "invalid_property_value_column": "kolom \"{column}\": nilai tidak sesuai dengan tipe atau pilihannya"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -634,12 +667,15 @@
       "limitExceeded": "Melebihi batas paket",
       "limitExceededNote": "Sebagian kontak baru tidak diimpor karena batas kontak paket Anda telah tercapai.",
       "rejectsFailed": "Baris yang ditolak tidak dapat diunduh.",
+      "sampleFailed": "File contoh tidak dapat diunduh. Coba lagi.",
       "groupRequired": "Tambahkan kontak ini ke",
       "groupExisting": "Grup yang sudah ada",
       "groupNew": "Grup baru",
       "groupPick": "Pilih grup",
       "groupNewPlaceholder": "Nama grup baru",
-      "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas."
+      "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas.",
+      "customProperties": "Properti kustom",
+      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak."
     },
     "detail": {
       "back": "Semua kontak",
@@ -1087,7 +1123,8 @@
         "moveDown": "Turunkan {name}",
         "edit": "Ubah {name}",
         "deactivate": "Nonaktifkan {name}",
-        "reactivate": "Aktifkan kembali"
+        "reactivate": "Aktifkan kembali",
+        "dependsOn": "Pilihan bergantung pada {field}"
       },
       "toast": {
         "conflict": "Orang lain telah mengubah ini. Daftar dimuat ulang; coba lagi.",
@@ -1243,6 +1280,34 @@
         "manageStages": "Kelola tahap",
         "manageGroups": "Kelola grup",
         "locked": "Tetap"
+      },
+      "cascade": {
+        "open": "Bidang bergantung",
+        "title": "Bidang bergantung",
+        "close": "Tutup",
+        "intro": "Bidang bergantung selalu ditampilkan. Pilihannya bergantung pada pilihan di properti induk: untuk setiap pilihan induk, centang pilihan bidang bergantung yang diizinkannya.",
+        "empty": "Belum ada bidang bergantung.",
+        "add": "Tambah bidang bergantung",
+        "needTwoChoiceFields": "Bidang bergantung memerlukan minimal dua properti dengan daftar pilihan (dropdown, multi-pilih, atau radio).",
+        "dependsOn": "bergantung pada {parent}",
+        "editLabel": "Edit {name}",
+        "removeLabel": "Hapus {name}",
+        "parent": "Properti induk",
+        "child": "Properti bergantung",
+        "pickParent": "Pilih properti induk",
+        "pickChild": "Pilih properti bergantung",
+        "allowed": "Pilihan {child} yang diizinkan untuk setiap pilihan {parent}",
+        "noParentChoices": "Properti induk belum punya pilihan.",
+        "noChildChoices": "Properti bergantung belum punya pilihan.",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "saved": "Bidang bergantung disimpan.",
+        "cycle": "Dependensi itu akan membuat dua properti saling menunggu.",
+        "removeTitle": "Hapus {name} dari bidang bergantung?",
+        "removeMessage": "Semua pilihannya akan ditampilkan lagi. Pilihan yang dimilikinya di bawah induk akan dilupakan; nilai yang dimiliki kontak tetap disimpan.",
+        "removeConfirm": "Hapus",
+        "removed": "Bidang bergantung dihapus.",
+        "removeFailed": "Bidang bergantung tidak bisa dihapus. Coba lagi."
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "Tutup",
         "changed": "Properti yang diubah",
         "clear": "Kosongkan",
-        "keep": "Pertahankan",
+        "remove": "Hapus {name}",
         "setValue": "Atur nilai",
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",
@@ -1399,7 +1464,8 @@
       "template": "Templat WhatsApp",
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
-      "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
+      "openInInbox": "Buka chat di kotak masuk",
+      "notSendable": "Templat ini tidak dapat dikirim dari sini.",
       "variables": "Variabel templat",
       "preview": "Pratinjau",
       "slot": "Variabel {key}",
@@ -1515,7 +1581,9 @@
         "selected": "Kolom terpilih",
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
-        "remove": "Hapus {name}"
+        "remove": "Hapus {name}",
+        "nameShort": "Nama tampilan minimal {min} karakter.",
+        "nameLong": "Nama tampilan maksimal {max} karakter."
       },
       "presets": {
         "myContacts": "Kontak saya",

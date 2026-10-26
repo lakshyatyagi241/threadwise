@@ -2,7 +2,11 @@ import type { WaChatLink, WaChatLinkStatus } from '@crm/contracts';
 import type { WaChatLinkRow } from './wa-chat-links.repository';
 
 /** `wa.me` URL: digits-only phone, country code re-prefixed with `+`. UTM fields are never appended (Reference parity). */
-export function buildWaUrl(countryCode: string, phoneNumber: string, welcomeMessage: string | null): string {
+export function buildWaUrl(
+  countryCode: string,
+  phoneNumber: string,
+  welcomeMessage: string | null,
+): string {
   const digits = `${countryCode}${phoneNumber}`.replace(/\D/g, '');
   const text = welcomeMessage ? `?text=${encodeURIComponent(welcomeMessage)}` : '';
   return `https://wa.me/${digits}${text}`;

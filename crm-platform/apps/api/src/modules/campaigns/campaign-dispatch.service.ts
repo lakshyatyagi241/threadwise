@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import {
   UNOFFICIAL_ENGINE,
@@ -6,6 +7,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { AppError } from '../../common/errors/app-error';
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate, ConsentPolicyService, purposeOfCategory } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -79,7 +81,7 @@ import {
   cleanSubject,
   isEmailProvider,
   isMailableAddress,
-  isWalletFree,
+  isUsageBilled,
   normalizeAddress,
   subjectSource,
 } from './email-campaign-rules';
@@ -183,12 +185,12 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
+    // Quiet hours (BL-177). Required, not optional: a sender built without it would send marketing inside the hours without a sign.
+    private readonly sendWindow: SendWindowService,
+    // BL-192: queues the catch-up of a recurring campaign's held recipients. Required for the same reason: held recipients would be stranded.
+    private readonly jobs: CampaignJobs,
     @Optional() private readonly consentPolicy?: ConsentPolicyService,
     @Optional() private readonly consentGate?: ConsentGate,
-    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
-    @Optional() private readonly sendWindow?: SendWindowService,
-    // BL-192: queues the catch-up of a recurring campaign's held recipients. Optional like the window: without it nothing is queued.
-    @Optional() private readonly jobs?: CampaignJobs,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -610,6 +612,10 @@ export class CampaignDispatchService {
     let heldCount = 0;
     let quietUntil: Date | null = null;
     const heldIds: number[] = [];
+    // The quiet-hours windows are read once per run, not once per batch. If that read fails, checkMany reads again and holds on failure.
+    const windowPolicy = o.marketing
+      ? await this.sendWindow.policy(orgId).catch(() => undefined)
+      : undefined;
 
     batches: for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
@@ -627,14 +633,14 @@ export class CampaignDispatchService {
       if (batch.length === 0) break;
 
       // One statement for the slice: whose local time is inside the workspace's quiet hours.
-      const windows =
-        o.marketing && this.sendWindow
-          ? await this.sendWindow.checkMany(
-              orgId,
-              'message',
-              batch.map((x) => x.contactId),
-            )
-          : null;
+      const windows = o.marketing
+        ? await this.sendWindow.checkMany(
+            orgId,
+            'message',
+            batch.map((x) => x.contactId),
+            { policy: windowPolicy },
+          )
+        : null;
 
       for (const [i, r] of batch.entries()) {
         const putBack = (rest: readonly ClaimedRecipient[]) =>
@@ -831,8 +837,9 @@ export class CampaignDispatchService {
     }
 
     // Free under the plan's monthly messages, else the wallet must cover this message: if not, the run stops (nothing is failed).
-    // SMS and email are never charged to the wallet, so an empty wallet does not stop them.
-    if (!isWalletFree(o.sender.engine)) {
+    // SMS and email are not priced by the WhatsApp rate card this check reads: their engines check the wallet themselves before each
+    // send (an empty wallet comes back from the send as WALLET_EMPTY, handled below), at the operator's SMS and email prices.
+    if (!isUsageBilled(o.sender.engine)) {
       const allowed = await this.billing.consume({ orgId, to, usedThisMonth: sentThisRun });
       if (!allowed) return 'wallet';
     }
@@ -886,6 +893,8 @@ export class CampaignDispatchService {
         providerMessageId = res.providerMessageId;
       }
     } catch (err) {
+      // The engine (SMS, email) found the wallet unable to pay for this message before sending it: the same stop as the check above.
+      if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) return 'wallet';
       if (err instanceof SenderThrottled) return { throttledMs: err.retryAfterMs };
       if (err instanceof SenderRefused) {
         await permanent(err.message);
@@ -1258,7 +1267,6 @@ export class CampaignDispatchService {
 
   /** Queues the catch-up of a recurring campaign for the instant its first held recipient may be messaged. */
   private async queueCatchUp(orgId: number, c: CampaignRow, at: Date): Promise<void> {
-    if (!this.jobs) return;
     const queued = await this.jobs.enqueue(
       orgId,
       c.id,

@@ -95,6 +95,18 @@ export function advanceFrom(
  */
 export function parkOrEnd(run: RunState): Transition {
   const menu = run.menus.latest;
+  if (menu && menu.listItems && menu.listItems.length > 0) {
+    return {
+      t: 'wait',
+      wait: {
+        nodeId: menu.nodeId,
+        variable: menu.variable || 'choice',
+        kind: 'List',
+        listItems: menu.listItems,
+        persistent: true,
+      },
+    };
+  }
   if (menu && menu.answerItems.length > 0) {
     return {
       t: 'wait',

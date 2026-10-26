@@ -1,0 +1,75 @@
+{
+  "feature": "message-history",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-message-history-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-history/components/detail-drawer.tsx",
+        "apps/web/src/features/message-history/components/message-history-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/message-history/components/message-history.render.test.tsx",
+          "match": "shows the loading and the error states"
+        }
+      ]
+    },
+    {
+      "id": "ES-message-history-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-history/components/detail-drawer.tsx",
+        "apps/web/src/features/message-history/components/message-history-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-message-history-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-history/api/history.ts",
+        "apps/web/src/features/message-history/components/detail-drawer.tsx",
+        "apps/web/src/features/message-history/components/export-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-message-history-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-message-history-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/message-history/components/export-panel.tsx",
+        "apps/web/src/features/message-history/components/filter-bar.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

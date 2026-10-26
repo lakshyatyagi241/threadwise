@@ -3,6 +3,9 @@
 import { useTranslations } from 'next-intl';
 import { Button, Menu, MenuItem, MenuLabel, MenuSeparator, Spinner } from '@crm/ui';
 import type { Member } from '../api/schemas';
+import { useTaskOutcomes } from '../api/hooks';
+import { useActivitySettings } from '@/features/sales-activities';
+import { clampOutcomeLabel } from '../lib/outcomes';
 import { CheckIcon, TrashIcon, UsersIcon } from './icons';
 
 export interface BulkBarProps {
@@ -12,7 +15,10 @@ export interface BulkBarProps {
   meId: string;
   canUpdate: boolean;
   canDelete: boolean;
-  onComplete: () => void;
+  /** On the Completed tab the bar re-opens instead of completing. */
+  completed: boolean;
+  /** Completes (on the Completed tab: re-opens) the selection; with an outcome id it records that outcome too. */
+  onComplete: (outcomeId?: string) => void;
   onAssign: (assigneeId: string | null) => void;
   onDelete: () => void;
   onClear: () => void;
@@ -21,6 +27,12 @@ export interface BulkBarProps {
 /** Appears over the table while rows are ticked: complete, assign to someone, delete. */
 export function BulkBar(p: BulkBarProps) {
   const t = useTranslations('tasks.bulk');
+  const outcomes = useTaskOutcomes(true);
+  const settings = useActivitySettings('task');
+  const outcomeList = outcomes.data ?? [];
+  const canPickOutcome = outcomeList.length > 0 && !(settings.loaded && !settings.outcomesEnabled);
+  const label = p.completed ? t('reopen') : t('complete');
+  const withLabel = p.completed ? t('reopenWithOutcome') : t('completeWithOutcome');
   return (
     <div
       role="region"
@@ -33,9 +45,24 @@ export function BulkBar(p: BulkBarProps) {
       {p.busy && <Spinner label={t('working')} />}
       {p.canUpdate && (
         <>
-          <Button size="sm" variant="secondary" disabled={p.busy} onClick={p.onComplete}>
-            <CheckIcon /> {t('complete')}
+          <Button size="sm" variant="secondary" disabled={p.busy} onClick={() => p.onComplete()}>
+            <CheckIcon /> {label}
           </Button>
+          {canPickOutcome && (
+            <Menu
+              label={withLabel}
+              disabled={p.busy}
+              triggerClassName="h-8 px-3"
+              trigger={<>{withLabel}</>}
+            >
+              <MenuLabel>{t('pickOutcome')}</MenuLabel>
+              {outcomeList.map((o) => (
+                <MenuItem key={o.id} onSelect={() => p.onComplete(o.id)}>
+                  <span title={o.name}>{clampOutcomeLabel(o.name)}</span>
+                </MenuItem>
+              ))}
+            </Menu>
+          )}
           <Menu
             label={t('assign')}
             disabled={p.busy}

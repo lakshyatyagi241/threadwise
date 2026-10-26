@@ -4,6 +4,7 @@ import {
   accessFor,
   availabilityFor,
   includedBy,
+  isMarketEntitlementKey,
   marketCheckoutPath,
   marketEntitlementKey,
   marketPackSlug,
@@ -61,8 +62,23 @@ export class PricingAccess {
   }
 
   async evaluator(orgId: number): Promise<(f: PricingFacts) => Promise<PricingEvaluation>> {
-    const vis = await this.visibility(orgId);
+    const e = await this.plans.forOrg(orgId);
+    const vis = visibilityOf(e);
     const planEnables = new Set(vis.appIds);
+    // The apps the operator set to Included on the plan whose offers apply (a lapsed paid plan's free fallback has its own).
+    const includedApps = new Set<number>();
+    if (e?.offerPlanSlug) {
+      const rows = await this.db.txAs({ orgId, userId: null }, (tx) =>
+        tx.execute(sql`
+          SELECT ap.marketplace_app_id::text AS app_id
+          FROM plan_addon_offers po
+          JOIN plans pl ON pl.id = po.plan_id AND pl.kind = 'plan' AND pl.slug = ${e.offerPlanSlug}
+          JOIN plans ap ON ap.id = po.addon_id AND ap.marketplace_app_id IS NOT NULL
+          WHERE po.mode = 'included'`),
+      );
+      for (const r of rows.rows as unknown as Array<{ app_id: string }>)
+        includedApps.add(Number(r.app_id));
+    }
     const features = new Map<string, Promise<boolean>>();
     const feature = (key: string) => {
       let p = features.get(key);
@@ -94,6 +110,12 @@ export class PricingAccess {
     return async (f) => {
       if (f.pricing.pricingModel === 'free')
         return { access: 'free', availability: 'open', includedBy: null, entitled: false };
+      // The app adds nothing the PLAN does not already carry: every plan feature it would grant is on from the plan alone (its own
+      // `mkt_` key aside, and ignoring every add-on and app, or a subscribed app would "include" itself).
+      const grantKeys = f.pricing.grantsPlanFeatures.filter((k) => !isMarketEntitlementKey(k));
+      const planCarriesGrants =
+        grantKeys.length > 0 &&
+        (await this.plans.includedByPlan(orgId, grantKeys)).size === grantKeys.length;
       const needsPlan = f.pricing.includedMinPlan !== null;
       const p = needsPlan ? await planFacts() : null;
       const by = includedBy({
@@ -105,6 +127,8 @@ export class PricingAccess {
         orgPlanSlug: p?.slug ?? null,
         planLapsed: p?.lapsed ?? false,
         catalogue: p?.catalogue ?? [],
+        planCarriesGrants,
+        planOfferIncluded: includedApps.has(f.appId),
       });
       const entitled = by ? false : await feature(marketEntitlementKey(f.slug));
       return {
@@ -123,6 +147,7 @@ export class PricingAccess {
           planVisible:
             vis.all ||
             planEnables.has(f.appId) ||
+            includedApps.has(f.appId) ||
             f.pricing.includedPlanFeature !== null ||
             f.pricing.includedMinPlan !== null,
           held: f.sub !== null || f.installed === true,

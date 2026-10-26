@@ -11,7 +11,8 @@
       "installed": "Installée · Marketplace",
       "manage": "Gérer l’application · Marketplace",
       "requests": "Demandes · Marketplace",
-      "addons": "Modules complémentaires · Marketplace"
+      "addons": "Modules complémentaires · Marketplace",
+      "developer": "Développeur · Marketplace"
     },
     "common": {
       "dismiss": "Fermer",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini-applications",
         "integration": "Intégrations",
-        "addon": "Modules complémentaires"
+        "addon": "Modules complémentaires",
+        "developer": "Développeur"
       },
       "installed": "Installées",
       "installedLimit": "Installées ({installed} sur {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Ouvrir",
       "empty": {
-        "title": "Aucun module complémentaire disponible",
-        "message": "Les modules inclus dans votre rôle et votre forfait apparaîtront ici."
+        "title": "Aucun outil pour développeurs disponible",
+        "message": "Les outils pour développeurs inclus dans votre rôle et votre offre apparaîtront ici."
       },
       "soon": "Bientôt",
       "upgrade": "Mettre à niveau"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Paiement annulé",
         "message": "Rien n’a été débité. Abonnez-vous de nouveau quand vous le souhaitez."
+      }
+    },
+    "addonsTab": {
+      "intro": "Des packs de fonctionnalités à acheter en plus de votre offre. Ce que votre offre inclut déjà est signalé et n’est pas facturé.",
+      "developerHint": "Vous cherchez l’API REST, les webhooks ou d’autres outils pour développeurs ?",
+      "developerLink": "Ouvrir l’onglet Développeur"
+    },
+    "developerTab": {
+      "intro": "Des outils pour les développeurs et les administrateurs techniques : clés d’API, webhooks, publication et traduction. Vous ne voyez que ceux que votre rôle et votre offre autorisent."
+    },
+    "connector": {
+      "builtIn": "Intégré",
+      "status": {
+        "connected": "Connecté",
+        "notConnected": "Non connecté",
+        "upgrade": "Mettre à niveau",
+        "soon": "Bientôt"
+      },
+      "cta": {
+        "open": "Ouvrir",
+        "manage": "Gérer",
+        "connect": "Connecter"
       }
     }
   }

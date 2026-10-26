@@ -2,6 +2,8 @@
 
 import { Button, Field, Input, Select, Spinner, Switch, Textarea, cn, useToast } from '@crm/ui';
 import { TimezoneCombobox } from '@/features/auth-registration-security/shared/timezone-combobox';
+import { AddonLockLink } from '@/features/plans-subscriptions-trials/components/addon-lock';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useTranslations } from 'next-intl';
 import { useId, useMemo, useState, type FormEvent } from 'react';
 import {
@@ -21,6 +23,7 @@ import {
   emptyTeamForm,
   formFromTeam,
   hoursProblem,
+  isMethodLocked,
   memberChanges,
   nameProblem,
   sameColor,
@@ -77,6 +80,9 @@ export function TeamEditorForm({
   const [hoursError, setHoursError] = useState(false);
   const [busy, setBusy] = useState(false);
   const devicesShown = showsDevicePicker(devices);
+  // Round robin and least loaded are automatic assignment (`inbox_routing`, the Smart routing add-on). A team that already stores one keeps it.
+  const autoMethodsInPlan = usePlanFeature('inbox_routing');
+  const storedMethod = team?.assignmentStrategy ?? 'manual';
   const patch = (p: Partial<TeamForm>) => setForm((f) => ({ ...f, ...p }));
 
   const people = useMemo(
@@ -421,20 +427,36 @@ export function TeamEditorForm({
               patch({ assignmentStrategy: e.target.value as TeamForm['assignmentStrategy'] })
             }
           >
-            {WSP_ASSIGNMENT_STRATEGIES.map((s) => (
-              <option key={s} value={s}>
-                {tt(`strategies.${s}`)}
-              </option>
-            ))}
+            {WSP_ASSIGNMENT_STRATEGIES.map((s) => {
+              const locked = isMethodLocked(autoMethodsInPlan, s, storedMethod);
+              return (
+                <option key={s} value={s} disabled={locked}>
+                  {locked
+                    ? t('handoff.methodLocked', { method: tt(`strategies.${s}`) })
+                    : tt(`strategies.${s}`)}
+                </option>
+              );
+            })}
           </Select>
+          {!autoMethodsInPlan && (
+            <p className="mt-1 text-xs text-warning" data-testid="team-method-lock">
+              {t('handoff.methodLockHint')} <AddonLockLink />
+            </p>
+          )}
         </Field>
         <Field
           label={t('handoff.defaultAssignee')}
           htmlFor={`${ids}-default-assignee`}
           hint={t('handoff.defaultAssigneeHint')}
         >
+          {!autoMethodsInPlan && (
+            <p className="mb-1 text-xs text-warning" data-testid="team-default-lock">
+              {t('handoff.defaultAssigneeLocked')} <AddonLockLink />
+            </p>
+          )}
           <Select
             id={`${ids}-default-assignee`}
+            disabled={!autoMethodsInPlan}
             value={form.defaultAssigneeId ?? ''}
             onChange={(e) => patch({ defaultAssigneeId: e.target.value || null })}
           >

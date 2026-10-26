@@ -8,6 +8,7 @@ import {
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { InvitationsService } from './invitations.service';
+import { Throttle } from '../platform-infrastructure';
 
 /** The invitee's two public calls (TW-WSP-016, 021). Rate limited per IP; every failure is the same 400 WSP_INVITE_INVALID. */
 @ApiTags('workspace-invitations')
@@ -16,6 +17,7 @@ export class InvitationsController {
   constructor(private readonly invitations: InvitationsService) {}
 
   @Public()
+  @Throttle('auth')
   @Get('preview')
   @ApiOperation({
     summary: 'Who invited whom to what, for the accept page (does not use the token up)',

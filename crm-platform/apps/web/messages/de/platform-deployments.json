@@ -91,6 +91,7 @@
       "empty": "Noch keine Version erfasst. Versionen erscheinen hier ab dem nächsten Deployment.",
       "cols": {
         "tag": "Tag",
+        "changes": "Änderungen",
         "state": "Status",
         "step": "Schritt",
         "started": "Gestartet",
@@ -104,7 +105,8 @@
         "ok": "Live",
         "failed": "Fehlgeschlagen",
         "rolled_back": "Zurückgerollt"
-      }
+      },
+      "by": "von {author}"
     }
   }
 }

@@ -1,6 +1,5 @@
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
-import { REMINDER_CONFIRM_BUTTONS_FEATURE } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
@@ -13,7 +12,7 @@ import {
   type InboundStoredEvent,
 } from '../chat-conversations';
 import { ContactActivitiesRepository } from '../crm';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { ReminderPlan } from './reminder-plan';
 import {
   AppointmentRemindersRepository,
   type ReplyAction,
@@ -74,7 +73,7 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
     private readonly booking: BookingService,
     private readonly support: AppointmentsSupport,
     private readonly activities: ContactActivitiesRepository,
-    private readonly entitlements: PlanEntitlementService,
+    private readonly plan: ReminderPlan,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -84,9 +83,9 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
 
   // --- out ----------------------------------------------------------------------------------------------------------------------
 
-  /** Whether the workspace's plan includes the buttons. */
+  /** Whether the workspace's plan includes the buttons (the upgrade tier of the Appointments app). */
   async buttonsAllowed(orgId: number): Promise<boolean> {
-    return this.entitlements.featureEnabled(orgId, REMINDER_CONFIRM_BUTTONS_FEATURE);
+    return (await this.plan.parts(orgId)).buttons;
   }
 
   /**

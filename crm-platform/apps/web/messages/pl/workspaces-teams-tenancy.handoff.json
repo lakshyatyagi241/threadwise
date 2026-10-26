@@ -5,7 +5,7 @@
         "title": "Przekazanie i przypisywanie",
         "hint": "Używane, gdy bot, przepływ lub współpracownik przekazuje rozmowę temu zespołowi.",
         "method": "Jak wybrać osobę",
-        "methodHint": "Ręcznie: rozmowa czeka w kolejce zespołu, aż ktoś ją przejmie. Round robin i Najmniej obciążony wybierają członka za Ciebie i wymagają planu z regułami przypisywania.",
+        "methodHint": "Ręcznie: rozmowa czeka w kolejce zespołu, aż ktoś ją przejmie. Rotacyjnie i Najmniej obciążony wybierają członka za Ciebie i są częścią dodatku Inteligentne kierowanie.",
         "defaultAssignee": "Domyślny odbiorca",
         "defaultAssigneeHint": "Przejmuje rozmowę, gdy nikt inny nie może. Wybierz jednego z członków zespołu.",
         "noDefaultAssignee": "Nikt konkretny",
@@ -23,7 +23,10 @@
           "fri": "Piątek",
           "sat": "Sobota",
           "sun": "Niedziela"
-        }
+        },
+        "methodLocked": "{method} (wymaga Inteligentnego kierowania)",
+        "methodLockHint": "Metody automatyczne są częścią dodatku Inteligentne kierowanie lub wyższego planu.",
+        "defaultAssigneeLocked": "Domyślna osoba jest używana tylko przy automatycznej metodzie zespołu, która jest częścią dodatku Inteligentne kierowanie lub wyższego planu."
       }
     }
   }

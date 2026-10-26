@@ -1,0 +1,127 @@
+{
+  "feature": "calling-voice",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-calling-voice-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/call-analytics-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-log-detail-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-logs-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/calling-voice/components/call-logs.render.test.tsx",
+          "match": "an empty timeline, loading, not found and a failed load"
+        },
+        {
+          "file": "apps/web/src/features/calling-voice/lib/webrtc-peer.test.ts",
+          "match": "keeps the teardown going when the upload fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-calling-voice-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/api/call-logs.ts",
+        "apps/web/src/features/calling-voice/api/calling.ts",
+        "apps/web/src/features/calling-voice/api/readiness.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-calling-voice-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/call-log-detail-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/calling-voice/components/call-logs.render.test.tsx",
+          "match": "an empty timeline, loading, not found and a failed load"
+        }
+      ]
+    },
+    {
+      "id": "ES-calling-voice-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/api/calling.ts",
+        "apps/web/src/features/calling-voice/components/call-analytics-screen.tsx",
+        "apps/web/src/features/calling-voice/components/call-button.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-calling-voice-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/use-error-text.ts",
+        "apps/web/src/features/calling-voice/lib/readiness.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-calling-voice-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/components/calling-provider.tsx",
+        "apps/web/src/features/calling-voice/lib/calls.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/calling-voice/lib/calls.test.ts",
+          "match": "recognises a permission request and a state conflict by code or status"
+        },
+        {
+          "file": "apps/web/src/features/calling-voice/lib/webrtc-peer.test.ts",
+          "match": "tears down without a terminate when a teammate took the call (409)"
+        }
+      ]
+    },
+    {
+      "id": "ES-calling-voice-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/calling-voice/api/call-logs.ts",
+        "apps/web/src/features/calling-voice/lib/calls.ts",
+        "apps/web/src/features/calling-voice/lib/webrtc-peer.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

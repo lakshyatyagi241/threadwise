@@ -12,4 +12,6 @@ export { TemplatesRepository, type TemplateRow } from './templates.repository';
 export * from './template-linter';
 export * from './template-payload';
 export * from './template-variables';
+export { BUILDABLE_TYPES } from './template-input';
+export { metaEditBlockOf } from './meta-edit-rules';
 export type { FlowTemplate } from './flow-template';

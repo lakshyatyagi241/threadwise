@@ -32,6 +32,8 @@ import { FaqNodes } from './runtime/nodes/ai/faq-node';
 import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
 import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
+import { FLOW_MEDIA_STORE } from '../../infra/providers/flow-builder-editor/flow-media.port';
+import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor/local-flow-media.adapter';
 import { ApiLibraryNodes } from './runtime/nodes/integrations/api-library-node';
 import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
 import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
@@ -64,6 +66,8 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     CryptoService,
     ApiKeyGuard,
     SafeFetch,
+    // The store a builder upload went to, so the runtime reads its own files back instead of fetching them over the web.
+    { provide: FLOW_MEDIA_STORE, useClass: LocalFlowMediaAdapter },
     CapTally,
     PacingRuntime,
     RunRepository,

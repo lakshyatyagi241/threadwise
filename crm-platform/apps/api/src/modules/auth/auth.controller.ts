@@ -27,6 +27,7 @@ import { clientMeta } from './support/client-meta';
 import { WorkspaceSwitchService } from './flows/workspace-switch.service';
 import { AllowWhileGated } from './guards/auth-gates';
 import { AuthSettingsService } from './platform/auth-settings.service';
+import { Throttle } from '../platform-infrastructure';
 
 const partnerLoginSchema = z.object({
   orgSlug: z.string().min(1),
@@ -95,6 +96,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('login/mfa')
   @ApiOperation({ summary: 'Complete a sign-in with an authenticator or recovery code' })
   async signInMfa(@Body(zodPipe(mfaLoginRequestSchema)) body: MfaLoginRequest) {
@@ -102,6 +104,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('login/mfa/webauthn-options')
   @ApiOperation({ summary: 'Options for signing in with a passkey at the second-factor step' })
   async signInPasskeyOptions(
@@ -111,6 +114,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('login/workspace')
   @ApiOperation({
     summary: 'Pick the workspace after a sign-in that matched several',
@@ -122,6 +126,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('partner/login')
   @ApiOperation({ summary: 'Sub-agent / channel-partner portal login' })
   @ApiBody({
@@ -151,6 +156,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle({ limit: 60, windowSeconds: 60, by: 'ip' })
   @Post('refresh')
   @ApiOperation({ summary: 'Rotate a refresh token' })
   async refresh(@Body(zodPipe(refreshRequestSchema)) body: z.infer<typeof refreshRequestSchema>) {

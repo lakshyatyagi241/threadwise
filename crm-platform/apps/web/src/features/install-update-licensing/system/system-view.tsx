@@ -97,7 +97,7 @@ function LicenceCard({ data }: { data: SystemStatusResponse }) {
 
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'short' }),
-    [locale],
+    [locale, timeZone],
   );
 
   return (
@@ -187,7 +187,7 @@ export function SystemView() {
   });
   const when = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium', timeStyle: 'medium' }),
-    [locale],
+    [locale, timeZone],
   );
   const stamp = (iso: string | null) => (iso ? when.format(new Date(iso)) : t('release.none'));
   const data = q.data;
@@ -217,7 +217,7 @@ export function SystemView() {
             {t('kicker')}
           </div>
           <h1 className="font-serif text-[28px] font-normal leading-none tracking-[-0.01em] sm:text-[40px]">
-            {t.rich('titleRich', { i: (c) => <span className="italic text-brand">{c}</span> })}
+            {t.rich('titleRich', { i: (c) => <span className="not-italic text-brand">{c}</span> })}
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('description')}</p>
         </div>

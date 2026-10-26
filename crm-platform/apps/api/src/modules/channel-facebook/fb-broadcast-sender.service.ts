@@ -20,7 +20,7 @@ import {
 import { FbBroadcastsRepository, type FbBroadcastRow } from './fb-broadcasts.repository';
 import { TOKEN_INVALID_MESSAGE, clipError, isTokenError } from './page-rules';
 import { PagesRepository } from './pages.repository';
-import type { FbBroadcastJob } from './fb-broadcasts.service';
+import { MODULE_KEY, type FbBroadcastJob } from './fb-broadcasts.service';
 import { QUEUES } from '../../infra/queue/queues';
 import {
   HELD_TABLES,
@@ -30,6 +30,7 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
+import { ChatUsageReporter, type BroadcastUsageRef } from '../chat-conversations';
 import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type FbRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
@@ -38,6 +39,13 @@ const GONE = 'The Page this broadcast belongs to is no longer connected.';
 const OUTSIDE = 'Outside the 24-hour messaging window.';
 const OUTSIDE_AFTER_HOLD =
   'Outside the 24-hour messaging window (it closed while the message waited for the quiet hours to end).';
+
+const usageRef = (b: FbBroadcastRow): BroadcastUsageRef => ({
+  module: MODULE_KEY,
+  id: b.id,
+  uuid: b.uuid,
+  name: b.name,
+});
 
 /**
  * Sends one Messenger broadcast (TW-FB-013), run by the `fb-broadcast` worker job. People are claimed in batches of 25 with
@@ -54,6 +62,9 @@ const OUTSIDE_AFTER_HOLD =
  * Consent (BL-141): every batch asks the ConsentGate first (purpose marketing, channel facebook), so the first send is screened like a
  * release is. A broadcast is marketing even inside the 24 hour window: that window decides whether Meta lets the Page write, not whether
  * the person agreed to marketing. Someone the gate refuses is `blocked` with `Not messaged: consent (<reason>)`.
+ *
+ * Every message Meta accepts is the platform's per-message fee (`chat_message` in the usage prices), reported per person on the message
+ * id Meta returned. Before each batch the wallet is asked: when it cannot pay, the run stops with nobody failed (see `waitForWallet`).
  */
 @Injectable()
 export class FbBroadcastSenderService {
@@ -72,6 +83,7 @@ export class FbBroadcastSenderService {
     @InjectQueue(QUEUES.FB_BROADCAST) private readonly queue: Queue<FbBroadcastJob>,
     @Inject(FACEBOOK_GRAPH) private readonly graph: FacebookGraphFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
+    private readonly usage: ChatUsageReporter,
   ) {}
 
   async run(orgId: number, broadcastId: number): Promise<FbRunResult> {
@@ -105,6 +117,11 @@ export class FbBroadcastSenderService {
       // A token Meta revoked mid-run flags the Page; the next batch finds it and stops (Reference stopped the same way).
       page = await livePage();
       if (page?.status !== 'connected') return this.fail(orgId, broadcastId, GONE);
+
+      // The whole batch is asked for, not one message: its fees settle a moment after the send, so a wallet of one message must not
+      // pass the check for a batch of hundreds.
+      const noMoney = await this.usage.refusal(orgId, BATCH_SIZE);
+      if (noMoney) return this.waitForWallet(orgId, broadcastId, noMoney);
 
       const batch = await this.db.txAs({ orgId }, (tx) =>
         this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE, lastId),
@@ -155,6 +172,12 @@ export class FbBroadcastSenderService {
         if (res.ok) {
           const mid = res.data?.messageId || null;
           await this.mark(orgId, r.id, { status: 'sent', providerMessageId: mid });
+          await this.usage.reportMessage(orgId, usageRef(current), {
+            channelKind: 'facebook',
+            peerKey: r.psid,
+            // A send that came back without a message id is billed on the recipient row.
+            providerMessageId: mid ?? `${current.uuid}:${r.id}`,
+          });
           if (r.conversationId !== null) {
             await this.mirror(orgId, current.uuid, r.conversationId, text, mid);
           }
@@ -215,6 +238,26 @@ export class FbBroadcastSenderService {
         'facebook broadcast mirror failed',
       );
     }
+  }
+
+  /**
+   * The wallet cannot pay for the next message. Nobody is failed and nobody is lost: what is left stays pending, the reason is kept on the
+   * broadcast and it goes back to a draft, which is what Pause does; Start continues it after a top-up.
+   */
+  private async waitForWallet(
+    orgId: number,
+    broadcastId: number,
+    why: string,
+  ): Promise<FbRunResult> {
+    await this.db.txAs({ orgId }, async (tx) => {
+      await this.repo.recompute(tx, orgId, broadcastId);
+      await this.repo.setStatus(tx, orgId, broadcastId, 'draft', { lastError: why.slice(0, 255) });
+    });
+    this.logger.warn(
+      { orgId, broadcastId },
+      '[FB] broadcast stopped: the wallet cannot pay for the next message',
+    );
+    return 'stopped';
   }
 
   private async fail(orgId: number, broadcastId: number, why: string): Promise<FbRunResult> {

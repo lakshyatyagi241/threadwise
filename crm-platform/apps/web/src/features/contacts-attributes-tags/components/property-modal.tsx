@@ -42,6 +42,7 @@ import {
   LABEL_MAX,
   OPTION_LABEL_MAX,
   checkDraft,
+  conditionRulesOf,
   diffConditions,
   diffOptions,
   draftFromField,
@@ -71,6 +72,10 @@ export interface PropertyModalProps {
   dependencies: readonly FieldDependencyResponse[];
   /** The module the property belongs to (default contacts). */
   moduleKey?: ModuleKey;
+  /** Called with the property once it is saved (made or changed), before the dialog closes. */
+  onSaved?: (field: FieldResponse) => void;
+  /** Offer only these types for a new property (the bot builder asks for ones that can hold what a step collects). */
+  allowedTypes?: readonly FieldType[];
   onClose: () => void;
 }
 
@@ -98,6 +103,8 @@ function PropertyForm({
   fields,
   dependencies,
   moduleKey = 'contacts',
+  onSaved,
+  allowedTypes,
   onClose,
 }: PropertyModalProps) {
   const t = useTranslations('contacts-attributes-tags.properties');
@@ -111,7 +118,14 @@ function PropertyForm({
   const lazyOptions = field !== undefined && hasLazyOptions(field);
 
   const [draft, setDraft] = useState<PropertyDraft>(() =>
-    field ? draftFromField(field, dependencies) : emptyDraft(sectionId ?? sections[0]?.id ?? ''),
+    field
+      ? draftFromField(field, dependencies)
+      : {
+          ...emptyDraft(sectionId ?? sections[0]?.id ?? ''),
+          ...(allowedTypes?.length && !allowedTypes.includes('text')
+            ? { type: allowedTypes[0]! }
+            : {}),
+        },
   );
   const [keyTouched, setKeyTouched] = useState(false);
   const [newOption, setNewOption] = useState('');
@@ -122,7 +136,8 @@ function PropertyForm({
   const takenKeys = useMemo(() => new Set(fields.map((f) => f.key)), [fields]);
   const problems = shown ? checkDraft(draft, { editing, takenKeys, lazyOptions }) : {};
   const others = fields.filter((f) => f.id !== field?.id && f.isActive);
-  const savedDeps = dependencies.filter((d) => d.fieldId === field?.id);
+  // The saved "show only when" rules; a cascade link is left alone by this form (the Dependent fields dialog owns it).
+  const savedDeps = field ? conditionRulesOf(field.id, dependencies) : [];
 
   const save = useMutation({
     mutationFn: async () => {
@@ -160,9 +175,10 @@ function PropertyForm({
       }
       return target;
     },
-    onSuccess: async () => {
+    onSuccess: async (saved) => {
       await invalidateProperties(qc);
       toast(editing ? t('modal.updated') : t('modal.created'), 'success');
+      onSaved?.(saved);
       onClose();
     },
     onError: () => void invalidateProperties(qc),
@@ -269,7 +285,7 @@ function PropertyForm({
             {editing && !(CREATABLE_TYPES as readonly string[]).includes(draft.type) && (
               <option value={draft.type}>{t(`types.${draft.type}`)}</option>
             )}
-            {CREATABLE_TYPES.map((x) => (
+            {CREATABLE_TYPES.filter((x) => !allowedTypes || allowedTypes.includes(x)).map((x) => (
               <option key={x} value={x}>
                 {t(`types.${x}`)}
               </option>

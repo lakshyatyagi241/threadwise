@@ -555,7 +555,8 @@
           "cardCount": "{count} 张卡片",
           "payLink": "支付链接",
           "invoice": "发票",
-          "faqRetired": "已停用 · 从“无匹配”离开"
+          "faqAgent": "从 {agent} 回答",
+          "faqNoAgent": "选择 AI 代理"
         },
         "overlays": {
           "startPinned": "这是起点（点击取消固定）",
@@ -746,7 +747,8 @@
           "storedIn": "值将保存到联系人的 <b>{property}</b> 属性中",
           "actions": "操作",
           "actionsHint": "添加一个紧接在此步骤之后运行的步骤。",
-          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。"
+          "actionsBlocked": "结束本部分的步骤后面不能再接其他步骤。",
+          "fromSteps": "从步骤 {stages} 到达"
         },
         "editors": {
           "linkLabel": "后续去向",
@@ -858,7 +860,13 @@
             "choose": "选择模板…",
             "buttons": "按钮",
             "variables": "由联系人信息填充",
-            "variablesHint": "每个编号会在发送消息时用此处所示的联系人信息填充。请在模板中修改。"
+            "variablesHint": "每个编号会在发送消息时用此处所示的联系人信息填充。请在模板中修改。",
+            "fills": "每个编号填入的内容",
+            "fillsHint": "选择联系人信息或流程变量，或输入你自己的文本。留空则使用模板中的设置。",
+            "fillPick": "插入信息…",
+            "headerMedia": "标题文件",
+            "headerMediaHint": "此模板标题中的图片、视频或文件。模板没有自带文件时必须提供。",
+            "headerMediaMissing": "请添加标题文件：此模板没有文件，没有它 WhatsApp 不会发送。"
           },
           "cta": {
             "buttonText": "按钮文字",
@@ -897,7 +905,15 @@
               "phone": "拨打号码",
               "email": "发送电子邮件",
               "agent": "与真人交谈"
-            }
+            },
+            "prev": "上一张卡片",
+            "next": "下一张卡片",
+            "goTo": "卡片 {n}",
+            "saveCopy": "保存副本",
+            "saveCopyHint": "将此图片保存到我们的服务器，使每位访客的聊天都能显示。拒绝共享的网站上的图片无法复制，请改为上传。",
+            "saving": "正在保存…",
+            "copyFailed": "无法保存副本：{message}",
+            "imageFormats": "支持的格式：JPG、JPEG 或 PNG。"
           },
           "condition": {
             "info": "添加规则（变量、比较和值）。用 AND 或 OR 连接，需要时可嵌套分组。",
@@ -908,12 +924,16 @@
             "hint": "访客会连同您的备注转交给该团队。此按钮之后无需连接任何内容。"
           },
           "faq": {
-            "exit": "继续到",
-            "exitHint": "流程始终从这里继续。"
+            "exit": "没有匹配时",
+            "exitHint": "没有条目能回答时，流程走向哪里。",
+            "matched": "有回答时",
+            "matchedHint": "发送回答后，流程走向哪里。"
           }
         },
         "branchAdd": "为“{title}”添加步骤",
-        "faqEnds": "这个已停用的步骤会结束这一部分：流程始终从它的“无匹配”出口继续。"
+        "faqEnds": "此步骤到此结束：流程从“已回答”或“无匹配”出口继续。",
+        "flowMenu": "{name} 的选项",
+        "renameFlow": "重命名流程"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value}（不在工作区中）",
           "templateLabel": "已审核通过的模板",
           "templateHint": "此处仅显示工作区中已审核通过的模板。<link>创建新模板 →</link>",
+          "statusExits": "添加状态出口（已发送、已送达、已读、已回复、失败）",
+          "statusExitsHint": "流程会从第一个已连接步骤的出口离开：模板一经接受即为“已发送”，WhatsApp 报告后为“已送达”或“已读”，客户回复时为“已回复”，无法发送时为“失败”。客户点击的按钮会从它自己的出口离开。",
           "type": "类型",
           "kindText": "文本",
           "kindImage": "图片",
@@ -1364,12 +1386,12 @@
           "stageHint": "当交易被移入此管道阶段时，其关联的联系人会被加入。请在 /deals 看板上管理阶段。",
           "rulesLabel": "绑定评论关键词规则",
           "rulesHint": "勾选应启动此流程的规则。全部不勾选则对任何“评论 → 私信”规则都运行。",
-          "rulesNone": "暂无“评论 → 私信”关键词规则。请在 <link>/auto-reply</link> 创建（Instagram · 触发器“评论 → 私信”），然后在此选择。",
+          "rulesNone": "暂无“评论 → 私信”关键词规则，因此此处没有可选择的内容。",
           "ruleFallback": "规则 {id}",
           "ruleOff": "关",
           "orderPlaced": "每个新订单都会触发。订单的客户会与已保存的联系人匹配并被加入。",
           "automatic": "自动触发，无需额外配置。",
-          "away": "在<b>离开模式</b>开启期间，任何收到的消息都会触发。请在<link>自动回复</link>页面切换离开模式。每位联系人只会被加入一次。",
+          "away": "在<b>离开模式</b>开启期间，任何收到的消息都会触发。每位联系人只会被加入一次。",
           "outOfHours": "任何在<b>工作区营业时间之外</b>收到的消息都会触发。请在工作区设置中设置营业时间。每位联系人只会被加入一次。",
           "manualEnroll": "您将通过此流程旁的<b>加入</b>按钮，从<link>/flows 列表</link>手动加入联系人。",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "等待付款后继续"
         },
         "faq": {
-          "retired": "此步骤已停用，不再查找任何内容。流程始终从“无匹配”继续。若要用你自己的知识回答，请使用 AI 助手步骤并选择一个 AI 智能体。"
+          "agent": "AI 代理",
+          "agentHint": "要搜索其知识库的代理。请在 AI 训练中为它添加常见问题。",
+          "query": "搜索内容",
+          "queryHint": "要查找的内容。通常是客户的最后一条消息。",
+          "sendAnswer": "将回答发送给客户",
+          "variable": "回答保存为",
+          "variableHint": "后续步骤用此名称读取回答，例如 faq.answer。"
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "流程分区",
         "build": "构建",
+        "faqs": "常见问题",
         "customize": "自定义",
         "saveFirst": "请先保存流程。",
         "needsCustomizing": "小组件仍在使用默认外观。请打开“自定义”。",
@@ -1933,6 +1962,13 @@
         "deploy": "部署",
         "customizeFirstWhatsapp": "发布前，请先自定义 WhatsApp 按钮并保存一次。",
         "install": "安装"
+      },
+      "faqsPanel": {
+        "intro": "常见问题是 AI 代理知识中的条目。这里的属于此流程用来回答的代理：在此添加问答，代理就会使用。",
+        "noAgent": "此流程尚未使用 AI 代理。添加“AI 助手”或“从常见问题回答”步骤并选择代理，它的常见问题会显示在这里。",
+        "agent": "AI 代理",
+        "openAgent": "在 AI 训练中打开",
+        "unknownAgent": "AI 代理（未找到）"
       },
       "buttonIcon": {
         "label": "图标(可选)",
@@ -2021,6 +2057,12 @@
           "unresolved": "尚未查询此短链接。请点击输入框以外的地方或重试。",
           "resolve_failed": "无法读取此链接。请检查它能否在 Google 地图中打开，或改为输入坐标。"
         }
+      },
+      "flowImage": {
+        "title": "图片未加载",
+        "empty": "链接为空",
+        "notAddress": "链接不是网址（必须以 https:// 开头）",
+        "failed": "加载失败（链接可能有误、为私有、被阻止或不是图片）"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "数字",
         "alphanumeric": "字母和数字",
         "date": "日期",
+        "datetime": "日期和时间",
+        "time": "时间",
         "age": "年龄",
         "date_of_birth": "出生日期"
       },
@@ -2343,6 +2387,8 @@
         "number": "请输入有效的数字",
         "alphanumeric": "请仅使用字母和数字",
         "date": "请输入有效的日期（{format}）",
+        "datetime": "请输入有效的日期和时间（{format} HH:MM）",
+        "time": "请输入有效的时间（HH:MM）",
         "age": "请以整数输入您的年龄",
         "date_of_birth": "请输入有效的日期({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "提问",
           "help": "提出任何问题并保存回答"
         },
-        "askName": {
-          "label": "姓名",
-          "help": "询问姓名并进行校验"
-        },
-        "askEmail": {
-          "label": "邮箱",
-          "help": "询问邮箱地址并进行校验"
-        },
-        "askPhone": {
-          "label": "电话号码",
-          "help": "询问电话号码并进行校验"
-        },
-        "askNumber": {
-          "label": "数字",
-          "help": "询问数字并进行校验"
-        },
-        "askAlphanumeric": {
-          "label": "字母和数字",
-          "help": "ID 或代码，不含空格或符号"
-        },
-        "askDate": {
-          "label": "日期",
-          "help": "按所选格式询问日期"
-        },
         "askFile": {
           "label": "文件或图片",
           "help": "等待照片、文档、视频或音频"
@@ -2617,7 +2639,9 @@
         "writeCode": "步骤 {stage}：请编写要运行的代码。",
         "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。",
         "chooseAiAgent": "步骤 {stage}：请选择负责回复的 AI 智能体，或将此步骤切换为自定义设置。",
-        "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。"
+        "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。",
+        "templateFile": "步骤 {stage}：添加模板的标题文件。",
+        "fileLinkInvalid": "步骤 {stage}：文件链接必须以 https:// 开头"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "模拟购买：{name} → 出口 \"purchased\"",
       "simAbandon": "模拟放弃 → 出口 \"abandoned\"",
       "locationSkipped": "（位置）已跳过：没有有效的坐标",
-      "faqRetired": "（模拟）“从常见问题回答”已停用：走“无匹配”。"
+      "faqLine": "（模拟）从常见问题回答：测试聊天不会搜索知识库，按“无匹配”处理。",
+      "carouselNoMatch": "“{value}”不是其中的按钮。请点选一个按钮，或准确输入按钮上的文字。"
     }
   }
 }

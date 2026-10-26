@@ -150,11 +150,14 @@
     },
     "source": {
       "inbox": "받은 편지함",
+      "contact": "연락처",
       "flow": "플로우",
       "auto_reply": "자동 응답",
+      "automation": "자동화",
       "ai": "AI 어시스턴트",
       "api": "API",
       "broadcast": "단체 발송",
+      "broadcast_test": "브로드캐스트 테스트 발송",
       "campaign": "캠페인",
       "scheduled": "예약",
       "other": "기타"
@@ -171,6 +174,7 @@
         "contact": "연락처",
         "message": "메시지",
         "type": "유형",
+        "source": "출처",
         "status": "상태",
         "open": "열기"
       },
@@ -228,11 +232,13 @@
       "source": "발송 주체",
       "sourceValue": {
         "inbox": "받은 편지함",
+        "contact": "연락처",
         "flow": "플로우",
         "auto_reply": "자동 응답",
         "ai": "AI 어시스턴트",
         "api": "API",
         "broadcast": "단체 발송",
+        "broadcast_test": "브로드캐스트 테스트 발송",
         "campaign": "캠페인",
         "scheduled": "예약 메시지",
         "other": "기타"

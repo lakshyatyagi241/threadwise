@@ -335,8 +335,7 @@ const SHAPERS: Record<string, Shaper> = {
 
   faq: (d) => ({
     query: s(d.query, '{{user_message}}'),
-    category: s(d.category).trim(),
-    minScore: isNil(d.minScore) || d.minScore === '' ? null : Number(d.minScore),
+    assistant: s(d.assistant),
     sendAnswer: isNil(d.sendAnswer) ? true : toBool(d.sendAnswer),
     variable: variableFrom(d, 'save', 'faq'),
   }),
@@ -572,6 +571,8 @@ const SHAPERS: Record<string, Shaper> = {
     longitude: flbParseCoordinate(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
+    // A link-mode step sends its pin without the name and address, so Maps cannot look the place up by them.
+    locMode: s(d.locMode),
   }),
 
   poll: (d) => ({

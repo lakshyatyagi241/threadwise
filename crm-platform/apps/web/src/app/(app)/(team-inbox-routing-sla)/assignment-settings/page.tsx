@@ -1,5 +1,6 @@
-import { HandoffSettingsScreen } from '@/features/team-inbox-routing-sla/components/handoff-settings-screen';
+import { redirect } from 'next/navigation';
 
+/** The handoff and owner settings now sit under Advanced on the Auto-assignment page; the old address keeps working. */
 export default function AssignmentSettingsPage() {
-  return <HandoffSettingsScreen />;
+  redirect('/auto-assignment');
 }

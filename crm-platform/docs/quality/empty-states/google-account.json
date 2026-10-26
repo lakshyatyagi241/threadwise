@@ -1,0 +1,63 @@
+{
+  "feature": "google-account",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-google-account-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-google-account-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/google-account/components/google-account-screen.tsx",
+        "apps/web/src/features/google-account/components/google-consent-confirm.tsx",
+        "apps/web/src/features/google-account/lib/model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-google-account-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/google-account/api/google-account.ts",
+        "apps/web/src/features/google-account/components/google-account-screen.tsx",
+        "apps/web/src/features/google-account/components/google-consent-confirm.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/google-account/components/google-account-screen.test.tsx",
+          "match": "tells a role without the read permission so, and shows nothing of the account"
+        },
+        {
+          "file": "apps/web/src/features/google-account/lib/model.test.ts",
+          "match": "ticks the permissions that need no Google review, and the file list the pickers need, when not allowed yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-google-account-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

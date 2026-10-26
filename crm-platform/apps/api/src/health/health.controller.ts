@@ -14,6 +14,7 @@ import type { Response } from 'express';
 import { Public } from '../common/decorators';
 import { isDependencyOutage } from '../common/errors/dependency-outage';
 import { DatabaseService } from '../infra/db/database.service';
+import { HealthDb } from '../infra/db/side-pools';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
 import {
   SkipThrottle,
@@ -80,6 +81,7 @@ export class HealthController {
 
   constructor(
     private readonly db: DatabaseService,
+    private readonly healthDb: HealthDb,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly workerStatus: WorkerStatusService,
   ) {}
@@ -98,6 +100,16 @@ export class HealthController {
   @Get('ready')
   @ApiOperation({ summary: 'Readiness — dependencies reachable (503 when not)' })
   async readiness(@Res({ passthrough: true }) res: Response) {
+    // Concurrent probes share one in-flight check: a burst of probes (or a scraper) costs the database one SELECT 1, not one per request.
+    this.inflight ??= this.runReadiness().finally(() => (this.inflight = undefined));
+    const { ready, body } = await this.inflight;
+    res.status(ready ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE);
+    return body;
+  }
+
+  private inflight?: Promise<{ ready: boolean; body: object }>;
+
+  private async runReadiness() {
     const [primary, replica, redis, { workers, outbox }] = await Promise.all([
       this.checkPrimary(),
       this.checkReplica(),
@@ -109,16 +121,15 @@ export class HealthController {
     // (a deploy in progress, a crashed worker) still serves requests, and pulling it from rotation would turn a background
     // problem into an outage. The deploy health gate and the container healthcheck read the status code only.
     const ready = primary.status === 'up' && redis.status === 'up';
-    res.status(ready ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE);
-
     return {
-      status: ready ? 'ok' : 'degraded',
-      checks: { primary, replica, redis, workers, outbox },
+      ready,
+      body: { status: ready ? 'ok' : 'degraded', checks: { primary, replica, redis, workers, outbox } },
     };
   }
 
   private checkPrimary(): Promise<DependencyCheck> {
-    return check(() => this.db.primary.execute(sql`SELECT 1`));
+    // The reserved pool: the probe must say "down" only when the database is, not when the shared pool is busy with other work.
+    return check(() => this.healthDb.ping());
   }
 
   /**

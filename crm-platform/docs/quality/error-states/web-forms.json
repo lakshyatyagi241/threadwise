@@ -1,0 +1,123 @@
+{
+  "feature": "web-forms",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-web-forms-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/forms-screen.tsx",
+        "apps/web/src/features/web-forms/components/new-form-dialog.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-web-forms-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/forms-screen.tsx",
+        "apps/web/src/features/web-forms/components/submissions-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-web-forms-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/lib/errors.ts",
+        "apps/web/src/features/web-forms/lib/public-paths.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/components/forms-screens.render.test.tsx",
+          "match": "shows a clear message for a form that was not found"
+        }
+      ]
+    },
+    {
+      "id": "ES-web-forms-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/api/forms.ts",
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/forms-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/lib/settings-model.test.ts",
+          "match": "keeps what still fits when the mode changes"
+        }
+      ]
+    },
+    {
+      "id": "ES-web-forms-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/lib/errors.ts",
+        "apps/web/src/features/web-forms/public/api.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-web-forms-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/share-tab.tsx",
+        "apps/web/src/features/web-forms/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/components/share-tab.render.test.tsx",
+          "match": "reports a version conflict apart from any other failure"
+        }
+      ]
+    },
+    {
+      "id": "ES-web-forms-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/form-renderer.tsx",
+        "apps/web/src/features/web-forms/components/forms-screen.tsx",
+        "apps/web/src/features/web-forms/components/share-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

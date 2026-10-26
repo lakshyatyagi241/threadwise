@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import type { WorkspaceSettingsResponse } from '@crm/contracts';
 import { Alert, Button, Card, Field, Input, Select, Spinner, Switch } from '@crm/ui';
 import { WorkingHoursCard } from './working-hours-card';
+import { TimezoneCombobox } from './timezone-combobox';
 import {
   usePreferences,
   useSavePreferences,
@@ -63,18 +64,13 @@ function GeneralForm({ data }: { data: WorkspaceSettingsResponse }) {
               <Input id="ws-slug" value={data.slug} disabled className="font-mono" readOnly />
             </Field>
             <Field label={t('timezone')} htmlFor="ws-tz" hint={t('timezoneHint')}>
-              <Select
+              <TimezoneCombobox
                 id="ws-tz"
                 value={timezone}
+                zones={zones}
                 disabled={locked}
-                onChange={(e) => setTimezone(e.target.value)}
-              >
-                {zones.map((z) => (
-                  <option key={z} value={z}>
-                    {z}
-                  </option>
-                ))}
-              </Select>
+                onChange={setTimezone}
+              />
             </Field>
             <Field label={t('currency')} htmlFor="ws-cur" hint={t('currencyHint')}>
               <Select

@@ -1,6 +1,6 @@
 ---
 id: inbox-tags
-title: Conversation tags
+title: Tags
 summary: Create colored tags, put them on conversations and filter the inbox by them. They are the same tags you use on contacts.
 area: settings
 order: 52
@@ -19,7 +19,7 @@ Both come from the same list. A tag you create here also appears on contacts, an
 
 ## How to use it
 
-1. Open **Settings**, then **Conversation tags**. The list shows every tag, its description and how many conversations carry it.
+1. Open **Settings**, then **Tags**. The list shows every tag, its description and how many conversations carry it.
 2. Under **New tag** type a name, pick a color (a hex color such as `#075E54`, or a color name) and, if you like, a description. Select **Create tag**.
 3. To change a tag, select **Edit**, change the name, color or description and select **Save changes**. Names are unique, ignoring capital letters.
 4. In the inbox, open a conversation. The side panel has two separate groups: **Contact tags** (read-only here) and **Conversation tags**. In **Conversation tags** select **Tag** and tick the tags that apply, or select the **×** beside a tag to take it off. The tags on the conversation also show under its name and in the list.

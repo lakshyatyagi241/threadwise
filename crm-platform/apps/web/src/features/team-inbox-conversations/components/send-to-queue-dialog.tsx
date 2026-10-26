@@ -6,6 +6,7 @@ import { HANDOFF_REASONS, type ConversationSummary, type HandoffReason } from '@
 import { Alert, Button, Field, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useAssignees } from '../api/hooks';
 import { useHandoffActions, useHandoffSettings } from '../api/handoff';
 import {
@@ -31,6 +32,7 @@ export function SendToQueueDialog({
   onPlaced: (row: ConversationSummary) => void;
 }) {
   const t = useTranslations('team-inbox-conversations.handoff');
+  const ta = useTranslations('team-inbox-conversations.panel.assignee');
   const { toast } = useToast();
   const { send } = useHandoffActions(conversationId);
   const assignees = useAssignees(true);
@@ -39,8 +41,10 @@ export function SendToQueueDialog({
   const [draft, setDraft] = useState<SendDraft>(EMPTY_SEND);
   const [problem, setProblem] = useState<string | null>(null);
   const set = (patch: Partial<SendDraft>) => setDraft((d) => ({ ...d, ...patch }));
-  // Without the plan feature the rules cannot run: the thread then waits in the queue, which the label says before the click.
-  const rulesAvailable = settings.data?.available.autoAssign !== false;
+  // Without the plan feature the rules cannot run: the thread then waits in the queue, which the label says before the click. The plan's own
+  // entitlement is asked too: a role that cannot read the inbox settings has no settings answer, but the plan still decides.
+  const rulesInPlan = usePlanFeature('inbox_routing');
+  const rulesAvailable = rulesInPlan && settings.data?.available.autoAssign !== false;
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -125,7 +129,7 @@ export function SendToQueueDialog({
               <option value="">{t('send.pickPerson')}</option>
               {(assignees.data?.users ?? []).map((u) => (
                 <option key={u.id} value={u.id}>
-                  {u.name ?? u.email}
+                  {u.name ?? u.email} · {ta(`availability.${u.availability}`)}
                 </option>
               ))}
             </Select>

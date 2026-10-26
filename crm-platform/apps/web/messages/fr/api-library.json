@@ -137,7 +137,9 @@
         "allSources": "Toutes les sources",
         "from": "Du",
         "to": "Au",
-        "clear": "Effacer les filtres"
+        "clear": "Effacer les filtres",
+        "deletedApi": "{name} (supprimée)",
+        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher."
       },
       "detail": {
         "title": "Détails du journal d'API",
@@ -168,7 +170,8 @@
         "openContact": "Ouvrir le contact",
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
-      }
+      },
+      "unsaved": "Non enregistrée"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",
@@ -218,7 +221,8 @@
         "empty": "Laissez vide pour n'envoyer aucune charge utile.",
         "invalid": "Ce JSON n'est pas valide.",
         "shape": "La charge utile doit être un objet JSON ou une liste.",
-        "format": "Formater le JSON"
+        "format": "Formater le JSON",
+        "invalidAt": "Ce n’est pas du JSON valide (il casse près de la ligne {line}, colonne {column})."
       },
       "responseVarsHint": "Champs de la réponse que les flux peuvent lire sous la forme '{{'ApiName.field'}}'. Sélectionnez-les dans la réponse du test.",
       "mappingHint": "Enregistrer un champ de la réponse dans une propriété de contact à chaque exécution du flux qui appelle cette API.",
@@ -300,7 +304,11 @@
         "choose": "Choisissez une propriété",
         "removeN": "Supprimer la ligne {n}",
         "pick": "Choisissez un chemin dans la dernière réponse du test",
-        "add": "Ajouter une ligne"
+        "add": "Ajouter une ligne",
+        "propertyDuplicate": "Une autre ligne enregistre dans cette propriété. Un champ ne reçoit qu’une valeur, choisissez donc une autre propriété.",
+        "propertyRequired": "Choisissez la propriété de contact dans laquelle cette ligne enregistre.",
+        "numberText": "Un champ numérique n’accepte que des nombres. Le dernier test a renvoyé « {value} » ici, et ce texte serait enregistré tel quel.",
+        "numberUntested": "Lancez un test pour vérifier que ce champ de réponse renvoie un nombre."
       },
       "responseVars": {
         "none": "Aucun champ exposé aux flux pour le moment.",
@@ -313,7 +321,8 @@
       "tested": "Test réussi",
       "requestHint": "Le nom, la méthode et l'adresse de l'appel.",
       "payloadHint": "Ce qui est envoyé dans le corps. Utilisez le bouton '{ }' pour insérer une variable dans une valeur.",
-      "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif."
+      "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif.",
+      "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet."
     },
     "test": {
       "title": "Réponse",
@@ -366,7 +375,8 @@
       "result": "Résultat",
       "status": "Statut",
       "time": "Heure",
-      "size": "Taille"
+      "size": "Taille",
+      "truncatedShown": "Affichage du début d’une réponse de {kb} Ko"
     },
     "pagination": {
       "label": "Pagination",

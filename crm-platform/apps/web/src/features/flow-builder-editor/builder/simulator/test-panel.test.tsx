@@ -28,6 +28,16 @@ describe('test panel', () => {
     expect(html).toContain('disabled=""');
   });
 
+  it("the bot's marks are drawn, not shown as asterisks, and the text is escaped", () => {
+    const html = renderToStaticMarkup(
+      <LogBubble entry={{ kind: 'bot', text: '*Creating new web bot*\n_soon_ <b>x</b>' }} />,
+    );
+    expect(html).toContain('<b>Creating new web bot</b>');
+    expect(html).toContain('<i>soon</i>');
+    expect(html).not.toContain('*Creating');
+    expect(html).toContain('&lt;b&gt;x&lt;/b&gt;');
+  });
+
   it('bubbles: system italic, user right, bot media by kind', () => {
     const r = (e: Parameters<typeof LogBubble>[0]['entry']) =>
       renderToStaticMarkup(<LogBubble entry={e} />);
@@ -45,5 +55,27 @@ describe('test panel', () => {
     expect(
       r({ kind: 'bot', text: '', media: { kind: 'document', url: '/x/b.pdf', filename: '' } }),
     ).toContain('b.pdf');
+  });
+
+  it('a Link button message is one bubble with one button that opens the web address', () => {
+    const html = renderToStaticMarkup(
+      <LogBubble
+        entry={{
+          kind: 'bot',
+          text: 'Read more',
+          choices: {
+            kind: 'links',
+            prompt: 'Read more',
+            labels: ['Shop'],
+            links: [{ type: 'url', label: 'Shop', value: 'https://example.com/shop' }],
+          },
+        }}
+      />,
+    );
+    expect(html).toContain('data-testid="choices-links"');
+    expect(html.match(/<a /g)).toHaveLength(1);
+    expect(html).toContain('href="https://example.com/shop"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('>Shop</a>');
   });
 });

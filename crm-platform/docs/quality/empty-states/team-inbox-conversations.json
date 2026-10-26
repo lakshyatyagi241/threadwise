@@ -1,0 +1,95 @@
+{
+  "feature": "team-inbox-conversations",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-team-inbox-conversations-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/use-thread.ts",
+        "apps/web/src/features/team-inbox-conversations/components/channels-list.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/composer-toolbar.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/components.test.tsx",
+          "match": "says there are no conversations yet once a channel exists"
+        },
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/saved-replies-screen.test.tsx",
+          "match": "has an empty state, a loading state, an error state and a no-access state"
+        },
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/lib/saved-replies.test.ts",
+          "match": "wraps both ways and survives an empty list"
+        }
+      ]
+    },
+    {
+      "id": "EM-team-inbox-conversations-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/components/conversation-list.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/filters-dialog.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/saved-replies-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/components.test.tsx",
+          "match": "says nothing matches when filters are on, and offers to clear them"
+        }
+      ]
+    },
+    {
+      "id": "EM-team-inbox-conversations-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/hooks.ts",
+        "apps/web/src/features/team-inbox-conversations/components/bulk-bar.tsx",
+        "apps/web/src/features/team-inbox-conversations/components/channels-list.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/components/saved-replies-screen.test.tsx",
+          "match": "has an empty state, a loading state, an error state and a no-access state"
+        }
+      ]
+    },
+    {
+      "id": "EM-team-inbox-conversations-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/team-inbox-conversations/api/saved-replies.ts",
+        "apps/web/src/features/team-inbox-conversations/api/use-list.ts",
+        "apps/web/src/features/team-inbox-conversations/components/conversation-list.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/team-inbox-conversations/lib/tags.test.ts",
+          "match": "names the scope only when it is the tags of the contact, and a scope alone sends nothing"
+        }
+      ]
+    }
+  ]
+}

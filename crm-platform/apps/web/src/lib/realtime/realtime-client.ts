@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import {
   REALTIME_CLIENT_EVENTS,
   REALTIME_SYSTEM_EVENTS,
@@ -355,7 +356,7 @@ export class RealtimeClient {
       try {
         handler(env);
       } catch (err) {
-        console.error('realtime handler failed', err);
+        Sentry.captureException(err, { tags: { module: 'realtime' }, extra: { type: env.type } });
       }
     }
   }
@@ -422,7 +423,7 @@ export class RealtimeClient {
       try {
         handler(request);
       } catch (err) {
-        console.error('realtime resync handler failed', err);
+        Sentry.captureException(err, { tags: { module: 'realtime', phase: 'resync' } });
       }
     }
   }

@@ -16,14 +16,60 @@ import {
  * returns a list of violations (empty = pass). The spec runs them on the real source; the bad-example tests run them on deliberately
  * wrong input to prove each one can fail.
  */
+/** A cache's instrumentation block as the register writes it: the rules and the spec read these fields. */
+export interface CacheInstrumentation {
+  instrumented: boolean;
+  metrics: string[];
+  exemption?: string;
+  reason?: string;
+  hitRatioAlert?: boolean;
+  [field: string]: unknown;
+}
+
+/** One cache in the register. Only the fields the rules read are typed; the rest of the entry is kept as it is. */
+export interface CacheEntry {
+  id: string;
+  layer: string;
+  location: string;
+  priority?: string;
+  ttl?: unknown;
+  ttlException?: string;
+  bound?: CacheBound;
+  tenant?: CacheTenant;
+  instrumentation: CacheInstrumentation;
+  [field: string]: unknown;
+}
+
+/** How a cache is capped; the rule reads the note that says why it cannot grow without limit. */
+export interface CacheBound {
+  note?: string;
+  [field: string]: unknown;
+}
+
+/** How a cache's key is scoped to a tenant: the mode, and the key part that must carry the organisation (and user) id. */
+export interface CacheTenant {
+  mode?: string;
+  anchor?: string;
+  reason?: string;
+  [field: string]: unknown;
+}
+
 export interface Register {
-  caches: Array<Record<string, any>>;
-  redisFamilies: Array<{ id: string; files: string[] }>;
+  caches: CacheEntry[];
+  redisFamilies: RedisFamily[];
   redisWriters: Record<string, string>;
   redisNoTtlAllowed: Record<string, string>;
   inProcessFields: Record<string, { cache?: string; allow?: string }>;
   httpPublicAllowed: Record<string, string>;
   rbacWriters: Record<string, string>;
+}
+
+/** A Redis key family as the rules read it: its id and files, the reason it is keyed as it is, and its time to live. */
+export interface RedisFamily {
+  id: string;
+  files: string[];
+  tenant?: { reason?: string };
+  ttl?: string;
 }
 
 export const REGISTER_PATH = join(REPO_ROOT, 'docs/performance/cache/register.json');
@@ -189,8 +235,8 @@ export function checkRegisterEntries(
     ids.add(c.id);
     for (const k of REQUIRED)
       if (c[k] === undefined || c[k] === '') out.push(`${c.id}: missing field "${k}".`);
-    if (!['P0', 'P1'].includes(c.priority)) out.push(`${c.id}: priority must be P0 or P1.`);
-    const t = c.tenant ?? {};
+    if (!['P0', 'P1'].includes(c.priority ?? '')) out.push(`${c.id}: priority must be P0 or P1.`);
+    const t: CacheTenant = c.tenant ?? {};
     if (t.mode === 'org' || t.mode === 'org+user') {
       if (!t.anchor) out.push(`${c.id}: tenant-keyed but has no key anchor to check.`);
       else if (!/org/i.test(t.anchor))
@@ -216,7 +262,7 @@ export function checkRegisterEntries(
       );
   }
   for (const f of reg.redisFamilies) {
-    const x = f as Record<string, any>;
+    const x = f;
     if (!x.tenant?.reason || x.tenant.reason.length < MIN_REASON)
       out.push(`${x.id}: family has no tenant reason.`);
     if (!x.ttl) out.push(`${x.id}: family has no ttl description.`);

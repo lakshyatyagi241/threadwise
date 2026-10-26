@@ -1,6 +1,6 @@
-import { Injectable, Logger, type OnModuleInit, Inject } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger, type OnModuleInit, Inject } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { type ReminderTestSendResult } from '@crm/contracts';
+import { ERROR_CODES, type ReminderTestSendResult } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -23,6 +23,8 @@ import { variablesFor, type MessageFacts } from './message-render';
 
 export const TEST_REQUESTED = 'appointment.reminder_test_requested';
 export const TEST_FINISHED = 'appointment.reminder_test_finished';
+/** A typed address makes this an outbound email to anyone, so the tests are capped per workspace (an address-typing abuse guard). */
+export const TEST_EMAILS_PER_HOUR = 10;
 
 /** `a***@example.com`: enough for the person to recognise their own address, nothing for anyone looking over a shoulder. */
 export function maskEmail(email: string): string {
@@ -47,7 +49,11 @@ export class ReminderTestSendService {
     private readonly audit: AuditService,
   ) {}
 
-  async request(typeUuid: string, reminderUuid: string): Promise<ReminderTestSendResult> {
+  async request(
+    typeUuid: string,
+    reminderUuid: string,
+    to?: string,
+  ): Promise<ReminderTestSendResult> {
     const ctx = RequestContextStore.require();
     if (!ctx.userId) throw AppError.forbidden('a signed-in user');
     return this.db.tx(async (tx) => {
@@ -59,23 +65,39 @@ export class ReminderTestSendService {
       const res = await tx.execute(
         sql`SELECT email::text AS email FROM users WHERE org_id = ${ctx.orgId} AND id = ${ctx.userId}`,
       );
-      const email = (res.rows as Array<{ email: string | null }>)[0]?.email;
+      const own = (res.rows as Array<{ email: string | null }>)[0]?.email;
+      const email = to ?? own;
       if (!email) {
         return { status: 'skipped', reason: 'no_contact_point', sentTo: null };
+      }
+      const recent = await tx.execute(
+        sql`SELECT count(*)::int AS n FROM event_outbox
+            WHERE org_id = ${ctx.orgId} AND event_type = ${TEST_REQUESTED} AND created_at > now() - interval '1 hour'`,
+      );
+      if (((recent.rows as Array<{ n: number }>)[0]?.n ?? 0) >= TEST_EMAILS_PER_HOUR) {
+        throw new AppError(
+          ERROR_CODES.RATE_LIMITED,
+          'Too many test emails this hour. Try again later.',
+          HttpStatus.TOO_MANY_REQUESTS,
+        );
       }
       await this.outbox.emit(tx, {
         orgId: ctx.orgId,
         aggregateModule: APPOINTMENT_MODULE,
         aggregateId: type.id,
         eventType: TEST_REQUESTED,
-        // Ids only: the address is read again by the worker from the user, never carried in an event.
-        payload: { typeUuid, reminderUuid, userId: ctx.userId },
+        // Ids only for the signed-in user's own address: the worker reads it again from the user. A TYPED address has to travel with the
+        // event (there is no other place to keep it for the few seconds until the worker runs); the event is not shown anywhere.
+        payload: { typeUuid, reminderUuid, userId: ctx.userId, ...(to ? { to } : {}) },
       });
       await this.audit.record(tx, {
         module: 'booking_reminders',
         recordId: rule.id,
         action: 'update',
-        delta: { test_email_requested: { old: null, new: true } },
+        delta: {
+          test_email_requested: { old: null, new: true },
+          ...(to ? { test_email_other_address: { old: null, new: true } } : {}),
+        },
       });
       return { status: 'queued', reason: null, sentTo: maskEmail(email) };
     });
@@ -108,6 +130,7 @@ export class ReminderTestSendConsumer implements OutboxSubscriber, OnModuleInit 
     const typeUuid = typeof p.typeUuid === 'string' ? p.typeUuid : null;
     const reminderUuid = typeof p.reminderUuid === 'string' ? p.reminderUuid : null;
     const userId = typeof p.userId === 'number' ? p.userId : null;
+    const typed = typeof p.to === 'string' && p.to.length > 0 ? p.to : null;
     if (!typeUuid || !reminderUuid || userId === null) return;
 
     const loaded = await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
@@ -118,14 +141,19 @@ export class ReminderTestSendConsumer implements OutboxSubscriber, OnModuleInit 
         sql`SELECT email::text AS email, full_name FROM users WHERE org_id = ${event.orgId} AND id = ${userId} AND status = 'active'`,
       );
       const user = (res.rows as Array<{ email: string | null; full_name: string | null }>)[0];
-      if (!user?.email) return null;
+      if (!user?.email && !typed) return null;
       const kids = (await this.types.children(tx, event.orgId, [type.id])).get(type.id);
       const typeReminderBody =
         (kids?.templates ?? [])
           .filter((t) => t.event === 'reminder')
           .map((t) => (t.libraryActive && t.libraryBody?.trim() ? t.libraryBody : t.plainBody))
           .find((b) => b?.trim()) ?? null;
-      return { type, rule, user, typeReminderBody };
+      return {
+        type,
+        rule,
+        user: user ?? { email: null, full_name: null },
+        typeReminderBody,
+      };
     });
     if (!loaded) return;
     const { type, rule, user, typeReminderBody } = loaded;
@@ -158,7 +186,7 @@ export class ReminderTestSendConsumer implements OutboxSubscriber, OnModuleInit 
       appointmentId: 'test',
       event: eventOf(rule.stepKind),
       channel: 'email',
-      to: { name: user.full_name, phone: null, email: user.email },
+      to: { name: user.full_name, phone: null, email: typed ?? user.email! },
       body,
       subject: `[Test] ${subject}`,
       waTemplateId: null,

@@ -47,7 +47,9 @@ export class TaskOutcomesRepository {
   }
 
   async byUuid(tx: Tx, orgId: number, uuid: string): Promise<TaskOutcomeRow | undefined> {
-    const res = await tx.execute(sql`${SELECT} WHERE o.org_id = ${orgId} AND o.uuid = ${uuid}::uuid`);
+    const res = await tx.execute(
+      sql`${SELECT} WHERE o.org_id = ${orgId} AND o.uuid = ${uuid}::uuid`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? toOutcome(r) : undefined;
   }

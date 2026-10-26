@@ -33,6 +33,7 @@ import { SaveIndicator } from './save-indicator';
 import { StepAudience } from './step-audience';
 import { StepReview } from './step-review';
 import { StepSend } from './step-send';
+import { templatesForSenders } from '../lib/templates';
 import { StepTemplate } from './step-template';
 import { Stepper } from './stepper';
 import { statusPath, useLaunch } from './use-launch';
@@ -207,6 +208,18 @@ function WizardBody({
     offeredSwitch.current = true;
     setSwitchTo(classic);
   }, [classic]);
+  // A template belongs to one number: when the number changes to one that cannot send the chosen template, the choice is dropped (the
+  // list then shows only that number's templates) instead of failing at launch.
+  const chosenSenders =
+    draft.senderKeys.length > 1 ? draft.senderKeys : draft.senderKey ? [draft.senderKey] : [];
+  const stillOffered =
+    !template || !templates.data
+      ? true
+      : templatesForSenders(templates.data.data, chosenSenders).some((x) => x.id === template.id);
+  useEffect(() => {
+    if (!stillOffered) w.dispatch({ type: 'template', template: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stillOffered]);
   const pickSender = (key: string) => {
     const picked = sendersList?.find((x) => x.key === key);
     if (picked?.guided) return w.dispatch({ type: 'sender', senderKey: key });
@@ -476,14 +489,17 @@ function WizardBody({
 const KNOWN_ISSUES: ReadonlySet<string> = new Set([
   'name_required',
   'template_required',
+  'template_b_same',
   'audience_required',
   'variable_unmapped',
+  'variable_fallback_required',
   'schedule_in_past',
   'schedule_end_before_start',
   'recurrence_invalid',
   'retry_end_required',
   'retry_end_before_send',
   'retry_end_in_past',
+  'retry_end_too_far',
   'schedule_required',
   'no_recipients',
   'insufficient_balance',

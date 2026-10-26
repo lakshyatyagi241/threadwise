@@ -2,6 +2,8 @@ import { Injectable, Logger, Module } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { PlatformPaymentGatewaysModule } from './paygw.module';
 import { NotificationPublisher, NotificationsRepository } from '../notifications';
+import { AddonRedundancyService } from './addon-redundancy.service';
+import { RefundReconcilerService } from './refund-reconciler.service';
 import { SubscriptionNotificationsConsumer } from './subscription-notifications.consumer';
 import { SubscriptionReconcilerService } from './subscription-reconciler.service';
 
@@ -33,11 +35,59 @@ export class SubscriptionReconcileScheduler {
   }
 }
 
+/** Stops add-on renewals the plan now covers, on the same clock (see AddonRedundancyService). */
+@Injectable()
+export class AddonRedundancyScheduler {
+  private readonly logger = new Logger(AddonRedundancyScheduler.name);
+  private running = false;
+
+  constructor(private readonly redundancy: AddonRedundancyService) {}
+
+  @Interval(TICK_MS)
+  async tick(): Promise<void> {
+    if (this.running) return;
+    this.running = true;
+    try {
+      const n = await this.redundancy.sweep();
+      if (n > 0) this.logger.log({ stopped: n }, '[PAYGW] redundant add-on renewals stopped');
+    } catch (err) {
+      this.logger.error({ err }, '[PAYGW] redundant add-on sweep failed');
+    } finally {
+      this.running = false;
+    }
+  }
+}
+
+/** Settles refunds whose answer from the provider never got recorded (see RefundReconcilerService), on the same clock. */
+@Injectable()
+export class RefundReconcileScheduler {
+  private readonly logger = new Logger(RefundReconcileScheduler.name);
+  private running = false;
+
+  constructor(private readonly reconciler: RefundReconcilerService) {}
+
+  @Interval(TICK_MS)
+  async tick(): Promise<void> {
+    if (this.running) return;
+    this.running = true;
+    try {
+      const tally = await this.reconciler.sweep();
+      if (Object.keys(tally).length > 0) this.logger.log({ tally }, '[PAYGW] refund sweep');
+    } catch (err) {
+      this.logger.error({ err }, '[PAYGW] refund sweep failed');
+    } finally {
+      this.running = false;
+    }
+  }
+}
+
 /** Imported ONLY by WorkersModule: the HTTP app never runs the sweep. */
 @Module({
   imports: [PlatformPaymentGatewaysModule],
   providers: [
     SubscriptionReconcileScheduler,
+    AddonRedundancyScheduler,
+    RefundReconcileScheduler,
     NotificationsRepository,
     NotificationPublisher,
     SubscriptionNotificationsConsumer,

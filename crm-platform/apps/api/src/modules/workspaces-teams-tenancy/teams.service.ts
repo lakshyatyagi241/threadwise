@@ -14,6 +14,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { presenceFor } from '../../common/agent-status';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -87,6 +88,7 @@ export class TeamsService {
         this.repo.members(tx, ctx.orgId, ids),
         this.repo.usage(tx, ctx.orgId, ids),
       ]);
+      await this.applyPresence(tx, ctx.orgId, members);
       return {
         data: items.map((t) =>
           toTeamResponse(
@@ -115,6 +117,8 @@ export class TeamsService {
       await this.plan.assertCanCreate(tx, ctx.orgId);
       // A parent team or a lead/manager needs the plan feature `team_hierarchy`; leaving them empty is always allowed.
       if (input.parentId || input.leadId) await this.plan.assertHierarchy(ctx.orgId);
+      // An automatic method (round robin, least loaded) needs `inbox_routing` (Smart routing); Manual is on every plan.
+      await this.plan.assertAssignmentMethod(ctx.orgId, input.assignmentStrategy, 'manual');
       if (await this.repo.nameTaken(tx, ctx.orgId, input.name)) throw this.nameTaken(input.name);
       const memberIds = await this.resolveMembers(tx, ctx.orgId, input.memberIds);
       const deviceIds = await this.resolveDevices(tx, ctx.orgId, input.deviceIds);
@@ -195,8 +199,20 @@ export class TeamsService {
         input.deviceIds === undefined
           ? undefined
           : await this.resolveDevices(tx, ctx.orgId, input.deviceIds);
-      // Setting a parent or a manager needs `team_hierarchy`; clearing one (null) stays allowed.
-      if (input.parentId || input.leadId) await this.plan.assertHierarchy(ctx.orgId);
+      // Setting a NEW parent or manager needs `team_hierarchy`; clearing one (null) stays allowed, and so does saving the team with the
+      // parent and manager it already has (a workspace that lost the feature keeps its teams and can still edit them).
+      if (
+        (input.parentId && input.parentId !== team.parentUuid) ||
+        (input.leadId && input.leadId !== team.leadUuid)
+      ) {
+        await this.plan.assertHierarchy(ctx.orgId);
+      }
+      // A different automatic method needs `inbox_routing` (Smart routing); keeping the stored one, or choosing Manual, is always allowed.
+      await this.plan.assertAssignmentMethod(
+        ctx.orgId,
+        input.assignmentStrategy,
+        team.assignmentStrategy,
+      );
       const parentId =
         input.parentId === undefined
           ? undefined
@@ -410,7 +426,20 @@ export class TeamsService {
       this.repo.members(tx, orgId, [team.id]),
       this.repo.usage(tx, orgId, [team.id]),
     ]);
+    await this.applyPresence(tx, orgId, members);
     return toTeamResponse(team, members, usage[0]);
+  }
+
+  /** The dot beside a member is the EFFECTIVE status (docs/specs/agent-status-bar.md), read for all the listed people in one go. */
+  private async applyPresence(
+    tx: Tx,
+    orgId: number,
+    rows: Array<{ userId: number; presence: string | null }>,
+  ): Promise<void> {
+    if (rows.length === 0) return;
+    const ids = [...new Set(rows.map((r) => r.userId))];
+    const words = await presenceFor(tx, orgId, ids, await this.plan.statusAutomationEnabled(orgId));
+    for (const r of rows) r.presence = words.get(r.userId) ?? 'online';
   }
 
   private async requireTeam(tx: Tx, orgId: number, uuid: string): Promise<TeamRow> {

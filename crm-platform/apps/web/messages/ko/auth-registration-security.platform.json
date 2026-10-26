@@ -1349,13 +1349,17 @@
             "details": "세부 정보 및 가격",
             "features": "기능",
             "limits": "한도",
-            "addons": "애드온"
+            "addons": "애드온",
+            "integrations": "연동",
+            "miniApps": "미니 앱"
           },
           "tabSummary": {
             "features": "기능 {total}개 중 {count}개 켜짐",
             "limits": "한도 {total}개 중 {count}개 설정됨",
-            "addons": "애드온 {count}개 선택됨",
-            "error": "수정할 오류가 있습니다"
+            "addons": "{count, plural, one {포함 또는 제공 중인 애드온 #개} other {포함 또는 제공 중인 애드온 #개}}",
+            "error": "수정할 오류가 있습니다",
+            "integrations": "포함 또는 제공 중인 연동: {count}",
+            "miniApps": "포함 또는 제공 중인 미니 앱: {count}"
           },
           "featuresUi": {
             "intro": "이 요금제에 포함되지 않는 항목은 끄세요. 기능이 꺼진 영역은 이 요금제의 워크스페이스에서 열 수 없습니다.",
@@ -1364,7 +1368,8 @@
             "enableAll": "모두 켜기",
             "disableAll": "모두 끄기",
             "noMatch": "검색과 일치하는 기능이 없습니다.",
-            "groupCount": "{total}개 중 {count}개 켜짐"
+            "groupCount": "{total}개 중 {count}개 켜짐",
+            "lockedBy": "애드온 탭의 {addon} 애드온에서 설정됨"
           },
           "limitsUi": {
             "intro": "한도에 도달하면 해당 작업이 차단됩니다. 한도를 없애려면 무제한을 선택하세요.",
@@ -1385,12 +1390,8 @@
             "total": "총"
           },
           "addons": {
-            "intro": "사용 설정된 애드온은 이 요금제의 워크스페이스에 마켓플레이스에서 표시되며, 워크스페이스가 구매한 후에만 사용할 수 있습니다.",
             "search": "애드온 검색",
             "searchPlaceholder": "애드온 또는 앱 검색",
-            "selectAll": "모두 선택",
-            "clear": "지우기",
-            "selected": "{total}개 중 {count}개 선택됨",
             "loading": "애드온 로드 중",
             "empty": "유료 애드온이 아직 없습니다",
             "emptyHint": "애드온은 운영자 콘솔의 마켓플레이스 카탈로그에서 만듭니다. 앱에 유료 팩이 생기면 여기에 표시됩니다.",
@@ -1404,7 +1405,8 @@
             "packInactive": "애드온 팩이 꺼져 있어 아무도 구매할 수 없습니다.",
             "appUnpublished": "앱이 게시되지 않아 워크스페이스에서 아직 볼 수 없습니다.",
             "appLabel": "앱: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {포함 또는 제공 중인 애드온 #개} other {포함 또는 제공 중인 애드온 #개}}"
           },
           "featureHints": {
             "automation": "대화에 응답하고 조치하는 플로우 빌더와 자동화입니다.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "화이트 라벨: 워크스페이스가 푸터에서 플랫폼 브랜딩을 숨길 수 있습니다.",
             "sales_pipeline": "딜, 작업, 파이프라인 및 대시보드의 파이프라인 수치입니다.",
             "appointment_booking": "예약 유형, 예약, 공개 예약 페이지입니다. 유료 예약 앱이 이 스위치를 관리합니다.",
+            "appointment_confirm_buttons": "예약 전에 WhatsApp으로 보내는 리마인더에 확인, 일정 변경, 취소 버튼을 추가합니다.",
+            "appointment_rebook_steps": "예약이 끝난 뒤 보내는 후속 메시지로, 연락처에 다시 예약하도록 안내합니다.",
             "chatbot_widgets": "웹사이트 챗봇 위젯 빌더입니다.",
             "wa_storefront": "WhatsApp 카탈로그 및 스토어프론트 영역입니다.",
             "inbox_sla": "팀 인박스의 SLA 정책 및 기한입니다.",
-            "inbox_routing": "인박스 대화를 자동으로 배정하는 라우팅 규칙입니다.",
+            "inbox_routing": "새 채팅 자동 배정: 라우팅 규칙, 나머지 전체, 대기열 타이머. 스마트 라우팅 애드온의 일부입니다.",
             "waba_calling": "인박스에서의 WhatsApp 통화: 통화 번호, 통화 권한, 전화 걸기 및 받기입니다.",
             "inbox_kanban": "팀 인박스의 칸반 보드 보기입니다.",
             "team_performance": "팀 성과 보고서입니다.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다.",
             "team_hierarchy": "상위 팀, 팀 리더, 그리고 자기 팀과 하위 팀을 볼 수 있는 매니저입니다.",
             "custom_roles": "역할을 만들고 수정하며, 권한마다 범위(내 기록, 팀 기록 또는 전체 기록)를 선택합니다.",
-            "inbox_assignment_sticky": "연락처 담당자와 채팅 담당자 간의 담당자 우선 및 동기화 유지 배정, 재방문 연락처 기간, 재배정 확인 창. 받은편지함 라우팅과 함께 동작합니다."
+            "inbox_assignment_sticky": "소유자 우선 및 동기화 배정, 재방문 연락처 기간, 재배정 시 확인. 스마트 라우팅 애드온의 일부입니다.",
+            "agent_status_bar": "상단 표시줄과 받은 편지함 상단의 응대 가능 / 자리 비움 상태 컨트롤로, 자리 비움 / 응대 가능으로 설정하기와 휴가 링크가 포함됩니다. 계정 메뉴의 응대 가능 / 자리 비움 스위치는 모든 요금제에서 사용할 수 있습니다.",
+            "agent_status_automation": "시간대가 있는 개인 근무 시간, 시간 외 자리 비움, 근무 시간 외 안내, 근무 시간 외 사람을 건너뛰는 배정. 일정을 저장하려면 필요하며, 없으면 저장된 일정은 유지되지만 무시됩니다."
           },
           "units": {
             "days": "일",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "이메일 메일함",
             "email_monthly": "월간 이메일",
             "storage_gb": "저장 공간 (GB)",
-            "teams": "팀"
+            "teams": "팀",
+            "webbot_messages": "월별 무료 웹사이트 챗봇 메시지"
           },
           "featureGroups": {
             "messaging": "메시징",
@@ -1609,10 +1616,12 @@
             "remove_branding": "화이트 라벨(플랫폼 브랜딩 제거)",
             "sales_pipeline": "영업 파이프라인(딜 및 작업)",
             "appointment_booking": "예약 및 예약 페이지",
+            "appointment_confirm_buttons": "리마인더 버튼: 확인, 일정 변경, 취소",
+            "appointment_rebook_steps": "예약 후 재예약(리콜) 단계",
             "chatbot_widgets": "웹사이트 챗봇 위젯",
             "wa_storefront": "WhatsApp 스토어프론트 및 카탈로그",
             "inbox_sla": "인박스 SLA 정책",
-            "inbox_routing": "인박스 라우팅 규칙 및 영업 시간",
+            "inbox_routing": "스마트 라우팅: 자동 배정 및 규칙",
             "waba_calling": "인박스에서 WhatsApp 통화 걸기 및 받기",
             "inbox_kanban": "인박스 칸반 보드",
             "team_performance": "팀 성과 보고서",
@@ -1638,7 +1647,9 @@
             "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)",
             "team_hierarchy": "팀 계층 및 매니저",
             "custom_roles": "사용자 지정 역할 및 범위",
-            "inbox_assignment_sticky": "연락처 담당자와 고정 배정"
+            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원",
+            "agent_status_bar": "상태 표시줄: 상단 표시줄과 받은 편지함의 응대 가능 / 자리 비움 컨트롤",
+            "agent_status_automation": "상태 자동화: 개인 근무 시간과 자동 자리 비움"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "요금제는 무료이면서 동시에 맞춤 견적일 수 없습니다.",
             "paid_needs_price": "0보다 큰 가격을 설정하거나 요금제를 무료로 표시하세요.",
             "offer_not_lower": "할인가는 요금제 가격보다 낮아야 합니다.",
-            "default_needs_active": "가입 기본 요금제는 활성 상태여야 합니다."
+            "default_needs_active": "가입 기본 요금제는 활성 상태여야 합니다.",
+            "addonPriceZero": "애드온 가격을 사용하려면 가격을 비워 두거나 포함을 선택하세요.",
+            "addonGone": "이 애드온은 더 이상 존재하지 않습니다. 페이지를 새로고침한 후 다시 저장하세요."
           },
           "limitHints": {
             "monthly_messages": "해당 월에 발송된 발신 메시지입니다. 제공량을 초과하면 지갑에서 차감됩니다.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
             "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한.",
             "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다.",
-            "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다."
+            "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다.",
+            "webbot_messages": "매 달력 월마다 무료로 포함되는 웹사이트 챗봇 메시지 수입니다. 초과하는 메시지는 지갑에서 차감됩니다. 비워 두거나 0 = 무료 메시지 없음."
           },
           "productLines": {
             "chat": "채팅",
             "crm": "영업 CRM",
             "platform": "둘 다 공유"
+          },
+          "offers": {
+            "readOnly": "이 요금제는 볼 수만 있고 변경할 수 없어서 이 컨트롤은 잠겨 있습니다.",
+            "featureTitle": "기능 애드온",
+            "featureIntro": "제품의 일부 기능을 여는 애드온입니다. 포함: 이 요금제의 워크스페이스는 추가 비용 없이 사용하며, 애드온 카드에 \"현재 요금제에 포함됨\"이라고 표시됩니다. 유료: 구매할 수 있으며, 이 요금제 전용 가격을 설정했다면 그 가격이 적용됩니다. 숨김: 워크스페이스에 전혀 표시되지 않습니다. 기능 탭에 있는 이 애드온의 기능은 이 선택을 따릅니다.",
+            "capacityTitle": "용량 애드온",
+            "capacityIntro": "추가 좌석처럼 한도만 늘려 주는 애드온입니다. 요금제에서는 유료 또는 숨김으로만 설정할 수 있으며, 요금제 자체의 한도는 한도 탭에서 설정합니다.",
+            "noFeaturePacks": "아직 기능 애드온이 없습니다.",
+            "adds": "추가: {limits}",
+            "limitAdd": "{name} +{amount}",
+            "limitUnlimited": "{name} 무제한",
+            "modeLabel": "이 요금제에서 {name} 제공 방식",
+            "modes": {
+              "included": "포함",
+              "paid": "유료",
+              "hidden": "숨김"
+            },
+            "noIncluded": "이 애드온은 한도만 늘려 주므로 요금제에 포함할 수 없습니다. 이 요금제 자체의 한도는 한도 탭에서 설정하세요.",
+            "priceLabel": "이 요금제의 가격({currency})",
+            "priceHint": "비워 두면 애드온 자체 가격이 적용됩니다.",
+            "includedCapacityNote": "기능만 포함됩니다. 추가 한도({limits})는 이 요금제의 워크스페이스에 계속 판매됩니다.",
+            "hiddenNote": "이 요금제의 워크스페이스에는 이 애드온이 표시되지 않으며 구매할 수 없습니다. 이미 구매한 워크스페이스는 기간이 끝날 때까지 계속 사용합니다.",
+            "offNote": "더 이상 포함되지 않음: 이 요금제의 워크스페이스는 애드온을 구매하지 않으면 이 기능을 잃습니다. 설정은 보존되며 다시 켜면 돌아옵니다.",
+            "loading": "애드온을 불러오는 중",
+            "loadFailed": "애드온을 불러오지 못했습니다. 변경된 내용은 없습니다.",
+            "empty": "아직 애드온이 없습니다",
+            "emptyHint": "스마트 라우팅, 팀 및 권한 같은 애드온은 운영자 콘솔의 애드온에서 만듭니다.",
+            "noPrice": "가격 미설정",
+            "gives": "제공: {features}",
+            "unlistedNote": "일부 기능({features})은 표준 애드온 목록에 없습니다. 요금제에서 켤 수는 있으며, 이 애드온을 팩으로 구매하는 방식만 다릅니다.",
+            "inactiveNote": "이 애드온은 초안이거나 꺼져 있어 아직 아무도 구매할 수 없습니다. 요금제에 포함하는 것은 가능합니다.",
+            "impactCount": "{count, plural, other {워크스페이스 #개가 이미 이 애드온을 결제하고 있습니다.}} 갱신은 현재 기간이 끝나면 중단되며, 환불은 없고 오늘 취소되는 것도 없습니다.",
+            "impactUnknown": "이 요금제의 워크스페이스 중 이미 이 애드온을 결제하고 있는 곳은 현재 기간이 끝나면 갱신이 중단됩니다. 환불은 없고 오늘 취소되는 것도 없습니다. 개수를 불러오지 못했습니다.",
+            "partlyNote": "이 플랜은 이미 이 애드온의 일부({features})를 제공합니다. 여기에서 포함, 유료 또는 숨김을 선택할 때까지 그대로 유지됩니다.",
+            "needsFeatures": "먼저 애드온 > {name}에서 이 항목이 여는 기능을 추가하세요"
+          },
+          "apps": {
+            "introMiniApps": "미니 앱은 워크스페이스가 Marketplace에서 설치하는 앱입니다. 포함: 이 요금제의 워크스페이스는 무료입니다. 유료: 앱 자체 가격으로 구매할 수 있습니다. 숨김: 전혀 보이지 않습니다. 포함을 선택하면 앱이 제공하는 요금제 기능도 함께 켜집니다.",
+            "introIntegrations": "연동은 외부 서비스를 연결합니다. 포함: 이 요금제의 워크스페이스는 무료입니다. 유료: 연동 자체 가격으로 구매할 수 있습니다. 숨김: 전혀 보이지 않습니다. 포함을 선택하면 연동이 제공하는 요금제 기능도 함께 켜집니다.",
+            "setAll": "표시된 항목 모두 다음으로 설정",
+            "summary": "{total}개 중 {count}개 포함 또는 제공 중",
+            "priceHint": "Marketplace 앱은 자체 가격을 유지합니다. 가격은 앱 리스팅에서 설정하세요.",
+            "emptyIntegrations": "아직 유료 연동이 없습니다",
+            "emptyIntegrationsHint": "무료 연동은 여기서 설정할 필요가 없습니다. Shopify와 WooCommerce는 기능 탭에서 켭니다."
           }
         }
       },

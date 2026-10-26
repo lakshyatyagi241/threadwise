@@ -1,0 +1,712 @@
+{
+  "module": "contact-consent",
+  "tier": "P0",
+  "schemas": [
+    {
+      "schema": "saveConsentNoticeSchema",
+      "file": "apps/api/src/modules/contact-consent/consent-notice.controller.ts",
+      "coercedFields": 2,
+      "scenarios": [
+        {
+          "field": "enabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "enabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "\"a\" x 1000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (1000)",
+          "value": "\"a\" x 1001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (1000)",
+          "value": "\"😀\" x 1000",
+          "priority": "P1"
+        },
+        {
+          "field": "url",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "termsUrl",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "channels",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "channels",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P0"
+        },
+        {
+          "field": "channels",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 3 items",
+          "value": "[\"whatsapp\",\"whatsapp\",\"whatsapp\"]",
+          "priority": "P0"
+        },
+        {
+          "field": "channels",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (3) items",
+          "value": "[\"whatsapp\",\"whatsapp\",\"whatsapp\",\"whatsapp\"]",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "url",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "termsUrl",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateConsentSettingsSchema",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "detectionEnabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "detectionEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "requireConsentForMarketing",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "requireConsentForMarketing",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "optOutKeywords",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "optInKeywords",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "autoReplyEnabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "autoReplyEnabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "optOutReply",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "optInReply",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "footerText",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "footerDefaultOn",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "footerDefaultOn",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "accept",
+          "label": "just above the minimum (0)",
+          "value": "1",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "0",
+          "priority": "P0"
+        },
+        {
+          "field": "rowVersion",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "optOutKeywords",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "optInKeywords",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "optOutReply",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "optInReply",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "footerText",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "testConsentMessageSchema",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "text",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P0"
+        },
+        {
+          "field": "text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "optOutKeywords",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "optInKeywords",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "optOutKeywords",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "optInKeywords",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "recordConsentSchema",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "channel",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "channel",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "channel",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (rcs)",
+          "value": "\"rcs\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purpose",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "purpose",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "purpose",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (utility)",
+          "value": "\"utility\"",
+          "priority": "P0"
+        },
+        {
+          "field": "action",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "action",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (withdrawn)",
+          "value": "\"withdrawn\"",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (contact_request)",
+          "value": "\"contact_request\"",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "evidence",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "recordPrivacyFlagSchema",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "kind",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "kind",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (sale_share_opt_out)",
+          "value": "\"sale_share_opt_out\"",
+          "priority": "P0"
+        },
+        {
+          "field": "value",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "value",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P0"
+        },
+        {
+          "field": "source",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (contact_request)",
+          "value": "\"contact_request\"",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P0"
+        },
+        {
+          "field": "note",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "evidence",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "occurredAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

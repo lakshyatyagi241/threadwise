@@ -18,7 +18,7 @@ const TONE: Record<ReleaseState, 'neutral' | 'warning' | 'danger' | 'success'> =
   rolled_back: 'danger',
 };
 
-const COLUMNS = ['tag', 'state', 'step', 'started', 'finished', 'error'] as const;
+const COLUMNS = ['tag', 'changes', 'state', 'step', 'started', 'finished', 'error'] as const;
 
 /**
  * The Product releases tab: what is live on desk.wabo.ai, whether a release is running, and every attempt with its steps and error.
@@ -71,7 +71,7 @@ export function ReleasesView() {
         <EmptyState title={t('empty.title')} message={t('releases.empty')} />
       ) : (
         <div className="overflow-x-auto rounded-md border border-border">
-          <table className="w-full min-w-[960px] text-sm">
+          <table className="w-full min-w-[1200px] text-sm">
             <thead className="bg-muted/50 text-start text-xs text-muted-foreground">
               <tr>
                 {COLUMNS.map((c) => (
@@ -101,6 +101,22 @@ function ReleaseRowView({ row }: { row: ReleaseRow }) {
   return (
     <tr className="align-top">
       <td className="px-3 py-2 font-mono text-xs">{row.tag}</td>
+      <td className="max-w-md px-3 py-2">
+        <ul className="space-y-1">
+          {row.changes.map((c) => (
+            <li key={`${c.pr ?? 'commit'}-${c.title}`} className="break-words">
+              {c.pr !== null && (
+                <span className="font-mono text-xs text-muted-foreground">#{c.pr} </span>
+              )}
+              {c.title}
+              <span className="text-xs text-muted-foreground">
+                {' '}
+                {t('releases.by', { author: c.author })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </td>
       <td className="px-3 py-2">
         <div className="flex flex-wrap gap-1">
           <Badge tone={TONE[row.state]}>{t(`releases.state.${row.state}`)}</Badge>

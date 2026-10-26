@@ -1,3 +1,5 @@
+import { modernZoneList } from '@/lib/timezones';
+
 /** Time zone helpers for the composer: times are entered as wall time in the chosen IANA zone (TW-SCHED-003). */
 
 /** Every IANA zone the browser knows, `UTC` first, as Reference's `DateTimeZone::listIdentifiers()` list. */
@@ -11,7 +13,7 @@ export function timezoneList(): string[] {
   } catch {
     zones = [];
   }
-  return ['UTC', ...zones.filter((z) => z !== 'UTC')];
+  return ['UTC', ...modernZoneList(zones).filter((z) => z !== 'UTC')];
 }
 
 interface Parts {

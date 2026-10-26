@@ -129,6 +129,7 @@ export class ChatMediaStore {
       allow: input.allow ?? ALL_KINDS,
       maxBytes: Math.max(limits.image, limits.media, limits.document),
     });
+    await this.validator.scan?.(input.buffer);
 
     const kind = kindOfMime(validated.mime);
     if (input.buffer.length > limits[kind]) {

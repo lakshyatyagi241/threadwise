@@ -33,12 +33,20 @@
         "done": "Przejęto tę rozmowę.",
         "doneOwner": "Przejęto tę rozmowę i jesteś teraz właścicielem kontaktu.",
         "failed": "Nie udało się przejąć rozmowy.",
-        "taken": "Ktoś inny przejął tę rozmowę wcześniej."
+        "taken": "Ktoś inny przejął tę rozmowę wcześniej.",
+        "overLimitTitle": "Osiągnięto Twój limit czatów",
+        "overLimitMessage": "Masz już {open} otwartych rozmów, a Twój limit to {limit}. Przejąć tę mimo to?",
+        "overLimitConfirm": "Przejmij mimo to",
+        "overLimitCancel": "Anuluj"
       },
       "giveBack": {
         "button": "Zwróć botowi",
         "done": "Bot znowu odpowiada w tej rozmowie.",
-        "failed": "Nie udało się zwrócić rozmowy botowi."
+        "failed": "Nie udało się zwrócić rozmowy botowi.",
+        "doneFlow": "Bot kontynuuje przepływ.",
+        "doneNextLive": "Bot odpowie na następną wiadomość klienta.",
+        "doneNextDefault": "Bot znów działa. Na następną wiadomość odpowie tylko wtedy, gdy ustawiono przepływ domyślny.",
+        "already": "Bot już obsługuje tę rozmowę."
       },
       "send": {
         "button": "Wyślij do kolejki",
@@ -50,7 +58,7 @@
         "intro": "Bot przestaje odpowiadać temu kontaktowi. Rozmowa trafia do wybranej osoby lub zespołu albo czeka w kolejce, aż ktoś ją przejmie.",
         "where": "Wyślij do",
         "whereRules": "Reguły przypisywania, a w razie braku – kolejka oczekujących",
-        "whereQueueOnly": "Kolejka oczekujących (reguły przypisywania nie są w Twoim planie)",
+        "whereQueueOnly": "Kolejka oczekujących (reguły przydzielania wymagają dodatku Inteligentne kierowanie)",
         "whereTeam": "Zespół",
         "wherePerson": "Jedna osoba",
         "team": "Zespół",
@@ -78,14 +86,16 @@
         "priority": "Priorytet",
         "summary": "Podsumowanie",
         "answers": "Co kontakt powiedział botowi",
-        "trace": "Jak przypisano"
+        "trace": "Jak przypisano",
+        "timers": "Kroki kolejki oczekujących"
       },
       "source": {
         "flow": "Przepływ",
         "ai_agent": "Agent AI",
         "keyword": "Własna prośba kontaktu",
         "bot_failure": "Bot, który nie mógł pomóc",
-        "manual": "Współpracownik"
+        "manual": "Współpracownik",
+        "arrival": "Kierowanie: nikt nie mógł go przejąć"
       },
       "reason": {
         "customer_asked": "Kontakt poprosił o konsultanta",
@@ -105,6 +115,42 @@
         "chosen": "Wybrano",
         "skipped": "Pominięto",
         "info": "Notatka"
+      },
+      "botLine": {
+        "system": "system",
+        "pressed": {
+          "flow": "Bot wrócił, zwrócony przez: {name}. Przepływ jest kontynuowany.",
+          "nextLive": "Bot wrócił, zwrócony przez: {name}. Odpowie na następną wiadomość klienta.",
+          "nextDefault": "Bot wrócił, zwrócony przez: {name}. Na następną wiadomość odpowie tylko wtedy, gdy ustawiono przepływ domyślny."
+        },
+        "result": {
+          "continued": "Przepływ był kontynuowany wyjściem „zwrócona”.",
+          "claimed_again": "Przepływ nie został wznowiony: ktoś ponownie przejął czat.",
+          "flow_not_live": "Przepływ nie został wznowiony: nie jest już aktywny.",
+          "start_failed": "Nie udało się wznowić przepływu."
+        },
+        "customer": {
+          "sent": "Wiadomość do klienta została wysłana.",
+          "window_closed": "Wiadomość do klienta pominięto: okno 24 godzin jest zamknięte.",
+          "no_consent": "Wiadomość do klienta pominięto: brak zgody.",
+          "failed": "Nie udało się wysłać wiadomości do klienta.",
+          "channel_unavailable": "Wiadomość do klienta pominięto: kanał jest niedostępny."
+        }
+      },
+      "timers": {
+        "reminded": "Przypomniano o {at}",
+        "offered": "Zaproponowano temu zespołowi o {at}",
+        "messaged": "Wiadomość do klienta wysłana o {at}",
+        "gaveBack": "Oddano botowi o {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Zwrócono do bota: {actor}",
+          "bot_resumed": "Bot kontynuował przepływ",
+          "bot_resume_skipped": "Przepływ nie został wznowiony"
+        }
       }
     }
   }

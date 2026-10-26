@@ -1,20 +1,29 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { API_LIBRARY_LOG_SOURCES } from '@crm/contracts';
+import {
+  API_LIBRARY_LOG_SEARCH_MAX,
+  API_LIBRARY_LOG_SOURCES,
+  type ApiLibraryLogApi,
+} from '@crm/contracts';
 import { Button, Field, Input, Select, cn } from '@crm/ui';
 import { EMPTY_LOG_FILTERS, hasLogFilters, type LogFilterForm } from '../lib/log-filters';
 import { SearchIcon } from './icons';
 
-/** Filters of the runs list. `apis` is set on the full page only (the drawer is already one API). */
+/**
+ * Filters of the runs list. `apis` is set on the full page only (the drawer is already one API). `searchInvalid` marks the search
+ * field and says why: the search is over the limit.
+ */
 export function LogFiltersBar({
   value,
   onChange,
   apis,
+  searchInvalid = false,
 }: {
   value: LogFilterForm;
   onChange: (next: LogFilterForm) => void;
-  apis?: Array<{ id: string; name: string }>;
+  apis?: ApiLibraryLogApi[];
+  searchInvalid?: boolean;
 }) {
   const t = useTranslations('api-library.logs.filters');
   const tc = useTranslations('api-library.common');
@@ -32,7 +41,12 @@ export function LogFiltersBar({
       className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6"
       onSubmit={(e) => e.preventDefault()}
     >
-      <Field label={t('search')} htmlFor="alib-log-search" className="sm:col-span-2">
+      <Field
+        label={t('search')}
+        htmlFor="alib-log-search"
+        className="sm:col-span-2"
+        error={searchInvalid ? t('searchTooLong', { max: API_LIBRARY_LOG_SEARCH_MAX }) : undefined}
+      >
         <div className="relative">
           <SearchIcon className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -41,7 +55,7 @@ export function LogFiltersBar({
             className="ps-9"
             value={value.search}
             placeholder={t('searchPlaceholder')}
-            maxLength={200}
+            invalid={searchInvalid}
             onChange={(e) => set('search', e.target.value)}
           />
         </div>
@@ -56,7 +70,7 @@ export function LogFiltersBar({
             <option value="">{t('allApis')}</option>
             {apis.map((a) => (
               <option key={a.id} value={a.id}>
-                {a.name}
+                {a.deleted ? t('deletedApi', { name: a.name }) : a.name}
               </option>
             ))}
           </Select>

@@ -33,7 +33,7 @@ These apply to every number and take effect on the next message.
 1. **Pace sends to each number's limit** turns the pacing on or off. Meta's own throttling always applies.
 2. **Default rate** is used for a number whose rate Meta has not reported.
 3. **Safety margin** keeps part of the limit free.
-4. **Longest wait** hands a send back to its queue instead of holding a worker for longer than this.
+4. **Longest wait** hands a send back to the waiting line instead of holding it for longer than this.
 5. **Slow down after a Meta throttle** halves the speed when Meta answers that sending is too fast, then recovers over about a minute.
 6. **Hold template messages at the daily limit** stops new template messages when a number reaches its tier. Off, the number is only flagged.
 7. **Warn at** sets the share of the tier at which a number is flagged.

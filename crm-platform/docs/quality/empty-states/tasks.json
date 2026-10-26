@@ -1,0 +1,64 @@
+{
+  "feature": "tasks",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-tasks-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/components/linked-tasks.tsx",
+        "apps/web/src/features/tasks/components/outcome-select.tsx",
+        "apps/web/src/features/tasks/components/task-form-modal.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/tasks/lib/hotkeys.test.ts",
+          "match": "has nowhere to go in an empty list"
+        }
+      ]
+    },
+    {
+      "id": "EM-tasks-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-tasks-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/components/bulk-bar.tsx",
+        "apps/web/src/features/tasks/components/inline-task-add.tsx",
+        "apps/web/src/features/tasks/components/linked-tasks.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-tasks-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/api/hooks.ts",
+        "apps/web/src/features/tasks/api/service.ts",
+        "apps/web/src/features/tasks/components/parts.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

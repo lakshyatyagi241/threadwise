@@ -66,10 +66,10 @@
       "pending": "đang chờ",
       "you": "Bạn",
       "presence": {
-        "online": "Trực tuyến",
-        "away": "Vắng mặt",
+        "online": "Sẵn sàng",
+        "away": "Vắng mặt, ngoài giờ làm việc",
         "busy": "Bận",
-        "offline": "Ngoại tuyến"
+        "offline": "Vắng mặt"
       },
       "inactive": "Không hoạt động",
       "roleFor": "Vai trò của {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Trạng thái sẵn sàng",
       "available": "Sẵn sàng",
-      "offline": "Ngoại tuyến",
-      "hint": "Khi bạn ngoại tuyến, hệ thống không tự động giao cuộc trò chuyện mới cho bạn. Các cuộc trò chuyện bạn đang có vẫn của bạn.",
+      "offline": "Vắng mặt",
+      "hint": "Khi bạn vắng mặt, chat mới sẽ không được tự động giao cho bạn. Các chat bạn đang có vẫn thuộc về bạn.",
       "failed": "Không thể thay đổi"
+    },
+    "myLeave": {
+      "label": "Nghỉ phép",
+      "onLeaveUntil": "Nghỉ phép đến {date}",
+      "onLeaveOpen": "Đang nghỉ phép",
+      "hint": "Báo cho nhóm biết bạn vắng mặt. Trong thời gian nghỉ, hệ thống sẽ không tự động giao cuộc trò chuyện mới cho bạn.",
+      "title": "Thời gian nghỉ của bạn"
     },
     "deactivate": {
       "eyebrow": "Thành viên nhóm",

@@ -9,8 +9,11 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createContactFileSchema,
   listContactFilesQuerySchema,
@@ -19,11 +22,16 @@ import {
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
-import { ContactFilesService } from './contact-files.service';
+import { chatMediaConfig } from '../../../infra/providers/chat-conversations/media';
+import { ContactFilesService, type UploadedContactFile } from './contact-files.service';
+
+const upload = FileInterceptor('file', {
+  limits: { fileSize: Math.max(...Object.values(chatMediaConfig().maxBytes)), files: 1 },
+});
 
 /**
- * Contact detail page: Files tab. Metadata only — actual byte upload is
- * Phase 9 (File Manager)'s job; this records where a file ended up.
+ * Contact detail page: Files tab. Upload (`POST .../files/upload`) stores the bytes through the chat media door and records them;
+ * recording a file that is already stored elsewhere (`POST .../files`) is kept for callers that have the key.
  * Gated behind record.contacts.* (not its own permission set).
  */
 @ApiTags('contact-files')
@@ -40,6 +48,23 @@ export class ContactFilesController {
     @Query(zodPipe(listContactFilesQuerySchema)) query: ListContactFilesQuery,
   ) {
     return this.files.list(contactId, query);
+  }
+
+  @Post('upload')
+  @Idempotent()
+  @RequirePermission('record.contacts.update')
+  @UseInterceptors(upload)
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({
+    summary: 'Upload a file to a contact',
+    description:
+      'Multipart field `file`. Checked by content (type, size, magic bytes); the size and type recorded are the ones the server reads.',
+  })
+  async uploadFile(
+    @Param('contactId', ParseUUIDPipe) contactId: string,
+    @UploadedFile() file: UploadedContactFile | undefined,
+  ) {
+    return this.files.upload(contactId, file);
   }
 
   @Post()

@@ -4,9 +4,12 @@ import { signTelephonyCallback } from '../../../src/infra/providers/telephony';
 import { FakeTelephonyProvider } from '../../../src/infra/providers/telephony';
 import { CallRecordingRetentionService } from '../../../src/modules/calling-voice/call-recording-retention.service';
 import { CallLogRetentionService } from '../../../src/modules/calling-voice/logging/call-log-retention.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import {
   addNumber,
   enableRecording,
+  fundWallet,
+  saveRecordingRules,
   startCallPipeline,
   type CallPipeline,
   type Tenant,
@@ -706,7 +709,7 @@ describe('the contact’s calls and the Call logs screen', () => {
           .post(`/v2/calling/call-logs/${made.body.entry.id}/playback`)
           .send({})
       ).status,
-    ).toBe(404);
+    ).toBe(403); // no role holds call.recordings.play any more, so the refusal comes before the "nothing to play" check
   });
 
   it('applies the record scope of call.logs.read by who handled the call, on the list, the contact and the detail', async () => {
@@ -1336,6 +1339,7 @@ describe('telephony', () => {
 
   it('places a click-to-call, then logs the finished call under the person and the contact who placed it', async () => {
     const { t, contactId, number } = await setup('ctc1', { phone: '+919811400001' });
+    await fundWallet(p, t);
     const c = await connect(t);
     const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
     fake.placed.length = 0;
@@ -1392,6 +1396,7 @@ describe('telephony', () => {
 
   it('refuses a click-to-call a provider cannot place, a disabled connection, and a provider refusal, without logging anything', async () => {
     const { t, contactId } = await setup('ctc2', { phone: '+919811400001' });
+    await fundWallet(p, t);
     const generic = await connect(t, { provider: 'generic', label: 'Relay' });
     const noBridge = await post(t.admin, '/v2/calls/click-to-call', {
       connectionId: generic.id,
@@ -1450,6 +1455,7 @@ describe('telephony', () => {
 
   it('refuses a marketing call to a Do-Not-Call number before the provider is asked, and still allows a service call and logging', async () => {
     const { t, contactId, number } = await setup('dnc1', { phone: '+919811400009' });
+    await fundWallet(p, t);
     const c = await connect(t);
     const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
     fake.placed.length = 0;
@@ -1519,6 +1525,72 @@ describe('telephony', () => {
     expect((await post(t.admin, '/v2/calls/check', { contactId })).body.decision).toBe('allow');
   });
 
+  it('refuses a click-to-call outside the calling window before the provider rings, and the preflight says deny', async () => {
+    const { t, contactId } = await setup('ctw1', { phone: '+919811400011' });
+    await fundWallet(p, t);
+    const c = await connect(t);
+    const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
+    fake.placed.length = 0;
+    // Calling hours 09:00 to 18:00 on every day. The contact's +91 number is read on India's clock.
+    await p.h.owner.query(
+      `INSERT INTO compliance_settings (org_id, calling_window_enabled, calling_start, calling_end, calling_days) VALUES ($1, true, '09:00', '18:00', '{1,2,3,4,5,6,7}')`,
+      [t.orgId],
+    );
+    const window = p.h.app.get(SendWindowService, { strict: false });
+    const clock = window.now;
+    window.now = () => new Date('2030-10-15T16:00:00Z'); // 21:30 in India: the window is closed
+    try {
+      expect((await post(t.admin, '/v2/calls/check', { contactId })).body).toEqual({
+        decision: 'deny',
+        reason: 'outside_calling_window',
+      });
+      const res = await post(t.admin, '/v2/calls/click-to-call', {
+        connectionId: c.id,
+        contactId,
+        agentPhone: '+919000000001',
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('CALL_OUTSIDE_WINDOW');
+      expect(res.body.errors).toEqual([{ path: 'opensAt', message: '2030-10-16T03:30:00.000Z' }]);
+      expect(fake.placed).toHaveLength(0);
+      expect(
+        await rows(`SELECT 1 FROM telephony_click_calls WHERE org_id = $1`, [t.orgId]),
+      ).toHaveLength(0);
+    } finally {
+      window.now = clock;
+    }
+  });
+
+  it('refuses a click-to-call by number to a contact the person may not read, outside the window, and names no zone', async () => {
+    const { t, number } = await setup('ctw2', { phone: '+919811400012' });
+    await fundWallet(p, t);
+    const c = await connect(t);
+    const fake = p.h.app.get(FakeTelephonyProvider, { strict: false });
+    fake.placed.length = 0;
+    await p.h.owner.query(
+      `INSERT INTO compliance_settings (org_id, calling_window_enabled, calling_start, calling_end, calling_days) VALUES ($1, true, '09:00', '18:00', '{1,2,3,4,5,6,7}')`,
+      [t.orgId],
+    );
+    const window = p.h.app.get(SendWindowService, { strict: false });
+    const clock = window.now;
+    window.now = () => new Date('2030-10-15T16:00:00Z'); // 21:30 in India: the window is closed
+    try {
+      const mate = await p.api.member(t, 'Placer', [['call.logs.create']]);
+      const res = await post(mate.token, '/v2/calls/click-to-call', {
+        connectionId: c.id,
+        customerPhone: number,
+        agentPhone: '+919000000001',
+      });
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('CALL_OUTSIDE_WINDOW');
+      // The person cannot read this contact, so the refusal gives the instant the window opens and nothing about the contact's zone.
+      expect(res.body.errors).toEqual([{ path: 'opensAt', message: '2030-10-16T03:30:00.000Z' }]);
+      expect(fake.placed).toHaveLength(0);
+    } finally {
+      window.now = clock;
+    }
+  });
+
   describe('a reference to a recording', () => {
     const recorded = (t: Tenant) =>
       rows<{
@@ -1564,6 +1636,25 @@ describe('telephony', () => {
       expect((await recorded(t))[0]!.recording_ref).toBeNull();
     });
 
+    it('refuses to switch recording on without a notice, the rule the PUT route applies', async () => {
+      const { t } = await setup('recnone', { phone: '+919811400002' });
+      await expect(
+        saveRecordingRules(p, t, {
+          enabled: true,
+          consentMode: 'confirmed',
+          retentionDays: 90,
+          noticeText: '  ',
+        }),
+      ).rejects.toThrow(
+        'Write the recording notice (at least 10 characters) before switching recording on.',
+      );
+      const rows = await p.h.owner.query(
+        `SELECT enabled FROM call_recording_settings WHERE org_id = $1`,
+        [t.orgId],
+      );
+      expect(rows.rows).toEqual([]);
+    });
+
     it('is kept with its consent evidence once recording is on, the mode is "announcement" and the connection plays the notice; then it is cleared after the retention window', async () => {
       const { t } = await setup('rec4', { phone: '+919811400001' });
       const settings = await enableRecording(p, t, { mode: 'announcement', retentionDays: 30 });
@@ -1583,7 +1674,7 @@ describe('telephony', () => {
       expect(JSON.stringify(detail.body)).not.toContain('rec-ok-1');
       expect(
         (await p.api.as(t.admin).post(`/v2/calling/call-logs/${row.id}/playback`).send({})).status,
-      ).toBe(404);
+      ).toBe(403); // no role holds call.recordings.play any more
 
       // The database itself refuses a reference with no consent behind it.
       for (const change of [

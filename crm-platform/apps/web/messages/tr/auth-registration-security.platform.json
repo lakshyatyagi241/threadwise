@@ -1349,13 +1349,17 @@
             "details": "Ayrıntılar ve fiyatlandırma",
             "features": "Özellikler",
             "limits": "Sınırlar",
-            "addons": "Eklentiler"
+            "addons": "Eklentiler",
+            "integrations": "Entegrasyonlar",
+            "miniApps": "Mini uygulamalar"
           },
           "tabSummary": {
             "features": "{total} özellikten {count} tanesi açık",
             "limits": "{total} sınırdan {count} tanesi ayarlı",
-            "addons": "{count} eklenti seçildi",
-            "error": "Düzeltilecek hatalar var"
+            "addons": "{count, plural, one {# eklenti dahil veya sunuluyor} other {# eklenti dahil veya sunuluyor}}",
+            "error": "Düzeltilecek hatalar var",
+            "integrations": "Dahil edilen veya sunulan entegrasyonlar: {count}",
+            "miniApps": "Dahil edilen veya sunulan mini uygulamalar: {count}"
           },
           "featuresUi": {
             "intro": "Bu planın içermediği şeyleri kapatın. Plandaki bir çalışma alanı, özelliği kapalı olan bir alanı açamaz.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Tümünü etkinleştir",
             "disableAll": "Tümünü devre dışı bırak",
             "noMatch": "Aramanızla eşleşen özellik yok.",
-            "groupCount": "{total} içinden {count} açık"
+            "groupCount": "{total} içinden {count} açık",
+            "lockedBy": "Eklentiler sekmesindeki {addon} eklentisi tarafından belirlenir"
           },
           "limitsUi": {
             "intro": "Bir sınır, çalışma alanı ona ulaştığında işlemi durdurur. Sınırı kaldırmak için Sınırsız seçeneğini işaretleyin.",
@@ -1385,12 +1390,8 @@
             "total": "toplamda"
           },
           "addons": {
-            "intro": "Etkin eklentiler bu plandaki çalışma alanlarına Pazar yerinde gösterilir; yalnızca çalışma alanı satın aldıktan sonra kullanılabilir.",
             "search": "Eklenti ara",
             "searchPlaceholder": "Eklenti veya uygulama ara",
-            "selectAll": "Tümünü seç",
-            "clear": "Temizle",
-            "selected": "{total} içinden {count} seçildi",
             "loading": "Eklentiler yükleniyor",
             "empty": "Henüz ücretli eklenti yok",
             "emptyHint": "Eklentiler operatör konsolunun Pazar yeri kataloğunda oluşturulur. Bir uygulamanın ücretli paketi olduğunda burada listelenir.",
@@ -1404,7 +1405,8 @@
             "packInactive": "Eklenti paketi kapalı, bu yüzden kimse satın alamaz.",
             "appUnpublished": "Uygulama yayımlanmadı, bu yüzden çalışma alanları henüz göremez.",
             "appLabel": "Uygulama: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# eklenti dahil veya sunuluyor} other {# eklenti dahil veya sunuluyor}}"
           },
           "featureHints": {
             "automation": "Sohbetlere yanıt veren ve onlar üzerinde işlem yapan akış oluşturucu ve otomasyonlar.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "Beyaz etiket: çalışma alanı alt bilgisindeki platform markasını gizleyebilir.",
             "sales_pipeline": "Fırsatlar, görevler ve satış hunileri ile panodaki huni rakamları.",
             "appointment_booking": "Rezervasyon türleri, randevular ve herkese açık rezervasyon sayfaları. Bu anahtar ücretli Randevular uygulamasına aittir.",
+            "appointment_confirm_buttons": "Randevudan önce WhatsApp ile gönderilen hatırlatmaya Onayla, Yeniden planla ve İptal et düğmelerini ekler.",
+            "appointment_rebook_steps": "Tamamlanan randevudan sonra gönderilen, kişiyi yeniden randevu almaya çağıran takip mesajları.",
             "chatbot_widgets": "Web sitesi sohbet botu widget oluşturucusu.",
             "wa_storefront": "WhatsApp kataloğu ve mağaza vitrini alanı.",
             "inbox_sla": "Ekip gelen kutusundaki SLA politikaları ve son tarihler.",
-            "inbox_routing": "Gelen kutusu görüşmelerini otomatik atayan yönlendirme kuralları.",
+            "inbox_routing": "Yeni sohbetlerin otomatik atanması: yönlendirme kuralları, Diğer herkes ve bekleme kuyruğu zamanlayıcıları. Akıllı yönlendirme eklentisinin parçasıdır.",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları: arama numaraları, arama izinleri, arama yapma ve yanıtlama.",
             "inbox_kanban": "Ekip gelen kutusunun Kanban pano görünümü.",
             "team_performance": "Ekip performans raporları.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar.",
             "team_hierarchy": "Kendi ekibini ve altındaki ekipleri gören üst ekipler, ekip liderleri ve yöneticiler.",
             "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar).",
-            "inbox_assignment_sticky": "Kişi sahibi ile sohbet sahibi arasında önce sahip ve senkronize tut atamaları, geri dönen kişi süresi ve yeniden atama istemi. Gelen kutusu yönlendirmesiyle birlikte çalışır."
+            "inbox_assignment_sticky": "Önce sahip ve eşitlenmiş atama, geri dönen kişi penceresi ve yeniden atama sorusu. Akıllı yönlendirme eklentisinin parçasıdır.",
+            "agent_status_bar": "Üst çubukta ve Gelen Kutusu’nun başında Müsait / Uzakta durum denetimi; Uzakta / Müsait olarak ayarla ve İzin bağlantısıyla birlikte. Hesap menüsündeki Müsait / Uzakta anahtarı her pakete açıktır.",
+            "agent_status_automation": "Saat dilimli kişisel çalışma saatleri, dışında Uzakta, Çalışma saatleri dışında uyarısı ve saatleri dışındaki kişileri atlayan atama. Bir takvimi kaydetmek için gerekir; olmadan kayıtlı takvim korunur ama yok sayılır."
           },
           "units": {
             "days": "Gün",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "E-posta kutuları",
             "email_monthly": "Aylık e-posta",
             "storage_gb": "Depolama (GB)",
-            "teams": "Ekipler"
+            "teams": "Ekipler",
+            "webbot_messages": "Aylık ücretsiz web sitesi sohbet botu mesajı"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1609,10 +1616,12 @@
             "remove_branding": "Beyaz etiket (platform markasını kaldırır)",
             "sales_pipeline": "Satış hunisi (fırsatlar ve görevler)",
             "appointment_booking": "Randevular ve rezervasyon sayfaları",
+            "appointment_confirm_buttons": "Hatırlatma düğmeleri: Onayla, Yeniden planla ve İptal et",
+            "appointment_rebook_steps": "Randevudan sonra yeniden randevu (hatırlatma) adımları",
             "chatbot_widgets": "Web sitesi sohbet botu widget'ları",
             "wa_storefront": "WhatsApp mağaza vitrini ve kataloğu",
             "inbox_sla": "Gelen kutusu SLA politikaları",
-            "inbox_routing": "Gelen kutusu yönlendirme kuralları ve çalışma saatleri",
+            "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
             "waba_calling": "Gelen kutusundan WhatsApp aramaları yapın ve yanıtlayın",
             "inbox_kanban": "Gelen kutusu Kanban panosu",
             "team_performance": "Ekip performans raporları",
@@ -1638,7 +1647,9 @@
             "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
             "custom_roles": "Özel roller ve kapsamlar",
-            "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
+            "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci",
+            "agent_status_bar": "Durum çubuğu: üst çubukta ve Gelen Kutusu’nda Müsait / Uzakta denetimi",
+            "agent_status_automation": "Durumu otomatikleştir: kişisel çalışma saatleri ve otomatik Uzakta"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "Bir plan hem ücretsiz hem özel teklifli olamaz.",
             "paid_needs_price": "0 üzerinde bir fiyat belirleyin veya planı ücretsiz olarak işaretleyin.",
             "offer_not_lower": "İndirimli fiyat plan fiyatından düşük olmalıdır.",
-            "default_needs_active": "Kayıt varsayılanı plan etkin olmalıdır."
+            "default_needs_active": "Kayıt varsayılanı plan etkin olmalıdır.",
+            "addonPriceZero": "Eklentinin fiyatını kullanmak için fiyatı boş bırakın veya Dahil seçeneğini seçin.",
+            "addonGone": "Bu eklenti artık mevcut değil. Sayfayı yeniden yükleyip tekrar kaydedin."
           },
           "limitHints": {
             "monthly_messages": "Takvim ayında gönderilen giden mesajlar. Hak aşıldığında cüzdandan ücret alınır.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
             "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
             "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez.",
-            "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez."
+            "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez.",
+            "webbot_messages": "Her takvim ayında ücretsiz dahil olan web sitesi sohbet botu mesajları. Bunun üzerindeki her mesaj cüzdandan tahsil edilir. Boş veya 0 = ücretsiz mesaj yok."
           },
           "productLines": {
             "chat": "Sohbet",
             "crm": "Satış CRM",
             "platform": "İkisi için ortak"
+          },
+          "offers": {
+            "readOnly": "Bu planı görüntüleyebilirsiniz ancak değiştiremezsiniz, bu yüzden bu denetimler kilitli.",
+            "featureTitle": "Özellik eklentileri",
+            "featureIntro": "Ürünün bir bölümünün kilidini açan eklentiler. Dahil: bu plandaki çalışma alanları onu ücretsiz alır ve kartında \"Planınıza dahil\" yazar. Ücretli: satın alabilirler; belirlediyseniz bu planın kendi fiyatıyla. Gizli: hiç görmezler. Eklentinin Özellikler sekmesindeki özellikleri bu seçimi izler.",
+            "capacityTitle": "Kapasite eklentileri",
+            "capacityIntro": "Yalnızca bir limiti artıran eklentiler, örneğin ek bir kullanıcı koltuğu. Bir planda ücretli veya gizlidir; planın kendi üst sınırları Sınırlar sekmesinde belirlenir.",
+            "noFeaturePacks": "Henüz özellik eklentisi yok.",
+            "adds": "Ekler: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "Sınırsız {name}",
+            "modeLabel": "{name} bu planda nasıl sunulur",
+            "modes": {
+              "included": "Dahil",
+              "paid": "Ücretli",
+              "hidden": "Gizli"
+            },
+            "noIncluded": "Bu eklenti yalnızca limitleri artırır, bu yüzden dahil edilemez. Bu planın kendi üst sınırını Sınırlar sekmesinde belirleyin.",
+            "priceLabel": "Bu plandaki fiyat ({currency})",
+            "priceHint": "Eklentinin kendi fiyatını kullanmak için boş bırakın.",
+            "includedCapacityNote": "Yalnızca özellikleri dahildir. Ek limitler ({limits}) bu plandaki çalışma alanlarına satılmaya devam eder.",
+            "hiddenNote": "Bu plandaki çalışma alanları bu eklentiyi görmez ve satın alamaz. Zaten satın almış bir çalışma alanı, süresi bitene kadar onu korur.",
+            "offNote": "Artık dahil değil: bu plandaki çalışma alanları eklentiyi satın almadıkça bu özellikleri kaybeder. Ayarları saklanır ve eklenti yeniden açıldığında geri gelir.",
+            "loading": "Eklentiler yükleniyor",
+            "loadFailed": "Eklentiler yüklenemedi. Hiçbir şey değiştirilmedi.",
+            "empty": "Henüz eklenti yok",
+            "emptyHint": "Akıllı yönlendirme ve Ekipler ve izinler gibi eklentiler, operatör konsolunda Eklentiler bölümünde oluşturulur.",
+            "noPrice": "Fiyat belirlenmedi",
+            "gives": "Sağladığı: {features}",
+            "unlistedNote": "Özelliklerinden bazıları ({features}) standart eklenti listesinin dışında. Yine de plan için açılabilirler; yalnızca bu eklentinin paket olarak satın alınması farklı çalışır.",
+            "inactiveNote": "Bu eklenti taslak veya kapalı, bu yüzden henüz kimse satın alamaz. Plana dahil etmek yine de çalışır.",
+            "impactCount": "{count, plural, one {# çalışma alanı bu eklenti için zaten ödeme yapıyor.} other {# çalışma alanı bu eklenti için zaten ödeme yapıyor.}} Yenilemeleri mevcut dönemin sonunda duracak, hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek.",
+            "impactUnknown": "Bu plandaki ve bu eklenti için zaten ödeme yapan çalışma alanları, mevcut dönemlerinin sonunda yenilemeyi bırakacak. Hiçbir şey iade edilmeyecek ve bugün hiçbir şey iptal edilmeyecek. Sayı yüklenemedi.",
+            "partlyNote": "Bu plan bu eklentinin bir kısmını zaten veriyor ({features}). Burada Dahil, Ücretli veya Gizli seçene kadar böyle kalır.",
+            "needsFeatures": "Önce Eklentiler > {name} bölümünde açtığı özellikleri ekleyin"
+          },
+          "apps": {
+            "introMiniApps": "Mini uygulamalar, bir çalışma alanının Marketplace’ten kurduğu uygulamalardır. Dahil: bu plandaki çalışma alanları için ücretsiz. Ücretli: uygulamanın kendi fiyatıyla satın alabilirler. Gizli: onu hiç görmezler. Dahil seçeneği, uygulamanın sağladığı plan özelliklerini de açar.",
+            "introIntegrations": "Entegrasyonlar harici bir hizmeti bağlar. Dahil: bu plandaki çalışma alanları için ücretsiz. Ücretli: entegrasyonun kendi fiyatıyla satın alabilirler. Gizli: onu hiç görmezler. Dahil seçeneği, entegrasyonun sağladığı plan özelliklerini de açar.",
+            "setAll": "Gösterilenlerin tümünü şuna ayarla",
+            "summary": "{total} içinden {count} dahil veya sunuluyor",
+            "priceHint": "Marketplace uygulamaları kendi fiyatını korur; fiyatı uygulamanın sayfasında belirleyin.",
+            "emptyIntegrations": "Henüz ücretli entegrasyon yok",
+            "emptyIntegrationsHint": "Ücretsiz entegrasyonlar için burada ayar gerekmez; Shopify ve WooCommerce Özellikler sekmesinden açılır."
           }
         }
       },

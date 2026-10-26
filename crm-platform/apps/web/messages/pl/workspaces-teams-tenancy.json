@@ -66,10 +66,10 @@
       "pending": "oczekuje",
       "you": "Ty",
       "presence": {
-        "online": "Online",
-        "away": "Poza biurkiem",
+        "online": "Dostępny",
+        "away": "Nieobecny, poza godzinami pracy",
         "busy": "Zajęty",
-        "offline": "Offline"
+        "offline": "Nieobecny"
       },
       "inactive": "Nieaktywny",
       "roleFor": "Rola: {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Dostępność",
       "available": "Dostępny",
-      "offline": "Offline",
-      "hint": "Gdy jesteś offline, nowe czaty nie są Ci przydzielane automatycznie. Czaty, które już masz, zostają Twoje.",
+      "offline": "Nieobecny",
+      "hint": "Gdy jesteś nieobecny, nowe czaty nie są Ci przydzielane automatycznie. Czaty, które już masz, pozostają Twoje.",
       "failed": "Nie udało się zmienić"
+    },
+    "myLeave": {
+      "label": "Urlop",
+      "onLeaveUntil": "Na urlopie do {date}",
+      "onLeaveOpen": "Na urlopie",
+      "hint": "Powiadom zespół, że jesteś nieobecny. Podczas urlopu nowe czaty nie są Ci przydzielane automatycznie.",
+      "title": "Twój urlop"
     },
     "deactivate": {
       "eyebrow": "Członkowie zespołu",

@@ -48,9 +48,11 @@ function optionText(o: unknown): string {
 function normalizeField(raw: unknown, index: number): WaFormField {
   const f = (raw && typeof raw === 'object' ? raw : {}) as Record<string, unknown>;
   const rawKind = String(f.kind ?? f.type ?? 'short_text');
-  const kind = ((WA_FORM_FIELD_KINDS as readonly string[]).includes(rawKind)
-    ? rawKind
-    : (LEGACY_FIELD_KIND[rawKind] ?? 'short_text')) as WaFormField['kind'];
+  const kind = (
+    (WA_FORM_FIELD_KINDS as readonly string[]).includes(rawKind)
+      ? rawKind
+      : (LEGACY_FIELD_KIND[rawKind] ?? 'short_text')
+  ) as WaFormField['kind'];
   const id = String(f.id ?? f.name ?? `fld_${index + 1}`);
   const field: WaFormField = {
     id,
@@ -61,7 +63,8 @@ function normalizeField(raw: unknown, index: number): WaFormField {
   if (typeof f.placeholder === 'string') field.placeholder = f.placeholder;
   const helper = f.helperText ?? f.helper_text;
   if (typeof helper === 'string') field.helperText = helper;
-  if (Array.isArray(f.options)) field.options = f.options.map(optionText).filter((o) => o.length > 0);
+  if (Array.isArray(f.options))
+    field.options = f.options.map(optionText).filter((o) => o.length > 0);
   return field;
 }
 

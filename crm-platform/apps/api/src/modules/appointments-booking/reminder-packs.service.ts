@@ -2,8 +2,6 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   BOOKING_TIMED_STEPS_MAX,
   ERROR_CODES,
-  REMINDER_CONFIRM_BUTTONS_FEATURE,
-  REMINDER_REBOOK_FEATURE,
   BOOKING_UNDELIVERED_DEFAULT,
   type BookingReminderChannel,
   type BookingReminderInput,
@@ -14,6 +12,7 @@ import {
   type ReminderPackLanguage,
   type ReminderPackPreview,
   type ReminderPackPreviewInput,
+  type ReminderPackWithheld,
   type ReminderPackPreviewStep,
   type ReminderPacksResponse,
   type AppointmentMessageKind,
@@ -21,7 +20,7 @@ import {
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { ReminderPlan } from './reminder-plan';
 import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import { AppointmentTemplatesService } from './appointment-templates.service';
 import { BookingTypesRepository, type ReminderRow } from './booking-types.repository';
@@ -124,7 +123,7 @@ export class ReminderPacksService {
     private readonly typesService: BookingTypesService,
     private readonly templates: AppointmentTemplatesService,
     private readonly channels: AppointmentChannelsRepository,
-    private readonly entitlements: PlanEntitlementService,
+    private readonly plan: ReminderPlan,
   ) {}
 
   list(): ReminderPacksResponse {
@@ -161,6 +160,13 @@ export class ReminderPacksService {
         },
       });
     }
+    const parts = await this.plan.parts(RequestContextStore.require().orgId);
+    const withheld: ReminderPackWithheld[] = pack.steps.flatMap((s) => [
+      ...(s.buttons && !parts.buttons ? [{ stepKind: s.stepKind, part: 'buttons' as const }] : []),
+      ...(s.stepKind === 'rebook' && !parts.rebook
+        ? [{ stepKind: s.stepKind, part: 'rebook' as const }]
+        : []),
+    ]);
     const packSteps = new Set(pack.steps.map((s) => s.stepKind));
     const keptRows = load.reminders.filter((r) => !packSteps.has(r.stepKind));
     const timed = keptRows.filter(isTimed).length + pack.steps.filter(isTimed).length;
@@ -178,6 +184,7 @@ export class ReminderPacksService {
       timedStepsMax: BOOKING_TIMED_STEPS_MAX,
       blocked: timed > BOOKING_TIMED_STEPS_MAX ? 'cap_exceeded' : null,
       needsConfirm: steps.some((s) => s.action === 'replace'),
+      withheld,
     };
   }
 
@@ -211,14 +218,7 @@ export class ReminderPacksService {
       const rows = await this.channels.settings(tx, ctx.orgId);
       return new Set(rows.filter((r) => r.enabled).map((r) => r.channel));
     });
-    const hasButtonsPlan = await this.entitlements.featureEnabled(
-      ctx.orgId,
-      REMINDER_CONFIRM_BUTTONS_FEATURE,
-    );
-    const hasRebookPlan = await this.entitlements.featureEnabled(
-      ctx.orgId,
-      REMINDER_REBOOK_FEATURE,
-    );
+    const { buttons: hasButtonsPlan, rebook: hasRebookPlan } = await this.plan.parts(ctx.orgId);
     const waReady = await this.templates.hasWhatsappConnection();
 
     const made: ReminderPackAdoptResult['templates'] = [];
@@ -335,7 +335,13 @@ export class ReminderPacksService {
       reminders: [...keep, ...inputs.values()],
       rowVersion: load.rowVersion,
     });
-    return { reminders: updated.reminders, templates: made, added, replaced };
+    return {
+      reminders: updated.reminders,
+      templates: made,
+      added,
+      replaced,
+      withheld: view.withheld,
+    };
   }
 
   // --- helpers ------------------------------------------------------------------------------------------------------------------

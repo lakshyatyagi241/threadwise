@@ -114,6 +114,7 @@ export class LiveNotificationsController {
   private flushTimer: Timer | undefined;
   private inboxTimer: Timer | undefined;
   private resyncTimer: Timer | undefined;
+  private overviewTimer: Timer | undefined;
   private readTimer: Timer | undefined;
   private readonly readSubjects = new Set<string>();
   private readonly deferred = new Map<string, Timer>();
@@ -163,6 +164,7 @@ export class LiveNotificationsController {
       this.flushTimer,
       this.inboxTimer,
       this.resyncTimer,
+      this.overviewTimer,
       this.readTimer,
       this.overflowTimer,
       this.announceTimer,
@@ -189,6 +191,7 @@ export class LiveNotificationsController {
 
     // The badge moves at once, to the server's own number (never "+1" on our side, so a lost or repeated event cannot drift it).
     this.o.qc.setQueryData<number>(NOTIFICATION_KEYS.unread, unreadFrom(payload));
+    this.scheduleOverview();
 
     // The person is reading this very conversation: no toast, ping or alert (see `flush`), and the rows are marked read so the badge settles.
     if (this.isLookingAt(payload)) this.scheduleRead(payload.subjectId!);
@@ -202,6 +205,7 @@ export class LiveNotificationsController {
     qc.setQueryData<NotificationListResponse | undefined>(NOTIFICATION_KEYS.feed, (feed) =>
       feedAfterRead(feed, payload, new Date(env.now()).toISOString()),
     );
+    this.scheduleOverview();
   }
 
   private isLookingAt(p: Pick<CreatedPayload, 'subjectKind' | 'subjectId'>): boolean {
@@ -221,6 +225,17 @@ export class LiveNotificationsController {
     this.inboxTimer ??= setTimeout(() => {
       this.inboxTimer = undefined;
       void this.o.qc.invalidateQueries({ queryKey: INBOX_COUNTS_KEY });
+    }, FLUSH_MS);
+  }
+
+  /**
+   * The Notifications page's overview tiles (unread, last day, last week, total) and its list live under the feed key, not the badge
+   * key, so a new or read row has to refresh them as well. The prefix covers all of them; a burst waits one pass, like the inbox counts.
+   */
+  private scheduleOverview(): void {
+    this.overviewTimer ??= setTimeout(() => {
+      this.overviewTimer = undefined;
+      void this.o.qc.invalidateQueries({ queryKey: NOTIFICATION_KEYS.feed });
     }, FLUSH_MS);
   }
 

@@ -60,6 +60,7 @@ export const BULK_TABLES = new Set([
   'wa_templates',
   'segments',
   'contact_views',
+  'contact_view_users',
   'ai_training_sources',
   'wa_forms',
   'api_library_apis',

@@ -69,7 +69,7 @@ export function HelpHeader({
               {crumbs}
             </div>
             <h1 className="truncate text-[20px] font-semibold leading-tight">
-              <span className="italic text-primary">{accent}</span>
+              <span className="not-italic text-primary">{accent}</span>
               {rest ? ` ${rest}` : ''}
             </h1>
           </div>

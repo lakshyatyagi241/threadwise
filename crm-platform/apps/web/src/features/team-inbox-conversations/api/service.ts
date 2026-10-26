@@ -18,7 +18,7 @@ import type {
 import { inboxRewriteResponseSchema } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
-import { listQuery, type ListFilters } from '../lib/list';
+import { countsQuery, listQuery, type ListFilters } from '../lib/list';
 import {
   bulkConversationsResponseSchema,
   inboxTagListSchema,
@@ -84,8 +84,13 @@ export const inboxApi = {
       schema: conversationListResponseSchema,
       signal,
     }),
-  counts: (signal?: AbortSignal) =>
-    apiFetch('/inbox/counts', { schema: inboxCountsSchema, signal }),
+  /** The badges for the filters; `null` is the unfiltered inbox (the menu's badge reads that one). */
+  counts: (filters: ListFilters | null, signal?: AbortSignal) =>
+    apiFetch('/inbox/counts', {
+      query: filters ? countsQuery(filters) : undefined,
+      schema: inboxCountsSchema,
+      signal,
+    }),
   conversation: (id: string, signal?: AbortSignal) =>
     apiFetch(`/inbox/conversations/${id}`, { schema: inboxConversationDetailSchema, signal }),
   messages: (

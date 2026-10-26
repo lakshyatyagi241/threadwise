@@ -2,8 +2,6 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
-  REMINDER_CONFIRM_BUTTONS_FEATURE,
-  REMINDER_REBOOK_FEATURE,
   defaultStepKind,
   type AppointmentMessageKind,
   type BookingReminderStepKind,
@@ -26,7 +24,8 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
+import { PlanUsageService } from '../plans-subscriptions-trials';
+import { ReminderPlan } from './reminder-plan';
 import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import { AppointmentChannelsService } from './appointment-channels.service';
 import { toApiTemplate } from './appointment-template.mapper';
@@ -87,7 +86,7 @@ export class BookingTypesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly planUsage: PlanUsageService,
-    private readonly entitlements: PlanEntitlementService,
+    private readonly reminderPlan: ReminderPlan,
     private readonly channels: AppointmentChannelsService,
     private readonly library: AppointmentChannelsRepository,
     config: ConfigService<Env, true>,
@@ -455,18 +454,10 @@ export class BookingTypesService {
         const before = r.id ? existing.find((e) => e.uuid === r.id) : undefined;
         const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
         if (step === 'rebook' && !(before?.isActive && before.stepKind === 'rebook')) {
-          await this.entitlements.assertFeature(
-            orgId,
-            REMINDER_REBOOK_FEATURE,
-            "Your plan doesn't include rebook messages. Upgrade to unlock them.",
-          );
+          await this.reminderPlan.assert(orgId, 'rebook');
         }
         if (r.buttonsEnabled && !(before?.isActive && before.buttonsEnabled)) {
-          await this.entitlements.assertFeature(
-            orgId,
-            REMINDER_CONFIRM_BUTTONS_FEATURE,
-            "Your plan doesn't include Confirm, Reschedule and Cancel buttons. Upgrade to unlock them.",
-          );
+          await this.reminderPlan.assert(orgId, 'buttons');
         }
       }
       const waIds = await this.repo.resolveWaTemplates(

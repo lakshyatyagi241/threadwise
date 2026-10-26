@@ -1,0 +1,1027 @@
+{
+  "module": "shopify-woocommerce",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "saveAutomationsSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/automations.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "automations",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "automations",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "automations",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 60 items",
+          "value": "array of 60",
+          "priority": "P2"
+        },
+        {
+          "field": "automations",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (60) items",
+          "value": "array of 61",
+          "priority": "P2"
+        },
+        {
+          "field": "senderKey",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "senderKey",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P0"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "sendOfferSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/broadcast.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "templateUuid",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "templateUuid",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "templateUuid",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P2"
+        },
+        {
+          "field": "groupUuid",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "groupUuid",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "groupUuid",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P2"
+        },
+        {
+          "field": "productUuid",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "productUuid",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "productUuid",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P2"
+        },
+        {
+          "field": "couponCode",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "sendWinbackSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/broadcast.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "templateUuid",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "templateUuid",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "templateUuid",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a uuid",
+          "value": "\"not-a-uuid\"",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (365)",
+          "value": "365",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (365)",
+          "value": "366",
+          "priority": "P2"
+        },
+        {
+          "field": "days",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (1000)",
+          "value": "1000",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (1000)",
+          "value": "1001",
+          "priority": "P2"
+        },
+        {
+          "field": "minOrders",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "minSpent",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "minSpent",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P2"
+        },
+        {
+          "field": "minSpent",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (0)",
+          "value": "0",
+          "priority": "P2"
+        },
+        {
+          "field": "minSpent",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (0)",
+          "value": "-1",
+          "priority": "P2"
+        },
+        {
+          "field": "couponCode",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P0"
+        },
+        {
+          "field": "couponCode",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "shopifyEmbeddedSessionInputSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/embedded.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "sessionToken",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4096)",
+          "value": "\"a\" x 4096",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4096)",
+          "value": "\"a\" x 4097",
+          "priority": "P0"
+        },
+        {
+          "field": "sessionToken",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4096)",
+          "value": "\"😀\" x 4096",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "updateEcomInvoicePolicySchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/invoice-policy.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "autoInvoice",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "autoInvoice",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "trigger",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "trigger",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "trigger",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (on_fulfilled)",
+          "value": "\"on_fulfilled\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "(body)",
+          "reason": "1 cross-field rule(s) (refine) are not generated",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateShopifySettingsSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/platform-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "enabled",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "enabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "clientId",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "clientId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "clientId",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P2"
+        },
+        {
+          "field": "clientId",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P2"
+        },
+        {
+          "field": "clientId",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "clientSecret",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "clientSecret",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "clientSecret",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "clientSecret",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "clientSecret",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "scopes",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "scopes",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "scopes",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "scopes",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P2"
+        },
+        {
+          "field": "scopes",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "redirectUri",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "redirectUri",
+          "reason": "union: only the base option is exercised",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    },
+    {
+      "schema": "updateWoocommerceSettingsSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/platform-settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "enabled",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "enabled",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "connectShopifySchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/shopify.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "shop",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P2"
+        },
+        {
+          "field": "shop",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "connectWoocommerceSchema",
+      "file": "apps/api/src/modules/shopify-woocommerce/woocommerce.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "storeUrl",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P0"
+        },
+        {
+          "field": "storeUrl",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P2"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerKey",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (191)",
+          "value": "\"a\" x 191",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (191)",
+          "value": "\"a\" x 192",
+          "priority": "P0"
+        },
+        {
+          "field": "consumerSecret",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (191)",
+          "value": "\"😀\" x 190",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

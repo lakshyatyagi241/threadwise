@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# uur} other {# uur}}",
         "days": "{count, plural, one {# dag} other {# dagen}}"
       },
-      "unsnoozesAt": "Wordt weer open {time}"
+      "unsnoozesAt": "Wordt weer open {time}",
+      "erased": "Gewiste contacten",
+      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon en zonder berichttekst. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
+      "erasedTitle": "Gewist contact"
     },
     "status": {
       "received": "Ontvangen",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
       "resolvedBanner": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "resolvedWebchatBanner": "Deze webchat is opgelost en kan niet opnieuw worden geopend.",
       "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",
+      "session": {
+        "header": "{range} · {count, plural, one {# bericht} other {# berichten}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Eerdere berichten laden",
       "empty": "Nog geen berichten in dit gesprek.",
       "newMessageAnnounce": "Nieuw bericht: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Geen resultaten",
       "searchPrev": "Vorige treffer",
       "searchNext": "Volgende treffer",
-      "searchClose": "Zoeken sluiten"
+      "searchClose": "Zoeken sluiten",
+      "erasedBadge": "Gewist",
+      "erasedBanner": "Dit contact is gewist. Berichttekst en media zijn verwijderd, dus er kan niets worden verzonden. De tijdlijn en tijden blijven bewaard."
     },
     "groupThread": {
       "openGroup": "Groep openen",
@@ -542,17 +554,17 @@
         "onLeave": "Met verlof",
         "onLeaveUntil": "Met verlof tot {date}",
         "availability": {
-          "online": "Online",
-          "away": "Afwezig",
+          "online": "Beschikbaar",
+          "away": "Afwezig, buiten werktijd",
           "busy": "Bezet",
-          "offline": "Offline"
+          "offline": "Afwezig"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Afwezig",
+        "online": "Beschikbaar",
+        "away": "Afwezig, buiten werktijd",
         "busy": "Bezig",
-        "offline": "Offline"
+        "offline": "Afwezig"
       },
       "notes": {
         "tab": "Contactnotities",
@@ -584,7 +596,11 @@
           "sla_breach": "Reactietermijn verlopen",
           "spam_flagged": "Als spam gemarkeerd door {actor}",
           "escalated": "Geëscaleerd",
-          "unknown": "{what} door {actor}"
+          "unknown": "{what} door {actor}",
+          "handoff_requested": "Overgedragen aan een persoon door {actor}",
+          "queue_reminded": "Het team is herinnerd",
+          "queue_offered": "Aangeboden aan een ander team",
+          "queue_customer_message": "Er is een bericht naar de klant gestuurd"
         },
         "actors": {
           "user": "Een teamgenoot",
@@ -711,6 +727,7 @@
         "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden.",
         "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
         "media_header": "Heeft een koptekst met afbeelding, video of document, die nog niet vanuit de inbox kan worden verzonden.",
+        "carousel": "Is een carrousel (kaarten met afbeeldingen) en kan nog niet vanuit de inbox worden verzonden.",
         "header_variable": "Heeft een variabele in de koptekst, die nog niet vanuit de inbox kan worden ingevuld.",
         "dynamic_button": "Heeft een knoppenlink met een variabele, die nog niet vanuit de inbox kan worden ingevuld.",
         "authentication": "Sjablonen met een eenmalige code worden door het systeem verzonden, niet vanuit de inbox.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Alleen berichten met status {status}",
         "requestedAt": "Aangevraagd {date}",
         "lines": "{count, plural, one {# regel} other {# regels}}",
+        "noLines": "Geen gebeurtenissen in deze periode",
         "until": "Beschikbaar tot {date}",
         "download": "Downloaden",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (testen)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Websitechat",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (testen)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Websitechat",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contact",
         "agent": "U",
@@ -1054,7 +1072,10 @@
       "tagRemove": "Tag verwijderen",
       "onLeave": "met verlof",
       "onLeaveUntil": "met verlof tot {date}",
-      "spam": "Markeer als spam"
+      "spam": "Markeer als spam",
+      "markUnread": "Markeren als ongelezen",
+      "unsnooze": "Uitstel opheffen",
+      "notSpam": "Markeer als geen spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Terug naar de inbox",
-        "title": "Gesprekstags",
+        "title": "Tags",
         "intro": "Gesprekstags markeren een conversatie (facturatie, terugbetaling, urgent) zodat je team de inbox kan sorteren en filteren. Ze komen uit dezelfde tagbibliotheek als contacttags, die de persoon beschrijven.",
         "newTitle": "Nieuwe tag",
         "editTitle": "Tag bewerken",

@@ -1,0 +1,110 @@
+{
+  "_comment": "Every OFFSET in the API needs a decision: a numbered-page screen that needs it (accepted, with the cap) or optimized. A new OFFSET site fails tools/pagination-audit/scan.mjs until it has one. The register only shrinks.",
+  "decisions": [
+    {
+      "file": "apps/api/src/modules/api-library/api-library-logs.repository.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Request log of an API Library item: numbered pages with a total. The count is capped (LOG_COUNT_CAP) and the query is restricted to one org and one item, so a deep page walks that item's rows, not the table.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/api-library/api-library.repository.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Workspace API Library list (tens of rows per workspace, numbered pages for the screen).",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/call-logs.repository.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Call log screen: numbered pages with a total and a page cap of 100,000; the unified view joins two tables. Candidate for a keyset page behind the same screen if a workspace passes about a million calls.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
+      "sites": 2,
+      "status": "optimized",
+      "reason": "Campaign recipients: the largest numbered list (a broadcast can have millions of recipients). The page query now finds the page of ids first and joins contacts only for those rows (measurement in docs/performance/pagination/README.md); the page number is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/wizard/wizard-contacts.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Contact picker of the campaign wizard: numbered pages with a total, limited to the caller's record scope; contacts are indexed on (org_id, id). Candidate for the same page-of-ids-first change.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/catalog-products/sql-storefront-reader.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Public storefront product list: numbered pages for the shop UI; the page number is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/channel-facebook/posts.repository.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Facebook posts of one page: a small list per workspace; the page number is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/coupon-admin.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Platform admin list of coupons (hundreds of rows); the page is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Platform admin list of currencies (dozens of rows); the page is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts",
+      "sites": 3,
+      "status": "accepted",
+      "reason": "Platform admin invoices and subscriptions; the page is capped at 100,000 and the export is a separate stream.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/platform-subscriptions.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Platform admin subscription list (operator tool); the page is capped at 100,000.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Scheduled queue warmer engagement list for one schedule (bounded by the schedule size).",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-read.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Scheduled queue warmer list (bounded by the workspace's schedules).",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Command-line demo data seeder, not a request path.",
+      "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/customer-profiles.service.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "WhatsApp customer profiles: numbered pages, page capped at 10,000.",
+      "owner": "platform-performance"
+    }
+  ]
+}

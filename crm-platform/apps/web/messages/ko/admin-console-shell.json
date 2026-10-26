@@ -24,7 +24,7 @@
         "noWorkspaces": "워크스페이스 없음"
       },
       "labels": {
-        "addonPacks": "애드온 팩",
+        "addonPacks": "애드온",
         "extensions": "확장 기능",
         "trackingCode": "추적 코드",
         "planPricingSettings": "요금제 가격 설정",
@@ -282,7 +282,9 @@
           "save": "저장",
           "saved": "환경설정을 저장했습니다.",
           "saveFailed": "환경설정을 저장할 수 없습니다."
-        }
+        },
+        "timezoneSearch": "시간대 검색",
+        "timezoneNoMatch": "일치하는 시간대가 없습니다."
       },
       "notifications": {
         "title": "워크스페이스 알림",

@@ -1,0 +1,447 @@
+{
+  "module": "public-api",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "publicLeadSubmitSchema",
+      "file": "apps/api/src/modules/public-api/public-api.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "name",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "\"a\"",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "\"a\" x 255",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (255)",
+          "value": "\"a\" x 256",
+          "priority": "P1"
+        },
+        {
+          "field": "name",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (255)",
+          "value": "\"😀\" x 254",
+          "priority": "P2"
+        },
+        {
+          "field": "email",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "email",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "email",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (6)",
+          "value": "\"aaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (6)",
+          "value": "\"aaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (20)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (20)",
+          "value": "\"aaaaaaaaaaaaaaaaaaaaa\"",
+          "priority": "P0"
+        },
+        {
+          "field": "mobile",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (20)",
+          "value": "\"😀😀😀😀😀😀😀😀😀😀\"",
+          "priority": "P2"
+        },
+        {
+          "field": "source",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "source",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "source",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (100)",
+          "value": "\"a\" x 100",
+          "priority": "P1"
+        },
+        {
+          "field": "source",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (100)",
+          "value": "\"a\" x 101",
+          "priority": "P1"
+        },
+        {
+          "field": "source",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (100)",
+          "value": "\"😀\" x 100",
+          "priority": "P2"
+        },
+        {
+          "field": "collegeTag",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "collegeTag",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "collegeTag",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (200)",
+          "value": "\"a\" x 200",
+          "priority": "P1"
+        },
+        {
+          "field": "collegeTag",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (200)",
+          "value": "\"a\" x 201",
+          "priority": "P1"
+        },
+        {
+          "field": "collegeTag",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (200)",
+          "value": "\"😀\" x 200",
+          "priority": "P2"
+        },
+        {
+          "field": "custom",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of an object",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.channels",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.channels",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.channels",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.channels",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 3 items",
+          "value": "[\"whatsapp\",\"whatsapp\",\"whatsapp\"]",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.channels",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (3) items",
+          "value": "[\"whatsapp\",\"whatsapp\",\"whatsapp\",\"whatsapp\"]",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.note",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.note",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.note",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (500)",
+          "value": "\"a\" x 500",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.note",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (500)",
+          "value": "\"a\" x 501",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.note",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (500)",
+          "value": "\"😀\" x 500",
+          "priority": "P2"
+        },
+        {
+          "field": "consent.text",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.text",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.text",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.text",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.text",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "consent.version",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (64)",
+          "value": "\"a\" x 64",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (64)",
+          "value": "\"a\" x 65",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.version",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (64)",
+          "value": "\"😀\" x 64",
+          "priority": "P2"
+        },
+        {
+          "field": "consent.at",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.at",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "consent.at",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

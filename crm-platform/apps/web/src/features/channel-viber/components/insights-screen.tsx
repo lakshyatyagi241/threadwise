@@ -32,7 +32,7 @@ export function InsightsScreen() {
           </div>
           <h1 className="text-[32px] font-normal leading-none tracking-tight sm:text-[40px]">
             {t('title')}{' '}
-            <span className="italic" style={{ color: VIBER }}>
+            <span className="not-italic" style={{ color: VIBER }}>
               {t('titleAccent')}
             </span>
           </h1>

@@ -47,6 +47,7 @@ import {
   type FakeSocket,
   type Rig,
 } from '../node-bridge-runtime/support';
+import { pngOfSize } from '../../support/images';
 
 /**
  * The groups of a PERSONAL WhatsApp number (docs/threadwise-port/plan/whatsapp-personal-groups-build.md): the real app, real Postgres and
@@ -1136,10 +1137,7 @@ describe('leave', () => {
 // --- picture ----------------------------------------------------------------------------------------------------------------------
 
 describe('the group picture', () => {
-  const PNG = Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(64),
-  ]);
+  const PNG = pngOfSize(8 + 64);
 
   it('sends a PNG to the socket, refuses a non-image or one over 5 MB, and removes it', async () => {
     const d = await connected('picture');

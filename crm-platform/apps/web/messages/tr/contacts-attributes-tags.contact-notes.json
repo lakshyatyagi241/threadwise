@@ -120,7 +120,12 @@
         "keep": "Dosyayı koru",
         "deleted": "Dosya kaldırıldı",
         "deleteFailed": "Dosya kaldırılamadı. Tekrar deneyin.",
-        "forbidden": "Dosya kaldırma izniniz yok."
+        "forbidden": "Dosya kaldırma izniniz yok.",
+        "upload": "Dosya ekle",
+        "uploading": "Dosya yükleniyor",
+        "added": "Dosya eklendi",
+        "uploadFailed": "Dosya eklenemedi. Tekrar deneyin.",
+        "uploadRejected": "Bu dosya türüne izin verilmiyor veya dosya çok büyük."
       }
     }
   }

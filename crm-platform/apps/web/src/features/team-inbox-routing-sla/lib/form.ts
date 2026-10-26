@@ -6,6 +6,7 @@ import {
   ROUTING_NAME_MAX,
   type ConversationPriority,
   type CreateRoutingRuleInput,
+  hasRoutingConditions,
   type RoutingConditions,
   type RoutingRule,
   type RoutingStrategy,
@@ -15,10 +16,29 @@ import { kindLookup, type FieldDef } from '@/features/segments/lib/fields';
 import { emptyRoot, pruneIncomplete, type Group } from '@/features/segments/lib/model';
 import { fromWire, parseRules, toWire } from '@/features/segments/lib/wire';
 
+/**
+ * The conditions a rule can have, as the editor's "Add a condition" menu offers them. Only the ones in `RuleForm.added` are shown;
+ * a rule starts with none (H13/H14). Contact details come last in the menu: they only match what is already saved on the contact.
+ */
+export const CONDITION_KEYS = [
+  'contactKind',
+  'channel',
+  'keywords',
+  'language',
+  'hours',
+  'contact',
+] as const;
+export type ConditionKey = (typeof CONDITION_KEYS)[number];
+
 /** The rule form as the person edits it. Text fields stay text until save; the contact conditions are the segments builder's own tree. */
 export interface RuleForm {
   name: string;
   description: string;
+  /** "Only for conversations that match...": off (the default) means the rule applies to every new conversation. */
+  onlyWhen: boolean;
+  /** The condition cards shown, in the order they were added. A condition not listed here is empty. */
+  added: ConditionKey[];
+  contactKind: 'any' | 'new' | 'returning';
   contact: Group;
   channelKinds: string[];
   keywords: string;
@@ -30,6 +50,8 @@ export interface RuleForm {
   strategy: RoutingStrategy;
   userIds: string[];
   teamIds: string[];
+  /** "Everyone Else" only: every agent who can open the inbox (the lists above are then empty). */
+  everyone: boolean;
   /** Whether the rule marks the conversation as spam (Reference's mark_spam). */
   markSpam: boolean;
   /** The priority to set, or '' to leave it as it is. */
@@ -57,6 +79,9 @@ export interface RuleForm {
 export const emptyForm = (): RuleForm => ({
   name: '',
   description: '',
+  onlyWhen: false,
+  added: [],
+  contactKind: 'any',
   contact: emptyRoot(),
   channelKinds: [],
   keywords: '',
@@ -67,6 +92,7 @@ export const emptyForm = (): RuleForm => ({
   strategy: 'round_robin',
   userIds: [],
   teamIds: [],
+  everyone: false,
   markSpam: false,
   priority: '',
   tags: '',
@@ -95,11 +121,29 @@ export function splitWords(text: string): string[] {
   return out;
 }
 
+/** The condition cards a stored rule needs: every part that has a value. */
+export function addedOf(c: RoutingConditions): ConditionKey[] {
+  const out: ConditionKey[] = [];
+  if (c.contactKind !== 'any') out.push('contactKind');
+  if (c.channelKinds.length > 0) out.push('channel');
+  if (c.keywords) out.push('keywords');
+  if (c.languages.length > 0) out.push('language');
+  if (c.businessHours !== 'any') out.push('hours');
+  if (c.contact) out.push('contact');
+  return out;
+}
+
 export function formFromRule(rule: RoutingRule): RuleForm {
   const c = rule.conditions;
+  const added = addedOf(c);
   return {
     name: rule.name,
     description: rule.description,
+    // A rule shows "Only for conversations that match" on unless it applies to every conversation. An old catch-all fallback
+    // (no conditions, not flagged) is also "every conversation".
+    onlyWhen: !rule.appliesToAll && (added.length > 0 || !rule.isFallback),
+    added,
+    contactKind: c.contactKind,
     contact: fromWire(c.contact as SegmentGroup | null),
     channelKinds: [...c.channelKinds],
     keywords: c.keywords ? c.keywords.words.join(', ') : '',
@@ -110,6 +154,7 @@ export function formFromRule(rule: RoutingRule): RuleForm {
     strategy: rule.assign?.strategy ?? 'round_robin',
     userIds: [...(rule.assign?.userIds ?? [])],
     teamIds: [...(rule.assign?.teamIds ?? [])],
+    everyone: rule.assign?.everyone ?? false,
     markSpam: rule.markSpam,
     priority: rule.priority ?? '',
     tags: rule.addTags.map((t) => t.name).join(', '),
@@ -134,6 +179,7 @@ function contactRules(root: Group, catalog: readonly FieldDef[]): SegmentGroup |
 export function conditionsFromForm(f: RuleForm, catalog: readonly FieldDef[]): RoutingConditions {
   const words = splitWords(f.keywords);
   return {
+    contactKind: f.contactKind,
     contact: contactRules(f.contact, catalog) as RoutingConditions['contact'],
     channelKinds: f.channelKinds as RoutingConditions['channelKinds'],
     keywords: words.length > 0 ? { mode: f.keywordMode, words } : null,
@@ -168,13 +214,8 @@ export function problemsOf(f: RuleForm, catalog: readonly FieldDef[]): FormProbl
   if (pruneIncomplete(f.contact, kindLookup(catalog)).dropped > 0) out.push('contactIncomplete');
   if (splitWords(f.keywords).length > ROUTING_KEYWORDS_MAX) out.push('keywordsMany');
   const c = conditionsFromForm(f, catalog);
-  const any =
-    c.contact !== null ||
-    c.channelKinds.length > 0 ||
-    c.keywords !== null ||
-    c.languages.length > 0 ||
-    c.businessHours !== 'any';
-  if (!any && !f.isFallback) out.push('conditions');
+  // "Only for conversations that match" is on, so at least one condition is needed or the rule would never match.
+  if (f.onlyWhen && !f.isFallback && !hasRoutingConditions(c)) out.push('conditions');
   const tagNames = splitWords(f.tags);
   if (tagNames.length > ROUTING_TAGS_MAX) out.push('tagsMany');
   if (f.escalates) {
@@ -200,9 +241,10 @@ export function problemsOf(f: RuleForm, catalog: readonly FieldDef[]): FormProbl
   ) {
     out.push('actions');
   }
-  if (f.assigns && f.userIds.length + f.teamIds.length === 0) out.push('targets');
+  if (f.assigns && !f.everyone && f.userIds.length + f.teamIds.length === 0) out.push('targets');
   else if (
     f.assigns &&
+    !f.everyone &&
     f.strategy === 'specific' &&
     (f.userIds.length !== 1 || f.teamIds.length > 0)
   ) {
@@ -220,7 +262,14 @@ export function payloadFromForm(
     name: f.name.trim(),
     description: f.description.trim(),
     conditions: conditionsFromForm(f, catalog),
-    assign: f.assigns ? { strategy: f.strategy, userIds: f.userIds, teamIds: f.teamIds } : null,
+    assign: f.assigns
+      ? {
+          strategy: f.strategy,
+          userIds: f.everyone ? [] : f.userIds,
+          teamIds: f.everyone ? [] : f.teamIds,
+          everyone: f.everyone,
+        }
+      : null,
     markSpam: f.markSpam,
     priority: f.priority === '' ? null : f.priority,
     addTags: splitWords(f.tags).map((name) => ({ name, color: null })),
@@ -235,6 +284,8 @@ export function payloadFromForm(
     triggerFlowId: f.triggerFlowId === '' ? null : f.triggerFlowId,
     stopOnMatch: f.stopOnMatch,
     isFallback: f.isFallback,
+    // Off: the rule applies to every conversation and its conditions (kept) are ignored.
+    appliesToAll: !f.onlyWhen,
     isActive,
   };
 }
@@ -254,6 +305,7 @@ export const editableOf = (r: RoutingRule): string =>
     r.triggerFlow?.id ?? null,
     r.stopOnMatch,
     r.isFallback,
+    r.appliesToAll,
     r.isActive,
   ]);
 

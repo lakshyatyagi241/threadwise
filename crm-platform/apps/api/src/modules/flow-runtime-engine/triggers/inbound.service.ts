@@ -7,6 +7,7 @@ import {
 import { DatabaseService } from '../../../infra/db/database.service';
 import { FlowEngine } from '../runtime/engine.service';
 import { sql } from 'drizzle-orm';
+import { liveTrigger } from '../runtime/live-graph';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { decodeInbound } from '../runtime/reply-router';
 import { RunRepository } from '../runtime/run.repository';
@@ -139,7 +140,7 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
     try {
       const flow = await this.db.txAs({ orgId: e.orgId }, async (tx) => {
         const res = (await tx.execute(
-          sql`SELECT id, provider, trigger_channel_id, is_published, is_active FROM flows WHERE org_id = ${e.orgId} AND uuid = ${flowUuid}::uuid`,
+          sql`SELECT id, ${liveTrigger('provider')} AS provider, ${liveTrigger('trigger_channel_id')} AS trigger_channel_id, is_published, is_active FROM flows WHERE org_id = ${e.orgId} AND uuid = ${flowUuid}::uuid`,
         )) as unknown as { rows: Array<Record<string, unknown>> };
         return res.rows[0] ?? null;
       });
@@ -157,7 +158,8 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
         conversationId: e.conversationId,
         requirePublished: true,
         withSubscriber: false,
-        startNodeId: nodeId,
+        // `__start` is the bot's own opening (a website chat that opens by itself): from its first step.
+        startNodeId: nodeId === '__start' ? null : nodeId,
       });
       return out.outcome === 'started';
     } catch (err) {

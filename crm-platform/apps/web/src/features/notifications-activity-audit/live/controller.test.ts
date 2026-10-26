@@ -441,6 +441,21 @@ describe('notification.read', () => {
 });
 
 describe('inbox signals and resync', () => {
+  it('marks the overview counts and the list stale when a row arrives or is read elsewhere', async () => {
+    const h = await setup();
+    const summary = [...NOTIFICATION_KEYS.feed, 'summary'];
+    h.qc.setQueryData(summary, { unread: 0, total: 0, last24Hours: 0, last7Days: 0, byType: {} });
+    h.created(1, CONV_A);
+    h.created(2, CONV_A);
+    await settle();
+    expect(h.qc.getQueryState(summary)?.isInvalidated).toBe(true);
+
+    h.qc.setQueryData(summary, { unread: 2, total: 2, last24Hours: 2, last7Days: 2, byType: {} });
+    h.emit({ unread: 1, notificationIds: [id(1)] }, REALTIME_EVENT.notificationRead);
+    await settle();
+    expect(h.qc.getQueryState(summary)?.isInvalidated).toBe(true);
+  });
+
   it('invalidates the inbox counts once for a burst of inbox events', async () => {
     const h = await setup();
     const spy = vi.spyOn(h.qc, 'invalidateQueries');

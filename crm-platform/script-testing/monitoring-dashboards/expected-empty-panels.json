@@ -5,6 +5,7 @@
     {"dashboard": "crm-realtime", "titleRegex": ".*", "reason": "realtime joins need authenticated sockets: the runner connects to /realtime without a session, so no socket reaches the counted state"},
     {"dashboard": "crm-api", "titleRegex": "^5xx share", "reason": "5xx share needs 5xx errors: none are produced on purpose"},
     {"dashboard": "crm-workers", "titleRegex": "^(Failed share|Retries|Failed jobs per second)", "reason": "failed and retried jobs need failing jobs: the runner only sends jobs that succeed"},
+    {"dashboard": "crm-slow-queries", "titleRegex": ".*", "reason": "slow-query watcher and chat bridge are separate services not started by this runner, so crm_slow_query_*, pg_stat_statements_available and crm_chat_bridge_* have no series here"},
     {"dashboard": "crm-release-comparison", "titleRegex": ".*", "reason": "release comparison needs history: it compares this release with one from $compare ago and needs two releases reporting over an hour"}
   ]
 }

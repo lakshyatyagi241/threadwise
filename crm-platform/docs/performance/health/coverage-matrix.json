@@ -1,0 +1,120 @@
+{
+  "comment": "Sheet3 #73. Source of truth for health/readiness coverage. tools/health-readiness/check.mjs verifies every claim against the compose files, the rules and the runbook; a service in a compose file that is missing here fails the check.",
+  "services": {
+    "api-blue": {
+      "liveness": "GET /health (no dependencies)",
+      "readiness": "GET /ready (primary DB + Redis, 2 s deadline each)",
+      "healthcheck": "compose: /ready, 10s/5s/6 retries, 30s grace",
+      "alert": "ApiProbeFailing",
+      "runbook": "docs/runbooks/health-readiness.md#api",
+      "test": "apps/api/test/unit/health-readiness/ + script-testing/health-readiness live fault proxy",
+      "owner": "platform"
+    },
+    "api-green": {
+      "same_as": "api-blue"
+    },
+    "web-blue": {
+      "liveness": "GET /api/health (no API call)",
+      "readiness": "GET /api/ready (API /health reachable, 2 s deadline)",
+      "healthcheck": "compose: /login, 10s/5s/6 retries, 30s grace",
+      "alert": "ApiProbeFailing",
+      "runbook": "docs/runbooks/health-readiness.md#web",
+      "test": "apps/web/src/app/api/ready/route.test.ts",
+      "owner": "platform"
+    },
+    "web-green": {
+      "same_as": "web-blue"
+    },
+    "worker": {
+      "liveness": "heartbeat in Redis (worker-probe.js)",
+      "readiness": "same heartbeat (needs Redis; the API /ready also reports workers and outbox)",
+      "healthcheck": "compose: worker-probe.js, 30s/5s/3 retries, 40s grace",
+      "alert": "RuntimeMetricsTargetDown",
+      "runbook": "docs/runbooks/health-readiness.md#worker",
+      "test": "apps/api/test/integration/platform-infrastructure/worker-status.spec.ts",
+      "owner": "platform"
+    },
+    "postgres": {
+      "liveness": "pg_isready",
+      "readiness": "pg_isready",
+      "healthcheck": "compose: pg_isready, 10s/5s/10",
+      "alert": "PostgresDown",
+      "runbook": "docs/runbooks/health-readiness.md#postgresdown",
+      "test": "health.rules.test.yml (promtool); live: DB fault proxy; crm_postgres_up in database.service.ts",
+      "owner": "platform"
+    },
+    "redis": {
+      "liveness": "redis-cli ping",
+      "readiness": "redis-cli ping",
+      "healthcheck": "compose: redis-cli ping, 10s/3s/5",
+      "alert": "RedisDown",
+      "runbook": "docs/runbooks/p0-failure-modes.md#redisdown",
+      "test": "live: Redis fault proxy in script-testing/health-readiness",
+      "owner": "platform"
+    },
+    "backup": {
+      "liveness": "n/a",
+      "readiness": "n/a",
+      "healthcheck": "compose: .last-ok younger than 26 h, 5m/10s/1, 3m grace",
+      "alert": "BackupStale, BackupMarkerMissing",
+      "runbook": "docs/runbooks/health-readiness.md#backupstale",
+      "test": "health.rules.test.yml (promtool) + probe.spec.ts",
+      "owner": "platform"
+    },
+    "offsite": {
+      "liveness": "n/a",
+      "readiness": "n/a",
+      "healthcheck": "compose: /tmp/offsite-ok younger than 2 h, 5m/10s/1, 10m grace",
+      "alert": "OffsiteBackupStale",
+      "runbook": "docs/runbooks/health-readiness.md#offsitebackupstale",
+      "test": "health.rules.test.yml (promtool) + probe.spec.ts",
+      "owner": "platform"
+    },
+    "migrate": {
+      "exempt": "one-shot job: depends_on service_completed_successfully is its health gate",
+      "alert": "none",
+      "runbook": "docs/runbooks/migrations.md",
+      "test": "deploy/hostinger/tests/ci-entry.test.sh",
+      "owner": "platform"
+    },
+    "probe": {
+      "liveness": "metrics port scrape (crm-probe)",
+      "readiness": "n/a",
+      "exempt": "no healthcheck: RuntimeMetricsTargetDown fires when crm-probe stops being scraped (it also exports the backup/offsite ages and the s3 reachability)",
+      "alert": "RuntimeMetricsTargetDown",
+      "runbook": "docs/performance/event-loop/event-loop-observability-runbook.md",
+      "test": "alerting runner live case probe-dead-port",
+      "owner": "platform"
+    },
+    "prometheus": {
+      "liveness": "/-/healthy",
+      "readiness": "/-/ready (rules loaded)",
+      "healthcheck": "compose: wget /-/healthy, 30s/5s/3, 30s grace",
+      "alert": "Watchdog (dead-man's-switch, external heartbeat receiver needed)",
+      "runbook": "docs/runbooks/health-readiness.md#watchdog",
+      "test": "health.rules.test.yml (promtool); tools/health-readiness/check.mjs",
+      "owner": "platform"
+    },
+    "alertmanager": {
+      "liveness": "/-/healthy",
+      "readiness": "/-/ready",
+      "healthcheck": "compose: wget /-/ready, 30s/5s/3, 20s grace",
+      "alert": "Watchdog (dead-man's-switch, external heartbeat receiver needed)",
+      "runbook": "docs/runbooks/health-readiness.md#watchdog",
+      "test": "alerting runner webhook delivery check; check.mjs routes",
+      "owner": "platform"
+    },
+    "grafana": {
+      "exempt": "dashboards only, not on the request path",
+      "alert": "none",
+      "runbook": "deploy/hostinger/README.md",
+      "test": "monitoring-dashboards runner",
+      "owner": "platform"
+    }
+  },
+  "virtual": {
+    "realtime-gateway": "runs inside the API process: covered by the api-blue/api-green rows (no separate container)",
+    "traefik": "external (dokploy), not in these compose files: routes /health and /ready to the API (traefik-desk.yml.template); its own health is outside this repo",
+    "s3-object-storage": "external Cloudflare R2: deliberately NOT part of /ready. Optional probe target s3 (set PROBE_S3_URL; any HTTP answer = reachable) with alert ObjectStoreUnreachable"
+  }
+}

@@ -44,8 +44,6 @@ function ModeBadge({ mode }: { mode: FlowType }) {
   );
 }
 
-const RETIRED_NODE = 'faq';
-
 /**
  * Search matches label, description and group, case-insensitively (TW-FLB-016 rule 2). QUIRK reproduced: the query is NOT
  * trimmed, so a query with leading or trailing spaces ("  sheet  ") matches nothing, and a blank-but-not-empty one too.
@@ -58,8 +56,6 @@ export function filterPalette(
   const q = query.toLowerCase();
   const groups = new Map<string, FlbNodeTypeDef[]>();
   for (const d of flbPaletteFor(mode)) {
-    // "Answer from FAQ" is retired: flows that still hold one keep working (it leaves by "No match"), but it is not offered any more.
-    if (d.id === RETIRED_NODE) continue;
     if (
       q &&
       !nodeLabel(t, d.id).toLowerCase().includes(q) &&

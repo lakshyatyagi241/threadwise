@@ -241,7 +241,8 @@
         "expiry": "Data zakończenia musi być późniejsza niż data wysyłki, w przeciwnym razie kampania wygasłaby, zanim cokolwiek wyśle.",
         "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
         "sender": "Wybierz nadawcę.",
-        "subject": "Skróć temat do 150 znaków lub mniej."
+        "subject": "Skróć temat do 150 znaków lub mniej.",
+        "pacing": "Sprawdź Inteligentne dostarczanie: każda liczba musi być liczbą całkowitą mieszczącą się w dozwolonym zakresie."
       },
       "submit": {
         "save": "Zapisz zmiany",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Najdłuższa przerwa przed wiadomością.",
         "batchPauseHint": "Minuty odpoczynku po każdej partii.",
         "retryFailed": "Automatycznie ponawiaj nieudane wiadomości",
-        "retryFailedHint": "Wiadomość, która nie poszła z przyczyn tymczasowych, jest ponawiana kilka razy z przerwą między próbami. Wyłącz, aby wysłać każdą wiadomość tylko raz."
+        "retryFailedHint": "Wiadomość, która nie poszła z przyczyn tymczasowych, jest ponawiana kilka razy z przerwą między próbami. Wyłącz, aby wysłać każdą wiadomość tylko raz.",
+        "range": "Wpisz liczbę całkowitą od {min} do {max}."
       },
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
       "draftChip": "Szkic / niezapisane",
@@ -595,7 +597,8 @@
           "expiry": "Data końcowa musi być późniejsza niż data wysyłki, inaczej kampania wygaśnie, zanim cokolwiek wyśle.",
           "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
           "sender": "Wybierz nadawcę.",
-          "subject": "Skróć temat do 150 znaków lub mniej."
+          "subject": "Skróć temat do 150 znaków lub mniej.",
+          "pacing": "Sprawdź Inteligentne dostarczanie: każda liczba musi być liczbą całkowitą mieszczącą się w dozwolonym zakresie."
         },
         "from": "Od",
         "subject": "Temat",
@@ -686,6 +689,7 @@
             "providerFailed": "Usługa obrazów nie odpowiedziała. Spróbuj ponownie za chwilę.",
             "badJson": "Usługa obrazów zwróciła nieoczekiwaną odpowiedź. Spróbuj ponownie.",
             "imageRefused": "OpenAI odmówiło utworzenia tego obrazu. Zmień produkt, ofertę lub notatki i spróbuj ponownie.",
+            "storageRequired": "Obrazy wymagają chmurowego magazynu obiektów: poproś administratora platformy o jego włączenie. Tekst kampanii został zachowany.",
             "invalid": "Sprawdź brief: nazwa firmy jest wymagana, a niektóre pola są zbyt długie.",
             "forbidden": "Nie masz uprawnień do tworzenia kampanii.",
             "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Wiadomości uzupełniające działają tylko z numerem WhatsApp Cloud API. Wybierz taki numer w kroku 1 lub usuń wiadomości uzupełniające.",
         "sequence_not_recurring": "Szablony wysyłane na zmianę działają tylko z kampanią cykliczną. Wybierz harmonogram cykliczny lub usuń dodatkowe szablony.",
         "sequence_with_ab": "Szablonów na zmianę nie można łączyć z testem A/B. Wyłącz test A/B lub usuń dodatkowe szablony.",
-        "sequence_template_required": "Wybierz szablon dla każdego kroku kolejności lub usuń puste."
+        "sequence_template_required": "Wybierz szablon dla każdego kroku kolejności lub usuń puste.",
+        "variable_fallback_required": "Wpisz wartość zastępczą dla każdej zmiennej pochodzącej z pola kontaktu: jest używana dla kontaktów bez wartości.",
+        "retry_end_too_far": "Ponowne próby mogą trwać najwyżej 7 dni od dziś. Wybierz bliższą datę zakończenia.",
+        "template_b_same": "Wariant B potrzebuje innego szablonu niż wariant A.",
+        "pacing_out_of_range": "Sprawdź Inteligentne dostarczanie: jedna z liczb jest poza dozwolonym zakresem."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Wersja informacji: {version}.",
         "modePrevious": "Wyślij do poprzednich wysyłek",
         "previousHint": "Ponownie dotrzyj do osób, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko tych, które przeczytały, nie przeczytały, odpowiedziały lub kliknęły.",
-        "chipPrevious": "{count, plural, one {# wcześniejsza wysyłka} few {# wcześniejsze wysyłki} many {# wcześniejszych wysyłek} other {# wcześniejszej wysyłki}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# wcześniejsza wysyłka} few {# wcześniejsze wysyłki} many {# wcześniejszych wysyłek} other {# wcześniejszej wysyłki}} ({outcome})",
+        "filterNoConditions": "Dodaj warunek, aby zobaczyć, ilu kontaktów pasuje."
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Poprzednie wysyłki: {names} ({outcome})",
         "sumSplit": "Podział między numery",
         "sumSplitCount": "{count, plural, one {# odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorcy}} ({percent}%)",
-        "sumSplitPercent": "{percent}% odbiorców"
+        "sumSplitPercent": "{percent}% odbiorców",
+        "sumCostCharged": "Obciążenie z Twojego portfela: {amount} (reszta jest objęta Twoim planem)"
       },
       "test": {
         "title": "Wyślij testową wiadomość WhatsApp",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Włącz ponawianie",
         "retriesToggle": "Ponawiaj wiadomości wstrzymane przez Meta",
         "retryEnd": "Ustaw datę zakończenia",
+        "retryEndPlaceholder": "Od teraz, najwyżej {days} dni",
         "retriesInfoWhy": "Ponawianie dotyczy tylko wiadomości, które nie zostały wysłane z powodu limitu częstotliwości Meta (błąd {code}).",
         "retriesInfoWhen": "Są uruchamiane dokładnie w odstępach {hours}-godzinnych do daty zakończenia.",
         "retriesInfoCost": "Bez dodatkowych kosztów: opłata za wiadomość jest naliczana tylko po jej dostarczeniu.",
         "recurringTitle": "Cykliczna wiadomość masowa",
         "recurringHint": "Wysyłaj w cyklicznym harmonogramie",
-        "occurrences": "uruchomienia"
+        "occurrences": "uruchomienia",
+        "recurringWarning": "Ta wysyłka powtarza się zgodnie z harmonogramem. Każde uruchomienie trafia do odbiorców w takim stanie, jaki mają w tym momencie, a każda wiadomość jest obciążana z Twojego portfela.",
+        "repeatRange": "Wpisz liczbę całkowitą od 1 do {max}."
       },
       "words": {
         "now": "Wysyłana od razu, jednorazowo.",

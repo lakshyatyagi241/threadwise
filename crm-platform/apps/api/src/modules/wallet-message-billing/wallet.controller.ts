@@ -2,14 +2,21 @@ import { Controller, Get, Query, Res, StreamableFile } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import {
+  expenseDaysQuerySchema,
+  expenseListQuerySchema,
+  expenseSummaryQuerySchema,
   messagePricingQuerySchema,
   statementQuerySchema,
   walletLedgerQuerySchema,
+  type ExpenseDaysQuery,
+  type ExpenseListQuery,
+  type ExpenseSummaryQuery,
   type StatementQuery,
   type WalletLedgerQuery,
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { WalletExpensesService } from './wallet-expenses.service';
 import { WalletExportService } from './wallet-export.service';
 import { WalletQueryService } from './wallet-query.service';
 
@@ -21,6 +28,7 @@ export class WalletController {
   constructor(
     private readonly query: WalletQueryService,
     private readonly exporter: WalletExportService,
+    private readonly expenses: WalletExpensesService,
   ) {}
 
   @Get('summary')
@@ -76,6 +84,40 @@ export class WalletController {
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
     return new StreamableFile(stream);
+  }
+
+  @Get('expenses')
+  @RequirePermission('wallet.statement.read')
+  @ApiOperation({
+    summary:
+      'Message expense log: one row per billable message, with its template and what it cost (cursor paginated)',
+    description:
+      'Filters: status, from, to, template, source and category. A row is one message: charged, free or refunded, with the amount it took and gave back.',
+  })
+  async expenseLog(@Query(zodPipe(expenseListQuerySchema)) q: ExpenseListQuery) {
+    return this.expenses.list(q);
+  }
+
+  @Get('expenses/summary')
+  @RequirePermission('wallet.statement.read')
+  @ApiOperation({
+    summary:
+      'Message expenses grouped by template, channel, category or country, with totals over the whole filtered set',
+  })
+  async expenseSummary(@Query(zodPipe(expenseSummaryQuerySchema)) q: ExpenseSummaryQuery) {
+    return this.expenses.summary(q);
+  }
+
+  @Get('expenses/days')
+  @RequirePermission('wallet.statement.read')
+  @ApiOperation({
+    summary:
+      'Message expenses grouped by calendar day, status, channel and category (cursor paginated by day)',
+    description:
+      'Days are in `timeZone` (default UTC). A row is one day with one status, channel and category, with the messages, amounts and net of that group. Pass the `nextCursor` as `cursor` for the older days.',
+  })
+  async expenseDays(@Query(zodPipe(expenseDaysQuerySchema)) q: ExpenseDaysQuery) {
+    return this.expenses.days(q);
   }
 
   @Get('pricing')

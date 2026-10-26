@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
         "days": "{count, plural, one {# Tag} other {# Tage}}"
       },
-      "unsnoozesAt": "Wird um {time} wieder geöffnet"
+      "unsnoozesAt": "Wird um {time} wieder geöffnet",
+      "erased": "Gelöschte Kontakte",
+      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person und ohne Nachrichtentext behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
+      "erasedTitle": "Gelöschter Kontakt"
     },
     "status": {
       "received": "Empfangen",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
       "resolvedBanner": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
+      "resolvedWebchatBanner": "Dieser Webchat ist abgeschlossen und kann nicht wieder geöffnet werden.",
       "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
       "messagesLabel": "Nachrichten",
+      "session": {
+        "header": "{range} · {count, plural, one {# Nachricht} other {# Nachrichten}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Frühere Nachrichten laden",
       "empty": "In dieser Unterhaltung gibt es noch keine Nachrichten.",
       "newMessageAnnounce": "Neue Nachricht: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Keine Treffer",
       "searchPrev": "Vorheriger Treffer",
       "searchNext": "Nächster Treffer",
-      "searchClose": "Suche schließen"
+      "searchClose": "Suche schließen",
+      "erasedBadge": "Gelöscht",
+      "erasedBanner": "Dieser Kontakt wurde gelöscht. Nachrichtentext und Medien wurden entfernt, daher kann nichts gesendet werden. Verlauf und Zeiten bleiben erhalten."
     },
     "groupThread": {
       "openGroup": "Gruppe öffnen",
@@ -542,17 +554,17 @@
         "onLeave": "Abwesend",
         "onLeaveUntil": "Abwesend bis {date}",
         "availability": {
-          "online": "Online",
-          "away": "Abwesend",
+          "online": "Verfügbar",
+          "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
           "busy": "Beschäftigt",
-          "offline": "Offline"
+          "offline": "Nicht verfügbar"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Abwesend",
+        "online": "Verfügbar",
+        "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
         "busy": "Beschäftigt",
-        "offline": "Offline"
+        "offline": "Nicht verfügbar"
       },
       "notes": {
         "tab": "Kontaktnotizen",
@@ -584,7 +596,11 @@
           "sla_breach": "Antwortfrist verpasst",
           "spam_flagged": "Von {actor} als Spam markiert",
           "escalated": "Eskaliert",
-          "unknown": "{what} von {actor}"
+          "unknown": "{what} von {actor}",
+          "handoff_requested": "An eine Person übergeben von {actor}",
+          "queue_reminded": "Das Team wurde erinnert",
+          "queue_offered": "Einem anderen Team angeboten",
+          "queue_customer_message": "Dem Kunden wurde eine Nachricht gesendet"
         },
         "actors": {
           "user": "Ein Teammitglied",
@@ -711,6 +727,7 @@
         "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden.",
         "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
         "media_header": "Hat einen Bild-, Video- oder Dokumentkopf, der im Posteingang noch nicht gesendet werden kann.",
+        "carousel": "Ist ein Karussell (Karten mit Bildern) und kann noch nicht aus dem Posteingang gesendet werden.",
         "header_variable": "Hat eine Variable im Kopf, die im Posteingang noch nicht ausgefüllt werden kann.",
         "dynamic_button": "Hat einen Schaltflächenlink mit einer Variable, die im Posteingang noch nicht ausgefüllt werden kann.",
         "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet, nicht aus dem Posteingang.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Nur Nachrichten mit Status {status}",
         "requestedAt": "Angefordert {date}",
         "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+        "noLines": "Keine Ereignisse in diesem Zeitraum",
         "until": "Verfügbar bis {date}",
         "download": "Herunterladen",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (Test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Website-Chat",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-Mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (Test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Website-Chat",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-Mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kontakt",
         "agent": "Sie",
@@ -1054,7 +1072,10 @@
       "tagRemove": "Tag entfernen",
       "onLeave": "abwesend",
       "onLeaveUntil": "abwesend bis {date}",
-      "spam": "Als Spam markieren"
+      "spam": "Als Spam markieren",
+      "markUnread": "Als ungelesen markieren",
+      "unsnooze": "Zurückstellung aufheben",
+      "notSpam": "Als kein Spam markieren"
     },
     "tags": {
       "tag": "Tag",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Zurück zum Posteingang",
-        "title": "Unterhaltungs-Tags",
+        "title": "Tags",
         "intro": "Unterhaltungs-Tags kennzeichnen einen Verlauf (Abrechnung, Erstattung, dringend), damit Ihr Team den Posteingang sortieren und filtern kann. Sie stammen aus derselben Tag-Bibliothek wie die Kontakt-Tags, die die Person beschreiben.",
         "newTitle": "Neuer Tag",
         "editTitle": "Tag bearbeiten",

@@ -174,6 +174,19 @@ describe('pre-submit linter (TW-TPL-023)', () => {
     expect(issues.find((i) => i.code === 'trigger_phrase')?.severity).toBe('warning');
     expect(issues.some((i) => i.severity === 'error')).toBe(false);
   });
+  it('reports a trigger phrase under the part that holds it, and not once it is gone from there', () => {
+    const inFooter = lintTemplate({ ...base, body: 'Hello {{1}} today', footer: 'Act now' });
+    expect(inFooter.filter((i) => i.code === 'trigger_phrase').map((i) => i.field)).toEqual([
+      'footer',
+    ]);
+    const inBody = lintTemplate({ ...base, body: 'Hi {{1}}, don’t miss it' });
+    expect(inBody.filter((i) => i.code === 'trigger_phrase').map((i) => i.field)).toEqual(['body']);
+    expect(
+      lintTemplate({ ...base, body: 'Hi {{1}}, see you soon' }).some(
+        (i) => i.code === 'trigger_phrase',
+      ),
+    ).toBe(false);
+  });
   it('length, spaces, tab and header/footer limits', () => {
     expect(codes(lintTemplate({ ...base, body: 'a'.repeat(1025) }))).toContain('body_too_long');
     expect(codes(lintTemplate({ ...base, body: 'a    b' }))).toContain('body_spaces');

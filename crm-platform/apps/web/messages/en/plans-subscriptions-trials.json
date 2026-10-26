@@ -48,7 +48,8 @@
       "email_mailboxes": "Email mailboxes",
       "email_monthly": "Emails per month",
       "storage_gb": "Storage (GB)",
-      "teams": "Teams"
+      "teams": "Teams",
+      "webbot_messages": "Free website chatbot messages per month"
     },
     "features": {
       "automation": "Automation",
@@ -60,11 +61,15 @@
       "remove_branding": "Remove branding",
       "sales_pipeline": "Sales pipeline",
       "appointment_booking": "Appointment booking",
+      "appointment_confirm_buttons": "Reminder buttons (Confirm / Reschedule / Cancel)",
+      "appointment_rebook_steps": "Rebook (recall) steps",
       "chatbot_widgets": "Chatbot widgets",
       "wa_storefront": "WhatsApp catalog",
       "inbox_sla": "SLA policies",
-      "inbox_routing": "Routing rules",
-      "inbox_assignment_sticky": "Contact owner and sticky agent",
+      "inbox_routing": "Smart routing: auto-assignment and rules",
+      "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
+      "agent_status_bar": "Status bar: Available / Away control in the top bar and the Inbox",
+      "agent_status_automation": "Automate status: personal working hours and automatic Away",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
       "team_performance": "Team performance",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
       "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
       "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
-      "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
+      "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed.",
+      "webbot_messages": "Website chatbot messages included free each calendar month. Every message beyond that is charged to the wallet. Blank or 0 = none included."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",
@@ -245,20 +251,7 @@
         "title": "Frequently asked questions"
       },
       "addons": {
-        "title": "Add-ons",
-        "owned": "Add-ons you own",
-        "oneTime": "one-time",
-        "buy": "Buy add-on",
-        "buyAgain": "Buy again",
-        "active": "Active",
-        "unlimitedBullet": "Unlimited {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ day} other {/ {count} days}}",
-          "weeks": "{count, plural, one {/ week} other {/ {count} weeks}}",
-          "months": "{count, plural, one {/ month} other {/ {count} months}}",
-          "years": "{count, plural, one {/ year} other {/ {count} years}}"
-        }
+        "title": "Add-ons"
       },
       "renewal": {
         "renewsOn": "Your plan renews automatically on {date}.",
@@ -578,7 +571,30 @@
       "appHint": "{feature} is also sold as an app in the Marketplace.",
       "appLink": "See the app",
       "back": "Go back",
-      "compare": "Compare all plans"
+      "compare": "Compare all plans",
+      "addonHint": "You can also add it to your current plan with the {addon} add-on.",
+      "addonLink": "See add-ons",
+      "addonsTabHint": "Add-ons do not need the Marketplace on your plan. You can still see what you own and buy add-ons from Plans and add-ons.",
+      "addonsTabLink": "Open Plans and add-ons",
+      "addonHintGeneric": "Your plan may also offer it as an add-on."
+    },
+    "lock": {
+      "link": "See plans and add-ons",
+      "offTitle": "Not on your plan",
+      "offLead": "This part is not included in your workspace's plan right now.",
+      "buyTitle": "Add {addon} for {price}",
+      "buyLead": "Your plan offers {addon} as an add-on. Add it to switch this part on.",
+      "buyLink": "See add-ons",
+      "askOwner": "Ask your account owner to add it.",
+      "unavailableTitle": "{addon} needs an active paid plan",
+      "unavailableLead": "Choose a paid plan first, then you can add {addon} to it.",
+      "viewPlans": "View plans",
+      "disabledTitle": "{addon} is turned off",
+      "disabledLead": "Your plan includes {addon}, but it is turned off for this workspace. Its settings are kept.",
+      "disabledAsk": "Ask your account owner to turn it on.",
+      "turnOn": "Turn it on",
+      "turnOnForbidden": "You don't have permission to turn this on. Ask your account owner.",
+      "turnOnFailed": "We couldn't turn {addon} on. Please try again."
     }
   }
 }

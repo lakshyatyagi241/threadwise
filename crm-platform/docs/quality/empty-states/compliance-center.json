@@ -1,0 +1,55 @@
+{
+  "feature": "compliance-center",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-compliance-center-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/compliance-center/components/dnc-tab.tsx",
+        "apps/web/src/features/compliance-center/components/profiles-tab.tsx",
+        "apps/web/src/features/compliance-center/components/subprocessors-tab.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-compliance-center-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/compliance-center/components/checklist-tab.tsx",
+        "apps/web/src/features/compliance-center/components/compliance-screen.tsx",
+        "apps/web/src/features/compliance-center/components/dnc-tab.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-compliance-center-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/compliance-center/components/checklist-tab.tsx",
+        "apps/web/src/features/compliance-center/components/compliance-screen.tsx",
+        "apps/web/src/features/compliance-center/components/notices-tab.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/compliance-center/components/compliance-screen.test.tsx",
+          "match": "a read-only role can look but not change: no save bar, disabled choices"
+        }
+      ]
+    }
+  ]
+}

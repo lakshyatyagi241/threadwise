@@ -414,6 +414,14 @@
           "label": "预约与 Google Calendar 不同步",
           "hint": "即将到来的预约在 Google Calendar 中的日程被删除、改期或参与者被更改。预约本身不会改变，由您决定如何处理。"
         },
+        "appointment_cancelled_by_customer": {
+          "label": "客户取消的预约",
+          "hint": "客户在提醒中点击“取消”取消了预约。预约的负责人会收到通知。"
+        },
+        "appointment_reminder_test": {
+          "label": "提醒邮件测试结果",
+          "hint": "你为某个提醒步骤发送的测试邮件的结果：已发送，或未发送及原因。"
+        },
         "snooze_wake": {
           "label": "已暂停的会话恢复",
           "hint": "已暂停的会话会在设定时间重新打开，并分配给你或你的团队。"

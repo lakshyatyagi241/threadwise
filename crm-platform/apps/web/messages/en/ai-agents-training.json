@@ -213,6 +213,16 @@
     "knowledge": {
       "title": "Train the agent",
       "tag": "knowledge",
+      "view": "View",
+      "viewNamed": "View {label}",
+      "viewClose": "Close",
+      "viewLoading": "Loading",
+      "viewFailed": "This entry could not be loaded. Try again.",
+      "viewQuestion": "Question",
+      "viewAnswer": "Answer",
+      "viewNotReadYet": "This page is still being read. Its text will show here once it is ready.",
+      "viewNoText": "This entry has no text.",
+      "viewTruncated": "Only the first part is shown here; the agent reads the whole entry.",
       "saveFirst": "Save the agent first. Knowledge entries attach to a saved agent.",
       "addLabel": "Add knowledge",
       "add": {

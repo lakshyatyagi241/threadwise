@@ -131,14 +131,15 @@ describe('loader script (TW-WGT-008)', () => {
     expect(appended).toBe(1);
   });
 
-  it('TW-WGT-004 #4: without a launcher image the built-in chat glyph is used; with one the image is 36px round', () => {
+  it('TW-WGT-004 #4: without a launcher image the built-in chat glyph is used; with one the picture fills the button, round and with no ring', () => {
     expect(buildEmbedScript(widget, chat)).toContain('svg viewBox');
     const withImg = buildEmbedScript(
       { ...widget, buttonImageUrl: 'https://cdn.example/logo.png' },
       chat,
     );
     expect(withImg).toContain('https://cdn.example/logo.png');
-    expect(withImg).toContain('width:36px;height:36px;border-radius:50%');
+    expect(withImg).toContain('width:100%;height:100%;border-radius:50%;object-fit:cover');
+    expect(withImg).toContain("btn.style.background = 'transparent'");
     expect(withImg).not.toContain('svg viewBox');
   });
 
@@ -237,6 +238,10 @@ describe('the panel of a flow bot (a website chat bot)', () => {
     expect(script).toContain('e.source !== frame.contentWindow || !e.data');
     expect(script).toContain("e.data.wgt === 'close'");
     expect(script).toContain("e.data.wgt === 'expand'");
+    // Expanded, the window sits in the middle of the page instead of growing from its corner.
+    expect(script).toContain("ps.transform = 'translate(-50%,-50%)'");
+    // Closing it puts the launcher's callout back as at first.
+    expect(script).toContain("if (typeof showExtras === 'function') showExtras();");
     expect(buildEmbedScript({ ...widget, mode: 'ai' }, chat)).not.toContain("wgt === 'close'");
   });
 
@@ -250,16 +255,64 @@ describe('the panel of a flow bot (a website chat bot)', () => {
   });
 });
 
-describe('the cross: Close this chat and Restart this chat', () => {
-  it('is drawn for every website bot inside the site panel, not only a flow bot', () => {
+describe('a phone question', () => {
+  it('shows a country list beside the box and sends the number with the chosen code', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('<select id="cc" class="cc" hidden></select>');
+    expect(page).toContain('"code":"IN","dial":"91"');
+    expect(page).toContain("body = '+' + $('cc').value + ' ' + body.replace(/^0+/, '')");
+  });
+});
+
+describe('the chat opened on its own page', () => {
+  it('keeps the size the author chose instead of filling the browser', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('html.standalone body');
+    expect(page).toContain('if (window.parent !== window || PREVIEW) return;');
+    expect(page).toContain('"standard":{"w":404,"h":672}');
+  });
+});
+
+describe('ending, leaving and restarting the chat', () => {
+  it('tells the server when the chat ends or the page closes, and keeps the thread on a restart', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("BASE + 'end?reason=ended'");
+    expect(page).toContain("navigator.sendBeacon(withVid(BASE + 'end?reason=left'))");
+    expect(page).toContain("'restart' + (ended ? '?fresh=1' : '')");
+    // Closing the page is not told to the server while the window reloads itself.
+    expect(page).toContain('if (PREVIEW || reloading || !storedUuid()) return;');
+  });
+});
+
+describe('the cross: end the conversation, rate it, or restart', () => {
+  it('asks first, in every website bot inside the site panel', () => {
     for (const flow of [true, false]) {
       const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow });
-      expect(page).toContain('id="endpop"');
-      expect(page).toContain('tx(o[0], o[1])');
-      expect(page).toContain("'closeThis', 'Close this chat'");
-      expect(page).toContain("'restartThis', 'Restart this chat'");
+      expect(page).toContain('id="endmodal"');
+      expect(page).toContain("tx('endTitle', 'Are you sure you want to end conversation?')");
+      expect(page).toContain("tx('endConversation', 'End conversation')");
+      expect(page).toContain("tx('restartChat', 'Restart chat')");
+      expect(page).toContain("tx('notNow', 'Not now')");
       expect(page).toContain("BASE + 'restart'");
     }
+  });
+
+  it('End conversation asks for stars and a few words; Restart chat sends five stars on its own; Not now only closes', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("var API_RATE = BASE + 'rating'");
+    expect(page).toContain(
+      "sheetButton('danger', tx('endConversation', 'End conversation'), openRating)",
+    );
+    expect(page).toContain('closeSheet(); rate(5).then(function () { startOver(true, false); })');
+    expect(page).toContain("sheetButton('ghost', tx('notNow', 'Not now'), closeSheet)");
+    expect(page).toContain("tx('submitFeedback', 'Submit feedback')");
+    expect(page).toContain("tx('noThanks', 'No, thanks')");
+  });
+
+  it('has a minimize button next to the cross that only folds the window into the launcher', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain("mn.dataset.minimize = '1'");
+    expect(page).toContain("tx('minimize', 'Minimize')");
   });
 });
 
@@ -326,9 +379,12 @@ describe('the closed launcher of a flow bot: callout, animation and unread dot',
       }),
     );
     expect(off.created.map((e) => e.textContent)).not.toContain('Hi');
-    expect(off.created.map((e) => e.textContent)).toContain('1');
-    const noBadge = run(flow({ badge: false }));
-    expect(noBadge.created.map((e) => e.textContent)).not.toContain('1');
+    // The unread dot is a red dot with no number in it.
+    const dot = (created: Array<Record<string, unknown>>) =>
+      created.some((e) => String((e.style as { cssText: string }).cssText).includes('#ff4d5e'));
+    expect(dot(off.created)).toBe(true);
+    expect(off.created.map((e) => e.textContent)).not.toContain('1');
+    expect(dot(run(flow({ badge: false })).created)).toBe(false);
   });
 
   it('adds the bounce or the ripple to the launcher button, and nothing for none', () => {
@@ -387,5 +443,84 @@ describe('the panel size and the frame permissions of a flow bot', () => {
       "'clipboard-write; microphone'",
     );
     expect(buildEmbedScript({ ...widget, mode: 'ai' }, chat)).not.toContain('microphone');
+  });
+});
+
+describe('the chat window draws a bot line the way WhatsApp does', () => {
+  const page = renderChatPage({
+    uuid: widget.uuid,
+    token: 'T'.repeat(48),
+    name: 'Acme',
+    flow: true,
+  });
+  const script = /<script>([\s\S]*)<\/script>\s*<\/body>/.exec(page)?.[1] ?? '';
+
+  // A node with just what the formatter uses, so the real functions run as they are in the page.
+  type Fake = { tag: string; text?: string; kids: Fake[] };
+  const fakeDocument = {
+    createElement: (tag: string): Fake & { appendChild(k: Fake): void } => {
+      const n: Fake & { appendChild(k: Fake): void } = {
+        tag,
+        kids: [],
+        appendChild(k) {
+          n.kids.push(k);
+        },
+      };
+      Object.defineProperty(n, 'textContent', {
+        get: () =>
+          n.kids
+            .map((k) =>
+              k.tag === '#text' ? k.text : (k as unknown as { textContent: string }).textContent,
+            )
+            .join(''),
+        set: (v: string) => {
+          n.kids = [{ tag: '#text', text: v, kids: [] }];
+        },
+      });
+      return n;
+    },
+    createTextNode: (text: string): Fake => ({ tag: '#text', text, kids: [] }),
+  };
+  const draw = (text: string): string => {
+    const from = script.indexOf('var MARKS');
+    const to = script.indexOf('function plain');
+    const body = script.slice(from, to) + '\nreturn { fmtInto: fmtInto };';
+    const { fmtInto } = new Function('document', body)(fakeDocument) as {
+      fmtInto: (el: unknown, t: string) => void;
+    };
+    const root = fakeDocument.createElement('div');
+    fmtInto(root, text);
+    const html = (n: Fake): string =>
+      n.tag === '#text' ? (n.text ?? '') : `<${n.tag}>${n.kids.map(html).join('')}</${n.tag}>`;
+    return root.kids.map(html).join('');
+  };
+
+  it('the page script is valid JavaScript', () => {
+    expect(script.length).toBeGreaterThan(1000);
+    expect(() => new Function(script)).not.toThrow();
+  });
+
+  it('turns *bold*, _italic_, ~strike~ and monospace into elements, with no marks left', () => {
+    expect(draw('*Welcome to Admissions*\n\n_Please browse_')).toBe(
+      '<b>Welcome to Admissions</b>\n\n<i>Please browse</i>',
+    );
+    expect(draw('a ~old~ and ```code``` and *bold _both_*')).toBe(
+      'a <s>old</s> and <code>code</code> and <b>bold <i>both</i></b>',
+    );
+  });
+
+  it('leaves a mark inside a word, a lone mark and any markup as typed', () => {
+    expect(draw('snake_case_name and 2*3*4 and a * b')).toBe('snake_case_name and 2*3*4 and a * b');
+    expect(draw('<b>x</b> *y*')).toBe('<b>x</b> <b>y</b>');
+  });
+
+  it('keeps reply buttons on screen after one is tapped, marks the tapped one, and gives a button no icon of its own', () => {
+    expect(script).not.toContain('clearChips();\n    m.appendChild(row);');
+    expect(script).toContain("c.classList.add('picked')");
+    expect(script).not.toContain('M5 12h14');
+  });
+
+  it('draws no picture for an empty icon address (it used to resolve to the page itself)', () => {
+    expect(page).toContain("if (!String(v || '').trim()) return '';");
   });
 });

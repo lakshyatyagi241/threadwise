@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { sql } from 'drizzle-orm';
 import {
@@ -91,15 +91,15 @@ export class ScheduledRunService {
     private readonly outbox: OutboxService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly consentGate: ConsentGate,
-    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
-    @Optional() private readonly sendWindow?: SendWindowService,
+    // Quiet hours (BL-177). Required, not optional: a runner built without it would send marketing inside the hours without a sign.
+    private readonly sendWindow: SendWindowService,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
   async run(orgId: number, scheduledId: number): Promise<RunResult> {
     const prep = await this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, uuid, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
+        SELECT id, uuid, schedule_name, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
                days_of_week, end_date, template_type, template_id, template_overrides, message_content, media_file, latitude, longitude, provider,
                device_id, send_attempts, recipients_spent
         FROM scheduled_messages WHERE org_id = ${orgId} AND id = ${scheduledId} FOR UPDATE`);
@@ -330,6 +330,8 @@ export class ScheduledRunService {
                   scheduledId,
                   provider: row.provider,
                   category: prepared.template?.category ?? null,
+                  templateName: prepared.template?.templateName ?? null,
+                  subjectName: row.schedule_name,
                   phone: r.phone,
                 },
               }),
@@ -437,7 +439,6 @@ export class ScheduledRunService {
     refused: ReadonlyMap<number, string>,
   ): Promise<Map<number, SendHold>> {
     const held = new Map<number, SendHold>();
-    if (!this.sendWindow) return held;
     const purpose: PurposeInput = prepared.template
       ? purposeOfCategory(prepared.template.category)
       : 'marketing_messaging';
@@ -479,6 +480,8 @@ export class ScheduledRunService {
         scheduledId: number;
         provider: string | null;
         category: string | null;
+        templateName: string | null;
+        subjectName: string;
         phone: string;
       };
     },
@@ -507,6 +510,8 @@ export class ScheduledRunService {
           recipient: assemblePhone(extra.report.phone, null) || null,
           category: extra.report.category,
           source: 'scheduled',
+          templateName: extra.report.templateName,
+          subjectName: extra.report.subjectName,
         },
       });
     }

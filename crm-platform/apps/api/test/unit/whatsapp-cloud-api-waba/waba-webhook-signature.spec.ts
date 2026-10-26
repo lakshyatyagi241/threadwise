@@ -59,8 +59,11 @@ function build() {
     verifyTokens: () => [],
     payloadProviders: async () => ({ custom: [], hasBuiltin: true }),
   };
+  // Replay memory (Redis) is not under test here: nothing is ever seen, so every delivery takes the path it took before.
+  const redis = { exists: async () => 0, set: async () => 'OK' };
   const svc = new WabaWebhookService(
     db as never,
+    redis as never,
     repo as never,
     crypto as never,
     config as never,

@@ -206,7 +206,7 @@ describe('TW-DASH-020 integrations status', () => {
       { code: 'meta_catalog', connected: false, events7d: null },
     ]);
     expect(i.connected).toBe(3); // + the Instagram account
-    expect(i.total).toBe(12);
+    expect(i.total).toBe(10); // the ten integrations with a connection table
   });
 
   it('another tenant firing events never marks this one connected', async () => {

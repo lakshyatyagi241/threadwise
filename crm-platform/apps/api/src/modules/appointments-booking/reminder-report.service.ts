@@ -10,6 +10,7 @@ import {
   type ReminderReportType,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
+import { ReminderPlan } from './reminder-plan';
 import { DatabaseService } from '../../infra/db/database.service';
 
 type Raw = Record<string, unknown>;
@@ -34,12 +35,17 @@ const stepOf = (r: Raw): BookingReminderStepKind =>
  */
 @Injectable()
 export class ReminderReportService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private readonly plan: ReminderPlan,
+  ) {}
 
   async report(query: ReminderReportQuery): Promise<ReminderReport> {
     const { orgId } = RequestContextStore.require();
     const to = query.to ? new Date(query.to) : new Date();
     const from = query.from ? new Date(query.from) : new Date(to.getTime() - 30 * DAY);
+    // The button counts are part of the upgrade tier: a plan without the feature gets no counts (null), not zeros.
+    const buttonsIncluded = (await this.plan.parts(orgId)).buttons;
     return this.db.tx(async (tx) => {
       const scope = sql`r.org_id = ${orgId} AND r.due_at >= ${from.toISOString()} AND r.due_at < ${to.toISOString()}
         ${query.bookingTypeId ? sql`AND bt.uuid = ${query.bookingTypeId}::uuid` : sql``}`;
@@ -53,7 +59,12 @@ export class ReminderReportService {
                count(*) FILTER (WHERE r.status = 'sent') AS sent,
                count(*) FILTER (WHERE r.status = 'sent' AND r.delivery = 'delivered') AS delivered,
                count(*) FILTER (WHERE r.status = 'failed') AS failed,
-               count(*) FILTER (WHERE r.status = 'skipped') AS skipped
+               count(*) FILTER (WHERE r.status = 'skipped') AS skipped,
+               count(*) FILTER (WHERE r.status = 'sent' AND jsonb_array_length(r.attempt_log) > 1
+                                  AND jsonb_path_exists(r.attempt_log, '$[*] ? (@.status == "sent")')) AS fallback_used,
+               count(*) FILTER (WHERE r.reply_state -> 'confirm' ->> 'usedAt' IS NOT NULL) AS btn_confirm,
+               count(*) FILTER (WHERE r.reply_state -> 'reschedule' ->> 'usedAt' IS NOT NULL) AS btn_reschedule,
+               count(*) FILTER (WHERE r.reply_state -> 'cancel' ->> 'usedAt' IS NOT NULL) AS btn_cancel
         ${FROM} WHERE ${scope}
         GROUP BY bt.id, bt.uuid, bt.name, r.step_kind, r.kind, r.offset_minutes`)
       ).rows as Raw[];
@@ -98,6 +109,8 @@ export class ReminderReportService {
           delivered: 0,
           failed: 0,
           skipped: 0,
+          fallbackUsed: 0,
+          buttons: buttonsIncluded ? { confirmed: 0, rescheduled: 0, cancelled: 0 } : null,
           skippedReasons: {},
           confirmationRate: null,
           cancelRate: null,
@@ -107,6 +120,12 @@ export class ReminderReportService {
         base.delivered += num(r.delivered);
         base.failed += num(r.failed);
         base.skipped += num(r.skipped);
+        base.fallbackUsed += num(r.fallback_used);
+        if (base.buttons) {
+          base.buttons.confirmed += num(r.btn_confirm);
+          base.buttons.rescheduled += num(r.btn_reschedule);
+          base.buttons.cancelled += num(r.btn_cancel);
+        }
         steps.set(k, { typeId: num(r.type_id), step: base });
       }
       for (const r of reasons) {
@@ -167,7 +186,7 @@ export class ReminderReportService {
           ...t,
           steps: t.steps.sort((a, b) => order.indexOf(a.stepKind) - order.indexOf(b.stepKind)),
         }));
-      return { from: from.toISOString(), to: to.toISOString(), data };
+      return { from: from.toISOString(), to: to.toISOString(), buttonsIncluded, data };
     });
   }
 }

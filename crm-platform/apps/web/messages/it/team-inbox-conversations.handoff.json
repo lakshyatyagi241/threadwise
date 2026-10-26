@@ -33,12 +33,20 @@
         "done": "Hai preso in carico questa conversazione.",
         "doneOwner": "Hai preso in carico questa conversazione e ora sei il proprietario del contatto.",
         "failed": "Impossibile prendere in carico la conversazione.",
-        "taken": "Qualcun altro ha preso in carico prima questa conversazione."
+        "taken": "Qualcun altro ha preso in carico prima questa conversazione.",
+        "overLimitTitle": "Hai raggiunto il tuo limite di chat",
+        "overLimitMessage": "Hai già {open} conversazioni aperte e il tuo limite è {limit}. Prendere comunque questa?",
+        "overLimitConfirm": "Prendila comunque",
+        "overLimitCancel": "Annulla"
       },
       "giveBack": {
         "button": "Restituisci al bot",
         "done": "Il bot risponde di nuovo a questa conversazione.",
-        "failed": "Impossibile restituire la conversazione al bot."
+        "failed": "Impossibile restituire la conversazione al bot.",
+        "doneFlow": "Il bot continua il flusso.",
+        "doneNextLive": "Il bot risponderà al prossimo messaggio del cliente.",
+        "doneNextDefault": "Il bot è di nuovo attivo. Risponderà al prossimo messaggio solo se è impostato un flusso predefinito.",
+        "already": "Il bot ha già questa conversazione."
       },
       "send": {
         "button": "Invia in coda",
@@ -50,7 +58,7 @@
         "intro": "Il bot smette di rispondere a questo contatto. La conversazione va alla persona o al team che scegli, oppure resta in coda finché qualcuno la prende in carico.",
         "where": "Invia a",
         "whereRules": "Le regole di assegnazione, altrimenti la coda di attesa",
-        "whereQueueOnly": "La coda di attesa (le regole di assegnazione non sono nel tuo piano)",
+        "whereQueueOnly": "La coda d'attesa (le regole di assegnazione richiedono il componente Instradamento intelligente)",
         "whereTeam": "Un team",
         "wherePerson": "Una persona",
         "team": "Team",
@@ -78,14 +86,16 @@
         "priority": "Priorità",
         "summary": "Riepilogo",
         "answers": "Cosa ha detto il contatto al bot",
-        "trace": "Come è stata assegnata"
+        "trace": "Come è stata assegnata",
+        "timers": "Passaggi della coda d'attesa"
       },
       "source": {
         "flow": "Un flusso",
         "ai_agent": "Un agente IA",
         "keyword": "Richiesta del contatto stesso",
         "bot_failure": "Un bot che non ha potuto aiutare",
-        "manual": "Un collega"
+        "manual": "Un collega",
+        "arrival": "L'instradamento: nessuno poteva prenderla"
       },
       "reason": {
         "customer_asked": "Il contatto ha chiesto una persona",
@@ -105,6 +115,42 @@
         "chosen": "Scelto",
         "skipped": "Saltato",
         "info": "Nota"
+      },
+      "botLine": {
+        "system": "il sistema",
+        "pressed": {
+          "flow": "Il bot è tornato, restituito da {name}. Il flusso prosegue.",
+          "nextLive": "Il bot è tornato, restituito da {name}. Risponderà al prossimo messaggio del cliente.",
+          "nextDefault": "Il bot è tornato, restituito da {name}. Risponderà al prossimo messaggio solo se è impostato un flusso predefinito."
+        },
+        "result": {
+          "continued": "Il flusso è proseguito dall’uscita «restituita».",
+          "claimed_again": "Il flusso non è ripreso: una persona ha preso di nuovo la chat.",
+          "flow_not_live": "Il flusso non è ripreso: non è più attivo.",
+          "start_failed": "Non è stato possibile riprendere il flusso."
+        },
+        "customer": {
+          "sent": "Il messaggio al cliente è stato inviato.",
+          "window_closed": "Il messaggio al cliente è stato saltato: la finestra di 24 ore è chiusa.",
+          "no_consent": "Il messaggio al cliente è stato saltato: nessun consenso.",
+          "failed": "Non è stato possibile inviare il messaggio al cliente.",
+          "channel_unavailable": "Il messaggio al cliente è stato saltato: il canale non è disponibile."
+        }
+      },
+      "timers": {
+        "reminded": "Sollecito alle {at}",
+        "offered": "Offerta a questo team alle {at}",
+        "messaged": "Messaggio inviato al cliente alle {at}",
+        "gaveBack": "Restituita al bot alle {at}"
+      }
+    },
+    "panel": {
+      "timeline": {
+        "events": {
+          "handoff_returned": "Restituita al bot da {actor}",
+          "bot_resumed": "Il bot ha proseguito il flusso",
+          "bot_resume_skipped": "Il flusso non è ripreso"
+        }
       }
     }
   }

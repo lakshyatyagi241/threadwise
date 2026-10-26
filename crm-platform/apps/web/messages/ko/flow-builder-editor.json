@@ -555,7 +555,8 @@
           "cardCount": "카드 {count}개",
           "payLink": "결제 링크",
           "invoice": "인보이스",
-          "faqRetired": "중단됨 · '일치 없음'으로 나감"
+          "faqAgent": "{agent}에서 답변",
+          "faqNoAgent": "AI 에이전트 선택"
         },
         "overlays": {
           "startPinned": "시작 지점입니다(클릭하면 해제)",
@@ -746,7 +747,8 @@
           "storedIn": "값은 연락처의 <b>{property}</b> 속성에 저장됩니다",
           "actions": "액션",
           "actionsHint": "이 단계 바로 뒤에 실행되는 단계를 추가합니다.",
-          "actionsBlocked": "자기 부분을 끝내는 단계 뒤에는 다른 단계가 올 수 없습니다."
+          "actionsBlocked": "자기 부분을 끝내는 단계 뒤에는 다른 단계가 올 수 없습니다.",
+          "fromSteps": "{stages}단계에서 연결됩니다"
         },
         "editors": {
           "linkLabel": "연결 대상",
@@ -858,7 +860,13 @@
             "choose": "템플릿 선택…",
             "buttons": "버튼",
             "variables": "연락처 정보로 채워집니다",
-            "variablesHint": "각 번호는 메시지를 보낼 때 여기에 표시된 연락처 정보로 채워집니다. 템플릿에서 변경하세요."
+            "variablesHint": "각 번호는 메시지를 보낼 때 여기에 표시된 연락처 정보로 채워집니다. 템플릿에서 변경하세요.",
+            "fills": "각 번호에 채울 내용",
+            "fillsHint": "연락처 정보나 플로 변수를 고르거나 직접 텍스트를 입력하세요. 비워 두면 템플릿에 정해진 값을 사용합니다.",
+            "fillPick": "정보 삽입…",
+            "headerMedia": "헤더 파일",
+            "headerMediaHint": "이 템플릿 헤더의 사진, 동영상 또는 파일입니다. 템플릿에 자체 파일이 없으면 필요합니다.",
+            "headerMediaMissing": "헤더 파일을 추가하세요. 이 템플릿에는 파일이 없고, 파일 없이는 WhatsApp이 보내지 않습니다."
           },
           "cta": {
             "buttonText": "버튼 텍스트",
@@ -897,7 +905,15 @@
               "phone": "번호로 전화",
               "email": "이메일 보내기",
               "agent": "상담원과 대화"
-            }
+            },
+            "prev": "이전 카드",
+            "next": "다음 카드",
+            "goTo": "카드 {n}",
+            "saveCopy": "사본 저장",
+            "saveCopyHint": "이 사진을 저희 서버에 저장해 모든 방문자의 채팅에 표시되도록 합니다. 공유를 허용하지 않는 사이트의 사진은 사본을 만들 수 없으니 대신 업로드하세요.",
+            "saving": "저장 중…",
+            "copyFailed": "사본을 저장하지 못했습니다: {message}",
+            "imageFormats": "허용되는 형식: JPG, JPEG, PNG"
           },
           "condition": {
             "info": "규칙(변수, 비교, 값)을 추가하세요. AND 또는 OR로 연결하고 필요하면 그룹을 중첩할 수 있습니다.",
@@ -908,12 +924,16 @@
             "hint": "방문자가 메모와 함께 이 팀으로 전달됩니다. 이 버튼 뒤에는 아무것도 연결하지 않아도 됩니다."
           },
           "faq": {
-            "exit": "다음으로 이동",
-            "exitHint": "플로우는 항상 여기로 이어집니다."
+            "exit": "일치하는 항목이 없을 때",
+            "exitHint": "어떤 항목도 답하지 못할 때 흐름이 가는 곳.",
+            "matched": "답변했을 때",
+            "matchedHint": "답변을 보낸 뒤 흐름이 가는 곳."
           }
         },
         "branchAdd": "“{title}”에 단계 추가",
-        "faqEnds": "이 중단된 단계는 이 부분을 끝냅니다. 플로우는 항상 '일치 없음' 출구로 이어집니다."
+        "faqEnds": "이 단계는 여기서 끝납니다. 흐름은 '답변됨' 또는 '일치 없음' 출구로 이어집니다.",
+        "flowMenu": "{name} 옵션",
+        "renameFlow": "플로 이름 바꾸기"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value}(워크스페이스에 없음)",
           "templateLabel": "승인된 템플릿",
           "templateHint": "워크스페이스의 승인된 템플릿만 여기에 표시됩니다. <link>새로 만들기 →</link>",
+          "statusExits": "상태 출구 추가(전송됨, 전달됨, 읽음, 답장함, 실패)",
+          "statusExitsHint": "플로우는 단계가 연결된 첫 번째 출구로 나갑니다. 전송됨은 템플릿이 수락되는 즉시, 전달됨·읽음은 WhatsApp이 알려 줄 때, 답장함은 고객이 답장할 때, 실패는 보내지 못했을 때입니다. 고객이 누른 버튼은 해당 버튼의 출구로 나갑니다.",
           "type": "유형",
           "kindText": "텍스트",
           "kindImage": "이미지",
@@ -1364,12 +1386,12 @@
           "stageHint": "딜이 이 파이프라인 단계로 이동하면 연결된 연락처가 등록됩니다. 단계는 /deals 보드에서 관리하세요.",
           "rulesLabel": "댓글 키워드 규칙에 연결",
           "rulesHint": "이 플로우를 시작할 규칙을 선택하세요. 모두 선택하지 않으면 모든 댓글 → DM 규칙에서 실행됩니다.",
-          "rulesNone": "댓글 → DM 키워드 규칙이 아직 없습니다. <link>/auto-reply</link>(Instagram · 트리거 \"댓글 → DM\")에서 만든 뒤 여기에서 선택하세요.",
+          "rulesNone": "댓글 → DM 키워드 규칙이 아직 없어 여기에서 선택할 항목이 없습니다.",
           "ruleFallback": "규칙 {id}",
           "ruleOff": "꺼짐",
           "orderPlaced": "새 주문마다 실행됩니다. 주문 고객은 저장된 연락처와 매칭되어 등록됩니다.",
           "automatic": "자동으로 실행되며 추가 설정이 필요 없습니다.",
-          "away": "<b>부재 모드</b>가 켜져 있는 동안 수신되는 모든 메시지에서 실행됩니다. 부재 모드는 <link>자동 응답</link> 페이지에서 전환하세요. 각 연락처는 한 번만 등록됩니다.",
+          "away": "<b>부재 모드</b>가 켜져 있는 동안 수신되는 모든 메시지에서 실행됩니다. 각 연락처는 한 번만 등록됩니다.",
           "outOfHours": "<b>워크스페이스 영업 시간 외</b>에 수신되는 모든 메시지에서 실행됩니다. 영업 시간은 워크스페이스 설정에서 지정하세요. 각 연락처는 한 번만 등록됩니다.",
           "manualEnroll": "<link>/flows 목록</link>에서 이 플로우 옆의 <b>등록</b> 버튼으로 연락처를 수동 등록합니다.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "결제될 때까지 기다린 후 계속"
         },
         "faq": {
-          "retired": "이 단계는 중단되어 더 이상 아무것도 찾지 않습니다. 플로우는 항상 '일치 없음'으로 이어집니다. 내 지식으로 답하려면 AI 어시스턴트 단계를 사용하고 AI 에이전트를 선택하세요."
+          "agent": "AI 에이전트",
+          "agentHint": "지식 베이스를 검색할 에이전트. 자주 묻는 질문은 AI 학습에서 추가하세요.",
+          "query": "검색할 내용",
+          "queryHint": "찾을 내용. 보통 고객의 마지막 메시지입니다.",
+          "sendAnswer": "고객에게 답변 보내기",
+          "variable": "답변 저장 이름",
+          "variableHint": "이후 단계는 이 이름으로 답변을 읽습니다. 예: faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "플로우 섹션",
         "build": "만들기",
+        "faqs": "FAQ",
         "customize": "사용자 지정",
         "saveFirst": "먼저 플로우를 저장하세요.",
         "needsCustomizing": "위젯이 아직 기본 모양을 사용하고 있습니다. 사용자 지정을 여세요.",
@@ -1933,6 +1962,13 @@
         "deploy": "배포",
         "customizeFirstWhatsapp": "게시하기 전에 WhatsApp 버튼을 사용자 지정하고 한 번 저장해 주세요.",
         "install": "설치"
+      },
+      "faqsPanel": {
+        "intro": "FAQ는 AI 에이전트 지식의 항목입니다. 여기 있는 항목은 이 플로우가 답변에 쓰는 에이전트의 것이며, 질문과 답변을 추가하면 에이전트가 사용합니다.",
+        "noAgent": "이 플로우는 아직 AI 에이전트를 사용하지 않습니다. AI 어시스턴트 또는 FAQ에서 답변 단계를 추가하고 에이전트를 선택하면 해당 FAQ가 여기에 표시됩니다.",
+        "agent": "AI 에이전트",
+        "openAgent": "AI 학습에서 열기",
+        "unknownAgent": "AI 에이전트(찾을 수 없음)"
       },
       "buttonIcon": {
         "label": "아이콘(선택 사항)",
@@ -2021,6 +2057,12 @@
           "unresolved": "이 단축 링크는 아직 확인되지 않았습니다. 입력란 밖을 누르거나 다시 시도하세요.",
           "resolve_failed": "이 링크를 읽을 수 없습니다. Google 지도에서 열리는지 확인하거나 좌표를 입력하세요."
         }
+      },
+      "flowImage": {
+        "title": "이미지를 불러오지 못함",
+        "empty": "링크가 비어 있습니다",
+        "notAddress": "링크가 웹 주소가 아닙니다 (https://로 시작해야 합니다)",
+        "failed": "불러오지 못했습니다 (링크가 잘못되었거나, 비공개이거나, 차단되었거나, 이미지가 아닐 수 있습니다)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "숫자",
         "alphanumeric": "문자와 숫자",
         "date": "날짜",
+        "datetime": "날짜 및 시간",
+        "time": "시간",
         "age": "나이",
         "date_of_birth": "생년월일"
       },
@@ -2343,6 +2387,8 @@
         "number": "올바른 숫자를 입력해 주세요",
         "alphanumeric": "문자와 숫자만 사용해 주세요",
         "date": "올바른 날짜를 입력해 주세요 ({format})",
+        "datetime": "올바른 날짜와 시간을 입력해 주세요 ({format} HH:MM)",
+        "time": "올바른 시간을 입력해 주세요 (HH:MM)",
         "age": "나이를 정수로 입력해 주세요",
         "date_of_birth": "올바른 날짜를 입력해 주세요 ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "질문",
           "help": "무엇이든 질문하고 답변 저장"
         },
-        "askName": {
-          "label": "이름",
-          "help": "이름을 요청하고 확인"
-        },
-        "askEmail": {
-          "label": "이메일",
-          "help": "이메일 주소를 요청하고 확인"
-        },
-        "askPhone": {
-          "label": "전화번호",
-          "help": "전화번호를 요청하고 확인"
-        },
-        "askNumber": {
-          "label": "숫자",
-          "help": "숫자를 요청하고 확인"
-        },
-        "askAlphanumeric": {
-          "label": "문자와 숫자",
-          "help": "ID 또는 코드 (공백이나 기호 없음)"
-        },
-        "askDate": {
-          "label": "날짜",
-          "help": "선택한 형식으로 날짜 요청"
-        },
         "askFile": {
           "label": "파일 또는 이미지",
           "help": "사진, 문서, 동영상 또는 오디오를 기다림"
@@ -2617,7 +2639,9 @@
         "writeCode": "단계 {stage}: 실행할 코드를 작성하세요.",
         "webhookUrl": "단계 {stage}: 호출할 주소(URL)를 추가하세요.",
         "chooseAiAgent": "단계 {stage}: 답변할 AI 에이전트를 선택하거나 이 단계를 직접 설정으로 전환하세요.",
-        "writeAiPrompt": "단계 {stage}: AI에 대한 지침을 작성하거나 AI 에이전트를 선택하세요."
+        "writeAiPrompt": "단계 {stage}: AI에 대한 지침을 작성하거나 AI 에이전트를 선택하세요.",
+        "templateFile": "{stage}단계: 템플릿의 헤더 파일을 추가하세요.",
+        "fileLinkInvalid": "{stage}단계: 파일 링크는 https://로 시작해야 합니다"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "시뮬레이션 구매: {name} → “구매 완료” 포트",
       "simAbandon": "시뮬레이션 이탈 → “이탈” 포트",
       "locationSkipped": "(위치) 건너뜀: 유효한 좌표 없음",
-      "faqRetired": "(시뮬레이션) FAQ에서 답변 단계는 중단되었습니다. '일치 없음'으로 진행합니다."
+      "faqLine": "(시뮬레이션) FAQ에서 답변: 테스트 채팅에서는 지식 베이스를 검색하지 않고 '일치 없음'으로 진행합니다.",
+      "carouselNoMatch": "“{value}”은(는) 버튼 중 하나가 아닙니다. 버튼을 누르거나 버튼 글자를 정확히 입력하세요."
     }
   }
 }

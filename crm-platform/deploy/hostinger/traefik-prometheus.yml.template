@@ -1,0 +1,29 @@
+# Public route for Prometheus (it has no login of its own, so basicAuth is mandatory). Written by observability-up.sh next to desk.yml;
+# it fills in the domain and the users line (user:apr1-hash from secrets/prometheus_basic_password; the hash never leaves the host).
+http:
+  routers:
+    prometheus:
+      rule: Host(`__PROMETHEUS_DOMAIN__`)
+      entryPoints: [websecure]
+      service: prometheus
+      middlewares: [prometheus-auth]
+      tls:
+        certResolver: letsencrypt
+    prometheus-http:
+      rule: Host(`__PROMETHEUS_DOMAIN__`)
+      entryPoints: [web]
+      service: prometheus
+      middlewares: [prometheus-https]
+  middlewares:
+    prometheus-https:
+      redirectScheme:
+        scheme: https
+    prometheus-auth:
+      basicAuth:
+        users:
+          - __PROMETHEUS_USERS__
+  services:
+    prometheus:
+      loadBalancer:
+        servers:
+          - url: http://desk-prometheus:9090

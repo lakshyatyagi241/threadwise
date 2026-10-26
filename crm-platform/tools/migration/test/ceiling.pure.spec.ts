@@ -91,6 +91,14 @@ describe('module ceiling', () => {
     expect(s.keys).not.toContain('flb.flows.read');
   });
 
+  it('never keeps team chat, even when a Waboo permission maps into it', () => {
+    const t = [...target, 'tchat.channels.read', 'tchat.messages.send', 'record.deals.read'];
+    const r = closedKeys(loadModuleCeiling(), new Set(['tchat.channels.read']), t);
+    expect(r.closed).toContain('team-chat');
+    expect(r.keys).toEqual(expect.arrayContaining(['tchat.channels.read', 'tchat.messages.send']));
+    expect(r.keys).not.toContain('record.deals.read');
+  });
+
   it('never keeps the unofficial WhatsApp engine or the TikTok channel, even when a Waboo permission maps into them', () => {
     const t = [
       ...target,

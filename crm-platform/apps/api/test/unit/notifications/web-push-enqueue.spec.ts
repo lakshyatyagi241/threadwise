@@ -182,6 +182,8 @@ describe('the push preference', () => {
     'marketplace_payment_failed',
     // BL-112: a chat nobody could take because the people it wanted are on leave; the push stays on because a customer is waiting.
     'assignment_blocked_by_leave',
+    // BL-426: a customer cancelled from a reminder; the host wants to know and may free the slot.
+    'appointment_cancelled_by_customer',
   ];
 
   it('is on by default only for chat events, assignments, a snoozed chat coming back, mentions and failed payments, and off for everything noisy', () => {

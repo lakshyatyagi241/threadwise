@@ -1,0 +1,103 @@
+{
+  "feature": "appointments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-appointments-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/components/appearance-editor.tsx",
+        "apps/web/src/features/appointments/components/appearance-screen.tsx",
+        "apps/web/src/features/appointments/components/appointment-drawer.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-appointments-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/api/schemas.ts",
+        "apps/web/src/features/appointments/components/appearance-screen.tsx",
+        "apps/web/src/features/appointments/components/booking-type-editor.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-appointments-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/api/http.ts",
+        "apps/web/src/features/appointments/api/mock-server.ts",
+        "apps/web/src/features/appointments/api/mock-service.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-appointments-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/api/mock-server.ts",
+        "apps/web/src/features/appointments/api/real-service.ts",
+        "apps/web/src/features/appointments/components/booking-type-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/appointments/lib/editor.test.ts",
+          "match": "server field errors"
+        }
+      ]
+    },
+    {
+      "id": "ES-appointments-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/api/mock-server.ts",
+        "apps/web/src/features/appointments/api/mock-service.ts",
+        "apps/web/src/features/appointments/api/sequences-service.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/appointments/lib/errors.test.ts",
+          "match": "keeps an unknown conflict as unexpected, and a row version conflict as conflict"
+        }
+      ]
+    },
+    {
+      "id": "ES-appointments-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/appointments/api/mock-server.ts",
+        "apps/web/src/features/appointments/components/appearance-editor.tsx",
+        "apps/web/src/features/appointments/components/appointments-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

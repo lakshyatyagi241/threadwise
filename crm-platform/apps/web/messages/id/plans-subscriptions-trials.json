@@ -48,7 +48,8 @@
       "email_mailboxes": "Kotak surat email",
       "email_monthly": "Email per bulan",
       "storage_gb": "Penyimpanan (GB)",
-      "teams": "Tim"
+      "teams": "Tim",
+      "webbot_messages": "Pesan chatbot situs web gratis per bulan"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -60,10 +61,12 @@
       "remove_branding": "Hapus branding",
       "sales_pipeline": "Pipeline penjualan",
       "appointment_booking": "Pemesanan janji temu",
+      "appointment_confirm_buttons": "Tombol pengingat (Konfirmasi / Jadwalkan Ulang / Batalkan)",
+      "appointment_rebook_steps": "Langkah pemesanan ulang (recall)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Kebijakan SLA",
-      "inbox_routing": "Aturan perutean",
+      "inbox_routing": "Perutean cerdas: penugasan otomatis dan aturan",
       "waba_calling": "Panggilan WhatsApp",
       "inbox_kanban": "Tampilan Kanban",
       "team_performance": "Performa tim",
@@ -89,7 +92,9 @@
       "record_assignment": "Aturan penugasan data",
       "team_hierarchy": "Hierarki tim dan manajer",
       "custom_roles": "Peran kustom dan cakupan",
-      "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
+      "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
+      "agent_status_bar": "Bilah status: kontrol Tersedia / Tidak di tempat di bilah atas dan Kotak Masuk",
+      "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
       "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
       "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir.",
-      "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus."
+      "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus.",
+      "webbot_messages": "Pesan chatbot situs web yang termasuk gratis setiap bulan kalender. Setiap pesan setelahnya ditagihkan ke dompet. Kosong atau 0 = tidak ada yang gratis."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",
@@ -245,20 +251,7 @@
         "title": "Pertanyaan yang sering diajukan"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on yang Anda miliki",
-        "oneTime": "sekali bayar",
-        "buy": "Beli add-on",
-        "buyAgain": "Beli lagi",
-        "active": "Aktif",
-        "unlimitedBullet": "{label} tanpa batas",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} hari}}",
-          "weeks": "{count, plural, other {/ {count} minggu}}",
-          "months": "{count, plural, other {/ {count} bulan}}",
-          "years": "{count, plural, other {/ {count} tahun}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Paket Anda diperpanjang otomatis pada {date}.",
@@ -578,7 +571,30 @@
       "back": "Kembali",
       "compare": "Bandingkan semua paket",
       "appHint": "{feature} juga dijual sebagai aplikasi di Marketplace.",
-      "appLink": "Lihat aplikasi"
+      "appLink": "Lihat aplikasi",
+      "addonHint": "Anda juga dapat menambahkannya ke paket saat ini dengan add-on {addon}.",
+      "addonLink": "Lihat add-on",
+      "addonsTabHint": "Pengaya tidak memerlukan Marketplace pada paket Anda. Anda tetap bisa melihat yang Anda miliki dan membeli pengaya dari Paket dan pengaya.",
+      "addonsTabLink": "Buka Paket dan pengaya",
+      "addonHintGeneric": "Paket Anda mungkin juga menawarkannya sebagai add-on."
+    },
+    "lock": {
+      "link": "Lihat paket dan add-on",
+      "offTitle": "Tidak ada di paket Anda",
+      "offLead": "Bagian ini saat ini tidak termasuk dalam paket ruang kerja Anda.",
+      "buyTitle": "Tambahkan {addon} seharga {price}",
+      "buyLead": "Paket Anda menawarkan {addon} sebagai add-on. Tambahkan untuk mengaktifkan bagian ini.",
+      "buyLink": "Lihat add-on",
+      "askOwner": "Minta pemilik akun untuk menambahkannya.",
+      "unavailableTitle": "{addon} memerlukan paket berbayar yang aktif",
+      "unavailableLead": "Pilih paket berbayar terlebih dahulu, lalu Anda dapat menambahkan {addon} ke paket itu.",
+      "viewPlans": "Lihat paket",
+      "disabledTitle": "{addon} nonaktif",
+      "disabledLead": "Paket Anda menyertakan {addon}, tetapi add-on ini dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+      "disabledAsk": "Minta pemilik akun untuk mengaktifkannya.",
+      "turnOn": "Aktifkan",
+      "turnOnForbidden": "Anda tidak memiliki izin untuk mengaktifkannya. Minta pemilik akun.",
+      "turnOnFailed": "Kami tidak dapat mengaktifkan {addon}. Silakan coba lagi."
     }
   }
 }

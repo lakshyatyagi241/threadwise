@@ -61,6 +61,9 @@
       "allChannels": "All channels",
       "archived": "Archived",
       "backToInbox": "Back to the inbox",
+      "erased": "Erased contacts",
+      "erasedHint": "These contacts were erased, and their conversations were kept without their details or message text. Times show the last message, because the erase date is not recorded.",
+      "erasedTitle": "Erased contact",
       "loading": "Loading conversations",
       "retry": "Try again",
       "listLabel": "Conversations",
@@ -328,9 +331,18 @@
       },
       "readOnly": "You can read this conversation but you do not have permission to reply.",
       "resolvedBanner": "This conversation is resolved. Reopen it to reply.",
+      "resolvedWebchatBanner": "This web chat is resolved and cannot be reopened.",
+      "erasedBadge": "Erased",
+      "erasedBanner": "This contact was erased. Message text and media were removed, so nothing can be sent. The timeline and times are kept.",
       "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to reply.",
       "typing": "{count, plural, one {A teammate is typing} other {# teammates are typing}}",
       "messagesLabel": "Messages",
+      "session": {
+        "header": "{range} · {count, plural, one {# message} other {# messages}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Load earlier messages",
       "empty": "No messages in this conversation yet.",
       "newMessageAnnounce": "New message: {text}",
@@ -542,17 +554,17 @@
         "onLeave": "On leave",
         "onLeaveUntil": "On leave until {date}",
         "availability": {
-          "online": "Online",
-          "away": "Away",
+          "online": "Available",
+          "away": "Away, outside working hours",
           "busy": "Busy",
-          "offline": "Offline"
+          "offline": "Away"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Away",
+        "online": "Available",
+        "away": "Away, outside working hours",
         "busy": "Busy",
-        "offline": "Offline"
+        "offline": "Away"
       },
       "notes": {
         "tab": "Contact notes",
@@ -584,7 +596,11 @@
           "sla_breach": "Response deadline missed",
           "spam_flagged": "Marked as spam by {actor}",
           "escalated": "Escalated",
-          "unknown": "{what} by {actor}"
+          "unknown": "{what} by {actor}",
+          "handoff_requested": "Handed to a person by {actor}",
+          "queue_reminded": "The team was reminded",
+          "queue_offered": "Offered to another team",
+          "queue_customer_message": "A message was sent to the customer"
         },
         "actors": {
           "user": "A teammate",
@@ -711,6 +727,7 @@
         "not_linked": "This conversation's channel is not linked to a WhatsApp number, so no template can be sent from it.",
         "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
         "media_header": "Has an image, video or document header, which cannot be sent from the inbox yet.",
+        "carousel": "Is a carousel (cards with pictures), which cannot be sent from the inbox yet.",
         "header_variable": "Has a variable in the header, which cannot be filled in from the inbox yet.",
         "dynamic_button": "Has a button link with a variable, which cannot be filled in from the inbox yet.",
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
@@ -805,6 +822,7 @@
         "onlyStatus": "Only {status} messages",
         "requestedAt": "Requested {date}",
         "lines": "{count, plural, one {# line} other {# lines}}",
+        "noLines": "No events in this range",
         "until": "Available until {date}",
         "download": "Download",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (testing)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Website chat",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Email",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (testing)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Website chat",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Email",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contact",
         "agent": "You",
@@ -1028,6 +1046,7 @@
       "selectAllInView": "Select all {count} in view",
       "done": "Done",
       "markRead": "Mark as read",
+      "markUnread": "Mark as unread",
       "resolve": "Resolve",
       "close": "Close",
       "reopen": "Reopen",
@@ -1037,6 +1056,7 @@
       "removeTeam": "Remove team",
       "priority": "Priority",
       "snooze": "Snooze",
+      "unsnooze": "Unsnooze",
       "snoozePreset": {
         "oneHour": "1 hour",
         "threeHours": "3 hours",
@@ -1054,7 +1074,8 @@
       "tagRemove": "Remove tag",
       "onLeave": "on leave",
       "onLeaveUntil": "on leave until {date}",
-      "spam": "Mark as spam"
+      "spam": "Mark as spam",
+      "notSpam": "Mark as not spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "Back to the inbox",
-        "title": "Conversation tags",
+        "title": "Tags",
         "intro": "Conversation tags mark a thread (billing, refund, urgent) so your team can sort and filter the inbox. They come from the same tag library as contact tags, which describe the person.",
         "newTitle": "New tag",
         "editTitle": "Edit tag",

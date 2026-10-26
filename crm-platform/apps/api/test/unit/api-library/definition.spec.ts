@@ -100,6 +100,17 @@ describe('the definition rules', () => {
     expect(problems({ ...base, url: 'http://x.test:8080/a?b=1' })).toEqual([]);
   });
 
+  it('url: a value with a space in the path is encoded before the check, a missing scheme is still refused', () => {
+    const base = { ...ok, method: 'GET', body: null, headers: [] };
+    const variables = [{ name: 'term', defaultValue: 'abc def' }];
+    expect(problems({ ...base, url: 'https://httpbin.org/anything/{{term}}', variables })).toEqual(
+      [],
+    );
+    expect(problems({ ...base, url: 'httpbin.org/anything/{{term}}', variables })).toEqual([
+      'url: A valid URL is required',
+    ]);
+  });
+
   it('headers: no duplicates, none the server owns, no content-type on form data', () => {
     expect(
       problems({
@@ -166,6 +177,30 @@ describe('the definition rules', () => {
     expect(problems({ ...ok, responseVariables: ['data.items[].id', 'data.items[0].id'] })).toEqual(
       [],
     );
+  });
+
+  it('mapping: two rows cannot save into the same contact property', () => {
+    expect(
+      problems({
+        ...ok,
+        mapping: [
+          { path: 'slideshow.title', contactProperty: 'decimal_number' },
+          { path: 'slideshow.author', contactProperty: 'decimal_number' },
+        ],
+      }),
+    ).toEqual([
+      'mapping.0.contactProperty: Two rows save into the same contact property',
+      'mapping.1.contactProperty: Two rows save into the same contact property',
+    ]);
+    expect(
+      problems({
+        ...ok,
+        mapping: [
+          { path: 'a', contactProperty: 'name' },
+          { path: 'b', contactProperty: 'title' },
+        ],
+      }),
+    ).toEqual([]);
   });
 
   it('update replaces the definition and carries the lock; a test run may omit the name', () => {

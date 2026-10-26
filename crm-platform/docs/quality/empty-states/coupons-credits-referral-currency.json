@@ -1,0 +1,91 @@
+{
+  "feature": "coupons-credits-referral-currency",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-coupons-credits-referral-currency-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate-page.tsx",
+        "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/parts.tsx",
+        "apps/web/src/features/coupons-credits-referral-currency/components/coupon-form-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate.test.tsx",
+          "match": "shows NO-code fallback text when the user has no code yet"
+        },
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/lib/affiliate.test.ts",
+          "match": "has no range for an empty table, so the footer is hidden"
+        }
+      ]
+    },
+    {
+      "id": "EM-coupons-credits-referral-currency-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/coupons-credits-referral-currency/components/currencies-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate.test.tsx",
+          "match": "says nothing matches when a search or range hides the rows"
+        }
+      ]
+    },
+    {
+      "id": "EM-coupons-credits-referral-currency-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate-page.tsx",
+        "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/parts.tsx",
+        "apps/web/src/features/coupons-credits-referral-currency/components/coupon-form-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate.test.tsx",
+          "match": "shows skeletons with a status for screen readers before the first answer"
+        }
+      ]
+    },
+    {
+      "id": "EM-coupons-credits-referral-currency-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/volume-chart.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/components/affiliate/affiliate.test.tsx",
+          "match": "colours a falling delta as a warning and a flat one as muted"
+        },
+        {
+          "file": "apps/web/src/features/coupons-credits-referral-currency/lib/drafts.test.ts",
+          "match": "flags a short code, a zero rate and seven decimals"
+        }
+      ]
+    }
+  ]
+}

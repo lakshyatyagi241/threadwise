@@ -1,0 +1,12 @@
+{
+  "id": "rate-limiting",
+  "sheetItem": 33,
+  "title": "Rate limiting",
+  "script": "run.sh",
+  "estMinutes": { "quick": 1, "full": 12 },
+  "heavy": false,
+  "needs": ["node22", "pnpm", "docker", "curl", "postgres", "redis"],
+  "proves": "Every public route has a measured limit or a written decision (no new unlimited route can merge); the limiter holds under 150 simultaneous requests, recovers after Retry-After, is not dodged by path, header or address-spelling variants or by a forged X-Forwarded-For from an untrusted peer; guessing one account from many networks is stopped without locking the owner out; password-reset mail is capped; every counter expires; and the gate fails on any unresolved Critical or High.",
+  "doesNotProve": "Behaviour behind a real reverse proxy or CDN (the proxy hop count is a deployment setting this cannot see), production traffic shapes, one-time-code guessing across addresses (the signup flow needs a mail domain that resolves), or authenticated per-user limits on the 1,900 signed-in routes beyond the ones with a declared limit.",
+  "report": "docs/security/rate-limiting/rate-limiting-REPORT.html"
+}

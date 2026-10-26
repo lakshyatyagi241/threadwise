@@ -22,8 +22,18 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { AddonEntitlementService } from '../addons-extension-registry';
-import { appVisibleOnPlan, PlanEntitlementService } from '../plans-subscriptions-trials';
+import {
+  AddonEntitlementService,
+  isIncludedInPlan,
+  readGrants,
+} from '../addons-extension-registry';
+import {
+  appVisibleOnPlan,
+  offerOf,
+  offersOfPlanSlug,
+  PlanEntitlementService,
+  type ResolvedOffer,
+} from '../plans-subscriptions-trials';
 import type { DriverOrder, PaymentResult } from '../../infra/providers/platform-payment-gateways';
 import { CheckoutSettingsService, type CheckoutSettings } from './checkout-settings.service';
 import { CouponService, type CouponResolution } from './coupon.service';
@@ -170,6 +180,8 @@ export class CheckoutService {
     tx: Tx,
     plan: PlanRow,
     rates: ReadonlyMap<string, string>,
+    /** The plain add-on's offer when the caller already resolved it (undefined: resolve it here). */
+    offer?: ResolvedOffer | null,
   ): Promise<void> {
     if (plan.isFree || plan.isCustomQuote) {
       throw unavailable(
@@ -193,9 +205,34 @@ export class CheckoutService {
             const e = await this.plans.forOrg(orgId);
             return e === null || appVisibleOnPlan(e, appId);
           },
+          async (keys) => (await this.plans.includedByPlan(orgId, keys)).size,
         )
       )
         return;
+      // Nothing left to buy: the plan (or an override) already grants every feature of this pack and the pack adds no cap. A crafted request
+      // for a pack the catalogue shows as "included" is refused here, not only hidden on the card.
+      const packRes = await tx.execute(
+        sql`SELECT features, limits FROM plans WHERE slug = ${plan.slug} AND kind = 'addon'`,
+      );
+      const pack = packRes.rows[0] as { features: unknown; limits: unknown } | undefined;
+      if (pack) {
+        const grants = readGrants(pack.features, pack.limits);
+        if (isIncludedInPlan(grants, await this.plans.includedByPlan(orgId, grants.features))) {
+          throw unavailable(
+            'Your plan already includes everything this add-on gives.',
+            ERROR_CODES.PAYGW_ADDON_INCLUDED,
+          );
+        }
+      }
+      // A plan that does not offer this add-on (docs/specs/addons-plan-offers.md): refused here, not only left off the list.
+      if (
+        (offer === undefined ? await this.plainPackOffer(tx, plan.slug) : offer)?.mode === 'hidden'
+      ) {
+        throw unavailable(
+          'Your plan does not offer this add-on.',
+          ERROR_CODES.PAYGW_ADDON_NOT_OFFERED,
+        );
+      }
       // An add-on sits on top of an active paid plan (TW-ADD-033). Reference enforced this only in the view; a direct POST bypassed it.
       const base = await tx.execute(sql`
         SELECT p.is_free, p.is_custom_quote, s.plan_ends_at
@@ -247,6 +284,23 @@ export class CheckoutService {
     }
   }
 
+  /**
+   * How the buyer's plan offers a plain add-on (included / paid at a plan price / hidden), or null for anything that is not a plain add-on. The plan is
+   * the one whose offers apply (a lapsed paid plan's free fallback has its own).
+   */
+  private async plainPackOffer(tx: Tx, slug: string): Promise<ResolvedOffer | null> {
+    const res = await tx.execute(
+      sql`SELECT id::int AS id FROM plans WHERE slug = ${slug} AND kind = 'addon' AND marketplace_app_id IS NULL`,
+    );
+    const pack = res.rows[0] as { id: number } | undefined;
+    if (!pack) return null;
+    const planSlug = (
+      await this.plans.forOrg(RequestContextStore.require().orgId, { ignorePacks: true })
+    )?.offerPlanSlug;
+    if (!planSlug) return { mode: 'paid', amount: null };
+    return offerOf(await offersOfPlanSlug(tx, planSlug), pack.id);
+  }
+
   /** The buyer's own locked price for this app's add-on and period, or null. Read in the buyer's transaction (row-level security). */
   private async lockedPrice(
     tx: Tx,
@@ -282,7 +336,9 @@ export class CheckoutService {
   ): Promise<Priced> {
     const plan = await this.loadPlan(tx, planSlug);
     const { enabled, rates } = await this.rates(tx, s.defaultCurrency);
-    await this.assertPurchasable(tx, plan, rates);
+    // A plain add-on's offer on the buyer's plan, resolved once: hidden is refused, a plan price replaces the add-on's.
+    const offer = plan.kind === 'addon' ? await this.plainPackOffer(tx, plan.slug) : null;
+    await this.assertPurchasable(tx, plan, rates, offer);
 
     const active = await this.gateways.activeRows();
     const available = availableCurrencies(
@@ -299,11 +355,13 @@ export class CheckoutService {
       plan.kind === 'addon'
         ? await this.lockedPrice(tx, plan.slug, yearlyPack ? 'yearly' : 'monthly')
         : null;
+    // A plain add-on may cost something else on the buyer's plan (the plan's own price for it), which replaces the add-on's price and offer.
+    const planPrice = offer?.amount ?? null;
     const chargeable = locked
       ? locked.amount
       : yearlyPack
         ? annual
-        : (plan.offerAmount ?? plan.amount);
+        : (planPrice ?? plan.offerAmount ?? plan.amount);
     const baseCurrency = locked ? locked.currency : plan.currency;
     const listMinor = majorToMinor(chargeable, baseCurrency);
     const converted =

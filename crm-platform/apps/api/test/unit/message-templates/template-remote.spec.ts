@@ -377,6 +377,7 @@ describe('row to API shape', () => {
     status: 'pending',
     metaStatus: null,
     metaTemplateId: null,
+    metaEditLog: [],
     qualityScore: null,
     rejectionReason: null,
     rejectionReasonCode: null,

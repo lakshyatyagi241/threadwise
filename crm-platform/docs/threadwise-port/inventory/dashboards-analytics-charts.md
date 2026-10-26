@@ -519,7 +519,7 @@ Other pages in Reference are also "dashboards" but belong to the domain that own
 - **External systems:** none.
 - **Settings:** none.
 - **Acceptance criteria:**
-  - Given 8 templates, Then only the 5 most recently updated are listed, ordered by window sends descending.
+  - Given 8 templates, Then only the 5 with the most window sends are listed, ordered by window sends descending; a tie goes to the most recently updated.
   - Given a template with 10 sends, 9 delivered, 5 read, Then it shows Sent 10, Delivered 9, Read 5, CTR 50.0%, performance 90.
   - Given a template whose provider config is disconnected, Then it is excluded from the list and the count.
 - **Source refs:** app/Http/Controllers/UserPagesController.php (dashboard templates), app/Models/WaTemplate.php (scopeProviderLive), resources/views/user/dashboard/index.blade.php

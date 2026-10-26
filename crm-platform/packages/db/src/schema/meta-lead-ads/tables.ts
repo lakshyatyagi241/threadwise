@@ -119,7 +119,6 @@ export const metaLeadForms = pgTable(
       columns: [t.orgId, t.connectedBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
-    index('idx_meta_lead_forms_page').on(t.orgId, t.pageId),
     index('idx_meta_lead_forms_connected_by').on(t.orgId, t.connectedBy),
   ],
 );

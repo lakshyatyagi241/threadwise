@@ -11,7 +11,8 @@
       "installed": "Installed · Marketplace",
       "manage": "Manage app · Marketplace",
       "requests": "Requests · Marketplace",
-      "addons": "Add-ons · Marketplace"
+      "addons": "Add-ons · Marketplace",
+      "developer": "Developer · Marketplace"
     },
     "common": {
       "dismiss": "Dismiss",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "Mini apps",
         "integration": "Integrations",
-        "addon": "Add-ons"
+        "addon": "Add-ons",
+        "developer": "Developer"
       },
       "installed": "Installed",
       "installedLimit": "Installed ({installed} of {limit})",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "Open",
       "empty": {
-        "title": "No add-ons available",
-        "message": "The add-ons your role and plan include will appear here."
+        "title": "No developer tools available",
+        "message": "The developer tools your role and plan include will appear here."
       },
       "soon": "Soon",
       "upgrade": "Upgrade"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "Payment cancelled",
         "message": "Nothing was charged. Subscribe again whenever you are ready."
+      }
+    },
+    "addonsTab": {
+      "intro": "Extra feature packs you buy on top of your plan. What your plan already includes is marked, and nothing is charged for it.",
+      "developerHint": "Looking for the REST API, webhooks or other developer tools?",
+      "developerLink": "Open the Developer tab"
+    },
+    "developerTab": {
+      "intro": "Tools for developers and technical admins: API keys, webhooks, publishing and translation. You only see the ones your role and plan allow."
+    },
+    "connector": {
+      "builtIn": "Built in",
+      "status": {
+        "connected": "Connected",
+        "notConnected": "Not connected",
+        "upgrade": "Upgrade",
+        "soon": "Soon"
+      },
+      "cta": {
+        "open": "Open",
+        "manage": "Manage",
+        "connect": "Connect"
       }
     }
   }

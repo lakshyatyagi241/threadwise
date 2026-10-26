@@ -5,7 +5,7 @@
         "title": "Passaggio e assegnazione",
         "hint": "Usato quando un bot, un flusso o un collega passa una conversazione a questo team.",
         "method": "Come scegliere una persona",
-        "methodHint": "Manuale: la conversazione resta nella coda del team finché qualcuno la prende in carico. A rotazione e Meno carico scelgono un membro per te e richiedono un piano con regole di assegnazione.",
+        "methodHint": "Manuale: la conversazione attende nella coda del team finché qualcuno la prende in carico. Round robin e Meno carico scelgono un membro per te e fanno parte del componente Instradamento intelligente.",
         "defaultAssignee": "Responsabile predefinito",
         "defaultAssigneeHint": "Prende la conversazione quando nessun altro può. Scegli uno dei membri del team.",
         "noDefaultAssignee": "Nessuno in particolare",
@@ -23,7 +23,10 @@
           "fri": "Venerdì",
           "sat": "Sabato",
           "sun": "Domenica"
-        }
+        },
+        "methodLocked": "{method} (richiede Instradamento intelligente)",
+        "methodLockHint": "I metodi automatici fanno parte del componente aggiuntivo Instradamento intelligente o di un piano superiore.",
+        "defaultAssigneeLocked": "L'assegnatario predefinito viene usato solo con un metodo di team automatico, che fa parte del componente aggiuntivo Instradamento intelligente o di un piano superiore."
       }
     }
   }

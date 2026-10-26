@@ -1,5 +1,8 @@
 import {
+  SEGMENT_MAX_DEPTH,
   checkConditionValue,
+  segmentRulesSchema,
+  type SegmentCondition,
   type SegmentFieldKind,
   type SegmentGroup,
   type SegmentNode,
@@ -7,12 +10,14 @@ import {
 import type { PqlCatalog } from './pql.prompt';
 
 /**
- * Drops every condition that points at something this workspace does not have (an id or key the model made up). The compiler would
- * answer such a condition with "matches nothing", which would make the whole search look empty; dropping it and saying so is honest.
- * A group left with no children is dropped too; null when nothing is left.
+ * Drops every part of the model's tree the workspace or the shared schema cannot use, and names it in `dropped`: a condition the schema
+ * refuses on its own (an operator its field does not have, a value of the wrong shape, a tag written as a name instead of its id), a
+ * condition that points at an id or key the workspace does not have (an invented one), and a group nested deeper than the schema allows.
+ * The compiler would answer such a condition with "matches nothing", which would make the whole search look empty; dropping it and saying
+ * so is honest. A group left with no children is dropped too; null when nothing is left.
  */
 export function pruneRules(
-  root: SegmentGroup,
+  root: unknown,
   catalog: PqlCatalog,
 ): { rules: SegmentGroup | null; dropped: string[] } {
   const known = {
@@ -37,26 +42,66 @@ export function pruneRules(
       ? known[field]
       : undefined;
 
-  const keep = (n: SegmentNode): SegmentNode | null => {
-    if (n.type === 'condition') {
-      if (n.field.startsWith('custom.') || n.field.startsWith('company.')) {
-        // The key must exist AND the operator and value must fit its kind: otherwise the compiler would answer "matches nothing".
-        const kind = known.custom.get(n.field);
-        if (!kind || checkConditionValue(kind, n.operator, n.value) !== null) {
-          dropped.push(n.field);
-          return null;
-        }
-      }
-      const refs = refSet(n.field);
-      if (refs && !values(n.value).every((v) => typeof v === 'string' && refs.has(v))) {
-        dropped.push(n.field);
+  // Each node is checked on its own, so a bad one is dropped without voiding its siblings. The shape is the model's, so nothing is
+  // trusted: a condition is rebuilt from the four fields the schema knows, and the shared schema decides whether it is legal.
+  const keepCondition = (n: Record<string, unknown>): SegmentCondition | null => {
+    const condition = {
+      type: 'condition',
+      field: n.field,
+      operator: n.operator,
+      ...(n.value !== undefined ? { value: n.value } : {}),
+    };
+    const legal = segmentRulesSchema.safeParse({
+      type: 'group',
+      combinator: 'and',
+      children: [condition],
+    });
+    if (!legal.success) {
+      dropped.push(String(n.field ?? 'condition'));
+      return null;
+    }
+    const kept = condition as SegmentCondition;
+    if (kept.field.startsWith('custom.') || kept.field.startsWith('company.')) {
+      // The key must exist AND the operator and value must fit its kind: otherwise the compiler would answer "matches nothing".
+      const kind = known.custom.get(kept.field);
+      if (!kind || checkConditionValue(kind, kept.operator, kept.value) !== null) {
+        dropped.push(kept.field);
         return null;
       }
-      return n;
     }
-    const children = n.children.map(keep).filter((c): c is SegmentNode => c !== null);
-    return children.length > 0 ? { ...n, children } : null;
+    const refs = refSet(kept.field);
+    if (refs && !values(kept.value).every((v) => typeof v === 'string' && refs.has(v))) {
+      dropped.push(kept.field);
+      return null;
+    }
+    return kept;
   };
-  const out = keep(root);
+
+  const keep = (n: unknown, depth: number): SegmentNode | null => {
+    if (typeof n !== 'object' || n === null) {
+      dropped.push('condition');
+      return null;
+    }
+    const { type, combinator, children } = n as {
+      type?: unknown;
+      combinator?: unknown;
+      children?: unknown;
+    };
+    if (type === 'condition') return keepCondition(n as Record<string, unknown>);
+    if (
+      type !== 'group' ||
+      depth > SEGMENT_MAX_DEPTH ||
+      (combinator !== 'and' && combinator !== 'or') ||
+      !Array.isArray(children)
+    ) {
+      dropped.push('group');
+      return null;
+    }
+    const kept = children
+      .map((c) => keep(c, depth + 1))
+      .filter((c): c is SegmentNode => c !== null);
+    return kept.length > 0 ? { type: 'group', combinator, children: kept } : null;
+  };
+  const out = keep(root, 1);
   return { rules: out && out.type === 'group' ? out : null, dropped };
 }

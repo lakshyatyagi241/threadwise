@@ -7,6 +7,7 @@
  * (apps/web .../lib/simple-model.ts) are copied; `Msg`, `msg` and `dedupeMsgs` (lib/msg.ts, which imports React) are copied without
  * the hooks. The test pins the constants too. The original has no DOM or React dependency; it is a pure function of the records.
  */
+import { propertyKeyOf } from '../transform/contacts';
 import { flbCleanAskFileExtensions } from '../../../packages/contracts/src/flow-builder-editor/ask-media';
 import { flbDefaultNodeData } from '../../../packages/contracts/src/flow-builder-editor/node-catalogue';
 import { FLB_WA_LIMITS } from '../../../packages/contracts/src/flow-builder-editor/whatsapp-limits';
@@ -421,7 +422,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             var: claimVar(r, `phone_${id8}`),
             validate: 'phone',
             saveProperty: key !== '',
-            propertyKey: key,
+            propertyKey: propertyKeyOf(key),
             ...(r.hasOTPVarification === true ? { verifyOtp: true } : {}),
           },
         };
@@ -442,7 +443,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             validate: 'date',
             dateFormat: 'dd/mm/yyyy',
             saveProperty: key !== '',
-            propertyKey: key,
+            propertyKey: propertyKeyOf(key),
           },
         };
       }
@@ -540,7 +541,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             var: claimVar(r, `file_${id8}`),
             extensions: flbCleanAskFileExtensions(first.allowedFileTypes),
             saveProperty: key !== '',
-            propertyKey: key,
+            propertyKey: propertyKeyOf(key),
           },
         };
       }
@@ -559,7 +560,7 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
             var: claimVar(r, `ask_${id8}`),
             validate,
             saveProperty: key !== '',
-            propertyKey: key,
+            propertyKey: propertyKeyOf(key),
           },
         };
       }
@@ -690,6 +691,10 @@ export function waboToGraph(raw: unknown, opts: WaboOptions = {}): WaboImport {
           x: lastX,
           y: 60 + agents * ROW,
           data: {
+            // `handoff: 2` makes it the Human handoff node; without it the node is read as the old Assign agent with one exit
+            handoff: 2,
+            destination: 'team',
+            reason: 'customer_asked',
             team: '',
             userId: '',
             journeyName: '',

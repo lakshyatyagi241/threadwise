@@ -203,15 +203,17 @@ describe('the reminder timeline', () => {
     const buttonsSwitch = document.getElementById(idOf('buttons')) as HTMLButtonElement;
     expect(buttonsSwitch).not.toBeNull();
     expect(buttonsSwitch.disabled).toBe(true);
-    expect(c.textContent).toContain('buttons are not part of your plan');
+    expect(c.textContent).toContain('buttons are part of the Appointments upgrade tier');
     expect(c.querySelector('a[href="/account/plans"]')).not.toBeNull();
     // the rebook step can be set up but not switched on
     const rebook = card('rebook')!;
     expect((rebook.querySelector('[role="switch"]') as HTMLButtonElement).disabled).toBe(true);
     expect(rebook.textContent).toContain('cannot be switched on with your current plan');
-    expect(document.body.textContent).toContain('Rebook messages are not part of your plan');
+    expect(document.body.textContent).toContain(
+      'Rebook messages are part of the Appointments upgrade tier',
+    );
     click(byText('Add step'));
-    expect(itemText('Rebook message')!.textContent).toContain('Plan upgrade needed');
+    expect(itemText('Rebook message')!.textContent).toContain('Upgrade tier: not in your plan');
   });
 
   it('lets a plan that lost the buttons still switch them off', () => {

@@ -53,7 +53,10 @@ export const isCoexistenceMeta = (meta: Meta | null | undefined): boolean =>
   meta?.coexistence === true || isCoexistence(str(meta?.platform_type));
 
 /** What the governor needs for a stored number: the rate, the pause and the tier. */
-export function publishedOf(meta: Meta | null | undefined, s: WabaThroughputSettings): PublishedNumber {
+export function publishedOf(
+  meta: Meta | null | undefined,
+  s: WabaThroughputSettings,
+): PublishedNumber {
   const l = limitsOf(meta);
   const t = parseThroughput(meta?.throughput);
   const rate = resolveRate({
@@ -176,7 +179,12 @@ export function totalsOf(numbers: WabaNumberThroughput[]): WabaThroughputTotals 
 
 /** What a sync writes onto the stored number from what Meta reported. */
 export function syncPatch(
-  phone: { throughput: unknown; messagingLimitTier: string | null; qualityRating: string | null; platformType: string | null },
+  phone: {
+    throughput: unknown;
+    messagingLimitTier: string | null;
+    qualityRating: string | null;
+    platformType: string | null;
+  },
   now: Date,
 ): Meta {
   return {
@@ -190,7 +198,11 @@ export function syncPatch(
 }
 
 /** True when this stored number is due to be re-read from Meta. */
-export function syncDue(meta: Meta | null | undefined, intervalMinutes: number, now: Date): boolean {
+export function syncDue(
+  meta: Meta | null | undefined,
+  intervalMinutes: number,
+  now: Date,
+): boolean {
   const at = str(meta?.throughput_synced_at);
   if (!at) return true;
   const t = Date.parse(at);

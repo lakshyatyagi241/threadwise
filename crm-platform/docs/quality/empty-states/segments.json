@@ -1,0 +1,86 @@
+{
+  "feature": "segments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-segments-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/mock-evaluate.ts",
+        "apps/web/src/features/segments/api/mock-server.ts",
+        "apps/web/src/features/segments/components/advanced-filter.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/segments/api/mock-evaluate.test.ts",
+          "match": "empty means null, blank or an empty list"
+        },
+        {
+          "file": "apps/web/src/features/segments/components/components.test.tsx",
+          "match": "the people picker: a labelled search, the count, chips that remove, and the empty states"
+        },
+        {
+          "file": "apps/web/src/features/segments/lib/hub.test.ts",
+          "match": "a page past the end lands on the last one; an empty list is page 1 of 1"
+        }
+      ]
+    },
+    {
+      "id": "EM-segments-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/components/share-picker.tsx",
+        "apps/web/src/features/segments/components/value-inputs.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-segments-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/components/live-preview.tsx",
+        "apps/web/src/features/segments/components/segment-actions.tsx",
+        "apps/web/src/features/segments/components/segment-builder.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/segments/components/components.test.tsx",
+          "match": "shows a loading state while the first answer is on its way"
+        },
+        {
+          "file": "apps/web/src/features/segments/lib/fields.test.ts",
+          "match": "flags nothing while the lookups are still loading, or when everything exists"
+        }
+      ]
+    },
+    {
+      "id": "EM-segments-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/components/segment-actions.tsx",
+        "apps/web/src/features/segments/components/segment-detail.tsx",
+        "apps/web/src/features/segments/components/segments-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

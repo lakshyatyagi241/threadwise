@@ -1,0 +1,36 @@
+{
+  "team-inbox-routing-sla": {
+    "waitingQueue": {
+      "title": "Kolejka oczekujących",
+      "intro": "Czaty, których nikt nie przejął, czekają na karcie Oczekujące. Te opcjonalne kroki pomagają je obsłużyć. Każdy krok uruchamia się raz na czat, liczy tylko minuty, gdy zespół jest otwarty, i kończy się, gdy ktoś przejmie czat.",
+      "introBasic": "Czaty, których nikt nie przejął, czekają na karcie Oczekujące, aż ktoś je przejmie.",
+      "remind": "Przypomnij zespołowi",
+      "remindBody": "Powiadamia osoby, które mogą przejąć czat.",
+      "overflow": "Zaproponuj innemu zespołowi",
+      "overflowBody": "Przenosi czat do kolejki tego zespołu, jednorazowo.",
+      "team": "Zespół",
+      "teamPick": "Wybierz zespół",
+      "final": "Ostatni krok",
+      "finalBody": "Jeśli do tego czasu nikt nie przejął czatu:",
+      "action": "Co się dzieje",
+      "actionMessage": "Wyślij wiadomość do klienta",
+      "actionBot": "Oddaj czat botowi",
+      "message": "Wiadomość",
+      "messageHint": "Możesz użyć '{{name}}' i '{{first_name}}'.",
+      "afterMinutes": "Po (minuty)",
+      "save": "Zapisz",
+      "saved": "Zapisano ustawienia kolejki oczekujących.",
+      "saveFailed": "Nie udało się zapisać ustawień kolejki oczekujących.",
+      "readOnly": "Możesz zobaczyć te ustawienia, ale nie możesz ich zmienić.",
+      "problems": {
+        "minutes": "Podaj liczbę od 1 do 1440.",
+        "team": "Wybierz zespół.",
+        "message": "Napisz wiadomość."
+      },
+      "away": "Zwracaj nieodpowiedziane czaty, gdy ktoś jest nieobecny",
+      "awayBody": "Gdy osoba zmienia status na Nieobecny lub zaczyna urlop, jej czaty, na które klient nadal czeka, wracają do kolejki zespołu.",
+      "offline": "Ustawiaj nieaktywne osoby jako nieobecne",
+      "offlineBody": "Dostępna osoba, która przez ten czas nic nie zrobiła, zostaje ustawiona jako Nieobecna. Sama może wrócić do Dostępnego."
+    }
+  }
+}

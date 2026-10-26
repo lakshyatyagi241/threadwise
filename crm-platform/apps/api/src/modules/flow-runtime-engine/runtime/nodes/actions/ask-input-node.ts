@@ -13,6 +13,8 @@ import {
   flbCleanMinAge,
   flbIsAgeInput,
   flbParseDate,
+  flbParseDateTime,
+  flbParseTime,
   judgeAgeAnswer,
   type AgeVerdict,
   type FlbAskInputType,
@@ -55,7 +57,8 @@ const HANDLER = 'AskInput';
 /** What the channel's input hint is told: an age is a number, a date of birth a date (the same pickers as the plain kinds). */
 const wireType = (t: FlbAskInputType): string =>
   t === 'date_of_birth' ? 'date' : t === 'age' ? 'number' : t;
-const takesDateFormat = (t: FlbAskInputType): boolean => t === 'date' || t === 'date_of_birth';
+const takesDateFormat = (t: FlbAskInputType): boolean =>
+  t === 'date' || t === 'datetime' || t === 'date_of_birth';
 
 const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' : String(v));
 const num = (v: unknown, fallback: number): number => {
@@ -131,8 +134,16 @@ export class AskInputNode implements NodeExecutor {
         const value = checked.value;
         if (flbIsAgeInput(type)) return this.answerAge(ctx, type, value, dateFormat, variable);
         if (verify) return this.startCode(ctx, value, variable, 0);
+        await this.ensureContact(ctx, type, value);
         await this.saveProperty(ctx, str(p.savePropertyKey), value);
-        const iso = type === 'date' ? flbParseDate(value, dateFormat) : null;
+        const iso =
+          type === 'date'
+            ? flbParseDate(value, dateFormat)
+            : type === 'datetime'
+              ? flbParseDateTime(value, dateFormat)
+              : type === 'time'
+                ? flbParseTime(value)
+                : null;
         return {
           action: 'route',
           port: 1,
@@ -318,6 +329,7 @@ export class AskInputNode implements NodeExecutor {
     const want = Buffer.from(str(d.hash), 'hex');
     if (text !== '' && have.length === want.length && timingSafeEqual(have, want)) {
       const phone = str(d.phone);
+      await this.ensureContact(ctx, 'phone', phone);
       await this.saveProperty(ctx, str(ctx.node.props.savePropertyKey), phone);
       return {
         action: 'route',
@@ -390,6 +402,26 @@ export class AskInputNode implements NodeExecutor {
   }
 
   /** "Also save on a contact property". A failure never stops the flow. */
+  /**
+   * A website chat visitor is no contact until they give an email or a phone number: the first time they do, inside a flow, the contact
+   * is made here (and tied to the thread), so the answer can be saved on it and a person only trying the bot out leaves no record.
+   */
+  private async ensureContact(ctx: NodeContext, type: string, value: string): Promise<void> {
+    if (ctx.run.contactId !== null || ctx.run.channelKind !== 'webchat') return;
+    if ((type !== 'email' && type !== 'phone') || value.trim() === '') return;
+    try {
+      const id = await this.contacts.ensureChannelContact(ctx.run.orgId, {
+        channel: 'chatbot_widget',
+        peerKey: ctx.run.peerKey,
+        conversationId: ctx.run.conversationId,
+        ...(type === 'email' ? { email: value } : { phone: value }),
+      });
+      if (id !== null) ctx.run.contactId = id;
+    } catch (err) {
+      this.logger.warn({ err }, '[FLR] making the contact of a chat visitor failed');
+    }
+  }
+
   private async saveProperty(ctx: NodeContext, key: string, value: string): Promise<void> {
     if (key === '' || value === '') return;
     if (ctx.run.contactId === null) {

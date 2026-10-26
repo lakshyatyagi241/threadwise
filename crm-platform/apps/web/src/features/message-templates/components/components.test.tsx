@@ -252,6 +252,7 @@ const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
     rejectionReason: null,
     rejectionReasonCode: null,
     metaTemplateId: 'M1',
+    editBlock: null,
     connectionId: null,
     pausedUntil: null,
     approvedAt: null,
@@ -267,11 +268,44 @@ const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
       { type: 'URL', text: 'Take Survey', url: 'https://example.com' },
       { type: 'QUICK_REPLY', text: 'Later' },
     ],
+    cards: [],
     rowVersion: 1,
     createdAt: '2026-10-01T10:00:00.000Z',
     updatedAt: '2026-10-01T10:00:00.000Z',
     ...over,
   });
+
+describe('a carousel in the phone', () => {
+  it('draws each card under the bubble: its file, its text and its buttons', () => {
+    const out = html(
+      <MessageBubble
+        model={model({
+          body: 'Our picks',
+          cards: [
+            {
+              format: 'image',
+              imageUrl: 'https://files.example/a.png',
+              body: 'Summer sale',
+              buttons: [{ kind: 'url', text: 'Shop' }],
+            },
+            { format: 'video', imageUrl: null, body: '', buttons: [] },
+          ],
+        })}
+      />,
+    );
+    expect(out).toContain('data-testid="bubble-cards"');
+    expect(out.match(/data-testid="bubble-card"/g)).toHaveLength(2);
+    expect(out).toContain('https://files.example/a.png');
+    expect(out).toContain('Summer sale');
+    expect(out).toContain('Shop');
+    // An empty card says what goes there.
+    expect(out).toContain('Text of card 2');
+  });
+
+  it('adds nothing for a template without cards', () => {
+    expect(html(<MessageBubble model={model()} />)).not.toContain('bubble-cards');
+  });
+});
 
 describe('library card', () => {
   const card = (
@@ -313,6 +347,30 @@ describe('library card', () => {
     expect(out).toContain('View details &amp; Meta review status');
     expect(out).toContain('aria-label="Delete sample_purchase_feedback"');
     expect(out).toContain('href="/templates/22222222-2222-4222-8222-222222222222/edit"');
+  });
+
+  it('offers Duplicate on a template Meta holds, and it opens a copy', () => {
+    const copy = 'href="/templates/new?from=22222222-2222-4222-8222-222222222222"';
+    expect(card(summary())).toContain(copy);
+    expect(card(summary())).toContain('aria-label="Duplicate sample_purchase_feedback"');
+    expect(card(summary({ status: 'pending' }))).toContain(copy);
+    expect(card(summary({ status: 'rejected' }))).toContain(copy);
+    expect(card(summary(), { mayEdit: false })).not.toContain(copy);
+    expect(card(summary({ metaTemplateId: null, status: 'draft' }))).not.toContain(copy);
+  });
+
+  it('hides Edit while Meta does not allow an edit right now', () => {
+    expect(card(summary())).toContain('Edit template');
+    expect(card(summary({ editBlock: { reason: 'in_review', until: null } }))).not.toContain(
+      'Edit template',
+    );
+    expect(
+      card(
+        summary({
+          editBlock: { reason: 'daily_limit', until: '2026-10-23T12:00:00.000Z' },
+        }),
+      ),
+    ).not.toContain('Edit template');
   });
 
   it('follows permissions and what the status allows', () => {

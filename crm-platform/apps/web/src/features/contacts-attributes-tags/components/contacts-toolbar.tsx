@@ -38,9 +38,6 @@ export const filtersOfSegment = (
 export interface ContactsToolbarProps {
   q: string;
   onQ: (q: string) => void;
-  /** Each new number moves the cursor into the search box (a column header's "Filter" on name, phone or email). */
-  focusSearch: number;
-
   /** The Filter button and its panel. */
   filter: FilterPanelProps;
 
@@ -117,10 +114,6 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
-
-  useEffect(() => {
-    if (p.focusSearch > 0) search.current?.focus();
-  }, [p.focusSearch]);
 
   return (
     <div className="relative flex flex-wrap items-center gap-2">

@@ -120,7 +120,12 @@
         "keep": "Bestand bewaren",
         "deleted": "Bestand verwijderd",
         "deleteFailed": "Het bestand kon niet worden verwijderd. Probeer het opnieuw.",
-        "forbidden": "Je hebt geen toestemming om bestanden te verwijderen."
+        "forbidden": "Je hebt geen toestemming om bestanden te verwijderen.",
+        "upload": "Bestand toevoegen",
+        "uploading": "Bestand wordt geüpload",
+        "added": "Bestand toegevoegd",
+        "uploadFailed": "Het bestand kon niet worden toegevoegd. Probeer het opnieuw.",
+        "uploadRejected": "Dit bestandstype is niet toegestaan, of het bestand is te groot."
       }
     }
   }

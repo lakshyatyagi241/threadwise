@@ -21,6 +21,7 @@ import {
   ChatMediaStore,
   MediaTokenService,
 } from '../../../src/infra/providers/chat-conversations/media';
+import { pngWithText } from '../../support/images';
 
 /**
  * Cache isolation, fail-closed behaviour, check-then-act races and stale entitlement caches
@@ -428,10 +429,7 @@ describe('AUTHZ-019 cache isolation between tenants and between users', () => {
   it('AUTHZ-019 signed media tokens are bound to one person in one tenant: no other user, in or out of the tenant, opens them', async () => {
     const store = h.app.get(ChatMediaStore);
     const tokens = h.app.get(MediaTokenService);
-    const png = Buffer.concat([
-      Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-      Buffer.from('cache-and-races-secret-image-bytes'),
-    ]);
+    const png = pngWithText('cache-and-races-secret-image-bytes');
     const stored = await store.store({ orgId: A.orgId, filename: 'secret.png', buffer: png });
     const open = (token: string, jwt: string) =>
       http()

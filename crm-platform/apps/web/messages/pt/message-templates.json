@@ -33,8 +33,10 @@
       "TPL_LINT_FAILED": "As verificações encontraram problemas que a Meta rejeitaria. Nada foi enviado. Corrija os erros listados à direita.",
       "TPL_META_REJECTED": "A Meta recusou o modelo. O motivo está abaixo; o modelo foi mantido como rascunho para você corrigi-lo e tentar novamente.",
       "TPL_NO_CONNECTION": "Este modelo não tem um número de WhatsApp conectado para envio. Conecte um número primeiro.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Os arquivos de cabeçalho precisam de armazenamento de objetos na nuvem. Peça ao administrador da plataforma para ativá-lo.",
       "TPL_IN_USE": "Este modelo não pode ser excluído porque uma transmissão em andamento ou agendada o utiliza.",
       "TPL_NOT_EDITABLE": "Somente um modelo que a Meta ainda não aprovou, ou que rejeitou, pode ser editado.",
+      "TPL_EDIT_LIMIT": "A Meta permite uma edição a cada 24 horas e dez a cada 30 dias em um modelo aprovado. Tente novamente mais tarde.",
       "ROW_VERSION_CONFLICT": "Outra pessoa alterou este modelo enquanto você editava. Recarregue para ver a versão mais recente e aplique sua alteração novamente.",
       "VALIDATION_FAILED": "Alguns campos são inválidos. Verifique os campos abaixo.",
       "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes."
@@ -57,12 +59,18 @@
       "moreButtons": "{count, plural, one {+# botão a mais} other {+# botões a mais}}",
       "live": "Pré-visualização ao vivo",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Cartões do carrossel",
+      "cardEmpty": "Texto do cartão {n}",
+      "offerExpires": "Termina em breve",
+      "offerTextEmpty": "Título da oferta"
     },
     "card": {
       "rejected": "Rejeitado: {reason}",
       "view": "Ver",
       "edit": "Editar",
+      "duplicate": "Duplicar modelo",
+      "duplicateNamed": "Duplicar {name}",
       "delete": "Excluir",
       "curl": "cURL: enviar este modelo com a API",
       "curlNamed": "cURL para enviar {name}",
@@ -117,7 +125,8 @@
         "all": "Todos",
         "approved": "Aprovado",
         "pending": "Em análise",
-        "rejected": "Rejeitado"
+        "rejected": "Rejeitado",
+        "draft": "Rascunho"
       },
       "quickStartTitle": "Início rápido",
       "quickStart": "Leia as <link>Diretrizes de modelos</link> antes de enviar à Meta para manter a aprovação em menos de 24 h.",
@@ -132,6 +141,16 @@
         "name-asc": "Nome A→Z",
         "name-desc": "Nome Z→A"
       },
+      "dateRange": "Intervalo de datas",
+      "range": {
+        "all": "Todo o período",
+        "7d": "7 dias",
+        "30d": "30 dias",
+        "90d": "90 dias",
+        "custom": "Intervalo personalizado",
+        "from": "Data inicial",
+        "to": "Data final"
+      },
       "showing": "Mostrando",
       "of": "de",
       "filteredTemplates": "modelos filtrados",
@@ -139,7 +158,8 @@
       "legend": {
         "approved": "Aprovados",
         "pending": "Em análise",
-        "rejected": "Rejeitados"
+        "rejected": "Rejeitados",
+        "draft": "Rascunho"
       },
       "helpLabel": "Ajuda - 0{n}",
       "help": {
@@ -163,7 +183,8 @@
       "confirm": "Excluir modelo",
       "cancel": "Cancelar",
       "done": "“{name}” excluído.",
-      "inUseHelp": "Abra a transmissão que usa este modelo e cancele-a ou escolha outro modelo; depois exclua este."
+      "inUseHelp": "Abra a transmissão que usa este modelo e cancele-a ou escolha outro modelo; depois exclua este.",
+      "messageDraft": "Excluir “{name}”? Ele nunca foi enviado à Meta, então será removido apenas aqui."
     },
     "lint": {
       "title": "Verificações antes do envio",
@@ -182,7 +203,8 @@
         "body": "Corpo",
         "footer": "Rodapé",
         "buttons": "Botões",
-        "template": "Modelo"
+        "template": "Modelo",
+        "cards": "Cartões"
       }
     },
     "form": {
@@ -265,7 +287,7 @@
         "uploading": "Enviando",
         "keptSample": "O exemplo salvo é mantido. Escolha um arquivo para substituí-lo.",
         "noFile": "Nenhum arquivo escolhido",
-        "limits": "Imagem até 5 MB, vídeo até 16 MB, PDF até 100 MB.",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB, PDF até 10 MB.",
         "replace": "Substituir arquivo",
         "choose": "Escolher arquivo de exemplo",
         "tooBig": "Este {kind} tem {size} MB. O WhatsApp aceita até {max} MB. Escolha um arquivo menor.",
@@ -309,14 +331,18 @@
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
-          "copy_code": "Copiar código"
+          "copy_code": "Copiar código",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "kind": {
           "quick_reply": "Resposta rápida",
           "url": "Visitar site",
           "phone": "Ligar",
           "copy_code": "Copiar código",
-          "other": "Outro"
+          "other": "Outro",
+          "form": "Formulário",
+          "catalog": "Catálogo"
         },
         "count": "{used}/{max} botões",
         "limitReached": "No máximo {max} deste tipo.",
@@ -345,8 +371,17 @@
           "codeRequired": "Digite um código de exemplo.",
           "quickReplyVariable": "Uma resposta rápida não pode conter variável.",
           "urlExampleRequired": "Informe um valor de exemplo para a variável da URL.",
-          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões."
-        }
+          "quickReplyPosition": "As respostas rápidas devem ficar juntas, no início ou no fim dos botões.",
+          "flowIdRequired": "Informe o ID do Flow.",
+          "flowIdInvalid": "O ID do Flow é um número.",
+          "screenRequired": "Informe o ID da tela.",
+          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
+        },
+        "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
+        "flowId": "ID do WhatsApp Flow",
+        "flowIdHint": "O ID numérico de um WhatsApp Flow publicado, no gerenciador de Flows da Meta.",
+        "screen": "Tela inicial",
+        "screenHint": "O ID da tela em que o formulário abre, por exemplo WELCOME."
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",
@@ -360,6 +395,46 @@
         "open": "Criar com IA",
         "applied": "Rascunho do modelo preenchido pela IA. Revise-o antes de enviar.",
         "authHint": "Modelos de autenticação têm texto fixo, então não há o que gerar."
+      },
+      "type": {
+        "label": "Tipo de botão",
+        "standard": "Padrão",
+        "carousel": "Carrossel",
+        "hint": "Escolha como a mensagem termina. Um carrossel é uma fileira de cartões; uma oferta por tempo limitado tem um título de oferta com contagem regressiva opcional e um botão de copiar código ou de site.",
+        "none": "Nenhum",
+        "buttons": "Copiar código, site, respostas rápidas etc.",
+        "lto": "Oferta por tempo limitado",
+        "catalogue": "Catálogo",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Cartões",
+        "hint": "De 2 a 10 cartões. Todos usam o mesmo tipo de arquivo e os mesmos botões.",
+        "format": "Os cartões mostram",
+        "formatImage": "Imagens",
+        "formatVideo": "Vídeos",
+        "count": "{used}/{max} cartões",
+        "add": "Adicionar cartão",
+        "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",
+        "card": "Cartão {n}",
+        "remove": "Remover o cartão {n}",
+        "noFile": "Nenhum arquivo escolhido",
+        "uploading": "Enviando",
+        "text": "Texto do cartão",
+        "textCounter": "{used}/{max}",
+        "buttons": "Botões",
+        "buttonText": "Texto do botão",
+        "buttonUrl": "URL do site",
+        "buttonPhone": "Número de telefone"
+      },
+      "offer": {
+        "title": "Oferta por tempo limitado",
+        "hint": "Aparece abaixo da imagem ou do vídeo: um título e, se quiser, uma contagem regressiva até o fim da oferta.",
+        "text": "Título da oferta",
+        "textHint": "{used}/{max}",
+        "placeholder": "Oferta por tempo limitado!",
+        "countdown": "Mostrar contagem regressiva",
+        "countdownHint": "O WhatsApp mostra o tempo restante até o fim da oferta."
       }
     },
     "detail": {
@@ -449,6 +524,9 @@
       },
       "refreshNow": "Atualizar agora",
       "editTemplate": "Editar modelo",
+      "editBlockedTitle": "Este modelo não pode ser editado agora",
+      "editBlocked": "{reason, select, in_review {A Meta está analisando este modelo. Ele poderá ser editado de novo quando a análise terminar.} daily_limit {A Meta permite uma edição a cada 24 horas em um modelo aprovado. Você poderá editá-lo de novo após {when}.} monthly_limit {A Meta permite dez edições em 30 dias em um modelo aprovado. Você poderá editá-lo de novo após {when}.} other {}}",
+      "duplicateTemplate": "Duplicar modelo",
       "editResubmit": "Editar e reenviar",
       "submitToMeta": "Enviar à Meta",
       "wabaAccount": "Conta do WhatsApp Business",
@@ -460,7 +538,6 @@
       "crumbTemplates": "Modelos",
       "crumbDetail": "Detalhe",
       "notSubmittedPill": "Não enviado",
-      "qualityPill": "Qualidade · {quality}",
       "preview": {
         "title": "Pré-visualização",
         "hint": "Como aparece no WhatsApp"

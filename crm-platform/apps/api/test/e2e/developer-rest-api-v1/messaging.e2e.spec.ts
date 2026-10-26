@@ -17,6 +17,7 @@ import {
 } from '../chat-conversations/pipeline-support';
 import type { Tenant } from './support';
 import { tenantWithKey } from './support';
+import { pngWithText } from '../../support/images';
 
 /**
  * The messaging group of the customer REST API (TW-API-110 to 120): send one message, the history, media upload, conversations, devices.
@@ -39,10 +40,7 @@ afterAll(async () => {
   delete process.env.MEDIA_LOCAL_DIR;
 });
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz'),
-]);
+const PNG = pngWithText('0123456789abcdefghijklmnopqrstuvwxyz');
 const PDF = Buffer.concat([Buffer.from('%PDF-1.7\n'), Buffer.from('invoice bytes')]);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 

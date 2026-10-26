@@ -1,3 +1,4 @@
+/// <reference lib="dom" />
 /**
  * The Carousel step of a website chat bot: a row of cards the visitor scrolls through, each with a picture, a title, a line of text and
  * up to two buttons. A button either REPLIES (the visitor's tap continues the flow down that button's own exit) or OPENS something
@@ -82,3 +83,37 @@ export function flbCarouselReplies(
 
 /** True when `url` is a picture address the chat window may load. */
 export const flbCarouselImageOk = (url: string): boolean => /^https?:\/\/\S+$/i.test(url.trim());
+
+/**
+ * A picture address the chat can use: an http(s) link, with spaces and other characters a browser would write as %XX written that way
+ * (a camera's `IMG 1234.JPG` is a usual name). Null for anything else, so a card without a usable picture shows without one.
+ */
+export function flbImageUrl(raw: unknown): string | null {
+  const s = typeof raw === 'string' ? raw.trim() : '';
+  if (s === '') return null;
+  try {
+    const u = new URL(s);
+    return u.protocol === 'http:' || u.protocol === 'https:' ? u.href : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The address a website chat button opens, or null when the value is not one the window may open (a script, a file, a wrong shape).
+ * The runtime sends it and the test chat draws it, so both use this one rule.
+ */
+export function webLinkUrl(type: string, value: string): string | null {
+  const v = value.trim();
+  if (v === '' || v.length > 2000) return null;
+  if (type === 'phone' || type === 'call_now') {
+    const digits = v.replace(/^tel:/i, '').replace(/[^\d+]/g, '');
+    return /^\+?\d{5,15}$/.test(digits) ? `tel:${digits}` : null;
+  }
+  if (type === 'email') {
+    const mail = v.replace(/^mailto:/i, '');
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? `mailto:${mail}` : null;
+  }
+  if (type === 'url' || type === 'visit') return /^https?:\/\/\S+$/i.test(v) ? v : null;
+  return null;
+}

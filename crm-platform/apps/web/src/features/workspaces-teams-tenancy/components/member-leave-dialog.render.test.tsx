@@ -136,13 +136,19 @@ afterEach(() => {
   host.remove();
 });
 
-const render = async (locale = 'en') => {
+const render = async (locale = 'en', self = false) => {
   await act(async () => {
     root.render(
       <QueryClientProvider client={new QueryClient()}>
         <NextIntlClientProvider locale={locale} messages={messages(locale)} timeZone="UTC">
           <ToastProvider>
-            <MemberLeaveDialog memberId="m-1" memberName="Asha" open onClose={() => undefined} />
+            <MemberLeaveDialog
+              memberId="m-1"
+              memberName="Asha"
+              open
+              self={self}
+              onClose={() => undefined}
+            />
           </ToastProvider>
         </NextIntlClientProvider>
       </QueryClientProvider>,
@@ -165,6 +171,13 @@ const buttonByText = (text: string) =>
   ) as HTMLButtonElement;
 
 describe('the leave dialog', () => {
+  it('opened for yourself from the account menu: dates and delegate, no manager reassign part', async () => {
+    await render('en', true);
+    expect(host.querySelector('[data-testid="leave-form"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="reassign-section"]')).toBeNull();
+    expect(host.textContent).toContain('End leave now');
+  });
+
   it('shows the leave now with its range, the reason for a manager, the coming leave and the workspace calendar note', async () => {
     await render();
     const text = host.textContent!;

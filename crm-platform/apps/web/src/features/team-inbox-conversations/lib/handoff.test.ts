@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY_SEND, sendReady, toSendInput, waitAge } from './handoff';
+import {
+  EMPTY_SEND,
+  botLineKeys,
+  giveBackToastKey,
+  sendReady,
+  toSendInput,
+  waitAge,
+} from './handoff';
 import { tabCount } from './list';
 
 const NOW = Date.parse('2026-10-21T12:00:00.000Z');
@@ -58,5 +65,50 @@ describe('the Waiting tab badge', () => {
     expect(tabCount({ ...counts }, 'waiting')).toBe(0);
     expect(tabCount({ ...counts, waiting: 4 }, 'waiting')).toBe(4);
     expect(tabCount(null, 'waiting')).toBeNull();
+  });
+});
+
+describe('Return to bot says what the bot will do', () => {
+  const r = (over: Partial<Parameters<typeof giveBackToastKey>[0]>) =>
+    giveBackToastKey({
+      resumed: 'next_message',
+      nextMessageBy: 'default_flow',
+      alreadyWithBot: false,
+      ...over,
+    });
+
+  it('picks the toast from the answer, never a bare "done"', () => {
+    expect(r({ resumed: 'flow', nextMessageBy: null })).toBe('doneFlow');
+    expect(r({ nextMessageBy: 'live_flow' })).toBe('doneNextLive');
+    expect(r({ nextMessageBy: 'default_flow' })).toBe('doneNextDefault');
+    expect(r({ alreadyWithBot: true })).toBe('already');
+  });
+
+  it('words the thread line from the event: the press, then the result and the customer message', () => {
+    expect(botLineKeys({ event: 'bot_returned', stage: 'pressed', resumed: 'flow' })).toEqual([
+      'pressed.flow',
+    ]);
+    expect(
+      botLineKeys({
+        event: 'bot_returned',
+        stage: 'pressed',
+        resumed: 'next_message',
+        nextMessageBy: 'live_flow',
+      }),
+    ).toEqual(['pressed.nextLive']);
+    expect(
+      botLineKeys({ event: 'bot_returned', stage: 'pressed', resumed: 'next_message' }),
+    ).toEqual(['pressed.nextDefault']);
+    expect(
+      botLineKeys({
+        event: 'bot_returned',
+        stage: 'result',
+        result: 'continued',
+        customer: 'window_closed',
+      }),
+    ).toEqual(['result.continued', 'customer.window_closed']);
+    expect(
+      botLineKeys({ event: 'bot_returned', stage: 'result', result: 'claimed_again' }),
+    ).toEqual(['result.claimed_again']);
   });
 });

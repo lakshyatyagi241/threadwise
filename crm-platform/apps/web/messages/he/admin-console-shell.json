@@ -24,7 +24,7 @@
         "noWorkspaces": "אין סביבות עבודה"
       },
       "labels": {
-        "addonPacks": "חבילות תוספים",
+        "addonPacks": "תוספות",
         "extensions": "הרחבות",
         "trackingCode": "קוד מעקב",
         "planPricingSettings": "הגדרות תמחור תוכניות",
@@ -282,7 +282,9 @@
           "save": "שמירה",
           "saved": "ההעדפה נשמרה.",
           "saveFailed": "לא ניתן היה לשמור את ההעדפה."
-        }
+        },
+        "timezoneSearch": "חיפוש אזורי זמן",
+        "timezoneNoMatch": "אין אזור זמן תואם."
       },
       "notifications": {
         "title": "התראות סביבת העבודה",

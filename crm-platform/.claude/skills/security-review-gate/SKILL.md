@@ -62,7 +62,6 @@ Skip only on the user's explicit word: `stamp.py write --status skipped --user-a
 - Inbound webhooks verify signature and are idempotent (`webhook-handler`).
 - No bare ids leak across tenants in responses; no PII or tokens in logs.
 - Mobile: tokens only in the keychain; see `mobile-quality-review`.
-- Nothing from `reference/` source is copied into `crm-platform/`.
 
 ## Report
 

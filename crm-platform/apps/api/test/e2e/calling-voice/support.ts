@@ -1,3 +1,14 @@
+import {
+  updateCallRecordingSettingsInputSchema,
+  type UpdateCallRecordingSettingsInput,
+} from '@crm/contracts';
+import { RequestContextStore } from '../../../src/common/context/request-context';
+import { DatabaseService } from '../../../src/infra/db/database.service';
+import { CallRecordingSettingsService } from '../../../src/modules/calling-voice/call-recording-settings.service';
+import {
+  BillingCurrencyService,
+  WalletLedgerService,
+} from '../../../src/modules/wallet-message-billing';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
 export { Api, type Tenant };
@@ -92,6 +103,29 @@ export async function startCallPipeline(): Promise<CallPipeline> {
 }
 
 // --- arranging ---------------------------------------------------------------------------------------------------------------
+
+/**
+ * Puts money in a workspace's wallet through the ledger, the way a paid top-up does (hundredths of its billing currency). A call is paid
+ * usage: placing one with an empty wallet is refused (422 `WALLET_EMPTY`), so a spec that places a call funds the workspace first.
+ */
+export async function fundWallet(p: CallPipeline, t: Tenant, minor = 100_000): Promise<void> {
+  const opts = { strict: false } as const;
+  const db = p.h.app.get(DatabaseService, opts);
+  const ledger = p.h.app.get(WalletLedgerService, opts);
+  const currency = p.h.app.get(BillingCurrencyService, opts);
+  await db.txAs({ orgId: t.orgId, userId: null }, async (tx) => {
+    await ledger.post(tx, {
+      orgId: t.orgId,
+      unit: await currency.forOrg(tx, t.orgId),
+      type: 'topup',
+      direction: 'in',
+      amountMinor: minor,
+      idempotencyKey: `fund:${t.orgId}:${Math.random()}`,
+      source: 'topup.conversion',
+      description: 'Wallet top-up',
+    });
+  });
+}
 
 export interface CallNumber {
   configId: number;
@@ -194,35 +228,48 @@ export const events = async (p: CallPipeline, callId: number) =>
 
 export const RECORDING_NOTICE = 'This call may be recorded to check quality and to train our team.';
 
-/** Switches recording on for the workspace through the API (the first save, or a later one with the current version). */
+/**
+ * Saves the workspace's recording rules through the real service, after the schema the PUT route validates with. The route needs
+ * `call.recordings.manage`, which no role holds any more (WhatsApp calling removed), so the rules are saved here without the route. The
+ * service keeps the notice-required check, the notice version, the sha-256 and the audit row.
+ */
+export async function saveRecordingRules(
+  p: CallPipeline,
+  t: Tenant,
+  input: UpdateCallRecordingSettingsInput,
+) {
+  const settings = p.h.app.get(CallRecordingSettingsService, { strict: false });
+  return RequestContextStore.run(
+    {
+      requestId: 'e2e',
+      orgId: t.orgId,
+      actorType: 'user',
+      actorId: t.adminUserId,
+      userId: t.adminUserId,
+    },
+    async () => {
+      const current = await settings.get();
+      return settings.update(
+        updateCallRecordingSettingsInputSchema.parse({
+          ...input,
+          ...(current.rowVersion ? { rowVersion: current.rowVersion } : {}),
+        }),
+      );
+    },
+  );
+}
+
+/** Switches recording on for the workspace (see saveRecordingRules). */
 export async function enableRecording(
   p: CallPipeline,
   t: Tenant,
   o: { mode?: 'announcement' | 'confirmed'; retentionDays?: number; notice?: string } = {},
 ) {
-  const cur = await p.api.as(t.admin).get('/v2/calling/recording-settings');
-  const res = await p.api
-    .as(t.admin)
-    .put('/v2/calling/recording-settings')
-    .send({
-      enabled: true,
-      consentMode: o.mode ?? 'confirmed',
-      retentionDays: o.retentionDays ?? 90,
-      noticeText: o.notice ?? RECORDING_NOTICE,
-      ...(cur.body.rowVersion ? { rowVersion: cur.body.rowVersion } : {}),
-    });
-  if (res.status !== 200)
-    throw new Error(`enableRecording: ${res.status} ${JSON.stringify(res.body)}`);
-  return res.body as { noticeVersion: number; rowVersion: number };
-}
-
-/** Writes the consent evidence on a call the way the consent route does, for specs whose call is not live (arrangement only). */
-export async function grantConsentRow(p: CallPipeline, t: Tenant, callUuid: string) {
-  await p.h.owner.query(
-    `UPDATE wa_calls w SET recording_consent_status = 'granted', recording_consent_method = 'spoken_yes',
-            recording_consent_at = now(), recording_notice_version = s.notice_version,
-            recording_notice_sha256 = (SELECT sha256 FROM call_recording_notice_versions v WHERE v.org_id = s.org_id AND v.version = s.notice_version)
-       FROM call_recording_settings s WHERE s.org_id = w.org_id AND w.org_id = $1 AND w.uuid = $2::uuid`,
-    [t.orgId, callUuid],
-  );
+  const saved = await saveRecordingRules(p, t, {
+    enabled: true,
+    consentMode: o.mode ?? 'confirmed',
+    retentionDays: o.retentionDays ?? 90,
+    noticeText: o.notice ?? RECORDING_NOTICE,
+  });
+  return { noticeVersion: saved.noticeVersion, rowVersion: saved.rowVersion };
 }

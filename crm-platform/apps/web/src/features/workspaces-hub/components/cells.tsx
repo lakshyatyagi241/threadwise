@@ -114,7 +114,6 @@ export function EndsCell({ row }: { row: WorkspaceHubRow }) {
 export function LimitsCell({ row }: { row: WorkspaceHubRow }) {
   const t = useTranslations('workspaces-hub.cell.limits');
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const l = row.limits;
   return (
     <div className="flex flex-wrap items-center gap-1.5 whitespace-nowrap text-xs">
@@ -134,7 +133,6 @@ export function LimitsCell({ row }: { row: WorkspaceHubRow }) {
 export function WalletCell({ row }: { row: WorkspaceHubRow }) {
   const t = useTranslations('workspaces-hub.cell');
   const locale = useLocale();
-  const timeZone = useTimeZone();
   return (
     <div className="flex flex-wrap items-center justify-end gap-1.5 whitespace-nowrap tabular-nums">
       <span>{formatWalletBalance(row.wallet.balanceMinor, row.wallet.currency, locale)}</span>
@@ -162,13 +160,11 @@ export function OwnerCell({ row }: { row: WorkspaceHubRow }) {
 
 export function MrrCell({ row, currency }: { row: WorkspaceHubRow; currency: string }) {
   const locale = useLocale();
-  const timeZone = useTimeZone();
   return <span className="tabular-nums">{formatMrr(row.mrr, currency, locale)}</span>;
 }
 
 export function Messages7dCell({ row }: { row: WorkspaceHubRow }) {
   const locale = useLocale();
-  const timeZone = useTimeZone();
   return (
     <span className="tabular-nums">{new Intl.NumberFormat(locale).format(row.messages7d)}</span>
   );

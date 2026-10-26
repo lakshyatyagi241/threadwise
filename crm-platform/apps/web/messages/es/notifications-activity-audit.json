@@ -414,6 +414,14 @@
           "label": "Cita desincronizada con Google Calendar",
           "hint": "El evento de Google Calendar de una próxima cita se eliminó, se movió o se modificaron sus invitados. La cita no se modifica; usted decide qué hacer."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Cita cancelada por el cliente",
+          "hint": "Un cliente canceló su cita al pulsar Cancelar en un recordatorio. Se avisa al responsable de la cita."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultado de la prueba de correo del recordatorio",
+          "hint": "El resultado del correo de prueba que envías para un paso de recordatorio: enviado, o no enviado y por qué."
+        },
         "snooze_wake": {
           "label": "El chat pospuesto vuelve",
           "hint": "Un chat pospuesto se reabre a su hora y se asigna a ti o a tu equipo."

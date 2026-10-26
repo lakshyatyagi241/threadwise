@@ -45,7 +45,8 @@
         "period": "Zeitraum",
         "grants": "Gewährt",
         "status": "Status",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "plans": "Tarife"
       },
       "price": {
         "free": "Kostenlos",
@@ -124,7 +125,8 @@
           "billingMode": "Abrechnung",
           "sortOrder": "Sortierreihenfolge",
           "isActive": "Aktiv",
-          "isLifetime": "Lebenslang (einmalig)"
+          "isLifetime": "Lebenslang (einmalig)",
+          "period": "Abrechnungszeitraum"
         },
         "modes": {
           "one_time": "Einmalig (nach Ablauf erneut kaufen)",
@@ -144,9 +146,78 @@
           "billingDuration": "Geben Sie eine ganze Zahl ab 1 ein.",
           "sortOrder": "Geben Sie eine ganze Zahl ein.",
           "limits": "Limits sind ganze Zahlen oder -1 für unbegrenzt.",
-          "form": "Prüfen Sie die markierten Felder."
-        }
-      }
+          "form": "Prüfen Sie die markierten Felder.",
+          "amountPositive": "Add-ons sind monatliche oder jährliche Abonnements, daher muss der Preis über null liegen.",
+          "features": "Wählen Sie mindestens eine Funktion oder machen Sie daraus ein Kapazitäts-Add-on.",
+          "limitsNeeded": "Geben Sie mindestens ein Limit über null ein oder machen Sie daraus ein Funktions-Add-on."
+        },
+        "legacy": {
+          "title": "Altes Paket",
+          "body": "Dieses Paket wurde erstellt, bevor Add-ons Abonnements wurden. Es wird genau wie bisher verkauft (seine Abrechnung wird angezeigt, kann aber nicht geändert werden), und Workspaces, die es besitzen, sind nicht betroffen. Name, Preis, Funktionen und Limits lassen sich weiterhin bearbeiten, oder Sie nehmen es aus dem Verkauf. Neue Pakete sind monatliche oder jährliche Abonnements."
+        },
+        "periods": {
+          "months": "Monatliches Abonnement",
+          "years": "Jährliches Abonnement"
+        },
+        "periodHint": "Add-ons sind Abonnements. Workspaces mit einem Online-Zahlungsanbieter verlängern sich automatisch; bei Banküberweisung oder Offline-Zahlung zahlen sie am Ende der Laufzeit erneut.",
+        "planOffers": {
+          "title": "Tarife",
+          "hint": "Wie jeder Tarif dieses Add-on anbietet. Enthalten: ohne Aufpreis, der Tarif bringt seine Funktionen mit. Kostenpflichtig: Workspaces kaufen es, zum eigenen Preis des Tarifs, falls Sie einen festlegen. Ausgeblendet: Workspaces in diesem Tarif sehen es nie.",
+          "noIncluded": "Dieses Add-on erweitert nur Limits, daher kann kein Tarif es enthalten. Ein Tarif legt seine eigenen Obergrenzen im Tab „Limits“ fest.",
+          "empty": "Es gibt noch keine Tarife.",
+          "freePlan": "Kostenloser Tarif",
+          "inactivePlan": "Inaktiv",
+          "modeLabel": "Wie {plan} dieses Add-on anbietet",
+          "modes": {
+            "included": "Enthalten",
+            "paid": "Kostenpflichtig",
+            "hidden": "Ausgeblendet"
+          },
+          "priceLabel": "Preis in diesem Tarif",
+          "priceHint": "Leer = eigener Preis des Add-ons.",
+          "freePlanNote": "Wird im kostenlosen Tarif angezeigt, aber zum Kaufen braucht ein Workspace einen kostenpflichtigen Tarif.",
+          "hiddenNote": "Wird Workspaces in diesem Tarif nicht angezeigt. Ein Workspace, der es bereits gekauft hat, behält es bis zum Ende seiner Laufzeit.",
+          "problems": {
+            "money": "Geben Sie einen Betrag wie 19 oder 19.99 ein.",
+            "zero": "Lassen Sie den Preis leer, um den Preis des Add-ons zu verwenden, oder wählen Sie „Enthalten“."
+          },
+          "errors": {
+            "generic": "Die Tarifangebote konnten nicht gespeichert werden.",
+            "forbidden": "Nur ein Super-Admin kann Tarifangebote ändern.",
+            "notFound": "Dieses Add-on existiert nicht mehr."
+          },
+          "saved": "Tarifangebote gespeichert.",
+          "changed": "{count, plural, one {# Tarif geändert} other {# Tarife geändert}}",
+          "save": "Tarifangebote speichern",
+          "needFeatures": "Fügen Sie zuerst oben die Funktionen hinzu, die es freischaltet"
+        },
+        "type": {
+          "title": "Typ",
+          "hint": "Wählen Sie, was dieses Add-on bewirkt. Nur ein Funktions-Add-on kann in einen Tarif aufgenommen werden.",
+          "feature": {
+            "title": "Funktions-Add-on",
+            "body": "Schaltet einen Teil des Produkts frei; kann auch Kapazität hinzufügen."
+          },
+          "capacity": {
+            "title": "Kapazitäts-Add-on",
+            "body": "Erhöht nur ein Limit (Plätze, Kontakte ...)."
+          }
+        },
+        "noFeaturesNotice": "Dieses Add-on schaltet noch nichts frei. Haken Sie die Funktionen an, die es bietet, damit Tarife es aufnehmen können.",
+        "limitsHintCapacity": "Ein Kapazitäts-Add-on erhöht nur Limits. Geben Sie eine Zahl ein, die zum Tarif ADDIERT wird (zum Beispiel +2 Plätze). -1 steht für unbegrenzt. Mindestens ein Limit ist erforderlich."
+      },
+      "kind": {
+        "feature": "Funktion",
+        "capacity": "Kapazität"
+      },
+      "plans": {
+        "included": "Enthalten: {plans}",
+        "paid": "Kostenpflichtig: {plans}",
+        "hidden": "Ausgeblendet: {plans}",
+        "withPrice": "{plan} ({price})",
+        "none": "Keine Tarife"
+      },
+      "noFeatures": "Noch keine Funktionen"
     },
     "extensions": {
       "crumbHere": "Add-ons",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "Add-ons",
       "description": "Zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen.",
-      "needPlanTitle": "Add-ons erfordern einen aktiven Tarif",
-      "needPlanBody": "Add-ons sind zusätzliche Funktionspakete, die Sie zu Ihrem Abonnement dazukaufen. Wählen Sie zuerst einen Tarif und kehren Sie dann hierher zurück, um Funktionen hinzuzufügen.",
-      "viewPlans": "Tarife ansehen",
-      "noneTitle": "Keine Add-ons verfügbar",
-      "noneBody": "Derzeit werden keine Add-ons angeboten. Schauen Sie später noch einmal vorbei.",
-      "ownedTitle": "Ihre Add-ons",
-      "ownedBody": "Aktive Pakete, die mit Ihrem aktuellen Tarif zusammengeführt sind.",
-      "ends": "Endet am {date}",
-      "lifetime": "Lebenslang",
-      "autoRenews": "Verlängert sich automatisch",
       "renewal": {
         "cancel": "Verlängerung kündigen",
         "confirmTitle": "Verlängerung kündigen?",
@@ -277,34 +338,105 @@
         "forbidden": "Sie haben keine Berechtigung, den Tarif zu ändern.",
         "none": "Es gibt kein aktives Abonnement, das gekündigt werden könnte.",
         "failed": "Die Verlängerung konnte nicht gekündigt werden. Bitte versuchen Sie es erneut."
-      },
-      "active": "Aktiv",
-      "cardEyebrow": "Add-on",
-      "catalogTitle": "Add-ons",
-      "catalogBody": "Schalten Sie zusätzliche Funktionen zu Ihrem aktuellen Tarif frei. Ein Tarifwechsel ist nicht nötig.",
-      "count": "{count, plural, one {# Add-on} other {# Add-ons}}",
-      "free": "Kostenlos",
-      "lifetimePrice": "einmalig",
-      "per": "/ {unit}",
-      "units": {
-        "days": "Tage",
-        "weeks": "Wochen",
-        "months": "Monate",
-        "years": "Jahre"
-      },
-      "buy": "Zum Tarif hinzufügen",
-      "buyAgain": "Erneut kaufen",
-      "owned": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "Unbegrenzt {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "Die Add-ons konnten nicht geladen werden."
+      }
     },
     "planFields": {
       "fromModule": "aus einem installierten Modul",
       "unlimited": "Unbegrenzt"
+    },
+    "list": {
+      "unavailable": {
+        "title": "Add-ons brauchen einen aktiven kostenpflichtigen Tarif",
+        "free_plan": "Sie haben einen kostenlosen Tarif. Add-ons sind Extras, die Sie zusätzlich zu einem kostenpflichtigen Tarif kaufen.",
+        "plan_expired": "Ihr kostenpflichtiger Tarif ist abgelaufen, daher sind Add-ons pausiert. Verlängern Sie Ihren Tarif, um Add-ons zu kaufen oder zu verlängern.",
+        "no_plan": "Ihr Workspace hat noch keinen Tarif. Wählen Sie einen kostenpflichtigen Tarif, um Add-ons zu nutzen.",
+        "cta": "Tarife ansehen"
+      },
+      "unavailableCard": "Braucht einen aktiven kostenpflichtigen Tarif",
+      "empty": {
+        "title": "Keine Add-ons im Angebot",
+        "body": "Derzeit werden keine Add-ons angeboten. Schauen Sie später noch einmal vorbei."
+      },
+      "listLabel": "Add-ons im Angebot",
+      "owned": {
+        "title": "Ihre Add-ons",
+        "renews": "Verlängert sich am {date}",
+        "ends": "Aktiv bis {date}. Es verlängert sich nicht automatisch.",
+        "lifetime": "Lebenslang"
+      },
+      "state": {
+        "included": "In deinem Tarif enthalten",
+        "includedSupport": "Von Ihrem Account-Manager aktiviert.",
+        "includedOwned": "Du hast dieses Add-on auch gebucht. Dein Tarif enthält es jetzt, du kannst es also kündigen. Es wird nichts automatisch erstattet.",
+        "includedEnds": "In deinem Tarif enthalten. Dein Add-on endet am {date} und wird nicht verlängert.",
+        "active": "Aktiv",
+        "ownedCount": "Im Besitz ×{count} · erneuter Kauf fügt mehr hinzu",
+        "turnedOff": "Ausgeschaltet"
+      },
+      "price": {
+        "free": "Kostenlos",
+        "oneTime": "einmalig",
+        "per": {
+          "days": "{count, plural, one {/ Tag} other {/ {count} Tage}}",
+          "weeks": "{count, plural, one {/ Woche} other {/ {count} Wochen}}",
+          "months": "{count, plural, one {/ Monat} other {/ {count} Monate}}",
+          "years": "{count, plural, one {/ Jahr} other {/ {count} Jahre}}"
+        }
+      },
+      "renewal": {
+        "recurring": "Verlängert sich in jeder Laufzeit. Bei Kartenzahlung wird automatisch bezahlt; bei Banküberweisung oder Offline-Zahlung zahlen Sie am Ende der Laufzeit erneut.",
+        "oneTime": "Einmalkauf. Er verlängert sich nicht."
+      },
+      "buy": "Add-on kaufen",
+      "buyAgain": "Erneut kaufen",
+      "cannotBuyHint": "Fragen Sie den Inhaber Ihres Kontos. Nur wer für diesen Workspace kaufen darf, kann einen Kauf starten.",
+      "bullets": {
+        "unlimited": "Unbegrenzt {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "Brauchen Sie Nachrichten-Guthaben? Laden Sie stattdessen Ihr Wallet auf; Guthaben ist kein Add-on.",
+      "walletLink": "Wallet aufladen",
+      "groups": {
+        "feature": "Funktions-Add-ons",
+        "capacity": "Kapazitäts-Add-ons"
+      },
+      "activation": {
+        "turnedOffNote": "Für diesen Arbeitsbereich ausgeschaltet. Die Einstellungen bleiben erhalten.",
+        "turnOff": "Ausschalten",
+        "turnOn": "Einschalten",
+        "askOwner": "Bitte den Kontoinhaber, dies ein- oder auszuschalten.",
+        "doneOn": "{name} ist eingeschaltet.",
+        "errors": {
+          "notToggleable": "{name} lässt sich hier nicht ein- oder ausschalten. Nur ein im Tarif enthaltenes Add-on kann umgeschaltet werden.",
+          "forbidden": "Du hast keine Berechtigung, Add-ons ein- oder auszuschalten.",
+          "generic": "{name} konnte nicht geändert werden. Bitte versuche es erneut."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name} ausschalten?",
+      "lead": "Das ändert sich. Du kannst es jederzeit wieder einschalten.",
+      "cancel": "Abbrechen",
+      "confirm": "{name} ausschalten",
+      "done": "{name} ist ausgeschaltet. Die Einstellungen bleiben erhalten.",
+      "typeLabel": "Zur Bestätigung {name} eingeben",
+      "typeHint": "Kundenchats oder Personen sind betroffen. Gib zur Bestätigung den Namen ein.",
+      "groups": {
+        "stops": "Was stoppt",
+        "kept": "Was erhalten bleibt",
+        "people": "Personen"
+      },
+      "items": {
+        "features_off": "Diese Funktionen funktionieren nicht mehr: {names}.",
+        "dependents_off": "Diese Funktionen setzen sie voraus und stoppen daher ebenfalls: {names}.",
+        "roles_dormant": "{count, plural, one {# Rolle hat Berechtigungen dieses Add-ons. Sie behält sie, aber sie sind inaktiv, bis du das Add-on wieder einschaltest.} other {# Rollen haben Berechtigungen dieses Add-ons. Sie behalten sie, aber sie sind inaktiv, bis du das Add-on wieder einschaltest.}}",
+        "waiting_chats": "{count, plural, one {# Chat wartet auf einen Agenten. Er wird nicht automatisch zugewiesen, jemand muss ihn übernehmen.} other {# Chats warten auf einen Agenten. Sie werden nicht automatisch zugewiesen, jemand muss sie übernehmen.}}",
+        "routing_rules": "{count, plural, one {# Routing-Regel weist keine Chats mehr zu.} other {# Routing-Regeln weisen keine Chats mehr zu.}}",
+        "auto_teams": "{count, plural, one {# Team ist auf automatische Chat-Zuweisung eingestellt und hört damit auf.} other {# Teams sind auf automatische Chat-Zuweisung eingestellt und hören damit auf.}}",
+        "teams": "{count, plural, one {# Team bleibt mit seinen Mitgliedern erhalten.} other {# Teams bleiben mit ihren Mitgliedern erhalten.}}",
+        "custom_role_holders": "{count, plural, one {# Person hat eine benutzerdefinierte Rolle. Die Rolle bleibt erhalten, aber die Berechtigungen dieses Add-ons gelten nicht mehr.} other {# Personen haben eine benutzerdefinierte Rolle. Die Rollen bleiben erhalten, aber die Berechtigungen dieses Add-ons gelten nicht mehr.}}",
+        "kept": "Deine Einstellungen und Daten bleiben erhalten. Beim erneuten Einschalten sind sie wieder so, wie du sie verlassen hast."
+      }
     }
   }
 }

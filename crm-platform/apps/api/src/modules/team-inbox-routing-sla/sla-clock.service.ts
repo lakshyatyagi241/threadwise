@@ -39,7 +39,7 @@ export class SlaClockService {
     if (!(await this.entitlements.featureEnabled(orgId, SLA_PLAN_FEATURE))) {
       return { started: false, reason: 'plan' };
     }
-    const done = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+    const done = await this.db.retry.txAs({ orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
         SELECT id, priority, waiting_since FROM conversations
         WHERE org_id = ${orgId} AND uuid = ${conversationUuid} FOR UPDATE`);

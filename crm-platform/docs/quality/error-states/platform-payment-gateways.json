@@ -1,0 +1,91 @@
+{
+  "feature": "platform-payment-gateways",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-platform-payment-gateways-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/components/billing/analytics-pages.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/billing-history-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/billing-settings-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-payment-gateways-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/components/checkout-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/gateway-card.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/subscriptions-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-payment-gateways-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/api.ts",
+        "apps/web/src/features/platform-payment-gateways/components/billing/analytics-pages.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/billing-history-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-payment-gateways-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/components/billing/billing-settings-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/invoices-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/refund-dialog.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-payment-gateways-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/components/billing/billing-settings-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/billing/order-history-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/gateway-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-platform-payment-gateways-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-payment-gateways/components/billing/order-history-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/checkout-page.tsx",
+        "apps/web/src/features/platform-payment-gateways/components/offline-instructions.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

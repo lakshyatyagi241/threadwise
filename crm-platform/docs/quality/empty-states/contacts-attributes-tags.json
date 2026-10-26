@@ -1,0 +1,129 @@
+{
+  "feature": "contacts-attributes-tags",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-contacts-attributes-tags-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/components/applied-filters.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/attributes-screen.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/bulk-bar.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/components.test.tsx",
+          "match": "renders a stat tile and an empty state"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/lead-score-chip.dom.test.tsx",
+          "match": "draws nothing (no empty chip) for a contact that has no score yet"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/notes-meetings-files.test.tsx",
+          "match": "shows the empty state and the composer to people who can update"
+        }
+      ]
+    },
+    {
+      "id": "EM-contacts-attributes-tags-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/components/applied-filters.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/bulk-properties-section.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/contact/timeline/activity-feed.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/data-sections.test.tsx",
+          "match": "says none were found when nothing matches the contact"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/owner.test.tsx",
+          "match": "offers only the owner when the selection is every contact a filter matches"
+        }
+      ]
+    },
+    {
+      "id": "EM-contacts-attributes-tags-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/conversations.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/owners.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/stats.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-contacts-attributes-tags-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/bulk.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/deals.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/owners.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/contact-view.test.tsx",
+          "match": "has no Tasks tab without the permission to read tasks, and no Conversations without the inbox"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/data-sections.test.tsx",
+          "match": "is the same line for a 403, and for a role without record.deals.read (which also asks for nothing)"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/notes-meetings-files.test.tsx",
+          "match": "without appointments permission the row is shown, read-only, with no link to the appointment screen"
+        }
+      ]
+    },
+    {
+      "id": "EM-contacts-attributes-tags-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/contacts.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/properties.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/stats.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/contact-view.test.tsx",
+          "match": "puts a small count on Activity and Deals only, and none for zero"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/lib/columns.test.ts",
+          "match": "writes day/month/year with zeros"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/lib/contact-data.test.ts",
+          "match": "is all zeros and no dates for no conversations"
+        }
+      ]
+    }
+  ]
+}

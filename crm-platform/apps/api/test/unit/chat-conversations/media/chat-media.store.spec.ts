@@ -16,14 +16,11 @@ import { LocalDiskMediaStore } from '../../../../src/infra/providers/chat-conver
 import { MediaTokenService } from '../../../../src/infra/providers/chat-conversations/media/media-token.service';
 import type { ChatMediaObjectGateway } from '../../../../src/infra/providers/chat-conversations/media/media.ports';
 import { UploadPolicyService } from '../../../../src/modules/auth/security/upload-policy.service';
+import { jpegOfSize, pngOfSize } from '../../../support/images';
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.alloc(100, 1),
-]);
+const PNG = pngOfSize();
 const PDF = Buffer.concat([Buffer.from('%PDF-1.7\n'), Buffer.alloc(100, 2)]);
-const jpeg = (size: number) =>
-  Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(size - 4, 3)]);
+const jpeg = (size: number) => jpegOfSize(size);
 
 let dir: string;
 let local: LocalDiskMediaStore;

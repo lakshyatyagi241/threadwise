@@ -10,7 +10,9 @@ import {
   type BillingUsagePanelResponse,
   type ChangePlanResponse,
   type EntitlementsResponse,
+  type FeatureAddon,
   type PlanFeatureKey,
+  isPlanFeatureKey,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -29,6 +31,7 @@ import {
   type Entitlements,
 } from './plan-entitlement.service';
 import { changeDirection, validityForState } from './plan-lifecycle';
+import { offerOf, offersOfPlanSlug, packFeatureKeys } from './plan-addon-offers';
 import { PLAN_COLUMNS, fullFeatures, fullLimits, toFacts, type PlanRow } from './plan-row';
 import {
   buildPlanCard,
@@ -84,7 +87,72 @@ export class BillingService {
     // every personal-number surface without it.
     if (await this.unofficial.isEnabledFor(RequestContextStore.require().orgId))
       features.push(UNOFFICIAL_WHATSAPP_FEATURE_KEY);
-    return { features };
+    return { features, featureAddons: await this.featureAddons(e, new Set(features)) };
+  }
+
+  /**
+   * For each plan feature a plain add-on on sale grants: the add-on and how the workspace's plan offers it (docs/specs/addons-plan-offers.md 4), so a
+   * locked screen names the add-on and its price from data, and shows nothing when the plan hides it. A feature two add-ons grant lists both.
+   */
+  private async featureAddons(e: Entitlements, has: ReadonlySet<string>): Promise<FeatureAddon[]> {
+    const grace = Math.max(0, Math.min(30, Math.trunc(await this.entitlements.graceDays())));
+    return this.db.txAs({ orgId: e.orgId, userId: null }, async (tx) => {
+      // Inactive (draft) add-ons too: one that is not on sale reads `hidden`, so a locked screen offers nothing instead of a link to a list
+      // that does not have it. "Owned" counts the autopay grace, like the entitlement resolver.
+      const packs = await tx.execute(sql`
+        SELECT id::int AS id, slug, name, amount::text AS amount, offer_amount::text AS offer_amount, currency,
+               billing_unit, billing_duration, features, is_active,
+               EXISTS (SELECT 1 FROM workspace_addons wa
+                       WHERE wa.org_id = ${e.orgId} AND wa.package_id = plans.id AND wa.status = 'active'
+                         AND (wa.ends_at IS NULL OR wa.ends_at > now()
+                              OR EXISTS (SELECT 1 FROM subscriptions sb
+                                         WHERE sb.org_id = wa.org_id AND sb.workspace_addon_id = wa.id AND sb.kind = 'addon'
+                                           AND sb.status IN ('active', 'past_due')
+                                           AND wa.ends_at > now() - make_interval(days => ${grace})))) AS owned
+        FROM plans WHERE kind = 'addon' AND marketplace_app_id IS NULL
+        ORDER BY sort_order, amount, slug`);
+      // The add-ons the workspace itself switched off (a plan that includes one still shows it, as "turned off", with a way back on).
+      const off = await tx.execute(
+        sql`SELECT addon_id::int AS addon_id FROM workspace_addon_activation WHERE org_id = ${e.orgId} AND state = 'disabled'`,
+      );
+      const disabled = new Set(
+        (off.rows as Array<{ addon_id: number }>).map((r) => Number(r.addon_id)),
+      );
+      const offers = e.offerPlanSlug ? await offersOfPlanSlug(tx, e.offerPlanSlug) : new Map();
+      // The same "may buy add-ons" rule as the add-on list: a paid plan that is running (a trial of it counts).
+      const paidActive = ['paid_active', 'paid_grace', 'free_trial'].includes(e.state);
+      const out: FeatureAddon[] = [];
+      for (const r of packs.rows as Array<Record<string, unknown>>) {
+        const offer = offerOf(offers, Number(r.id));
+        for (const feature of packFeatureKeys(r.features)) {
+          if (!isPlanFeatureKey(feature)) continue;
+          const state: FeatureAddon['offer'] = has.has(feature)
+            ? r.owned
+              ? 'owned'
+              : 'included'
+            : r.owned
+              ? 'owned'
+              : disabled.has(Number(r.id)) && offer.mode === 'included'
+                ? 'disabled'
+                : offer.mode === 'hidden' || !r.is_active
+                  ? 'hidden'
+                  : offer.mode === 'included' || !paidActive
+                    ? 'unavailable'
+                    : 'buy';
+          out.push({
+            feature,
+            addonSlug: r.slug as string,
+            addonName: r.name as string,
+            offer: state,
+            amount: offer.amount ?? (r.offer_amount as string | null) ?? (r.amount as string),
+            currency: r.currency as string,
+            billingUnit: r.billing_unit as string,
+            billingDuration: Number(r.billing_duration),
+          });
+        }
+      }
+      return out;
+    });
   }
 
   async plans(canManage: boolean, unlocks?: PlanFeatureKey): Promise<BillingPlansResponse> {

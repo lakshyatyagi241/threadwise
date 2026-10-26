@@ -12,6 +12,7 @@ import { CommandPalette } from './command-palette';
 import { NavDrawer, NavRail } from './nav-rail';
 import { PageTitle } from './page-title';
 import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
+import { ShellDataProvider, type ShellData } from './shell-data';
 import { TopBar, type WalletChipData } from './top-bar';
 import type { ShellUser } from './user-menu';
 
@@ -73,47 +74,56 @@ export function AppShell({
   const bell = nav.find((i) => i.id === BELL_ID);
   const settingsLink = nav.find((i) => i.id === SETTINGS_NAV_ID);
 
+  // What the shell resolved for this person; the More page and other screens inside the shell read it (shell-data.tsx).
+  // No top bar is drawn here, so `bar` is empty and the More page lists its demotable screens in the Navigation strip.
+  const shellData = useMemo<ShellData>(
+    () => ({ nav, tiles: settings, mode: 'sidebar', bar: [], walletLabel: wallet?.label }),
+    [nav, settings, wallet?.label],
+  );
+
   return (
-    <div className="app-shell flex min-h-dvh">
-      <PageTitle nav={nav} tiles={settings} />
-      {/* Ctrl/Cmd+K on every page: jump to any menu entry or Settings tile this person may open (nav and tiles are already gated). */}
-      <CommandPalette nav={nav} tiles={settings} />
-      <NavRail sections={sections} activeId={activeId} footer={navFooter} />
-      <NavDrawer
-        open={drawer}
-        onClose={closeDrawer}
-        sections={sections}
-        activeId={activeId}
-        returnFocusTo={menuButton}
-        footer={navFooter}
-      />
-      <div className="app-shell-col flex min-w-0 flex-1 flex-col">
-        <TopBar
-          user={user}
-          theme={theme}
-          onOpenMenu={() => setDrawer(true)}
-          menuButtonRef={menuButton}
-          headerStart={headerStart}
-          announcement={announcement}
-          wallet={wallet}
-          notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
-          notificationCount={notificationCount}
-          bell={liveBell}
-          pageHelp={<PageHelpTip />}
-          pageSettings={<PageSettingsShortcut tiles={settings} />}
-          settingsHref={settingsLink?.href}
-          helpItems={help}
+    <ShellDataProvider value={shellData}>
+      <div className="app-shell flex min-h-dvh">
+        <PageTitle nav={nav} tiles={settings} />
+        {/* Ctrl/Cmd+K on every page: jump to any menu entry or Settings tile this person may open (nav and tiles are already gated). */}
+        <CommandPalette nav={nav} tiles={settings} />
+        <NavRail sections={sections} activeId={activeId} footer={navFooter} />
+        <NavDrawer
+          open={drawer}
+          onClose={closeDrawer}
+          sections={sections}
+          activeId={activeId}
+          returnFocusTo={menuButton}
+          footer={navFooter}
         />
-        {banners}
-        {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page.
-            A screen wrapped in <PageFill> turns the shell into a one-window-tall column (rules in globals.css). */}
-        <main className="app-shell-main relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
-          <SettingsTilesProvider tiles={settings}>
-            <SettingsBack />
-            {children}
-          </SettingsTilesProvider>
-        </main>
+        <div className="app-shell-col flex min-w-0 flex-1 flex-col">
+          <TopBar
+            user={user}
+            theme={theme}
+            onOpenMenu={() => setDrawer(true)}
+            menuButtonRef={menuButton}
+            headerStart={headerStart}
+            announcement={announcement}
+            wallet={wallet}
+            notificationsHref={bell && !bell.comingSoon ? bell.href : undefined}
+            notificationCount={notificationCount}
+            bell={liveBell}
+            pageHelp={<PageHelpTip />}
+            pageSettings={<PageSettingsShortcut tiles={settings} />}
+            settingsHref={settingsLink?.href}
+            helpItems={help}
+          />
+          {banners}
+          {/* `relative overflow-x-clip`: a visually hidden label that escaped a wide table must never widen the page.
+              A screen wrapped in <PageFill> turns the shell into a one-window-tall column (rules in globals.css). */}
+          <main className="app-shell-main relative min-w-0 flex-1 overflow-x-clip p-4 md:p-6">
+            <SettingsTilesProvider tiles={settings}>
+              <SettingsBack />
+              {children}
+            </SettingsTilesProvider>
+          </main>
+        </div>
       </div>
-    </div>
+    </ShellDataProvider>
   );
 }

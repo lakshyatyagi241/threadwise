@@ -50,11 +50,7 @@ export function GroupsScreen() {
         </div>
       </div>
 
-      <GroupsPanel
-        onCreate={() => setEditing('new')}
-        onEdit={setEditing}
-        onImport={canImport ? setImporting : undefined}
-      />
+      <GroupsPanel onEdit={setEditing} onImport={canImport ? setImporting : undefined} />
 
       <div className="grid gap-4 lg:grid-cols-3">
         {(['one', 'two', 'three'] as const).map((k, i) => (

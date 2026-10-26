@@ -16,6 +16,7 @@ import {
   checkRegisterEntries,
   loadFiles,
   loadRegister,
+  type CacheEntry,
   type Register,
 } from './checks';
 
@@ -171,7 +172,10 @@ describe('part 2: each rule fails on a deliberately bad example', () => {
 
   it('Redis key with no organisation: an entry that was never filled in is reported', () => {
     const r = withBad({});
-    r.caches = [{ id: 'R99', layer: 'redis', priority: 'P0', location: 'apps/api/src/x.ts' }];
+    // An entry that was never filled in: no instrumentation block, which is the point of the check.
+    r.caches = [
+      { id: 'R99', layer: 'redis', priority: 'P0', location: 'apps/api/src/x.ts' } as CacheEntry,
+    ];
     expect(
       checkRegisterEntries(
         r,

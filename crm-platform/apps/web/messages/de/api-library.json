@@ -137,7 +137,9 @@
         "allSources": "Alle Quellen",
         "from": "Von",
         "to": "Bis",
-        "clear": "Filter zurücksetzen"
+        "clear": "Filter zurücksetzen",
+        "deletedApi": "{name} (gelöscht)",
+        "searchTooLong": "Die Suche darf höchstens {max} Zeichen lang sein. Kürzen Sie sie, um zu suchen."
       },
       "detail": {
         "title": "Details zum API-Protokoll",
@@ -168,7 +170,8 @@
         "openContact": "Kontakt öffnen",
         "user": "Ausgeführt von (Benutzer-ID)",
         "noContext": "Kein Flow und kein Kontakt waren beteiligt."
-      }
+      },
+      "unsaved": "Nicht gespeichert"
     },
     "variables": {
       "insertFor": "Variable in {label} einfügen",
@@ -218,7 +221,8 @@
         "empty": "Leer lassen, um kein Payload zu senden.",
         "invalid": "Dies ist kein gültiges JSON.",
         "shape": "Das Payload muss ein JSON-Objekt oder eine Liste sein.",
-        "format": "JSON formatieren"
+        "format": "JSON formatieren",
+        "invalidAt": "Das ist kein gültiges JSON (es bricht in Zeile {line}, Spalte {column} ab)."
       },
       "responseVarsHint": "Felder der Antwort, die Flows als '{{'ApiName.field'}}' lesen können. Wähle sie aus der Testantwort aus.",
       "mappingHint": "Speichere bei jedem Lauf des Flows ein Feld der Antwort in einer Kontakteigenschaft.",
@@ -300,7 +304,11 @@
         "choose": "Eigenschaft auswählen",
         "removeN": "Zeile {n} entfernen",
         "pick": "Wähle einen Pfad aus der letzten Testantwort",
-        "add": "Zeile hinzufügen"
+        "add": "Zeile hinzufügen",
+        "propertyDuplicate": "Eine andere Zeile speichert in dieselbe Eigenschaft. In ein Feld passt nur ein Wert, wähle daher eine andere Eigenschaft.",
+        "propertyRequired": "Wähle die Kontakteigenschaft, in die diese Zeile speichert.",
+        "numberText": "Ein Zahlenfeld nimmt nur Zahlen an. Der letzte Test lieferte hier „{value}“, und dieser Text würde unverändert gespeichert.",
+        "numberUntested": "Starte einen Test, um zu prüfen, ob dieses Antwortfeld eine Zahl liefert."
       },
       "responseVars": {
         "none": "Noch keine Felder für Flows freigegeben.",
@@ -313,7 +321,8 @@
       "tested": "Test bestanden",
       "requestHint": "Der Name, die Methode und die Adresse des Aufrufs.",
       "payloadHint": "Was im Body gesendet wird. Verwende die Schaltfläche '{ }', um eine Variable in einen Wert einzufügen.",
-      "functionHint": "Passe das Payload mit JavaScript an, bevor es gesendet wird. Optional."
+      "functionHint": "Passe das Payload mit JavaScript an, bevor es gesendet wird. Optional.",
+      "plainHttpWarning": "Diese Adresse beginnt mit http://, daher würden das Passwort oder der Schlüssel in Ihren Headern unverschlüsselt übertragen. Verwenden Sie https://, wenn der Server das unterstützt."
     },
     "test": {
       "title": "Antwort",
@@ -366,7 +375,8 @@
       "result": "Ergebnis",
       "status": "Status",
       "time": "Zeit",
-      "size": "Größe"
+      "size": "Größe",
+      "truncatedShown": "Es wird der erste Teil einer {kb}-KB-Antwort angezeigt"
     },
     "pagination": {
       "label": "Seitennavigation",

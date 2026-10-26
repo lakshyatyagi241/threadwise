@@ -6,7 +6,7 @@ const MB = 1024 * 1024;
 export const MEDIA_MAX_BYTES: Record<TplAttachment, number> = {
   image: 5 * MB,
   video: 16 * MB,
-  document: 100 * MB,
+  document: 10 * MB,
 };
 
 export const MEDIA_ACCEPT: Record<TplAttachment, string> = {

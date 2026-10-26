@@ -48,7 +48,8 @@
       "email_mailboxes": "E-posta kutuları",
       "email_monthly": "Aylık e-posta",
       "storage_gb": "Depolama (GB)",
-      "teams": "Ekipler"
+      "teams": "Ekipler",
+      "webbot_messages": "Aylık ücretsiz web sitesi sohbet botu mesajı"
     },
     "features": {
       "automation": "Otomasyon",
@@ -60,10 +61,12 @@
       "remove_branding": "Markalamayı kaldır",
       "sales_pipeline": "Satış hattı",
       "appointment_booking": "Randevu alma",
+      "appointment_confirm_buttons": "Hatırlatma düğmeleri (Onayla / Yeniden planla / İptal et)",
+      "appointment_rebook_steps": "Yeniden randevu (hatırlatma) adımları",
       "chatbot_widgets": "Sohbet botu widget'ları",
       "wa_storefront": "WhatsApp kataloğu",
       "inbox_sla": "SLA politikaları",
-      "inbox_routing": "Yönlendirme kuralları",
+      "inbox_routing": "Akıllı yönlendirme: otomatik atama ve kurallar",
       "waba_calling": "WhatsApp aramaları",
       "inbox_kanban": "Kanban görünümü",
       "team_performance": "Ekip performansı",
@@ -89,7 +92,9 @@
       "record_assignment": "Kayıt atama kuralları",
       "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
       "custom_roles": "Özel roller ve kapsamlar",
-      "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
+      "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci",
+      "agent_status_bar": "Durum çubuğu: üst çubukta ve Gelen Kutusu’nda Müsait / Uzakta denetimi",
+      "agent_status_automation": "Durumu otomatikleştir: kişisel çalışma saatleri ve otomatik Uzakta"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
       "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
       "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez.",
-      "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez."
+      "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez.",
+      "webbot_messages": "Her takvim ayında ücretsiz dahil olan web sitesi sohbet botu mesajları. Bunun üzerindeki her mesaj cüzdandan tahsil edilir. Boş veya 0 = ücretsiz mesaj yok."
     },
     "planAddons": {
       "title": "Planınızda kullanılabilir eklentiler",
@@ -245,20 +251,7 @@
         "title": "Sık sorulan sorular"
       },
       "addons": {
-        "title": "Eklentiler",
-        "owned": "Sahip olduğunuz eklentiler",
-        "oneTime": "Tek seferlik",
-        "buy": "Eklenti satın al",
-        "buyAgain": "Yeniden satın al",
-        "active": "Etkin",
-        "unlimitedBullet": "Sınırsız {label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} gün}}",
-          "weeks": "{count, plural, other {/ {count} hafta}}",
-          "months": "{count, plural, other {/ {count} ay}}",
-          "years": "{count, plural, other {/ {count} yıl}}"
-        }
+        "title": "Eklentiler"
       },
       "renewal": {
         "renewsOn": "Planınız {date} tarihinde otomatik yenilenir.",
@@ -578,7 +571,30 @@
       "back": "Geri dön",
       "compare": "Tüm planları karşılaştır",
       "appHint": "{feature}, Pazar yerinde uygulama olarak da satılır.",
-      "appLink": "Uygulamayı gör"
+      "appLink": "Uygulamayı gör",
+      "addonHint": "Bunu {addon} eklentisiyle mevcut planınıza da ekleyebilirsiniz.",
+      "addonLink": "Eklentileri gör",
+      "addonsTabHint": "Eklentiler için planınızda Pazar yeri olması gerekmez. Planlar ve eklentiler bölümünden sahip olduklarınızı görebilir ve eklenti satın alabilirsiniz.",
+      "addonsTabLink": "Planlar ve eklentileri aç",
+      "addonHintGeneric": "Planınız bunu bir eklenti olarak da sunuyor olabilir."
+    },
+    "lock": {
+      "link": "Planları ve eklentileri gör",
+      "offTitle": "Planınızda yok",
+      "offLead": "Bu bölüm şu anda çalışma alanınızın planına dahil değil.",
+      "buyTitle": "{addon} eklentisini {price} karşılığında ekleyin",
+      "buyLead": "Planınız {addon} eklentisini sunuyor. Bu bölümü açmak için ekleyin.",
+      "buyLink": "Eklentileri gör",
+      "askOwner": "Eklemesi için hesap sahibinden isteyin.",
+      "unavailableTitle": "{addon} için etkin bir ücretli plan gerekir",
+      "unavailableLead": "Önce ücretli bir plan seçin, ardından {addon} ekleyebilirsiniz.",
+      "viewPlans": "Planları gör",
+      "disabledTitle": "{addon} kapalı",
+      "disabledLead": "Planınız {addon} eklentisini içeriyor, ancak bu çalışma alanı için kapalı. Ayarları korunur.",
+      "disabledAsk": "Açması için hesap sahibinden isteyin.",
+      "turnOn": "Aç",
+      "turnOnForbidden": "Bunu açma yetkiniz yok. Hesap sahibinden isteyin.",
+      "turnOnFailed": "{addon} açılamadı. Lütfen tekrar deneyin."
     }
   }
 }

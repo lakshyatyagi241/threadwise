@@ -48,7 +48,8 @@
       "email_mailboxes": "Caselle e-mail",
       "email_monthly": "E-mail al mese",
       "storage_gb": "Archiviazione (GB)",
-      "teams": "Team"
+      "teams": "Team",
+      "webbot_messages": "Messaggi gratuiti del chatbot del sito al mese"
     },
     "features": {
       "automation": "Automazione",
@@ -60,10 +61,12 @@
       "remove_branding": "Rimuovi branding",
       "sales_pipeline": "Pipeline di vendita",
       "appointment_booking": "Prenotazione appuntamenti",
+      "appointment_confirm_buttons": "Pulsanti del promemoria (Conferma / Riprogramma / Annulla)",
+      "appointment_rebook_steps": "Passaggi di riprenotazione (richiamo)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Catalogo WhatsApp",
       "inbox_sla": "Policy SLA",
-      "inbox_routing": "Regole di instradamento",
+      "inbox_routing": "Instradamento intelligente: assegnazione automatica e regole",
       "waba_calling": "Chiamate WhatsApp",
       "inbox_kanban": "Vista Kanban",
       "team_performance": "Performance del team",
@@ -89,7 +92,9 @@
       "record_assignment": "Regole di assegnazione dei record",
       "team_hierarchy": "Gerarchia dei team e manager",
       "custom_roles": "Ruoli personalizzati e ambiti",
-      "inbox_assignment_sticky": "Proprietario del contatto e agente persistente"
+      "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso",
+      "agent_status_bar": "Barra di stato: controllo Disponibile / Assente nella barra superiore e nella Posta in arrivo",
+      "agent_status_automation": "Automatizza stato: orario di lavoro personale e Assente automatico"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -144,7 +149,8 @@
       "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
       "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
       "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
-      "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
+      "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi.",
+      "webbot_messages": "Messaggi del chatbot del sito inclusi gratuitamente ogni mese di calendario. Ogni messaggio oltre il limite viene addebitato sul portafoglio. Vuoto o 0 = nessuno incluso."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",
@@ -245,20 +251,7 @@
         "title": "Domande frequenti"
       },
       "addons": {
-        "title": "Add-on",
-        "owned": "Add-on posseduti",
-        "oneTime": "una tantum",
-        "buy": "Acquista add-on",
-        "buyAgain": "Acquista di nuovo",
-        "active": "Attivo",
-        "unlimitedBullet": "{label} illimitati",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, one {/ giorno} other {/ {count} giorni}}",
-          "weeks": "{count, plural, one {/ settimana} other {/ {count} settimane}}",
-          "months": "{count, plural, one {/ mese} other {/ {count} mesi}}",
-          "years": "{count, plural, one {/ anno} other {/ {count} anni}}"
-        }
+        "title": "Add-on"
       },
       "renewal": {
         "renewsOn": "Il tuo piano si rinnova automaticamente il {date}.",
@@ -578,7 +571,30 @@
       "back": "Torna indietro",
       "compare": "Confronta tutti i piani",
       "appHint": "{feature} è venduto anche come app nel Marketplace.",
-      "appLink": "Vedi l’app"
+      "appLink": "Vedi l’app",
+      "addonHint": "Puoi anche aggiungerlo al tuo piano attuale con il componente {addon}.",
+      "addonLink": "Vedi componenti aggiuntivi",
+      "addonsTabHint": "I componenti aggiuntivi non richiedono il Marketplace nel tuo piano. Da Piani e componenti aggiuntivi puoi comunque vedere cosa possiedi e acquistarne altri.",
+      "addonsTabLink": "Apri Piani e componenti aggiuntivi",
+      "addonHintGeneric": "Il tuo piano potrebbe offrirlo anche come componente aggiuntivo."
+    },
+    "lock": {
+      "link": "Vedi piani e componenti aggiuntivi",
+      "offTitle": "Non incluso nel tuo piano",
+      "offLead": "Questa parte al momento non è inclusa nel piano del tuo spazio di lavoro.",
+      "buyTitle": "Aggiungi {addon} a {price}",
+      "buyLead": "Il tuo piano offre {addon} come componente aggiuntivo. Aggiungilo per attivare questa parte.",
+      "buyLink": "Vedi componenti aggiuntivi",
+      "askOwner": "Chiedi al proprietario dell’account di aggiungerlo.",
+      "unavailableTitle": "{addon} richiede un piano a pagamento attivo",
+      "unavailableLead": "Scegli prima un piano a pagamento, poi potrai aggiungervi {addon}.",
+      "viewPlans": "Vedi piani",
+      "disabledTitle": "{addon} è disattivato",
+      "disabledLead": "Il tuo piano include {addon}, ma è disattivato per questo spazio di lavoro. Le sue impostazioni sono conservate.",
+      "disabledAsk": "Chiedi al proprietario dell’account di attivarlo.",
+      "turnOn": "Attivalo",
+      "turnOnForbidden": "Non hai il permesso di attivarlo. Chiedilo al proprietario dell’account.",
+      "turnOnFailed": "Non è stato possibile attivare {addon}. Riprova."
     }
   }
 }

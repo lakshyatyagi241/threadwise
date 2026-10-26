@@ -13,6 +13,18 @@ export function previewOfSummary(
   const headerKind: HeaderKind = media ? s.attachmentType : s.header ? 'text' : 'none';
   return {
     auth: s.metaCategory === 'AUTHENTICATION',
+    cards: (s.cards ?? []).map((c) => ({
+      format: c.format,
+      imageUrl: c.imageUrl,
+      body: c.body,
+      buttons: c.buttons.map((b) => {
+        const r = buttonToRow(b);
+        return { kind: r.kind, text: r.text };
+      }),
+    })),
+    offer: s.limitedOffer
+      ? { text: s.limitedOffer.text, countdown: s.limitedOffer.hasExpiration }
+      : null,
     language: s.language,
     headerKind,
     headerText: headerKind === 'text' ? (s.header ?? '') : '',

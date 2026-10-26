@@ -1,0 +1,139 @@
+{
+  "feature": "checkout-orders-merchant-payments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-checkout-orders-merchant-payments-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/api/store-invoices.ts",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-usages-drawer.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.render.test.tsx",
+          "match": "an empty list offers the first coupon in ${locale}"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/customers-screen.render.test.tsx",
+          "match": "a profile that has no address yet also shows the badge"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/groups.render.test.tsx",
+          "match": "an empty directory says no groups yet and points at Channels in ${locale}"
+        }
+      ]
+    },
+    {
+      "id": "EM-checkout-orders-merchant-payments-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/gateways-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/groups-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/orders.render.test.tsx",
+          "match": "says nothing matches, with Clear filters, when a filter is on"
+        }
+      ]
+    },
+    {
+      "id": "EM-checkout-orders-merchant-payments-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/api/store-invoices.ts",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.render.test.tsx",
+          "match": "shows a loading skeleton while the list loads"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/customers-screen.render.test.tsx",
+          "match": "shows a loading skeleton while the list loads"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/groups.render.test.tsx",
+          "match": "shows the loading skeleton while the list has not arrived"
+        }
+      ]
+    },
+    {
+      "id": "EM-checkout-orders-merchant-payments-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-form-modal.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/components/customers-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/gateways-screen.render.test.tsx",
+          "match": "without the read permission the page is a no-access panel and loads nothing"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/orders.render.test.tsx",
+          "match": "is read-only without the manage permission: no form, no link actions, no delete"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/payments-screen.render.test.tsx",
+          "match": "without the view permission nothing is loaded or shown"
+        }
+      ]
+    },
+    {
+      "id": "EM-checkout-orders-merchant-payments-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/checkout-orders-merchant-payments/components/orders-screen.tsx",
+        "apps/web/src/features/checkout-orders-merchant-payments/lib/coupon-form.ts",
+        "apps/web/src/features/checkout-orders-merchant-payments/lib/format.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/components/coupons-screen.render.test.tsx",
+          "match": "an edit starts from the coupon and a flat coupon has no cap field"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/lib/coupon-form.test.ts",
+          "match": "takes a flat amount with at most two decimals"
+        },
+        {
+          "file": "apps/web/src/features/checkout-orders-merchant-payments/lib/store-invoices.test.ts",
+          "match": "honours a zero-decimal currency"
+        }
+      ]
+    }
+  ]
+}

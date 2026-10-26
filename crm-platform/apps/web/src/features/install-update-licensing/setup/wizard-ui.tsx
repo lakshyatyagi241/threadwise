@@ -21,7 +21,7 @@ export const tileClass =
 
 /** Rich-text renderers for the `<i>` accent word and `<b>` emphasis used in the copy. */
 export const richTags = {
-  i: (chunks: ReactNode) => <span className="italic text-brand">{chunks}</span>,
+  i: (chunks: ReactNode) => <span className="not-italic text-brand">{chunks}</span>,
   b: (chunks: ReactNode) => <span className="font-medium text-foreground">{chunks}</span>,
 };
 

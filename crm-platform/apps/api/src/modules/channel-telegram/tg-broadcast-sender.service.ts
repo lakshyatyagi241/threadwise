@@ -21,7 +21,7 @@ import { BotsRepository } from './bots.repository';
 import { sendToChat, type Outcome } from './chat-send';
 import { templateButtonsMarkup } from './telegram-markup';
 import { TgBroadcastsRepository, type TgBroadcastRow } from './tg-broadcasts.repository';
-import type { TgBroadcastJob } from './tg-broadcasts.service';
+import { MODULE_KEY, type TgBroadcastJob } from './tg-broadcasts.service';
 import { QUEUES } from '../../infra/queue/queues';
 import {
   HELD_TABLES,
@@ -31,11 +31,19 @@ import {
   scheduleWake,
   splitByQuietHours,
 } from '../compliance-center';
+import { ChatUsageReporter, type BroadcastUsageRef } from '../chat-conversations';
 import { ConsentGate, consentSkipNote, gateRecipients } from '../contact-consent';
 
 export type TgRunResult = 'skipped' | 'stopped' | 'done' | 'failed' | 'held';
 
 type Bytes = Extract<MediaSource, { bytes: Uint8Array }>;
+
+const usageRef = (b: TgBroadcastRow): BroadcastUsageRef => ({
+  module: MODULE_KEY,
+  id: b.id,
+  uuid: b.uuid,
+  name: b.name,
+});
 
 /**
  * Sends one Telegram broadcast (TW-TG-013), run by the `tg-broadcast` worker job. Chats are claimed in batches of 25 with
@@ -45,6 +53,9 @@ type Bytes = Extract<MediaSource, { bytes: Uint8Array }>;
  * Quiet hours (BL-191): a chat whose contact's local time is inside the workspace's quiet hours is HELD, not denied. It goes back to
  * `pending` with the instant it may be messaged, the rest of the audience goes, and when only held chats are left a delayed job takes them
  * up at the first opening. At release the ConsentGate is asked again, so a STOP that arrived while the message waited still stops it.
+ *
+ * Every message Telegram accepts is the platform's per-message fee (`chat_message` in the usage prices), reported per chat on its
+ * message id. Before each batch the wallet is asked: when it cannot pay, the run stops with nobody failed (see `waitForWallet`).
  */
 @Injectable()
 export class TgBroadcastSenderService {
@@ -64,6 +75,7 @@ export class TgBroadcastSenderService {
     @Inject(TELEGRAM_API) private readonly telegram: TelegramApiFactory,
     @Inject(MEDIA_STORE) private readonly media: MediaStore,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
+    private readonly usage: ChatUsageReporter,
   ) {}
 
   async run(orgId: number, broadcastId: number): Promise<TgRunResult> {
@@ -103,6 +115,11 @@ export class TgBroadcastSenderService {
       broadcast = await load();
       if (!broadcast || broadcast.status !== 'sending') return 'stopped';
       const current = broadcast;
+
+      // The whole batch is asked for, not one message: its fees settle a moment after the send, so a wallet of one message must not
+      // pass the check for a batch of hundreds.
+      const noMoney = await this.usage.refusal(orgId, BATCH_SIZE);
+      if (noMoney) return this.waitForWallet(orgId, broadcastId, noMoney);
 
       const batch = await this.db.txAs({ orgId }, (tx) =>
         this.repo.claim(tx, orgId, broadcastId, BATCH_SIZE, lastId),
@@ -178,6 +195,17 @@ export class TgBroadcastSenderService {
             error: out.error,
           }),
         );
+        if (out.ok) {
+          await this.usage.reportMessage(orgId, usageRef(current), {
+            channelKind: 'telegram',
+            peerKey: r.chatId,
+            // A Telegram message id is only unique inside its chat; a send that came back without one is billed on the recipient row.
+            providerMessageId: out.providerMessageId
+              ? `${r.chatId}:${out.providerMessageId}`
+              : `${current.uuid}:${r.id}`,
+            scope: String(botRowId),
+          });
+        }
         if (out.ok && r.conversationId !== null) {
           await this.mirror(orgId, current.uuid, r.conversationId, text, out.providerMessageId);
         }
@@ -185,6 +213,26 @@ export class TgBroadcastSenderService {
       }
       await this.db.txAs({ orgId }, (tx) => this.repo.recompute(tx, orgId, broadcastId));
     }
+  }
+
+  /**
+   * The wallet cannot pay for the next message. Nobody is failed and nobody is lost: what is left stays pending, the reason is kept on the
+   * broadcast and it goes back to a draft, which is what Pause does; Start continues it after a top-up.
+   */
+  private async waitForWallet(
+    orgId: number,
+    broadcastId: number,
+    why: string,
+  ): Promise<TgRunResult> {
+    await this.db.txAs({ orgId }, async (tx) => {
+      await this.repo.recompute(tx, orgId, broadcastId);
+      await this.repo.setStatus(tx, orgId, broadcastId, 'draft', { lastError: why.slice(0, 255) });
+    });
+    this.logger.warn(
+      { orgId, broadcastId },
+      '[TG] broadcast stopped: the wallet cannot pay for the next message',
+    );
+    return 'stopped';
   }
 
   /** A failure to copy into the thread never fails the send (Reference). */

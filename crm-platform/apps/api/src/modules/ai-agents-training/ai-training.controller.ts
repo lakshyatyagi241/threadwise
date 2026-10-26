@@ -169,6 +169,15 @@ export class AiTrainingController {
     return this.sources.upload(id, file, fields);
   }
 
+  @Get('sources/:id')
+  @RequirePermission('aiag.training.read')
+  @ApiOperation({
+    summary: "One knowledge entry's text, for the View panel (cut at 20,000 characters)",
+  })
+  previewSource(@Param('id', ParseUUIDPipe) id: string) {
+    return this.sources.preview(id);
+  }
+
   @Delete('sources/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('aiag.training.update')

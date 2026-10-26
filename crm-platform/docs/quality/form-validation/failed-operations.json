@@ -1,0 +1,112 @@
+{
+  "module": "failed-operations",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "redriveRequestSchema",
+      "file": "apps/api/src/modules/failed-operations/failed-operations.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "acknowledgeRepair",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "acknowledgeRepair",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "terminateRequestSchema",
+      "file": "apps/api/src/modules/failed-operations/failed-operations.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "reason",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (3)",
+          "value": "\"aa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (3)",
+          "value": "\"aaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (200)",
+          "value": "\"a\" x 200",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (200)",
+          "value": "\"a\" x 201",
+          "priority": "P1"
+        },
+        {
+          "field": "reason",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (200)",
+          "value": "\"😀\" x 200",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

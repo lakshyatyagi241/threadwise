@@ -1,3 +1,5 @@
+import { modernZoneList } from '@/lib/timezones';
+
 /**
  * Wall-clock times in a chosen IANA zone (TW-CMS-040). A `datetime-local` value has no zone; the announcement form lets the
  * operator pick one, and the API stores the instant. Reference stored the wall time as if it were server time, so a non-default
@@ -51,20 +53,23 @@ export function instantToLocal(iso: string | null, zone: string): string {
 /** The zones the browser knows, with the given one first; a short list where `Intl.supportedValuesOf` is missing. */
 export function zoneList(current: string): string[] {
   const intl = Intl as unknown as { supportedValuesOf?: (k: string) => string[] };
-  const all = intl.supportedValuesOf?.('timeZone') ?? [
-    'UTC',
-    'Europe/London',
-    'Europe/Berlin',
-    'Asia/Kolkata',
-    'Asia/Dubai',
-    'Asia/Singapore',
-    'Asia/Tokyo',
-    'Australia/Sydney',
-    'America/New_York',
-    'America/Chicago',
-    'America/Los_Angeles',
-    'America/Sao_Paulo',
-  ];
+  const all = modernZoneList(
+    intl.supportedValuesOf?.('timeZone') ?? [
+      'UTC',
+      'Europe/London',
+      'Europe/Berlin',
+      'Asia/Kolkata',
+      'Asia/Dubai',
+      'Asia/Singapore',
+      'Asia/Tokyo',
+      'Australia/Sydney',
+      'America/New_York',
+      'America/Chicago',
+      'America/Los_Angeles',
+      'America/Sao_Paulo',
+    ],
+    current,
+  );
   return [current, ...all.filter((z) => z !== current)];
 }
 

@@ -1,0 +1,136 @@
+{
+  "feature": "roles-permissions",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-roles-permissions-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/permission-create.tsx",
+        "apps/web/src/features/roles-permissions/permissions-page.tsx",
+        "apps/web/src/features/roles-permissions/role-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "shows an error state with a retry when the permissions fail to load"
+        }
+      ]
+    },
+    {
+      "id": "ES-roles-permissions-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/ui/access.tsx",
+        "apps/web/src/features/roles-permissions/ui/states.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/lib/errors.test.ts",
+          "match": "names the missing permission on a 403"
+        },
+        {
+          "file": "apps/web/src/features/roles-permissions/workspace/lib/errors.test.ts",
+          "match": "isForbidden is only the missing-permission refusal"
+        }
+      ]
+    },
+    {
+      "id": "ES-roles-permissions-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/ui/danger-zone.tsx",
+        "apps/web/src/features/roles-permissions/workspace/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-roles-permissions-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/permission-create.tsx",
+        "apps/web/src/features/roles-permissions/permissions-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/states.test.tsx",
+          "match": "keeps the typed values and shows the error when create fails"
+        }
+      ],
+      "partial": "Only the create-permission form is tested, not delete-permission, delete-role or the role editor."
+    },
+    {
+      "id": "ES-roles-permissions-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/workspace/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/workspace/ui/add-member-modal.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-roles-permissions-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/errors.ts",
+        "apps/web/src/features/roles-permissions/role-editor.tsx",
+        "apps/web/src/features/roles-permissions/workspace/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/roles-permissions/lib/errors.test.ts",
+          "match": "maps a row version conflict to a reload prompt"
+        },
+        {
+          "file": "apps/web/src/features/roles-permissions/workspace/lib/errors.test.ts",
+          "match": "treats a row-version conflict as a reload prompt and keeps the request id"
+        }
+      ]
+    },
+    {
+      "id": "ES-roles-permissions-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/roles-permissions/lib/use-debounced.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -40,7 +40,7 @@
       "topup": "充值",
       "earn": "收入",
       "refund": "退款",
-      "spend": "消息费用",
+      "spend": "使用费",
       "admin_adjust": "调整"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "打开完整账单明细",
         "emptyTitle": "暂无活动",
         "emptyBody": "充值、消息费用和退款会显示在此处。"
-      }
+      },
+      "messageExpenses": "消息费用"
     },
     "activity": {
       "description": "描述",
@@ -145,7 +146,7 @@
         "all": "全部",
         "topup": "充值",
         "earn": "收入",
-        "spend": "消息扣费",
+        "spend": "使用费",
         "refund": "退款",
         "admin_adjust": "调整"
       },
@@ -164,12 +165,16 @@
         "in": "收入",
         "out": "支出",
         "balance": "余额",
-        "none": "无"
+        "none": "无",
+        "channel": "频道",
+        "recipient": "收件人",
+        "template": "模板",
+        "country": "国家",
+        "category": "类别",
+        "engine": "发动机"
       },
       "context": {
-        "reason": "原因",
-        "to": "收件人",
-        "template": "模板"
+        "reason": "原因"
       },
       "channels": {
         "campaign": "营销活动",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "支出",
+      "subtitle": "每条消息、每次通话、每个 AI 请求和每次查询的费用及其用途。合计涵盖所有符合筛选条件的项目。",
+      "back": "返回钱包",
+      "breadcrumbLabel": "面包屑导航",
+      "breadcrumbWallet": "钱包",
+      "breadcrumbExpenses": "支出",
+      "fullStatement": "完整账单明细",
+      "summary": {
+        "messages": "项目",
+        "charged": "已扣费",
+        "refunded": "已退款",
+        "net": "净费用",
+        "notBilled": "未计费"
+      },
+      "filters": {
+        "status": "状态",
+        "statusAll": "全部",
+        "statusCharged": "已扣费",
+        "statusFree": "未计费",
+        "statusRefunded": "已退款",
+        "template": "模板",
+        "templatePlaceholder": "模板名称",
+        "channel": "频道",
+        "category": "类别",
+        "allChannels": "全部频道",
+        "allCategories": "全部类别",
+        "from": "开始",
+        "to": "结束",
+        "apply": "应用",
+        "reset": "重置",
+        "rangeInverted": "结束日期早于开始日期。",
+        "kind": "类型",
+        "allKinds": "所有类型"
+      },
+      "breakdown": {
+        "title": "费用按",
+        "groupBy": {
+          "template": "模板",
+          "source": "频道",
+          "category": "类别",
+          "country": "国家",
+          "kind": "类型"
+        },
+        "group": "分组",
+        "notRecorded": "未记录",
+        "truncated": "显示前 {count} 个分组。请缩小日期范围以查看其余内容。",
+        "empty": "没有符合这些筛选条件的内容。"
+      },
+      "columns": {
+        "date": "日期",
+        "template": "模板",
+        "campaign": "活动、群发或功能",
+        "channel": "频道",
+        "category": "类别",
+        "country": "国家",
+        "status": "状态",
+        "charged": "已扣费",
+        "refunded": "已退款",
+        "net": "净额",
+        "messages": "项目",
+        "notBilled": "未计费",
+        "type": "类型"
+      },
+      "status": {
+        "charged": "已扣费",
+        "free": "未计费",
+        "refunded": "已退款",
+        "refundedOn": "已于 {date} 退回"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "已包含在您的套餐中",
+        "wallet_empty": "钱包余额为零",
+        "rate_is_zero": "费率为零",
+        "no_wallet_owner": "没有钱包所有者"
+      },
+      "uncollected": "未收取 {amount}",
+      "emptyTitle": "暂无支出",
+      "emptyBody": "消息、通话、AI 请求和其他使用情况会连同用途和费用显示在这里。",
+      "emptyFiltered": "没有符合这些筛选条件的内容。请更改或重置筛选条件。",
+      "days": {
+        "title": "每日日志",
+        "subtitle": "按日期、类型、状态、渠道和类别分组的消息。打开某一天即可查看每条消息。",
+        "messagesOnDay": "{count} 条消息",
+        "viewDetails": "查看详情",
+        "actions": "操作",
+        "empty": "这些日期没有消息。"
+      },
+      "log": {
+        "title": "消息",
+        "forDay": "{date}的消息",
+        "showAllDays": "显示所有日期"
+      },
+      "units": {
+        "sms": "{count, plural, other {# 个分段}}",
+        "whatsapp_call": "{count, plural, other {# 分钟}}",
+        "voice_call": "{count, plural, other {# 分钟}}"
+      },
+      "sources": {
+        "lead_first": "线索即时回复",
+        "lead": "线索即时回复",
+        "test": "测试发送",
+        "appointment": "预约提醒",
+        "lead_scoring": "线索评分",
+        "lead_digest": "聊天摘要",
+        "pql_search": "联系人搜索",
+        "growth_assistant": "增长助手",
+        "ai_copilot": "AI 副驾驶",
+        "help_agent": "帮助助手",
+        "company_brief": "公司简报",
+        "inbox_ai": "回复助手",
+        "template_ai": "模板生成器",
+        "campaign_ai": "活动文案撰写",
+        "campaign_ai_image": "活动图片",
+        "kb_embedding": "知识库",
+        "flow_ai": "流程生成器",
+        "widget_ai": "网站聊天机器人",
+        "growth": "增长",
+        "telephony": "电话通话",
+        "translation": "翻译",
+        "widget": "网站聊天机器人"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "服务"
             },
             "problems": "已跳过的行"
+          }
+        },
+        "usage": {
+          "title": "其他使用价格",
+          "subtitle": "短信、电子邮件、通话、联系人查询和其他聊天渠道向您的客户收取的每单位费用。价格为 0 或开关关闭时，仍会记录在支出日志中，但不收费。",
+          "perUnit": "每{unit}的价格",
+          "chargeFor": "对{kind}收费",
+          "units": {
+            "segment": "短信分段",
+            "email": "封电子邮件",
+            "minute": "分钟",
+            "lookup": "次查询",
+            "message": "条消息"
+          },
+          "hints": {
+            "sms": "在客户自己的短信服务商账单之外另行收取。一个分段为 160 个字符（非拉丁文字为 70 个）。",
+            "email": "在客户自己的邮箱之外另行收取。每发送一封电子邮件计一次。",
+            "whatsapp_call": "WhatsApp 通话中每个已开始的分钟。无人接听的通话免费。",
+            "voice_call": "客户的电话服务商报告的通话中每个已开始的分钟。手动录入的通话记录从不收费。",
+            "enrichment": "通过平台的数据服务商查询的每个联系人。",
+            "chat_message": "通过 Telegram、Facebook、Instagram、LINE、Viber 或 WeChat 发送的每条消息。在您设置价格之前免费。",
+            "webbot_message": "套餐每月免费消息用完后，网站聊天机器人处理的每条访客消息。"
+          },
+          "costPlus": {
+            "title": "按供应商成本加加价收费",
+            "body": "AI 请求和付费翻译使用平台自己的供应商密钥，按供应商收取的金额加下方的加价收费。使用自己密钥的工作区从不收费。"
+          },
+          "markup": "供应商成本的加价",
+          "markupHint": "10 表示成本为 1.00 的请求按 1.10 收费。",
+          "saving": "正在保存",
+          "save": "保存价格",
+          "saved": "使用价格已保存",
+          "problems": {
+            "invalid": "请输入最多 2 位小数的金额",
+            "tooHigh": "超出上限"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp 消息",
+      "sms": "短信",
+      "email": "电子邮件",
+      "whatsapp_call": "WhatsApp 通话",
+      "voice_call": "语音通话",
+      "ai": "AI",
+      "translation": "翻译",
+      "enrichment": "联系人查询",
+      "chat_message": "聊天消息",
+      "webbot_message": "网站聊天机器人消息"
     }
   }
 }

@@ -1,0 +1,52 @@
+{
+  "feature": "meeting-conferencing",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-meeting-conferencing-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/meeting-conferencing/components/meeting-conferencing-fields.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-meeting-conferencing-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/meeting-conferencing/components/meeting-video-status.tsx",
+        "apps/web/src/features/meeting-conferencing/components/operator-setup-panel.tsx",
+        "apps/web/src/features/meeting-conferencing/components/video-meetings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-meeting-conferencing-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/meeting-conferencing/components/video-meetings-screen.tsx",
+        "apps/web/src/features/meeting-conferencing/settings.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/meeting-conferencing/components/meeting-conferencing.render.test.tsx",
+          "match": "tells a role without the key so and shows no cards"
+        }
+      ]
+    }
+  ]
+}

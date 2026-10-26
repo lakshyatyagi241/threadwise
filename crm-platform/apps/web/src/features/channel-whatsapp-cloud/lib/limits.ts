@@ -107,10 +107,19 @@ export function acceptAttribute(allowed: readonly string[]): string {
   return parts.join(',');
 }
 
-/** The limits worth showing under the box: one entry per kind the channel takes, in megabytes. */
-export function limitHints(allowed: readonly string[]): { kind: AttachmentKind; mb: number }[] {
-  return ATTACHMENT_KINDS.filter((k) => allowed.includes(k)).map((kind) => ({
-    kind,
-    mb: WHATSAPP_MEDIA_LIMITS[kind].maxBytes / MB,
-  }));
+/**
+ * The limits worth showing: one entry per kind the channel takes, in megabytes, and the file extensions the picker takes for it
+ * (the same rule `acceptAttribute` reads, so the words on screen cannot drift from what the picker lets through).
+ */
+export function limitHints(
+  allowed: readonly string[],
+): { kind: AttachmentKind; mb: number; formats: string }[] {
+  return ATTACHMENT_KINDS.filter((k) => allowed.includes(k)).map((kind) => {
+    const rule = WHATSAPP_MEDIA_LIMITS[kind];
+    return {
+      kind,
+      mb: rule.maxBytes / MB,
+      formats: rule.extensions.map((e) => e.toUpperCase()).join(', '),
+    };
+  });
 }

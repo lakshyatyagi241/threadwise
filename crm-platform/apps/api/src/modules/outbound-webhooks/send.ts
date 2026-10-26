@@ -20,6 +20,10 @@ export interface SendOutcome {
 const TIMEOUT_MS = 10_000;
 const SNIPPET_BYTES = 1024;
 
+/** How one request leaves the process. Production is `guardedRequest`; the e2e harness swaps in a stub so a test never opens a socket. */
+export type WebhookTransport = typeof guardedRequest;
+export const WEBHOOK_TRANSPORT = Symbol('WEBHOOK_TRANSPORT');
+
 /**
  * One signed POST of an envelope to a customer's endpoint. The address is checked again here (a name can be repointed at an internal
  * host after it was saved), the address is checked again inside the socket's own DNS lookup (`guardedRequest`, so a name repointed
@@ -30,6 +34,7 @@ export async function send(
   url: string,
   secret: string | null,
   envelope: WebhookEnvelope,
+  transport: WebhookTransport = guardedRequest,
 ): Promise<SendOutcome> {
   const started = Date.now();
   const elapsed = () => Date.now() - started;
@@ -65,7 +70,7 @@ export async function send(
     // The address is checked inside the socket's own DNS lookup, so the address that was checked is the address that is connected to:
     // a name repointed at an internal host between the check above and this call cannot be reached (DNS rebinding), and redirects are
     // never followed.
-    const res = await guardedRequest({
+    const res = await transport({
       method: 'POST',
       url: new URL(url),
       headers,

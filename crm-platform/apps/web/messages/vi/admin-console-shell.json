@@ -24,7 +24,7 @@
         "noWorkspaces": "Không có không gian làm việc"
       },
       "labels": {
-        "addonPacks": "Gói tiện ích bổ sung",
+        "addonPacks": "Tiện ích bổ sung",
         "extensions": "Tiện ích mở rộng",
         "trackingCode": "Mã theo dõi",
         "planPricingSettings": "Cài đặt giá gói",
@@ -282,7 +282,9 @@
           "save": "Lưu",
           "saved": "Đã lưu tùy chọn.",
           "saveFailed": "Không thể lưu tùy chọn."
-        }
+        },
+        "timezoneSearch": "Tìm múi giờ",
+        "timezoneNoMatch": "Không có múi giờ nào khớp."
       },
       "notifications": {
         "title": "Thông báo không gian làm việc",

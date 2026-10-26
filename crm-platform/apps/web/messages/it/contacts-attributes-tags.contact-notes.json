@@ -120,7 +120,12 @@
         "keep": "Mantieni file",
         "deleted": "File rimosso",
         "deleteFailed": "Impossibile rimuovere il file. Riprova.",
-        "forbidden": "Non hai il permesso di rimuovere i file."
+        "forbidden": "Non hai il permesso di rimuovere i file.",
+        "upload": "Aggiungi file",
+        "uploading": "Caricamento del file",
+        "added": "File aggiunto",
+        "uploadFailed": "Impossibile aggiungere il file. Riprova.",
+        "uploadRejected": "Questo tipo di file non è consentito, oppure il file è troppo grande."
       }
     }
   }

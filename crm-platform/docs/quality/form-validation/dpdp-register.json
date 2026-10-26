@@ -1,0 +1,202 @@
+{
+  "module": "dpdp-register",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "dpdpAttestInputSchema",
+      "file": "apps/api/src/modules/dpdp-register/dpdp-register.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "result",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "result",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P1"
+        },
+        {
+          "field": "result",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (fail)",
+          "value": "\"fail\"",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (10)",
+          "value": "\"aaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "only spaces",
+          "value": "\"   \"",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (10)",
+          "value": "\"aaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (2000)",
+          "value": "\"a\" x 2000",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (2000)",
+          "value": "\"a\" x 2001",
+          "priority": "P1"
+        },
+        {
+          "field": "note",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (2000)",
+          "value": "\"😀\" x 2000",
+          "priority": "P2"
+        },
+        {
+          "field": "evidenceUrl",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "evidenceUrl",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P0"
+        },
+        {
+          "field": "evidenceUrl",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a url",
+          "value": "\"not a url\"",
+          "priority": "P0"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (1)",
+          "value": "1",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (1)",
+          "value": "0",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (365)",
+          "value": "365",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (365)",
+          "value": "366",
+          "priority": "P1"
+        },
+        {
+          "field": "expiresInDays",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P1"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "evidenceUrl",
+          "reason": "1 refine rule(s) on this field are not generated",
+          "priority": "P0"
+        },
+        {
+          "field": "evidenceUrl",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P0"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}

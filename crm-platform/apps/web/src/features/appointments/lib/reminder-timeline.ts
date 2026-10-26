@@ -196,3 +196,26 @@ export const WA_TONE: Record<WhatsappState, Tone> = {
   none: 'neutral',
   na: 'neutral',
 };
+
+/** The address typed for a test email: empty (= the signed-in user's own), a plausible address, or one that is not. */
+export function testAddressState(value: string): 'empty' | 'valid' | 'invalid' {
+  const v = value.trim();
+  if (!v) return 'empty';
+  return v.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? 'valid' : 'invalid';
+}
+
+/** Why a step cannot be test-sent yet, or `ok`. The test sends the SAVED step, so unsaved edits and new steps wait for a save. */
+export type TestEmailState = 'ok' | 'readOnly' | 'noEmail' | 'notSaved' | 'unsaved';
+
+export function testEmailState(input: {
+  canEdit: boolean;
+  /** The reminders have changes that are not saved yet. */
+  dirty: boolean;
+  rule: Pick<ReminderDraft, 'serverId' | 'channels'>;
+}): TestEmailState {
+  if (!input.canEdit) return 'readOnly';
+  if (!input.rule.channels.includes('email')) return 'noEmail';
+  if (!input.rule.serverId) return 'notSaved';
+  if (input.dirty) return 'unsaved';
+  return 'ok';
+}

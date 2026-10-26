@@ -4,7 +4,8 @@
       "ports": {
         "assigned": "assigned",
         "waitingInQueue": "waiting in queue",
-        "noAgentOutOfHours": "no agent / out of hours"
+        "noAgentOutOfHours": "no agent / out of hours",
+        "returnedToBot": "returned to the bot"
       }
     },
     "simpleModel": {
@@ -20,26 +21,27 @@
         "nodePreview": {
           "handoffTo": "Hand off to",
           "handoffRules": "Assignment rules",
-          "pickAgent": "— pick a person —"
+          "pickAgent": "— pick a person —",
+          "returnBack": "When the bot is back:"
         }
       },
       "handoff": {
         "legacy": "This step is the older “Assign agent”.",
-        "upgradeHint": "It gives the chat to a team and carries on. Switch to the Human handoff to add a reason, a priority, messages for the contact and three exits (assigned, waiting in queue, no agent or out of hours). Wiring you already made keeps working.",
+        "upgradeHint": "It gives the chat to a team and carries on. Switch to the Human handoff to add a reason, a priority, messages for the contact and the exits (assigned, waiting in queue, no agent or out of hours, and an optional one for when the chat is given back to the bot). Wiring you already made keeps working.",
         "upgrade": "Use handoff features",
         "destination": "Send the conversation to",
         "dest": {
           "team": "A team",
           "person": "One person",
           "rules": "The assignment rules",
-          "rulesLocked": "The assignment rules (not in your plan)"
+          "rulesLocked": "The assignment rules (Smart routing add-on)"
         },
         "destHint": {
           "team": "It goes to someone in the team, or waits in the team's queue.",
           "person": "It goes to this person if they can take it; otherwise it waits in the queue.",
           "rules": "Uses your Conversation auto-assignment rules; when none finds a person it waits in the queue."
         },
-        "lockHint": "Your plan does not include assignment rules, so a conversation sent here waits in the Waiting queue until a teammate claims it.",
+        "lockHint": "Assignment rules are part of the Smart routing add-on or a higher plan, so a conversation sent here waits in the Waiting queue until a teammate claims it.",
         "team": "Team",
         "teamPick": "— pick a team —",
         "teamNone": "No teams yet",
@@ -76,7 +78,15 @@
         "exitAssigned": "assigned: a person has the conversation now",
         "exitWaiting": "waiting in queue: it waits for someone to claim it",
         "exitUnavailable": "no agent / out of hours: nobody could take it",
-        "simpleExits": "The next step runs once a person has the conversation. If it has to wait in the queue, or nobody is available, the bot stops here and a person answers. Use the Advanced builder to follow the other exits."
+        "simpleExits": "The next step runs once a person has the conversation. If it has to wait in the queue, or nobody is available, the bot stops here and a person answers. Use the Advanced builder to follow the other exits.",
+        "returnMessage": "Message to the contact when the bot is back",
+        "returnMessageHint": "Optional. Sent once, as your business, when a teammate presses Return to bot, before the flow carries on from the 'returned' exit. It is not sent if the 24 hour window is closed or the contact has not given consent. Variables like '{{'name'}}' work.",
+        "returnNeedsExit": "This message is only sent when the flow carries on after Return to bot. Connect the 'returned' exit to the step that should come next.",
+        "exitReturned": "returned to the bot (optional): a teammate pressed Return to bot; the flow carries on from here",
+        "returnedStep": "When a teammate gives the chat back, continue at",
+        "returnedStepHint": "Optional. Pick the step the flow carries on with when someone presses Return to bot. Leave it empty and the bot waits for the contact's next message.",
+        "returnNone": "No step: wait for the contact's next message",
+        "returnStepOption": "{stage} · {label}"
       }
     }
   }

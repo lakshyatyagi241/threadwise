@@ -1,6 +1,6 @@
 'use client';
 
-import { wizardSenderPicks, type WizardDraft } from '@crm/contracts';
+import { wizardRetryEndRange, wizardSenderPicks, type WizardDraft } from '@crm/contracts';
 import type { WizardAction } from '../lib/state';
 import type { StepIssue } from '../lib/issues';
 import { useBuilder } from '../../api/campaigns';
@@ -68,6 +68,7 @@ export function StepSend({
       />
       <RetriesCard
         retries={draft.retries}
+        range={wizardRetryEndRange(draft, new Date())}
         issues={issues}
         disabled={disabled}
         onRetries={(retries) => dispatch({ type: 'retries', retries })}

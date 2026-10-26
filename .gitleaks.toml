@@ -7,7 +7,7 @@ title = "WaDesk port secret scanning"
 useDefault = true
 
 [allowlist]
-description = "Fake values: test fixtures, placeholders in docs, the documented development key, and the licensed reference copy."
+description = "Fake values: test fixtures, placeholders in docs, and the documented development key."
 paths = [
   # Specs and fixtures hold made-up keys and tokens to test masking, vaults, signatures and parsers.
   '''^crm-platform/apps/api/test/''',
@@ -19,9 +19,6 @@ paths = [
   # Examples in documentation: truncated tokens and sample curl commands.
   '''^docs/api-testing\.md$''',
   '''^crm-platform/docs/api/''',
-  # The licensed WaDesk reference copy: third-party code and docs with example keys, not our credentials.
-  '''^wadesk-reference/''',
-  '''^reference/''',
 ]
 regexes = [
   # The development placeholder for CREDENTIALS_ENCRYPTION_KEY (base64 of "dev-only-32-byte-key-do-not-use!"). The API refuses to

@@ -9,6 +9,8 @@ import {
   hasReplyOptions,
   laneOf,
   offsetParts,
+  testAddressState,
+  testEmailState,
   timedSteps,
   whatsappState,
   STEP_CHOICES,
@@ -160,5 +162,35 @@ describe('options and the WhatsApp state', () => {
     );
     expect(fallbackNote({ ...base, waTemplateStatus: 'approved' })).toBe('ok');
     expect(fallbackNote({ ...base, channels: ['email'] })).toBe('ok');
+  });
+});
+
+describe('the email test of a step', () => {
+  const saved = { serverId: 'r1', channels: ['whatsapp', 'email'] as ('whatsapp' | 'email')[] };
+  it('goes for a saved step with email, when nothing is waiting to be saved', () => {
+    expect(testEmailState({ canEdit: true, dirty: false, rule: saved })).toBe('ok');
+  });
+  it('waits for a save, and says why', () => {
+    expect(testEmailState({ canEdit: true, dirty: true, rule: saved })).toBe('unsaved');
+    expect(
+      testEmailState({ canEdit: true, dirty: false, rule: { ...saved, serverId: undefined } }),
+    ).toBe('notSaved');
+  });
+  it('is for email only, and for people who may edit', () => {
+    expect(
+      testEmailState({ canEdit: true, dirty: false, rule: { ...saved, channels: ['whatsapp'] } }),
+    ).toBe('noEmail');
+    expect(testEmailState({ canEdit: false, dirty: false, rule: saved })).toBe('readOnly');
+  });
+});
+
+describe('the address typed for a test email', () => {
+  it('is empty (own address), valid or invalid', () => {
+    expect(testAddressState('')).toBe('empty');
+    expect(testAddressState('   ')).toBe('empty');
+    expect(testAddressState('ana@example.com')).toBe('valid');
+    expect(testAddressState(' ana@example.com ')).toBe('valid');
+    expect(testAddressState('ana@example')).toBe('invalid');
+    expect(testAddressState('ana example.com')).toBe('invalid');
   });
 });

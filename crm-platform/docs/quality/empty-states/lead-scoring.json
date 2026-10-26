@@ -1,0 +1,115 @@
+{
+  "feature": "lead-scoring",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-lead-scoring-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/runs-log.tsx",
+        "apps/web/src/features/lead-scoring/components/score-card.tsx",
+        "apps/web/src/features/lead-scoring/components/suggestions-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/score-card.test.tsx",
+          "match": "says when there is nothing yet"
+        },
+        {
+          "file": "apps/web/src/features/lead-scoring/lib/settings-model.test.ts",
+          "match": "sends no rowVersion on the first save (no row yet)"
+        },
+        {
+          "file": "apps/web/src/features/lead-scoring/platform/lead-scoring-page.test.tsx",
+          "match": "shows empty states for the runs log, plain and filtered"
+        }
+      ]
+    },
+    {
+      "id": "EM-lead-scoring-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/platform/runs-card.tsx",
+        "apps/web/src/features/lead-scoring/platform/workspaces-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-lead-scoring-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/insight-card.tsx",
+        "apps/web/src/features/lead-scoring/components/parts.tsx",
+        "apps/web/src/features/lead-scoring/components/runs-log.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/score-card.test.tsx",
+          "match": "shows a spinner state and blocks a second click while scoring"
+        }
+      ]
+    },
+    {
+      "id": "EM-lead-scoring-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/parts.tsx",
+        "apps/web/src/features/lead-scoring/components/runs-table.tsx",
+        "apps/web/src/features/lead-scoring/components/settings-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/settings-screen.test.tsx",
+          "match": "shows no access without lsc.runs.read"
+        }
+      ]
+    },
+    {
+      "id": "EM-lead-scoring-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/lib/cost.ts",
+        "apps/web/src/features/lead-scoring/platform/logic.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/runs-log.test.tsx",
+          "match": "never prints a non-zero cost as $0.00, and marks an estimate"
+        },
+        {
+          "file": "apps/web/src/features/lead-scoring/components/score-card.test.tsx",
+          "match": "says what the last run cost, never rounding a small cost to zero"
+        },
+        {
+          "file": "apps/web/src/features/lead-scoring/components/settings-screen.test.tsx",
+          "match": "shows scores, tokens, total, average and who pays, without rounding to zero"
+        }
+      ]
+    }
+  ]
+}

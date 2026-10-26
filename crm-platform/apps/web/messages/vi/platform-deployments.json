@@ -91,6 +91,7 @@
       "empty": "Chưa có bản phát hành nào được ghi lại. Các bản sẽ hiện ở đây từ lần triển khai tiếp theo.",
       "cols": {
         "tag": "Thẻ",
+        "changes": "Thay đổi",
         "state": "Trạng thái",
         "step": "Bước",
         "started": "Bắt đầu",
@@ -104,7 +105,8 @@
         "ok": "Đang chạy",
         "failed": "Lỗi",
         "rolled_back": "Đã hoàn lại"
-      }
+      },
+      "by": "bởi {author}"
     }
   }
 }

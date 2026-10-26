@@ -6,6 +6,7 @@ import { RolesPermissionsModule } from '../roles-permissions';
 import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
+import { AgentStatusService } from './agent-status.service';
 import { InvitationsController } from './invitations.controller';
 import { InvitationsService } from './invitations.service';
 import { MemberHandoverController } from './member-handover.controller';
@@ -59,6 +60,7 @@ import { TeamsService } from './teams.service';
   providers: [
     MembersRepository,
     MembersService,
+    AgentStatusService,
     MemberHandoverService,
     LeaveRepository,
     LeaveService,
@@ -73,6 +75,12 @@ import { TeamsService } from './teams.service';
     LifecycleRepository,
     LifecycleService,
   ],
-  exports: [MembersService, TeamsService, TeamsPlanService, PlatformWorkspacesService, LifecycleService],
+  exports: [
+    MembersService,
+    TeamsService,
+    TeamsPlanService,
+    PlatformWorkspacesService,
+    LifecycleService,
+  ],
 })
 export class WorkspacesTeamsTenancyModule {}

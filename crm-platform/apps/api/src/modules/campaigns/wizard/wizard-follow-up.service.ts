@@ -116,9 +116,9 @@ export class WizardFollowUpService {
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
+    // Quiet hours (BL-177). Required, not optional: a follow-up built without it would send marketing inside the hours without a sign.
+    private readonly sendWindow: SendWindowService,
     @Optional() private readonly consentGate?: ConsentGate,
-    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
-    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   /** One full pass. Returns what it did, for the log and the tests. */
@@ -407,7 +407,7 @@ export class WizardFollowUpService {
     c: Claimed,
     templateId: number,
   ): Promise<{ until: string; reason: string } | null> {
-    if (!this.sendWindow || c.contactId === null) return null;
+    if (c.contactId === null) return null;
     const { orgId } = c;
     const category = await this.db.txAs({ orgId }, async (tx) => {
       const res = await tx.execute(sql`

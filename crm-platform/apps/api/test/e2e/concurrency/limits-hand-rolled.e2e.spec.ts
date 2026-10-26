@@ -51,7 +51,7 @@ describe('CC-LIM-19 tags made on the way', () => {
         } as never),
       ),
     );
-    expect(res.every((r) => r.outcome === 'created' || r.outcome === 'existing')).toBe(true);
+    expect(res.every((r) => r.outcome === 'created' || r.outcome === 'found')).toBe(true);
     expect(
       await count(`SELECT count(*)::int AS n FROM tags WHERE org_id = $1`, [t.orgId]),
     ).toBeLessThanOrEqual(3);

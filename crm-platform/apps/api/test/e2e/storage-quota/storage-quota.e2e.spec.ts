@@ -12,6 +12,7 @@ import { Api, type Tenant } from '../contacts-attributes-tags/support';
 import { ChatMediaStore } from '../../../src/infra/providers/chat-conversations/media';
 import { StorageQuotaPublisher } from '../../../src/modules/storage-quota/storage-quota.publisher';
 import { StorageQuotaScheduler } from '../../../src/modules/storage-quota/storage-quota.scheduler';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Storage quota, observe mode, through HTTP on the real application (the whole module graph, so a binding of `STORAGE_METER` that does
@@ -24,10 +25,7 @@ let operatorToken = '';
 const http = () => request(h.app.getHttpServer());
 const bearer = (t: string) => ({ authorization: `Bearer ${t}` });
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.alloc(2048, 1),
-]);
+const PNG = pngOfSize(8 + 2048);
 
 beforeAll(async () => {
   h = await startHarness({
@@ -181,10 +179,7 @@ describe('the operator storage view', () => {
 
 describe('the worker side: a real file on disk, the real queue', () => {
   let t: Tenant;
-  const png = Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(5000, 7),
-  ]);
+  const png = pngOfSize(8 + 5000);
   const until = async <T>(read: () => Promise<T | undefined>, ms = 60_000): Promise<T> => {
     const end = Date.now() + ms;
     for (;;) {

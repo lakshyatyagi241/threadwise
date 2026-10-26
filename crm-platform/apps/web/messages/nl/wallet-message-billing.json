@@ -40,7 +40,7 @@
       "topup": "Opwaardering",
       "earn": "Verdiend",
       "refund": "Terugbetaling",
-      "spend": "Berichtkosten",
+      "spend": "Gebruikskosten",
       "admin_adjust": "Correctie"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Het volledige overzicht openen",
         "emptyTitle": "Nog geen activiteit",
         "emptyBody": "Opwaarderingen, berichtkosten en terugbetalingen verschijnen hier."
-      }
+      },
+      "messageExpenses": "Berichtkosten"
     },
     "activity": {
       "description": "Omschrijving",
@@ -145,7 +146,7 @@
         "all": "Alle",
         "topup": "Opwaarderingen",
         "earn": "Verdiensten",
-        "spend": "Berichtkosten",
+        "spend": "Gebruikskosten",
         "refund": "Terugbetalingen",
         "admin_adjust": "Correcties"
       },
@@ -164,12 +165,16 @@
         "in": "Binnenkomend",
         "out": "Uitgaand",
         "balance": "Saldo",
-        "none": "Geen"
+        "none": "Geen",
+        "channel": "Kanaal",
+        "recipient": "Ontvanger",
+        "template": "Sjabloon",
+        "country": "Land",
+        "category": "Categorie",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Reden",
-        "to": "Aan",
-        "template": "Sjabloon"
+        "reason": "Reden"
       },
       "channels": {
         "campaign": "Campagne",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Uitgaven",
+      "subtitle": "Wat elk bericht, gesprek, AI-verzoek en elke opzoeking heeft gekost en waarvoor het was. De totalen omvatten alles wat bij de filters past.",
+      "back": "Terug naar portemonnee",
+      "breadcrumbLabel": "Kruimelpad",
+      "breadcrumbWallet": "Portemonnee",
+      "breadcrumbExpenses": "Uitgaven",
+      "fullStatement": "Volledig overzicht",
+      "summary": {
+        "messages": "Items",
+        "charged": "Gefactureerd",
+        "refunded": "Terugbetaald",
+        "net": "Nettokosten",
+        "notBilled": "Niet gefactureerd"
+      },
+      "filters": {
+        "status": "Facturatiestatus",
+        "statusAll": "Alle",
+        "statusCharged": "Gefactureerd",
+        "statusFree": "Niet gefactureerd",
+        "statusRefunded": "Terugbetaald",
+        "template": "Sjabloon",
+        "templatePlaceholder": "Naam van sjabloon",
+        "channel": "Kanaal",
+        "category": "Categorie",
+        "allChannels": "Alle kanalen",
+        "allCategories": "Alle categorieën",
+        "from": "Van",
+        "to": "Tot",
+        "apply": "Toepassen",
+        "reset": "Resetten",
+        "rangeInverted": "De einddatum ligt voor de begindatum.",
+        "kind": "Type",
+        "allKinds": "Alle typen"
+      },
+      "breakdown": {
+        "title": "Kosten per",
+        "groupBy": {
+          "template": "Sjabloon",
+          "source": "Kanaal",
+          "category": "Categorie",
+          "country": "Land",
+          "kind": "Type"
+        },
+        "group": "Groep",
+        "notRecorded": "Niet geregistreerd",
+        "truncated": "De {count} grootste groepen worden getoond. Beperk de datums om de rest te zien.",
+        "empty": "Niets komt overeen met deze filters."
+      },
+      "columns": {
+        "date": "Datum",
+        "template": "Sjabloon",
+        "campaign": "Campagne, broadcast of functie",
+        "channel": "Kanaal",
+        "category": "Categorie",
+        "country": "Land",
+        "status": "Facturatiestatus",
+        "charged": "Gefactureerd",
+        "refunded": "Terugbetaald",
+        "net": "Netto",
+        "messages": "Items",
+        "notBilled": "Niet gefactureerd",
+        "type": "Type"
+      },
+      "status": {
+        "charged": "Gefactureerd",
+        "free": "Niet gefactureerd",
+        "refunded": "Terugbetaald",
+        "refundedOn": "Teruggestort op {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Inbegrepen in je abonnement",
+        "wallet_empty": "De portemonnee was leeg",
+        "rate_is_zero": "Het tarief is nul",
+        "no_wallet_owner": "Geen eigenaar van de portemonnee"
+      },
+      "uncollected": "{amount} niet geïncasseerd",
+      "emptyTitle": "Nog geen uitgaven",
+      "emptyBody": "Berichten, gesprekken, AI-verzoeken en ander gebruik verschijnen hier met waarvoor ze waren en wat ze kostten.",
+      "emptyFiltered": "Niets komt overeen met deze filters. Wijzig of reset ze.",
+      "days": {
+        "title": "Dagelijks logboek",
+        "subtitle": "Berichten gegroepeerd per dag, type, status, kanaal en categorie. Open een dag om elk bericht te zien.",
+        "messagesOnDay": "{count} berichten",
+        "viewDetails": "Details bekijken",
+        "actions": "Acties",
+        "empty": "Er zijn op deze dagen geen berichten."
+      },
+      "log": {
+        "title": "Berichten",
+        "forDay": "Berichten van {date}",
+        "showAllDays": "Alle dagen tonen"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segment} other {# segmenten}}",
+        "whatsapp_call": "{count, plural, one {# minuut} other {# minuten}}",
+        "voice_call": "{count, plural, one {# minuut} other {# minuten}}"
+      },
+      "sources": {
+        "lead_first": "Directe leadreactie",
+        "lead": "Directe leadreactie",
+        "test": "Testverzending",
+        "appointment": "Afspraakherinnering",
+        "lead_scoring": "Leadscore",
+        "lead_digest": "Chatsamenvatting",
+        "pql_search": "Contacten zoeken",
+        "growth_assistant": "Groeiassistent",
+        "ai_copilot": "AI-copilot",
+        "help_agent": "Hulpassistent",
+        "company_brief": "Bedrijfsprofiel",
+        "inbox_ai": "Antwoordassistent",
+        "template_ai": "Sjabloonbouwer",
+        "campaign_ai": "Campagneschrijver",
+        "campaign_ai_image": "Campagneafbeelding",
+        "kb_embedding": "Kennisbank",
+        "flow_ai": "Flowgenerator",
+        "widget_ai": "Chatbot op de website",
+        "growth": "Groei",
+        "telephony": "Telefoongesprekken",
+        "translation": "Vertaling",
+        "widget": "Websitechatbot"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "Service"
             },
             "problems": "Overgeslagen rijen"
+          }
+        },
+        "usage": {
+          "title": "Prijzen voor ander gebruik",
+          "subtitle": "Wat sms'jes, e-mails, gesprekken, contactopzoekingen en andere chatkanalen uw klanten per eenheid kosten. Een prijs van 0 of een uitgeschakelde schakelaar wordt toch in het uitgavenlogboek bijgehouden, zonder iets te rekenen.",
+          "perUnit": "Prijs per {unit}",
+          "chargeFor": "{kind} in rekening brengen",
+          "units": {
+            "segment": "sms-segment",
+            "email": "e-mail",
+            "minute": "minuut",
+            "lookup": "opzoeking",
+            "message": "bericht"
+          },
+          "hints": {
+            "sms": "Wordt bovenop de rekening van de eigen sms-provider van de klant gerekend. Een segment is 160 tekens (70 bij niet-Latijnse tekst).",
+            "email": "Wordt bovenop de eigen mailbox van de klant gerekend. Elke verzonden e-mail telt één keer.",
+            "whatsapp_call": "Elke gestarte minuut van een WhatsApp-gesprek. Een gesprek dat niemand opnam is gratis.",
+            "voice_call": "Elke gestarte minuut van een gesprek dat de telefonieprovider van de klant meldt. Handmatig ingevoerde gesprekslogs worden nooit gerekend.",
+            "enrichment": "Elk contact dat bij de dataprovider van het platform wordt opgezocht.",
+            "chat_message": "Elk bericht via Telegram, Facebook, Instagram, LINE, Viber of WeChat. Gratis tot u een prijs instelt.",
+            "webbot_message": "Elk bezoekersbericht dat de websitechatbot afhandelt nadat de gratis maandberichten van het abonnement op zijn."
+          },
+          "costPlus": {
+            "title": "Berekend tegen de kosten van de leverancier plus een opslag",
+            "body": "AI-verzoeken en betaalde vertaling draaien op de eigen leverancierssleutels van het platform en worden berekend tegen wat de leverancier rekende, plus de opslag hieronder. Een werkruimte met een eigen sleutel wordt nooit belast."
+          },
+          "markup": "Opslag op de kosten van de leverancier",
+          "markupHint": "10 betekent dat een verzoek dat 1,00 kostte voor 1,10 wordt berekend.",
+          "saving": "Opslaan…",
+          "save": "Prijzen opslaan",
+          "saved": "Gebruiksprijzen opgeslagen",
+          "problems": {
+            "invalid": "Voer een bedrag in met maximaal 2 decimalen",
+            "tooHigh": "Dat is hoger dan de limiet"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp-bericht",
+      "sms": "sms",
+      "email": "E-mail",
+      "whatsapp_call": "WhatsApp-gesprek",
+      "voice_call": "Spraakgesprek",
+      "ai": "AI",
+      "translation": "Vertaling",
+      "enrichment": "Contactopzoeking",
+      "chat_message": "Chatbericht",
+      "webbot_message": "Websitechatbot-bericht"
     }
   }
 }

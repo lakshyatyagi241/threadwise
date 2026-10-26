@@ -1,0 +1,145 @@
+{
+  "feature": "campaigns",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-campaigns-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/builder/ai-modal.tsx",
+        "apps/web/src/features/campaigns/components/builder/cost-panel.tsx",
+        "apps/web/src/features/campaigns/components/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-review-send.test.tsx",
+          "match": "has loading and error states (the error does not block, it says the check repeats at launch)"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/steps-template-audience.test.tsx",
+          "match": "has loading and error states"
+        }
+      ]
+    },
+    {
+      "id": "ES-campaigns-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/builder-screen.tsx",
+        "apps/web/src/features/campaigns/components/campaigns-screen.tsx",
+        "apps/web/src/features/campaigns/components/create-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/components/create-screen.test.tsx",
+          "match": "shows no access without the create permission"
+        }
+      ]
+    },
+    {
+      "id": "ES-campaigns-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/detail-screen.tsx",
+        "apps/web/src/features/campaigns/earlier/components/detail-screen.tsx",
+        "apps/web/src/features/campaigns/wizard/components/broadcast-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-campaigns-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/api/campaigns.ts",
+        "apps/web/src/features/campaigns/components/builder/ai-modal.tsx",
+        "apps/web/src/features/campaigns/components/builder/cost-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/components/states.test.tsx",
+          "match": "keeps the values and shows the error when the generate request fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-campaigns-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/wizard/lib/launch-errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/wizard/components/follow-ups-card.dom.test.tsx",
+          "match": "shows the field error of its own step"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/lib/launch-errors.test.ts",
+          "match": "422 WALLET_EMPTY goes to the credit check"
+        }
+      ]
+    },
+    {
+      "id": "ES-campaigns-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/guided-campaign.tsx",
+        "apps/web/src/features/campaigns/wizard/components/save-indicator.tsx",
+        "apps/web/src/features/campaigns/wizard/components/use-wizard.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/campaigns/wizard/lib/autosave.test.ts",
+          "match": "a 409 stops saving and is never retried"
+        },
+        {
+          "file": "apps/web/src/features/campaigns/wizard/lib/launch-errors.test.ts",
+          "match": "409 is a conflict, and an already launched draft is said so"
+        }
+      ]
+    },
+    {
+      "id": "ES-campaigns-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/campaigns/components/campaigns-screen.tsx",
+        "apps/web/src/features/campaigns/components/director-summary.tsx",
+        "apps/web/src/features/campaigns/components/recipients-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

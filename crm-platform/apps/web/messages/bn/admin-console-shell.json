@@ -24,7 +24,7 @@
         "noWorkspaces": "কোনো ওয়ার্কস্পেস নেই"
       },
       "labels": {
-        "addonPacks": "অ্যাড-অন প্যাক",
+        "addonPacks": "অ্যাড-অন",
         "extensions": "এক্সটেনশন",
         "trackingCode": "ট্র্যাকিং কোড",
         "planPricingSettings": "প্ল্যান মূল্য নির্ধারণের সেটিংস",
@@ -282,7 +282,9 @@
           "save": "সংরক্ষণ করুন",
           "saved": "পছন্দ সংরক্ষিত হয়েছে।",
           "saveFailed": "পছন্দ সংরক্ষণ করা যায়নি।"
-        }
+        },
+        "timezoneSearch": "সময় অঞ্চল খুঁজুন",
+        "timezoneNoMatch": "কোনো মিলে যাওয়া সময় অঞ্চল নেই।"
       },
       "notifications": {
         "title": "ওয়ার্কস্পেস নোটিফিকেশন",

@@ -19,10 +19,26 @@ let api: Api;
 let a: Tenant;
 let b: Tenant;
 
+/** The fields of GET /v2/auth/session these specs read. The persona view is typed as present; the spec that expects it absent asserts that. */
+interface SessionView {
+  permissions: unknown;
+  org: {
+    persona: {
+      key: string;
+      version: number;
+      rev: number;
+      solo: boolean;
+      showAll: boolean;
+      defaultVisibility: string;
+      modules: Record<string, { visible: boolean; locked: boolean }>;
+    };
+  };
+}
+
 const session = async (t: Tenant) => {
   const res = await api.http().get('/v2/auth/session').set(bearer(t.admin));
   expect(res.status, JSON.stringify(res.body)).toBe(200);
-  return res.body as Record<string, any>;
+  return res.body as SessionView;
 };
 
 /** The operator columns can only be written on the privileged path (a trigger); the owner connection must say so too. */
@@ -99,7 +115,7 @@ describe('the persona view on the session', () => {
       ],
     );
     const after = await session(a);
-    const strip = (s: Record<string, any>) => ({ ...s, org: { ...s.org, persona: undefined } });
+    const strip = (s: SessionView) => ({ ...s, org: { ...s.org, persona: undefined } });
     expect(strip(after)).toEqual(strip(before));
     expect(after.permissions).toEqual(before.permissions);
     // ... while the view itself did change

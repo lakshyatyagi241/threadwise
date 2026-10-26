@@ -5,6 +5,12 @@
  * CHANNEL_DISCONNECTED keep their existing names.
  */
 export const INBOX_ERROR_CODES = {
+  /**
+   * Claiming would put the person over their own chat limit (`user_profiles.chat_limit`). 422 with `errors[]` `open` and `limit`; sending the
+   * claim again with `acknowledgeLimit: true` takes the chat anyway. The limit is a warning for a person who claims, a hard filter only for
+   * automatic assignment.
+   */
+  INBOX_CLAIM_OVER_LIMIT: 'INBOX_CLAIM_OVER_LIMIT',
   /** No such SLA policy in this workspace. */
   SLA_POLICY_NOT_FOUND: 'SLA_POLICY_NOT_FOUND',
   /** No such tag in this workspace (a tag of another workspace is the same answer). The code keeps its original name `INBOX_LABEL_*` so clients that branch on it keep working. */

@@ -108,6 +108,45 @@ describe('GET /v2/analytics/panels', () => {
     expect(p.templates.some((x) => x.name === 'tpl10')).toBe(false); // older than the latest 8
   });
 
+  it('TW-DASH-028: an older template with the most window sends leads the list', async () => {
+    const u = await api.signup('dtop');
+    await q(`UPDATE org_plan_state SET overrides = $2::jsonb WHERE org_id = $1`, [
+      u.orgId,
+      JSON.stringify({ features: { analytics: true } }),
+    ]);
+    for (let i = 1; i <= 9; i++) {
+      await q(
+        `INSERT INTO wa_templates (org_id, template_name, template_body, category, language, status, updated_at)
+         VALUES ($1, $2, 'b', 'marketing', 'en', 'approved', now() - ($3 || ' hours')::interval)`,
+        [u.orgId, `fresh${i}`, String(i)],
+      );
+    }
+    const busy = await q(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, category, language, status, updated_at)
+       VALUES ($1, 'busy', 'b', 'marketing', 'en', 'approved', now() - interval '90 days') RETURNING id`,
+      [u.orgId],
+    );
+    const ch = await q(
+      `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
+      [u.orgId],
+    );
+    const conv = await q(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, 'top-peer', 'top') RETURNING id`,
+      [u.orgId, ch.rows[0].id],
+    );
+    await q(
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, kind, template_id, created_at)
+       SELECT $1, $2, g, 'out', 'agent', 'sent', 'template', $3, now() - interval '1 day'
+       FROM generate_series(1, 3) g`,
+      [u.orgId, conv.rows[0].id, busy.rows[0].id],
+    );
+    const res = await api.as(u.admin).get('/v2/analytics/panels?range=30d');
+    const p = analyticsPanelsSchema.parse(res.body);
+    expect(p.templates).toHaveLength(8);
+    expect(p.templates[0]).toMatchObject({ name: 'busy', sends: 3 });
+    expect(p.templates.some((x) => x.name === 'fresh9')).toBe(false);
+  });
+
   it('TW-DASH-028: top conversations by message count in the window', async () => {
     const p = analyticsPanelsSchema.parse((await get(t.admin)).body);
     expect(p.contacts.map((c) => [c.title, c.messages])).toEqual([

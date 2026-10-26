@@ -39,13 +39,12 @@ const timeline = async (email: string, token = t.admin) => {
   const res = await as(token).get(`/v2/contacts/${await contactUuid(email)}/activities`);
   return res;
 };
+/** A mail entry on the Activity Timeline as these specs read it: its type, and when it happened. */
+type MailEntry = Record<string, unknown> & { activityType: string; occurredAt: string };
 const mailEntries = async (email: string) => {
   const res = await timeline(email);
   expect(res.status, JSON.stringify(res.body)).toBe(200);
-  return (res.body.data as Array<Record<string, any>>).filter((a) =>
-    // eslint-disable-line @typescript-eslint/no-explicit-any
-    String(a.activityType).startsWith('email_'),
-  );
+  return (res.body.data as MailEntry[]).filter((a) => String(a.activityType).startsWith('email_'));
 };
 const ledgerCount = async () =>
   Number(

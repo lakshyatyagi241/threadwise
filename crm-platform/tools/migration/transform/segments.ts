@@ -1,7 +1,8 @@
 import { isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
+import { propertyKeyOf } from './contacts';
 import { TYPE_MAP } from './fields';
-import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
+import type { Ctx, HandlerSpec, Outcome, Soft, TargetRef } from './types';
 
 /**
  * segments -> segments, contact_saved_views (custom ones) -> contact_views.
@@ -132,16 +133,36 @@ function condition(field: string, kind: Kind, wop: string, value: unknown): Node
   }
 }
 
-/** The kind of a Waboo rule field and the WaDesk name it gets (custom.<key> for a property the target has). */
+/** The kind of a Waboo rule field and the WaDesk name it gets (custom.<key> for a property the target has; a reserved key is prefixed). */
 function fieldOf(name: string, ctx: Ctx): { field: string; kind: Kind } {
   const b = BUILTIN[name];
   if (b) return b;
   const def = ctx.idx.fieldsByName.get(name);
   if (!def || !ctx.idx.declaredKeys.has(name)) throw new Unsupported(`field "${name}" is not a property of this workspace`);
-  if (!CUSTOM_KEY.test(name)) throw new Unsupported(`field "${name}" cannot be a WaDesk custom property key`);
+  const key = propertyKeyOf(name);
+  if (!CUSTOM_KEY.test(key)) throw new Unsupported(`field "${name}" cannot be a WaDesk custom property key`);
   const kind = KIND_OF_TYPE[TYPE_MAP[String(def.type ?? '').toLowerCase()] ?? 'text'];
   if (!kind) throw new Unsupported(`field "${name}" has a type WaDesk cannot filter`);
-  return { field: `custom.${name}`, kind };
+  return { field: `custom.${key}`, kind };
+}
+
+/** The app keeps a contact view's name at 3 to 50 characters (packages/contracts crm/contact-view.ts). A longer name is cut, a shorter one gets " view". */
+export const VIEW_NAME_MIN = 3;
+export const VIEW_NAME_MAX = 50;
+export function fitViewName(raw: string): { name: string; soft: Soft[] } {
+  const t = raw.trim();
+  if (t.length > VIEW_NAME_MAX)
+    return {
+      // never cut between the two halves of a surrogate pair (an emoji), which would leave a broken character
+      name: t.slice(0, VIEW_NAME_MAX - (/[\uD800-\uDBFF]/.test(t[VIEW_NAME_MAX - 1] ?? '') ? 1 : 0)).trimEnd(),
+      soft: [{ code: 'VIEW_NAME_CUT', reason: `the view name is ${t.length} characters; WaDesk keeps ${VIEW_NAME_MIN} to ${VIEW_NAME_MAX}, so it is cut` }],
+    };
+  if (t.length < VIEW_NAME_MIN)
+    return {
+      name: `${t} view`.trim(),
+      soft: [{ code: 'VIEW_NAME_EXTENDED', reason: `the view name is shorter than ${VIEW_NAME_MIN} characters; " view" is added` }],
+    };
+  return { name: t, soft: [] };
 }
 
 export function convertTree(raw: unknown, ctx: Ctx): Node {
@@ -246,9 +267,23 @@ export const savedViews: HandlerSpec = {
   mapCollection: 'contact_saved_views',
   tables: {
     contact_views: {
-      columns: [c('name', 'text'), c('filter', 'jsonb'), c('position', 'integer'), c('is_shared', 'boolean'), c('created_by', 'bigint'), ...TS_COLS],
-      fp: ['name', 'filter', 'position', 'is_shared'],
+      columns: [
+        c('name', 'text'),
+        c('filter', 'jsonb'),
+        c('position', 'integer'),
+        c('is_shared', 'boolean'),
+        c('share_mode', 'text'),
+        c('access_type', 'text'),
+        c('created_by', 'bigint'),
+        ...TS_COLS,
+      ],
+      fp: ['name', 'filter', 'position', 'is_shared', 'share_mode', 'access_type'],
       constants: { row_version: 1 },
+    },
+    contact_view_users: {
+      keyless: { parent: 'contact_views', parentCol: 'view_id' },
+      columns: [c('view_id', 'bigint'), c('user_id', 'bigint')],
+      fp: ['user_id'],
     },
   },
   fields: {
@@ -261,8 +296,8 @@ export const savedViews: HandlerSpec = {
     contact_filter: 'drop:the key of a system view (my_contacts / all_contacts); null on a custom view',
     mongodb_query: 'drop:the machine copy of filter_query',
     position: 'col:position',
-    access_type: 'drop:can_view / can_edit: WaDesk shares a view read-only or keeps it private; edit rights are not carried',
-    shared_with: 'col:is_shared (everyone = shared, me = private to its creator)',
+    access_type: 'col:access_type (a view shared with everyone keeps can_view or can_edit; a private view is can_edit for its creator)',
+    shared_with: 'col:share_mode and is_shared (everyone = shared, me = private to its creator)',
     created_by: 'col:created_by (the migrated user, when the id resolves)',
     updated_by: 'drop:last editor; contact_views has no such column',
     created_time: 'col:created_at',
@@ -272,13 +307,13 @@ export const savedViews: HandlerSpec = {
     columns: 'drop:the columns a view shows: contact_views has no column for it (recorded in missing-in-wadesk-log.md)',
     is_favorite: 'drop:the favorite star of a view: contact_views has no such column (recorded in missing-in-wadesk-log.md)',
     user_list:
-      'drop:the users a view is shared with one by one: WaDesk shares a view with everyone or keeps it private (shared_with = everyone / me)',
+      'col:contact_view_users (for a view with shared_with me: the migrated people it lists besides its creator; they become a selected share)',
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
     if (isDeleted(doc)) return { kind: 'exclude', code: 'SOFT_DELETED', reason: 'is_deleted or deleted_time is set' };
     if ((str(doc.type) ?? '').toLowerCase() === 'system')
       return { kind: 'exclude', code: 'SYSTEM_VIEW', reason: 'a system view exists natively in WaDesk (My, Unassigned and All Contacts)' };
-    const name = str(doc.name);
+    const name = str(doc.name)?.trim();
     if (!name || name.length > 191) return { kind: 'quarantine', code: 'INVALID_NAME', reason: 'view name is empty or longer than 191 characters' };
     let filter: Record<string, unknown> = {};
     const fq = doc.filter_query as Doc | null | undefined;
@@ -296,16 +331,33 @@ export const savedViews: HandlerSpec = {
     }
     const t = times(doc, ctx.fallbackAt);
     const soft: Soft[] = [...t.soft];
+    const viewName = fitViewName(name);
+    soft.push(...viewName.soft);
     const owner = doc.created_by !== undefined && doc.created_by !== null ? ctx.ref('user', doc.created_by) : undefined;
     const sharedWith = (str(doc.shared_with) ?? '').toLowerCase();
-    let isShared = sharedWith !== 'me';
+    // Waboo's user_list holds the people a view is shared with, the creator included. A view kept to its creator (me) that lists another
+    // migrated person is shared with that person as a selected share. A view shared with everyone needs no list.
+    const creatorKey = doc.created_by === undefined || doc.created_by === null ? null : String(doc.created_by);
+    const people = new Map<number, TargetRef>();
+    if (sharedWith === 'me' && Array.isArray(doc.user_list))
+      for (const entry of doc.user_list) {
+        if (entry === null || entry === undefined || String(entry) === creatorKey) continue;
+        const ref = ctx.ref('user', entry);
+        if (ref) people.set(ref.id, ref);
+        else soft.push({ code: 'USER_LIST_UNRESOLVED', reason: 'a person listed on the view is not a migrated user: not shared with them' });
+      }
+    // As in Waboo: a view is shared with everyone, with the people it lists, or kept to its creator. Anything else stays private.
+    const shareMode: 'everyone' | 'me' | 'selected' =
+      sharedWith === 'everyone' ? 'everyone' : people.size > 0 ? 'selected' : 'me';
     if (sharedWith !== 'everyone' && sharedWith !== 'me')
-      soft.push({ code: 'SHARED_WITH_UNKNOWN', reason: 'shared_with is neither everyone nor me: the view is shared with everyone' });
-    if (!isShared && !owner) {
-      // a private view nobody owns would be invisible to everyone
-      isShared = true;
-      soft.push({ code: 'VIEW_OWNER_UNRESOLVED', reason: 'the private view has no migrated owner: it is shared so it stays visible' });
-    }
+      soft.push({ code: 'SHARED_WITH_UNKNOWN', reason: 'shared_with is neither everyone nor me: the view is kept private (creator only)' });
+    if (shareMode === 'me' && !owner)
+      soft.push({ code: 'VIEW_OWNER_UNRESOLVED', reason: 'the private view has no migrated owner: nobody can see it until an owner is set' });
+    // Waboo's access_type: can_edit lets the people a view is shared with change it, can_view only read it. The creator always keeps full rights, which WaDesk records as can_edit on a private view.
+    const waboAccess = (str(doc.access_type) ?? '').toLowerCase();
+    if (waboAccess !== '' && waboAccess !== 'can_view' && waboAccess !== 'can_edit')
+      soft.push({ code: 'ACCESS_TYPE_UNKNOWN', reason: 'access_type is neither can_view nor can_edit: the view is read-only for the people it is shared with' });
+    const accessType = shareMode === 'me' || waboAccess === 'can_edit' ? 'can_edit' : 'can_view';
     return {
       kind: 'rows',
       soft,
@@ -314,15 +366,23 @@ export const savedViews: HandlerSpec = {
           table: 'contact_views',
           sub: '',
           row: {
-            name,
+            name: viewName.name,
             filter,
             position: Math.max(0, Math.trunc(num(doc.position) ?? 0)),
-            is_shared: isShared,
+            // the service keeps share_mode and is_shared in step; without it the column default 'me' hides a shared view from everyone else
+            is_shared: shareMode !== 'me',
+            share_mode: shareMode,
+            access_type: accessType,
             created_by: owner?.id ?? null,
             created_at: t.created,
             updated_at: t.updated,
           },
         },
+        ...[...people.values()].map((ref) => ({
+          table: 'contact_view_users',
+          sub: `#person:${ref.id}`,
+          row: { user_id: ref.id },
+        })),
       ],
     };
   },

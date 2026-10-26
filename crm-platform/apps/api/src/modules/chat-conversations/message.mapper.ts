@@ -101,10 +101,27 @@ function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] 
   };
 }
 
+/** The cards of a carousel a flow sent (`meta.sentCarousel`, kept by `FlowSender`). */
+function sentCarouselOf(row: MessageRow): MessageResponse['sentCarousel'] {
+  const c = row.meta.sentCarousel as { cards?: unknown } | undefined;
+  if (row.direction !== 'out' || !c || !Array.isArray(c.cards)) return null;
+  return {
+    cards: (c.cards as Array<Record<string, unknown>>).map((card) => ({
+      title: str(card.title) ?? '',
+      text: str(card.text) ?? '',
+      image: str(card.image),
+      buttons: (Array.isArray(card.buttons)
+        ? (card.buttons as Array<Record<string, unknown>>)
+        : []
+      ).map((b) => ({ title: str(b.title) ?? '', url: str(b.url) })),
+    })),
+  };
+}
+
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
 /**
  * The system lines the web app words in the reader's language: the consent line the STOP / START listener wrote (`meta.event =
- * 'consent'`) and the stage change lines the growth pilot writes (`meta.event = 'stage_change'`).
+ * 'consent'`) and the stage change lines the growth pilot writes (`meta.event = 'stage_change'`) and the "bot is back" lines of Return to bot (`meta.event = 'bot_returned'`).
  */
 function systemEventOf(row: MessageRow): MessageResponse['systemEvent'] {
   if (row.kind !== 'system') return undefined;
@@ -122,6 +139,33 @@ function systemEventOf(row: MessageRow): MessageResponse['systemEvent'] {
       return undefined;
     }
     return { event: 'stage_change', action, suggestionId, fromStage, toStage };
+  }
+  if (row.meta.event === 'bot_returned') {
+    const stage = row.meta.botStage === 'result' ? 'result' : 'pressed';
+    const by = str(row.meta.botBy);
+    const pick = <T extends string>(v: unknown, allowed: readonly T[]): T | undefined =>
+      typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : undefined;
+    return {
+      event: 'bot_returned',
+      stage,
+      by,
+      resumed: pick(row.meta.botResumed, ['flow', 'next_message'] as const),
+      nextMessageBy: pick(row.meta.botNextBy, ['live_flow', 'default_flow'] as const) ?? null,
+      result: pick(row.meta.botResult, [
+        'continued',
+        'claimed_again',
+        'flow_not_live',
+        'start_failed',
+      ] as const),
+      customer:
+        pick(row.meta.botCustomer, [
+          'sent',
+          'window_closed',
+          'no_consent',
+          'failed',
+          'channel_unavailable',
+        ] as const) ?? null,
+    };
   }
   return undefined;
 }
@@ -323,6 +367,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     mentions: mentionsOf(row),
     groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
+    sentCarousel: sentCarouselOf(row),
     email: emailOf(row),
     unsupported:
       row.meta.unsupported === true &&

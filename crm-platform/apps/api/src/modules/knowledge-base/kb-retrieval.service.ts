@@ -25,6 +25,11 @@ export interface KbRetrieval {
    */
   grounded: boolean;
   passages: KbPassage[];
+  /**
+   * How many of the first `passages` the search matched to the message. The rest (text not indexed yet, added as written) is context
+   * for an agent, not a match: a reader that must decide "did anything answer?" (the flow FAQ step) reads this, not `passages.length`.
+   */
+  hits?: number;
 }
 
 /**
@@ -43,9 +48,18 @@ export class KbRetrievalService {
     private readonly chunks: KbChunkRepository,
   ) {}
 
-  async retrieve(orgId: number, assistantId: number, message: string): Promise<KbRetrieval> {
+  /**
+   * `usageId` names the customer message being answered (a flow step, an inbound message id): the embedding of its search is billed
+   * once under it, and not at all when the vector is already cached.
+   */
+  async retrieve(
+    orgId: number,
+    assistantId: number,
+    message: string,
+    usageId?: string,
+  ): Promise<KbRetrieval> {
     try {
-      const searched = await this.search(orgId, assistantId, message);
+      const searched = await this.search(orgId, assistantId, message, usageId);
       if (searched) return searched;
     } catch (err) {
       if (!(err instanceof KbUnavailableError)) {
@@ -71,6 +85,7 @@ export class KbRetrievalService {
     orgId: number,
     assistantId: number,
     message: string,
+    usageId?: string,
   ): Promise<KbRetrieval | null> {
     if (!isSearchable(message)) return null;
     const cfg = await this.config.get();
@@ -82,7 +97,7 @@ export class KbRetrievalService {
     );
     if (ready === 0) return null;
 
-    const q = await this.embeddings.embedQuery(orgId, queryText(message));
+    const q = await this.embeddings.embedQuery(orgId, queryText(message), usageId);
     const { near, unindexed } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
       near: await this.chunks.nearest(
         tx,
@@ -99,6 +114,7 @@ export class KbRetrievalService {
       label: p.label,
       text: p.text,
     }));
+    const hits = picked.length;
     // Text the vectors do not cover yet is read as written, up to a budget: a new entry works at once.
     let budget = UNINDEXED_BUDGET_CHARS;
     for (const u of unindexed) {
@@ -106,6 +122,6 @@ export class KbRetrievalService {
       picked.push({ label: u.label, text: u.text.slice(0, budget) });
       budget -= u.text.length;
     }
-    return { grounded: true, passages: picked };
+    return { grounded: true, passages: picked, hits };
   }
 }

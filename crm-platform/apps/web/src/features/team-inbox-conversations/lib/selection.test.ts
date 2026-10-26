@@ -9,6 +9,7 @@ import {
   selectRange,
   snoozeUntil,
   summarize,
+  toggleAllInView,
   toggleId,
 } from './selection';
 
@@ -38,6 +39,13 @@ describe('selection', () => {
     expect(allInViewSelected(rows, all)).toBe(true);
     expect(allInViewSelected(rows, toggleId(all, 'c'))).toBe(false);
     expect(allInViewSelected([], EMPTY_SELECTION)).toBe(false);
+  });
+
+  it('select all in view again clears the selection once every loaded row is picked', () => {
+    const some = toggleId(EMPTY_SELECTION, 'b');
+    expect([...toggleAllInView(rows, some)].sort()).toEqual(['a', 'b', 'c', 'd', 'e']);
+    expect(toggleAllInView(rows, selectAllInView(rows)).size).toBe(0);
+    expect(toggleAllInView([], EMPTY_SELECTION).size).toBe(0);
   });
 
   it('drops ids that left the list and keeps the same set when nothing left', () => {

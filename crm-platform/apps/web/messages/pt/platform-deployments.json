@@ -91,6 +91,7 @@
       "empty": "Nenhuma versão registrada ainda. As versões aparecem aqui a partir da próxima implantação.",
       "cols": {
         "tag": "Etiqueta",
+        "changes": "Alterações",
         "state": "Status",
         "step": "Etapa",
         "started": "Início",
@@ -104,7 +105,8 @@
         "ok": "No ar",
         "failed": "Falhou",
         "rolled_back": "Revertida"
-      }
+      },
+      "by": "por {author}"
     }
   }
 }

@@ -9,6 +9,7 @@ import {
   type WizardLaunchResult,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
+import { loadWorkspaceCalendar } from '../../../common/workspace-calendar';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
@@ -20,7 +21,7 @@ import { CampaignsService } from '../campaigns.service';
 import { WizardCsvService } from './wizard-csv.service';
 import { WizardDraftsService, draftOf } from './wizard-drafts.service';
 import { WizardRunService } from './wizard-run.service';
-import { templateSlots } from './wizard-rules';
+import { campaignZone, templateSlots } from './wizard-rules';
 import { WizardRepository } from './wizard.repository';
 
 const MESSAGE = {
@@ -265,6 +266,13 @@ export class WizardLaunchService {
       }
 
       const runAt = schedule.mode === 'scheduled' ? firstRunInstant(schedule) : null;
+      // The zone the campaign's times are read in (the Messages tab, the analytics and the CSV export): a send now has no zone of its
+      // own, so it takes the retry window's zone, else the workspace's (it used to fall to UTC, so every time showed in UTC).
+      const zone = campaignZone({
+        scheduledZone: schedule.mode === 'scheduled' ? schedule.timezone : null,
+        retriesZone: draft.retries.timezone,
+        workspaceZone: (await loadWorkspaceCalendar(tx, orgId)).timezone,
+      });
       const made = await this.runs.createRun(tx, orgId, {
         ...base,
         existingId: row.id,
@@ -272,8 +280,7 @@ export class WizardLaunchService {
         scheduleType: schedule.mode === 'now' ? 'now' : 'scheduled',
         sendDate: schedule.mode === 'scheduled' ? schedule.date : null,
         sendTime: schedule.mode === 'scheduled' ? schedule.time : null,
-        timezone:
-          schedule.mode === 'scheduled' ? schedule.timezone : (draft.retries.timezone ?? 'UTC'),
+        timezone: zone,
         runAt,
       });
       return {

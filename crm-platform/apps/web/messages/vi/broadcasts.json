@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Đóng"
     },
+    "list": {
+      "unofficialDisabled": "Không chính thức (đã tắt)"
+    },
     "detail": {
       "back": "Quay lại",
       "crumb": "Gửi hàng loạt / Phân tích / #{ref}",

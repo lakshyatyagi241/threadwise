@@ -1,0 +1,69 @@
+{
+  "feature": "broadcasts",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-broadcasts-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/broadcasts/components/audience-picker.tsx",
+        "apps/web/src/features/broadcasts/components/overrides-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/broadcasts/components/states.test.tsx",
+          "match": "shows the empty state with the primary action when there are no contacts yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-broadcasts-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/broadcasts/components/audience-picker.tsx",
+        "apps/web/src/features/broadcasts/components/overrides-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/broadcasts/components/states.test.tsx",
+          "match": "offers a way to clear the filters when the filters match nothing"
+        }
+      ],
+      "partial": "Only the clear-filters control is tested. A server-side filter with zero rows shows the first-use message (product defect)."
+    },
+    {
+      "id": "EM-broadcasts-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-broadcasts-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/broadcasts/api/channels.ts",
+        "apps/web/src/features/broadcasts/api/compose.ts",
+        "apps/web/src/features/broadcasts/components/overrides-panel.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

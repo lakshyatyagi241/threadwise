@@ -2,11 +2,31 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, Drawer, Field, Input, Select, useToast } from '@crm/ui';
+import {
+  Badge,
+  Button,
+  ConfirmDialog,
+  Drawer,
+  Field,
+  Input,
+  Menu,
+  MenuItem,
+  Modal,
+  Select,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { ApiError } from '@/lib/api/errors';
@@ -28,9 +48,9 @@ import {
   groupIndexOf,
   groupsOf,
   groupText,
+  incomingStages,
   insertStep,
   moveStep,
-  LIMITS,
   newStep,
   problems,
   removeGroup,
@@ -39,6 +59,7 @@ import {
   duplicateGroup,
   stageIn,
   stepSummary,
+  stepText,
   toGraph,
   toSimple,
   unreachable,
@@ -50,6 +71,7 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { FaqsPanel, flowAgentIds } from '../faqs-panel';
 import { TestPanel } from '../simulator/test-panel';
 import { templateQuickReplies } from '../../lib/templates';
 import {
@@ -60,7 +82,8 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
-import { StepPreview } from './step-preview';
+import { StepPreview, StepText } from './step-preview';
+import { TemplatePreview } from '../inspector/forms-core/previews';
 import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
@@ -75,6 +98,10 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
  * steps one under another, grouped in flows ("journeys") like the console's bot builder; a button or list row leads to any step.
  * It saves the same graph the Advanced canvas does, through the same API, so a flow runs the same and opens in either builder.
  */
+/** A button that cannot be pressed now (nothing to save, already published): grey but still readable, not a faded ghost of itself. */
+const QUIET_DISABLED =
+  'disabled:opacity-100 disabled:border-border disabled:bg-muted disabled:text-muted-foreground';
+
 export function SimpleScreen({
   flowId: initialFlowId,
   channel = 'chat',
@@ -223,7 +250,6 @@ function Editor({
 }) {
   const t = useTranslations('flb.builder.simple');
   const tw = useTranslations('flb.builder.webBot');
-  const tEd = useTranslations('flb.builder.simple.editors');
   const tCommon = useTranslations('flb.common');
   const tTool = useTranslations('flb.builder.shell.toolbar');
   const m = useMsg();
@@ -234,6 +260,14 @@ function Editor({
   const [flowId, setFlowId] = useState<string | null>(initial?.id ?? null);
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
+  // Edits made since the bot was last published: saving them does not put them live, so Publish stays available until it is pressed.
+  const [unpublished, setUnpublished] = useState(false);
+  // A bot's Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  const [customizeDirty, setCustomizeDirty] = useState(false);
+  const customizeSave = useRef<(() => void) | null>(null);
+  const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
+    customizeSave.current = fn;
+  }, []);
   const [busy, setBusy] = useState(false);
   // Saves run one at a time and always read the newest version / flow id / content from refs, never from the render that started them:
   // two quick clicks outside the step, or an edit made while a save is in flight, must not send a stale version (that is a false
@@ -246,10 +280,13 @@ function Editor({
   const queuedSave = useRef<Promise<FlowDetail> | null>(null);
   const inFlight = useRef(0);
   const failToast = useRef<number | null>(null);
-  // A website chat or WhatsApp bot has Customize and Deploy beside Build.
-  const tabSet = useMemo(() => ({ web: true }), []);
+  // Every saved flow has FAQs beside Build (for a person who may read AI agents' knowledge); a website chat or WhatsApp bot also has Customize and Deploy.
+  const canFaqs = useCan('aiag.training.read');
+  const canEditFaqs = useCan('aiag.training.update');
+  const tabSet = useMemo(() => ({ faqs: canFaqs, web: true }), [canFaqs]);
   const [tab, setTab] = useBuilderTab(!!flowId, tabSet);
-  const shownTab: BuilderTab = tab;
+  // A tab this flow does not offer (FAQs before the first save) is never shown, whatever the link asked for.
+  const shownTab: BuilderTab = tab === 'faqs' ? (flowId && canFaqs ? 'faqs' : 'build') : tab;
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(flowId);
   const needsCustomizing = !!flowId && widgetQuery.data?.widget === null;
@@ -258,6 +295,8 @@ function Editor({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [showProblems, setShowProblems] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+  /** The flow being renamed from the sidebar's ⋮ menu, with the name as typed. */
+  const [renaming, setRenaming] = useState<{ index: number; name: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<{
     doc: SimpleDoc;
@@ -272,11 +311,15 @@ function Editor({
     editSeq.current += 1;
     dirtyRef.current = true;
     setDirty(true);
+    setUnpublished(true);
   }, []);
 
   const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
   // What stops a publish.
-  const found = useMemo(() => problems(doc, { senderRequired }), [doc, senderRequired]);
+  const found = useMemo(
+    () => problems(doc, { senderRequired, templates: ctx.templates }),
+    [doc, senderRequired, ctx.templates],
+  );
   // Parts nothing leads to: they would never run, but they harm nothing, so they only warn (an imported flow has many).
   const notReached = useMemo(
     () =>
@@ -360,36 +403,6 @@ function Editor({
     linkTo(id, i, target);
   };
 
-  /**
-   * The "+" under a set of buttons or a list: the chosen step starts a new part, tied to the first button that leads nowhere yet. When
-   * every button already leads somewhere, a new button (or row) is added for it, up to the limit.
-   */
-  const addBranch = (stepId: string, kind: StepKind) => {
-    const step = allSteps(doc).find((x) => x.id === stepId);
-    if (!step) return;
-    const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
-    let idx = options.findIndex((_, i) => !step.links[i] || step.links[i] === LINK_NEXT);
-    let data: Record<string, unknown> | undefined;
-    if (idx < 0) {
-      const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
-      if (options.length >= max) return;
-      idx = options.length;
-      const added =
-        step.type === 'list'
-          ? { title: `Item ${idx + 1}`, description: '', section: '' }
-          : tEd('buttons.placeholder', { n: idx + 1 });
-      data = { options: [...options, added] };
-    }
-    const first = newStep(kind.type, allSteps(doc), kind.preset);
-    let next = addJourney(doc, first);
-    const links = step.links.slice();
-    links[idx] = first.id;
-    next = updateStep(next, stepId, { ...(data ? { data } : {}), links });
-    change(next);
-    setGi(groupsOf(next).length - 1);
-    setActiveId(first.id);
-  };
-
   /** Where the last step of a part carries on (a "node to node" connection). */
   const setGoto = (id: string, target: string | null, first?: SimpleStep) => {
     if (target === NEW_JOURNEY) {
@@ -451,10 +464,13 @@ function Editor({
   const testGraph = useMemo(() => toGraph(doc), [doc]);
 
   // --- save / publish -------------------------------------------------------------------------------------------------
+  // A queued save reads the latest doc and name when it runs, so the refs follow each commit (set in a layout effect, not in render).
   const docRef = useRef(doc);
-  docRef.current = doc;
   const nameRef = useRef(name);
-  nameRef.current = name;
+  useLayoutEffect(() => {
+    docRef.current = doc;
+    nameRef.current = name;
+  }, [doc, name]);
   const payload = () => {
     const g = toGraph(docRef.current);
     return {
@@ -561,22 +577,38 @@ function Editor({
 
   useEffect(() => {
     if (!activeId) return;
+    const inside = (target: Element): boolean =>
+      Boolean(
+        target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`) ||
+        target.closest(
+          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
+        ),
+      );
+    // Where the press began. Selecting text in the step and letting go outside it sends the click to the page around the step (the
+    // press and the release have only that in common), which is not a click outside: only a press that began outside closes it.
+    let pressedInside = false;
+    const onPress = (e: MouseEvent) => {
+      const target = e.target instanceof Element ? e.target : null;
+      pressedInside = Boolean(target && inside(target));
+    };
     const onOutside = (e: MouseEvent) => {
       const target = e.target instanceof Element ? e.target : null;
       if (!target || !target.isConnected) return;
-      if (target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`)) return;
-      if (
-        target.closest(
-          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
-        )
-      )
+      if (pressedInside) {
+        pressedInside = false;
         return;
+      }
+      if (inside(target)) return;
       closeAndSave.current();
     };
     // The click, not the press: closing the step moves what is below it, and a press-time close would send the click to the wrong place
     // (the + under the step, or the next step's header).
+    document.addEventListener('mousedown', onPress, true);
     document.addEventListener('click', onOutside, true);
-    return () => document.removeEventListener('click', onOutside, true);
+    return () => {
+      document.removeEventListener('mousedown', onPress, true);
+      document.removeEventListener('click', onOutside, true);
+    };
   }, [activeId]);
 
   const onPublish = async () => {
@@ -600,9 +632,11 @@ function Editor({
           toast(tw(channel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'), 'danger');
           return;
         }
+        const editsAtPublish = editSeq.current;
         const pub = await flowsApi.publish(id!);
         rowVersionRef.current = pub.rowVersion;
         setPublished(true);
+        if (editSeq.current === editsAtPublish) setUnpublished(false);
         toast(t('publishedToast'), 'success');
       } catch (e) {
         toast(t('publishFailed', { error: errMessage(e, t('genericError')) }), 'danger');
@@ -610,6 +644,7 @@ function Editor({
     });
   };
 
+  const onCustomizeTab = shownTab === 'customize';
   const status = published
     ? dirty
       ? t('status.publishedUnsaved')
@@ -642,6 +677,7 @@ function Editor({
               editSeq.current += 1;
               dirtyRef.current = true;
               setDirty(true);
+              setUnpublished(true);
             }}
             className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
           />
@@ -709,12 +745,19 @@ function Editor({
             <Button
               variant="secondary"
               size="sm"
-              disabled={busy || !dirty}
-              onClick={() => void onSave()}
+              disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
+              className={QUIET_DISABLED}
+              onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
             >
               {t('save')}
             </Button>
-            <Button variant="brand" size="sm" disabled={busy} onClick={() => void onPublish()}>
+            <Button
+              variant={published && !unpublished && !dirty ? 'secondary' : 'brand'}
+              size="sm"
+              disabled={busy || (published && !unpublished && !dirty)}
+              className={published && !unpublished && !dirty ? QUIET_DISABLED : undefined}
+              onClick={() => void onPublish()}
+            >
               {published ? t('publishChanges') : t('publish')}
             </Button>
           </div>
@@ -725,6 +768,7 @@ function Editor({
           onTab={setTab}
           saved={!!flowId}
           needsCustomizing={needsCustomizing}
+          faqs={canFaqs}
           web
         />
 
@@ -855,7 +899,7 @@ function Editor({
                 return (
                   <div
                     key={g.key}
-                    className={`mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
+                    className={`group mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
                       i === gIndex ? 'bg-muted font-semibold' : 'hover:bg-muted/60'
                     }`}
                   >
@@ -878,6 +922,77 @@ function Editor({
                         </span>
                       ) : null}
                     </button>
+                    {/* Out of the row until it is hovered or focused, so it leaves no gap and the duplicate icon and the count stay where they are. */}
+                    <div className="hidden group-focus-within:block group-hover:block">
+                      <Menu
+                        label={t('flowMenu', { name: groupText(g, tf) })}
+                        align="end"
+                        className="w-max min-w-0 rounded-xl p-1 shadow-xl"
+                        triggerClassName="size-7 rounded-md border-transparent px-0"
+                        triggerProps={{ 'aria-label': t('flowMenu', { name: groupText(g, tf) }) }}
+                        trigger={
+                          <svg
+                            viewBox="0 0 16 16"
+                            className="size-4 text-muted-foreground"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <circle cx="8" cy="3" r="1.3" />
+                            <circle cx="8" cy="8" r="1.3" />
+                            <circle cx="8" cy="13" r="1.3" />
+                          </svg>
+                        }
+                      >
+                        <div className="flex gap-1">
+                          <MenuItem
+                            className="relative size-9 justify-center rounded-lg p-0 text-foreground"
+                            onSelect={() =>
+                              setRenaming({
+                                index: i,
+                                name: g.placeholder && i > 0 ? '' : groupText(g, tf),
+                              })
+                            }
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              className="size-[18px]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M10.5 2.5l3 3L5.5 13.5l-3.5.5.5-3.5 8-8z" />
+                            </svg>
+                            <span className="absolute inset-0" title={t('renameFlow')} />
+                            <span className="sr-only">{t('renameFlow')}</span>
+                          </MenuItem>
+                          {i > 0 ? (
+                            <MenuItem
+                              danger
+                              className="relative size-9 justify-center rounded-lg p-0 hover:bg-danger/10 focus-visible:bg-danger/10"
+                              onSelect={() => setConfirmDelete(i)}
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                className="size-4"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                              </svg>
+                              <span className="absolute inset-0" title={t('deleteFlow')} />
+                              <span className="sr-only">{t('deleteFlow')}</span>
+                            </MenuItem>
+                          ) : null}
+                        </div>
+                      </Menu>
+                    </div>
                     <button
                       type="button"
                       aria-label={t('duplicateNamed', { name: groupText(g, tf) })}
@@ -952,9 +1067,26 @@ function Editor({
                   />
                 </Field>
                 {gIndex > 0 ? (
-                  <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(gIndex)}>
-                    {t('deleteFlow')}
-                  </Button>
+                  <button
+                    type="button"
+                    aria-label={t('deleteFlow')}
+                    title={t('deleteFlow')}
+                    onClick={() => setConfirmDelete(gIndex)}
+                    className="grid size-10 shrink-0 place-items-center rounded-lg border border-border bg-background text-muted-foreground outline-none transition hover:border-danger hover:text-danger focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                    </svg>
+                  </button>
                 ) : null}
               </div>
 
@@ -993,6 +1125,7 @@ function Editor({
                           ctx={ctx}
                           flowId={flowId}
                           stage={stageIn(doc, ci, si)}
+                          from={incomingStages(doc, s.id)}
                           active={activeId === s.id}
                           editing={activeId !== null}
                           bad={badSteps.has(s.id)}
@@ -1022,47 +1155,17 @@ function Editor({
                             setActiveId(null);
                           }}
                         />
-                        {BRANCHING.has(s.type) ? (
+                        {BRANCHING.has(s.type) && !OPTION_STEPS.has(s.type) ? (
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
                             {s.type === 'faq'
                               ? t('faqEnds')
-                              : OPTION_STEPS.has(s.type)
-                                ? t('optionsCarryOn', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })
-                                : t('branchingEnds', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })}
+                              : t('branchingEnds', {
+                                  kind: s.type === 'list' ? 'list' : 'buttons',
+                                })}
                           </p>
                         ) : null}
-                        {s.type === 'buttons' || s.type === 'list' ? (
+                        {OPTION_STEPS.has(s.type) ? (
                           <>
-                            <div
-                              className="mb-3 flex flex-wrap justify-center gap-2"
-                              data-testid="branch-adders"
-                            >
-                              {(Array.isArray(s.data.options) ? s.data.options : []).map(
-                                (o: unknown, i: number) => {
-                                  // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                  if (s.links[i] && s.links[i] !== LINK_NEXT) return null;
-                                  const label =
-                                    typeof o === 'string'
-                                      ? o
-                                      : str((o as Record<string, unknown>).title);
-                                  return (
-                                    <button
-                                      key={i}
-                                      type="button"
-                                      onClick={() => link(s.id, i, NEW_JOURNEY)}
-                                      className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
-                                    >
-                                      + {t('branchAdd', { title: label || `#${i + 1}` })}
-                                    </button>
-                                  );
-                                },
-                              )}
-                            </div>
-                            <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
                             <AddMenu
                               channel={channel}
                               onPick={(k) => add(ci, si + 1, k)}
@@ -1142,6 +1245,23 @@ function Editor({
           }}
         />
 
+        {flowId && canFaqs ? (
+          <div
+            role="tabpanel"
+            id="web-bot-panel-faqs"
+            aria-labelledby="web-bot-tab-faqs"
+            className={`min-h-0 flex-1 overflow-y-auto bg-background ${shownTab === 'faqs' ? '' : 'hidden'}`}
+          >
+            {shownTab === 'faqs' ? (
+              <FaqsPanel
+                agentIds={flowAgentIds(doc)}
+                assistants={ctx.assistants}
+                canEdit={canEditFaqs}
+              />
+            ) : null}
+          </div>
+        ) : null}
+
         {flowId ? (
           <WebBotPanels
             tab={shownTab}
@@ -1151,8 +1271,48 @@ function Editor({
             flowName={name}
             published={published}
             canEdit={canEditFlow}
+            onCustomizeDirty={setCustomizeDirty}
+            registerCustomizeSave={registerCustomizeSave}
           />
         ) : null}
+
+        <Modal
+          open={renaming !== null}
+          onClose={() => setRenaming(null)}
+          title={t('renameFlow')}
+          closeLabel={tCommon('dismiss')}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setRenaming(null)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                onClick={() => {
+                  if (renaming) change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }}
+              >
+                {t('save')}
+              </Button>
+            </>
+          }
+        >
+          <Field label={t('flowName')}>
+            <Input
+              autoFocus
+              value={renaming?.name ?? ''}
+              placeholder={t('flowPlaceholder', { n: (renaming?.index ?? 0) + 1 })}
+              onChange={(e) => setRenaming((r) => (r ? { ...r, name: e.target.value } : r))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && renaming) {
+                  e.preventDefault();
+                  change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }
+              }}
+            />
+          </Field>
+        </Modal>
 
         <ConfirmDialog
           open={confirmDelete !== null}
@@ -1296,14 +1456,16 @@ function AddMenu({
     setQ('');
     modal?.onDismiss();
   };
+  // An effect event always runs the latest close, so the listeners below do not need it in their dependencies.
+  const closeFromPage = useEffectEvent(() => close());
   // The menu closes when the page outside it is clicked, or on Escape (a click inside it, on a step or the + button, is handled there).
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) close();
+      if (!box.current?.contains(e.target as Node)) closeFromPage();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') closeFromPage();
     };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);
@@ -1382,7 +1544,8 @@ function AddMenu({
             />
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4">
-            {(['send', 'ask', 'logic', 'action', 'answer', 'handoff'] as const).map((group) => {
+            {/* Conditions and actions (wait, API call, webhook, JS function) are not listed here: they are added from the step's own shortcuts, so they land right under it. */}
+            {(['send', 'ask', 'answer', 'handoff'] as const).map((group) => {
               const kinds = stepKindsFor(channel).filter(
                 (k) =>
                   k.group === group &&
@@ -1452,6 +1615,8 @@ function StepCard(p: {
   /** The saved flow (null before the first save): the FAQ step reads this flow's FAQs. */
   flowId: string | null;
   stage: string;
+  /** The stage numbers of the steps that lead here. */
+  from?: string[];
   active: boolean;
   /** A step is open somewhere: only that one shows its tools, hovering the others does not add theirs beside it. */
   editing: boolean;
@@ -1520,6 +1685,7 @@ function StepCard(p: {
   const property =
     s.data.saveProperty === true && str(s.data.propertyKey).trim() ? str(s.data.propertyKey) : '';
   const bodyText = stepSummary(s, tf);
+  const text = stepText(s);
   const tools = () => (
     <>
       {p.active ? (
@@ -1610,6 +1776,15 @@ function StepCard(p: {
             <span className="min-w-0 flex-1 truncate text-[14px] font-medium">
               {m(stepLabel(s))}
             </span>
+            {p.from && p.from.length > 0 ? (
+              <span
+                className="shrink-0 font-mono text-[11px] text-muted-foreground"
+                title={t('fromSteps', { stages: p.from.join(', ') })}
+                data-testid="step-from"
+              >
+                ← {p.from.join(', ')}
+              </span>
+            ) : null}
             <span className="shrink-0 font-mono text-[12px] text-muted-foreground">{p.stage}</span>
           </button>
           <div className="flex shrink-0 items-center gap-0.5 text-muted-foreground lg:hidden">
@@ -1623,9 +1798,13 @@ function StepCard(p: {
             title={t('clickToEdit')}
             className="block w-full border-t border-border px-4 pb-4 pt-3 text-start"
           >
-            <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
-              {bodyText || t('empty')}
-            </p>
+            {s.type === 'template' &&
+            p.ctx.templates.some((tp) => tp.name === String(s.data.tpl ?? '')) ? (
+              // A closed template step still shows the template as the customer gets it, not just its name.
+              <TemplatePreview d={s.data} templates={p.ctx.templates} />
+            ) : (
+              <StepText text={text} fallback={bodyText || t('empty')} />
+            )}
             {exits.length > 0 ? (
               <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">
                 {exits.map((e, i) => (

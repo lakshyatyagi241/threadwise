@@ -308,11 +308,152 @@ describe('handoff: queue, claim, named person (every plan)', () => {
     expect(calls).toEqual([c.uuid]);
   });
 
+  it('spam mutes the bot listeners and clears the handoff state; off spam, they answer again', async () => {
+    const calls: string[] = [];
+    const hooks = get(InboundMessageHooks);
+    hooks.register({
+      name: 'probe-bot-spam',
+      bot: true,
+      onStored: async (e) => {
+        calls.push(e.conversationUuid);
+        return { consumed: false };
+      },
+    });
+    const c = await thread(t, ch);
+    const event = {
+      orgId: t.orgId,
+      channelId: ch.internalId,
+      conversationId: c.id,
+      contactId: null,
+      channelUuid: ch.id,
+      channelKind: 'simulator',
+      conversationUuid: c.uuid,
+      messageUuid: randomUUID(),
+      peerKey: c.from,
+      peerName: null,
+      createdConversation: false,
+      message: { kind: 'text' as const, body: 'hi', meta: {}, location: null, mediaKey: null },
+    };
+    // the simulator's own inbound message runs the hooks in the background too: let it finish before counting
+    await new Promise((r) => setTimeout(r, 1500));
+    await handoff(t.admin, c.uuid, { destination: { kind: 'team', teamId: team.uuid } });
+    expect((await row(c.id)).handling).toBe('waiting');
+
+    const spam = await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${c.uuid}/spam`)
+      .set('idempotency-key', randomUUID())
+      .send({ rowVersion: Number((await row(c.id)).row_version) });
+    expect(spam.status, JSON.stringify(spam.body)).toBe(200);
+    const marked = await row(c.id);
+    expect(marked.status).toBe('spam');
+    expect(marked.handling).toBeNull();
+    expect(
+      (
+        await p.h.owner.query(
+          `SELECT status FROM conversation_handoffs WHERE conversation_id = $1`,
+          [c.id],
+        )
+      ).rows.map((x) => x.status),
+    ).toEqual(['resolved']);
+
+    calls.length = 0;
+    expect((await hooks.run(event)).consumed).toBe(true);
+    expect(calls).toEqual([]);
+
+    const back = await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${c.uuid}/status`)
+      .set('idempotency-key', randomUUID())
+      .send({ status: 'open', rowVersion: Number((await row(c.id)).row_version) });
+    expect(back.status, JSON.stringify(back.body)).toBe(200);
+    expect((await row(c.id)).status).toBe('open');
+    expect((await hooks.run(event)).consumed).toBe(false);
+    expect(calls).toEqual([c.uuid]);
+  });
+
+  it('spam on a chat a person holds keeps the hold: the bot stays muted through unspam, until it goes back to the bot', async () => {
+    const calls: string[] = [];
+    const hooks = get(InboundMessageHooks);
+    hooks.register({
+      name: 'probe-bot-held',
+      bot: true,
+      onStored: async (e) => {
+        calls.push(e.conversationUuid);
+        return { consumed: false };
+      },
+    });
+    const c = await thread(t, ch);
+    const event = {
+      orgId: t.orgId,
+      channelId: ch.internalId,
+      conversationId: c.id,
+      contactId: null,
+      channelUuid: ch.id,
+      channelKind: 'simulator',
+      conversationUuid: c.uuid,
+      messageUuid: randomUUID(),
+      peerKey: c.from,
+      peerName: null,
+      createdConversation: false,
+      message: { kind: 'text' as const, body: 'hi', meta: {}, location: null, mediaKey: null },
+    };
+    // the simulator's own inbound message runs the hooks in the background too: let it finish before counting
+    await new Promise((r) => setTimeout(r, 1500));
+    await handoff(t.admin, c.uuid, {
+      destination: { kind: 'person', userId: await uuidOf(a1.userId) },
+    });
+    expect((await row(c.id)).handling).toBe('with_person');
+
+    const spam = await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${c.uuid}/spam`)
+      .set('idempotency-key', randomUUID())
+      .send({ rowVersion: Number((await row(c.id)).row_version) });
+    expect(spam.status, JSON.stringify(spam.body)).toBe(200);
+    const marked = await row(c.id);
+    expect(marked.status).toBe('spam');
+    expect(marked.handling).toBe('with_person');
+    expect(marked.assignee_user_id).not.toBeNull();
+    expect(
+      (
+        await p.h.owner.query(
+          `SELECT status FROM conversation_handoffs WHERE conversation_id = $1`,
+          [c.id],
+        )
+      ).rows.map((x) => x.status),
+    ).toEqual(['assigned']);
+
+    calls.length = 0;
+    expect((await hooks.run(event)).consumed).toBe(true);
+    expect(calls).toEqual([]);
+
+    const back = await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${c.uuid}/status`)
+      .set('idempotency-key', randomUUID())
+      .send({ status: 'open', rowVersion: Number((await row(c.id)).row_version) });
+    expect(back.status, JSON.stringify(back.body)).toBe(200);
+    expect((await row(c.id)).handling).toBe('with_person');
+    expect((await hooks.run(event)).consumed).toBe(true);
+    expect(calls).toEqual([]);
+
+    const bot = await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${c.uuid}/return-to-bot`)
+      .set('idempotency-key', randomUUID())
+      .send({});
+    expect(bot.status, JSON.stringify(bot.body)).toBe(200);
+    expect((await hooks.run(event)).consumed).toBe(false);
+    expect(calls).toEqual([c.uuid]);
+  });
+
   it('settings: a Basic plan can set what it has and is refused, with a reason, what it does not', async () => {
     const s = await p.api.as(t.admin).get('/v2/inbox/handoff-settings');
     expect(s.status).toBe(200);
+    // what is in effect: the stored switch is on (the default) but the plan has no routing, so it reads off (d2f0625de)
     expect(s.body).toMatchObject({
-      autoAssign: true,
+      autoAssign: false,
       ownerMode: 'independent',
       claimSetsOwner: false,
     });

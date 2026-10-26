@@ -66,10 +66,10 @@
       "pending": "in attesa",
       "you": "Tu",
       "presence": {
-        "online": "Online",
-        "away": "Assente",
+        "online": "Disponibile",
+        "away": "Assente, fuori orario di lavoro",
         "busy": "Occupato",
-        "offline": "Offline"
+        "offline": "Assente"
       },
       "inactive": "Inattivo",
       "roleFor": "Ruolo di {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Disponibilità",
       "available": "Disponibile",
-      "offline": "Offline",
-      "hint": "Finché sei offline, nessuna nuova chat ti viene assegnata automaticamente. Le chat che hai già restano tue.",
+      "offline": "Assente",
+      "hint": "Finché sei assente, non ti vengono assegnate automaticamente nuove chat. Le chat che hai già restano tue.",
       "failed": "Impossibile modificare"
+    },
+    "myLeave": {
+      "label": "Assenza",
+      "onLeaveUntil": "In ferie fino al {date}",
+      "onLeaveOpen": "In ferie",
+      "hint": "Avvisa il tuo team che sei assente. Durante l'assenza non ti vengono assegnate automaticamente nuove chat.",
+      "title": "La tua assenza"
     },
     "deactivate": {
       "eyebrow": "Membri del team",

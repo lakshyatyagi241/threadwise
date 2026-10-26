@@ -217,7 +217,7 @@ export class BookingPageThemesService {
   ): Promise<BookingPageSettingsResponse> {
     const ctx = RequestContextStore.require();
     // Type and size are checked from the bytes (the file name is only a hint); SVG is refused because the file is served to the public.
-    const ok = this.uploads.validate({
+    const ok = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image'],

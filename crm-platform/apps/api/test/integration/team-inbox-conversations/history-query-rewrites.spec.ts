@@ -307,7 +307,8 @@ describe('rewritten history and dashboard queries equal the statements they repl
   it('dashboard counts: the per-conversation form gives the old numbers', async () => {
     const f = window.from.toISOString();
     const t = window.to.toISOString();
-    const DELIVERED = `(status IN ('delivered','read') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`;
+    // the dashboard's delivered set counts a message that is only `sent` as delivered, as Reference does (migrated history has no receipts)
+    const DELIVERED = `(status IN ('delivered','read','sent') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`;
     const FAILED = `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`;
     const READ = `(read_at IS NOT NULL OR status = 'read')`;
     const old = (

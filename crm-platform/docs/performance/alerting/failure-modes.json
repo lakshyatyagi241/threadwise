@@ -15,7 +15,8 @@
     "resources": "docs/performance/resource-limits/README.md",
     "outbox": "docs/runbooks/outbox-backlog.md",
     "failedWork": "docs/runbooks/failed-background-work.md",
-    "backup": "docs/runbooks/backup-restore.md"
+    "backup": "docs/runbooks/backup-restore.md",
+    "chat": "docs/runbooks/google-chat-alerts.md"
   },
   "modes": [
     {
@@ -274,14 +275,33 @@
       "id": "backup-failure",
       "failureMode": "Backup failure / stale backup",
       "severity": "critical",
-      "alerts": [],
-      "runbook": "docs/runbooks/backup-restore.md",
-      "status": "gap",
-      "gap": {
-        "missingMetric": "crm_backup_last_success_timestamp_seconds",
-        "reason": "backup scripts write no metric; the runbook says to check by hand",
-        "canInduceOnLaptop": true
-      }
+      "alerts": ["BackupStale", "BackupMarkerMissing", "OffsiteBackupStale"],
+      "runbook": "docs/runbooks/health-readiness.md#backupstale",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "postgres-unreachable",
+      "failureMode": "Postgres primary unreachable (direct gauge)",
+      "severity": "critical",
+      "alerts": ["PostgresDown"],
+      "runbook": "docs/runbooks/health-readiness.md#postgresdown",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "object-store-unreachable",
+      "failureMode": "Object store unreachable (not part of /ready)",
+      "severity": "warning",
+      "alerts": ["ObjectStoreUnreachable"],
+      "runbook": "docs/runbooks/health-readiness.md#objectstoreunreachable",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "monitoring-dead",
+      "failureMode": "Prometheus or Alertmanager dead (dead-man's-switch)",
+      "severity": "critical",
+      "alerts": ["Watchdog"],
+      "runbook": "docs/runbooks/health-readiness.md#watchdog",
+      "status": "tested-promtool"
     },
     {
       "id": "metrics-pipeline-targets",
@@ -338,6 +358,29 @@
         "reason": "needs a service outside this stack",
         "canInduceOnLaptop": true
       }
+    },
+    {
+      "id": "webhook-flood",
+      "failureMode": "Public webhook flood or slow webhook path saturating the API's DB pools",
+      "severity": "critical",
+      "alerts": [
+        "WebhookRateHigh",
+        "WebhookLatencyHigh",
+        "DbPoolSaturated",
+        "WabaIngestBacklogGrowing"
+      ],
+      "runbook": "docs/runbooks/p0-failure-modes.md#webhookflood",
+      "status": "tested-promtool",
+      "note": "queue age is paged by CriticalQueueOldestJobAge; connections idle in a transaction are not alerted (no Postgres exporter is deployed)"
+    },
+    {
+      "id": "chat-alerting-pipeline",
+      "p0": false,
+      "failureMode": "Slow queries and Google Chat alert delivery (watcher down, bridge failing, dead-man heartbeat missing)",
+      "severity": "warning",
+      "alerts": ["Watchdog", "SlowQueryBurst", "SlowQueryWatcherDown", "ChatBridgeDeliveryFailing", "ChatBridgeNoWatchdog"],
+      "runbook": "docs/runbooks/google-chat-alerts.md",
+      "status": "tested-promtool"
     }
   ]
 }

@@ -414,6 +414,14 @@
           "label": "Wizyta niezsynchronizowana z Google Calendar",
           "hint": "Wydarzenie w Google Calendar dotyczące nadchodzącej wizyty zostało usunięte, przeniesione lub zmieniono jego gości. Wizyta nie została zmieniona; to Ty decydujesz, co zrobić."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Wizyta odwołana przez klienta",
+          "hint": "Klient odwołał wizytę, klikając Anuluj w przypomnieniu. Osoba odpowiedzialna za wizytę otrzymuje powiadomienie."
+        },
+        "appointment_reminder_test": {
+          "label": "Wynik testu e-maila przypomnienia",
+          "hint": "Wynik testowego e-maila wysłanego dla kroku przypomnienia: wysłano albo nie wysłano, wraz z powodem."
+        },
         "snooze_wake": {
           "label": "Odłożony czat wraca",
           "hint": "Odłożony czat otwiera się ponownie o wyznaczonej porze i trafia do ciebie lub do zespołu."

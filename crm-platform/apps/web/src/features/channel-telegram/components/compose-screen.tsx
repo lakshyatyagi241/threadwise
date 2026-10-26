@@ -121,7 +121,7 @@ export function ComposeScreen() {
             {t('kicker')}
           </div>
           <h1 className="mt-1 text-[26px] leading-none sm:text-[32px]">
-            {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+            {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
           </h1>
         </div>
       </div>

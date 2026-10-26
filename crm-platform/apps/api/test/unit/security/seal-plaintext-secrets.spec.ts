@@ -91,6 +91,29 @@ describe('sealPlaintextSecrets', () => {
     expect(crypto.decrypt(String(db.rows[0]!.enc))).toBe('tok-1');
   });
 
+  it('a table or column name that is not a plain identifier is refused before any statement is sent', async () => {
+    const sent: string[] = [];
+    const db: SealDb = {
+      async query(text) {
+        sent.push(text);
+        return { rows: [] };
+      },
+    };
+    for (const bad of ['users"; DROP TABLE users; --', 'a b', '', 'x.y']) {
+      const target: SealTarget = {
+        name: 'x',
+        table: bad,
+        pk: ['org_id', 'id'],
+        plain: 'auth',
+        inPlace: true,
+      };
+      await expect(sealPlaintextSecrets(db, crypto, { targets: [target] })).rejects.toThrow(
+        /plain identifier/,
+      );
+    }
+    expect(sent).toEqual([]);
+  });
+
   it('every target names a table.column', () => {
     for (const t of SEAL_TARGETS) expect(t.name).toMatch(/^[a-z_]+\.[a-z_]+$/);
   });

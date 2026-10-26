@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '@crm/ui';
-import type { ChannelListResponse, ChannelResponse } from '@crm/contracts';
+import { ERROR_CODES, type ChannelListResponse, type ChannelResponse } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import {
   makeSession,
   renderAccount,
@@ -8,7 +9,12 @@ import {
 } from '@/features/auth-registration-security/account/render-test-utils';
 import { sendKeys } from '../api/single-send';
 import type { RowView } from '../lib/row-view';
-import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
+import {
+  AssignedElsewhereNotice,
+  SingleSendDrawer,
+  TemplateListError,
+  type SingleSendTarget,
+} from './single-send-drawer';
 
 const row = (over: Partial<RowView> = {}): RowView => ({
   id: '294dca7c-5806-4548-9035-dcca9befc7b1',
@@ -128,5 +134,36 @@ describe('SingleSendDrawer — sms', () => {
     expect(html).not.toContain('href="sms:');
     expect(html).toContain('aria-disabled="true"');
     expect(html).toContain('Number is hidden for your role.');
+  });
+});
+
+describe('SingleSendDrawer — WhatsApp chat assigned to another agent', () => {
+  it('says why no template is offered and links to the chat in the inbox', () => {
+    const html = renderAccount(<AssignedElsewhereNotice conversationId="conv-1" />, {
+      session: makeSession(),
+    });
+    expect(html).toContain('This chat is assigned to another agent');
+    expect(html).toContain('href="/inbox?c=conv-1"');
+    expect(html).toContain('Open the chat in the inbox');
+  });
+
+  it('shows the notice, with no retry, when the list is refused for another agent', () => {
+    const refused = new ApiError(403, ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER, 'refused');
+    const html = renderAccount(
+      <TemplateListError error={refused} conversationId="conv-1" onRetry={() => undefined} />,
+      { session: makeSession() },
+    );
+    expect(html).toContain('href="/inbox?c=conv-1"');
+    expect(html).not.toContain('Try again');
+  });
+
+  it('keeps the retry line for any other refusal', () => {
+    const refused = new ApiError(403, ERROR_CODES.FORBIDDEN, 'refused');
+    const html = renderAccount(
+      <TemplateListError error={refused} conversationId="conv-1" onRetry={() => undefined} />,
+      { session: makeSession() },
+    );
+    expect(html).toContain('Try again');
+    expect(html).not.toContain('href="/inbox?c=');
   });
 });

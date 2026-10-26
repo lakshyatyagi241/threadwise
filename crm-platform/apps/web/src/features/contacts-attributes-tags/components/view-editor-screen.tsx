@@ -5,7 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Input, MultiSelect, Select, cn, useToast } from '@crm/ui';
-import type { ViewAccessType, ViewShareMode } from '@crm/contracts';
+import {
+  CONTACT_VIEW_NAME_MAX,
+  CONTACT_VIEW_NAME_MIN,
+  type ViewAccessType,
+  type ViewShareMode,
+} from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { RulesEditor, usePeople, useRulesDraft } from '@/features/segments';
@@ -22,7 +27,13 @@ import {
   type ColumnDef,
   type ColumnId,
 } from '../lib/columns';
-import { composeViewFilter, viewColumnsOf, viewRulesOf } from '../lib/views';
+import {
+  composeViewFilter,
+  searchOfView,
+  viewColumnsOf,
+  viewNameProblem,
+  viewRulesOf,
+} from '../lib/views';
 import { GripIcon, LockIcon, StarIcon, XIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.views.editor';
@@ -105,7 +116,9 @@ function Editor({ view }: { view?: View }) {
 
   const attrCols = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? [])
+        .filter((a) => a.active && !a.hidden)
+        .map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: the Lead score column is not offered. A view that already lists it keeps it (it comes back with scoring).
@@ -161,11 +174,13 @@ function Editor({ view }: { view?: View }) {
     setOverId(null);
   };
 
-  const nameOk = name.trim().length > 0;
+  const nameProblem = viewNameProblem(name);
+  const nameOk = nameProblem === null;
   const filterOk = rules.summary.count > 0 && rules.summary.valid;
   const peopleOk = shareMode !== 'selected' || userIds.length > 0;
   const busy = create.isPending || update.isPending || pin.isPending;
-  const back = view ? `/contacts?view=${view.id}` : '/contacts';
+  // The URL carries the saved filters, so the list opens on them with no second step.
+  const back = view ? `/contacts${searchOfView(view.filter, view.id)}` : '/contacts';
 
   const fail = (e: unknown) =>
     toast(tv('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
@@ -191,7 +206,7 @@ function Editor({ view }: { view?: View }) {
         {
           onSuccess: (v) => {
             toast(tv('toast.created', { name: v.name }), 'success');
-            router.push(`/contacts?view=${v.id}`);
+            router.push(`/contacts${searchOfView(v.filter, v.id)}`);
           },
           onError: fail,
         },
@@ -211,10 +226,11 @@ function Editor({ view }: { view?: View }) {
         },
       },
       {
-        onSuccess: () => {
+        onSuccess: (saved) => {
           const finish = () => {
             toast(tv('toast.updated'), 'success');
-            router.push(back);
+            // The list opens on what the server stored, not on the copy this form composed.
+            router.push(`/contacts${searchOfView(saved.filter, view.id)}`);
           };
           if (favorite !== view.isFavorite)
             pin.mutate({ id: view.id, pinned: favorite }, { onSuccess: finish, onError: fail });
@@ -256,7 +272,7 @@ function Editor({ view }: { view?: View }) {
               <Input
                 id="ve-name"
                 value={name}
-                maxLength={255}
+                maxLength={CONTACT_VIEW_NAME_MAX}
                 placeholder={t('namePlaceholder')}
                 aria-invalid={tried && !nameOk}
                 onChange={(e) => setName(e.target.value)}
@@ -276,11 +292,18 @@ function Editor({ view }: { view?: View }) {
                 {t('favorite')}
               </button>
             </div>
-            {tried && !nameOk && (
-              <p role="alert" className="text-xs text-danger">
-                {t('needName')}
-              </p>
-            )}
+            <div className="flex items-start justify-between gap-3">
+              {tried && nameProblem ? (
+                <p role="alert" className="text-xs text-danger">
+                  {t(nameProblem, { min: CONTACT_VIEW_NAME_MIN, max: CONTACT_VIEW_NAME_MAX })}
+                </p>
+              ) : (
+                <span />
+              )}
+              <span className="shrink-0 font-mono text-[11px] text-muted-foreground">
+                {name.trim().length}/{CONTACT_VIEW_NAME_MAX}
+              </span>
+            </div>
           </div>
           <div className="space-y-4">
             <div className="space-y-1">

@@ -48,7 +48,7 @@ export function Topbar({ brand, specUrl }: { brand: string; specUrl: string }) {
           <CodeIcon className="size-5" />
         </span>
         <span className="truncate text-lg font-semibold leading-none">
-          {brand} <em className="font-semibold text-brand">{t('apiWord')}</em>
+          {brand} <em className="font-semibold not-italic text-brand">{t('apiWord')}</em>
         </span>
         <span className="rounded-full border border-border bg-muted px-2 py-0.5 font-mono text-[10px] tracking-wider text-brand">
           {t('version')}
@@ -82,7 +82,7 @@ export function Hero({ brand, baseUrl }: { brand: string; baseUrl: string }) {
     <section id="intro" className="mb-10 scroll-mt-20">
       <div className={cn(EYEBROW, 'mb-2.5 text-[11px]')}>{t('eyebrow')}</div>
       <h1 className="mb-3.5 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-        {t.rich('title', { brand, em: (chunks) => <em className="text-brand">{chunks}</em> })}
+        {t.rich('title', { brand, em: (chunks) => <em className="not-italic text-brand">{chunks}</em> })}
       </h1>
       <p className="mb-5 max-w-2xl text-[15px] text-muted-foreground">{t('lead')}</p>
       <div className="flex flex-wrap items-center gap-2.5">

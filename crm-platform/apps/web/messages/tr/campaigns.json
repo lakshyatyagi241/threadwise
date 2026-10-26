@@ -241,7 +241,8 @@
         "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi hâlde kampanya hiç gönderilmeden süresi dolar.",
         "media": "http:// veya https:// ile başlayan tam bir adres girin.",
         "sender": "Bir gönderici seçin.",
-        "subject": "Konuyu 150 karakter veya daha kısa tutun."
+        "subject": "Konuyu 150 karakter veya daha kısa tutun.",
+        "pacing": "Akıllı Teslimat'ı kontrol edin: her sayı izin verilen aralıkta bir tam sayı olmalıdır."
       },
       "submit": {
         "save": "Değişiklikleri kaydet",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Bir mesajdan önceki en uzun bekleme.",
         "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika).",
         "retryFailed": "Başarısız mesajları otomatik olarak yeniden dene",
-        "retryFailedHint": "Geçici bir nedenle başarısız olan mesaj, denemeler arasında bekleyerek birkaç kez yeniden denenir. Her mesajı yalnızca bir kez göndermek için kapatın."
+        "retryFailedHint": "Geçici bir nedenle başarısız olan mesaj, denemeler arasında bekleyerek birkaç kez yeniden denenir. Her mesajı yalnızca bir kez göndermek için kapatın.",
+        "range": "{min} ile {max} arasında bir tam sayı girin."
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
@@ -595,7 +597,8 @@
           "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi halde kampanya hiç gönderilmeden sona erer.",
           "media": "http:// veya https:// ile başlayan tam bir adres girin.",
           "sender": "Bir gönderici seçin.",
-          "subject": "Konuyu 150 karakter veya daha kısa tutun."
+          "subject": "Konuyu 150 karakter veya daha kısa tutun.",
+          "pacing": "Akıllı Teslimat'ı kontrol edin: her sayı izin verilen aralıkta bir tam sayı olmalıdır."
         },
         "from": "Gönderen",
         "subject": "Konu",
@@ -686,6 +689,7 @@
             "providerFailed": "Görsel hizmeti yanıt vermedi. Biraz sonra tekrar deneyin.",
             "badJson": "Görsel hizmeti beklenmeyen bir yanıt gönderdi. Tekrar deneyin.",
             "imageRefused": "OpenAI bu görseli çizmeyi reddetti. Ürünü, teklifi veya notları değiştirip tekrar deneyin.",
+            "storageRequired": "Resimler bulut nesne depolama gerektirir: platform yöneticisinden bunu açmasını isteyin. Kampanya metni korundu.",
             "invalid": "Özeti kontrol edin: işletme adı zorunludur ve bazı alanlar çok uzun.",
             "forbidden": "Kampanya oluşturma izniniz yok.",
             "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın.",
         "sequence_not_recurring": "Sırayla gönderilen şablonlar yalnızca yinelenen bir kampanyayla çalışır. Yinelenen bir zamanlama seçin veya ek şablonları kaldırın.",
         "sequence_with_ab": "Sırayla gönderilen şablonlar A/B testiyle birlikte kullanılamaz. A/B testini kapatın veya ek şablonları kaldırın.",
-        "sequence_template_required": "Sıradaki her adım için bir şablon seçin veya boş olanları kaldırın."
+        "sequence_template_required": "Sıradaki her adım için bir şablon seçin veya boş olanları kaldırın.",
+        "variable_fallback_required": "Bir kişi alanından gelen her değişken için yedek bir değer girin: değeri olmayan kişiler için kullanılır.",
+        "retry_end_too_far": "Yeniden denemeler bugünden itibaren en fazla 7 gün sürebilir. Daha yakın bir bitiş tarihi seçin.",
+        "template_b_same": "B varyantı, A varyantından farklı bir şablon gerektirir.",
+        "pacing_out_of_range": "Akıllı Teslimat'ı kontrol edin: bir sayı izin verilen aralığın dışında."
       },
       "template": {
         "previewOnline": "çevrimiçi",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Bildirim sürümü: {version}.",
         "modePrevious": "Önceki gönderimlere gönder",
         "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri yeniden hedefleyin; isterseniz yalnızca okuyan, okumayan, yanıtlayan veya tıklayanları seçin.",
-        "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})",
+        "filterNoConditions": "Kaç kişinin eşleştiğini görmek için bir koşul ekleyin."
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Önceki gönderimler: {names} ({outcome})",
         "sumSplit": "Numaralara göre dağılım",
         "sumSplitCount": "{count, plural, one {# alıcı} other {# alıcı}} (%{percent})",
-        "sumSplitPercent": "Kitlenin %{percent}'i"
+        "sumSplitPercent": "Kitlenin %{percent}'i",
+        "sumCostCharged": "Cüzdanınızdan ücretlendirilir: {amount} (kalanını planınız karşılar)"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Yeniden denemeleri etkinleştir",
         "retriesToggle": "Meta'nın tuttuğu mesajları yeniden dene",
         "retryEnd": "Bitiş tarihi belirle",
+        "retryEndPlaceholder": "Şimdiden itibaren en fazla {days} gün",
         "retriesInfoWhy": "Yeniden denemeler yalnızca Meta sıklık sınırlaması nedeniyle başarısız olan mesajlar içindir (hata {code}).",
         "retriesInfoWhen": "Bitiş tarihine kadar tam olarak {hours} saatlik aralıklarla çalışırlar.",
         "retriesInfoCost": "Ek maliyet yok: bir mesaj için yalnızca iletildiğinde ücretlendirilirsiniz.",
         "recurringTitle": "Yinelenen toplu gönderim",
         "recurringHint": "Bunu yinelenen bir zamanlamayla gönder",
-        "occurrences": "çalıştırma"
+        "occurrences": "çalıştırma",
+        "recurringWarning": "Bu yayın planına göre tekrarlanır. Her çalıştırma o andaki hedef kitleye gider ve her mesaj cüzdanınızdan ücretlendirilir.",
+        "repeatRange": "1 ile {max} arasında bir tam sayı girin."
       },
       "words": {
         "now": "Hemen, bir kez gönderilir.",

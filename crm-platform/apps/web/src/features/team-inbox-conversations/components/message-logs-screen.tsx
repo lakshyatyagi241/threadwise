@@ -234,7 +234,10 @@ function ExportRow({ item: e, highlighted }: { item: MessageLogExport; highlight
         <p className="text-xs text-muted-foreground">
           {t('history.requestedAt', { date: fullStamp(e.requestedAt, locale, timeZone) })}
           {e.status === 'ready' && e.rowCount !== null && (
-            <> · {t('history.lines', { count: e.rowCount })}</>
+            <>
+              {' · '}
+              {e.rowCount === 0 ? t('history.noLines') : t('history.lines', { count: e.rowCount })}
+            </>
           )}
           {e.status === 'ready' && e.expiresAt && (
             <> · {t('history.until', { date: fullStamp(e.expiresAt, locale, timeZone) })}</>

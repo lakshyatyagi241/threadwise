@@ -376,22 +376,33 @@ describe('embed loader: popup mode', () => {
   const key = 'aB3dE5gH7jK9mN1pQ3sT5v';
   const script = buildEmbedScript(key, 'https://app.example.com');
 
+  /** An element as the loader builds it and the spec reads it: its attributes, its children and its style. */
+  interface FakeElement {
+    style: Record<string, string>;
+    attrs: Record<string, string>;
+    src?: string;
+    children: FakeElement[];
+    setAttribute(n: string, v: string): void;
+    appendChild(c: FakeElement): void;
+    addEventListener: () => undefined;
+    focus: () => undefined;
+  }
+
   /** A page just big enough for the loader: records what it appends, which timers it sets and which listeners it adds. */
   function page(attrs: Record<string, string>, stored: Record<string, string> = {}) {
     const store = { ...stored };
     const timers: Array<{ fn: () => void; ms: number }> = [];
     const winListeners: Record<string, Array<(e?: unknown) => void>> = {};
     const docListeners: Record<string, Array<(e?: unknown) => void>> = {};
-    const appended: Array<Record<string, any>> = []; // eslint-disable-line @typescript-eslint/no-explicit-any
-    const element = (): Record<string, any> => ({
-      // eslint-disable-line @typescript-eslint/no-explicit-any
+    const appended: FakeElement[] = [];
+    const element = (): FakeElement => ({
       style: {},
       attrs: {} as Record<string, string>,
-      children: [] as unknown[],
+      children: [] as FakeElement[],
       setAttribute(n: string, v: string) {
         this.attrs[n] = v;
       },
-      appendChild(c: unknown) {
+      appendChild(c: FakeElement) {
         this.children.push(c);
       },
       addEventListener: () => undefined,
@@ -433,7 +444,7 @@ describe('embed loader: popup mode', () => {
       currentScript: null,
       activeElement: null,
       head: element(),
-      body: { appendChild: (c: Record<string, any>) => appended.push(c) }, // eslint-disable-line @typescript-eslint/no-explicit-any
+      body: { appendChild: (c: FakeElement) => appended.push(c) },
       documentElement: { scrollHeight: 2800, style: {} as Record<string, string> },
       querySelectorAll: () => [node],
       getElementById: () => null,

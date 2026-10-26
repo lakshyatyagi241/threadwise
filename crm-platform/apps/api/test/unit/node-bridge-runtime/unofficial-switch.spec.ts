@@ -319,6 +319,9 @@ describe("per-workspace decisions use the row's own workspace", () => {
       (svc as unknown as { mustResolve: () => Promise<unknown> }).mustResolve = async () => ({
         platformOwned: true, // no special treatment for a platform-owned workspace (owner decision 2026-10-06)
       });
+      // the add-on offers that ride along (docs/specs/addons-plan-offers.md) are not under test here
+      (svc as unknown as { featureAddons: () => Promise<unknown[]> }).featureAddons =
+        async () => [];
       return svc;
     };
     const keys = (org: number, g: ReturnType<typeof gate>) =>

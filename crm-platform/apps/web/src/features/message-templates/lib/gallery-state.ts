@@ -1,6 +1,6 @@
 import type { TemplateGalleryItem } from '@crm/contracts';
 import { buttonToRow } from './buttons';
-import { initialState, type FormState, type HeaderKind } from './form-model';
+import { buttonTypeOf, initialState, type FormState, type HeaderKind } from './form-model';
 import { syncSlots } from './variables';
 
 const HEADER_FORMATS: Readonly<Record<string, HeaderKind>> = {
@@ -49,6 +49,7 @@ export function galleryToState(g: TemplateGalleryItem, connectionId = ''): FormS
     body: bodyText,
     bodySlots,
     footer: foot?.text ?? '',
+    buttonType: buttonTypeOf({ templateType: 'standard', buttons: buttons?.buttons ?? [] }),
     buttons: (buttons?.buttons ?? []).map((b) => buttonToRow(b)),
   };
 }

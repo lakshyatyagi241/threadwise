@@ -91,6 +91,7 @@
       "empty": "Aucune version enregistrée pour l’instant. Les versions apparaîtront ici à partir du prochain déploiement.",
       "cols": {
         "tag": "Étiquette",
+        "changes": "Modifications",
         "state": "Statut",
         "step": "Étape",
         "started": "Début",
@@ -104,7 +105,8 @@
         "ok": "En ligne",
         "failed": "Échouée",
         "rolled_back": "Annulée"
-      }
+      },
+      "by": "par {author}"
     }
   }
 }

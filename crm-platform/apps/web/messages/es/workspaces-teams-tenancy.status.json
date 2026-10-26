@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Disponible",
+        "away": "Ausente",
+        "onLeaveUntil": "De baja hasta {date}",
+        "onLeaveOpen": "De baja",
+        "awayHours": "Ausente fuera del horario laboral",
+        "label": "Tu estado"
+      },
+      "menu": {
+        "title": "Menú de estado",
+        "update": "Actualizar estado",
+        "setAway": "Marcar como ausente",
+        "setAvailable": "Marcar como disponible",
+        "failed": "No se pudo cambiar tu estado.",
+        "automate": "Automatizar estado",
+        "manage": "Gestionar horario laboral y ausencia de la oficina",
+        "workingHours": "Horario laboral",
+        "timeOff": "Tiempo libre",
+        "outsideNotice": "Fuera del horario laboral",
+        "locked": "La barra de estado está incluida en un plan superior. El interruptor Disponible / Ausente del menú de tu cuenta sigue funcionando."
+      },
+      "hours": {
+        "title": "Tu horario laboral",
+        "titleFor": "Horario laboral de {name}",
+        "lead": "Elige cuándo estás disponible. Fuera de este horario tu estado cambia a Ausente automáticamente.",
+        "leadOther": "Elige cuándo está disponible esta persona. Fuera de este horario su estado cambia a Ausente automáticamente.",
+        "locked": "El estado automático según el horario laboral está incluido en un plan superior.",
+        "viewOnly": "Puedes ver este horario, pero no cambiarlo.",
+        "automate": "Automatizar mi estado",
+        "automateHint": "Ausente fuera de este horario, Disponible dentro de él. Un estado que fijas a mano dura hasta el próximo cambio de horario.",
+        "emptyWarning": "Ningún día está abierto, así que siempre aparecerás como Disponible. Abre al menos un día.",
+        "timezone": "Zona horaria",
+        "timezoneHint": "Parte de la zona horaria de tu espacio de trabajo ({zone}).",
+        "useWorkspaceZone": "Usar la zona horaria del espacio de trabajo"
+      },
+      "members": {
+        "hoursAction": "Horario laboral"
+      }
+    }
+  }
+}

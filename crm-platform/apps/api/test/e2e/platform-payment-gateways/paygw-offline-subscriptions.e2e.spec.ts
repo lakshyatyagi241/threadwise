@@ -15,6 +15,7 @@ import {
   startHarness,
   type Harness,
 } from '../auth-registration-security/harness';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Platform payment gateways end to end through HTTP, against a real Postgres and the real AppModule. Only the far end of the
@@ -160,11 +161,7 @@ afterEach(() => {
   calls.length = 0;
 });
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('0000000d49484452', 'hex'),
-  Buffer.alloc(40),
-]);
+const PNG = pngOfSize(60);
 const WEBHOOK_SECRET = 'whsec_2';
 const signStripe = (raw: string, secret = WEBHOOK_SECRET) => {
   const t = Math.floor(Date.now() / 1000);

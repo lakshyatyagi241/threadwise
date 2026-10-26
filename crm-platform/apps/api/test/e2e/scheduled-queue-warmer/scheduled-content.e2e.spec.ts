@@ -5,6 +5,7 @@ import type { Queue } from 'bullmq';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { QUEUES } from '../../../src/infra/queue/queues';
 import { OutboxService } from '../../../src/kernel/outbox/outbox.service';
 import {
@@ -29,6 +30,7 @@ import { ScheduleMessageBuilder } from '../../../src/modules/scheduled-queue-war
 import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.service';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { ConsentGate } from '../../../src/modules/contact-consent';
+import { pngOfSize } from '../../support/images';
 
 /**
  * Template and file schedules, the edit screen's API and the detail page's funnel (TW-SCHED-006, 012, 016) through the real API on a
@@ -88,6 +90,7 @@ beforeAll(async () => {
     h.app.get(OutboxService),
     h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
+    h.app.get(SendWindowService),
   );
   // An object store in memory behind the real storage service. Until a test turns it on, media is local disk, as on a fresh install.
   const storage = h.app.get(MediaStorageService, { strict: false }) as unknown as Record<
@@ -251,11 +254,7 @@ const due = (uuid: string) =>
   );
 
 /** A file that passes the upload policy's content check: the PNG signature, then padding to `size` bytes. */
-const png = (size: number) =>
-  Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(Math.max(0, size - 8), 1),
-  ]);
+const png = (size: number) => pngOfSize(size);
 const upload = (t: Tenant, buf: Buffer, name = 'offer.png') =>
   api
     .as(t.admin)

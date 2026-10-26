@@ -139,6 +139,10 @@ export const appointmentReminderSchema = z.object({
     .default([]),
   /** What the provider reported afterwards (WhatsApp only). */
   delivery: z.enum(['unknown', 'delivered', 'failed', 'undelivered']).default('unknown'),
+  /** The button taps of this message that did something (oldest first). */
+  buttonReplies: z
+    .array(z.object({ action: z.enum(['confirm', 'reschedule', 'cancel']), at: instant }))
+    .default([]),
 });
 export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 

@@ -1,0 +1,62 @@
+{
+  "feature": "growth",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-growth-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/growth/components/audiences-tab.tsx",
+        "apps/web/src/features/growth/components/auto-stage-tab.tsx",
+        "apps/web/src/features/growth/components/campaigns-tab.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-growth-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/growth/components/assistant-tab.tsx",
+        "apps/web/src/features/growth/components/audiences-tab.tsx",
+        "apps/web/src/features/growth/components/auto-stage-tab.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-growth-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/growth/components/audiences-tab.tsx",
+        "apps/web/src/features/growth/components/growth-screen.tsx",
+        "apps/web/src/features/growth/components/parts.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-growth-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/growth/components/inbox-tab.tsx",
+        "apps/web/src/features/growth/components/insights-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

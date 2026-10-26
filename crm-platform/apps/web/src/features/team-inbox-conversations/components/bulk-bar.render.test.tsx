@@ -88,12 +88,13 @@ const render = (ui: React.ReactNode, locale = 'en') =>
 
 const props = (over: Partial<BulkBarProps> = {}): BulkBarProps => ({
   count: 3,
+  picked: [],
   inView: 30,
   allInViewSelected: false,
   busy: false,
   can: { resolve: true, assign: true, assignSelf: true, priority: true, snooze: true, tag: true },
   meId: 'u-me',
-  onSelectAll: vi.fn(),
+  onToggleAll: vi.fn(),
   onClear: vi.fn(),
   onRun: vi.fn(),
   ...over,
@@ -112,6 +113,18 @@ const choose = (testId: string, value: string) =>
     el.dispatchEvent(new Event('change', { bubbles: true }));
   });
 
+const ranOf = (p: BulkBarProps) =>
+  (p.onRun as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0]);
+
+/** The option values of a select, in order: the assignee menu and the tag menu are read by value. */
+const valuesOf = (testId: string) =>
+  [...host.querySelectorAll(`[data-testid="${testId}"] option`)].map(
+    (o) => (o as HTMLOptionElement).value,
+  );
+
+const vip = { id: 'l-1', name: 'VIP', color: '#5B3D8A' };
+const mine = { user: { id: 'u-me', name: 'Me' }, team: null, aiAgent: null };
+
 describe('the bulk bar', () => {
   it('says how many are selected and offers select all in view', () => {
     const p = props();
@@ -123,9 +136,19 @@ describe('the bulk bar', () => {
       'Select all 30 in view',
     );
     click('inbox-bulk-all');
-    expect(p.onSelectAll).toHaveBeenCalledOnce();
+    expect(p.onToggleAll).toHaveBeenCalledOnce();
     click('inbox-bulk-clear');
     expect(p.onClear).toHaveBeenCalledOnce();
+  });
+
+  it('keeps select all in view clickable once every row in view is picked, so it can clear them', () => {
+    const p = props({ count: 30, allInViewSelected: true });
+    render(<BulkBar {...p} />);
+    const all = host.querySelector('[data-testid="inbox-bulk-all"]') as HTMLButtonElement;
+    expect(all.disabled).toBe(false);
+    expect(all.getAttribute('aria-pressed')).toBe('true');
+    click('inbox-bulk-all');
+    expect(p.onToggleAll).toHaveBeenCalledOnce();
   });
 
   it('runs the action named on the button', () => {
@@ -212,6 +235,162 @@ describe('the bulk bar', () => {
     expect(
       (host.querySelector('[data-testid="inbox-bulk-resolve"]') as HTMLButtonElement).disabled,
     ).toBe(true);
+    for (const name of ['assign', 'priority', 'snooze', 'tag']) {
+      const select = host.querySelector(`[data-testid="inbox-bulk-${name}"]`) as HTMLSelectElement;
+      expect(select.disabled).toBe(true);
+      expect(select.className).toContain('disabled:opacity-50');
+    }
+  });
+
+  it('offers "Mark as not spam" in place of the spam action when every picked conversation is spam', () => {
+    const p = props({
+      picked: [summary({ status: 'spam' }), summary({ id: 'row-2', status: 'spam' })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-resolve"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-not-spam"]')?.textContent).toBe(
+      'Mark as not spam',
+    );
+    click('inbox-bulk-not-spam');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'status', status: 'open' }]);
+  });
+
+  it('keeps the spam action while the picked conversations are mixed', () => {
+    const p = props({ picked: [summary({ status: 'spam' }), summary({ id: 'row-2' })] });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-not-spam"]')).toBeNull();
+    click('inbox-bulk-spam');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'spam' }]);
+  });
+
+  it('offers "Unsnooze" in place of the snooze menu when every picked conversation is snoozed', () => {
+    const p = props({ picked: [summary({ status: 'snoozed' })] });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).toBeNull();
+    click('inbox-bulk-unsnooze');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'status', status: 'open' }]);
+  });
+
+  it('keeps the snooze menu for a snoozed selection the caller cannot wake', () => {
+    const p = props({
+      picked: [summary({ status: 'snoozed' })],
+      can: {
+        resolve: false,
+        assign: true,
+        assignSelf: true,
+        priority: true,
+        snooze: true,
+        tag: true,
+      },
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-unsnooze"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
+  });
+
+  it('offers "Mark as unread" when no picked conversation has an unread message', () => {
+    const p = props({ picked: [summary({ unreadCount: 0 })] });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-read"]')).toBeNull();
+    click('inbox-bulk-unread');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'mark_unread' }]);
+  });
+
+  it('keeps "Mark as read" while some picked conversation is unread', () => {
+    const p = props({
+      picked: [summary({ unreadCount: 0 }), summary({ id: 'row-2', unreadCount: 2 })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-unread"]')).toBeNull();
+    click('inbox-bulk-read');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'mark_read' }]);
+  });
+
+  it('offers assign to me, unassign and remove team only while they change something', () => {
+    render(<BulkBar {...props({ picked: [summary({ assignment: mine })] })} />);
+    expect(valuesOf('inbox-bulk-assign')).toEqual(['', 'none', 'u:u-2', 't:t-1']);
+    render(<BulkBar {...props({ picked: [summary({})] })} />);
+    expect(valuesOf('inbox-bulk-assign')).toEqual(['', 'me', 'u:u-2', 't:t-1']);
+    const team = { id: 't-1', name: 'Sales', color: null };
+    render(
+      <BulkBar
+        {...props({
+          picked: [summary({ assignment: { user: null, team, aiAgent: null } })],
+        })}
+      />,
+    );
+    expect(valuesOf('inbox-bulk-assign')).toEqual(['', 'me', 'no-team', 'u:u-2', 't:t-1']);
+  });
+
+  it('offers to add a tag some picked conversation lacks, and to remove one some carries', () => {
+    render(
+      <BulkBar {...props({ picked: [summary({ labels: [vip] }), summary({ id: 'row-2' })] })} />,
+    );
+    expect(valuesOf('inbox-bulk-tag')).toEqual(['', 'add:l-1', 'remove:l-1']);
+  });
+
+  it('does not offer to add a tag every picked conversation already has', () => {
+    render(
+      <BulkBar
+        {...props({
+          picked: [summary({ labels: [vip] }), summary({ id: 'row-2', labels: [vip] })],
+        })}
+      />,
+    );
+    expect(valuesOf('inbox-bulk-tag')).toEqual(['', 'remove:l-1']);
+  });
+
+  it('offers Reopen for resolved or closed conversations only', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'closed' })],
+    });
+    render(<BulkBar {...p} />);
+    click('inbox-bulk-reopen');
+    expect(ranOf(p)).toEqual<BulkConversationAction[]>([{ type: 'status', status: 'open' }]);
+  });
+
+  it('hides Reopen when a spam conversation is picked with a resolved one, and keeps Not spam off', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'spam' })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-not-spam"]')).toBeNull();
+  });
+
+  it('hides Reopen when a snoozed conversation is picked with a resolved one, and keeps the snooze menu', () => {
+    const p = props({
+      picked: [summary({ status: 'resolved' }), summary({ id: 'row-2', status: 'snoozed' })],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-unsnooze"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
+  });
+
+  it('offers no Reopen, snooze or spam when a resolved web chat is picked, and keeps resolve and close', () => {
+    const webchat = { id: 'c-1', kind: 'webchat', name: 'Site' };
+    const p = props({
+      picked: [
+        summary({ channel: webchat, status: 'resolved' }),
+        summary({ id: 'row-2', channel: webchat, status: 'open' }),
+      ],
+    });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-close"]')).not.toBeNull();
+  });
+
+  it('still offers Reopen for resolved conversations on other channels', () => {
+    const p = props({ picked: [summary({ status: 'resolved' })] });
+    render(<BulkBar {...p} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).not.toBeNull();
   });
 
   it('reads in Arabic, not in English', () => {

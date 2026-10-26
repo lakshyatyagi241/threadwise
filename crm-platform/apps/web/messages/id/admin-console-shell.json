@@ -24,7 +24,7 @@
         "noWorkspaces": "Tidak ada workspace"
       },
       "labels": {
-        "addonPacks": "Paket add-on",
+        "addonPacks": "Add-on",
         "extensions": "Ekstensi",
         "trackingCode": "Kode pelacakan",
         "planPricingSettings": "Pengaturan harga paket",
@@ -282,7 +282,9 @@
           "save": "Simpan",
           "saved": "Preferensi disimpan.",
           "saveFailed": "Preferensi tidak dapat disimpan."
-        }
+        },
+        "timezoneSearch": "Cari zona waktu",
+        "timezoneNoMatch": "Tidak ada zona waktu yang cocok."
       },
       "notifications": {
         "title": "Notifikasi workspace",

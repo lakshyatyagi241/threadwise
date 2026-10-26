@@ -197,6 +197,8 @@
       "date": "日付",
       "imagesBlocked": "インターネット上の画像は非表示になっています。",
       "loadImages": "画像を読み込む",
+      "showQuoted": "引用部分を表示",
+      "hideQuoted": "引用部分を隠す",
       "frameTitle": "メール：{subject}",
       "truncated": "このメールは長いため、最初の部分のみ表示しています。",
       "noBody": "このメールには本文がありません。",

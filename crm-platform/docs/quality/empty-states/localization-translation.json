@@ -1,0 +1,50 @@
+{
+  "feature": "localization-translation",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-localization-translation-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/localization-translation/catalog-tools.ts",
+        "apps/web/src/features/localization-translation/platform/languages-page.tsx",
+        "apps/web/src/features/localization-translation/platform/providers-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-localization-translation-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/localization-translation/platform/languages-page.tsx",
+        "apps/web/src/features/localization-translation/platform/providers-page.tsx",
+        "apps/web/src/features/localization-translation/platform/usage-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-localization-translation-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "no",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/localization-translation/catalog-tools.test.ts",
+          "match": "flatten and compareCatalog"
+        }
+      ]
+    }
+  ]
+}

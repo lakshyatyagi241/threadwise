@@ -197,6 +197,8 @@
       "date": "Data",
       "imagesBlocked": "As imagens da internet estão ocultas.",
       "loadImages": "Carregar imagens",
+      "showQuoted": "Mostrar texto citado",
+      "hideQuoted": "Ocultar texto citado",
       "frameTitle": "E-mail: {subject}",
       "truncated": "Este e-mail era longo, então apenas a primeira parte é exibida.",
       "noBody": "Este e-mail não tem texto.",

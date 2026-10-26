@@ -2,10 +2,25 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { FieldDependencyResponse, FieldResponse, FieldSectionResponse } from '@crm/contracts';
+import type {
+  FieldDependencyResponse,
+  FieldOptionDependencyResponse,
+  FieldResponse,
+  FieldSectionResponse,
+} from '@crm/contracts';
 import { Badge, Checkbox, Field, Input, Select, Textarea } from '@crm/ui';
+import { PhoneField } from '@/features/auth-registration-security/shared/phone-field';
 import { hasLazyOptions, useFieldOptionSearch, useLazyOptionLabels } from '../api/properties';
-import { emptyInput, inputKind, isFieldApplicable, type InputValue } from '../lib/field-values';
+import { withCascadeChoices } from '../lib/cascade';
+import {
+  emptyInput,
+  INVALID_PHONE,
+  inputKind,
+  isCascadeLink,
+  isEmptyInput,
+  isFieldApplicable,
+  type InputValue,
+} from '../lib/field-values';
 import { groupBySection } from '../lib/property-model';
 
 /** The properties the form draws: the workspace's own, active, and not hidden. */
@@ -14,13 +29,14 @@ export const isFormField = (f: FieldResponse): boolean => f.isActive && !f.isSys
 /**
  * The workspace's contact properties on the contact form, grouped under their sections. Each one is drawn for its
  * type (text, long text, number, date, dropdown, multi-select, checkbox, link, email, phone); a property with a
- * "show only when" rule appears once the property it waits for has the value. Other modules that keep properties in the same
- * registry (companies) reuse it and give their own `looseTitle` / `hint`.
+ * "show only when" rule appears once the property it waits for has the value, and a cascade child lists only the choices its
+ * parent allows. Other modules that keep properties in the same registry (companies) reuse it and give their own `looseTitle` / `hint`.
  */
 export function CustomFieldsSection({
   fields,
   sections,
   dependencies,
+  optionDependencies,
   values,
   errors,
   idPrefix,
@@ -31,6 +47,7 @@ export function CustomFieldsSection({
   fields: readonly FieldResponse[];
   sections: readonly FieldSectionResponse[];
   dependencies: readonly FieldDependencyResponse[];
+  optionDependencies: readonly FieldOptionDependencyResponse[];
   values: Readonly<Record<string, InputValue>>;
   /** Message per property key. */
   errors: Readonly<Record<string, string>>;
@@ -43,9 +60,22 @@ export function CustomFieldsSection({
 }) {
   const t = useTranslations('contacts-attributes-tags.form');
   const byId = useMemo(() => new Map(fields.map((f) => [f.id, f])), [fields]);
-  const shown = fields.filter(
+  const offered = useMemo(
+    () => withCascadeChoices(fields, dependencies, optionDependencies, values),
+    [fields, dependencies, optionDependencies, values],
+  );
+  const shown = offered.filter(
     (f) => isFormField(f) && isFieldApplicable(f, dependencies, byId, values),
   );
+  /** A cascade child whose parents hold no choice yet says which parent to pick first. */
+  const waitingHint = (f: FieldResponse): string | undefined => {
+    const parents = dependencies
+      .filter((d) => d.fieldId === f.id && isCascadeLink(d))
+      .flatMap((d) => byId.get(d.dependsOnFieldId) ?? []);
+    if (parents.length === 0 || !parents.every((p) => isEmptyInput(p, values[p.key])))
+      return undefined;
+    return t('cascadeWaiting', { parent: parents.map((p) => p.label).join(', ') });
+  };
   const groups = groupBySection(sections, shown).filter((g) => g.fields.length > 0);
   if (groups.length === 0) return null;
 
@@ -67,6 +97,7 @@ export function CustomFieldsSection({
                 id={`${idPrefix}-prop-${f.key}`}
                 value={values[f.key] ?? emptyInput(f)}
                 error={errors[f.key]}
+                hint={waitingHint(f)}
                 onChange={(v) => onChange(f.key, v)}
               />
             ))}
@@ -83,12 +114,15 @@ export function PropertyInput({
   id,
   value,
   error,
+  hint,
   onChange,
 }: {
   field: FieldResponse;
   id: string;
   value: InputValue;
   error?: string;
+  /** Replaces the property's own description under the input (a cascade child waiting for its parent). */
+  hint?: string;
   onChange: (v: InputValue) => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.form');
@@ -106,9 +140,11 @@ export function PropertyInput({
 
   const label = (
     <>
-      <span dir="auto">{field.label}</span>
+      <span dir="auto" className="[overflow-wrap:anywhere]">
+        {field.label}
+      </span>
       {field.isRequired && kind !== 'checkbox' ? ' *' : ''}{' '}
-      <span dir="ltr" className="font-mono text-xs text-muted-foreground">
+      <span dir="ltr" className="font-mono text-xs text-muted-foreground [overflow-wrap:anywhere]">
         /{field.key}
       </span>
       {readOnly && <Badge className="ms-1.5 align-middle">{t('readOnlyField')}</Badge>}
@@ -120,7 +156,7 @@ export function PropertyInput({
       className={wide ? 'sm:col-span-2' : undefined}
       label={label}
       htmlFor={id}
-      hint={description || undefined}
+      hint={hint ?? (description || undefined)}
       error={error}
     >
       {kind === 'textarea' ? (
@@ -200,6 +236,14 @@ export function PropertyInput({
           checked={text === 'true'}
           disabled={readOnly}
           onChange={(e) => onChange(e.target.checked ? 'true' : 'false')}
+        />
+      ) : kind === 'tel' ? (
+        // A country picker beside the number, like the contact's own phone: the value kept is the international (E.164) number.
+        <PhoneField
+          id={id}
+          initial={text.startsWith('+') ? text : null}
+          invalid={Boolean(error)}
+          onChange={(v) => onChange(v.e164 ?? (v.empty ? '' : INVALID_PHONE))}
         />
       ) : (
         <Input

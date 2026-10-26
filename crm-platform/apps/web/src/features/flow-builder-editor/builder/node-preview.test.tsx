@@ -68,20 +68,21 @@ describe('Update contact field card', () => {
   });
 });
 
-describe('retired Answer from FAQ card', () => {
+describe('Answer from FAQ card', () => {
   const faqCard = (data: Record<string, unknown>) =>
     renderIntl(
       <NodePreview
         node={{ id: 'n', type: 'faq', x: 0, y: 0, data } as FlowNode}
-        ctx={{} as FlbBuilderContext}
+        ctx={{ assistants: [{ id: 'a1', name: 'Support bot', sources: 3 }] } as FlbBuilderContext}
       />,
     );
 
-  it('still renders, and says the step is retired', () => {
-    for (const data of [{}, { query: '{{user_message}}', category: 'Billing', minScore: 0.6 }]) {
-      const html = faqCard(data);
-      expect(html).toContain('Retired');
-      expect(html).toContain('no match');
-    }
+  it('names the AI agent whose knowledge base it searches', () => {
+    expect(faqCard({ assistant: 'a1' })).toContain('Answers from Support bot');
+  });
+
+  it('asks for an agent while none is picked, and for a saved step that has none', () => {
+    for (const data of [{}, { assistant: 'gone' }])
+      expect(faqCard(data)).toContain('Pick an AI agent');
   });
 });

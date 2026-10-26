@@ -401,7 +401,37 @@
           "message": "{name} 未连接，因此无法发送回复。内部备注仍可使用。"
         },
         "open": "打开 WhatsApp 设置",
-        "askAdmin": "请联系管理渠道的人员重新连接。"
+        "askAdmin": "请联系管理渠道的人员重新连接。",
+        "email": {
+          "needs_reconnect": {
+            "title": "需要重新连接此邮箱。",
+            "message": "{name} 不再接受已保存的登录信息，因此无法发送回复。内部备注仍可使用。"
+          },
+          "error": {
+            "title": "此邮箱连接出现问题。",
+            "message": "{name} 处于错误状态，因此无法发送回复。内部备注仍可使用。"
+          },
+          "not_connected": {
+            "title": "此邮箱已断开连接。",
+            "message": "{name} 未连接，因此在重新连接之前无法发送回复。内部备注仍可使用。"
+          },
+          "open": "打开邮箱设置"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "需要重新连接此渠道。",
+            "message": "{name} 不再接受已保存的凭据，因此无法发送回复。内部备注仍可使用。"
+          },
+          "error": {
+            "title": "此渠道连接出现问题。",
+            "message": "{name} 处于错误状态，因此无法发送回复。内部备注仍可使用。"
+          },
+          "not_connected": {
+            "title": "此渠道已关闭。",
+            "message": "{name} 未连接，因此无法发送回复。内部备注仍可使用。"
+          },
+          "open": "打开渠道设置"
+        }
       },
       "failure": {
         "openSettings": "打开 WhatsApp 设置",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "暂不支持向 WhatsApp 群组发送消息。",
           "hint": "请通过 WhatsApp Business 应用回复。"
-        }
+        },
+        "openChannelSettings": "打开渠道设置"
       },
       "media": {
         "downloading": "正在下载文件",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "此号码无法发送{kind}。",
           "unsupportedType": "WhatsApp 不接受此类型的文件。支持 JPEG 和 PNG 图片、MP4 和 3GP 视频、AAC、MP3、AMR、M4A 和 OGG 音频，以及 PDF、Office 和文本文档。",
           "empty": "该文件为空。"
+        },
+        "tip": "添加文件。支持的格式和大小：{list}",
+        "tipLimit": {
+          "image": "图片最大 {mb} MB（{formats}）",
+          "video": "视频最大 {mb} MB（{formats}）",
+          "audio": "音频最大 {mb} MB（{formats}）",
+          "document": "文档最大 {mb} MB（{formats}）"
         }
       }
     }

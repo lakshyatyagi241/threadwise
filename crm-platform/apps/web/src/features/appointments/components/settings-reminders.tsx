@@ -28,6 +28,7 @@ import {
 import { ChevronDownIcon } from './icons';
 import { ErrorLine, TypeDot, useAppointmentsCan } from './parts';
 import { ReminderPackDialog } from './reminder-pack-dialog';
+import { ReminderTestEmail } from './reminder-test-email';
 import { ReminderTimeline } from './reminder-timeline';
 import { SettingsCard } from './settings-parts';
 
@@ -187,6 +188,9 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             channelStates={channelStates}
             library={library}
             idPrefix={`rem-${type.id}`}
+            renderExtra={(r) => (
+              <ReminderTestEmail typeId={type.id} rule={r} dirty={dirty} canEdit={canEdit} />
+            )}
             toolbar={
               <Button
                 variant="secondary"

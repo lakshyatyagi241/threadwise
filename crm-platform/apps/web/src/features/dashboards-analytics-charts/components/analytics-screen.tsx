@@ -156,8 +156,8 @@ export function AnalyticsScreen() {
                   hint={t('kpi.conversationsTotal', { count: a.conversations.total })}
                 />
                 <StatTile
-                  label={t('kpi.conversationsClosed')}
-                  value={a.conversations.closed.toLocaleString(locale)}
+                  label={t('kpi.conversationsResolved')}
+                  value={a.conversations.resolved.toLocaleString(locale)}
                 />
                 <StatTile
                   label={t('kpi.conversationsAssigned')}

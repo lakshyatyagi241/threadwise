@@ -107,7 +107,10 @@ export function inputToValue(field: TypedField, input: InputValue | undefined): 
   return text;
 }
 
-export type ValueProblem = 'required' | 'number' | 'integer' | 'email' | 'url';
+export type ValueProblem = 'required' | 'number' | 'integer' | 'email' | 'url' | 'phone';
+
+/** What a phone property's input holds while the number typed is not a valid one (it is never sent: `checkValue` refuses it). */
+export const INVALID_PHONE = '!';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -141,6 +144,8 @@ export function checkValue(
       return EMAIL.test(text) ? null : 'email';
     case 'url':
       return validUrl(text) ? null : 'url';
+    case 'tel':
+      return text === INVALID_PHONE ? 'phone' : null;
     default:
       return null;
   }
@@ -183,9 +188,15 @@ export function displayValue(
   return '';
 }
 
+/** A field-level dependency that names neither an option nor a value: a cascade link (its choices come from option pairs). */
+export const isCascadeLink = (
+  d: Pick<FieldDependencyResponse, 'dependsOnOptionId' | 'dependsOnValue'>,
+): boolean => (d.dependsOnOptionId ?? null) === null && (d.dependsOnValue ?? null) === null;
+
 /**
- * Whether a property is shown, given the values entered so far. A dependency is met when the property it depends on
- * holds the named option's value (or the named text); a property with several dependencies needs all of them.
+ * Whether a property is shown, given the values entered so far. A "show only when" rule is met when the property it depends on
+ * holds the named option's value (or the named text); a property with several rules needs all of them. A cascade link (see
+ * `isCascadeLink`) is no rule: its property always shows, and only its choices depend on the parent.
  */
 export function isFieldApplicable(
   field: Pick<FieldResponse, 'id'>,
@@ -193,7 +204,7 @@ export function isFieldApplicable(
   fieldsById: ReadonlyMap<string, FieldResponse>,
   values: Readonly<Record<string, InputValue | undefined>>,
 ): boolean {
-  const own = dependencies.filter((d) => d.fieldId === field.id);
+  const own = dependencies.filter((d) => d.fieldId === field.id && !isCascadeLink(d));
   return own.every((d) => {
     const parent = fieldsById.get(d.dependsOnFieldId);
     if (!parent) return true;

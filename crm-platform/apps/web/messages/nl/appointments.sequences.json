@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Upgrade je abonnement",
+      "timeline": {
+        "label": "Herinneringstijdlijn",
+        "addMenu": "Stap toevoegen",
+        "addStep": "Stap toevoegen",
+        "count": "{count} van {max} stappen met een tijd. De bevestiging van de afspraak en het bericht bij niet verschijnen tellen niet mee.",
+        "capReached": "Je hebt het maximum van {max} stappen met een tijd bereikt. Verwijder er een om een andere toe te voegen.",
+        "empty": "Nog geen stappen. Voeg de eerste stap toe of begin met een kant-en-klare reeks.",
+        "lane": {
+          "booked": "Wanneer de afspraak is geboekt",
+          "before": "Voor de afspraak",
+          "after": "Na de afspraak"
+        },
+        "laneHint": {
+          "booked": "Wordt verstuurd zodra de afspraak is geboekt.",
+          "before": "Wordt verstuurd voordat de afspraak begint, nooit erna.",
+          "after": "Wordt verstuurd nadat de afspraak is afgelopen, of als die als niet verschenen is gemarkeerd."
+        },
+        "laneEmpty": "Hier staat nog niets.",
+        "step": {
+          "confirmation": "Bevestiging van afspraak",
+          "reminder_24h": "Herinnering 24 uur vooraf",
+          "reminder_2h": "Herinnering 2 uur vooraf",
+          "reminder_15m": "Herinnering 15 minuten vooraf",
+          "reminder": "Herinnering",
+          "after_visit": "Bericht na de afspraak",
+          "no_show": "Bericht bij niet verschijnen",
+          "rebook": "Bericht om opnieuw te boeken"
+        },
+        "stepHint": {
+          "confirmation": "Wordt direct verstuurd nadat de afspraak is bevestigd.",
+          "reminder_24h": "Een dag vooraf. Het kan de knoppen Bevestigen, Verzetten en Annuleren bevatten.",
+          "reminder_2h": "Een korte herinnering een paar uur vooraf.",
+          "reminder_15m": "Alleen voor online afspraken met een deelnamelink.",
+          "reminder": "Een herinnering op een tijdstip dat je kiest.",
+          "after_visit": "Een bedankje of vervolgbericht nadat de afspraak is afgelopen.",
+          "no_show": "Wordt verstuurd wanneer je de afspraak als niet verschenen markeert.",
+          "rebook": "Vraagt de contactpersoon enkele dagen na een afgeronde afspraak opnieuw te boeken. Telt als marketing."
+        },
+        "choice": {
+          "confirmation": "Bevestiging van afspraak",
+          "reminder_24h": "24 uur vooraf",
+          "reminder_2h": "2 uur vooraf",
+          "reminder_15m": "15 minuten vooraf",
+          "custom": "Herinnering op een ander tijdstip",
+          "after_visit": "Bericht na de afspraak",
+          "no_show": "Bericht bij niet verschijnen",
+          "rebook": "Bericht om opnieuw te boeken, enkele dagen later"
+        },
+        "choiceHint": {
+          "present": "Al toegevoegd",
+          "cap": "Limiet bereikt",
+          "online": "Online afspraken",
+          "locked": "Upgradeniveau: niet in je abonnement"
+        },
+        "enabledOf": "Verstuur: {step}",
+        "remove": "Verwijderen: {step}",
+        "offsetOf": "Tijd van: {step}",
+        "unitOf": "Tijdseenheid van: {step}",
+        "beforeStart": "voordat de afspraak begint",
+        "afterEnd": "nadat de afspraak is afgelopen",
+        "setTime": "Vul een tijd in",
+        "templateName": "WhatsApp-sjabloon: {name}",
+        "wa": {
+          "none": "Geen sjabloon",
+          "draft": "Sjabloon nog niet naar Meta gestuurd",
+          "pending": "Wacht op goedkeuring door Meta",
+          "approved": "Sjabloon goedgekeurd",
+          "rejected": "Afgewezen door Meta"
+        },
+        "fallback": {
+          "email": "Totdat het WhatsApp-sjabloon is goedgekeurd, wordt deze stap per Email verstuurd.",
+          "window": "WhatsApp is hier het enige kanaal. Buiten het venster van 24 uur wordt niets verstuurd totdat een sjabloon is goedgekeurd. Voeg Email toe als vangnet."
+        },
+        "when": {
+          "before": "{amount} voordat het begint",
+          "after": "{amount} nadat het is afgelopen"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+          "hours": "{count, plural, one {# uur} other {# uur}}",
+          "days": "{count, plural, one {# dag} other {# dagen}}"
+        },
+        "rebookLocked": "Berichten om opnieuw te boeken horen bij het upgradeniveau van de Afspraken-app, dat niet in je abonnement zit. Je kunt de stap instellen, maar die blijft uit totdat je abonnement ze bevat.",
+        "rebookLockedStep": "Hoort bij het upgradeniveau van de Afspraken-app: kan niet worden aangezet met je huidige abonnement."
+      },
+      "reasons": {
+        "already_confirmed": "De contactpersoon had al bevestigd.",
+        "no_join_link": "De afspraak heeft geen deelnamelink.",
+        "already_rebooked": "De contactpersoon heeft opnieuw geboekt.",
+        "visit_not_completed": "De afspraak is niet afgerond.",
+        "plan_feature_locked": "Je abonnement bevat deze stap niet.",
+        "not_delivered": "WhatsApp heeft het niet op tijd bezorgd, daarom is het volgende kanaal gebruikt.",
+        "send_failed": "Verzenden is mislukt, daarom is het volgende kanaal gebruikt."
+      },
+      "packs": {
+        "open": "Kant-en-klare reeksen",
+        "eyebrow": "Voor {name}",
+        "title": "Kant-en-klare herinneringsreeksen",
+        "close": "Sluiten",
+        "intro": "Kies een reeks die bij jouw type bedrijf past. Die zet in één keer de bevestiging, de herinneringen, de opvolging en het bericht om opnieuw te boeken klaar. WhatsApp-berichten hebben goedkeuring van Meta nodig voordat ze kunnen worden verstuurd. Tot die tijd wordt elke stap per Email verstuurd.",
+        "loading": "Reeksen laden",
+        "choose": "Kies een reeks",
+        "stepsCount": "{count, plural, one {# stap} other {# stappen}}",
+        "language": "Taal van de berichten",
+        "machineDraft": "De Hindi-tekst is een machinale concepttekst. Laat iemand die Hindi leest hem controleren voordat je de stappen aanzet.",
+        "previewLoading": "Voorbeeld laden",
+        "previewTitle": "Wat er verandert",
+        "summary": "{add} toevoegen, {replace} vervangen, {unchanged} al gelijk",
+        "timedOf": "{count} van {max} stappen met een tijd",
+        "blocked": "Deze reeks toepassen zou de limiet van {max} stappen met een tijd overschrijden. Verwijder eerst een stap.",
+        "confirmTitle": "Dit vervangt stappen die je al hebt",
+        "confirmBody": "{count, plural, one {# stap van dit type afspraak} other {# stappen van dit type afspraak}} wordt vervangen door de versie uit de reeks, inclusief eventuele tekst die jij zelf hebt geschreven.",
+        "confirmCheck": "Vervangen",
+        "action": {
+          "add": "Nieuw",
+          "replace": "Vervangt jouw versie",
+          "unchanged": "Al gelijk"
+        },
+        "starts": {
+          "on": "Start aan",
+          "off": "Start uit"
+        },
+        "category": {
+          "UTILITY": "Servicebericht",
+          "MARKETING": "Marketingbericht"
+        },
+        "onlineOnly": "Alleen online afspraken",
+        "hasButtons": "Knoppen Bevestigen, Verzetten, Annuleren",
+        "wa": {
+          "new": "Wordt naar Meta gestuurd"
+        },
+        "replaceOwnText": "Je hebt eigen tekst voor deze stap geschreven. Die wordt vervangen.",
+        "planNotes": {
+          "rebook": "De stap om opnieuw te boeken hoort bij het upgradeniveau van de Afspraken-app, dat niet in je abonnement zit, dus deze stap wordt uitgeschakeld opgeslagen.",
+          "buttons": "De knoppen Bevestigen, Verplaatsen en Annuleren horen bij het upgradeniveau van de Afspraken-app, dat niet in je abonnement zit, dus ze zijn weggelaten."
+        },
+        "showMessages": "Berichten tonen",
+        "hideMessages": "Berichten verbergen",
+        "kept": "{count, plural, one {# stap die je al hebt, blijft ongewijzigd.} other {# stappen die je al hebt, blijven ongewijzigd.}}",
+        "sample": {
+          "title": "Voorbeeldwaarden",
+          "hint": "De berichten worden getoond met deze verzonnen waarden. Verander ze om te zien hoe een langere naam of een andere plek eruitziet.",
+          "reset": "Waarden herstellen",
+          "labels": {
+            "name": "Naam contactpersoon",
+            "service": "Dienst",
+            "date": "Datum",
+            "time": "Tijd",
+            "place": "Plaats",
+            "join_link": "Deelnamelink",
+            "manage_link": "Beheerlink"
+          }
+        },
+        "submitToMeta": "Stuur de WhatsApp-berichten nu naar Meta voor goedkeuring",
+        "submitHint": "{count, plural, one {# nieuw WhatsApp-bericht wordt aangemaakt.} other {# nieuwe WhatsApp-berichten worden aangemaakt.}} Meta bepaalt wanneer er wordt goedgekeurd; tot die tijd wordt de stap per Email verstuurd. Zet dit uit om ze als concept te bewaren.",
+        "submitHintNone": "De WhatsApp-berichten bestaan al in je werkruimte, dus er wordt niets nieuws aangemaakt.",
+        "apply": "Reeks toepassen",
+        "applying": "Bezig met toepassen",
+        "cancel": "Annuleren",
+        "block": {
+          "readOnly": "Je kunt de reeksen bekijken maar niet toepassen.",
+          "unsaved": "Sla je wijzigingen aan de stappen van dit type afspraak eerst op of gooi ze weg.",
+          "cap": "Verwijder eerst een stap: de limiet van stappen met een tijd zou worden overschreden.",
+          "confirm": "Vink Vervangen aan om door te gaan."
+        },
+        "errors": {
+          "needsConfirm": "Toepassen zou een stap vervangen, dus is je bevestiging nodig. De voorvertoning is opnieuw geladen.",
+          "cap": "De reeks zou de limiet van stappen met een tijd voor dit type afspraak overschrijden."
+        },
+        "result": {
+          "title": "De reeks is toegepast",
+          "summary": "{added} toegevoegd, {replaced} vervangen. De stappen starten zoals de reeks ze instelt.",
+          "templatesTitle": "WhatsApp-berichten",
+          "templatesNone": "Er is geen WhatsApp-bericht aangemaakt. Koppel een WhatsApp Cloud API-nummer om WhatsApp te gebruiken; tot die tijd wordt Email gebruikt.",
+          "waiting": "Totdat Meta een bericht goedkeurt, wordt die stap per Email verstuurd.",
+          "metaError": "Meta heeft het geweigerd: {error}",
+          "refresh": "Status vernieuwen",
+          "refreshing": "Vernieuwen",
+          "withheldTitle": "Weggelaten vanwege je abonnement",
+          "withheldButtons": "De knoppen Bevestigen, Verplaatsen en Annuleren van deze stap: {step}.",
+          "withheldRebook": "{step}: wordt uitgeschakeld opgeslagen."
+        }
+      },
+      "buttonsLocked": "De knoppen Bevestigen, Verplaatsen en Annuleren horen bij het upgradeniveau van de Afspraken-app, dat niet in je abonnement zit.",
+      "test": {
+        "send": "Testmail versturen",
+        "sending": "Bezig met versturen",
+        "hint": "Verstuurt deze stap met voorbeeldwaarden. Laat het adres leeg om het naar je eigen e-mailadres te sturen.",
+        "toLabel": "Test versturen naar",
+        "toPlaceholder": "Je eigen adres, of typ een ander adres",
+        "toInvalid": "Vul een volledig e-mailadres in, of laat het leeg.",
+        "wait": {
+          "unsaved": "Sla eerst je wijzigingen op: de test verstuurt de opgeslagen stap.",
+          "notSaved": "Sla eerst de herinneringen op: deze stap is nieuw."
+        },
+        "queued": "De testmail is onderweg naar {address}. Het resultaat komt ook in je meldingen.",
+        "skipped": "Er is niets verstuurd: je gebruiker heeft geen e-mailadres.",
+        "noWhatsapp": "WhatsApp-berichten kunnen hier niet worden getest."
+      },
+      "report": {
+        "title": "Herinneringsrapport",
+        "description": "Wat de herinneringen deden: hoeveel er zijn verstuurd, afgeleverd, mislukt of overgeslagen en hoeveel er via een ander kanaal gingen.",
+        "type": "Boekingstype",
+        "allTypes": "Alle boekingstypen",
+        "range": "Periode",
+        "ranges": {
+          "7": "Laatste 7 dagen",
+          "30": "Laatste 30 dagen",
+          "90": "Laatste 90 dagen",
+          "custom": "Datums kiezen"
+        },
+        "from": "Van",
+        "to": "Tot",
+        "refresh": "Vernieuwen",
+        "pickDates": "Kies een begin- en einddatum om het rapport te zien.",
+        "loading": "Rapport laden",
+        "empty": "In deze periode was er geen herinnering gepland. Zodra herinneringen worden verstuurd, verschijnen de resultaten hier.",
+        "caption": "Resultaten van herinneringen voor {name}",
+        "col": {
+          "step": "Stap",
+          "sent": "Verstuurd",
+          "delivered": "Afgeleverd",
+          "failed": "Mislukt",
+          "fallback": "Via ander kanaal verstuurd",
+          "skipped": "Overgeslagen",
+          "confirmed": "Bevestigd",
+          "rescheduled": "Verplaatsing gevraagd",
+          "cancelled": "Geannuleerd",
+          "total": "Totaal"
+        },
+        "rates": "Van {count, plural, one {# afspraak} other {# afspraken}} die een herinnering kregen: {confirmed}% bevestigd, {cancelled}% geannuleerd, {noShow}% niet verschenen.",
+        "why": "Waarom",
+        "otherReason": "Andere reden",
+        "buttonsLocked": "De resultaten van de knoppen Bevestigen, Verplaatsen en Annuleren horen bij het upgradeniveau van de Afspraken-app, dus ze tellen niet mee in je abonnement.",
+        "emailNote": "Afgeleverd wordt alleen door WhatsApp gemeld: e-mail heeft geen afleverrapport en telt dus als verstuurd. Er worden alleen aantallen getoond, geen namen, nummers of berichten."
+      },
+      "history": {
+        "fallback": "Verstuurd via {channel} omdat het eerste kanaal het niet kon afleveren.",
+        "delivery": {
+          "delivered": "WhatsApp meldde dat het is afgeleverd.",
+          "failed": "WhatsApp meldde dat het is mislukt.",
+          "undelivered": "WhatsApp heeft het niet op tijd afgeleverd."
+        },
+        "tried": "Geprobeerde kanalen, op volgorde",
+        "attempt": {
+          "sent": "verstuurd",
+          "skipped": "niet gebruikt",
+          "held": "wacht",
+          "failed": "mislukt"
+        },
+        "buttons": "Antwoorden met de knoppen",
+        "button": {
+          "confirm": "Tikte op Bevestigen",
+          "reschedule": "Tikte op Verplaatsen",
+          "cancel": "Tikte op Annuleren"
+        }
+      }
+    }
+  }
+}

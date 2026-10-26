@@ -401,7 +401,37 @@
           "message": "{name}이(가) 연결되어 있지 않아 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
         },
         "open": "WhatsApp 설정 열기",
-        "askAdmin": "채널 관리 권한이 있는 사용자에게 재연결을 요청하세요."
+        "askAdmin": "채널 관리 권한이 있는 사용자에게 재연결을 요청하세요.",
+        "email": {
+          "needs_reconnect": {
+            "title": "이 메일함을 다시 연결해야 합니다.",
+            "message": "{name} 연결이 저장된 로그인을 더 이상 허용하지 않아 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "error": {
+            "title": "이 메일함에 연결 문제가 있습니다.",
+            "message": "{name} 연결이 오류 상태여서 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "not_connected": {
+            "title": "이 메일함의 연결이 끊어졌습니다.",
+            "message": "{name} 연결이 되어 있지 않아 다시 연결하기 전까지 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "open": "메일함 설정 열기"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "이 채널을 다시 연결해야 합니다.",
+            "message": "{name} 연결이 저장된 자격 증명을 더 이상 허용하지 않아 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "error": {
+            "title": "이 채널에 연결 문제가 있습니다.",
+            "message": "{name} 연결이 오류 상태여서 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "not_connected": {
+            "title": "이 채널이 꺼져 있습니다.",
+            "message": "{name} 연결이 되어 있지 않아 답장을 보낼 수 없습니다. 내부 메모는 계속 사용할 수 있습니다."
+          },
+          "open": "채널 설정 열기"
+        }
       },
       "failure": {
         "openSettings": "WhatsApp 설정 열기",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다.",
           "hint": "WhatsApp Business 앱에서 답장하세요."
-        }
+        },
+        "openChannelSettings": "채널 설정 열기"
       },
       "media": {
         "downloading": "파일 다운로드 중",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "이 번호로는 {kind}을(를) 보낼 수 없습니다.",
           "unsupportedType": "WhatsApp이 허용하지 않는 파일 형식입니다. JPEG 및 PNG 이미지, MP4 및 3GP 동영상, AAC, MP3, AMR, M4A, OGG 오디오, PDF, Office 및 텍스트 문서를 사용할 수 있습니다.",
           "empty": "파일이 비어 있습니다."
+        },
+        "tip": "파일 첨부. 지원되는 형식과 크기: {list}",
+        "tipLimit": {
+          "image": "이미지 최대 {mb}MB ({formats})",
+          "video": "동영상 최대 {mb}MB ({formats})",
+          "audio": "오디오 최대 {mb}MB ({formats})",
+          "document": "문서 최대 {mb}MB ({formats})"
         }
       }
     }

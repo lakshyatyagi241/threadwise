@@ -3,7 +3,8 @@ import type { WizardVariables } from '@crm/contracts';
 import type { MergeContact, MergeContext } from '../../../src/modules/crm';
 import {
   applyWizardVariables,
-  chargeableMessages,
+  campaignZone,
+  coversShownEstimate,
   estimateCost,
   fillText,
   isFrequencyCap,
@@ -316,20 +317,6 @@ describe('cost', () => {
     expect(estimateCost(lines, 0).totalMinor).toBe(0);
     expect(estimateCost([], 0).totalMinor).toBe(0);
   });
-
-  it('wallet mode charges every message; plan mode only what is beyond the monthly allowance (0 is unlimited)', () => {
-    const base = { recipients: 100, usedThisMonth: 950, planActive: true };
-    expect(chargeableMessages({ ...base, mode: 'wallet', monthlyLimit: 1000 })).toBe(100);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 1000 })).toBe(50);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 5000 })).toBe(0);
-    expect(chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 0 })).toBe(0);
-    expect(
-      chargeableMessages({ ...base, mode: 'plan', monthlyLimit: 1000, planActive: false }),
-    ).toBe(100);
-    expect(
-      chargeableMessages({ ...base, usedThisMonth: 5000, mode: 'plan', monthlyLimit: 1000 }),
-    ).toBe(100);
-  });
 });
 
 describe('schedule columns', () => {
@@ -377,5 +364,46 @@ describe('senderGuided', () => {
     expect(meta({ name_status: 'DECLINED' })).toBe(false);
     for (const s of ['BANNED', 'restricted', 'DELETED', 'MIGRATED', 'PENDING'])
       expect(meta({ phone_status: s })).toBe(false);
+  });
+});
+
+describe('campaignZone', () => {
+  it('prefers the scheduled zone, then the retry zone, then the workspace zone (never UTC by default)', () => {
+    expect(
+      campaignZone({
+        scheduledZone: 'Asia/Kolkata',
+        retriesZone: 'UTC',
+        workspaceZone: 'Europe/Paris',
+      }),
+    ).toBe('Asia/Kolkata');
+    expect(
+      campaignZone({
+        scheduledZone: null,
+        retriesZone: 'Asia/Dubai',
+        workspaceZone: 'Europe/Paris',
+      }),
+    ).toBe('Asia/Dubai');
+    expect(
+      campaignZone({ scheduledZone: null, retriesZone: null, workspaceZone: 'Asia/Kolkata' }),
+    ).toBe('Asia/Kolkata');
+  });
+});
+
+describe('coversShownEstimate', () => {
+  it('needs the balance to reach the estimate shown', () => {
+    expect(
+      coversShownEstimate({ platformOwned: false, balanceMinor: 2200, estimateMinor: 2201 }),
+    ).toBe(false);
+    expect(
+      coversShownEstimate({ platformOwned: false, balanceMinor: 2200, estimateMinor: 2200 }),
+    ).toBe(true);
+  });
+  it('passes a free send and a platform-owned workspace', () => {
+    expect(coversShownEstimate({ platformOwned: false, balanceMinor: 0, estimateMinor: 0 })).toBe(
+      true,
+    );
+    expect(
+      coversShownEstimate({ platformOwned: true, balanceMinor: 0, estimateMinor: 99_999 }),
+    ).toBe(true);
   });
 });

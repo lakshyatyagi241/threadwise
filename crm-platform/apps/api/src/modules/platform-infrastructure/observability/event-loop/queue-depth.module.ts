@@ -1,5 +1,11 @@
 import { getQueueToken } from '@nestjs/bullmq';
-import { Injectable, Logger, Module, type OnApplicationBootstrap, type OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  Module,
+  type OnApplicationBootstrap,
+  type OnModuleDestroy,
+} from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { getRuntimeMonitor } from '@crm/observability';
 import { QUEUES } from '../../../../infra/queue/queues';

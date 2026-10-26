@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
+import { Alert, Button, Drawer, Input, Select, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CallButton, useCallEligibility, useDirectCall } from '@/features/calling-voice';
 import {
@@ -22,11 +23,24 @@ import {
   whatsappChannels,
   type SendChannel,
 } from '../lib/single-send';
+import { errorKind } from '../lib/errors';
 import type { RowView } from '../lib/row-view';
 import { isMaskedPhone } from '../lib/row-actions';
+import { ErrorLine } from './error-line';
 import { MailIcon, PhoneIcon, SmsIcon, WhatsAppIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.singleSend';
+
+/** The refusals the template list names (the same codes as the inbox picker); each has a sentence under `singleSend.reason`. */
+const REASONS = new Set([
+  'not_linked',
+  'paused',
+  'media_header',
+  'header_variable',
+  'dynamic_button',
+  'authentication',
+  'named_variables',
+]);
 
 const ICON: Record<SendChannel, typeof PhoneIcon> = {
   whatsapp: WhatsAppIcon,
@@ -185,6 +199,38 @@ function Body({ target, onClose }: { target: SingleSendTarget; onClose: () => vo
   );
 }
 
+/** The chat belongs to another agent, so its templates are refused: say why, and link to the chat where it can be assigned. */
+export function AssignedElsewhereNotice({ conversationId }: { conversationId: string }) {
+  const t = useTranslations(NS);
+  const tErrors = useTranslations('contacts-attributes-tags.errors');
+  return (
+    <Alert tone="warning">
+      <p>{tErrors('assignedToOther')}</p>
+      <Link
+        href={`/inbox?c=${conversationId}`}
+        className="mt-2 inline-block font-medium text-primary underline"
+      >
+        {t('openInInbox')}
+      </Link>
+    </Alert>
+  );
+}
+
+/** Why the template list was refused: a chat another agent holds gets the link to it, anything else the plain error line. */
+export function TemplateListError({
+  error,
+  conversationId,
+  onRetry,
+}: {
+  error: unknown;
+  conversationId: string;
+  onRetry: () => void;
+}) {
+  if (errorKind(error) === 'assignedToOther')
+    return <AssignedElsewhereNotice conversationId={conversationId} />;
+  return <ErrorLine error={error} onRetry={onRetry} />;
+}
+
 function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   const t = useTranslations(NS);
   const { toast } = useToast();
@@ -200,7 +246,9 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
 
   const conversation = useOpenConversation(row.id, numberId);
   const templates = useConversationTemplates(conversation.data?.id);
-  const picked = templates.data?.data.find((x) => x.id === templateId);
+  // A template of another WhatsApp number can never be sent from this number: it is left out of the list instead of offered and refused.
+  const offered = (templates.data?.data ?? []).filter((x) => x.reason !== 'other_number');
+  const picked = offered.find((x) => x.id === templateId);
   const missing = picked ? missingSlots(picked, vars) : [];
 
   const send = useMutation({
@@ -291,21 +339,31 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
             }}
           >
             <option value="">{t('templatePlaceholder')}</option>
-            {templates.data?.data.map((x) => (
+            {offered.map((x) => (
               <option key={x.id} value={x.id}>
                 {x.name} ({x.language})
               </option>
             ))}
           </Select>
-          {templates.data && templates.data.data.length === 0 && (
+          {templates.data && offered.length === 0 && (
             <p className="text-xs text-muted-foreground">{t('noTemplates')}</p>
+          )}
+          {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
+          {templates.isError && (
+            <TemplateListError
+              error={templates.error}
+              conversationId={conversation.data.id}
+              onRetry={() => void templates.refetch()}
+            />
           )}
         </div>
       )}
 
       {picked && !picked.sendable && (
         <p role="alert" className="text-sm text-danger">
-          {t('notSendable', { reason: picked.reason ?? '-' })}
+          {picked.reason && REASONS.has(picked.reason)
+            ? t(`reason.${picked.reason}`)
+            : t('notSendable')}
         </p>
       )}
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ImapFlow, type FetchMessageObject } from 'imapflow';
+import type { FetchMessageObject, ImapFlow } from 'imapflow';
 import { channelEmailEnv } from '../../../../config/domains/channel-email.env';
 import type { MailServerLogin } from '../mail-types';
 import { resolveSafeTarget } from './host-guard';
@@ -127,7 +127,9 @@ export class ImapMailClient {
   async connect(login: MailServerLogin): Promise<ImapSession> {
     const env = channelEmailEnv();
     const target = await resolveSafeTarget(login.host, env.MAIL_IMAP_ALLOW_PRIVATE_HOSTS);
-    const client = new ImapFlow({
+    // loaded on first use: imapflow adds about 27 MB and 120 ms to every process that imports this file, and only mail sync needs it
+    const { ImapFlow: ImapFlowClient } = await import('imapflow');
+    const client = new ImapFlowClient({
       host: target.connectHost,
       port: login.port,
       secure: login.security === 'ssl',

@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "סגור"
     },
+    "list": {
+      "unofficialDisabled": "לא רשמי (מושבת)"
+    },
     "detail": {
       "back": "חזרה",
       "crumb": "שידורים / ניתוח נתונים / #{ref}",

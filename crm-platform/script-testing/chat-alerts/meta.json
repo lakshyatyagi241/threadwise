@@ -1,0 +1,11 @@
+{
+  "id": "chat-alerts",
+  "title": "Google Chat alerts and slow-query watcher (bridge, watcher, rules, fake Chat receiver)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 2, "full": 4 },
+  "heavy": false,
+  "needs": ["docker", "node22", "postgres"],
+  "proves": "Unit tests for sanitizer, router, formatter, dedup, rate limit; promtool check/test of slow-query.rules.yml; amtool check of alertmanager.gchat.yml; compose config; least-privilege read-only role; live: pg_sleep(7) produces a Slow Queries post with no literals, critical/warning/resolved/Watchdog routing, 5xx/429 retry, permanent failure does not crash, secrets absent from logs and /metrics (full adds burst rate limit and digest).",
+  "doesNotProve": "Delivery to real Google Chat, the production Postgres or its pg_stat_statements, memory under production load, Grafana contact points and the deploy notifier (built on another branch).",
+  "report": "docs/performance/slow-query/Sheet-chat-alerts-REPORT.html"
+}

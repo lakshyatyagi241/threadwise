@@ -77,7 +77,10 @@ export class WaFormsController {
     summary: 'Save a form',
     description: 'Editing a published form drops it back to draft (Reference parity).',
   })
-  update(@Param('id', ParseUUIDPipe) id: string, @Body(zodPipe(saveWaFormInputSchema)) body: SaveWaFormInput) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(saveWaFormInputSchema)) body: SaveWaFormInput,
+  ) {
     return this.forms.update(id, body);
   }
 

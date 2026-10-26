@@ -1,7 +1,12 @@
 'use client';
 
 import { z } from 'zod';
-import { BULK_IDS_MAX } from '@crm/contracts';
+import {
+  BULK_CONSENT_MAX,
+  BULK_IDS_MAX,
+  type ConsentAction,
+  type ConsentChannel,
+} from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import type { BulkTarget } from '../lib/selection';
@@ -50,16 +55,20 @@ export interface BulkOutcome {
   failed: number;
 }
 
-/** Explicit id lists are capped per request; a longer one is sent in slices and the outcomes added up. */
+/**
+ * Explicit id lists are capped per request; a longer one is sent in slices and the outcomes added up. `max` is the slice size: the
+ * default is the id cap, an action that does more work per contact passes its own (the consent action passes `BULK_CONSENT_MAX`).
+ */
 export async function run(
   path: string,
   target: BulkTarget,
   extra: object = {},
+  max: number = BULK_IDS_MAX,
 ): Promise<BulkOutcome> {
   const bodies =
-    target.kind === 'ids' && target.ids.length > BULK_IDS_MAX
-      ? Array.from({ length: Math.ceil(target.ids.length / BULK_IDS_MAX) }, (_, i) => ({
-          ids: target.ids.slice(i * BULK_IDS_MAX, (i + 1) * BULK_IDS_MAX),
+    target.kind === 'ids' && target.ids.length > max
+      ? Array.from({ length: Math.ceil(target.ids.length / max) }, (_, i) => ({
+          ids: target.ids.slice(i * max, (i + 1) * max),
         }))
       : [selectionBody(target)];
   const total: BulkOutcome = { matched: 0, changed: 0, failed: 0 };
@@ -92,6 +101,15 @@ export const bulkTag = (
   action: 'add' | 'remove',
   tag: { tagId?: string; name?: string },
 ) => run('/contacts/bulk/tag', target, { action, ...tag });
+
+/**
+ * Records marketing consent for one channel on the target (`POST /contacts/bulk/consent`): a grant with the note of how the contacts
+ * agreed, or a withdrawal. The same write as the single contact edit, one event per contact.
+ */
+export const bulkConsent = (
+  target: BulkTarget,
+  body: { channel: ConsentChannel; action: ConsentAction; note?: string },
+) => run('/contacts/bulk/consent', target, body, BULK_CONSENT_MAX);
 
 /**
  * Hands the target to one person, or to nobody (`null`). Unlike `bulkUpdate` this takes "all N matching" too, so a whole
@@ -154,6 +172,10 @@ export interface BulkUpdateValues {
   otherLostReason?: string | null;
   /** An IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
   timezone?: string | null;
+  /** Built-in text properties; a first name is never blank, `null` clears the others. */
+  firstName?: string;
+  lastName?: string | null;
+  source?: string | null;
   /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
   customFields?: Record<string, unknown>;
 }

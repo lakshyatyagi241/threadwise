@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {שעה אחת} two {שעתיים} other {# שעות}}",
         "days": "{count, plural, one {יום אחד} two {יומיים} other {# ימים}}"
       },
-      "unsnoozesAt": "ייפתח מחדש ב-{time}"
+      "unsnoozesAt": "ייפתח מחדש ב-{time}",
+      "erased": "אנשי קשר שנמחקו",
+      "erasedHint": "אנשי קשר אלה נמחקו, והשיחות שלהם נשמרו בלי פרטי האדם ובלי תוכן ההודעות. השעות מציגות את ההודעה האחרונה, מפני שתאריך המחיקה אינו נרשם.",
+      "erasedTitle": "איש קשר שנמחק"
     },
     "status": {
       "received": "התקבלה",
@@ -328,9 +331,16 @@
       },
       "readOnly": "אפשר לקרוא שיחה זו, אך אין לך הרשאה להשיב.",
       "resolvedBanner": "השיחה הזו נפתרה. פתחו אותה מחדש כדי להשיב.",
+      "resolvedWebchatBanner": "צ'אט האתר נפתר ואי אפשר לפתוח אותו מחדש.",
       "assignedToOther": "הצ'אט הזה מוקצה לסוכן אחר. הקצו אותו לעצמכם קודם כדי להשיב.",
       "typing": "{count, plural, one {חבר צוות מקליד} two {# חברי צוות מקלידים} other {# חברי צוות מקלידים}}",
       "messagesLabel": "הודעות",
+      "session": {
+        "header": "{range} · {count, plural, one {# הודעה} two {שתי הודעות} other {# הודעות}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "טען הודעות קודמות",
       "empty": "אין הודעות בשיחה זו עדיין.",
       "newMessageAnnounce": "הודעה חדשה: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "אין התאמות",
       "searchPrev": "התוצאה הקודמת",
       "searchNext": "התוצאה הבאה",
-      "searchClose": "סגירת החיפוש"
+      "searchClose": "סגירת החיפוש",
+      "erasedBadge": "נמחק",
+      "erasedBanner": "איש קשר זה נמחק. תוכן ההודעות והמדיה הוסרו, ולכן לא ניתן לשלוח דבר. ציר הזמן והשעות נשמרים."
     },
     "groupThread": {
       "openGroup": "פתיחת הקבוצה",
@@ -542,17 +554,17 @@
         "onLeave": "בחופשה",
         "onLeaveUntil": "בחופשה עד {date}",
         "availability": {
-          "online": "מחובר",
-          "away": "לא זמין",
+          "online": "זמין",
+          "away": "לא זמין, מחוץ לשעות העבודה",
           "busy": "עסוק",
-          "offline": "לא מחובר"
+          "offline": "לא זמין"
         }
       },
       "presence": {
-        "online": "מחובר",
-        "away": "לא זמין",
+        "online": "זמין",
+        "away": "לא זמין, מחוץ לשעות העבודה",
         "busy": "עסוק",
-        "offline": "לא מחובר"
+        "offline": "לא זמין"
       },
       "notes": {
         "tab": "הערות איש קשר",
@@ -584,7 +596,11 @@
           "sla_breach": "מועד המענה הוחמץ",
           "spam_flagged": "סומן כספאם על ידי {actor}",
           "escalated": "הוסלם",
-          "unknown": "{what} על ידי {actor}"
+          "unknown": "{what} על ידי {actor}",
+          "handoff_requested": "הועבר לאדם על ידי {actor}",
+          "queue_reminded": "הצוות קיבל תזכורת",
+          "queue_offered": "הוצע לצוות אחר",
+          "queue_customer_message": "נשלחה הודעה ללקוח"
         },
         "actors": {
           "user": "חבר צוות",
@@ -711,6 +727,7 @@
         "not_linked": "הערוץ של השיחה הזו אינו מקושר למספר וואטסאפ, ולכן לא ניתן לשלוח ממנו תבנית.",
         "paused": "הושהתה על ידי WhatsApp. ניתן לשלוח אותה שוב לאחר סיום ההשהיה.",
         "media_header": "יש לה כותרת של תמונה, וידאו או מסמך, שלא ניתן לשלוח מתיבת ההודעות עדיין.",
+        "carousel": "זו קרוסלה (כרטיסים עם תמונות) ועדיין אי אפשר לשלוח אותה מתיבת הדואר הנכנס.",
         "header_variable": "יש בה משתנה בכותרת, שלא ניתן למלא עדיין מתיבת ההודעות.",
         "dynamic_button": "יש בה קישור בכפתור עם משתנה, שלא ניתן למלא עדיין מתיבת ההודעות.",
         "authentication": "תבניות של סיסמה חד-פעמית נשלחות על ידי המערכת, ולא מתיבת ההודעות.",
@@ -805,6 +822,7 @@
         "onlyStatus": "רק הודעות {status}",
         "requestedAt": "התבקש ב-{date}",
         "lines": "{count, plural, one {שורה #} two {# שורות} other {# שורות}}",
+        "noLines": "אין אירועים בטווח הזה",
         "until": "זמין עד {date}",
         "download": "הורדה",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "סימולטור (בדיקות)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "צ'אט באתר",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "אימייל",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "סימולטור (בדיקות)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "צ'אט באתר",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "אימייל",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "איש קשר",
         "agent": "אתם",
@@ -1054,7 +1072,10 @@
       "tagRemove": "הסרת תגית",
       "onLeave": "בחופשה",
       "onLeaveUntil": "בחופשה עד {date}",
-      "spam": "סמן כספאם"
+      "spam": "סמן כספאם",
+      "markUnread": "סמן כלא נקרא",
+      "unsnooze": "בטל דחייה",
+      "notSpam": "סמן כלא ספאם"
     },
     "tags": {
       "tag": "תגית",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "חזרה לתיבת הדואר",
-        "title": "תגיות שיחה",
+        "title": "תגיות",
         "intro": "תגיות שיחה מסמנות שיחה (חיוב, החזר, דחוף) כדי שהצוות שלך יוכל למיין ולסנן את תיבת הדואר. הן מגיעות מאותה ספריית תגיות כמו תגיות איש קשר, שמתארות את האדם.",
         "newTitle": "תגית חדשה",
         "editTitle": "עריכת תגית",

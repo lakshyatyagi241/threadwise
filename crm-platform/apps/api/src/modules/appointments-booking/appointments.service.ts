@@ -179,6 +179,7 @@ export class AppointmentsService {
       stepKind: r.stepKind,
       attempts: r.attempts,
       delivery: r.delivery,
+      buttonReplies: r.buttonReplies,
       offsetMinutes: r.offsetMinutes,
       label: r.label,
       dueAt: r.dueAt.toISOString(),

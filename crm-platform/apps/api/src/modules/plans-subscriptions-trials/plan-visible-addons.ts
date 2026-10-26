@@ -45,7 +45,7 @@ export async function addonOptions(tx: Tx): Promise<PlanAddonOption[]> {
   const res = await tx.execute(sql`
     SELECT ap.uuid AS id, ap.slug AS pack_slug, ap.name, ap.is_active, ap.amount::text AS amount, ap.currency,
            ap.billing_unit, ap.billing_duration,
-           a.uuid AS app_uuid, a.slug AS app_slug, a.name AS app_name, a.status AS app_status
+           a.uuid AS app_uuid, a.slug AS app_slug, a.name AS app_name, a.status AS app_status, a.kind AS app_kind
     FROM plans ap
     JOIN marketplace_apps a ON a.id = ap.marketplace_app_id
     WHERE ap.kind = 'addon'
@@ -64,6 +64,7 @@ export async function addonOptions(tx: Tx): Promise<PlanAddonOption[]> {
       slug: r.app_slug as string,
       name: r.app_name as string,
       status: r.app_status as string,
+      kind: (r.app_kind as string) ?? 'mini_app',
     },
   }));
 }

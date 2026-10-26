@@ -34,9 +34,18 @@ hooks in every worker do the same. After a hard kill of the whole run: `pnpm --f
 `tc_nodocker_*` clusters and Redis servers; `node scripts/test-no-docker-clean.mjs --list` shows them). Every start also reaps
 leftovers older than 3 hours. The shared dev cluster (`16/main`, port 55710) and its Redis (56710) are never touched.
 
+## macOS and Linux (no WSL)
+
+On macOS and Linux the same shims start the clusters from the binaries on the machine (`native-runtime.ts`; `runtime.ts` picks it when the
+platform is not Windows). Same rules: a NEW cluster per `PostgreSqlContainer.start()` under `/tmp/tc_nodocker_pg_<run>_<pid>_<rand>`, a
+throwaway `redis-server` per Redis container, removed on stop, at the end of the run, and by the 3 h reaper. Needs `brew install postgresql@16 redis`
+plus pgvector built for 16 (the Homebrew bottle covers 17 and 18 only: build v0.8.x with `make PG_CONFIG=$(brew --prefix postgresql@16)/bin/pg_config`).
+`PG_BIN` overrides the binary directory. Run: `cd apps/api && TEST_NO_DOCKER=1 npx vitest run test/integration/analytics/msg-feed.spec.ts`.
+`scripts/test-no-docker-clean.mjs` is for WSL only; on macOS stop any leftover server with `pkill -f tc_nodocker` and remove the `/tmp/tc_nodocker_*` folders.
+
 ## Requirements and limits
 
-- Windows with WSL2, distro `Ubuntu-24.04` (override with `TEST_NO_DOCKER_DISTRO`) with PostgreSQL 16 (+ pgvector, contrib) and Redis 7
+- Windows: WSL2, distro `Ubuntu-24.04` (override with `TEST_NO_DOCKER_DISTRO`) with PostgreSQL 16 (+ pgvector, contrib) and Redis 7
   installed; see `_work/shared-db/wsl-setup.sh`. Docker Desktop stays off.
 - `channel-email/imap-mail.e2e.spec.ts` (GreenMail, a Java mail server image) is excluded in this mode.
 - Not supported: `exec`, `logs`, `Wait` strategies (accepted and ignored), images other than Postgres and Redis.

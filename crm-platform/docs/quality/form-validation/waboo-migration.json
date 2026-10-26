@@ -1,0 +1,572 @@
+{
+  "module": "waboo-migration",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "wabooMigrationRunnerClaimSchema",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "runner",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "wabooMigrationRunnerReportSchema",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "runner",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "lines",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "lines",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "lines",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 50 items",
+          "value": "array of 50",
+          "priority": "P2"
+        },
+        {
+          "field": "lines",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (50) items",
+          "value": "array of 51",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (8192)",
+          "value": "\"a\" x 8192",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (8192)",
+          "value": "\"a\" x 8193",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (8192)",
+          "value": "\"😀\" x 8192",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "wabooMigrationRunnerFinishSchema",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "runner",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runner",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "exitCode",
+          "rule": "null",
+          "kind": "accept",
+          "label": "null",
+          "value": "null",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a number",
+          "value": "\"abc\"",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (-1)",
+          "value": "-1",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "below the minimum (-1)",
+          "value": "-2",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (255)",
+          "value": "255",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "above the maximum (255)",
+          "value": "256",
+          "priority": "P0"
+        },
+        {
+          "field": "exitCode",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P0"
+        },
+        {
+          "field": "timedOut",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "timedOut",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (8192)",
+          "value": "\"a\" x 8192",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (8192)",
+          "value": "\"a\" x 8193",
+          "priority": "P2"
+        },
+        {
+          "field": "stderrTail",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (8192)",
+          "value": "\"😀\" x 8192",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createWabooMigrationRunSchema",
+      "file": "apps/api/src/modules/waboo-migration/waboo-migration.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "organizationId",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationId",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationId",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "sourceClient",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "sourceClient",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "does not match the pattern",
+          "value": "\"\"",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (catchup)",
+          "value": "\"catchup\"",
+          "priority": "P2"
+        },
+        {
+          "field": "skipWhatsapp",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "confirm",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "wabooMigrationReadinessQuerySchema",
+      "file": "apps/api/src/modules/waboo-migration/waboo-migration.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "organizationIds",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 50 items",
+          "value": "array of 50",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (50) items",
+          "value": "array of 51",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "createWabooMigrationBatchSchema",
+      "file": "apps/api/src/modules/waboo-migration/waboo-migration.controller.ts",
+      "coercedFields": 1,
+      "scenarios": [
+        {
+          "field": "organizationIds",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of a list",
+          "value": "\"x\"",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one under the minimum (1) items",
+          "value": "[]",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "accept",
+          "label": "exactly 50 items",
+          "value": "array of 50",
+          "priority": "P2"
+        },
+        {
+          "field": "organizationIds",
+          "rule": "size",
+          "kind": "refuse",
+          "label": "one over the maximum (50) items",
+          "value": "array of 51",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "refuse",
+          "label": "a value outside the list",
+          "value": "\"__not_in_list__\"",
+          "priority": "P2"
+        },
+        {
+          "field": "mode",
+          "rule": "enum",
+          "kind": "accept",
+          "label": "the last listed value (catchup)",
+          "value": "\"catchup\"",
+          "priority": "P2"
+        },
+        {
+          "field": "skipWhatsapp",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "skipWhatsapp",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        },
+        {
+          "field": "confirmCount",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "a fraction where a whole number is needed",
+          "value": "1.5",
+          "priority": "P2"
+        },
+        {
+          "field": "runAt",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "runAt",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "runAt",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not a date-time",
+          "value": "\"yesterday\"",
+          "priority": "P2"
+        },
+        {
+          "field": "stopOnFailure",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P2"
+        },
+        {
+          "field": "stopOnFailure",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "text instead of true/false",
+          "value": "\"maybe\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

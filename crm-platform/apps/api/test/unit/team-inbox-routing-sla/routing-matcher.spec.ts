@@ -6,6 +6,7 @@ import {
   type RoutingConditions,
 } from '@crm/contracts';
 import {
+  explainFacts,
   keywordsMatch,
   languageMatches,
   matchesFacts,
@@ -17,6 +18,7 @@ const facts = (over: Partial<RoutingFacts> = {}): RoutingFacts => ({
   messageText: 'Hi, I need a REFUND for my order',
   language: 'en',
   outsideHours: false,
+  contactKind: 'returning',
   ...over,
 });
 const cond = (over: Partial<RoutingConditions>): RoutingConditions =>
@@ -76,6 +78,42 @@ describe('matchesFacts', () => {
   });
 });
 
+describe('new and returning contacts (H16)', () => {
+  it('matches the kind the engine reads, and never a chat without a contact', () => {
+    expect(matchesFacts(cond({ contactKind: 'new' }), facts({ contactKind: 'new' }))).toBe(true);
+    expect(matchesFacts(cond({ contactKind: 'new' }), facts({ contactKind: 'returning' }))).toBe(
+      false,
+    );
+    expect(matchesFacts(cond({ contactKind: 'returning' }), facts({ contactKind: null }))).toBe(
+      false,
+    );
+    expect(matchesFacts(cond({ contactKind: 'any' }), facts({ contactKind: null }))).toBe(true);
+  });
+});
+
+describe('explainFacts (the Try it box)', () => {
+  it('lists only the parts that are set, each with a machine reason when it failed', () => {
+    expect(explainFacts(cond({}), facts())).toEqual([]);
+    const c = cond({
+      channelKinds: ['telegram'],
+      keywords: { mode: 'any', words: ['invoice'] },
+      languages: ['ar'],
+      businessHours: 'outside',
+    });
+    expect(explainFacts(c, facts())).toEqual([
+      { part: 'channel', matched: false, why: 'channel_differs' },
+      { part: 'keywords', matched: false, why: 'no_word' },
+      { part: 'languages', matched: false, why: 'language_differs' },
+      { part: 'businessHours', matched: false, why: 'hours_differ' },
+    ]);
+    expect(explainFacts(cond({ contactKind: 'new' }), facts({ contactKind: null }))[0]).toEqual({
+      part: 'contactKind',
+      matched: false,
+      why: 'no_contact',
+    });
+  });
+});
+
 describe('the rule contract', () => {
   const assign = {
     strategy: 'round_robin',
@@ -105,6 +143,38 @@ describe('the rule contract', () => {
     ).toBe(false);
     expect(createRoutingRuleSchema.safeParse({ ...base, assign }).success).toBe(true);
   });
+  it('accepts a rule with no condition when it applies to every conversation (H13), and refuses it otherwise', () => {
+    expect(
+      createRoutingRuleSchema.safeParse({ name: 'All', assign, appliesToAll: true }).success,
+    ).toBe(true);
+    expect(createRoutingRuleSchema.safeParse({ name: 'All', assign }).success).toBe(false);
+    // the switch is off by default: an old client that sends no flag keeps today's rule
+    expect(
+      createRoutingRuleSchema.parse({ name: 'R', conditions: { languages: ['ar'] }, assign })
+        .appliesToAll,
+    ).toBe(false);
+  });
+  it('"everyone" is a pool of its own: no lists, no "specific"', () => {
+    const base = { name: 'Everyone else', isFallback: true };
+    expect(
+      createRoutingRuleSchema.safeParse({
+        ...base,
+        assign: { strategy: 'round_robin', everyone: true },
+      }).success,
+    ).toBe(true);
+    expect(
+      createRoutingRuleSchema.safeParse({
+        ...base,
+        assign: { strategy: 'least_busy', everyone: true, userIds: assign.userIds },
+      }).success,
+    ).toBe(false);
+    expect(
+      createRoutingRuleSchema.safeParse({
+        ...base,
+        assign: { strategy: 'specific', everyone: true },
+      }).success,
+    ).toBe(false);
+  });
   it('saves switched off unless asked, and stops on match by default', () => {
     const r = createRoutingRuleSchema.parse({
       name: 'R',
@@ -121,5 +191,6 @@ describe('the rule contract', () => {
   it('knows an empty condition set', () => {
     expect(hasRoutingConditions(cond({}))).toBe(false);
     expect(hasRoutingConditions(cond({ businessHours: 'inside' }))).toBe(true);
+    expect(hasRoutingConditions(cond({ contactKind: 'new' }))).toBe(true);
   });
 });

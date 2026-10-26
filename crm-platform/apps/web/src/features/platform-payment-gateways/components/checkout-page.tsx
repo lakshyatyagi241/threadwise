@@ -264,7 +264,7 @@ export function CheckoutPage({ target }: { target: CheckoutTarget }) {
             {target.kind === 'plan' ? (
               <>
                 {t('titleFirst')}{' '}
-                <em className="font-semibold italic text-primary">{t('titleSecond')}</em>
+                <em className="font-semibold not-italic text-primary">{t('titleSecond')}</em>
               </>
             ) : (
               title

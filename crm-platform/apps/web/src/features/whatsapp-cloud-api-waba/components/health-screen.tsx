@@ -9,6 +9,7 @@ import { CallingToggleCard } from '@/features/calling-voice';
 import { useHealth, useRenewToken, useResubscribe, useSetToken } from '../api/hooks';
 import { metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
 import { BusinessProfileCard } from './business-profile-card';
+import { ComplianceCard } from './compliance-card';
 import {
   FreeConversationsTile,
   InboundCheckCard,
@@ -308,6 +309,7 @@ export function HealthScreen({ id }: { id: string }) {
         </Card>
 
         <BusinessProfileCard id={id} />
+        <ComplianceCard id={id} />
         <VerifiedBadgeCard health={h} />
         <CallingToggleCard numberId={h.connection.id} />
         <InboundCheckCard id={id} inboundWired={c.inboundWired} />

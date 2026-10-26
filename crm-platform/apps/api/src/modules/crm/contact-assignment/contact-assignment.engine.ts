@@ -439,8 +439,28 @@ export class ContactAssignmentEngine {
       const grants = await this.rbac.grantsForUser(orgId, id);
       (this.rbac.can(grants, key).allowed ? openers : noAccess).push(id);
     }
-    const pool = await this.repo.candidates(tx, orgId, openers, subject, rule.skipOffline, today);
-    const excluded = await this.explainExclusions(tx, orgId, noAccess, openers, pool, rule, today);
+    const statusAutomation =
+      rule.skipOffline &&
+      (await this.entitlements.featureEnabled(orgId, 'agent_status_automation'));
+    const pool = await this.repo.candidates(
+      tx,
+      orgId,
+      openers,
+      subject,
+      rule.skipOffline,
+      today,
+      statusAutomation,
+    );
+    const excluded = await this.explainExclusions(
+      tx,
+      orgId,
+      noAccess,
+      openers,
+      pool,
+      rule,
+      today,
+      statusAutomation,
+    );
     if (pool.length === 0) return { person: null, excluded };
     const chosen =
       rule.strategy === 'least_busy'
@@ -466,12 +486,13 @@ export class ContactAssignmentEngine {
     pool: readonly Candidate[],
     rule: RuleRow,
     today: string,
+    statusAutomation: boolean,
   ): Promise<AssignmentExcluded[]> {
     const inPool = new Set(pool.map((p) => p.id));
     const dropped = openers.filter((id) => !inPool.has(id));
     const wanted = [...noAccess, ...dropped].slice(0, MAX_EXCLUDED);
     if (wanted.length === 0) return [];
-    const people = await this.repo.describePeople(tx, orgId, wanted, today);
+    const people = await this.repo.describePeople(tx, orgId, wanted, today, statusAutomation);
     const out: AssignmentExcluded[] = [];
     for (const id of wanted) {
       const p = people.get(id);

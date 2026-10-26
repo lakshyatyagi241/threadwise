@@ -543,6 +543,22 @@ describe('ConversationList states', () => {
     expect(out).toContain('data-testid="inbox-filters-open"');
   });
 
+  it('the channel box says the list is narrowed when the Filters window chose channels, not All channels', () => {
+    const chat = (cid: string, name: string) =>
+      ({ id: cid, kind: 'webchat', name, status: 'connected', capabilities: {} }) as never;
+    const channels = [chat(id(900), 'Website'), chat(id(901), 'Support line')];
+    // The option the channel box shows: the one marked selected in its markup.
+    const shownChannel = (out: string) => {
+      const box = /<select[^>]*aria-label="Channel"[^>]*>([\s\S]*?)<\/select>/.exec(out)?.[1] ?? '';
+      return /<option[^>]*selected=""[^>]*>([^<]*)<\/option>/.exec(box)?.[1];
+    };
+    const narrowed = render(
+      props({ channels, filters: { ...DEFAULT_FILTERS, channelIds: [id(900)] } }),
+    );
+    expect(shownChannel(narrowed)).not.toBe('All channels');
+    expect(shownChannel(render(props({ channels })))).toBe('All channels');
+  });
+
   it('tells a workspace with no channel to connect one, with a link', () => {
     const out = render(props());
     expect(out).toContain('Connect a channel to start');
@@ -558,6 +574,36 @@ describe('ConversationList states', () => {
       props({ channels: [{ id: id(900), capabilities: { windowHours: null } } as never] }),
     );
     expect(out).toContain('No conversations yet');
+  });
+
+  it('lists the channel box as All channels, one heading per chat kind, then the email heading', () => {
+    const channel = (n: number, kind: string, name: string) =>
+      ({ id: id(n), kind, name, capabilities: { windowHours: null } }) as never;
+    const out = render(
+      props({
+        channels: [
+          channel(1, 'whatsapp_cloud', 'Sales line'),
+          channel(2, 'email', 'hello@x.test'),
+          channel(3, 'webchat', 'Web bot'),
+          channel(4, 'whatsapp_cloud', 'Support line'),
+        ],
+      }),
+    );
+    const from = out.indexOf('All channels</option>');
+    const select = out.slice(out.lastIndexOf('<option', from), out.indexOf('</select>', from));
+    const tokens = [
+      ...select.matchAll(/<optgroup label="([^"]*)"|<option[^>]*>([^<]*)<\/option>/g),
+    ].map((m) => m[1] ?? m[2]);
+    expect(tokens).toEqual([
+      'All channels',
+      'WhatsApp Cloud API',
+      'Sales line',
+      'Support line',
+      'Website chat',
+      'Web bot',
+      'Email',
+      'hello@x.test',
+    ]);
   });
 
   it('shows the four tabs with their counts and the unread badge', () => {

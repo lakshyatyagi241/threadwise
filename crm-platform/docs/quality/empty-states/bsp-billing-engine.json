@@ -1,0 +1,44 @@
+{
+  "feature": "bsp-billing-engine",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-bsp-billing-engine-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/bsp-billing-engine/components/attach-card.tsx",
+        "apps/web/src/features/bsp-billing-engine/components/dashboard-page.tsx",
+        "apps/web/src/features/bsp-billing-engine/components/register-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-bsp-billing-engine-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/bsp-billing-engine/components/attach-card.tsx",
+        "apps/web/src/features/bsp-billing-engine/components/connection-card.tsx",
+        "apps/web/src/features/bsp-billing-engine/components/console-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-bsp-billing-engine-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

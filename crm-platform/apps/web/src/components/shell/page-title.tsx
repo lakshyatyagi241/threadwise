@@ -6,8 +6,9 @@ import { useEffect } from 'react';
 import type { ResolvedSettingsTile } from '@/features/_registry/settings-types';
 import type { ResolvedNavItem } from '@/features/_registry/types';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { splitTitleBadge } from '@/lib/tab-title';
 import { useBrandName } from './brand';
-import { documentTitle, pageLabelKey, splitTitleBadge } from './page-title-model';
+import { documentTitle, pageLabelKey } from './page-title-model';
 
 /**
  * The browser tab title of every signed-in page, `<Page> | <Workspace name>`, set in this one place from the menu and Settings
@@ -34,9 +35,10 @@ export function PageTitle({
     let server: string | null = null;
     const apply = () => {
       const label = registered || document.querySelector('main h1')?.textContent?.trim() || '';
-      // An unread badge `(3) ` in front belongs to the live notifications: it is neither the server's title nor ours, and it stays.
-      const { badge, rest } = splitTitleBadge(document.title);
-      if (rest !== mine) server = rest;
+      // The live notifications own the `(3) ` unread badge in front of the title: name the page, keep the badge as it is. Writing
+      // the title without it makes that watcher put it back, which makes this one rewrite it, and so on without end.
+      const { badge, base } = splitTitleBadge(document.title);
+      if (base !== mine) server = base;
       const next = documentTitle({ label, workspace, brand, serverTitle: server });
       if (!next) return;
       mine = next;

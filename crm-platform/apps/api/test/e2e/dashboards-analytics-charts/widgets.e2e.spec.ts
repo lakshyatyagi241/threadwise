@@ -210,6 +210,66 @@ describe('GET /v2/dashboard/widgets', () => {
     });
   });
 
+  it('TW-DASH-015: the busiest templates lead, even when six newer templates never sent', async () => {
+    const u = await api.signup('dwtop');
+    const ch = await q(
+      `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
+      [u.orgId],
+    );
+    const conv = await q(
+      `INSERT INTO conversations (org_id, channel_id, peer_key, title) VALUES ($1, $2, 'top-peer', 'top') RETURNING id`,
+      [u.orgId, ch.rows[0].id],
+    );
+    const busy = await q(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, category, status, language, updated_at)
+       VALUES ($1, 'busy', 'hi', 'marketing', 'approved', 'en', now() - interval '60 days') RETURNING id`,
+      [u.orgId],
+    );
+    for (const i of [1, 2, 3, 4, 5, 6]) {
+      await q(
+        `INSERT INTO wa_templates (org_id, template_name, template_body, category, status, language, updated_at)
+         VALUES ($1, $2, 'hi', 'utility', 'approved', 'en', now() - $3::interval)`,
+        [u.orgId, `fresh${i}`, `${i} hours`],
+      );
+    }
+    await q(
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, kind, template_id, created_at)
+       SELECT $1, $2, g, 'out', 'agent', 'delivered', 'template', $3, now() - interval '2 days'
+       FROM generate_series(1, 3) g`,
+      [u.orgId, conv.rows[0].id, busy.rows[0].id],
+    );
+    // nine sends older than the window and nine inbound rows: neither may rank
+    const stale = await q(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, category, status, language, updated_at)
+       VALUES ($1, 'stale', 'hi', 'marketing', 'approved', 'en', now() - interval '90 days') RETURNING id`,
+      [u.orgId],
+    );
+    const inbound = await q(
+      `INSERT INTO wa_templates (org_id, template_name, template_body, category, status, language, updated_at)
+       VALUES ($1, 'inbound', 'hi', 'marketing', 'approved', 'en', now() - interval '90 days') RETURNING id`,
+      [u.orgId],
+    );
+    await q(
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, kind, template_id, created_at)
+       SELECT $1, $2, g + 10, 'out', 'agent', 'delivered', 'template', $3, now() - interval '30 days'
+       FROM generate_series(1, 9) g`,
+      [u.orgId, conv.rows[0].id, stale.rows[0].id],
+    );
+    await q(
+      `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, kind, template_id, created_at)
+       SELECT $1, $2, g + 20, 'in', 'customer', 'received', 'template', $3, now() - interval '1 day'
+       FROM generate_series(1, 9) g`,
+      [u.orgId, conv.rows[0].id, inbound.rows[0].id],
+    );
+    const tp = (await api.as(u.admin).get('/v2/dashboard/widgets?range=7d')).body.templates;
+    expect(tp.count).toBe(9);
+    expect(tp.rows).toHaveLength(5);
+    expect(tp.rows[0]).toMatchObject({ name: 'busy', sent: 3, delivered: 3 });
+    expect(tp.rows.slice(1).every((r: { sent: number }) => r.sent === 0)).toBe(true);
+    expect(tp.rows.map((r: { name: string }) => r.name)).not.toContain('stale');
+    expect(tp.rows.map((r: { name: string }) => r.name)).not.toContain('inbound');
+  });
+
   it('TW-DASH-016: unread counts chats, never archived ones; the three most recent are listed', async () => {
     const i = (await get(t.admin)).body.inbox;
     expect(i.unread).toBe(2);

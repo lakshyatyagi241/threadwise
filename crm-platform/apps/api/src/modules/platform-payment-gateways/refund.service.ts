@@ -251,54 +251,88 @@ export class RefundService {
       paymentId: t.paymentId,
       ...(partial ? { amountMinor: claimed.amount } : {}),
       note: req.reason,
+      idempotencyKey: claimed.uuid,
+      reference: claimed.uuid,
     });
 
     // 3. Record what it said, with the audit row and the event, in one transaction.
-    return this.store.tx(async (tx) => {
-      const status = answer.ok
-        ? answer.status === 'processed'
-          ? 'processed'
-          : 'pending'
-        : 'failed';
-      const res = await tx.execute(sql`
-        UPDATE order_refunds
-        SET status = ${status}, gateway_refund_id = ${answer.refundId ?? null}, failure = ${answer.ok ? null : (answer.reason ?? 'unknown').slice(0, 500)}
-        WHERE org_id = ${t.orgId} AND id = ${claimed.id}
-        RETURNING *`);
-      const row = (res.rows as Raw[])[0]!;
-      await this.audit.record(tx, {
-        event: answer.ok ? 'billing.refund.created' : 'billing.refund.failed',
-        status: answer.ok ? 'success' : 'failure',
-        actorType: 'platform_operator',
-        actorId: operatorId,
-        payload: {
-          refund: claimed.uuid,
-          gateway: t.gateway,
-          payment: t.paymentId,
-          amountMinor: claimed.amount.toString(),
-          currency: t.currency,
-          status,
-        },
-      });
-      await this.outbox.emit(tx, {
-        aggregateModule: 'order_refunds',
-        aggregateId: claimed.id,
-        eventType: answer.ok ? 'paygw.refund.created' : 'paygw.refund.failed',
-        orgId: t.orgId,
-        payload: {
-          gateway: t.gateway,
-          amountMinor: claimed.amount.toString(),
-          currency: t.currency,
-          status,
-        },
-      });
-      if (!answer.ok)
-        this.logger.warn(
-          { gateway: t.gateway, reason: answer.reason },
-          'refund refused by the provider',
-        );
-      return present(row);
+    return this.store.tx(async (tx) =>
+      present(
+        await this.settle(
+          tx,
+          {
+            orgId: t.orgId,
+            id: claimed.id,
+            uuid: claimed.uuid,
+            gateway: t.gateway,
+            paymentId: t.paymentId,
+            amount: claimed.amount,
+            currency: t.currency,
+          },
+          answer,
+          { type: 'platform_operator', id: operatorId },
+        ),
+      ),
+    );
+  }
+
+  /**
+   * Gives a `pending` refund row the provider's answer, with the audit row and the outbox event, inside the caller's transaction. Used
+   * by the request that made the refund and by the reconciler that finds one whose answer never got recorded.
+   */
+  async settle(
+    tx: Tx,
+    c: {
+      orgId: number;
+      id: number;
+      uuid: string;
+      gateway: string;
+      paymentId: string;
+      amount: bigint;
+      currency: string;
+    },
+    answer: { ok: boolean; refundId?: string; status?: string; reason?: string },
+    actor: { type: 'platform_operator' | 'system'; id: number | null },
+  ): Promise<Raw> {
+    const status = answer.ok ? (answer.status === 'processed' ? 'processed' : 'pending') : 'failed';
+    const res = await tx.execute(sql`
+      UPDATE order_refunds
+      SET status = ${status}, gateway_refund_id = ${answer.refundId ?? null}, failure = ${answer.ok ? null : (answer.reason ?? 'unknown').slice(0, 500)}
+      WHERE org_id = ${c.orgId} AND id = ${c.id}
+      RETURNING *`);
+    const row = (res.rows as Raw[])[0]!;
+    await this.audit.record(tx, {
+      event: answer.ok ? 'billing.refund.created' : 'billing.refund.failed',
+      status: answer.ok ? 'success' : 'failure',
+      actorType: actor.type,
+      actorId: actor.id,
+      payload: {
+        refund: c.uuid,
+        gateway: c.gateway,
+        payment: c.paymentId,
+        amountMinor: c.amount.toString(),
+        currency: c.currency,
+        status,
+      },
     });
+    await this.outbox.emit(tx, {
+      aggregateModule: 'order_refunds',
+      aggregateId: c.id,
+      eventType: answer.ok ? 'paygw.refund.created' : 'paygw.refund.failed',
+      orgId: c.orgId,
+      payload: {
+        gateway: c.gateway,
+        amountMinor: c.amount.toString(),
+        currency: c.currency,
+        status,
+      },
+    });
+    if (!answer.ok)
+      this.logger.warn(
+        { gateway: c.gateway, reason: answer.reason },
+        'refund refused by the provider',
+      );
+    return row;
   }
 
   /** Everything already returned (or being returned) on this payment: failed attempts do not count. */

@@ -376,6 +376,7 @@ const history = (over: Partial<FieldHistoryEntry>): FieldHistoryEntry => ({
   newValue: 'Aarav Sharma',
   actorType: 'user',
   changedByUserId: ME,
+  changedByName: 'Ritchie Tandhara',
   changedAt: '2026-03-06T09:30:00.000Z',
   ...over,
 });
@@ -400,12 +401,15 @@ describe('FieldHistoryPanel', () => {
           newValue: 'Ravi Nair',
           actorType: 'system',
           changedByUserId: null,
+          changedByName: null,
         }),
+        history({ fieldKey: 'status', actorType: 'user', changedByName: null }),
         history({
           fieldKey: 'customFields.lead_source',
           oldValue: { a: 1 },
           newValue: 'Webinar',
           actorType: 'api',
+          changedByName: null,
         }),
       ],
       true,
@@ -425,6 +429,8 @@ describe('FieldHistoryPanel', () => {
     expect(out).toContain('—');
     expect(out).toContain('>empty<');
     expect(out).toContain('Mar 6, 2026, 9:30 AM');
+    // A change names the person who made it; only one whose name is not known falls back to "a user".
+    expect(out).toContain('By Ritchie Tandhara');
     expect(out).toContain('By a user');
     expect(out).toContain('By the system');
     expect(out).toContain('By the API');

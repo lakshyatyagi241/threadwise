@@ -13,13 +13,15 @@ import {
   isGroupPeer,
   personalGroupSendBlock,
 } from '../../infra/providers/whatsapp/group-peer';
+import { deliveryProviderOf } from '../../kernel/outbox/delivery-report';
 import { QUEUES } from '../../infra/queue/queues';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { WalletGateService } from '../wallet-message-billing';
+import { UsageBillingService, WalletGateService } from '../wallet-message-billing';
 import { ChannelDispatcher } from './channel-dispatcher.service';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { usageKindOfChannel } from './chat-usage';
 import type { EnqueueOutboundInput, EnqueueOutboundResult } from './conversations.facade';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
 import {
@@ -87,6 +89,7 @@ export class OutboundService {
     private readonly dispatcher: ChannelDispatcher,
     private readonly plans: PlanEntitlementService,
     private readonly wallet: WalletGateService,
+    private readonly usage: UsageBillingService,
     private readonly realtime: ChatRealtimePublisher,
     private readonly view: MessageViewService,
     private readonly lifecycle: ConversationLifecycleService,
@@ -186,6 +189,8 @@ export class OutboundService {
         },
       };
       const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
+      await this.assertUsageAffordable(orgId, runtime.kind, isReaction);
+      await this.assertMessageAffordable(orgId, runtime.kind, conv.peerKey, isReaction);
       await this.dispatcher.assertCanQueue(request, {
         monthlyUsed: await this.monthlyUsed(tx, orgId, runtime),
       });
@@ -252,7 +257,11 @@ export class OutboundService {
         replyToMessageUuid: replyTo?.uuid ?? null,
         templateId: fields.templateId,
         // A message to a Cloud API group remembers how many people it was addressed to, for the "delivered to X of N" tally.
-        meta: groupMembers === null ? fields.meta : { ...fields.meta, group_members: groupMembers },
+        meta: {
+          ...fields.meta,
+          ...(input.origin ? { source: input.origin } : {}),
+          ...(groupMembers === null ? {} : { group_members: groupMembers }),
+        },
       });
       await this.messages.insertEvent(
         tx,
@@ -282,8 +291,12 @@ export class OutboundService {
   /**
    * The agent's Retry on a failed message: the same message goes back to `queued` (a new dispatch generation, so the job id is new)
    * and is checked again like a new send (the window may have closed, the channel may have been switched off, the cap may be full).
+   * `templateComponents` are the components a Retry rebuilt for a template message sent before they were stored; they are stored with it.
    */
-  async retry(messageUuid: string): Promise<MessageResponse> {
+  async retry(
+    messageUuid: string,
+    templateComponents?: Record<string, unknown>[],
+  ): Promise<MessageResponse> {
     const ctx = RequestContextStore.require();
     const orgId = ctx.orgId;
 
@@ -306,7 +319,22 @@ export class OutboundService {
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
       await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
-      const retryEnvelope = envelopeOf(row, conv.peerKey, replyTo?.providerMessageId ?? null, 1);
+      await this.assertUsageAffordable(orgId, runtime.kind, row.kind === 'reaction');
+      await this.assertMessageAffordable(
+        orgId,
+        runtime.kind,
+        conv.peerKey,
+        row.kind === 'reaction',
+      );
+      // A template message sent before its components were stored gets the ones the caller rebuilt from the live template.
+      const patch = templateComponents ? { templateComponents } : {};
+      const retried = { ...row, meta: { ...row.meta, ...patch } };
+      const retryEnvelope = envelopeOf(
+        retried,
+        conv.peerKey,
+        replyTo?.providerMessageId ?? null,
+        1,
+      );
       await this.dispatcher.assertCanQueue(
         {
           channel: runtime,
@@ -322,7 +350,7 @@ export class OutboundService {
       );
 
       const ref = { id: row.id, createdAt: row.createdAtText };
-      const requeued = await this.messages.requeue(tx, orgId, ref);
+      const requeued = await this.messages.requeue(tx, orgId, ref, patch);
       if (!requeued) {
         throw new AppError(
           ERROR_CODES.MESSAGE_NOT_RETRYABLE,
@@ -428,6 +456,39 @@ export class OutboundService {
       `Message ${uuid} not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  /**
+   * Email and the other chat channels cost the platform's per-message fee (`email`, `chat_message` in the usage prices), charged when
+   * the provider accepts the message. An empty wallet is refused here, before a row exists (422 `WALLET_EMPTY`), for the same reason
+   * the WhatsApp group send is: the fee is taken after the work, so an empty wallet would otherwise send for free. Independent of
+   * `metered` (the plan's monthly cap). A free price, a platform-owned workspace, an unbilled channel and a reaction pass; a failed
+   * billing lookup lets the send through.
+   */
+  private async assertUsageAffordable(
+    orgId: number,
+    channelKind: string,
+    isReaction: boolean,
+  ): Promise<void> {
+    const kind = usageKindOfChannel(channelKind);
+    if (!kind || isReaction) return;
+    await this.usage.assertCanAfford(orgId, kind);
+  }
+
+  /**
+   * A WhatsApp message to one person is the paid message of the wallet (TW-WALLET-009): refuse before a row exists when the wallet
+   * cannot pay for it and the plan's allowance does not cover it (422 `WALLET_EMPTY`). Without this check an inbox or template send
+   * with an empty wallet went out and was recorded free. A group send has its own check (`assertGroupSendable`), a reaction is free,
+   * and a channel whose messages are not billed (the simulator, a personal number) passes.
+   */
+  private async assertMessageAffordable(
+    orgId: number,
+    channelKind: string,
+    peerKey: string,
+    isReaction: boolean,
+  ): Promise<void> {
+    if (isReaction || isGroupPeer(peerKey) || deliveryProviderOf(channelKind) === null) return;
+    await this.wallet.assertCanSend({ orgId, source: 'inbox', to: peerKey });
   }
 
   /**

@@ -40,7 +40,7 @@
       "topup": "Aufladung",
       "earn": "Gutschrift",
       "refund": "Erstattung",
-      "spend": "Nachrichtenkosten",
+      "spend": "Nutzungsgebühr",
       "admin_adjust": "Korrektur"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Vollständigen Kontoauszug öffnen",
         "emptyTitle": "Noch keine Aktivität",
         "emptyBody": "Aufladungen, Nachrichtenkosten und Erstattungen erscheinen hier."
-      }
+      },
+      "messageExpenses": "Nachrichtenkosten"
     },
     "activity": {
       "description": "Beschreibung",
@@ -145,7 +146,7 @@
         "all": "Alle",
         "topup": "Aufladungen",
         "earn": "Erträge",
-        "spend": "Nachrichtengebühren",
+        "spend": "Nutzungsgebühren",
         "refund": "Erstattungen",
         "admin_adjust": "Anpassungen"
       },
@@ -164,12 +165,16 @@
         "in": "Geldeingang",
         "out": "Geldausgang",
         "balance": "Saldo",
-        "none": "Keine"
+        "none": "Keine",
+        "channel": "Kanal",
+        "recipient": "Empfänger",
+        "template": "Vorlage",
+        "country": "Land",
+        "category": "Kategorie",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Grund",
-        "to": "An",
-        "template": "Vorlage"
+        "reason": "Grund"
       },
       "channels": {
         "campaign": "Kampagne",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Ausgaben",
+      "subtitle": "Was jede Nachricht, jeder Anruf, jede KI-Anfrage und jede Abfrage gekostet hat und wofür sie war. Die Summen umfassen alles, was zu den Filtern passt.",
+      "back": "Zurück zum Wallet",
+      "breadcrumbLabel": "Navigationspfad",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Ausgaben",
+      "fullStatement": "Vollständiger Kontoauszug",
+      "summary": {
+        "messages": "Posten",
+        "charged": "Berechnet",
+        "refunded": "Erstattet",
+        "net": "Nettokosten",
+        "notBilled": "Nicht berechnet"
+      },
+      "filters": {
+        "status": "Abrechnungsstatus",
+        "statusAll": "Alle",
+        "statusCharged": "Berechnet",
+        "statusFree": "Nicht berechnet",
+        "statusRefunded": "Erstattet",
+        "template": "Vorlage",
+        "templatePlaceholder": "Name der Vorlage",
+        "channel": "Kanal",
+        "category": "Kategorie",
+        "allChannels": "Alle Kanäle",
+        "allCategories": "Alle Kategorien",
+        "from": "Von",
+        "to": "Bis",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen",
+        "rangeInverted": "Das Enddatum liegt vor dem Startdatum.",
+        "kind": "Typ",
+        "allKinds": "Alle Typen"
+      },
+      "breakdown": {
+        "title": "Kosten nach",
+        "groupBy": {
+          "template": "Vorlage",
+          "source": "Kanal",
+          "category": "Kategorie",
+          "country": "Land",
+          "kind": "Typ"
+        },
+        "group": "Gruppe",
+        "notRecorded": "Nicht erfasst",
+        "truncated": "Die {count} größten Gruppen werden angezeigt. Zum Anzeigen der restlichen Gruppen den Zeitraum eingrenzen.",
+        "empty": "Nichts passt zu diesen Filtern."
+      },
+      "columns": {
+        "date": "Datum",
+        "template": "Vorlage",
+        "campaign": "Kampagne, Broadcast oder Funktion",
+        "channel": "Kanal",
+        "category": "Kategorie",
+        "country": "Land",
+        "status": "Abrechnungsstatus",
+        "charged": "Berechnet",
+        "refunded": "Erstattet",
+        "net": "Netto",
+        "messages": "Posten",
+        "notBilled": "Nicht berechnet",
+        "type": "Typ"
+      },
+      "status": {
+        "charged": "Berechnet",
+        "free": "Nicht berechnet",
+        "refunded": "Erstattet",
+        "refundedOn": "Erstattet am {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Im Tarif enthalten",
+        "wallet_empty": "Das Wallet war leer",
+        "rate_is_zero": "Der Preis ist null",
+        "no_wallet_owner": "Kein Wallet-Inhaber"
+      },
+      "uncollected": "{amount} nicht eingezogen",
+      "emptyTitle": "Noch keine Ausgaben",
+      "emptyBody": "Nachrichten, Anrufe, KI-Anfragen und andere Nutzung erscheinen hier mit Zweck und Kosten.",
+      "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
+      "days": {
+        "title": "Tagesprotokoll",
+        "subtitle": "Nachrichten nach Tag, Typ, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
+        "messagesOnDay": "{count} Nachrichten",
+        "viewDetails": "Details anzeigen",
+        "actions": "Aktionen",
+        "empty": "An diesen Tagen gibt es keine Nachrichten."
+      },
+      "log": {
+        "title": "Nachrichten",
+        "forDay": "Nachrichten vom {date}",
+        "showAllDays": "Alle Tage anzeigen"
+      },
+      "units": {
+        "sms": "{count, plural, one {# Segment} other {# Segmente}}",
+        "whatsapp_call": "{count, plural, one {# Minute} other {# Minuten}}",
+        "voice_call": "{count, plural, one {# Minute} other {# Minuten}}"
+      },
+      "sources": {
+        "lead_first": "Sofortige Lead-Antwort",
+        "lead": "Sofortige Lead-Antwort",
+        "test": "Testversand",
+        "appointment": "Terminerinnerung",
+        "lead_scoring": "Lead-Bewertung",
+        "lead_digest": "Chat-Zusammenfassung",
+        "pql_search": "Kontaktsuche",
+        "growth_assistant": "Wachstumsassistent",
+        "ai_copilot": "KI-Copilot",
+        "help_agent": "Hilfeassistent",
+        "company_brief": "Firmenprofil",
+        "inbox_ai": "Antwortassistent",
+        "template_ai": "Vorlagen-Builder",
+        "campaign_ai": "Kampagnentexter",
+        "campaign_ai_image": "Kampagnenbild",
+        "kb_embedding": "Wissensdatenbank",
+        "flow_ai": "Flow-Generator",
+        "widget_ai": "Website-Chatbot",
+        "growth": "Wachstum",
+        "telephony": "Telefonanrufe",
+        "translation": "Übersetzung",
+        "widget": "Website-Chatbot"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "Service"
             },
             "problems": "Übersprungene Zeilen"
+          }
+        },
+        "usage": {
+          "title": "Preise für weitere Nutzung",
+          "subtitle": "Was SMS, E-Mails, Anrufe, Kontaktabfragen und andere Chat-Kanäle Ihre Kunden pro Einheit kosten. Ein Preis von 0 oder ein ausgeschalteter Schalter wird im Ausgabenprotokoll trotzdem erfasst, aber nichts berechnet.",
+          "perUnit": "Preis pro {unit}",
+          "chargeFor": "{kind} berechnen",
+          "units": {
+            "segment": "SMS-Segment",
+            "email": "E-Mail",
+            "minute": "Minute",
+            "lookup": "Abfrage",
+            "message": "Nachricht"
+          },
+          "hints": {
+            "sms": "Wird zusätzlich zur Rechnung des eigenen SMS-Anbieters des Kunden berechnet. Ein Segment hat 160 Zeichen (70 bei nicht lateinischem Text).",
+            "email": "Wird zusätzlich zum eigenen Postfach des Kunden berechnet. Jede gesendete E-Mail zählt einmal.",
+            "whatsapp_call": "Jede begonnene Minute eines WhatsApp-Anrufs. Ein Anruf, den niemand angenommen hat, ist kostenlos.",
+            "voice_call": "Jede begonnene Minute eines Anrufs, den der Telefonieanbieter des Kunden meldet. Von Hand eingetragene Anrufprotokolle werden nie berechnet.",
+            "enrichment": "Jeder Kontakt, der beim Datenanbieter der Plattform abgefragt wird.",
+            "chat_message": "Jede Nachricht über Telegram, Facebook, Instagram, LINE, Viber oder WeChat. Kostenlos, bis Sie einen Preis festlegen.",
+            "webbot_message": "Jede Besuchernachricht, die der Website-Chatbot bearbeitet, nachdem die kostenlosen Monatsnachrichten des Tarifs aufgebraucht sind."
+          },
+          "costPlus": {
+            "title": "Zum Anbieterpreis plus Aufschlag berechnet",
+            "body": "KI-Anfragen und kostenpflichtige Übersetzungen laufen über die eigenen Anbieterschlüssel der Plattform und werden zum Preis des Anbieters plus dem Aufschlag unten berechnet. Ein Arbeitsbereich mit eigenem Schlüssel wird nie belastet."
+          },
+          "markup": "Aufschlag auf die Anbieterkosten",
+          "markupHint": "10 bedeutet: Eine Anfrage, die 1,00 gekostet hat, wird mit 1,10 berechnet.",
+          "saving": "Speichern …",
+          "save": "Preise speichern",
+          "saved": "Nutzungspreise gespeichert",
+          "problems": {
+            "invalid": "Geben Sie einen Betrag mit höchstens 2 Dezimalstellen ein",
+            "tooHigh": "Das liegt über dem Limit"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "WhatsApp-Nachricht",
+      "sms": "SMS",
+      "email": "E-Mail",
+      "whatsapp_call": "WhatsApp-Anruf",
+      "voice_call": "Sprachanruf",
+      "ai": "KI",
+      "translation": "Übersetzung",
+      "enrichment": "Kontaktabfrage",
+      "chat_message": "Chat-Nachricht",
+      "webbot_message": "Website-Chatbot-Nachricht"
     }
   }
 }

@@ -415,6 +415,10 @@
         "tooLarge": "इमेज 1 MB से बड़ी है।"
       }
     },
+    "fullPage": {
+      "open": "पूरा पेज",
+      "close": "पूरा पेज बंद करें"
+    },
     "flowBot": {
       "customize": {
         "loading": "विजेट लोड हो रहा है…",

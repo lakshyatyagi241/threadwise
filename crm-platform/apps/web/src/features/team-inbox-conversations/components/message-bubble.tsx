@@ -44,8 +44,9 @@ import {
 import { Ticks, useErrorText } from './parts';
 import { QuotePreview } from './quote-preview';
 import { ReactionBar } from './reaction-bar';
+import { BotReturnedLine } from './bot-returned-line';
 import { StageChangeLine } from './stage-change-line';
-import { TemplateMessage } from './template-message';
+import { MatchedTemplateButtons, TemplateMessage } from './template-message';
 
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
 
@@ -216,6 +217,64 @@ function MessageBody({
     );
   }
 
+  // A carousel a flow sent: its intro line, then each card in order with its picture, text and buttons.
+  if (m.sentCarousel) {
+    return (
+      <div data-testid="inbox-sent-carousel" className="space-y-1.5">
+        {caption && <WhatsAppText text={caption} />}
+        <ul className="space-y-1.5">
+          {m.sentCarousel.cards.map((c, i) => {
+            const image = safeHttpHref(c.image);
+            return (
+              <li
+                key={i}
+                data-testid="inbox-sent-carousel-card"
+                className="space-y-1 rounded-lg bg-background/50 px-2 py-1.5 text-xs"
+              >
+                {image && (
+                  <img
+                    src={image}
+                    alt={c.title}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    className="max-h-32 w-full rounded object-cover"
+                  />
+                )}
+                {c.title && (
+                  <p dir="auto" className="font-semibold break-words">
+                    {c.title}
+                  </p>
+                )}
+                {c.text && (
+                  <p dir="auto" className="break-words">
+                    {c.text}
+                  </p>
+                )}
+                {c.buttons.length > 0 && (
+                  <BubbleButtonList testId="inbox-sent-carousel-buttons" className="-mx-2 mt-1.5">
+                    {c.buttons.map((b, j) => {
+                      // A link button opens its address; a reply button has nothing to open.
+                      const href = safeHttpHref(b.url);
+                      return (
+                        <BubbleButton
+                          key={j}
+                          href={href}
+                          testId="inbox-sent-carousel-button"
+                          icon={href ? <LinkIcon width={14} height={14} aria-hidden /> : undefined}
+                          label={b.title}
+                        />
+                      );
+                    })}
+                  </BubbleButtonList>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   if (m.kind === 'interactive' && (m.interactive || caption)) {
     // A Flow answer has no chip, only its text lines: show those as they are, with their line breaks.
     if (!m.interactive && caption && caption.includes('\n')) {
@@ -339,6 +398,13 @@ export const MessageBubble = memo(function MessageBubble({
         </li>
       );
     }
+    if (m.systemEvent?.event === 'bot_returned') {
+      return (
+        <li data-testid="inbox-message" className="flex justify-center">
+          <BotReturnedLine event={m.systemEvent} fallback={m.body} />
+        </li>
+      );
+    }
     const consent = m.systemEvent?.event === 'consent' ? m.systemEvent : null;
     return (
       <li data-testid="inbox-message" className="flex justify-center">
@@ -399,9 +465,15 @@ export const MessageBubble = memo(function MessageBubble({
             className={cn(
               BUBBLE,
               m.email && 'w-full sm:max-w-[90%]',
-              out
-                ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
-                : 'rounded-es-md border border-border bg-background',
+              m.email
+                ? // An email is a card of its own: the same frame for both sides, the sent ones marked with an accent edge.
+                  cn(
+                    'rounded-lg border border-border bg-background text-foreground shadow-sm',
+                    out && 'border-s-4 border-s-primary',
+                  )
+                : out
+                  ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
+                  : 'rounded-es-md border border-border bg-background',
               failed && 'border-danger/50',
             )}
           >
@@ -452,6 +524,7 @@ export const MessageBubble = memo(function MessageBubble({
             )}
             {m.replyToMessageId && <QuotePreview message={quoted} variant="bubble" />}
             <MessageBody message={m} onRetry={onRetry} />
+            {m.matchedTemplate && <MatchedTemplateButtons buttons={m.matchedTemplate.buttons} />}
             {m.reaction && m.kind !== 'reaction' && (
               <span
                 data-testid="inbox-customer-reaction"

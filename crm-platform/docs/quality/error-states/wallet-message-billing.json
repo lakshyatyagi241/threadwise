@@ -1,0 +1,117 @@
+{
+  "feature": "wallet-message-billing",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-wallet-message-billing-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/adjust-dialog.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/billing-currency-card.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/logs-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/components/states.test.tsx",
+          "match": "shows an error state with a retry when the log list fails to load"
+        }
+      ]
+    },
+    {
+      "id": "ES-wallet-message-billing-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/package-form-page.tsx",
+        "apps/web/src/features/wallet-message-billing/components/customer/message-pricing-panel.tsx",
+        "apps/web/src/features/wallet-message-billing/components/customer/statement-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-wallet-message-billing-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/api.ts",
+        "apps/web/src/features/wallet-message-billing/components/admin/adjust-dialog.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/billing-currency-card.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/components/states.test.tsx",
+          "match": "keeps the typed values and shows the error when save fails, and the button works again"
+        }
+      ]
+    },
+    {
+      "id": "ES-wallet-message-billing-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/lib/errors.ts",
+        "apps/web/src/features/wallet-message-billing/lib/package-form.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/margins-packages.test.tsx",
+          "match": "turns a 409 into the stale-form state and a 422 into field marks, never by message text"
+        }
+      ]
+    },
+    {
+      "id": "ES-wallet-message-billing-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/lib/errors.ts",
+        "apps/web/src/features/wallet-message-billing/lib/package-form.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/components/states.test.tsx",
+          "match": "names the stale row when the save fails with a version conflict"
+        },
+        {
+          "file": "apps/web/src/features/wallet-message-billing/margins-packages.test.tsx",
+          "match": "turns a 409 into the stale-form state and a 422 into field marks, never by message text"
+        }
+      ]
+    },
+    {
+      "id": "ES-wallet-message-billing-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/adjust-dialog.tsx",
+        "apps/web/src/features/wallet-message-billing/lib/download.ts",
+        "apps/web/src/features/wallet-message-billing/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

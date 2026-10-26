@@ -6,6 +6,7 @@ import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { WhatsAppText } from '@/components/whatsapp-text';
 import type { PreviewModel } from '../lib/form-model';
 import {
+  CheckIcon,
   CopyIcon,
   DocumentIcon,
   ImageIcon,
@@ -66,6 +67,58 @@ function MediaBlock({ model }: { model: PreviewModel }) {
   );
 }
 
+/** A carousel's cards under the bubble: a row to swipe through, each card a picture or video, its text and its buttons. */
+function CardsStrip({ cards }: { cards: NonNullable<PreviewModel['cards']> }) {
+  const t = useTranslations('message-templates.preview');
+  return (
+    <ul
+      className="flex gap-2 overflow-x-auto pb-1"
+      data-testid="bubble-cards"
+      aria-label={t('cards')}
+    >
+      {cards.map((c, i) => (
+        <li
+          key={i}
+          className="w-[11rem] shrink-0 overflow-hidden rounded-lg bg-background text-sm shadow-sm"
+          data-testid="bubble-card"
+        >
+          {c.imageUrl && c.format === 'image' ? (
+            <img src={c.imageUrl} alt="" className="h-24 w-full object-cover" />
+          ) : (
+            <div className="grid h-24 place-items-center bg-muted text-muted-foreground">
+              {c.format === 'video' ? (
+                <VideoIcon className="size-6" />
+              ) : (
+                <ImageIcon className="size-6" />
+              )}
+            </div>
+          )}
+          <div className="break-words px-2 py-1.5 text-xs">
+            {c.body ? (
+              <FormattedText text={c.body} />
+            ) : (
+              <span className="text-muted-foreground">{t('cardEmpty', { n: i + 1 })}</span>
+            )}
+          </div>
+          {c.buttons.length > 0 && (
+            <ul className="space-y-1 border-t border-border px-2 py-1.5">
+              {c.buttons.map((b, j) => (
+                <li
+                  key={j}
+                  className="flex items-center justify-center gap-1.5 text-xs font-medium text-brand"
+                >
+                  <ButtonIcon kind={b.kind} />
+                  <span className="truncate">{b.text || t('buttonUnnamed')}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
  * The WhatsApp-style message bubble used by the library cards, the live form preview and the detail page. Only shows what
  * the template holds; it never invents content.
@@ -84,7 +137,7 @@ export function MessageBubble({
   const shown = maxButtons === undefined ? model.buttons : model.buttons.slice(0, maxButtons);
   const hidden = model.buttons.length - shown.length;
 
-  return (
+  const bubble = (
     <div
       className={cn(
         'w-full max-w-[95%] rounded-lg rounded-ss-sm bg-background px-2.5 py-2 text-sm shadow-sm',
@@ -106,6 +159,19 @@ export function MessageBubble({
       ) : (
         <>
           <MediaBlock model={model} />
+          {model.offer && (
+            <div
+              className="mb-1.5 flex items-center justify-between gap-2 rounded-md bg-muted px-2 py-1.5 text-xs"
+              data-testid="bubble-offer"
+            >
+              <span className="font-semibold break-words">
+                {model.offer.text || t('offerTextEmpty')}
+              </span>
+              {model.offer.countdown && (
+                <span className="shrink-0 text-muted-foreground">{t('offerExpires')}</span>
+              )}
+            </div>
+          )}
           {model.headerKind === 'text' && model.headerText && (
             <div className="mb-1 font-semibold break-words">
               <FormattedText text={model.headerText} />
@@ -123,7 +189,10 @@ export function MessageBubble({
           )}
         </>
       )}
-      <p className="mt-1 text-end text-[10px] text-muted-foreground">{t('time')} ✓✓</p>
+      <p className="mt-1 flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
+        {t('time')}
+        <CheckIcon className="h-2.5 w-4 text-brand" />
+      </p>
       {(shown.length > 0 || model.auth) && (
         <ul className="mt-1.5 space-y-1 border-t border-border pt-1.5" data-testid="bubble-buttons">
           {model.auth ? (
@@ -149,6 +218,14 @@ export function MessageBubble({
           )}
         </ul>
       )}
+    </div>
+  );
+  const cards = model.cards ?? [];
+  if (cards.length === 0 || model.auth) return bubble;
+  return (
+    <div className="w-full space-y-1.5">
+      {bubble}
+      <CardsStrip cards={cards} />
     </div>
   );
 }

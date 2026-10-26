@@ -555,7 +555,8 @@
           "cardCount": "{count} Karte(n)",
           "payLink": "Zahlungslink",
           "invoice": "Rechnung",
-          "faqRetired": "Eingestellt · verlässt über „Keine Übereinstimmung“"
+          "faqAgent": "Antwortet aus {agent}",
+          "faqNoAgent": "KI-Agent wählen"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
@@ -746,7 +747,8 @@
           "storedIn": "Werte werden in der Eigenschaft <b>{property}</b> des Kontakts gespeichert",
           "actions": "Aktionen",
           "actionsHint": "Einen Schritt hinzufügen, der direkt nach diesem läuft.",
-          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen."
+          "actionsBlocked": "Auf einen Schritt, der seinen Teil beendet, kann kein Schritt folgen.",
+          "fromSteps": "Erreicht von Schritt {stages}"
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -858,7 +860,13 @@
             "choose": "Vorlage auswählen ...",
             "buttons": "Schaltflächen",
             "variables": "Wird aus dem Kontakt befüllt",
-            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage."
+            "variablesHint": "Jede Nummer wird beim Senden der Nachricht mit der hier genannten Kontaktangabe befüllt. Ändern Sie das in der Vorlage.",
+            "fills": "Womit jede Nummer gefüllt wird",
+            "fillsHint": "Wähle eine Kontaktangabe oder eine Ablaufvariable oder schreibe einen eigenen Text. Leer lassen, um die Vorgabe der Vorlage zu nutzen.",
+            "fillPick": "Angabe einfügen…",
+            "headerMedia": "Kopfzeilen-Datei",
+            "headerMediaHint": "Das Bild, Video oder die Datei in der Kopfzeile dieser Vorlage. Nötig, wenn die Vorlage keine eigene Datei hat.",
+            "headerMediaMissing": "Kopfzeilen-Datei hinzufügen: Diese Vorlage hat keine, und WhatsApp sendet sie ohne nicht."
           },
           "cta": {
             "buttonText": "Schaltflächentext",
@@ -897,7 +905,15 @@
               "phone": "Nummer anrufen",
               "email": "E-Mail senden",
               "agent": "Mit einer Person sprechen"
-            }
+            },
+            "prev": "Vorherige Karte",
+            "next": "Nächste Karte",
+            "goTo": "Karte {n}",
+            "saveCopy": "Kopie speichern",
+            "saveCopyHint": "Speichert dieses Bild auf unserem Server, damit der Chat es jedem Besucher zeigen kann. Ein Bild von einer Seite, die das Teilen verweigert, kann nicht kopiert werden: laden Sie es stattdessen hoch.",
+            "saving": "Wird gespeichert…",
+            "copyFailed": "Kopie konnte nicht gespeichert werden: {message}",
+            "imageFormats": "Zulässige Formate: JPG, JPEG oder PNG."
           },
           "condition": {
             "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",
@@ -908,12 +924,16 @@
             "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
           },
           "faq": {
-            "exit": "Weiter mit",
-            "exitHint": "Der Ablauf geht immer hier weiter."
+            "exit": "Wenn nichts passt",
+            "exitHint": "Wohin der Ablauf geht, wenn kein Eintrag antwortet.",
+            "matched": "Bei Antwort",
+            "matchedHint": "Wohin der Ablauf nach dem Senden der Antwort geht."
           }
         },
         "branchAdd": "Schritt für „{title}“ hinzufügen",
-        "faqEnds": "Dieser eingestellte Schritt beendet diesen Abschnitt: Der Ablauf geht immer über seinen Ausgang „Keine Übereinstimmung“ weiter."
+        "faqEnds": "Dieser Schritt beendet diesen Teil: Der Ablauf geht über den Ausgang Beantwortet oder Kein Treffer weiter.",
+        "flowMenu": "Optionen für {name}",
+        "renameFlow": "Ablauf umbenennen"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value} (nicht im Arbeitsbereich)",
           "templateLabel": "Genehmigte Vorlage",
           "templateHint": "Hier werden nur genehmigte Vorlagen aus dem Arbeitsbereich angezeigt. <link>Neue erstellen →</link>",
+          "statusExits": "Status-Ausgänge hinzufügen (Gesendet, Zugestellt, Gelesen, Beantwortet, Fehlgeschlagen)",
+          "statusExitsHint": "Der Ablauf verlässt den Baustein über den ersten Ausgang mit angeschlossenem Schritt: Gesendet, sobald die Vorlage angenommen ist; Zugestellt oder Gelesen, wenn WhatsApp es meldet; Beantwortet, wenn der Kunde antwortet; Fehlgeschlagen, wenn sie nicht gesendet werden konnte. Eine vom Kunden gedrückte Schaltfläche nimmt ihren eigenen Ausgang.",
           "type": "Typ",
           "kindText": "Text",
           "kindImage": "Bild",
@@ -1364,12 +1386,12 @@
           "stageHint": "Wenn ein Deal in diese Pipeline-Phase verschoben wird, wird der verknüpfte Kontakt aufgenommen. Phasen verwalten Sie auf der Deals-Übersicht /deals.",
           "rulesLabel": "An Kommentar-Schlüsselwortregeln binden",
           "rulesHint": "Markieren Sie die Regeln, die diesen Flow starten sollen. Lassen Sie alle unmarkiert, damit er bei jeder Regel Kommentar → DM läuft.",
-          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden. Erstellen Sie sie unter <link>/auto-reply</link> (Instagram · Auslöser „Kommentar → DM“) und wählen Sie sie dann hier aus.",
+          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden, daher gibt es hier nichts auszuwählen.",
           "ruleFallback": "Regel {id}",
           "ruleOff": "aus",
           "orderPlaced": "Wird für jede neue Bestellung ausgelöst. Der Kunde der Bestellung wird einem gespeicherten Kontakt zugeordnet und aufgenommen.",
           "automatic": "Wird automatisch ausgelöst, keine weitere Konfiguration nötig.",
-          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Schalten Sie den Abwesenheitsmodus auf der Seite <link>Automatische Antwort</link> um. Jeder Kontakt wird einmal aufgenommen.",
+          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Jeder Kontakt wird einmal aufgenommen.",
           "outOfHours": "Wird bei jeder eingehenden Nachricht ausgelöst, die <b>außerhalb der Geschäftszeiten Ihres Arbeitsbereichs</b> eingeht. Legen Sie die Geschäftszeiten in den Einstellungen Ihres Arbeitsbereichs fest. Jeder Kontakt wird einmal aufgenommen.",
           "manualEnroll": "Sie nehmen Kontakte manuell über die <link>Flows-Liste /flows</link> auf, mit der Schaltfläche <b>Aufnehmen</b> neben diesem Flow.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "Bis zur Zahlung warten, dann fortfahren"
         },
         "faq": {
-          "retired": "Dieser Schritt ist eingestellt und sucht nichts mehr. Der Ablauf geht immer über „Keine Übereinstimmung“ weiter. Um aus Ihrem eigenen Wissen zu antworten, nutzen Sie einen KI-Assistenten-Schritt und wählen Sie einen KI-Agenten."
+          "agent": "KI-Agent",
+          "agentHint": "Der Agent, dessen Wissensdatenbank durchsucht wird. Häufige Fragen fügen Sie unter KI-Training hinzu.",
+          "query": "Suchen nach",
+          "queryHint": "Wonach gesucht wird. Meist die letzte Nachricht des Kunden.",
+          "sendAnswer": "Antwort an den Kunden senden",
+          "variable": "Antwort speichern als",
+          "variableHint": "Spätere Schritte lesen die Antwort unter diesem Namen, zum Beispiel faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "Flow-Bereiche",
         "build": "Erstellen",
+        "faqs": "FAQ",
         "customize": "Anpassen",
         "saveFirst": "Speichern Sie zuerst den Flow.",
         "needsCustomizing": "Das Widget verwendet noch das Standarddesign. Öffnen Sie „Anpassen“.",
@@ -1933,6 +1962,13 @@
         "deploy": "Bereitstellen",
         "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen.",
         "install": "Installieren"
+      },
+      "faqsPanel": {
+        "intro": "FAQ sind Einträge im Wissen eines KI-Agenten. Diese gehören zum Agenten, mit dem dieser Ablauf antwortet: Fügen Sie hier Fragen und Antworten hinzu, der Agent nutzt sie.",
+        "noAgent": "Dieser Ablauf nutzt noch keinen KI-Agenten. Fügen Sie einen Schritt KI-Assistent oder Antwort aus FAQ hinzu und wählen Sie einen Agenten: Seine FAQ erscheinen hier.",
+        "agent": "KI-Agent",
+        "openAgent": "In KI-Training öffnen",
+        "unknownAgent": "KI-Agent (nicht gefunden)"
       },
       "buttonIcon": {
         "label": "Symbol (optional)",
@@ -2021,6 +2057,12 @@
           "unresolved": "Dieser Kurzlink wurde noch nicht abgerufen. Verlassen Sie das Feld oder versuchen Sie es erneut.",
           "resolve_failed": "Dieser Link konnte nicht gelesen werden. Prüfen Sie, ob er in Google Maps öffnet, oder geben Sie die Koordinaten ein."
         }
+      },
+      "flowImage": {
+        "title": "Bild nicht geladen",
+        "empty": "der Link ist leer",
+        "notAddress": "der Link ist keine Webadresse (er muss mit https:// beginnen)",
+        "failed": "konnte nicht geladen werden (der Link ist möglicherweise falsch, privat, blockiert oder kein Bild)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "Zahl",
         "alphanumeric": "Buchstaben und Zahlen",
         "date": "Datum",
+        "datetime": "Datum und Uhrzeit",
+        "time": "Uhrzeit",
         "age": "Alter",
         "date_of_birth": "Geburtsdatum"
       },
@@ -2343,6 +2387,8 @@
         "number": "Bitte geben Sie eine gültige Zahl ein",
         "alphanumeric": "Bitte verwenden Sie nur Buchstaben und Zahlen",
         "date": "Bitte geben Sie ein gültiges Datum ein ({format})",
+        "datetime": "Bitte gib ein gültiges Datum und eine gültige Uhrzeit ein ({format} HH:MM)",
+        "time": "Bitte gib eine gültige Uhrzeit ein (HH:MM)",
         "age": "Bitte geben Sie Ihr Alter als ganze Zahl ein",
         "date_of_birth": "Bitte geben Sie ein gültiges Datum ein ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "Frage",
           "help": "Beliebige Frage stellen und Antwort speichern"
         },
-        "askName": {
-          "label": "Name",
-          "help": "Nach einem Namen fragen und prüfen"
-        },
-        "askEmail": {
-          "label": "E-Mail",
-          "help": "Nach einer E-Mail-Adresse fragen und prüfen"
-        },
-        "askPhone": {
-          "label": "Telefonnummer",
-          "help": "Nach einer Telefonnummer fragen und prüfen"
-        },
-        "askNumber": {
-          "label": "Zahl",
-          "help": "Nach einer Zahl fragen und prüfen"
-        },
-        "askAlphanumeric": {
-          "label": "Buchstaben und Zahlen",
-          "help": "Eine ID oder ein Code, ohne Leerzeichen oder Symbole"
-        },
-        "askDate": {
-          "label": "Datum",
-          "help": "Nach einem Datum im gewählten Format fragen"
-        },
         "askFile": {
           "label": "Datei oder Bild",
           "help": "Auf Foto, Dokument, Video oder Audio warten"
@@ -2617,7 +2639,9 @@
         "writeCode": "Schritt {stage}: Schreibe den Code, der ausgeführt wird.",
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
-        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten."
+        "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten.",
+        "templateFile": "Schritt {stage}: Füge die Kopfzeilen-Datei der Vorlage hinzu.",
+        "fileLinkInvalid": "Schritt {stage}: Der Dateilink muss mit https:// beginnen"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
       "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
-      "faqRetired": "(simuliert) Antwort aus FAQ ist eingestellt: „Keine Übereinstimmung“ wird genommen."
+      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\".",
+      "carouselNoMatch": "„{value}“ ist keiner der Buttons. Tippen Sie auf einen oder geben Sie seinen Text genau ein."
     }
   }
 }

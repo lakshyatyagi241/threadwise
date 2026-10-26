@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Nâng cấp gói của bạn",
+      "timeline": {
+        "label": "Dòng thời gian nhắc hẹn",
+        "addMenu": "Thêm một bước",
+        "addStep": "Thêm bước",
+        "count": "{count} trên {max} bước có thời gian. Tin xác nhận lịch hẹn và tin khách không đến không được tính.",
+        "capReached": "Bạn đã đạt {max} bước có thời gian. Hãy xóa một bước để thêm bước khác.",
+        "empty": "Chưa có bước nào. Thêm bước đầu tiên, hoặc bắt đầu từ một chuỗi có sẵn.",
+        "lane": {
+          "booked": "Khi lịch hẹn được đặt",
+          "before": "Trước lịch hẹn",
+          "after": "Sau lịch hẹn"
+        },
+        "laneHint": {
+          "booked": "Gửi ngay khi lịch hẹn được đặt.",
+          "before": "Gửi trước khi lịch hẹn bắt đầu, không bao giờ gửi sau đó.",
+          "after": "Gửi sau khi lịch hẹn kết thúc, hoặc khi được đánh dấu là khách không đến."
+        },
+        "laneEmpty": "Chưa có gì ở đây.",
+        "step": {
+          "confirmation": "Xác nhận lịch hẹn",
+          "reminder_24h": "Nhắc trước 24 giờ",
+          "reminder_2h": "Nhắc trước 2 giờ",
+          "reminder_15m": "Nhắc trước 15 phút",
+          "reminder": "Nhắc hẹn",
+          "after_visit": "Tin sau lịch hẹn",
+          "no_show": "Tin khách không đến",
+          "rebook": "Tin đặt lại lịch"
+        },
+        "stepHint": {
+          "confirmation": "Gửi ngay sau khi lịch hẹn được xác nhận.",
+          "reminder_24h": "Trước một ngày. Có thể kèm các nút Xác nhận, Đổi lịch và Hủy.",
+          "reminder_2h": "Lời nhắc ngắn vài giờ trước lịch hẹn.",
+          "reminder_15m": "Chỉ dành cho lịch hẹn trực tuyến có liên kết tham gia.",
+          "reminder": "Lời nhắc vào thời điểm bạn chọn.",
+          "after_visit": "Lời cảm ơn hoặc tin theo dõi sau khi lịch hẹn kết thúc.",
+          "no_show": "Gửi khi bạn đánh dấu lịch hẹn là khách không đến.",
+          "rebook": "Mời khách đặt lịch lại vài ngày sau một lịch hẹn đã hoàn thành. Được tính là tin tiếp thị."
+        },
+        "choice": {
+          "confirmation": "Xác nhận lịch hẹn",
+          "reminder_24h": "Trước 24 giờ",
+          "reminder_2h": "Trước 2 giờ",
+          "reminder_15m": "Trước 15 phút",
+          "custom": "Nhắc vào thời điểm khác",
+          "after_visit": "Tin sau lịch hẹn",
+          "no_show": "Tin khách không đến",
+          "rebook": "Tin đặt lại lịch, vài ngày sau"
+        },
+        "choiceHint": {
+          "present": "Đã thêm",
+          "cap": "Đã đạt giới hạn",
+          "online": "Lịch hẹn trực tuyến",
+          "locked": "Cấp nâng cấp: không có trong gói của bạn"
+        },
+        "enabledOf": "Gửi: {step}",
+        "remove": "Xóa: {step}",
+        "offsetOf": "Thời gian của: {step}",
+        "unitOf": "Đơn vị thời gian của: {step}",
+        "beforeStart": "trước khi lịch hẹn bắt đầu",
+        "afterEnd": "sau khi lịch hẹn kết thúc",
+        "setTime": "Nhập thời gian",
+        "templateName": "Mẫu WhatsApp: {name}",
+        "wa": {
+          "none": "Không có mẫu",
+          "draft": "Mẫu chưa được gửi tới Meta",
+          "pending": "Đang chờ Meta duyệt",
+          "approved": "Mẫu đã được duyệt",
+          "rejected": "Bị Meta từ chối"
+        },
+        "fallback": {
+          "email": "Cho đến khi mẫu WhatsApp được duyệt, bước này được gửi qua Email.",
+          "window": "Ở đây WhatsApp là kênh duy nhất, nên ngoài khung 24 giờ sẽ không gửi gì cho đến khi có mẫu được duyệt. Hãy thêm Email làm kênh dự phòng."
+        },
+        "when": {
+          "before": "{amount} trước khi lịch hẹn bắt đầu",
+          "after": "{amount} sau khi lịch hẹn kết thúc"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# phút} other {# phút}}",
+          "hours": "{count, plural, one {# giờ} other {# giờ}}",
+          "days": "{count, plural, one {# ngày} other {# ngày}}"
+        },
+        "rebookLocked": "Tin nhắn đặt lại lịch thuộc cấp nâng cấp của ứng dụng Lịch hẹn, mà gói của bạn không bao gồm. Bạn có thể thiết lập bước này nhưng nó vẫn tắt cho đến khi gói của bạn bao gồm tính năng này.",
+        "rebookLockedStep": "Thuộc cấp nâng cấp của ứng dụng Lịch hẹn: không thể bật với gói hiện tại của bạn."
+      },
+      "reasons": {
+        "already_confirmed": "Khách đã xác nhận trước đó.",
+        "no_join_link": "Lịch hẹn không có liên kết tham gia.",
+        "already_rebooked": "Khách đã đặt lại lịch.",
+        "visit_not_completed": "Lịch hẹn chưa được hoàn thành.",
+        "plan_feature_locked": "Gói của bạn không có bước này.",
+        "not_delivered": "WhatsApp không gửi được đúng hạn nên đã dùng kênh tiếp theo.",
+        "send_failed": "Gửi không thành công nên đã dùng kênh tiếp theo."
+      },
+      "packs": {
+        "open": "Chuỗi có sẵn",
+        "eyebrow": "Cho {name}",
+        "title": "Chuỗi nhắc hẹn có sẵn",
+        "close": "Đóng",
+        "intro": "Chọn một chuỗi phù hợp với loại hình kinh doanh của bạn. Chuỗi này thiết lập cùng lúc tin xác nhận, nhắc hẹn, tin theo dõi và tin đặt lại lịch. Tin WhatsApp cần Meta duyệt trước khi gửi được; trong lúc chờ, mỗi bước được gửi qua Email.",
+        "loading": "Đang tải các chuỗi",
+        "choose": "Chọn một chuỗi",
+        "stepsCount": "{count, plural, one {# bước} other {# bước}}",
+        "language": "Ngôn ngữ của tin nhắn",
+        "machineDraft": "Nội dung tiếng Hindi là bản nháp do máy dịch. Hãy nhờ người đọc được tiếng Hindi kiểm tra trước khi bật các bước.",
+        "previewLoading": "Đang tải bản xem trước",
+        "previewTitle": "Những gì sẽ thay đổi",
+        "summary": "Thêm {add}, thay thế {replace}, đã giống nhau {unchanged}",
+        "timedOf": "{count} trên {max} bước có thời gian",
+        "blocked": "Áp dụng chuỗi này sẽ vượt giới hạn {max} bước có thời gian. Hãy xóa một bước trước.",
+        "confirmTitle": "Thao tác này sẽ thay thế các bước bạn đã có",
+        "confirmBody": "{count, plural, one {# bước của loại lịch hẹn này} other {# bước của loại lịch hẹn này}} sẽ được thay bằng phiên bản của chuỗi, kể cả nội dung bạn đã viết.",
+        "confirmCheck": "Thay thế",
+        "action": {
+          "add": "Mới",
+          "replace": "Thay bản của bạn",
+          "unchanged": "Đã giống nhau"
+        },
+        "starts": {
+          "on": "Bắt đầu ở trạng thái bật",
+          "off": "Bắt đầu ở trạng thái tắt"
+        },
+        "category": {
+          "UTILITY": "Tin dịch vụ",
+          "MARKETING": "Tin tiếp thị"
+        },
+        "onlineOnly": "Chỉ lịch hẹn trực tuyến",
+        "hasButtons": "Nút Xác nhận, Đổi lịch, Hủy",
+        "wa": {
+          "new": "Sẽ được gửi tới Meta"
+        },
+        "replaceOwnText": "Bạn đã tự viết nội dung cho bước này. Nội dung đó sẽ bị thay thế.",
+        "planNotes": {
+          "rebook": "Bước đặt lại lịch thuộc cấp nâng cấp của ứng dụng Lịch hẹn, mà gói của bạn không bao gồm, nên bước này được lưu ở trạng thái tắt.",
+          "buttons": "Các nút Xác nhận, Đổi lịch và Hủy thuộc cấp nâng cấp của ứng dụng Lịch hẹn, mà gói của bạn không bao gồm, nên đã bị bỏ qua."
+        },
+        "showMessages": "Hiện tin nhắn",
+        "hideMessages": "Ẩn tin nhắn",
+        "kept": "{count, plural, one {# bước bạn đã có sẽ không bị thay đổi.} other {# bước bạn đã có sẽ không bị thay đổi.}}",
+        "sample": {
+          "title": "Giá trị mẫu",
+          "hint": "Tin nhắn được hiển thị với các giá trị giả này. Hãy thay đổi để xem tên dài hơn hoặc địa điểm khác trông thế nào.",
+          "reset": "Đặt lại giá trị",
+          "labels": {
+            "name": "Tên khách",
+            "service": "Dịch vụ",
+            "date": "Ngày",
+            "time": "Giờ",
+            "place": "Địa điểm",
+            "join_link": "Liên kết tham gia",
+            "manage_link": "Liên kết quản lý"
+          }
+        },
+        "submitToMeta": "Gửi các tin WhatsApp tới Meta để duyệt ngay",
+        "submitHint": "{count, plural, other {Sẽ tạo # tin WhatsApp mới.}} Meta quyết định khi nào duyệt; cho đến lúc đó bước này được gửi qua Email. Tắt tùy chọn này để giữ chúng ở dạng bản nháp.",
+        "submitHintNone": "Các tin WhatsApp đã có trong không gian làm việc của bạn, nên không tạo thêm gì mới.",
+        "apply": "Áp dụng chuỗi",
+        "applying": "Đang áp dụng",
+        "cancel": "Hủy",
+        "block": {
+          "readOnly": "Bạn chỉ có thể xem các chuỗi, không áp dụng được.",
+          "unsaved": "Hãy lưu hoặc hủy thay đổi các bước của loại lịch hẹn này trước.",
+          "cap": "Hãy xóa một bước trước: sẽ vượt giới hạn bước có thời gian.",
+          "confirm": "Chọn Thay thế để tiếp tục."
+        },
+        "errors": {
+          "needsConfirm": "Áp dụng sẽ thay thế một bước nên cần bạn xác nhận. Bản xem trước đã được tải lại.",
+          "cap": "Chuỗi này sẽ vượt giới hạn bước có thời gian cho loại lịch hẹn này."
+        },
+        "result": {
+          "title": "Đã áp dụng chuỗi",
+          "summary": "Đã thêm {added}, thay thế {replaced}. Các bước bắt đầu theo cách chuỗi đã thiết lập.",
+          "templatesTitle": "Tin WhatsApp",
+          "templatesNone": "Chưa tạo tin WhatsApp nào. Kết nối một số WhatsApp Cloud API để dùng WhatsApp; trong lúc này dùng Email.",
+          "waiting": "Cho đến khi Meta duyệt tin, bước đó được gửi qua Email.",
+          "metaError": "Meta từ chối: {error}",
+          "refresh": "Làm mới trạng thái",
+          "refreshing": "Đang làm mới",
+          "withheldTitle": "Bị bỏ qua do gói của bạn",
+          "withheldButtons": "Các nút Xác nhận, Đổi lịch và Hủy của bước này: {step}.",
+          "withheldRebook": "{step}: được lưu ở trạng thái tắt."
+        }
+      },
+      "buttonsLocked": "Các nút Xác nhận, Đổi lịch và Hủy thuộc cấp nâng cấp của ứng dụng Lịch hẹn, mà gói của bạn không bao gồm.",
+      "test": {
+        "send": "Gửi email thử",
+        "sending": "Đang gửi",
+        "hint": "Gửi bước này với giá trị mẫu. Để trống địa chỉ để gửi đến email của chính bạn.",
+        "toLabel": "Gửi thử đến",
+        "toPlaceholder": "Địa chỉ của bạn, hoặc nhập địa chỉ khác",
+        "toInvalid": "Nhập địa chỉ email đầy đủ, hoặc để trống.",
+        "wait": {
+          "unsaved": "Hãy lưu thay đổi trước: bản thử gửi bước đã lưu.",
+          "notSaved": "Hãy lưu các lời nhắc trước: bước này là bước mới."
+        },
+        "queued": "Email thử đang được gửi đến {address}. Kết quả cũng sẽ đến trong thông báo của bạn.",
+        "skipped": "Không có gì được gửi: người dùng của bạn không có địa chỉ email.",
+        "noWhatsapp": "Không thể thử tin nhắn WhatsApp từ đây."
+      },
+      "report": {
+        "title": "Báo cáo lời nhắc",
+        "description": "Các lời nhắc đã làm gì: bao nhiêu đã gửi, đã giao, thất bại hoặc bị bỏ qua, và bao nhiêu đi qua kênh khác.",
+        "type": "Loại đặt lịch",
+        "allTypes": "Tất cả loại đặt lịch",
+        "range": "Khoảng thời gian",
+        "ranges": {
+          "7": "7 ngày qua",
+          "30": "30 ngày qua",
+          "90": "90 ngày qua",
+          "custom": "Chọn ngày"
+        },
+        "from": "Từ",
+        "to": "Đến",
+        "refresh": "Làm mới",
+        "pickDates": "Chọn ngày bắt đầu và ngày kết thúc để xem báo cáo.",
+        "loading": "Đang tải báo cáo",
+        "empty": "Không có lời nhắc nào đến hạn trong khoảng thời gian này. Khi lời nhắc được gửi, kết quả sẽ hiện ở đây.",
+        "caption": "Kết quả lời nhắc cho {name}",
+        "col": {
+          "step": "Bước",
+          "sent": "Đã gửi",
+          "delivered": "Đã giao",
+          "failed": "Thất bại",
+          "fallback": "Gửi qua kênh khác",
+          "skipped": "Bị bỏ qua",
+          "confirmed": "Đã xác nhận",
+          "rescheduled": "Yêu cầu đổi lịch",
+          "cancelled": "Đã hủy",
+          "total": "Tổng"
+        },
+        "rates": "Trong {count, plural, other {# lịch hẹn}} đã nhận lời nhắc: {confirmed}% đã xác nhận, {cancelled}% đã hủy, {noShow}% vắng mặt.",
+        "why": "Vì sao",
+        "otherReason": "Lý do khác",
+        "buttonsLocked": "Kết quả của các nút Xác nhận, Đổi lịch và Hủy thuộc cấp nâng cấp của ứng dụng Lịch hẹn, nên không được tính trong gói của bạn.",
+        "emailNote": "Trạng thái đã giao chỉ do WhatsApp báo cáo: email không có báo cáo giao nhận nên được tính là đã gửi. Chỉ hiển thị số lượng; không có tên, số điện thoại hay tin nhắn."
+      },
+      "history": {
+        "fallback": "Đã gửi qua {channel} vì kênh đầu tiên không giao được.",
+        "delivery": {
+          "delivered": "WhatsApp báo đã giao.",
+          "failed": "WhatsApp báo gửi thất bại.",
+          "undelivered": "WhatsApp không giao kịp thời."
+        },
+        "tried": "Các kênh đã thử, theo thứ tự",
+        "attempt": {
+          "sent": "đã gửi",
+          "skipped": "không dùng",
+          "held": "đang chờ",
+          "failed": "thất bại"
+        },
+        "buttons": "Phản hồi bằng các nút",
+        "button": {
+          "confirm": "Đã nhấn Xác nhận",
+          "reschedule": "Đã nhấn Đổi lịch",
+          "cancel": "Đã nhấn Hủy"
+        }
+      }
+    }
+  }
+}

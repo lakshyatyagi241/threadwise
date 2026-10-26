@@ -134,7 +134,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('code', 'Run code (JS)', 'Logic', 'Sandboxed JavaScript transform', ['chat', 'call']),
   def('mysql', 'MySQL Query', 'Logic', 'Run a read-only SQL query'),
   def('ai', 'AI assistant', 'AI', 'Reply with ChatGPT or Gemini', WEB_CAPABLE),
-  // Not a Reference node: the FAQ knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
+  // Not a Reference node: an AI agent's knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
   def('faq', 'Answer from FAQ', 'AI', 'Match a message to your FAQs', SOCIAL_AND_CHAT),
   def('tag', 'Tag contact', 'Contact', 'Add or remove a tag'),
   def('assign', 'Human handoff', 'Contact', 'Hand the chat to a person or a queue'),
@@ -327,7 +327,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'message':
       return { text: 'Type your message…' };
     case 'template':
-      return { tpl: '' };
+      return { tpl: '', statusExits: false };
     case 'media':
       return { kind: 'image', filename: '', caption: '' };
     case 'notify_number':
@@ -583,6 +583,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         summary: '',
         customerMessage: '',
         offHoursMessage: '',
+        returnMessage: '',
       };
     case 'subflow':
       return { flow: '' };
@@ -638,8 +639,7 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
     case 'faq':
       return {
         query: '{{user_message}}',
-        category: '',
-        minScore: null,
+        assistant: '',
         sendAnswer: true,
         save: 'faq',
       };
@@ -806,6 +806,20 @@ export function flbListOption(
 }
 
 const out = (label: string): FlbPortDef[] => [{ id: 'out', label, kind: 'flow' }];
+
+/**
+ * What can happen to a sent template, as the node's extra exits: the provider accepted it (`sent`), it reached the phone (`delivered`),
+ * it was opened (`read`), the customer wrote back (`replied`), or it did not go (`failed`).
+ */
+export const FLB_TEMPLATE_STATUSES = ['sent', 'delivered', 'read', 'replied', 'failed'] as const;
+export type FlbTemplateStatus = (typeof FLB_TEMPLATE_STATUSES)[number];
+const FLB_TEMPLATE_STATUS_PORTS: FlbPortDef[] = [
+  { id: 'sent', label: 'Sent', kind: 'flow' },
+  { id: 'delivered', label: 'Delivered', kind: 'flow' },
+  { id: 'read', label: 'Read', kind: 'flow' },
+  { id: 'replied', label: 'Replied', kind: 'flow' },
+  { id: 'failed', label: 'Failed', kind: 'no' },
+];
 const yesNo = (yes: [string, string], no: [string, string]): FlbPortDef[] => [
   { id: yes[0], label: yes[1], kind: 'yes' },
   { id: no[0], label: no[1], kind: 'no' },
@@ -828,12 +842,14 @@ export function flbPortsFor(
     case 'media':
     case 'sequence':
     case 'assign':
-      // The Human handoff has three exits; a node saved before it existed (no `handoff: 2`) keeps its single exit.
+      // The Human handoff has three exits and an optional fourth, `returned` (a person pressed Return to bot: the flow continues there);
+      // a node saved before it existed (no `handoff: 2`) keeps its single exit.
       return d.handoff === 2
         ? [
             { id: 'assigned', label: 'assigned', kind: 'flow' },
             { id: 'waiting', label: 'waiting in queue', kind: 'flow' },
             { id: 'unavailable', label: 'no agent / out of hours', kind: 'no' },
+            { id: 'returned', label: 'returned to the bot', kind: 'flow' },
           ]
         : out('next');
     case 'tag':
@@ -852,12 +868,14 @@ export function flbPortsFor(
       return yesNo(['yes', 'yes'], ['no', 'no']);
     case 'template': {
       const qr = ctx.templateButtons?.({ data: d }) ?? [];
-      if (qr.length === 0) return out('next');
-      return qr.map((b, i) => ({
+      const buttons = qr.map((b, i) => ({
         id: `p${i}`,
         label: b.label || `Button ${i + 1}`,
         kind: 'flow' as const,
       }));
+      // With the status exits on, the node waits and leaves by what happens to the message (and by a tap, if the template has buttons).
+      if (d.statusExits === true) return [...buttons, ...FLB_TEMPLATE_STATUS_PORTS];
+      return buttons.length === 0 ? out('next') : buttons;
     }
     case 'notify_number':
       return out('sent');
@@ -1014,7 +1032,7 @@ export const flbIsMultiPort = (
 const HANDLE_PORT: Record<string, Record<string, number>> = {
   condition: { yes: 1, no: 2 },
   // Human handoff (BL-398): the old single exit (`out`) stays port 1.
-  assign: { assigned: 1, waiting: 2, unavailable: 3 },
+  assign: { assigned: 1, waiting: 2, unavailable: 3, returned: 4 },
   book_appointment: { booked: 1, no_slots: 2 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },

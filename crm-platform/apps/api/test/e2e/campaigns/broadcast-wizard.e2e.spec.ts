@@ -851,7 +851,7 @@ describe('step 3: credit check and variables', () => {
     expect(c).toMatchObject({ sufficient: true, shortfallMinor: 0, balanceMinor: 1_000_000 });
   });
 
-  it('a workspace on a plan whose monthly messages cover the send is not charged: estimate 0 and sufficient with an empty wallet', async () => {
+  it('a workspace on a plan is charged for every message: its monthly allowance does not make the send free, so an empty wallet is insufficient', async () => {
     const w = await world(lab, 'bwc3');
     await owner().query(
       `INSERT INTO org_plan_state (org_id, overrides) VALUES ($1, '{"limits":{"monthly_messages":1000}}'::jsonb)
@@ -870,12 +870,12 @@ describe('step 3: credit check and variables', () => {
     );
     expect(c).toMatchObject({
       billingMode: 'plan',
-      chargeableMessages: 0,
-      estimatedCostMinor: 0,
-      sufficient: true,
+      chargeableMessages: 2,
+      sufficient: false,
     });
-    // The plan covers the send, so the wallet is charged nothing now, but the real cost is still shown.
-    expect(c.fullCostMinor).toBeGreaterThan(0);
+    // Every message is charged at its price: the estimate is the full cost, and an empty wallet cannot cover it.
+    expect(c.estimatedCostMinor).toBeGreaterThan(0);
+    expect(c.estimatedCostMinor).toBe(c.fullCostMinor);
     expect(c.fullCostMinor).toBe(
       c.lines.reduce((n: number, l: { fullSubtotalMinor: number }) => n + l.fullSubtotalMinor, 0),
     );

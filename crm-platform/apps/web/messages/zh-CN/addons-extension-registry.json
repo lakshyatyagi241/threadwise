@@ -45,7 +45,8 @@
         "period": "周期",
         "grants": "包含内容",
         "status": "状态",
-        "actions": "操作"
+        "actions": "操作",
+        "plans": "套餐"
       },
       "price": {
         "free": "免费",
@@ -124,7 +125,8 @@
           "billingMode": "计费",
           "sortOrder": "排序",
           "isActive": "启用",
-          "isLifetime": "永久（一次性）"
+          "isLifetime": "永久（一次性）",
+          "period": "计费周期"
         },
         "modes": {
           "one_time": "一次性（到期后可再次购买）",
@@ -144,9 +146,78 @@
           "billingDuration": "请输入 1 或更大的整数。",
           "sortOrder": "请输入整数。",
           "limits": "限额须为整数，或 -1 表示不限。",
-          "form": "请检查高亮的字段。"
-        }
-      }
+          "form": "请检查高亮的字段。",
+          "amountPositive": "附加组件为按月或按年订阅，因此价格必须大于零。",
+          "features": "请至少勾选一项功能，或将其改为容量附加组件。",
+          "limitsNeeded": "请至少输入一项大于零的上限，或将其改为功能附加组件。"
+        },
+        "legacy": {
+          "title": "旧版套餐包",
+          "body": "此套餐包创建于附加组件成为订阅之前。它仍按原样销售（其计费方式会显示但无法更改），已拥有它的工作区不受影响。您仍可编辑其名称、价格、功能和限额，或将其下架。新的套餐包为按月或按年订阅。"
+        },
+        "periods": {
+          "months": "按月订阅",
+          "years": "按年订阅"
+        },
+        "periodHint": "附加组件是订阅。使用在线支付网关的工作区会自动续订；使用银行转账或线下支付时，周期结束后需要再次付款。",
+        "planOffers": {
+          "title": "套餐",
+          "hint": "各套餐提供此附加组件的方式。包含：免费，套餐自带其功能。付费：工作区需购买，如果您设置了套餐专属价格，则按该价格计费。隐藏：该套餐的工作区完全看不到它。",
+          "noIncluded": "此附加组件只增加限额，因此任何套餐都无法包含它。套餐自身的上限在其“限制”标签页中设置。",
+          "empty": "还没有套餐。",
+          "freePlan": "免费套餐",
+          "inactivePlan": "未启用",
+          "modeLabel": "{plan}提供此附加组件的方式",
+          "modes": {
+            "included": "包含",
+            "paid": "付费",
+            "hidden": "隐藏"
+          },
+          "priceLabel": "此套餐中的价格",
+          "priceHint": "留空 = 附加组件自身的价格。",
+          "freePlanNote": "会在免费套餐中显示，但工作区需要付费套餐才能购买。",
+          "hiddenNote": "不向此套餐的工作区显示。已购买的工作区可继续使用到期限结束。",
+          "problems": {
+            "money": "请输入金额，例如 19 或 19.99。",
+            "zero": "将价格留空以使用附加组件的价格，或选择“包含”。"
+          },
+          "errors": {
+            "generic": "无法保存套餐提供设置。",
+            "forbidden": "只有超级管理员才能更改套餐提供设置。",
+            "notFound": "此附加组件已不存在。"
+          },
+          "saved": "套餐提供设置已保存。",
+          "changed": "{count, plural, one {已更改 # 个套餐} other {已更改 # 个套餐}}",
+          "save": "保存套餐提供设置",
+          "needFeatures": "请先在上方添加它解锁的功能"
+        },
+        "type": {
+          "title": "类型",
+          "hint": "选择此附加组件的作用。只有功能附加组件可以包含在套餐中。",
+          "feature": {
+            "title": "功能附加组件",
+            "body": "解锁产品的一部分，也可以增加容量。"
+          },
+          "capacity": {
+            "title": "容量附加组件",
+            "body": "仅增加某项上限（席位、联系人等）。"
+          }
+        },
+        "noFeaturesNotice": "此附加组件尚未解锁任何内容。请勾选它提供的功能，套餐才能包含它。",
+        "limitsHintCapacity": "容量附加组件只增加上限。输入要在套餐基础上增加的数值（例如 +2 个席位）。-1 表示不限。至少需要一项上限。"
+      },
+      "kind": {
+        "feature": "功能",
+        "capacity": "容量"
+      },
+      "plans": {
+        "included": "包含：{plans}",
+        "paid": "付费：{plans}",
+        "hidden": "隐藏：{plans}",
+        "withPrice": "{plan}（{price}）",
+        "none": "无套餐"
+      },
+      "noFeatures": "暂无功能"
     },
     "extensions": {
       "crumbHere": "附加组件",
@@ -258,16 +329,6 @@
     "workspace": {
       "title": "附加包",
       "description": "在订阅之外购买的额外功能包。",
-      "needPlanTitle": "附加包需要有效套餐",
-      "needPlanBody": "附加包是在订阅之外购买的额外功能包。请先选择套餐，再回到这里添加功能。",
-      "viewPlans": "查看套餐",
-      "noneTitle": "暂无可用附加包",
-      "noneBody": "目前没有提供附加包，请稍后再来。",
-      "ownedTitle": "你的附加包",
-      "ownedBody": "已合并到当前套餐的有效功能包。",
-      "ends": "{date} 结束",
-      "lifetime": "永久",
-      "autoRenews": "自动续订",
       "renewal": {
         "cancel": "取消续订",
         "confirmTitle": "取消续订？",
@@ -277,34 +338,105 @@
         "forbidden": "你无权更改套餐。",
         "none": "没有可取消的有效订阅。",
         "failed": "无法取消续订，请重试。"
-      },
-      "active": "已启用",
-      "cardEyebrow": "附加包",
-      "catalogTitle": "附加包",
-      "catalogBody": "在当前套餐基础上解锁额外功能，无需更换套餐。",
-      "count": "{count, plural, other {# 个附加包}}",
-      "free": "免费",
-      "lifetimePrice": "一次性",
-      "per": "/ {unit}",
-      "units": {
-        "days": "天",
-        "weeks": "周",
-        "months": "个月",
-        "years": "年"
-      },
-      "buy": "添加到套餐",
-      "buyAgain": "再次购买",
-      "owned": "已拥有 ×{count} · 再次购买可叠加",
-      "bullets": {
-        "feature": "{name}",
-        "unlimited": "不限 {name}",
-        "add": "+{amount} {name}"
-      },
-      "error": "无法加载附加包。"
+      }
     },
     "planFields": {
       "fromModule": "来自已安装的模块",
       "unlimited": "无限制"
+    },
+    "list": {
+      "unavailable": {
+        "title": "附加组件需要有效的付费套餐",
+        "free_plan": "您当前使用的是免费套餐。附加组件是在付费套餐之上另行购买的扩展。",
+        "plan_expired": "您的付费套餐已到期，附加组件已暂停。请续订套餐以购买或续订附加组件。",
+        "no_plan": "您的工作区还没有套餐。请选择付费套餐以使用附加组件。",
+        "cta": "查看套餐"
+      },
+      "unavailableCard": "需要有效的付费套餐",
+      "empty": {
+        "title": "暂无在售的附加组件",
+        "body": "目前没有提供的附加组件。请稍后再来查看。"
+      },
+      "listLabel": "在售的附加组件",
+      "owned": {
+        "title": "您拥有的附加组件",
+        "renews": "将于 {date} 续订",
+        "ends": "有效期至 {date}。不会自动续订。",
+        "lifetime": "永久"
+      },
+      "state": {
+        "included": "已包含在你的套餐中",
+        "includedSupport": "由您的客户经理开通。",
+        "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
+        "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
+        "active": "已启用",
+        "ownedCount": "已拥有 ×{count} · 再次购买可叠加",
+        "turnedOff": "已关闭"
+      },
+      "price": {
+        "free": "免费",
+        "oneTime": "一次性",
+        "per": {
+          "days": "{count, plural, other {/ {count} 天}}",
+          "weeks": "{count, plural, other {/ {count} 周}}",
+          "months": "{count, plural, other {/ {count} 个月}}",
+          "years": "{count, plural, other {/ {count} 年}}"
+        }
+      },
+      "renewal": {
+        "recurring": "每个周期续订。使用银行卡支付时自动扣款；使用银行转账或线下支付时，周期结束后需要再次付款。",
+        "oneTime": "一次性购买，不会续订。"
+      },
+      "buy": "购买附加包",
+      "buyAgain": "再次购买",
+      "cannotBuyHint": "请联系您的账户所有者。只有有权为此工作区购买的人才能发起购买。",
+      "bullets": {
+        "unlimited": "不限 {name}",
+        "add": "+{amount} {name}"
+      },
+      "walletNote": "需要消息额度？请改为给钱包充值；额度不是附加组件。",
+      "walletLink": "钱包充值",
+      "groups": {
+        "feature": "功能附加组件",
+        "capacity": "容量附加组件"
+      },
+      "activation": {
+        "turnedOffNote": "已在此工作区关闭。其设置会保留。",
+        "turnOff": "关闭",
+        "turnOn": "开启",
+        "askOwner": "请让账户所有者开启或关闭。",
+        "doneOn": "{name} 已开启。",
+        "errors": {
+          "notToggleable": "无法在此开启或关闭 {name}。只能切换套餐中包含的附加组件。",
+          "forbidden": "你没有开启或关闭附加组件的权限。",
+          "generic": "无法更改 {name}。请重试。"
+        }
+      }
+    },
+    "toggle": {
+      "title": "关闭 {name}?",
+      "lead": "以下是将发生的变化。你可以随时重新开启。",
+      "cancel": "取消",
+      "confirm": "关闭 {name}",
+      "done": "{name} 已关闭。其设置会保留。",
+      "typeLabel": "输入 {name} 以确认",
+      "typeHint": "这会影响客户聊天或相关人员,请输入名称以确认。",
+      "groups": {
+        "stops": "将停止的内容",
+        "kept": "将保留的内容",
+        "people": "人员"
+      },
+      "items": {
+        "features_off": "这些功能将停止工作:{names}。",
+        "dependents_off": "这些功能依赖它们,因此也会停止:{names}。",
+        "roles_dormant": "{count, plural, other {# 个角色拥有此附加组件的权限。权限会保留,但在你重新开启之前处于未启用状态。}}",
+        "waiting_chats": "{count, plural, other {# 个聊天正在等待客服。它们不会被自动分配,需要有人手动接手。}}",
+        "routing_rules": "{count, plural, other {# 条分配规则将停止分配聊天。}}",
+        "auto_teams": "{count, plural, other {# 个团队设置为自动分配聊天,该功能将停止。}}",
+        "teams": "{count, plural, other {# 个团队及其成员会保留。}}",
+        "custom_role_holders": "{count, plural, other {# 人拥有自定义角色。角色会保留,但此附加组件的权限将不再生效。}}",
+        "kept": "你的设置和数据会保留。重新开启后会恢复到你离开时的样子。"
+      }
     }
   }
 }

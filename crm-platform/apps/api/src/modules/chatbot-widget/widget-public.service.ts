@@ -3,13 +3,15 @@ import { chatWindowLocale } from './chat-window-locale';
 import { isAssetSlot } from './asset-slots';
 import { HttpException, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { HandoffService } from '../team-inbox-routing-sla';
-import { readHandoff } from './ai-prompt';
+import { ERROR_FALLBACK, readHandoff } from './ai-prompt';
 import { randomUUID } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import {
   judgeAgeAnswer,
   toPublicLauncher,
   widgetFeedbackRequestSchema,
+  widgetLocationRequestSchema,
+  widgetRatingRequestSchema,
   widgetMessageRequestSchema,
   type AgeVerdict,
   type WidgetHistoryResponse,
@@ -53,6 +55,7 @@ import {
   widgetMediaOf,
 } from './widget-rules';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
+import { WidgetUsageReporter } from './widget-usage.reporter';
 import { WidgetThrottleService, type ThrottledRoute } from './widget-throttle.service';
 import { WidgetVisitorsRepository, type VisitorRow } from './widget-visitors.repository';
 import { WidgetsRepository, type WidgetRow } from './widgets.repository';
@@ -121,6 +124,7 @@ export class WidgetPublicService {
     private readonly visitors: WidgetVisitorsRepository,
     private readonly throttle: WidgetThrottleService,
     private readonly aiReply: WidgetAiReplyService,
+    private readonly usageReporter: WidgetUsageReporter,
     private readonly media: ChatMediaStore,
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
@@ -269,6 +273,9 @@ export class WidgetPublicService {
     return this.db.txAs({ orgId }, async (tx) => {
       const { visitor, isNew } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
       await this.visitors.touch(tx, orgId, visitor.id);
+      // A visitor who left the page and is back (another page of the site, another day) has their open thread again.
+      if (visitor.conversationId !== null)
+        await this.inbox.reopenAfterLeave(tx, orgId, visitor.conversationId);
       const flowUuid =
         widget.flowId === null
           ? null
@@ -423,10 +430,20 @@ export class WidgetPublicService {
 
     // 2. The vendor call, with no transaction open.
     let replyText: string | null = null;
-    if (stored.assistant) {
+    // The bot's message fee: the plan's free allowance covers it, or the wallet pays. When neither can, the bot gives its fallback line and
+    // does no AI work (and no charge); the visitor's message is stored for the team either way.
+    const botMayAnswer = stored.assistant ? await this.usageReporter.canAnswer(orgId) : true;
+    if (stored.assistant && !botMayAnswer) {
+      replyText = stored.assistant.fallbackMessage || ERROR_FALLBACK;
+    } else if (stored.assistant) {
       // What the agent knows about THIS message: the few best passages of its own knowledge base (it reads the whole base only when
       // the search cannot run). Read here, with no transaction open: the search may call the embedding vendor.
-      const found = await this.kb.retrieve(orgId, stored.assistant.id, data.body);
+      const found = await this.kb.retrieve(
+        orgId,
+        stored.assistant.id,
+        data.body,
+        `widget:${stored.inbound.id}`,
+      );
       replyText = await this.aiReply.reply({
         orgId,
         assistant: stored.assistant,
@@ -440,7 +457,9 @@ export class WidgetPublicService {
         grounded: found.grounded,
         history: stored.history,
         visitorMessage: data.body,
+        messageId: stored.inbound.id,
       });
+      await this.usageReporter.reportMessage(orgId, widget, stored.inbound.id);
     }
 
     // The model (or the visitor's keyword) asked for a person: the same handoff a flow node makes (BL-399). The marker never reaches the visitor.
@@ -722,8 +741,9 @@ export class WidgetPublicService {
   ): Promise<WidgetMessageResponse> {
     const prepared = await this.flowPeer(orgId, widget, req, forInbox, data, age);
     const tapped = data.tap_id ? { interactive: { id: data.tap_id, title: data.body } } : undefined;
+    const providerMessageId = `wgt-${randomUUID()}`;
     await this.ingest.enqueueInbound(orgId, prepared.channelUuid, {
-      providerMessageId: `wgt-${randomUUID()}`,
+      providerMessageId,
       peerKey: prepared.peerKey,
       ...(prepared.peerName ? { peerName: prepared.peerName } : {}),
       kind: tapped ? 'interactive' : 'text',
@@ -731,6 +751,7 @@ export class WidgetPublicService {
       ...(tapped ? { meta: tapped } : {}),
       providerTimestamp: new Date(),
     });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
     return { ok: true, inbound: { id: 0 }, reply: null };
   }
 
@@ -771,8 +792,9 @@ export class WidgetPublicService {
     };
     const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
     const mime = stored.mime;
+    const providerMessageId = `wgt-${randomUUID()}`;
     await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
-      providerMessageId: `wgt-${randomUUID()}`,
+      providerMessageId,
       peerKey: peer.peerKey,
       ...(peer.peerName ? { peerName: peer.peerName } : {}),
       kind: 'media',
@@ -792,6 +814,7 @@ export class WidgetPublicService {
       },
       providerTimestamp: new Date(),
     });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
     return { ok: true, name: stored.name };
   }
 
@@ -844,8 +867,20 @@ export class WidgetPublicService {
   async restart(
     token: string,
     req: PublicRequest,
+    fresh = false,
   ): Promise<{ widgetUuid: string; visitorUuid: string }> {
     const { orgId, widget } = await this.locateActive(token);
+    // "Restart this chat" stays in the same thread, with a line for the team; a visitor whose chat ended gets a new thread (`fresh`).
+    if (!fresh) {
+      const kept = await this.db.txAs({ orgId }, async (tx) => {
+        const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+        if (!resolved) return null;
+        if (resolved.visitor.conversationId !== null)
+          await this.inbox.markRestart(tx, orgId, resolved.visitor.conversationId);
+        return resolved.visitor.visitorUuid;
+      });
+      if (kept !== null) return { widgetUuid: widget.uuid, visitorUuid: kept };
+    }
     const visitor = await this.db.txAs({ orgId }, (tx) =>
       this.visitors.create(tx, orgId, widget.id, {
         referrer: req.referer.slice(0, 1024),
@@ -854,6 +889,112 @@ export class WidgetPublicService {
       }),
     );
     return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
+  /**
+   * The visitor ended the chat (`reason: 'ended'`) or the page closed (`'left'`, sent as the window unloads): the team's thread is
+   * resolved, so a chat nobody is in is not left open. A visitor with no thread yet has nothing to close.
+   */
+  async end(token: string, req: PublicRequest, reason: unknown): Promise<{ ok: true }> {
+    if (reason !== 'ended' && reason !== 'left')
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return;
+      await this.inbox.closeThread(tx, orgId, resolved.visitor.conversationId, reason);
+    });
+    return { ok: true };
+  }
+
+  /**
+   * A flow bot that opens by itself (`POST api/start`): the first time the window opens on an empty thread the bot starts at its first
+   * step, instead of waiting for the visitor to write. The start rides the inbox's own queue as a tap on the bot's start step, so the
+   * same rules apply as for any message; the line is kept for the team ("Opened the chat") and left out of what the window shows.
+   */
+  async start(token: string, req: PublicRequest): Promise<{ ok: true }> {
+    const { orgId, widget } = await this.locateActive(token);
+    if (widget.flowId === null) return { ok: true };
+    const forInbox: WidgetForInbox = {
+      id: widget.id,
+      uuid: widget.uuid,
+      userId: widget.userId,
+      name: widget.name,
+      welcomeMessage: widget.welcomeMessage,
+      assistantUuid: widget.assistantUuid,
+    };
+    const flowUuid = await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, true);
+      if (!resolved) return null;
+      if (
+        resolved.visitor.conversationId !== null &&
+        (await this.inbox.hasCustomerLine(tx, orgId, resolved.visitor.conversationId))
+      )
+        return null;
+      return this.inbox.flowUuidOf(tx, orgId, widget.flowId!);
+    });
+    if (flowUuid === null) return { ok: true };
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
+    await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
+      providerMessageId: `wgt-${randomUUID()}`,
+      peerKey: peer.peerKey,
+      ...(peer.peerName ? { peerName: peer.peerName } : {}),
+      kind: 'interactive',
+      body: 'Opened the chat',
+      meta: { interactive: { id: `go:${flowUuid}:__start`, title: 'Opened the chat' } },
+      providerTimestamp: new Date(),
+    });
+    return { ok: true };
+  }
+
+  /** A flow bot asked for the visitor's location and they shared it (`POST api/location`): it joins the thread like a pin on WhatsApp. */
+  async shareLocation(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetLocationRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    if (widget.flowId === null)
+      throw new WidgetPublicError(422, { message: 'This chat does not take a location.' });
+    const forInbox: WidgetForInbox = {
+      id: widget.id,
+      uuid: widget.uuid,
+      userId: widget.userId,
+      name: widget.name,
+      welcomeMessage: widget.welcomeMessage,
+      assistantUuid: widget.assistantUuid,
+    };
+    const peer = await this.flowPeer(orgId, widget, req, forInbox, {}, null);
+    const providerMessageId = `wgt-${randomUUID()}`;
+    await this.ingest.enqueueInbound(orgId, peer.channelUuid, {
+      providerMessageId,
+      peerKey: peer.peerKey,
+      ...(peer.peerName ? { peerName: peer.peerName } : {}),
+      kind: 'location',
+      location: { latitude: parsed.data.latitude, longitude: parsed.data.longitude },
+      providerTimestamp: new Date(),
+    });
+    await this.usageReporter.reportMessage(orgId, widget, providerMessageId);
+    return { ok: true };
+  }
+
+  /** The visitor's stars when they end the chat (`POST api/rating`). A visitor with no thread yet has nothing to rate. */
+  async rate(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
+    const parsed = widgetRatingRequestSchema.safeParse(rawBody ?? {});
+    if (!parsed.success)
+      throw new WidgetPublicError(422, { message: 'The given data was invalid.' });
+    const { orgId, widget } = await this.locateActive(token);
+    await this.db.txAs({ orgId }, async (tx) => {
+      const resolved = await this.resolveVisitor(tx, orgId, widget, req, false);
+      if (!resolved || resolved.visitor.conversationId === null) return;
+      await this.inbox.recordRating(
+        tx,
+        orgId,
+        resolved.visitor.conversationId,
+        parsed.data.rating,
+        parsed.data.comment ?? '',
+      );
+    });
+    return { ok: true };
   }
 
   async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {

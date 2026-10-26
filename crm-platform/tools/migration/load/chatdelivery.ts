@@ -9,6 +9,8 @@ import { connect, sql, withPrivileged, withTenant } from './db';
  * turn `sent`; the dashboard then cannot tell a message that was only sent from one that was delivered.
  * Which rows: messages of ONE organization that this tool loaded (migration.id_map, collection chathistory), outbound, with a
  * provider_message_id that matches a billing-log row (not a broadcast recipient: those have their own state on the campaign).
+ * BLOCKED: the dumps checked carry no outbound provider id (chathistory.meta_msg_id is empty or absent), so no row matches; the join
+ * key is not verified (README section 9, "Delivery state"). The run then logs CHATDELIVERY_NO_KEY and moves nothing.
  * What changes: `status`, `delivered_at`, `read_at` (and failure_code / failure_reason for a failed one), only FORWARD from `sent`; a
  * message the live app already moved is never touched. `messages` has no touch trigger. Never `queued`, so nothing is re-dispatched.
  * The touched message uuids are recorded in migration.run_log (_chat / chat_delivery) and reconcile expects exactly those to differ.
@@ -80,6 +82,10 @@ export async function chatDelivery(o: ChatDeliveryOptions): Promise<void> {
     ).rows as unknown as Array<{ id: number | string; uuid: string; status: string; wamid: string; created_at: string }>;
     const byId = new Map(rows.map((r) => [String(r.id), r]));
     const c = classifyDelivery(rows, want, (r) => (r as (typeof rows)[number]).wamid);
+    if (rows.length === 0 && logRows > 0)
+      o.log(
+        `  delivery  CHATDELIVERY_NO_KEY: ${logRows} receipt(s) in the billing log, but no loaded outbound message has a provider id (chathistory.meta_msg_id is empty or absent in this dump): nothing can match, see README "Delivery state"`,
+      );
     const by = (s: string): number => c.todo.filter((t) => t.receipt.status === s).length;
     o.log(
       `  delivery  ${logRows} receipt(s) in the billing log, ${rows.length} outbound message(s) of this tool with a provider id: ${c.todo.length} ${o.apply ? 'to move' : 'would move'} (delivered ${by('delivered')}, read ${by('read')}, failed ${by('failed')}), ${c.alreadyRight} already right, ${c.kept} moved by the app (kept), ${c.noReceipt} with no receipt`,

@@ -1,0 +1,115 @@
+{
+  "feature": "workspaces-teams-tenancy",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-workspaces-teams-tenancy-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/availability-row.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/deactivate-dialog.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/invite-dialog.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/states.test.tsx",
+          "match": "shows an error state with a retry when the members fail to load"
+        }
+      ],
+      "partial": "Only the members and teams screens are tested, not the dialogs that also read."
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/teams-screen.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/api/hooks.ts",
+        "apps/web/src/features/workspaces-teams-tenancy/components/accept-invite-form.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/deactivate-dialog.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/states.test.tsx",
+          "match": "keeps the typed values and shows the error when the invite send fails"
+        }
+      ],
+      "partial": "Only the invite dialog is tested, not the deactivate dialog or the accept-invite form."
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/accept-invite-form.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/invite-dialog.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/team-editor-form.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-workspaces-teams-tenancy-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/api/hooks.ts",
+        "apps/web/src/features/workspaces-teams-tenancy/api/impersonation.ts",
+        "apps/web/src/features/workspaces-teams-tenancy/api/service.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

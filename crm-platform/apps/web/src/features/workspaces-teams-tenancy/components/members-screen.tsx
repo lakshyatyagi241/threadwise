@@ -13,6 +13,7 @@ import { useLeaves } from '../api/leave';
 import { InviteDialog } from './invite-dialog';
 import { MemberDetailsDialog } from './member-details-dialog';
 import { MemberLeaveDialog } from './member-leave-dialog';
+import { WorkingHoursDialog } from './working-hours-dialog';
 import { PlusIcon, SearchIcon } from './icons';
 import { LinkBanner, WspProviders, useDebounced, useErrorText } from './parts';
 import { MembersTable } from './members-table';
@@ -56,6 +57,7 @@ function Members() {
       ? { id: params.get('member')!, name: '', reassign: params.get('reassign') === '1' }
       : null,
   );
+  const [hoursFor, setHoursFor] = useState<{ id: string; name: string } | null>(null);
   const membersQ = useMembers(q, tierQuery(tier));
   const summary = summaryQ.data;
   const me = summary?.me;
@@ -261,6 +263,7 @@ function Members() {
                   timeZone: session.org.timezone,
                   onEdit: setEditing,
                   onLeave: (m) => setLeaveFor({ id: m.id, name: m.fullName, reassign: false }),
+                  onHours: (m) => setHoursFor({ id: m.id, name: m.fullName }),
                   onRole: (m, roleId) => void changeRole(m, roleId),
                   onReset: (m) => setConfirm({ kind: 'reset', member: m }),
                   onResend: (m) => void handOver(m, 'resend'),
@@ -296,6 +299,15 @@ function Members() {
         focusReassign={leaveFor?.reassign ?? false}
         onClose={() => setLeaveFor(null)}
       />
+
+      {hoursFor && (
+        <WorkingHoursDialog
+          memberId={hoursFor.id}
+          memberName={hoursFor.name}
+          open
+          onClose={() => setHoursFor(null)}
+        />
+      )}
 
       <ConfirmDialog
         open={confirm?.kind === 'remove'}

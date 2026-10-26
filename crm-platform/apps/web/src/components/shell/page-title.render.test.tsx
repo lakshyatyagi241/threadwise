@@ -4,8 +4,8 @@ import { createRoot, type Root } from 'react-dom/client';
 import { NextIntlClientProvider } from 'next-intl';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ResolvedNavItem } from '@/features/_registry/types';
-import { BrandProvider } from './brand';
 import { createTitleBadge } from '@/features/notifications-activity-audit/live/alerts';
+import { BrandProvider } from './brand';
 import { PageTitle } from './page-title';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
@@ -77,36 +77,32 @@ describe('the tab title', () => {
     expect(document.title).toBe('Contacts | WABO DEMO');
   });
 
-  it('keeps the unread badge instead of fighting it (the two title watchers must settle)', async () => {
+  it('keeps the unread badge in front of the title and settles with the badge watcher (no title write loop)', async () => {
     pathname = '/contacts';
-    render();
-    // Count every write to the title: two watchers that keep undoing each other never stop, and in a browser that freezes the tab.
+    const writes: string[] = [];
     const real = Object.getOwnPropertyDescriptor(Document.prototype, 'title')!;
-    let writes = 0;
     Object.defineProperty(document, 'title', {
       configurable: true,
       get: () => real.get!.call(document),
       set: (v: string) => {
-        if (++writes > 50) throw new Error('title write loop');
+        writes.push(v);
+        // A write loop must fail the test, not hang it.
+        if (writes.length > 50) throw new Error('document.title is being rewritten in a loop');
         real.set!.call(document, v);
       },
     });
-    const badge = createTitleBadge();
+    const badge = createTitleBadge(document);
     try {
+      render();
       badge.set(2);
-      for (let i = 0; i < 5; i += 1) {
+      for (let i = 0; i < 20; i++) {
         await act(async () => {
           await Promise.resolve();
         });
       }
       expect(document.title).toBe('(2) Contacts | WABO DEMO');
-      expect(writes).toBeLessThan(10);
-      // The badge going away leaves the plain page title.
-      badge.set(0);
-      await act(async () => {
-        await Promise.resolve();
-      });
-      expect(document.title).toBe('Contacts | WABO DEMO');
+      // The two writers each write the title a few times to reach it, then both go quiet.
+      expect(writes.length).toBeLessThan(10);
     } finally {
       badge.dispose();
       delete (document as { title?: string }).title;

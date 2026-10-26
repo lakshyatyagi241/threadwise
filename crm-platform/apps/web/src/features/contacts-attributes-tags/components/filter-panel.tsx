@@ -4,7 +4,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Popover, cn } from '@crm/ui';
 import { PQL_QUERY_MAX } from '@crm/contracts';
-import { AdvancedFilter } from '@/features/segments';
+import { AdvancedFilter, SegmentConditions } from '@/features/segments';
+import { ApiError } from '@/lib/api/errors';
 import { askPql } from '../api/pql';
 import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
 import type { Owner } from '../api/owners';
@@ -36,7 +37,11 @@ export type FilterSection =
   | 'ai';
 
 type View = 'menu' | FilterSection;
-type Outcome = { kind: 'ignored'; parts: string[] } | { kind: 'empty' } | { kind: 'failed' };
+type Outcome =
+  | { kind: 'ignored'; parts: string[] }
+  | { kind: 'empty' }
+  | { kind: 'failed'; detail?: string }
+  | { kind: 'noKey' };
 
 type FilterValues = Pick<
   ContactFilters,
@@ -87,6 +92,8 @@ export interface FilterPanelProps {
   conditionCount: number;
   /** Opens the panel on a section from outside; each new `nonce` opens it again. */
   request?: { section: FilterSection; nonce: number } | null;
+  /** Opens the condition builder on one field from outside (a column header's "Filter" on name, phone or email). */
+  fieldRequest?: { field: string; nonce: number } | null;
 }
 
 const row =
@@ -134,6 +141,14 @@ export function FilterPanel(p: FilterPanelProps) {
     setOpen(true);
   }, [p.request]);
 
+  const seenField = useRef(0);
+  useEffect(() => {
+    if (!p.fieldRequest || p.fieldRequest.nonce === seenField.current) return;
+    seenField.current = p.fieldRequest.nonce;
+    setOpen(false);
+    setBuilder(true);
+  }, [p.fieldRequest]);
+
   const f = p.filters;
   // Suggestions use this workspace's own first tag and stage, so they read like something the person would really ask.
   const tag = p.tags[0]?.name;
@@ -170,8 +185,14 @@ export function FilterPanel(p: FilterPanelProps) {
       p.onAiSummary(json, r.summary);
       if (r.ignored.length > 0) setOutcome({ kind: 'ignored', parts: r.ignored });
       else close();
-    } catch {
-      setOutcome({ kind: 'failed' });
+    } catch (e) {
+      if (e instanceof ApiError && e.code === 'PQL_NO_KEY') setOutcome({ kind: 'noKey' });
+      else
+        // The server's sentence says why (key refused, provider unreachable, too many searches); without one the generic line shows.
+        setOutcome({
+          kind: 'failed',
+          detail: e instanceof ApiError && e.status !== 500 && e.message ? e.message : undefined,
+        });
     } finally {
       setBusy(false);
     }
@@ -200,9 +221,7 @@ export function FilterPanel(p: FilterPanelProps) {
             ? t('myContacts')
             : (p.owners.find((o) => o.id === owners[0])?.fullName ?? t('ownerFormer'));
   const teamName =
-    f.team === ''
-      ? undefined
-      : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
+    f.team === '' ? undefined : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
   const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
@@ -320,6 +339,7 @@ export function FilterPanel(p: FilterPanelProps) {
               {t('quickFilters')}
             </p>
             {entry('segment', t('segmentLabel'), segmentName)}
+            {f.segment && <SegmentConditions segmentId={f.segment} />}
             {entry('tag', t('tagLabel'), tagName)}
             {entry('owner', t('ownerLabel'), ownerName)}
             {(p.teams.length > 0 || f.team !== '') && entry('team', t('teamLabel'), teamName)}
@@ -400,7 +420,10 @@ export function FilterPanel(p: FilterPanelProps) {
                 <p>{t('pqlIgnored', { parts: outcome.parts.join(', ') })}</p>
               )}
               {outcome?.kind === 'empty' && <p>{t('pqlNothing')}</p>}
-              {outcome?.kind === 'failed' && <p className="text-destructive">{t('pqlFailed')}</p>}
+              {outcome?.kind === 'failed' && (
+                <p className="text-danger">{outcome.detail ?? t('pqlFailed')}</p>
+              )}
+              {outcome?.kind === 'noKey' && <p className="text-danger">{t('pqlNoKey')}</p>}
             </div>
           </div>
         )}
@@ -622,6 +645,7 @@ export function FilterPanel(p: FilterPanelProps) {
         open={builder}
         onOpenChange={setBuilder}
         hideTrigger
+        start={p.fieldRequest}
       />
     </div>
   );

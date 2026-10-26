@@ -6,7 +6,6 @@ import {
   type ListProductsQuery,
   type ListProductsResponse,
   type ProductPickerQuery,
-  type ProductCurrency,
   type ProductOption,
   type ProductPickerResponse,
   type ProductResponse,

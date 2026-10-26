@@ -60,6 +60,7 @@ export function oldWorkspaceKeys(
  */
 export const NEVER_KEPT: readonly string[] = [
   'website-chat',
+  'team-chat',
   'ai-studio',
   'unofficial-whatsapp',
   'tiktok',

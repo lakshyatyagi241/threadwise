@@ -1,0 +1,34 @@
+{
+  "feature": "install-update-licensing",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-install-update-licensing-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/install-update-licensing/setup/screens.tsx",
+        "apps/web/src/features/install-update-licensing/setup/wizard-ui.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-install-update-licensing-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/install-update-licensing/setup/screens.tsx",
+        "apps/web/src/features/install-update-licensing/setup/wizard-ui.tsx",
+        "apps/web/src/features/install-update-licensing/system/system-view.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -107,8 +107,9 @@ export class BroadcastsActionsService {
 
       await this.sendPolicy.screenBulk(ctx.orgId, '', { source: 'broadcast' });
       try {
-        // SMS is never charged to the wallet (TW-SMS-027).
-        if (row.provider !== 'sms') await this.wallet.precheck(ctx.orgId, failed);
+        // An SMS is priced at the SMS usage price, not the WhatsApp rate card this check reads: the balance must cover the retried ones.
+        if (row.provider === 'sms') await this.wallet.precheckUsage(ctx.orgId, 'sms', failed);
+        else await this.wallet.precheck(ctx.orgId, failed);
       } catch (err) {
         if (err instanceof AppError) throw err;
         throw refuse(

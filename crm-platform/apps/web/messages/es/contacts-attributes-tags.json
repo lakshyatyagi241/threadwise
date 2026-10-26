@@ -37,7 +37,8 @@
       "statusStage": "Ese estado pertenece a otra etapa. Elige un estado que corresponda a la etapa del contacto.",
       "stageScope": "Un estado solo se puede limitar a una de tus etapas del ciclo de vida.",
       "planLimit": "Has alcanzado el límite de tu plan de {limit, plural, one {# contacto} other {# contactos}}. Mejora tu plan para añadir más, o elimina uno existente para liberar espacio.",
-      "legalHold": "Este registro está protegido y no se puede borrar por ahora."
+      "legalHold": "Este registro está protegido y no se puede borrar por ahora.",
+      "assignedToOther": "Este chat está asignado a otro agente. Asígnatelo primero para enviar un mensaje."
     },
     "list": {
       "title": "Centro de contactos",
@@ -282,8 +283,6 @@
       "shortEmail": "Correo",
       "shortStage": "Etapa",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Creado",
-      "shortModified": "Modificado",
       "firstRun": {
         "title": "Añade tus primeros contactos",
         "message": "Trae a las personas con las que hablas. Los contactos se usan para mensajes, campañas, tareas y negocios.",
@@ -296,7 +295,9 @@
       "teamLabel": "Equipo",
       "teamFilter": "Filtrar por equipo",
       "allTeams": "Todos los equipos",
-      "teamFormer": "Equipo anterior"
+      "teamFormer": "Equipo anterior",
+      "unhideColumn": "Mostrar columna",
+      "resizeColumn": "Arrastra para cambiar el ancho de {column}; doble clic para restablecer"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -346,7 +347,25 @@
       "assignOwner": "Asignar responsable",
       "changeStage": "Cambiar etapa",
       "more": "Más",
-      "held": "Este registro está protegido y no se puede borrar por ahora."
+      "held": "Este registro está protegido y no se puede borrar por ahora.",
+      "consent": "Consentimiento de marketing",
+      "consentTitle": "Consentimiento de marketing",
+      "consentChannel": "Canal",
+      "consentAction": "Cambiar",
+      "consentSubscribe": "Suscribir",
+      "consentUnsubscribe": "Dar de baja",
+      "consentNote": "Cómo aceptaron los contactos",
+      "consentNotePlaceholder": "Qué dijeron o firmaron, y dónde",
+      "consentNoteRequired": "Indica cómo aceptaron los contactos antes de suscribirlos.",
+      "consentContinue": "Continuar",
+      "consentBack": "Atrás",
+      "consentConfirm": "Registrar consentimiento",
+      "consentSummary": "Marcar {count, plural, one {# contacto} other {# contactos}} como {change} en {channel}. Cada uno recibe una entrada en su historial de consentimiento.",
+      "consentChangeGranted": "suscritos",
+      "consentChangeWithdrawn": "dados de baja",
+      "consentAllMatching": "Esto se aplica a todos los contactos que coincidan con el filtro.",
+      "consentSubscribed": "{count, plural, one {# contacto suscrito} other {# contactos suscritos}}",
+      "consentUnsubscribed": "{count, plural, one {# contacto dado de baja} other {# contactos dados de baja}}"
     },
     "form": {
       "addEyebrow": "Contacto nuevo",
@@ -448,7 +467,8 @@
       "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
       "searchOptions": "Buscar opciones",
       "searchOptionsFor": "Buscar entre las opciones de {field}",
-      "noOptionsFound": "Ninguna opción coincide con la búsqueda."
+      "noOptionsFound": "Ninguna opción coincide con la búsqueda.",
+      "cascadeWaiting": "Elija primero {parent} para ver las opciones."
     },
     "tags": {
       "title": "Etiquetas",
@@ -497,7 +517,6 @@
       "loading": "Cargando grupos...",
       "unavailableTitle": "Los grupos aún no están disponibles",
       "unavailableMessage": "El servicio de grupos de contactos no está activo en este servidor, así que aún no se pueden listar ni crear grupos.",
-      "contacts": "contactos",
       "viewContacts": "Ver contactos",
       "edit": "Editar grupo",
       "editNamed": "Editar el grupo {name}",
@@ -505,8 +524,6 @@
       "deleteNamed": "Eliminar el grupo {name}",
       "deleteTitle": "¿Eliminar este grupo?",
       "deleteMessage": "\"{name}\" se quitará de todos los contactos que pertenecen a él. Los contactos se conservan.",
-      "createTile": "Crear grupo nuevo",
-      "createTileHint": "Agrupa contactos por segmento, etapa del embudo o interés.",
       "emptyTitle": "Aún no hay grupos",
       "emptyMessage": "Pide a un responsable del espacio de trabajo que cree el primer grupo.",
       "helpKicker": "Ayuda - 0{n}",
@@ -526,7 +543,21 @@
       },
       "exists": "Ya existe un grupo con este nombre, por lo que no se creó ninguno nuevo.",
       "import": "Importar contactos",
-      "importInto": "Importar"
+      "importInto": "Importar",
+      "colName": "Nombre",
+      "colMembers": "Miembros",
+      "colCreatedBy": "Creado por",
+      "colCreatedAt": "Creado el",
+      "colModifiedBy": "Modificado por",
+      "colUpdatedAt": "Actualizado el",
+      "colActions": "Acciones",
+      "tableLabel": "Grupos de contactos",
+      "search": "Buscar grupos",
+      "searchPlaceholder": "Buscar por nombre",
+      "count": "{count, plural, =0 {Ningún grupo} one {# grupo} other {# grupos}}",
+      "noResultsTitle": "Ningún grupo coincide",
+      "noResults": "Ningún nombre de grupo contiene lo que escribiste.",
+      "clearSearch": "Borrar búsqueda"
     },
     "import": {
       "eyebrow": "Importación masiva",
@@ -621,7 +652,9 @@
         "invalid_date_of_birth": "la fecha de nacimiento no es una fecha con el año primero que pueda ser de nacimiento",
         "duplicate_in_file": "número repetido, combinado con una fila anterior",
         "invalid_timezone": "zona horaria no válida",
-        "legal_hold": "registro protegido, sin cambios"
+        "legal_hold": "registro protegido, sin cambios",
+        "invalid_property_value": "el valor de la propiedad personalizada no coincide con su tipo ni con sus opciones",
+        "invalid_property_value_column": "columna \"{column}\": el valor no coincide con su tipo o sus opciones"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -634,12 +667,15 @@
       "limitExceeded": "Límite del plan superado",
       "limitExceededNote": "Algunos contactos nuevos no se importaron porque se alcanzó el límite de contactos de tu plan.",
       "rejectsFailed": "No se pudieron descargar las filas rechazadas.",
+      "sampleFailed": "No se pudo descargar el archivo de ejemplo. Inténtalo de nuevo.",
       "groupRequired": "Añadir estos contactos a",
       "groupExisting": "Un grupo existente",
       "groupNew": "Un grupo nuevo",
       "groupPick": "Elige un grupo",
       "groupNewPlaceholder": "Nombre del grupo nuevo",
-      "groupRequiredHint": "Todos los contactos importados se unen a este grupo. La columna de grupo del archivo se ignora a menos que la asignes arriba."
+      "groupRequiredHint": "Todos los contactos importados se unen a este grupo. La columna de grupo del archivo se ignora a menos que la asignes arriba.",
+      "customProperties": "Propiedades personalizadas",
+      "customPropertiesHint": "Una columna cuyo encabezado sea el nombre de la propiedad, o attr:key tal como lo escribe la exportación, completa esa propiedad. Una celda vacía conserva el valor que el contacto ya tiene."
     },
     "detail": {
       "back": "Todos los contactos",
@@ -1087,7 +1123,8 @@
         "moveDown": "Bajar {name}",
         "edit": "Editar {name}",
         "deactivate": "Desactivar {name}",
-        "reactivate": "Reactivar"
+        "reactivate": "Reactivar",
+        "dependsOn": "Las opciones dependen de {field}"
       },
       "toast": {
         "conflict": "Otra persona cambió esto. La lista se actualizó; inténtalo de nuevo.",
@@ -1243,6 +1280,34 @@
         "manageStages": "Administrar etapas",
         "manageGroups": "Administrar grupos",
         "locked": "Fija"
+      },
+      "cascade": {
+        "open": "Campos dependientes",
+        "title": "Campos dependientes",
+        "close": "Cerrar",
+        "intro": "Un campo dependiente siempre se muestra. Sus opciones dependen de la opción elegida en su campo principal: para cada opción del principal, marque las opciones del campo dependiente que permite.",
+        "empty": "Todavía no hay campos dependientes.",
+        "add": "Añadir campo dependiente",
+        "needTwoChoiceFields": "Los campos dependientes necesitan al menos dos propiedades con una lista de opciones (desplegable, selección múltiple o radio).",
+        "dependsOn": "depende de {parent}",
+        "editLabel": "Editar {name}",
+        "removeLabel": "Quitar {name}",
+        "parent": "Campo principal",
+        "child": "Campo dependiente",
+        "pickParent": "Elija el campo principal",
+        "pickChild": "Elija el campo dependiente",
+        "allowed": "Opciones de {child} permitidas con cada opción de {parent}",
+        "noParentChoices": "El campo principal aún no tiene opciones.",
+        "noChildChoices": "El campo dependiente aún no tiene opciones.",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "saved": "Campo dependiente guardado.",
+        "cycle": "Esa dependencia haría que dos campos esperaran uno al otro.",
+        "removeTitle": "¿Quitar {name} de los campos dependientes?",
+        "removeMessage": "Volverá a mostrar todas sus opciones. Las opciones que tenía bajo el campo principal se olvidan; los valores que tienen los contactos se conservan.",
+        "removeConfirm": "Quitar",
+        "removed": "Campo dependiente quitado.",
+        "removeFailed": "No se pudo quitar el campo dependiente. Inténtelo de nuevo."
       }
     },
     "lost": {
@@ -1303,7 +1368,7 @@
         "closePicker": "Cerrar",
         "changed": "Propiedades a cambiar",
         "clear": "Borrar",
-        "keep": "Mantener",
+        "remove": "Quitar {name}",
         "setValue": "Definir un valor",
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",
@@ -1399,7 +1464,8 @@
       "template": "Plantilla de WhatsApp",
       "templatePlaceholder": "Selecciona una plantilla",
       "noTemplates": "No hay plantillas aprobadas para este número.",
-      "notSendable": "Esta plantilla no se puede completar aquí ({reason}).",
+      "openInInbox": "Abrir el chat en la bandeja",
+      "notSendable": "Esta plantilla no se puede enviar desde aquí.",
       "variables": "Variables de la plantilla",
       "preview": "Vista previa",
       "slot": "Variable {key}",
@@ -1515,7 +1581,9 @@
         "selected": "Columnas seleccionadas",
         "selectAll": "Seleccionar todo",
         "reorder": "Arrastra para reordenar las columnas",
-        "remove": "Quitar {name}"
+        "remove": "Quitar {name}",
+        "nameShort": "El nombre de la vista debe tener al menos {min} caracteres.",
+        "nameLong": "El nombre de la vista puede tener como máximo {max} caracteres."
       },
       "presets": {
         "myContacts": "Mis contactos",

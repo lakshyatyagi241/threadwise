@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# घंटा} other {# घंटे}}",
         "days": "{count, plural, one {# दिन} other {# दिन}}"
       },
-      "unsnoozesAt": "{time} पर फिर खुलेगी"
+      "unsnoozesAt": "{time} पर फिर खुलेगी",
+      "erased": "मिटाए गए संपर्क",
+      "erasedHint": "ये संपर्क मिटा दिए गए थे, और उनकी बातचीत उनकी जानकारी या संदेश के टेक्स्ट के बिना सुरक्षित रखी गई है। समय आखिरी संदेश का दिखाता है, क्योंकि मिटाने की तारीख दर्ज नहीं है।",
+      "erasedTitle": "मिटाया गया संपर्क"
     },
     "status": {
       "received": "प्राप्त",
@@ -328,9 +331,16 @@
       },
       "readOnly": "आप यह बातचीत पढ़ सकते हैं, लेकिन जवाब देने की अनुमति नहीं है।",
       "resolvedBanner": "यह बातचीत हल हो चुकी है। जवाब देने के लिए इसे फिर से खोलें।",
+      "resolvedWebchatBanner": "यह वेब चैट हल हो चुकी है और इसे फिर से नहीं खोला जा सकता।",
       "assignedToOther": "यह चैट किसी दूसरे एजेंट को असाइन है। जवाब देने के लिए पहले इसे अपने नाम पर असाइन करें।",
       "typing": "{count, plural, one {एक साथी लिख रहा है} other {# साथी लिख रहे हैं}}",
       "messagesLabel": "संदेश",
+      "session": {
+        "header": "{range} · {count, plural, one {# संदेश} other {# संदेश}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "पहले के संदेश लोड करें",
       "empty": "इस बातचीत में अभी कोई संदेश नहीं है।",
       "newMessageAnnounce": "नया संदेश: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "कोई मेल नहीं",
       "searchPrev": "पिछला परिणाम",
       "searchNext": "अगला परिणाम",
-      "searchClose": "खोज बंद करें"
+      "searchClose": "खोज बंद करें",
+      "erasedBadge": "मिटाया गया",
+      "erasedBanner": "यह संपर्क मिटा दिया गया था। संदेश का टेक्स्ट और मीडिया हटा दिए गए हैं, इसलिए कुछ भी नहीं भेजा जा सकता। टाइमलाइन और समय सुरक्षित हैं।"
     },
     "groupThread": {
       "openGroup": "ग्रुप खोलें",
@@ -542,17 +554,17 @@
         "onLeave": "छुट्टी पर",
         "onLeaveUntil": "{date} तक छुट्टी पर",
         "availability": {
-          "online": "ऑनलाइन",
-          "away": "दूर",
+          "online": "उपलब्ध",
+          "away": "अनुपलब्ध, कार्य समय के बाहर",
           "busy": "व्यस्त",
-          "offline": "ऑफ़लाइन"
+          "offline": "अनुपलब्ध"
         }
       },
       "presence": {
-        "online": "ऑनलाइन",
-        "away": "दूर",
+        "online": "उपलब्ध",
+        "away": "अनुपलब्ध, कार्य समय के बाहर",
         "busy": "व्यस्त",
-        "offline": "ऑफ़लाइन"
+        "offline": "अनुपलब्ध"
       },
       "notes": {
         "tab": "संपर्क के नोट्स",
@@ -584,7 +596,11 @@
           "sla_breach": "उत्तर की समय सीमा चूक गई",
           "spam_flagged": "{actor} ने स्पैम के रूप में चिह्नित किया",
           "escalated": "बढ़ाया गया",
-          "unknown": "{actor} द्वारा {what}"
+          "unknown": "{actor} द्वारा {what}",
+          "handoff_requested": "{actor} द्वारा किसी व्यक्ति को सौंपा गया",
+          "queue_reminded": "टीम को याद दिलाया गया",
+          "queue_offered": "दूसरी टीम को ऑफ़र किया गया",
+          "queue_customer_message": "ग्राहक को संदेश भेजा गया"
         },
         "actors": {
           "user": "एक साथी",
@@ -711,6 +727,7 @@
         "not_linked": "इस बातचीत का चैनल किसी WhatsApp नंबर से जुड़ा नहीं है, इसलिए इससे कोई टेम्पलेट नहीं भेजा जा सकता।",
         "paused": "WhatsApp द्वारा रोका गया। रोक हटने के बाद फिर से भेजा जा सकता है।",
         "media_header": "इसमें इमेज, वीडियो या दस्तावेज़ हेडर है, जिसे अभी इनबॉक्स से नहीं भेजा जा सकता।",
+        "carousel": "यह एक कैरोसेल (चित्रों वाले कार्ड) है, जिसे अभी इनबॉक्स से नहीं भेजा जा सकता।",
         "header_variable": "इसके हेडर में एक वेरिएबल है, जिसे अभी इनबॉक्स से नहीं भरा जा सकता।",
         "dynamic_button": "इसमें वेरिएबल वाला बटन लिंक है, जिसे अभी इनबॉक्स से नहीं भरा जा सकता।",
         "authentication": "वन-टाइम-पासवर्ड टेम्पलेट सिस्टम द्वारा भेजे जाते हैं, इनबॉक्स से नहीं।",
@@ -805,6 +822,7 @@
         "onlyStatus": "केवल {status} संदेश",
         "requestedAt": "अनुरोध की तारीख {date}",
         "lines": "{count, plural, one {# पंक्ति} other {# पंक्तियाँ}}",
+        "noLines": "इस अवधि में कोई घटना नहीं है",
         "until": "{date} तक उपलब्ध",
         "download": "डाउनलोड करें",
         "status": {
@@ -816,20 +834,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "सिम्युलेटर (परीक्षण)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "वेबसाइट चैट",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "ईमेल",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "सिम्युलेटर (परीक्षण)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "वेबसाइट चैट",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "ईमेल",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "संपर्क",
         "agent": "आप",
@@ -1054,7 +1072,10 @@
       "tagRemove": "टैग हटाएँ",
       "onLeave": "छुट्टी पर",
       "onLeaveUntil": "{date} तक छुट्टी पर",
-      "spam": "स्पैम के रूप में चिह्नित करें"
+      "spam": "स्पैम के रूप में चिह्नित करें",
+      "markUnread": "अपठित चिह्नित करें",
+      "unsnooze": "स्नूज़ हटाएँ",
+      "notSpam": "स्पैम नहीं के रूप में चिह्नित करें"
     },
     "tags": {
       "tag": "टैग",
@@ -1086,7 +1107,7 @@
       },
       "screen": {
         "back": "इनबॉक्स पर वापस जाएँ",
-        "title": "बातचीत के टैग",
+        "title": "टैग",
         "intro": "बातचीत के टैग किसी थ्रेड (बिलिंग, रिफ़ंड, अर्जेंट) को चिह्नित करते हैं ताकि आपकी टीम इनबॉक्स को क्रमबद्ध और फ़िल्टर कर सके। ये उसी टैग लाइब्रेरी से आते हैं जिससे संपर्क के टैग आते हैं, जो व्यक्ति के बारे में बताते हैं।",
         "newTitle": "नया टैग",
         "editTitle": "टैग संपादित करें",

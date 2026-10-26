@@ -1,0 +1,85 @@
+{
+  "feature": "ai-keys-usage-admin",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-ai-keys-usage-admin-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/platform/dashboard-page.tsx",
+        "apps/web/src/features/ai-keys-usage-admin/platform/keys-page.tsx",
+        "apps/web/src/features/ai-keys-usage-admin/shared/state.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-keys-usage-admin-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/lib/errors.ts",
+        "apps/web/src/features/ai-keys-usage-admin/workspace/keys-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-keys-usage-admin-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/lib/errors.ts",
+        "apps/web/src/features/ai-keys-usage-admin/platform/dashboard-page.tsx",
+        "apps/web/src/features/ai-keys-usage-admin/platform/key-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-keys-usage-admin-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-keys-usage-admin-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/lib/errors.ts",
+        "apps/web/src/features/ai-keys-usage-admin/platform/key-card.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-keys-usage-admin-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-keys-usage-admin/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

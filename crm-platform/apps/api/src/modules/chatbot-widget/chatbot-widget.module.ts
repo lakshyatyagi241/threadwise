@@ -10,6 +10,7 @@ import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
 import {
@@ -26,6 +27,7 @@ import {
   WidgetPublicController,
 } from './widget-public.controller';
 import { WidgetPublicService } from './widget-public.service';
+import { WidgetUsageReporter } from './widget-usage.reporter';
 import { WidgetThrottleService } from './widget-throttle.service';
 import { WidgetVisitorsRepository } from './widget-visitors.repository';
 import { KnowledgeBaseModule } from '../knowledge-base';
@@ -48,6 +50,9 @@ import { WidgetsService } from './widgets.service';
     CrmModule,
     KnowledgeBaseModule,
     TeamInboxRoutingSlaModule,
+    // AiChargeService: the assistant's reply runs on the platform's key and is charged to the workspace's wallet. UsageBillingService: the
+    // bot's own message fee (free inside the plan's allowance).
+    WalletMessageBillingModule,
   ],
   controllers: [
     WidgetsController,
@@ -63,6 +68,7 @@ import { WidgetsService } from './widgets.service';
     WidgetPublicService,
     WidgetThrottleService,
     WidgetAiReplyService,
+    WidgetUsageReporter,
     { provide: AI_CHAT_PORT, useClass: HttpAiChatAdapter },
     { provide: ASSISTANT_DIRECTORY, useClass: SqlAssistantDirectory },
     { provide: INBOX_GATEWAY, useClass: SqlInboxGateway },

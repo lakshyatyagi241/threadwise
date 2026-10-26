@@ -40,7 +40,7 @@
       "topup": "Recarga",
       "earn": "Ganho",
       "refund": "Reembolso",
-      "spend": "Cobrança de mensagem",
+      "spend": "Cobrança de uso",
       "admin_adjust": "Ajuste"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Abrir o extrato completo",
         "emptyTitle": "Nenhuma atividade ainda",
         "emptyBody": "Recargas, cobranças de mensagens e reembolsos aparecem aqui."
-      }
+      },
+      "messageExpenses": "Gastos com mensagens"
     },
     "activity": {
       "description": "Descrição",
@@ -145,7 +146,7 @@
         "all": "Todos",
         "topup": "Recargas",
         "earn": "Ganhos",
-        "spend": "Cobranças de mensagens",
+        "spend": "Cobranças de uso",
         "refund": "Reembolsos",
         "admin_adjust": "Ajustes"
       },
@@ -164,12 +165,16 @@
         "in": "Entradas",
         "out": "Saídas",
         "balance": "Saldo",
-        "none": "Nenhum"
+        "none": "Nenhum",
+        "channel": "Canal",
+        "recipient": "Destinatário",
+        "template": "Modelo",
+        "country": "País",
+        "category": "Categoria",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Motivo",
-        "to": "Para",
-        "template": "Modelo"
+        "reason": "Motivo"
       },
       "channels": {
         "campaign": "Campanha",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Despesas",
+      "subtitle": "Quanto custou cada mensagem, chamada, solicitação de IA e consulta, e para que serviu. Os totais cobrem tudo o que corresponde aos filtros.",
+      "back": "Voltar para a carteira",
+      "breadcrumbLabel": "Trilha de navegação",
+      "breadcrumbWallet": "Carteira",
+      "breadcrumbExpenses": "Despesas",
+      "fullStatement": "Extrato completo",
+      "summary": {
+        "messages": "Itens",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Custo líquido",
+        "notBilled": "Não cobrado"
+      },
+      "filters": {
+        "status": "Situação",
+        "statusAll": "Todos",
+        "statusCharged": "Cobrado",
+        "statusFree": "Não cobrado",
+        "statusRefunded": "Reembolsado",
+        "template": "Modelo",
+        "templatePlaceholder": "Nome do modelo",
+        "channel": "Canal",
+        "category": "Categoria",
+        "allChannels": "Todos os canais",
+        "allCategories": "Todas as categorias",
+        "from": "De",
+        "to": "Até",
+        "apply": "Aplicar",
+        "reset": "Redefinir",
+        "rangeInverted": "A data final é anterior à data inicial.",
+        "kind": "Tipo",
+        "allKinds": "Todos os tipos"
+      },
+      "breakdown": {
+        "title": "Custo por",
+        "groupBy": {
+          "template": "Modelo",
+          "source": "Canal",
+          "category": "Categoria",
+          "country": "País",
+          "kind": "Tipo"
+        },
+        "group": "Grupo",
+        "notRecorded": "Não registrado",
+        "truncated": "Mostrando os {count} maiores grupos. Restrinja as datas para ver o restante.",
+        "empty": "Nada corresponde a esses filtros."
+      },
+      "columns": {
+        "date": "Data",
+        "template": "Modelo",
+        "campaign": "Campanha, transmissão ou recurso",
+        "channel": "Canal",
+        "category": "Categoria",
+        "country": "País",
+        "status": "Situação",
+        "charged": "Cobrado",
+        "refunded": "Reembolsado",
+        "net": "Líquido",
+        "messages": "Itens",
+        "notBilled": "Não cobrado",
+        "type": "Tipo"
+      },
+      "status": {
+        "charged": "Cobrado",
+        "free": "Não cobrado",
+        "refunded": "Reembolsado",
+        "refundedOn": "Devolvido em {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Incluído no seu plano",
+        "wallet_empty": "A carteira estava vazia",
+        "rate_is_zero": "A tarifa é zero",
+        "no_wallet_owner": "Sem titular da carteira"
+      },
+      "uncollected": "{amount} não cobrados",
+      "emptyTitle": "Ainda não há despesas",
+      "emptyBody": "Mensagens, chamadas, solicitações de IA e outros usos aparecem aqui com a finalidade e o custo de cada um.",
+      "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
+      "days": {
+        "title": "Registo diário",
+        "subtitle": "Mensagens agrupadas por dia, tipo, estado, canal e categoria. Abra um dia para ver cada mensagem.",
+        "messagesOnDay": "{count} mensagens",
+        "viewDetails": "Ver detalhes",
+        "actions": "Ações",
+        "empty": "Não há mensagens nestes dias."
+      },
+      "log": {
+        "title": "Mensagens",
+        "forDay": "Mensagens de {date}",
+        "showAllDays": "Mostrar todos os dias"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segmento} other {# segmentos}}",
+        "whatsapp_call": "{count, plural, one {# minuto} other {# minutos}}",
+        "voice_call": "{count, plural, one {# minuto} other {# minutos}}"
+      },
+      "sources": {
+        "lead_first": "Resposta imediata a leads",
+        "lead": "Resposta imediata a leads",
+        "test": "Envio de teste",
+        "appointment": "Lembrete de agendamento",
+        "lead_scoring": "Pontuação de leads",
+        "lead_digest": "Resumo do chat",
+        "pql_search": "Busca de contatos",
+        "growth_assistant": "Assistente de crescimento",
+        "ai_copilot": "Copiloto de IA",
+        "help_agent": "Assistente de ajuda",
+        "company_brief": "Resumo da empresa",
+        "inbox_ai": "Assistente de respostas",
+        "template_ai": "Criador de modelos",
+        "campaign_ai": "Redator de campanhas",
+        "campaign_ai_image": "Imagem da campanha",
+        "kb_embedding": "Base de conhecimento",
+        "flow_ai": "Gerador de fluxos",
+        "widget_ai": "Chatbot do site",
+        "growth": "Crescimento",
+        "telephony": "Chamadas telefônicas",
+        "translation": "Tradução",
+        "widget": "Chatbot do site"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "Serviço"
             },
             "problems": "Linhas ignoradas"
+          }
+        },
+        "usage": {
+          "title": "Preços de outros usos",
+          "subtitle": "Quanto SMS, e-mails, chamadas, consultas de contatos e outros canais de chat custam aos seus clientes, por unidade. Um preço 0 ou uma chave desligada continua registrado no registro de despesas, sem cobrar nada.",
+          "perUnit": "Preço por {unit}",
+          "chargeFor": "Cobrar por {kind}",
+          "units": {
+            "segment": "segmento de SMS",
+            "email": "e-mail",
+            "minute": "minuto",
+            "lookup": "consulta",
+            "message": "mensagem"
+          },
+          "hints": {
+            "sms": "Cobrado além da fatura do provedor de SMS do próprio cliente. Um segmento tem 160 caracteres (70 em texto não latino).",
+            "email": "Cobrado além da caixa de e-mail do próprio cliente. Cada e-mail enviado conta uma vez.",
+            "whatsapp_call": "Cada minuto iniciado de uma chamada do WhatsApp. Uma chamada que ninguém atendeu é gratuita.",
+            "voice_call": "Cada minuto iniciado de uma chamada informada pelo provedor de telefonia do cliente. Registros de chamadas digitados à mão nunca são cobrados.",
+            "enrichment": "Cada contato consultado no provedor de dados da plataforma.",
+            "chat_message": "Cada mensagem enviada pelo Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuita até você definir um preço.",
+            "webbot_message": "Cada mensagem de visitante tratada pelo chatbot do site depois de esgotadas as mensagens gratuitas do mês do plano."
+          },
+          "costPlus": {
+            "title": "Cobrado pelo custo do fornecedor mais uma margem",
+            "body": "As solicitações de IA e a tradução paga usam as chaves de fornecedor da própria plataforma e são cobradas pelo que o fornecedor cobrou, mais a margem abaixo. Um espaço de trabalho com chave própria nunca é cobrado."
+          },
+          "markup": "Margem sobre o custo do fornecedor",
+          "markupHint": "10 significa que uma solicitação que custou 1,00 é cobrada a 1,10.",
+          "saving": "Salvando",
+          "save": "Salvar preços",
+          "saved": "Preços de uso salvos",
+          "problems": {
+            "invalid": "Informe um valor com no máximo 2 casas decimais",
+            "tooHigh": "Acima do limite"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Mensagem do WhatsApp",
+      "sms": "SMS",
+      "email": "E-mail",
+      "whatsapp_call": "Chamada do WhatsApp",
+      "voice_call": "Chamada de voz",
+      "ai": "IA",
+      "translation": "Tradução",
+      "enrichment": "Consulta de contato",
+      "chat_message": "Mensagem de chat",
+      "webbot_message": "Mensagem do chatbot do site"
     }
   }
 }

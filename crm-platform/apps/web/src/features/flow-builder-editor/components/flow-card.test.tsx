@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { FlowFeatured, FlowSummary } from '@crm/contracts';
@@ -17,6 +19,7 @@ const flow = (over: Partial<FlowSummary> = {}): FlowSummary => ({
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Welcome',
   flowType: 'chat',
+  builder: 'simple',
   category: 'welcome',
   state: 'live',
   isPublished: true,
@@ -44,6 +47,19 @@ const card = (over: Partial<FlowSummary> = {}) =>
   renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
 
 describe('flow card (TW-FLB-001)', () => {
+  it('a WhatsApp bot carries the WhatsApp mark, an Advanced messaging flow the automation mark instead', () => {
+    expect(card()).not.toContain('flow-card-automation');
+    const advanced = card({ builder: 'advanced' });
+    expect(advanced).toContain('data-testid="flow-card-automation"');
+    expect(advanced).not.toContain('bg-[#25D366]');
+  });
+
+  it('an Advanced messaging flow opens on the canvas, not the Simple editor, in a Simple workspace', () => {
+    const html = card({ builder: 'advanced' });
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flows/simple/');
+  });
+
   it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
     expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
@@ -120,6 +136,17 @@ describe('featured card (TW-FLB-002)', () => {
     expect(html).toContain('~2.5 h total');
   });
 
+  it('names the bot: a WhatsApp flow and a website flow each carry their own type pill', () => {
+    const wa = renderToStaticMarkup(<FeaturedCard flow={featured()} actions={actions} />);
+    expect(wa).toContain('data-testid="featured-flow-type"');
+    expect(wa).toContain('contracts.flowTypes.chat');
+    const web = renderToStaticMarkup(
+      <FeaturedCard flow={featured({ flowType: 'web' })} actions={actions} />,
+    );
+    expect(web).toContain('contracts.flowTypes.web');
+    expect(web).not.toContain('contracts.flowTypes.chat');
+  });
+
   it('a flow with no category reads "Flow"', () => {
     expect(
       renderToStaticMarkup(<FeaturedCard flow={featured({ category: null })} actions={actions} />),
@@ -132,5 +159,14 @@ describe('featured card (TW-FLB-002)', () => {
     );
     expect(html).toContain('emptyPreview');
     expect(html).toContain('no waits');
+  });
+});
+
+describe('dark mode text on the flows screen', () => {
+  it('lifts brand-coloured text to the light primary on the dark surfaces (the featured flow was unreadable)', () => {
+    const css = readFileSync(join(__dirname, '../builder/builder.css'), 'utf8');
+    expect(css).toMatch(
+      /\[data-theme='dark'\] \.flb-root \.text-brand:not\(\[class\*='flb-mint'\]\) \{\s*color: var\(--primary\);/,
+    );
   });
 });

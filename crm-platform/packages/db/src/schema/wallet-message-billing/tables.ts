@@ -189,6 +189,14 @@ export const usageCharges = pgTable(
     costMicros: bigint('cost_micros', { mode: 'number' }),
     refundedAt: timestamp('refunded_at', { withTimezone: true }),
     refundTxId: idColumn('refund_tx_id'),
+    /** The template as it was sent, copied at settle time; null on charges from before the expense log. */
+    templateName: text('template_name'),
+    /** The campaign, broadcast or schedule name at send time; null for chat and flow sends and older charges. */
+    subjectName: text('subject_name'),
+    /** What was billed: a WhatsApp message, an SMS, an email, a call, an AI call, a translation... */
+    kind: text('kind').notNull().default('whatsapp_message'),
+    /** How many units the price was taken over: SMS segments, call minutes, 1 for a message or an AI call. */
+    units: integer('units').notNull().default(1),
   },
   (t) => [
     primaryKey({ columns: [t.id, t.createdAt] }),
@@ -205,6 +213,11 @@ export const usageCharges = pgTable(
       sql`${t.credits} >= 0 and ${t.priceCredits} >= 0 and ${t.shortfallCredits} >= 0 and ${t.revenueMinor} >= 0`,
     ),
     check('chk_usage_charges_mode', sql`${t.billingMode} in ('plan', 'wallet')`),
+    check(
+      'chk_usage_charges_kind',
+      sql`${t.kind} in ('whatsapp_message', 'sms', 'email', 'whatsapp_call', 'voice_call', 'ai', 'translation', 'enrichment', 'chat_message', 'webbot_message')`,
+    ),
+    check('chk_usage_charges_units', sql`${t.units} >= 0`),
     check(
       'chk_usage_charges_free_reason',
       sql`${t.freeReason} is null or ${t.freeReason} in ('rate_is_zero', 'within_plan_free_quota', 'no_wallet_owner', 'wallet_empty')`,
@@ -286,6 +299,8 @@ export const walletUsageMonths = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     month: date('month').notNull(),
     messages: integer('messages').notNull().default(0),
+    /** Website chatbot messages counted against the plan's free allowance this month (migration 2033). */
+    webbotMessages: integer('webbot_messages').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -304,6 +319,7 @@ export const walletUsageMonths = pgTable(
       sql`${t.month} = date_trunc('month', ${t.month})::date`,
     ),
     check('chk_wallet_usage_months_messages', sql`${t.messages} >= 0`),
+    check('chk_wallet_usage_months_webbot', sql`${t.webbotMessages} >= 0`),
   ],
 );
 

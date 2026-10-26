@@ -17,6 +17,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   bulkAssignTasksSchema,
   bulkTaskIdsSchema,
+  bulkTaskTransitionSchema,
   createTaskSchema,
   listLinkedTasksQuerySchema,
   listTasksQuerySchema,
@@ -26,6 +27,7 @@ import {
   updateTaskSchema,
   type BulkAssignTasksInput,
   type BulkTaskIdsInput,
+  BulkTaskTransitionInput,
   type CreateTaskInput,
   type ListLinkedTasksQuery,
   type ListTasksQuery,
@@ -123,7 +125,7 @@ export class TasksController {
       'Unknown ids and ids outside the caller scope are listed in `failed`; they do not stop the rest. Tasks that are already done succeed without an event.',
   })
   async bulkComplete(
-    @Body(zodPipe(bulkTaskIdsSchema)) body: BulkTaskIdsInput,
+    @Body(zodPipe(bulkTaskTransitionSchema)) body: BulkTaskTransitionInput,
     @GrantedScope('record.tasks.update') scope: RecordScope,
   ) {
     return this.tasks.bulkComplete(body, scope);
@@ -134,7 +136,7 @@ export class TasksController {
   @RequirePermission('record.tasks.update')
   @ApiOperation({ summary: 'Reopen several done tasks' })
   async bulkReopen(
-    @Body(zodPipe(bulkTaskIdsSchema)) body: BulkTaskIdsInput,
+    @Body(zodPipe(bulkTaskTransitionSchema)) body: BulkTaskTransitionInput,
     @GrantedScope('record.tasks.update') scope: RecordScope,
   ) {
     return this.tasks.bulkReopen(body, scope);

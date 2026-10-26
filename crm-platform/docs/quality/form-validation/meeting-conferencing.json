@@ -1,0 +1,128 @@
+{
+  "module": "meeting-conferencing",
+  "tier": "P1",
+  "schemas": [
+    {
+      "schema": "conferencingStartInputSchema",
+      "file": "apps/api/src/modules/meeting-conferencing/meeting-conferencing.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "returnTo",
+          "rule": "null",
+          "kind": "refuse",
+          "label": "null instead of a value",
+          "value": "null",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (300)",
+          "value": "\"a\" x 300",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (300)",
+          "value": "\"a\" x 301",
+          "priority": "P1"
+        },
+        {
+          "field": "returnTo",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (300)",
+          "value": "\"😀\" x 300",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    },
+    {
+      "schema": "conferencingConfirmInputSchema",
+      "file": "apps/api/src/modules/meeting-conferencing/meeting-conferencing.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "ticket",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "empty",
+          "kind": "refuse",
+          "label": "empty text",
+          "value": "\"\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "min",
+          "kind": "refuse",
+          "label": "one under the minimum (10)",
+          "value": "\"aaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "min",
+          "kind": "accept",
+          "label": "exactly the minimum (10)",
+          "value": "\"aaaaaaaaaa\"",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "max",
+          "kind": "accept",
+          "label": "exactly the maximum (4096)",
+          "value": "\"a\" x 4096",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "max",
+          "kind": "refuse",
+          "label": "one over the maximum (4096)",
+          "value": "\"a\" x 4097",
+          "priority": "P1"
+        },
+        {
+          "field": "ticket",
+          "rule": "unicode",
+          "kind": "accept",
+          "label": "emoji up to the maximum (4096)",
+          "value": "\"😀\" x 4096",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [],
+      "drop": 0
+    }
+  ]
+}

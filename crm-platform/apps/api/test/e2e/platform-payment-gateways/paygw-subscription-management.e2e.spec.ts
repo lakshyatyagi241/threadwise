@@ -13,6 +13,7 @@ import {
   type OutboxEvent,
 } from '../../../src/kernel/outbox/outbox-subscribers';
 import { PlatformSettingsService } from '../../../src/modules/auth';
+import { RefundReconcilerService } from '../../../src/modules/platform-payment-gateways/refund-reconciler.service';
 import { SubscriptionNotificationsConsumer } from '../../../src/modules/platform-payment-gateways/subscription-notifications.consumer';
 import { NotificationsRepository } from '../../../src/modules/notifications/notifications.repository';
 import { PlanEntitlementService } from '../../../src/modules/plans-subscriptions-trials';
@@ -773,7 +774,8 @@ describe('refunds go back through Razorpay', () => {
     expect(body(rzpCalls(`/v1/payments/${payId}/refund`)[0]!)).toEqual({
       amount: 5000,
       speed: 'normal',
-      notes: { reason: 'Goodwill credit' },
+      // our refund row's uuid rides along, so a refund whose answer was lost can be found at the provider
+      notes: { reason: 'Goodwill credit', ref: expect.stringMatching(/^[0-9a-f-]{36}$/) },
     });
 
     const tooMuch = await ops('post', `/billing/orders/${orderUuid}/refund`).send({
@@ -831,6 +833,105 @@ describe('refunds go back through Razorpay', () => {
       amountMinor: '19900',
       gatewayRefundId: 'rfnd_ok',
     });
+  });
+
+  it('a refund whose answer was never recorded is settled from the provider by the sweep, and one the provider never got is failed after two hours', async () => {
+    const o = await paidOrder('lite');
+    const seed = async (amount: number, age: string) =>
+      (
+        await h.owner.query(
+          `INSERT INTO order_refunds (org_id, order_id, gateway, gateway_payment_id, amount_minor, currency, status, reason, created_at)
+           VALUES ($1, $2, 'razorpay', $3, $4, 'INR', 'pending', 'Answer lost', now() - $5::interval) RETURNING id, uuid`,
+          [buyer.orgId, o.id, payId, amount, age],
+        )
+      ).rows[0] as { id: string; uuid: string };
+    const stateOf = async (id: string) =>
+      (
+        await h.owner.query(
+          `SELECT status, gateway_refund_id, failure FROM order_refunds WHERE org_id = $1 AND id = $2`,
+          [buyer.orgId, id],
+        )
+      ).rows[0];
+    const sweep = () => h.app.get(RefundReconcilerService).sweep();
+
+    // 1. a fresh pending row is left to the request that made it
+    const fresh = await seed(1000, '1 minute');
+    expect(await sweep()).toEqual({});
+    expect((await stateOf(fresh.id)).status).toBe('pending');
+    await h.owner.query(
+      `UPDATE order_refunds SET status = 'failed' WHERE org_id = $1 AND id = $2`,
+      [buyer.orgId, fresh.id],
+    );
+
+    // 2. the provider holds it (matched by the uuid we stored on it)
+    const lost = await seed(5000, '3 hours');
+    handlers.unshift((url) =>
+      url.pathname === `/v1/payments/${payId}/refunds`
+        ? {
+            status: 200,
+            body: {
+              items: [
+                {
+                  id: 'rfnd_found',
+                  amount: 5000,
+                  status: 'processed',
+                  created_at: Math.floor(Date.now() / 1000) - 3000,
+                  notes: { ref: lost.uuid },
+                },
+              ],
+            },
+          }
+        : undefined,
+    );
+    expect(await sweep()).toEqual({ recorded: 1 });
+    expect(await stateOf(lost.id)).toMatchObject({
+      status: 'processed',
+      gateway_refund_id: 'rfnd_found',
+    });
+    expect(await sweep()).toEqual({}); // settled rows are not picked up again
+
+    // 3. the provider has nothing for it: after two hours it never got the request, and the amount is free again
+    const never = await seed(7000, '3 hours');
+    handlers.shift();
+    handlers.unshift((url) =>
+      url.pathname === `/v1/payments/${payId}/refunds`
+        ? { status: 200, body: { items: [] } }
+        : undefined,
+    );
+    expect(await sweep()).toEqual({ failed_not_found: 1 });
+    expect(await stateOf(never.id)).toMatchObject({ status: 'failed', gateway_refund_id: null });
+    expect((await stateOf(never.id)).failure).toContain('never reached it');
+
+    // 4. the provider cannot be asked: the row is left as it is
+    const unsure = await seed(900, '3 hours');
+    handlers.shift();
+    handlers.unshift((url) =>
+      url.pathname === `/v1/payments/${payId}/refunds` ? { status: 500, body: {} } : undefined,
+    );
+    expect(await sweep()).toEqual({ skip_cannot_tell: 1 });
+    expect((await stateOf(unsure.id)).status).toBe('pending');
+
+    // 5. a full page of other refunds could hide ours on the next page: not proof, so the row stays pending
+    handlers.shift();
+    handlers.unshift((url) =>
+      url.pathname === `/v1/payments/${payId}/refunds`
+        ? {
+            status: 200,
+            body: {
+              items: Array.from({ length: 100 }, (_, i) => ({
+                id: `rfnd_other${i}`,
+                amount: 1,
+                status: 'processed',
+                created_at: 1_795_000_000 + i,
+                notes: { ref: `other-${i}` },
+              })),
+            },
+          }
+        : undefined,
+    );
+    expect(await sweep()).toEqual({ skip_cannot_tell: 1 });
+    expect((await stateOf(unsure.id)).status).toBe('pending');
+    handlers.length = 0;
   });
 
   it('refuses what cannot be refunded: an unpaid order, a wallet top-up, a subscription payment, a bad amount, a non-operator', async () => {

@@ -241,7 +241,8 @@
         "expiry": "終了日は送信日より後にしてください。そうしないと、キャンペーンが送信される前に期限切れになります。",
         "media": "http://またはhttps://で始まる完全なアドレスを入力してください。",
         "sender": "送信元を選択してください。",
-        "subject": "件名は150文字以内にしてください。"
+        "subject": "件名は150文字以内にしてください。",
+        "pacing": "スマート配信を確認してください: すべての数値は許容範囲内の整数である必要があります。"
       },
       "submit": {
         "save": "変更を保存",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "メッセージ送信前の最長待機時間です。",
         "batchPauseHint": "各バッチの後に休止する分数です。",
         "retryFailed": "失敗したメッセージを自動で再試行",
-        "retryFailedHint": "一時的な理由で失敗したメッセージは、間隔をあけて数回再送されます。各メッセージを1回だけ送るには、オフにしてください。"
+        "retryFailedHint": "一時的な理由で失敗したメッセージは、間隔をあけて数回再送されます。各メッセージを1回だけ送るには、オフにしてください。",
+        "range": "{min} から {max} までの整数を入力してください。"
       },
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
       "draftChip": "下書き / 未保存",
@@ -595,7 +597,8 @@
           "expiry": "終了日は送信日より後の日付にしてください。そうしないと、キャンペーンが一度も送信されないまま期限切れになります。",
           "media": "http://またはhttps://で始まる完全なアドレスを入力してください。",
           "sender": "送信元を選択してください。",
-          "subject": "件名は150文字以内にしてください。"
+          "subject": "件名は150文字以内にしてください。",
+          "pacing": "スマート配信を確認してください: すべての数値は許容範囲内の整数である必要があります。"
         },
         "from": "差出人",
         "subject": "件名",
@@ -686,6 +689,7 @@
             "providerFailed": "画像サービスから応答がありませんでした。しばらくしてからもう一度お試しください。",
             "badJson": "画像サービスから予期しない応答がありました。もう一度お試しください。",
             "imageRefused": "OpenAIがこの画像の生成を拒否しました。商品、オファー、メモを変更してもう一度お試しください。",
+            "storageRequired": "画像にはクラウドのオブジェクトストレージが必要です。プラットフォーム管理者に有効化を依頼してください。キャンペーンの文章は残っています。",
             "invalid": "ブリーフを確認してください。事業名は必須で、長すぎる項目があります。",
             "forbidden": "キャンペーンを作成する権限がありません。",
             "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。",
         "sequence_not_recurring": "順番に送るテンプレートは、繰り返しキャンペーンでのみ使えます。繰り返しのスケジュールを選ぶか、追加のテンプレートを削除してください。",
         "sequence_with_ab": "順番に送るテンプレートは A/B テストと併用できません。A/B テストをオフにするか、追加のテンプレートを削除してください。",
-        "sequence_template_required": "順番の各ステップにテンプレートを選ぶか、空のものを削除してください。"
+        "sequence_template_required": "順番の各ステップにテンプレートを選ぶか、空のものを削除してください。",
+        "variable_fallback_required": "連絡先の項目から来るすべての変数に代替値を入力してください。値のない連絡先に使われます。",
+        "retry_end_too_far": "再試行は今日から最長7日間まで実行できます。より近い終了日を選んでください。",
+        "template_b_same": "バリアントBには、バリアントAとは別のテンプレートが必要です。",
+        "pacing_out_of_range": "スマート配信を確認してください: 数値が許容範囲外です。"
       },
       "template": {
         "previewOnline": "オンライン",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "通知のバージョン: {version}。",
         "modePrevious": "過去の配信先に送信",
         "previousHint": "過去の一斉配信やキャンペーンの配信先に再度送信します。既読、未読、返信、クリックした人だけに絞ることもできます。",
-        "chipPrevious": "{count, plural, other {過去の配信#件}}({outcome})"
+        "chipPrevious": "{count, plural, other {過去の配信#件}}({outcome})",
+        "filterNoConditions": "条件を追加すると、一致する連絡先の数がわかります。"
       },
       "review": {
         "intro": "コストを確認し、各テンプレート変数に何を入力するかを指定して、一斉配信を確認します。",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "過去の配信: {names}({outcome})",
         "sumSplit": "番号ごとの振り分け",
         "sumSplitCount": "{count, plural, other {#件の宛先}} ({percent}%)",
-        "sumSplitPercent": "オーディエンスの{percent}%"
+        "sumSplitPercent": "オーディエンスの{percent}%",
+        "sumCostCharged": "ウォレットから請求: {amount}(残りはプランで賄われます)"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "再試行を有効にする",
         "retriesToggle": "Metaが保留したメッセージを再試行",
         "retryEnd": "終了日を設定",
+        "retryEndPlaceholder": "今から{days}日以内",
         "retriesInfoWhy": "再試行の対象は、Metaの配信頻度制限(エラー{code})で失敗したメッセージのみです。",
         "retriesInfoWhen": "終了日まで、ちょうど{hours}時間間隔で実行されます。",
         "retriesInfoCost": "追加費用はありません。メッセージが配信されたときにのみ課金されます。",
         "recurringTitle": "定期一斉配信",
         "recurringHint": "これを定期スケジュールで送信",
-        "occurrences": "回の実行"
+        "occurrences": "回の実行",
+        "recurringWarning": "この一斉送信はスケジュールに従って繰り返されます。各実行はその時点のオーディエンスに送られ、すべてのメッセージがウォレットから請求されます。",
+        "repeatRange": "1 から {max} までの整数を入力してください。"
       },
       "words": {
         "now": "すぐに1回だけ送信されます。",

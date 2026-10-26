@@ -57,7 +57,13 @@ async function device(t: Tenant, phone = '9812345678'): Promise<string> {
   return r.rows[0].uuid as string;
 }
 
-async function shop(t: Tenant, name: string, deviceId: string): Promise<Record<string, any>> {
+/** The shop fields the tests read off a created shop. */
+interface ShopRow {
+  id: string;
+  slug: string;
+}
+
+async function shop(t: Tenant, name: string, deviceId: string): Promise<ShopRow> {
   const res = await api.as(t.admin).post('/v2/store/shops').send({ shopName: name, deviceId });
   expect(res.status, JSON.stringify(res.body)).toBe(201);
   return res.body;
@@ -316,7 +322,7 @@ describe('orders: list, filters, detail', () => {
   it('lists newest first with the contract fields and no internal ids', async () => {
     const res = await get(m.t, '/v2/store/orders');
     expect(res.status, JSON.stringify(res.body)).toBe(200);
-    expect(res.body.data.map((d: any) => d.orderNo)).toEqual([
+    expect(res.body.data.map((d: { orderNo: number }) => d.orderNo)).toEqual([
       o.o1!.id,
       o.o2!.id,
       o.o3!.id,
@@ -345,7 +351,9 @@ describe('orders: list, filters, detail', () => {
 
   it('filters by status, source, shop, payment status and the date range', async () => {
     const q = async (qs: string) =>
-      (await get(m.t, `/v2/store/orders?${qs}`)).body.data.map((d: any) => d.orderNo);
+      (await get(m.t, `/v2/store/orders?${qs}`)).body.data.map(
+        (d: { orderNo: number }) => d.orderNo,
+      );
     expect(await q('status=paid')).toEqual([o.o3!.id]);
     expect(await q('status=all')).toHaveLength(5);
     expect(await q('source=waba')).toEqual([o.o2!.id]);
@@ -363,7 +371,7 @@ describe('orders: list, filters, detail', () => {
   it("searches the buyer's phone (digits, any formatting), name and the order number", async () => {
     const q = async (term: string) =>
       (await get(m.t, `/v2/store/orders?q=${encodeURIComponent(term)}`)).body.data.map(
-        (d: any) => d.orderNo,
+        (d: { orderNo: number }) => d.orderNo,
       );
     expect(await q('98765')).toEqual([o.o1!.id]);
     expect(await q('+91 98765 43210')).toEqual([o.o1!.id]);
@@ -382,7 +390,7 @@ describe('orders: list, filters, detail', () => {
     for (;;) {
       const res = await get(m.t, `/v2/store/orders?limit=2${cursor ? `&cursor=${cursor}` : ''}`);
       expect(res.status).toBe(200);
-      seen.push(...res.body.data.map((d: any) => d.orderNo));
+      seen.push(...res.body.data.map((d: { orderNo: number }) => d.orderNo));
       pages += 1;
       if (!res.body.page.hasMore) break;
       cursor = res.body.page.nextCursor;
@@ -508,7 +516,7 @@ describe('orders: status, payment links, delete', () => {
       paymentStatus: 'awaiting',
     });
     expect(res.body.order.rowVersion).toBeGreaterThan(before.rowVersion);
-    expect(res.body.order.timeline.map((t: any) => t.kind)).toEqual([
+    expect(res.body.order.timeline.map((t: { kind: string }) => t.kind)).toEqual([
       'created',
       'status_changed',
       'payment_link',
@@ -662,7 +670,7 @@ describe('gateways: catalogue, save, mask, test, default, delete', () => {
     const res = await get(t, '/v2/store/gateways/drivers');
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveLength(33);
-    const by = Object.fromEntries(res.body.data.map((d: any) => [d.slug, d]));
+    const by = Object.fromEntries(res.body.data.map((d: { slug: string }) => [d.slug, d]));
     expect(by.razorpay).toMatchObject({
       name: 'Razorpay',
       available: true,
@@ -677,7 +685,7 @@ describe('gateways: catalogue, save, mask, test, default, delete', () => {
     expect(by.stripe.supportsPaymentLinks).toBe(true);
     expect(by.bank_transfer.supportsPaymentLinks).toBe(false);
     expect(by.payu.supportsPaymentLinks).toBe(false);
-    expect(res.body.data.every((d: any) => d.available === true)).toBe(true);
+    expect(res.body.data.every((d: { available: boolean }) => d.available === true)).toBe(true);
   });
 
   it('saves keys encrypted at rest and never returns them; a blank field keeps, clear removes, an unknown key is refused', async () => {
@@ -701,7 +709,10 @@ describe('gateways: catalogue, save, mask, test, default, delete', () => {
       migratedFromStorefront: false,
     });
     expect(res.body.webhookUrl).toMatch(/\/v2\/store-public\/webhooks\/gateway\/[0-9a-f-]{36}$/);
-    const cred = (b: any, k: string) => b.credentials.find((c: any) => c.key === k);
+    const cred = (
+      b: { credentials: Array<{ key: string; hasValue: boolean; masked: string | null }> },
+      k: string,
+    ) => b.credentials.find((c) => c.key === k)!;
     expect(cred(res.body, 'key_secret')).toEqual({
       key: 'key_secret',
       hasValue: true,
@@ -799,7 +810,9 @@ describe('gateways: catalogue, save, mask, test, default, delete', () => {
     const setS = await api.as(m.t.admin).post('/v2/store/gateways/stripe/default');
     expect(setS.body.isDefault).toBe(true);
     const list = (await get(m.t, '/v2/store/gateways')).body.data;
-    expect(list.filter((g: any) => g.isDefault).map((g: any) => g.slug)).toEqual(['stripe']);
+    expect(
+      list.filter((g: { isDefault: boolean }) => g.isDefault).map((g: { slug: string }) => g.slug),
+    ).toEqual(['stripe']);
 
     // A per-shop override wins for its shop and only there.
     await saveGateway(m.t, 'razorpay', {
@@ -811,11 +824,9 @@ describe('gateways: catalogue, save, mask, test, default, delete', () => {
     expect(own).toMatchObject({ slug: 'razorpay', source: 'store_override', storefrontId: m.s.id });
     expect((await get(m.t, '/v2/store/gateways/resolved')).body.resolved.slug).toBe('stripe');
     const scoped = (await get(m.t, `/v2/store/gateways?storefrontId=${m.s.id}`)).body.data;
-    expect(scoped.map((g: any) => `${g.scope}:${g.slug}`).sort()).toEqual([
-      'store:razorpay',
-      'workspace:razorpay',
-      'workspace:stripe',
-    ]);
+    expect(
+      scoped.map((g: { scope: string; slug: string }) => `${g.scope}:${g.slug}`).sort(),
+    ).toEqual(['store:razorpay', 'workspace:razorpay', 'workspace:stripe']);
 
     // Switching the default off hands over to the next usable one; delete is real.
     const off = await api.as(m.t.admin).post('/v2/store/gateways/stripe/toggle');
@@ -1139,7 +1150,7 @@ describe('payment links and the gateway webhook', () => {
         reference: `pi_${o.id}`,
       }),
     ]);
-    expect(detail.timeline.map((t: any) => t.kind)).toContain('paid');
+    expect(detail.timeline.map((t: { kind: string }) => t.kind)).toContain('paid');
 
     // A cancelled order is not revived, and a reference that is not ours is ignored.
     const c = await order(m.t, { shopId: m.shopId, total: 30000, status: 'cancelled' });
@@ -1306,7 +1317,7 @@ describe('coupons', () => {
 
     // Search and the state filter.
     const q = async (qs: string) =>
-      (await get(m.t, `/v2/store/coupons?${qs}`)).body.data.map((c: any) => c.code);
+      (await get(m.t, `/v2/store/coupons?${qs}`)).body.data.map((c: { code: string }) => c.code);
     expect(await q('')).toEqual(['FLAT100', 'SAVE10']);
     expect(await q('q=save')).toEqual(['SAVE10']);
     expect(await q('q=%25')).toEqual([]);
@@ -1404,7 +1415,9 @@ describe('coupons', () => {
       state: 'exhausted',
     });
     expect(
-      (await get(m.t, '/v2/store/coupons?state=exhausted')).body.data.map((x: any) => x.code),
+      (await get(m.t, '/v2/store/coupons?state=exhausted')).body.data.map(
+        (x: { code: string }) => x.code,
+      ),
     ).toEqual(['SAVE20']);
 
     const usages = await get(m.t, `/v2/store/coupons/${c.body.id}/usages`);
@@ -1503,7 +1516,12 @@ describe('customers', () => {
     expect(list.status).toBe(200);
     // Last activity, newest first: customers nobody ordered with sort by their profile's last change (Chitra, then the unnamed one
     // saved just before her), then the buyers by their latest order (Bala, then Asha).
-    expect(list.body.data.map((c: any) => c.name)).toEqual(['Chitra', null, 'Bala', 'Asha R.']);
+    expect(list.body.data.map((c: { name: string | null }) => c.name)).toEqual([
+      'Chitra',
+      null,
+      'Bala',
+      'Asha R.',
+    ]);
     const asha = list.body.data[3];
     expect(asha.orderCount).toBe(4);
     expect(asha.lifetimeTotals).toEqual([
@@ -1519,7 +1537,7 @@ describe('customers', () => {
 
     const q = async (term: string) =>
       (await get(m.t, `/v2/store/customers?q=${encodeURIComponent(term)}`)).body.data.map(
-        (c: any) => c.phone,
+        (c: { phone: string }) => c.phone,
       );
     expect(await q('asha')).toEqual(['919876543210']);
     expect(await q('98111')).toEqual(['919811111111']);
@@ -1533,7 +1551,7 @@ describe('customers', () => {
     for (let i = 0; i < 6; i++) {
       const res = await get(m.t, `/v2/store/customers?limit=1${cursor ? `&cursor=${cursor}` : ''}`);
       expect(res.status).toBe(200);
-      seen.push(...res.body.data.map((c: any) => c.phone));
+      seen.push(...res.body.data.map((c: { phone: string }) => c.phone));
       if (!res.body.page.hasMore) break;
       cursor = res.body.page.nextCursor;
     }
@@ -1749,7 +1767,7 @@ describe('payments overview and WhatsApp Pay', () => {
 
     const list = await get(m.t, '/v2/store/payments');
     expect(list.status, JSON.stringify(list.body)).toBe(200);
-    expect(list.body.data.map((p: any) => p.orderNo)).toEqual([
+    expect(list.body.data.map((p: { orderNo: number }) => p.orderNo)).toEqual([
       paid.id,
       stripe.id,
       awaiting.id,
@@ -1779,7 +1797,9 @@ describe('payments overview and WhatsApp Pay', () => {
       reference: 'pi_9',
     });
     const q = async (qs: string) =>
-      (await get(m.t, `/v2/store/payments?${qs}`)).body.data.map((p: any) => p.orderNo);
+      (await get(m.t, `/v2/store/payments?${qs}`)).body.data.map(
+        (p: { orderNo: number }) => p.orderNo,
+      );
     expect(await q('status=paid')).toEqual([paid.id, stripe.id, usd.id]);
     expect(await q('status=awaiting')).toEqual([awaiting.id]);
     expect(await q('status=unpaid')).toEqual([unpaid.id]);
@@ -1834,7 +1854,9 @@ describe('payments overview and WhatsApp Pay', () => {
     });
     await put({ configName: 'Second', paymentType: 'billdesk' });
     expect(
-      (await get(t, '/v2/store/payments/whatsapp-pay')).body.data.map((c: any) => c.configName),
+      (await get(t, '/v2/store/payments/whatsapp-pay')).body.data.map(
+        (c: { configName: string }) => c.configName,
+      ),
     ).toEqual(['Second', 'Main Razorpay']);
     expect((await put({ configName: 'x', paymentType: 'paypal' })).status).toBe(422);
     expect((await put({ configName: '', paymentType: 'razorpay' })).status).toBe(422);

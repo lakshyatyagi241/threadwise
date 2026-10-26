@@ -37,7 +37,8 @@
       "statusStage": "That status belongs to a different stage. Choose a status that fits the contact's stage.",
       "stageScope": "A status can only be limited to one of your lifecycle stages.",
       "planLimit": "You've reached your plan's limit of {limit, plural, one {# contact} other {# contacts}}. Upgrade your plan to add more, or delete an existing one to free up space.",
-      "legalHold": "This record is protected and cannot be deleted at the moment."
+      "legalHold": "This record is protected and cannot be deleted at the moment.",
+      "assignedToOther": "This chat is assigned to another agent. Assign it to yourself first to send a message."
     },
     "list": {
       "title": "Contact Hub",
@@ -204,6 +205,7 @@
       "pqlIgnored": "Not understood: {parts}",
       "pqlNothing": "Nothing in that search could be turned into a filter.",
       "pqlFailed": "English search is unavailable right now. Try again.",
+      "pqlNoKey": "English search is not set up for this workspace yet. Ask an admin to add an OpenRouter key under AI keys.",
       "filter": "Filter",
       "filterAi": "Filter with AI",
       "filterAiHint": "Describe who you are looking for",
@@ -286,8 +288,6 @@
       "shortEmail": "Email",
       "shortStage": "Stage",
       "shortWhatsapp": "WhatsApp",
-      "shortCreated": "Created",
-      "shortModified": "Modified",
       "firstRun": {
         "title": "Add your first contacts",
         "message": "Bring in the people you talk to. Contacts are used for messages, campaigns, tasks and deals.",
@@ -296,7 +296,9 @@
         "importBody": "Upload a spreadsheet and match its columns to contact fields.",
         "connect": "Connect WhatsApp",
         "connectBody": "Connect your number so contacts can reply and you can message them."
-      }
+      },
+      "unhideColumn": "Unhide column",
+      "resizeColumn": "Drag to resize {column}; double-click to reset"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -346,7 +348,25 @@
       "assignOwner": "Assign owner",
       "changeStage": "Change stage",
       "more": "More",
-      "held": "This record is protected and cannot be deleted at the moment."
+      "held": "This record is protected and cannot be deleted at the moment.",
+      "consent": "Marketing consent",
+      "consentTitle": "Marketing consent",
+      "consentChannel": "Channel",
+      "consentAction": "Change",
+      "consentSubscribe": "Subscribe",
+      "consentUnsubscribe": "Unsubscribe",
+      "consentNote": "How the contacts agreed",
+      "consentNotePlaceholder": "What they said or signed, and where",
+      "consentNoteRequired": "Say how the contacts agreed before subscribing them.",
+      "consentContinue": "Continue",
+      "consentBack": "Back",
+      "consentConfirm": "Record consent",
+      "consentSummary": "Mark {count, plural, one {# contact} other {# contacts}} as {change} on {channel}. Each one gets an entry in its consent history.",
+      "consentChangeGranted": "subscribed",
+      "consentChangeWithdrawn": "unsubscribed",
+      "consentAllMatching": "This applies to every contact the filter matches.",
+      "consentSubscribed": "{count, plural, one {# contact subscribed} other {# contacts subscribed}}",
+      "consentUnsubscribed": "{count, plural, one {# contact unsubscribed} other {# contacts unsubscribed}}"
     },
     "form": {
       "addEyebrow": "New contact",
@@ -428,7 +448,8 @@
         "number": "Enter a number.",
         "integer": "Enter a whole number.",
         "email": "Enter a valid email address.",
-        "url": "Enter a full link starting with http:// or https://."
+        "url": "Enter a full link starting with http:// or https://.",
+        "phone": "Enter a valid phone number for the country picked."
       },
       "readOnlyField": "Read only",
       "yes": "Yes",
@@ -448,7 +469,8 @@
       "companyRefused": "You cannot use that company. Pick another one or clear the field.",
       "searchOptions": "Search options",
       "searchOptionsFor": "Search the options of {field}",
-      "noOptionsFound": "No option matches your search."
+      "noOptionsFound": "No option matches your search.",
+      "cascadeWaiting": "Choose {parent} first to see the choices."
     },
     "tags": {
       "title": "Tags",
@@ -497,7 +519,6 @@
       "loading": "Loading groups...",
       "unavailableTitle": "Groups are not available yet",
       "unavailableMessage": "The contact groups service is not live on this server, so groups cannot be listed or created yet.",
-      "contacts": "contacts",
       "viewContacts": "View contacts",
       "edit": "Edit group",
       "editNamed": "Edit group {name}",
@@ -505,8 +526,6 @@
       "deleteNamed": "Delete group {name}",
       "deleteTitle": "Delete this group?",
       "deleteMessage": "\"{name}\" will be removed from every contact that is in it. The contacts themselves are kept.",
-      "createTile": "Create new group",
-      "createTileHint": "Bucket contacts by segment, funnel stage, or interest.",
       "emptyTitle": "No groups yet",
       "emptyMessage": "Ask a workspace manager to create the first group.",
       "helpKicker": "Help - 0{n}",
@@ -526,7 +545,21 @@
       },
       "exists": "A group with this name already exists, so nothing new was created.",
       "import": "Import contacts",
-      "importInto": "Import"
+      "importInto": "Import",
+      "colName": "Name",
+      "colMembers": "Members",
+      "colCreatedBy": "Created by",
+      "colCreatedAt": "Created at",
+      "colModifiedBy": "Modified by",
+      "colUpdatedAt": "Updated at",
+      "colActions": "Actions",
+      "tableLabel": "Contact groups",
+      "search": "Search groups",
+      "searchPlaceholder": "Search by name",
+      "count": "{count, plural, =0 {No groups} one {# group} other {# groups}}",
+      "noResultsTitle": "No groups match",
+      "noResults": "No group name contains what you typed.",
+      "clearSearch": "Clear search"
     },
     "import": {
       "eyebrow": "Bulk import",
@@ -564,6 +597,8 @@
         "timezone": "Time zone (e.g. Asia/Kolkata)"
       },
       "notInFile": "Not in file",
+      "customProperties": "Custom properties",
+      "customPropertiesHint": "A column whose header is the property's name, or attr:key as the export writes it, fills that property. A blank cell keeps the value the contact already has.",
       "columnN": "Column {n}",
       "applyTitle": "Apply to every imported contact",
       "status": "Status",
@@ -621,7 +656,9 @@
         "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
-        "legal_hold": "protected record, not changed"
+        "legal_hold": "protected record, not changed",
+        "invalid_property_value": "custom property value does not fit its type or options",
+        "invalid_property_value_column": "column \"{column}\": the value does not fit its type or options"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
@@ -634,6 +671,7 @@
       "limitExceeded": "Over plan limit",
       "limitExceededNote": "Some new contacts were not imported because the contact limit of your plan was reached.",
       "rejectsFailed": "The rejected rows could not be downloaded.",
+      "sampleFailed": "The sample file could not be downloaded. Try again.",
       "groupRequired": "Add these contacts to",
       "groupExisting": "An existing group",
       "groupNew": "A new group",
@@ -1087,7 +1125,8 @@
         "moveDown": "Move {name} down",
         "edit": "Edit {name}",
         "deactivate": "Deactivate {name}",
-        "reactivate": "Reactivate"
+        "reactivate": "Reactivate",
+        "dependsOn": "Choices depend on {field}"
       },
       "toast": {
         "conflict": "Someone else changed this. The list was refreshed; try again.",
@@ -1243,6 +1282,34 @@
         "manageStages": "Manage stages",
         "manageGroups": "Manage groups",
         "locked": "Fixed"
+      },
+      "cascade": {
+        "open": "Dependent fields",
+        "title": "Dependent fields",
+        "close": "Close",
+        "intro": "A dependent field always shows. Its choices depend on the choice made in its parent property: for each parent choice, tick the choices of the dependent field it allows.",
+        "empty": "No dependent fields yet.",
+        "add": "Add dependent field",
+        "needTwoChoiceFields": "Dependent fields need at least two properties with a choice list (dropdown, multi-select or radio).",
+        "dependsOn": "depends on {parent}",
+        "editLabel": "Edit {name}",
+        "removeLabel": "Remove {name}",
+        "parent": "Parent property",
+        "child": "Dependent property",
+        "pickParent": "Choose the parent property",
+        "pickChild": "Choose the dependent property",
+        "allowed": "Choices of {child} allowed under each choice of {parent}",
+        "noParentChoices": "The parent property has no choices yet.",
+        "noChildChoices": "The dependent property has no choices yet.",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saved": "Dependent field saved.",
+        "cycle": "That dependency would make two properties wait for each other.",
+        "removeTitle": "Remove {name} from dependent fields?",
+        "removeMessage": "It shows all its choices again. The choices it had under the parent are forgotten; the values contacts hold are kept.",
+        "removeConfirm": "Remove",
+        "removed": "Dependent field removed.",
+        "removeFailed": "The dependent field could not be removed. Try again."
       }
     },
     "lost": {
@@ -1276,6 +1343,9 @@
       "shared": "Shared",
       "privateHint": "Only you, and people who can edit every segment.",
       "sharedHint": "Everyone who can view segments.",
+      "specific": "Specific people",
+      "specificHint": "Only the people and teams you choose, plus you and people who can edit every segment.",
+      "shareRequired": "Choose at least one person or team to share with.",
       "cancel": "Cancel",
       "save": "Save and open rules",
       "created": "Created the segment \"{name}\". Refine its rules below.",
@@ -1294,7 +1364,7 @@
       "close": "Close",
       "apply": "Update {count, plural, one {# contact} other {# contacts}}",
       "properties": {
-        "title": "Custom properties",
+        "title": "Properties",
         "hint": "Properties you add here are set on {count, plural, one {the selected contact} other {all # selected contacts}}. Properties you do not add are not changed.",
         "add": "Add property",
         "search": "Search properties",
@@ -1303,9 +1373,10 @@
         "closePicker": "Close",
         "changed": "Properties to change",
         "clear": "Clear",
-        "keep": "Keep",
+        "remove": "Remove {name}",
         "setValue": "Set a value",
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
+        "parentFirst": "First update {parent}, then this property: its choices depend on it.",
         "requiredNoClear": "A required property cannot be cleared.",
         "problemEmpty": "Enter a value, or choose Clear."
       },
@@ -1399,7 +1470,17 @@
       "template": "WhatsApp template",
       "templatePlaceholder": "Select a template",
       "noTemplates": "No approved templates for this number.",
-      "notSendable": "This template cannot be filled in here ({reason}).",
+      "openInInbox": "Open the chat in the inbox",
+      "notSendable": "This template cannot be sent from here.",
+      "reason": {
+        "not_linked": "This number is not linked to a WhatsApp business account, so no template can be sent.",
+        "paused": "Paused by WhatsApp. It can be sent again once the pause ends.",
+        "media_header": "Has an image, video or document header, which cannot be sent from here yet.",
+        "header_variable": "Has a variable in the header, which cannot be filled in from here yet.",
+        "dynamic_button": "Has a button link with a variable, which cannot be filled in from here yet.",
+        "authentication": "One-time-password templates are sent by the system, not from here.",
+        "named_variables": "Uses named variables, which cannot be filled in from here yet."
+      },
       "variables": "Template variables",
       "preview": "Preview",
       "slot": "Variable {key}",
@@ -1515,7 +1596,9 @@
         "selected": "Selected columns",
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
-        "remove": "Remove {name}"
+        "remove": "Remove {name}",
+        "nameShort": "View name must be at least {min} characters.",
+        "nameLong": "View name can be at most {max} characters."
       },
       "presets": {
         "myContacts": "My contacts",

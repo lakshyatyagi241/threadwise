@@ -1,25 +1,13 @@
-# Threadwise port workspace
+# Threadwise workspace
 
-Naming: **Threadwise** is the product we build. **Reference** is the licensed Laravel app in `reference/` that we port behavior from (it was previously shipped under another name).
-Goal: rebuild every Reference feature in `crm-platform/` (NestJS, Postgres+RLS, Drizzle, BullMQ, Next.js), three people in parallel
-(Lakshya, Vedant, Punya). The project owner holds the license for Reference and has authorized using its source directly as the
-reference: read the Laravel code, views, JS/CSS, migrations and docs, and port them into NestJS and Next.js (same behavior, same
-data model, same screens and flows, same copy where it fits). The port is a rewrite in our stack, not a paste: translate the logic into
-our conventions (RLS, Drizzle, contracts, module boundaries); do not drop Laravel/PHP/Blade code into `crm-platform/`. Do not publish the
-Reference source itself outside the project.
+**Threadwise** is the product we build in `crm-platform/` (NestJS, Postgres+RLS, Drizzle, BullMQ, Next.js). Three people work on it in parallel (Lakshya, Vedant, Punya).
 
-**HARD RULES for every session and chat: no Reference feature lost or changed, same UI rebuilt on our stack, real backend wiring,
-read the feature's wiring map first.** Full text: `crm-platform/docs/threadwise-port/PORTING_RULES.md` (read first); wiring maps:
-`crm-platform/docs/threadwise-port/wiring/`. Do not start port work without them.
+**Reference** was the licensed Laravel app that Threadwise was ported from. Its source (`reference/`) has been removed from this repo. Do not read, run, copy from or bring it back. What it did is recorded in `crm-platform/docs/threadwise-port/` (wiring maps, specs, inventory). Treat those files as the feature record, not as a live reference.
 
-Start here: `crm-platform/docs/threadwise-port/README.md` (status, findings, decisions needed, next-session runbook).
+| Folder          | What                                                                    | Rules                                                    |
+| --------------- | ----------------------------------------------------------------------- | -------------------------------------------------------- |
+| `crm-platform/` | the product (git, origin `geta-ai/crm-platform`)                        | follow its own `CLAUDE.md`, `CONTRIBUTING.md` and skills |
 
-| Folder              | What                                                                                   | Rules                                                    |
-| ------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `reference/` | the licensed Laravel product (`app/`, `Documentation/`, `Update/`, `Database/`) | read-only; run it with the `threadwise-run-reference` skill  |
-| `crm-platform/`     | the build target (git, origin `geta-ai/crm-platform`)                                  | follow its own `CLAUDE.md`, `CONTRIBUTING.md` and skills |
-| `_work/`            | manifests, tools, reports, resumable workflow script; not in git                       | regenerate with the `threadwise-inventory-refresh` skill     |
-
-Skills load from `.claude/skills` (symlink to the repo's). Use `threadwise-port-feature` for any unit of port work; it chains the rest.
+Skills load from `.claude/skills` (symlink to the repo's).
 Open Claude Code inside `crm-platform/` when writing code so the repo's own CLAUDE.md applies.
 Nothing is committed or pushed unless the user asks.

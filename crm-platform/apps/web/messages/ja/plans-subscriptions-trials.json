@@ -48,7 +48,8 @@
       "email_mailboxes": "メールボックス数",
       "email_monthly": "月間メール数",
       "storage_gb": "ストレージ (GB)",
-      "teams": "チーム"
+      "teams": "チーム",
+      "webbot_messages": "月ごとの無料ウェブサイトチャットボットメッセージ数"
     },
     "features": {
       "automation": "自動化",
@@ -60,10 +61,12 @@
       "remove_branding": "ブランディングの削除",
       "sales_pipeline": "営業パイプライン",
       "appointment_booking": "予約受付",
+      "appointment_confirm_buttons": "リマインダーのボタン（確認・日時変更・キャンセル）",
+      "appointment_rebook_steps": "再予約（リコール）ステップ",
       "chatbot_widgets": "チャットボットウィジェット",
       "wa_storefront": "WhatsAppカタログ",
       "inbox_sla": "SLAポリシー",
-      "inbox_routing": "ルーティングルール",
+      "inbox_routing": "スマートルーティング: 自動割り当てとルール",
       "waba_calling": "WhatsApp通話",
       "inbox_kanban": "カンバン表示",
       "team_performance": "チームのパフォーマンス",
@@ -89,7 +92,9 @@
       "record_assignment": "レコード割り当てルール",
       "team_hierarchy": "チーム階層とマネージャー",
       "custom_roles": "カスタムロールとスコープ",
-      "inbox_assignment_sticky": "連絡先の担当者と固定担当"
+      "inbox_assignment_sticky": "スマートルーティング: 連絡先オーナーと固定担当者",
+      "agent_status_bar": "ステータスバー：上部バーと受信トレイの対応可能 / 離席中の操作",
+      "agent_status_automation": "ステータスの自動化：個人の勤務時間と自動の離席中"
     },
     "limitGroups": {
       "messaging": "メッセージング",
@@ -144,7 +149,8 @@
       "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。",
       "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。",
       "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。",
-      "teams": "ワークスペースが持てるチーム数。空欄は無制限、0 は個人利用(チームなし)です。既存のチームが削除されることはありません。"
+      "teams": "ワークスペースが持てるチーム数。空欄は無制限、0 は個人利用(チームなし)です。既存のチームが削除されることはありません。",
+      "webbot_messages": "暦月ごとに無料で含まれるウェブサイトチャットボットのメッセージ数。それを超えるメッセージはウォレットから課金されます。空欄または0 = 無料分なし。"
     },
     "planAddons": {
       "title": "お使いのプランで利用できるアドオン",
@@ -245,20 +251,7 @@
         "title": "よくある質問"
       },
       "addons": {
-        "title": "アドオン",
-        "owned": "所有しているアドオン",
-        "oneTime": "一回払い",
-        "buy": "アドオンを購入",
-        "buyAgain": "再購入",
-        "active": "有効",
-        "unlimitedBullet": "無制限の{label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} 日}}",
-          "weeks": "{count, plural, other {/ {count} 週}}",
-          "months": "{count, plural, other {/ {count} か月}}",
-          "years": "{count, plural, other {/ {count} 年}}"
-        }
+        "title": "アドオン"
       },
       "renewal": {
         "renewsOn": "プランは{date}に自動更新されます。",
@@ -578,7 +571,30 @@
       "back": "戻る",
       "compare": "すべてのプランを比較",
       "appHint": "{feature}はマーケットプレイスでアプリとしても販売されています。",
-      "appLink": "アプリを見る"
+      "appLink": "アプリを見る",
+      "addonHint": "{addon}アドオンで、現在のプランに追加することもできます。",
+      "addonLink": "アドオンを見る",
+      "addonsTabHint": "アドオンの利用にプランのマーケットプレイス機能は不要です。「プランとアドオン」から、所有中のものを確認しアドオンを購入できます。",
+      "addonsTabLink": "プランとアドオンを開く",
+      "addonHintGeneric": "ご利用のプランでは、アドオンとして追加できる場合もあります。"
+    },
+    "lock": {
+      "link": "プランとアドオンを見る",
+      "offTitle": "ご利用のプランに含まれていません",
+      "offLead": "この部分は現在、ワークスペースのプランに含まれていません。",
+      "buyTitle": "{addon} を {price} で追加",
+      "buyLead": "ご利用のプランでは {addon} をアドオンとして提供しています。追加するとこの部分が有効になります。",
+      "buyLink": "アドオンを見る",
+      "askOwner": "アカウントオーナーに追加を依頼してください。",
+      "unavailableTitle": "{addon} には有効な有料プランが必要です",
+      "unavailableLead": "まず有料プランを選ぶと、そこに {addon} を追加できます。",
+      "viewPlans": "プランを見る",
+      "disabledTitle": "{addon} はオフです",
+      "disabledLead": "ご利用のプランには {addon} が含まれていますが、このワークスペースではオフになっています。設定は保持されます。",
+      "disabledAsk": "オンにするには、アカウントオーナーに依頼してください。",
+      "turnOn": "オンにする",
+      "turnOnForbidden": "オンにする権限がありません。アカウントオーナーに依頼してください。",
+      "turnOnFailed": "{addon} をオンにできませんでした。もう一度お試しください。"
     }
   }
 }

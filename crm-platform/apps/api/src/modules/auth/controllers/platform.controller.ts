@@ -72,6 +72,7 @@ import { SecurityPolicyService } from '../platform/security-policy.service';
 import { AccountGateService } from '../security/account-gate.service';
 import { AuthAuditService } from '../security/auth-audit.service';
 import { clientMeta } from '../support/client-meta';
+import { Throttle } from '../../platform-infrastructure';
 
 /** Operator sign-in. Public routes (no operator token exists yet); everything else is behind OperatorGuard. */
 @ApiTags('platform')
@@ -87,6 +88,7 @@ export class PlatformAuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('login/mfa')
   @ApiOperation({ summary: 'Complete operator sign-in with a code' })
   async loginMfa(@Body(zodPipe(mfaLoginRequestSchema)) body: MfaLoginRequest) {
@@ -94,6 +96,7 @@ export class PlatformAuthController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('login/mfa/webauthn-options')
   @ApiOperation({
     summary: 'Options for signing in with a passkey at the operator second-factor step',
@@ -105,6 +108,7 @@ export class PlatformAuthController {
   }
 
   @Public()
+  @Throttle({ limit: 60, windowSeconds: 60, by: 'ip' })
   @Post('refresh')
   @ApiOperation({ summary: 'Rotate an operator refresh token' })
   async refresh(@Body(zodPipe(refreshRequestSchema)) body: z.infer<typeof refreshRequestSchema>) {

@@ -198,7 +198,8 @@ export type DateOperator =
   | 'is_not_empty';
 
 /** Midnight UTC of a `YYYY-MM-DD` day, whatever the session time zone is. */
-const dayStart = (day: string, tz: string): SQL => sql`((${day}::date)::timestamp AT TIME ZONE ${tz})`;
+const dayStart = (day: string, tz: string): SQL =>
+  sql`((${day}::date)::timestamp AT TIME ZONE ${tz})`;
 const dayEnd = (day: string, tz: string): SQL => sql`(${dayStart(day, tz)} + interval '1 day')`;
 
 /**

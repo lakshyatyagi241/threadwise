@@ -1349,13 +1349,17 @@
             "details": "Szczegóły i cennik",
             "features": "Funkcje",
             "limits": "Limity",
-            "addons": "Dodatki"
+            "addons": "Dodatki",
+            "integrations": "Integracje",
+            "miniApps": "Miniaplikacje"
           },
           "tabSummary": {
             "features": "Włączone funkcje: {count} z {total}",
             "limits": "Ustawione limity: {count} z {total}",
-            "addons": "Wybrane dodatki: {count}",
-            "error": "Zawiera błędy do poprawienia"
+            "addons": "{count, plural, one {# dodatek wliczony lub oferowany} few {# dodatki wliczone lub oferowane} many {# dodatków wliczonych lub oferowanych} other {# dodatku wliczonego lub oferowanego}}",
+            "error": "Zawiera błędy do poprawienia",
+            "integrations": "Integracje wliczone lub oferowane: {count}",
+            "miniApps": "Miniaplikacje wliczone lub oferowane: {count}"
           },
           "featuresUi": {
             "intro": "Wyłącz to, czego ten plan nie obejmuje. Przestrzeń robocza na tym planie nie może otworzyć obszaru, którego funkcja jest wyłączona.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Włącz wszystkie",
             "disableAll": "Wyłącz wszystkie",
             "noMatch": "Żadne funkcje nie pasują do wyszukiwania.",
-            "groupCount": "Włączone: {count} z {total}"
+            "groupCount": "Włączone: {count} z {total}",
+            "lockedBy": "Ustawione przez dodatek {addon} na karcie Dodatki"
           },
           "limitsUi": {
             "intro": "Limit zatrzymuje akcję, gdy przestrzeń robocza go osiągnie. Zaznacz Bez limitu, aby go usunąć.",
@@ -1385,12 +1390,8 @@
             "total": "łącznie"
           },
           "addons": {
-            "intro": "Włączone dodatki są pokazywane przestrzeniom roboczym na tym planie w ich Marketplace; można ich używać dopiero po zakupie przez przestrzeń roboczą.",
             "search": "Szukaj dodatków",
             "searchPlaceholder": "Szukaj dodatków lub aplikacji",
-            "selectAll": "Zaznacz wszystko",
-            "clear": "Wyczyść",
-            "selected": "Wybrano {count} z {total}",
             "loading": "Ładowanie dodatków",
             "empty": "Nie istnieją jeszcze płatne dodatki",
             "emptyHint": "Dodatki tworzy się w katalogu Marketplace konsoli operatora. Gdy aplikacja ma płatny pakiet, pojawia się tutaj.",
@@ -1404,7 +1405,8 @@
             "packInactive": "Pakiet dodatku jest wyłączony, więc nikt nie może go kupić.",
             "appUnpublished": "Aplikacja nie jest opublikowana, więc przestrzenie robocze jeszcze jej nie widzą.",
             "appLabel": "Aplikacja: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# dodatek wliczony lub oferowany} few {# dodatki wliczone lub oferowane} many {# dodatków wliczonych lub oferowanych} other {# dodatku wliczonego lub oferowanego}}"
           },
           "featureHints": {
             "automation": "Kreator przepływów i automatyzacje, które odpowiadają na rozmowy i na nie reagują.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "White-label: przestrzeń robocza może ukryć branding platformy w stopce.",
             "sales_pipeline": "Transakcje, zadania i lejki oraz dane o lejkach na pulpicie.",
             "appointment_booking": "Typy rezerwacji, spotkania i publiczne strony rezerwacji. Ten przełącznik należy do płatnej aplikacji Spotkania.",
+            "appointment_confirm_buttons": "Dodaje przyciski Potwierdź, Zmień termin i Anuluj do przypomnienia o wizycie wysyłanego przez WhatsApp.",
+            "appointment_rebook_steps": "Wiadomości przypominające wysyłane po zakończonej wizycie, które zachęcają kontakt do ponownego umówienia się.",
             "chatbot_widgets": "Kreator widżetu chatbota na stronie.",
             "wa_storefront": "Obszar katalogu i sklepu WhatsApp.",
             "inbox_sla": "Zasady i terminy SLA w skrzynce zespołu.",
-            "inbox_routing": "Reguły routingu, które automatycznie przypisują rozmowy ze skrzynki odbiorczej.",
+            "inbox_routing": "Automatyczne przydzielanie nowych czatów: reguły kierowania, Wszyscy pozostali i liczniki kolejki oczekujących. Część dodatku Inteligentne kierowanie.",
             "waba_calling": "Połączenia WhatsApp ze skrzynki odbiorczej: numery do połączeń, uprawnienia do połączeń, wykonywanie i odbieranie połączeń.",
             "inbox_kanban": "Widok tablicy Kanban skrzynki zespołu.",
             "team_performance": "Raporty wydajności zespołu.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu.",
             "team_hierarchy": "Zespoły nadrzędne, liderzy zespołów i menedżerowie, którzy widzą swój zespół i zespoły poniżej.",
             "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia.",
-            "inbox_assignment_sticky": "Przypisywanie „najpierw właściciel” i synchronizacja między właścicielem kontaktu a właścicielem czatu, okno dla powracających kontaktów i pytanie przy zmianie przypisania. Działa razem z routingiem skrzynki."
+            "inbox_assignment_sticky": "Przydzielanie z pierwszeństwem właściciela i synchronizacją, okno dla wracających kontaktów i pytanie przy zmianie przydziału. Część dodatku Inteligentne kierowanie.",
+            "agent_status_bar": "Kontrolka statusu Dostępny / Nieobecny na górnym pasku i na początku Skrzynki odbiorczej, z opcjami Ustaw jako nieobecny / dostępny i linkiem do Urlopu. Przełącznik Dostępny / Nieobecny w menu konta jest otwarty w każdym planie.",
+            "agent_status_automation": "Osobiste godziny pracy ze strefą czasową, Nieobecny poza nimi, powiadomienie Poza godzinami pracy oraz przydzielanie, które pomija osoby poza ich godzinami. Zapis harmonogramu tego wymaga; bez tego zapisany harmonogram jest zachowany, ale ignorowany."
           },
           "units": {
             "days": "Dni",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "Skrzynki e-mail",
             "email_monthly": "E-maile miesięcznie",
             "storage_gb": "Miejsce na dane (GB)",
-            "teams": "Zespoły"
+            "teams": "Zespoły",
+            "webbot_messages": "Darmowe wiadomości chatbota na stronie miesięcznie"
           },
           "featureGroups": {
             "messaging": "Wiadomości",
@@ -1609,10 +1616,12 @@
             "remove_branding": "White-label (usuwa branding platformy)",
             "sales_pipeline": "Lejek sprzedaży (transakcje i zadania)",
             "appointment_booking": "Spotkania i strony rezerwacji",
+            "appointment_confirm_buttons": "Przyciski przypomnienia: Potwierdź, Zmień termin i Anuluj",
+            "appointment_rebook_steps": "Kroki ponownego umówienia (przypomnienia) po wizycie",
             "chatbot_widgets": "Widżety chatbota na stronie",
             "wa_storefront": "Sklep i katalog WhatsApp",
             "inbox_sla": "Zasady SLA skrzynki odbiorczej",
-            "inbox_routing": "Reguły routingu skrzynki odbiorczej i godziny pracy",
+            "inbox_routing": "Inteligentne kierowanie: automatyczne przydzielanie i reguły",
             "waba_calling": "Wykonuj i odbieraj połączenia WhatsApp ze skrzynki odbiorczej",
             "inbox_kanban": "Tablica Kanban skrzynki odbiorczej",
             "team_performance": "Raporty wydajności zespołu",
@@ -1638,7 +1647,9 @@
             "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
             "custom_roles": "Własne role i zakresy",
-            "inbox_assignment_sticky": "Właściciel kontaktu i stały agent"
+            "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent",
+            "agent_status_bar": "Pasek statusu: kontrolka Dostępny / Nieobecny na górnym pasku i w Skrzynce odbiorczej",
+            "agent_status_automation": "Automatyzuj status: osobiste godziny pracy i automatyczna nieobecność"
           },
           "problems": {
             "required": "To pole jest wymagane.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "Plan nie może być jednocześnie bezpłatny i z wyceną indywidualną.",
             "paid_needs_price": "Ustaw cenę powyżej 0 lub oznacz plan jako bezpłatny.",
             "offer_not_lower": "Cena promocyjna musi być niższa niż cena planu.",
-            "default_needs_active": "Plan domyślny przy rejestracji musi być aktywny."
+            "default_needs_active": "Plan domyślny przy rejestracji musi być aktywny.",
+            "addonPriceZero": "Pozostaw cenę pustą, aby użyć ceny dodatku, lub wybierz Wliczone.",
+            "addonGone": "Ten dodatek już nie istnieje. Odśwież stronę i zapisz ponownie."
           },
           "limitHints": {
             "monthly_messages": "Wiadomości wychodzące wysłane w miesiącu kalendarzowym. Po przekroczeniu limitu naliczana jest opłata z portfela.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
             "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
             "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
-            "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
+            "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane.",
+            "webbot_messages": "Wiadomości chatbota na stronie wliczone za darmo w każdym miesiącu kalendarzowym. Każda wiadomość ponad limit jest pobierana z portfela. Puste lub 0 = brak darmowych."
           },
           "productLines": {
             "chat": "Czat",
             "crm": "CRM sprzedaży",
             "platform": "Wspólne dla obu"
+          },
+          "offers": {
+            "readOnly": "Możesz przeglądać ten plan, ale nie możesz go zmieniać, więc te ustawienia są zablokowane.",
+            "featureTitle": "Dodatki z funkcjami",
+            "featureIntro": "Dodatki, które odblokowują część produktu. Wliczone: przestrzenie robocze w tym planie dostają dodatek bez opłaty, a na jego karcie widnieje „W cenie Twojego planu”. Płatne: mogą go kupić, po cenie tego planu, jeśli ją ustawisz. Ukryte: nigdy go nie widzą. Funkcje dodatku na karcie Funkcje podążają za tym wyborem.",
+            "capacityTitle": "Dodatki pojemnościowe",
+            "capacityIntro": "Dodatki, które tylko zwiększają limit, np. dodatkowe stanowisko. W planie są płatne lub ukryte; własne limity planu ustawisz na karcie Limity.",
+            "noFeaturePacks": "Nie ma jeszcze dodatków z funkcjami.",
+            "adds": "Dodaje: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} bez limitu",
+            "modeLabel": "{name}: sposób oferowania w tym planie",
+            "modes": {
+              "included": "Wliczone",
+              "paid": "Płatne",
+              "hidden": "Ukryte"
+            },
+            "noIncluded": "Ten dodatek tylko zwiększa limity, więc nie może być wliczony. Własny limit tego planu ustawisz na karcie Limity.",
+            "priceLabel": "Cena w tym planie ({currency})",
+            "priceHint": "Pozostaw puste, aby użyć własnej ceny dodatku.",
+            "includedCapacityNote": "Wliczone są tylko jego funkcje. Dodatkowe limity ({limits}) nadal są w sprzedaży dla przestrzeni roboczych w tym planie.",
+            "hiddenNote": "Przestrzenie robocze w tym planie nie widzą tego dodatku i nie mogą go kupić. Przestrzeń robocza, która już go kupiła, zachowuje go do końca okresu.",
+            "offNote": "Już niewliczone: przestrzenie robocze w tym planie tracą te funkcje, chyba że kupią dodatek. Ich ustawienia zostają zachowane i wrócą, gdy dodatek znów zostanie włączony.",
+            "loading": "Ładowanie dodatków",
+            "loadFailed": "Nie udało się załadować dodatków. Nic nie zostało zmienione.",
+            "empty": "Nie ma jeszcze dodatków",
+            "emptyHint": "Dodatki takie jak Inteligentne kierowanie oraz Zespoły i uprawnienia tworzy się w sekcji Dodatki w konsoli operatora.",
+            "noPrice": "Nie ustawiono ceny",
+            "gives": "Daje: {features}",
+            "unlistedNote": "Niektóre jego funkcje ({features}) nie są na standardowej liście dodatków. Nadal można je włączyć dla planu; inaczej działa tylko kupowanie tego dodatku jako pakietu.",
+            "inactiveNote": "Ten dodatek jest szkicem lub jest wyłączony, więc nikt jeszcze nie może go kupić. Uwzględnienie go w planie nadal działa.",
+            "impactCount": "{count, plural, one {# przestrzeń robocza już płaci za ten dodatek.} few {# przestrzenie robocze już płacą za ten dodatek.} many {# przestrzeni roboczych już płaci za ten dodatek.} other {# przestrzeni roboczej już płaci za ten dodatek.}} Ich odnowienie zatrzyma się na końcu bieżącego okresu, nic nie zostanie zwrócone i dziś nic nie zostanie anulowane.",
+            "impactUnknown": "Przestrzenie robocze w tym planie, które już płacą za ten dodatek, przestaną go odnawiać na koniec bieżącego okresu. Nic nie zostanie zwrócone i dziś nic nie zostanie anulowane. Nie udało się załadować liczby.",
+            "partlyNote": "Ten plan już daje część tego dodatku ({features}). Zostaje tak, dopóki nie wybierzesz tutaj W cenie, Płatny lub Ukryty.",
+            "needsFeatures": "Najpierw dodaj funkcje, które odblokowuje, w Dodatki > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Miniaplikacje to aplikacje, które przestrzeń robocza instaluje z Marketplace. Wliczone: bezpłatnie dla przestrzeni roboczych w tym planie. Płatne: mogą ją kupić po własnej cenie aplikacji. Ukryte: nigdy jej nie widzą. Wybranie opcji Wliczone włącza też funkcje planu, które daje aplikacja.",
+            "introIntegrations": "Integracje łączą zewnętrzną usługę. Wliczone: bezpłatnie dla przestrzeni roboczych w tym planie. Płatne: mogą ją kupić po własnej cenie integracji. Ukryte: nigdy jej nie widzą. Wybranie opcji Wliczone włącza też funkcje planu, które daje integracja.",
+            "setAll": "Ustaw wszystkie wyświetlone na",
+            "summary": "{count} z {total} wliczonych lub oferowanych",
+            "priceHint": "Aplikacje Marketplace zachowują własną cenę; ustaw ją na stronie aplikacji.",
+            "emptyIntegrations": "Nie ma jeszcze płatnych integracji",
+            "emptyIntegrationsHint": "Bezpłatne integracje nie wymagają tu ustawień; Shopify i WooCommerce włącza się na karcie Funkcje."
           }
         }
       },

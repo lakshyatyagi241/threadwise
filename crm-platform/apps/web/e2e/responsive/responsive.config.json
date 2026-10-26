@@ -1,0 +1,34 @@
+{
+  "_comment": "Read by layout.spec.ts. widths are the six the QA sheet asks for (task 20). `known` lists routes allowed to fail today, each with the reason; it only shrinks. A route not listed here must have zero P0 and P1 layout defects.",
+  "widths": [
+    {
+      "width": 360,
+      "height": 740
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "skipGroups": ["(admin)", "(embedded)", "(setup)", "(site-preview)"],
+  "authedGroups": ["(app)", "(gate)"],
+  "known": {
+    "/more": "P0, real defect: the page throws 'useShellData must be used inside the app shell' on every visit and shows the error screen. Commit 1f7894a4e (5 Oct, wip(preserve)) removed the <ShellDataProvider> wrappers from components/shell/app-shell.tsx, so the More page (admin-console-shell/more/more-page.tsx) has no shell data. Owner: admin-console-shell. Fix: provide ShellData (nav, tiles, mode, bar, wallet label) from AppShell, or retire the page."
+  }
+}

@@ -51,7 +51,8 @@ export class GoogleCalendarController {
   @Get('spreadsheets')
   @RequirePermission('record.booking-types.update')
   @ApiOperation({
-    summary: 'The spreadsheets of the connected Google account, for the booking type\'s sheet picker',
+    summary:
+      "The spreadsheets of the connected Google account, for the booking type's sheet picker",
     description:
       '409 APPT_CALENDAR_NOT_CONNECTED when nothing is connected, it needs reconnecting or the Drive file list permission was not given; 502 APPT_CALENDAR_PROVIDER_FAILED when Google does not answer.',
   })

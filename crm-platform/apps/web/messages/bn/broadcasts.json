@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "বন্ধ করুন"
     },
+    "list": {
+      "unofficialDisabled": "অনানুষ্ঠানিক (নিষ্ক্রিয়)"
+    },
     "detail": {
       "back": "ফিরে যান",
       "crumb": "ব্রডকাস্ট / অ্যানালিটিক্স / #{ref}",

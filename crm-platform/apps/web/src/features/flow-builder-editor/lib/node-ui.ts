@@ -108,6 +108,8 @@ export const NODE_LOOK: Record<string, NodeLook> = {
     PLUM,
     'M3 2.5h10v8H8.5L5 13.5v-3H3zM6.6 5.6a1.4 1.4 0 0 1 2.8 0c0 1-1.4 1.1-1.4 2M8 9h.01',
   ),
+  // Scrolling cards: one card in front with a part of its neighbours on each side.
+  carousel: l('#EAF6FF', '#0B5FA5', 'M5 3h6v10H5zM1.5 5.5h2v5h-2zM12.5 5.5h2v5h-2zM6.5 10h3'),
   api_library: l('#E8F5E9', DEEP, 'M6 4L2.5 8 6 12M10 4l3.5 4L10 12M9 3.5l-2 9'),
   google_sheets: l('#E6F4EA', '#137333', 'M3 2h10v12H3zM3 5h10M3 8h10M3 11h10M6.5 5v9M9.5 5v9'),
   google_docs: l('#E8F0FE', '#1A73E8', 'M3 2h7l3 3v9H3zM10 2v3h3M5 8h6M5 10h6M5 12h4'),

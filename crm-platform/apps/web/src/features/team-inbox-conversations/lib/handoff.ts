@@ -1,4 +1,9 @@
-import type { HandoffReason, RequestHandoffInput } from '@crm/contracts';
+import type {
+  HandoffReason,
+  MessageSystemEvent,
+  RequestHandoffInput,
+  ReturnToBotResponse,
+} from '@crm/contracts';
 
 /** How long a conversation has waited in the queue, as the one unit the badge shows: minutes, then hours, then days. */
 export function waitAge(sinceIso: string, nowMs: number): { count: number; unit: 'm' | 'h' | 'd' } {
@@ -48,4 +53,53 @@ export function toSendInput(d: SendDraft): RequestHandoffInput {
           ? { kind: 'person', userId: d.userId }
           : { kind: 'rules' },
   };
+}
+
+// --- Return to bot -----------------------------------------------------------------------------------------------------------
+
+/** The toast after Return to bot: it always says what the bot will do, never a bare "done". */
+export function giveBackToastKey(
+  r: Pick<ReturnToBotResponse, 'resumed' | 'nextMessageBy' | 'alreadyWithBot'>,
+): 'already' | 'doneFlow' | 'doneNextLive' | 'doneNextDefault' {
+  if (r.alreadyWithBot) return 'already';
+  if (r.resumed === 'flow') return 'doneFlow';
+  return r.nextMessageBy === 'live_flow' ? 'doneNextLive' : 'doneNextDefault';
+}
+
+/** Spelled out (not built from the event) so each message is visibly used and a renamed outcome fails the type check. */
+const RESULT_KEY: Record<NonNullable<BotReturnedEvent['result']>, string> = {
+  continued: 'result.continued',
+  claimed_again: 'result.claimed_again',
+  flow_not_live: 'result.flow_not_live',
+  start_failed: 'result.start_failed',
+};
+const CUSTOMER_KEY: Record<NonNullable<BotReturnedEvent['customer']>, string> = {
+  sent: 'customer.sent',
+  window_closed: 'customer.window_closed',
+  no_consent: 'customer.no_consent',
+  failed: 'customer.failed',
+  channel_unavailable: 'customer.channel_unavailable',
+};
+
+export type BotReturnedEvent = Extract<MessageSystemEvent, { event: 'bot_returned' }>;
+
+/**
+ * The messages (keys under `handoff.botLine`) that make up one "bot is back" line of the thread, in reading order. The first line a
+ * person sees right after pressing Return to bot is `pressed`; the worker adds a `result` line once the flow was (or was not) continued,
+ * and what became of the optional message to the customer.
+ */
+export function botLineKeys(e: BotReturnedEvent): string[] {
+  if (e.stage === 'pressed') {
+    return [
+      e.resumed === 'flow'
+        ? 'pressed.flow'
+        : e.nextMessageBy === 'live_flow'
+          ? 'pressed.nextLive'
+          : 'pressed.nextDefault',
+    ];
+  }
+  const keys: string[] = [];
+  if (e.result) keys.push(RESULT_KEY[e.result]);
+  if (e.customer) keys.push(CUSTOMER_KEY[e.customer]);
+  return keys;
 }

@@ -48,7 +48,8 @@
       "email_mailboxes": "邮箱数量",
       "email_monthly": "每月邮件数",
       "storage_gb": "存储空间 (GB)",
-      "teams": "团队"
+      "teams": "团队",
+      "webbot_messages": "每月免费网站聊天机器人消息数"
     },
     "features": {
       "automation": "自动化",
@@ -60,10 +61,12 @@
       "remove_branding": "移除品牌标识",
       "sales_pipeline": "销售管道",
       "appointment_booking": "预约预订",
+      "appointment_confirm_buttons": "提醒按钮（确认 / 改期 / 取消）",
+      "appointment_rebook_steps": "再预约（召回）步骤",
       "chatbot_widgets": "聊天机器人小组件",
       "wa_storefront": "WhatsApp 目录",
       "inbox_sla": "SLA 策略",
-      "inbox_routing": "分配规则",
+      "inbox_routing": "智能路由: 自动分配和规则",
       "waba_calling": "WhatsApp 通话",
       "inbox_kanban": "看板视图",
       "team_performance": "团队绩效",
@@ -89,7 +92,9 @@
       "record_assignment": "记录分配规则",
       "team_hierarchy": "团队层级与经理",
       "custom_roles": "自定义角色与范围",
-      "inbox_assignment_sticky": "联系人负责人与粘性客服"
+      "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服",
+      "agent_status_bar": "状态栏：顶部栏和收件箱中的可用 / 离开控件",
+      "agent_status_automation": "自动化状态：个人工作时间和自动离开"
     },
     "limitGroups": {
       "messaging": "消息",
@@ -144,7 +149,8 @@
       "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
       "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
       "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。",
-      "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。"
+      "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。",
+      "webbot_messages": "每个自然月免费包含的网站聊天机器人消息数。超出的每条消息从钱包扣费。留空或 0 = 不含免费消息。"
     },
     "planAddons": {
       "title": "您的套餐可用的附加包",
@@ -245,20 +251,7 @@
         "title": "常见问题"
       },
       "addons": {
-        "title": "附加包",
-        "owned": "您已拥有的附加包",
-        "oneTime": "一次性",
-        "buy": "购买附加包",
-        "buyAgain": "再次购买",
-        "active": "有效",
-        "unlimitedBullet": "无限{label}",
-        "addBullet": "+{amount, number} {label}",
-        "per": {
-          "days": "{count, plural, other {/ {count} 天}}",
-          "weeks": "{count, plural, other {/ {count} 周}}",
-          "months": "{count, plural, other {/ {count} 个月}}",
-          "years": "{count, plural, other {/ {count} 年}}"
-        }
+        "title": "附加包"
       },
       "renewal": {
         "renewsOn": "您的套餐将于 {date} 自动续订。",
@@ -578,7 +571,30 @@
       "back": "返回",
       "compare": "比较全部套餐",
       "appHint": "{feature}也在应用市场以应用形式出售。",
-      "appLink": "查看应用"
+      "appLink": "查看应用",
+      "addonHint": "你也可以通过{addon}附加组件将其加入当前套餐。",
+      "addonLink": "查看附加组件",
+      "addonsTabHint": "使用附加功能不需要套餐包含应用市场。你仍可在“套餐与附加功能”中查看已拥有的内容并购买附加功能。",
+      "addonsTabLink": "打开“套餐与附加功能”",
+      "addonHintGeneric": "你的套餐也可能以附加组件的形式提供它。"
+    },
+    "lock": {
+      "link": "查看套餐和附加组件",
+      "offTitle": "不在你的套餐中",
+      "offLead": "此部分目前不包含在你的工作区套餐中。",
+      "buyTitle": "以 {price} 添加 {addon}",
+      "buyLead": "你的套餐以附加组件形式提供 {addon}。添加后即可开启此部分。",
+      "buyLink": "查看附加组件",
+      "askOwner": "请让账户所有者添加。",
+      "unavailableTitle": "{addon} 需要有效的付费套餐",
+      "unavailableLead": "请先选择付费套餐，然后即可为其添加 {addon}。",
+      "viewPlans": "查看套餐",
+      "disabledTitle": "{addon} 已关闭",
+      "disabledLead": "你的套餐包含 {addon},但它已在此工作区关闭。其设置会保留。",
+      "disabledAsk": "请让账户所有者开启它。",
+      "turnOn": "开启它",
+      "turnOnForbidden": "你没有开启它的权限。请联系账户所有者。",
+      "turnOnFailed": "无法开启 {addon}。请重试。"
     }
   }
 }

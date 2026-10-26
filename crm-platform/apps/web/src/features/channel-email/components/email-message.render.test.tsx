@@ -35,6 +35,14 @@ describe('email message in the thread', () => {
     expect(html).toContain('<time dateTime="2026-10-12T09:30:00.000Z"');
   });
 
+  it('opens with the sender: an initial and their name', () => {
+    const html = view(meta());
+    expect(html).toContain('data-testid="email-avatar"');
+    expect(html).toMatch(/data-testid="email-avatar"[^>]*>A</);
+    // The quote toggle only appears once the frame has been read and found a quote.
+    expect(html).not.toContain('email-toggle-quoted');
+  });
+
   it('falls back to the plain text when there is no HTML', () => {
     const html = view(meta({ html: null }), 'Hello there\nSecond line');
     expect(html).not.toContain('<iframe');

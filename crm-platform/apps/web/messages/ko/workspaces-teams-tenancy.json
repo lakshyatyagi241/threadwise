@@ -66,10 +66,10 @@
       "pending": "대기 중",
       "you": "나",
       "presence": {
-        "online": "온라인",
-        "away": "자리 비움",
+        "online": "응대 가능",
+        "away": "자리 비움, 근무 시간 외",
         "busy": "바쁨",
-        "offline": "오프라인"
+        "offline": "자리 비움"
       },
       "inactive": "비활성",
       "roleFor": "{name}의 역할",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "응대 가능 여부",
       "available": "응대 가능",
-      "offline": "오프라인",
-      "hint": "오프라인인 동안에는 새 채팅이 자동으로 배정되지 않습니다. 이미 맡고 있는 채팅은 그대로 유지됩니다.",
+      "offline": "자리 비움",
+      "hint": "자리 비움 상태에서는 새 채팅이 자동으로 배정되지 않습니다. 이미 가지고 있는 채팅은 그대로 유지됩니다.",
       "failed": "변경하지 못했습니다"
+    },
+    "myLeave": {
+      "label": "휴가",
+      "onLeaveUntil": "{date}까지 휴가 중",
+      "onLeaveOpen": "휴가 중",
+      "hint": "부재 중임을 팀에 알립니다. 휴가 중에는 새 채팅이 자동으로 배정되지 않습니다.",
+      "title": "내 휴가"
     },
     "deactivate": {
       "eyebrow": "팀 멤버",

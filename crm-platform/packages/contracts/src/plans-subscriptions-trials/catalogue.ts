@@ -97,6 +97,10 @@ export const PLAN_LIMIT_DEFS = [
   // PLAN_LIMITS_ZERO_IS_NONE); a plan row that predates the key, or one that stores PLAN_UNLIMITED_FROM or more, means unlimited, so no
   // existing plan changes. The Teams and permissions add-on raises it (its `teams` is a number of extra teams, -1 = unlimited).
   { key: 'teams', group: 'workspace' },
+  // Website chatbot (webbot) messages the plan includes free each calendar month; every one beyond it is charged to the wallet (usage kind
+  // `webbot_message`). Like `monthly_messages`: it is an allowance, not a block, and 0 (or an unlimited stand-in) means NO free messages, so a
+  // plan saved without a number charges every message instead of giving them away.
+  { key: 'webbot_messages', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -114,9 +118,29 @@ export const limitZeroIsNone = (key: string): boolean =>
 /**
  * The keys a plain add-on pack (one that is not a Marketplace app) may grant inside the one entitlement resolver every gate asks. The list is
  * deliberately short: any other pack keeps going through the add-on registry's own resolver, exactly as before. The "Teams and permissions"
- * add-on (BL-383) grants the two features and raises the `teams` cap.
+ * add-on (BL-383) grants the two features and raises the `teams` cap; the "Smart routing" add-on grants `inbox_routing` (automatic assignment)
+ * and `inbox_assignment_sticky` (contact owner and sticky agent), docs/specs/packaging-teams-and-smart-routing.md.
  */
-export const PACK_GRANTABLE_FEATURES: readonly string[] = ['team_hierarchy', 'custom_roles'];
+export const PACK_GRANTABLE_FEATURES: readonly string[] = [
+  'team_hierarchy',
+  'custom_roles',
+  'inbox_routing',
+  'inbox_assignment_sticky',
+];
+
+/**
+ * Flags a NEW plan starts without in the operator's plan form (everything else starts on, Reference's rule). They match the registry default
+ * (false) on purpose: the form writes every key, so a plan saved from it stores them explicitly either way. These two are sold as the "Smart
+ * routing" add-on (or switched on per plan, which the operator does for the higher tiers).
+ */
+export const NEW_PLAN_FEATURES_OFF: readonly string[] = [
+  'inbox_routing',
+  'inbox_assignment_sticky',
+  'agent_status_bar',
+  'agent_status_automation',
+  'appointment_confirm_buttons',
+  'appointment_rebook_steps',
+];
 export const PACK_GRANTABLE_LIMITS: readonly string[] = ['teams'];
 
 export const PLAN_FEATURE_GROUPS = ['messaging', 'aiCalling', 'integrations', 'advanced'] as const;
@@ -152,20 +176,42 @@ export const PLAN_FEATURE_DEFS = [
   // `20261023090200_mkt_appointments_app.sql` and the operator's grandfather action).
   { key: 'appointment_booking', group: 'advanced', productLine: 'crm', default: false },
   // Parts of a reminder sequence (BL-428): the Confirm / Reschedule / Cancel buttons on the 24 hour reminder and the rebook (recall)
-  // steps. Default TRUE so every plan that has appointment booking keeps both; a plan can switch either off. Both need `appointment_booking`.
-  { key: 'appointment_confirm_buttons', group: 'advanced', productLine: 'crm', default: true },
-  { key: 'appointment_rebook_steps', group: 'advanced', productLine: 'crm', default: true },
+  // steps. Default FALSE since the owner decision of 2026-10-22 (no paying clients yet): they are the UPGRADE TIER of the Appointments app
+  // (timed WhatsApp and email reminders, packs, test email, fallback, report and history come with `appointment_booking`). Both need
+  // `appointment_booking`. The app listing grants only `appointment_booking`, so these two are per-plan switches (plan Features tab).
+  {
+    key: 'appointment_confirm_buttons',
+    group: 'advanced',
+    productLine: 'crm',
+    default: false,
+    requires: ['appointment_booking'],
+  },
+  {
+    key: 'appointment_rebook_steps',
+    group: 'advanced',
+    productLine: 'crm',
+    default: false,
+    requires: ['appointment_booking'],
+  },
   // The website chatbot widget builder (TW-WGT-027). Default false: Reference's `access_chatbot_widgets` column default (its seeder turns it on for Growth and Pro).
   { key: 'chatbot_widgets', group: 'messaging', productLine: 'chat', default: false },
   // The WhatsApp catalog area (TW-CAT-001). Default false: Reference's `access_wa_storefront` column default.
   { key: 'wa_storefront', group: 'messaging', productLine: 'chat', default: false },
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', productLine: 'chat', default: false },
-  { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: true },
+  // Sold as the "Smart routing" add-on (a pack may grant it) or switched on per plan. Default FALSE: the entry plan has no automatic assignment. A plan row
+  // that does not store the key reads this default (storedFeature), so a plan must store `true` to include it; the sample plans and the operator's plan
+  // form do. Owner decision 2026-10-22: no paying clients yet, existing ones are migrated onto plans that carry what they have.
+  { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: false },
   // Owner first, keep in sync and the continuity window for the last handler (BL-402, docs/specs/conversation-handoff-and-assignment.md 7).
-  // Effective only together with `inbox_routing`. Default true: a plan row that predates the key and has routing gets it, so Standard keeps one
-  // switch; the owner can switch it off for one plan in plan management without a code change.
-  { key: 'inbox_assignment_sticky', group: 'messaging', productLine: 'chat', default: true },
+  // Effective only together with `inbox_routing`. Default false, with the other Smart routing flag (see above).
+  {
+    key: 'inbox_assignment_sticky',
+    group: 'messaging',
+    productLine: 'chat',
+    default: false,
+    requires: ['inbox_routing'],
+  },
   // WhatsApp calling from the inbox (TW-CALL-003). Default true: no plan row held it here before, so every one that predates it keeps calling.
   { key: 'waba_calling', group: 'messaging', productLine: 'chat', default: true },
   { key: 'inbox_kanban', group: 'messaging', productLine: 'chat', default: true },
@@ -218,15 +264,42 @@ export const PLAN_FEATURE_DEFS = [
   // "Teams and permissions" add-on (a pack may grant them, see PACK_GRANTABLE_FEATURES).
   { key: 'team_hierarchy', group: 'advanced', productLine: 'platform', default: true },
   { key: 'custom_roles', group: 'advanced', productLine: 'platform', default: true },
+  // The personal status control (docs/specs/agent-status-bar.md): the Available / Away pill in the global top bar and at the top of the Inbox sidebar, with
+  // "Set as away / available" and the link to Time off. Default FALSE (owner rule: every new feature has its own flag, the owner decides per plan). The
+  // Available / Away switch in the account menu is NOT gated: it existed before this flag.
+  { key: 'agent_status_bar', group: 'messaging', productLine: 'chat', default: false },
+  // Automate status: a personal weekly schedule and time zone, Away outside it, the "Outside of working hours" notice and the routing skip
+  // (`outside_working_hours`). Default FALSE. Off: saving a schedule is 422 PLAN_FEATURE_LOCKED, a stored schedule is kept and ignored.
+  { key: 'agent_status_automation', group: 'messaging', productLine: 'chat', default: false },
 ] as const satisfies ReadonlyArray<{
   key: string;
   group: PlanFeatureGroup;
   /** Which side of the one product the feature belongs to; editions are made from it as data (see PLAN_PRODUCT_LINES). */
   productLine: PlanProductLine;
   default: boolean;
+  /**
+   * Plan features this one only works with (docs/specs/addons-lifecycle-and-permissions.md 3). The resolver switches the feature off whenever one of
+   * them is off, so a dependent never stays on by itself and "disable X" can list what stops with it.
+   */
+  requires?: readonly string[];
 }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
+
+/** The plan features `key` needs (declared once on the feature, see `PLAN_FEATURE_DEFS`); empty for a feature that needs none. */
+export function featureRequires(key: string): readonly string[] {
+  const def = (
+    PLAN_FEATURE_DEFS as ReadonlyArray<{ key: string; requires?: readonly string[] }>
+  ).find((d) => d.key === key);
+  return def?.requires ?? [];
+}
+
+/** The plan features that need `key` (the reverse of `featureRequires`): what stops when `key` is switched off. */
+export function featureDependents(key: string): string[] {
+  return (PLAN_FEATURE_DEFS as ReadonlyArray<{ key: string; requires?: readonly string[] }>)
+    .filter((d) => d.requires?.includes(key))
+    .map((d) => d.key);
+}
 
 /** The words a lock message and the paywall sheet use for a feature (TW-PLAN-019 rule 5). */
 export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
@@ -244,8 +317,10 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   chatbot_widgets: 'Chatbot widgets',
   wa_storefront: 'WhatsApp catalog',
   inbox_sla: 'SLA policies',
-  inbox_routing: 'Routing rules',
-  inbox_assignment_sticky: 'Contact owner and sticky agent for conversations',
+  inbox_routing: 'Smart routing: auto-assignment and rules',
+  inbox_assignment_sticky: 'Smart routing: contact owner and sticky agent',
+  agent_status_bar: 'Status bar: Available / Away control in the top bar and the Inbox',
+  agent_status_automation: 'Automate status: personal working hours and automatic Away',
   waba_calling: 'WhatsApp calling',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',
@@ -306,6 +381,8 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'inbox_sla',
   'inbox_routing',
   'inbox_assignment_sticky',
+  'agent_status_bar',
+  'agent_status_automation',
   'waba_calling',
   'inbox_kanban',
   'team_performance',

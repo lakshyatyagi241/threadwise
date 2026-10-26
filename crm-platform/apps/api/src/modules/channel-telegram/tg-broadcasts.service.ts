@@ -33,7 +33,7 @@ import {
 import { BotsRepository } from './bots.repository';
 import { TgBroadcastsRepository, type TgBroadcastRow } from './tg-broadcasts.repository';
 
-const MODULE_KEY = 'telegram_broadcasts';
+export const MODULE_KEY = 'telegram_broadcasts';
 const LIST_LIMIT = 50;
 
 export interface TgBroadcastJob {

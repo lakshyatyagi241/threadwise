@@ -6,6 +6,11 @@ import {
 } from '../../../src/modules/dashboards-analytics-charts/quick-access';
 
 describe('quick access (TW-DASH-009)', () => {
+  it('does not offer, or draw, a pinned page whose screen is not built (Auto-reply was a 404 tile)', () => {
+    const tiles = quickAccessTiles(sanitizeQuickAccess([{ key: 'auto-reply' }, { key: 'inbox' }]));
+    expect(tiles.map((t) => t.key)).toEqual(['inbox']);
+  });
+
   it('a user who never customised gets the nine defaults, in order (no Broadcasts tile)', () => {
     const items = effectiveQuickAccess(null);
     expect(items.map((i) => ('key' in i ? i.key : ''))).toEqual([

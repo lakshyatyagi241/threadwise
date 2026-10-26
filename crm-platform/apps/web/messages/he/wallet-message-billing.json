@@ -26,7 +26,7 @@
         "all": "הכול",
         "topup": "טעינות",
         "earn": "רווחים",
-        "spend": "חיובי הודעות",
+        "spend": "חיובי שימוש",
         "refund": "החזרים",
         "admin_adjust": "התאמות"
       },
@@ -45,12 +45,16 @@
         "in": "כסף שנכנס",
         "out": "כסף שיצא",
         "balance": "יתרה",
-        "none": "אין"
+        "none": "אין",
+        "channel": "ערוץ",
+        "recipient": "נמען",
+        "template": "תבנית",
+        "country": "מדינה",
+        "category": "קטגוריה",
+        "engine": "מנוע"
       },
       "context": {
-        "reason": "סיבה",
-        "to": "אל",
-        "template": "תבנית"
+        "reason": "סיבה"
       },
       "channels": {
         "campaign": "קמפיין",
@@ -67,6 +71,129 @@
         "twilio": "Twilio"
       },
       "title": "דף חשבון ארנק"
+    },
+    "expenses": {
+      "title": "הוצאות",
+      "subtitle": "כמה עלתה כל הודעה, שיחה, בקשת בינה מלאכותית וחיפוש, ולמה היא שימשה. הסכומים כוללים את כל מה שמתאים למסננים.",
+      "back": "חזרה לארנק",
+      "breadcrumbLabel": "נתיב ניווט",
+      "breadcrumbWallet": "ארנק",
+      "breadcrumbExpenses": "הוצאות",
+      "fullStatement": "דף חשבון מלא",
+      "summary": {
+        "messages": "פריטים",
+        "charged": "חויב",
+        "refunded": "הוחזר",
+        "net": "עלות נטו",
+        "notBilled": "לא חויב"
+      },
+      "filters": {
+        "status": "סטטוס",
+        "statusAll": "הכול",
+        "statusCharged": "חויב",
+        "statusFree": "לא חויב",
+        "statusRefunded": "הוחזר",
+        "template": "תבנית",
+        "templatePlaceholder": "שם התבנית",
+        "channel": "ערוץ",
+        "category": "קטגוריה",
+        "allChannels": "כל הערוצים",
+        "allCategories": "כל הקטגוריות",
+        "from": "מ־",
+        "to": "עד",
+        "apply": "החל",
+        "reset": "איפוס",
+        "rangeInverted": "תאריך הסיום מוקדם מתאריך ההתחלה.",
+        "kind": "סוג",
+        "allKinds": "כל הסוגים"
+      },
+      "breakdown": {
+        "title": "עלות לפי",
+        "groupBy": {
+          "template": "תבנית",
+          "source": "ערוץ",
+          "category": "קטגוריה",
+          "country": "מדינה",
+          "kind": "סוג"
+        },
+        "group": "קבוצה",
+        "notRecorded": "לא נרשם",
+        "truncated": "מוצגות {count} הקבוצות הגדולות ביותר. צמצם את התאריכים כדי לראות את השאר.",
+        "empty": "שום דבר לא מתאים למסננים האלה."
+      },
+      "columns": {
+        "date": "תאריך",
+        "template": "תבנית",
+        "campaign": "קמפיין, שידור או תכונה",
+        "channel": "ערוץ",
+        "category": "קטגוריה",
+        "country": "מדינה",
+        "status": "סטטוס",
+        "charged": "חויב",
+        "refunded": "הוחזר",
+        "net": "נטו",
+        "messages": "פריטים",
+        "notBilled": "לא חויב",
+        "type": "סוג"
+      },
+      "status": {
+        "charged": "חויב",
+        "free": "לא חויב",
+        "refunded": "הוחזר",
+        "refundedOn": "הוחזר ב־{date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "כלול בתוכנית שלך",
+        "wallet_empty": "הארנק היה ריק",
+        "rate_is_zero": "התעריף הוא אפס",
+        "no_wallet_owner": "אין בעלים לארנק"
+      },
+      "uncollected": "{amount} לא נגבו",
+      "emptyTitle": "אין עדיין הוצאות",
+      "emptyBody": "הודעות, שיחות, בקשות בינה מלאכותית ושימושים אחרים מופיעים כאן עם המטרה והעלות שלהם.",
+      "emptyFiltered": "שום דבר לא תואם למסננים אלה. שנה אותם או אפס אותם.",
+      "days": {
+        "title": "יומן יומי",
+        "subtitle": "הודעות מקובצות לפי יום, סוג, סטטוס, ערוץ וקטגוריה. פתחו יום כדי לראות כל הודעה.",
+        "messagesOnDay": "{count} הודעות",
+        "viewDetails": "הצגת פרטים",
+        "actions": "פעולות",
+        "empty": "אין הודעות בימים האלה."
+      },
+      "log": {
+        "title": "הודעות",
+        "forDay": "הודעות מתאריך {date}",
+        "showAllDays": "הצגת כל הימים"
+      },
+      "units": {
+        "sms": "{count, plural, one {# מקטע} two {# מקטעים} other {# מקטעים}}",
+        "whatsapp_call": "{count, plural, one {# דקה} two {# דקות} other {# דקות}}",
+        "voice_call": "{count, plural, one {# דקה} two {# דקות} other {# דקות}}"
+      },
+      "sources": {
+        "lead_first": "מענה מיידי ללידים",
+        "lead": "מענה מיידי ללידים",
+        "test": "שליחת ניסיון",
+        "appointment": "תזכורת לפגישה",
+        "lead_scoring": "דירוג לידים",
+        "lead_digest": "סיכום צ'אט",
+        "pql_search": "חיפוש אנשי קשר",
+        "growth_assistant": "עוזר צמיחה",
+        "ai_copilot": "טייס משנה בינה מלאכותית",
+        "help_agent": "עוזר עזרה",
+        "company_brief": "סיכום חברה",
+        "inbox_ai": "עוזר תגובות",
+        "template_ai": "בונה תבניות",
+        "campaign_ai": "כותב קמפיינים",
+        "campaign_ai_image": "תמונת קמפיין",
+        "kb_embedding": "מאגר ידע",
+        "flow_ai": "מחולל תהליכים",
+        "widget_ai": "צ'אטבוט באתר",
+        "growth": "צמיחה",
+        "telephony": "שיחות טלפון",
+        "translation": "תרגום",
+        "widget": "צ'אטבוט באתר"
+      }
     },
     "admin": {
       "admin": "מנהל",
@@ -383,6 +510,41 @@
               "service": "שירות"
             },
             "problems": "שורות שדולגו"
+          }
+        },
+        "usage": {
+          "title": "מחירי שימושים אחרים",
+          "subtitle": "כמה עולים ללקוחות שלך SMS, אימייל, שיחות, חיפושי אנשי קשר וערוצי צ'אט אחרים, ליחידה. מחיר 0 או מתג כבוי עדיין נרשמים ביומן ההוצאות, בלי חיוב.",
+          "perUnit": "מחיר ל{unit}",
+          "chargeFor": "חיוב עבור {kind}",
+          "units": {
+            "segment": "מקטע SMS",
+            "email": "אימייל",
+            "minute": "דקה",
+            "lookup": "חיפוש",
+            "message": "הודעה"
+          },
+          "hints": {
+            "sms": "מחויב בנוסף לחשבון של ספק ה-SMS של הלקוח עצמו. מקטע הוא 160 תווים (70 בטקסט שאינו לטיני).",
+            "email": "מחויב בנוסף לתיבת הדואר של הלקוח עצמו. כל אימייל שנשלח נספר פעם אחת.",
+            "whatsapp_call": "כל דקה שהתחילה בשיחת WhatsApp. שיחה שאיש לא ענה עליה היא בחינם.",
+            "voice_call": "כל דקה שהתחילה בשיחה שספק הטלפוניה של הלקוח דיווח עליה. יומני שיחות שהוקלדו ידנית לעולם אינם מחויבים.",
+            "enrichment": "כל איש קשר שנבדק אצל ספק הנתונים של הפלטפורמה.",
+            "chat_message": "כל הודעה שנשלחה ב-Telegram, ב-Facebook, ב-Instagram, ב-LINE, ב-Viber או ב-WeChat. בחינם עד שתקבע מחיר.",
+            "webbot_message": "כל הודעת מבקר שצ'אטבוט האתר מטפל בה לאחר שההודעות החינמיות החודשיות של התוכנית אזלו."
+          },
+          "costPlus": {
+            "title": "מחויב לפי עלות הספק בתוספת רווח",
+            "body": "בקשות בינה מלאכותית ותרגום בתשלום פועלים עם מפתחות הספקים של הפלטפורמה עצמה ומחויבים לפי מה שהספק גבה, בתוספת הרווח שלמטה. סביבת עבודה עם מפתח משלה לעולם אינה מחויבת."
+          },
+          "markup": "רווח על עלות הספק",
+          "markupHint": "10 אומר שבקשה שעלתה 1.00 מחויבת ב-1.10.",
+          "saving": "שומר",
+          "save": "שמירת מחירים",
+          "saved": "מחירי השימוש נשמרו",
+          "problems": {
+            "invalid": "הזינו סכום עם עד 2 ספרות אחרי הנקודה",
+            "tooHigh": "זה מעל המגבלה"
           }
         }
       },
@@ -786,7 +948,7 @@
       "topup": "טעינה",
       "earn": "רווח",
       "refund": "החזר",
-      "spend": "חיוב הודעה",
+      "spend": "חיוב שימוש",
       "admin_adjust": "התאמה"
     },
     "categories": {
@@ -845,7 +1007,8 @@
         "fullStatement": "פתח את דף החשבון המלא",
         "emptyTitle": "אין פעילות עדיין",
         "emptyBody": "טעינות, חיובי הודעות והחזרים יופיעו כאן."
-      }
+      },
+      "messageExpenses": "הוצאות הודעות"
     },
     "activity": {
       "description": "תיאור",
@@ -863,6 +1026,18 @@
       "noCharge": "ללא חיוב",
       "perMessage": "לכל הודעה",
       "footer": "מחויב כאשר הודעה נמסרת. המחיר תלוי במדינת הנמען ובקטגוריית ההודעה."
+    },
+    "kinds": {
+      "whatsapp_message": "הודעת WhatsApp",
+      "sms": "SMS",
+      "email": "אימייל",
+      "whatsapp_call": "שיחת WhatsApp",
+      "voice_call": "שיחה קולית",
+      "ai": "בינה מלאכותית",
+      "translation": "תרגום",
+      "enrichment": "חיפוש איש קשר",
+      "chat_message": "הודעת צ'אט",
+      "webbot_message": "הודעת צ'אטבוט באתר"
     }
   }
 }

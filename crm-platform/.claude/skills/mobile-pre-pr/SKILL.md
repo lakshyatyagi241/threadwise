@@ -34,5 +34,4 @@ The repo-wide `pre-pr` gate calls this script with `--extras` when `apps/mobile`
 
 ## After it passes
 
-State plainly in the PR: what ran (default or `--full`), whether the change was run on an emulator/device (which), and anything not verified. Do not commit or push unless the owner asked (repository rule). For a branch that changes the API or contracts too, the repo-wide gate and the
-`threadwise-playwright-parity` run still apply.
+State plainly in the PR: what ran (default or `--full`), whether the change was run on an emulator/device (which), and anything not verified. Do not commit or push unless the owner asked (repository rule). For a branch that changes the API or contracts too, the repo-wide gate still applies.

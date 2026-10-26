@@ -371,8 +371,8 @@ export async function applySettings(
             },
           ];
           await tx.execute(sql`
-            INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort)
-            VALUES (${orgId}, 'Auto assignment (from Waboo)', ${JSON.stringify(conditions)}::jsonb, ${JSON.stringify(actions)}::jsonb, true, true, true, 1)`);
+            INSERT INTO routing_rules (org_id, name, conditions, actions, stop_on_match, is_active, is_fallback, sort, applies_to_all)
+            VALUES (${orgId}, 'Auto assignment (from Waboo)', ${JSON.stringify(conditions)}::jsonb, ${JSON.stringify(actions)}::jsonb, true, true, true, 1, true)`);
           res.routingRule = 'created';
         }
       }

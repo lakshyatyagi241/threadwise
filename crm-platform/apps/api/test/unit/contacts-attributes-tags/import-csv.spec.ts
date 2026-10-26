@@ -7,10 +7,8 @@ import {
   resolveMapping,
   splitList,
 } from '../../../src/modules/crm/contact-import/import-rows';
-import {
-  analyzeCsv,
-  sampleCsv,
-} from '../../../src/modules/crm/contact-import/contact-import.service';
+import { analyzeCsv } from '../../../src/modules/crm/contact-import/contact-import.service';
+import { sampleCsv } from '../../../src/modules/crm/contact-import/import-sample';
 import { contactImportOptionsSchema } from '@crm/contracts';
 
 const opts = (over: Record<string, unknown> = {}) => contactImportOptionsSchema.parse(over);
@@ -68,10 +66,9 @@ describe('column auto-detection (TW-CON-028)', () => {
 });
 
 describe('sample CSV (TW-CON-032)', () => {
-  it('TW-CON-032 #1: three lines with the importer header', () => {
+  it('TW-CON-032 #1: the header is every built-in column, then two example contacts', () => {
     const lines = sampleCsv().trimEnd().split('\n');
     expect(lines).toHaveLength(3);
-    expect(lines[0]).toBe('name,last_name,country_code,mobile,email,group,language');
     expect(lines[0]!.split(',')).toEqual([...IMPORT_SAMPLE_HEADERS]);
     expect(sampleCsv().endsWith('\n')).toBe(true);
   });
@@ -85,8 +82,9 @@ describe('sample CSV (TW-CON-032)', () => {
   });
 
   it('the quoted group cell survives the parser as one cell', () => {
-    const recs = parseCsv(sampleCsv()).records;
-    expect(recs[1]!.cells[5]).toBe('VIP, New leads');
+    const headers = parseCsv(sampleCsv()).records[0]!.cells;
+    const group = headers.indexOf('group');
+    expect(parseCsv(sampleCsv()).records[1]!.cells[group]).toBe('VIP, New leads');
   });
 });
 

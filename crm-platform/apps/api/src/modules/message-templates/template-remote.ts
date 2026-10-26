@@ -1,5 +1,5 @@
 import type { RemoteTemplate } from '../../infra/providers/whatsapp-cloud-api-waba/waba-template.port';
-import type { TemplateButton } from './template-payload';
+import type { TemplateButton, TemplateCard } from './template-payload';
 import type { TemplatePatch } from './templates.repository';
 import { slotsFor, tokensOf, type VariableMap, type VariableSlot } from './template-variables';
 
@@ -22,8 +22,12 @@ export interface ParsedComponents {
   footer: string | null;
   buttons: TemplateButton[];
   codeExpirationMinutes: number | null;
-  /** `standard`, `media`, `auth`; a shape we only display (`carousel`, `limited_time_offer`) keeps its own name. */
+  /** `standard`, `media`, `auth`, `carousel`; a shape we only display (`limited_time_offer`) keeps its own name. */
   templateType: string;
+  /** A carousel's cards (Meta's example file as the sample address); empty for every other type. */
+  cards: TemplateCard[];
+  /** A limited-time offer's heading and countdown; null for every other type. */
+  limitedOffer: { text: string; hasExpiration: boolean } | null;
   variableMap: VariableMap;
 }
 
@@ -43,6 +47,54 @@ function slotsWithExamples(text: string, examples: string[]): VariableSlot[] {
   return slotsFor(tokensOf(text)).map((s) => {
     const example = examples[s.num - 1];
     return example ? { ...s, example } : s;
+  });
+}
+
+/** The heading and countdown of Meta's LIMITED_TIME_OFFER component. */
+function offerOf(c: Component | undefined): { text: string; hasExpiration: boolean } | null {
+  const o = c?.limited_time_offer as Record<string, unknown> | undefined;
+  return typeof o?.text === 'string'
+    ? { text: o.text, hasExpiration: o.has_expiration !== false }
+    : null;
+}
+
+/** The cards of Meta's CAROUSEL component, as we store them (the picture is Meta's sample until the author uploads their own). */
+function cardsOfCarousel(carousel: Component | undefined): TemplateCard[] {
+  const cards = Array.isArray(carousel?.cards) ? (carousel!.cards as unknown[]) : [];
+  return cards.map((card) => {
+    const comps = asComponents(
+      Array.isArray((card as { components?: unknown })?.components)
+        ? ((card as { components: unknown[] }).components as unknown[])
+        : [],
+    );
+    const header = comps.find((c) => String(c.type).toUpperCase() === 'HEADER');
+    const body = comps.find((c) => String(c.type).toUpperCase() === 'BODY');
+    const buttons = comps.find((c) => String(c.type).toUpperCase() === 'BUTTONS');
+    const handles = (header?.example as { header_handle?: unknown } | undefined)?.header_handle;
+    const sample = Array.isArray(handles) ? str(handles[0]) : null;
+    return {
+      format: String(header?.format ?? 'IMAGE').toUpperCase() === 'VIDEO' ? 'video' : 'image',
+      image: sample,
+      headerHandle: null,
+      headerSampleUrl: sample,
+      body: str(body?.text) ?? '',
+      buttons: Array.isArray(buttons?.buttons)
+        ? (buttons.buttons as Component[]).map((b) => ({ ...b, type: String(b.type) }))
+        : [],
+    };
+  });
+}
+
+/**
+ * A fresh sync keeps what the author uploaded: the cards Meta lists are matched by position and, when the text is the same, keep
+ * their stored file and handle (Meta only ever gives back its own sample address).
+ */
+export function mergeCards(fresh: TemplateCard[], stored: TemplateCard[]): TemplateCard[] {
+  return fresh.map((c, i) => {
+    const old = stored[i];
+    return old && old.body === c.body && old.image
+      ? { ...c, image: old.image, headerHandle: old.headerHandle ?? null }
+      : c;
   });
 }
 
@@ -72,7 +124,7 @@ export function parseRemoteComponents(
   const special = list.find((c) => ['CAROUSEL', 'LIMITED_TIME_OFFER'].includes(String(c.type)));
   let templateType = 'standard';
   if (isAuth) templateType = 'auth';
-  else if (special) templateType = String(special.type).toLowerCase();
+  else if (special) templateType = special.type === 'LIMITED_TIME_OFFER' ? 'lto' : 'carousel';
   else if (media) templateType = 'media';
 
   const map: VariableMap = {};
@@ -93,6 +145,8 @@ export function parseRemoteComponents(
       : [],
     codeExpirationMinutes: typeof codeExp === 'number' ? codeExp : null,
     templateType,
+    cards: templateType === 'carousel' ? cardsOfCarousel(special) : [],
+    limitedOffer: templateType === 'lto' ? offerOf(special) : null,
     variableMap: map,
   };
 }

@@ -14,28 +14,54 @@ import type { PlanField, PlanProblems } from './plan-draft';
  * beside each limit, the search filter, and the add-on rows (options plus stale selected ids).
  */
 
-export const PLAN_TABS = ['details', 'features', 'limits', 'addons'] as const;
+export const PLAN_TABS = [
+  'details',
+  'features',
+  'limits',
+  'addons',
+  'integrations',
+  'miniApps',
+] as const;
 export type PlanTab = (typeof PLAN_TABS)[number];
 
-/** The tab a field's input lives on. */
-export function tabForField(field: PlanField): PlanTab {
-  if (field === 'visibleAddons') return 'addons';
+/** The two tabs that list Marketplace apps, by the app's kind. */
+export type AppTab = 'integrations' | 'miniApps';
+
+/** The tab an app of this kind is listed on (`app.kind` is `integration` or `mini_app`; anything else reads as a mini app). */
+export const appTabFor = (kind: string): AppTab =>
+  kind === 'integration' ? 'integrations' : 'miniApps';
+
+/** App pack id -> the tab that lists it, for routing an error on `addonOffers.<id>` to the tab that holds the id. */
+export type AppTabs = ReadonlyMap<string, AppTab>;
+
+export function appTabsOf(options: readonly PlanAddonOption[]): AppTabs {
+  return new Map(options.map((o) => [o.id, appTabFor(o.app.kind)]));
+}
+
+/**
+ * The tab a field's input lives on. An offer error names its add-on by id: an app goes to the tab that lists it (`appTabs`), a plain
+ * add-on, an id nobody lists and the tab-wide offer error go to the Add-ons tab.
+ */
+export function tabForField(field: PlanField, appTabs?: AppTabs): PlanTab {
+  if (field.startsWith('addonOffers.'))
+    return appTabs?.get(field.slice('addonOffers.'.length)) ?? 'addons';
+  if (field === 'visibleAddons' || field === 'addonOffers') return 'addons';
   if (field.startsWith('limits.')) return 'limits';
   return 'details';
 }
 
 /** The tabs that hold at least one problem, in tab order (client problems and server 422s alike). */
-export function tabsWithProblems(problems: PlanProblems): PlanTab[] {
+export function tabsWithProblems(problems: PlanProblems, appTabs?: AppTabs): PlanTab[] {
   const found = new Set<PlanTab>();
-  for (const field of Object.keys(problems) as PlanField[]) found.add(tabForField(field));
+  for (const field of Object.keys(problems) as PlanField[]) found.add(tabForField(field, appTabs));
   return PLAN_TABS.filter((t) => found.has(t));
 }
 
 /** The first field in tab order, then in the order the problems were found: where focus goes after a failed save. */
-export function firstProblemField(problems: PlanProblems): PlanField | null {
+export function firstProblemField(problems: PlanProblems, appTabs?: AppTabs): PlanField | null {
   const fields = Object.keys(problems) as PlanField[];
   for (const tab of PLAN_TABS) {
-    const hit = fields.find((f) => tabForField(f) === tab);
+    const hit = fields.find((f) => tabForField(f, appTabs) === tab);
     if (hit) return hit;
   }
   return null;
@@ -87,6 +113,7 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   email_monthly: 'perMonth',
   storage_gb: 'total',
   teams: 'total',
+  webbot_messages: 'perMonth',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */
@@ -120,33 +147,26 @@ export function addonSaleState(option: PlanAddonOption): AddonSaleState {
   return 'onSale';
 }
 
-/** A row of the Add-ons tab: a known option, or a selected id the options no longer list. */
-export type AddonRow =
-  { kind: 'option'; id: string; option: PlanAddonOption } | { kind: 'unknown'; id: string };
-
-/**
- * Every option, then every selected id that is not among them (a deleted pack), so the admin can
- * untick it. Unknown rows are listed first: they are the ones that make a save fail.
- */
-export function addonRows(
-  options: readonly PlanAddonOption[],
-  selected: readonly string[],
-): AddonRow[] {
-  const known = new Set(options.map((o) => o.id));
-  const unknown = [...new Set(selected)].filter((id) => !known.has(id));
-  return [
-    ...unknown.map((id): AddonRow => ({ kind: 'unknown', id })),
-    ...options.map((option): AddonRow => ({ kind: 'option', id: option.id, option })),
-  ];
+/** The app packs of one tab: Integrations lists `integration` apps, Mini apps everything else (a kind this build does not know reads as a mini app). */
+export function appOptionsFor(options: readonly PlanAddonOption[], tab: AppTab): PlanAddonOption[] {
+  return options.filter((o) => appTabFor(o.app.kind) === tab);
 }
 
-/** Rows matching the search (an unknown row always shows: it has no name to search and is the one that blocks a save). */
-export function filterAddonRows(rows: readonly AddonRow[], query: string): AddonRow[] {
-  return rows.filter((r) =>
-    r.kind === 'unknown'
-      ? true
-      : matchesQuery(query, r.option.name, r.option.app.name, r.option.packSlug, r.option.app.slug),
-  );
+/** Options matching the search (add-on, app and pack names). */
+export function filterAppOptions(
+  options: readonly PlanAddonOption[],
+  query: string,
+): PlanAddonOption[] {
+  return options.filter((o) => matchesQuery(query, o.name, o.app.name, o.packSlug, o.app.slug));
+}
+
+/** Selected ids that no option lists (a deleted pack): shown on the Add-ons tab so the operator can remove them. */
+export function staleAppIds(
+  options: readonly PlanAddonOption[],
+  selected: readonly string[],
+): string[] {
+  const known = new Set(options.map((o) => o.id));
+  return [...new Set(selected)].filter((id) => !known.has(id));
 }
 
 /** The entitlement counts the plans table shows: features on, limits capped (0 = unlimited / default), add-ons made visible. */

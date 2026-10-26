@@ -45,7 +45,8 @@ mailboxes (and `error` ones after 5 minutes) of workspaces that own `email_chann
 ## Outbox events emitted
 
 `mail.mailbox.connected`, `mail.mailbox.reconnected`, `mail.mailbox.disconnected`, `mail.mailbox.needs_reauth` (aggregate module `mail_mailboxes`,
-payload `{uuid, provider, address}`). Individual mails are messages (their own log), not outbox events.
+payload `{uuid, provider, address}`). Individual mails are messages (their own log), not outbox events, except for the wallet: each mail that
+leaves is one `usage.reported` (`kind: "email"`, aggregate module `mail_mailboxes` for the campaign engine, `conversations` for an inbox reply), see "Per-mail fee" below.
 
 ## Provider boundary
 
@@ -118,7 +119,21 @@ Deviation from Reference: Reference has no personal mailboxes. Runbook: if a wor
 
 ## Campaign engine (TW-CAMP-028, email half)
 
-`EmailEngineSender` (`channel-email/email-engine.sender.ts`, pure rules `email-engine.rules.ts`) is the `email` engine of `EngineSenderRegistry`: campaigns send through a mailbox (`email:<uuid>`) with the mailbox's own `MailTokens.withAccess`, `MailDriverRegistry`, `MailSendGuard` (bounce list, hourly cap and burst) and the consent gate / unsubscribe link. New seams: `ChannelEmailModule` imports `BroadcastsModule` (the registry); `MailPlan.monthlyLimit` (plan limit `email_monthly`); `MailboxesRepository.byId`, `sentSince`, `contactUuid`. No new table or permission. See wiring/campaigns.md (Email campaigns).
+`EmailEngineSender` (`channel-email/email-engine.sender.ts`, pure rules `email-engine.rules.ts`) is the `email` engine of `EngineSenderRegistry`: campaigns send through a mailbox (`email:<uuid>`) with the mailbox's own `MailTokens.withAccess`, `MailDriverRegistry`, `MailSendGuard` (bounce list, hourly cap and burst) and the consent gate / unsubscribe link. New seams: `ChannelEmailModule` imports `BroadcastsModule` (the registry); `MailPlan.monthlyLimit` (plan limit `email_monthly`); `MailboxesRepository.byId`, `sentSince`, `contactUuid`. No new table or permission. See wiring/campaigns.md (Email campaigns). Each campaign mail is also the per-mail fee (below).
+
+## Per-mail fee (wallet)
+
+Two send sites, both bill the same way (kind `email`, `usageId` = the provider message id, 1 unit, idempotent on `email:<id>`):
+
+| Send site                                                                            | Reports                                                                                          | Refuses an empty wallet                                         |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| Inbox reply: `EmailChannelAdapter` through `MessageDispatchService.markSent`         | `DeliveryReporter.report` -> `chat-usage.ts`, in the transaction that marks the message sent     | `OutboundService.enqueue` / `retry`: `422 WALLET_EMPTY`, no row |
+| `EmailEngineSender.sendOne` (campaigns, campaign test send, appointment, lead first) | `reportUsage`, own `txAs`, right after the driver accepted, before the bookkeeping; never throws | `sendText`: `SenderThrottled` (15 min), cached 3 s per run      |
+
+- `source` of an engine mail: the sender's `screen.source` if it names itself (`appointment`, `test`, `commerce`), else the client reference (`camptest-` test, `lead-first-` lead), else `campaign` (`usageSourceOfSend`).
+- Appointment and lead-first mails go through the engine, so they are billed there; neither needs its own hook.
+- `ChannelEmailModule` imports `WalletMessageBillingModule` (`UsageBillingService`); `OutboxService` is global. The worker gets both through `ChannelEmailWorkerModule`.
+- Not billed: inbound mail, bounce notices, the mailbox connection tests, the platform's own mail. A bounce does not refund.
 
 ## E-19 wiring (mail on the contact timeline)
 

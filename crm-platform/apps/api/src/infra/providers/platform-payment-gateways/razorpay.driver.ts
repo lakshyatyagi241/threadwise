@@ -17,6 +17,7 @@ import {
   type PaymentDriver,
   type CancelOptions,
   type CancelResult,
+  type ProviderRefund,
   type RefundRequest,
   type RefundResult,
   type SubscriptionCharge,
@@ -406,11 +407,21 @@ export class RazorpayDriver implements PaymentDriver {
         `${API}/payments/${encodeURIComponent(req.paymentId)}/refund`,
         {
           method: 'POST',
-          headers: this.auth,
+          // X-Refund-Idempotency: a repeat of the same key returns the first refund instead of making another one.
+          headers: req.idempotencyKey
+            ? { ...this.auth, 'X-Refund-Idempotency': req.idempotencyKey }
+            : this.auth,
           body: JSON.stringify({
             ...(req.amountMinor !== undefined ? { amount: Number(req.amountMinor) } : {}),
             speed: 'normal',
-            ...(req.note ? { notes: { reason: req.note.slice(0, 250) } } : {}),
+            ...(req.note || req.reference
+              ? {
+                  notes: {
+                    ...(req.note ? { reason: req.note.slice(0, 250) } : {}),
+                    ...(req.reference ? { ref: req.reference } : {}),
+                  },
+                }
+              : {}),
           }),
         },
       );
@@ -425,6 +436,38 @@ export class RazorpayDriver implements PaymentDriver {
       return { ok: true, refundId: id, status: str(body.status) ?? 'pending' };
     } catch (e) {
       return { ok: false, reason: `razorpay_exception: ${brief(e)}` };
+    }
+  }
+
+  /** `GET /payments/:id/refunds`: every refund of the payment (newest first). null when the call fails. */
+  async listPaymentRefunds(paymentId: string): Promise<ProviderRefund[] | null> {
+    if (!this.ctx.credentials.key_id || !this.ctx.credentials.key_secret) return null;
+    try {
+      const res = await this.ctx.http(
+        `${API}/payments/${encodeURIComponent(paymentId)}/refunds?count=100`,
+        { method: 'GET', headers: this.auth },
+      );
+      if (!isOk(res)) return null;
+      const items = asRecord(res.json).items;
+      if (!Array.isArray(items)) return null;
+      return items.flatMap((raw): ProviderRefund[] => {
+        const r = asRecord(raw);
+        const id = str(r.id);
+        const amount = r.amount;
+        const created = typeof r.created_at === 'number' ? r.created_at : null;
+        if (!id || typeof amount !== 'number' || created === null) return [];
+        return [
+          {
+            id,
+            amountMinor: BigInt(amount),
+            status: str(r.status) ?? 'pending',
+            createdAt: new Date(created * 1000),
+            reference: str(asRecord(r.notes).ref) ?? null,
+          },
+        ];
+      });
+    } catch {
+      return null;
     }
   }
 }

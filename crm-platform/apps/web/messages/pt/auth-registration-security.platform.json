@@ -1349,13 +1349,17 @@
             "details": "Detalhes e preço",
             "features": "Recursos",
             "limits": "Limites",
-            "addons": "Complementos"
+            "addons": "Complementos",
+            "integrations": "Integrações",
+            "miniApps": "Miniapps"
           },
           "tabSummary": {
             "features": "{count} de {total} recursos ativos",
             "limits": "{count} de {total} limites definidos",
-            "addons": "{count} complementos selecionados",
-            "error": "Tem erros para corrigir"
+            "addons": "{count, plural, one {# complemento incluído ou oferecido} other {# complementos incluídos ou oferecidos}}",
+            "error": "Tem erros para corrigir",
+            "integrations": "Integrações incluídas ou oferecidas: {count}",
+            "miniApps": "Miniapps incluídos ou oferecidos: {count}"
           },
           "featuresUi": {
             "intro": "Desative o que este plano não inclui. Um espaço de trabalho no plano não consegue abrir uma área cujo recurso está desativado.",
@@ -1364,7 +1368,8 @@
             "enableAll": "Ativar todos",
             "disableAll": "Desativar todos",
             "noMatch": "Nenhum recurso corresponde à sua pesquisa.",
-            "groupCount": "{count} de {total} ativos"
+            "groupCount": "{count} de {total} ativos",
+            "lockedBy": "Definido pelo complemento {addon} na aba Complementos"
           },
           "limitsUi": {
             "intro": "Um limite impede a ação quando o espaço de trabalho o atinge. Marque Ilimitado para remover o limite.",
@@ -1385,12 +1390,8 @@
             "total": "no total"
           },
           "addons": {
-            "intro": "Os complementos ativados são exibidos aos espaços de trabalho deste plano no Marketplace; só podem ser usados depois que o espaço de trabalho os compra.",
             "search": "Pesquisar complementos",
             "searchPlaceholder": "Pesquisar complementos ou apps",
-            "selectAll": "Selecionar todos",
-            "clear": "Limpar",
-            "selected": "{count} de {total} selecionados",
             "loading": "Carregando complementos",
             "empty": "Ainda não existem complementos pagos",
             "emptyHint": "Os complementos são criados no catálogo do Marketplace do console do operador. Quando um app tiver um pacote pago, ele aparece aqui.",
@@ -1404,7 +1405,8 @@
             "packInactive": "O pacote do complemento está desativado, então ninguém pode comprá-lo.",
             "appUnpublished": "O app não está publicado, então os espaços de trabalho ainda não podem vê-lo.",
             "appLabel": "App: {name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {# complemento incluído ou oferecido} other {# complementos incluídos ou oferecidos}}"
           },
           "featureHints": {
             "automation": "O construtor de fluxos e as automações que respondem e agem nas conversas.",
@@ -1416,10 +1418,12 @@
             "remove_branding": "Marca própria: o espaço de trabalho pode ocultar a marca da plataforma no rodapé.",
             "sales_pipeline": "Negócios, tarefas e funis, e os números do funil no painel.",
             "appointment_booking": "Tipos de agendamento, compromissos e as páginas públicas de agendamento. O app pago de Agendamentos controla esta chave.",
+            "appointment_confirm_buttons": "Adiciona os botões Confirmar, Reagendar e Cancelar ao lembrete de atendimento enviado pelo WhatsApp.",
+            "appointment_rebook_steps": "Mensagens de acompanhamento enviadas após um atendimento concluído, pedindo ao contato que agende de novo.",
             "chatbot_widgets": "O construtor de widgets de chatbot para sites.",
             "wa_storefront": "A área de catálogo e loja virtual do WhatsApp.",
             "inbox_sla": "Políticas e prazos de SLA na caixa de entrada da equipe.",
-            "inbox_routing": "Regras de roteamento que atribuem automaticamente as conversas da caixa de entrada.",
+            "inbox_routing": "Atribuição automática de novas conversas: regras de roteamento, Todos os outros e temporizadores da fila de espera. Faz parte do complemento Roteamento inteligente.",
             "waba_calling": "Chamadas do WhatsApp pela caixa de entrada: números de chamada, permissões de chamada, fazer e atender chamadas.",
             "inbox_kanban": "A visualização em quadro Kanban da caixa de entrada da equipe.",
             "team_performance": "Os relatórios de desempenho da equipe.",
@@ -1445,7 +1449,9 @@
             "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade.",
             "team_hierarchy": "Equipes pai, líderes de equipe e gestores que veem sua equipe e as equipes abaixo dela.",
             "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão.",
-            "inbox_assignment_sticky": "Atribuição com prioridade ao responsável e sincronizada entre o responsável pelo contato e o responsável pelo chat, a janela de contato recorrente e o aviso de reatribuição. Funciona junto com o roteamento da caixa de entrada."
+            "inbox_assignment_sticky": "Atribuição com prioridade ao proprietário e sincronizada, janela para contatos recorrentes e aviso ao reatribuir. Faz parte do complemento Roteamento inteligente.",
+            "agent_status_bar": "O controle de status Disponível / Ausente na barra superior e no topo da Caixa de entrada, com Definir como ausente / disponível e o link para Folga. A chave Disponível / Ausente do menu da conta está aberta a todos os planos.",
+            "agent_status_automation": "Horário de trabalho pessoal com fuso horário, Ausente fora dele, o aviso Fora do horário de trabalho e uma atribuição que ignora quem está fora do horário. Salvar um horário exige este recurso; sem ele, o horário salvo é mantido, mas ignorado."
           },
           "units": {
             "days": "Dias",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "Caixas de e-mail",
             "email_monthly": "E-mails por mês",
             "storage_gb": "Armazenamento (GB)",
-            "teams": "Equipes"
+            "teams": "Equipes",
+            "webbot_messages": "Mensagens gratuitas do chatbot do site por mês"
           },
           "featureGroups": {
             "messaging": "Mensagens",
@@ -1609,10 +1616,12 @@
             "remove_branding": "Marca própria (remove a marca da plataforma)",
             "sales_pipeline": "Funil de vendas (negócios e tarefas)",
             "appointment_booking": "Agendamentos e páginas de reserva",
+            "appointment_confirm_buttons": "Botões do lembrete: Confirmar, Reagendar e Cancelar",
+            "appointment_rebook_steps": "Etapas de novo agendamento (reativação) após o atendimento",
             "chatbot_widgets": "Widgets de chatbot para sites",
             "wa_storefront": "Loja virtual e catálogo do WhatsApp",
             "inbox_sla": "Políticas de SLA da caixa de entrada",
-            "inbox_routing": "Regras de roteamento da caixa de entrada e horário comercial",
+            "inbox_routing": "Roteamento inteligente: atribuição automática e regras",
             "waba_calling": "Fazer e atender chamadas do WhatsApp pela caixa de entrada",
             "inbox_kanban": "Quadro Kanban da caixa de entrada",
             "team_performance": "Relatórios de desempenho da equipe",
@@ -1638,7 +1647,9 @@
             "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)",
             "team_hierarchy": "Hierarquia de equipes e gestores",
             "custom_roles": "Funções personalizadas e escopos",
-            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
+            "inbox_assignment_sticky": "Roteamento inteligente: proprietário do contato e agente fixo",
+            "agent_status_bar": "Barra de status: controle Disponível / Ausente na barra superior e na Caixa de entrada",
+            "agent_status_automation": "Automatizar status: horário de trabalho pessoal e Ausente automático"
           },
           "problems": {
             "required": "Este campo é obrigatório.",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "Um plano não pode ser gratuito e de orçamento personalizado ao mesmo tempo.",
             "paid_needs_price": "Defina um preço acima de 0 ou marque o plano como gratuito.",
             "offer_not_lower": "O preço promocional deve ser menor que o preço do plano.",
-            "default_needs_active": "O plano padrão de cadastro deve estar ativo."
+            "default_needs_active": "O plano padrão de cadastro deve estar ativo.",
+            "addonPriceZero": "Deixe o preço vazio para usar o preço do complemento ou escolha Incluído.",
+            "addonGone": "Este complemento não existe mais. Recarregue a página e salve novamente."
           },
           "limitHints": {
             "monthly_messages": "Mensagens enviadas no mês civil. Além da franquia, a carteira é cobrada.",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado.",
             "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado.",
             "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda.",
-            "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas."
+            "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas.",
+            "webbot_messages": "Mensagens do chatbot do site incluídas gratuitamente em cada mês civil. Cada mensagem além disso é cobrada da carteira. Em branco ou 0 = nenhuma incluída."
           },
           "productLines": {
             "chat": "Chat",
             "crm": "CRM de vendas",
             "platform": "Compartilhado por ambos"
+          },
+          "offers": {
+            "readOnly": "Você pode ver este plano, mas não alterá-lo, por isso estes controles estão bloqueados.",
+            "featureTitle": "Complementos de recursos",
+            "featureIntro": "Complementos que liberam uma parte do produto. Incluído: os espaços de trabalho deste plano o recebem sem custo e o cartão dele mostra \"Incluído no seu plano\". Pago: eles podem comprá-lo, pelo preço próprio deste plano se você definir um. Oculto: eles nunca o veem. Os recursos do complemento na aba Recursos seguem esta escolha.",
+            "capacityTitle": "Complementos de capacidade",
+            "capacityIntro": "Complementos que só aumentam um limite, como uma licença extra. Em um plano, eles são pagos ou ocultos; os limites do próprio plano são definidos na aba Limites.",
+            "noFeaturePacks": "Ainda não há complementos de recursos.",
+            "adds": "Adiciona: {limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name} sem limite",
+            "modeLabel": "Como {name} é oferecido neste plano",
+            "modes": {
+              "included": "Incluído",
+              "paid": "Pago",
+              "hidden": "Oculto"
+            },
+            "noIncluded": "Este complemento só aumenta limites, por isso não pode ser incluído. Defina o limite do próprio plano na aba Limites.",
+            "priceLabel": "Preço neste plano ({currency})",
+            "priceHint": "Deixe vazio para usar o preço do próprio complemento.",
+            "includedCapacityNote": "Só os recursos dele estão incluídos. Os limites extras ({limits}) continuam à venda para os espaços de trabalho deste plano.",
+            "hiddenNote": "Os espaços de trabalho deste plano não veem este complemento e não podem comprá-lo. Um espaço de trabalho que já o comprou fica com ele até o fim do período.",
+            "offNote": "Não está mais incluído: os espaços de trabalho deste plano perdem esses recursos, a menos que comprem o complemento. As configurações deles são mantidas e voltam quando ele for ativado novamente.",
+            "loading": "Carregando complementos",
+            "loadFailed": "Não foi possível carregar os complementos. Nada foi alterado.",
+            "empty": "Ainda não há complementos",
+            "emptyHint": "Complementos como Roteamento inteligente e Equipes e permissões são criados em Complementos, no console do operador.",
+            "noPrice": "Sem preço definido",
+            "gives": "Oferece: {features}",
+            "unlistedNote": "Alguns de seus recursos ({features}) estão fora da lista padrão de complementos. Ainda podem ser ativados para o plano; só muda a forma de comprar este complemento como pacote.",
+            "inactiveNote": "Este complemento é um rascunho ou está desativado, então ninguém pode comprá-lo ainda. Incluí-lo no plano continua funcionando.",
+            "impactCount": "{count, plural, one {# espaço de trabalho já paga por este complemento.} other {# espaços de trabalho já pagam por este complemento.}} A renovação deles será interrompida no fim do período atual, nada será reembolsado e nada será cancelado hoje.",
+            "impactUnknown": "Os espaços de trabalho deste plano que já pagam por este complemento deixarão de renová-lo no fim do período atual. Nada será reembolsado e nada será cancelado hoje. Não foi possível carregar o número.",
+            "partlyNote": "Este plano já oferece parte deste complemento ({features}). Fica assim até você escolher Incluído, Pago ou Oculto aqui.",
+            "needsFeatures": "Primeiro adicione os recursos que ele libera em Complementos > {name}"
+          },
+          "apps": {
+            "introMiniApps": "Miniapps são apps que um espaço de trabalho instala pelo Marketplace. Incluído: grátis para os espaços de trabalho deste plano. Pago: eles podem comprá-lo pelo preço próprio do app. Oculto: nunca o veem. Incluído também ativa os recursos do plano que o app oferece.",
+            "introIntegrations": "Integrações conectam um serviço externo. Incluído: grátis para os espaços de trabalho deste plano. Pago: eles podem comprá-la pelo preço próprio da integração. Oculto: nunca a veem. Incluído também ativa os recursos do plano que a integração oferece.",
+            "setAll": "Definir todos os exibidos como",
+            "summary": "{count} de {total} incluídos ou oferecidos",
+            "priceHint": "Os apps do Marketplace mantêm o próprio preço; defina-o na página do app.",
+            "emptyIntegrations": "Ainda não há integrações pagas",
+            "emptyIntegrationsHint": "Integrações gratuitas não precisam de ajuste aqui; Shopify e WooCommerce são ativados na aba Recursos."
           }
         }
       },

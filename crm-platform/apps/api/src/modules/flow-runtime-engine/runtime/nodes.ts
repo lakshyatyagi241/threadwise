@@ -1,7 +1,9 @@
 import {
   flbCoordinateProblem,
+  flbImageUrl,
   flbParseCoordinate,
   flbSanitizeConditionGroup,
+  webLinkUrl,
 } from '@crm/contracts';
 import { evaluateConditions, evaluateConditionTree } from './condition';
 import { askItems, buttonItems, listRows, REPLY_BUTTONS_MAX } from './menus';
@@ -173,7 +175,7 @@ const carousel: NodeExecutor = {
       .map((c) => ({
         title: ctx.render(c.title).trim(),
         text: ctx.render(c.text).trim(),
-        ...(/^https?:\/\/\S+$/i.test(str(c.image).trim()) ? { image: str(c.image).trim() } : {}),
+        ...(flbImageUrl(ctx.render(c.image)) ? { image: flbImageUrl(ctx.render(c.image))! } : {}),
         buttons: arr(c.buttons)
           .map(obj)
           .flatMap((b): CarouselCard['buttons'] => {
@@ -282,13 +284,20 @@ const list: NodeExecutor = {
       sections,
     });
     if (!out.ok) return failed(out, 'end', ctx)!;
+    const variable = str(p.variable) || 'choice';
+    // Like the Buttons menu, the list stays tappable after a leaf branch finishes (unless `keepMenuOpen` is off): without this the run
+    // ended on the first pick and every later tap on the same list did nothing.
+    const keepOpen = p.keepMenuOpen !== false;
+    if (keepOpen)
+      ctx.run.menus.latest = { nodeId: ctx.node.id, variable, answerItems: [], listItems: rows };
     return {
       kind: 'wait',
       wait: {
         nodeId: ctx.node.id,
-        variable: str(p.variable) || 'choice',
+        variable,
         kind: 'List',
         listItems: rows,
+        persistent: keepOpen,
       },
     };
   },
@@ -401,6 +410,7 @@ const cta: NodeExecutor = {
         ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value)),
     );
     let msg: OutboundMessage;
+    let moreLinks: Array<Record<string, unknown>> = [];
     if (ctx.run.channelKind === 'webchat') {
       // The website chat window draws up to three buttons that open a page, a call or an email.
       const links = actions
@@ -415,8 +425,13 @@ const cta: NodeExecutor = {
       if (links.length === 0 && !text) return advance;
       msg = { kind: 'text', body: text || links[0]!.label, ...(links.length ? { links } : {}) };
     } else if (urlAction) {
+      const isLink = (a: Record<string, unknown>) =>
+        ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value));
+      // WhatsApp's link message holds one button, so every further web link goes out as a button message of its own (a call, an email
+      // or a copy code cannot be a button there and stays a line of text in the first message).
+      moreLinks = actions.filter((a) => a !== urlAction && isLink(a)).slice(0, 2);
       const extra = actions
-        .filter((a) => a !== urlAction)
+        .filter((a) => a !== urlAction && !isLink(a))
         .slice(0, 2)
         .map(line)
         .join('\n');
@@ -445,25 +460,24 @@ const cta: NodeExecutor = {
       const stop = failed(out, 'skip', ctx);
       if (stop) return stop;
     }
+    if (out.ok) {
+      for (const a of moreLinks) {
+        const label = (str(a.label) || 'Visit').slice(0, 20);
+        const more = await ctx.send({
+          kind: 'cta_url',
+          body: label,
+          text: label,
+          url: ctx.render(a.value),
+        });
+        if (!more.ok) {
+          const stop = failed(more, 'skip', ctx);
+          if (stop) return stop;
+        }
+      }
+    }
     return advance;
   },
 };
-
-/** The address a website chat button opens, or null when the value is not one the window may open (a script, a file, a wrong shape). */
-export function webLinkUrl(type: string, value: string): string | null {
-  const v = value.trim();
-  if (v === '' || v.length > 2000) return null;
-  if (type === 'phone' || type === 'call_now') {
-    const digits = v.replace(/^tel:/i, '').replace(/[^\d+]/g, '');
-    return /^\+?\d{5,15}$/.test(digits) ? `tel:${digits}` : null;
-  }
-  if (type === 'email') {
-    const mail = v.replace(/^mailto:/i, '');
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? `mailto:${mail}` : null;
-  }
-  if (type === 'url' || type === 'visit') return /^https?:\/\/\S+$/i.test(v) ? v : null;
-  return null;
-}
 
 /** Location (TW-FLR-027): the pin, or a text with a maps link when the channel cannot send one. */
 const location: NodeExecutor = {
@@ -481,23 +495,38 @@ const location: NodeExecutor = {
     const longitude = flbParseCoordinate(p.longitude)!;
     const name = ctx.render(p.title);
     const address = ctx.render(p.address);
+    // A link-mode step sends its pin with the coordinates only, which come from the pasted Maps link. A pin that carries a name and
+    // an address gets looked up by them in Maps, which can open a different spot than the link the author chose.
+    const linkMode = str(p.locMode) === 'link';
     let out = await ctx.send({
       kind: 'location',
       latitude,
       longitude,
-      ...(name ? { name } : {}),
-      ...(address ? { address } : {}),
+      ...(!linkMode && name ? { name } : {}),
+      ...(!linkMode && address ? { address } : {}),
     });
+    const pinSent = out.ok;
     if (!out.ok && !out.halt) {
-      const link = `https://maps.google.com/?q=${latitude},${longitude}`;
+      const pinLink = `https://maps.google.com/?q=${latitude},${longitude}`;
       out = await ctx.send({
         kind: 'text',
-        body: [name ? `📍 *${name}*` : '📍 Location', address, link].filter(Boolean).join('\n'),
+        body: [name ? `📍 *${name}*` : '📍 Location', address, pinLink].filter(Boolean).join('\n'),
       });
     }
     if (!out.ok) {
       const stop = failed(out, 'skip', ctx);
       if (stop) return stop;
+    }
+    // The name and address a link-mode pin leaves out follow as a text: text is not looked up by place.
+    if (pinSent && linkMode && (name || address)) {
+      const detail = await ctx.send({
+        kind: 'text',
+        body: [name ? `📍 *${name}*` : '📍 Location', address].filter(Boolean).join('\n'),
+      });
+      if (!detail.ok) {
+        const stop = failed(detail, 'skip', ctx);
+        if (stop) return stop;
+      }
     }
     return advance;
   },

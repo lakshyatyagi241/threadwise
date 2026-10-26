@@ -429,6 +429,8 @@ function BuilderInner({
     name: flowName,
     category,
     flowType: mode,
+    // A flow saved from the canvas is an Advanced one: the flows list draws it with the automation mark, not the WhatsApp bot's.
+    builder: 'advanced' as const,
     graph: {
       flowNodes: state.nodes as unknown as Array<Record<string, unknown>>,
       flowEdges: state.edges.map(({ id, source, sourceHandle, target }) => ({
@@ -568,10 +570,11 @@ function BuilderInner({
       refresh: refreshContext,
       toast,
       nodes: state.nodes,
+      edges: state.edges,
       flowId,
       uploadMedia: uploadFlowMedia,
     }),
-    [ctx, mode, openedAs, refreshContext, toast, state.nodes, flowId],
+    [ctx, mode, openedAs, refreshContext, toast, state.nodes, state.edges, flowId],
   );
 
   return (

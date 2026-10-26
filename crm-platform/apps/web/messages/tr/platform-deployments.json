@@ -91,6 +91,7 @@
       "empty": "Henüz kayıtlı bir sürüm yok. Sürümler bir sonraki dağıtımdan itibaren burada görünür.",
       "cols": {
         "tag": "Etiket",
+        "changes": "Değişiklikler",
         "state": "Durum",
         "step": "Adım",
         "started": "Başlangıç",
@@ -104,7 +105,8 @@
         "ok": "Canlı",
         "failed": "Başarısız",
         "rolled_back": "Geri alındı"
-      }
+      },
+      "by": "{author} tarafından"
     }
   }
 }

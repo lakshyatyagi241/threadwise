@@ -8,6 +8,7 @@ import {
   handoffCardSchema,
   handoffOutcomeSchema,
   handoffSettingsSchema,
+  returnToBotResponseSchema,
   type HandoffSettings,
   type RequestHandoffInput,
   type UpdateHandoffSettingsInput,
@@ -17,7 +18,6 @@ import { inboxApi } from './service';
 
 /** The handoff calls of the inbox (BL-396..BL-404). Everything is parsed with the shared contracts. */
 const claimResponse = z.object({ conversation: conversationSummarySchema, ownerSet: z.boolean() });
-const returnResponse = z.object({ conversation: conversationSummarySchema });
 /** `refused` is the reason the service gave when it did nothing (an archived thread, spam); the screen shows it as a message. */
 const sendResponse = z.object({
   outcome: handoffOutcomeSchema,
@@ -32,10 +32,10 @@ export const handoffApi = {
       schema: conversationHandoffResponseSchema,
       signal,
     }),
-  claim: (conversationId: string, rowVersion: number) =>
+  claim: (conversationId: string, rowVersion: number, acknowledgeLimit = false) =>
     apiFetch(`/inbox/conversations/${conversationId}/claim`, {
       method: 'POST',
-      body: { rowVersion },
+      body: { rowVersion, ...(acknowledgeLimit ? { acknowledgeLimit: true } : {}) },
       schema: claimResponse,
     }),
   send: (conversationId: string, input: RequestHandoffInput) =>
@@ -48,7 +48,7 @@ export const handoffApi = {
     apiFetch(`/inbox/conversations/${conversationId}/return-to-bot`, {
       method: 'POST',
       body: {},
-      schema: returnResponse,
+      schema: returnToBotResponseSchema,
     }),
   settings: (signal?: AbortSignal) =>
     apiFetch('/inbox/handoff-settings', { schema: handoffSettingsSchema, signal }),
@@ -83,9 +83,9 @@ export function useHandoffActions(conversationId: string) {
   // A claim is "take it if nobody holds it": it asks for the row's current version first, so opening the thread (which marks it read and
   // moves the version) never makes the first click a conflict.
   const claim = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (opts?: { acknowledgeLimit?: boolean }) => {
       const fresh = await inboxApi.conversation(conversationId);
-      return handoffApi.claim(conversationId, fresh.rowVersion);
+      return handoffApi.claim(conversationId, fresh.rowVersion, opts?.acknowledgeLimit === true);
     },
     onSettled: done,
   });

@@ -159,6 +159,22 @@ export const messageSentInteractiveSchema = z.object({
 });
 export type MessageSentInteractive = z.infer<typeof messageSentInteractiveSchema>;
 
+/**
+ * A carousel a flow sent (website chat): its cards in order. `image` is the picture's https address when the card has one; a reply
+ * button has no `url`, a link button opens it.
+ */
+export const messageSentCarouselSchema = z.object({
+  cards: z.array(
+    z.object({
+      title: z.string(),
+      text: z.string(),
+      image: z.string().nullable(),
+      buttons: z.array(z.object({ title: z.string(), url: z.string().nullable() })),
+    }),
+  ),
+});
+export type MessageSentCarousel = z.infer<typeof messageSentCarouselSchema>;
+
 /** Where a first message came from when the customer tapped an ad or a link that opens WhatsApp (Meta `referral`). */
 export const messageReferralSchema = z.object({
   sourceType: z.string().nullable(),
@@ -233,6 +249,23 @@ export const messageSystemEventSchema = z.discriminatedUnion('event', [
     fromStage: z.string().max(120),
     toStage: z.string().max(120),
   }),
+  /**
+   * A person gave the conversation back to the bot (`stage: 'pressed'`, written at once: `resumed` says whether the flow continues
+   * now or the bot waits for the next message), and what then happened to the flow (`stage: 'result'`: it continued, or why it did not,
+   * and what became of the optional message to the customer). Staff-only line; `by` is the person's name.
+   */
+  z.object({
+    event: z.literal('bot_returned'),
+    stage: z.enum(['pressed', 'result']),
+    by: z.string().max(200).nullable().optional(),
+    resumed: z.enum(['flow', 'next_message']).optional(),
+    nextMessageBy: z.enum(['live_flow', 'default_flow']).nullable().optional(),
+    result: z.enum(['continued', 'claimed_again', 'flow_not_live', 'start_failed']).optional(),
+    customer: z
+      .enum(['sent', 'window_closed', 'no_consent', 'failed', 'channel_unavailable'])
+      .nullable()
+      .optional(),
+  }),
 ]);
 export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;
 
@@ -254,6 +287,8 @@ export const messageResponseSchema = z.object({
   referral: messageReferralSchema.nullable().optional(),
   /** The buttons of an interactive message an agent or flow sent (outbound only). */
   sentInteractive: messageSentInteractiveSchema.nullable().optional(),
+  /** The cards of a carousel a flow sent (outbound only); the message body is its intro line. */
+  sentCarousel: messageSentCarouselSchema.nullable().optional(),
   /** Email channel only: subject, addresses, sanitised HTML, attachments (TW-MAIL-026). Absent on every other channel. */
   email: emailMetaSchema.nullable().optional(),
   /** A system line that has a translated wording of its own (the consent line); the bubble prefers it to `body`. Absent on every other message. */
@@ -270,6 +305,15 @@ export const messageResponseSchema = z.object({
   forwarded: z.boolean().optional(),
   /** The message was brought in by an imported history (`meta.historySync`): the bubble marks it. Absent on a live message. */
   imported: z.boolean().optional(),
+  /**
+   * An outbound text or media message that is not stored as a template message (an imported history, or a copy of what the business
+   * sent from its phone) but whose words are exactly one approved template's body: that template's buttons, so the bubble shows the
+   * call-to-action it had when it was sent. Set when the thread is listed; absent otherwise.
+   */
+  matchedTemplate: z
+    .object({ name: z.string(), buttons: z.array(messageTemplateButtonSchema) })
+    .nullable()
+    .optional(),
   /** Set for an inbound media message: whether its file could be stored. */
   mediaState: messageMediaStateSchema.nullable().optional(),
   /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */
@@ -346,6 +390,8 @@ const clientMessageId = uuidSchema;
 const sendBase = {
   clientMessageId,
   replyToMessageId: uuidSchema.optional(),
+  /** Where the send was made from, for the Source column of Message History. Only the contact drawer says `contact`; the inbox is the default. */
+  origin: z.enum(['contact']).optional(),
 };
 
 /**

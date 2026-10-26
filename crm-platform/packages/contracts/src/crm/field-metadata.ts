@@ -197,7 +197,11 @@ export const reorderFieldsSchema = z.object({
 });
 export type ReorderFieldsInput = z.infer<typeof reorderFieldsSchema>;
 
-// --- Field dependencies (field-level: shows/hides the dependent field) -----
+// --- Field dependencies (field-level) -------------------------------------------
+//
+// Two kinds share one row shape. A row that names an option or a value is a "show only when" rule: the dependent field
+// shows while the property it waits for holds that option (or text). A row that names neither is a cascade link: the
+// dependent field always shows, and its choices come from the option pairs of its parent (see `replaceCascadeSchema`).
 
 export const fieldDependencyResponseSchema = z.object({
   id: uuidSchema,
@@ -230,7 +234,9 @@ export type CreateFieldDependencyInput = z.infer<typeof createFieldDependencySch
 
 export const fieldOptionDependencyResponseSchema = z.object({
   id: uuidSchema,
+  parentFieldId: uuidSchema,
   parentOptionId: uuidSchema,
+  childFieldId: uuidSchema,
   childOptionId: uuidSchema,
   createdAt: z.string().datetime(),
 });
@@ -246,6 +252,24 @@ export const createFieldOptionDependencySchema = z
     path: ['childOptionId'],
   });
 export type CreateFieldOptionDependencyInput = z.infer<typeof createFieldOptionDependencySchema>;
+
+/**
+ * `PUT /v2/fields/:id/cascade`: make a property a cascade child of `dependsOnFieldId` and set which of its choices each choice of
+ * the parent allows. Replaces the child's whole cascade: any other cascade link and pair of the child is removed first. A pair is
+ * `[parent option, child option]`; a parent option with no pair allows no child choice.
+ */
+export const replaceCascadeSchema = z.object({
+  dependsOnFieldId: uuidSchema,
+  optionPairs: z
+    .array(
+      z.object({
+        parentOptionId: uuidSchema,
+        childOptionId: uuidSchema,
+      }),
+    )
+    .max(10_000),
+});
+export type ReplaceCascadeInput = z.infer<typeof replaceCascadeSchema>;
 
 // --- Status options (lifecycle_stage, deal_status, subscription statuses) --
 

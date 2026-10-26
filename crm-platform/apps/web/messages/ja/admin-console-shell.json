@@ -24,7 +24,7 @@
         "noWorkspaces": "ワークスペースなし"
       },
       "labels": {
-        "addonPacks": "アドオンパック",
+        "addonPacks": "アドオン",
         "extensions": "拡張機能",
         "trackingCode": "トラッキングコード",
         "planPricingSettings": "プラン料金設定",
@@ -282,7 +282,9 @@
           "save": "保存",
           "saved": "設定を保存しました。",
           "saveFailed": "設定を保存できませんでした。"
-        }
+        },
+        "timezoneSearch": "タイムゾーンを検索",
+        "timezoneNoMatch": "一致するタイムゾーンはありません。"
       },
       "notifications": {
         "title": "ワークスペースの通知",

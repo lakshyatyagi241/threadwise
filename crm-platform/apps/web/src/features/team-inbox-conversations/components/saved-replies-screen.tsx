@@ -302,7 +302,7 @@ export function ReplyRow({
   onDelete: () => void;
 }) {
   const t = useTranslations('team-inbox-conversations.savedReplies.screen');
-  const tk = useTranslations('team-inbox-conversations.savedReplies.channelKind');
+  const tk = useTranslations('team-inbox-conversations.channelKind');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const lastUsed = reply.lastUsedAt

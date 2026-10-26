@@ -19,6 +19,7 @@ import { ConsentGate } from '../contact-consent';
 import { MergeTagService, renderMergeTags, resolveToken, type ContactRow } from '../crm';
 import { EmailTemplatesService } from '../email-templates';
 import { TemplatesRepository, tokensOf, type TemplateRow } from '../message-templates';
+import { UsageBillingService } from '../wallet-message-billing';
 import { LeadFirstMessageLookups } from './lead-first-message.lookups';
 import { factsOf, shapeOf } from './lead-first-message.templates';
 import type { FirstReplyRow } from './lead-first-replies.repository';
@@ -56,6 +57,11 @@ const BAD_PARAMETER = /[\n\r\t]| {4,}/;
  */
 export function verdictOfEngineError(err: unknown): Verdict {
   if (err instanceof SenderThrottled) return { status: 'held', reason: 'channel_unavailable' };
+  // An engine that bills its own sends (SMS) refuses before sending when the wallet cannot pay: the message waits for a top-up.
+  if (err instanceof AppError) {
+    const verdict = verdictOfCode(err.code);
+    if (verdict) return verdict;
+  }
   const message = err instanceof Error ? err.message : '';
   if (/no sendable|not connected|cannot be read|reconnect/i.test(message))
     return { status: 'skipped', reason: 'no_sender' };
@@ -79,6 +85,11 @@ export function verdictOfEngineError(err: unknown): Verdict {
  * SMS and email go through the engines the broadcast and campaign screens use (`EngineSenderRegistry`), which enforce the sender's
  * connection, the plan's cap and, for email, the bounce list and the unsubscribe link. They have no idempotency key: the service never
  * retries an SMS or an email whose delivery was interrupted.
+ *
+ * Both are paid for from the wallet, like every message a workspace sends: the SMS engine checks the wallet before it sends and bills
+ * what the provider accepted (a lead's text is one more SMS to it); an email is checked here before the mailbox is called (so a
+ * wallet that cannot pay holds the message with its own reason) and is billed by the email engine, the one place a mail is billed. A
+ * wallet that cannot pay holds the message for a top-up (`held / wallet_empty`).
  */
 @Injectable()
 export class LeadFirstMessageSender {
@@ -94,6 +105,7 @@ export class LeadFirstMessageSender {
     private readonly channels: ChannelsFacade,
     private readonly engines: EngineSenderRegistry,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly usage: UsageBillingService,
   ) {}
 
   async prepare(
@@ -322,6 +334,8 @@ export class LeadFirstMessageSender {
         target: { phone: null, email: to },
         deliver: async () => {
           try {
+            // Paid work: the wallet must cover the mail before the mailbox is called (422 `WALLET_EMPTY` holds the message).
+            await this.usage.assertCanAfford(orgId, 'email', 1);
             const opened = await engine.open(orgId, {
               engine: 'email',
               id: mailbox.id,

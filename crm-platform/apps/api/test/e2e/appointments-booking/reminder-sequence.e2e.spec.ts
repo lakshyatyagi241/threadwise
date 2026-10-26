@@ -247,7 +247,11 @@ describe('the SMS-removal migration, as the API shows it (BL-420)', () => {
 
   it('the owner looking at the step clears the notice: switching it on, or choosing other channels, saves it without the note', async () => {
     const t = await make(b, 'Notice cleared', ['whatsapp']);
-    await setChannels(t.id, ['whatsapp', 'email'], ", is_active = false, notice_code = 'sms_removed'");
+    await setChannels(
+      t.id,
+      ['whatsapp', 'email'],
+      ", is_active = false, notice_code = 'sms_removed'",
+    );
     const before = await read(b, t.id);
     expect(before.reminders[0]).toMatchObject({ isActive: false, notice: 'sms_removed' });
     // Saved but still off and unchanged: the note stays.
@@ -257,7 +261,12 @@ describe('the SMS-removal migration, as the API shows it (BL-420)', () => {
       .send({
         rowVersion: before.rowVersion,
         reminders: [
-          { id: before.reminders[0]!.id, offsetMinutes: 60, isActive: false, channels: ['whatsapp', 'email'] },
+          {
+            id: before.reminders[0]!.id,
+            offsetMinutes: 60,
+            isActive: false,
+            channels: ['whatsapp', 'email'],
+          },
         ],
       });
     expect(same.status, JSON.stringify(same.body)).toBe(200);
@@ -269,7 +278,12 @@ describe('the SMS-removal migration, as the API shows it (BL-420)', () => {
       .send({
         rowVersion: same.body.rowVersion,
         reminders: [
-          { id: before.reminders[0]!.id, offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
+          {
+            id: before.reminders[0]!.id,
+            offsetMinutes: 60,
+            isActive: true,
+            channels: ['whatsapp'],
+          },
         ],
       });
     expect(on.status, JSON.stringify(on.body)).toBe(200);
@@ -297,7 +311,12 @@ describe('the SMS-removal migration, as the API shows it (BL-420)', () => {
       .send({
         rowVersion: cur.rowVersion,
         reminders: [
-          { id: cur.reminders[0]!.id, offsetMinutes: 60, isActive: false, channels: ['email', 'sms'] },
+          {
+            id: cur.reminders[0]!.id,
+            offsetMinutes: 60,
+            isActive: false,
+            channels: ['email', 'sms'],
+          },
         ],
       });
     expect(updated.status, JSON.stringify(updated.body)).toBe(422);
@@ -357,15 +376,30 @@ describe('delivering the steps of a sequence', () => {
 
   describe('WhatsApp first, then email, and why', () => {
     const cases: Array<[string, BookingMessageResult, string, string]> = [
-      ['the contact has no number', { status: 'skipped', reason: 'no_contact_point' }, 'skipped', 'no_contact_point'],
-      ['the contact gave no consent', { status: 'skipped', reason: 'no_consent' }, 'skipped', 'no_consent'],
+      [
+        'the contact has no number',
+        { status: 'skipped', reason: 'no_contact_point' },
+        'skipped',
+        'no_contact_point',
+      ],
+      [
+        'the contact gave no consent',
+        { status: 'skipped', reason: 'no_consent' },
+        'skipped',
+        'no_consent',
+      ],
       [
         'the WhatsApp template is not approved',
         { status: 'skipped', reason: 'template_unavailable' },
         'skipped',
         'template_unavailable',
       ],
-      ['the provider refuses the message', { status: 'failed', reason: 'provider_error' }, 'failed', 'provider_error'],
+      [
+        'the provider refuses the message',
+        { status: 'failed', reason: 'provider_error' },
+        'failed',
+        'provider_error',
+      ],
     ];
 
     for (const [why, whatsapp, status, reason] of cases) {
@@ -502,7 +536,11 @@ describe('delivering the steps of a sequence', () => {
       );
       await sweep.deliver();
       expect(sentFor(a.id).map((m) => m.channel)).toEqual(['whatsapp', 'whatsapp']);
-      expect((await runsOf(a.id))[0]).toMatchObject({ status: 'sent', channel: 'whatsapp', reason: null });
+      expect((await runsOf(a.id))[0]).toMatchObject({
+        status: 'sent',
+        channel: 'whatsapp',
+        reason: null,
+      });
     });
 
     it('a WhatsApp that cannot deliver does fall to email, but a held WhatsApp does not', async () => {
@@ -616,9 +654,10 @@ describe('delivering the steps of a sequence', () => {
       const without = await book('No link', [{ offsetMinutes: 15, isActive: true }]);
       const withLink = await book('With link', [{ offsetMinutes: 15, isActive: true }]);
       for (const x of [without, withLink]) await arrange(x.a.id, 10, 600);
-      await h.owner.query(`UPDATE appointments SET meet_url = 'https://meet.example.com/abc-defg' WHERE uuid = $1`, [
-        withLink.a.id,
-      ]);
+      await h.owner.query(
+        `UPDATE appointments SET meet_url = 'https://meet.example.com/abc-defg' WHERE uuid = $1`,
+        [withLink.a.id],
+      );
       await sweep.sweep();
       await sweep.deliver();
       expect(sentFor(without.a.id)).toEqual([]);
@@ -628,8 +667,13 @@ describe('delivering the steps of a sequence', () => {
         reason: 'no_join_link',
       });
       expect(sentFor(withLink.a.id).map((m) => m.channel)).toEqual(['whatsapp']);
-      expect(sentFor(withLink.a.id)[0]!.variables?.join_link).toBe('https://meet.example.com/abc-defg');
-      expect((await runsOf(withLink.a.id))[0]).toMatchObject({ status: 'sent', channel: 'whatsapp' });
+      expect(sentFor(withLink.a.id)[0]!.variables?.join_link).toBe(
+        'https://meet.example.com/abc-defg',
+      );
+      expect((await runsOf(withLink.a.id))[0]).toMatchObject({
+        status: 'sent',
+        channel: 'whatsapp',
+      });
       expect(await remindersOf(without.a.id)).toMatchObject([
         { stepKind: 'reminder_15m', status: 'skipped', reason: 'no_join_link' },
       ]);
@@ -644,9 +688,10 @@ describe('delivering the steps of a sequence', () => {
       ]);
       const noRule = await book('Rule off', [{ offsetMinutes: 120, isActive: true }]);
       for (const x of [confirmed, unconfirmed, noRule]) await arrange(x.a.id, 100, 600);
-      await h.owner.query(`UPDATE appointments SET customer_confirmed_at = now() WHERE uuid = ANY($1::uuid[])`, [
-        [confirmed.a.id, noRule.a.id],
-      ]);
+      await h.owner.query(
+        `UPDATE appointments SET customer_confirmed_at = now() WHERE uuid = ANY($1::uuid[])`,
+        [[confirmed.a.id, noRule.a.id]],
+      );
       await sweep.sweep();
       await sweep.deliver();
       expect((await runsOf(confirmed.a.id))[0]).toMatchObject({
@@ -672,7 +717,10 @@ describe('delivering the steps of a sequence', () => {
       await sweep.deliver();
       expect(sentFor(lastMinute.a.id)).toEqual([]);
       expect(sentFor(began.a.id)).toEqual([]);
-      expect((await runsOf(lastMinute.a.id))[0]).toMatchObject({ status: 'skipped', reason: 'started' });
+      expect((await runsOf(lastMinute.a.id))[0]).toMatchObject({
+        status: 'skipped',
+        reason: 'started',
+      });
       expect((await runsOf(began.a.id))[0]).toMatchObject({ status: 'skipped', reason: 'started' });
     });
   });
@@ -758,7 +806,9 @@ describe('delivering the steps of a sequence', () => {
       const { a } = await book('No confirm step', [{ offsetMinutes: 60, isActive: true }]);
       const ev = (await outbox(t.orgId, 'appointment.booked', a.id))[0]!;
       await consumer.handle(ev);
-      expect(sentFor(a.id).map((m) => [m.event, m.channel])).toEqual([['confirmation', 'whatsapp']]);
+      expect(sentFor(a.id).map((m) => [m.event, m.channel])).toEqual([
+        ['confirmation', 'whatsapp'],
+      ]);
       expect(await runsOf(a.id)).toEqual([]);
     });
 
@@ -775,7 +825,9 @@ describe('delivering the steps of a sequence', () => {
       const ev = (await outbox(t.orgId, 'appointment.no_show', marked.a.id))[0]!;
       expect(ev).toBeDefined();
       await consumer.handle(ev);
-      expect(sentFor(marked.a.id).map((m) => [m.event, m.channel])).toEqual([['no_show', 'whatsapp']]);
+      expect(sentFor(marked.a.id).map((m) => [m.event, m.channel])).toEqual([
+        ['no_show', 'whatsapp'],
+      ]);
       expect(await runsOf(marked.a.id)).toMatchObject([
         { kind: 'event', step_kind: 'no_show', status: 'sent', channel: 'whatsapp' },
       ]);

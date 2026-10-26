@@ -1349,13 +1349,17 @@
             "details": "详情与定价",
             "features": "功能",
             "limits": "限制",
-            "addons": "附加组件"
+            "addons": "附加组件",
+            "integrations": "集成",
+            "miniApps": "迷你应用"
           },
           "tabSummary": {
             "features": "已开启 {count}/{total} 项功能",
             "limits": "已设置 {count}/{total} 项限制",
-            "addons": "已选择 {count} 个附加组件",
-            "error": "有待修复的错误"
+            "addons": "{count, plural, one {已包含或提供 # 个附加组件} other {已包含或提供 # 个附加组件}}",
+            "error": "有待修复的错误",
+            "integrations": "已包含或提供的集成：{count}",
+            "miniApps": "已包含或提供的迷你应用：{count}"
           },
           "featuresUi": {
             "intro": "关闭此套餐不包含的功能。使用该套餐的工作区无法打开功能已关闭的区域。",
@@ -1364,7 +1368,8 @@
             "enableAll": "全部启用",
             "disableAll": "全部停用",
             "noMatch": "没有匹配的功能。",
-            "groupCount": "已开启 {count}/{total}"
+            "groupCount": "已开启 {count}/{total}",
+            "lockedBy": "由“附加组件”标签页中的 {addon} 附加组件设置"
           },
           "limitsUi": {
             "intro": "工作区达到上限后，相应操作将被阻止。勾选不限可取消上限。",
@@ -1385,12 +1390,8 @@
             "total": "总计"
           },
           "addons": {
-            "intro": "已启用的附加组件会显示在使用此套餐的工作区的应用市场中；工作区购买后才能使用。",
             "search": "搜索附加组件",
             "searchPlaceholder": "搜索附加组件或应用",
-            "selectAll": "全选",
-            "clear": "清除",
-            "selected": "已选择 {count}/{total}",
             "loading": "正在加载附加组件",
             "empty": "尚无付费附加组件",
             "emptyHint": "附加组件在运维控制台的应用市场目录中创建。应用拥有付费包后，会在此处列出。",
@@ -1404,7 +1405,8 @@
             "packInactive": "该附加组件包已关闭，因此无人可以购买。",
             "appUnpublished": "该应用尚未发布，因此工作区暂时无法看到。",
             "appLabel": "应用：{name}",
-            "price": "{price} {period}"
+            "price": "{price} {period}",
+            "total": "{count, plural, one {已包含或提供 # 个附加组件} other {已包含或提供 # 个附加组件}}"
           },
           "featureHints": {
             "automation": "用于回复对话并根据对话执行操作的流程构建器和自动化。",
@@ -1416,10 +1418,12 @@
             "remove_branding": "白标：工作区可在页脚隐藏平台品牌标识。",
             "sales_pipeline": "交易、任务和销售管道，以及仪表板上的管道数据。",
             "appointment_booking": "预约类型、预约及公开预约页面。此开关由付费的预约应用掌管。",
+            "appointment_confirm_buttons": "在预约前通过 WhatsApp 发送的提醒中添加“确认”“改期”和“取消”按钮。",
+            "appointment_rebook_steps": "预约完成后发送的跟进消息，邀请联系人再次预约。",
             "chatbot_widgets": "网站聊天机器人小组件构建器。",
             "wa_storefront": "WhatsApp 商品目录和店铺区域。",
             "inbox_sla": "团队收件箱中的 SLA 策略和截止时间。",
-            "inbox_routing": "自动分配收件箱对话的路由规则。",
+            "inbox_routing": "自动分配新会话：路由规则、其他所有人和等待队列计时器。属于智能路由附加组件。",
             "waba_calling": "收件箱中的 WhatsApp 通话：通话号码、通话权限、拨打和接听电话。",
             "inbox_kanban": "团队收件箱的看板视图。",
             "team_performance": "团队绩效报表。",
@@ -1445,7 +1449,9 @@
             "record_assignment": "按优先级规则，将新的联系人、公司和商机分配给合适的销售负责人。",
             "team_hierarchy": "上级团队、团队负责人和经理,他们可以查看自己的团队及下级团队。",
             "custom_roles": "创建和编辑角色,并为每项权限选择范围(自己的、团队的或全部记录)。",
-            "inbox_assignment_sticky": "联系人负责人与聊天负责人之间的负责人优先和保持同步分配、回访联系人时间窗口以及重新分配提示。与收件箱路由配合使用。"
+            "inbox_assignment_sticky": "负责人优先和同步分配、回访联系人时间窗口以及重新分配时的提示。属于智能路由附加组件。",
+            "agent_status_bar": "顶部栏和收件箱顶部的可用 / 离开状态控件，包含设为离开 / 可用以及休假链接。账户菜单中的可用 / 离开开关对所有套餐开放。",
+            "agent_status_automation": "带时区的个人工作时间、时间外离开、“非工作时间”提示，以及跳过非工作时间人员的分配。保存日程需要此功能；没有它时，已保存的日程会保留但被忽略。"
           },
           "units": {
             "days": "天",
@@ -1591,7 +1597,8 @@
             "email_mailboxes": "邮箱数量",
             "email_monthly": "每月邮件数",
             "storage_gb": "存储空间 (GB)",
-            "teams": "团队"
+            "teams": "团队",
+            "webbot_messages": "每月免费网站聊天机器人消息数"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1609,10 +1616,12 @@
             "remove_branding": "白标（移除平台品牌标识）",
             "sales_pipeline": "销售管道（交易和任务）",
             "appointment_booking": "预约和预约页面",
+            "appointment_confirm_buttons": "提醒按钮：确认、改期和取消",
+            "appointment_rebook_steps": "预约后的再预约（召回）步骤",
             "chatbot_widgets": "网站聊天机器人小组件",
             "wa_storefront": "WhatsApp 店铺和商品目录",
             "inbox_sla": "收件箱 SLA 策略",
-            "inbox_routing": "收件箱路由规则和营业时间",
+            "inbox_routing": "智能路由: 自动分配和规则",
             "waba_calling": "在收件箱中拨打和接听 WhatsApp 电话",
             "inbox_kanban": "收件箱看板",
             "team_performance": "团队绩效报表",
@@ -1638,7 +1647,9 @@
             "record_assignment": "记录分配规则（自动分配联系人、公司和商机）",
             "team_hierarchy": "团队层级与经理",
             "custom_roles": "自定义角色与范围",
-            "inbox_assignment_sticky": "联系人负责人与粘性客服"
+            "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服",
+            "agent_status_bar": "状态栏：顶部栏和收件箱中的可用 / 离开控件",
+            "agent_status_automation": "自动化状态：个人工作时间和自动离开"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1654,7 +1665,9 @@
             "custom_not_free": "套餐不能同时是免费和定制报价。",
             "paid_needs_price": "请设置大于 0 的价格，或将套餐标记为免费。",
             "offer_not_lower": "优惠价必须低于套餐价格。",
-            "default_needs_active": "注册默认套餐必须处于启用状态。"
+            "default_needs_active": "注册默认套餐必须处于启用状态。",
+            "addonPriceZero": "将价格留空以使用附加组件的价格，或选择“包含”。",
+            "addonGone": "此附加组件已不存在。请重新加载页面后再次保存。"
           },
           "limitHints": {
             "monthly_messages": "日历月内发送的出站消息。超出额度后将从钱包扣费。",
@@ -1695,12 +1708,57 @@
             "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
             "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
             "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。",
-            "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。"
+            "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。",
+            "webbot_messages": "每个自然月免费包含的网站聊天机器人消息数。超出的每条消息从钱包扣费。留空或 0 = 不含免费消息。"
           },
           "productLines": {
             "chat": "聊天",
             "crm": "销售 CRM",
             "platform": "两者共用"
+          },
+          "offers": {
+            "readOnly": "您只能查看此套餐而无法修改，因此这些控件已锁定。",
+            "featureTitle": "功能附加组件",
+            "featureIntro": "用于解锁产品某一部分的附加组件。包含：此套餐的工作区可免费获得，其卡片会显示“已包含在你的套餐中”。付费：工作区可以购买，如果您设置了此套餐专属价格，则按该价格计费。隐藏：工作区完全看不到它。“功能”标签页中该附加组件的功能会随此选择变化。",
+            "capacityTitle": "容量附加组件",
+            "capacityIntro": "只增加某项限额的附加组件，例如额外席位。在套餐中只能设为付费或隐藏；套餐自身的上限请在“限制”标签页设置。",
+            "noFeaturePacks": "还没有功能附加组件。",
+            "adds": "增加：{limits}",
+            "limitAdd": "+{amount} {name}",
+            "limitUnlimited": "{name}不限",
+            "modeLabel": "{name}在此套餐中的提供方式",
+            "modes": {
+              "included": "包含",
+              "paid": "付费",
+              "hidden": "隐藏"
+            },
+            "noIncluded": "此附加组件只增加限额，因此无法包含在套餐中。请在“限制”标签页设置此套餐自身的上限。",
+            "priceLabel": "此套餐中的价格（{currency}）",
+            "priceHint": "留空则使用附加组件自身的价格。",
+            "includedCapacityNote": "仅包含其功能。额外限额（{limits}）仍向此套餐的工作区出售。",
+            "hiddenNote": "此套餐的工作区看不到此附加组件，也无法购买。已购买的工作区可继续使用到期限结束。",
+            "offNote": "不再包含：此套餐的工作区除非购买该附加组件，否则将失去这些功能。其设置会保留，重新开启后即可恢复。",
+            "loading": "正在加载附加组件",
+            "loadFailed": "无法加载附加组件。未做任何更改。",
+            "empty": "还没有附加组件",
+            "emptyHint": "智能路由、团队与权限等附加组件在运营商控制台的“附加组件”中创建。",
+            "noPrice": "未设置价格",
+            "gives": "提供：{features}",
+            "unlistedNote": "它的部分功能（{features}）不在标准附加组件列表中。仍可为套餐开启；只是将此附加组件作为套餐包购买的方式有所不同。",
+            "inactiveNote": "此附加组件是草稿或已关闭，因此暂时无人能购买。将其纳入套餐仍然有效。",
+            "impactCount": "{count, plural, other {已有 # 个工作区在为此附加组件付费。}}它们的续订将在当前周期结束时停止，不会退款，今天也不会取消任何内容。",
+            "impactUnknown": "此套餐中已为该附加组件付费的工作区，将在当前周期结束时停止续订。不会退款，今天也不会取消任何内容。无法加载数量。",
+            "partlyNote": "此套餐已包含该附加组件的一部分（{features}）。在这里选择“包含”“付费”或“隐藏”之前，它保持不变。",
+            "needsFeatures": "请先在“附加组件”>“{name}”中添加它解锁的功能"
+          },
+          "apps": {
+            "introMiniApps": "迷你应用是工作区从 Marketplace 安装的应用。包含：此套餐的工作区免费使用。付费：可按应用自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该应用提供的套餐功能。",
+            "introIntegrations": "集成用于连接外部服务。包含：此套餐的工作区免费使用。付费：可按集成自己的价格购买。隐藏：工作区看不到它。选择“包含”时，也会开启该集成提供的套餐功能。",
+            "setAll": "将显示的全部设为",
+            "summary": "{total} 项中已包含或提供 {count} 项",
+            "priceHint": "Marketplace 应用保留自己的价格，请在应用的列表页中设置。",
+            "emptyIntegrations": "暂无付费集成",
+            "emptyIntegrationsHint": "免费集成无需在此设置；Shopify 和 WooCommerce 在“功能”标签页中开启。"
           }
         }
       },

@@ -66,10 +66,10 @@
       "pending": "pendiente",
       "you": "Tú",
       "presence": {
-        "online": "En línea",
-        "away": "Ausente",
+        "online": "Disponible",
+        "away": "Ausente, fuera del horario laboral",
         "busy": "Ocupado",
-        "offline": "Desconectado"
+        "offline": "Ausente"
       },
       "inactive": "Inactivo",
       "roleFor": "Rol de {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Disponibilidad",
       "available": "Disponible",
-      "offline": "Desconectado",
-      "hint": "Mientras estés sin conexión, no se te asignan chats nuevos automáticamente. Los chats que ya tienes siguen siendo tuyos.",
+      "offline": "Ausente",
+      "hint": "Mientras estés ausente, no se te asignan chats nuevos automáticamente. Los chats que ya tienes siguen siendo tuyos.",
       "failed": "No se pudo cambiar"
+    },
+    "myLeave": {
+      "label": "Tiempo libre",
+      "onLeaveUntil": "De baja hasta {date}",
+      "onLeaveOpen": "De baja",
+      "hint": "Avisa a tu equipo de que no estás. Mientras estés de baja, no se te asignan chats nuevos automáticamente.",
+      "title": "Tu tiempo libre"
     },
     "deactivate": {
       "eyebrow": "Miembros del equipo",

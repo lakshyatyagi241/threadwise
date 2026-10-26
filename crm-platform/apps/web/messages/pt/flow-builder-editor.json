@@ -555,7 +555,8 @@
           "cardCount": "{count} cartão(ões)",
           "payLink": "Link de pagamento",
           "invoice": "Fatura",
-          "faqRetired": "Descontinuado · sai por sem correspondência"
+          "faqAgent": "Responde com {agent}",
+          "faqNoAgent": "Escolha um agente de IA"
         },
         "overlays": {
           "startPinned": "Este é o ponto de partida (clique para desafixar)",
@@ -746,7 +747,8 @@
           "storedIn": "Os valores serão salvos na propriedade <b>{property}</b> do contato",
           "actions": "Ações",
           "actionsHint": "Adicione um passo que roda logo depois deste.",
-          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois."
+          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois.",
+          "fromSteps": "Alcançado a partir da etapa {stages}"
         },
         "editors": {
           "linkLabel": "Para onde isto leva",
@@ -858,7 +860,13 @@
             "choose": "Escolha um template…",
             "buttons": "Botões",
             "variables": "Preenchido com dados do contato",
-            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo."
+            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo.",
+            "fills": "O que preenche cada número",
+            "fillsHint": "Escolha um dado do contato ou uma variável do fluxo, ou escreva seu próprio texto. Deixe vazio para usar o que o modelo diz.",
+            "fillPick": "Inserir um dado…",
+            "headerMedia": "Arquivo do cabeçalho",
+            "headerMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+            "headerMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
           },
           "cta": {
             "buttonText": "Texto do botão",
@@ -897,7 +905,15 @@
               "phone": "Ligar para um número",
               "email": "Enviar um e-mail",
               "agent": "Falar com uma pessoa"
-            }
+            },
+            "prev": "Cartão anterior",
+            "next": "Próximo cartão",
+            "goTo": "Cartão {n}",
+            "saveCopy": "Salvar uma cópia",
+            "saveCopyHint": "Guarda esta imagem no nosso servidor para que o chat de cada visitante possa mostrá-la. Uma imagem de um site que não permite compartilhá-la não pode ser copiada: envie-a no lugar.",
+            "saving": "Salvando…",
+            "copyFailed": "Não foi possível salvar uma cópia: {message}",
+            "imageFormats": "Formatos aceitos: JPG, JPEG ou PNG."
           },
           "condition": {
             "info": "Adicione regras (uma variável, uma comparação e um valor). Una-as com AND ou OR e aninhe grupos quando precisar.",
@@ -908,12 +924,16 @@
             "hint": "O visitante é passado a esta equipe com a sua nota. Não é preciso conectar nada depois deste botão."
           },
           "faq": {
-            "exit": "Continuar com",
-            "exitHint": "O fluxo sempre continua aqui."
+            "exit": "Quando nada corresponde",
+            "exitHint": "Para onde o fluxo vai quando nenhuma entrada responde.",
+            "matched": "Quando responde",
+            "matchedHint": "Para onde o fluxo vai depois de enviar a resposta."
           }
         },
         "branchAdd": "Adicionar um passo para “{title}”",
-        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência."
+        "faqEnds": "Esta etapa encerra esta parte: o fluxo segue pela saída Respondida ou Sem correspondência.",
+        "flowMenu": "Opções de {name}",
+        "renameFlow": "Renomear fluxo"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value} (não está no espaço de trabalho)",
           "templateLabel": "Template aprovado",
           "templateHint": "Apenas templates aprovados do espaço de trabalho aparecem aqui. <link>Criar um novo →</link>",
+          "statusExits": "Adicionar saídas de status (Enviado, Entregue, Lido, Respondido, Falhou)",
+          "statusExitsHint": "O fluxo sai pela primeira saída que tem uma etapa ligada: Enviado assim que o modelo é aceito, Entregue ou Lido quando o WhatsApp informa, Respondido quando o cliente escreve, Falhou se não foi possível enviar. Um botão tocado pelo cliente sai pela própria saída.",
           "type": "Tipo",
           "kindText": "Texto",
           "kindImage": "Imagem",
@@ -1364,12 +1386,12 @@
           "stageHint": "Quando um negócio é movido PARA este estágio do funil, o contato vinculado é inscrito. Gerencie os estágios no quadro /deals.",
           "rulesLabel": "Vincular a regras de palavra-chave de comentário",
           "rulesHint": "Marque as regras que devem iniciar este fluxo. Deixe todas desmarcadas para rodar em qualquer regra de Comentário → DM.",
-          "rulesNone": "Nenhuma regra de palavra-chave de Comentário → DM ainda. Crie-as em <link>/auto-reply</link> (Instagram · gatilho “Comentário → DM”) e escolha-as aqui.",
+          "rulesNone": "Ainda não há regras de palavra-chave de Comentário → DM, por isso não há nada para escolher aqui.",
           "ruleFallback": "Regra {id}",
           "ruleOff": "desativada",
           "orderPlaced": "Dispara em todo novo pedido. O cliente do pedido é associado a um contato salvo e inscrito.",
           "automatic": "Dispara automaticamente — nenhuma configuração extra necessária.",
-          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Alterne o modo Ausente na página <link>Resposta automática</link>. Cada contato é inscrito uma vez.",
+          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Cada contato é inscrito uma vez.",
           "outOfHours": "Dispara em qualquer mensagem recebida <b>fora do horário comercial do seu espaço de trabalho</b>. Defina o horário comercial nas configurações do espaço de trabalho. Cada contato é inscrito uma vez.",
           "manualEnroll": "Você inscreverá contatos manualmente na <link>lista /flows</link> pelo botão <b>Inscrever</b> ao lado deste fluxo.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "Aguardar o pagamento e depois continuar"
         },
         "faq": {
-          "retired": "Esta etapa foi descontinuada e não busca mais nada. O fluxo sempre segue por Sem correspondência. Para responder com seu próprio conhecimento, use uma etapa de assistente de IA e escolha um agente de IA."
+          "agent": "Agente de IA",
+          "agentHint": "O agente cuja base de conhecimento é pesquisada. Adicione perguntas frequentes em Treinamento de IA.",
+          "query": "Pesquisar por",
+          "queryHint": "O que procurar. Normalmente a última mensagem do cliente.",
+          "sendAnswer": "Enviar a resposta ao cliente",
+          "variable": "Salvar a resposta como",
+          "variableHint": "As etapas seguintes leem a resposta com este nome, por exemplo faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "Seções do fluxo",
         "build": "Criar",
+        "faqs": "Perguntas frequentes",
         "customize": "Personalizar",
         "saveFirst": "Salve o fluxo primeiro.",
         "needsCustomizing": "O widget ainda usa a aparência padrão. Abra Personalizar.",
@@ -1933,6 +1962,13 @@
         "deploy": "Implantar",
         "customizeFirstWhatsapp": "Personalize seu botão do WhatsApp e salve-o uma vez antes de publicar.",
         "install": "Instalar"
+      },
+      "faqsPanel": {
+        "intro": "As perguntas frequentes são entradas do conhecimento de um agente de IA. Estas pertencem ao agente com que este fluxo responde: adicione perguntas e respostas aqui e o agente as usará.",
+        "noAgent": "Este fluxo ainda não usa um agente de IA. Adicione uma etapa Assistente de IA ou Responder com perguntas frequentes e escolha um agente: as perguntas dele aparecem aqui.",
+        "agent": "Agente de IA",
+        "openAgent": "Abrir em Treinamento de IA",
+        "unknownAgent": "Agente de IA (não encontrado)"
       },
       "buttonIcon": {
         "label": "Ícone (opcional)",
@@ -2021,6 +2057,12 @@
           "unresolved": "Este link curto ainda não foi consultado. Saia do campo ou tente de novo.",
           "resolve_failed": "Não foi possível ler este link. Verifique se ele abre no Google Maps ou informe as coordenadas."
         }
+      },
+      "flowImage": {
+        "title": "Imagem não carregada",
+        "empty": "o link está vazio",
+        "notAddress": "o link não é um endereço da web (deve começar com https://)",
+        "failed": "não carregou (o link pode estar errado, ser privado, bloqueado ou não ser uma imagem)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "Número",
         "alphanumeric": "Letras e números",
         "date": "Data",
+        "datetime": "Data e hora",
+        "time": "Hora",
         "age": "Idade",
         "date_of_birth": "Data de nascimento"
       },
@@ -2343,6 +2387,8 @@
         "number": "Digite um número válido",
         "alphanumeric": "Use somente letras e números",
         "date": "Digite uma data válida ({format})",
+        "datetime": "Informe uma data e hora válidas ({format} HH:MM)",
+        "time": "Informe uma hora válida (HH:MM)",
         "age": "Informe sua idade como um número inteiro",
         "date_of_birth": "Informe uma data válida ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "Pergunta",
           "help": "Pergunte qualquer coisa e salve a resposta"
         },
-        "askName": {
-          "label": "Nome",
-          "help": "Pedir um nome e validá-lo"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Pedir um endereço de e-mail e validá-lo"
-        },
-        "askPhone": {
-          "label": "Número de telefone",
-          "help": "Pedir um número de telefone e validá-lo"
-        },
-        "askNumber": {
-          "label": "Número",
-          "help": "Pedir um número e validá-lo"
-        },
-        "askAlphanumeric": {
-          "label": "Letras e números",
-          "help": "Um ID ou código, sem espaços nem símbolos"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Pedir uma data no formato escolhido"
-        },
         "askFile": {
           "label": "Arquivo ou imagem",
           "help": "Aguardar uma foto, documento, vídeo ou áudio"
@@ -2617,7 +2639,9 @@
         "writeCode": "Passo {stage}: escreva o código a executar.",
         "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
         "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
-        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA.",
+        "templateFile": "Etapa {stage}: adicione o arquivo do cabeçalho do modelo.",
+        "fileLinkInvalid": "Etapa {stage}: o link do arquivo deve começar com https://"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
       "simAbandon": "Abandono simulado → saída \"abandonado\"",
       "locationSkipped": "(localização) ignorada: sem coordenadas válidas",
-      "faqRetired": "(simulado) Responder pelas perguntas frequentes foi descontinuado: seguindo por \"sem correspondência\"."
+      "faqLine": "(simulado) Responder com perguntas frequentes: a base de conhecimento não é pesquisada no chat de teste, seguindo \"sem correspondência\".",
+      "carouselNoMatch": "“{value}” não é um dos botões. Toque em um ou digite o texto exatamente."
     }
   }
 }

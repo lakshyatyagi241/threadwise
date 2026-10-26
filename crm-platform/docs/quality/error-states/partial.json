@@ -1,0 +1,10 @@
+{
+  "ES-broadcasts-004": "Only the upload request is checked (rejects with an ApiError). The alert needs a click, so the component state is not tested.",
+  "ES-flow-builder-editor-004": "Only the error text helper is tested; no click-driven save failure shows typed values kept.",
+  "ES-flow-runtime-engine-004": "Only the error text hook is tested; no click-driven failure shows typed values kept.",
+  "ES-whatsapp-cloud-api-waba-004": "Only the error text hook is tested; no click-driven failure shows typed values kept.",
+  "ES-roles-permissions-004": "Only the create-permission form is tested, not delete-permission, delete-role or the role editor.",
+  "ES-workspaces-teams-tenancy-004": "Only the invite dialog is tested, not the deactivate dialog or the accept-invite form.",
+  "ES-workspaces-teams-tenancy-001": "Only the members and teams screens are tested, not the dialogs that also read.",
+  "ES-contact-consent-001": "The settings screen has a retry and is tested; the contact consent card and the notice editor show an alert with no retry."
+}

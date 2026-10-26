@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseWhatsApp, type Block, type Inline } from './whatsapp-format';
+import { parseWhatsApp, widenToWords, type Block, type Inline } from './whatsapp-format';
 
 /** The kinds of the top-level runs of a single plain line. */
 function runsOf(text: string, variables = false): Inline[] {
@@ -9,6 +9,20 @@ function runsOf(text: string, variables = false): Inline[] {
 }
 
 const kinds = (runs: Inline[]) => runs.map((r) => r.kind);
+
+describe('widenToWords', () => {
+  it('widens a selection inside a word to the whole word', () => {
+    expect(widenToWords('Hello wonderful world', 9, 12)).toEqual({ start: 6, end: 15 });
+  });
+  it('leaves a selection that starts and ends at word edges, or is empty, as it is', () => {
+    expect(widenToWords('say hello now', 4, 9)).toEqual({ start: 4, end: 9 });
+    expect(widenToWords('say hello now', 4, 4)).toEqual({ start: 4, end: 4 });
+  });
+  it('stops at a marker, and counts an underscore as part of the word', () => {
+    expect(widenToWords('*wonderful*', 4, 7)).toEqual({ start: 1, end: 10 });
+    expect(widenToWords('snake_case', 7, 9)).toEqual({ start: 0, end: 10 });
+  });
+});
 
 describe('WhatsApp inline formatting', () => {
   it('parses bold, italic, strike and monospace', () => {

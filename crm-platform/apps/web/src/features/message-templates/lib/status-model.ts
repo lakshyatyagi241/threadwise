@@ -51,26 +51,38 @@ export function qualityTone(score: string | null): Tone {
 export const BUILDABLE_TYPES: readonly string[] = ['standard', 'media', 'auth'];
 
 /**
- * Everything but a disabled template or one Meta no longer lists can be edited (TPL_NOT_EDITABLE): a draft, one in review or
- * rejected is saved over, a live (approved or paused) one is edited in place on Meta, as Reference does.
+ * Everything but a disabled template or one Meta no longer lists can be edited (TPL_NOT_EDITABLE): a draft is saved over, a template
+ * Meta holds (approved, paused or rejected) is edited in place on Meta, as Reference does. One in review, or past Meta's edit limit,
+ * cannot be edited right now: the API reports that as `editBlock`.
  */
 export const canEdit = (s: TplStatus, templateType: string = 'standard'): boolean =>
   s !== 'disabled' && s !== 'deleted' && BUILDABLE_TYPES.includes(templateType);
 
-/** An approved or paused template is edited in place on Meta: its name and language no longer change. */
+/** A template Meta holds in an approved, paused or rejected status is edited in place on Meta: its name and language never change. */
 export const isLive = (s: TplStatus, metaTemplateId: string | null): boolean =>
-  (s === 'approved' || s === 'paused') && metaTemplateId !== null;
+  (s === 'approved' || s === 'paused' || s === 'rejected') && metaTemplateId !== null;
 
-/** The library's status tabs (Reference's effective status): `all`, then the three groups the API filters on. */
-export const STATUS_TABS = ['all', 'approved', 'pending', 'rejected'] as const;
+/**
+ * Meta keeps the name of every template it holds, so a copy is how that name changes: Duplicate opens a new template filled in from
+ * it, named `<name>_copy`, which is saved and submitted as a template of its own.
+ */
+export const canDuplicate = (
+  s: TplStatus,
+  metaTemplateId: string | null,
+  templateType: string = 'standard',
+): boolean => metaTemplateId !== null && s !== 'deleted' && BUILDABLE_TYPES.includes(templateType);
+
+/** The library's status tabs: `all`, then the groups the API filters on (a draft is not "in review": it has not been sent to Meta). */
+export const STATUS_TABS = ['all', 'approved', 'pending', 'draft', 'rejected'] as const;
 export type StatusTab = (typeof STATUS_TABS)[number];
 
 export const SORTS = ['newest', 'oldest', 'name-asc', 'name-desc'] as const;
 
-/** The dot beside a status: green approved, amber in review, coral rejected; the tab a status counts under follows the API. */
+/** The dot beside a status: green approved, amber in review, grey draft, coral rejected; the tab a status counts under follows the API. */
 export function statusGroupOf(s: TplStatus): Exclude<StatusTab, 'all'> | null {
   if (s === 'approved') return 'approved';
-  if (s === 'pending' || s === 'draft') return 'pending';
+  if (s === 'pending') return 'pending';
+  if (s === 'draft') return 'draft';
   if (s === 'rejected' || s === 'paused' || s === 'disabled') return 'rejected';
   return null;
 }

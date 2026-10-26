@@ -40,7 +40,7 @@
       "topup": "Ricarica",
       "earn": "Guadagno",
       "refund": "Rimborso",
-      "spend": "Addebito messaggio",
+      "spend": "Addebito di utilizzo",
       "admin_adjust": "Rettifica"
     },
     "categories": {
@@ -99,7 +99,8 @@
         "fullStatement": "Apri l’estratto conto completo",
         "emptyTitle": "Nessuna attività ancora",
         "emptyBody": "Qui compaiono ricariche, addebiti di messaggi e rimborsi."
-      }
+      },
+      "messageExpenses": "Spese dei messaggi"
     },
     "activity": {
       "description": "Descrizione",
@@ -145,7 +146,7 @@
         "all": "Tutti",
         "topup": "Ricariche",
         "earn": "Guadagni",
-        "spend": "Addebiti messaggi",
+        "spend": "Addebiti di utilizzo",
         "refund": "Rimborsi",
         "admin_adjust": "Rettifiche"
       },
@@ -164,12 +165,16 @@
         "in": "Entrate",
         "out": "Uscite",
         "balance": "Saldo",
-        "none": "Nessuno"
+        "none": "Nessuno",
+        "channel": "Canale",
+        "recipient": "Destinatario",
+        "template": "Modello",
+        "country": "Paese",
+        "category": "Categoria",
+        "engine": "Motore"
       },
       "context": {
-        "reason": "Motivo",
-        "to": "A",
-        "template": "Template"
+        "reason": "Motivo"
       },
       "channels": {
         "campaign": "Campagna",
@@ -184,6 +189,129 @@
         "waba": "WhatsApp Cloud",
         "baileys": "WhatsApp QR",
         "twilio": "Twilio"
+      }
+    },
+    "expenses": {
+      "title": "Spese",
+      "subtitle": "Quanto è costato ogni messaggio, chiamata, richiesta di IA e ricerca, e a cosa serviva. I totali comprendono tutto ciò che corrisponde ai filtri.",
+      "back": "Torna al wallet",
+      "breadcrumbLabel": "Percorso di navigazione",
+      "breadcrumbWallet": "Wallet",
+      "breadcrumbExpenses": "Spese",
+      "fullStatement": "Estratto conto completo",
+      "summary": {
+        "messages": "Voci",
+        "charged": "Addebitato",
+        "refunded": "Rimborsato",
+        "net": "Costo netto",
+        "notBilled": "Non addebitato"
+      },
+      "filters": {
+        "status": "Stato",
+        "statusAll": "Tutti",
+        "statusCharged": "Addebitato",
+        "statusFree": "Non addebitato",
+        "statusRefunded": "Rimborsato",
+        "template": "Modello",
+        "templatePlaceholder": "Nome del modello",
+        "channel": "Canale",
+        "category": "Categoria",
+        "allChannels": "Tutti i canali",
+        "allCategories": "Tutte le categorie",
+        "from": "Da",
+        "to": "A",
+        "apply": "Applica",
+        "reset": "Reimposta",
+        "rangeInverted": "La data di fine è precedente alla data di inizio.",
+        "kind": "Tipo",
+        "allKinds": "Tutti i tipi"
+      },
+      "breakdown": {
+        "title": "Costo per",
+        "groupBy": {
+          "template": "Modello",
+          "source": "Canale",
+          "category": "Categoria",
+          "country": "Paese",
+          "kind": "Tipo"
+        },
+        "group": "Gruppo",
+        "notRecorded": "Non registrato",
+        "truncated": "Vengono mostrati i {count} gruppi più grandi. Restringi le date per vedere il resto.",
+        "empty": "Nessun risultato per questi filtri."
+      },
+      "columns": {
+        "date": "Data",
+        "template": "Modello",
+        "campaign": "Campagna, broadcast o funzione",
+        "channel": "Canale",
+        "category": "Categoria",
+        "country": "Paese",
+        "status": "Stato",
+        "charged": "Addebitato",
+        "refunded": "Rimborsato",
+        "net": "Netto",
+        "messages": "Voci",
+        "notBilled": "Non addebitato",
+        "type": "Tipo"
+      },
+      "status": {
+        "charged": "Addebitato",
+        "free": "Non addebitato",
+        "refunded": "Rimborsato",
+        "refundedOn": "Restituito il {date}"
+      },
+      "freeReason": {
+        "within_plan_free_quota": "Incluso nel tuo piano",
+        "wallet_empty": "Il wallet era vuoto",
+        "rate_is_zero": "La tariffa è zero",
+        "no_wallet_owner": "Nessun titolare del wallet"
+      },
+      "uncollected": "{amount} non riscossi",
+      "emptyTitle": "Ancora nessuna spesa",
+      "emptyBody": "Messaggi, chiamate, richieste di IA e altri utilizzi compaiono qui con la loro finalità e il loro costo.",
+      "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
+      "days": {
+        "title": "Registro giornaliero",
+        "subtitle": "Messaggi raggruppati per giorno, tipo, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
+        "messagesOnDay": "{count} messaggi",
+        "viewDetails": "Visualizza dettagli",
+        "actions": "Azioni",
+        "empty": "Nessun messaggio in questi giorni."
+      },
+      "log": {
+        "title": "Messaggi",
+        "forDay": "Messaggi del {date}",
+        "showAllDays": "Mostra tutti i giorni"
+      },
+      "units": {
+        "sms": "{count, plural, one {# segmento} other {# segmenti}}",
+        "whatsapp_call": "{count, plural, one {# minuto} other {# minuti}}",
+        "voice_call": "{count, plural, one {# minuto} other {# minuti}}"
+      },
+      "sources": {
+        "lead_first": "Risposta immediata ai lead",
+        "lead": "Risposta immediata ai lead",
+        "test": "Invio di prova",
+        "appointment": "Promemoria appuntamento",
+        "lead_scoring": "Punteggio dei lead",
+        "lead_digest": "Riepilogo della chat",
+        "pql_search": "Ricerca contatti",
+        "growth_assistant": "Assistente di crescita",
+        "ai_copilot": "Copilota IA",
+        "help_agent": "Assistente di aiuto",
+        "company_brief": "Scheda azienda",
+        "inbox_ai": "Assistente alle risposte",
+        "template_ai": "Creatore di modelli",
+        "campaign_ai": "Redattore di campagne",
+        "campaign_ai_image": "Immagine della campagna",
+        "kb_embedding": "Base di conoscenza",
+        "flow_ai": "Generatore di flussi",
+        "widget_ai": "Chatbot del sito",
+        "growth": "Crescita",
+        "telephony": "Chiamate telefoniche",
+        "translation": "Traduzione",
+        "widget": "Chatbot del sito"
       }
     },
     "admin": {
@@ -501,6 +629,41 @@
               "service": "Servizio"
             },
             "problems": "Righe saltate"
+          }
+        },
+        "usage": {
+          "title": "Prezzi degli altri utilizzi",
+          "subtitle": "Quanto costano ai tuoi clienti, per unità, SMS, email, chiamate, ricerche di contatti e altri canali di chat. Un prezzo pari a 0 o un interruttore spento viene comunque registrato nel registro delle spese, senza addebitare nulla.",
+          "perUnit": "Prezzo per {unit}",
+          "chargeFor": "Addebita {kind}",
+          "units": {
+            "segment": "segmento SMS",
+            "email": "email",
+            "minute": "minuto",
+            "lookup": "ricerca",
+            "message": "messaggio"
+          },
+          "hints": {
+            "sms": "Addebitato in aggiunta alla fattura del fornitore SMS del cliente. Un segmento è di 160 caratteri (70 per testo non latino).",
+            "email": "Addebitato in aggiunta alla casella di posta del cliente. Ogni email inviata conta una volta.",
+            "whatsapp_call": "Ogni minuto iniziato di una chiamata WhatsApp. Una chiamata a cui nessuno ha risposto è gratuita.",
+            "voice_call": "Ogni minuto iniziato di una chiamata segnalata dal fornitore di telefonia del cliente. I registri chiamate scritti a mano non vengono mai addebitati.",
+            "enrichment": "Ogni contatto cercato presso il fornitore di dati della piattaforma.",
+            "chat_message": "Ogni messaggio inviato su Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratuito finché non imposti un prezzo.",
+            "webbot_message": "Ogni messaggio di un visitatore gestito dal chatbot del sito dopo l'esaurimento dei messaggi gratuiti mensili del piano."
+          },
+          "costPlus": {
+            "title": "Addebitato al costo del fornitore più un ricarico",
+            "body": "Le richieste di IA e la traduzione a pagamento usano le chiavi fornitore della piattaforma e vengono addebitate a quanto ha addebitato il fornitore, più il ricarico qui sotto. Uno spazio di lavoro con la propria chiave non viene mai addebitato."
+          },
+          "markup": "Ricarico sul costo del fornitore",
+          "markupHint": "10 significa che una richiesta costata 1,00 viene addebitata a 1,10.",
+          "saving": "Salvataggio",
+          "save": "Salva i prezzi",
+          "saved": "Prezzi di utilizzo salvati",
+          "problems": {
+            "invalid": "Inserisci un importo con al massimo 2 decimali",
+            "tooHigh": "Supera il limite"
           }
         }
       },
@@ -863,6 +1026,18 @@
           }
         }
       }
+    },
+    "kinds": {
+      "whatsapp_message": "Messaggio WhatsApp",
+      "sms": "SMS",
+      "email": "Email",
+      "whatsapp_call": "Chiamata WhatsApp",
+      "voice_call": "Chiamata vocale",
+      "ai": "IA",
+      "translation": "Traduzione",
+      "enrichment": "Ricerca contatto",
+      "chat_message": "Messaggio di chat",
+      "webbot_message": "Messaggio del chatbot del sito"
     }
   }
 }

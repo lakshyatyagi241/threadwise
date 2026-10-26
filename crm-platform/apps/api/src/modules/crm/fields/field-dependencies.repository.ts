@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { alias } from 'drizzle-orm/pg-core';
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 
 const { fieldDependencies, fieldOptionDependencies, fields, fieldOptions } = schema;
@@ -25,11 +25,19 @@ export interface FieldOptionDependencyRow {
   uuid: string;
   parentOptionId: number;
   parentOptionUuid: string;
+  parentFieldUuid: string;
   /** The parent option's owning field's moduleKey — same reasoning as above. */
   moduleKey: string;
   childOptionId: number;
   childOptionUuid: string;
+  childFieldUuid: string;
   createdAt: Date;
+}
+
+/** A child-option pair to store: the parent option and the child option it allows (internal ids). */
+export interface OptionPairValues {
+  parentOptionId: number;
+  childOptionId: number;
 }
 
 const dependentField = alias(fields, 'dependent_field');
@@ -38,6 +46,7 @@ const dependsOnOption = alias(fieldOptions, 'depends_on_option');
 const parentOption = alias(fieldOptions, 'parent_option');
 const childOption = alias(fieldOptions, 'child_option');
 const parentOptionField = alias(fields, 'parent_option_field');
+const childOptionField = alias(fields, 'child_option_field');
 
 /**
  * Data access for the two dependency tables. field_dependencies is
@@ -197,9 +206,11 @@ export class FieldDependenciesRepository {
       uuid: fieldOptionDependencies.uuid,
       parentOptionId: fieldOptionDependencies.parentOptionId,
       parentOptionUuid: parentOption.uuid,
+      parentFieldUuid: parentOptionField.uuid,
       moduleKey: parentOptionField.moduleKey,
       childOptionId: fieldOptionDependencies.childOptionId,
       childOptionUuid: childOption.uuid,
+      childFieldUuid: childOptionField.uuid,
       createdAt: fieldOptionDependencies.createdAt,
     };
   }
@@ -228,7 +239,95 @@ export class FieldDependenciesRepository {
           eq(parentOptionField.orgId, parentOption.orgId),
           eq(parentOptionField.id, parentOption.fieldId),
         ),
+      )
+      .innerJoin(
+        childOptionField,
+        and(
+          eq(childOptionField.orgId, childOption.orgId),
+          eq(childOptionField.id, childOption.fieldId),
+        ),
       );
+  }
+
+  /** Every option-level pair of the fields of one module, for the properties screen and the contact form. */
+  async listOptionDependenciesByModule(
+    tx: Tx,
+    orgId: number,
+    moduleKey: string,
+  ): Promise<FieldOptionDependencyRow[]> {
+    return this.optionDependencyBaseQuery(tx).where(
+      and(eq(fieldOptionDependencies.orgId, orgId), eq(parentOptionField.moduleKey, moduleKey)),
+    ) as Promise<FieldOptionDependencyRow[]>;
+  }
+
+  /** Store option pairs as they are; the caller has checked that each option belongs to the right field. */
+  async insertOptionPairs(
+    tx: Tx,
+    orgId: number,
+    pairs: readonly OptionPairValues[],
+  ): Promise<void> {
+    if (pairs.length === 0) return;
+    await tx.insert(fieldOptionDependencies).values(
+      pairs.map((p) => ({
+        orgId,
+        uuid: sql`gen_random_uuid()`,
+        parentOptionId: p.parentOptionId,
+        childOptionId: p.childOptionId,
+      })),
+    );
+  }
+
+  /**
+   * Remove the option pairs that make `childFieldId`'s choices depend on `parentFieldId`'s (or on any parent, when none is given):
+   * a pair belongs to the child when its child option is one of the child's options.
+   */
+  async deleteOptionPairsOfChild(
+    tx: Tx,
+    orgId: number,
+    childFieldId: number,
+    parentFieldId?: number,
+  ): Promise<void> {
+    const childOptionIds = tx
+      .select({ id: fieldOptions.id })
+      .from(fieldOptions)
+      .where(and(eq(fieldOptions.orgId, orgId), eq(fieldOptions.fieldId, childFieldId)));
+    const parentOptionIds =
+      parentFieldId === undefined
+        ? undefined
+        : tx
+            .select({ id: fieldOptions.id })
+            .from(fieldOptions)
+            .where(and(eq(fieldOptions.orgId, orgId), eq(fieldOptions.fieldId, parentFieldId)));
+    await tx
+      .delete(fieldOptionDependencies)
+      .where(
+        and(
+          eq(fieldOptionDependencies.orgId, orgId),
+          inArray(fieldOptionDependencies.childOptionId, childOptionIds),
+          parentOptionIds
+            ? inArray(fieldOptionDependencies.parentOptionId, parentOptionIds)
+            : undefined,
+        ),
+      );
+  }
+
+  /**
+   * Remove every cascade link of a field: a field-level dependency that names neither an option nor a value. Returns how many
+   * went. A "show only when" rule of the same field is left alone.
+   */
+  async deleteCascadeLinks(tx: Tx, orgId: number, fieldId: number): Promise<number> {
+    const result = await tx
+      .delete(fieldDependencies)
+      .where(
+        and(
+          eq(fieldDependencies.orgId, orgId),
+          eq(fieldDependencies.fieldId, fieldId),
+          isNull(fieldDependencies.dependsOnOptionId),
+          isNull(fieldDependencies.dependsOnValue),
+        ),
+      )
+      .returning({ id: fieldDependencies.id });
+    return result.length;
   }
 
   async listOptionDependenciesByParent(

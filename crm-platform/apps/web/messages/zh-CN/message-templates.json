@@ -33,8 +33,10 @@
       "TPL_LINT_FAILED": "检查发现了 Meta 会拒绝的问题。尚未发送任何内容。请修正右侧列出的错误。",
       "TPL_META_REJECTED": "Meta 拒绝了该模板。原因如下;模板已保存为草稿,你可以修正后重新提交。",
       "TPL_NO_CONNECTION": "此模板没有可用于提交的已连接 WhatsApp 号码。请先连接号码。",
+      "TPL_HEADER_STORAGE_REQUIRED": "页眉文件需要云对象存储。请让平台管理员开启它。",
       "TPL_IN_USE": "此模板正被运行中或已计划的群发使用,无法删除。",
       "TPL_NOT_EDITABLE": "只能编辑 Meta 尚未通过或已拒绝的模板。",
+      "TPL_EDIT_LIMIT": "Meta 对已批准的模板允许每 24 小时编辑一次、每 30 天编辑十次。请稍后再试。",
       "ROW_VERSION_CONFLICT": "你在编辑时此模板已被他人更改。请刷新以查看最新版本,然后重新应用你的更改。",
       "VALIDATION_FAILED": "部分字段无效。请检查下方字段。",
       "INTERNAL": "服务器无法处理此请求。请稍后重试。"
@@ -57,12 +59,18 @@
       "moreButtons": "{count, plural, other {另有 # 个按钮}}",
       "live": "实时预览",
       "business": "Bloomly",
-      "online": "在线"
+      "online": "在线",
+      "cards": "轮播卡片",
+      "cardEmpty": "卡片 {n} 的文字",
+      "offerExpires": "即将结束",
+      "offerTextEmpty": "优惠标题"
     },
     "card": {
       "rejected": "已拒绝:{reason}",
       "view": "查看",
       "edit": "编辑",
+      "duplicate": "复制模板",
+      "duplicateNamed": "复制 {name}",
       "delete": "删除",
       "curl": "cURL：通过 API 发送此模板",
       "curlNamed": "发送 {name} 的 cURL",
@@ -117,7 +125,8 @@
         "all": "全部",
         "approved": "已批准",
         "pending": "审核中",
-        "rejected": "已拒绝"
+        "rejected": "已拒绝",
+        "draft": "草稿"
       },
       "quickStartTitle": "快速入门",
       "quickStart": "提交到 Meta 之前请阅读<link>模板指南</link>，以便将审核时间控制在 24 小时以内。",
@@ -132,6 +141,16 @@
         "name-asc": "名称 A→Z",
         "name-desc": "名称 Z→A"
       },
+      "dateRange": "日期范围",
+      "range": {
+        "all": "全部时间",
+        "7d": "7 天",
+        "30d": "30 天",
+        "90d": "90 天",
+        "custom": "自定义范围",
+        "from": "起始日期",
+        "to": "截止日期"
+      },
       "showing": "显示",
       "of": "/",
       "filteredTemplates": "个已筛选模板",
@@ -139,7 +158,8 @@
       "legend": {
         "approved": "已批准",
         "pending": "审核中",
-        "rejected": "已拒绝"
+        "rejected": "已拒绝",
+        "draft": "草稿"
       },
       "helpLabel": "帮助 - 0{n}",
       "help": {
@@ -163,7 +183,8 @@
       "confirm": "删除模板",
       "cancel": "取消",
       "done": "已删除“{name}”。",
-      "inUseHelp": "请打开使用此模板的群发,将其取消或改用其他模板,然后再删除此模板。"
+      "inUseHelp": "请打开使用此模板的群发,将其取消或改用其他模板,然后再删除此模板。",
+      "messageDraft": "删除“{name}”？它从未发送到 Meta，因此仅会在此处删除。"
     },
     "lint": {
       "title": "提交前检查",
@@ -182,7 +203,8 @@
         "body": "正文",
         "footer": "页脚",
         "buttons": "按钮",
-        "template": "模板"
+        "template": "模板",
+        "cards": "卡片"
       }
     },
     "form": {
@@ -265,7 +287,7 @@
         "uploading": "上传中",
         "keptSample": "已保存的示例将被保留。选择文件即可替换。",
         "noFile": "未选择文件",
-        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 100 MB。",
+        "limits": "图片最大 5 MB,视频最大 16 MB,PDF 最大 10 MB。",
         "replace": "替换文件",
         "choose": "选择示例文件",
         "tooBig": "此{kind}为 {size} MB。WhatsApp 最大接受 {max} MB。请选择较小的文件。",
@@ -309,14 +331,18 @@
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
-          "copy_code": "复制验证码"
+          "copy_code": "复制验证码",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "kind": {
           "quick_reply": "快速回复",
           "url": "访问网站",
           "phone": "拨打电话",
           "copy_code": "复制验证码",
-          "other": "其他"
+          "other": "其他",
+          "form": "表单",
+          "catalog": "商品目录"
         },
         "count": "{used}/{max} 个按钮",
         "limitReached": "此类按钮最多 {max} 个。",
@@ -345,8 +371,17 @@
           "codeRequired": "请输入示例验证码。",
           "quickReplyVariable": "快速回复不能包含变量。",
           "urlExampleRequired": "请为网址变量提供示例值。",
-          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。"
-        }
+          "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。",
+          "flowIdRequired": "请输入 Flow ID。",
+          "flowIdInvalid": "Flow ID 必须是数字。",
+          "screenRequired": "请输入页面 ID。",
+          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
+        },
+        "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "已发布的 WhatsApp Flow 的数字 ID，可在 Meta 的 Flows 管理器中查看。",
+        "screen": "起始页面",
+        "screenHint": "表单打开时显示的页面 ID，例如 WELCOME。"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",
@@ -360,6 +395,46 @@
         "open": "使用 AI 生成",
         "applied": "已由 AI 填写模板草稿。提交前请先检查。",
         "authHint": "验证类模板的文本是固定的，无需起草。"
+      },
+      "type": {
+        "label": "按钮类型",
+        "standard": "标准",
+        "carousel": "轮播",
+        "hint": "选择消息的结尾形式。轮播是一排卡片；限时优惠包含优惠标题（可选倒计时）以及复制代码或网站按钮。",
+        "none": "无",
+        "buttons": "复制代码、网站、快捷回复等",
+        "lto": "限时优惠",
+        "catalogue": "商品目录",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "卡片",
+        "hint": "2 到 10 张卡片。所有卡片使用同一种文件和相同的按钮。",
+        "format": "卡片显示",
+        "formatImage": "图片",
+        "formatVideo": "视频",
+        "count": "{used}/{max} 张卡片",
+        "add": "添加卡片",
+        "needTwo": "轮播至少需要 {min} 张卡片。",
+        "card": "卡片 {n}",
+        "remove": "删除卡片 {n}",
+        "noFile": "未选择文件",
+        "uploading": "上传中",
+        "text": "卡片文字",
+        "textCounter": "{used}/{max}",
+        "buttons": "按钮",
+        "buttonText": "按钮文字",
+        "buttonUrl": "网站链接",
+        "buttonPhone": "电话号码"
+      },
+      "offer": {
+        "title": "限时优惠",
+        "hint": "显示在图片或视频下方：一个标题，以及（可选的）优惠结束倒计时。",
+        "text": "优惠标题",
+        "textHint": "{used}/{max}",
+        "placeholder": "优惠即将结束！",
+        "countdown": "显示倒计时",
+        "countdownHint": "WhatsApp 会显示距优惠结束的剩余时间。"
       }
     },
     "detail": {
@@ -449,6 +524,9 @@
       },
       "refreshNow": "立即刷新",
       "editTemplate": "编辑模板",
+      "editBlockedTitle": "此模板目前无法编辑",
+      "editBlocked": "{reason, select, in_review {Meta 正在审核此模板，审核结束后才能再次编辑。} daily_limit {Meta 对已批准的模板允许每 24 小时编辑一次。{when} 之后可再次编辑。} monthly_limit {Meta 对已批准的模板允许每 30 天编辑十次。{when} 之后可再次编辑。} other {}}",
+      "duplicateTemplate": "复制模板",
       "editResubmit": "编辑并重新提交",
       "submitToMeta": "提交到 Meta",
       "wabaAccount": "WhatsApp Business 账号",
@@ -460,7 +538,6 @@
       "crumbTemplates": "模板",
       "crumbDetail": "详情",
       "notSubmittedPill": "未提交",
-      "qualityPill": "质量 · {quality}",
       "preview": {
         "title": "预览",
         "hint": "在 WhatsApp 上的显示效果"

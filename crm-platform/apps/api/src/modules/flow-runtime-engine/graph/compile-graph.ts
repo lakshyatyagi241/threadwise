@@ -95,8 +95,8 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
 const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   condition: { yes: 1, no: 2 },
   book_appointment: { booked: 1, no_slots: 2 },
-  // Human handoff (BL-398); the old single exit (`out`) is port 1 too.
-  assign: { assigned: 1, waiting: 2, unavailable: 3 },
+  // Human handoff (BL-398); the old single exit (`out`) is port 1 too. `returned` (4) is taken only by Return to bot, never by a handoff.
+  assign: { assigned: 1, waiting: 2, unavailable: 3, returned: 4 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },
   shopify: { purchased: 1, abandoned: 2 },
@@ -108,6 +108,8 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },
   sheet_check: { yes: 1, no: 2 },
+  // What happens to a sent template (the buttons are p0, p1, ... = ports 1, 2, ...): kept apart from them.
+  template: { sent: 101, delivered: 102, read: 103, replied: 104, failed: 105 },
 };
 
 const UNIT_SECONDS: Readonly<Record<string, number>> = {
@@ -213,6 +215,8 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
         savePropertyKey: str(data.savePropertyKey),
+        // Like the Buttons node: the list stays tappable after a leaf branch unless the author turned this off.
+        keepMenuOpen: data.keepMenuOpen !== false,
       };
     }
     case 'carousel': {
@@ -357,6 +361,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         longitude: flbParseCoordinate(data.longitude),
         title: str(data.title ?? data.locationName ?? data.name),
         address: str(data.address),
+        locMode: str(data.locMode),
       };
     default:
       // A node type without a compiler keeps its raw data: its executor (when it is built) reads it from here.
@@ -465,6 +470,18 @@ export function compileGraph(input: unknown): RuntimeGraph {
       .map((e) => str(e.source)),
   );
   for (const n of nodes) if (n.type === 'Template') n.props.buttonsWired = tapWired.has(n.id);
+  // The status exits of a Template node that have a branch wired: the node waits for the first of them to happen.
+  const statusWired = new Map<string, string[]>();
+  for (const e of arr(g.flowEdges).map(obj) as BuilderEdge[]) {
+    const h = str(e.sourceHandle);
+    if (!['sent', 'delivered', 'read', 'replied', 'failed'].includes(h)) continue;
+    const list = statusWired.get(str(e.source)) ?? [];
+    if (!list.includes(h)) list.push(h);
+    statusWired.set(str(e.source), list);
+  }
+  for (const n of nodes)
+    if (n.type === 'Template')
+      n.props.statusWired = n.props.statusExits === true ? (statusWired.get(n.id) ?? []) : [];
   // A button that hands the visitor to a person and has nothing wired after it gets its own Assign agent step.
   const wired = new Set(edges.map((e) => e.from));
   for (const n of [...nodes]) {

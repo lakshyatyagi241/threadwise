@@ -30,7 +30,7 @@ export class PlanStore {
   /**
    * `billing.grace_days` (default 7, 0 to 30): how long autopay keeps a lapsed paid plan or add-on active while it retries.
    * `platform_settings` is readable only under the privileged flag, so it is read here, and kept for 30 seconds because the
-   * entitlement resolver asks on a hot path (only for a workspace with a live autopay subscription).
+   * entitlement resolver asks on a hot path (every resolution: a plain add-on in its autopay grace still counts).
    */
   async graceDays(): Promise<number> {
     if (this.grace && Date.now() - this.grace.at < 30_000) {

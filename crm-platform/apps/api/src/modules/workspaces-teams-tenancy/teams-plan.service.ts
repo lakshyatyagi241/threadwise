@@ -54,9 +54,33 @@ export class TeamsPlanService {
     );
   }
 
+  /** Whether people's own working hours count (the presence dots of a team's members follow the effective status). */
+  statusAutomationEnabled(orgId: number): Promise<boolean> {
+    return this.entitlements.featureEnabled(orgId, 'agent_status_automation');
+  }
+
   /** Whether parent teams and lead/manager scope are on for the workspace (the web hook is `usePlanFeature('team_hierarchy')`). */
   hierarchyEnabled(orgId: number): Promise<boolean> {
     return this.entitlements.featureEnabled(orgId, 'team_hierarchy');
+  }
+
+  /**
+   * A team's assignment method other than Manual (round robin, least loaded) is automatic assignment, which is the `inbox_routing` feature
+   * (the "Smart routing" add-on or a plan that includes it). Choosing one without it is 422 PLAN_FEATURE_LOCKED instead of being stored and
+   * silently ignored by the handoff. Manual is always allowed, and so is keeping the method the team already stores (a workspace that
+   * lost the feature keeps its teams as they are; the handoff skips the method with the trace line `not_in_plan`).
+   */
+  async assertAssignmentMethod(
+    orgId: number,
+    next: string | undefined,
+    current: string,
+  ): Promise<void> {
+    if (next === undefined || next === 'manual' || next === current) return;
+    await this.entitlements.assertFeature(
+      orgId,
+      'inbox_routing',
+      'Round robin and least loaded are automatic assignment, which is not on your plan. Upgrade your plan, or ask for the Smart routing add-on, to use them.',
+    );
   }
 
   /**

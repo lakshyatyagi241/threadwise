@@ -11,7 +11,8 @@
       "installed": "インストール済み · マーケットプレイス",
       "manage": "アプリを管理 · マーケットプレイス",
       "requests": "リクエスト · マーケットプレイス",
-      "addons": "アドオン · マーケットプレイス"
+      "addons": "アドオン · マーケットプレイス",
+      "developer": "開発者 · マーケットプレイス"
     },
     "common": {
       "dismiss": "閉じる",
@@ -127,7 +128,8 @@
       "tabs": {
         "mini_app": "ミニアプリ",
         "integration": "連携",
-        "addon": "アドオン"
+        "addon": "アドオン",
+        "developer": "開発者"
       },
       "installed": "インストール済み",
       "installedLimit": "インストール済み（{installed} / {limit}）",
@@ -897,8 +899,8 @@
     "tools": {
       "open": "開く",
       "empty": {
-        "title": "利用できるアドオンはありません",
-        "message": "ロールとプランに含まれるアドオンがここに表示されます。"
+        "title": "利用できる開発者向けツールはありません",
+        "message": "ロールとプランに含まれる開発者向けツールがここに表示されます。"
       },
       "soon": "近日公開",
       "upgrade": "アップグレード"
@@ -919,6 +921,28 @@
       "cancelled": {
         "title": "お支払いをキャンセルしました",
         "message": "請求は発生していません。準備ができたら、いつでももう一度購読してください。"
+      }
+    },
+    "addonsTab": {
+      "intro": "プランに追加で購入する機能パックです。プランにすでに含まれているものには印が付き、料金はかかりません。",
+      "developerHint": "REST API、Webhook、その他の開発者向けツールをお探しですか？",
+      "developerLink": "開発者タブを開く"
+    },
+    "developerTab": {
+      "intro": "開発者や技術管理者向けのツール：APIキー、Webhook、公開、翻訳。ロールとプランで許可されたものだけが表示されます。"
+    },
+    "connector": {
+      "builtIn": "組み込み",
+      "status": {
+        "connected": "接続済み",
+        "notConnected": "未接続",
+        "upgrade": "アップグレード",
+        "soon": "近日公開"
+      },
+      "cta": {
+        "open": "開く",
+        "manage": "管理",
+        "connect": "接続"
       }
     }
   }

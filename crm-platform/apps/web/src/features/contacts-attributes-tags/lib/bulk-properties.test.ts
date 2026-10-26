@@ -2,11 +2,16 @@ import { describe, expect, it } from 'vitest';
 import type { FieldResponse } from '@crm/contracts';
 import {
   addableProperties,
+  bulkBuiltInValues,
   bulkCustomFields,
   bulkPropertyProblem,
   bulkPropertyProblems,
+  builtInFields,
+  changesAfter,
   isBulkEditable,
   startingChange,
+  waitingParents,
+  withBulkCascade,
   type BulkPropertyChanges,
 } from './bulk-properties';
 
@@ -136,5 +141,100 @@ describe('bulkPropertyProblem(s)', () => {
         byKey,
       ),
     ).toEqual({ city: 'empty' });
+  });
+});
+
+describe('built-in properties in a bulk update', () => {
+  const label = (k: string) => k;
+  const all = [...builtInFields(label), ...fields];
+  const byKey = new Map(all.map((x) => [x.key, x]));
+
+  it('offers first name, last name, source and the text properties in the same list', () => {
+    const keys = addableProperties(all, {}, '').map((x) => x.key);
+    expect(keys.slice(0, 7)).toEqual([
+      'first_name',
+      'last_name',
+      'middle_name',
+      'language',
+      'source',
+      'address',
+      'memo',
+    ]);
+    expect(keys).not.toContain('phone');
+    expect(keys).not.toContain('email');
+  });
+
+  it('sends names and source as request fields and the rest as reserved custom keys', () => {
+    const changes: BulkPropertyChanges = {
+      first_name: { mode: 'set', value: ' Asha ' },
+      last_name: { mode: 'clear' },
+      source: { mode: 'set', value: 'Fair' },
+      memo: { mode: 'set', value: 'VIP' },
+      city: { mode: 'set', value: 'Pune' },
+    };
+    expect(bulkBuiltInValues(changes, byKey)).toEqual({
+      firstName: 'Asha',
+      lastName: null,
+      source: 'Fair',
+    });
+    expect(bulkCustomFields(changes, byKey)).toEqual({ memo: 'VIP', city: 'Pune' });
+  });
+
+  it('refuses to clear or blank the first name', () => {
+    const first = byKey.get('first_name')!;
+    expect(bulkPropertyProblem(first, { mode: 'clear' })).toBe('required');
+    expect(bulkPropertyProblem(first, { mode: 'set', value: ' ' })).toBe('empty');
+  });
+});
+
+describe('dependent properties in a bulk update', () => {
+  const parent = f('country', 'select', {
+    id: 'p',
+    options: [
+      { id: 'o-in', value: 'in', label: 'India' },
+      { id: 'o-us', value: 'us', label: 'USA' },
+    ] as FieldResponse['options'],
+  });
+  const child = f('state', 'select', {
+    id: 'c',
+    options: [
+      { id: 'o-mh', value: 'mh', label: 'Maharashtra' },
+      { id: 'o-ca', value: 'ca', label: 'California' },
+    ] as FieldResponse['options'],
+  });
+  const list = [parent, child];
+  const deps = [
+    { id: 'd', fieldId: 'c', dependsOnFieldId: 'p', dependsOnOptionId: null, dependsOnValue: null },
+  ] as never;
+  const pairs = [
+    { childFieldId: 'c', childOptionId: 'o-mh', parentFieldId: 'p', parentOptionId: 'o-in' },
+    { childFieldId: 'c', childOptionId: 'o-ca', parentFieldId: 'p', parentOptionId: 'o-us' },
+  ] as never;
+
+  it('waits for the parent to hold a value to set', () => {
+    expect(waitingParents(child, deps, list, {}).map((p) => p.key)).toEqual(['country']);
+    expect(waitingParents(child, deps, list, { country: { mode: 'set', value: '' } })).toHaveLength(
+      1,
+    );
+    expect(
+      waitingParents(child, deps, list, { country: { mode: 'set', value: 'in' } }),
+    ).toHaveLength(0);
+    expect(waitingParents(parent, deps, list, {})).toHaveLength(0);
+  });
+
+  it('narrows the child to what the parent value allows', () => {
+    const shown = withBulkCascade(list, deps, pairs, { country: { mode: 'set', value: 'in' } });
+    expect(shown.find((x) => x.key === 'state')?.options?.map((o) => o.value)).toEqual(['mh']);
+  });
+
+  it('empties a child value the new parent value no longer allows, and drops a child with no parent row', () => {
+    const start: BulkPropertyChanges = {
+      country: { mode: 'set', value: 'in' },
+      state: { mode: 'set', value: 'mh' },
+    };
+    const moved = changesAfter(start, 'country', { mode: 'set', value: 'us' }, list, deps, pairs);
+    expect(moved.state).toEqual({ mode: 'set', value: '' });
+    const removed = changesAfter(start, 'country', null, list, deps, pairs);
+    expect(removed).toEqual({});
   });
 });

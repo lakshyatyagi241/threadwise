@@ -24,7 +24,7 @@
         "noWorkspaces": "Brak przestrzeni roboczych"
       },
       "labels": {
-        "addonPacks": "Pakiety dodatków",
+        "addonPacks": "Dodatki",
         "extensions": "Rozszerzenia",
         "trackingCode": "Kod śledzący",
         "planPricingSettings": "Ustawienia cen planów",
@@ -282,7 +282,9 @@
           "save": "Zapisz",
           "saved": "Preferencja zapisana.",
           "saveFailed": "Nie udało się zapisać preferencji."
-        }
+        },
+        "timezoneSearch": "Szukaj stref czasowych",
+        "timezoneNoMatch": "Brak pasujących stref czasowych."
       },
       "notifications": {
         "title": "Powiadomienia przestrzeni roboczej",

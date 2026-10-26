@@ -1,0 +1,48 @@
+{
+  "feature": "platform-settings-branding-storage",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-platform-settings-branding-storage-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-platform-settings-branding-storage-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-platform-settings-branding-storage-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/platform-settings-branding-storage/components/brand-assets.tsx",
+        "apps/web/src/features/platform-settings-branding-storage/components/connection-test.tsx",
+        "apps/web/src/features/platform-settings-branding-storage/components/group-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-platform-settings-branding-storage-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

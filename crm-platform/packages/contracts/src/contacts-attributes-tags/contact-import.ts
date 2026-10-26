@@ -161,19 +161,79 @@ export function detectImportColumns(headers: readonly string[]): Record<string, 
   return detected;
 }
 
-/** The sample file is built from the importer's own header names so it can never drift from them. */
+/**
+ * The sample file's built-in columns, in the importer's own header names so the sample cannot drift from them. One column per
+ * built-in field (a test holds the list to IMPORT_FIELDS); the workspace's custom properties are added by the API.
+ */
 export const IMPORT_SAMPLE_HEADERS = [
   'name',
+  'first_name',
   'last_name',
-  'country_code',
   'mobile',
+  'country_code',
   'email',
   'group',
+  'tags',
   'language',
+  'title',
+  'address',
+  'memo',
+  'status',
+  'source',
+  'timezone',
+  'marketing_consent',
+  'sms_consent',
+  'email_consent',
+  'date_of_birth',
+  'minor',
 ] as const;
 export const IMPORT_SAMPLE_ROWS: readonly (readonly string[])[] = [
-  ['Aarav Sharma', 'Sharma', '91', '9812345678', 'aarav@example.com', 'VIP, New leads', 'en'],
-  ['Priya Patel', 'Patel', '91', '9898765432', 'priya@example.com', 'Customers', 'en'],
+  [
+    'Aarav Sharma',
+    'Aarav',
+    'Sharma',
+    '9812345678',
+    '91',
+    'aarav@example.com',
+    'VIP, New leads',
+    'Trial, Referral',
+    'en',
+    'Mr',
+    '12 MG Road, Bengaluru',
+    'Asked about the annual plan',
+    'prospect',
+    'Website',
+    'Asia/Kolkata',
+    // No consent for the WhatsApp and SMS numbers, which may belong to someone: a file confirmed with this sample must not grant them.
+    // The email address is example.com, which no one owns, so its yes shows the format.
+    'no',
+    'no',
+    'yes',
+    '1990-05-14',
+    'no',
+  ],
+  [
+    'Priya Patel',
+    'Priya',
+    'Patel',
+    '9898765432',
+    '91',
+    'priya@example.com',
+    'Customers',
+    'Newsletter',
+    'en',
+    'Ms',
+    '4 Park Street, Kolkata',
+    'Renewal due in March',
+    'customer',
+    'Referral',
+    'Asia/Kolkata',
+    'no',
+    'no',
+    'yes',
+    '1988-11-02',
+    'no',
+  ],
 ];
 
 // --- consent column ----------------------------------------------------------------------
@@ -275,6 +335,13 @@ export function parseImportConsent(cell: string): ImportConsentValue {
 export const contactImportOptionsSchema = z.object({
   /** Field -> column index. Omitted: auto-detected from the header row. null: ignore that field. */
   mapping: z.record(importFieldSchema, z.number().int().min(0).nullable()).optional(),
+  /**
+   * Custom property key -> column index, the same way as `mapping`. Omitted: a column is matched to a property by its label or its key
+   * (`attr:<key>`, as the export writes it). null: ignore that property's column.
+   */
+  propertyMapping: z
+    .record(z.string().trim().min(1).max(255), z.number().int().min(0).nullable())
+    .optional(),
   /** Omitted: detected from the header row (comma, semicolon, tab, pipe). */
   delimiter: z.enum([',', ';', '\t', '|']).optional(),
   /** Stamped on every contact this file CREATES. Existing contacts keep theirs. */
@@ -315,6 +382,8 @@ export const importRowIssueSchema = z.object({
   /** 1-based line in the file, header included. */
   row: z.number().int(),
   reason: z.string(),
+  /** The header of the column that failed, when one column is to blame (`invalid_property_value`). */
+  column: z.string().optional(),
   values: z.record(z.string()).optional(),
 });
 export type ImportRowIssue = z.infer<typeof importRowIssueSchema>;
@@ -336,6 +405,8 @@ export const IMPORT_REJECT_REASONS = [
   'duplicate_in_file',
   /** The number belongs to a contact under a legal hold (BL-295): the row would overwrite it, so it is skipped. The text is neutral. */
   'legal_hold',
+  /** A custom property's column holds a value that does not fit the property's type or options. */
+  'invalid_property_value',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
@@ -355,6 +426,15 @@ const importConsentSummarySchema = z.object({
   unrecognisedSamples: z.array(z.string()),
 });
 
+/** One custom contact property and the column that would fill it (null: no column in the file). */
+export const importPropertyColumnSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  fieldType: z.string(),
+  column: z.number().int().nullable(),
+});
+export type ImportPropertyColumn = z.infer<typeof importPropertyColumnSchema>;
+
 export const contactImportPreviewSchema = z.object({
   fileName: z.string(),
   delimiter: z.string(),
@@ -362,6 +442,8 @@ export const contactImportPreviewSchema = z.object({
   detected: z.record(z.number().int()),
   /** The mapping that would be used (detected, overridden by the request). */
   mapping: z.record(z.number().int().nullable()),
+  /** Every active custom contact property the workspace has, with the column it would read. Omitted by an older server. */
+  properties: z.array(importPropertyColumnSchema).optional(),
   missingRequired: z.array(importFieldSchema),
   /** Up to 5 data rows, keyed by header. */
   sampleRows: z.array(z.record(z.string())),

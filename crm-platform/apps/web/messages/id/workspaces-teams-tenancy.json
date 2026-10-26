@@ -66,10 +66,10 @@
       "pending": "menunggu",
       "you": "Anda",
       "presence": {
-        "online": "Online",
-        "away": "Pergi",
+        "online": "Tersedia",
+        "away": "Tidak di tempat, di luar jam kerja",
         "busy": "Sibuk",
-        "offline": "Offline"
+        "offline": "Tidak di tempat"
       },
       "inactive": "Tidak aktif",
       "roleFor": "Peran {name}",
@@ -410,9 +410,16 @@
     "availability": {
       "label": "Ketersediaan",
       "available": "Tersedia",
-      "offline": "Offline",
-      "hint": "Selama Anda offline, obrolan baru tidak ditugaskan kepada Anda secara otomatis. Obrolan yang sudah Anda pegang tetap milik Anda.",
+      "offline": "Tidak di tempat",
+      "hint": "Selama Anda tidak di tempat, chat baru tidak ditugaskan kepada Anda secara otomatis. Chat yang sudah Anda miliki tetap milik Anda.",
       "failed": "Tidak dapat mengubah"
+    },
+    "myLeave": {
+      "label": "Cuti",
+      "onLeaveUntil": "Cuti hingga {date}",
+      "onLeaveOpen": "Sedang cuti",
+      "hint": "Beri tahu tim Anda bahwa Anda tidak masuk. Selama cuti, obrolan baru tidak ditugaskan kepada Anda secara otomatis.",
+      "title": "Cuti Anda"
     },
     "deactivate": {
       "eyebrow": "Anggota tim",

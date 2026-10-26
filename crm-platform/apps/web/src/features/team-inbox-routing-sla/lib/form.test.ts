@@ -3,6 +3,7 @@ import { createRoutingRuleSchema } from '@crm/contracts';
 import {
   conditionsFromForm,
   editableOf,
+  addedOf,
   emptyForm,
   formFromRule,
   moveId,
@@ -26,8 +27,30 @@ describe('splitWords', () => {
 describe('problemsOf', () => {
   const ok = () => ({ ...emptyForm(), name: 'R', keywords: 'refund', userIds: [U1] });
 
-  it('a new empty form needs a name, a condition and somebody to assign to', () => {
-    expect(problemsOf(emptyForm(), [])).toEqual(['name', 'conditions', 'targets']);
+  it('a new empty form needs a name and somebody to assign to, but no condition: it applies to every conversation', () => {
+    expect(emptyForm().onlyWhen).toBe(false);
+    expect(problemsOf(emptyForm(), [])).toEqual(['name', 'targets']);
+  });
+  it('with "Only for conversations that match" on, at least one condition is needed (H13)', () => {
+    expect(problemsOf({ ...emptyForm(), name: 'R', userIds: [U1], onlyWhen: true }, [])).toEqual([
+      'conditions',
+    ]);
+    expect(
+      problemsOf(
+        { ...emptyForm(), name: 'R', userIds: [U1], onlyWhen: true, contactKind: 'new' },
+        [],
+      ),
+    ).toEqual([]);
+  });
+  it('Everyone else can share over all agents: no list of agents is needed then', () => {
+    const f = { ...emptyForm(), name: 'E', isFallback: true, everyone: true };
+    expect(problemsOf(f, [])).toEqual([]);
+    expect(payloadFromForm(f, [], true).assign).toEqual({
+      strategy: 'round_robin',
+      userIds: [],
+      teamIds: [],
+      everyone: true,
+    });
   });
   it('a complete form has no problem', () => {
     expect(problemsOf(ok(), [])).toEqual([]);
@@ -68,9 +91,12 @@ describe('payloadFromForm', () => {
       description: 'note',
       isActive: true,
       stopOnMatch: true,
-      assign: { strategy: 'round_robin', userIds: [U1, U2], teamIds: [] },
+      assign: { strategy: 'round_robin', userIds: [U1, U2], teamIds: [], everyone: false },
+      // "Only for conversations that match" is off: the conditions are kept on the rule but it applies to every conversation
+      appliesToAll: true,
     });
     expect(payload.conditions).toEqual({
+      contactKind: 'any',
       contact: null,
       channelKinds: ['telegram'],
       keywords: { mode: 'all', words: ['Refund', 'invoice'] },
@@ -78,6 +104,27 @@ describe('payloadFromForm', () => {
       businessHours: 'outside',
     });
     expect(createRoutingRuleSchema.safeParse(payload).success).toBe(true);
+  });
+});
+
+describe('the "only when" switch (H13)', () => {
+  it('on: the rule matches by its conditions; off: it applies to every conversation and keeps them', () => {
+    const f = { ...emptyForm(), name: 'R', userIds: [U1], keywords: 'refund', onlyWhen: true };
+    expect(payloadFromForm(f, [], true).appliesToAll).toBe(false);
+    const off = payloadFromForm({ ...f, onlyWhen: false }, [], true);
+    expect(off.appliesToAll).toBe(true);
+    expect(off.conditions?.keywords).toEqual({ mode: 'any', words: ['refund'] });
+    expect(createRoutingRuleSchema.safeParse(off).success).toBe(true);
+  });
+  it('a saved rule opens with the switch and the cards it needs', () => {
+    const saved = formFromRule(rule());
+    expect(saved.onlyWhen).toBe(true);
+    expect(saved.added).toEqual(['channel', 'keywords']);
+    const every = formFromRule(rule({ appliesToAll: true }));
+    expect(every.onlyWhen).toBe(false);
+    expect(every.added).toEqual(['channel', 'keywords']);
+    const returning = rule({ conditions: { ...rule().conditions, contactKind: 'returning' } });
+    expect(addedOf(returning.conditions)).toEqual(['contactKind', 'channel', 'keywords']);
   });
 });
 

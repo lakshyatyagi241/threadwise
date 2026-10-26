@@ -29,7 +29,7 @@ records of past runs. SMS for broadcasts and one-time codes is a different produ
 | `reminder`     | `before` | 1 to 43,200                      | any other time before the start                                                                       | `reminder`           |
 | `after_visit`  | `after`  | 1 to 43,200 (2 hours by default) | after the END                                                                                         | `follow_up`          |
 | `no_show`      | `event`  | 1 (fixed)                        | when the visit is marked no-show                                                                      | `no_show`            |
-| `rebook`       | `after`  | up to 525,600 (a year)           | N days after a **completed** visit; marketing; off by default; plan feature `appointment_rebook_steps` | `rebook`             |
+| `rebook`       | `after`  | up to 525,600 (a year)           | N days after a **completed** visit; marketing; off by default; plan feature `appointment_rebook_steps` (upgrade tier, default off) | `rebook`             |
 
 At most **5 timed steps** (`before` and `after`) per booking type; the two event steps come on top (`422` otherwise). `(stepKind, kind, offsetMinutes)`
 is distinct within a type. `stepKind` may be left out of the input: it is read from the kind and the offset (1440 before = the 24 hour reminder).
@@ -119,6 +119,14 @@ was sent for. A rate is `null` when nothing was sent. Counts only; no contact, a
 
 ## Plan features (BL-428)
 
-`appointment_confirm_buttons` (Confirm / Reschedule / Cancel buttons) and `appointment_rebook_steps` (rebook steps), both `productLine: crm`, default
-**on**, listed in the plan editor with the other appointment features. They are asked when a step is switched on (a plan that lost one still saves
-everything else), when the buttons are sent and when a rebook step is delivered (`plan_feature_locked`).
+`appointment_confirm_buttons` (Confirm / Reschedule / Cancel buttons) and `appointment_rebook_steps` (rebook steps), both `productLine: crm`, listed in the
+plan editor with the other appointment features. Since 2026-10-22 both default to **off** and are the **upgrade tier** of the Appointments app; they also need
+`appointment_booking`. They are asked when a step is switched on (a plan that lost one still saves everything else; 422 `PLAN_FEATURE_LOCKED`), when a pack is applied
+(the locked parts are left out and `withheld` says so), when the buttons are sent and when a rebook step is delivered (`plan_feature_locked`). One function decides
+(`ReminderPlan`). Operator how-to, matrix and downgrade rules: [appointment-reminders-packaging.md](appointment-reminders-packaging.md).
+
+## Report additions (2026-10-22)
+
+`GET /appointment-reminder-report` also returns `buttonsIncluded`, and per step `fallbackUsed` (sent on a later channel than the first tried) and `buttons`
+`{ confirmed, rescheduled, cancelled }` (taps that did something; `null` when the plan has no buttons). The test email takes an optional `{ "to": "<address>" }`
+(default the signed-in user), at most 10 per workspace per hour (429). Each reminder of `GET /appointments/:id` also returns `buttonReplies: [{ action, at }]`.

@@ -8,6 +8,7 @@ import {
   SECRET_HEADERS,
   createFatalHandler,
   initSentry,
+  sentryOptions,
   redactHeaders,
   scrubSentryEvent,
   scrubSentrySpan,
@@ -205,6 +206,13 @@ describe('scrubSentrySpan', () => {
 
   it('copes with a span that has no attributes', () => {
     expect(scrubSentrySpan({})).toEqual({});
+  });
+});
+
+describe('sentryOptions', () => {
+  it('never adds our trace headers to requests we make to other servers', () => {
+    const o = sentryOptions('api', 'https://k@o.ingest.sentry.io/1', {});
+    expect(o.tracePropagationTargets).toEqual([]);
   });
 });
 

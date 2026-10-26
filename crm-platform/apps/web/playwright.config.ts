@@ -36,6 +36,8 @@ const cross = process.env.CROSS_BROWSER === '1';
  */
 export default defineConfig({
   testDir: './e2e',
+  // the visual suite has its own project and its own stack settings; the browser projects below must not run it
+  testIgnore: /e2e\/visual\//,
   ...(priorityMatch ? { testMatch: priorityMatch } : {}),
   outputDir: './e2e/.results',
   // The specs share one seeded operator and the API caps concurrent sessions per account, so a
@@ -43,7 +45,10 @@ export default defineConfig({
   // gets its own account.
   workers: 1,
   retries: 0,
-  reporter: [['list']],
+  reporter: process.env.PW_JSON
+    ? [['list'], ['json', { outputFile: process.env.PW_JSON }]]
+    : [['list']],
+  snapshotPathTemplate: '{testDir}/visual/__baselines__/{arg}{ext}',
   use: {
     // A visible browser by default so a run can be watched; set HEADLESS=1 for CI or a quiet run.
     headless: process.env.HEADLESS === '1',
@@ -54,6 +59,16 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: { executablePath: process.env.CHROMIUM_PATH || undefined },
+      },
+    },
+    // Visual regression (QA task 21): Chromium only, so one baseline per page and viewport. See e2e/visual/README.md.
+    {
+      name: 'visual',
+      testMatch: /e2e\/visual\/.*\.spec\.ts$/,
+      testIgnore: [],
       use: {
         ...devices['Desktop Chrome'],
         launchOptions: { executablePath: process.env.CHROMIUM_PATH || undefined },

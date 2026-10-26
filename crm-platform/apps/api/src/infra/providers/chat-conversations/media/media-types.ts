@@ -27,9 +27,11 @@ const OFFICE_OLE: Record<string, string> = {
 };
 
 function looksLikeText(b: Buffer): boolean {
-  const head = b.subarray(0, 1024);
-  if (head.includes(0)) return false;
-  return !/<\s*(html|script|svg|\?php|iframe|object|embed)/i.test(head.toString('utf8'));
+  if (b.subarray(0, 1024).includes(0)) return false;
+  // 64 KB, not 1 KB: padding must not hide markup from the check (SEC-UPLOAD-2)
+  return !/<\s*(html|script|svg|\?php|iframe|object|embed)/i.test(
+    b.subarray(0, 65536).toString('utf8'),
+  );
 }
 
 /**

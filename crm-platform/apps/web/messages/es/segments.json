@@ -196,7 +196,10 @@
       "next": "Siguiente",
       "pageOf": "Página {page, number} de {pages, number}",
       "perPage": "Segmentos por página",
-      "perPageOption": "{count, number} por página"
+      "perPageOption": "{count, number} por página",
+      "colCreatedBy": "Creado por",
+      "colCreatedAt": "Creado el",
+      "colModifiedBy": "Modificado por"
     },
     "actions": {
       "forbidden": "No tienes permiso para hacer eso.",

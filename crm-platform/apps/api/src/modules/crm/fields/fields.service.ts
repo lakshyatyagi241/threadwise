@@ -14,6 +14,7 @@ import type {
   ListFieldsQuery,
   ModuleKey,
   PageResponse,
+  ReplaceCascadeInput,
   SearchFieldOptionsQuery,
   ReorderFieldOptionsInput,
   ReorderFieldsInput,
@@ -28,7 +29,10 @@ import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { propertyPermissionKey, type PropertyAction } from '../field-metadata-permission';
-import { FieldDependenciesRepository } from './field-dependencies.repository';
+import {
+  FieldDependenciesRepository,
+  type OptionPairValues,
+} from './field-dependencies.repository';
 import { FieldOptionsRepository } from './field-options.repository';
 import {
   toFieldDependencyResponse,
@@ -513,7 +517,117 @@ export class FieldsService {
       if (!existing) throw AppError.notFound('FieldDependency', uuid);
       this.requireModulePermission(existing.moduleKey as ModuleKey, 'delete');
       await this.dependenciesRepo.deleteFieldDependency(tx, ctx.orgId, existing.id);
+      // A cascade link's option pairs mean nothing without it, so they go with it.
+      if (existing.dependsOnOptionId === null && existing.dependsOnValue === null) {
+        await this.dependenciesRepo.deleteOptionPairsOfChild(
+          tx,
+          ctx.orgId,
+          existing.fieldId,
+          existing.dependsOnFieldId,
+        );
+      }
     });
+  }
+
+  /**
+   * Make `childUuid`'s choices depend on `dependsOnFieldId`'s: a cascade. It replaces the field's whole cascade (its cascade links and
+   * every option pair that feeds its choices), so after it the given parent is the field's only cascade parent.
+   */
+  async replaceCascade(childUuid: string, input: ReplaceCascadeInput): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const child = await this.requireField(tx, ctx.orgId, childUuid);
+      this.requireModulePermission(child.moduleKey as ModuleKey, 'update');
+      const parent = await this.requireField(tx, ctx.orgId, input.dependsOnFieldId);
+      if (parent.moduleKey !== child.moduleKey) {
+        throw new AppError(
+          ERROR_CODES.VALIDATION_FAILED,
+          'A cascade can only link properties of the same module',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      const pairs = await this.resolveOptionPairs(tx, ctx.orgId, parent, child, input.optionPairs);
+
+      await this.dependenciesRepo.deleteOptionPairsOfChild(tx, ctx.orgId, child.id);
+      await this.dependenciesRepo.deleteCascadeLinks(tx, ctx.orgId, child.id);
+      if (await this.dependenciesRepo.wouldCreateCycle(tx, ctx.orgId, child.id, parent.id)) {
+        throw new AppError(
+          ERROR_CODES.DEPENDENCY_CYCLE_DETECTED,
+          `Making "${child.key}" depend on "${parent.key}" would create a cycle`,
+          HttpStatus.CONFLICT,
+        );
+      }
+      await this.dependenciesRepo.insertFieldDependency(tx, ctx.orgId, {
+        fieldId: child.id,
+        dependsOnFieldId: parent.id,
+      });
+      await this.dependenciesRepo.insertOptionPairs(tx, ctx.orgId, pairs);
+    });
+  }
+
+  /** Remove a field's cascade: its cascade links and every option pair that feeds its choices. Its "show only when" rules stay. */
+  async removeCascade(childUuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    await this.db.tx(async (tx) => {
+      const child = await this.requireField(tx, ctx.orgId, childUuid);
+      this.requireModulePermission(child.moduleKey as ModuleKey, 'delete');
+      await this.dependenciesRepo.deleteOptionPairsOfChild(tx, ctx.orgId, child.id);
+      await this.dependenciesRepo.deleteCascadeLinks(tx, ctx.orgId, child.id);
+    });
+  }
+
+  /** Every cascade option pair of one module's fields (the choices a cascade child allows under each parent choice). */
+  async listModuleOptionDependencies(
+    query: FieldUsageQuery,
+  ): Promise<FieldOptionDependencyResponse[]> {
+    const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
+    return this.db.tx(async (tx) => {
+      const rows = await this.dependenciesRepo.listOptionDependenciesByModule(
+        tx,
+        ctx.orgId,
+        query.moduleKey,
+      );
+      return rows.map(toFieldOptionDependencyResponse);
+    });
+  }
+
+  /** Checks each pair's options: both must exist and sit on the parent's and the child's field respectively. */
+  private async resolveOptionPairs(
+    tx: Parameters<FieldsRepository['findByUuid']>[0],
+    orgId: number,
+    parent: FieldRow,
+    child: FieldRow,
+    pairs: ReplaceCascadeInput['optionPairs'],
+  ): Promise<OptionPairValues[]> {
+    const uuids = [...new Set(pairs.flatMap((p) => [p.parentOptionId, p.childOptionId]))];
+    const found = await this.optionsRepo.findByUuids(tx, orgId, uuids);
+    const out = new Map<string, OptionPairValues>();
+    for (const pair of pairs) {
+      const parentOption = found.get(pair.parentOptionId);
+      if (!parentOption) throw AppError.notFound('FieldOption', pair.parentOptionId);
+      const childOption = found.get(pair.childOptionId);
+      if (!childOption) throw AppError.notFound('FieldOption', pair.childOptionId);
+      if (parentOption.fieldId !== parent.id) {
+        throw new AppError(
+          ERROR_CODES.VALIDATION_FAILED,
+          `That option is not a choice of "${parent.key}"`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      if (childOption.fieldId !== child.id) {
+        throw new AppError(
+          ERROR_CODES.VALIDATION_FAILED,
+          `That option is not a choice of "${child.key}"`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+      out.set(`${parentOption.id}:${childOption.id}`, {
+        parentOptionId: parentOption.id,
+        childOptionId: childOption.id,
+      });
+    }
+    return [...out.values()];
   }
 
   // --- field option dependencies -----------------------------------------

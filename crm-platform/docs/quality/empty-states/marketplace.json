@@ -1,0 +1,127 @@
+{
+  "feature": "marketplace",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-marketplace-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketplace/components/app-detail-page.tsx",
+        "apps/web/src/features/marketplace/components/browse-page.tsx",
+        "apps/web/src/features/marketplace/components/browse-parts.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketplace/components/browse.render.test.tsx",
+          "match": "shows the empty state with a way to clear filters and the request box"
+        },
+        {
+          "file": "apps/web/src/features/marketplace/components/manage.render.test.tsx",
+          "match": "says there are no deliveries yet, and offers Load more only when there are more"
+        },
+        {
+          "file": "apps/web/src/features/marketplace/components/requests-installed.render.test.tsx",
+          "match": "has an empty state with links into both tabs, and a loading state"
+        }
+      ]
+    },
+    {
+      "id": "EM-marketplace-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketplace/components/browse-page.tsx",
+        "apps/web/src/features/marketplace/operator/components/catalogue-page.tsx",
+        "apps/web/src/features/marketplace/operator/components/requests-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketplace/components/browse.render.test.tsx",
+          "match": "shows the empty state with a way to clear filters and the request box"
+        }
+      ]
+    },
+    {
+      "id": "EM-marketplace-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketplace/components/app-detail-page.tsx",
+        "apps/web/src/features/marketplace/components/browse-page.tsx",
+        "apps/web/src/features/marketplace/components/browse-parts.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketplace/components/browse.render.test.tsx",
+          "match": "shows a loading state before data, and no cards"
+        },
+        {
+          "file": "apps/web/src/features/marketplace/components/detail-install.render.test.tsx",
+          "match": "shows a loading state while the app loads, and the page once it is cached"
+        },
+        {
+          "file": "apps/web/src/features/marketplace/components/manage.render.test.tsx",
+          "match": "shows a loading state before the installation arrives"
+        }
+      ]
+    },
+    {
+      "id": "EM-marketplace-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketplace/api.ts",
+        "apps/web/src/features/marketplace/components/app-detail-page.tsx",
+        "apps/web/src/features/marketplace/components/install-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketplace/components/detail-install.render.test.tsx",
+          "match": "says an app with no permissions asks for none, and draws no risk callout"
+        }
+      ]
+    },
+    {
+      "id": "EM-marketplace-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/marketplace/lib/errors.ts",
+        "apps/web/src/features/marketplace/lib/pricing.ts",
+        "apps/web/src/features/marketplace/operator/components/subscription-dialogs.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/marketplace/lib/lib.test.ts",
+          "match": "applies a vote and takes it back, never below zero"
+        },
+        {
+          "file": "apps/web/src/features/marketplace/operator/lib/pricing.test.ts",
+          "match": "the contract itself flags the same fields as the form does for a price below zero or none"
+        }
+      ]
+    }
+  ]
+}

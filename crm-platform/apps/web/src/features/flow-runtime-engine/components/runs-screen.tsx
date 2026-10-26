@@ -82,7 +82,7 @@ export function RunsScreen() {
         <div className="min-w-0">
           <div className={`mb-2 ${KICKER}`}>{t('common.workspace')}</div>
           <h1 className="text-3xl font-normal leading-none tracking-tight lg:text-[44px]">
-            {t('runs.title')} <span className="italic text-brand">{t('runs.titleAccent')}</span>
+            {t('runs.title')} <span className="not-italic text-brand">{t('runs.titleAccent')}</span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('runs.intro')}</p>
         </div>

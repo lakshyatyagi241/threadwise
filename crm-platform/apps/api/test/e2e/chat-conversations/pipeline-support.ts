@@ -134,6 +134,21 @@ export const eventsOf = (c: Conn, type: string) =>
 export const joinConversation = (c: Conn, id: string) =>
   c.socket.timeout(5000).emitWithAck('room:join', { kind: 'conv', id });
 
+// --- the wallet ----------------------------------------------------------------------------------------------------------------
+
+/**
+ * Puts money in a workspace's wallet (major units of its billing currency, USD in these specs). Email carries the platform's per-mail
+ * fee, so sending one with an empty wallet is refused (422 `WALLET_EMPTY`): a spec that sends a mail through the inbox funds the
+ * workspace first. The other chat channels default to a price of 0 and need nothing.
+ */
+export async function fundWallet(p: PipelineCore, t: Tenant, amount = 100): Promise<void> {
+  await p.h.owner.query(
+    `INSERT INTO wallets (org_id, unit, balance) VALUES ($1, 'USD', $2)
+     ON CONFLICT (org_id, unit) DO UPDATE SET balance = EXCLUDED.balance`,
+    [t.orgId, amount],
+  );
+}
+
 // --- acting as a person -----------------------------------------------------------------------------------------------------
 
 /** Runs `fn` as this user of this workspace, the way a request would (the facade reads the ambient context). */

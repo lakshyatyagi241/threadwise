@@ -1,0 +1,14 @@
+{
+  "id": "inc-mvjdln1f-1",
+  "normalized_query": "select pg_sleep($1)",
+  "queryid": "-3416356442043621232",
+  "database": null,
+  "calls": 4,
+  "mean_ms": 60048.255071249994,
+  "max_ms": 60050.566684000005,
+  "first_seen": "2026-10-22T10:06:02.512Z",
+  "last_seen": "2026-10-22T10:06:04.515Z",
+  "verdict": "recurring slow statement",
+  "status": "open",
+  "ticket": "needs a code/index fix; a Claude Code routine may draft a PR from this file"
+}

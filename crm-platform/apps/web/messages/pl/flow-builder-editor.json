@@ -555,7 +555,8 @@
           "cardCount": "{count, plural, one {# karta} few {# karty} many {# kart} other {# karty}}",
           "payLink": "Link do płatności",
           "invoice": "Faktura",
-          "faqRetired": "Wycofany · wychodzi przez brak dopasowania"
+          "faqAgent": "Odpowiada z {agent}",
+          "faqNoAgent": "Wybierz agenta AI"
         },
         "overlays": {
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
@@ -746,7 +747,8 @@
           "storedIn": "Wartości zostaną zapisane we właściwości <b>{property}</b> kontaktu",
           "actions": "Akcje",
           "actionsHint": "Dodaj krok uruchamiany zaraz po tym.",
-          "actionsBlocked": "Po kroku, który kończy swoją część, nie może być kolejnego kroku."
+          "actionsBlocked": "Po kroku, który kończy swoją część, nie może być kolejnego kroku.",
+          "fromSteps": "Prowadzi tu krok {stages}"
         },
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
@@ -858,7 +860,13 @@
             "choose": "Wybierz szablon…",
             "buttons": "Przyciski",
             "variables": "Uzupełniane danymi kontaktu",
-            "variablesHint": "Każdy numer jest uzupełniany podczas wysyłania wiadomości danymi kontaktu wskazanymi tutaj. Zmienisz to w szablonie."
+            "variablesHint": "Każdy numer jest uzupełniany podczas wysyłania wiadomości danymi kontaktu wskazanymi tutaj. Zmienisz to w szablonie.",
+            "fills": "Czym jest wypełniany każdy numer",
+            "fillsHint": "Wybierz dane kontaktu lub zmienną przepływu albo wpisz własny tekst. Zostaw puste, aby użyć tego, co mówi szablon.",
+            "fillPick": "Wstaw dane…",
+            "headerMedia": "Plik nagłówka",
+            "headerMediaHint": "Obraz, wideo lub plik w nagłówku tego szablonu. Wymagany, gdy szablon nie ma własnego pliku.",
+            "headerMediaMissing": "Dodaj plik nagłówka: ten szablon go nie ma, a WhatsApp nie wyśle go bez niego."
           },
           "cta": {
             "buttonText": "Tekst przycisku",
@@ -897,7 +905,15 @@
               "phone": "Zadzwoń pod numer",
               "email": "Wyślij e-mail",
               "agent": "Porozmawiaj z człowiekiem"
-            }
+            },
+            "prev": "Poprzednia karta",
+            "next": "Następna karta",
+            "goTo": "Karta {n}",
+            "saveCopy": "Zapisz kopię",
+            "saveCopyHint": "Zapisuje to zdjęcie na naszym serwerze, aby czat każdego odwiedzającego mógł je pokazać. Zdjęcia z witryny, która nie zezwala na jego udostępnianie, nie można skopiować: prześlij je zamiast tego.",
+            "saving": "Zapisywanie…",
+            "copyFailed": "Nie udało się zapisać kopii: {message}",
+            "imageFormats": "Akceptowane formaty: JPG, JPEG lub PNG."
           },
           "condition": {
             "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
@@ -908,12 +924,16 @@
             "hint": "Odwiedzający trafia do tego zespołu z Twoją notatką. Po tym przycisku nie trzeba niczego łączyć."
           },
           "faq": {
-            "exit": "Kontynuuj w",
-            "exitHint": "Przepływ zawsze idzie dalej tutaj."
+            "exit": "Gdy nic nie pasuje",
+            "exitHint": "Dokąd idzie przepływ, gdy żaden wpis nie odpowiada.",
+            "matched": "Gdy jest odpowiedź",
+            "matchedHint": "Dokąd idzie przepływ po wysłaniu odpowiedzi."
           }
         },
         "branchAdd": "Dodaj krok dla „{title}”",
-        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania."
+        "faqEnds": "Ten krok kończy tę część: przepływ idzie dalej wyjściem Odpowiedziano lub Brak dopasowania.",
+        "flowMenu": "Opcje: {name}",
+        "renameFlow": "Zmień nazwę przepływu"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value} (nie ma w przestrzeni roboczej)",
           "templateLabel": "Zatwierdzony szablon",
           "templateHint": "Tutaj pojawiają się tylko zatwierdzone szablony z przestrzeni roboczej. <link>Utwórz nowy →</link>",
+          "statusExits": "Dodaj wyjścia statusów (Wysłano, Dostarczono, Przeczytano, Odpowiedziano, Niepowodzenie)",
+          "statusExitsHint": "Przepływ opuszcza krok pierwszym wyjściem, do którego podłączono krok: Wysłano — gdy szablon zostanie przyjęty, Dostarczono lub Przeczytano — gdy zgłosi to WhatsApp, Odpowiedziano — gdy klient odpisze, Niepowodzenie — gdy nie udało się wysłać. Przycisk dotknięty przez klienta ma własne wyjście.",
           "type": "Typ",
           "kindText": "Tekst",
           "kindImage": "Obraz",
@@ -1364,12 +1386,12 @@
           "stageHint": "Gdy szansa zostaje przeniesiona NA ten etap lejka, powiązany kontakt jest zapisywany. Etapy zarządzasz na tablicy /deals.",
           "rulesLabel": "Powiąż z regułami słów kluczowych komentarzy",
           "rulesHint": "Zaznacz reguły, które mają uruchamiać ten przepływ. Jeśli nic nie zaznaczysz, przepływ działa przy każdej regule Komentarz → DM.",
-          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi. Utwórz je w <link>/auto-reply</link> (Instagram · wyzwalacz „Komentarz → DM”), a następnie wybierz tutaj.",
+          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi, więc nie ma tu nic do wyboru.",
           "ruleFallback": "Reguła {id}",
           "ruleOff": "wył.",
           "orderPlaced": "Uruchamia się przy każdym nowym zamówieniu. Klient zamówienia zostaje dopasowany do zapisanego kontaktu i zapisany do przepływu.",
           "automatic": "Uruchamia się automatycznie — nie wymaga dodatkowej konfiguracji.",
-          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Przełącz go na stronie <link>Automatycznej odpowiedzi</link>. Każdy kontakt zapisywany jest raz.",
+          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Każdy kontakt zapisywany jest raz.",
           "outOfHours": "Uruchamia się przy każdej przychodzącej wiadomości, która przyjdzie <b>poza godzinami pracy</b> przestrzeni roboczej. Ustaw godziny pracy w ustawieniach przestrzeni roboczej. Każdy kontakt zapisywany jest raz.",
           "manualEnroll": "Kontakty będziesz zapisywać ręcznie z <link>listy /flows</link> przyciskiem <b>Zapisz</b> obok tego przepływu.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "Czekaj na płatność, a następnie kontynuuj"
         },
         "faq": {
-          "retired": "Ten krok został wycofany i niczego już nie wyszukuje. Przepływ zawsze idzie dalej przez Brak dopasowania. Aby odpowiadać na podstawie własnej wiedzy, użyj kroku asystenta AI i wybierz agenta AI."
+          "agent": "Agent AI",
+          "agentHint": "Agent, w którego bazie wiedzy szukamy. Dodaj do niego pytania i odpowiedzi w Szkoleniu AI.",
+          "query": "Szukaj",
+          "queryHint": "Czego szukać. Zwykle ostatniej wiadomości klienta.",
+          "sendAnswer": "Wyślij odpowiedź klientowi",
+          "variable": "Zapisz odpowiedź jako",
+          "variableHint": "Kolejne kroki odczytują odpowiedź pod tą nazwą, na przykład faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "Sekcje przepływu",
         "build": "Twórz",
+        "faqs": "FAQ",
         "customize": "Dostosuj",
         "saveFirst": "Najpierw zapisz przepływ.",
         "needsCustomizing": "Widżet nadal używa domyślnego wyglądu. Otwórz Dostosuj.",
@@ -1933,6 +1962,13 @@
         "deploy": "Wdróż",
         "customizeFirstWhatsapp": "Spersonalizuj przycisk WhatsApp i zapisz go raz przed publikacją.",
         "install": "Zainstaluj"
+      },
+      "faqsPanel": {
+        "intro": "FAQ to wpisy w wiedzy agenta AI. Te należą do agenta, którym ten przepływ odpowiada: dodaj tu pytania i odpowiedzi, a agent z nich skorzysta.",
+        "noAgent": "Ten przepływ nie używa jeszcze agenta AI. Dodaj krok Asystent AI lub Odpowiedź z FAQ i wybierz agenta: jego FAQ pojawią się tutaj.",
+        "agent": "Agent AI",
+        "openAgent": "Otwórz w Szkoleniu AI",
+        "unknownAgent": "Agent AI (nie znaleziono)"
       },
       "buttonIcon": {
         "label": "Ikona (opcjonalnie)",
@@ -2021,6 +2057,12 @@
           "unresolved": "Ten krótki link nie został jeszcze sprawdzony. Opuść pole lub spróbuj ponownie.",
           "resolve_failed": "Nie udało się odczytać tego linku. Sprawdź, czy otwiera się w Mapach Google, albo wpisz współrzędne."
         }
+      },
+      "flowImage": {
+        "title": "Nie załadowano obrazu",
+        "empty": "link jest pusty",
+        "notAddress": "link nie jest adresem internetowym (musi zaczynać się od https://)",
+        "failed": "nie załadowano (link może być błędny, prywatny, zablokowany lub nie być obrazem)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "Liczba",
         "alphanumeric": "Litery i cyfry",
         "date": "Data",
+        "datetime": "Data i godzina",
+        "time": "Godzina",
         "age": "Wiek",
         "date_of_birth": "Data urodzenia"
       },
@@ -2343,6 +2387,8 @@
         "number": "Podaj prawidłową liczbę",
         "alphanumeric": "Używaj tylko liter i cyfr",
         "date": "Podaj prawidłową datę ({format})",
+        "datetime": "Podaj prawidłową datę i godzinę ({format} HH:MM)",
+        "time": "Podaj prawidłową godzinę (HH:MM)",
         "age": "Podaj swój wiek jako liczbę całkowitą",
         "date_of_birth": "Podaj prawidłową datę ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "Pytanie",
           "help": "Zadaj dowolne pytanie i zapisz odpowiedź"
         },
-        "askName": {
-          "label": "Imię i nazwisko",
-          "help": "Poproś o imię i nazwisko i sprawdź je"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Poproś o adres e-mail i sprawdź go"
-        },
-        "askPhone": {
-          "label": "Numer telefonu",
-          "help": "Poproś o numer telefonu i sprawdź go"
-        },
-        "askNumber": {
-          "label": "Liczba",
-          "help": "Poproś o liczbę i sprawdź ją"
-        },
-        "askAlphanumeric": {
-          "label": "Litery i cyfry",
-          "help": "Identyfikator lub kod, bez spacji i symboli"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Poproś o datę w wybranym formacie"
-        },
         "askFile": {
           "label": "Plik lub obraz",
           "help": "Czekaj na zdjęcie, dokument, wideo lub audio"
@@ -2617,7 +2639,9 @@
         "writeCode": "Krok {stage}: napisz kod do uruchomienia.",
         "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania.",
         "chooseAiAgent": "Krok {stage}: wybierz agenta AI, który odpowiada, albo przełącz krok na ustawienia własne.",
-        "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI."
+        "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI.",
+        "templateFile": "Krok {stage}: dodaj plik nagłówka szablonu.",
+        "fileLinkInvalid": "Krok {stage}: link do pliku musi zaczynać się od https://"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
       "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
       "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych",
-      "faqRetired": "(symulacja) Odpowiedź z FAQ jest wycofana: wybierane jest „brak dopasowania”."
+      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”.",
+      "carouselNoMatch": "„{value}” nie jest żadnym z przycisków. Dotknij jednego lub wpisz jego tekst dokładnie."
     }
   }
 }

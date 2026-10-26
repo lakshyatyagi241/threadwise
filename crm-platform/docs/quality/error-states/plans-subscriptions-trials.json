@@ -1,0 +1,104 @@
+{
+  "feature": "plans-subscriptions-trials",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-plans-subscriptions-trials-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/components/plans-picker.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/components/usage-section.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/operator/analytics-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/plans-subscriptions-trials/components/states.test.tsx",
+          "match": "shows an error state with a retry when the plans fail to load"
+        }
+      ]
+    },
+    {
+      "id": "ES-plans-subscriptions-trials-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/components/cancel-renewal.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/components/plans-picker.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/operator/plan-settings-page.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/plans-subscriptions-trials/components/states.test.tsx",
+          "match": "says the person may not change the plan when the save fails with a 403"
+        }
+      ]
+    },
+    {
+      "id": "ES-plans-subscriptions-trials-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/components/cancel-renewal.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/components/plans-picker.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/components/usage-section.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/plans-subscriptions-trials/components/states.test.tsx",
+          "match": "keeps the dialog open and shows the error when the save fails, and the button works again"
+        }
+      ]
+    },
+    {
+      "id": "ES-plans-subscriptions-trials-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/operator/faqs-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-plans-subscriptions-trials-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/operator/attach-dialog.tsx",
+        "apps/web/src/features/plans-subscriptions-trials/operator/faqs-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-plans-subscriptions-trials-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/plans-subscriptions-trials/server.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

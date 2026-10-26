@@ -1,0 +1,102 @@
+{
+  "feature": "sales-docs",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-sales-docs-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/components/activity-drawer.tsx",
+        "apps/web/src/features/sales-docs/components/builder-screen.tsx",
+        "apps/web/src/features/sales-docs/components/linked-sales-docs.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-sales-docs-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/components/parts.tsx",
+        "apps/web/src/features/sales-docs/components/record-picker.tsx",
+        "apps/web/src/features/sales-docs/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-sales-docs-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/api/http.ts",
+        "apps/web/src/features/sales-docs/components/activity-drawer.tsx",
+        "apps/web/src/features/sales-docs/components/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/sales-docs/api/schemas.test.ts",
+          "match": "parses with no staff-only field and keeps what decides the buttons"
+        }
+      ]
+    },
+    {
+      "id": "ES-sales-docs-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/components/record-picker.tsx",
+        "apps/web/src/features/sales-docs/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-sales-docs-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/api/service.ts",
+        "apps/web/src/features/sales-docs/components/use-doc-actions.ts",
+        "apps/web/src/features/sales-docs/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/sales-docs/lib/totals.test.ts",
+          "match": "2 x 15.50 + 1 x 9.99 at 10% tax is 4099 + 410 = 4509 (409.9 rounds up)"
+        }
+      ]
+    },
+    {
+      "id": "ES-sales-docs-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-docs/components/doc-controller.tsx",
+        "apps/web/src/features/sales-docs/components/public-quote.tsx",
+        "apps/web/src/features/sales-docs/components/record-picker.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

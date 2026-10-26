@@ -16,7 +16,13 @@ import {
 import { canSendViaApi, templateSendCurl } from '../lib/curl';
 import { clearFlash, peekFlash } from '../lib/flash';
 import { previewOfSummary } from '../lib/preview';
-import { REJECTION_CODES, canEdit, canRefresh, isAwaitingReview } from '../lib/status-model';
+import {
+  REJECTION_CODES,
+  canDuplicate,
+  canEdit,
+  canRefresh,
+  isAwaitingReview,
+} from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { ErrorAlert } from './error-line';
 import {
@@ -128,6 +134,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   const t = useTranslations('message-templates.detail');
   const ts = useTranslations('message-templates.status');
   const tt = useTranslations('message-templates.card.type');
+  const tq = useTranslations('message-templates.quality');
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   const { toast } = useToast();
@@ -159,6 +166,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   const notSubmitted = !onMeta && (tpl.status === 'pending' || tpl.status === 'draft');
   const inReview = isAwaitingReview(tpl.status) && onMeta;
   const quality = (tpl.qualityScore ?? 'UNKNOWN').toUpperCase();
+  const qualityLabel = tq.has(quality) ? tq(quality) : tq('UNKNOWN');
   const typeLabel = tt.has(tpl.templateType) ? tt(tpl.templateType) : tpl.templateType;
   const crumb = [tpl.metaCategory ?? '', typeLabel].filter(Boolean).join(' · ').toUpperCase();
 
@@ -225,7 +233,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
     ) : null;
 
   const editHref = `/templates/${tpl.id}/edit`;
-  const editable = mayEdit && canEdit(tpl.status, tpl.templateType);
+  const editable = mayEdit && canEdit(tpl.status, tpl.templateType) && tpl.editBlock === null;
   const submitBtn = (
     <div className="flex flex-wrap items-center gap-2">
       {usable.length > 1 && (
@@ -289,7 +297,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
                   data-testid="quality-badge"
                   className="rounded-full bg-muted px-2.5 py-1 text-[11px] text-muted-foreground ring-1 ring-border"
                 >
-                  {t('qualityPill', { quality })}
+                  {qualityLabel}
                 </span>
               )}
             </div>
@@ -299,7 +307,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             <p className={cn(LABEL, 'mb-1')}>{t('facts.title')}</p>
             <dl className="divide-y divide-border">
               <Fact label={t('facts.status')}>{metaStatus || '—'}</Fact>
-              <Fact label={t('facts.quality')}>{quality}</Fact>
+              <Fact label={t('facts.quality')}>{qualityLabel}</Fact>
               <Fact label={t('facts.category')}>{tpl.metaCategory ?? '—'}</Fact>
               <Fact label={t('facts.metaId')}>
                 <span className="font-mono text-xs">{tpl.metaTemplateId ?? '—'}</span>
@@ -354,6 +362,15 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
                 {t('editTemplate')}
               </Link>
             )}
+            {mayEdit && canDuplicate(tpl.status, tpl.metaTemplateId, tpl.templateType) && (
+              <Link
+                href={`/templates/new?from=${tpl.id}`}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] hover:bg-muted"
+              >
+                <CopyIcon className="size-3.5" />
+                {t('duplicateTemplate')}
+              </Link>
+            )}
             {isApproved && (
               <Link
                 href="/campaigns/create"
@@ -399,6 +416,14 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             </div>
           </header>
 
+          {mayEdit && tpl.editBlock && (
+            <p className="mb-4 text-[13px] text-muted-foreground" data-testid="edit-blocked">
+              {t('editBlocked', {
+                reason: tpl.editBlock.reason,
+                when: tpl.editBlock.until ? stamp(tpl.editBlock.until) : '',
+              })}
+            </p>
+          )}
           {failure && <ErrorAlert className="mb-4" error={failure} />}
           {outcome?.metaError && (
             <Banner

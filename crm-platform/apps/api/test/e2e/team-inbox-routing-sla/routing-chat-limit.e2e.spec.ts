@@ -141,26 +141,26 @@ describe('routing honours the chat limit and the availability switch', () => {
     for (let i = 0; i < 3; i += 1) {
       const from = phone();
       await simInbound(p, t, ch, { from, text: `nomatch ${i}` });
-      held.push(await until(`chat ${from}`, async () => (await conversationOf(p, t, ch, from)) ?? null));
+      held.push(
+        await until(`chat ${from}`, async () => (await conversationOf(p, t, ch, from)) ?? null),
+      );
     }
     const ids = held.map((c) => Number((c as { id: number }).id));
     const give = (conv: number, user: number) =>
-      p.h.owner.query(`UPDATE conversations SET assignee_user_id = $3 WHERE org_id = $1 AND id = $2`, [
-        t.orgId,
-        conv,
-        user,
-      ]);
+      p.h.owner.query(
+        `UPDATE conversations SET assignee_user_id = $3 WHERE org_id = $1 AND id = $2`,
+        [t.orgId, conv, user],
+      );
     await give(ids[0]!, a1.userId);
     await give(ids[1]!, a2.userId);
     await give(ids[2]!, a2.userId);
 
     // Without a limit the least busy agent (a1) is chosen.
     expect(await customer(t, ch, 'lbword free')).toBe(a1.userId);
-    await p.h.owner.query(`UPDATE conversations SET status = 'resolved' WHERE org_id = $1 AND assignee_user_id = $2 AND id NOT IN ($3)`, [
-      t.orgId,
-      a1.userId,
-      ids[0],
-    ]);
+    await p.h.owner.query(
+      `UPDATE conversations SET status = 'resolved' WHERE org_id = $1 AND assignee_user_id = $2 AND id NOT IN ($3)`,
+      [t.orgId, a1.userId, ids[0]],
+    );
 
     // With a limit of 1 a1 is full, so a2 takes the chat although a2 holds more.
     await limit(a1.userId, 1);

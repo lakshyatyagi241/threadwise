@@ -2,15 +2,15 @@
   "appointments": {
     "reminders": {
       "upgrade": "Upgrade your plan",
-      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are not part of your plan.",
+      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include.",
       "timeline": {
         "label": "Reminder timeline",
         "addMenu": "Add a step",
         "addStep": "Add step",
         "count": "{count} of {max} steps with a time. The booking confirmation and the no-show message do not count.",
         "capReached": "You have reached {max} steps with a time. Remove one to add another.",
-        "rebookLocked": "Rebook messages are not part of your plan. You can set the step up, but it stays off until you upgrade.",
-        "rebookLockedStep": "This step cannot be switched on with your current plan.",
+        "rebookLocked": "Rebook messages are part of the Appointments upgrade tier, which your plan does not include. You can set the step up, but it stays off until your plan includes them.",
+        "rebookLockedStep": "Part of the Appointments upgrade tier: it cannot be switched on with your current plan.",
         "empty": "No steps yet. Add the first step, or start from a ready-made sequence.",
         "lane": {
           "booked": "When it is booked",
@@ -56,7 +56,7 @@
         "choiceHint": {
           "present": "Already added",
           "cap": "Limit reached",
-          "locked": "Plan upgrade needed to switch on",
+          "locked": "Upgrade tier: not in your plan",
           "online": "Online appointments"
         },
         "enabledOf": "Send: {step}",
@@ -136,8 +136,8 @@
         },
         "replaceOwnText": "You wrote your own text for this step. It will be replaced.",
         "planNotes": {
-          "rebook": "Your plan does not include rebook messages, so this step is saved switched off.",
-          "buttons": "Your plan does not include the reply buttons, so they are left out."
+          "rebook": "The rebook step is part of the Appointments upgrade tier, which your plan does not include, so this step is saved switched off.",
+          "buttons": "The Confirm, Reschedule and Cancel buttons are part of the Appointments upgrade tier, which your plan does not include, so they are left out."
         },
         "showMessages": "Show messages",
         "hideMessages": "Hide messages",
@@ -180,7 +180,83 @@
           "waiting": "Until Meta approves a message, that step goes out by email.",
           "metaError": "Meta refused it: {error}",
           "refresh": "Refresh status",
-          "refreshing": "Refreshing"
+          "refreshing": "Refreshing",
+          "withheldTitle": "Left out because of your plan",
+          "withheldButtons": "The Confirm, Reschedule and Cancel buttons of the {step}.",
+          "withheldRebook": "The {step}: it is saved switched off."
+        }
+      },
+      "test": {
+        "send": "Send a test email",
+        "sending": "Sending",
+        "hint": "Sends this step with sample values. Leave the address empty to send it to your own email address.",
+        "toLabel": "Send the test to",
+        "toPlaceholder": "Your own address, or type another one",
+        "toInvalid": "Enter a complete email address, or leave it empty.",
+        "wait": {
+          "unsaved": "Save your changes first: the test sends the saved step.",
+          "notSaved": "Save the reminders first: this step is new."
+        },
+        "queued": "The test email is on its way to {address}. The result also arrives in your notifications.",
+        "skipped": "Nothing was sent: your user has no email address.",
+        "noWhatsapp": "WhatsApp messages cannot be tested from here."
+      },
+      "report": {
+        "title": "Reminder report",
+        "description": "What the reminders did: how many were sent, delivered, failed or skipped, and how many went by another channel.",
+        "type": "Booking type",
+        "allTypes": "All booking types",
+        "range": "Period",
+        "ranges": {
+          "7": "Last 7 days",
+          "30": "Last 30 days",
+          "90": "Last 90 days",
+          "custom": "Choose dates"
+        },
+        "from": "From",
+        "to": "To",
+        "refresh": "Refresh",
+        "pickDates": "Choose a start and an end date to see the report.",
+        "loading": "Loading the report",
+        "empty": "No reminder was due in this period. Once reminders are sent, their results appear here.",
+        "caption": "Reminder results for {name}",
+        "col": {
+          "step": "Step",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "failed": "Failed",
+          "fallback": "Sent by another channel",
+          "skipped": "Skipped",
+          "confirmed": "Confirmed",
+          "rescheduled": "Reschedule asked",
+          "cancelled": "Cancelled",
+          "total": "Total"
+        },
+        "rates": "Of {count, plural, one {# appointment} other {# appointments}} that got a reminder: {confirmed}% confirmed, {cancelled}% cancelled, {noShow}% no-show.",
+        "why": "Why",
+        "otherReason": "Another reason",
+        "buttonsLocked": "The Confirm, Reschedule and Cancel button results belong to the Appointments upgrade tier, so they are not counted on your plan.",
+        "emailNote": "Delivered comes from WhatsApp only: email has no delivery report, so an email counts as sent. Counts only; no names, numbers or messages are shown."
+      },
+      "history": {
+        "fallback": "Sent by {channel} because the first channel could not deliver it.",
+        "delivery": {
+          "delivered": "WhatsApp reported it as delivered.",
+          "failed": "WhatsApp reported that it failed.",
+          "undelivered": "WhatsApp did not deliver it in time."
+        },
+        "tried": "Channels tried, in order",
+        "attempt": {
+          "sent": "sent",
+          "skipped": "not used",
+          "held": "waiting",
+          "failed": "failed"
+        },
+        "buttons": "Replies with the buttons",
+        "button": {
+          "confirm": "Tapped Confirm",
+          "reschedule": "Tapped Reschedule",
+          "cancel": "Tapped Cancel"
         }
       }
     }

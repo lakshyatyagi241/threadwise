@@ -15,9 +15,9 @@ Team performance shows how the team handles conversations, such as response time
 
 ## How to use it
 
-1. Open the team performance screen from the menu or the analytics area.
+1. Go to `/inbox/analytics/team`.
 2. Pick the period you want to review.
-3. Compare people or teams, and open a person to see their conversations.
+3. Read the totals and the table, which has one row for each agent who replied.
 
 ## Plan and access
 

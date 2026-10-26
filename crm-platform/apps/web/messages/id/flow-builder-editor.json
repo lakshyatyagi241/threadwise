@@ -555,7 +555,8 @@
           "cardCount": "{count} kartu",
           "payLink": "Tautan bayar",
           "invoice": "Faktur",
-          "faqRetired": "Dihentikan · keluar lewat tidak cocok"
+          "faqAgent": "Menjawab dari {agent}",
+          "faqNoAgent": "Pilih agen AI"
         },
         "overlays": {
           "startPinned": "Ini adalah titik awal (klik untuk lepas pin)",
@@ -746,7 +747,8 @@
           "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
           "actions": "Aksi",
           "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
-          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain.",
+          "fromSteps": "Dicapai dari langkah {stages}"
         },
         "editors": {
           "linkLabel": "Tujuan",
@@ -858,7 +860,13 @@
             "choose": "Pilih templat…",
             "buttons": "Tombol",
             "variables": "Diisi dari data kontak",
-            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat."
+            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat.",
+            "fills": "Apa yang mengisi setiap nomor",
+            "fillsHint": "Pilih data kontak atau variabel alur, atau ketik teks Anda sendiri. Kosongkan untuk memakai isi templat.",
+            "fillPick": "Sisipkan data…",
+            "headerMedia": "File header",
+            "headerMediaHint": "Gambar, video, atau file di header templat ini. Diperlukan jika templat tidak punya file sendiri.",
+            "headerMediaMissing": "Tambahkan file header: templat ini tidak punya, dan WhatsApp tidak akan mengirimnya tanpa itu."
           },
           "cta": {
             "buttonText": "Teks tombol",
@@ -897,7 +905,15 @@
               "phone": "Telepon sebuah nomor",
               "email": "Kirim email",
               "agent": "Bicara dengan seseorang"
-            }
+            },
+            "prev": "Kartu sebelumnya",
+            "next": "Kartu berikutnya",
+            "goTo": "Kartu {n}",
+            "saveCopy": "Simpan salinan",
+            "saveCopyHint": "Menyimpan gambar ini di server kami agar chat setiap pengunjung dapat menampilkannya. Gambar dari situs yang menolak membagikannya tidak bisa disalin: unggah saja.",
+            "saving": "Menyimpan…",
+            "copyFailed": "Tidak dapat menyimpan salinan: {message}",
+            "imageFormats": "Format yang diterima: JPG, JPEG, atau PNG."
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",
@@ -908,12 +924,16 @@
             "hint": "Pengunjung diteruskan ke tim ini dengan catatan Anda. Tidak perlu menyambungkan apa pun setelah tombol ini."
           },
           "faq": {
-            "exit": "Lanjutkan dengan",
-            "exitHint": "Alur selalu berlanjut ke sini."
+            "exit": "Jika tidak ada yang cocok",
+            "exitHint": "Ke mana alur pergi saat tidak ada entri yang menjawab.",
+            "matched": "Jika terjawab",
+            "matchedHint": "Ke mana alur pergi setelah jawaban dikirim."
           }
         },
         "branchAdd": "Tambah langkah untuk “{title}”",
-        "faqEnds": "Langkah yang dihentikan ini mengakhiri bagian ini: alur selalu berlanjut lewat jalur keluar Tidak cocok."
+        "faqEnds": "Langkah ini mengakhiri bagian ini: alur berlanjut lewat jalur Terjawab atau Tidak cocok.",
+        "flowMenu": "Opsi untuk {name}",
+        "renameFlow": "Ganti nama alur"
       },
       "formsCore": {
         "helpers": {
@@ -1247,6 +1267,8 @@
           "notInWorkspace": "{value} (tidak ada di workspace)",
           "templateLabel": "Templat yang disetujui",
           "templateHint": "Hanya templat yang disetujui dari workspace yang tampil di sini. <link>Buat yang baru →</link>",
+          "statusExits": "Tambahkan jalur status (Terkirim, Sampai, Dibaca, Dibalas, Gagal)",
+          "statusExitsHint": "Alur keluar lewat jalur pertama yang memiliki langkah terhubung: Terkirim begitu templat diterima, Sampai atau Dibaca saat WhatsApp melaporkan, Dibalas saat pelanggan menulis, Gagal jika tidak bisa dikirim. Tombol yang diketuk pelanggan keluar lewat jalurnya sendiri.",
           "type": "Jenis",
           "kindText": "Teks",
           "kindImage": "Gambar",
@@ -1364,12 +1386,12 @@
           "stageHint": "Saat deal dipindahkan KE tahap pipeline ini, kontak terkaitnya didaftarkan. Kelola tahap di papan /deals.",
           "rulesLabel": "Kaitkan ke aturan kata kunci komentar",
           "rulesHint": "Centang aturan yang harus meluncurkan alur ini. Biarkan semua tidak dicentang untuk berjalan pada aturan Komentar → DM apa pun.",
-          "rulesNone": "Belum ada aturan kata kunci Komentar → DM. Buat di <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), lalu pilih di sini.",
+          "rulesNone": "Belum ada aturan kata kunci Komentar → DM, jadi tidak ada yang bisa dipilih di sini.",
           "ruleFallback": "Aturan {id}",
           "ruleOff": "nonaktif",
           "orderPlaced": "Aktif untuk setiap pesanan baru. Pelanggan pesanan dicocokkan dengan kontak tersimpan dan didaftarkan.",
           "automatic": "Aktif otomatis — tidak perlu konfigurasi tambahan.",
-          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Ubah mode Away dari halaman <link>Balasan Otomatis</link>. Setiap kontak didaftarkan sekali.",
+          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Setiap kontak didaftarkan sekali.",
           "outOfHours": "Aktif pada pesan masuk apa pun yang datang <b>di luar Jam Kerja workspace</b> Anda. Atur Jam Kerja di pengaturan workspace. Setiap kontak didaftarkan sekali.",
           "manualEnroll": "Anda akan mendaftarkan kontak secara manual dari <link>daftar /flows</link> melalui tombol <b>Daftarkan</b> di samping alur ini.",
           "ext": {
@@ -1861,7 +1883,13 @@
           "waitUntilPaid": "Tunggu hingga dibayar, lalu lanjutkan"
         },
         "faq": {
-          "retired": "Langkah ini sudah dihentikan dan tidak mencari apa pun lagi. Alur selalu berlanjut lewat Tidak cocok. Untuk menjawab dari pengetahuan Anda sendiri, gunakan langkah asisten AI dan pilih agen AI."
+          "agent": "Agen AI",
+          "agentHint": "Agen yang basis pengetahuannya dicari. Tambahkan FAQ di Pelatihan AI.",
+          "query": "Cari",
+          "queryHint": "Apa yang dicari. Biasanya pesan terakhir pelanggan.",
+          "sendAnswer": "Kirim jawaban ke pelanggan",
+          "variable": "Simpan jawaban sebagai",
+          "variableHint": "Langkah berikutnya membaca jawaban dengan nama ini, misalnya faq.answer."
         }
       },
       "attrPicker": {
@@ -1926,6 +1954,7 @@
       "webBot": {
         "aria": "Bagian alur",
         "build": "Bangun",
+        "faqs": "FAQ",
         "customize": "Sesuaikan",
         "saveFirst": "Simpan alur terlebih dahulu.",
         "needsCustomizing": "Widget masih memakai tampilan default. Buka Sesuaikan.",
@@ -1933,6 +1962,13 @@
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Kustomisasi tombol WhatsApp Anda dan simpan sekali sebelum mempublikasikan.",
         "install": "Pasang"
+      },
+      "faqsPanel": {
+        "intro": "FAQ adalah entri dalam pengetahuan agen AI. Ini milik agen yang dipakai alur ini untuk menjawab: tambahkan pertanyaan dan jawaban di sini dan agen akan memakainya.",
+        "noAgent": "Alur ini belum memakai agen AI. Tambahkan langkah Asisten AI atau Jawab dari FAQ dan pilih agen: FAQ-nya muncul di sini.",
+        "agent": "Agen AI",
+        "openAgent": "Buka di Pelatihan AI",
+        "unknownAgent": "Agen AI (tidak ditemukan)"
       },
       "buttonIcon": {
         "label": "Ikon (opsional)",
@@ -2021,6 +2057,12 @@
           "unresolved": "Tautan pendek ini belum diperiksa. Keluar dari kolom atau coba lagi.",
           "resolve_failed": "Tautan ini tidak dapat dibaca. Pastikan tautan terbuka di Google Maps, atau masukkan koordinat."
         }
+      },
+      "flowImage": {
+        "title": "Gambar tidak dimuat",
+        "empty": "tautan kosong",
+        "notAddress": "tautan bukan alamat web (harus diawali https://)",
+        "failed": "tidak dapat dimuat (tautan mungkin salah, privat, diblokir, atau bukan gambar)"
       }
     },
     "contracts": {
@@ -2332,6 +2374,8 @@
         "number": "Angka",
         "alphanumeric": "Huruf dan angka",
         "date": "Tanggal",
+        "datetime": "Tanggal dan waktu",
+        "time": "Waktu",
         "age": "Usia",
         "date_of_birth": "Tanggal lahir"
       },
@@ -2343,6 +2387,8 @@
         "number": "Masukkan angka yang valid",
         "alphanumeric": "Gunakan huruf dan angka saja",
         "date": "Masukkan tanggal yang valid ({format})",
+        "datetime": "Masukkan tanggal dan waktu yang valid ({format} HH:MM)",
+        "time": "Masukkan waktu yang valid (HH:MM)",
         "age": "Masukkan usia Anda sebagai bilangan bulat",
         "date_of_birth": "Masukkan tanggal yang valid ({format})"
       },
@@ -2502,30 +2548,6 @@
           "label": "Pertanyaan",
           "help": "Tanyakan apa saja dan simpan jawabannya"
         },
-        "askName": {
-          "label": "Nama",
-          "help": "Minta nama dan periksa"
-        },
-        "askEmail": {
-          "label": "Email",
-          "help": "Minta alamat email dan periksa"
-        },
-        "askPhone": {
-          "label": "Nomor telepon",
-          "help": "Minta nomor telepon dan periksa"
-        },
-        "askNumber": {
-          "label": "Angka",
-          "help": "Minta angka dan periksa"
-        },
-        "askAlphanumeric": {
-          "label": "Huruf dan angka",
-          "help": "ID atau kode, tanpa spasi atau simbol"
-        },
-        "askDate": {
-          "label": "Tanggal",
-          "help": "Minta tanggal dengan format yang Anda pilih"
-        },
         "askFile": {
           "label": "File atau gambar",
           "help": "Tunggu foto, dokumen, video, atau audio"
@@ -2617,7 +2639,9 @@
         "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
         "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
         "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
-        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI."
+        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI.",
+        "templateFile": "Langkah {stage}: tambahkan file header templat.",
+        "fileLinkInvalid": "Langkah {stage}: tautan file harus diawali https://"
       }
     },
     "waboImport": {
@@ -2731,7 +2755,8 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
-      "faqRetired": "(simulasi) Jawab dari FAQ sudah dihentikan: mengambil \"tidak cocok\"."
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\".",
+      "carouselNoMatch": "“{value}” bukan salah satu tombol. Ketuk salah satu, atau ketik teksnya persis."
     }
   }
 }

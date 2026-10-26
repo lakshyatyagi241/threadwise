@@ -1,0 +1,59 @@
+{
+  "feature": "dashboards-analytics-charts",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-dashboards-analytics-charts-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dashboards-analytics-charts/components/admin-analytics-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/admin-overview-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/analytics-panels.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-dashboards-analytics-charts-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dashboards-analytics-charts/components/admin-analytics-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/admin-overview-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/analytics-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-dashboards-analytics-charts-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/dashboards-analytics-charts/components/admin-analytics-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/analytics-screen.tsx",
+        "apps/web/src/features/dashboards-analytics-charts/components/charts.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/dashboards-analytics-charts/components/funnel.test.tsx",
+          "match": "a drop uses the warning tone and zero is neutral"
+        },
+        {
+          "file": "apps/web/src/features/dashboards-analytics-charts/lib/funnel-model.test.ts",
+          "match": "is all zero with nobody messaged, and caps replied at 100"
+        }
+      ]
+    }
+  ]
+}

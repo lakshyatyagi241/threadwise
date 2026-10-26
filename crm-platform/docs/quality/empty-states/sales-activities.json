@@ -1,0 +1,47 @@
+{
+  "feature": "sales-activities",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-sales-activities-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-activities/components/option-list.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-sales-activities-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-activities/components/activity-drawer.tsx",
+        "apps/web/src/features/sales-activities/components/create-activity-dialog.tsx",
+        "apps/web/src/features/sales-activities/components/meeting-outcome.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-sales-activities-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/sales-activities/components/activity-drawer.tsx",
+        "apps/web/src/features/sales-activities/components/task-outcomes-list.tsx",
+        "apps/web/src/features/sales-activities/settings.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

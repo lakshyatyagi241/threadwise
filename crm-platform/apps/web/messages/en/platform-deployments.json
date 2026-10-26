@@ -91,6 +91,7 @@
       "empty": "No release has been recorded yet. Releases appear here from the next deploy on.",
       "cols": {
         "tag": "Tag",
+        "changes": "Changes",
         "state": "State",
         "step": "Step",
         "started": "Started",
@@ -104,7 +105,8 @@
         "ok": "Live",
         "failed": "Failed",
         "rolled_back": "Rolled back"
-      }
+      },
+      "by": "by {author}"
     }
   }
 }

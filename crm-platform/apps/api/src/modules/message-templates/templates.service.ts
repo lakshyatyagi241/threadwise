@@ -19,7 +19,9 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage } from '../../common/pagination/cursor';
+import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
+import { createdWindow } from '../campaigns';
 import {
   WABA_TEMPLATES,
   type RemoteTemplate,
@@ -37,7 +39,8 @@ import {
   type ResolvedWabaConnection,
 } from '../whatsapp-cloud-api-waba';
 import type { FlowTemplate } from './flow-template';
-import { describeTemplateFailure, providerProblem } from './template-errors';
+import { metaEditBlockOf, metaEditLogAfter, type MetaEditBlock } from './meta-edit-rules';
+import { describeTemplateFailure, uploadProblem } from './template-errors';
 import {
   detailWithMedia,
   headerPreviewUrl,
@@ -55,7 +58,7 @@ import {
 import type { LintIssue } from './template-linter';
 import { buildMetaTemplate, normalizeTemplateName } from './template-payload';
 import { columnsOfState, sameLanguage, statePatchFrom, type CurrentState } from './template-remote';
-import { draftOf, lintOf, statusOf, toDetail, toSummary } from './templates.mapper';
+import { draftOf, lintOf, statusOf, storedCardsOf, toDetail, toSummary } from './templates.mapper';
 import {
   TemplatesRepository,
   encodeNameCursor,
@@ -65,9 +68,9 @@ import {
 
 const MODULE = 'wa_templates';
 /** Statuses a template can still be edited in (TW-TPL-018, and Geta's "locked once approved"). */
-/** An approved or paused template is edited in place on Meta (Meta's own edit endpoint), as Reference does; the rest are replaced. */
+/** An approved, paused or rejected template Meta holds is edited in place on Meta (its edit endpoint); the rest are replaced. */
 const EDITABLE = new Set(['pending', 'rejected', 'draft', 'approved', 'paused']);
-const IN_PLACE = new Set(['approved', 'paused']);
+const IN_PLACE = new Set(['approved', 'paused', 'rejected']);
 
 /** Header example files Meta takes, and the size it allows for each (TW-TPL-009: 5 MB image, 16 MB video, 100 MB document). */
 const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxBytes: number }> = {
@@ -76,11 +79,25 @@ const MEDIA_TYPES: Record<string, { kind: 'image' | 'media' | 'document'; maxByt
   png: { kind: 'image', maxBytes: 5 * 1024 * 1024 },
   mp4: { kind: 'media', maxBytes: 16 * 1024 * 1024 },
   '3gp': { kind: 'media', maxBytes: 16 * 1024 * 1024 },
-  pdf: { kind: 'document', maxBytes: 100 * 1024 * 1024 },
+  pdf: { kind: 'document', maxBytes: 10 * 1024 * 1024 },
 };
-export const MEDIA_UPLOAD_MAX_BYTES = 100 * 1024 * 1024;
+export const MEDIA_UPLOAD_MAX_BYTES = 16 * 1024 * 1024;
 
 const inPlace = (r: TemplateRow): boolean => Boolean(r.metaTemplateId) && IN_PLACE.has(statusOf(r));
+
+/** The refusal for an edit Meta would not take now: the template is under review, or past its edit limit. */
+const editBlocked = (block: MetaEditBlock): AppError =>
+  block.reason === 'in_review'
+    ? new AppError(
+        ERROR_CODES.TPL_NOT_EDITABLE,
+        'Meta is reviewing this template. It can be edited again once the review ends.',
+        HttpStatus.CONFLICT,
+      )
+    : new AppError(
+        ERROR_CODES.TPL_EDIT_LIMIT,
+        `Meta allows an approved template one edit in 24 hours and ten in 30 days. It can be edited again after ${block.until.toISOString()}.`,
+        HttpStatus.CONFLICT,
+      );
 
 const toIssue = (i: LintIssue): TplLintIssue => i;
 
@@ -112,8 +129,9 @@ export class TemplatesService {
 
   async list(query: ListTemplatesQuery): Promise<ListTemplatesResponse> {
     const { orgId } = RequestContextStore.require();
-    const rows = await this.db.tx((tx) =>
-      this.repo.list(tx, orgId, {
+    const rows = await this.db.tx(async (tx) => {
+      const window = await this.createdWindowOf(tx, orgId, query);
+      return this.repo.list(tx, orgId, {
         limit: query.limit,
         cursor: query.cursor,
         status: query.status,
@@ -122,8 +140,10 @@ export class TemplatesService {
         category: query.category,
         connectionUuid: query.connectionId,
         q: query.q,
-      }),
-    );
+        createdFrom: window.from,
+        createdTo: window.to,
+      });
+    });
     const { items, page } = buildPage(rows, query.limit);
     const byName = query.sort === 'name-asc' || query.sort === 'name-desc';
     const last = items[items.length - 1];
@@ -143,15 +163,34 @@ export class TemplatesService {
   /** The numbers on the library's tabs and "Showing N of M" (one read, no totals on the list itself). */
   async counts(query: TemplateCountsQuery): Promise<TemplateCounts> {
     const { orgId } = RequestContextStore.require();
-    return this.db.tx((tx) =>
-      this.repo.counts(tx, orgId, {
+    return this.db.tx(async (tx) => {
+      const window = await this.createdWindowOf(tx, orgId, query);
+      return this.repo.counts(tx, orgId, {
         status: query.status,
         statusGroup: query.statusGroup,
         category: query.category,
         connectionUuid: query.connectionId,
         q: query.q,
-      }),
-    );
+        createdFrom: window.from,
+        createdTo: window.to,
+      });
+    });
+  }
+
+  /** The date filter's window in the workspace's own days (a preset counts back from now). Only a day range reads the zone. */
+  private async createdWindowOf(
+    tx: Tx,
+    orgId: number,
+    query: Pick<ListTemplatesQuery, 'range' | 'from' | 'to'>,
+  ): Promise<{ from: Date | null; to: Date | null }> {
+    if (query.range === 'all') return { from: null, to: null };
+    const now = Date.now();
+    const { timezone } = await loadWorkspaceCalendar(tx, orgId, new Date(now));
+    const w = createdWindow(query, now, timezone);
+    return {
+      from: w.from === null ? null : new Date(w.from),
+      to: w.to === null ? null : new Date(w.to),
+    };
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
@@ -184,6 +223,8 @@ export class TemplatesService {
     });
     if (!row) return null;
     const d = toDetail(row);
+    // A carousel's cards are sent with a link to each stored file (fresh, an hour is long enough for the send that follows).
+    const cards = await this.cardsForFlow(row);
     return {
       id: row.id,
       uuid: row.uuid,
@@ -200,7 +241,29 @@ export class TemplatesService {
       attachmentType: row.attachmentType,
       headerMediaUrl: /^https?:\/\//i.test(row.headerSampleUrl ?? '') ? row.headerSampleUrl : null,
       headerLocation: row.headerLocation,
+      ...(cards.length > 0 ? { cards } : {}),
     };
+  }
+
+  private async cardsForFlow(row: TemplateRow): Promise<NonNullable<FlowTemplate['cards']>> {
+    const stored = storedCardsOf(row);
+    if (row.templateType !== 'carousel' || stored.length === 0) return [];
+    const link = await this.storage.linker(MEDIA_PREVIEW_TTL_S);
+    const out: NonNullable<FlowTemplate['cards']> = [];
+    for (const c of stored) {
+      const image = c.image
+        ? /^https?:\/\//i.test(c.image)
+          ? c.image
+          : ((await link(c.image)) ?? '')
+        : '';
+      out.push({
+        image,
+        format: c.format === 'video' ? 'video' : 'image',
+        body: c.body,
+        buttons: c.buttons ?? [],
+      });
+    }
+    return out;
   }
 
   /** Instant feedback for the form (TW-TPL-023): the same preparation and rules as a save, nothing stored, nothing sent. */
@@ -228,6 +291,7 @@ export class TemplatesService {
     const ctx = RequestContextStore.require();
     const prepared = prepareTemplate(input);
     this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
+    for (const c of prepared.cards) this.assertOwnMedia(ctx.orgId, c.image ?? null);
     const issues = lintPrepared(prepared, Boolean(prepared.headerHandle), input.name);
     if (input.submit) {
       this.requireSubmitRight();
@@ -260,6 +324,8 @@ export class TemplatesService {
         headerSampleUrl: prepared.headerSampleUrl,
         headerMediaKey: prepared.headerMediaKey,
         headerLocation: prepared.headerLocation,
+        carouselData: prepared.cards.length > 0 ? prepared.cards : null,
+        limitedOffer: prepared.limitedOffer,
         parameterFormat: prepared.parameterFormat,
         status: input.submit ? 'pending' : 'draft',
         providerConfigId: target.id,
@@ -292,8 +358,9 @@ export class TemplatesService {
     if (input.submit) this.requireSubmitRight();
     const prepared = prepareTemplate(input);
     this.assertOwnMedia(ctx.orgId, prepared.headerMediaKey);
+    for (const c of prepared.cards) this.assertOwnMedia(ctx.orgId, c.image ?? null);
 
-    const { row, issues, edit, replacedKey } = await this.db.tx(async (tx) => {
+    const { row, issues, edit, replacedKey, droppedCardKeys } = await this.db.tx(async (tx) => {
       const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
       if (!current) throw this.notFound();
       if (!EDITABLE.has(statusOf(current)) || !BUILDABLE_TYPES.has(current.templateType))
@@ -302,6 +369,9 @@ export class TemplatesService {
           'Only a template that is a draft, in review, rejected, approved or paused can be edited. Copy it into a new template instead.',
           HttpStatus.CONFLICT,
         );
+      // Meta refuses an edit of a template under review, or past an approved template's edit limit.
+      const block = metaEditBlockOf(current, new Date());
+      if (block) throw editBlocked(block);
       if (current.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Template');
       if (current.providerConfigId === null)
         throw new AppError(
@@ -324,8 +394,20 @@ export class TemplatesService {
       const sameMedia = prepared.attachmentType === (current.attachmentType ?? null);
       const handle = prepared.headerHandle ?? (sameMedia ? current.attachmentFile : null);
       const mediaKey = prepared.headerMediaKey ?? (sameMedia ? current.headerMediaKey : null);
+      // A card whose file did not change keeps the handle and the sample already stored for it.
+      const storedCards = storedCardsOf(current);
+      const cards = prepared.cards.map((c, i) => {
+        const old = storedCards[i];
+        const same = Boolean(old && c.image && old.image === c.image);
+        return {
+          ...c,
+          headerHandle: c.headerHandle ?? (same ? (old!.headerHandle ?? null) : null),
+          headerSampleUrl: c.headerSampleUrl ?? (same ? (old!.headerSampleUrl ?? null) : null),
+        };
+      });
       const effective: PreparedTemplate = {
         ...prepared,
+        cards,
         headerHandle: prepared.attachmentType ? handle : null,
         headerMediaKey: prepared.attachmentType ? mediaKey : null,
         headerSampleUrl: prepared.headerSampleUrl ?? (sameMedia ? current.headerSampleUrl : null),
@@ -366,6 +448,8 @@ export class TemplatesService {
           headerSampleUrl: effective.headerSampleUrl,
           headerMediaKey: effective.headerMediaKey,
           headerLocation: effective.headerLocation,
+          carouselData: effective.cards.length > 0 ? effective.cards : null,
+          limitedOffer: effective.limitedOffer,
           parameterFormat: effective.parameterFormat,
           // An in-place edit keeps its live status until Meta takes the edit.
           ...(input.submit && !inPlace(current) ? { status: 'pending' } : {}),
@@ -389,9 +473,21 @@ export class TemplatesService {
         current.headerMediaKey && current.headerMediaKey !== saved.headerMediaKey
           ? current.headerMediaKey
           : null;
-      return { row: saved, issues: found, edit: inPlace(current), replacedKey: replaced };
+      // A card file that is no longer used is released like a replaced header.
+      const kept = new Set(effective.cards.map((c) => c.image));
+      const dropped = storedCards
+        .map((c) => c.image)
+        .filter((k): k is string => Boolean(k) && !/^https?:\/\//i.test(k!) && !kept.has(k!));
+      return {
+        row: saved,
+        issues: found,
+        edit: inPlace(current),
+        replacedKey: replaced,
+        droppedCardKeys: dropped,
+      };
     });
     if (replacedKey) await this.releaseHeaderCopy(ctx.orgId, replacedKey);
+    for (const key of droppedCardKeys) await this.releaseHeaderCopy(ctx.orgId, key);
 
     const target = input.submit ? await this.connection({ id: row.providerConfigId! }) : null;
     if (target) this.requireUsable(target);
@@ -503,7 +599,7 @@ export class TemplatesService {
         'Meta takes a JPG or PNG image, an MP4 or 3GP video, or a PDF as the header example',
         [{ path: 'file', message: 'File type not supported.' }],
       );
-    const checked = this.uploads.validate({
+    const checked = await this.uploads.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: [rule.kind],
@@ -516,8 +612,10 @@ export class TemplatesService {
     const key = `${templateMediaFolder(orgId)}${checked.storedName}`;
     const stored = await this.storage.put(key, file.buffer, checked.mime);
     if (!stored)
-      throw AppError.validation(
+      throw new AppError(
+        ERROR_CODES.TPL_HEADER_STORAGE_REQUIRED,
         'Header files for templates need cloud object storage: ask the platform admin to turn it on',
+        HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'file', message: 'Storage is local.' }],
       );
     let handle: string;
@@ -529,7 +627,7 @@ export class TemplatesService {
       });
     } catch (e) {
       await this.releaseHeaderCopy(orgId, key);
-      throw providerProblem('Meta did not accept the file', e);
+      throw uploadProblem('Meta did not accept the file', e);
     }
     return {
       handle,
@@ -729,6 +827,7 @@ export class TemplatesService {
           submittedAt: now,
           lastSyncedAt: now,
           rejectionReason: null,
+          metaEditLog: metaEditLogAfter(row.metaEditLog, now),
         })) ?? row;
       await this.audit.record(tx, {
         module: MODULE,

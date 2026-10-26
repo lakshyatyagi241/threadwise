@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Müsait",
+        "away": "Uzakta",
+        "onLeaveUntil": "{date} tarihine kadar izinde",
+        "onLeaveOpen": "İzinde",
+        "awayHours": "Çalışma saatleri dışında uzakta",
+        "label": "Durumunuz"
+      },
+      "menu": {
+        "title": "Durum menüsü",
+        "update": "Durumu güncelle",
+        "setAway": "Uzakta olarak ayarla",
+        "setAvailable": "Müsait olarak ayarla",
+        "failed": "Durumunuz değiştirilemedi.",
+        "automate": "Durumu otomatikleştir",
+        "manage": "Çalışma saatlerini ve ofis dışı durumunu yönet",
+        "workingHours": "Çalışma saatleri",
+        "timeOff": "İzin",
+        "outsideNotice": "Çalışma saatleri dışında",
+        "locked": "Durum çubuğu daha üst bir pakete dahildir. Hesap menünüzdeki Müsait / Uzakta anahtarı çalışmaya devam eder."
+      },
+      "hours": {
+        "title": "Çalışma saatleriniz",
+        "titleFor": "{name} için çalışma saatleri",
+        "lead": "Ne zaman müsait olduğunuzu seçin. Bu saatlerin dışında durumunuz otomatik olarak Uzakta olur.",
+        "leadOther": "Bu kişinin ne zaman müsait olduğunu seçin. Bu saatlerin dışında durumu otomatik olarak Uzakta olur.",
+        "locked": "Çalışma saatlerine göre otomatik durum daha üst bir pakete dahildir.",
+        "viewOnly": "Bu saatleri görebilirsiniz ama değiştiremezsiniz.",
+        "automate": "Durumumu otomatikleştir",
+        "automateHint": "Bu saatlerin dışında Uzakta, içinde Müsait. Elle ayarladığınız durum, saatlerin bir sonraki değişimine kadar sürer.",
+        "emptyWarning": "Hiçbir gün açık değil, bu yüzden her zaman Müsait görünürsünüz. En az bir günü açın.",
+        "timezone": "Saat dilimi",
+        "timezoneHint": "Çalışma alanınızın saat diliminden ({zone}) başlar.",
+        "useWorkspaceZone": "Çalışma alanının saat dilimini kullan"
+      },
+      "members": {
+        "hoursAction": "Çalışma saatleri"
+      }
+    }
+  }
+}

@@ -12,6 +12,8 @@ export interface FlowRow {
   name: string;
   category: string | null;
   flowType: string;
+  /** 'simple' or 'advanced': the builder the flow was made in. */
+  builder: string;
   triggerKind: string;
   triggerValue: number | null;
   triggerKeywords: string | null;
@@ -53,6 +55,7 @@ const toRow = (r: Raw): FlowRow => ({
   name: r.flow_name as string,
   category: (r.category as string | null) ?? null,
   flowType: r.flow_type as string,
+  builder: (r.builder as string | undefined) === 'advanced' ? 'advanced' : 'simple',
   triggerKind: r.trigger_kind as string,
   triggerValue:
     r.trigger_value === null || r.trigger_value === undefined ? null : Number(r.trigger_value),
@@ -84,7 +87,7 @@ const toRow = (r: Raw): FlowRow => ({
 });
 
 const COLUMNS = sql`
-  f.id, f.uuid, f.user_id, f.flow_name, f.category, f.flow_type, f.trigger_kind, f.trigger_value, f.trigger_keywords,
+  f.id, f.uuid, f.user_id, f.flow_name, f.category, f.flow_type, f.builder, f.trigger_kind, f.trigger_value, f.trigger_keywords,
   f.trigger_device_id, f.trigger_channel_id, f.provider, f.is_published, f.is_active, f.published_at, f.created_at, f.updated_at,
   to_char(f.updated_at at time zone 'UTC', ${sql.raw(ISO)}) AS updated_at_iso, f.row_version,
   coalesce(jsonb_array_length(CASE WHEN jsonb_typeof(f.flow_data->'flowNodes') = 'array' THEN f.flow_data->'flowNodes' END), 0) AS node_count,
@@ -132,6 +135,8 @@ export interface NewFlow {
   graph: FlowGraph;
   category: string | null;
   flowType: string;
+  /** The builder the flow is made in; a flow made anywhere but the Advanced canvas is 'simple'. */
+  builder?: string;
   triggerKind: string;
   triggerValue: number | null;
   triggerKeywords: string | null;
@@ -150,6 +155,8 @@ export interface FlowUpdate {
   /** Replaces the category only when non-empty (a category cannot be cleared through save: Reference rule). */
   category: string | null;
   flowType: string;
+  /** Left out, the flow keeps the builder it was made in. */
+  builder?: string | null;
   triggerKind: string;
   triggerValue: number | null;
   triggerKeywords: string | null;
@@ -260,9 +267,9 @@ export class FlowsRepository {
 
   async insert(tx: Tx, orgId: number, f: NewFlow): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO flows (org_id, user_id, flow_name, flow_data, category, flow_type, trigger_kind, trigger_value,
+      INSERT INTO flows (org_id, user_id, flow_name, flow_data, category, flow_type, builder, trigger_kind, trigger_value,
         trigger_keywords, trigger_device_id, trigger_channel_id, trigger_config, provider, is_published, is_active)
-      VALUES (${orgId}, ${f.userId}, ${f.name}, ${JSON.stringify(f.graph)}::jsonb, ${f.category}, ${f.flowType},
+      VALUES (${orgId}, ${f.userId}, ${f.name}, ${JSON.stringify(f.graph)}::jsonb, ${f.category}, ${f.flowType}, ${f.builder ?? 'simple'},
         ${f.triggerKind}, ${f.triggerValue}, ${f.triggerKeywords}, ${f.triggerDeviceId}, ${f.triggerChannelId},
         ${f.triggerConfig == null ? null : JSON.stringify(f.triggerConfig)}::jsonb, coalesce(${f.provider}, 'baileys'), false, ${f.isActive ?? true})
       RETURNING id
@@ -281,10 +288,9 @@ export class FlowsRepository {
     const cfg = f.triggerConfig == null ? null : JSON.stringify(f.triggerConfig);
     const res = await tx.execute(sql`
       UPDATE flows SET flow_name = ${f.name}, flow_data = ${JSON.stringify(f.graph)}::jsonb,
-        category = coalesce(${f.category}, category), flow_type = ${f.flowType}, trigger_kind = ${f.triggerKind},
+        category = coalesce(${f.category}, category), flow_type = ${f.flowType}, builder = coalesce(${f.builder ?? null}, builder), trigger_kind = ${f.triggerKind},
         trigger_value = ${f.triggerValue}, trigger_keywords = ${f.triggerKeywords},
         trigger_device_id = ${f.triggerDeviceId}, trigger_channel_id = ${f.triggerChannelId}, provider = coalesce(${f.provider}, provider),
-        trigger_last_occurrence = CASE WHEN trigger_config IS NOT DISTINCT FROM ${cfg}::jsonb THEN trigger_last_occurrence ELSE NULL END,
         trigger_config = ${cfg}::jsonb
       WHERE org_id = ${orgId} AND id = ${id} AND row_version = ${expectedVersion}
       RETURNING id
@@ -347,11 +353,23 @@ export class FlowsRepository {
     return res.rows.length > 0;
   }
 
+  /**
+   * Publish keeps a copy of the graph and of the trigger settings and sender the runtime then reads (2028 and 2029 migrations). A schedule
+   * whose settings changed restarts its bookmark here, so the new settings fire from now; the same settings published again keep it, so
+   * an occurrence that already ran does not run twice. Unpublish keeps the trigger copy: it is only read while the flow is published.
+   */
   async setPublished(tx: Tx, orgId: number, id: number, published: boolean): Promise<void> {
     await tx.execute(
       published
-        ? sql`UPDATE flows SET is_published = true, published_at = now() WHERE org_id = ${orgId} AND id = ${id}`
-        : sql`UPDATE flows SET is_published = false, published_at = NULL WHERE org_id = ${orgId} AND id = ${id}`,
+        ? sql`UPDATE flows SET is_published = true, published_at = now(),
+            trigger_last_occurrence = CASE WHEN published_trigger_config IS NOT DISTINCT FROM trigger_config THEN trigger_last_occurrence ELSE NULL END,
+            published_flow_data = flow_data,
+            published_trigger_kind = trigger_kind, published_trigger_value = trigger_value,
+            published_trigger_keywords = trigger_keywords, published_trigger_config = trigger_config,
+            published_trigger_device_id = trigger_device_id, published_trigger_channel_id = trigger_channel_id,
+            published_provider = provider
+          WHERE org_id = ${orgId} AND id = ${id}`
+        : sql`UPDATE flows SET is_published = false, published_at = NULL, published_flow_data = NULL WHERE org_id = ${orgId} AND id = ${id}`,
     );
   }
 

@@ -77,7 +77,7 @@ export function LanguagesPage() {
         eyebrow={t('kicker')}
         title={
           <>
-            {t('titleLead')} <span className="italic text-primary">{t('titleEm')}</span>
+            {t('titleLead')} <span className="not-italic text-primary">{t('titleEm')}</span>
           </>
         }
         description={t('description')}

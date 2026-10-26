@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import { createDbClient, runTransaction, type DbClient, type DbClientPair } from '@crm/db';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { HealthDb } from '../../../src/infra/db/side-pools';
 import { RedisModule } from '../../../src/infra/redis/redis.module';
 import {
   BoundedQueue,
@@ -203,7 +204,7 @@ describe('readiness probe (GET /ready)', () => {
     const workerStatus = {
       read: () => Promise.reject(new Error('redis is down')),
     } as never;
-    return new HealthController(new DatabaseService(pair), redis, workerStatus);
+    return new HealthController(new DatabaseService(pair), new HealthDb(pg), redis, workerStatus);
   }
   const fakeRes = () => {
     const res = { code: 200, status: (c: number) => ((res.code = c), res) };

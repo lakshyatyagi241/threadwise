@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
@@ -6,8 +7,13 @@ import {
   type TranslationUsageQuery,
   type TranslationUsageResponse,
 } from '@crm/contracts';
+import { isWalletEmpty } from '../../common/errors/wallet-empty';
 import { DatabaseService } from '../../infra/db/database.service';
+import { emitUsageReported } from '../../kernel/outbox/usage-report';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { PlatformStore } from '../auth';
+import { UsageBillingService } from '../wallet-message-billing';
+import { translationUsageId } from './translation-billing';
 
 export interface UsageEntry {
   providerSlug: string;
@@ -17,6 +23,11 @@ export interface UsageEntry {
   charsOut: number;
   /** More than one provider was tried before this one answered. */
   wasFallback: boolean;
+  /**
+   * `fingerprint` of the text that was sent. Names the translation for the wallet (a paid one is charged once per text per day);
+   * without it the call is charged under a fresh id.
+   */
+  textHash?: string;
 }
 
 export const costMicros = (slug: string, charsIn: number): number =>
@@ -30,6 +41,10 @@ const DAY_MS = 86_400_000;
  * One row per provider call that actually reached the wire; dictionary and cache hits are free and not recorded.
  * The ledger is a tenant table, so a row always carries the workspace it was spent for: calls with no workspace are
  * simply not recorded (Reference wrote NULL-workspace rows that no per-workspace screen could ever count).
+ *
+ * A paid provider (DeepL, Google Cloud: `cost_micros` above 0) also costs the workspace's wallet money. The charge is reported to the
+ * wallet as a `usage.reported` event written in the SAME transaction as the ledger row, so a translation is on the usage screen if and
+ * only if it is on the bill. The free providers are never reported.
  */
 @Injectable()
 export class TranslationUsageService {
@@ -38,19 +53,60 @@ export class TranslationUsageService {
   constructor(
     private readonly db: DatabaseService,
     private readonly store: PlatformStore,
+    private readonly outbox: OutboxService,
+    private readonly billing: UsageBillingService,
   ) {}
+
+  /**
+   * Whether this workspace may use this provider now. A free provider, or a call with no workspace, always may. A paid one needs a wallet
+   * that can pay: the caller then skips it and tries the next provider, so an empty wallet costs the platform nothing and the customer
+   * still gets a translation from a free provider (or the original text). A failed lookup lets the call through, like the other gates.
+   */
+  async canUse(orgId: number | null, providerSlug: string): Promise<boolean> {
+    if (orgId === null || costMicros(providerSlug, 1) <= 0) return true;
+    try {
+      await this.billing.assertCanAfford(orgId, 'translation');
+      return true;
+    } catch (err) {
+      return !isWalletEmpty(err);
+    }
+  }
 
   /** Never throws: accounting must not turn a delivered translation into a failure. */
   async record(orgId: number | null, e: UsageEntry): Promise<void> {
     if (orgId === null) return;
+    const cost = costMicros(e.providerSlug, e.charsIn);
     try {
-      await this.db.txAs({ orgId, userId: null }, (tx) =>
-        tx.execute(sql`
+      await this.db.txAs({ orgId, userId: null }, async (tx) => {
+        const res = await tx.execute(sql`
           INSERT INTO translation_usage (org_id, provider_slug, source_lang, target_lang, chars_in, chars_out, cost_micros, was_fallback)
           VALUES (${orgId}, ${e.providerSlug}, ${e.sourceLang}, ${e.targetLang}, ${e.charsIn}, ${e.charsOut},
-                  ${costMicros(e.providerSlug, e.charsIn)}, ${e.wasFallback})
-        `),
-      );
+                  ${cost}, ${e.wasFallback})
+          RETURNING id
+        `);
+        if (cost <= 0) return;
+        const rowId = Number((res.rows[0] as { id?: string | number } | undefined)?.id ?? orgId);
+        await emitUsageReported(this.outbox, tx, {
+          orgId,
+          aggregateModule: 'translation',
+          aggregateId: rowId,
+          report: {
+            kind: 'translation',
+            usageId: translationUsageId({
+              orgId,
+              providerSlug: e.providerSlug,
+              sourceLang: e.sourceLang,
+              targetLang: e.targetLang,
+              textHash: e.textHash ?? randomUUID(),
+              at: new Date(),
+            }),
+            label: 'Translation',
+            source: 'translation',
+            provider: e.providerSlug,
+            vendorCostUsd: cost / 1_000_000,
+          },
+        });
+      });
     } catch (err) {
       this.logger.warn({ err, orgId }, 'could not record translation usage');
     }

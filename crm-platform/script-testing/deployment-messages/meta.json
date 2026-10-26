@@ -1,0 +1,11 @@
+{
+  "id": "deployment-messages",
+  "title": "Deployment message standard (PR number, commit, author, who deployed)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 1, "full": 1 },
+  "heavy": false,
+  "needs": ["python3", "curl"],
+  "proves": "The release watcher and build-server notifier show PR number(s), commit, author and deployer for merge-commit, squash, multi-PR and direct-push releases; in-progress/live/unchanged variants; fallback on API 500, timeout, bad or missing token; hostile PR titles and logins are sanitised; 1200-char cap; 1 h cache; the GitHub token never appears in the process list, output or logs. All against a local fake GitHub API and fake Chat receiver.",
+  "doesNotProve": "A real GitHub token or API response shape on every edge, how Google Chat renders the text, or the systemd install on the production host.",
+  "report": null
+}

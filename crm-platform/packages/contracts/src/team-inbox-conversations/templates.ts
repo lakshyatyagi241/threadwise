@@ -18,6 +18,7 @@ export const INBOX_TEMPLATE_BLOCK_REASONS = [
   'paused',
   /** The header is an image, video, document or location: the inbox has nowhere to put the file. */
   'media_header',
+  'carousel',
   /** The header carries a variable. */
   'header_variable',
   /** A button's link has a variable. */
@@ -50,6 +51,8 @@ export const inboxTemplateOptionSchema = z.object({
   slots: z.array(inboxTemplateSlotSchema),
   sendable: z.boolean(),
   reason: inboxTemplateBlockReasonSchema.nullable(),
+  /** Whether the template can be opened for editing now: Meta's edit limit and review allow it (a copy is always possible). */
+  editable: z.boolean(),
 });
 export type InboxTemplateOption = z.infer<typeof inboxTemplateOptionSchema>;
 

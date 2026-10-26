@@ -241,7 +241,8 @@
         "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前过期。",
         "media": "请输入以 http:// 或 https:// 开头的完整地址。",
         "sender": "请选择发送方。",
-        "subject": "请将主题缩短到 150 个字符以内。"
+        "subject": "请将主题缩短到 150 个字符以内。",
+        "pacing": "请检查智能发送：每个数字都必须是允许范围内的整数。"
       },
       "submit": {
         "save": "保存更改",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "每条消息之前的最长等待时间。",
         "batchPauseHint": "每批发送后的休息分钟数。",
         "retryFailed": "自动重试失败的消息",
-        "retryFailedHint": "因临时原因失败的消息会在间隔一段时间后重试几次。关闭后每条消息只发送一次。"
+        "retryFailedHint": "因临时原因失败的消息会在间隔一段时间后重试几次。关闭后每条消息只发送一次。",
+        "range": "请输入 {min} 到 {max} 之间的整数。"
       },
       "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
       "draftChip": "草稿 / 未保存",
@@ -595,7 +597,8 @@
           "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前就已过期。",
           "media": "请输入以 http:// 或 https:// 开头的完整地址。",
           "sender": "请选择发送方。",
-          "subject": "请将主题缩短到 150 个字符以内。"
+          "subject": "请将主题缩短到 150 个字符以内。",
+          "pacing": "请检查智能发送：每个数字都必须是允许范围内的整数。"
         },
         "from": "发件人",
         "subject": "主题",
@@ -686,6 +689,7 @@
             "providerFailed": "图片服务未响应。请稍后重试。",
             "badJson": "图片服务返回了意外内容。请重试。",
             "imageRefused": "OpenAI 拒绝生成此图片。请修改产品、优惠或备注后重试。",
+            "storageRequired": "图片需要云对象存储。请让平台管理员开启它。活动文案已保留。",
             "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
             "forbidden": "您没有创建营销活动的权限。",
             "network": "无法连接服务器。请检查网络连接后重试。",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "跟进仅适用于 WhatsApp Cloud API 号码。请在第 1 步中选择一个号码，或移除跟进。",
         "sequence_not_recurring": "轮流发送的模板仅适用于重复活动。请选择重复计划，或删除多余的模板。",
         "sequence_with_ab": "轮流发送的模板不能与 A/B 测试同时使用。请关闭 A/B 测试，或删除多余的模板。",
-        "sequence_template_required": "请为顺序中的每一步选择模板，或删除空的步骤。"
+        "sequence_template_required": "请为顺序中的每一步选择模板，或删除空的步骤。",
+        "variable_fallback_required": "为每个来自联系人字段的变量填写备用值：没有值的联系人会使用它。",
+        "retry_end_too_far": "重试从今天起最多进行 7 天。请选择更近的结束日期。",
+        "template_b_same": "变体 B 需要与变体 A 不同的模板。",
+        "pacing_out_of_range": "请检查智能发送：有一个数字超出了允许范围。"
       },
       "template": {
         "previewOnline": "在线",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "告知版本:{version}。",
         "modePrevious": "发送给以往发送的收件人",
         "previousHint": "重新触达以往群发和活动的收件人，也可以只选择已读、未读、已回复或点击过的人。",
-        "chipPrevious": "{count, plural, other {# 个以往发送}}（{outcome}）"
+        "chipPrevious": "{count, plural, other {# 个以往发送}}（{outcome}）",
+        "filterNoConditions": "添加一个条件，即可查看符合条件的联系人数量。"
       },
       "review": {
         "intro": "核对费用，告诉我们每个模板变量的填充内容，并检查群发。",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "以往发送：{names}（{outcome}）",
         "sumSplit": "按号码拆分",
         "sumSplitCount": "{count, plural, other {# 位收件人}} ({percent}%)",
-        "sumSplitPercent": "占受众的 {percent}%"
+        "sumSplitPercent": "占受众的 {percent}%",
+        "sumCostCharged": "从钱包扣费：{amount}（其余由您的套餐覆盖）"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "启用重试",
         "retriesToggle": "重试被 Meta 暂扣的消息",
         "retryEnd": "设置结束日期",
+        "retryEndPlaceholder": "从现在起，最长 {days} 天",
         "retriesInfoWhy": "重试仅适用于因 Meta 频率限制而失败的消息（错误 {code}）。",
         "retriesInfoWhen": "它们按固定的 {hours} 小时间隔运行，直到结束日期。",
         "retriesInfoCost": "无额外费用：仅在消息送达时才会扣费。",
         "recurringTitle": "周期性群发",
         "recurringHint": "按周期计划发送",
-        "occurrences": "次运行"
+        "occurrences": "次运行",
+        "recurringWarning": "此群发会按计划重复。每次运行都会发送给当时的受众，并且每条消息都会从您的钱包扣费。",
+        "repeatRange": "请输入 1 到 {max} 之间的整数。"
       },
       "words": {
         "now": "立即发送，仅一次。",

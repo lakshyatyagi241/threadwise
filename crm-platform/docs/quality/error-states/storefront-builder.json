@@ -1,0 +1,104 @@
+{
+  "feature": "storefront-builder",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-storefront-builder-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/dashboard-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/parts.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/dashboard-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/wizard-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/api/hooks.ts",
+        "apps/web/src/features/storefront-builder/admin/lib/errors.ts",
+        "apps/web/src/features/storefront-builder/public/api/server.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/api/hooks.ts",
+        "apps/web/src/features/storefront-builder/admin/components/parts.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/shop-form.tsx",
+        "apps/web/src/features/storefront-builder/admin/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/settings-screen.tsx",
+        "apps/web/src/features/storefront-builder/admin/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-storefront-builder-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/storefront-builder/admin/components/share-modal.tsx",
+        "apps/web/src/features/storefront-builder/admin/components/sidebar.tsx",
+        "apps/web/src/features/storefront-builder/admin/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

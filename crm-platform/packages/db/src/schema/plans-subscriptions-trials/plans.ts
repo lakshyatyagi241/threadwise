@@ -63,6 +63,8 @@ export const plans = pgTable(
      * Set on the billing add-on that sells one Marketplace app (20261023090000_mkt_pricing.sql). References marketplace_apps in the
      * database; not declared here because that table's schema file imports this one.
      */
+    /** A plain add-on's kind (feature / capacity), chosen by the operator; null on an older row (the kind is then derived from its grants). */
+    addonKind: text('addon_kind').$type<'feature' | 'capacity'>(),
     marketplaceAppId: idColumn('marketplace_app_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -101,6 +103,31 @@ export const planVisibleAddons = pgTable(
   ],
 );
 
+/**
+ * Mirror of 20270331090100_plan_addon_offers.sql: how a plan offers a plain add-on (no Marketplace app). `included` (no charge, the plan carries
+ * the add-on's features), `paid` (buyable; `amount` null = the add-on's own price) or `hidden` (not listed, not buyable). No row = paid at the
+ * add-on's price. docs/specs/addons-plan-offers.md.
+ */
+export const planAddonOffers = pgTable(
+  'plan_addon_offers',
+  {
+    planId: idColumn('plan_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    addonId: idColumn('addon_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    mode: text('mode').$type<'included' | 'paid' | 'hidden'>().notNull(),
+    amount: numeric('amount', { precision: 12, scale: 2 }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.planId, t.addonId] }),
+    index('idx_plan_addon_offers_addon').on(t.addonId),
+  ],
+);
+
 /** Per-organization plan state; `organizations.plan` stays the authoritative slug. */
 export const orgPlanState = pgTable('org_plan_state', {
   orgId: orgIdColumn().primaryKey(),
@@ -119,3 +146,31 @@ export const orgPlanState = pgTable('org_plan_state', {
   updatedAt: updatedAt(),
   rowVersion: rowVersion(),
 });
+
+/**
+ * Mirror of 20270402090000_workspace_addon_activation.sql: a workspace's own switch on an add-on it is entitled to. `disabled` is an opt-out (the
+ * add-on's features stop applying to that workspace); no row means active. Covers plain add-ons and the add-on of a Marketplace app.
+ */
+export const workspaceAddonActivation = pgTable(
+  'workspace_addon_activation',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    addonId: idColumn('addon_id')
+      .notNull()
+      .references(() => plans.id, { onDelete: 'cascade' }),
+    state: text('state').$type<'active' | 'disabled'>().notNull().default('disabled'),
+    source: text('source').$type<'user' | 'operator' | 'system'>().notNull().default('user'),
+    changedBy: idColumn('changed_by'),
+    changedAt: timestamp('changed_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    uniqueIndex('workspace_addon_activation_org_addon_key').on(t.orgId, t.addonId),
+    index('idx_workspace_addon_activation_addon').on(t.addonId),
+  ],
+);

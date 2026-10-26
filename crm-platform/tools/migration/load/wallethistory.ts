@@ -120,6 +120,11 @@ export async function buildHistory(
     events: core.walletEvents,
     workspaceId,
   });
+  // a dump newer than core.json would leave its charges out of the statement, which would stop at readAt (ISKM); refuse instead of logging
+  if (plan.stats.skippedAfterAsOf > 0)
+    throw new HistoryError(
+      `WALLETHISTORY_CORE_STALE: the dump holds ${plan.stats.skippedAfterAsOf} record(s) after core.json readAt ${asOf}; re-run core-opening.cjs after the export, then ship. Nothing was written`,
+    );
   return { plan, unit, target, asOf, timezone };
 }
 

@@ -1,0 +1,35 @@
+{
+  "feature": "addons-extension-registry",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-addons-extension-registry-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/addons-extension-registry/components/packs-page.tsx",
+        "apps/web/src/features/addons-extension-registry/components/plan-module-fields.tsx",
+        "apps/web/src/features/addons-extension-registry/components/workspace-addons-page.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-addons-extension-registry-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/addons-extension-registry/components/cancel-addon-renewal.tsx",
+        "apps/web/src/features/addons-extension-registry/components/extensions-page.tsx",
+        "apps/web/src/features/addons-extension-registry/components/pack-form-page.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

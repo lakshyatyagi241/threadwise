@@ -174,7 +174,16 @@ describe('attribute definitions (TW-CON-043, 044, 046)', () => {
   it('TW-CON-046 #1: the built-in list has 10 entries, and every one of them is a reserved key', () => {
     expect(SYSTEM_ATTRIBUTES).toHaveLength(10);
     for (const a of SYSTEM_ATTRIBUTES) expect(RESERVED_ATTRIBUTE_KEYS.has(a.key)).toBe(true);
-    for (const k of ['status', 'source', 'phone', 'mobile', 'groups']) {
+    for (const k of [
+      'status',
+      'source',
+      'phone',
+      'mobile',
+      'groups',
+      'memo',
+      'lifecycle_stage',
+      'opt_out',
+    ]) {
       expect(RESERVED_ATTRIBUTE_KEYS.has(k), k).toBe(true);
     }
   });

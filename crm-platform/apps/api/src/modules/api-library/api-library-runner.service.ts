@@ -18,9 +18,15 @@ import {
   maskJsonText,
   maskResponseHeaders,
   maskUrl,
+  PROCESSED_PAYLOAD_PROBLEM,
+  isProcessedPayload,
   renderBody,
   renderHeaders,
+  readAnswer,
   renderUrl,
+  scrubSecretHeaders,
+  scrubSecretValues,
+  secretValuesOf,
   truncateText,
   type OutHeader,
   type VariableValues,
@@ -186,12 +192,8 @@ export class ApiLibraryRunner {
               'function',
               `The processing function failed: ${ran.error ?? 'unknown error'}`,
             );
-          if (ran.result === null || typeof ran.result !== 'object')
-            return fail(
-              started,
-              'function',
-              'processPayload must return the payload (an object or a list).',
-            );
+          if (!isProcessedPayload(ran.result))
+            return fail(started, 'function', PROCESSED_PAYLOAD_PROBLEM);
           body = ran.result as ApiLibraryBody;
           processed = ran.result;
         }
@@ -227,10 +229,18 @@ export class ApiLibraryRunner {
       const contentType =
         typeof res.headers['content-type'] === 'string' ? res.headers['content-type'] : null;
       const truncated = res.truncated === true;
+      const answer = readAnswer(
+        res.raw ?? Buffer.from(res.text, 'utf8'),
+        res.headers,
+        RUN_MAX_RESPONSE_BYTES,
+      );
+      // A server that repeats the request back (a debugging page, an error) would show our secrets in the clear: hide them in what is shown and stored.
+      const secrets = secretValuesOf(url, headers);
+      const shownText = scrubSecretValues(answer.text, secrets);
       let bodyJson: unknown = null;
-      if (!truncated && res.text.trim() !== '') {
+      if (answer.isText && !truncated && shownText.trim() !== '') {
         try {
-          bodyJson = JSON.parse(res.text);
+          bodyJson = JSON.parse(shownText);
         } catch {
           /* not JSON: the text is all there is */
         }
@@ -248,12 +258,12 @@ export class ApiLibraryRunner {
             : `The server answered HTTP ${res.status}.`,
         request,
         response: {
-          headers: maskResponseHeaders(res.headers),
+          headers: scrubSecretHeaders(maskResponseHeaders(res.headers), secrets),
           contentType,
-          bodyText: truncateText(res.text, RESPONSE_TEXT_LIMIT).text,
+          bodyText: truncateText(shownText, RESPONSE_TEXT_LIMIT).text,
           bodyJson,
-          truncated: truncated || res.text.length > RESPONSE_TEXT_LIMIT,
-          sizeBytes: Buffer.byteLength(res.text),
+          truncated: truncated || shownText.length > RESPONSE_TEXT_LIMIT,
+          sizeBytes: answer.sizeBytes,
         },
         processedPayload: processed,
       };

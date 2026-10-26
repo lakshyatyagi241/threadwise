@@ -1,8 +1,0 @@
-app/Bsp/Http/Controllers/Admin/BspCreditController.php
-app/Bsp/Http/Controllers/Admin/BspDashboardController.php
-app/Bsp/Http/Controllers/BspStatusController.php
-app/Bsp/Models/BspCreditAllocation.php
-app/Bsp/Services/CreditAllocationService.php
-app/Bsp/Services/CreditSource/CreditSourceContract.php
-app/Bsp/Services/CreditSource/MetaSolutionPartnerCreditSource.php
-app/Bsp/Services/ReportService.php

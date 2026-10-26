@@ -1,0 +1,90 @@
+{
+  "feature": "scheduled-queue-warmer",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-scheduled-queue-warmer-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-steps.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/engagement.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-scheduled-queue-warmer-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-scheduled-queue-warmer-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/detail-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/engagement.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/scheduled-queue-warmer/components/components.test.tsx",
+          "match": "empty and loading states, and an upgrade pointer for a plan refusal"
+        }
+      ]
+    },
+    {
+      "id": "EM-scheduled-queue-warmer-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/error-notice.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/nav.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/scheduled-queue-warmer/components/components.test.tsx",
+          "match": "without the manage permission there are no create link or row actions"
+        }
+      ]
+    },
+    {
+      "id": "EM-scheduled-queue-warmer-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-steps.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/detail-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/scheduled-queue-warmer/components/components.test.tsx",
+          "match": "says there is nothing to chart before anything was sent"
+        }
+      ]
+    }
+  ]
+}

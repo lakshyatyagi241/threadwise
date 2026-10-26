@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { pageResponseSchema } from '../common/pagination';
 import { uuidSchema } from '../common/ids';
+import { parseDateValue } from '../common/dates';
 
 /** Meta's category, which is what the review and the price follow. */
 export const tplMetaCategorySchema = z.enum(['MARKETING', 'UTILITY', 'AUTHENTICATION']);
@@ -43,6 +44,45 @@ export const tplVariableMapSchema = z.object({
 });
 export type TplVariableMap = z.infer<typeof tplVariableMapSchema>;
 
+/** A limited-time-offer template: the offer's heading (Meta: at most 16 characters) and whether it counts down to an expiry time. */
+export const TPL_OFFER_TEXT_MAX = 16;
+export const tplLimitedOfferSchema = z.object({
+  text: z.string().trim().min(1).max(TPL_OFFER_TEXT_MAX),
+  hasExpiration: z.boolean().default(true),
+});
+export type TplLimitedOffer = z.infer<typeof tplLimitedOfferSchema>;
+
+/** A carousel template holds 2 to 10 cards (Meta's limits): each a picture or video, a short text and up to two buttons. */
+export const TPL_CAROUSEL_MIN = 2;
+export const TPL_CAROUSEL_MAX = 10;
+export const TPL_CAROUSEL_BODY_MAX = 160;
+export const TPL_CAROUSEL_BUTTONS_MAX = 2;
+
+/** One card as the author sends it. */
+export const tplCardInputSchema = z.object({
+  format: z.enum(['image', 'video']).default('image'),
+  /** Object-storage key of the uploaded file (`POST /v2/templates/media` -> `mediaKey`): what a send shows. */
+  image: z.string().max(512).nullish(),
+  /** Handle Meta returned for the example file (same upload). Required to submit. */
+  headerHandle: z.string().max(2000).nullish(),
+  headerSampleUrl: z.string().max(2000).nullish(),
+  body: z.string().max(TPL_CAROUSEL_BODY_MAX),
+  buttons: z.array(tplButtonSchema).max(TPL_CAROUSEL_BUTTONS_MAX).default([]),
+});
+export type TplCardInput = z.infer<typeof tplCardInputSchema>;
+
+/** One card as the library and the form read it back. */
+export const tplCardSchema = z.object({
+  format: z.enum(['image', 'video']),
+  /** The stored file's key (sent back unchanged to keep the file), or an address when the card came from Meta. */
+  image: z.string().nullable(),
+  /** A link to draw the card's file with: a fresh link to the stored file on the detail, else Meta's sample address. */
+  imageUrl: z.string().nullable(),
+  body: z.string(),
+  buttons: z.array(tplButtonSchema),
+});
+export type TplCard = z.infer<typeof tplCardSchema>;
+
 export const tplAttachmentTypeSchema = z.enum(['none', 'image', 'video', 'document', 'location']);
 
 /** The map pin of a `location` header: WhatsApp renders 0,0 for a value out of range, so the range is enforced here. */
@@ -57,7 +97,7 @@ export type TplHeaderLocation = z.infer<typeof tplHeaderLocationSchema>;
 export const tplLintIssueSchema = z.object({
   code: z.string(),
   severity: z.enum(['error', 'warning']),
-  field: z.enum(['name', 'language', 'header', 'body', 'footer', 'buttons', 'template']),
+  field: z.enum(['name', 'language', 'header', 'body', 'footer', 'buttons', 'cards', 'template']),
   message: z.string(),
 });
 export type TplLintIssue = z.infer<typeof tplLintIssueSchema>;
@@ -75,6 +115,16 @@ export const templateSummarySchema = z.object({
   /** Meta's reason code (`INVALID_FORMAT`, `PROMOTIONAL`...), when it sent one; `NONE` is not reported. */
   rejectionReasonCode: z.string().nullable(),
   metaTemplateId: z.string().nullable(),
+  /**
+   * Why Meta does not let this template be edited right now: its review (`in_review`), or the edit limit of an approved template
+   * (`daily_limit` one per 24 hours, `monthly_limit` ten per 30 days, with `until` when it opens). Null when it can be edited.
+   */
+  editBlock: z
+    .object({
+      reason: z.enum(['in_review', 'daily_limit', 'monthly_limit']),
+      until: z.string().datetime().nullable(),
+    })
+    .nullable(),
   /** The WhatsApp number it is submitted through (uuid of the connection). */
   connectionId: uuidSchema.nullable(),
   pausedUntil: z.string().datetime().nullable(),
@@ -90,6 +140,10 @@ export const templateSummarySchema = z.object({
   body: z.string(),
   footer: z.string().nullable(),
   buttons: z.array(tplButtonSchema),
+  /** The cards of a carousel template (empty for every other type). */
+  cards: z.array(tplCardSchema),
+  /** The offer of a limited-time-offer template (null for every other type). */
+  limitedOffer: z.object({ text: z.string(), hasExpiration: z.boolean() }).nullish(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -114,11 +168,21 @@ export type TemplateDetail = z.infer<typeof templateDetailSchema>;
  * The library's three status tabs (Reference's "effective status"): approved; in review (pending and drafts); rejected (rejected,
  * paused, disabled). A row Meta no longer lists (`deleted`) is only found under All.
  */
-export const tplStatusGroupSchema = z.enum(['approved', 'pending', 'rejected']);
+export const tplStatusGroupSchema = z.enum(['approved', 'pending', 'draft', 'rejected']);
 export type TplStatusGroup = z.infer<typeof tplStatusGroupSchema>;
 
 export const tplSortSchema = z.enum(['newest', 'oldest', 'name-asc', 'name-desc']);
 export type TplSort = z.infer<typeof tplSortSchema>;
+
+/** The library's date filter by creation time: a preset (the last N days up to now), all time, or a custom range of days. */
+export const TEMPLATE_RANGES = ['all', '7d', '30d', '90d', 'custom'] as const;
+export const tplRangeSchema = z.enum(TEMPLATE_RANGES);
+export type TplRange = z.infer<typeof tplRangeSchema>;
+
+/** A day the library's date filter takes: a real `YYYY-MM-DD` inside 1900 to 2200, the years the date helpers and the database accept. */
+export const tplFilterDaySchema = z.string().refine((v) => parseDateValue(v)?.kind === 'day', {
+  message: 'Use a calendar day between 1900 and 2200, YYYY-MM-DD',
+});
 
 export const listTemplatesQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(30),
@@ -129,6 +193,10 @@ export const listTemplatesQuerySchema = z.object({
   category: tplMetaCategorySchema.optional(),
   connectionId: uuidSchema.optional(),
   q: z.string().trim().max(100).optional(),
+  range: tplRangeSchema.default('all'),
+  /** `range=custom` only: the first and the last day of the window (workspace days, both included); a missing side is open. */
+  from: tplFilterDaySchema.optional(),
+  to: tplFilterDaySchema.optional(),
 });
 export type ListTemplatesQuery = z.infer<typeof listTemplatesQuerySchema>;
 export const listTemplatesResponseSchema = pageResponseSchema(templateSummarySchema);
@@ -141,7 +209,7 @@ const templateFields = {
     .trim()
     .regex(/^[a-z]{2,3}(_[A-Z]{2})?$/, 'a Meta language code such as en_US'),
   metaCategory: tplMetaCategorySchema,
-  templateType: z.enum(['standard', 'media', 'auth']).default('standard'),
+  templateType: z.enum(['standard', 'media', 'auth', 'carousel', 'lto']).default('standard'),
   header: z.string().trim().max(60).nullish(),
   attachmentType: tplAttachmentTypeSchema.default('none'),
   /** Handle returned by `POST /v2/templates/media`; required for an image, video or document header. */
@@ -154,6 +222,10 @@ const templateFields = {
   body: z.string().max(TPL_BODY_MAX),
   footer: z.string().trim().max(60).nullish(),
   buttons: z.array(tplButtonSchema).max(10).default([]),
+  /** `templateType: 'carousel'` only: 2 to 10 cards. */
+  cards: z.array(tplCardInputSchema).max(TPL_CAROUSEL_MAX).optional(),
+  /** `templateType: 'lto'` only. */
+  limitedOffer: tplLimitedOfferSchema.nullish(),
   variableMap: tplVariableMapSchema.optional(),
   codeExpirationMinutes: z.number().int().min(1).max(90).nullish(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']).default('POSITIONAL'),
@@ -208,6 +280,9 @@ export const templateCountsQuerySchema = listTemplatesQuerySchema.pick({
   category: true,
   connectionId: true,
   q: true,
+  range: true,
+  from: true,
+  to: true,
 });
 export type TemplateCountsQuery = z.infer<typeof templateCountsQuerySchema>;
 export const templateCountsSchema = z.object({

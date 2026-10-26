@@ -38,7 +38,7 @@ export function HubScreen() {
             {t('kicker')}
           </div>
           <h1 className="text-3xl font-normal leading-none tracking-tight sm:text-[40px]">
-            {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+            {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
         </div>

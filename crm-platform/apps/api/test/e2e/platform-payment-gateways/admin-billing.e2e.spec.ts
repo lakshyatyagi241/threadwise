@@ -17,6 +17,7 @@ import {
   startHarness,
   type Harness,
 } from '../auth-registration-security/harness';
+import { pngOfSize } from '../../support/images';
 
 /**
  * The operator billing screens end to end (TW-PAYGW-037..046, 007) through HTTP, against a real Postgres and the real AppModule:
@@ -768,11 +769,8 @@ describe('billing settings (TW-PAYGW-007)', () => {
   });
 
   it('a logo over 1 MB is refused and changes nothing; a png is accepted, served back, and removable; a fake png is refused', async () => {
-    const png = Buffer.concat([Buffer.from('89504e470d0a1a0a', 'hex'), Buffer.alloc(200, 1)]);
-    const big = Buffer.concat([
-      Buffer.from('89504e470d0a1a0a', 'hex'),
-      Buffer.alloc(1024 * 1024 + 10, 1),
-    ]);
+    const png = pngOfSize(8 + 200);
+    const big = pngOfSize(8 + 1024 * 1024 + 10);
     const tooBig = await ops('post', '/settings/logo').attach('file', big, 'logo.png');
     expect([413, 422]).toContain(tooBig.status);
     expect((await got(billingSettingsResponseSchema, '/settings')).hasInvoiceLogo).toBe(false);

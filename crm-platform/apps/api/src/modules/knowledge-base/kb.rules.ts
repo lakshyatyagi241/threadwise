@@ -1,4 +1,5 @@
 import { KB_RETRIEVAL } from '@crm/contracts';
+import { fingerprint } from '../../common/stable-usage-id';
 
 /** Pure rules of the knowledge base search: no database, no network, so every decision here is unit-tested. */
 
@@ -22,6 +23,15 @@ export const queryText = (raw: string): string =>
 export function isSearchable(text: string): boolean {
   const t = tidy(text);
   return Array.from(t).length >= 2 && /[\p{L}\p{N}]/u.test(t);
+}
+
+/**
+ * What names one embedding batch for the wallet: the passages' ids and a fingerprint of each text, in order. The same passages with the
+ * same text give the same key, so a batch that was embedded and billed but not stored (the write after it failed) and is claimed again
+ * is billed once. It carries no attempt number on purpose: an attempt count would make every retry a new bill.
+ */
+export function embedBatchKey(batch: ReadonlyArray<{ id: number; text: string }>): string {
+  return fingerprint(batch.map((b) => `${b.id}:${fingerprint(b.text)}`).join('|'));
 }
 
 /** pgvector's text form of a vector, six decimals (halfvec keeps about three significant digits anyway). */

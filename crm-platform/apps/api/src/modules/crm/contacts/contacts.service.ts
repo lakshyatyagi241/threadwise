@@ -40,7 +40,7 @@ import { stagesInUse, statusesInUse } from './contact-values-in-use';
 import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
-import { assertFormFieldLimits } from './form-field-limits';
+import { assertFormFieldLimits, FORM_FIELD_LIMITS, reservedTextPlan } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import {
   missingRequired,
@@ -641,6 +641,47 @@ export class ContactsService {
   }
 
   /**
+   * The contact of a chat visitor who has just given an email or a phone number inside a flow (the website chat makes no contact before
+   * that, so trying the bot out leaves no empty record): found by the visitor's id on the channel or by the phone, else made, and tied
+   * to the thread when it has none. Null when the contact could not be made (the plan's cap, an unusable value).
+   */
+  async ensureChannelContact(
+    orgId: number,
+    input: {
+      channel: string;
+      peerKey: string;
+      conversationId: number | null;
+      email?: string | null;
+      phone?: string | null;
+    },
+  ): Promise<number | null> {
+    const digits = (input.phone ?? '').replace(/\D/g, '');
+    return this.db.txAs({ orgId }, async (tx) => {
+      const r = await this.resolveOrCreateByIdentity(tx, orgId, {
+        kind: 'channel_uid',
+        channel: input.channel,
+        value: input.peerKey,
+        name: null,
+        firstName: null,
+        email: input.email?.trim() || null,
+        phone: digits === '' ? null : `+${digits}`,
+        matchPhoneFirst: true,
+        ownerId: null,
+        source: input.channel,
+        quiet: true,
+      } as Parameters<ContactsService['resolveOrCreateByIdentity']>[2]);
+      if (r.outcome !== 'found' && r.outcome !== 'created') return null;
+      if (input.conversationId !== null) {
+        await tx.execute(
+          sql`UPDATE conversations SET contact_id = ${r.contactId}
+              WHERE org_id = ${orgId} AND id = ${input.conversationId} AND contact_id IS NULL`,
+        );
+      }
+      return r.contactId;
+    });
+  }
+
+  /**
    * `resolveOrCreateByIdentity` for many inputs, in the order given. A phone number or email that already belongs to a contact is answered
    * from two queries for the whole list (the identity and its contact), exactly as the single call answers it; every other input (new,
    * healed from a stored number, over the plan cap, unusable, or a channel id) goes through the single call unchanged, so locking, quota,
@@ -813,6 +854,8 @@ export class ContactsService {
    * Exception: a built-in contact column (`email`, `name`, ...) is written by `setFieldFromFlow`, the same path as the "Update contact
    * field" step, so "also save the answer on the contact property" works for them. That path emits `contact.updated` with `via: 'flow'`,
    * which flow triggers skip and webhooks receive.
+   * A read-only property (the Web Analytics Information ones, any a workspace flagged) is never written from a flow: it is not an
+   * editable property for anyone, and a flow is something an administrator configures.
    */
   async setPropertyFromFlow(
     orgId: number,
@@ -827,7 +870,7 @@ export class ContactsService {
     }
     return this.db.txAs({ orgId }, async (tx) => {
       const field = await tx.execute(
-        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+        sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true AND is_read_only = false`,
       );
       if (field.rows.length === 0) return false;
       const row = await this.repo.findById(tx, orgId, contactId);
@@ -852,6 +895,7 @@ export class ContactsService {
    * columns (`FLOW_CONTACT_COLUMNS`) or an active custom property of this workspace by key; anything else is refused (`false`), so a
    * key typed by hand cannot write where it should not (the phone and the dedupe keys are never writable here). A blank value clears
    * a column except the name. `contact.updated` is emitted with `via: 'flow'` so webhooks hear it and the flow triggers skip it.
+   * A read-only property is refused like an unknown one (see `setPropertyFromFlow`).
    * Returns the value as stored, or null when nothing could be written.
    */
   async setFieldFromFlow(
@@ -882,7 +926,7 @@ export class ContactsService {
         delta = { [clean]: { old: row.current ?? null, new: next } };
       } else {
         const field = await tx.execute(
-          sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,
+          sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true AND is_read_only = false`,
         );
         if (field.rows.length === 0) return null;
         const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
@@ -1690,6 +1734,7 @@ export class ContactsService {
         ...new Set(items.map((i) => i.actorId).filter((id): id is number => id !== null)),
       ];
       const actorUuids = await this.repo.resolveUserUuids(tx, ctx.orgId, actorIds);
+      const actorNames = await this.repo.resolveUserNames(tx, ctx.orgId, actorIds);
 
       const entries: FieldHistoryEntry[] = items.flatMap((entry) =>
         Object.entries(entry.delta ?? {}).map(([fieldKey, change]) => ({
@@ -1698,6 +1743,7 @@ export class ContactsService {
           newValue: (change as { new: unknown }).new,
           actorType: entry.actorType,
           changedByUserId: entry.actorId !== null ? (actorUuids.get(entry.actorId) ?? null) : null,
+          changedByName: entry.actorId !== null ? (actorNames.get(entry.actorId) ?? null) : null,
           changedAt: entry.at.toISOString(),
         })),
       );
@@ -1801,12 +1847,24 @@ export class ContactsService {
       // that does not fit its property's type is a 422 and nothing is changed.
       const customInput = input.values.customFields;
       if (customInput !== undefined) assertFormFieldLimits(customInput);
-      const propertyPlan =
-        customInput !== undefined && Object.keys(customInput).length > 0
+      // The form's own text properties live in `data` under reserved keys: they are not registry rows, so they are planned apart.
+      const registryInput = Object.fromEntries(
+        Object.entries(customInput ?? {}).filter(([k]) => !(k in FORM_FIELD_LIMITS)),
+      );
+      const registryPlan =
+        Object.keys(registryInput).length > 0
           ? planPropertyChanges(
-              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(customInput)),
-              customInput,
+              await this.repo.editableProperties(tx, ctx.orgId, Object.keys(registryInput)),
+              registryInput,
             )
+          : undefined;
+      const reservedPlan = reservedTextPlan(customInput);
+      const propertyPlan =
+        registryPlan || reservedPlan
+          ? {
+              set: { ...registryPlan?.set, ...reservedPlan?.set },
+              clear: [...(registryPlan?.clear ?? []), ...(reservedPlan?.clear ?? [])],
+            }
           : undefined;
 
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
@@ -1858,6 +1916,21 @@ export class ContactsService {
         if (input.values.timezone !== undefined) {
           values.timezone = input.values.timezone;
           values.timezoneSource = input.values.timezone === null ? null : 'staff';
+        }
+        // Built-in text properties. The display name follows a first or last name that changes (a bulk "set" is the same name
+        // on every contact, which is what was asked for).
+        if (input.values.firstName !== undefined) values.firstName = input.values.firstName;
+        if (input.values.lastName !== undefined)
+          values.lastName = input.values.lastName?.trim() || null;
+        if (input.values.source !== undefined) values.source = input.values.source?.trim() || null;
+        if (input.values.firstName !== undefined || input.values.lastName !== undefined) {
+          values.name =
+            [
+              (values.firstName as string | null | undefined) ?? existing.firstName,
+              (values.lastName as string | null | undefined) ?? existing.lastName,
+            ]
+              .filter((p): p is string => !!p && p.trim() !== '')
+              .join(' ') || existing.name;
         }
         let changedKeys: string[] = [];
         if (propertyPlan) {

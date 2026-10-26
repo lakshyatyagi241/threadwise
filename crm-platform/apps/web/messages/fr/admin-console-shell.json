@@ -24,7 +24,7 @@
         "noWorkspaces": "Aucun espace de travail"
       },
       "labels": {
-        "addonPacks": "Packs de modules complémentaires",
+        "addonPacks": "Modules complémentaires",
         "extensions": "Extensions",
         "trackingCode": "Code de suivi",
         "planPricingSettings": "Paramètres de tarification des forfaits",
@@ -282,7 +282,9 @@
           "save": "Enregistrer",
           "saved": "Préférence enregistrée.",
           "saveFailed": "La préférence n’a pas pu être enregistrée."
-        }
+        },
+        "timezoneSearch": "Rechercher un fuseau horaire",
+        "timezoneNoMatch": "Aucun fuseau horaire ne correspond."
       },
       "notifications": {
         "title": "Notifications de l’espace de travail",

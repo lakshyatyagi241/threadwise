@@ -1,0 +1,264 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Faça upgrade do seu plano",
+      "timeline": {
+        "label": "Linha do tempo dos lembretes",
+        "addMenu": "Adicionar uma etapa",
+        "addStep": "Adicionar etapa",
+        "count": "{count} de {max} etapas com horário. A confirmação do agendamento e a mensagem de não comparecimento não contam.",
+        "capReached": "Você atingiu {max} etapas com horário. Remova uma para adicionar outra.",
+        "empty": "Ainda não há etapas. Adicione a primeira ou comece com uma sequência pronta.",
+        "lane": {
+          "booked": "Quando for agendado",
+          "before": "Antes do agendamento",
+          "after": "Depois do agendamento"
+        },
+        "laneHint": {
+          "booked": "Enviado assim que o agendamento é feito.",
+          "before": "Enviado antes do início do agendamento, nunca depois.",
+          "after": "Enviado depois que o agendamento termina ou quando é marcado como não comparecimento."
+        },
+        "laneEmpty": "Nada aqui ainda.",
+        "step": {
+          "confirmation": "Confirmação do agendamento",
+          "reminder_24h": "Lembrete de 24 horas",
+          "reminder_2h": "Lembrete de 2 horas",
+          "reminder_15m": "Lembrete de 15 minutos",
+          "reminder": "Lembrete",
+          "after_visit": "Mensagem após o agendamento",
+          "no_show": "Mensagem de não comparecimento",
+          "rebook": "Mensagem de reagendamento"
+        },
+        "stepHint": {
+          "confirmation": "Enviado logo após a confirmação do agendamento.",
+          "reminder_24h": "No dia anterior. Pode ter os botões Confirmar, Reagendar e Cancelar.",
+          "reminder_2h": "Um lembrete curto algumas horas antes.",
+          "reminder_15m": "Só para agendamentos online com link de acesso.",
+          "reminder": "Um lembrete no horário que você escolher.",
+          "after_visit": "Um agradecimento ou acompanhamento depois que o agendamento termina.",
+          "no_show": "Enviado quando você marca o agendamento como não comparecimento.",
+          "rebook": "Convida o contato a agendar de novo alguns dias depois de um atendimento concluído. Conta como marketing."
+        },
+        "choice": {
+          "confirmation": "Confirmação do agendamento",
+          "reminder_24h": "24 horas antes",
+          "reminder_2h": "2 horas antes",
+          "reminder_15m": "15 minutos antes",
+          "custom": "Lembrete em outro horário",
+          "after_visit": "Mensagem após o agendamento",
+          "no_show": "Mensagem de não comparecimento",
+          "rebook": "Mensagem de reagendamento, alguns dias depois"
+        },
+        "choiceHint": {
+          "present": "Já adicionado",
+          "cap": "Limite atingido",
+          "online": "Agendamentos online",
+          "locked": "Nível superior: não incluído no seu plano"
+        },
+        "enabledOf": "Enviar: {step}",
+        "remove": "Remover: {step}",
+        "offsetOf": "Horário de: {step}",
+        "unitOf": "Unidade de tempo de: {step}",
+        "beforeStart": "antes do início do agendamento",
+        "afterEnd": "depois do término do agendamento",
+        "setTime": "Informe um horário",
+        "templateName": "Modelo do WhatsApp: {name}",
+        "wa": {
+          "none": "Sem modelo",
+          "draft": "Modelo não enviado à Meta",
+          "pending": "Aguardando aprovação da Meta",
+          "approved": "Modelo aprovado",
+          "rejected": "Rejeitado pela Meta"
+        },
+        "fallback": {
+          "email": "Até o modelo do WhatsApp ser aprovado, esta etapa é enviada por Email.",
+          "window": "Aqui o WhatsApp é o único canal, então fora da janela de 24 horas nada é enviado até que um modelo seja aprovado. Adicione o Email como alternativa."
+        },
+        "when": {
+          "before": "{amount} antes do início",
+          "after": "{amount} depois do término"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minuto} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} other {# horas}}",
+          "days": "{count, plural, one {# dia} other {# dias}}"
+        },
+        "rebookLocked": "As mensagens para marcar novamente fazem parte do nível superior de Agendamentos, que o seu plano não inclui. Pode configurar a etapa, mas ela fica desativada até o seu plano a incluir.",
+        "rebookLockedStep": "Faz parte do nível superior de Agendamentos: não pode ser ativada com o seu plano atual."
+      },
+      "reasons": {
+        "already_confirmed": "O contato já tinha confirmado.",
+        "no_join_link": "O agendamento não tem link de acesso.",
+        "already_rebooked": "O contato agendou novamente.",
+        "visit_not_completed": "O agendamento não foi concluído.",
+        "plan_feature_locked": "Seu plano não inclui esta etapa.",
+        "not_delivered": "O WhatsApp não entregou a tempo, então o próximo canal foi usado.",
+        "send_failed": "O envio falhou, então o próximo canal foi usado."
+      },
+      "packs": {
+        "open": "Sequências prontas",
+        "eyebrow": "Para {name}",
+        "title": "Sequências prontas de lembretes",
+        "close": "Fechar",
+        "intro": "Escolha uma sequência para o seu tipo de negócio. Ela configura de uma vez a confirmação, os lembretes, o acompanhamento e a mensagem de reagendamento. As mensagens do WhatsApp precisam de aprovação da Meta antes de serem enviadas; até lá, cada etapa é enviada por Email.",
+        "loading": "Carregando as sequências",
+        "choose": "Escolher uma sequência",
+        "stepsCount": "{count, plural, one {# etapa} other {# etapas}}",
+        "language": "Idioma das mensagens",
+        "machineDraft": "O texto em hindi é um rascunho feito por máquina. Peça para alguém que leia hindi revisar antes de ativar as etapas.",
+        "previewLoading": "Carregando a prévia",
+        "previewTitle": "O que vai mudar",
+        "summary": "{add} para adicionar, {replace} para substituir, {unchanged} já iguais",
+        "timedOf": "{count} de {max} etapas com horário",
+        "blocked": "Aplicar esta sequência ultrapassaria o limite de {max} etapas com horário. Remova uma etapa primeiro.",
+        "confirmTitle": "Isto substitui etapas que você já tem",
+        "confirmBody": "{count, plural, one {# etapa deste tipo de agendamento} other {# etapas deste tipo de agendamento}} será substituída pela versão da sequência, incluindo qualquer texto que você tenha escrito.",
+        "confirmCheck": "Substituir",
+        "action": {
+          "add": "Nova",
+          "replace": "Substitui a sua",
+          "unchanged": "Já igual"
+        },
+        "starts": {
+          "on": "Começa ligada",
+          "off": "Começa desligada"
+        },
+        "category": {
+          "UTILITY": "Mensagem de serviço",
+          "MARKETING": "Mensagem de marketing"
+        },
+        "onlineOnly": "Somente agendamentos online",
+        "hasButtons": "Botões Confirmar, Reagendar, Cancelar",
+        "wa": {
+          "new": "Será enviada para a Meta"
+        },
+        "replaceOwnText": "Você escreveu um texto próprio para esta etapa. Ele será substituído.",
+        "planNotes": {
+          "rebook": "A etapa de nova marcação faz parte do nível superior de Agendamentos, que o seu plano não inclui, por isso é guardada desativada.",
+          "buttons": "Os botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, que o seu plano não inclui, por isso foram deixados de fora."
+        },
+        "showMessages": "Mostrar mensagens",
+        "hideMessages": "Ocultar mensagens",
+        "kept": "{count, plural, one {# etapa que você já tem não será alterada.} other {# etapas que você já tem não serão alteradas.}}",
+        "sample": {
+          "title": "Valores de exemplo",
+          "hint": "As mensagens são mostradas com estes valores fictícios. Altere-os para ver como fica um nome mais longo ou outro local.",
+          "reset": "Restaurar os valores",
+          "labels": {
+            "name": "Nome do contato",
+            "service": "Serviço",
+            "date": "Data",
+            "time": "Horário",
+            "place": "Local",
+            "join_link": "Link de acesso",
+            "manage_link": "Link de gerenciamento"
+          }
+        },
+        "submitToMeta": "Enviar agora as mensagens do WhatsApp para aprovação da Meta",
+        "submitHint": "{count, plural, one {# nova mensagem do WhatsApp será criada.} other {# novas mensagens do WhatsApp serão criadas.}} A Meta decide quando aprovar; até lá, a etapa é enviada por Email. Deixe desligado para mantê-las como rascunhos.",
+        "submitHintNone": "As mensagens do WhatsApp já existem no seu workspace, então nada novo é criado.",
+        "apply": "Aplicar sequência",
+        "applying": "Aplicando",
+        "cancel": "Cancelar",
+        "block": {
+          "readOnly": "Você pode ver as sequências, mas não aplicá-las.",
+          "unsaved": "Salve ou descarte as alterações nas etapas deste tipo de agendamento primeiro.",
+          "cap": "Remova uma etapa primeiro: o limite de etapas com horário seria ultrapassado.",
+          "confirm": "Marque Substituir para continuar."
+        },
+        "errors": {
+          "needsConfirm": "Aplicar substituiria uma etapa, então precisa da sua confirmação. A prévia foi recarregada.",
+          "cap": "A sequência ultrapassaria o limite de etapas com horário para este tipo de agendamento."
+        },
+        "result": {
+          "title": "A sequência foi aplicada",
+          "summary": "{added} adicionada(s), {replaced} substituída(s). As etapas começam como a sequência as define.",
+          "templatesTitle": "Mensagens do WhatsApp",
+          "templatesNone": "Nenhuma mensagem do WhatsApp foi criada. Conecte um número do WhatsApp Cloud API para usar o WhatsApp; enquanto isso, o Email é usado.",
+          "waiting": "Até a Meta aprovar uma mensagem, esta etapa é enviada por Email.",
+          "metaError": "A Meta recusou: {error}",
+          "refresh": "Atualizar status",
+          "refreshing": "Atualizando",
+          "withheldTitle": "Deixado de fora por causa do seu plano",
+          "withheldButtons": "Os botões Confirmar, Reagendar e Cancelar desta etapa: {step}.",
+          "withheldRebook": "{step}: é guardada desativada."
+        }
+      },
+      "buttonsLocked": "Os botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, que o seu plano não inclui.",
+      "test": {
+        "send": "Enviar um e-mail de teste",
+        "sending": "A enviar",
+        "hint": "Envia esta etapa com valores de exemplo. Deixe o endereço vazio para enviar ao seu próprio e-mail.",
+        "toLabel": "Enviar o teste para",
+        "toPlaceholder": "O seu próprio endereço, ou escreva outro",
+        "toInvalid": "Introduza um endereço de e-mail completo, ou deixe vazio.",
+        "wait": {
+          "unsaved": "Guarde primeiro as alterações: o teste envia a etapa guardada.",
+          "notSaved": "Guarde primeiro os lembretes: esta etapa é nova."
+        },
+        "queued": "O e-mail de teste está a caminho de {address}. O resultado também chega às suas notificações.",
+        "skipped": "Nada foi enviado: o seu utilizador não tem endereço de e-mail.",
+        "noWhatsapp": "As mensagens de WhatsApp não podem ser testadas a partir daqui."
+      },
+      "report": {
+        "title": "Relatório de lembretes",
+        "description": "O que os lembretes fizeram: quantos foram enviados, entregues, falharam ou foram ignorados, e quantos seguiram por outro canal.",
+        "type": "Tipo de marcação",
+        "allTypes": "Todos os tipos de marcação",
+        "range": "Período",
+        "ranges": {
+          "7": "Últimos 7 dias",
+          "30": "Últimos 30 dias",
+          "90": "Últimos 90 dias",
+          "custom": "Escolher datas"
+        },
+        "from": "De",
+        "to": "Até",
+        "refresh": "Atualizar",
+        "pickDates": "Escolha uma data de início e uma de fim para ver o relatório.",
+        "loading": "A carregar o relatório",
+        "empty": "Nenhum lembrete estava previsto neste período. Quando os lembretes forem enviados, os resultados aparecem aqui.",
+        "caption": "Resultados dos lembretes de {name}",
+        "col": {
+          "step": "Etapa",
+          "sent": "Enviados",
+          "delivered": "Entregues",
+          "failed": "Falharam",
+          "fallback": "Enviados por outro canal",
+          "skipped": "Ignorados",
+          "confirmed": "Confirmados",
+          "rescheduled": "Reagendamento pedido",
+          "cancelled": "Cancelados",
+          "total": "Total"
+        },
+        "rates": "De {count, plural, one {# agendamento} other {# agendamentos}} que receberam um lembrete: {confirmed}% confirmados, {cancelled}% cancelados, {noShow}% faltas.",
+        "why": "Porquê",
+        "otherReason": "Outro motivo",
+        "buttonsLocked": "Os resultados dos botões Confirmar, Reagendar e Cancelar fazem parte do nível superior de Agendamentos, por isso não são contados no seu plano.",
+        "emailNote": "«Entregue» vem apenas do WhatsApp: o e-mail não tem relatório de entrega, por isso conta como enviado. Só se mostram contagens; nenhum nome, número ou mensagem."
+      },
+      "history": {
+        "fallback": "Enviado por {channel} porque o primeiro canal não conseguiu entregar.",
+        "delivery": {
+          "delivered": "O WhatsApp indicou que foi entregue.",
+          "failed": "O WhatsApp indicou que falhou.",
+          "undelivered": "O WhatsApp não entregou a tempo."
+        },
+        "tried": "Canais tentados, por ordem",
+        "attempt": {
+          "sent": "enviado",
+          "skipped": "não usado",
+          "held": "em espera",
+          "failed": "falhou"
+        },
+        "buttons": "Respostas com os botões",
+        "button": {
+          "confirm": "Tocou em Confirmar",
+          "reschedule": "Tocou em Reagendar",
+          "cancel": "Tocou em Cancelar"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "feature": "segments",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-segments-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/lookups.ts",
+        "apps/web/src/features/segments/components/live-preview.tsx",
+        "apps/web/src/features/segments/components/segment-actions.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-segments-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/lookups.ts",
+        "apps/web/src/features/segments/components/segment-actions.tsx",
+        "apps/web/src/features/segments/components/segment-builder.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-segments-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/mock-server.ts",
+        "apps/web/src/features/segments/api/segments.ts",
+        "apps/web/src/features/segments/components/live-preview.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/segments/lib/fields.test.ts",
+          "match": "dropMissingValues keeps the values that still exist"
+        },
+        {
+          "file": "apps/web/src/features/segments/lib/model.test.ts",
+          "match": "switching between \"is\" and \"is any of\" keeps what was chosen"
+        }
+      ]
+    },
+    {
+      "id": "ES-segments-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/mock-server.ts",
+        "apps/web/src/features/segments/components/segment-builder.tsx",
+        "apps/web/src/features/segments/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-segments-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/api/mock-server.ts",
+        "apps/web/src/features/segments/api/segments.ts",
+        "apps/web/src/features/segments/components/segment-actions.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-segments-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/segments/components/live-preview.tsx",
+        "apps/web/src/features/segments/components/segment-actions.tsx",
+        "apps/web/src/features/segments/components/segments-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

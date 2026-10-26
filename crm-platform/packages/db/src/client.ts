@@ -1,5 +1,5 @@
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Pool, types, type PoolConfig } from 'pg';
+import { Pool, types, type PoolClient, type PoolConfig } from 'pg';
 import * as schema from './schema';
 
 /**
@@ -120,6 +120,23 @@ export function createDbClientPair(
 }
 
 /**
+ * The drizzle database of one pooled connection, built once. `drizzle(client, { schema })` processes the whole schema (every table's
+ * indexes and relations) and builds the session, which a 15-minute soak of every GET route measured at 53% of the API's CPU when it ran for
+ * every transaction. The pool hands the same connection object back each time it reuses a connection, so the database is cached on it; a
+ * connection that is closed is garbage-collected together with its entry. A connection runs one transaction at a time (it is checked out
+ * for the whole of one), so sharing the database between successive transactions is safe: `transaction` builds its own transaction object.
+ */
+const databases = new WeakMap<object, Database>();
+export function databaseFor(client: PoolClient): Database {
+  let db = databases.get(client);
+  if (!db) {
+    db = drizzle(client, { schema });
+    databases.set(client, db);
+  }
+  return db;
+}
+
+/**
  * Opens a top-level transaction on `db` and hands the connection back whatever happens.
  *
  * drizzle's own `db.transaction` runs `begin` BEFORE its try/finally, so when `begin` fails (the connection died or went silent between
@@ -137,7 +154,7 @@ export async function runTransaction<T>(db: Database, fn: (tx: Tx) => Promise<T>
   const ignore = (): void => undefined;
   client.on('error', ignore);
   try {
-    return await drizzle(client, { schema }).transaction(fn);
+    return await databaseFor(client).transaction(fn);
   } finally {
     client.off('error', ignore);
     const raw = client as unknown as {
