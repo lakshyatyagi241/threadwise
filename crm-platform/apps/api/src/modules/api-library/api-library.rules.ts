@@ -89,6 +89,7 @@ export function withoutDotSegments(url: string): string {
  * knows to send the value as what it looks like (a number, a yes/no) and not as text.
  */
 export const RAW_TOKEN_MARK = '\u0001';
+// eslint-disable-next-line no-control-regex
 const RAW_TOKEN_RE = /^\u0001\{\{\s*([^{}]+?)\s*\}\}$/;
 
 /** The text of a value as a JSON value: `19.99` is a number, `yes` or `true` is true, `no` or `false` is false, empty is null; any other text stays text. */
