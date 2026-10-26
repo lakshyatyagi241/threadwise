@@ -338,6 +338,15 @@ export class RuntimeMonitor {
     if (retries > 0) this.jobRetries.inc(retries, { queue });
   }
 
+  /**
+   * Makes a queue's outcome series exist at 0 from the moment its worker starts. A counter that first appears at 1 has no earlier
+   * sample, so Prometheus's increase() reports 0 for it and the first failure of a worker's life would never alert.
+   */
+  registerQueue(queue: string): void {
+    this.jobs.inc(0, { queue, outcome: 'completed' });
+    this.jobs.inc(0, { queue, outcome: 'failed' });
+  }
+
   /** A failed operation was recorded. Labels are the fixed queue name and the failure category: never an id, tenant or error text. */
   observeDeadLetter(queue: string, category: string): void {
     this.dlqCaptured.inc(1, { queue, category });
