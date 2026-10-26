@@ -664,6 +664,7 @@ export function InboxScreen() {
           {selectedId ? (
             <ThreadPane
               key={selectedId}
+              onOpenThread={(id) => open(id, { focus: false })}
               conversationId={selectedId}
               detail={detail.detail}
               fetchedAt={detail.fetchedAt}

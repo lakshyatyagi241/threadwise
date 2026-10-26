@@ -1151,6 +1151,16 @@
       "unofficial": "Não oficial",
       "officialFull": "Oficial (API do WhatsApp Cloud)",
       "unofficialFull": "Não oficial (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Conversas anteriores",
+      "began": "Iniciada em {date}",
+      "showMore": "Mostrar mais {count}",
+      "showLess": "Mostrar menos",
+      "loading": "Carregando…",
+      "failed": "Não foi possível carregar esta conversa.",
+      "unknown": "Remetente desconhecido",
+      "openThread": "Abrir conversa"
     }
   }
 }

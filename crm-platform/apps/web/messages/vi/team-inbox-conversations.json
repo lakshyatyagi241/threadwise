@@ -1151,6 +1151,16 @@
       "unofficial": "Không chính thức",
       "officialFull": "Chính thức (WhatsApp Cloud API)",
       "unofficialFull": "Không chính thức (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Chuỗi trước đó",
+      "began": "Bắt đầu {date}",
+      "showMore": "Hiện thêm {count}",
+      "showLess": "Thu gọn",
+      "loading": "Đang tải…",
+      "failed": "Không tải được chuỗi này.",
+      "unknown": "Người gửi không xác định",
+      "openThread": "Mở chuỗi"
     }
   }
 }

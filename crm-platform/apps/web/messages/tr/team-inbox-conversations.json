@@ -1151,6 +1151,16 @@
       "unofficial": "Resmi olmayan",
       "officialFull": "Resmi (WhatsApp Cloud API)",
       "unofficialFull": "Resmi olmayan (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Önceki konuşmalar",
+      "began": "Başlangıç: {date}",
+      "showMore": "{count} tane daha göster",
+      "showLess": "Daha az göster",
+      "loading": "Yükleniyor…",
+      "failed": "Bu konuşma yüklenemedi.",
+      "unknown": "Bilinmeyen gönderen",
+      "openThread": "Konuşmayı aç"
     }
   }
 }

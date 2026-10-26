@@ -1151,6 +1151,16 @@
       "unofficial": "Nieoficjalny",
       "officialFull": "Oficjalny (WhatsApp Cloud API)",
       "unofficialFull": "Nieoficjalny (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Wcześniejsze wątki",
+      "began": "Rozpoczęty {date}",
+      "showMore": "Pokaż jeszcze {count}",
+      "showLess": "Pokaż mniej",
+      "loading": "Ładowanie…",
+      "failed": "Nie udało się wczytać tego wątku.",
+      "unknown": "Nieznany nadawca",
+      "openThread": "Otwórz wątek"
     }
   }
 }

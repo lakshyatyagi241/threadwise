@@ -1151,6 +1151,16 @@
       "unofficial": "ไม่เป็นทางการ",
       "officialFull": "ทางการ (WhatsApp Cloud API)",
       "unofficialFull": "ไม่เป็นทางการ (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "เธรดก่อนหน้า",
+      "began": "เริ่มเมื่อ {date}",
+      "showMore": "แสดงเพิ่มอีก {count}",
+      "showLess": "แสดงน้อยลง",
+      "loading": "กำลังโหลด…",
+      "failed": "โหลดเธรดนี้ไม่ได้",
+      "unknown": "ผู้ส่งที่ไม่รู้จัก",
+      "openThread": "เปิดเธรด"
     }
   }
 }

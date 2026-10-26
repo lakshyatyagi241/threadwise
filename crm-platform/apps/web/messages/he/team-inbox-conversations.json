@@ -1151,6 +1151,16 @@
       "unofficial": "לא רשמי",
       "officialFull": "רשמי (WhatsApp Cloud API)",
       "unofficialFull": "לא רשמי (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "שרשורים קודמים",
+      "began": "התחיל ב-{date}",
+      "showMore": "הצג עוד {count}",
+      "showLess": "הצג פחות",
+      "loading": "טוען…",
+      "failed": "לא ניתן לטעון שרשור זה.",
+      "unknown": "שולח לא ידוע",
+      "openThread": "פתח שרשור"
     }
   }
 }

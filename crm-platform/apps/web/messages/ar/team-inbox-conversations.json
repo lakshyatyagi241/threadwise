@@ -1151,6 +1151,16 @@
       "unofficial": "غير رسمي",
       "officialFull": "رسمي (واجهة WhatsApp Cloud API)",
       "unofficialFull": "غير رسمي (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "سلاسل سابقة",
+      "began": "بدأت في {date}",
+      "showMore": "عرض {count} أخرى",
+      "showLess": "عرض أقل",
+      "loading": "جارٍ التحميل…",
+      "failed": "تعذّر تحميل هذه السلسلة.",
+      "unknown": "مرسل غير معروف",
+      "openThread": "فتح السلسلة"
     }
   }
 }

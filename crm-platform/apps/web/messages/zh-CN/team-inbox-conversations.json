@@ -1151,6 +1151,16 @@
       "unofficial": "非官方",
       "officialFull": "官方 (WhatsApp Cloud API)",
       "unofficialFull": "非官方 (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "之前的会话串",
+      "began": "开始于 {date}",
+      "showMore": "再显示 {count} 条",
+      "showLess": "收起",
+      "loading": "加载中…",
+      "failed": "无法加载此会话串。",
+      "unknown": "未知发件人",
+      "openThread": "打开会话串"
     }
   }
 }

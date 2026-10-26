@@ -1151,6 +1151,16 @@
       "unofficial": "غیر سرکاری",
       "officialFull": "سرکاری (WhatsApp Cloud API)",
       "unofficialFull": "غیر سرکاری (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "پچھلے تھریڈ",
+      "began": "شروع: {date}",
+      "showMore": "مزید {count} دکھائیں",
+      "showLess": "کم دکھائیں",
+      "loading": "لوڈ ہو رہا ہے…",
+      "failed": "یہ تھریڈ لوڈ نہیں ہو سکا۔",
+      "unknown": "نامعلوم بھیجنے والا",
+      "openThread": "تھریڈ کھولیں"
     }
   }
 }

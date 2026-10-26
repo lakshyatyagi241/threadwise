@@ -1151,6 +1151,16 @@
       "unofficial": "Non ufficiale",
       "officialFull": "Ufficiale (API WhatsApp Cloud)",
       "unofficialFull": "Non ufficiale (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Thread precedenti",
+      "began": "Iniziato il {date}",
+      "showMore": "Mostra altri {count}",
+      "showLess": "Mostra meno",
+      "loading": "Caricamento…",
+      "failed": "Impossibile caricare questo thread.",
+      "unknown": "Mittente sconosciuto",
+      "openThread": "Apri thread"
     }
   }
 }

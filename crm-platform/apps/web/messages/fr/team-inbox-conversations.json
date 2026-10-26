@@ -1151,6 +1151,16 @@
       "unofficial": "Non officiel",
       "officialFull": "Officiel (API WhatsApp Cloud)",
       "unofficialFull": "Non officiel (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Fils précédents",
+      "began": "Commencé le {date}",
+      "showMore": "Afficher {count} de plus",
+      "showLess": "Afficher moins",
+      "loading": "Chargement…",
+      "failed": "Impossible de charger ce fil.",
+      "unknown": "Expéditeur inconnu",
+      "openThread": "Ouvrir le fil"
     }
   }
 }

@@ -1151,6 +1151,16 @@
       "unofficial": "আনঅফিসিয়াল",
       "officialFull": "অফিসিয়াল (WhatsApp Cloud API)",
       "unofficialFull": "আনঅফিসিয়াল (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "আগের থ্রেড",
+      "began": "শুরু {date}",
+      "showMore": "আরও {count}টি দেখান",
+      "showLess": "কম দেখান",
+      "loading": "লোড হচ্ছে…",
+      "failed": "এই থ্রেড লোড করা যায়নি।",
+      "unknown": "অজানা প্রেরক",
+      "openThread": "থ্রেড খুলুন"
     }
   }
 }
