@@ -207,7 +207,11 @@ export function maskJson(value: unknown, depth = 0): unknown {
 // "…token…": "value" or a bare scalar; the key part may carry any text around the word. Used only when the text is JSON-shaped but cut
 // (an answer larger than the log keeps), where the structure cannot be parsed.
 const SECRET_PAIR =
-  /("(?:[^"\\]|\\.)*(?:authorization|token|secret|password|passwd|api[-_ ]?key|cookie|credential|signature|bearer|private[-_ ]?key)(?:[^"\\]|\\.)*"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
+  /("(?:[^"\\]|\\.)*(?:authorization|token|secret|password|passwd|api[-_ ]?key|cookie|credential|signature|bearer|private[-_ ]?key|card[-_ ]?number|session[-_ ]?id|otp[-_ ]?code)(?:[^"\\]|\\.)*"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
+
+// Short secret names (`pwd`, `pin`, `otp`, `cvv`, `ssn`, `jwt`, `session`) are only a secret as the whole key, in a cut JSON text too.
+const SHORT_SECRET_PAIR =
+  /("(?:pwd|pin|otp|cvv2?|cvc|ssn|jwt|session|session[-_ ]?key|card[-_ ]?no)"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
 
 /**
  * A JSON text with its secret-looking keys masked. Text that parses is masked by key at any depth; JSON-shaped text that does not parse
@@ -218,7 +222,9 @@ export function maskJsonText(text: string): string {
     return JSON.stringify(maskJson(JSON.parse(text)));
   } catch {
     return /^\s*[{[]/.test(text)
-      ? text.replace(SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
+      ? text
+          .replace(SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
+          .replace(SHORT_SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
       : text;
   }
 }
@@ -238,6 +244,18 @@ export function sameOrigin(a: string, b: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * True when the address a run really calls (its variables filled in with what the flow passed) is on another origin than the one the
+ * saved defaults give. A saved secret header must not be sent then: a value from a flow or a contact could aim it at a host of its own.
+ */
+export function addressMovedFromSaved(
+  url: string,
+  values: VariableValues,
+  defaults: VariableValues,
+): boolean {
+  return !sameOrigin(renderUrl(url, values), renderUrl(url, defaults));
 }
 
 export function truncateText(text: string, max: number): { text: string; truncated: boolean } {
@@ -534,5 +552,19 @@ export function scrubSecretHeaders(
         ? v.map((x) => scrubSecretValues(x, secrets))
         : scrubSecretValues(v, secrets),
     ]),
+  );
+}
+
+/**
+ * An answer's text as it may be shown and stored: JSON is masked by key at any depth; any other text (a form-encoded echo, a plain
+ * `name: value` page, HTML) has its `secret-name=value` and `secret-name: value` pairs masked. The server's own reply is not trusted
+ * to leave out what it was sent.
+ */
+export function maskResponseText(text: string): string {
+  if (/^\s*[{[]/.test(text)) return maskJsonText(text);
+  return text.replace(
+    /([A-Za-z][A-Za-z0-9_.-]{1,40})(\s*[=:]\s*)([^\s&;,"'<>]+)/g,
+    (m, name: string, sep: string) =>
+      apiLibraryIsSensitiveName(name) ? `${name}${sep}${API_LIBRARY_SECRET_MASK}` : m,
   );
 }

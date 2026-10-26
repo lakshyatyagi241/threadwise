@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseCurl, shellSplit } from './curl';
+import { parseCurl, shellSplit, urlEncodeDatum } from './curl';
 
 describe('shellSplit', () => {
   it('groups quotes, honours escapes and joins continued lines', () => {
@@ -81,5 +81,23 @@ describe('parseCurl', () => {
 
   it('maps an unknown method to GET', () => {
     expect(parseCurl('curl -X TRACE https://a.test')?.method).toBe('GET');
+  });
+});
+
+describe('--data-urlencode', () => {
+  it('encodes the content like curl does and never splits on an & inside it', () => {
+    expect(urlEncodeDatum('q=a b&c=d')).toBe('q=a%20b%26c%3Dd');
+    expect(urlEncodeDatum('=x y')).toBe('x%20y');
+    expect(urlEncodeDatum('plain & text')).toBe('plain%20%26%20text');
+    expect(urlEncodeDatum('file@/tmp/a')).toBe('file@/tmp/a');
+  });
+
+  it('puts the encoded value in the address of a -G request, other data as typed', () => {
+    expect(
+      parseCurl(`curl -G https://a.test/s --data-urlencode 'q=fish & chips' -d 'page=2'`),
+    ).toMatchObject({ method: 'GET', url: 'https://a.test/s?q=fish%20%26%20chips&page=2' });
+    expect(
+      parseCurl(`curl https://a.test/s --data-urlencode 'name=A&B' --data-urlencode 'x=1'`)?.body,
+    ).toBe('name=A%26B&x=1');
   });
 });

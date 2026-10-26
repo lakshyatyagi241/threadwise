@@ -73,6 +73,23 @@ const FLAGS_WITH_VALUE = new Set([
   ...DATA_FLAGS,
 ]);
 
+/**
+ * One `--data-urlencode` value the way curl reads it: `name=content` keeps the name and encodes the content, `=content` and a bare
+ * `content` encode all of it (a space is %20, an `&` inside it is %26, so it can never split the query). `name@file` reads a file the
+ * browser has no access to, so it is kept as typed.
+ */
+export function urlEncodeDatum(raw: string): string {
+  const enc = (v: string) =>
+    encodeURIComponent(v).replace(
+      /[!'()*]/g,
+      (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
+    );
+  const eq = raw.indexOf('=');
+  if (eq < 0) return raw.includes('@') && raw.indexOf('@') > 0 ? raw : enc(raw);
+  if (eq === 0) return enc(raw.slice(1));
+  return `${raw.slice(0, eq)}=${enc(raw.slice(eq + 1))}`;
+}
+
 const b64 = (s: string): string =>
   typeof btoa === 'function' ? btoa(s) : Buffer.from(s, 'utf8').toString('base64');
 
@@ -119,7 +136,8 @@ export function parseCurl(command: string): ImportedRequest | null {
     else if (t === '-b' || t === '--cookie') setHeader('Cookie', next());
     else if (t === '-A' || t === '--user-agent') setHeader('User-Agent', next());
     else if (t === '--url') url = next();
-    else if (DATA_FLAGS.has(t)) data.push(next());
+    else if (DATA_FLAGS.has(t))
+      data.push(t === '--data-urlencode' ? urlEncodeDatum(next()) : next());
     else if (t === '-F' || t === '--form') {
       const f = next();
       const at = f.indexOf('=');

@@ -19,6 +19,7 @@ import {
   renderBody,
   renderUrl,
   resolveVariables,
+  addressMovedFromSaved,
   sameOrigin,
   type VariableValues,
 } from './api-library.rules';
@@ -93,7 +94,7 @@ export class ApiLibraryRunService {
               source: 'flow' as const,
               defaultValue: v.defaultValue,
             })),
-            { overrides: input.values },
+            // The address a secret was saved for is the one the DEFAULTS give: values typed into the test form must not move it.
           ),
         ),
       );
@@ -214,22 +215,34 @@ export class ApiLibraryRunService {
       })),
       { overrides: input.overrides, lookup: input.lookup },
     );
-    const outcome = await this.runner.run(
-      {
-        method: row.method,
-        url: row.url,
-        payloadType: row.payloadType,
-        headers: row.headers.map((h) => ({
-          key: h.key,
-          value: h.secret ? this.crypto.decrypt(h.value) : h.value,
-          secret: h.secret,
-        })),
-        body: row.body,
-        functionCode: row.functionCode,
-        idempotencyKey: input.idempotencyKey,
-      },
-      values,
+    // A saved secret goes only to the address it was saved for. A value the flow passes in (or reads from the contact) can change the
+    // host of a `{{variable}}` address, so the address this run really calls is compared with the one the defaults give.
+    const defaults = await resolveVariables(
+      row.variables.map((v) => ({
+        name: v.name,
+        source: 'flow' as const,
+        defaultValue: v.defaultValue,
+      })),
     );
+    const outcome =
+      row.headers.some((h) => h.secret) && addressMovedFromSaved(row.url, values, defaults)
+        ? secretElsewhere()
+        : await this.runner.run(
+            {
+              method: row.method,
+              url: row.url,
+              payloadType: row.payloadType,
+              headers: row.headers.map((h) => ({
+                key: h.key,
+                value: h.secret ? this.crypto.decrypt(h.value) : h.value,
+                secret: h.secret,
+              })),
+              body: row.body,
+              functionCode: row.functionCode,
+              idempotencyKey: input.idempotencyKey,
+            },
+            values,
+          );
     await this.db.txAs({ orgId: input.orgId }, (tx) =>
       this.logs.record(
         tx,
@@ -276,6 +289,21 @@ export class ApiLibraryRunService {
       ),
     );
   }
+}
+
+/** A run stopped before any request: a saved secret would have gone to an address other than the one it was saved for. */
+function secretElsewhere(): RunOutcome {
+  return {
+    ok: false,
+    status: null,
+    durationMs: 0,
+    errorKind: 'invalid',
+    error:
+      'This API holds a secret header, which is only sent to the address it was saved for. The address this step built points somewhere else, so nothing was sent.',
+    request: null,
+    response: null,
+    processedPayload: null,
+  };
 }
 
 export function toTestResponse(
