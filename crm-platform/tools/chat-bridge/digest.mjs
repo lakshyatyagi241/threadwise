@@ -8,6 +8,11 @@ import { sanitizeSql, widgetsOf } from './lib.mjs';
 // total_exec_time is the cost of a statement (calls x mean), so the ranking is by what the database spent, not by the single slowest call.
 export const DIGEST_SQL = `select s.queryid::text as queryid, s.calls::float8 as calls, s.total_exec_time, s.max_exec_time, left(s.query, 600) as q
   from pg_stat_statements s where s.calls > 0 and s.query not ilike '%pg_stat_statements%' and s.query not ilike '%pg_stat_activity%'`;
+// D-08: tables over 64 MB with dead rows autovacuum has not cleaned yet, worst first. Counters only (no table scan). A closed month of
+// messages that sits high here, or has no recent autovacuum, is the first sign of bloat; the exact numbers come from tools/db-bloat.
+export const TABLES_SQL = `select relname, n_live_tup::float8 as live, n_dead_tup::float8 as dead, pg_table_size(relid)::float8 as bytes, last_autovacuum
+  from pg_stat_user_tables where schemaname = 'public' and pg_table_size(relid) > 67108864 and n_dead_tup > 0
+  order by n_dead_tup::float8 / greatest(n_live_tup + n_dead_tup, 1) desc limit 5`;
 export const RESET_SQL = `select stats_reset from pg_stat_statements_info`;
 
 export const digestCfg = (env) => ({
@@ -52,21 +57,27 @@ export function weeklyTop(ref, cur, { top = 10, skip = () => false } = {}) {
 }
 
 /** The Google Chat message. `sinceLabel` says whether it is a full week or since a statistics reset. */
-export function digestMessage(w, { sinceLabel, thresholdMs }) {
+export function digestMessage(w, { sinceLabel, thresholdMs, tables = [] }) {
   const title = `Weekly database digest: ${w.statements} statements, ${fmtDur(w.totalMs)} of database time`;
   if (!w.top.length) return { text: `${title}. Nothing ran in this period.` };
   const rows = w.top.map((r, i) => [
     `#${i + 1}  ${(r.share * 100).toFixed(1)} % of time${r.meanMs >= thresholdMs ? `  ·  mean over ${thresholdMs} ms` : ''}`,
     `${r.calls.toLocaleString('en')} calls · mean ${r.meanMs.toFixed(1)} ms · max ${r.maxMs.toFixed(0)} ms · total ${fmtDur(r.totalMs)}\n${sanitizeSql(r.q, 240)}`,
   ]);
+  const sections = [{ widgets: widgetsOf(rows) }];
+  if (tables.length) {
+    const health = tables.map((t) => [
+      `${t.relname}: ${((100 * t.dead) / Math.max(t.live + t.dead, 1)).toFixed(1)} % dead rows`,
+      `${Math.round(t.bytes / 1048576)} MB · ${Math.round(t.dead).toLocaleString('en')} dead rows · last autovacuum ${t.last_autovacuum ? new Date(t.last_autovacuum).toISOString().slice(0, 16).replace('T', ' ') : 'never'}`,
+    ]);
+    sections.push({
+      header: 'Table health: most dead rows (tables over 64 MB)',
+      widgets: widgetsOf(health),
+    });
+  }
   return {
     text: `${title} (${sinceLabel})`,
-    cardsV2: [
-      {
-        cardId: 'digest',
-        card: { header: { title, subtitle: sinceLabel }, sections: [{ widgets: widgetsOf(rows) }] },
-      },
-    ],
+    cardsV2: [{ cardId: 'digest', card: { header: { title, subtitle: sinceLabel }, sections } }],
   };
 }
 
@@ -117,9 +128,17 @@ export function createDigest({
         ? `last 7 days, since ${new Date(baseline.t).toISOString().slice(0, 10)}`
         : await sinceReset();
       const w = weeklyTop(full ? baseline.map : null, cur, { top: c.top, skip });
-      await send('slowquery', digestMessage(w, { sinceLabel, thresholdMs: c.thresholdMs }), {
-        meta: { kind: 'weekly_digest' },
-      });
+      const tables = await query(TABLES_SQL, []).then(
+        (r) => r.rows,
+        () => [], // the table list is a bonus: a failure here must not lose the digest
+      );
+      await send(
+        'slowquery',
+        digestMessage(w, { sinceLabel, thresholdMs: c.thresholdMs, tables }),
+        {
+          meta: { kind: 'weekly_digest' },
+        },
+      );
       lastSent = t;
       baseline = { t, map: cur };
       return true;

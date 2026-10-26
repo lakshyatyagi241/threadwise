@@ -16,8 +16,8 @@
       "failed": "Operazione non riuscita",
       "source": {
         "test": "Test",
-        "flow": "Flusso",
-        "automation": "Automazione"
+        "flow": "Flusso semplice",
+        "automation": "Flusso avanzato"
       },
       "errorKind": {
         "blocked": "Indirizzo bloccato",
@@ -327,6 +327,7 @@
       "functionHint": "Rimodella il payload con JavaScript prima dell'invio. Facoltativo.",
       "plainHttpWarning": "Questo indirizzo inizia con http://, quindi la password o la chiave negli header viaggerebbero senza crittografia. Usa https:// se il server lo supporta.",
       "importSkipped": "Il comando incollato invia anche un file ({names}). Qui non è possibile importare un file, quindi è stato escluso. Tutto il resto è stato compilato.",
+      "importForm": "Il comando incollato invia i dati come modulo web (a=1&b=2). Questa API invia JSON o multipart form-data, quindi i campi sono stati convertiti in un oggetto JSON. Verifica che l'API chiamata accetti JSON.",
       "payloadTypedHint": "Per inviare un numero vero o sì/no, scrivi la variabile senza virgolette: {example}."
     },
     "test": {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   API_LIBRARY_SECRET_MASK,
   apiLibraryIsSensitiveName,
@@ -243,11 +244,16 @@ export class ApiLibraryRunService {
             },
             values,
           );
-    await this.db.txAs({ orgId: input.orgId }, (tx) =>
+    await this.db.txAs({ orgId: input.orgId }, async (tx) =>
       this.logs.record(
         tx,
         input.orgId,
-        { source: 'flow', apiUuid: row.uuid, apiName: row.name, ...input.context },
+        {
+          source: await this.flowSource(tx, input.orgId, input.context.flowId),
+          apiUuid: row.uuid,
+          apiName: row.name,
+          ...input.context,
+        },
         outcome,
       ),
     );
@@ -280,14 +286,37 @@ export class ApiLibraryRunService {
       response: null,
       processedPayload: null,
     };
-    await this.db.txAs({ orgId: input.orgId }, (tx) =>
+    await this.db.txAs({ orgId: input.orgId }, async (tx) =>
       this.logs.record(
         tx,
         input.orgId,
-        { source: 'flow', apiUuid: input.apiId, apiName: '', ...input.context },
+        {
+          source: await this.flowSource(tx, input.orgId, input.context.flowId),
+          apiUuid: input.apiId,
+          apiName: '',
+          ...input.context,
+        },
         outcome,
       ),
     );
+  }
+
+  /**
+   * The log's source for a run made by a flow: `flow` for one built in the Simple builder, `automation` for one built in the Advanced
+   * builder (the Logs filter names them Simple flow and Advanced flow). A run with no flow named stays `flow`.
+   */
+  private async flowSource(
+    tx: Parameters<ApiLibraryRepository['findByUuid']>[0],
+    orgId: number,
+    flowId: number | null | undefined,
+  ): Promise<'flow' | 'automation'> {
+    if (flowId == null) return 'flow';
+    const res = await tx.execute(
+      sql`SELECT builder FROM flows WHERE org_id = ${orgId} AND id = ${flowId}`,
+    );
+    return (res.rows[0] as { builder?: string } | undefined)?.builder === 'advanced'
+      ? 'automation'
+      : 'flow';
   }
 }
 

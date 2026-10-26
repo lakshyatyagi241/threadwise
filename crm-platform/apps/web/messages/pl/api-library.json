@@ -16,8 +16,8 @@
       "failed": "Błąd",
       "source": {
         "test": "Test",
-        "flow": "Przepływ",
-        "automation": "Automatyzacja"
+        "flow": "Prosty przepływ",
+        "automation": "Zaawansowany przepływ"
       },
       "errorKind": {
         "blocked": "Adres zablokowany",
@@ -327,6 +327,7 @@
       "functionHint": "Przekształć ładunek za pomocą JavaScript przed wysłaniem. Opcjonalne.",
       "plainHttpWarning": "Ten adres zaczyna się od http://, więc hasło lub klucz w nagłówkach zostałyby wysłane bez szyfrowania. Użyj https://, jeśli serwer to obsługuje.",
       "importSkipped": "Wklejone polecenie wysyła także plik ({names}). Pliku nie można tu zaimportować, więc go pominięto. Wszystko inne zostało wypełnione.",
+      "importForm": "Wklejone polecenie wysyła dane jako formularz webowy (a=1&b=2). To API wysyła JSON lub multipart form-data, więc pola formularza zamieniono na obiekt JSON. Sprawdź, czy wywoływane API akceptuje JSON.",
       "payloadTypedHint": "Aby wysłać prawdziwą liczbę lub tak/nie, wpisz zmienną bez cudzysłowów: {example}."
     },
     "test": {

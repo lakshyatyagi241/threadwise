@@ -274,7 +274,8 @@ export function fromDetail(d: ApiLibraryDetail): ApiFormState {
 /** What the old console's "Import API's" produced from a cURL command (see curl.ts). */
 /** A part of a pasted command that could not be imported (a file to upload): shown, never dropped without a word. */
 export interface ImportNote {
-  code: 'file';
+  /** `file`: a file part left out. `form`: a web-form body (`a=1&b=2`) turned into a JSON object, because the API sends JSON or multipart form-data. */
+  code: 'file' | 'form';
   name: string;
 }
 

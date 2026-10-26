@@ -1,0 +1,69 @@
+name: qa-daily
+# Explores every page of the web app on a fresh seeded stack, then files each bug in the shared Google Sheet (apps/web/qa-daily/README.md).
+# Needs repo secrets QA_SHEET_URL and QA_SHEET_TOKEN. No Claude or API key: fixing the open rows runs on a developer's machine.
+on:
+  schedule:
+    - cron: '30 21 * * *' # 03:00 IST
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Only the first N pages (empty = all)'
+        default: ''
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: crm, POSTGRES_PASSWORD: crm, POSTGRES_DB: crm }
+        ports: ['5432:5432']
+        options: --health-cmd "pg_isready -U crm" --health-interval 5s --health-retries 10
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 10
+    env:
+      OPERATOR_EMAIL: qa-operator@example.test
+      OPERATOR_PASSWORD: Qa-Daily-Pass1x
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability --filter @crm/api build
+      - run: pnpm db:migrate && pnpm db:seed
+      - run: pnpm --filter @crm/api operator:create -- --email "$OPERATOR_EMAIL" --name "QA Operator"
+      - name: Start the API
+        working-directory: apps/api
+        run: |
+          nohup node dist/src/main.js > "$RUNNER_TEMP/api.log" 2>&1 &
+          for i in $(seq 1 60); do curl -fsS http://localhost:3000/health >/dev/null && exit 0; sleep 2; done
+          tail -n 30 "$RUNNER_TEMP/api.log"; exit 1
+      - run: pnpm --filter @crm/web build
+      - name: Start the web app
+        working-directory: apps/web
+        run: |
+          nohup node node_modules/next/dist/bin/next start -p 3001 > "$RUNNER_TEMP/web.log" 2>&1 &
+          for i in $(seq 1 60); do curl -fsS http://localhost:3001/login >/dev/null && exit 0; sleep 2; done
+          tail -n 30 "$RUNNER_TEMP/web.log"; exit 1
+      - run: pnpm --filter @crm/web exec playwright install --with-deps chromium
+      - name: Explore and report
+        working-directory: apps/web
+        env:
+          QA_SHEET_URL: ${{ secrets.QA_SHEET_URL }}
+          QA_SHEET_TOKEN: ${{ secrets.QA_SHEET_TOKEN }}
+          QA_LIMIT: ${{ github.event.inputs.limit }}
+          E2E_OPERATOR_EMAIL: ${{ env.OPERATOR_EMAIL }}
+          E2E_OPERATOR_PASSWORD: ${{ env.OPERATOR_PASSWORD }}
+        run: bash qa-daily/run-daily.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-daily
+          path: |
+            apps/web/qa-daily/out
+            ${{ runner.temp }}/api.log
+            ${{ runner.temp }}/web.log

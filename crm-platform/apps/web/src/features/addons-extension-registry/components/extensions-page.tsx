@@ -679,6 +679,7 @@ function InstalledList({
                 <Button
                   size="sm"
                   variant="secondary"
+                  aria-label={`${x.status === 'active' ? t('disable') : t('enable')}: ${x.name}`}
                   className="shrink-0"
                   disabled={toggle.isPending}
                   onClick={() => toggle.mutate(x)}
@@ -688,6 +689,7 @@ function InstalledList({
                 <Button
                   size="sm"
                   variant="secondary"
+                  aria-label={`${t('remove')}: ${x.name}`}
                   className="shrink-0 border-danger/40 text-danger"
                   onClick={() => setConfirm({ kind: 'extension', item: x })}
                 >
@@ -717,6 +719,7 @@ function InstalledList({
               <Button
                 size="sm"
                 variant="secondary"
+                aria-label={`${m.active ? t('remove') : t('reactivate')}: ${m.name}`}
                 className={cn(
                   'shrink-0',
                   m.active ? 'border-danger/40 text-danger' : 'border-primary/40 text-primary',
