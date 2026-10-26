@@ -1,3 +1,4 @@
+import { normalizeImportDate } from '@crm/contracts';
 import type { PropertyDef } from '../contacts/contact-property-values';
 import { normaliseHeader, readBooleanCell, readNumberCell } from '../property-csv-cells';
 
@@ -68,10 +69,23 @@ export function resolvePropertyColumns(
  */
 const unguardedCell = (text: string): string => (/^'[=+\-@\t\r]/.test(text) ? text.slice(1) : text);
 
-/** The option a cell names, matched without regard to case, guard apostrophe or not; undefined when it names none. */
+/** An option's name for comparing: accents, case, and runs of spaces (a no-break space too) do not matter. */
+const optionKey = (text: string): string =>
+  text
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+/**
+ * The option a cell names, matched without regard to case, accents, extra spaces, guard apostrophe or not; undefined when it names
+ * none. An exact (case-insensitive) match wins over the looser one.
+ */
 function optionNamed(def: PropertyDef, text: string): string | undefined {
-  const named = (t: string) => def.options.find((o) => o.toLowerCase() === t.toLowerCase());
-  return named(text) ?? named(unguardedCell(text));
+  const exact = (t: string) => def.options.find((o) => o.toLowerCase() === t.toLowerCase());
+  const loose = (t: string) => def.options.find((o) => optionKey(o) === optionKey(t));
+  return exact(text) ?? exact(unguardedCell(text)) ?? loose(text) ?? loose(unguardedCell(text));
 }
 
 /** The option a cell names, or the cell as it is when it names none (so the write rules refuse it). */
@@ -111,6 +125,9 @@ export function cellToPropertyValue(def: PropertyDef, cell: string): unknown {
         .map((p) => optionOf(def, p));
       return parts.length > 0 ? parts : undefined;
     }
+    case 'date':
+      // A spreadsheet writes 14-05-1990 back for 1990-05-14: a date that cannot be read two ways is accepted as the day it names.
+      return normalizeImportDate(text) ?? text;
     default:
       return text;
   }

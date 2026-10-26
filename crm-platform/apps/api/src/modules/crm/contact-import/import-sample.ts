@@ -26,7 +26,7 @@ export function sampleValue(def: PropertyDef): string {
       return 'yes';
     // Year first, always: the importer does not read 10/05/2026 (day or month first) as a date.
     case 'date':
-      return '2026-05-10';
+      return '2026-05-21';
     case 'datetime':
       return '2026-05-10T14:30';
     case 'email':

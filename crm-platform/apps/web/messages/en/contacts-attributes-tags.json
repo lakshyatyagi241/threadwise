@@ -657,7 +657,7 @@
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
         "tag_limit_reached": "plan tag limit reached",
-        "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
+        "invalid_date_of_birth": "date of birth is not a clear date that can be a birth date: write it year first, like 1990-05-14",
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
         "legal_hold": "protected record, not changed",

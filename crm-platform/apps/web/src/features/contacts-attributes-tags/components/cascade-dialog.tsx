@@ -172,13 +172,22 @@ export function CascadeDialog({
   }
 
   const editing = mode.kind === 'edit';
+  // Closing the dialog from the editor (the cross, Escape, the backdrop) must not leave the editor open for the next time: it starts on the list.
+  function close() {
+    setMode({ kind: 'list' });
+    setParentId('');
+    setChildId('');
+    setPairs(new Set());
+    save.reset();
+    onClose();
+  }
   const cycle = save.isError && errorKind(save.error) === 'dependencyCycle';
   const parentOptions = (parent?.options ?? []).filter((o) => !o.isHidden).sort(byPosition);
   const childOptions = (child?.options ?? []).filter((o) => !o.isHidden).sort(byPosition);
 
   return (
     <>
-      <Modal open={open} onClose={onClose} size="lg" title={t('title')} closeLabel={t('close')}>
+      <Modal open={open} onClose={close} size="lg" title={t('title')} closeLabel={t('close')}>
         {editing ? (
           <form onSubmit={onSubmit} noValidate className="space-y-5">
             <p className="text-sm text-muted-foreground">{t('intro')}</p>
