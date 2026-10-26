@@ -323,7 +323,8 @@
       "requestHint": "The name, method and address of the call.",
       "payloadHint": "What is sent in the body. Use the '{ }' button to put a variable in a value.",
       "functionHint": "Reshape the payload with JavaScript before it is sent. Optional.",
-      "importSkipped": "The pasted command also sends a file ({names}). A file cannot be imported here, so it was left out. Everything else was filled in."
+      "importSkipped": "The pasted command also sends a file ({names}). A file cannot be imported here, so it was left out. Everything else was filled in.",
+      "payloadTypedHint": "To send a real number or yes/no, write the variable without quotes: {example}."
     },
     "test": {
       "title": "Response",

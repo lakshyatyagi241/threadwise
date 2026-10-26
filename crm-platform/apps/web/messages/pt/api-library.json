@@ -323,7 +323,8 @@
       "payloadHint": "O que é enviado no corpo. Use o botão '{ }' para inserir uma variável em um valor.",
       "functionHint": "Reformate o payload com JavaScript antes de enviá-lo. Opcional.",
       "plainHttpWarning": "Este endereço começa com http://, então a senha ou chave nos seus cabeçalhos viajaria sem criptografia. Use https:// se o servidor suportar.",
-      "importSkipped": "O comando colado também envia um arquivo ({names}). Não é possível importar um arquivo aqui, por isso ele ficou de fora. O resto foi preenchido."
+      "importSkipped": "O comando colado também envia um arquivo ({names}). Não é possível importar um arquivo aqui, por isso ele ficou de fora. O resto foi preenchido.",
+      "payloadTypedHint": "Para enviar um número real ou sim/não, escreva a variável sem aspas: {example}."
     },
     "test": {
       "title": "Resposta",

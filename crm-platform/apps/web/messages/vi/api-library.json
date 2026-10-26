@@ -323,7 +323,8 @@
       "payloadHint": "Nội dung được gửi trong body. Dùng nút '{ }' để chèn biến vào giá trị.",
       "functionHint": "Định dạng lại payload bằng JavaScript trước khi gửi. Không bắt buộc.",
       "plainHttpWarning": "Địa chỉ này bắt đầu bằng http://, nên mật khẩu hoặc khóa trong tiêu đề sẽ được gửi không mã hóa. Hãy dùng https:// nếu máy chủ hỗ trợ.",
-      "importSkipped": "Lệnh đã dán cũng gửi một tệp ({names}). Không thể nhập tệp ở đây nên đã bỏ qua. Mọi thứ khác đã được điền."
+      "importSkipped": "Lệnh đã dán cũng gửi một tệp ({names}). Không thể nhập tệp ở đây nên đã bỏ qua. Mọi thứ khác đã được điền.",
+      "payloadTypedHint": "Để gửi số thật hoặc có/không, hãy viết biến không có dấu ngoặc kép: {example}."
     },
     "test": {
       "title": "Phản hồi",
