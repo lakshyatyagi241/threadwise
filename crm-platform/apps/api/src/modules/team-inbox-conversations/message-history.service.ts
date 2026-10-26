@@ -31,7 +31,7 @@ import {
   previousWindow,
   recipientTimeline,
   resolveWindow,
-  safeZone,
+  chartZone,
   toHistoryRow,
   type HistoryContext,
   type FeedRollup,
@@ -137,7 +137,7 @@ export class MessageHistoryService {
     const ctx = RequestContextStore.require();
     const window = this.windowOf(query, now);
     const sel = selectionOf(query, window);
-    const tz = safeZone(query.tz);
+    const tz = chartZone(query);
     // Reference's hourly view is the last 24 hours, whatever the range.
     const seriesFrom =
       query.bucket === 'hourly'

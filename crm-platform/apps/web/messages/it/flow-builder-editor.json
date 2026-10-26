@@ -1077,6 +1077,7 @@
         "imported": "Importati {steps, plural, one {# passaggio} other {# passaggi}} in {flows, plural, one {# flow} other {# flow}}. Controllali, poi Salva.",
         "invalidJson": "Il file non è un JSON valido.",
         "saved": "Salvato «{name}»",
+        "nodeSaved": "Nodo aggiornato con successo!",
         "saveFailed": "Salvataggio non riuscito: {error}",
         "publishedToast": "Pubblicato",
         "publishFailed": "Pubblicazione non riuscita: {error}",

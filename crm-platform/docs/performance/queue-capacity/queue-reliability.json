@@ -1,0 +1,246 @@
+{
+  "item": "Sheet3 D-14",
+  "target": "100% of queues on the shared defaults or a written exception; failed-job alert fires within 5 min",
+  "about": "Read by tools/queue-capacity/reliability.mjs. \"overrides\": why a producer sets attempts, backoff or removeOnComplete/removeOnFail inline instead of using jobOptionsFor(). \"noJobId\": why an enqueue has no jobId. \"idempotency\": per queue, documented | known-risk | not-demonstrated | no-consumer; a documented or known-risk entry quotes the code, and the ratchet fails if the quote disappears. Reasons marked \"Inferred from the code\" are not recorded by the authors and should be confirmed by the owner.",
+  "overrides": {
+    "CAMPAIGN": "Inferred from the code (no reason recorded there): removeOnComplete and removeOnFail 100 instead of 1,000 and 500: campaign ticks are high volume and Redis is a small noeviction instance. Attempts and backoff stay at the defaults.",
+    "FB_BROADCAST": "From a code comment: the job id carries the row version so a pause then a start queues a fresh run. Retention 100 and 100 only; attempts and backoff stay at the defaults.",
+    "LINE_BROADCAST": "From a code comment: the job id carries the row version so a pause then a start queues a fresh run. Retention 100 and 100 only; attempts and backoff stay at the defaults.",
+    "TG_BROADCAST": "From a code comment: the job id carries the row version so a pause then a start queues a fresh run. Retention 100 and 100 only; attempts and backoff stay at the defaults.",
+    "VIBER_BROADCAST": "From a code comment: the job id carries the row version so a pause then a start queues a fresh run. Retention 100 and 100 only; attempts and backoff stay at the defaults.",
+    "WECHAT_BROADCAST": "From a code comment: one attempt only: a mass send is never repeated by the queue. The job id carries the row version so a retry queues a fresh run.",
+    "ECOM_IMPORT": "From a code comment: one import per store at a time (asking again while one waits or runs changes nothing). attempts 1; completed and failed jobs are dropped, a failed import is started again by the user. A run again is safe (see idempotency).",
+    "ECOM_WEBHOOK": "Inferred from the code (no reason recorded there): attempts 1, completed jobs dropped, failures kept (1,000): the broadcast and cart sends message a customer, so the queue must not repeat them; the store event log row records the outcome.",
+    "IG_PULL": "From a code comment: attempts 1, nothing kept: a failed pull is harmless, the next sweep queues another (data is personal and dropped on completion).",
+    "LEAD_SYNC": "From a code comment: attempts 1, nothing kept: a failure is harmless, the sweep queues a run that stays queued. Lead data is not kept in Redis.",
+    "MKT_INBOUND": "From a code comment: attempts 1, nothing kept: a failure is logged and swallowed, the sweep is the safety net. Lead data is not kept in Redis.",
+    "MKT_PULL": "Inferred from the code (no reason recorded there): attempts 1, nothing kept: the pull is repeated by the next due-connection sweep. Lead data is not kept in Redis.",
+    "META_LEAD_SWEEP": "Inferred from the code (no reason recorded there): attempts 1, nothing kept: the sweep is itself the repeat (it re-reads recent leads). Lead data is not kept in Redis.",
+    "FLOW_RUN": "Inferred from the code (no reason recorded there): attempts 3 instead of 5 (backoff and retention stay at the defaults). The code records no reason; the flow owner should confirm it.",
+    "LSC_SCORE": "From a code comment: attempts 3 with exponential backoff; a completed job is removed because a retained one would block the next score for the same contact (its job id). Failures kept 1,000.",
+    "MAIL_SYNC": "Inferred from the code (no reason recorded there): attempts 3 from 15 s with jitter, nothing kept: the next mailbox sync picks up what a failed one missed.",
+    "MEETING_MIRROR_BACKFILL": "Inferred from the code (no reason recorded there): attempts 3 exponential, failures kept 7 days: runs once per worker start and repeats safely (see idempotency).",
+    "OWNING_TEAM_BACKFILL": "Inferred from the code (no reason recorded there): attempts 3 exponential, failures kept 7 days, completed day-runs dropped: batch backfill that repeats safely (see idempotency).",
+    "PINNACLE_CREDIT_LINE": "Inferred from the code (no reason recorded there): 6 attempts exponential, completed kept 1 day and failures 7 days: sharing the credit line after a partner connects is worth retrying for longer than the default, one job per number.",
+    "WAB_MIGRATE": "From a code comment: attempts 1: a run lasts up to an hour and must hold nothing else; the queue never starts it again by itself.",
+    "WEBHOOK_DELIVER": "From a code comment: attempts and a custom backoff set per delivery (customer-configured endpoint, TW-API-147); completed kept 1,000, failures 5,000.",
+    "WEBHOOK_FORWARD": "Inferred from the code (no reason recorded there): attempts per target (maxAttempts) with FORWARD_BACKOFF, completed dropped, failures kept 500: the raw Meta body is forwarded to a platform-configured target."
+  },
+  "noJobId": [
+    {
+      "queue": "WEBHOOK_RETRY",
+      "file": "modules/webhook-retry/webhook-retry.service.ts",
+      "reason": "The event has no natural id and its handlers are documented as safe to run twice. A jobId would also drop a re-deferred event while a failed copy is still retained (3 days)."
+    },
+    {
+      "queue": "ECOM_WEBHOOK",
+      "file": "modules/shopify-woocommerce/webhook.service.ts",
+      "reason": "The delivery is de-duplicated before the enqueue by a Redis replay key (ecom:delivery:<kind>:<store>:<delivery id>, SET NX), the same protection a jobId would give."
+    },
+    {
+      "queue": "ECOM_WEBHOOK",
+      "file": "modules/shopify-woocommerce/broadcast.service.ts",
+      "reason": "One job per user action, after its own event-log row is written; attempts 1, so the queue never repeats it."
+    },
+    {
+      "queue": "CAMPAIGN",
+      "file": "modules/campaigns/fixture/fixture-receipts.ts",
+      "reason": "Sandbox only: delayed fixture receipts the sandbox sender emits; a repeat is applied exactly as a webhook would be."
+    }
+  ],
+  "idempotency": {
+    "OUTBOX": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "CAMPAIGN": {
+      "status": "not-demonstrated"
+    },
+    "MESSAGE_DISPATCH": {
+      "status": "known-risk",
+      "file": "modules/chat-conversations/message-dispatch.service.ts",
+      "quote": "API has no idempotency key, so that retry can send once more",
+      "note": "A retry after a send the provider already accepted can send the message once more; documented in the code, not fixed here."
+    },
+    "WEBHOOK_INGEST": {
+      "status": "documented",
+      "file": "infra/queue/queues.ts",
+      "quote": "ingest is idempotent."
+    },
+    "BILLING_POSTING": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "SLA_SWEEP": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "COUNTER_FLUSH": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "PARTITION_MAINTENANCE": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "BULK_JOBS": {
+      "status": "no-consumer",
+      "note": "No @Processor: scheduled or run by other means (allow-no-consumer.json)."
+    },
+    "CON_IMPORT": {
+      "status": "documented",
+      "file": "modules/crm/contact-import/contact-import.processor.ts",
+      "quote": "Safe to run twice: the engine resumes from the rows the job row says are done"
+    },
+    "BCAST_DISPATCH": {
+      "status": "not-demonstrated"
+    },
+    "WABA_INGEST": {
+      "status": "documented",
+      "file": "infra/queue/queues.ts",
+      "quote": "Ingest is idempotent (the message ledger's unique key), so a retry never stores a message twice."
+    },
+    "PINNACLE_CREDIT_LINE": {
+      "status": "not-demonstrated"
+    },
+    "WEBHOOK_FORWARD": {
+      "status": "not-demonstrated"
+    },
+    "WEBHOOK_DELIVER": {
+      "status": "not-demonstrated"
+    },
+    "TG_BROADCAST": {
+      "status": "not-demonstrated"
+    },
+    "LINE_BROADCAST": {
+      "status": "documented",
+      "file": "modules/channel-line/line-broadcast.processor.ts",
+      "quote": "A retry after a crash is safe: people already sent are not pending any more."
+    },
+    "VIBER_BROADCAST": {
+      "status": "not-demonstrated"
+    },
+    "FB_BACKFILL": {
+      "status": "not-demonstrated"
+    },
+    "META_LEADGEN": {
+      "status": "not-demonstrated"
+    },
+    "META_LEAD_SWEEP": {
+      "status": "documented",
+      "file": "modules/meta-lead-ads/lead-sweep.processor.ts",
+      "quote": "Idempotent: the pipeline stores every lead once, under Meta's lead id."
+    },
+    "FB_BROADCAST": {
+      "status": "not-demonstrated"
+    },
+    "IG_PULL": {
+      "status": "not-demonstrated"
+    },
+    "ECOM_IMPORT": {
+      "status": "documented",
+      "file": "modules/shopify-woocommerce/ecom-import.processor.ts",
+      "quote": "A run again is safe because every row is keyed by the store's id."
+    },
+    "ECOM_WEBHOOK": {
+      "status": "not-demonstrated"
+    },
+    "SCHED_RUN": {
+      "status": "not-demonstrated"
+    },
+    "SEGMENT_ACTIONS": {
+      "status": "documented",
+      "file": "modules/crm/segments/segment-actions.processor.ts",
+      "quote": "Idempotent: members already in the group are skipped by the insert itself"
+    },
+    "MEDIA_FETCH": {
+      "status": "not-demonstrated"
+    },
+    "FLOW_RUN": {
+      "status": "not-demonstrated"
+    },
+    "TPL_SWEEP": {
+      "status": "not-demonstrated"
+    },
+    "MKT_PULL": {
+      "status": "not-demonstrated"
+    },
+    "MKT_INBOUND": {
+      "status": "not-demonstrated"
+    },
+    "LEAD_SYNC": {
+      "status": "not-demonstrated"
+    },
+    "WEB_PUSH": {
+      "status": "not-demonstrated"
+    },
+    "MAIL_SYNC": {
+      "status": "not-demonstrated"
+    },
+    "MSG_LOG_EXPORT": {
+      "status": "not-demonstrated"
+    },
+    "LSC_SCORE": {
+      "status": "documented",
+      "file": "modules/lead-scoring/lead-scoring.processor.ts",
+      "quote": "Idempotent: scoring twice writes the same kind of row"
+    },
+    "CONSENT_EXPORT": {
+      "status": "not-demonstrated"
+    },
+    "AUDIT_LOG_EXPORT": {
+      "status": "not-demonstrated"
+    },
+    "REVENUE_EXPORT": {
+      "status": "not-demonstrated"
+    },
+    "PRIVACY_EXPORT": {
+      "status": "not-demonstrated"
+    },
+    "WAB_MIGRATE": {
+      "status": "not-demonstrated",
+      "note": "Enqueue is idempotent (an existing job is never duplicated); one attempt only, so the queue never repeats a run."
+    },
+    "CALLING_READINESS": {
+      "status": "not-demonstrated",
+      "note": "Enqueue is idempotent (the job id carries the event, per its jobs file); the handler is not shown to be."
+    },
+    "CALENDAR_RECONCILE": {
+      "status": "not-demonstrated"
+    },
+    "CALENDAR_BACKFILL": {
+      "status": "documented",
+      "file": "modules/appointments-booking/calendar-backfill.jobs.ts",
+      "quote": "the write is idempotent anyway"
+    },
+    "MEETING_MIRROR_BACKFILL": {
+      "status": "documented",
+      "file": "modules/appointments-booking/meeting-mirror-backfill.jobs.ts",
+      "quote": "Idempotent: the unique index on (org_id, appointment_id)"
+    },
+    "OWNING_TEAM_BACKFILL": {
+      "status": "documented",
+      "file": "modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts",
+      "quote": "Idempotent: a row already stamped is skipped"
+    },
+    "CALENDAR_ICS_REFRESH": {
+      "status": "not-demonstrated"
+    },
+    "WECHAT_BROADCAST": {
+      "status": "not-demonstrated"
+    },
+    "TELEPHONY_INGEST": {
+      "status": "documented",
+      "file": "modules/calling-voice/logging/telephony-events.service.ts",
+      "quote": "idempotent: the entry is unique on (source, connection"
+    },
+    "WEBHOOK_RETRY": {
+      "status": "documented",
+      "file": "modules/webhook-retry/webhook-retry.service.ts",
+      "quote": "it must be safe to run twice"
+    },
+    "STORAGE_QUOTA": {
+      "status": "not-demonstrated"
+    }
+  }
+}

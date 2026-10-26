@@ -3,9 +3,11 @@ import {
   Inject,
   Injectable,
   Logger,
+  Optional,
   type OnApplicationBootstrap,
   type OnApplicationShutdown,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Interval } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
@@ -45,9 +47,18 @@ import {
 } from '../../../infra/providers/node-bridge-runtime/group-mapping';
 import { DeviceNotReadyError } from './device-session';
 import { senderDigits } from '../outbound/sender-resolver.service';
+import type { Env } from '../../../config/env.schema';
 
 /** Reference's rule: a session of fewer files than this was never finished or was logged out. */
 const HEALTHY_SESSION_ROWS = 3;
+/** A number woken only to take the messages WhatsApp held for it goes back to sleep after this long if nothing arrived (V-02). */
+const SYNC_AWAKE_MS = 2 * 60_000;
+/**
+ * The most numbers woken in one pass (every 20 s). A wake builds a socket (a database read, a proxy probe), the pass renews every lease
+ * in turn, and a lease lasts 90 s: waking a whole fleet in one pass could outlast it. 25 per pass is 75 a minute, enough for a thousand
+ * numbers on a 15 minute wake interval; the rest wait for the next pass (they are still due).
+ */
+const WAKES_PER_PASS = 25;
 /** A device that nobody has touched for this long is no longer connected. */
 const STALE_SECONDS = 90;
 const TICK_MS = 20_000;
@@ -102,6 +113,10 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   private stopped = false;
   private passes = 0;
   private readonly workerId = randomUUID();
+  /** Idle unloading (V-02), in ms; 0 = off. Set from WA_IDLE_UNLOAD_MINUTES and read on every pass, so a test can set it. */
+  idleUnloadMs = 0;
+  /** While unloaded, how often a number wakes to take held messages. */
+  idleWakeMs = 15 * 60_000;
   /** Pause between devices when restoring many at once, to spare the CPU (Reference: 2 s). Tests set 0. */
   staggerMs = 2_000;
 
@@ -117,7 +132,13 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     private readonly receipts: ReceiptRouter,
     private readonly control: DeviceControlService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
-  ) {}
+    @Optional() config?: ConfigService<Env, true>,
+  ) {
+    if (config) {
+      this.idleUnloadMs = config.get('WA_IDLE_UNLOAD_MINUTES', { infer: true }) * 60_000;
+      this.idleWakeMs = config.get('WA_IDLE_WAKE_MINUTES', { infer: true }) * 60_000;
+    }
+  }
 
   /** Logged once per off period, so a switched-off engine does not write a line every 20 s tick. */
   private offLogged = false;
@@ -357,6 +378,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     // A workspace taken off the allow-list while running: close its sockets on this pass, keep the saved sessions.
     await this.releaseDisallowed(await this.unofficial.enabledOrgIds());
     const alive: Array<[number, number]> = [];
+    const wakeBudget = { left: WAKES_PER_PASS };
     for (const o of [...this.owned.values()]) {
       // A lease that is no longer ours means another worker has the device: stop at once, never run two sockets.
       if (!(await this.lease.renew(o.orgId, o.deviceId, o.token))) {
@@ -368,7 +390,9 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
         this.owned.delete(key(o.orgId, o.deviceId));
         continue;
       }
-      if (o.session.isReady) alive.push([o.orgId, o.deviceId]);
+      // An unloaded number is still linked and still ours: it keeps its heartbeat, or the stale-device sweep would call it disconnected.
+      if (o.session.isReady || o.session.isUnloaded) alive.push([o.orgId, o.deviceId]);
+      await this.idleStep(o.session, wakeBudget);
       if (this.passes % 3 === 0) await o.session.tick();
     }
     await this.touch(alive);
@@ -377,11 +401,35 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
     if (this.passes % 3 === 1) await this.restore();
   }
 
+  /**
+   * Idle unloading (V-02). Off (the default): nothing changes, except that a session left unloaded by a switch-off is woken. On: a number
+   * quiet for the idle time is closed (its lease and saved session stay, so no other worker takes it), and wakes every `idleWakeMs` to take
+   * what WhatsApp held for it; a send wakes it at once.
+   */
+  private async idleStep(session: DeviceSession, wakes: { left: number }): Promise<void> {
+    if (this.idleUnloadMs <= 0) {
+      if (session.isUnloaded && wakes.left-- > 0) await session.wake('activity');
+      return;
+    }
+    if (session.isUnloaded) {
+      if (session.unloadedFor() >= this.idleWakeMs && wakes.left-- > 0) await session.wake('sync');
+      return;
+    }
+    if (session.canUnload(this.idleUnloadMs, SYNC_AWAKE_MS)) session.unload();
+  }
+
   /** This worker is alive and holds this many devices: what `NodeWorkerStatus` reads (TW-NODE-004). */
   private async beat(): Promise<void> {
     await this.redis.set(
       waKeys.worker(this.workerId),
-      JSON.stringify({ at: Date.now(), devices: this.owned.size }),
+      JSON.stringify({
+        at: Date.now(),
+        devices: this.owned.size,
+        // What a reader needs to divide this process's memory by the sessions that are really open (V-01, V-02).
+        ready: [...this.owned.values()].filter((o) => o.session.isReady).length,
+        unloaded: [...this.owned.values()].filter((o) => o.session.isUnloaded).length,
+        rssMb: Math.round(process.memoryUsage().rss / 1048576),
+      }),
       'EX',
       WORKER_ALIVE_S,
     );

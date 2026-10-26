@@ -6,10 +6,39 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { incrWithTtl } from '../../../infra/redis/counter';
+import type { Tx } from '@crm/db';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { BroadcastProgressService } from '../broadcast-progress.service';
 import { clickWebhook } from '../webhook-events';
 import { isBot, isTokenShape } from './link-rules';
+
+/**
+ * A tap on a campaign's tracked link: the recipient's row is stamped (clicked, how many times, the first time) and, only the first
+ * time this contact taps, the campaign's own click count goes up, so the campaign history shows a click rate. Without this the tap
+ * was counted on the link only and every campaign stayed at 0 clicks.
+ */
+export async function recordCampaignClick(
+  tx: Tx,
+  orgId: number,
+  campaignId: number,
+  contactId: number,
+): Promise<void> {
+  await tx.execute(
+    sql`SELECT pg_advisory_xact_lock(hashtextextended(${`camp-click:${orgId}:${campaignId}:${contactId}`}, 0))`,
+  );
+  const res = await tx.execute(sql`
+    UPDATE wp_campaign_contacts
+       SET click_count = click_count + 1,
+           clicked_at = coalesce(clicked_at, now()),
+           clicked = true
+     WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND contact_id = ${contactId}
+    RETURNING (click_count = 1) AS first_tap`);
+  if (res.rows.some((r) => (r as { first_tap: boolean }).first_tap === true)) {
+    await tx.execute(
+      sql`UPDATE wpcampaigns SET clicked_count = clicked_count + 1 WHERE org_id = ${orgId} AND id = ${campaignId}`,
+    );
+  }
+}
 
 const IP_UNIQUE_SECONDS = 3600;
 /** A link-preview crawler can hit one link many times at once; this only stops a flood from one address. */
@@ -105,9 +134,14 @@ export class LinkRedirectService {
     const ipNew = await this.ipIsNew(linkId, ip);
     await this.db.txAs({ orgId }, async (tx) => {
       const link = await tx.execute(sql`
-        SELECT broadcast_id, contact_id FROM wa_link_clicks WHERE org_id = ${orgId} AND id = ${linkId} FOR UPDATE`);
+        SELECT broadcast_id, campaign_id, contact_id FROM wa_link_clicks WHERE org_id = ${orgId} AND id = ${linkId} FOR UPDATE`);
       const row = link.rows[0] as
-        { broadcast_id: number | string | null; contact_id: number | string | null } | undefined;
+        | {
+            broadcast_id: number | string | null;
+            campaign_id: number | string | null;
+            contact_id: number | string | null;
+          }
+        | undefined;
       if (!row) return;
       const broadcastId = row.broadcast_id === null ? null : Number(row.broadcast_id);
       const contactId = row.contact_id === null ? null : Number(row.contact_id);
@@ -132,6 +166,9 @@ export class LinkRedirectService {
           last_ip = left(${ip}, 45), last_user_agent = left(${userAgent}, 191)
         WHERE org_id = ${orgId} AND id = ${linkId}`);
 
+      if (row.campaign_id !== null && contactId !== null) {
+        await recordCampaignClick(tx, orgId, Number(row.campaign_id), contactId);
+      }
       if (broadcastId === null || contactId === null) return;
       if (firstForContact) {
         await tx.execute(

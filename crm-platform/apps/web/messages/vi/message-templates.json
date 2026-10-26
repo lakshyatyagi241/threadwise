@@ -378,10 +378,13 @@
           "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác."
         },
         "catalogHint": "Mở danh mục WhatsApp của bạn. Nút hiển thị “Xem danh mục” và phải là nút duy nhất.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "ID dạng số của một WhatsApp Flow đã xuất bản, lấy từ trình quản lý Flows của Meta.",
-        "screen": "Màn hình mở đầu",
-        "screenHint": "ID của màn hình mà biểu mẫu mở ra, ví dụ WELCOME."
+        "flowPick": "Biểu mẫu WhatsApp",
+        "flowPickHint": "Chọn một biểu mẫu WhatsApp đã xuất bản của bạn. Nút sẽ mở nó ngay trong WhatsApp.",
+        "flowChoose": "Chọn biểu mẫu WhatsApp",
+        "flowLoading": "Đang tải biểu mẫu…",
+        "flowNone": "Bạn chưa có biểu mẫu WhatsApp nào đã xuất bản.",
+        "flowNoneLink": "Tạo và xuất bản một biểu mẫu",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",
@@ -425,7 +428,9 @@
         "buttons": "Nút",
         "buttonText": "Văn bản nút",
         "buttonUrl": "URL trang web",
-        "buttonPhone": "Số điện thoại"
+        "buttonPhone": "Số điện thoại",
+        "moveUp": "Chuyển thẻ {n} lên",
+        "moveDown": "Chuyển thẻ {n} xuống"
       },
       "offer": {
         "title": "Ưu đãi có thời hạn",

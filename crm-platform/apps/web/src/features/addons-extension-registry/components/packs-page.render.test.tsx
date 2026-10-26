@@ -73,6 +73,12 @@ describe.each(['en', 'ar'] as const)('admin add-ons list (%s)', (locale) => {
       ],
     });
 
+  it('names each row button after its pack, so a screen reader can tell the rows apart', () => {
+    const out = html([pack(1)]);
+    // Edit, Disable and Delete: three buttons, each named with the pack's name
+    expect(out.match(/aria-label="[^"]*: Pack 1"/g)).toHaveLength(3);
+  });
+
   it('badges each pack Feature or Capacity', () => {
     const out = html([
       pack(1),

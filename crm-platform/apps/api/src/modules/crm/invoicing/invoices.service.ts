@@ -706,8 +706,15 @@ export class InvoicesService {
     const numbering = numberingOf(profile.row);
     const series = seriesKey(row.docType, numbering, issueDate);
     // The counter row is locked until this transaction ends: two issuers cannot share a number, a rollback gives it back.
-    const seq = await this.repo.allocateSeq(tx, orgId, series);
-    const number = formatNumber(row.docType, numbering, issueDate, seq);
+    let seq = await this.repo.allocateSeq(tx, orgId, series);
+    let number = formatNumber(row.docType, numbering, issueDate, seq);
+    // The counter is per series, the number is unique per workspace. A numbering change (yearly reset on or off, a new prefix)
+    // starts a series that can print a number an older series already used; take the next one instead of failing the issue.
+    // Each allocation moves the counter on inside this transaction, so the loop ends.
+    while (await this.repo.numberTaken(tx, orgId, number)) {
+      seq = await this.repo.allocateSeq(tx, orgId, series);
+      number = formatNumber(row.docType, numbering, issueDate, seq);
+    }
     const token = newPublicToken();
     const zero = row.totalMinor === 0n;
     await this.repo.markIssued(tx, orgId, row.id, {

@@ -371,10 +371,13 @@
           "catalogAlone": "A catalog button cannot be combined with other buttons."
         },
         "catalogHint": "Opens your WhatsApp catalog. The button says “View catalog” and must be the only button.",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "The numeric ID of a published WhatsApp Flow, from Meta's Flows manager.",
-        "screen": "Opening screen",
-        "screenHint": "The ID of the screen the form opens on, for example WELCOME."
+        "flowPick": "WhatsApp Form",
+        "flowPickHint": "Pick one of your published WhatsApp Forms. The button opens it inside WhatsApp.",
+        "flowChoose": "Choose a WhatsApp Form",
+        "flowLoading": "Loading forms…",
+        "flowNone": "You have no published WhatsApp Forms yet.",
+        "flowNoneLink": "Create and publish one",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Saved, but Meta refused the template.",
@@ -418,7 +421,9 @@
         "buttons": "Buttons",
         "buttonText": "Button text",
         "buttonUrl": "Website URL",
-        "buttonPhone": "Phone number"
+        "buttonPhone": "Phone number",
+        "moveUp": "Move card {n} up",
+        "moveDown": "Move card {n} down"
       },
       "offer": {
         "title": "Limited time offer",

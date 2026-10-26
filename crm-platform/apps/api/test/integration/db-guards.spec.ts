@@ -192,4 +192,37 @@ describe('database guards', () => {
       },
     );
   });
+
+  // Sheet 3 D-08 (migration 2035): messages is updated up to three times per outgoing message and none of those updates can be HOT, so its
+  // partitions are vacuumed after 2 % of the rows changed (5 % bloat in the bench, against 20 % at the server default).
+  describe('message partitions are vacuumed early', () => {
+    const OPTIONS = ['autovacuum_vacuum_scale_factor=0.02', 'autovacuum_analyze_scale_factor=0.02'];
+    const optionsOf = async (name: string): Promise<string[]> =>
+      (
+        await db.query<{ reloptions: string[] | null }>(
+          `SELECT reloptions FROM pg_class WHERE oid = to_regclass($1)`,
+          [`public.${name}`],
+        )
+      ).rows[0]?.reloptions ?? [];
+
+    it('every existing partition of messages carries them', async () => {
+      const { rows } = await db.query<{ relname: string }>(
+        `SELECT c.relname FROM pg_inherits i JOIN pg_class c ON c.oid = i.inhrelid WHERE i.inhparent = 'public.messages'::regclass`,
+      );
+      expect(rows.length).toBeGreaterThan(1);
+      for (const { relname } of rows) expect(await optionsOf(relname)).toEqual(OPTIONS);
+    });
+
+    it('a month created later gets them, and another stream does not', async () => {
+      await db.query(
+        `SELECT ensure_monthly_partition('messages', (now() + interval '4 months')::date),
+                ensure_monthly_partition('message_events', (now() + interval '4 months')::date)`,
+      );
+      const { rows } = await db.query<{ m: string }>(
+        `SELECT to_char(now() + interval '4 months', 'YYYYMM') AS m`,
+      );
+      expect(await optionsOf(`messages_${rows[0]!.m}`)).toEqual(OPTIONS);
+      expect(await optionsOf(`message_events_${rows[0]!.m}`)).toEqual([]);
+    });
+  });
 });

@@ -378,10 +378,13 @@
           "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami."
         },
         "catalogHint": "Otwiera Twój katalog WhatsApp. Przycisk ma napis „Zobacz katalog” i musi być jedynym przyciskiem.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "Numeryczny identyfikator opublikowanego WhatsApp Flow z menedżera Flows w Meta.",
-        "screen": "Ekran startowy",
-        "screenHint": "Identyfikator ekranu, na którym otwiera się formularz, np. WELCOME."
+        "flowPick": "Formularz WhatsApp",
+        "flowPickHint": "Wybierz jeden z opublikowanych formularzy WhatsApp. Przycisk otworzy go w WhatsApp.",
+        "flowChoose": "Wybierz formularz WhatsApp",
+        "flowLoading": "Wczytywanie formularzy…",
+        "flowNone": "Nie masz jeszcze opublikowanych formularzy WhatsApp.",
+        "flowNoneLink": "Utwórz i opublikuj formularz",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Zapisano, ale Meta odrzuciła szablon.",
@@ -425,7 +428,9 @@
         "buttons": "Przyciski",
         "buttonText": "Tekst przycisku",
         "buttonUrl": "Adres URL strony",
-        "buttonPhone": "Numer telefonu"
+        "buttonPhone": "Numer telefonu",
+        "moveUp": "Przesuń kartę {n} w górę",
+        "moveDown": "Przesuń kartę {n} w dół"
       },
       "offer": {
         "title": "Oferta czasowa",

@@ -378,10 +378,13 @@
           "catalogAlone": "לא ניתן לשלב כפתור קטלוג עם כפתורים אחרים."
         },
         "catalogHint": "פותח את קטלוג ה-WhatsApp שלך. על הכפתור כתוב „הצגת הקטלוג” והוא חייב להיות הכפתור היחיד.",
-        "flowId": "מזהה WhatsApp Flow",
-        "flowIdHint": "המזהה המספרי של WhatsApp Flow שפורסם, ממנהל ה-Flows של Meta.",
-        "screen": "מסך פתיחה",
-        "screenHint": "מזהה המסך שבו נפתח הטופס, למשל WELCOME."
+        "flowPick": "טופס WhatsApp",
+        "flowPickHint": "בחרו אחד מטפסי ה-WhatsApp שפרסמתם. הכפתור פותח אותו בתוך WhatsApp.",
+        "flowChoose": "בחרו טופס WhatsApp",
+        "flowLoading": "טוען טפסים…",
+        "flowNone": "עדיין אין לכם טפסי WhatsApp שפורסמו.",
+        "flowNoneLink": "צרו ופרסמו טופס",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "נשמר, אך Meta דחתה את התבנית.",
@@ -425,7 +428,9 @@
         "buttons": "כפתורים",
         "buttonText": "טקסט הכפתור",
         "buttonUrl": "כתובת האתר",
-        "buttonPhone": "מספר טלפון"
+        "buttonPhone": "מספר טלפון",
+        "moveUp": "העברת כרטיס {n} למעלה",
+        "moveDown": "העברת כרטיס {n} למטה"
       },
       "offer": {
         "title": "מבצע לזמן מוגבל",

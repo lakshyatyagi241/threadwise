@@ -475,9 +475,12 @@ export class RecurringInvoicesService {
         this.makeInvoice(sp, orgId, actorUserId, row, index, periodDate),
       );
     } catch (err) {
-      error = (
-        err instanceof AppError ? err.message : err instanceof Error ? err.message : 'unknown error'
-      ).slice(0, 500);
+      // A driver error's message is the failed SQL with its bound params (tokens included); the database's own reason is in `cause`.
+      const reason =
+        err instanceof Error && !(err instanceof AppError) && err.cause instanceof Error
+          ? err.cause
+          : err;
+      error = (reason instanceof Error ? reason.message : 'unknown error').slice(0, 500);
       this.logger.warn(
         { recurring: row.uuid, index, error },
         'recurring invoice generation failed',

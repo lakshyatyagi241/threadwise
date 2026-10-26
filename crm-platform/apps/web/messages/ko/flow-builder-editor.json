@@ -645,6 +645,7 @@
         "imported": "{flows, plural, other {플로우 #개}}에서 {steps, plural, other {#단계}}를 가져왔습니다. 확인한 뒤 저장하세요.",
         "invalidJson": "올바른 JSON 파일이 아닙니다.",
         "saved": "\"{name}\" 저장됨",
+        "nodeSaved": "노드가 업데이트되었습니다!",
         "saveFailed": "저장 실패: {error}",
         "publishedToast": "게시됨",
         "publishFailed": "게시 실패: {error}",

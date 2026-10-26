@@ -378,10 +378,13 @@
           "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
         },
         "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "ID numerik WhatsApp Flow yang sudah dipublikasikan, dari pengelola Flows Meta.",
-        "screen": "Layar pembuka",
-        "screenHint": "ID layar tempat formulir dibuka, misalnya WELCOME."
+        "flowPick": "Formulir WhatsApp",
+        "flowPickHint": "Pilih salah satu formulir WhatsApp Anda yang sudah dipublikasikan. Tombol membukanya di dalam WhatsApp.",
+        "flowChoose": "Pilih formulir WhatsApp",
+        "flowLoading": "Memuat formulir…",
+        "flowNone": "Anda belum punya formulir WhatsApp yang dipublikasikan.",
+        "flowNoneLink": "Buat dan publikasikan satu",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
@@ -425,7 +428,9 @@
         "buttons": "Tombol",
         "buttonText": "Teks tombol",
         "buttonUrl": "URL situs web",
-        "buttonPhone": "Nomor telepon"
+        "buttonPhone": "Nomor telepon",
+        "moveUp": "Naikkan kartu {n}",
+        "moveDown": "Turunkan kartu {n}"
       },
       "offer": {
         "title": "Penawaran waktu terbatas",

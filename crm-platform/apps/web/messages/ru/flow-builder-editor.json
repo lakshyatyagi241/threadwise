@@ -645,6 +645,7 @@
         "imported": "Импортировано: {steps, plural, one {# шаг} few {# шага} many {# шагов} other {# шага}} ({flows, plural, one {# сценарий} few {# сценария} many {# сценариев} other {# сценария}}). Проверьте их и нажмите «Сохранить».",
         "invalidJson": "Файл не является корректным JSON.",
         "saved": "Сохранено: «{name}»",
+        "nodeSaved": "Узел успешно обновлён!",
         "saveFailed": "Не удалось сохранить: {error}",
         "publishedToast": "Опубликовано",
         "publishFailed": "Не удалось опубликовать: {error}",

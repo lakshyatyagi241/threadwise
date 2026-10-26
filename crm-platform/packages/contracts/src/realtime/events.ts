@@ -191,6 +191,8 @@ export const realtimeEventSchemas = {
     unread: z.number().int().nonnegative(),
     /** The rows that were marked read, or `all`. */
     notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
+    /** The rows were deleted (the bell's Clear all), not only read: other tabs drop them from their list. */
+    cleared: z.boolean().optional(),
   }),
   [REALTIME_EVENT.wabaGroupChanged]: z.object({
     groupId: uuidSchema,

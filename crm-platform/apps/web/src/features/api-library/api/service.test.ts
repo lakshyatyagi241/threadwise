@@ -117,14 +117,35 @@ describe('apiLibraryApi', () => {
     expect(JSON.parse(init.body as string).headers[0].value).toBe('********');
   });
 
-  it('deletes plainly first and with force=true when flows use it', async () => {
+  it('fetches the run log as CSV text with the filters on screen and no paging', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init: RequestInit) => {
+        calls.push({ url, init });
+        return new Response('Time (UTC),API\r\n2026-01-01T00:00:00.000Z,Orders\r\n', {
+          status: 200,
+          headers: { 'content-type': 'text/csv; charset=utf-8' },
+        });
+      }),
+    );
+    const text = await apiLibraryApi.logsCsv({ apiId: ID, status: 'failed', search: 'timeout' });
+    expect(text).toContain('Time (UTC),API');
+    expect(calls[0]!.url).toBe(
+      `/api/v2/api-library/logs/export?apiId=${ID}&status=failed&search=timeout`,
+    );
+    expect(calls[0]!.url).not.toContain('page=');
+  });
+
+  it('turns a refused export into the same ApiError the other calls throw', async () => {
+    vi.stubGlobal('fetch', reply(422, { code: ERROR_CODES.VALIDATION_FAILED, status: 422 }));
+    const e = await apiLibraryApi.logsCsv({}).catch((x: unknown) => x);
+    expect(e).toBeInstanceOf(ApiError);
+  });
+
+  it('deletes with a plain DELETE, with no force override', async () => {
     vi.stubGlobal('fetch', reply(204, undefined));
     await apiLibraryApi.remove(ID);
-    await apiLibraryApi.remove(ID, true);
-    expect(calls.map((c) => c.url)).toEqual([
-      `/api/v2/api-library/apis/${ID}`,
-      `/api/v2/api-library/apis/${ID}?force=true`,
-    ]);
+    expect(calls.map((c) => c.url)).toEqual([`/api/v2/api-library/apis/${ID}`]);
     expect(calls.every((c) => c.init.method === 'DELETE')).toBe(true);
   });
 

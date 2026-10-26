@@ -378,10 +378,13 @@
           "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons."
         },
         "catalogHint": "Ouvre votre catalogue WhatsApp. Le bouton affiche « Voir le catalogue » et doit être le seul bouton.",
-        "flowId": "ID du WhatsApp Flow",
-        "flowIdHint": "L’ID numérique d’un WhatsApp Flow publié, dans le gestionnaire de Flows de Meta.",
-        "screen": "Écran d’ouverture",
-        "screenHint": "L’ID de l’écran sur lequel le formulaire s’ouvre, par exemple WELCOME."
+        "flowPick": "Formulaire WhatsApp",
+        "flowPickHint": "Choisissez l’un de vos formulaires WhatsApp publiés. Le bouton l’ouvre dans WhatsApp.",
+        "flowChoose": "Choisissez un formulaire WhatsApp",
+        "flowLoading": "Chargement des formulaires…",
+        "flowNone": "Vous n’avez pas encore de formulaire WhatsApp publié.",
+        "flowNoneLink": "En créer et en publier un",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
@@ -425,7 +428,9 @@
         "buttons": "Boutons",
         "buttonText": "Texte du bouton",
         "buttonUrl": "URL du site web",
-        "buttonPhone": "Numéro de téléphone"
+        "buttonPhone": "Numéro de téléphone",
+        "moveUp": "Monter la carte {n}",
+        "moveDown": "Descendre la carte {n}"
       },
       "offer": {
         "title": "Offre à durée limitée",

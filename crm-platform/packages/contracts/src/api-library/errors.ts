@@ -6,7 +6,7 @@
 export const ALIB_ERROR_CODES = {
   /** Another API of this workspace already has the name (names are unique ignoring case). 409. */
   ALIB_NAME_TAKEN: 'ALIB_NAME_TAKEN',
-  /** The API is used by flows; delete again with `?force=true` to remove it anyway. 409. */
+  /** The API is used by flows, so it is not deleted; remove it from them first. 409. */
   ALIB_IN_USE: 'ALIB_IN_USE',
   /** The workspace already has the maximum number of saved APIs. 422. */
   ALIB_LIMIT_REACHED: 'ALIB_LIMIT_REACHED',

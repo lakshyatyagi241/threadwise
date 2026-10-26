@@ -174,7 +174,8 @@
         "status": "Status",
         "schedule": "Planning",
         "actions": "Acties"
-      }
+      },
+      "newCampaignAny": "Nieuwe campagne"
     },
     "builder": {
       "loadError": "Deze campagne kon niet worden geladen.",
@@ -725,7 +726,11 @@
         "balanceShort": "Het saldo is niet genoeg: je hebt nog {shortfall} nodig.",
         "balanceLowFull": "Het saldo is lager dan de volledige kosten van {full}: je abonnement dekt het nu, maar niet meer zodra het abonnement afloopt.",
         "chargedNowLabel": "Nu van je portemonnee afgeschreven"
-      }
+      },
+      "kickerEmail": "E-mailcampagnes / Nieuw",
+      "kickerEditEmail": "E-mailcampagnes / Bewerken",
+      "titleEmail": "Nieuwe e-mail maken",
+      "titleEditEmail": "Bewerk je e-mail"
     },
     "detail": {
       "notFound": "Die campagne is niet gevonden.",

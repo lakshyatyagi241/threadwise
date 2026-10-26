@@ -378,10 +378,13 @@
           "catalogAlone": "カタログボタンは他のボタンと組み合わせられません。"
         },
         "catalogHint": "WhatsAppカタログを開きます。ボタンには「カタログを見る」と表示され、唯一のボタンである必要があります。",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "公開済みWhatsApp Flowの数値ID（MetaのFlowsマネージャーで確認）。",
-        "screen": "開始画面",
-        "screenHint": "フォームが最初に開く画面のID（例: WELCOME）。"
+        "flowPick": "WhatsAppフォーム",
+        "flowPickHint": "公開済みのWhatsAppフォームから1つ選びます。ボタンはWhatsApp内でフォームを開きます。",
+        "flowChoose": "WhatsAppフォームを選択",
+        "flowLoading": "フォームを読み込み中…",
+        "flowNone": "公開済みのWhatsAppフォームがまだありません。",
+        "flowNoneLink": "作成して公開する",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "保存しましたが、Metaがテンプレートを拒否しました。",
@@ -425,7 +428,9 @@
         "buttons": "ボタン",
         "buttonText": "ボタンのテキスト",
         "buttonUrl": "ウェブサイトのURL",
-        "buttonPhone": "電話番号"
+        "buttonPhone": "電話番号",
+        "moveUp": "カード{n}を上へ移動",
+        "moveDown": "カード{n}を下へ移動"
       },
       "offer": {
         "title": "期間限定オファー",

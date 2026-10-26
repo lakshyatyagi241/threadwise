@@ -233,7 +233,7 @@ export function MessageHistoryScreen() {
           insights={insights.data}
           bucket={state.bucket}
           days={days ?? 30}
-          tz={tz}
+          tz={insights.data?.tz ?? tz}
           onBucket={(b: Bucket) => go({ bucket: b })}
         />
         <DirectionDonut insights={insights.data} />

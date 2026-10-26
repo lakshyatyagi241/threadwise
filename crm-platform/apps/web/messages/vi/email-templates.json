@@ -131,7 +131,11 @@
         "required": "Trường này là bắt buộc.",
         "tooLong": "Quá dài (tối đa {limit} ký tự).",
         "subjectLines": "Tiêu đề phải nằm trên một dòng."
-      }
+      },
+      "bodyMode": "Định dạng nội dung",
+      "bodyRich": "Văn bản phong phú",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Viết HTML cho email. Dùng các biến bên dưới để cá nhân hóa.</p>"
     },
     "preview": {
       "title": "Xem trước với dữ liệu mẫu",

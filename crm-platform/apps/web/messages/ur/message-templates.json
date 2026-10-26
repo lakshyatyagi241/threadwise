@@ -378,10 +378,13 @@
           "catalogAlone": "کیٹلاگ بٹن کو دوسرے بٹنوں کے ساتھ ملایا نہیں جا سکتا۔"
         },
         "catalogHint": "آپ کا WhatsApp کیٹلاگ کھولتا ہے۔ بٹن پر “کیٹلاگ دیکھیں” لکھا ہوتا ہے اور یہ واحد بٹن ہونا چاہیے۔",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "شائع شدہ WhatsApp Flow کی عددی ID، Meta کے Flows مینیجر سے۔",
-        "screen": "ابتدائی اسکرین",
-        "screenHint": "اس اسکرین کی ID جس پر فارم کھلتا ہے، مثلاً WELCOME۔"
+        "flowPick": "WhatsApp فارم",
+        "flowPickHint": "اپنے شائع شدہ WhatsApp فارمز میں سے ایک منتخب کریں۔ بٹن اسے WhatsApp کے اندر کھولتا ہے۔",
+        "flowChoose": "WhatsApp فارم منتخب کریں",
+        "flowLoading": "فارم لوڈ ہو رہے ہیں…",
+        "flowNone": "آپ کے پاس ابھی کوئی شائع شدہ WhatsApp فارم نہیں ہے۔",
+        "flowNoneLink": "ایک بنائیں اور شائع کریں",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "محفوظ ہو گیا، لیکن Meta نے ٹیمپلیٹ مسترد کر دیا۔",
@@ -425,7 +428,9 @@
         "buttons": "بٹن",
         "buttonText": "بٹن کا متن",
         "buttonUrl": "ویب سائٹ URL",
-        "buttonPhone": "فون نمبر"
+        "buttonPhone": "فون نمبر",
+        "moveUp": "کارڈ {n} اوپر لے جائیں",
+        "moveDown": "کارڈ {n} نیچے لے جائیں"
       },
       "offer": {
         "title": "محدود وقت کی پیشکش",

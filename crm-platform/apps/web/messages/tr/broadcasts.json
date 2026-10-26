@@ -158,7 +158,11 @@
       "contactsDenied": "Kişi listesine erişiminiz yok. Kişileri gruplar veya etiketler üzerinden seçin.",
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "colEmail": "E-posta",
-      "noEmail": "E-posta adresi yok"
+      "noEmail": "E-posta adresi yok",
+      "contactsHeading": "Kişiler",
+      "matchTitle": "Seçilen gruplar, etiketler ve segmentlerle eşleştir",
+      "matchAny": "Bunlardan herhangi biri",
+      "matchAll": "Bunların hepsi"
     },
     "overrides": {
       "title": "Bu gönderimi doldurun",

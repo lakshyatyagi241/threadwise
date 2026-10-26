@@ -174,7 +174,8 @@
         "status": "סטטוס",
         "schedule": "תזמון",
         "actions": "פעולות"
-      }
+      },
+      "newCampaignAny": "קמפיין חדש"
     },
     "builder": {
       "loadError": "לא ניתן היה לטעון את הקמפיין הזה.",
@@ -725,7 +726,11 @@
         "balanceShort": "היתרה לא מספיקה: חסרים לכם עוד {shortfall}.",
         "balanceLowFull": "היתרה נמוכה מהעלות המלאה של {full}: החבילה שלכם מכסה אותה עכשיו, אבל לא לאחר שהחבילה תסתיים.",
         "chargedNowLabel": "יחויב מהארנק שלכם עכשיו"
-      }
+      },
+      "kickerEmail": "קמפייני אימייל / חדש",
+      "kickerEditEmail": "קמפייני אימייל / עריכה",
+      "titleEmail": "יצירת אימייל חדש",
+      "titleEditEmail": "עריכת האימייל שלך"
     },
     "detail": {
       "notFound": "הקמפיין הזה לא נמצא.",

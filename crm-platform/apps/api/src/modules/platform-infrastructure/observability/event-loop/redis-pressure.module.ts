@@ -10,7 +10,7 @@ import {
 import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import { getRuntimeMonitor } from '@crm/observability';
 import type { Redis } from 'ioredis';
-import { REDIS_CLIENT } from '../../../../infra/redis/redis.module';
+import { REDIS_CLIENT, REDIS_QUEUE_CLIENT } from '../../../../infra/redis/redis.module';
 import { createRedisSampler } from './redis-pressure';
 import { guardWorkerAgainstOom, type GuardableWorker } from './worker-oom-guard';
 
@@ -39,13 +39,16 @@ export class WorkerOomGuardService implements OnApplicationBootstrap {
   }
 }
 
-/** Exports Redis memory, clients, keys and evictions every 15 s (crm_redis_*). One `INFO`, never a key scan. */
+/** Exports Redis memory, clients, keys and evictions every 15 s (crm_redis_*, one `redis` label per server). One `INFO` each, never a key scan. */
 @Injectable()
 export class RedisPressureService implements OnApplicationBootstrap, OnModuleDestroy {
   private timer?: NodeJS.Timeout;
   private running = false;
 
-  constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis) {}
+  constructor(
+    @Inject(REDIS_QUEUE_CLIENT) private readonly queueRedis: Redis,
+    @Inject(REDIS_CLIENT) private readonly cacheRedis: Redis,
+  ) {}
 
   onApplicationBootstrap(): void {
     const monitor = getRuntimeMonitor();
@@ -55,7 +58,9 @@ export class RedisPressureService implements OnApplicationBootstrap, OnModuleDes
       if (this.running) return; // a slow Redis must not stack samples
       this.running = true;
       try {
-        await sampler.sample(this.redis);
+        await sampler.sample(this.queueRedis, 'queue');
+        // The same connection until REDIS_CACHE_URL points at another server: then it is a second Redis with its own memory.
+        if (this.cacheRedis !== this.queueRedis) await sampler.sample(this.cacheRedis, 'cache');
       } finally {
         this.running = false;
       }

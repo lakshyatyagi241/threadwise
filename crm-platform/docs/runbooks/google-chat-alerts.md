@@ -40,6 +40,11 @@ Grafana policy tree: `group=slow_query` -> gchat-slowquery, `severity=critical` 
 ## Thresholds
 Env on the `gchat-bridge` service (set in `.env`, then `up -d gchat-bridge`): `SLOW_RUNNING_SECONDS` (5), `SLOW_MEAN_MS` (500), `SLOW_POLL_SECONDS` (15), `SLOW_COOLDOWN_SECONDS` (900 per query), `SLOW_MAX_PER_MINUTE` (10; extras become one digest message), `CHAT_RETRIES` (3), `CHAT_RETRY_BASE_MS` (500). Alert thresholds: `slow-query.rules.yml`. Grafana-managed rule thresholds: on the Grafana branch.
 
+## Weekly database digest (Sheet 3 D-06)
+Every Monday at 09:00 UTC the watcher posts the ten statements that cost the most database time over the last 7 days to Slow Queries & Warnings: share of the week's database time, calls, mean, max and the normalised statement text (`tools/chat-bridge/digest.mjs`). It uses the watcher's read-only connection to `pg_stat_statements` and subtracts the snapshot taken a week earlier. The snapshot is in memory: after a restart of the bridge the first digest covers the time since `pg_stat_statements` was last reset (the message says so), and the next one is a full week. Env: `SLOW_DIGEST=0` turns it off, `SLOW_DIGEST_DAY` (1 = Monday), `SLOW_DIGEST_HOUR` (9, UTC), `SLOW_DIGEST_TOP` (10), `SLOW_DIGEST_MEAN_MS` (120: statements with a mean above this are flagged).
+
+Postgres logs every statement over `log_min_duration_statement=120` (docker-compose files; was 500). The setting is a server flag in the compose `command`, so it applies when the postgres container is recreated (a short database restart: do it in a quiet window). Expect more log lines than before; the postgres container log is rotated (`max-size`), and `pg_stat_statements` (`track=all`) holds the same statements as counters if a log line has rotated away.
+
 ## Memory budget
 Bridge + watcher: `mem_limit: 96m` (one Node process, one pg connection, no queue; measured idle RSS is in the report).
 

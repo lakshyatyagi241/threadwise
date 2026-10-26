@@ -7,6 +7,7 @@ import { createRequire } from 'node:module';
 import { createGate, sanitizeSql } from './lib.mjs';
 import { fmtDur } from './threads.mjs';
 import { isExcluded, isPureSelect } from './resolver.mjs';
+import { createDigest } from './digest.mjs';
 
 const ACTIVE_SQL = `select pid, datname, usename, application_name, state, extract(epoch from now()-query_start) as secs,
   extract(epoch from now()-state_change) as state_secs, extract(epoch from now()-xact_start) as xact_secs, query_start, xact_start,
@@ -42,6 +43,9 @@ export function windowedMeans(ref, cur, { minCalls = 3, thresholdMs = 120, skip 
   top.sort((a, b) => b.mean - a.mean);
   return { maxMs, over, top: top.slice(0, 5) };
 }
+
+// Plain maintenance statements (copy, vacuum, DDL, ...) are not slow-query incidents; the weekly digest (digest.mjs) skips them too.
+export const maintRegex = (env) => new RegExp(env.SLOW_EXCLUDE_STATEMENT_REGEX ?? '^\\s*(copy|vacuum|analyze|reindex|cluster|create|alter|drop|truncate|refresh\\s+materialized|checkpoint|lock\\s+table|set\\s|show\\s|begin|commit)\\b', 'i');
 
 export const cfg = (env) => ({
   intervalMs: Number(env.SLOW_POLL_SECONDS ?? 15) * 1000,
@@ -88,7 +92,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
   const prev = new Map(), recur = new Map(), open = new Map(); // statement baselines, recurring statements, alerts awaiting their end
   // pg_stat_statements has no application name, so a backup or migration statement would pass the allow-list there. Remember the query ids the
   // activity pass excluded (by app/user), and also skip plain maintenance statements by text.
-  const excludedQ = new Map(), MAINT = new RegExp(env.SLOW_EXCLUDE_STATEMENT_REGEX ?? '^\\s*(copy|vacuum|analyze|reindex|cluster|create|alter|drop|truncate|refresh\\s+materialized|checkpoint|lock\\s+table|set\\s|show\\s|begin|commit)\\b', 'i');
+  const excludedQ = new Map(), MAINT = maintRegex(env);
   // The data-migration tool keeps its own bookkeeping in the `migration` schema (id_map, quarantine, ...): rolling an organisation back or reloading it deletes
   // or rewrites hundreds of thousands of rows by design, so those statements are expected to be slow and are not slow-query incidents.
   const MIGRATION_TOOL = /\b(?:from|into|update|join)\s+migration\./i, skipQ = (q) => MAINT.test(q) || MIGRATION_TOOL.test(q);
@@ -251,5 +255,10 @@ export function startWatcher({ env, metrics, send, log, resolverFactory }) {
   const t = setInterval(() => w.poll(), w.intervalMs);
   t.unref?.();
   w.poll();
-  return { stop: () => { clearInterval(t); client.end().catch(() => {}); cc?.end().catch(() => {}); } };
+  // D-06: the Monday digest. The clock is checked every minute; the digest itself decides whether it is due.
+  const maint = maintRegex(env), digest = createDigest({ query, send, log, env, skip: (q) => maint.test(q) });
+  const dt = setInterval(() => digest.tick(), 60_000);
+  dt.unref?.();
+  digest.tick();
+  return { stop: () => { clearInterval(t); clearInterval(dt); client.end().catch(() => {}); cc?.end().catch(() => {}); } };
 }

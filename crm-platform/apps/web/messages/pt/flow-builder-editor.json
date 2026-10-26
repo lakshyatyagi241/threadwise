@@ -645,6 +645,7 @@
         "imported": "{steps, plural, one {# etapa importada} other {# etapas importadas}} em {flows, plural, one {# fluxo} other {# fluxos}}. Confira e depois clique em Salvar.",
         "invalidJson": "Esse arquivo não é um JSON válido.",
         "saved": "“{name}” salvo",
+        "nodeSaved": "Nó atualizado com sucesso!",
         "saveFailed": "Falha ao salvar: {error}",
         "publishedToast": "Publicado",
         "publishFailed": "Falha ao publicar: {error}",

@@ -7,6 +7,7 @@ import type {
   QueueUnclaimedAction,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { CUSTOMER_LANGUAGE } from './routing-rules.repository';
 
 type Raw = Record<string, unknown>;
 const rowsOf = (res: unknown): Raw[] => (res as { rows: Raw[] }).rows;
@@ -559,8 +560,9 @@ export class HandoffRepository {
     status: string;
   } | null> {
     const res = await tx.execute(sql`
-      SELECT c.contact_id, c.customer_language, c.archived, c.status, ch.kind AS channel_kind
+      SELECT c.contact_id, ${CUSTOMER_LANGUAGE} AS customer_language, c.archived, c.status, ch.kind AS channel_kind
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
       WHERE c.org_id = ${orgId} AND c.id = ${id}`);
     const r = rowsOf(res)[0];
     return r

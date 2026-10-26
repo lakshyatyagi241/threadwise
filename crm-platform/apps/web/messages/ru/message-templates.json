@@ -378,10 +378,13 @@
           "catalogAlone": "Кнопку каталога нельзя сочетать с другими кнопками."
         },
         "catalogHint": "Открывает ваш каталог WhatsApp. На кнопке написано «Посмотреть каталог», и она должна быть единственной.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "Числовой ID опубликованного WhatsApp Flow из менеджера Flows в Meta.",
-        "screen": "Начальный экран",
-        "screenHint": "ID экрана, на котором открывается форма, например WELCOME."
+        "flowPick": "Форма WhatsApp",
+        "flowPickHint": "Выберите одну из опубликованных форм WhatsApp. Кнопка откроет её внутри WhatsApp.",
+        "flowChoose": "Выберите форму WhatsApp",
+        "flowLoading": "Загрузка форм…",
+        "flowNone": "У вас пока нет опубликованных форм WhatsApp.",
+        "flowNoneLink": "Создайте и опубликуйте форму",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Сохранено, но Meta отклонила шаблон.",
@@ -425,7 +428,9 @@
         "buttons": "Кнопки",
         "buttonText": "Текст кнопки",
         "buttonUrl": "Адрес сайта",
-        "buttonPhone": "Номер телефона"
+        "buttonPhone": "Номер телефона",
+        "moveUp": "Переместить карточку {n} выше",
+        "moveDown": "Переместить карточку {n} ниже"
       },
       "offer": {
         "title": "Предложение с ограниченным сроком",

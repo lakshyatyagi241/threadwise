@@ -171,6 +171,18 @@ export function Canvas({
     };
   }, [measurePorts]);
 
+  // The node each output is wired to, by node and port, for the label beside the port.
+  const outLinks = useMemo(() => {
+    const by = new Map<string, Record<string, string[]>>();
+    for (const e of edges) {
+      const ports = by.get(e.source) ?? {};
+      const handle = e.sourceHandle || 'out';
+      (ports[handle] ??= []).push(e.target);
+      by.set(e.source, ports);
+    }
+    return by;
+  }, [edges]);
+
   // Moving a node moves its ports with it: edge geometry follows `nodes` x/y, offsets are relative to the card.
   const edgePaths = useMemo(() => {
     return edges
@@ -501,6 +513,7 @@ export function Canvas({
                     : 'dim'
             }
             hoveredPort={hoveredPort}
+            outTo={outLinks.get(node.id)}
             onPointerDown={onNodePointerDown}
             onSelect={(id) => {
               setEdgePopup(null);

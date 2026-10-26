@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-26T10:36:38.839Z",
+  "sourceKeys": 118,
+  "copies": 10,
+  "engines": [
+    {
+      "server": "redis 7.4.11",
+      "emptyBytes": 1086400,
+      "steps": [
+        {
+          "copies": 1,
+          "keys": 118,
+          "usedMemory": 1357280
+        },
+        {
+          "copies": 10,
+          "keys": 1180,
+          "usedMemory": 1854920
+        }
+      ],
+      "dataBytes": 768520,
+      "bytesPerKey": 651
+    },
+    {
+      "server": "valkey 8.1.10",
+      "emptyBytes": 1017376,
+      "steps": [
+        {
+          "copies": 1,
+          "keys": 118,
+          "usedMemory": 1302568
+        },
+        {
+          "copies": 10,
+          "keys": 1180,
+          "usedMemory": 1746808
+        }
+      ],
+      "dataBytes": 729432,
+      "bytesPerKey": 618
+    }
+  ],
+  "valkeyVsRedisPct": -5.1
+}

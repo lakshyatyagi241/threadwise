@@ -174,7 +174,8 @@
         "status": "Status",
         "schedule": "Harmonogram",
         "actions": "Akcje"
-      }
+      },
+      "newCampaignAny": "Nowa kampania"
     },
     "builder": {
       "loadError": "Nie udało się załadować tej kampanii.",
@@ -725,7 +726,11 @@
         "balanceShort": "Saldo jest za małe: brakuje {shortfall}.",
         "balanceLowFull": "Saldo jest niższe niż pełny koszt {full}: Twój plan pokrywa go teraz, ale nie po jego wyczerpaniu.",
         "chargedNowLabel": "Pobrano teraz z Twojego portfela"
-      }
+      },
+      "kickerEmail": "Kampanie e-mail / Nowa",
+      "kickerEditEmail": "Kampanie e-mail / Edycja",
+      "titleEmail": "Utwórz nowy e-mail",
+      "titleEditEmail": "Edytuj swój e-mail"
     },
     "detail": {
       "notFound": "Nie znaleziono tej kampanii.",

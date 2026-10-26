@@ -320,7 +320,6 @@ function Panel({
             <WebBehaviourCard
               s={s}
               set={set}
-              flash={flash}
               domains={domains}
               onDomains={setDomains}
               widgetId={widgetId}

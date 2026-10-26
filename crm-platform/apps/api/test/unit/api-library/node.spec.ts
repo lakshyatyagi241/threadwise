@@ -217,13 +217,14 @@ describe('the API (from library) node', () => {
 });
 
 describe('the node in the catalogue and the graph', () => {
-  it('is an Integrations node for WhatsApp flows only, with success and error ports', () => {
+  it('is an Integrations node for WhatsApp and website flows only, with success and error ports', () => {
     expect(FLB_NODE_TYPES.api_library).toMatchObject({
       label: 'API (from library)',
       group: 'Integrations',
-      modes: ['chat'],
+      modes: ['chat', 'web'],
     });
     expect(flbPaletteFor('chat').map((d) => d.id)).toContain('api_library');
+    expect(flbPaletteFor('web').map((d) => d.id)).toContain('api_library');
     for (const m of ['instagram', 'facebook', 'telegram', 'call'] as const)
       expect(flbPaletteFor(m).map((d) => d.id)).not.toContain('api_library');
     expect(flbPortsFor({ type: 'api_library' }).map((p) => p.id)).toEqual(['success', 'error']);

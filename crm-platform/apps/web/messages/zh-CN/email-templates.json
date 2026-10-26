@@ -131,7 +131,11 @@
         "required": "此项为必填。",
         "tooLong": "内容过长（最多 {limit} 个字符）。",
         "subjectLines": "主题必须为单行。"
-      }
+      },
+      "bodyMode": "正文格式",
+      "bodyRich": "富文本",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>编写邮件的 HTML。使用下方变量进行个性化。</p>"
     },
     "preview": {
       "title": "使用示例数据预览",

@@ -10,6 +10,8 @@ export interface AudienceInput {
   groupIds?: readonly string[];
   tagIds?: readonly string[];
   segmentIds?: readonly string[];
+  /** `any`: a contact in at least one picked group, tag or segment (the default). `all`: in one picked item of each kind that has picks. */
+  audienceMatch?: 'any' | 'all';
   manualNumbers?: string;
   csvText?: string;
   /** Who earlier broadcasts and campaigns went to (optionally only those who read, replied...). */
@@ -47,11 +49,26 @@ export class CampaignAudienceService {
     _userId: number | null,
     input: AudienceInput,
   ): Promise<number[]> {
+    // Groups, tags and segments: the members of each kind are one set. `any` takes the union of the kinds; `all` keeps only the
+    // contacts that are in every kind picked (a kind with no picks does not narrow the audience).
+    const kinds: number[][] = [];
+    if ((input.groupIds ?? []).length > 0)
+      kinds.push(await this.repo.groupMemberIds(tx, orgId, input.groupIds ?? []));
+    if ((input.tagIds ?? []).length > 0)
+      kinds.push(await this.repo.tagMemberIds(tx, orgId, input.tagIds ?? []));
+    if ((input.segmentIds ?? []).length > 0)
+      kinds.push(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? []));
+    const picked =
+      input.audienceMatch === 'all' && kinds.length > 0
+        ? kinds.reduce((acc, ids) => {
+            const inKind = new Set(ids);
+            return acc.filter((id) => inKind.has(id));
+          }, kinds[0]!)
+        : kinds.flat();
+
     const merged: number[] = [
       ...(await this.repo.contactIdsByUuid(tx, orgId, input.contactIds ?? [])),
-      ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds ?? [])),
-      ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds ?? [])),
-      ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
+      ...picked,
       ...(await this.repo.previousSendContactIds(tx, orgId, input.previousSends)),
     ];
 

@@ -725,6 +725,7 @@ describe('steps per channel', () => {
         'ask_location',
         'delay',
         'cta',
+        'api_library',
         'webhook',
         'ai',
       ]),
@@ -1035,11 +1036,11 @@ describe('API call and JS function steps (the Actions list)', () => {
     return { d, a };
   };
 
-  it('are offered in the + menu on WhatsApp and not on a website chat bot', () => {
+  it('are offered in the + menu on WhatsApp, and the API step on a website chat bot too (code is WhatsApp only)', () => {
     expect(stepKindsFor('chat').map((k) => k.key)).toEqual(
       expect.arrayContaining(['api-library', 'code']),
     );
-    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('api-library');
+    expect(stepKindsFor('web').map((k) => k.key)).toContain('api-library');
     expect(stepKindsFor('web').map((k) => k.key)).not.toContain('code');
   });
 

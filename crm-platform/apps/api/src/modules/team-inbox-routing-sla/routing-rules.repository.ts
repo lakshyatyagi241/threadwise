@@ -6,6 +6,13 @@ import type { Tx } from '@crm/db';
 type Raw = Record<string, unknown>;
 export type RuleRow = Raw;
 
+/**
+ * The customer's language for a "Customer language" condition: the one the translation reading stored on the conversation, else the
+ * Language set on the contact. Without the second, a contact whose language was typed in (or imported) never matched a rule. Needs
+ * the conversation as `c` and the contact left-joined as `ct`.
+ */
+export const CUSTOMER_LANGUAGE = sql`coalesce(nullif(c.customer_language, ''), nullif(ct.language, ''))`;
+
 const rowsOf = (res: unknown): Raw[] => (res as { rows: Raw[] }).rows;
 
 /** `a,b` as `uuid IN (...)`; an empty list matches nothing. */
@@ -353,9 +360,10 @@ export class RoutingRulesRepository {
     routedMessage: string | null;
   } | null> {
     const res = await tx.execute(sql`
-      SELECT c.contact_id, c.customer_language, c.archived, ch.kind AS channel_kind,
+      SELECT c.contact_id, ${CUSTOMER_LANGUAGE} AS customer_language, c.archived, ch.kind AS channel_kind,
              c.routing_meta ->> 'routedMessage' AS routed_message
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+      LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
       WHERE c.org_id = ${orgId} AND c.id = ${id}`);
     const r = rowsOf(res)[0];
     if (!r) return null;

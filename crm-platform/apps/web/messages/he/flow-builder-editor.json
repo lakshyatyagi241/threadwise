@@ -645,6 +645,7 @@
         "imported": "יובאו {steps, plural, one {שלב אחד} two {שני שלבים} other {# שלבים}} ב-{flows, plural, one {תהליך אחד} two {שני תהליכים} other {# תהליכים}}. בדוק אותם ולאחר מכן שמור.",
         "invalidJson": "הקובץ אינו JSON תקין.",
         "saved": "נשמר “{name}”",
+        "nodeSaved": "הצומת עודכן בהצלחה!",
         "saveFailed": "השמירה נכשלה: {error}",
         "publishedToast": "פורסם",
         "publishFailed": "הפרסום נכשל: {error}",

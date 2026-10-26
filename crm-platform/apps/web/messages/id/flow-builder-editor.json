@@ -645,6 +645,7 @@
         "imported": "Diimpor {steps, plural, other {# langkah}} dalam {flows, plural, other {# alur}}. Periksa, lalu Simpan.",
         "invalidJson": "Berkas itu bukan JSON yang valid.",
         "saved": "\"{name}\" disimpan",
+        "nodeSaved": "Node berhasil diperbarui!",
         "saveFailed": "Gagal menyimpan: {error}",
         "publishedToast": "Dipublikasikan",
         "publishFailed": "Publikasi gagal: {error}",

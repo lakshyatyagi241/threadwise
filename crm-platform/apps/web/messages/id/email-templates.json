@@ -131,7 +131,11 @@
         "required": "Wajib diisi.",
         "tooLong": "Terlalu panjang (maksimal {limit} karakter).",
         "subjectLines": "Subjek harus satu baris."
-      }
+      },
+      "bodyMode": "Format isi",
+      "bodyRich": "Teks kaya",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Tulis HTML email. Gunakan variabel di bawah untuk mempersonalisasinya.</p>"
     },
     "preview": {
       "title": "Pratinjau dengan data contoh",

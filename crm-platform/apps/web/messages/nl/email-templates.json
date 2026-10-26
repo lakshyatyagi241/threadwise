@@ -131,7 +131,11 @@
         "required": "Dit veld is verplicht.",
         "tooLong": "Dit is te lang (maximaal {limit} tekens).",
         "subjectLines": "Het onderwerp moet uit één regel bestaan."
-      }
+      },
+      "bodyMode": "Opmaak van de tekst",
+      "bodyRich": "Opgemaakte tekst",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Schrijf de HTML van de e-mail. Gebruik de variabelen hieronder om hem te personaliseren.</p>"
     },
     "preview": {
       "title": "Voorbeeld met voorbeeldgegevens",

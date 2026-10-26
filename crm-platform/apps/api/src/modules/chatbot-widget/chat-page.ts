@@ -117,6 +117,7 @@ body[data-corner="square"] .bubble, body[data-corner="square"] .bubble.out, body
 .bubble.out { border-radius: 20px 20px 6px 20px; background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,.14); }
 .time { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #8b8fa8; padding: 0 4px; }
 .row.out .time svg { color: var(--accent); }
+.bubble a { color: inherit; text-decoration: underline; word-break: break-all; }
 .bubble code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; background: rgba(30,32,60,.08); border-radius: 4px; padding: 0 3px; }
 .bubble.media { padding: 5px; }
 .bubble.media .cap { padding: 7px 10px 5px; white-space: pre-wrap; }
@@ -198,7 +199,52 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .intake label.consent a { color: var(--accent); }
 .intake .age-err { color: #b91c1c; font-size: 12px; margin: -2px 0 8px; }
 .intake button { width: 100%; padding: 10px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; }
-.footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
+.footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; position: relative; }
+.dpbtn { flex: none; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--accent); display: grid; place-items: center; cursor: pointer; }
+.dpbtn svg { flex: none; width: 19px; height: 19px; }
+.dpbtn[hidden] { display: none; }
+.dpbtn:hover { background: var(--accent-soft); }
+.dp { flex: none; margin: 0 10px 8px; background: #fff; color: #222; border: 1px solid #e6e8f2; border-radius: 16px; box-shadow: 0 6px 24px rgba(30, 28, 70, .12); padding: 12px; max-height: calc(100% - 56px); overflow-y: auto; align-self: center; width: calc(100% - 20px); max-width: 340px; }
+.dp[hidden] { display: none; }
+.dp .dphead { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+.dp .dpnav { width: 30px; height: 30px; border: 1px solid #e3e5f0; border-radius: 9px; background: #fff; color: #444; display: grid; place-items: center; cursor: pointer; padding: 0; flex: none; }
+.dp .dpnav:hover { background: var(--accent-soft); border-color: var(--accent-line); }
+.dp .dptitle { display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1; min-width: 0; }
+.dp .dptb { border: 0; background: transparent; font: inherit; font-weight: 700; font-size: 14px; color: #222; text-transform: capitalize; padding: 5px 8px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+.dp .dptb:hover { background: var(--accent-soft); color: var(--accent); }
+.dp .dptb svg { width: 11px; height: 11px; }
+.dp .dpgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.dp .dplist { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.dp .dpitem { height: 40px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 13.5px; color: #222; cursor: pointer; padding: 0; text-transform: capitalize; }
+.dp .dpitem:hover { background: var(--accent-soft); }
+.dp .dpitem.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.dp .dpwd { font-size: 10.5px; font-weight: 600; color: #8b8fa8; padding: 4px 0; text-transform: uppercase; }
+.dp .dpday { position: relative; height: 34px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 13.5px; color: #222; cursor: pointer; padding: 0; }
+.dp .dpday:hover { background: var(--accent-soft); }
+.dp .dpday.out { color: #b4b7cc; }
+.dp .dpday.today::after { content: ""; position: absolute; left: 50%; bottom: 4px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--accent); }
+.dp .dpday.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.dp .dpday.sel::after { background: var(--accent-ink); }
+.dp .dpfoot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eef0f7; font-size: 13px; }
+.dp .dpsel { color: #6b6f88; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dp .dpgo { border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 600; font-size: 13px; padding: 7px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.dp .dpgo:disabled { opacity: .45; cursor: default; }
+.dp .dplink { border: 0; background: transparent; color: var(--accent); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 6px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: .03em; }
+.dp .dplink:hover { background: var(--accent-soft); }
+.dp .dpcap { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; color: #8b8fa8; text-transform: uppercase; margin-bottom: 6px; }
+.dp .dpdigits { display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 10px; }
+.dp .dpdig { border: 0; background: var(--accent-soft); border-radius: 10px; font: inherit; font-size: 40px; line-height: 1; font-weight: 500; color: #555; padding: 8px 12px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.dp .dpdig.on { background: var(--accent); color: var(--accent-ink); }
+.dp .dpcolon { font-size: 36px; color: #555; line-height: 1; }
+.dp .dpampm { display: flex; flex-direction: column; gap: 4px; margin-inline-start: 6px; }
+.dp .dpap { border: 1px solid #e3e5f0; background: #fff; border-radius: 8px; font: inherit; font-weight: 700; font-size: 13px; color: #6b6f88; padding: 6px 10px; cursor: pointer; }
+.dp .dpap.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+.dp .dpface { position: relative; width: 220px; height: 220px; margin: 0 auto; border-radius: 50%; background: #f0f1f8; touch-action: none; cursor: pointer; }
+.dp .dpnum { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 0; border-radius: 50%; background: transparent; font: inherit; font-size: 14px; color: #222; cursor: pointer; padding: 0; z-index: 2; }
+.dp .dpnum.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.dp .dphand { position: absolute; left: 110px; top: 109px; height: 2px; background: var(--accent); transform-origin: 0 50%; z-index: 1; pointer-events: none; }
+.dp .dpcenter { position: absolute; left: 107px; top: 107px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); z-index: 1; pointer-events: none; }
+
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
 .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .input-row .cc { flex: none; width: 92px; max-width: 34%; border: 0; border-inline-end: 1px solid #dfe2ee; border-radius: 0; background: transparent; font: inherit; font-size: 13.5px; font-weight: 600; color: #2c2e3d; padding: 8px 4px 8px 0; text-overflow: ellipsis; cursor: pointer; outline: none; }
@@ -294,6 +340,185 @@ const SCRIPT = `
     var want = ccPicked || String((h && h.country) || 'IN').toUpperCase();
     for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
+  // A date, date-and-time or time question opens a picker in the body of the chat (never over the header or the footer): a calendar whose month
+  // and year open lists of their own, and a clock face for the time. The pick is written into the box in the question's own shape and sent like
+  // a typed answer, so it is judged by the same rules. A date and time is filled only after Continue on the day and OK on the time.
+  var LOC = document.documentElement.lang || navigator.language || 'en';
+  var dp = { view: 'days', m: 0, y: 0, sel: null, h: 12, mi: 0, mode: 'hour', decade: 0 };
+  function dpPad(n) { return (n < 10 ? '0' : '') + n; }
+  function dpType() { return hint && (hint.type === 'date' || hint.type === 'datetime' || hint.type === 'time') ? hint.type : null; }
+  function dpDateText(d) {
+    var f = String((hint && hint.format) || 'dd-mm-yyyy').toLowerCase();
+    return f.replace('yyyy', String(d.y)).replace('yy', String(d.y).slice(-2)).replace('dd', dpPad(d.d)).replace('mm', dpPad(d.m + 1));
+  }
+  function dpValue() {
+    var type = dpType();
+    var time = dpPad(dp.h) + ':' + dpPad(dp.mi);
+    if (type === 'time') return time;
+    if (!dp.sel) return '';
+    return type === 'datetime' ? dpDateText(dp.sel) + ' ' + time : dpDateText(dp.sel);
+  }
+  function dpSvg(path) { var s = svg(14, [path]); s.setAttribute('stroke-width', '2.2'); s.setAttribute('aria-hidden', 'true'); return s; }
+  function dpEl(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function dpBtn(cls, text, fn) { var b = dpEl('button', cls, text); b.type = 'button'; b.addEventListener('click', fn); return b; }
+  function dpClose() { $('dp').hidden = true; $('dpbtn').setAttribute('aria-expanded', 'false'); }
+  function dpFill() {
+    var v = dpValue();
+    if (!v) return;
+    var t = $('txt'); t.value = v; syncSend(); dpClose(); t.focus();
+  }
+  // The header: previous, the month and the year (each opens its own list), next.
+  function dpHead(box, prevFn, nextFn, parts) {
+    var head = dpEl('div', 'dphead');
+    var prev = dpBtn('dpnav', '', prevFn); prev.appendChild(dpSvg('M15 6l-6 6 6 6')); prev.setAttribute('aria-label', 'Previous');
+    var next = dpBtn('dpnav', '', nextFn); next.appendChild(dpSvg('M9 6l6 6-6 6')); next.setAttribute('aria-label', 'Next');
+    var title = dpEl('div', 'dptitle');
+    parts.forEach(function (p) { var tb = dpBtn('dptb', p.text, p.fn); if (p.chev) tb.appendChild(dpSvg('M6 9l6 6 6-6')); title.appendChild(tb); });
+    head.appendChild(prev); head.appendChild(title); head.appendChild(next); box.appendChild(head);
+  }
+  function dpDays(box, type) {
+    var first = new Date(dp.y, dp.m, 1);
+    dpHead(box,
+      function () { dp.m -= 1; if (dp.m < 0) { dp.m = 11; dp.y -= 1; } dpRender(); },
+      function () { dp.m += 1; if (dp.m > 11) { dp.m = 0; dp.y += 1; } dpRender(); },
+      [{ text: new Intl.DateTimeFormat(LOC, { month: 'long' }).format(first), fn: function () { dp.view = 'months'; dpRender(); }, chev: true },
+       { text: String(dp.y), fn: function () { dp.view = 'years'; dp.decade = dp.y - (dp.y % 12); dpRender(); }, chev: true }]);
+    var grid = dpEl('div', 'dpgrid');
+    var wd = new Intl.DateTimeFormat(LOC, { weekday: 'short' });
+    for (var w = 0; w < 7; w++) grid.appendChild(dpEl('div', 'dpwd', wd.format(new Date(2023, 0, 1 + w)).slice(0, 2)));
+    var today = new Date();
+    var start = new Date(dp.y, dp.m, 1 - first.getDay());
+    for (var c = 0; c < 42; c++) {
+      var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + c);
+      var b = dpEl('button', 'dpday', String(day.getDate())); b.type = 'button';
+      if (day.getMonth() !== dp.m) b.classList.add('out');
+      if (day.getFullYear() === today.getFullYear() && day.getMonth() === today.getMonth() && day.getDate() === today.getDate()) b.classList.add('today');
+      if (dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate()) b.classList.add('sel');
+      b.addEventListener('click', (function (dd) { return function () {
+        dp.sel = { y: dd.getFullYear(), m: dd.getMonth(), d: dd.getDate() };
+        dp.y = dd.getFullYear(); dp.m = dd.getMonth();
+        if (type === 'date') dpFill(); else dpRender();
+      }; })(day));
+      grid.appendChild(b);
+    }
+    box.appendChild(grid);
+    var foot = dpEl('div', 'dpfoot');
+    var left = dpEl('div', 'dpsel');
+    if (type === 'date') {
+      var tb = dpBtn('dplink', new Intl.RelativeTimeFormat(LOC, { numeric: 'auto' }).format(0, 'day'), function () { var n = new Date(); dp.sel = { y: n.getFullYear(), m: n.getMonth(), d: n.getDate() }; dpFill(); });
+      left.appendChild(tb);
+    } else left.textContent = dp.sel ? dpDateText(dp.sel) : '—';
+    foot.appendChild(left);
+    if (type === 'datetime') {
+      var go = dpBtn('dpgo', '', function () { dp.view = 'time'; dp.mode = 'hour'; dpRender(); });
+      go.appendChild(dpSvg('M5 12.5l4.5 4.5L19 7.5')); go.appendChild(dpEl('span', '', tx('continue', 'Continue')));
+      go.disabled = !dp.sel;
+      foot.appendChild(go);
+    }
+    box.appendChild(foot);
+  }
+  function dpMonths(box) {
+    dpHead(box, function () { dp.y -= 1; dpRender(); }, function () { dp.y += 1; dpRender(); },
+      [{ text: String(dp.y), fn: function () { dp.view = 'years'; dp.decade = dp.y - (dp.y % 12); dpRender(); }, chev: true }]);
+    var list = dpEl('div', 'dplist');
+    var mf = new Intl.DateTimeFormat(LOC, { month: 'long' });
+    for (var i = 0; i < 12; i++) {
+      var b = dpBtn('dpitem' + (i === dp.m ? ' sel' : ''), mf.format(new Date(2023, i, 1)), (function (mm) { return function () { dp.m = mm; dp.view = 'days'; dpRender(); }; })(i));
+      list.appendChild(b);
+    }
+    box.appendChild(list);
+  }
+  function dpYears(box) {
+    dpHead(box, function () { dp.decade -= 12; dpRender(); }, function () { dp.decade += 12; dpRender(); },
+      [{ text: dp.decade + ' – ' + (dp.decade + 11), fn: function () { dp.view = 'months'; dpRender(); }, chev: false }]);
+    var list = dpEl('div', 'dplist');
+    for (var i = 0; i < 12; i++) {
+      var y = dp.decade + i;
+      list.appendChild(dpBtn('dpitem' + (y === dp.y ? ' sel' : ''), String(y), (function (yy) { return function () { dp.y = yy; dp.view = 'months'; dpRender(); }; })(y)));
+    }
+    box.appendChild(list);
+  }
+  // The clock: the hour (1-12) and then the minute are chosen on a face; AM and PM are two buttons; the box gets the 24-hour time.
+  function dpTime(box, type) {
+    box.appendChild(dpEl('div', 'dpcap', 'Select time'));
+    var h12 = dp.h % 12 === 0 ? 12 : dp.h % 12;
+    var pm = dp.h >= 12;
+    var digits = dpEl('div', 'dpdigits');
+    digits.appendChild(dpBtn('dpdig' + (dp.mode === 'hour' ? ' on' : ''), dpPad(h12), function () { dp.mode = 'hour'; dpRender(); }));
+    digits.appendChild(dpEl('span', 'dpcolon', ':'));
+    digits.appendChild(dpBtn('dpdig' + (dp.mode === 'minute' ? ' on' : ''), dpPad(dp.mi), function () { dp.mode = 'minute'; dpRender(); }));
+    var ap = dpEl('div', 'dpampm');
+    ap.appendChild(dpBtn('dpap' + (!pm ? ' on' : ''), 'AM', function () { if (pm) dp.h -= 12; dpRender(); }));
+    ap.appendChild(dpBtn('dpap' + (pm ? ' on' : ''), 'PM', function () { if (!pm) dp.h += 12; dpRender(); }));
+    digits.appendChild(ap);
+    box.appendChild(digits);
+    var face = dpEl('div', 'dpface');
+    var R = 86, C = 110;
+    var value = dp.mode === 'hour' ? h12 : dp.mi;
+    var angle = dp.mode === 'hour' ? (h12 % 12) * 30 : dp.mi * 6;
+    var hand = dpEl('div', 'dphand'); hand.style.width = R + 'px'; hand.style.transform = 'rotate(' + (angle - 90) + 'deg)';
+    face.appendChild(hand); face.appendChild(dpEl('div', 'dpcenter'));
+    for (var i = 0; i < 12; i++) {
+      var n = dp.mode === 'hour' ? (i === 0 ? 12 : i) : i * 5;
+      var a = i * Math.PI / 6;
+      var nb = dpBtn('dpnum' + (n === value ? ' sel' : ''), dp.mode === 'hour' ? String(n) : dpPad(n), (function (num) { return function (e) { e.stopPropagation(); dpPick(num); }; })(n));
+      nb.style.left = (C + Math.sin(a) * R) + 'px'; nb.style.top = (C - Math.cos(a) * R) + 'px';
+      face.appendChild(nb);
+    }
+    // A click anywhere on the face picks the nearest hour or minute.
+    face.addEventListener('click', function (e) {
+      var r = face.getBoundingClientRect();
+      var deg = Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))) * 180 / Math.PI;
+      if (deg < 0) deg += 360;
+      if (dp.mode === 'hour') { var hh = Math.round(deg / 30) % 12; dpPick(hh === 0 ? 12 : hh); } else dpPick(Math.round(deg / 6) % 60);
+    });
+    box.appendChild(face);
+    var foot = dpEl('div', 'dpfoot');
+    foot.appendChild(dpBtn('dplink', 'Cancel', function () { if (type === 'datetime') { dp.view = 'days'; dpRender(); } else dpClose(); }));
+    foot.appendChild(dpBtn('dplink', 'OK', dpFill));
+    box.appendChild(foot);
+  }
+  function dpPick(num) {
+    if (dp.mode === 'hour') {
+      var pm = dp.h >= 12;
+      dp.h = (num % 12) + (pm ? 12 : 0);
+      dp.mode = 'minute';
+    } else dp.mi = num;
+    dpRender();
+  }
+  function dpRender() {
+    var type = dpType();
+    var box = $('dp');
+    if (!type) { dpClose(); return; }
+    box.textContent = '';
+    if (type === 'time') dp.view = 'time';
+    else if (dp.view === 'time' && type === 'date') dp.view = 'days';
+    if (dp.view === 'time') dpTime(box, type);
+    else if (dp.view === 'months') dpMonths(box);
+    else if (dp.view === 'years') dpYears(box);
+    else dpDays(box, type);
+    box.hidden = false; $('dpbtn').setAttribute('aria-expanded', 'true');
+    var m = $('msgs'); if (m) m.scrollTop = m.scrollHeight;
+  }
+  function dpOpen() {
+    if (!dpType() || PREVIEW) return;
+    var n = new Date();
+    if (!dp.sel) { dp.y = n.getFullYear(); dp.m = n.getMonth(); }
+    if (dpType() === 'time' || !dp.sel) { dp.h = n.getHours(); dp.mi = Math.round(n.getMinutes() / 5) * 5 % 60; }
+    dp.view = dpType() === 'time' ? 'time' : 'days'; dp.mode = 'hour';
+    dpRender();
+  }
+  $('dpbtn').addEventListener('click', function () { if ($('dp').hidden) dpOpen(); else dpClose(); });
+  $('txt').addEventListener('focus', function () { if (dpType() && $('dp').hidden && !$('txt').value) dpOpen(); });
+  // A pick redraws the picker, so the clicked button is already gone from the page when this runs: the path of the event is asked instead.
+  document.addEventListener('click', function (e) {
+    var box = $('dp');
+    if (box.hidden) return;
+    var path = e.composedPath ? e.composedPath() : [];
+    if (path.indexOf(box) >= 0 || path.indexOf($('txt')) >= 0 || path.indexOf($('dpbtn')) >= 0) return;
+    dpClose();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dpClose(); });
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
     var t = $('txt'), row = document.querySelector('.input-row'), type = hint ? hint.type : 'text';
@@ -309,6 +534,9 @@ const SCRIPT = `
     t.setAttribute('autocomplete', type === 'name' ? 'name' : type === 'email' ? 'email' : type === 'phone' ? 'tel' : 'off');
     t.placeholder = type === 'name' ? tx('yourName', 'Your name') : type === 'email' ? tx('emailPh', 'name@example.com') : type === 'phone' ? tx('phonePh', 'Phone number') : type === 'number' ? tx('numberPh', 'A number') : type === 'date' || type === 'datetime' || type === 'time' ? dateShape(hint) : tx('typeMessage', 'Type a message\\u2026');
     row.className = 'input-row' + (type === 'file' ? ' file' : type === 'location' ? ' loc' : '');
+    dp.sel = null;
+    $('dpbtn').hidden = !dpType();
+    if (dpType()) dpOpen(); else dpClose();
     $('locbtn').textContent = '\\uD83D\\uDCCD ' + tx('shareLocation', 'Share my location');
     var f = $('file');
     f.accept = type === 'file' && hint.accept && hint.accept.length ? hint.accept.map(function (e) { return '.' + e; }).join(',') : '';
@@ -843,6 +1071,22 @@ const SCRIPT = `
   // WhatsApp's own marks in a line the bot sent: *bold*, _italic_, ~strike~ and three backticks for monospace. Built as elements with
   // textContent, never as markup, so nothing in the text can add any. A mark inside a word (snake_case, a link) is left as typed.
   var MARKS = /\\x60\\x60\\x60([^\\n]+?)\\x60\\x60\\x60|\\*(?=\\S)([^*\\n]*?\\S)\\*|_(?=\\S)([^_\\n]*?\\S)_|~(?=\\S)([^~\\n]*?\\S)~/g;
+  // Plain text with its web addresses made into links (http and https only), for a map pin or any link the bot writes into a line.
+  function textInto(el, text) {
+    var re = /https?:[/][/][^\\s<>"']+/g;
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      var url = m[0].replace(/[.,;:!?)\\]]+$/, '');
+      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.textContent = url;
+      el.appendChild(a);
+      last = m.index + url.length;
+      re.lastIndex = last;
+    }
+    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+  }
   function fmtInto(el, text) {
     // Its own regex per call: the nested call for *bold _italic_* must not move this one's position.
     var re = new RegExp(MARKS.source, 'g');
@@ -850,7 +1094,7 @@ const SCRIPT = `
     while ((m = re.exec(text)) !== null) {
       var mono = m[1] !== undefined;
       if (!mono && (/\\w/.test(text.charAt(m.index - 1)) || /\\w/.test(text.charAt(m.index + m[0].length)))) { re.lastIndex = m.index + 1; continue; }
-      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      if (m.index > last) textInto(el, text.slice(last, m.index));
       var tag = mono ? 'code' : m[2] !== undefined ? 'b' : m[3] !== undefined ? 'i' : 's';
       var inner = mono ? m[1] : m[2] !== undefined ? m[2] : m[3] !== undefined ? m[3] : m[4];
       var n = document.createElement(tag);
@@ -858,7 +1102,7 @@ const SCRIPT = `
       el.appendChild(n);
       last = m.index + m[0].length;
     }
-    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+    if (last < text.length) textInto(el, text.slice(last));
   }
   // The same line without its marks, for the voice that reads it out.
   function plain(text) {
@@ -1589,6 +1833,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <div class="body" id="msgs" role="log" aria-live="polite" aria-label="Conversation"></div>
 <div class="voice" id="voice" hidden role="dialog" aria-live="polite"><div class="orb"><b></b><i></i></div><div class="vphase" id="vphase"></div><div class="vline" id="vline"></div><div class="vbtns"><button type="button" id="vtype"></button><button type="button" class="end" id="vend"></button></div></div>
 <button class="latest" id="latest" type="button" aria-label="Jump to the latest message"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v14M6 13l6 6 6-6"></path></svg>Latest</button>
+<div class="dp" id="dp" hidden role="dialog"></div>
 </div>
 <div class="pipcard" id="pipcard" hidden></div>
 <footer class="footer">
@@ -1598,6 +1843,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <select id="cc" class="cc" hidden></select>
 <button id="locbtn" class="locbtn" type="button">Share my location</button>
 <input id="txt" type="text" placeholder="Type a message…" aria-label="Type a message" autocomplete="off" />
+<button class="dpbtn" id="dpbtn" type="button" hidden aria-haspopup="dialog"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M8 3v4M16 3v4M3.5 10h17"></path></svg></button>
 <label class="att" id="att"><input id="file" type="file" hidden /><span aria-hidden="true">&#128206;</span><span>Attach a file</span></label>
 <button class="mic" id="mic" type="button" hidden><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></button>
 <button id="send" type="button" disabled></button>

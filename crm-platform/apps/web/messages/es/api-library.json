@@ -16,8 +16,8 @@
       "failed": "Error",
       "source": {
         "test": "Prueba",
-        "flow": "Flujo",
-        "automation": "Automatización"
+        "flow": "Flujo simple",
+        "automation": "Flujo avanzado"
       },
       "errorKind": {
         "blocked": "Dirección bloqueada",
@@ -91,7 +91,6 @@
       "title": "Eliminar API",
       "message": "¿Seguro que quieres eliminar {name}? Esta acción no se puede deshacer.",
       "delete": "Eliminar",
-      "deleteAnyway": "Eliminar de todas formas",
       "done": "Se eliminó {name}.",
       "checking": "Comprobando qué flujos la usan...",
       "usageFailed": "No se pudo comprobar qué flujos usan esta API. Si alguno la usa, al eliminarla, ese paso saldrá por su puerto de error.",
@@ -99,7 +98,9 @@
       "published": "Publicada",
       "draft": "Borrador",
       "nodes": "{count, plural, one {# paso} other {# pasos}}",
-      "forceNote": "Si la eliminas de todas formas, esos pasos dejarán de funcionar y saldrán por su puerto de error. Sus registros se conservan."
+      "blocked": "Esta API no se puede eliminar mientras la usen flujos. Quita su paso de estos flujos, o elige otra API allí, y luego elimínala aquí.",
+      "publishedCopy": "La versión publicada aún la llama",
+      "republish": "Publica el flujo de nuevo sin este paso y luego elimina la API."
     },
     "logs": {
       "title": "Registros de API",
@@ -114,7 +115,8 @@
         "source": "Origen",
         "result": "Resultado",
         "statusCode": "Código de estado",
-        "duration": "Duración"
+        "duration": "Duración",
+        "bot": "Bot"
       },
       "openLog": "Abrir la ejecución de {when}",
       "drawerTitle": "Registros: {name}",
@@ -139,7 +141,9 @@
         "to": "Hasta",
         "clear": "Quitar filtros",
         "deletedApi": "{name} (eliminada)",
-        "searchTooLong": "La búsqueda puede tener como máximo {max} caracteres. Acórtala para buscar."
+        "searchTooLong": "La búsqueda puede tener como máximo {max} caracteres. Acórtala para buscar.",
+        "bot": "Bot",
+        "allBots": "Todos los bots"
       },
       "detail": {
         "title": "Detalles del registro de API",
@@ -171,7 +175,10 @@
         "user": "Ejecutado por (ID de usuario)",
         "noContext": "No intervino ningún flujo ni contacto."
       },
-      "unsaved": "Sin guardar"
+      "unsaved": "Sin guardar",
+      "export": "Exportar CSV",
+      "exporting": "Exportando…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Insertar una variable en {label}",
@@ -324,6 +331,7 @@
       "functionHint": "Reformatea el cuerpo con JavaScript antes de enviarlo. Opcional.",
       "plainHttpWarning": "Esta dirección empieza por http://, así que la contraseña o clave de tus encabezados viajaría sin cifrar. Usa https:// si el servidor lo admite.",
       "importSkipped": "El comando pegado también envía un archivo ({names}). Aquí no se puede importar un archivo, así que se omitió. Todo lo demás se rellenó.",
+      "importForm": "El comando pegado envía sus datos como formulario web (a=1&b=2). Esta API envía JSON o multipart form-data, así que los campos se convirtieron en un objeto JSON. Comprueba que la API a la que llamas acepte JSON.",
       "payloadTypedHint": "Para enviar un número real o sí/no, escribe la variable sin comillas: {example}."
     },
     "test": {

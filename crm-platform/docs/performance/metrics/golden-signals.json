@@ -35,7 +35,7 @@
       "latency": { "status": "missing", "reason": "no per-query timing metric; only the HTTP and job histograms include DB time. Needs postgres_exporter or pg_stat_statements, outside this repo's code" },
       "traffic": { "status": "missing", "reason": "no query counter (same as latency)" },
       "errors": { "status": "missing", "reason": "no query error counter" },
-      "saturation": { "status": "present", "metrics": ["crm_db_pool_connections", "crm_db_pool_waiting", "crm_db_pool_max"], "new": true, "note": "client pool view, label pool=primary|replica" }
+      "saturation": { "status": "present", "metrics": ["crm_db_pool_connections", "crm_db_pool_waiting", "crm_db_pool_max", "crm_db_pool_acquire_seconds"], "new": true, "note": "client pool view, label pool=primary|replica|webhook|health; acquire_seconds is the checkout time (D-07)" }
     },
     "redis": {
       "latency": { "status": "present", "metrics": ["crm_probe_http_duration_seconds"], "note": "indirect: the readiness probe round trip; no command latency histogram" },
