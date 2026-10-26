@@ -39,7 +39,7 @@ export function EmailComposerFooter({
 }) {
   const t = useTranslations('email.composer');
   return (
-    <div className="mx-3 mt-2 flex flex-wrap items-center gap-2 text-xs">
+    <div className="flex flex-wrap items-center gap-2 text-xs">
       <button
         type="button"
         data-testid="email-rich-toggle"

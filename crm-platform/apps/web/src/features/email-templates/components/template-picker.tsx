@@ -70,11 +70,11 @@ export function EmailTemplatePicker({
   };
 
   return (
-    <div data-testid="email-template-picker" className="mx-3 mt-2 space-y-1 text-xs">
+    <div data-testid="email-template-picker" className="space-y-1 text-xs">
       <div className="relative flex flex-wrap items-center gap-2">
         <Button
           type="button"
-          variant="secondary"
+          variant="ghost"
           size="sm"
           aria-haspopup="dialog"
           aria-expanded={open}
@@ -102,7 +102,7 @@ export function EmailTemplatePicker({
           open={open}
           onClose={() => setOpen(false)}
           label={t('title')}
-          className="start-0 top-full z-20 mt-1 w-[min(26rem,calc(100vw-2rem))] p-2"
+          className="bottom-full start-0 z-20 mb-1 w-[min(26rem,calc(100vw-2rem))] p-2"
         >
           <div id={panelId}>
             <input

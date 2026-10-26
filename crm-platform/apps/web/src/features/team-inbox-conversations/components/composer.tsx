@@ -721,27 +721,7 @@ export function Composer(props: ComposerProps) {
       {isEmail && !isNote && !groupBlocked && (
         <EmailSendProblem problem={props.email?.sendProblem ?? null} bodyTooLong={bodyTooLong} />
       )}
-      {isEmail && !isNote && !groupBlocked && (
-        <EmailTemplatePicker
-          conversationId={conversationId}
-          hasDraft={richEmail ? !emailBodyBlank : trimmed.length > 0}
-          disabled={disabled}
-          applied={template}
-          onApply={applyTemplate}
-          onForget={() => setTemplate(null)}
-        />
-      )}
-      {isEmail && !isNote && !groupBlocked && (
-        <EmailExtrasFields
-          value={extras}
-          onChange={setExtras}
-          defaultSubject={props.email?.defaultSubject ?? ''}
-          showProblems={extrasTried}
-          disabled={disabled}
-        />
-      )}
-
-      <div className="relative flex items-end gap-2 p-3">
+      <div className={cn('relative flex gap-2 p-3', richEmail ? 'items-start' : 'items-end')}>
         {showSavedReplies && (
           <SavedReplyPicker
             key={conversationId}
@@ -910,6 +890,34 @@ export function Composer(props: ComposerProps) {
           <span className="hidden sm:inline">{isNote ? t('addNote') : t('send')}</span>
         </Button>
       </div>
+      {isEmail && !isNote && !groupBlocked && (
+        <div
+          data-testid="email-tools"
+          className="flex flex-wrap items-start gap-x-3 gap-y-1 px-3 pb-1 text-xs"
+        >
+          <EmailTemplatePicker
+            conversationId={conversationId}
+            hasDraft={richEmail ? !emailBodyBlank : trimmed.length > 0}
+            disabled={disabled}
+            applied={template}
+            onApply={applyTemplate}
+            onForget={() => setTemplate(null)}
+          />
+          <EmailExtrasFields
+            value={extras}
+            onChange={setExtras}
+            defaultSubject={props.email?.defaultSubject ?? ''}
+            showProblems={extrasTried}
+            disabled={disabled}
+          />
+          <EmailComposerFooter
+            rich={rich}
+            onToggle={toggleRich}
+            uploading={staged.uploading}
+            failed={staged.failed}
+          />
+        </div>
+      )}
       {!groupBlocked && !isEmail && (
         <ComposerToolbar
           extras={toolbarExtras}
@@ -927,14 +935,6 @@ export function Composer(props: ComposerProps) {
           choice={signature}
           onChange={setSignature}
           disabled={disabled}
-        />
-      )}
-      {isEmail && !isNote && !groupBlocked && (
-        <EmailComposerFooter
-          rich={rich}
-          onToggle={toggleRich}
-          uploading={staged.uploading}
-          failed={staged.failed}
         />
       )}
       <p
