@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "This link is paused or expired.",
       "ROW_VERSION_CONFLICT": "This was changed elsewhere. Reload and try again.",
       "VALIDATION_FAILED": "Check the highlighted fields and try again.",
-      "PLAN_FEATURE_LOCKED": "Upgrade your plan to use this feature."
+      "PLAN_FEATURE_LOCKED": "Upgrade your plan to use this feature.",
+      "WFL_FORM_SYNC_FAILED": "Could not read the forms from Meta."
     },
     "forms": {
       "heading": "WhatsApp Forms",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "No forms yet",
-        "description": "Create a form, then send it from a WhatsApp Form step in a flow."
+        "description": "Create a form, then send it from a WhatsApp Form step in a flow.",
+        "noMatch": "No forms match “{q}”."
       },
       "table": {
         "form": "Form",
@@ -143,6 +145,14 @@
           "contact": "Contact",
           "phone": "Phone"
         }
+      },
+      "sync": {
+        "cta": "Sync with Meta",
+        "syncing": "Syncing…",
+        "done": "Synced with Meta: {checked} checked, {updated} updated, {missing} not found in Meta, {metaOnly} only in Meta."
+      },
+      "search": {
+        "placeholder": "Search forms"
       }
     },
     "links": {
@@ -151,15 +161,24 @@
       "loading": "Loading links…",
       "retry": "Try again",
       "searchPlaceholder": "Search by name or link",
-      "create": { "cta": "New link" },
+      "create": {
+        "cta": "New link"
+      },
       "stats": {
         "all": "All links",
         "live": "Live",
         "totalClicks": "Total clicks",
         "avgClicks": "Avg. clicks / link"
       },
-      "tabs": { "all": "All", "live": "Live", "paused": "Paused" },
-      "status": { "live": "Live", "paused": "Paused" },
+      "tabs": {
+        "all": "All",
+        "live": "Live",
+        "paused": "Paused"
+      },
+      "status": {
+        "live": "Live",
+        "paused": "Paused"
+      },
       "empty": {
         "title": "No links yet",
         "description": "Mint a link to share in ads, bios or a QR code."

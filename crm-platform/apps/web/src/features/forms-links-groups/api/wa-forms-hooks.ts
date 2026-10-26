@@ -10,10 +10,19 @@ export const WA_FORM_KEYS = {
   submissions: (id: string) => ['wa-forms', 'submissions', id] as const,
 };
 
-export function useWaForms() {
+export function useWaForms(q = '') {
   return useQuery({
-    queryKey: WA_FORM_KEYS.list(),
-    queryFn: ({ signal }) => waFormsApi.list(undefined, signal),
+    queryKey: q ? ([...WA_FORM_KEYS.list(), q] as const) : WA_FORM_KEYS.list(),
+    queryFn: ({ signal }) => waFormsApi.list({ limit: 100, ...(q ? { q } : {}) }, signal),
+    placeholderData: (previous) => previous,
+  });
+}
+
+export function useSyncWaForms() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => waFormsApi.sync(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: WA_FORM_KEYS.list() }),
   });
 }
 

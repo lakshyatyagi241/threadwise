@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "이 링크는 일시 중지되었거나 만료되었습니다.",
       "ROW_VERSION_CONFLICT": "다른 곳에서 변경되었습니다. 새로고침 후 다시 시도하세요.",
       "VALIDATION_FAILED": "강조 표시된 필드를 확인하고 다시 시도하세요.",
-      "PLAN_FEATURE_LOCKED": "이 기능을 사용하려면 플랜을 업그레이드하세요."
+      "PLAN_FEATURE_LOCKED": "이 기능을 사용하려면 플랜을 업그레이드하세요.",
+      "WFL_FORM_SYNC_FAILED": "Meta에서 양식을 읽지 못했습니다."
     },
     "forms": {
       "heading": "WhatsApp 양식",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "아직 양식이 없습니다",
-        "description": "양식을 만든 후 플로우의 WhatsApp 양식 단계에서 전송하세요."
+        "description": "양식을 만든 후 플로우의 WhatsApp 양식 단계에서 전송하세요.",
+        "noMatch": "“{q}”와 일치하는 양식이 없습니다."
       },
       "table": {
         "form": "양식",
@@ -143,6 +145,14 @@
           "contact": "연락처",
           "phone": "전화번호"
         }
+      },
+      "sync": {
+        "cta": "Meta와 동기화",
+        "syncing": "동기화 중…",
+        "done": "Meta와 동기화됨: {checked}개 확인, {updated}개 업데이트, Meta에 없음 {missing}개, Meta에만 있음 {metaOnly}개."
+      },
+      "search": {
+        "placeholder": "양식 검색"
       }
     },
     "links": {
