@@ -4,7 +4,7 @@ import { ModuleRef } from '@nestjs/core';
 import { Interval } from '@nestjs/schedule';
 import type { Queue } from 'bullmq';
 import type { Redis } from 'ioredis';
-import { REDIS_CLIENT } from '../redis/redis.module';
+import { REDIS_QUEUE_CLIENT } from '../redis/redis.module';
 import { TRIM_BATCH, parseMemoryInfo, pressureTier, trimPlan } from './queue-guard';
 
 const TICK_MS = 60_000;
@@ -32,7 +32,7 @@ export class QueueGuardService {
 
   constructor(
     private readonly moduleRef: ModuleRef,
-    @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    @Inject(REDIS_QUEUE_CLIENT) private readonly redis: Redis,
     @Inject(QUEUE_GUARD_OPTIONS) options: QueueGuardOptions,
   ) {
     this.captured = new Set(options.capturedQueues);

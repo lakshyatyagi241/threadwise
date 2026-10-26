@@ -378,7 +378,13 @@
       "p0": false,
       "failureMode": "Slow queries and Google Chat alert delivery (watcher down, bridge failing, dead-man heartbeat missing)",
       "severity": "warning",
-      "alerts": ["Watchdog", "SlowQueryBurst", "SlowQueryWatcherDown", "ChatBridgeDeliveryFailing", "ChatBridgeNoWatchdog"],
+      "alerts": [
+        "Watchdog",
+        "SlowQueryBurst",
+        "SlowQueryWatcherDown",
+        "ChatBridgeDeliveryFailing",
+        "ChatBridgeNoWatchdog"
+      ],
       "runbook": "docs/runbooks/google-chat-alerts.md",
       "status": "tested-promtool"
     },
@@ -399,6 +405,15 @@
       "alerts": ["RouteLatencyP95High"],
       "runbook": "docs/runbooks/db-and-route-alerts.md#routelatencyp95high",
       "status": "tested-promtool"
+    },
+    {
+      "id": "redis-memory-high",
+      "p0": false,
+      "failureMode": "The queue Redis is over 70% of maxmemory (Sheet 3 D-15); it refuses writes at maxmemory",
+      "severity": "warning",
+      "alerts": ["RedisMemoryHigh"],
+      "runbook": "docs/runbooks/redis-cache-split.md#redismemoryhigh",
+      "status": "tested-promtool"
     }
   ],
   "alertOwners": {
@@ -406,6 +421,7 @@
     "RouteLatencyP95High": "vedant",
     "ApiHighErrorRate": "vedant",
     "DbPoolSaturated": "vedant",
-    "DbPoolExhausted": "vedant"
+    "DbPoolExhausted": "vedant",
+    "RedisMemoryHigh": "vedant"
   }
 }
