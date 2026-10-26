@@ -794,6 +794,18 @@ export class InvoicesRepository {
     return Number((res.rows[0] as { seq: number | string }).seq);
   }
 
+  /**
+   * Whether an invoice of this workspace already carries the number, in any series. Voided invoices keep theirs, so they count.
+   * The counter is per series but the number is unique per workspace: after a numbering change the new series can produce a
+   * number an older series already used.
+   */
+  async numberTaken(tx: Tx, orgId: number, number: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM invoices WHERE org_id = ${orgId} AND invoice_number = ${number} LIMIT 1`,
+    );
+    return res.rows.length > 0;
+  }
+
   /** Draft -> issued. The caller has locked the row; the freeze trigger lets this one transition through. */
   async markIssued(
     tx: Tx,
