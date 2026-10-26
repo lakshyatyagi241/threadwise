@@ -378,10 +378,13 @@
           "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd."
         },
         "catalogHint": "Opent uw WhatsApp-catalogus. De knop zegt “Catalogus bekijken” en moet de enige knop zijn.",
-        "flowId": "WhatsApp Flow-ID",
-        "flowIdHint": "Het numerieke ID van een gepubliceerde WhatsApp Flow, uit de Flows-beheerder van Meta.",
-        "screen": "Openingsscherm",
-        "screenHint": "Het ID van het scherm waarop het formulier opent, bijvoorbeeld WELCOME."
+        "flowPick": "WhatsApp-formulier",
+        "flowPickHint": "Kies een van je gepubliceerde WhatsApp-formulieren. De knop opent het in WhatsApp.",
+        "flowChoose": "Kies een WhatsApp-formulier",
+        "flowLoading": "Formulieren laden…",
+        "flowNone": "Je hebt nog geen gepubliceerde WhatsApp-formulieren.",
+        "flowNoneLink": "Maak er een en publiceer het",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",

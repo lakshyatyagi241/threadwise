@@ -378,10 +378,13 @@
           "catalogAlone": "ক্যাটালগ বোতাম অন্য বোতামের সাথে একসাথে ব্যবহার করা যায় না।"
         },
         "catalogHint": "আপনার WhatsApp ক্যাটালগ খোলে। বোতামে “ক্যাটালগ দেখুন” লেখা থাকে এবং এটি একমাত্র বোতাম হতে হবে।",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "প্রকাশিত WhatsApp Flow-এর সংখ্যাসূচক ID, Meta-র Flows ম্যানেজার থেকে।",
-        "screen": "শুরুর স্ক্রিন",
-        "screenHint": "যে স্ক্রিনে ফর্ম খোলে তার ID, যেমন WELCOME।"
+        "flowPick": "WhatsApp ফর্ম",
+        "flowPickHint": "আপনার প্রকাশিত WhatsApp ফর্মগুলোর একটি বেছে নিন। বোতামটি এটি WhatsApp-এর ভেতরেই খোলে।",
+        "flowChoose": "WhatsApp ফর্ম বেছে নিন",
+        "flowLoading": "ফর্ম লোড হচ্ছে…",
+        "flowNone": "আপনার এখনও কোনো প্রকাশিত WhatsApp ফর্ম নেই।",
+        "flowNoneLink": "একটি তৈরি করে প্রকাশ করুন",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "সংরক্ষিত হয়েছে, কিন্তু Meta টেমপ্লেটটি প্রত্যাখ্যান করেছে।",
