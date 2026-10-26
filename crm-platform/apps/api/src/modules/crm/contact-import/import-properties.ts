@@ -71,12 +71,7 @@ const unguardedCell = (text: string): string => (/^'[=+\-@\t\r]/.test(text) ? te
 
 /** An option's name for comparing: accents, case, and runs of spaces (a no-break space too) do not matter. */
 const optionKey = (text: string): string =>
-  text
-    .normalize('NFKD')
-    .replace(/\p{M}/gu, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .toLowerCase();
+  text.normalize('NFKD').replace(/\p{M}/gu, '').replace(/\s+/g, ' ').trim().toLowerCase();
 
 /**
  * The option a cell names, matched without regard to case, accents, extra spaces, guard apostrophe or not; undefined when it names
