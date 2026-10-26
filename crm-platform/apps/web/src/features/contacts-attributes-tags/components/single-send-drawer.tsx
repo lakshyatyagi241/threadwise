@@ -252,10 +252,7 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   // A template of another WhatsApp number can never be sent from this number: it is left out of the list instead of offered and refused.
   const offered = (templates.data?.data ?? []).filter((x) => x.reason !== 'other_number');
   const picked = offered.find((x) => x.id === templateId);
-  const vars = useMemo(
-    () => (picked ? resolveVariables(picked, sources, row) : {}),
-    [picked, sources, row],
-  );
+  const vars = picked ? resolveVariables(picked, sources, row) : {};
   const missing = picked ? missingSlots(picked, vars) : [];
 
   const send = useMutation({
