@@ -63,25 +63,42 @@ export const accentFor = (uuid: string): string =>
   ACCENTS[Number.parseInt(uuid.charAt(0) || '0', 16) % 4] ?? ACCENTS[0];
 
 /** Short relative time, as the Updated column shows it ("2s ago", "5m ago", "3h ago", "2d ago", "1w ago", "4mo ago"). */
-export function relativeShort(iso: string, now: number = Date.now()): string {
+export function relativeShort(iso: string, now: number = Date.now(), locale = 'en'): string {
   const diff = Math.max(0, Math.floor((now - new Date(iso).getTime()) / 1000));
-  if (diff < 60) return `${diff}s ago`;
+  const ago = (n: number, unit: Intl.RelativeTimeFormatUnit, short: string): string =>
+    isEnglish(locale)
+      ? `${n}${short} ago`
+      : new Intl.RelativeTimeFormat(locale, { numeric: 'always', style: 'narrow' }).format(
+          -n,
+          unit,
+        );
+  if (diff < 60) return ago(diff, 'second', 's');
   const m = Math.floor(diff / 60);
-  if (m < 60) return `${m}m ago`;
+  if (m < 60) return ago(m, 'minute', 'm');
   const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
+  if (h < 24) return ago(h, 'hour', 'h');
   const d = Math.floor(h / 24);
-  if (d < 7) return `${d}d ago`;
-  if (d < 30) return `${Math.floor(d / 7)}w ago`;
-  if (d < 365) return `${Math.floor(d / 30)}mo ago`;
-  return `${Math.floor(d / 365)}y ago`;
+  if (d < 7) return ago(d, 'day', 'd');
+  if (d < 30) return ago(Math.floor(d / 7), 'week', 'w');
+  if (d < 365) return ago(Math.floor(d / 30), 'month', 'mo');
+  return ago(Math.floor(d / 365), 'year', 'y');
 }
+
+const isEnglish = (locale: string): boolean => locale === 'en' || locale.startsWith('en-');
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /** "Oct 02, 08:00" in the viewer's time zone. */
-export function stampShort(iso: string): string {
+export function stampShort(iso: string, locale = 'en'): string {
   const d = new Date(iso);
   const p = (n: number) => String(n).padStart(2, '0');
-  return `${MONTHS[d.getMonth()]} ${p(d.getDate())}, ${p(d.getHours())}:${p(d.getMinutes())}`;
+  if (isEnglish(locale))
+    return `${MONTHS[d.getMonth()]} ${p(d.getDate())}, ${p(d.getHours())}:${p(d.getMinutes())}`;
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(d);
 }

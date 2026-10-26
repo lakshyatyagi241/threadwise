@@ -309,7 +309,8 @@ function SourceRow({
   );
 }
 
-function AddPanel({
+/** One way of adding knowledge (a page, text, FAQs or a file) as an inline form. Exported for the tests. */
+export function AddPanel({
   kind,
   assistantId,
   onDone,
@@ -374,13 +375,19 @@ function AddPanel({
         await uploadSource(assistantId, file!, label.trim(), setProgress, abort.current.signal);
       } else if (kind === 'faq') {
         // One entry per row, in order; a blank row is skipped. The entry's label is its question.
-        for (const r of rows.filter((x) => x.question.trim() || x.answer.trim()))
+        for (const r of rows.filter((x) => x.question.trim() || x.answer.trim())) {
           await addSource(assistantId, {
             kind: 'qa',
             label: r.question.trim().slice(0, AIAG_SOURCE_LIMITS.label),
             question: r.question,
             answer: r.answer,
           });
+          // A saved row leaves the form at once, so when a later one fails, pressing Add again sends only the rows that are not saved.
+          setRows((cur) => {
+            const left = cur.filter((x) => x !== r);
+            return left.length > 0 ? left : [{ question: '', answer: '' }];
+          });
+        }
       } else {
         const body: AddAiagSourceInput =
           kind === 'url'

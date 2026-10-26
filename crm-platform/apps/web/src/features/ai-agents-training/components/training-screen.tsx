@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import type { AiagAssistant } from '@crm/contracts';
 import { Button, ConfirmDialog, EmptyState, Input, Spinner, cn, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
@@ -409,6 +409,7 @@ function AgentRow({
   onDelete: () => void;
 }) {
   const t = useTranslations('aiTraining.list');
+  const locale = useLocale();
   const pill = STATUS_PILL[a.status];
   const prov = providerPill(a.aiProvider);
   return (
@@ -465,9 +466,11 @@ function AgentRow({
       </div>
       <div className="text-xs capitalize">{a.tone}</div>
       <div className="min-w-0">
-        <div className="truncate font-mono text-[11.5px]">{relativeShort(a.updatedAt)}</div>
+        <div className="truncate font-mono text-[11.5px]">
+          {relativeShort(a.updatedAt, Date.now(), locale)}
+        </div>
         <div className="truncate font-mono text-[10px] text-muted-foreground">
-          {stampShort(a.updatedAt)}
+          {stampShort(a.updatedAt, locale)}
         </div>
       </div>
       <div className="flex items-center justify-end gap-0.5 whitespace-nowrap">
