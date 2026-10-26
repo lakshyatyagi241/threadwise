@@ -620,7 +620,10 @@
           "resolved": "সমাধান হয়েছে",
           "closed": "বন্ধ",
           "spam": "স্প্যাম"
-        }
+        },
+        "created": "শুরু {date}",
+        "showMore": "আরও {count}টি দেখান",
+        "showLess": "কম দেখান"
       }
     },
     "simulator": {

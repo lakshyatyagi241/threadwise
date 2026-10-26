@@ -620,7 +620,10 @@
           "resolved": "已解决",
           "closed": "已关闭",
           "spam": "垃圾信息"
-        }
+        },
+        "created": "开始于 {date}",
+        "showMore": "再显示 {count} 条",
+        "showLess": "收起"
       }
     },
     "simulator": {

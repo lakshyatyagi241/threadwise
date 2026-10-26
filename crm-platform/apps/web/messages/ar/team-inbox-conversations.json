@@ -620,7 +620,10 @@
           "resolved": "تم حلها",
           "closed": "مغلقة",
           "spam": "مزعجة"
-        }
+        },
+        "created": "بدأت في {date}",
+        "showMore": "عرض {count} أخرى",
+        "showLess": "عرض أقل"
       }
     },
     "simulator": {

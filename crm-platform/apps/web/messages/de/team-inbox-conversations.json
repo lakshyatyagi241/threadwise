@@ -620,7 +620,10 @@
           "resolved": "Gelöst",
           "closed": "Geschlossen",
           "spam": "Spam"
-        }
+        },
+        "created": "Begonnen am {date}",
+        "showMore": "{count} weitere anzeigen",
+        "showLess": "Weniger anzeigen"
       }
     },
     "simulator": {

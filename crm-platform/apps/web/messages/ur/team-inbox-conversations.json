@@ -620,7 +620,10 @@
           "resolved": "حل شدہ",
           "closed": "بند",
           "spam": "اسپیم"
-        }
+        },
+        "created": "شروع: {date}",
+        "showMore": "مزید {count} دکھائیں",
+        "showLess": "کم دکھائیں"
       }
     },
     "simulator": {

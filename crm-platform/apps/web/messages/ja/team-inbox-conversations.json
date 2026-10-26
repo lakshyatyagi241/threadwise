@@ -620,7 +620,10 @@
           "resolved": "解決済み",
           "closed": "終了",
           "spam": "スパム"
-        }
+        },
+        "created": "開始日 {date}",
+        "showMore": "さらに{count}件表示",
+        "showLess": "表示を減らす"
       }
     },
     "simulator": {

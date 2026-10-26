@@ -620,7 +620,10 @@
           "resolved": "완료",
           "closed": "종료됨",
           "spam": "스팸"
-        }
+        },
+        "created": "시작일 {date}",
+        "showMore": "{count}개 더 보기",
+        "showLess": "간단히 보기"
       }
     },
     "simulator": {
