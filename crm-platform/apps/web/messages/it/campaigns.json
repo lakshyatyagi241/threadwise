@@ -1126,7 +1126,8 @@
         "saved": "Bozza salvata",
         "saving": "Salvataggio...",
         "failed": "Impossibile salvare",
-        "retry": "Riprova"
+        "retry": "Riprova",
+        "nameTaken": "Esiste già una campagna con lo stesso nome"
       },
       "errors": {
         "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Seleziona i numeri da cui inviare e assegna una quota a ciascuno. Il pubblico viene diviso in base a queste quote e ogni contatto riceve il messaggio da un solo numero. Una quota vuota o 0 vale 1.",
         "shareWeight": "Quota",
         "shareWeightLabel": "Quota di {name}",
-        "shareKeepOne": "Almeno un numero deve restare selezionato."
+        "shareKeepOne": "Almeno un numero deve restare selezionato.",
+        "nameTaken": "Esiste già una campagna con lo stesso nome"
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",

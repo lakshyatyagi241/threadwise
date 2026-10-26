@@ -1126,7 +1126,8 @@
         "saved": "Entwurf gespeichert",
         "saving": "Wird gespeichert...",
         "failed": "Speichern nicht möglich",
-        "retry": "Wiederholen"
+        "retry": "Wiederholen",
+        "nameTaken": "Eine Kampagne mit demselben Namen gibt es bereits"
       },
       "errors": {
         "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Wählen Sie die Absendernummern aus und geben Sie jeder einen Anteil. Die Zielgruppe wird nach diesen Anteilen aufgeteilt, und jeder Kontakt erhält die Nachricht von genau einer Nummer. Ein leerer Anteil oder 0 zählt als 1.",
         "shareWeight": "Anteil",
         "shareWeightLabel": "Anteil von {name}",
-        "shareKeepOne": "Mindestens eine Nummer bleibt ausgewählt."
+        "shareKeepOne": "Mindestens eine Nummer bleibt ausgewählt.",
+        "nameTaken": "Eine Kampagne mit demselben Namen gibt es bereits"
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",

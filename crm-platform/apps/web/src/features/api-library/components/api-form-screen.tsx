@@ -119,7 +119,14 @@ export function ApiFormScreen({ id }: { id?: string }) {
     );
   }
   return imported ? (
-    <ApiForm key="import" initial={fromImport(imported)} />
+    <>
+      {imported.skipped && imported.skipped.length > 0 && (
+        <Alert tone="warning" className="mb-4">
+          {t('importSkipped', { names: imported.skipped.map((n) => n.name).join(', ') })}
+        </Alert>
+      )}
+      <ApiForm key="import" initial={fromImport(imported)} />
+    </>
   ) : (
     <ApiForm key="new" initial={emptyForm()} />
   );
@@ -462,7 +469,7 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
               <SectionCard
                 id="alib-s-payload"
                 title={t('sections.payload')}
-                hint={t('payloadHint')}
+                hint={`${t('payloadHint')} ${t('payloadTypedHint', { example: '{"price": {{price}}}' })}`}
               >
                 <Field
                   label={t('payloadType')}

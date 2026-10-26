@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseCurl, shellSplit, urlEncodeDatum } from './curl';
+import { parseCurl, shellSplit } from './curl';
 
 describe('shellSplit', () => {
   it('groups quotes, honours escapes and joins continued lines', () => {
@@ -82,22 +82,50 @@ describe('parseCurl', () => {
   it('maps an unknown method to GET', () => {
     expect(parseCurl('curl -X TRACE https://a.test')?.method).toBe('GET');
   });
-});
 
-describe('--data-urlencode', () => {
-  it('encodes the content like curl does and never splits on an & inside it', () => {
-    expect(urlEncodeDatum('q=a b&c=d')).toBe('q=a%20b%26c%3Dd');
-    expect(urlEncodeDatum('=x y')).toBe('x%20y');
-    expect(urlEncodeDatum('plain & text')).toBe('plain%20%26%20text');
-    expect(urlEncodeDatum('file@/tmp/a')).toBe('file@/tmp/a');
+  it('encodes --data-urlencode like curl, so "a b&c" is one value in the address', () => {
+    expect(parseCurl(`curl -G https://a.test/s --data-urlencode 'q=a b&c'`)?.url).toBe(
+      'https://a.test/s?q=a%20b%26c',
+    );
+    expect(parseCurl(`curl -G https://a.test/s --data-urlencode 'a b'`)?.url).toBe(
+      'https://a.test/s?a%20b',
+    );
+    expect(parseCurl(`curl https://a.test/s --data-urlencode 'q=x y' -d 'k=1'`)?.body).toBe(
+      'q=x%20y&k=1',
+    );
   });
 
-  it('puts the encoded value in the address of a -G request, other data as typed', () => {
-    expect(
-      parseCurl(`curl -G https://a.test/s --data-urlencode 'q=fish & chips' -d 'page=2'`),
-    ).toMatchObject({ method: 'GET', url: 'https://a.test/s?q=fish%20%26%20chips&page=2' });
-    expect(
-      parseCurl(`curl https://a.test/s --data-urlencode 'name=A&B' --data-urlencode 'x=1'`)?.body,
-    ).toBe('name=A%26B&x=1');
+  it('keeps --form-string text and says which file parts it could not take', () => {
+    const r = parseCurl(
+      `curl https://a.test/up -F 'file=@/tmp/a.png' --form-string 'note=@not a file' -F 'name=Ann'`,
+    );
+    expect(r).toMatchObject({
+      payloadType: 'multipart/form-data',
+      body: { note: '@not a file', name: 'Ann' },
+      skipped: [{ code: 'file', name: 'file' }],
+    });
+    // Only a file: still a form, with nothing silently pretended.
+    expect(parseCurl(`curl https://a.test/up -F 'f=@a.txt'`)).toMatchObject({
+      method: 'POST',
+      payloadType: 'multipart/form-data',
+      body: {},
+      skipped: [{ code: 'file', name: 'f' }],
+    });
+  });
+
+  it("reads bash's $'...' quoting: \\n is a line break", () => {
+    expect(shellSplit("a $'l1\\nl2\\t\\x41\\'' b")).toEqual(['a', "l1\nl2\tA'", 'b']);
+    expect(parseCurl("curl https://a.test/m -d $'line1\\nline2'")?.body).toBe('line1\nline2');
+  });
+
+  it('reads --json as a JSON body with its headers', () => {
+    expect(parseCurl(`curl https://a.test/j --json '{"a":1}'`)).toMatchObject({
+      method: 'POST',
+      body: { a: 1 },
+      headers: [
+        { key: 'Content-Type', value: 'application/json' },
+        { key: 'Accept', value: 'application/json' },
+      ],
+    });
   });
 });

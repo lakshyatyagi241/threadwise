@@ -1,9 +1,10 @@
-import type { WizardDraftResponse } from '@crm/contracts';
+import { ERROR_CODES, type WizardDraftResponse } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { sanitizePatch } from './save-patch';
 import type { DraftPatch } from './state';
 
-export type SaveStatus = 'idle' | 'pending' | 'saving' | 'saved' | 'error' | 'conflict';
+export type SaveStatus =
+  'idle' | 'pending' | 'saving' | 'saved' | 'error' | 'conflict' | 'nameTaken';
 
 export const AUTOSAVE_DELAY_MS = 800;
 
@@ -46,7 +47,8 @@ export class Autosaver {
       this.status === 'pending' ||
       this.status === 'saving' ||
       this.status === 'error' ||
-      this.status === 'conflict'
+      this.status === 'conflict' ||
+      this.status === 'nameTaken'
     );
   }
 
@@ -105,6 +107,8 @@ export class Autosaver {
         // Put back what was not saved, without overwriting what was typed since.
         this.pending = { ...sent, ...this.pending };
         if (e instanceof ApiError && e.isRowVersionConflict) this.set('conflict', e);
+        else if (e instanceof ApiError && e.code === ERROR_CODES.CAMP_NAME_TAKEN)
+          this.set('nameTaken', e);
         else this.set('error', e);
         return false;
       }

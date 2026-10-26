@@ -1126,7 +1126,8 @@
         "saved": "Concept opgeslagen",
         "saving": "Opslaan...",
         "failed": "Kon niet opslaan",
-        "retry": "Opnieuw proberen"
+        "retry": "Opnieuw proberen",
+        "nameTaken": "Er bestaat al een campagne met dezelfde naam"
       },
       "errors": {
         "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Vink de nummers aan waarmee je verzendt en geef elk een aandeel. De doelgroep wordt volgens die aandelen verdeeld en elk contact krijgt het bericht van slechts één nummer. Een leeg aandeel of 0 telt als 1.",
         "shareWeight": "Aandeel",
         "shareWeightLabel": "Aandeel van {name}",
-        "shareKeepOne": "Minstens één nummer blijft aangevinkt."
+        "shareKeepOne": "Minstens één nummer blijft aangevinkt.",
+        "nameTaken": "Er bestaat al een campagne met dezelfde naam"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",

@@ -1126,7 +1126,8 @@
         "saved": "Draf disimpan",
         "saving": "Menyimpan...",
         "failed": "Tidak dapat menyimpan",
-        "retry": "Coba lagi"
+        "retry": "Coba lagi",
+        "nameTaken": "Kampanye dengan nama yang sama sudah ada"
       },
       "errors": {
         "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Centang nomor pengirim dan beri masing-masing bagian. Audiens dibagi menurut bagian tersebut dan setiap kontak menerima pesan dari satu nomor saja. Bagian yang kosong atau 0 dihitung 1.",
         "shareWeight": "Bagian",
         "shareWeightLabel": "Bagian {name}",
-        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang."
+        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang.",
+        "nameTaken": "Kampanye dengan nama yang sama sudah ada"
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
