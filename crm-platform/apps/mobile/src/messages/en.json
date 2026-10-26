@@ -1202,7 +1202,8 @@
         "authentication": "One-time-password templates are sent by the system.",
         "named_variables": "Uses named variables, which the app can't fill in yet.",
         "other_number": "Belongs to another WhatsApp number, so it cannot be sent from this conversation.",
-        "not_linked": "This conversation's channel is not linked to a WhatsApp number, so no template can be sent from it."
+        "not_linked": "This conversation's channel is not linked to a WhatsApp number, so no template can be sent from it.",
+        "carousel": "Is a carousel (cards with pictures), which the app can't send yet."
       }
     },
     "attach": {
@@ -1369,7 +1370,14 @@
       "tag_added": "Tag added",
       "tag_removed": "Tag removed",
       "first_response": "First reply sent",
-      "sla_breach": "Reply time missed"
+      "sla_breach": "Reply time missed",
+      "handoff_requested": "Handed to a person",
+      "handoff_returned": "Given back to the bot",
+      "bot_resumed": "The bot continued the flow",
+      "bot_resume_skipped": "The flow was not resumed",
+      "queue_reminded": "The team was reminded",
+      "queue_offered": "Offered to another team",
+      "queue_customer_message": "A message was sent to the customer"
     },
     "replies": {
       "open": "Saved replies",

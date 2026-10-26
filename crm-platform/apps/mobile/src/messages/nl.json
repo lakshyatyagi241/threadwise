@@ -1202,7 +1202,8 @@
         "authentication": "Sjablonen met eenmalige wachtwoorden worden door het systeem verzonden.",
         "named_variables": "Gebruikt benoemde variabelen, die de app nog niet kan invullen.",
         "other_number": "Hoort bij een ander WhatsApp-nummer en kan daarom niet vanuit dit gesprek worden verzonden.",
-        "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden."
+        "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden.",
+        "carousel": "Is een carrousel (kaarten met afbeeldingen), die de app nog niet kan versturen."
       }
     },
     "attach": {
@@ -1369,7 +1370,14 @@
       "tag_added": "Tag toegevoegd",
       "tag_removed": "Tag verwijderd",
       "first_response": "Eerste antwoord verzonden",
-      "sla_breach": "Antwoordtijd overschreden"
+      "sla_breach": "Antwoordtijd overschreden",
+      "handoff_requested": "Overgedragen aan een persoon",
+      "handoff_returned": "Teruggegeven aan de bot",
+      "bot_resumed": "De bot zette de flow voort",
+      "bot_resume_skipped": "De flow is niet hervat",
+      "queue_reminded": "Het team is herinnerd",
+      "queue_offered": "Aangeboden aan een ander team",
+      "queue_customer_message": "Er is een bericht naar de klant gestuurd"
     },
     "replies": {
       "open": "Opgeslagen antwoorden",

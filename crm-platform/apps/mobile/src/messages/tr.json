@@ -1202,7 +1202,8 @@
         "authentication": "Tek kullanımlık parola şablonlarını sistem gönderir.",
         "named_variables": "Uygulamanın henüz dolduramadığı adlandırılmış değişkenler kullanıyor.",
         "other_number": "Başka bir WhatsApp numarasına ait, bu sohbetten gönderilemez.",
-        "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez."
+        "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
+        "carousel": "Bir karusel (resimli kartlar) olduğundan uygulama henüz gönderemiyor."
       }
     },
     "attach": {
@@ -1369,7 +1370,14 @@
       "tag_added": "Etiket eklendi",
       "tag_removed": "Etiket kaldırıldı",
       "first_response": "İlk yanıt gönderildi",
-      "sla_breach": "Yanıt süresi kaçırıldı"
+      "sla_breach": "Yanıt süresi kaçırıldı",
+      "handoff_requested": "Bir kişiye devredildi",
+      "handoff_returned": "Bota geri verildi",
+      "bot_resumed": "Bot akışı sürdürdü",
+      "bot_resume_skipped": "Akış yeniden başlatılmadı",
+      "queue_reminded": "Ekibe hatırlatıldı",
+      "queue_offered": "Başka bir ekibe önerildi",
+      "queue_customer_message": "Müşteriye mesaj gönderildi"
     },
     "replies": {
       "open": "Hazır yanıtlar",

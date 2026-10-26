@@ -46,6 +46,7 @@ const option = (over: Partial<InboxTemplateOption> = {}): InboxTemplateOption =>
   buttons: [],
   slots: [],
   sendable: true,
+  editable: false,
   reason: null,
   ...over,
 });

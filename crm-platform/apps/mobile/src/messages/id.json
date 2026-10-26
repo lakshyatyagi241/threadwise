@@ -1180,7 +1180,8 @@
         "authentication": "Template kata sandi sekali pakai dikirim oleh sistem.",
         "named_variables": "Menggunakan variabel bernama, yang belum dapat diisi oleh aplikasi.",
         "other_number": "Milik nomor WhatsApp lain, jadi tidak bisa dikirim dari percakapan ini.",
-        "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya."
+        "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya.",
+        "carousel": "Berupa carousel (kartu dengan gambar), yang belum dapat dikirim oleh aplikasi."
       }
     },
     "attach": {
@@ -1345,7 +1346,14 @@
       "tag_added": "Tag ditambahkan",
       "tag_removed": "Tag dihapus",
       "first_response": "Balasan pertama terkirim",
-      "sla_breach": "Waktu balasan terlewat"
+      "sla_breach": "Waktu balasan terlewat",
+      "handoff_requested": "Diserahkan ke orang",
+      "handoff_returned": "Dikembalikan ke bot",
+      "bot_resumed": "Bot melanjutkan alur",
+      "bot_resume_skipped": "Alur tidak dilanjutkan",
+      "queue_reminded": "Tim sudah diingatkan",
+      "queue_offered": "Ditawarkan ke tim lain",
+      "queue_customer_message": "Pesan dikirim ke pelanggan"
     },
     "replies": {
       "open": "Balasan tersimpan",

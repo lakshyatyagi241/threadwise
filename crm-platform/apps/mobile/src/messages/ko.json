@@ -1180,7 +1180,8 @@
         "authentication": "일회용 비밀번호 템플릿은 시스템이 보냅니다.",
         "named_variables": "이름이 있는 변수를 사용해 앱에서 아직 입력할 수 없습니다.",
         "other_number": "다른 WhatsApp 번호의 템플릿이므로 이 대화에서는 보낼 수 없습니다.",
-        "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다."
+        "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다.",
+        "carousel": "캐러셀(이미지 카드)이라서 앱에서 아직 보낼 수 없습니다."
       }
     },
     "attach": {
@@ -1345,7 +1346,14 @@
       "tag_added": "태그 추가됨",
       "tag_removed": "태그 제거됨",
       "first_response": "첫 답장 발송됨",
-      "sla_breach": "응답 시간 초과"
+      "sla_breach": "응답 시간 초과",
+      "handoff_requested": "사람에게 인계됨",
+      "handoff_returned": "봇에게 돌려줌",
+      "bot_resumed": "봇이 플로우를 이어갔습니다",
+      "bot_resume_skipped": "플로우를 재개하지 않았습니다",
+      "queue_reminded": "팀에 알렸습니다",
+      "queue_offered": "다른 팀에 제안했습니다",
+      "queue_customer_message": "고객에게 메시지를 보냈습니다"
     },
     "replies": {
       "open": "저장된 답변",

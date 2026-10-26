@@ -1202,7 +1202,8 @@
         "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet.",
         "named_variables": "Verwendet benannte Variablen, die die App noch nicht ausfüllen kann.",
         "other_number": "Gehört zu einer anderen WhatsApp-Nummer und kann deshalb aus diesem Gespräch nicht gesendet werden.",
-        "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden."
+        "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden.",
+        "carousel": "Ist ein Karussell (Karten mit Bildern), das die App noch nicht senden kann."
       }
     },
     "attach": {
@@ -1369,7 +1370,14 @@
       "tag_added": "Tag hinzugefügt",
       "tag_removed": "Tag entfernt",
       "first_response": "Erste Antwort gesendet",
-      "sla_breach": "Antwortzeit verpasst"
+      "sla_breach": "Antwortzeit verpasst",
+      "handoff_requested": "An eine Person übergeben",
+      "handoff_returned": "An den Bot zurückgegeben",
+      "bot_resumed": "Der Bot hat den Flow fortgesetzt",
+      "bot_resume_skipped": "Der Flow wurde nicht fortgesetzt",
+      "queue_reminded": "Das Team wurde erinnert",
+      "queue_offered": "Einem anderen Team angeboten",
+      "queue_customer_message": "Dem Kunden wurde eine Nachricht gesendet"
     },
     "replies": {
       "open": "Gespeicherte Antworten",

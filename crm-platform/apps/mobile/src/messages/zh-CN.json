@@ -1180,7 +1180,8 @@
         "authentication": "一次性密码模板由系统发送。",
         "named_variables": "使用了命名变量，应用暂不支持填写。",
         "other_number": "属于另一个 WhatsApp 号码，因此无法从此会话发送。",
-        "not_linked": "此会话的渠道未关联 WhatsApp 号码，因此无法从此发送任何模板。"
+        "not_linked": "此会话的渠道未关联 WhatsApp 号码，因此无法从此发送任何模板。",
+        "carousel": "这是轮播模板（带图片的卡片），应用暂不支持发送。"
       }
     },
     "attach": {
@@ -1345,7 +1346,14 @@
       "tag_added": "已添加标签",
       "tag_removed": "已移除标签",
       "first_response": "已发送首次回复",
-      "sla_breach": "回复超时"
+      "sla_breach": "回复超时",
+      "handoff_requested": "已移交给人工",
+      "handoff_returned": "已交还机器人",
+      "bot_resumed": "机器人继续了流程",
+      "bot_resume_skipped": "流程未恢复",
+      "queue_reminded": "已提醒团队",
+      "queue_offered": "已转给另一个团队",
+      "queue_customer_message": "已向客户发送消息"
     },
     "replies": {
       "open": "快捷回复",

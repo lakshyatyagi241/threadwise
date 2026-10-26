@@ -1246,7 +1246,8 @@
         "authentication": "Szablony z hasłem jednorazowym są wysyłane przez system.",
         "named_variables": "Używa zmiennych nazwanych, których aplikacja nie potrafi jeszcze uzupełnić.",
         "other_number": "Należy do innego numeru WhatsApp, więc nie można go wysłać z tej rozmowy.",
-        "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu."
+        "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu.",
+        "carousel": "To karuzela (karty z obrazami), której aplikacja nie potrafi jeszcze wysłać."
       }
     },
     "attach": {
@@ -1417,7 +1418,14 @@
       "tag_added": "Dodano tag",
       "tag_removed": "Usunięto tag",
       "first_response": "Wysłano pierwszą odpowiedź",
-      "sla_breach": "Przekroczono czas odpowiedzi"
+      "sla_breach": "Przekroczono czas odpowiedzi",
+      "handoff_requested": "Przekazano osobie",
+      "handoff_returned": "Zwrócono do bota",
+      "bot_resumed": "Bot kontynuował przepływ",
+      "bot_resume_skipped": "Przepływ nie został wznowiony",
+      "queue_reminded": "Przypomniano zespołowi",
+      "queue_offered": "Zaproponowano innemu zespołowi",
+      "queue_customer_message": "Wysłano wiadomość do klienta"
     },
     "replies": {
       "open": "Zapisane odpowiedzi",

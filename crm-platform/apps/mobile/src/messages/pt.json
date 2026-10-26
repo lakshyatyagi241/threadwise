@@ -1224,7 +1224,8 @@
         "authentication": "Os modelos de senha de uso único são enviados pelo sistema.",
         "named_variables": "Usa variáveis nomeadas, que o app ainda não consegue preencher.",
         "other_number": "Pertence a outro número de WhatsApp, por isso não pode ser enviado a partir desta conversa.",
-        "not_linked": "O canal desta conversa não está vinculado a um número de WhatsApp, por isso nenhum modelo pode ser enviado a partir dele."
+        "not_linked": "O canal desta conversa não está vinculado a um número de WhatsApp, por isso nenhum modelo pode ser enviado a partir dele.",
+        "carousel": "É um carrossel (cartões com imagens), que o app ainda não consegue enviar."
       }
     },
     "attach": {
@@ -1393,7 +1394,14 @@
       "tag_added": "Tag adicionada",
       "tag_removed": "Tag removida",
       "first_response": "Primeira resposta enviada",
-      "sla_breach": "Prazo de resposta perdido"
+      "sla_breach": "Prazo de resposta perdido",
+      "handoff_requested": "Transferida para uma pessoa",
+      "handoff_returned": "Devolvida ao bot",
+      "bot_resumed": "O bot continuou o fluxo",
+      "bot_resume_skipped": "O fluxo não foi retomado",
+      "queue_reminded": "A equipe foi lembrada",
+      "queue_offered": "Oferecida a outra equipe",
+      "queue_customer_message": "Uma mensagem foi enviada ao cliente"
     },
     "replies": {
       "open": "Respostas salvas",

@@ -1224,7 +1224,8 @@
         "authentication": "Les modèles de mot de passe à usage unique sont envoyés par le système.",
         "named_variables": "Utilise des variables nommées, que l’application ne peut pas encore renseigner.",
         "other_number": "Appartient à un autre numéro WhatsApp, il ne peut donc pas être envoyé depuis cette conversation.",
-        "not_linked": "Le canal de cette conversation n’est lié à aucun numéro WhatsApp : aucun modèle ne peut y être envoyé."
+        "not_linked": "Le canal de cette conversation n’est lié à aucun numéro WhatsApp : aucun modèle ne peut y être envoyé.",
+        "carousel": "C’est un carrousel (cartes avec images), que l’application ne peut pas encore envoyer."
       }
     },
     "attach": {
@@ -1393,7 +1394,14 @@
       "tag_added": "Étiquette ajoutée",
       "tag_removed": "Étiquette retirée",
       "first_response": "Première réponse envoyée",
-      "sla_breach": "Délai de réponse dépassé"
+      "sla_breach": "Délai de réponse dépassé",
+      "handoff_requested": "Confiée à une personne",
+      "handoff_returned": "Rendue au bot",
+      "bot_resumed": "Le bot a poursuivi le flux",
+      "bot_resume_skipped": "Le flux n’a pas repris",
+      "queue_reminded": "L’équipe a été relancée",
+      "queue_offered": "Proposée à une autre équipe",
+      "queue_customer_message": "Un message a été envoyé au client"
     },
     "replies": {
       "open": "Réponses enregistrées",

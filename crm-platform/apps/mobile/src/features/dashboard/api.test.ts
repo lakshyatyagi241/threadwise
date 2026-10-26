@@ -59,7 +59,10 @@ describe('dashboard api', () => {
       jsonResponse(200, { features: ['unofficial_whatsapp'] }),
     );
     await expect(fetchWalletSummary()).resolves.toMatchObject({ balanceMinor: 250000 });
-    await expect(fetchEntitlements()).resolves.toEqual({ features: ['unofficial_whatsapp'] });
+    await expect(fetchEntitlements()).resolves.toEqual({
+      features: ['unofficial_whatsapp'],
+      featureAddons: [],
+    });
     expect(http.calls.map((call) => call.url)).toEqual([
       expect.stringContaining('/v2/wallet/summary'),
       expect.stringContaining('/v2/billing/entitlements'),

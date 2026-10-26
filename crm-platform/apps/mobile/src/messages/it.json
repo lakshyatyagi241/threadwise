@@ -1224,7 +1224,8 @@
         "authentication": "I template con password monouso vengono inviati dal sistema.",
         "named_variables": "Usa variabili con nome, che l'app non può ancora compilare.",
         "other_number": "Appartiene a un altro numero WhatsApp, quindi non può essere inviato da questa conversazione.",
-        "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello."
+        "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello.",
+        "carousel": "È un carosello (schede con immagini), che l'app non può ancora inviare."
       }
     },
     "attach": {
@@ -1393,7 +1394,14 @@
       "tag_added": "Tag aggiunto",
       "tag_removed": "Tag rimosso",
       "first_response": "Prima risposta inviata",
-      "sla_breach": "Tempo di risposta non rispettato"
+      "sla_breach": "Tempo di risposta non rispettato",
+      "handoff_requested": "Passata a una persona",
+      "handoff_returned": "Restituita al bot",
+      "bot_resumed": "Il bot ha proseguito il flusso",
+      "bot_resume_skipped": "Il flusso non è ripreso",
+      "queue_reminded": "Il team è stato sollecitato",
+      "queue_offered": "Offerta a un altro team",
+      "queue_customer_message": "È stato inviato un messaggio al cliente"
     },
     "replies": {
       "open": "Risposte salvate",

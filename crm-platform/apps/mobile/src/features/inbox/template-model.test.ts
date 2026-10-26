@@ -28,6 +28,7 @@ const template = (over: Partial<InboxTemplateOption> = {}): InboxTemplateOption 
     { key: '2', label: 'code', example: null },
   ],
   sendable: true,
+  editable: false,
   reason: null,
   ...over,
 });

@@ -67,7 +67,7 @@ function arrange(
   throughputCall.mockResolvedValue(throughput);
   widgetsCall.mockResolvedValue(over.widgets ?? widgets);
   walletCall.mockResolvedValue(over.wallet ?? wallet);
-  entitlementsCall.mockResolvedValue({ features: over.features ?? [] });
+  entitlementsCall.mockResolvedValue({ features: over.features ?? [], featureAddons: [] });
   newContactsCall.mockResolvedValue(42);
   taskCountsCall.mockResolvedValue({
     overdue: 1,

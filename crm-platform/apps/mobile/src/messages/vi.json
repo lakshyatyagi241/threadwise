@@ -1180,7 +1180,8 @@
         "authentication": "Các mẫu mật khẩu dùng một lần do hệ thống gửi.",
         "named_variables": "Dùng biến có tên mà ứng dụng chưa thể điền.",
         "other_number": "Thuộc số WhatsApp khác, nên không gửi được từ cuộc trò chuyện này.",
-        "not_linked": "Kênh của cuộc trò chuyện này chưa được liên kết với số WhatsApp nào, nên không gửi được mẫu tin nào từ đây."
+        "not_linked": "Kênh của cuộc trò chuyện này chưa được liên kết với số WhatsApp nào, nên không gửi được mẫu tin nào từ đây.",
+        "carousel": "Là băng chuyền (thẻ có hình ảnh) mà ứng dụng chưa thể gửi."
       }
     },
     "attach": {
@@ -1345,7 +1346,14 @@
       "tag_added": "Đã thêm thẻ",
       "tag_removed": "Đã gỡ thẻ",
       "first_response": "Đã gửi phản hồi đầu tiên",
-      "sla_breach": "Quá thời hạn phản hồi"
+      "sla_breach": "Quá thời hạn phản hồi",
+      "handoff_requested": "Đã chuyển cho một người",
+      "handoff_returned": "Đã trả lại cho bot",
+      "bot_resumed": "Bot đã tiếp tục luồng",
+      "bot_resume_skipped": "Luồng không được tiếp tục",
+      "queue_reminded": "Đã nhắc nhóm",
+      "queue_offered": "Đã đề nghị cho nhóm khác",
+      "queue_customer_message": "Đã gửi tin nhắn cho khách hàng"
     },
     "replies": {
       "open": "Trả lời nhanh",

@@ -1224,7 +1224,8 @@
         "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema.",
         "named_variables": "Usa variables con nombre, que la app aún no puede completar.",
         "other_number": "Pertenece a otro número de WhatsApp, así que no se puede enviar desde esta conversación.",
-        "not_linked": "El canal de esta conversación no está vinculado a un número de WhatsApp, así que no se puede enviar ninguna plantilla."
+        "not_linked": "El canal de esta conversación no está vinculado a un número de WhatsApp, así que no se puede enviar ninguna plantilla.",
+        "carousel": "Es un carrusel (tarjetas con imágenes), que la app aún no puede enviar."
       }
     },
     "attach": {
@@ -1393,7 +1394,14 @@
       "tag_added": "Etiqueta añadida",
       "tag_removed": "Etiqueta quitada",
       "first_response": "Primera respuesta enviada",
-      "sla_breach": "Tiempo de respuesta incumplido"
+      "sla_breach": "Tiempo de respuesta incumplido",
+      "handoff_requested": "Derivada a una persona",
+      "handoff_returned": "Devuelta al bot",
+      "bot_resumed": "El bot continuó el flujo",
+      "bot_resume_skipped": "El flujo no se reanudó",
+      "queue_reminded": "Se recordó al equipo",
+      "queue_offered": "Ofrecida a otro equipo",
+      "queue_customer_message": "Se envió un mensaje al cliente"
     },
     "replies": {
       "open": "Respuestas guardadas",
