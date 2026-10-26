@@ -203,13 +203,20 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .dpbtn svg { flex: none; width: 19px; height: 19px; }
 .dpbtn[hidden] { display: none; }
 .dpbtn:hover { background: var(--accent-soft); }
-.dp { position: absolute; left: 12px; right: 12px; bottom: calc(100% + 6px); z-index: 30; background: #fff; color: #222; border: 1px solid #e6e8f2; border-radius: 16px; box-shadow: 0 14px 40px rgba(30, 28, 70, .18); padding: 12px; max-width: 340px; margin: 0 auto; max-height: calc(100vh - 140px); overflow-y: auto; }
+.dp { flex: none; margin: 0 10px 8px; background: #fff; color: #222; border: 1px solid #e6e8f2; border-radius: 16px; box-shadow: 0 6px 24px rgba(30, 28, 70, .12); padding: 12px; max-height: calc(100% - 56px); overflow-y: auto; align-self: center; width: calc(100% - 20px); max-width: 340px; }
 .dp[hidden] { display: none; }
-.dp .dphead { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-.dp .dpnav { width: 30px; height: 30px; border: 1px solid #e3e5f0; border-radius: 9px; background: #fff; color: #444; display: grid; place-items: center; cursor: pointer; padding: 0; }
+.dp .dphead { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+.dp .dpnav { width: 30px; height: 30px; border: 1px solid #e3e5f0; border-radius: 9px; background: #fff; color: #444; display: grid; place-items: center; cursor: pointer; padding: 0; flex: none; }
 .dp .dpnav:hover { background: var(--accent-soft); border-color: var(--accent-line); }
-.dp .dptitle { font-weight: 700; font-size: 14px; text-transform: capitalize; }
+.dp .dptitle { display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1; min-width: 0; }
+.dp .dptb { border: 0; background: transparent; font: inherit; font-weight: 700; font-size: 14px; color: #222; text-transform: capitalize; padding: 5px 8px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; }
+.dp .dptb:hover { background: var(--accent-soft); color: var(--accent); }
+.dp .dptb svg { width: 11px; height: 11px; }
 .dp .dpgrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+.dp .dplist { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.dp .dpitem { height: 40px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 13.5px; color: #222; cursor: pointer; padding: 0; text-transform: capitalize; }
+.dp .dpitem:hover { background: var(--accent-soft); }
+.dp .dpitem.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
 .dp .dpwd { font-size: 10.5px; font-weight: 600; color: #8b8fa8; padding: 4px 0; text-transform: uppercase; }
 .dp .dpday { position: relative; height: 34px; border: 0; border-radius: 10px; background: transparent; font: inherit; font-size: 13.5px; color: #222; cursor: pointer; padding: 0; }
 .dp .dpday:hover { background: var(--accent-soft); }
@@ -221,17 +228,21 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .dp .dpsel { color: #6b6f88; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dp .dpgo { border: 0; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 600; font-size: 13px; padding: 7px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 .dp .dpgo:disabled { opacity: .45; cursor: default; }
-.dp .dplink { border: 0; background: transparent; color: var(--accent); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 6px 4px; }
-.dp .dptime { display: flex; align-items: center; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eef0f7; }
-.dp .dpclock { flex: none; width: 104px; height: 104px; }
-.dp .dpcols { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.dp .dplab { font-size: 10.5px; font-weight: 700; color: #8b8fa8; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px; }
-.dp .dpnums { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; }
-.dp .dpnum { height: 26px; border: 0; border-radius: 8px; background: transparent; font: inherit; font-size: 12px; color: #333; cursor: pointer; padding: 0; }
-.dp .dpnum:hover { background: var(--accent-soft); }
+.dp .dplink { border: 0; background: transparent; color: var(--accent); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; padding: 6px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: .03em; }
+.dp .dplink:hover { background: var(--accent-soft); }
+.dp .dpcap { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; color: #8b8fa8; text-transform: uppercase; margin-bottom: 6px; }
+.dp .dpdigits { display: flex; align-items: center; justify-content: center; gap: 4px; margin-bottom: 10px; }
+.dp .dpdig { border: 0; background: var(--accent-soft); border-radius: 10px; font: inherit; font-size: 40px; line-height: 1; font-weight: 500; color: #555; padding: 8px 12px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.dp .dpdig.on { background: var(--accent); color: var(--accent-ink); }
+.dp .dpcolon { font-size: 36px; color: #555; line-height: 1; }
+.dp .dpampm { display: flex; flex-direction: column; gap: 4px; margin-inline-start: 6px; }
+.dp .dpap { border: 1px solid #e3e5f0; background: #fff; border-radius: 8px; font: inherit; font-weight: 700; font-size: 13px; color: #6b6f88; padding: 6px 10px; cursor: pointer; }
+.dp .dpap.on { background: var(--accent-soft); color: var(--accent); border-color: var(--accent-line); }
+.dp .dpface { position: relative; width: 220px; height: 220px; margin: 0 auto; border-radius: 50%; background: #f0f1f8; touch-action: none; cursor: pointer; }
+.dp .dpnum { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 0; border-radius: 50%; background: transparent; font: inherit; font-size: 14px; color: #222; cursor: pointer; padding: 0; z-index: 2; }
 .dp .dpnum.sel { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
-.dp .dpmin { display: flex; align-items: center; gap: 6px; }
-.dp .dpmin input { width: 52px; border: 1px solid #e3e5f0; border-radius: 8px; padding: 5px 6px; font: inherit; font-size: 13px; text-align: center; }
+.dp .dphand { position: absolute; left: 110px; top: 109px; height: 2px; background: var(--accent); transform-origin: 0 50%; z-index: 1; pointer-events: none; }
+.dp .dpcenter { position: absolute; left: 107px; top: 107px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); z-index: 1; pointer-events: none; }
 
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
 .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
@@ -328,10 +339,11 @@ const SCRIPT = `
     var want = ccPicked || String((h && h.country) || 'IN').toUpperCase();
     for (var i = 0; i < cc.options.length; i++) if (cc.options[i].dataset.code === want) { cc.selectedIndex = i; return; }
   }
-  // A date, date-and-time or time question opens a calendar (and a clock) above the box; the pick is written into the box in the question's own
-  // shape, so the answer is judged exactly as if it had been typed.
+  // A date, date-and-time or time question opens a picker in the body of the chat (never over the header or the footer): a calendar whose month
+  // and year open lists of their own, and a clock face for the time. The pick is written into the box in the question's own shape and sent like
+  // a typed answer, so it is judged by the same rules. A date and time is filled only after Continue on the day and OK on the time.
   var LOC = document.documentElement.lang || navigator.language || 'en';
-  var dp = { m: 0, y: 0, sel: null, h: 12, mi: 0 };
+  var dp = { view: 'days', m: 0, y: 0, sel: null, h: 12, mi: 0, mode: 'hour', decade: 0 };
   function dpPad(n) { return (n < 10 ? '0' : '') + n; }
   function dpType() { return hint && (hint.type === 'date' || hint.type === 'datetime' || hint.type === 'time') ? hint.type : null; }
   function dpDateText(d) {
@@ -347,113 +359,164 @@ const SCRIPT = `
   }
   function dpSvg(path) { var s = svg(14, [path]); s.setAttribute('stroke-width', '2.2'); s.setAttribute('aria-hidden', 'true'); return s; }
   function dpEl(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function dpBtn(cls, text, fn) { var b = dpEl('button', cls, text); b.type = 'button'; b.addEventListener('click', fn); return b; }
   function dpClose() { $('dp').hidden = true; $('dpbtn').setAttribute('aria-expanded', 'false'); }
   function dpFill() {
     var v = dpValue();
     if (!v) return;
     var t = $('txt'); t.value = v; syncSend(); dpClose(); t.focus();
   }
-  function dpClock() {
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('class', 'dpclock'); svg.setAttribute('aria-hidden', 'true');
-    function add(name, attrs) { var n = document.createElementNS(NS, name); for (var k in attrs) n.setAttribute(k, attrs[k]); svg.appendChild(n); return n; }
-    add('circle', { cx: 50, cy: 50, r: 47, fill: '#fff', stroke: 'var(--accent-line)', 'stroke-width': 3 });
-    for (var i = 0; i < 12; i++) {
-      var a = i * Math.PI / 6, big = i % 3 === 0;
-      add('line', { x1: 50 + Math.sin(a) * (big ? 36 : 40), y1: 50 - Math.cos(a) * (big ? 36 : 40), x2: 50 + Math.sin(a) * 44, y2: 50 - Math.cos(a) * 44, stroke: big ? 'var(--accent)' : '#b4b7cc', 'stroke-width': big ? 2.6 : 1.6, 'stroke-linecap': 'round' });
+  // The header: previous, the month and the year (each opens its own list), next.
+  function dpHead(box, prevFn, nextFn, parts) {
+    var head = dpEl('div', 'dphead');
+    var prev = dpBtn('dpnav', '', prevFn); prev.appendChild(dpSvg('M15 6l-6 6 6 6')); prev.setAttribute('aria-label', 'Previous');
+    var next = dpBtn('dpnav', '', nextFn); next.appendChild(dpSvg('M9 6l6 6-6 6')); next.setAttribute('aria-label', 'Next');
+    var title = dpEl('div', 'dptitle');
+    parts.forEach(function (p) { var tb = dpBtn('dptb', p.text, p.fn); if (p.chev) tb.appendChild(dpSvg('M6 9l6 6 6-6')); title.appendChild(tb); });
+    head.appendChild(prev); head.appendChild(title); head.appendChild(next); box.appendChild(head);
+  }
+  function dpDays(box, type) {
+    var first = new Date(dp.y, dp.m, 1);
+    dpHead(box,
+      function () { dp.m -= 1; if (dp.m < 0) { dp.m = 11; dp.y -= 1; } dpRender(); },
+      function () { dp.m += 1; if (dp.m > 11) { dp.m = 0; dp.y += 1; } dpRender(); },
+      [{ text: new Intl.DateTimeFormat(LOC, { month: 'long' }).format(first), fn: function () { dp.view = 'months'; dpRender(); }, chev: true },
+       { text: String(dp.y), fn: function () { dp.view = 'years'; dp.decade = dp.y - (dp.y % 12); dpRender(); }, chev: true }]);
+    var grid = dpEl('div', 'dpgrid');
+    var wd = new Intl.DateTimeFormat(LOC, { weekday: 'short' });
+    for (var w = 0; w < 7; w++) grid.appendChild(dpEl('div', 'dpwd', wd.format(new Date(2023, 0, 1 + w)).slice(0, 2)));
+    var today = new Date();
+    var start = new Date(dp.y, dp.m, 1 - first.getDay());
+    for (var c = 0; c < 42; c++) {
+      var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + c);
+      var b = dpEl('button', 'dpday', String(day.getDate())); b.type = 'button';
+      if (day.getMonth() !== dp.m) b.classList.add('out');
+      if (day.getFullYear() === today.getFullYear() && day.getMonth() === today.getMonth() && day.getDate() === today.getDate()) b.classList.add('today');
+      if (dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate()) b.classList.add('sel');
+      b.addEventListener('click', (function (dd) { return function () {
+        dp.sel = { y: dd.getFullYear(), m: dd.getMonth(), d: dd.getDate() };
+        dp.y = dd.getFullYear(); dp.m = dd.getMonth();
+        if (type === 'date') dpFill(); else dpRender();
+      }; })(day));
+      grid.appendChild(b);
     }
-    var ha = ((dp.h % 12) + dp.mi / 60) * Math.PI / 6, ma = dp.mi * Math.PI / 30;
-    add('line', { x1: 50, y1: 50, x2: 50 + Math.sin(ha) * 22, y2: 50 - Math.cos(ha) * 22, stroke: '#222', 'stroke-width': 4, 'stroke-linecap': 'round' });
-    add('line', { x1: 50, y1: 50, x2: 50 + Math.sin(ma) * 33, y2: 50 - Math.cos(ma) * 33, stroke: 'var(--accent)', 'stroke-width': 2.8, 'stroke-linecap': 'round' });
-    add('circle', { cx: 50, cy: 50, r: 3.6, fill: 'var(--accent)' });
-    return svg;
+    box.appendChild(grid);
+    var foot = dpEl('div', 'dpfoot');
+    var left = dpEl('div', 'dpsel');
+    if (type === 'date') {
+      var tb = dpBtn('dplink', new Intl.RelativeTimeFormat(LOC, { numeric: 'auto' }).format(0, 'day'), function () { var n = new Date(); dp.sel = { y: n.getFullYear(), m: n.getMonth(), d: n.getDate() }; dpFill(); });
+      left.appendChild(tb);
+    } else left.textContent = dp.sel ? dpDateText(dp.sel) : '—';
+    foot.appendChild(left);
+    if (type === 'datetime') {
+      var go = dpBtn('dpgo', '', function () { dp.view = 'time'; dp.mode = 'hour'; dpRender(); });
+      go.appendChild(dpSvg('M5 12.5l4.5 4.5L19 7.5')); go.appendChild(dpEl('span', '', tx('continue', 'Continue')));
+      go.disabled = !dp.sel;
+      foot.appendChild(go);
+    }
+    box.appendChild(foot);
+  }
+  function dpMonths(box) {
+    dpHead(box, function () { dp.y -= 1; dpRender(); }, function () { dp.y += 1; dpRender(); },
+      [{ text: String(dp.y), fn: function () { dp.view = 'years'; dp.decade = dp.y - (dp.y % 12); dpRender(); }, chev: true }]);
+    var list = dpEl('div', 'dplist');
+    var mf = new Intl.DateTimeFormat(LOC, { month: 'long' });
+    for (var i = 0; i < 12; i++) {
+      var b = dpBtn('dpitem' + (i === dp.m ? ' sel' : ''), mf.format(new Date(2023, i, 1)), (function (mm) { return function () { dp.m = mm; dp.view = 'days'; dpRender(); }; })(i));
+      list.appendChild(b);
+    }
+    box.appendChild(list);
+  }
+  function dpYears(box) {
+    dpHead(box, function () { dp.decade -= 12; dpRender(); }, function () { dp.decade += 12; dpRender(); },
+      [{ text: dp.decade + ' – ' + (dp.decade + 11), fn: function () { dp.view = 'months'; dpRender(); }, chev: false }]);
+    var list = dpEl('div', 'dplist');
+    for (var i = 0; i < 12; i++) {
+      var y = dp.decade + i;
+      list.appendChild(dpBtn('dpitem' + (y === dp.y ? ' sel' : ''), String(y), (function (yy) { return function () { dp.y = yy; dp.view = 'months'; dpRender(); }; })(y)));
+    }
+    box.appendChild(list);
+  }
+  // The clock: the hour (1-12) and then the minute are chosen on a face; AM and PM are two buttons; the box gets the 24-hour time.
+  function dpTime(box, type) {
+    box.appendChild(dpEl('div', 'dpcap', 'Select time'));
+    var h12 = dp.h % 12 === 0 ? 12 : dp.h % 12;
+    var pm = dp.h >= 12;
+    var digits = dpEl('div', 'dpdigits');
+    digits.appendChild(dpBtn('dpdig' + (dp.mode === 'hour' ? ' on' : ''), dpPad(h12), function () { dp.mode = 'hour'; dpRender(); }));
+    digits.appendChild(dpEl('span', 'dpcolon', ':'));
+    digits.appendChild(dpBtn('dpdig' + (dp.mode === 'minute' ? ' on' : ''), dpPad(dp.mi), function () { dp.mode = 'minute'; dpRender(); }));
+    var ap = dpEl('div', 'dpampm');
+    ap.appendChild(dpBtn('dpap' + (!pm ? ' on' : ''), 'AM', function () { if (pm) dp.h -= 12; dpRender(); }));
+    ap.appendChild(dpBtn('dpap' + (pm ? ' on' : ''), 'PM', function () { if (!pm) dp.h += 12; dpRender(); }));
+    digits.appendChild(ap);
+    box.appendChild(digits);
+    var face = dpEl('div', 'dpface');
+    var R = 86, C = 110;
+    var value = dp.mode === 'hour' ? h12 : dp.mi;
+    var angle = dp.mode === 'hour' ? (h12 % 12) * 30 : dp.mi * 6;
+    var hand = dpEl('div', 'dphand'); hand.style.width = R + 'px'; hand.style.transform = 'rotate(' + (angle - 90) + 'deg)';
+    face.appendChild(hand); face.appendChild(dpEl('div', 'dpcenter'));
+    for (var i = 0; i < 12; i++) {
+      var n = dp.mode === 'hour' ? (i === 0 ? 12 : i) : i * 5;
+      var a = i * Math.PI / 6;
+      var nb = dpBtn('dpnum' + (n === value ? ' sel' : ''), dp.mode === 'hour' ? String(n) : dpPad(n), (function (num) { return function (e) { e.stopPropagation(); dpPick(num); }; })(n));
+      nb.style.left = (C + Math.sin(a) * R) + 'px'; nb.style.top = (C - Math.cos(a) * R) + 'px';
+      face.appendChild(nb);
+    }
+    // A click anywhere on the face picks the nearest hour or minute.
+    face.addEventListener('click', function (e) {
+      var r = face.getBoundingClientRect();
+      var deg = Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))) * 180 / Math.PI;
+      if (deg < 0) deg += 360;
+      if (dp.mode === 'hour') { var hh = Math.round(deg / 30) % 12; dpPick(hh === 0 ? 12 : hh); } else dpPick(Math.round(deg / 6) % 60);
+    });
+    box.appendChild(face);
+    var foot = dpEl('div', 'dpfoot');
+    foot.appendChild(dpBtn('dplink', 'Cancel', function () { if (type === 'datetime') { dp.view = 'days'; dpRender(); } else dpClose(); }));
+    foot.appendChild(dpBtn('dplink', 'OK', dpFill));
+    box.appendChild(foot);
+  }
+  function dpPick(num) {
+    if (dp.mode === 'hour') {
+      var pm = dp.h >= 12;
+      dp.h = (num % 12) + (pm ? 12 : 0);
+      dp.mode = 'minute';
+    } else dp.mi = num;
+    dpRender();
   }
   function dpRender() {
     var type = dpType();
     var box = $('dp');
     if (!type) { dpClose(); return; }
     box.textContent = '';
-    if (type !== 'time') {
-      var head = dpEl('div', 'dphead');
-      var prev = dpEl('button', 'dpnav'); prev.type = 'button'; prev.appendChild(dpSvg('M15 6l-6 6 6 6')); prev.setAttribute('aria-label', 'Previous month');
-      var next = dpEl('button', 'dpnav'); next.type = 'button'; next.appendChild(dpSvg('M9 6l6 6-6 6')); next.setAttribute('aria-label', 'Next month');
-      var first = new Date(dp.y, dp.m, 1);
-      var title = dpEl('div', 'dptitle', new Intl.DateTimeFormat(LOC, { month: 'long', year: 'numeric' }).format(first));
-      prev.addEventListener('click', function () { dp.m -= 1; if (dp.m < 0) { dp.m = 11; dp.y -= 1; } dpRender(); });
-      next.addEventListener('click', function () { dp.m += 1; if (dp.m > 11) { dp.m = 0; dp.y += 1; } dpRender(); });
-      head.appendChild(prev); head.appendChild(title); head.appendChild(next); box.appendChild(head);
-      var grid = dpEl('div', 'dpgrid');
-      var wd = new Intl.DateTimeFormat(LOC, { weekday: 'short' });
-      for (var w = 0; w < 7; w++) grid.appendChild(dpEl('div', 'dpwd', wd.format(new Date(2023, 0, 1 + w)).slice(0, 2)));
-      var today = new Date();
-      var start = new Date(dp.y, dp.m, 1 - first.getDay());
-      for (var c = 0; c < 42; c++) {
-        var day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + c);
-        var b = dpEl('button', 'dpday', String(day.getDate())); b.type = 'button';
-        if (day.getMonth() !== dp.m) b.classList.add('out');
-        if (day.getFullYear() === today.getFullYear() && day.getMonth() === today.getMonth() && day.getDate() === today.getDate()) b.classList.add('today');
-        if (dp.sel && dp.sel.y === day.getFullYear() && dp.sel.m === day.getMonth() && dp.sel.d === day.getDate()) b.classList.add('sel');
-        b.addEventListener('click', (function (dd) { return function () {
-          dp.sel = { y: dd.getFullYear(), m: dd.getMonth(), d: dd.getDate() };
-          dp.y = dd.getFullYear(); dp.m = dd.getMonth();
-          if (type === 'date') dpFill(); else dpRender();
-        }; })(day));
-        grid.appendChild(b);
-      }
-      box.appendChild(grid);
-    }
-    if (type !== 'date') {
-      var tm = dpEl('div', 'dptime');
-      tm.appendChild(dpClock());
-      var cols = dpEl('div', 'dpcols');
-      var hl = dpEl('div'); hl.appendChild(dpEl('div', 'dplab', 'Hour'));
-      var hn = dpEl('div', 'dpnums');
-      for (var h = 0; h < 24; h++) {
-        var hb = dpEl('button', 'dpnum' + (dp.h === h ? ' sel' : ''), dpPad(h)); hb.type = 'button';
-        hb.addEventListener('click', (function (v) { return function () { dp.h = v; dpRender(); }; })(h));
-        hn.appendChild(hb);
-      }
-      hl.appendChild(hn); cols.appendChild(hl);
-      var ml = dpEl('div'); ml.appendChild(dpEl('div', 'dplab', 'Minute'));
-      var mrow = dpEl('div', 'dpmin');
-      var mi = document.createElement('input'); mi.type = 'number'; mi.min = 0; mi.max = 59; mi.value = dpPad(dp.mi); mi.setAttribute('aria-label', 'Minute');
-      mi.addEventListener('change', function () { var v = Math.max(0, Math.min(59, parseInt(mi.value, 10) || 0)); dp.mi = v; dpRender(); });
-      mrow.appendChild(mi);
-      [0, 15, 30, 45].forEach(function (v) {
-        var q = dpEl('button', 'dpnum' + (dp.mi === v ? ' sel' : ''), dpPad(v)); q.type = 'button'; q.style.width = '34px';
-        q.addEventListener('click', function () { dp.mi = v; dpRender(); });
-        mrow.appendChild(q);
-      });
-      ml.appendChild(mrow); cols.appendChild(ml); tm.appendChild(cols); box.appendChild(tm);
-    }
-    var foot = dpEl('div', 'dpfoot');
-    var left = dpEl('div', 'dpsel');
-    if (type === 'date') {
-      var tb = dpEl('button', 'dplink', new Intl.RelativeTimeFormat(LOC, { numeric: 'auto' }).format(0, 'day')); tb.type = 'button'; tb.style.textTransform = 'capitalize';
-      tb.addEventListener('click', function () { var n = new Date(); dp.sel = { y: n.getFullYear(), m: n.getMonth(), d: n.getDate() }; dpFill(); });
-      left.appendChild(tb);
-    } else left.textContent = dpValue() || '—';
-    foot.appendChild(left);
-    if (type !== 'date') {
-      var go = dpEl('button', 'dpgo'); go.type = 'button'; go.appendChild(dpSvg('M5 12.5l4.5 4.5L19 7.5')); go.appendChild(dpEl('span', '', tx('continue', 'Continue')));
-      go.disabled = type === 'datetime' && !dp.sel;
-      go.addEventListener('click', dpFill);
-      foot.appendChild(go);
-    }
-    box.appendChild(foot);
+    if (type === 'time') dp.view = 'time';
+    else if (dp.view === 'time' && type === 'date') dp.view = 'days';
+    if (dp.view === 'time') dpTime(box, type);
+    else if (dp.view === 'months') dpMonths(box);
+    else if (dp.view === 'years') dpYears(box);
+    else dpDays(box, type);
     box.hidden = false; $('dpbtn').setAttribute('aria-expanded', 'true');
+    var m = $('msgs'); if (m) m.scrollTop = m.scrollHeight;
   }
   function dpOpen() {
     if (!dpType() || PREVIEW) return;
     var n = new Date();
     if (!dp.sel) { dp.y = n.getFullYear(); dp.m = n.getMonth(); }
     if (dpType() === 'time' || !dp.sel) { dp.h = n.getHours(); dp.mi = Math.round(n.getMinutes() / 5) * 5 % 60; }
+    dp.view = dpType() === 'time' ? 'time' : 'days'; dp.mode = 'hour';
     dpRender();
   }
   $('dpbtn').addEventListener('click', function () { if ($('dp').hidden) dpOpen(); else dpClose(); });
   $('txt').addEventListener('focus', function () { if (dpType() && $('dp').hidden && !$('txt').value) dpOpen(); });
-  document.addEventListener('click', function (e) { var box = $('dp'); if (!box.hidden && !box.contains(e.target) && e.target !== $('txt') && !$('dpbtn').contains(e.target)) dpClose(); });
+  // A pick redraws the picker, so the clicked button is already gone from the page when this runs: the path of the event is asked instead.
+  document.addEventListener('click', function (e) {
+    var box = $('dp');
+    if (box.hidden) return;
+    var path = e.composedPath ? e.composedPath() : [];
+    if (path.indexOf(box) >= 0 || path.indexOf($('txt')) >= 0 || path.indexOf($('dpbtn')) >= 0) return;
+    dpClose();
+  });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') dpClose(); });
   function setHint(h) {
     hint = h && h.type && h.type !== 'text' && h.type !== 'alphanumeric' ? h : null;
@@ -1753,12 +1816,12 @@ export function renderChatPage(w: ChatPageWidget): string {
 <div class="body" id="msgs" role="log" aria-live="polite" aria-label="Conversation"></div>
 <div class="voice" id="voice" hidden role="dialog" aria-live="polite"><div class="orb"><b></b><i></i></div><div class="vphase" id="vphase"></div><div class="vline" id="vline"></div><div class="vbtns"><button type="button" id="vtype"></button><button type="button" class="end" id="vend"></button></div></div>
 <button class="latest" id="latest" type="button" aria-label="Jump to the latest message"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v14M6 13l6 6 6-6"></path></svg>Latest</button>
+<div class="dp" id="dp" hidden role="dialog"></div>
 </div>
 <div class="pipcard" id="pipcard" hidden></div>
 <footer class="footer">
 <div class="sugg" id="sugg" hidden></div>
 <div id="intake" class="intake" style="display:none"></div>
-<div class="dp" id="dp" hidden role="dialog"></div>
 <div class="input-row">
 <select id="cc" class="cc" hidden></select>
 <button id="locbtn" class="locbtn" type="button">Share my location</button>
