@@ -51,11 +51,35 @@ import type {
 } from './socket.port';
 import { DeviceAuthStore } from './device-auth-store';
 import { buildProxyAgent, probeProxy } from './proxy';
+import { TtlCache } from './ttl-cache';
 
 const VERSION_TTL_MS = 60 * 60 * 1000;
 /** A customer's file is kept for the inbox up to this size; WhatsApp allows more, but Redis holds it until the inbox stores it. */
 const INBOUND_MEDIA_MAX_BYTES = 25 * 1024 * 1024;
 const DOWNLOAD_TIMEOUT_MS = 60_000;
+
+/**
+ * The five caches of one socket, with Baileys' own lifetimes (signal keys, device lists and call offers 5 minutes, retry counters and
+ * placeholder resends 1 hour) and a size cap each, so one busy number cannot grow without limit. Ours, not Baileys' defaults: those
+ * start a timer per cache that is never stopped, so every ended socket stayed in memory (see ttl-cache.ts).
+ */
+const SOCKET_CACHES = {
+  signalStore: { ttlMs: 5 * 60_000, max: 10_000 },
+  userDevices: { ttlMs: 5 * 60_000, max: 5_000 },
+  msgRetry: { ttlMs: 60 * 60_000, max: 10_000 },
+  callOffer: { ttlMs: 5 * 60_000, max: 500 },
+  placeholderResend: { ttlMs: 60 * 60_000, max: 5_000 },
+} as const;
+const newCaches = () => ({
+  signalStore: new TtlCache(SOCKET_CACHES.signalStore.ttlMs, SOCKET_CACHES.signalStore.max),
+  userDevices: new TtlCache(SOCKET_CACHES.userDevices.ttlMs, SOCKET_CACHES.userDevices.max),
+  msgRetry: new TtlCache(SOCKET_CACHES.msgRetry.ttlMs, SOCKET_CACHES.msgRetry.max),
+  callOffer: new TtlCache(SOCKET_CACHES.callOffer.ttlMs, SOCKET_CACHES.callOffer.max),
+  placeholderResend: new TtlCache(
+    SOCKET_CACHES.placeholderResend.ttlMs,
+    SOCKET_CACHES.placeholderResend.max,
+  ),
+});
 
 /**
  * A chat id for a number, or the id as given when it already is one. Digits only: Reference's last-12-digits cut misrouted some countries.
@@ -175,9 +199,14 @@ export class BaileysSocketFactory implements WaSocketFactory {
     const logger = pino({ level: process.env.BAILEYS_LOG_LEVEL || 'warn' });
     const version = await this.waVersion();
     const history = historySocketConfig(target.historyImport ?? 'none');
+    const caches = newCaches();
     const sock = makeWASocket({
       ...(version ? { version } : {}),
-      auth: { creds, keys: makeCacheableSignalKeyStore(keys, logger) },
+      auth: { creds, keys: makeCacheableSignalKeyStore(keys, logger, caches.signalStore) },
+      userDevicesCache: caches.userDevices,
+      msgRetryCounterCache: caches.msgRetry,
+      callOfferCache: caches.callOffer,
+      placeholderResendCache: caches.placeholderResend,
       logger,
       browser: Browsers.macOS('Desktop'),
       connectTimeoutMs: 60_000,
@@ -608,6 +637,7 @@ export class BaileysSocketFactory implements WaSocketFactory {
         sock.ev.removeAllListeners('connection.update');
         sock.ev.removeAllListeners('creds.update');
         sock.end(undefined);
+        for (const c of Object.values(caches)) c.flushAll();
       },
     };
   }
