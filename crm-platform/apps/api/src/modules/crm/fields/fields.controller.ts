@@ -11,8 +11,11 @@ import {
   Post,
   Put,
   Query,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Request, Response } from 'express';
 import {
   createFieldDependencySchema,
   createFieldOptionDependencySchema,
@@ -82,7 +85,18 @@ export class FieldsController {
   @ApiOperation({ summary: 'Every option-level (cascade) pair of the fields of a module' })
   async listModuleOptionDependencies(
     @Query(zodPipe(fieldUsageQuerySchema)) query: FieldUsageQuery,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
   ) {
+    // The browser keeps the list and asks "still current?" each time a form opens: a matching If-None-Match gets a 304 from a one-table
+    // stamp, without running the four-join query or building the body.
+    const tag = await this.fields.optionDependenciesTag(query);
+    res.setHeader('ETag', tag);
+    res.setHeader('Cache-Control', 'private, no-cache');
+    if (req.headers['if-none-match'] === tag) {
+      res.status(HttpStatus.NOT_MODIFIED);
+      return undefined;
+    }
     return this.fields.listModuleOptionDependencies(query);
   }
 

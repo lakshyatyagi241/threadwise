@@ -12,6 +12,8 @@ const FORWARD_REQUEST = [
   'idempotency-key',
   'x-request-id',
   'if-match',
+  // A conditional GET: the API answers 304 from a cheap stamp (the field option-pair list), the browser reuses its copy.
+  'if-none-match',
   'accept-language',
   'user-agent',
   'x-forwarded-for',

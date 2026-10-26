@@ -249,6 +249,21 @@ export class FieldDependenciesRepository {
       );
   }
 
+  /**
+   * A cheap stamp of the workspace's option pairs: how many there are and the highest id. It changes whenever a pair is added or
+   * removed (a replaced cascade inserts new rows, so the highest id moves), which is all the list's ETag needs. One table, no joins.
+   */
+  async optionPairStamp(tx: Tx, orgId: number): Promise<{ count: number; last: number }> {
+    const [row] = await tx
+      .select({
+        count: sql<number>`count(*)::int`,
+        last: sql<number>`coalesce(max(${fieldOptionDependencies.id}), 0)`,
+      })
+      .from(fieldOptionDependencies)
+      .where(eq(fieldOptionDependencies.orgId, orgId));
+    return { count: Number(row?.count ?? 0), last: Number(row?.last ?? 0) };
+  }
+
   /** Every option-level pair of the fields of one module, for the properties screen and the contact form. */
   async listOptionDependenciesByModule(
     tx: Tx,
