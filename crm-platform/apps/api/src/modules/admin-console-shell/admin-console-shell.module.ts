@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import { NotificationsModule } from '../notifications';
 import { NavLayoutService } from './nav-layout.service';
 import { AnalyticsModule } from '../analytics';
 import { OverviewStatsService } from './overview-stats.service';
@@ -21,7 +22,7 @@ import { WorkspaceSettingsService } from './workspace-settings.service';
  * Registered in app.module.ts. The platform door (PlatformStore, PlatformSettingsService) comes from the global auth module.
  */
 @Module({
-  imports: [AnalyticsModule, PlatformSettingsModule],
+  imports: [AnalyticsModule, PlatformSettingsModule, NotificationsModule],
   controllers: [
     ShellController,
     ShellUserController,
