@@ -72,7 +72,7 @@ def token():
 
 
 def get(path, ttl=TTL):
-    """GET with cache (1h, by path), 6 s timeout, size cap and an overall deadline. Raises on any failure."""
+    """GET with cache (1h, by path), 6 s timeout, one retry on a timeout/5xx/429, size cap and an overall deadline. Raises on any failure."""
     cf = os.path.join(STATE, "cache-" + re.sub(r"[^A-Za-z0-9.]", "_", path)[-150:] + ".json")
     try:
         if time.time() - os.path.getmtime(cf) < ttl:
@@ -85,8 +85,24 @@ def get(path, ttl=TTL):
     if time.time() - _t0 > DEADLINE:
         raise RuntimeError("deadline")
     req = urllib.request.Request(API + path, headers={"Authorization": "Bearer " + t, "Accept": "application/vnd.github+json", "User-Agent": "desk-release-watch"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        raw = r.read(MAXBYTES + 1)
+    raw, last = None, None
+    for attempt in range(2):  # one slow or dropped call (a 6 s timeout, a 5xx, a 429) is usually gone a second later; a 4xx is not retried
+        if attempt:
+            if time.time() - _t0 + 1 > DEADLINE:
+                break
+            time.sleep(1)
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                raw = r.read(MAXBYTES + 1)
+            break
+        except urllib.error.HTTPError as e:
+            if e.code < 500 and e.code != 429:
+                raise
+            last = e
+        except OSError as e:  # TimeoutError and URLError are OSErrors
+            last = e
+    if raw is None:
+        raise last
     if len(raw) > MAXBYTES:
         raise RuntimeError("too big")
     data = json.loads(raw)
