@@ -297,7 +297,17 @@
         "removeRow": "Usuń to pytanie"
       },
       "reading": "Czytanie…",
-      "failed": "Nie udało się tego odczytać."
+      "failed": "Nie udało się tego odczytać.",
+      "view": "Pokaż",
+      "viewNamed": "Pokaż {label}",
+      "viewClose": "Zamknij",
+      "viewLoading": "Ładowanie",
+      "viewFailed": "Nie udało się wczytać tego wpisu. Spróbuj ponownie.",
+      "viewQuestion": "Pytanie",
+      "viewAnswer": "Odpowiedź",
+      "viewNotReadYet": "Ta strona jest jeszcze czytana. Jej tekst pojawi się tutaj, gdy będzie gotowa.",
+      "viewNoText": "Ten wpis nie ma tekstu.",
+      "viewTruncated": "Tutaj pokazana jest tylko pierwsza część; agent czyta cały wpis."
     }
   }
 }

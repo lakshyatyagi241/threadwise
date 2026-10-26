@@ -118,11 +118,11 @@
       "moreActions": "Más acciones",
       "modifyColumns": "Modificar columnas",
       "resetColumns": "Restablecer valores predeterminados",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Buscar columnas",
+      "columnsSelectAll": "Seleccionar todo",
+      "dragToReorder": "Arrastra para reordenar las columnas",
+      "removeColumn": "Quitar {name}",
+      "columnsSave": "Guardar",
       "colContactName": "Nombre del contacto",
       "colPhone": "Número de teléfono",
       "colEmailId": "Correo electrónico",
@@ -297,7 +297,8 @@
       "allTeams": "Todos los equipos",
       "teamFormer": "Equipo anterior",
       "unhideColumn": "Mostrar columna",
-      "resizeColumn": "Arrastra para cambiar el ancho de {column}; doble clic para restablecer"
+      "resizeColumn": "Arrastra para cambiar el ancho de {column}; doble clic para restablecer",
+      "pqlNoKey": "La búsqueda en inglés aún no está configurada para este espacio de trabajo. Pide a un administrador que añada una clave de OpenRouter en Claves de IA."
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -447,7 +448,8 @@
         "number": "Introduce un número.",
         "integer": "Introduce un número entero.",
         "email": "Introduce una dirección de correo electrónico válida.",
-        "url": "Introduce un enlace completo que empiece por http:// o https://."
+        "url": "Introduce un enlace completo que empiece por http:// o https://.",
+        "phone": "Escribe un número de teléfono válido para el país elegido."
       },
       "readOnlyField": "Solo lectura",
       "yes": "Sí",
@@ -1349,7 +1351,10 @@
       "save": "Guardar y abrir reglas",
       "created": "Se creó el segmento “{name}”. Afina sus reglas a continuación.",
       "forbidden": "No tienes permiso para crear segmentos.",
-      "failed": "No se pudo crear el segmento. Inténtalo de nuevo."
+      "failed": "No se pudo crear el segmento. Inténtalo de nuevo.",
+      "specific": "Personas concretas",
+      "specificHint": "Solo las personas y equipos que elijas, además de ti y de quienes puedan editar todos los segmentos.",
+      "shareRequired": "Elige al menos una persona o equipo con quien compartir."
     },
     "bulkUpdate": {
       "title": "Actualizar {count, plural, one {# contacto} other {# contactos}}",
@@ -1376,7 +1381,8 @@
         "setValue": "Definir un valor",
         "willClear": "Se vaciará en {count, plural, one {el contacto seleccionado} other {los # contactos seleccionados}}.",
         "requiredNoClear": "Una propiedad obligatoria no se puede borrar.",
-        "problemEmpty": "Introduce un valor o elige Borrar."
+        "problemEmpty": "Introduce un valor o elige Borrar.",
+        "parentFirst": "Primero actualiza {parent}; luego esta propiedad, porque sus opciones dependen de ella."
       },
       "titleAll": "Actualizar todos los contactos coincidentes",
       "hintAll": "Establece los mismos valores en todos los contactos que coinciden con los filtros actuales. Los campos en Mantener no se modifican.",
@@ -1486,6 +1492,15 @@
       },
       "openApp": {
         "sms": "Abrir en tu app de mensajes"
+      },
+      "reason": {
+        "not_linked": "Este número no está vinculado a una cuenta de WhatsApp Business, así que no se puede enviar ninguna plantilla.",
+        "paused": "WhatsApp la pausó. Se puede enviar de nuevo cuando termine la pausa.",
+        "media_header": "Tiene un encabezado de imagen, video o documento, que todavía no se puede enviar desde aquí.",
+        "header_variable": "Tiene una variable en el encabezado, que todavía no se puede completar desde aquí.",
+        "dynamic_button": "Tiene un botón con enlace y una variable, que todavía no se puede completar desde aquí.",
+        "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema, no desde aquí.",
+        "named_variables": "Usa variables con nombre, que todavía no se pueden completar desde aquí."
       }
     },
     "views": {

@@ -12,6 +12,7 @@
       "body": "Halaman gagal dimuat. Kejadian ini telah dilaporkan. Coba lagi, dan jika terus terjadi hubungi dukungan.",
       "bodyWithDigest": "Halaman gagal dimuat. Kejadian ini telah dilaporkan. Coba lagi, dan jika terus terjadi hubungi dukungan dan sebutkan {digest}.",
       "home": "Kembali ke awal"
-    }
+    },
+    "clearSearch": "Hapus pencarian"
   }
 }

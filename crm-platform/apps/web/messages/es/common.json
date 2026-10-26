@@ -12,6 +12,7 @@
       "body": "No se pudo cargar la página. Se ha notificado. Inténtalo de nuevo y, si sigue ocurriendo, contacta con soporte.",
       "bodyWithDigest": "No se pudo cargar la página. Se ha notificado. Inténtalo de nuevo y, si sigue ocurriendo, contacta con soporte e indica {digest}.",
       "home": "Volver al inicio"
-    }
+    },
+    "clearSearch": "Borrar búsqueda"
   }
 }

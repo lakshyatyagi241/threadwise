@@ -12,6 +12,7 @@
       "body": "Sayfa yüklenemedi. Bildirildi. Tekrar deneyin, devam ederse destekle iletişime geçin.",
       "bodyWithDigest": "Sayfa yüklenemedi. Bildirildi. Tekrar deneyin, devam ederse destekle iletişime geçin ve {digest} değerini belirtin.",
       "home": "Başa dön"
-    }
+    },
+    "clearSearch": "Aramayı temizle"
   }
 }

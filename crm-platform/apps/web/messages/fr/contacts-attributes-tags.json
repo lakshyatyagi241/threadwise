@@ -118,11 +118,11 @@
       "moreActions": "Plus d’actions",
       "modifyColumns": "Modifier les colonnes",
       "resetColumns": "Rétablir les valeurs par défaut",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Rechercher dans les colonnes",
+      "columnsSelectAll": "Tout sélectionner",
+      "dragToReorder": "Glisser pour réorganiser les colonnes",
+      "removeColumn": "Retirer {name}",
+      "columnsSave": "Enregistrer",
       "colContactName": "Nom du contact",
       "colPhone": "Numéro de téléphone",
       "colEmailId": "Adresse e-mail",
@@ -297,7 +297,8 @@
       "allTeams": "Toutes les équipes",
       "teamFormer": "Ancienne équipe",
       "unhideColumn": "Afficher une colonne",
-      "resizeColumn": "Faites glisser pour redimensionner {column} ; double-clic pour réinitialiser"
+      "resizeColumn": "Faites glisser pour redimensionner {column} ; double-clic pour réinitialiser",
+      "pqlNoKey": "La recherche en anglais n'est pas encore configurée pour cet espace de travail. Demandez à un administrateur d'ajouter une clé OpenRouter dans Clés IA."
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",
@@ -447,7 +448,8 @@
         "number": "Saisissez un nombre.",
         "integer": "Saisissez un nombre entier.",
         "email": "Saisissez une adresse e-mail valide.",
-        "url": "Saisissez un lien complet commençant par http:// ou https://."
+        "url": "Saisissez un lien complet commençant par http:// ou https://.",
+        "phone": "Saisissez un numéro de téléphone valide pour le pays choisi."
       },
       "readOnlyField": "Lecture seule",
       "yes": "Oui",
@@ -1117,7 +1119,7 @@
       },
       "row": {
         "drag": "Faire glisser pour réordonner",
-        "inactive": "Inactive",
+        "inactive": "Inactif",
         "readOnly": "Lecture seule",
         "shownWhen": "Affichée quand {field} est {value}",
         "optionCount": "{count, plural, one {# option} other {# options}}",
@@ -1237,7 +1239,7 @@
         "visibleHint": "Afficher dans le formulaire de contact et sur la page du contact.",
         "readOnly": "Lecture seule",
         "readOnlyHint": "Affichée dans le formulaire mais renseignée par les importations et l’API.",
-        "active": "Active",
+        "active": "Actif",
         "activeHint": "Les propriétés inactives sont masquées partout. Les valeurs sont conservées.",
         "conditions": "Afficher uniquement quand",
         "conditionsHint": "Masquer cette propriété dans le formulaire de contact tant qu’une autre propriété n’a pas de valeur.",
@@ -1349,7 +1351,10 @@
       "save": "Enregistrer et ouvrir les règles",
       "created": "Segment « {name} » créé. Affinez ses règles ci-dessous.",
       "forbidden": "Vous n’avez pas l’autorisation de créer des segments.",
-      "failed": "Impossible de créer le segment. Réessayez."
+      "failed": "Impossible de créer le segment. Réessayez.",
+      "specific": "Personnes précises",
+      "specificHint": "Seules les personnes et équipes que vous choisissez, ainsi que vous et les personnes pouvant modifier tous les segments.",
+      "shareRequired": "Choisissez au moins une personne ou une équipe avec qui partager."
     },
     "bulkUpdate": {
       "title": "Mettre à jour {count, plural, one {# contact} other {# contacts}}",
@@ -1376,7 +1381,8 @@
         "setValue": "Définir une valeur",
         "willClear": "Sera vidée pour {count, plural, one {le contact sélectionné} other {les # contacts sélectionnés}}.",
         "requiredNoClear": "Une propriété obligatoire ne peut pas être effacée.",
-        "problemEmpty": "Saisissez une valeur ou choisissez Effacer."
+        "problemEmpty": "Saisissez une valeur ou choisissez Effacer.",
+        "parentFirst": "Mettez d'abord à jour {parent}, puis cette propriété : ses choix en dépendent."
       },
       "titleAll": "Mettre à jour tous les contacts correspondants",
       "hintAll": "Définit les mêmes valeurs pour chaque contact correspondant aux filtres actuels. Les champs laissés sur Conserver ne sont pas modifiés.",
@@ -1486,6 +1492,15 @@
       },
       "openApp": {
         "sms": "Ouvrir dans votre application de messages"
+      },
+      "reason": {
+        "not_linked": "Ce numéro n'est lié à aucun compte WhatsApp Business, donc aucun modèle ne peut être envoyé.",
+        "paused": "Suspendu par WhatsApp. Il pourra être envoyé à nouveau une fois la suspension terminée.",
+        "media_header": "Il a un en-tête avec une image, une vidéo ou un document, qui ne peut pas encore être envoyé depuis ici.",
+        "header_variable": "Il contient une variable dans l'en-tête, qui ne peut pas encore être renseignée depuis ici.",
+        "dynamic_button": "Il a un bouton avec un lien contenant une variable, qui ne peut pas encore être renseignée depuis ici.",
+        "authentication": "Les modèles à mot de passe à usage unique sont envoyés par le système, pas depuis ici.",
+        "named_variables": "Il utilise des variables nommées, qui ne peuvent pas encore être renseignées depuis ici."
       }
     },
     "views": {

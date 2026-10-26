@@ -85,7 +85,13 @@
         "title": "{name} löschen?",
         "body": "Dieses Add-on löschen? Workspaces, die es gekauft haben, behalten es bis zum Ablauf.",
         "confirm": "Löschen",
-        "inUse": "{count, plural, one {# Workspace besitzt dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.} other {# Workspaces besitzen dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.}}"
+        "inUse": "{count, plural, one {# Workspace besitzt dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.} other {# Workspaces besitzen dieses Add-on, daher kann es nicht gelöscht werden. Deaktivieren Sie es stattdessen; Besitzer behalten es bis zum Ende.}}",
+        "errors": {
+          "refused": "Diese Erweiterung hat Käufe, auch beendete, und kann daher nicht gelöscht werden. Deaktivieren Sie sie stattdessen.",
+          "forbidden": "Nur ein Super-Administrator kann Erweiterungen löschen.",
+          "notFound": "Diese Erweiterung gibt es nicht mehr.",
+          "failed": "Die Erweiterung konnte nicht gelöscht werden."
+        }
       },
       "errors": {
         "generic": "Das Add-on konnte nicht gespeichert werden.",

@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# tarefa excluída.} other {# tarefas excluídas.}}",
       "deleteTitle": "Excluir as tarefas selecionadas?",
       "deleteMessage": "{count, plural, one {# tarefa será excluída para todos. Isso não pode ser desfeito.} other {# tarefas serão excluídas para todos. Isso não pode ser desfeito.}}",
-      "keep": "Manter"
+      "keep": "Manter",
+      "reopen": "Reabrir",
+      "completeWithOutcome": "Concluir com resultado da tarefa",
+      "reopenWithOutcome": "Reabrir com resultado da tarefa",
+      "pickOutcome": "Resultado da tarefa",
+      "reopened": "{count, plural, one {# tarefa reaberta.} other {# tarefas reabertas.}}"
     },
     "quick": {
       "label": "Adicionar uma tarefa",

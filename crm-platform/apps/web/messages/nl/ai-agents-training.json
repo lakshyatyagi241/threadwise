@@ -297,7 +297,17 @@
         "removeRow": "Deze vraag verwijderen"
       },
       "reading": "Bezig met lezen…",
-      "failed": "Dit kon niet worden gelezen."
+      "failed": "Dit kon niet worden gelezen.",
+      "view": "Bekijken",
+      "viewNamed": "{label} bekijken",
+      "viewClose": "Sluiten",
+      "viewLoading": "Laden",
+      "viewFailed": "Dit item kon niet worden geladen. Probeer het opnieuw.",
+      "viewQuestion": "Vraag",
+      "viewAnswer": "Antwoord",
+      "viewNotReadYet": "Deze pagina wordt nog gelezen. De tekst verschijnt hier zodra die klaar is.",
+      "viewNoText": "Dit item heeft geen tekst.",
+      "viewTruncated": "Hier wordt alleen het eerste deel getoond; de agent leest het hele item."
     }
   }
 }

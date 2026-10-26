@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# taak verwijderd.} other {# taken verwijderd.}}",
       "deleteTitle": "De geselecteerde taken verwijderen?",
       "deleteMessage": "{count, plural, one {# taak wordt voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.} other {# taken worden voor iedereen verwijderd. Dit kan niet ongedaan worden gemaakt.}}",
-      "keep": "Behouden"
+      "keep": "Behouden",
+      "reopen": "Heropenen",
+      "completeWithOutcome": "Afronden met taakresultaat",
+      "reopenWithOutcome": "Heropenen met taakresultaat",
+      "pickOutcome": "Taakresultaat",
+      "reopened": "{count, plural, one {# taak heropend.} other {# taken heropend.}}"
     },
     "quick": {
       "label": "Taak toevoegen",

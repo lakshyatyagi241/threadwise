@@ -85,7 +85,13 @@
         "title": "Hapus {name}?",
         "body": "Hapus add-on ini? Workspace yang telah membelinya tetap memilikinya sampai masa berlakunya berakhir.",
         "confirm": "Hapus",
-        "inUse": "{count, plural, other {# workspace memiliki add-on ini, sehingga tidak dapat dihapus. Nonaktifkan saja; pemilik tetap memilikinya sampai berakhir.}}"
+        "inUse": "{count, plural, other {# workspace memiliki add-on ini, sehingga tidak dapat dihapus. Nonaktifkan saja; pemilik tetap memilikinya sampai berakhir.}}",
+        "errors": {
+          "refused": "Add-on ini punya pembelian, termasuk yang sudah berakhir, jadi tidak bisa dihapus. Nonaktifkan saja.",
+          "forbidden": "Hanya super admin yang bisa menghapus add-on.",
+          "notFound": "Add-on ini sudah tidak ada.",
+          "failed": "Add-on tidak bisa dihapus."
+        }
       },
       "errors": {
         "generic": "Add-on tidak dapat disimpan.",

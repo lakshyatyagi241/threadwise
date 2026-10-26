@@ -297,7 +297,17 @@
         "removeRow": "Supprimer cette question"
       },
       "reading": "Lecture en cours…",
-      "failed": "Impossible de lire cela."
+      "failed": "Impossible de lire cela.",
+      "view": "Voir",
+      "viewNamed": "Voir {label}",
+      "viewClose": "Fermer",
+      "viewLoading": "Chargement",
+      "viewFailed": "Cette entrée n'a pas pu être chargée. Réessayez.",
+      "viewQuestion": "Question",
+      "viewAnswer": "Réponse",
+      "viewNotReadYet": "Cette page est encore en cours de lecture. Son texte s'affichera ici une fois prêt.",
+      "viewNoText": "Cette entrée n'a pas de texte.",
+      "viewTruncated": "Seule la première partie est affichée ici ; l'agent lit l'entrée entière."
     }
   }
 }

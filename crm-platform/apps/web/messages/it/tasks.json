@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# task eliminato.} other {# task eliminati.}}",
       "deleteTitle": "Eliminare i task selezionati?",
       "deleteMessage": "{count, plural, one {# task verrà eliminato per tutti. Non è possibile annullare.} other {# task verranno eliminati per tutti. Non è possibile annullare.}}",
-      "keep": "Mantieni"
+      "keep": "Mantieni",
+      "reopen": "Riapri",
+      "completeWithOutcome": "Completa con esito dell'attività",
+      "reopenWithOutcome": "Riapri con esito dell'attività",
+      "pickOutcome": "Esito dell'attività",
+      "reopened": "{count, plural, one {# attività riaperta.} other {# attività riaperte.}}"
     },
     "quick": {
       "label": "Aggiungi un task",

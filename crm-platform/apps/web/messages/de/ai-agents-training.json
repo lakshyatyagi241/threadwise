@@ -297,7 +297,17 @@
         "removeRow": "Diese Frage entfernen"
       },
       "reading": "Wird gelesen…",
-      "failed": "Das konnte nicht gelesen werden."
+      "failed": "Das konnte nicht gelesen werden.",
+      "view": "Ansehen",
+      "viewNamed": "{label} ansehen",
+      "viewClose": "Schließen",
+      "viewLoading": "Wird geladen",
+      "viewFailed": "Dieser Eintrag konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+      "viewQuestion": "Frage",
+      "viewAnswer": "Antwort",
+      "viewNotReadYet": "Diese Seite wird noch gelesen. Ihr Text wird hier angezeigt, sobald sie fertig ist.",
+      "viewNoText": "Dieser Eintrag hat keinen Text.",
+      "viewTruncated": "Hier wird nur der erste Teil angezeigt; der Agent liest den gesamten Eintrag."
     }
   }
 }

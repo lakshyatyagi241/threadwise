@@ -12,6 +12,7 @@
       "body": "Nie udało się wczytać strony. Zgłoszono to. Spróbuj ponownie, a jeśli problem się powtarza, skontaktuj się z pomocą techniczną.",
       "bodyWithDigest": "Nie udało się wczytać strony. Zgłoszono to. Spróbuj ponownie, a jeśli problem się powtarza, skontaktuj się z pomocą techniczną i podaj {digest}.",
       "home": "Wróć na początek"
-    }
+    },
+    "clearSearch": "Wyczyść wyszukiwanie"
   }
 }

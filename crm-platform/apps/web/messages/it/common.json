@@ -12,6 +12,7 @@
       "body": "Impossibile caricare la pagina. Il problema è stato segnalato. Riprova e, se continua a succedere, contatta l'assistenza.",
       "bodyWithDigest": "Impossibile caricare la pagina. Il problema è stato segnalato. Riprova e, se continua a succedere, contatta l'assistenza citando {digest}.",
       "home": "Torna all'inizio"
-    }
+    },
+    "clearSearch": "Cancella ricerca"
   }
 }

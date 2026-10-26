@@ -155,7 +155,12 @@
       "deleted": "{count, plural, other {# tugas dihapus.}}",
       "deleteTitle": "Hapus tugas yang dipilih?",
       "deleteMessage": "{count, plural, other {# tugas akan dihapus untuk semua orang. Tindakan ini tidak dapat dibatalkan.}}",
-      "keep": "Pertahankan"
+      "keep": "Pertahankan",
+      "reopen": "Buka lagi",
+      "completeWithOutcome": "Selesaikan dengan hasil tugas",
+      "reopenWithOutcome": "Buka lagi dengan hasil tugas",
+      "pickOutcome": "Hasil tugas",
+      "reopened": "{count, plural, other {# tugas dibuka lagi.}}"
     },
     "quick": {
       "label": "Tambah tugas",

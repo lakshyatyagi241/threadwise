@@ -85,7 +85,13 @@
         "title": "Excluir {name}?",
         "body": "Excluir este complemento? Os espaços de trabalho que o compraram o mantêm até ele expirar.",
         "confirm": "Excluir",
-        "inUse": "{count, plural, one {# espaço de trabalho possui este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.} other {# espaços de trabalho possuem este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.}}"
+        "inUse": "{count, plural, one {# espaço de trabalho possui este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.} other {# espaços de trabalho possuem este complemento, então ele não pode ser excluído. Desative-o; os proprietários o mantêm até o fim.}}",
+        "errors": {
+          "refused": "Este complemento tem compras, inclusive encerradas, então não pode ser excluído. Desative-o em vez disso.",
+          "forbidden": "Somente um superadministrador pode excluir complementos.",
+          "notFound": "Este complemento não existe mais.",
+          "failed": "Não foi possível excluir o complemento."
+        }
       },
       "errors": {
         "generic": "Não foi possível salvar o complemento.",

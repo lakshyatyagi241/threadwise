@@ -297,7 +297,17 @@
         "removeRow": "Xóa câu hỏi này"
       },
       "reading": "Đang đọc…",
-      "failed": "Không đọc được nội dung này."
+      "failed": "Không đọc được nội dung này.",
+      "view": "Xem",
+      "viewNamed": "Xem {label}",
+      "viewClose": "Đóng",
+      "viewLoading": "Đang tải",
+      "viewFailed": "Không tải được mục này. Vui lòng thử lại.",
+      "viewQuestion": "Câu hỏi",
+      "viewAnswer": "Trả lời",
+      "viewNotReadYet": "Trang này vẫn đang được đọc. Nội dung sẽ hiện ở đây khi sẵn sàng.",
+      "viewNoText": "Mục này không có nội dung.",
+      "viewTruncated": "Chỉ hiển thị phần đầu; trợ lý đọc toàn bộ mục."
     }
   }
 }

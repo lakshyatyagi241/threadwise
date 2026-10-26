@@ -85,7 +85,13 @@
         "title": "Eliminare {name}?",
         "body": "Eliminare questo add-on? I workspace che lo hanno acquistato lo mantengono fino alla scadenza.",
         "confirm": "Elimina",
-        "inUse": "{count, plural, one {# workspace possiede questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} many {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} other {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.}}"
+        "inUse": "{count, plural, one {# workspace possiede questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} many {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.} other {# workspace possiedono questo add-on, quindi non può essere eliminato. Disabilitalo: i proprietari lo mantengono fino alla scadenza.}}",
+        "errors": {
+          "refused": "Questo componente aggiuntivo ha acquisti, anche conclusi, quindi non può essere eliminato. Disattivalo.",
+          "forbidden": "Solo un super amministratore può eliminare i componenti aggiuntivi.",
+          "notFound": "Questo componente aggiuntivo non esiste più.",
+          "failed": "Non è stato possibile eliminare il componente aggiuntivo."
+        }
       },
       "errors": {
         "generic": "Impossibile salvare l'add-on.",

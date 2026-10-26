@@ -85,7 +85,13 @@
         "title": "{name} silinsin mi?",
         "body": "Bu eklenti silinsin mi? Eklentiyi satın alan çalışma alanları, süresi dolana kadar kullanmaya devam eder.",
         "confirm": "Sil",
-        "inUse": "{count, plural, one {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.} other {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.}}"
+        "inUse": "{count, plural, one {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.} other {# çalışma alanı bu eklentiye sahip olduğu için silinemez. Bunun yerine devre dışı bırakın; sahipler eklentiyi süresi bitene kadar korur.}}",
+        "errors": {
+          "refused": "Bu eklentinin, sona ermiş olanlar dahil, satın alımları var; bu yüzden silinemez. Bunun yerine devre dışı bırakın.",
+          "forbidden": "Eklentileri yalnızca süper yönetici silebilir.",
+          "notFound": "Bu eklenti artık yok.",
+          "failed": "Eklenti silinemedi."
+        }
       },
       "errors": {
         "generic": "Eklenti kaydedilemedi.",
