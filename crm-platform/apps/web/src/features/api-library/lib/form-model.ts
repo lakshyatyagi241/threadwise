@@ -97,7 +97,17 @@ export function emptyForm(): ApiFormState {
 
 /** A name with a dot reads another saved API's answer (`Orders.data.id`); everything else starts as a contact property. */
 export const variableSourceOf = (name: string): ApiLibraryVariable['source'] =>
-  name.includes('.') ? 'api' : 'contact';
+  hintedSources.get(name.toLowerCase()) ?? (name.includes('.') ? 'api' : 'contact');
+
+/**
+ * Where the person said a variable comes from, when they put it in from the menu: a name typed into the Flow variable box is a flow
+ * variable, which its spelling alone cannot tell from a contact property. Kept by name for the session, so the variable is declared
+ * with the source it was added with whichever field the token ends up in.
+ */
+const hintedSources = new Map<string, ApiLibraryVariable['source']>();
+export function rememberVariableSource(name: string, source: ApiLibraryVariable['source']): void {
+  hintedSources.set(name.trim().toLowerCase(), source);
+}
 
 /** The payload as a value, or undefined when the text is not a JSON object or array. */
 /**
