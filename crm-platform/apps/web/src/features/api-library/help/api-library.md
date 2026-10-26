@@ -68,7 +68,7 @@ A value inside a list offers **this item** (`items[0].name`) or **every item** (
 
 ## Logs
 
-**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status, source (test or flow) and dates, and a search over the URL, API name and error. A deleted API stays in the API filter, marked "(deleted)", while its runs are kept. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
+**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status, source (test or flow) and dates, and a search over the URL, API name and error. A deleted API stays in the API filter, marked "(deleted)", while its runs are kept. A run made by a bot shows the **Bot** name and where the bot is now (Live, Paused, Draft or Deleted); renaming a bot changes the name on its runs at once, and a bot that was deleted keeps the name it had. Type part of a bot's name in **Bot** to see only its runs. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
 
 ## Deleting
 

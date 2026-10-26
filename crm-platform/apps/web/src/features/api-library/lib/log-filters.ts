@@ -10,6 +10,7 @@ export interface LogFilterForm {
   from: string;
   to: string;
   search: string;
+  bot: string;
 }
 
 export const EMPTY_LOG_FILTERS: LogFilterForm = {
@@ -20,6 +21,7 @@ export const EMPTY_LOG_FILTERS: LogFilterForm = {
   from: '',
   to: '',
   search: '',
+  bot: '',
 };
 
 const DAY = /^(\d{4})-(\d{2})-(\d{2})$/;
@@ -39,6 +41,7 @@ export function dayBound(value: string, edge: 'start' | 'end'): string | null {
 export function logQuery(f: LogFilterForm, fixedApiId?: string): LogFilters {
   const code = /^\d{3}$/.test(f.statusCode.trim()) ? Number(f.statusCode.trim()) : undefined;
   const search = f.search.trim();
+  const bot = f.bot.trim();
   return {
     apiId: fixedApiId ?? (f.apiId !== '' ? f.apiId : undefined),
     status: f.status !== '' ? f.status : undefined,
@@ -47,6 +50,7 @@ export function logQuery(f: LogFilterForm, fixedApiId?: string): LogFilters {
     from: dayBound(f.from, 'start') ?? undefined,
     to: dayBound(f.to, 'end') ?? undefined,
     search: search !== '' ? search : undefined,
+    bot: bot !== '' ? bot : undefined,
   };
 }
 
@@ -55,4 +59,5 @@ export const hasLogFilters = (f: LogFilterForm): boolean =>
 
 /** A search the API would refuse (over the contract's limit after trimming). Such a search is not sent. */
 export const searchTooLong = (f: LogFilterForm): boolean =>
-  f.search.trim().length > API_LIBRARY_LOG_SEARCH_MAX;
+  f.search.trim().length > API_LIBRARY_LOG_SEARCH_MAX ||
+  f.bot.trim().length > API_LIBRARY_LOG_SEARCH_MAX;

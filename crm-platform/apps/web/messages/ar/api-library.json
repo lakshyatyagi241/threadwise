@@ -111,11 +111,18 @@
       "col": {
         "requestedOn": "طُلب في",
         "api": "واجهة API",
+        "bot": "البوت",
         "url": "الرابط",
         "source": "المصدر",
         "result": "النتيجة",
         "statusCode": "رمز الحالة",
         "duration": "المدة"
+      },
+      "botState": {
+        "active": "يعمل",
+        "paused": "متوقف مؤقتًا",
+        "draft": "مسودة",
+        "deleted": "محذوف"
       },
       "openLog": "فتح التشغيل بتاريخ {when}",
       "drawerTitle": "السجلات: {name}",
@@ -140,6 +147,8 @@
         "to": "إلى",
         "clear": "مسح التصفيات",
         "deletedApi": "{name} (محذوف)",
+        "bot": "البوت",
+        "botPlaceholder": "اسم البوت",
         "searchTooLong": "يمكن أن يحتوي البحث على {max} حرفًا كحد أقصى. اختصره لتتمكن من البحث."
       },
       "detail": {

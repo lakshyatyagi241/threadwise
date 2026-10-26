@@ -60,6 +60,15 @@ export function LogFiltersBar({
           />
         </div>
       </Field>
+      <Field label={t('bot')} htmlFor="alib-log-bot">
+        <Input
+          id="alib-log-bot"
+          type="search"
+          value={value.bot}
+          placeholder={t('botPlaceholder')}
+          onChange={(e) => set('bot', e.target.value)}
+        />
+      </Field>
       {apis && (
         <Field label={t('api')} htmlFor="alib-log-api">
           <Select

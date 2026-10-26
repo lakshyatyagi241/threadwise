@@ -20,6 +20,7 @@ describe('log filters', () => {
       from: undefined,
       to: undefined,
       search: undefined,
+      bot: undefined,
     });
     expect(hasLogFilters(EMPTY_LOG_FILTERS)).toBe(false);
   });
@@ -33,6 +34,7 @@ describe('log filters', () => {
       from: '2026-03-01',
       to: '2026-03-02',
       search: '  orders ',
+      bot: ' Welcome bot ',
     });
     expect(q).toMatchObject({
       apiId: 'a1',
@@ -40,6 +42,7 @@ describe('log filters', () => {
       statusCode: 404,
       source: 'flow',
       search: 'orders',
+      bot: 'Welcome bot',
     });
     expect(new Date(q.from!).getTime()).toBeLessThan(new Date(q.to!).getTime());
   });

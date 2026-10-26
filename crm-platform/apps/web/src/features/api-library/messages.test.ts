@@ -62,6 +62,7 @@ const DYNAMIC = [
   `${ROOT}.nav.`,
   `${ROOT}.list.col.`,
   `${ROOT}.logs.col.`,
+  `${ROOT}.logs.botState.`,
 ];
 
 const files = [
@@ -109,6 +110,7 @@ describe('api-library messages', () => {
           'unexpected',
         ] as const
       ).map((k) => `errors.${k}`),
+      ...(['active', 'paused', 'draft', 'deleted'] as const).map((k) => `logs.botState.${k}`),
       'nav.apiLibrary',
     ];
     expect(dynamic.filter((k) => !(`${ROOT}.${k}` in en))).toEqual([]);

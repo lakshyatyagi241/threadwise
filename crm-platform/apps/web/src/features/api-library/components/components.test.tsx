@@ -312,8 +312,28 @@ describe('logs', () => {
     durationMs: 1500,
     errorKind: 'status',
     error: 'HTTP 500',
+    botName: null,
+    botState: null,
     createdAt: '2026-03-05T10:00:00.000Z',
     ...over,
+  });
+
+  it('names the bot that made a run, with where the bot is now, and nothing for a test', () => {
+    state.logs = listOf([
+      log({ botName: 'Welcome bot', botState: 'active' }),
+      log({
+        id: '00000000-0000-4000-8000-0000000000ab',
+        botName: 'Old bot',
+        botState: 'deleted',
+      }),
+      log({ id: '00000000-0000-4000-8000-0000000000ac', source: 'test' }),
+    ]);
+    const page = html(<LogsPanel paging={paging} />);
+    expect(page).toContain('Welcome bot');
+    expect(page).toContain('Live');
+    expect(page).toContain('Old bot');
+    expect(page).toContain('Deleted');
+    expect(page).toContain('Name of the bot');
   });
 
   it('lists runs with status, source, duration and the API column on the full page only', () => {

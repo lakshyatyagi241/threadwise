@@ -65,6 +65,7 @@ export class ApiLibraryLogsService {
         from: query.from,
         to: query.to,
         search: query.search || undefined,
+        bot: query.bot || undefined,
         limit: query.limit,
         order: query.order,
       };
@@ -95,16 +96,31 @@ export class ApiLibraryLogsService {
         from: query.from,
         to: query.to,
         search: query.search || undefined,
+        bot: query.bot || undefined,
         limit: LOG_EXPORT_MAX_ROWS,
         order: 'desc',
       });
       return buildCsv(
-        ['Time (UTC)', 'API', 'Source', 'Method', 'URL', 'Result', 'Status code', 'Duration (ms)', 'Error'],
+        [
+          'Time (UTC)',
+          'API',
+          'Bot',
+          'Bot state',
+          'Source',
+          'Method',
+          'URL',
+          'Result',
+          'Status code',
+          'Duration (ms)',
+          'Error',
+        ],
         rows.map((row) => {
           const item = toLogItem(row);
           return [
             item.createdAt,
             item.apiName,
+            item.botName,
+            item.botState,
             item.source,
             item.method,
             item.url,

@@ -133,6 +133,8 @@ export const apiLibraryLogs = pgTable(
     flowId: idColumn('flow_id'),
     flowRunUuid: uuid('flow_run_uuid'),
     flowNodeId: text('flow_node_id'),
+    /** The bot's name at the time of the run; the log shows the bot's current name while it exists (20261231090300). */
+    flowName: text('flow_name'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [

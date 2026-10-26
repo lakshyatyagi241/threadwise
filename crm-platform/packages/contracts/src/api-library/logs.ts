@@ -30,6 +30,10 @@ export const apiLibraryLogItemSchema = z.object({
   durationMs: z.number().int(),
   errorKind: apiLibraryErrorKindSchema.nullable(),
   error: z.string().nullable(),
+  /** The bot (flow) that made the run, by its current name while it exists, else the name it had; null for a test or any run no bot made. */
+  botName: z.string().nullable().default(null),
+  /** Where that bot is now: running, paused, a draft (never published), or deleted. Null when no bot made the run. */
+  botState: z.enum(['active', 'paused', 'draft', 'deleted']).nullable().default(null),
   createdAt: z.string().datetime(),
 });
 export type ApiLibraryLogItem = z.infer<typeof apiLibraryLogItemSchema>;
@@ -62,6 +66,8 @@ export const listApiLibraryLogsQuerySchema = paginationQuerySchema.extend({
   source: apiLibraryLogSourceSchema.optional(),
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
+  /** Part of the name of the bot that made the run (its current name, or the one a deleted bot had), ignoring case. */
+  bot: z.string().trim().max(API_LIBRARY_LOG_SEARCH_MAX).optional(),
   /** Matches the URL, the API name and the error text, ignoring case. */
   search: z.string().trim().max(API_LIBRARY_LOG_SEARCH_MAX).optional(),
 });

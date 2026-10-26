@@ -71,6 +71,8 @@ export function toLogItem(row: LogRow): ApiLibraryLogItem {
     durationMs: row.durationMs,
     errorKind: row.errorKind,
     error: row.error,
+    botName: row.botName,
+    botState: row.botState,
     createdAt: row.createdAt.toISOString(),
   };
 }

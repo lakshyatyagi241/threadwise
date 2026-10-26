@@ -37,6 +37,8 @@ export interface LogRow {
   flowUuid: string | null;
   flowRunUuid: string | null;
   flowNodeId: string | null;
+  botName: string | null;
+  botState: 'active' | 'paused' | 'draft' | 'deleted' | null;
   createdAtIso: string;
   createdAt: Date;
 }
@@ -72,6 +74,8 @@ export interface LogFilter {
   from?: string;
   to?: string;
   search?: string;
+  /** Part of the name of the bot that made the run. */
+  bot?: string;
   cursor?: string;
   /** Page mode: rows to skip. Present means offset pagination and `cursor` is ignored. */
   offset?: number;
@@ -102,13 +106,21 @@ const toLog = (r: Raw): LogRow => ({
   flowUuid: (r.flow_uuid ?? null) as string | null,
   flowRunUuid: (r.flow_run_uuid ?? null) as string | null,
   flowNodeId: (r.flow_node_id ?? null) as string | null,
+  botName: (r.bot_name ?? null) as string | null,
+  botState: (r.bot_state ?? null) as LogRow['botState'],
   createdAtIso: r.created_at_iso as string,
   createdAt: new Date(r.created_at as string),
 });
 
 const SELECT = sql`
   SELECT l.*, to_char(l.created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
-         u.uuid AS user_uuid, f.uuid AS flow_uuid
+         u.uuid AS user_uuid, f.uuid AS flow_uuid,
+         CASE WHEN l.flow_id IS NULL THEN NULL ELSE coalesce(f.name, l.flow_name) END AS bot_name,
+         CASE WHEN l.flow_id IS NULL THEN NULL
+              WHEN f.id IS NULL THEN 'deleted'
+              WHEN NOT f.is_active THEN 'paused'
+              WHEN f.is_published THEN 'active'
+              ELSE 'draft' END AS bot_state
   FROM api_library_logs l
   LEFT JOIN users u ON u.org_id = l.org_id AND u.id = l.user_id
   LEFT JOIN flows f ON f.org_id = l.org_id AND f.id = l.flow_id`;
@@ -120,10 +132,11 @@ export class ApiLibraryLogsRepository {
     const res = await tx.execute(sql`
       INSERT INTO api_library_logs
         (org_id, api_uuid, api_name, source, method, url, request_headers, request_body, status_code, ok, duration_ms, error_kind, error,
-         response_headers, response_body, response_truncated, user_id, contact_uuid, flow_id, flow_run_uuid, flow_node_id)
+         response_headers, response_body, response_truncated, user_id, contact_uuid, flow_id, flow_run_uuid, flow_node_id, flow_name)
       VALUES (${orgId}, ${l.apiUuid}::uuid, ${l.apiName}, ${l.source}, ${l.method}, ${l.url}, ${JSON.stringify(l.requestHeaders)}::jsonb,
               ${l.requestBody}, ${l.statusCode}, ${l.ok}, ${l.durationMs}, ${l.errorKind}, ${l.error}, ${JSON.stringify(l.responseHeaders)}::jsonb,
-              ${l.responseBody}, ${l.responseTruncated}, ${l.userId}, ${l.contactUuid}::uuid, ${l.flowId}, ${l.flowRunUuid}::uuid, ${l.flowNodeId})
+              ${l.responseBody}, ${l.responseTruncated}, ${l.userId}, ${l.contactUuid}::uuid, ${l.flowId}, ${l.flowRunUuid}::uuid, ${l.flowNodeId},
+              (SELECT f.name FROM flows f WHERE f.org_id = ${orgId} AND f.id = ${l.flowId}))
       RETURNING uuid`);
     return (res.rows[0] as { uuid: string }).uuid;
   }
@@ -146,6 +159,12 @@ export class ApiLibraryLogsRepository {
         sql`l.created_at >= now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS + 1})`,
       );
     if (f.to) where.push(sql`l.created_at <= ${f.to}::timestamptz`);
+    if (f.bot) {
+      const like = `%${escapeLike(f.bot)}%`;
+      where.push(
+        sql`(l.flow_name ILIKE ${like} OR EXISTS (SELECT 1 FROM flows bf WHERE bf.org_id = l.org_id AND bf.id = l.flow_id AND bf.name ILIKE ${like}))`,
+      );
+    }
     if (f.search) {
       const like = `%${escapeLike(f.search)}%`;
       where.push(sql`(l.url ILIKE ${like} OR l.api_name ILIKE ${like} OR l.error ILIKE ${like})`);

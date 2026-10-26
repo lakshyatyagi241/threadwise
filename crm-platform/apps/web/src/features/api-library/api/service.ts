@@ -96,7 +96,9 @@ export const apiLibraryApi = {
       signal,
     }).then((r) => normalizePage(r, query)),
   /** The run log as CSV text, with the list's filters. The file is not JSON, so it is fetched here rather than through apiFetch. */
-  logsCsv: async (query: Omit<LogsQuery, keyof PageQuery> & { apiId?: string }): Promise<string> => {
+  logsCsv: async (
+    query: Omit<LogsQuery, keyof PageQuery> & { apiId?: string },
+  ): Promise<string> => {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(query)) {
       if (value !== undefined && value !== '') params.set(key, String(value));

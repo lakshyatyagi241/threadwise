@@ -111,12 +111,14 @@
       "col": {
         "requestedOn": "Requested on",
         "api": "API",
+        "bot": "Bot",
         "url": "URL",
         "source": "Source",
         "result": "Result",
         "statusCode": "Status code",
         "duration": "Duration"
       },
+      "botState": { "active": "Live", "paused": "Paused", "draft": "Draft", "deleted": "Deleted" },
       "openLog": "Open the run of {when}",
       "unsaved": "Not saved",
       "drawerTitle": "Logs: {name}",
@@ -130,6 +132,8 @@
         "label": "Filter runs",
         "search": "Search",
         "searchPlaceholder": "URL, API name or error",
+        "bot": "Bot",
+        "botPlaceholder": "Name of the bot",
         "searchTooLong": "Search can be at most {max} characters. Shorten it to search.",
         "api": "API",
         "allApis": "All APIs",

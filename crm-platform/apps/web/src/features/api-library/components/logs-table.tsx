@@ -25,7 +25,7 @@ export function LogsTable({
   const t = useTranslations('api-library.logs');
   const tc = useTranslations('api-library.common');
   const fmt = useFormatDate();
-  const cols = showApi ? 7 : 6;
+  const cols = showApi ? 8 : 7;
   return (
     <div className="thin-scrollbar overflow-x-auto">
       <table className="w-full min-w-[52rem] border-separate border-spacing-0 text-sm">
@@ -36,6 +36,7 @@ export function LogsTable({
               'requestedOn',
               ...(showApi ? ['api'] : []),
               'url',
+              'bot',
               'source',
               'result',
               'statusCode',
@@ -82,6 +83,18 @@ export function LogsTable({
                     </span>
                   </span>
                   {r.error && <p className="mt-1 truncate text-xs text-danger">{r.error}</p>}
+                </td>
+                <td className={TD}>
+                  {r.botName ? (
+                    <span className="flex min-w-0 flex-col items-start gap-1">
+                      <span className="max-w-[12rem] truncate font-medium" title={r.botName}>
+                        {r.botName}
+                      </span>
+                      {r.botState && <Badge>{t(`botState.${r.botState}`)}</Badge>}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
                 </td>
                 <td className={TD}>
                   <Badge>{tc(`source.${r.source}`)}</Badge>
