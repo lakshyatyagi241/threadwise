@@ -106,7 +106,8 @@
         "failed": "ناکام",
         "rolled_back": "رول بیک ہو گئی"
       },
-      "by": "از {author}"
+      "by": "از {author}",
+      "raisedIst": "بنایا گیا {time} IST"
     }
   }
 }

@@ -106,7 +106,8 @@
         "failed": "Mislukt",
         "rolled_back": "Teruggedraaid"
       },
-      "by": "door {author}"
+      "by": "door {author}",
+      "raisedIst": "Aangemaakt {time} IST"
     }
   }
 }

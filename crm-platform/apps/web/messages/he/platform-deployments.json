@@ -106,7 +106,8 @@
         "failed": "נכשל",
         "rolled_back": "הוחזר"
       },
-      "by": "מאת {author}"
+      "by": "מאת {author}",
+      "raisedIst": "נוצרה {time} IST"
     }
   }
 }

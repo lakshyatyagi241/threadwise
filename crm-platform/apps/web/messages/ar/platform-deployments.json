@@ -106,7 +106,8 @@
         "failed": "فشل",
         "rolled_back": "أُرجع"
       },
-      "by": "بواسطة {author}"
+      "by": "بواسطة {author}",
+      "raisedIst": "تاريخ الإنشاء {time} IST"
     }
   }
 }

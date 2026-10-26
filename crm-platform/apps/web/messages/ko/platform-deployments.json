@@ -106,7 +106,8 @@
         "failed": "실패",
         "rolled_back": "롤백됨"
       },
-      "by": "작성자 {author}"
+      "by": "작성자 {author}",
+      "raisedIst": "생성 {time} IST"
     }
   }
 }

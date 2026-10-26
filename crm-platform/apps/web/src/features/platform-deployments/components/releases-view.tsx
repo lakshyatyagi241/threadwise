@@ -18,6 +18,9 @@ const TONE: Record<ReleaseState, 'neutral' | 'warning' | 'danger' | 'success'> =
   rolled_back: 'danger',
 };
 
+/** Operators read the console in Indian time whatever their browser's zone is. */
+const IST = 'Asia/Kolkata';
+
 const COLUMNS = ['tag', 'changes', 'state', 'step', 'started', 'finished', 'error'] as const;
 
 /**
@@ -113,6 +116,25 @@ function ReleaseRowView({ row }: { row: ReleaseRow }) {
                 {' '}
                 {t('releases.by', { author: c.author })}
               </span>
+              {c.createdAt && (
+                <div className="text-xs text-muted-foreground" data-testid="release-raised">
+                  {t('releases.raisedIst', {
+                    time: f.dateTime(new Date(c.createdAt), {
+                      dateStyle: 'medium',
+                      timeStyle: 'medium',
+                      timeZone: IST,
+                    }),
+                  })}
+                </div>
+              )}
+              {c.body && (
+                <div
+                  className="mt-1 max-h-32 overflow-y-auto whitespace-pre-wrap break-words text-xs"
+                  data-testid="release-description"
+                >
+                  {c.body}
+                </div>
+              )}
             </li>
           ))}
         </ul>

@@ -18,6 +18,7 @@
     "form-validation": "P0",
     "roles-permissions": "P0",
     "companies": "P1",
-    "google-account": "P1"
+    "google-account": "P1",
+    "platform-deployments": "P2"
   }
 }

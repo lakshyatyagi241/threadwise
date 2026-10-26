@@ -106,7 +106,8 @@
         "failed": "ล้มเหลว",
         "rolled_back": "ย้อนกลับแล้ว"
       },
-      "by": "โดย {author}"
+      "by": "โดย {author}",
+      "raisedIst": "สร้างเมื่อ {time} IST"
     }
   }
 }
