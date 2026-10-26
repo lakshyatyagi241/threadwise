@@ -104,6 +104,16 @@ export const LEGAL_TEMPLATES: readonly LegalTemplate[] = [
         ),
       },
       {
+        title: 'Google user data',
+        body: p(
+          'A workspace administrator can connect a Google account to {{brand}}. We ask for each permission only when the administrator ticks it, and use it only for the feature named here. Your Google email address (openid, userinfo.email) shows which account is connected. Google Calendar (calendar.events, calendar.freebusy, calendar.calendarlist.readonly) creates, moves and deletes the appointment events that {{brand}} created, checks busy time so booked slots are not offered, and lets the administrator pick a calendar. Google Sheets (spreadsheets) reads or appends rows only in spreadsheets the administrator names in an automation. Google Forms (forms.body.readonly, forms.responses.readonly) reads the link and answers of a form the administrator names, so the automation can send the link and continue when it is filled. Google Docs and Drive (documents, drive) copy a template the administrator owns, fill in placeholders in the copy and share the copy by link. Drive file names (drive.metadata.readonly) are listed so the administrator can pick a spreadsheet, document or form by name; they are not stored.',
+          'We use Google user data only to provide and improve these user-facing features. We do not sell it, do not use it for advertising, and do not transfer it except to the service providers that run {{brand}}, as the law requires, or in a merger or sale with notice to you. People at {{brand}} do not read it unless you ask for support, it is needed to investigate abuse or security, or the law requires it.',
+          'We do not use Google user data, raw or derived, to develop, improve or train generalised AI or machine-learning models, and we do not send it to third-party AI services that train on it.',
+          'The use of information received from Google APIs, including Google Workspace APIs, will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy#limited-use">Google API Services User Data Policy</a>, including the Limited Use requirements.',
+          'Access tokens are stored encrypted. You can disconnect at any time with the Disconnect button in Settings, Integrations, Google account, or at myaccount.google.com under third-party access. On disconnect and on workspace deletion we delete the stored grant. To ask for deletion, use the contact page.',
+        ),
+      },
+      {
         title: 'Sharing',
         body: p(
           'We share data only with service providers who help us run the service, under written terms, and where the law requires it.',
