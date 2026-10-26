@@ -274,7 +274,8 @@ export function fromDetail(d: ApiLibraryDetail): ApiFormState {
 /** What the old console's "Import API's" produced from a cURL command (see curl.ts). */
 /** A part of a pasted command that could not be imported (a file to upload): shown, never dropped without a word. */
 export interface ImportNote {
-  code: 'file';
+  /** `file`: a file to upload. `body`: a message the pasted method cannot send. `method`: a verb that is not one of ours. */
+  code: 'file' | 'body' | 'method';
   name: string;
 }
 

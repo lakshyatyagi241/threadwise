@@ -1,4 +1,8 @@
-import { API_LIBRARY_METHODS, type ApiLibraryMethod } from '@crm/contracts';
+import {
+  API_LIBRARY_METHODS,
+  apiLibraryMethodHasBody,
+  type ApiLibraryMethod,
+} from '@crm/contracts';
 import type { ImportNote, ImportedRequest } from './form-model';
 
 /** Splits a command line the way a shell would: quotes group, a backslash escapes, a backslash-newline joins lines. */
@@ -215,7 +219,11 @@ export function parseCurl(command: string): ImportedRequest | null {
     headers.find((h) => h.key.toLowerCase() === 'content-type')?.value.toLowerCase() ?? '';
   const hasPayload = data.length > 0 || form.length > 0 || multipart;
   let verb = method ?? (hasPayload && !getMode ? 'POST' : 'GET');
-  if (!API_LIBRARY_METHODS.includes(verb as ApiLibraryMethod)) verb = 'GET';
+  if (!API_LIBRARY_METHODS.includes(verb as ApiLibraryMethod)) {
+    // A misspelt or unknown verb (PACTH) is said, not silently turned into a GET.
+    skipped.push({ code: 'method', name: verb });
+    verb = 'GET';
+  }
 
   if (getMode && data.length > 0) {
     // -G puts the data in the query string instead of the body.
@@ -234,6 +242,9 @@ export function parseCurl(command: string): ImportedRequest | null {
       ...(skipped.length > 0 ? { skipped } : {}),
     };
   }
+
+  // A message with a verb that cannot send one (GET): the text is kept in the form, and the person is told it will not be sent.
+  if (data.length > 0 && !apiLibraryMethodHasBody(verb)) skipped.push({ code: 'body', name: verb });
 
   let body: unknown = undefined;
   if (data.length > 0) {

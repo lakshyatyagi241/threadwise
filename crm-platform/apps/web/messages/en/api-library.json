@@ -322,6 +322,8 @@
       "requestHint": "The name, method and address of the call.",
       "payloadHint": "What is sent in the body. Use the '{ }' button to put a variable in a value.",
       "functionHint": "Reshape the payload with JavaScript before it is sent. Optional.",
+      "importBody": "The pasted command is a {method} that also has a message. A {method} call here sends no message, so the message is kept in the form but will not be sent. Change the method to POST, PUT or PATCH to send it.",
+      "importMethod": "The method \"{method}\" in the pasted command is not one we know (GET, POST, PUT, PATCH, DELETE). It was set to GET: check the method before saving.",
       "importSkipped": "The pasted command also sends a file ({names}). A file cannot be imported here, so it was left out. Everything else was filled in.",
       "payloadTypedHint": "To send a real number or yes/no, write the variable without quotes: {example}."
     },

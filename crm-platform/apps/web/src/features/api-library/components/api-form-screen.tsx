@@ -122,7 +122,28 @@ export function ApiFormScreen({ id }: { id?: string }) {
     <>
       {imported.skipped && imported.skipped.length > 0 && (
         <Alert tone="warning" className="mb-4">
-          {t('importSkipped', { names: imported.skipped.map((n) => n.name).join(', ') })}
+          <ul className="list-inside list-disc space-y-1">
+            {imported.skipped.some((n) => n.code === 'file') && (
+              <li>
+                {t('importSkipped', {
+                  names: imported.skipped
+                    .filter((n) => n.code === 'file')
+                    .map((n) => n.name)
+                    .join(', '),
+                })}
+              </li>
+            )}
+            {imported.skipped
+              .filter((n) => n.code === 'body')
+              .map((n) => (
+                <li key={`body-${n.name}`}>{t('importBody', { method: n.name })}</li>
+              ))}
+            {imported.skipped
+              .filter((n) => n.code === 'method')
+              .map((n) => (
+                <li key={`method-${n.name}`}>{t('importMethod', { method: n.name })}</li>
+              ))}
+          </ul>
         </Alert>
       )}
       <ApiForm key="import" initial={fromImport(imported)} />
