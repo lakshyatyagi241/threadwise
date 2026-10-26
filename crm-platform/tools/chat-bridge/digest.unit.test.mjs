@@ -66,6 +66,44 @@ test('the message flags statements over the mean threshold and says what period 
   assert.match(m.cardsV2[0].card.header.subtitle, /last 7 days/);
 });
 
+test('the message lists tables with the most dead rows (D-08), and a table query that fails does not lose the digest', async () => {
+  const tables = [
+    {
+      relname: 'messages_202610',
+      live: 900,
+      dead: 100,
+      bytes: 200 * 1048576,
+      last_autovacuum: '2026-10-25T03:00:00Z',
+    },
+  ];
+  const m = digestMessage(weeklyTop(null, snap({ a: [10, 500] })), {
+    sinceLabel: 'x',
+    thresholdMs: 120,
+    tables,
+  });
+  const body = JSON.stringify(m.cardsV2);
+  assert.match(body, /messages_202610: 10\.0 % dead rows/);
+  assert.match(body, /200 MB/);
+  assert.match(body, /last autovacuum 2026-10-25 03:00/);
+
+  const sent = [];
+  const d = createDigest({
+    query: async (sql) => {
+      if (/pg_stat_user_tables/.test(sql)) throw new Error('no access');
+      if (/pg_stat_statements_info/.test(sql))
+        return { rows: [{ stats_reset: new Date('2026-10-01') }] };
+      return {
+        rows: [{ queryid: '1', calls: 5, total_exec_time: 50, max_exec_time: 20, q: 'select 1' }],
+      };
+    },
+    send: async (ch, body) => sent.push(body),
+    now: () => MON_9,
+    env: {},
+  });
+  assert.equal(await d.tick(), true);
+  assert.equal(sent.length, 1);
+});
+
 test('empty period still produces a plain message', () => {
   assert.match(
     digestMessage(weeklyTop(null, new Map()), { sinceLabel: 'x', thresholdMs: 120 }).text,
