@@ -276,7 +276,12 @@ export async function verifyFlows(a: Args): Promise<void> {
       alarm(
         `FLOW_COLUMN: category / provider / flow_type / trigger_kind of the ${tag} are not what the import writes`,
       );
-    if (r.created_at !== ts(o.created) || (!a.allowExtraRows && r.updated_at !== ts(o.updated)))
+    // the link step (load/update.ts) touches the row after the load, so updated_at may move later; only a date before the source is a difference
+    if (
+      r.created_at !== ts(o.created) ||
+      (!a.allowExtraRows &&
+        (o.updated === null ? r.updated_at !== null : r.updated_at < ts(o.updated)!))
+    )
       alarm(`FLOW_COLUMN: created_at / updated_at of the ${tag} are not the dates of the source`);
     lossTotals = {
       flows: lossTotals.flows + 1,

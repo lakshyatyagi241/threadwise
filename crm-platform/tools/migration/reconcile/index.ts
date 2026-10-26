@@ -33,6 +33,7 @@ import { CONTACT_FIELDS, propertyKeyOf, REJECT_MARKER } from '../transform/conta
 import { isBuiltInKey } from '../transform/fields';
 import { buildIndex } from '../transform/source-index';
 import type { HandlerSpec, Outcome, Row, TableSpec } from '../transform/types';
+import { mediaAsCopied } from './media-copy';
 import {
   docKeysWith,
   isDeleted,
@@ -1678,10 +1679,13 @@ async function verifyChunk(
         continue;
       v.sample.compared++;
       roll.rows++;
+      // a flow's media links point at the copy the files step made (reconcile/media-copy.ts): the same file, not a difference
+      const got: Record<string, unknown> =
+        table === 'flows' ? { ...t, flow_data: mediaAsCopied(l.row.flow_data, t.flow_data) } : t;
       roll.s.push(`${l.uuid}:${rowHash(compareCols, types, l.row)}`);
-      roll.t.push(`${l.uuid}:${rowHash(compareCols, types, t)}`);
+      roll.t.push(`${l.uuid}:${rowHash(compareCols, types, got)}`);
       const diff = compareCols.filter(
-        (c) => norm(l.row[c], types.get(c)!) !== norm(t[c], types.get(c)!),
+        (c) => norm(l.row[c], types.get(c)!) !== norm(got[c], types.get(c)!),
       );
       for (const [c, want0] of Object.entries(ts.constants ?? {})) {
         const want = c === 'row_version' && v.bumped.has(l.uuid) ? v.bumped.get(l.uuid) : want0;

@@ -546,6 +546,9 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         'pipeline_stages',
         'deal_lost_reasons',
         'contact_consent_settings',
+        // the consent rows the marketing step writes (marketingConsent, run just before this): recorded here so they are not "added" later
+        'contact_consent_events',
+        'contact_consent_state',
         'routing_rules',
         'task_outcomes',
         'workspace_settings',

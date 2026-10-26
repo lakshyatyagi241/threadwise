@@ -367,6 +367,8 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
         allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'],
         // the largest media file the copy downloads: the client config may raise it (maxFileMB, a positive number of MB); 50 by default
         maxFileMB: Number(cfg.maxFileMB) > 0 ? Number(cfg.maxFileMB) : 50,
+        // the public https origin of the media bucket: converted flows and widgets show their images by link (copy-files.cjs refuses without it)
+        flowMediaPublicBase: typeof cfg.flowMediaPublicBase === 'string' ? cfg.flowMediaPublicBase : '',
         timeoutMs: 60000,
       }) + '\n',
     );

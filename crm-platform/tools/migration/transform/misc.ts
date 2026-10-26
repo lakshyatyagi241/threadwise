@@ -13,6 +13,9 @@ const LIFECYCLE_FIELDS = {
   modified_time: 'col:updated_at',
   is_deleted: 'drop:soft-delete flag; deleted rows are excluded and counted',
   deleted_time: 'drop:soft-delete timestamp (empty string on live rows)',
+  created_by:
+    'drop:the Waboo user who made the stage or status; status_options has no creator column',
+  updated_by: 'drop:the Waboo user who last changed it; status_options has no editor column',
   position: 'col:position',
   label: 'col:label (and the value, slugified)',
   name: 'col:label fallback',

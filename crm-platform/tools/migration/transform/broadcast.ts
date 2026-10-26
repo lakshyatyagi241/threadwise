@@ -32,6 +32,8 @@ const NOT_PRESENT = 'NOT PRESENT: no column in wpcampaigns / wp_campaign_contact
 export const CAMPAIGN_FIELDS: FieldMap = {
   _id: 'id (wpcampaigns.uuid is derived from it; registered in migration.id_map)',
   id: 'id (registered in migration.id_map: the recipient rows reference the campaign by it)',
+  broadcast_action:
+    'drop:the action a broadcast was started with (send now, schedule) has no column; the status and dates are kept',
   broadcast_id:
     'id (registered in migration.id_map: the recipient rows reference the campaign by it)',
   broadcast_name: 'col:campaign_name',
@@ -64,8 +66,7 @@ export const CAMPAIGN_FIELDS: FieldMap = {
   last_retry: `drop:${NOT_PRESENT}; retry bookkeeping`,
   broadcast_template_id:
     'col:template_id (the Waboo template id, matched to the migrated wa_templates row through migration.id_map; see broadcast/template-link.ts)',
-  broadcast_template_name:
-    `drop:${NOT_PRESENT}; the name must equal the linked template's name (else CONFLICT, template_id NULL); kept in quarantine TEMPLATE_UNLINKED when unlinked`,
+  broadcast_template_name: `drop:${NOT_PRESENT}; the name must equal the linked template's name (else CONFLICT, template_id NULL); kept in quarantine TEMPLATE_UNLINKED when unlinked`,
   broadcast_template_type: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   broadcast_template_category: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   sender_number: `drop:${NOT_PRESENT} (device_id points into wa_provider_configs); kept in quarantine SENDER_NUMBER (proposal P1)`,
@@ -434,7 +435,10 @@ export const recipients: HandlerSpec = {
   fields: RECIPIENT_FIELDS,
   // `update` mode: a recipient's delivery status moves on (sent -> delivered -> read) after the first load. retry_count is never written (nor
   // are next_attempt_at / retry_*: they are not columns of this step); a failed row keeps send_attempts >= 3 so the sweeper skips it
-  update: { ignore: ['retry_count'], allow: { status: ['sent', 'delivered', 'read', 'responded', 'failed'] } },
+  update: {
+    ignore: ['retry_count'],
+    allow: { status: ['sent', 'delivered', 'read', 'responded', 'failed'] },
+  },
   tables: {
     wp_campaign_contacts: {
       columns: [

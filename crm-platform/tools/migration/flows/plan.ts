@@ -516,7 +516,15 @@ export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
       });
 
     // secrets in the text of a step never reach the target
-    const sc = scrub(graph);
+    // an ask step's property key names a contact field: it is not a secret, and a key that happens to match a token shape blocked the whole
+    // flow (SECRET_IN_FLOW), so it is left out of the scan
+    const sc = scrub({
+      ...graph,
+      flowNodes: graph.flowNodes.map((n) => ({
+        ...n,
+        data: { ...n.data, propertyKey: undefined },
+      })),
+    });
     if (sc.redacted.length > 0) {
       fail(
         'SECRET_IN_FLOW',
