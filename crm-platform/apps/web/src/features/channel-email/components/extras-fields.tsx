@@ -42,7 +42,7 @@ export function EmailExtrasFields({
   };
 
   return (
-    <div data-testid="email-extras" className="px-3 pt-2 text-xs">
+    <div data-testid="email-extras" className={shown ? 'w-full text-xs' : 'text-xs'}>
       {!shown ? (
         <button
           type="button"

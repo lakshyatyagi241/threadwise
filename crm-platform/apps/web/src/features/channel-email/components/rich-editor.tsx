@@ -158,70 +158,73 @@ export function RichEditor({
   // Buttons must not take the selection away from the text.
   const keep = (e: { preventDefault: () => void }) => e.preventDefault();
 
-  return (
-    <div className={cn('min-w-0 flex-1', className)}>
-      <div
-        role="toolbar"
-        aria-label={t('toolbar')}
-        data-testid="email-editor-toolbar"
-        className="mb-1 flex flex-wrap items-center gap-0.5"
+  // The formatting buttons sit under the box, like the tool row of the other channels' composer.
+  const toolbar = (
+    <div
+      role="toolbar"
+      aria-label={t('toolbar')}
+      data-testid="email-editor-toolbar"
+      className="mt-1 flex flex-wrap items-center gap-0.5"
+    >
+      {BUTTONS.map((b) => (
+        <button
+          key={b.id}
+          type="button"
+          disabled={disabled}
+          title={t(b.label)}
+          aria-label={t(b.label)}
+          data-testid={`email-editor-${b.id}`}
+          onMouseDown={keep}
+          onClick={() => run(b.command)}
+          className={cn(tool, b.id === 'italic' && 'italic', b.id === 'underline' && 'underline')}
+        >
+          {b.glyph}
+        </button>
+      ))}
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('quote')}
+        aria-label={t('quote')}
+        data-testid="email-editor-quote"
+        onMouseDown={keep}
+        onClick={() => run('formatBlock', 'blockquote')}
+        className={tool}
       >
-        {BUTTONS.map((b) => (
-          <button
-            key={b.id}
-            type="button"
-            disabled={disabled}
-            title={t(b.label)}
-            aria-label={t(b.label)}
-            data-testid={`email-editor-${b.id}`}
-            onMouseDown={keep}
-            onClick={() => run(b.command)}
-            className={cn(tool, b.id === 'italic' && 'italic', b.id === 'underline' && 'underline')}
-          >
-            {b.glyph}
-          </button>
-        ))}
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('quote')}
-          aria-label={t('quote')}
-          data-testid="email-editor-quote"
-          onMouseDown={keep}
-          onClick={() => run('formatBlock', 'blockquote')}
-          className={tool}
-        >
-          “
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('link')}
-          aria-label={t('link')}
-          aria-expanded={linkOpen}
-          data-testid="email-editor-link"
-          onMouseDown={keep}
-          onClick={() => {
-            remember();
-            setLinkOpen((v) => !v);
-          }}
-          className={tool}
-        >
-          🔗
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('clear')}
-          aria-label={t('clear')}
-          data-testid="email-editor-clear"
-          onMouseDown={keep}
-          onClick={() => run('removeFormat')}
-          className={tool}
-        >
-          Tx
-        </button>
-      </div>
+        “
+      </button>
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('link')}
+        aria-label={t('link')}
+        aria-expanded={linkOpen}
+        data-testid="email-editor-link"
+        onMouseDown={keep}
+        onClick={() => {
+          remember();
+          setLinkOpen((v) => !v);
+        }}
+        className={tool}
+      >
+        🔗
+      </button>
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('clear')}
+        aria-label={t('clear')}
+        data-testid="email-editor-clear"
+        onMouseDown={keep}
+        onClick={() => run('removeFormat')}
+        className={tool}
+      >
+        Tx
+      </button>
+    </div>
+  );
+  const linkBar = (
+    <>
       {linkOpen && (
         <div className="mb-1 flex flex-wrap items-center gap-1.5 text-xs">
           <input
@@ -260,6 +263,10 @@ export function RichEditor({
           )}
         </div>
       )}
+    </>
+  );
+  return (
+    <div className={cn('min-w-0 flex-1', className)}>
       <div
         ref={box}
         role="textbox"
@@ -280,13 +287,15 @@ export function RichEditor({
         onPaste={onPaste}
         onKeyDown={onKey}
         className={cn(
-          'max-h-60 min-h-20 w-full overflow-y-auto rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary',
+          'max-h-60 min-h-10 w-full overflow-y-auto rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary',
           'empty:before:text-muted-foreground empty:before:content-[attr(data-placeholder)]',
           '[&_blockquote]:ms-1 [&_blockquote]:border-s-4 [&_blockquote]:border-border [&_blockquote]:ps-3 [&_blockquote]:text-muted-foreground',
           '[&_ul]:ms-5 [&_ul]:list-disc [&_ol]:ms-5 [&_ol]:list-decimal [&_a]:text-primary [&_a]:underline',
           disabled && 'cursor-not-allowed bg-muted opacity-70',
         )}
       />
+      {linkBar}
+      {toolbar}
     </div>
   );
 }
