@@ -80,8 +80,16 @@ export function StepRecipients({
             key={m}
             compact
             checked={mode === m}
-            title={t(`audience.modes.${m}.title`)}
-            hint={t(`audience.modes.${m}.hint`)}
+            title={t(
+              email && m !== 'audience'
+                ? `audience.emailModes.${m}.title`
+                : `audience.modes.${m}.title`,
+            )}
+            hint={t(
+              email && m !== 'audience'
+                ? `audience.emailModes.${m}.hint`
+                : `audience.modes.${m}.hint`,
+            )}
             onSelect={() => onMode(m)}
           />
         ))}
@@ -186,40 +194,34 @@ export function StepRecipients({
               patch({ csvText: await readFileText(f) });
             }}
           />
-          <p className="mt-1 text-[11px] text-muted-foreground">{t('audience.csvHint')}</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {t(email ? 'audience.emailCsvHint' : 'audience.csvHint')}
+          </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {t('audience.csvRows', { count: countCsvRows(form.csvText) })}
           </p>
-          {email && (
-            <p role="alert" className="mt-1 text-xs text-warning">
-              {t('audience.emailNoAddress')}
-            </p>
-          )}
         </div>
       )}
 
       {mode === 'manual' && (
         <Field
-          label={t('audience.numbers')}
+          label={t(email ? 'audience.emails' : 'audience.numbers')}
           htmlFor="camp-numbers"
-          hint={t('audience.numbersHint')}
+          hint={t(email ? 'audience.emailsHint' : 'audience.numbersHint')}
         >
           <Textarea
             id="camp-numbers"
             rows={8}
             value={form.manualNumbers}
             onChange={(e) => patch({ manualNumbers: e.target.value })}
-            placeholder={t('audience.numbersPlaceholder')}
+            placeholder={t(email ? 'audience.emailsPlaceholder' : 'audience.numbersPlaceholder')}
             className="font-mono text-xs"
           />
           <p className="mt-1 text-xs text-muted-foreground">
-            {t('audience.numbersCount', { count: countNumbers(form.manualNumbers) })}
+            {t(email ? 'audience.emailsCount' : 'audience.numbersCount', {
+              count: countNumbers(form.manualNumbers),
+            })}
           </p>
-          {email && (
-            <p role="alert" className="mt-1 text-xs text-warning">
-              {t('audience.emailNoAddress')}
-            </p>
-          )}
         </Field>
       )}
     </StepCard>

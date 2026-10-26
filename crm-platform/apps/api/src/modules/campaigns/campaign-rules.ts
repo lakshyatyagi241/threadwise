@@ -135,6 +135,78 @@ export function parseCsv(text: string): ParsedCsv {
   return { numbers, attrsByPhone };
 }
 
+// ---------------------------------------------------------------- email recipients
+
+const EMAIL_SHAPE = /^[^\s@,;]+@[^\s@,;]+\.[^\s@,;]+$/;
+const EMAIL_COLUMNS = ['email', 'e-mail', 'email address', 'email_address', 'emailaddress', 'mail'];
+
+/** One typed or uploaded address as the audience keeps it: trimmed, lower case; null when it is not an address. */
+export function cleanEmail(raw: string): string | null {
+  const v = raw.trim().toLowerCase();
+  return v.length <= 254 && EMAIL_SHAPE.test(v) ? v : null;
+}
+
+/** The addresses typed one per line, or split by a comma or semicolon; invalid ones are left out, repeats kept once. */
+export function parseManualEmails(text: string): string[] {
+  const out = new Set<string>();
+  for (const part of text.split(/[\n,;]+/)) {
+    const e = cleanEmail(part);
+    if (e) out.add(e);
+  }
+  return [...out];
+}
+
+export interface ParsedEmailCsv {
+  emails: string[];
+  /** Every other column of the row (the name too), by address. */
+  attrsByEmail: Map<string, Record<string, string>>;
+}
+
+/**
+ * A recipients CSV for an email campaign: the column called email (or e-mail, email address), else the first column. Any other column
+ * is kept for the contact (`name` is its name), as the phone CSV does.
+ */
+export function parseEmailCsv(text: string): ParsedEmailCsv {
+  const emails: string[] = [];
+  const attrsByEmail = new Map<string, Record<string, string>>();
+  const lines = text.split(/\r?\n/).filter((l) => l.trim() !== '');
+  let headers: string[] | null = null;
+  let emailIdx = 0;
+  lines.forEach((line, i) => {
+    const cols = csvCells(line);
+    if (i === 0) {
+      const lower = cols.map((c) => c.trim().toLowerCase());
+      const at = lower.findIndex((c) => EMAIL_COLUMNS.includes(c));
+      if (at !== -1 || cols.some((c) => HEADER_NAMES.test(c.trim()))) {
+        headers = lower;
+        emailIdx = at === -1 ? 0 : at;
+        return;
+      }
+    }
+    const email = cleanEmail(cols[emailIdx] ?? '');
+    if (!email) return;
+    if (!emails.includes(email)) emails.push(email);
+    if (!headers) return;
+    const attrs: Record<string, string> = {};
+    headers.forEach((h, ci) => {
+      const name = h.trim();
+      if (ci === emailIdx || name === '' || RESERVED_COLUMNS.has(name)) return;
+      const val = (cols[ci] ?? '').trim();
+      if (val === '') return;
+      attrs[name] = val;
+      const snake = name.replace(/[ -]/g, '_');
+      if (snake !== name) attrs[snake] = val;
+    });
+    if (Object.keys(attrs).length > 0)
+      attrsByEmail.set(email, { ...(attrsByEmail.get(email) ?? {}), ...attrs });
+  });
+  return { emails, attrsByEmail };
+}
+
+export const SAMPLE_EMAIL_CSV =
+  'name,email\nAarav Sharma,aarav@example.com\nPriya Patel,priya@example.com\n';
+export const SAMPLE_EMAIL_CSV_FILE = 'campaign-email-recipients-sample.csv';
+
 export const SAMPLE_CSV =
   'name,country_code,phone\nAarav Sharma,91,9812345678\nPriya Patel,91,9898765432\n';
 export const SAMPLE_CSV_FILE = 'campaign-recipients-sample.csv';

@@ -262,7 +262,9 @@ function Builder({
 
   const sampleCsv = async () => {
     try {
-      const { blob, filename } = await download('/campaigns/sample-csv');
+      const { blob, filename } = await download(
+        emailChannel ? '/campaigns/sample-csv?channel=email' : '/campaigns/sample-csv',
+      );
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

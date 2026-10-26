@@ -148,6 +148,6 @@ export function emailSkipped(
 ): { contacts: number; numbers: number; total: number } {
   const noAddress = new Set(contacts.filter((c) => (c.email ?? '').trim() === '').map((c) => c.id));
   const picked = f.contactIds.filter((id) => noAddress.has(id)).length;
-  const numbers = countNumbers(f.manualNumbers) + countCsvRows(f.csvText);
-  return { contacts: picked, numbers, total: picked + numbers };
+  // A typed address or a CSV row is matched to (or made into) a contact with that address, so none of them is skipped.
+  return { contacts: picked, numbers: 0, total: picked };
 }
