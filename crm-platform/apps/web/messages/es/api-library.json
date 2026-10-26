@@ -91,7 +91,6 @@
       "title": "Eliminar API",
       "message": "¿Seguro que quieres eliminar {name}? Esta acción no se puede deshacer.",
       "delete": "Eliminar",
-      "deleteAnyway": "Eliminar de todas formas",
       "done": "Se eliminó {name}.",
       "checking": "Comprobando qué flujos la usan...",
       "usageFailed": "No se pudo comprobar qué flujos usan esta API. Si alguno la usa, al eliminarla, ese paso saldrá por su puerto de error.",
@@ -99,7 +98,7 @@
       "published": "Publicada",
       "draft": "Borrador",
       "nodes": "{count, plural, one {# paso} other {# pasos}}",
-      "forceNote": "Si la eliminas de todas formas, esos pasos dejarán de funcionar y saldrán por su puerto de error. Sus registros se conservan."
+      "blocked": "Esta API no se puede eliminar mientras la usen flujos. Quita su paso de estos flujos, o elige otra API allí, y luego elimínala aquí."
     },
     "logs": {
       "title": "Registros de API",

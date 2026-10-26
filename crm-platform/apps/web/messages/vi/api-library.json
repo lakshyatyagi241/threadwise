@@ -91,7 +91,6 @@
       "title": "Xóa API",
       "message": "Bạn có chắc muốn xóa {name}? Thao tác này không thể hoàn tác.",
       "delete": "Xóa",
-      "deleteAnyway": "Vẫn xóa",
       "done": "Đã xóa {name}.",
       "checking": "Đang kiểm tra luồng nào đang dùng API...",
       "usageFailed": "Không thể kiểm tra luồng nào đang dùng API này. Nếu có luồng dùng, xóa API sẽ khiến bước đó thoát qua cổng lỗi.",
@@ -99,7 +98,7 @@
       "published": "Đã xuất bản",
       "draft": "Bản nháp",
       "nodes": "{count, plural, one {# bước} other {# bước}}",
-      "forceNote": "Nếu vẫn xóa, các bước đó sẽ ngừng hoạt động và thoát qua cổng lỗi. Nhật ký vẫn được giữ lại."
+      "blocked": "Không thể xóa API này khi còn luồng đang dùng. Hãy gỡ bước của nó khỏi các luồng này, hoặc chọn API khác ở đó, rồi xóa tại đây."
     },
     "logs": {
       "title": "Nhật ký API",

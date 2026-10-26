@@ -174,7 +174,8 @@
         "status": "状态",
         "schedule": "排期",
         "actions": "操作"
-      }
+      },
+      "newCampaignAny": "新建活动"
     },
     "builder": {
       "loadError": "无法加载此营销活动。",
@@ -725,7 +726,11 @@
         "balanceShort": "余额不足：还需 {shortfall}。",
         "balanceLowFull": "余额低于全部费用 {full}：目前套餐可以覆盖，但套餐用完后将无法覆盖。",
         "chargedNowLabel": "现从您的钱包扣款"
-      }
+      },
+      "kickerEmail": "邮件活动 / 新建",
+      "kickerEditEmail": "邮件活动 / 编辑",
+      "titleEmail": "创建新邮件",
+      "titleEditEmail": "编辑您的邮件"
     },
     "detail": {
       "notFound": "未找到该营销活动。",

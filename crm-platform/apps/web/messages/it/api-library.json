@@ -91,7 +91,6 @@
       "title": "Elimina API",
       "message": "Eliminare {name}? L'operazione non può essere annullata.",
       "delete": "Elimina",
-      "deleteAnyway": "Elimina comunque",
       "done": "{name} è stata eliminata.",
       "checking": "Verifica dei flussi che la usano...",
       "usageFailed": "Impossibile verificare quali flussi usano questa API. Se ne esiste uno, eliminarla farà uscire quel passaggio dalla sua porta di errore.",
@@ -99,7 +98,7 @@
       "published": "Pubblicata",
       "draft": "Bozza",
       "nodes": "{count, plural, one {# passaggio} other {# passaggi}}",
-      "forceNote": "Se la elimini comunque, questi passaggi smetteranno di funzionare e usciranno dalla porta di errore. I suoi log vengono conservati."
+      "blocked": "Questa API non può essere eliminata finché dei flussi la usano. Rimuovi il suo passaggio da questi flussi, o scegli lì un'altra API, poi eliminala qui."
     },
     "logs": {
       "title": "Log API",

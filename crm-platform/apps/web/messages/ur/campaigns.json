@@ -174,7 +174,8 @@
         "status": "اسٹیٹس",
         "schedule": "شیڈول",
         "actions": "کارروائیاں"
-      }
+      },
+      "newCampaignAny": "نئی مہم"
     },
     "builder": {
       "loadError": "یہ مہم لوڈ نہیں ہو سکی۔",
@@ -725,7 +726,11 @@
         "balanceShort": "بیلنس کافی نہیں ہے: آپ کو مزید {shortfall} درکار ہیں۔",
         "balanceLowFull": "بیلنس {full} کی مکمل لاگت سے کم ہے: آپ کا پلان اسے ابھی پورا کرتا ہے، مگر پلان ختم ہونے کے بعد نہیں۔",
         "chargedNowLabel": "ابھی آپ کے والٹ سے کٹے گا"
-      }
+      },
+      "kickerEmail": "ای میل مہمات / نئی",
+      "kickerEditEmail": "ای میل مہمات / ترمیم",
+      "titleEmail": "نئی ای میل بنائیں",
+      "titleEditEmail": "اپنی ای میل میں ترمیم کریں"
     },
     "detail": {
       "notFound": "وہ مہم نہیں ملی۔",

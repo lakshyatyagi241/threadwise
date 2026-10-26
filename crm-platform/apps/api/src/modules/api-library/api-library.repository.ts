@@ -218,8 +218,9 @@ export class ApiLibraryRepository {
   }
 
   /**
-   * The flows with at least one node that calls the API. A flow's graph is `flow_data.flowNodes[]` with `{ type: 'api_library',
-   * data: { apiId } }`; containment on the jsonb finds them without reading every graph into the application.
+   * The flows with at least one node that calls the API, in the draft or in the published copy (the copy is what runs, and it keeps the
+   * node after the draft drops it). A flow's graph is `flow_data.flowNodes[]` with `{ type: 'api_library', data: { apiId } }`;
+   * containment on the jsonb finds them without reading every graph into the application.
    */
   async flowsUsing(tx: Tx, orgId: number, apiUuid: string): Promise<UsageRow[]> {
     const probe = JSON.stringify({
@@ -227,10 +228,12 @@ export class ApiLibraryRepository {
     });
     const res = await tx.execute(sql`
       SELECT f.uuid, f.flow_name AS name, (f.is_published AND f.is_active) AS published,
-             (SELECT count(*)::int FROM jsonb_array_elements(f.flow_data -> 'flowNodes') n
+             (SELECT count(*)::int FROM jsonb_array_elements(
+                CASE WHEN jsonb_typeof(f.flow_data -> 'flowNodes') = 'array' THEN f.flow_data -> 'flowNodes' ELSE '[]'::jsonb END) n
                WHERE n ->> 'type' = 'api_library' AND n -> 'data' ->> 'apiId' = ${apiUuid}) AS node_count
       FROM flows f
-      WHERE f.org_id = ${orgId} AND jsonb_typeof(f.flow_data -> 'flowNodes') = 'array' AND f.flow_data @> ${probe}::jsonb
+      WHERE f.org_id = ${orgId}
+        AND (f.flow_data @> ${probe}::jsonb OR f.published_flow_data @> ${probe}::jsonb)
       ORDER BY lower(f.flow_name), f.id LIMIT 200`);
     return (res.rows as Raw[]).map((r) => ({
       uuid: r.uuid as string,

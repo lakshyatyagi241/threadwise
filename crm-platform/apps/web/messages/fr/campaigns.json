@@ -174,7 +174,8 @@
         "status": "Statut",
         "schedule": "Planification",
         "actions": "Actions"
-      }
+      },
+      "newCampaignAny": "Nouvelle campagne"
     },
     "builder": {
       "loadError": "Impossible de charger cette campagne.",
@@ -725,7 +726,11 @@
         "balanceShort": "Le solde est insuffisant : il vous manque {shortfall}.",
         "balanceLowFull": "Le solde est inférieur au coût total de {full} : votre forfait le couvre pour l’instant, mais plus une fois le forfait épuisé.",
         "chargedNowLabel": "Débité maintenant de votre portefeuille"
-      }
+      },
+      "kickerEmail": "Campagnes e-mail / Nouvelle",
+      "kickerEditEmail": "Campagnes e-mail / Modifier",
+      "titleEmail": "Créer un nouvel e-mail",
+      "titleEditEmail": "Modifier votre e-mail"
     },
     "detail": {
       "notFound": "Cette campagne est introuvable.",

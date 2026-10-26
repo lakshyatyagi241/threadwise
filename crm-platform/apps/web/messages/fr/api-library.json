@@ -91,7 +91,6 @@
       "title": "Supprimer l'API",
       "message": "Voulez-vous vraiment supprimer {name} ? Cette action est irréversible.",
       "delete": "Supprimer",
-      "deleteAnyway": "Supprimer quand même",
       "done": "{name} a été supprimée.",
       "checking": "Vérification des flux qui l'utilisent...",
       "usageFailed": "Impossible de vérifier quels flux utilisent cette API. Si l'un d'eux l'utilise, sa suppression fait sortir cette étape par son port d'erreur.",
@@ -99,7 +98,7 @@
       "published": "Publié",
       "draft": "Brouillon",
       "nodes": "{count, plural, one {# étape} other {# étapes}}",
-      "forceNote": "Si vous la supprimez quand même, ces étapes ne fonctionneront plus et sortiront par leur port d'erreur. Ses journaux sont conservés."
+      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici."
     },
     "logs": {
       "title": "Journaux des API",

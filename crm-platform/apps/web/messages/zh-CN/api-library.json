@@ -91,7 +91,6 @@
       "title": "删除 API",
       "message": "确定要删除 {name} 吗？此操作无法撤销。",
       "delete": "删除",
-      "deleteAnyway": "仍然删除",
       "done": "已删除 {name}。",
       "checking": "正在检查哪些流程在使用它...",
       "usageFailed": "无法检查哪些流程在使用此 API。如果有流程在使用，删除后该步骤将从其错误端口离开。",
@@ -99,7 +98,7 @@
       "published": "已发布",
       "draft": "草稿",
       "nodes": "{count, plural, other {# 个步骤}}",
-      "forceNote": "如果仍然删除，这些步骤将停止工作，并从其错误端口离开。其日志会保留。"
+      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。"
     },
     "logs": {
       "title": "API 日志",
