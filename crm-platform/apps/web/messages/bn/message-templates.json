@@ -428,7 +428,9 @@
         "buttons": "বোতাম",
         "buttonText": "বোতামের লেখা",
         "buttonUrl": "ওয়েবসাইট URL",
-        "buttonPhone": "ফোন নম্বর"
+        "buttonPhone": "ফোন নম্বর",
+        "moveUp": "কার্ড {n} উপরে সরান",
+        "moveDown": "কার্ড {n} নিচে সরান"
       },
       "offer": {
         "title": "সীমিত সময়ের অফার",

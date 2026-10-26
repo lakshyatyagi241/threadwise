@@ -98,7 +98,9 @@
       "published": "Gepubliceerd",
       "draft": "Concept",
       "nodes": "{count, plural, one {# stap} other {# stappen}}",
-      "blocked": "Deze API kan niet worden verwijderd zolang flows hem gebruiken. Verwijder de stap uit deze flows of kies daar een andere API, en verwijder hem dan hier."
+      "blocked": "Deze API kan niet worden verwijderd zolang flows hem gebruiken. Verwijder de stap uit deze flows of kies daar een andere API, en verwijder hem dan hier.",
+      "publishedCopy": "De gepubliceerde versie roept hem nog aan",
+      "republish": "Publiceer de flow opnieuw zonder deze stap en verwijder dan de API."
     },
     "logs": {
       "title": "API-logs",

@@ -74,8 +74,10 @@ export const apiLibraryUsageItemSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   published: z.boolean(),
-  /** How many nodes of that flow call this API. */
+  /** How many nodes of the flow's draft call this API. */
   nodeCount: z.number().int(),
+  /** How many nodes of its published copy (what runs) call it: above 0 with a `nodeCount` of 0 means only the published copy still does. */
+  publishedNodeCount: z.number().int(),
 });
 export type ApiLibraryUsageItem = z.infer<typeof apiLibraryUsageItemSchema>;
 

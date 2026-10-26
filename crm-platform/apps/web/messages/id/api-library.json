@@ -98,7 +98,9 @@
       "published": "Terbit",
       "draft": "Draf",
       "nodes": "{count, plural, one {# langkah} other {# langkah}}",
-      "blocked": "API ini tidak dapat dihapus selama masih dipakai alur. Hapus langkahnya dari alur tersebut, atau pilih API lain di sana, lalu hapus di sini."
+      "blocked": "API ini tidak dapat dihapus selama masih dipakai alur. Hapus langkahnya dari alur tersebut, atau pilih API lain di sana, lalu hapus di sini.",
+      "publishedCopy": "Versi yang dipublikasikan masih memanggilnya",
+      "republish": "Publikasikan ulang alur tanpa langkah ini, lalu hapus API."
     },
     "logs": {
       "title": "Log API",

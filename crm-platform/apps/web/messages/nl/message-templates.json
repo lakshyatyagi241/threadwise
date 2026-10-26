@@ -428,7 +428,9 @@
         "buttons": "Knoppen",
         "buttonText": "Knoptekst",
         "buttonUrl": "Website-URL",
-        "buttonPhone": "Telefoonnummer"
+        "buttonPhone": "Telefoonnummer",
+        "moveUp": "Kaart {n} omhoog",
+        "moveDown": "Kaart {n} omlaag"
       },
       "offer": {
         "title": "Tijdelijke aanbieding",

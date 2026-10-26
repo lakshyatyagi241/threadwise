@@ -203,6 +203,21 @@ export function listItems(options: unknown): ListItem[] {
   return asArray(options).map((o, i) => flbListOption(o, i));
 }
 
+/**
+ * The items as stored, for the form's own inputs: a title the person has cleared stays empty while they type (the preview and the
+ * runtime fill an empty title with "Item N", but an input that did the same would bring the text back at every backspace).
+ */
+export function listItemsAsTyped(options: unknown): ListItem[] {
+  return asArray(options).map((o, i) => {
+    if (typeof o !== 'string' && o && typeof o === 'object') {
+      const r = o as Record<string, unknown>;
+      const text = (v: unknown) => (typeof v === 'string' ? v : '');
+      return { title: text(r.title), description: text(r.description), section: text(r.section) };
+    }
+    return flbListOption(o, i);
+  });
+}
+
 export interface SectionGroup<T> {
   title: string;
   rows: T[];

@@ -765,7 +765,14 @@ describe('deleting an API that flows use', () => {
 
     const usage = await api.as(t.admin).get(`/v2/api-library/apis/${made.id}/usage`);
     expect(usage.body.data).toEqual([
-      { kind: 'flow', id: flow, name: 'Order status', published: true, nodeCount: 2 },
+      {
+        kind: 'flow',
+        id: flow,
+        name: 'Order status',
+        published: true,
+        nodeCount: 2,
+        publishedNodeCount: 0,
+      },
     ]);
 
     await api
@@ -782,7 +789,10 @@ describe('deleting an API that flows use', () => {
     expect((await api.as(t.admin).get(`/v2/api-library/apis/${made.id}`)).status).toBe(200);
 
     // the flow stops calling it: the delete now goes through, and the log of its runs stays
-    await h.owner.query(`UPDATE flows SET flow_data = '{"flowNodes":[],"flowEdges":[]}'::jsonb WHERE uuid = $1`, [flow]);
+    await h.owner.query(
+      `UPDATE flows SET flow_data = '{"flowNodes":[],"flowEdges":[]}'::jsonb WHERE uuid = $1`,
+      [flow],
+    );
     const deleted = await api.as(t.admin).delete(`/v2/api-library/apis/${made.id}`);
     expect(deleted.status).toBe(204);
     expect((await api.as(t.admin).get(`/v2/api-library/apis/${made.id}`)).status).toBe(404);

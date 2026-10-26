@@ -7,6 +7,7 @@ import {
   ctaActions,
   groupBySection,
   listItems,
+  listItemsAsTyped,
   moveItem,
   removeConditionRow,
   resolveTriggerChannel,
@@ -195,5 +196,17 @@ describe('agentLabel', () => {
     expect(agentLabel(t, { name: '', provider: 'openai', model: 'x' })).toBe(
       'agentWithModel:{"name":"agentFallback","model":"openai/x"}',
     );
+  });
+});
+
+describe('list items as typed', () => {
+  it('keeps a cleared title empty, where the preview fills it with Item N', () => {
+    const options = [{ title: '' }, { title: 'Two', description: 'd' }, 'Three'];
+    expect(listItems(options)[0]!.title).toBe('Item 1');
+    expect(listItemsAsTyped(options)).toEqual([
+      { title: '', description: '', section: '' },
+      { title: 'Two', description: 'd', section: '' },
+      { title: 'Three', description: '', section: '' },
+    ]);
   });
 });

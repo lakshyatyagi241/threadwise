@@ -428,7 +428,9 @@
         "buttons": "버튼",
         "buttonText": "버튼 텍스트",
         "buttonUrl": "웹사이트 URL",
-        "buttonPhone": "전화번호"
+        "buttonPhone": "전화번호",
+        "moveUp": "카드 {n} 위로 이동",
+        "moveDown": "카드 {n} 아래로 이동"
       },
       "offer": {
         "title": "기간 한정 혜택",
