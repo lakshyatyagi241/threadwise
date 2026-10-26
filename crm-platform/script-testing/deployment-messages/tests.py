@@ -89,7 +89,9 @@ FIX.update(compare=[commit(sha(1), "fix x", "alice"), commit(sha(2), "Merge pull
 out, _ = run("live", A, B, "88")
 check("merge commit: PR number, title, URL", '#12 "Fix the thing"' in out and "https://github.com/o/r/pull/12" in out, out)
 check("merge commit: author and merger differ", "Author: @alice" in out and "Deployed by: @bob" in out, out)
-check("live title and versions", out.startswith("✅ *Release live*") and "`bbbbbbbbb` (was `aaaaaaaaa`)" in out and "/commit/bbbbbbbbb" in out and "Took 88s" in out and "UTC" in out, out)
+check("live title and versions", out.startswith("✅ *Release live*") and "`bbbbbbbbb` (was `aaaaaaaaa`)" in out and "/commit/bbbbbbbbb" in out and "Took 88 s" in out and " IST" in out and "UTC" not in out, out)
+out2, _ = run("live", A, B, "267")
+check("a long release shows minutes and seconds, and the time is Indian Standard Time", "Took 4 min 27 s" in out2 and re.search(r"\d\d \w{3} \d{4}, \d\d:\d\d IST", out2) is not None, out2)
 check("only needed API calls (no call for branch commit)", sum(bool(re.search(r"/commits/\w+/pulls$", h[0])) for h in hits) == 1 and sum(bool(re.search(r"/pulls/\d+$", h[0])) for h in hits) == 1, str(hits))
 n = len(hits); out2, _ = run("live", A, B, "88", fresh=False)
 check("second run served from 1h cache", len(hits) == 0 and out2.split("\n")[1:4] == out.split("\n")[1:4], str(len(hits)))
@@ -112,7 +114,7 @@ check("direct push: subject, author, no PR", "hotfix: bump timeout" in out and "
 
 # 5 unchanged
 out, _ = run("unchanged", B, B, "40", "Rolled back.")
-check("unchanged variant", out.startswith("⚠️ *Deploy finished but the live version did not change*") and "Rolled back." in out, out)
+check("unchanged variant", out.startswith("⚠️ *Release finished, but the live version did not change*") and "Rolled back." in out, out)
 
 # 6 fallbacks
 FIX.update(compare=[commit(sha(3), "Add feature (#34)", "carol")], pulls={sha(3): [pr(34, "Add feature", "carol", "carol")]})

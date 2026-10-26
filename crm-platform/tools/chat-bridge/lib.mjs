@@ -43,7 +43,14 @@ export function routeFor(a, env = process.env) {
 export const channelFor = (a, env) => routeFor(a, env).channel;
 
 const ICON = { critical: '🔴', warning: '🟠', info: '🔵', resolved: '✅' };
-const fmtTime = (t) => (t && !String(t).startsWith('0001') ? String(t).replace('T', ' ').replace(/\.\d+/, '').replace('Z', ' UTC') : '');
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+// "24 Oct, 00:33 IST": Indian Standard Time (UTC+5:30), the zone the team reads the cards in.
+const fmtTime = (t) => {
+  if (!t || String(t).startsWith('0001')) return '';
+  const ms = Date.parse(t); if (!Number.isFinite(ms)) return '';
+  const d = new Date(ms + 19800000), p = (n) => String(n).padStart(2, '0');
+  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())} IST`;
+};
 
 function alertWidgets(a, grafanaUrl) {
   const l = a.labels ?? {}, n = a.annotations ?? {};
