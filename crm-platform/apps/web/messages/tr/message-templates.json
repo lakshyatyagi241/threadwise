@@ -428,7 +428,9 @@
         "buttons": "Düğmeler",
         "buttonText": "Düğme metni",
         "buttonUrl": "Web sitesi URL'si",
-        "buttonPhone": "Telefon numarası"
+        "buttonPhone": "Telefon numarası",
+        "moveUp": "{n}. kartı yukarı taşı",
+        "moveDown": "{n}. kartı aşağı taşı"
       },
       "offer": {
         "title": "Sınırlı süreli teklif",

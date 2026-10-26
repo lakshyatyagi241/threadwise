@@ -428,7 +428,9 @@
         "buttons": "按钮",
         "buttonText": "按钮文字",
         "buttonUrl": "网站链接",
-        "buttonPhone": "电话号码"
+        "buttonPhone": "电话号码",
+        "moveUp": "将卡片 {n} 上移",
+        "moveDown": "将卡片 {n} 下移"
       },
       "offer": {
         "title": "限时优惠",

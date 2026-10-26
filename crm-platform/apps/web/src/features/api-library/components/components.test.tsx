@@ -247,7 +247,16 @@ describe('delete with the usage guard', () => {
   it('lists the flows and blocks the delete when some use it', () => {
     state.usage = q({
       data: {
-        data: [{ kind: 'flow', id: 'f1', name: 'Welcome flow', published: true, nodeCount: 2 }],
+        data: [
+          {
+            kind: 'flow',
+            id: 'f1',
+            name: 'Welcome flow',
+            published: true,
+            nodeCount: 2,
+            publishedNodeCount: 2,
+          },
+        ],
       },
     });
     const out = html(<DeleteApiDialog api={api} onClose={() => undefined} />);
@@ -258,6 +267,28 @@ describe('delete with the usage guard', () => {
     expect(out).toContain('cannot be deleted while flows use it');
     expect(out).not.toContain('Delete anyway');
     expect(out).toMatch(/<button[^>]*disabled[^>]*>[^<]*Delete</);
+  });
+
+  it('says the published version still calls it when the draft no longer does', () => {
+    state.usage = q({
+      data: {
+        data: [
+          {
+            kind: 'flow',
+            id: 'f2',
+            name: 'Old flow',
+            published: true,
+            nodeCount: 0,
+            publishedNodeCount: 1,
+          },
+        ],
+      },
+    });
+    const out = html(<DeleteApiDialog api={api} onClose={() => undefined} />);
+    expect(out).toContain('Old flow');
+    expect(out).toContain('The published version still calls it');
+    expect(out).toContain('Publish the flow again without this step');
+    expect(out).not.toContain('0 steps');
   });
 
   it('waits for the check before it lets the person confirm', () => {
@@ -292,7 +323,7 @@ describe('logs', () => {
     expect(page).toContain('>API<');
     expect(page).toContain('500');
     expect(page).toContain('1.50 s');
-    expect(page).toContain('Flow');
+    expect(page).toContain('Simple flow');
     expect(page).toContain('HTTP 500');
     expect(html(<LogsPanel apiId={ID} paging={paging} />)).not.toContain('>API</th>');
   });

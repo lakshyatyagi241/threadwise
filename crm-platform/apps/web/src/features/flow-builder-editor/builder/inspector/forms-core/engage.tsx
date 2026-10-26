@@ -22,7 +22,8 @@ import { AddLink, CardHeader, InfoBox } from './parts';
 import { CtaPreview, LocationPreview } from './previews';
 import { LocationPicker } from '../../location-picker';
 
-const CTA_TYPES = ['url', 'phone', 'call_now', 'copy'] as const;
+/** `call_now` is the same button as `phone` (both dial the number), so only one of them is offered; a step saved with `call_now` shows as Call. */
+const CTA_TYPES = ['url', 'phone', 'copy'] as const;
 
 /** The key (under `ctaHint`) of the hint below an action: Call and Copy are not native buttons on WhatsApp Official. */
 function ctaHintKey(type: string, unofficial: boolean): string {
@@ -62,7 +63,7 @@ export function CtaForm({ data: d, set, env }: FormProps) {
               onRemove={() => setActions(actions.filter((_, j) => j !== i))}
             >
               <select
-                value={type}
+                value={type === 'call_now' ? 'phone' : type}
                 onChange={(e) =>
                   setActions(
                     actions.map((x, j) => (j === i ? changeCtaType(th, x, e.target.value) : x)),

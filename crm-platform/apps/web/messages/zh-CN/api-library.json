@@ -16,8 +16,8 @@
       "failed": "失败",
       "source": {
         "test": "测试",
-        "flow": "流程",
-        "automation": "自动化"
+        "flow": "简易流程",
+        "automation": "高级流程"
       },
       "errorKind": {
         "blocked": "地址已被拦截",
@@ -98,7 +98,9 @@
       "published": "已发布",
       "draft": "草稿",
       "nodes": "{count, plural, other {# 个步骤}}",
-      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。"
+      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。",
+      "publishedCopy": "已发布的版本仍在调用它",
+      "republish": "请去掉此步骤后重新发布流程，然后再删除该 API。"
     },
     "logs": {
       "title": "API 日志",
@@ -170,7 +172,9 @@
         "user": "运行者（用户 ID）",
         "noContext": "未涉及任何流程或联系人。"
       },
-      "unsaved": "未保存"
+      "unsaved": "未保存",
+      "export": "导出 CSV",
+      "exporting": "正在导出…"
     },
     "variables": {
       "insertFor": "将变量插入 {label}",
@@ -323,6 +327,7 @@
       "payloadHint": "正文中发送的内容。使用 '{ }' 按钮可在值中插入变量。",
       "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。",
       "importSkipped": "粘贴的命令还会发送一个文件（{names}）。此处无法导入文件，因此已略过。其余内容均已填入。",
+      "importForm": "粘贴的命令以网页表单（a=1&b=2）的形式发送数据。此 API 发送 JSON 或 multipart form-data，因此表单字段已转换为 JSON 对象。请确认您调用的 API 接受 JSON。",
       "payloadTypedHint": "要发送真正的数字或是/否，请不加引号书写变量：{example}。"
     },
     "test": {

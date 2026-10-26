@@ -16,8 +16,8 @@
       "failed": "Failed",
       "source": {
         "test": "Test",
-        "flow": "Flow",
-        "automation": "Automation"
+        "flow": "Simple flow",
+        "automation": "Advanced flow"
       },
       "errorKind": {
         "blocked": "Address blocked",
@@ -98,7 +98,9 @@
       "published": "Published",
       "draft": "Draft",
       "nodes": "{count, plural, one {# step} other {# steps}}",
-      "blocked": "This API cannot be deleted while flows use it. Remove its step from these flows, or pick another API there, then delete it here."
+      "blocked": "This API cannot be deleted while flows use it. Remove its step from these flows, or pick another API there, then delete it here.",
+      "publishedCopy": "The published version still calls it",
+      "republish": "Publish the flow again without this step, then delete the API."
     },
     "logs": {
       "title": "API logs",
@@ -170,7 +172,9 @@
         "openContact": "Open the contact",
         "user": "Run by (user id)",
         "noContext": "No flow or contact was involved."
-      }
+      },
+      "export": "Export CSV",
+      "exporting": "Exporting…"
     },
     "variables": {
       "insertFor": "Insert a variable into {label}",
@@ -325,6 +329,7 @@
       "importBody": "The pasted command is a {method} that also has a message. A {method} call here sends no message, so the message is kept in the form but will not be sent. Change the method to POST, PUT or PATCH to send it.",
       "importMethod": "The method \"{method}\" in the pasted command is not one we know (GET, POST, PUT, PATCH, DELETE). It was set to GET: check the method before saving.",
       "importSkipped": "The pasted command also sends a file ({names}). A file cannot be imported here, so it was left out. Everything else was filled in.",
+      "importForm": "The pasted command sends its data as a web form (a=1&b=2). This API sends JSON or multipart form-data, so the form fields were turned into a JSON object. Check that the API you call accepts JSON.",
       "payloadTypedHint": "To send a real number or yes/no, write the variable without quotes: {example}."
     },
     "test": {

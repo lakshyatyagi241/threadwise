@@ -85,6 +85,7 @@ export interface UsageRow {
   name: string;
   published: boolean;
   nodeCount: number;
+  publishedNodeCount: number;
 }
 
 /** Rows of `api_library_apis` (RLS keeps every query inside the caller's workspace). */
@@ -230,7 +231,10 @@ export class ApiLibraryRepository {
       SELECT f.uuid, f.flow_name AS name, (f.is_published AND f.is_active) AS published,
              (SELECT count(*)::int FROM jsonb_array_elements(
                 CASE WHEN jsonb_typeof(f.flow_data -> 'flowNodes') = 'array' THEN f.flow_data -> 'flowNodes' ELSE '[]'::jsonb END) n
-               WHERE n ->> 'type' = 'api_library' AND n -> 'data' ->> 'apiId' = ${apiUuid}) AS node_count
+               WHERE n ->> 'type' = 'api_library' AND n -> 'data' ->> 'apiId' = ${apiUuid}) AS node_count,
+             (SELECT count(*)::int FROM jsonb_array_elements(
+                CASE WHEN jsonb_typeof(f.published_flow_data -> 'flowNodes') = 'array' THEN f.published_flow_data -> 'flowNodes' ELSE '[]'::jsonb END) n
+               WHERE n ->> 'type' = 'api_library' AND n -> 'data' ->> 'apiId' = ${apiUuid}) AS published_node_count
       FROM flows f
       WHERE f.org_id = ${orgId}
         AND (f.flow_data @> ${probe}::jsonb OR f.published_flow_data @> ${probe}::jsonb)
@@ -240,6 +244,7 @@ export class ApiLibraryRepository {
       name: (r.name as string | null) ?? '',
       published: r.published === true,
       nodeCount: Number(r.node_count),
+      publishedNodeCount: Number(r.published_node_count),
     }));
   }
 }

@@ -428,7 +428,9 @@
         "buttons": "Pulsanti",
         "buttonText": "Testo del pulsante",
         "buttonUrl": "URL del sito web",
-        "buttonPhone": "Numero di telefono"
+        "buttonPhone": "Numero di telefono",
+        "moveUp": "Sposta su la scheda {n}",
+        "moveDown": "Sposta giù la scheda {n}"
       },
       "offer": {
         "title": "Offerta a tempo limitato",

@@ -133,6 +133,7 @@ export function ApiFormScreen({ id }: { id?: string }) {
                 })}
               </li>
             )}
+            {imported.skipped.some((n) => n.code === 'form') && <li>{t('importForm')}</li>}
             {imported.skipped
               .filter((n) => n.code === 'body')
               .map((n) => (

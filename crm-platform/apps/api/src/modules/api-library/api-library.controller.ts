@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,12 +15,14 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createApiLibraryApiSchema,
+  exportApiLibraryLogsQuerySchema,
   listApiLibraryApisQuerySchema,
   listApiLibraryLogsQuerySchema,
   testApiLibraryApiSchema,
   testApiLibraryFunctionSchema,
   updateApiLibraryApiSchema,
   type CreateApiLibraryApiInput,
+  type ExportApiLibraryLogsQuery,
   type ListApiLibraryApisQuery,
   type ListApiLibraryLogsQuery,
   type TestApiLibraryApiInput,
@@ -165,6 +168,20 @@ export class ApiLibraryController {
   })
   logApis() {
     return this.logs.filterApis();
+  }
+
+  // Declared before `logs/:id`, which would otherwise take "export" as a run id.
+  @Get('logs/export')
+  @RequirePermission('integ.apilibrary.read')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="api-library-logs.csv"')
+  @ApiOperation({
+    summary: 'Export the run log as CSV: the list filters, newest first, at most 5,000 runs',
+  })
+  exportLogs(
+    @Query(zodPipe(exportApiLibraryLogsQuerySchema)) query: ExportApiLibraryLogsQuery,
+  ): Promise<string> {
+    return this.logs.exportCsv(query);
   }
 
   @Get('logs/:id')

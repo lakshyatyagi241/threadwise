@@ -17,6 +17,9 @@ interface Args {
   items: Array<{ base: string; outcome: Extract<Outcome, { kind: 'rows' }> }>;
   allowExtraRows: boolean;
   alarm: (m: string) => void;
+  /** when the live balance was read (wallet-history): passages the application wrote after it are activity, not findings */
+  readMs: number | null;
+  warnings: string[];
 }
 
 export async function verifyFaq(a: Args): Promise<void> {
@@ -26,7 +29,10 @@ export async function verifyFaq(a: Args): Promise<void> {
     const e = it.outcome.rows.find((r) => r.table === 'ai_training_sources');
     if (!e) continue;
     const id = e.row.assistant_id;
-    want.set(rowUuid(client, 'faq_knowledge', it.base, e.sub), id === null || id === undefined ? null : Number(id));
+    want.set(
+      rowUuid(client, 'faq_knowledge', it.base, e.sub),
+      id === null || id === undefined ? null : Number(id),
+    );
   }
   if (want.size === 0) return;
 
@@ -44,28 +50,45 @@ export async function verifyFaq(a: Args): Promise<void> {
     }>) {
       const named = want.get(x.uuid);
       if (x.kind !== 'text' || x.label !== 'FAQ')
-        alarm(`FAQ_ENTRY_SHAPE: entry ${x.uuid.slice(0, 8)} is ${x.kind} "${x.label}", expected a text entry labelled FAQ`);
+        alarm(
+          `FAQ_ENTRY_SHAPE: entry ${x.uuid.slice(0, 8)} is ${x.kind} "${x.label}", expected a text entry labelled FAQ`,
+        );
       if (x.assistant_id === null) {
-        alarm(`FAQ_NO_AGENT: FAQ entry ${x.uuid.slice(0, 8)} belongs to no AI agent, so nothing can read it`);
+        alarm(
+          `FAQ_NO_AGENT: FAQ entry ${x.uuid.slice(0, 8)} belongs to no AI agent, so nothing can read it`,
+        );
         continue;
       }
       const agent = Number(x.assistant_id);
       if (named !== null && named !== undefined && named !== agent)
-        alarm(`FAQ_WRONG_AGENT: FAQ entry ${x.uuid.slice(0, 8)} should sit on the assistant of its bot (${named}) and sits on ${agent}`);
+        alarm(
+          `FAQ_WRONG_AGENT: FAQ entry ${x.uuid.slice(0, 8)} should sit on the assistant of its bot (${named}) and sits on ${agent}`,
+        );
       perAgent.set(agent, (perAgent.get(agent) ?? 0) + 1);
     }
     for (const [agent, n] of perAgent)
-      if (n > 1) alarm(`FAQ_DUPLICATE_AGENT: agent ${agent} holds ${n} tool-made FAQ entries, expected one`);
+      if (n > 1)
+        alarm(`FAQ_DUPLICATE_AGENT: agent ${agent} holds ${n} tool-made FAQ entries, expected one`);
 
     if (!a.allowExtraRows) {
+      const readAt = a.readMs === null ? '1970-01-01T00:00:00Z' : new Date(a.readMs).toISOString();
       const t = (
         await tx.execute(sql`
-          SELECT count(*)::int AS n FROM ai_training_chunks c
+          SELECT count(*)::int AS n, count(*) FILTER (WHERE c.created_at > ${readAt}::timestamptz)::int AS after
+          FROM ai_training_chunks c
           JOIN ai_training_sources s ON s.org_id = c.org_id AND s.id = c.source_id
           WHERE c.org_id = ${orgId} AND s.uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify([...want.keys()])}::jsonb)::uuid)`)
-      ).rows[0] as { n: number };
-      if (t.n > 0)
-        alarm(`FAQ_SAFETY: ${t.n} passage(s) already exist for the migrated FAQ entries; the tool writes none (the application's worker makes them)`);
+      ).rows[0] as { n: number; after: number };
+      // passages the application's worker made from the migrated entries after the read are activity, not findings
+      const after = a.readMs === null ? 0 : t.after;
+      if (t.n - after > 0)
+        alarm(
+          `FAQ_SAFETY: ${t.n - after} passage(s) already exist for the migrated FAQ entries; the tool writes none (the application's worker makes them)`,
+        );
+      if (after > 0)
+        a.warnings.push(
+          `FAQ APP ROWS: ${after} passage(s) were made by the application from the migrated FAQ entries after the live balance was read (counted as activity, not findings)`,
+        );
     }
   });
 }

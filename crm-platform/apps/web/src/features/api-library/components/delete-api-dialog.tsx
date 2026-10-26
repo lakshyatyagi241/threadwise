@@ -96,12 +96,15 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
                     name: f.name,
                     extra: f.published,
                     nodes: f.nodeCount,
+                    // The draft no longer calls it, but the copy that runs still does: the flow has to be published again.
+                    stale: f.nodeCount === 0 && f.publishedNodeCount > 0,
                   }))
                 : racing.map((f) => ({
                     id: f.id,
                     name: f.name,
                     extra: undefined,
                     nodes: undefined,
+                    stale: false,
                   }))
               ).map((f) => (
                 <li key={f.id}>
@@ -111,15 +114,18 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
                   {f.extra !== undefined && (
                     <span className="text-xs">
                       {' · '}
-                      {f.extra ? t('published') : t('draft')}
-                      {' · '}
-                      {t('nodes', { count: f.nodes ?? 0 })}
+                      {f.stale
+                        ? t('publishedCopy')
+                        : `${f.extra ? t('published') : t('draft')} · ${t('nodes', { count: f.nodes ?? 0 })}`}
                     </span>
                   )}
                 </li>
               ))}
             </ul>
             <p className="mt-2">{t('blocked')}</p>
+            {flows.some((f) => f.nodeCount === 0 && f.publishedNodeCount > 0) && (
+              <p className="mt-2">{t('republish')}</p>
+            )}
           </Alert>
         ) : null}
       </div>

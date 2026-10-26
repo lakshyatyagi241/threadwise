@@ -97,6 +97,7 @@ const SOCIAL_AND_CHAT = ['chat', ...SOCIAL_FLOW_TYPES] as const;
 /** What the website chat widget renders today: plain text, tap-to-pick replies, a question, the AI reply and files (image, video, audio, document). Lists and carousels wait for the widget to render them. */
 const WEB_CAPABLE = [...SOCIAL_AND_CHAT, 'web'] as const;
 const CHAT = ['chat'] as const;
+const CHAT_AND_WEB = ['chat', 'web'] as const;
 const CALL = ['call'] as const;
 
 const def = (
@@ -151,13 +152,13 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('ai_call', 'AI voice call', 'Engage', 'Call the customer with an AI voice agent'),
   def('google_meet', 'Google Meet', 'Engage', 'Create + send a Meet link'),
   def('wa_form', 'WhatsApp form', 'Engage', 'Send a published Meta form'),
-  // Not a Reference node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). On the chat, social and website flows.
+  // Not a Reference node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). On the WhatsApp and website flows.
   def(
     'api_library',
     'API (from library)',
     'Integrations',
     'Call a saved API from the API Library',
-    WEB_CAPABLE,
+    CHAT_AND_WEB,
   ),
   def('google_sheets', 'Google Sheets', 'Integrations', 'Write or read a row'),
   def('google_docs', 'Google Docs', 'Integrations', 'Generate from a template'),

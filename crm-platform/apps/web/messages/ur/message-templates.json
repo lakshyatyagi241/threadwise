@@ -428,7 +428,9 @@
         "buttons": "بٹن",
         "buttonText": "بٹن کا متن",
         "buttonUrl": "ویب سائٹ URL",
-        "buttonPhone": "فون نمبر"
+        "buttonPhone": "فون نمبر",
+        "moveUp": "کارڈ {n} اوپر لے جائیں",
+        "moveDown": "کارڈ {n} نیچے لے جائیں"
       },
       "offer": {
         "title": "محدود وقت کی پیشکش",

@@ -16,8 +16,8 @@
       "failed": "Échec",
       "source": {
         "test": "Test",
-        "flow": "Flux",
-        "automation": "Automatisation"
+        "flow": "Flux simple",
+        "automation": "Flux avancé"
       },
       "errorKind": {
         "blocked": "Adresse bloquée",
@@ -98,7 +98,9 @@
       "published": "Publié",
       "draft": "Brouillon",
       "nodes": "{count, plural, one {# étape} other {# étapes}}",
-      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici."
+      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici.",
+      "publishedCopy": "La version publiée l'appelle encore",
+      "republish": "Publiez de nouveau le flux sans cette étape, puis supprimez l'API."
     },
     "logs": {
       "title": "Journaux des API",
@@ -170,7 +172,9 @@
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
       },
-      "unsaved": "Non enregistrée"
+      "unsaved": "Non enregistrée",
+      "export": "Exporter en CSV",
+      "exporting": "Export en cours…"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",
@@ -323,6 +327,7 @@
       "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif.",
       "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet.",
       "importSkipped": "La commande collée envoie aussi un fichier ({names}). Un fichier ne peut pas être importé ici, il a donc été laissé de côté. Tout le reste a été rempli.",
+      "importForm": "La commande collée envoie ses données comme un formulaire web (a=1&b=2). Cette API envoie du JSON ou du multipart form-data : les champs ont donc été convertis en objet JSON. Vérifiez que l'API appelée accepte le JSON.",
       "payloadTypedHint": "Pour envoyer un vrai nombre ou oui/non, écrivez la variable sans guillemets : {example}."
     },
     "test": {

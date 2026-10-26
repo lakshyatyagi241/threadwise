@@ -1136,6 +1136,8 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         items: faqItems,
         allowExtraRows: Boolean(opts.allowExtraRows),
         alarm,
+        readMs: walletHistory ? Date.parse(walletHistory.asOf) : null,
+        warnings,
       });
     if (anyRan('automation_flows', 'automation_nodes'))
       await verifyAutomations({
@@ -1330,9 +1332,29 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             alarm(
               `BASELINE_CHANGED: ${table}: ${gone} row(s) that provisioning created were changed or deleted`,
             );
-          if (left.length > 0 && !(feedOk && FEED_TABLES.has(table)))
+          // passages the application's worker wrote for the migrated FAQ entries after the live balance was read: activity, not findings
+          const appAfter =
+            left.length > 0 && table === 'ai_training_chunks' && walletHistory
+              ? await withTenant(db, { orgId }, async (tx) =>
+                  Number(
+                    (
+                      (
+                        await tx.execute(sql`
+                          SELECT count(*) FILTER (WHERE created_at > ${new Date(walletHistory.asOf).toISOString()}::timestamptz)::int AS n
+                          FROM ai_training_chunks WHERE org_id = ${orgId}`)
+                      ).rows[0] as { n: number }
+                    ).n,
+                  ),
+                )
+              : 0;
+          const app = Math.min(appAfter, left.length);
+          if (app > 0)
+            warnings.push(
+              `APP ROWS: ${table}: ${app} row(s) were written by the application after the live balance was read (counted as activity, not findings)`,
+            );
+          if (left.length - app > 0 && !(feedOk && FEED_TABLES.has(table)))
             alarm(
-              `EXTRA_ROWS: ${table}: ${left.length} row(s) were added that this migration does not create${gone > 0 ? ' (or changed)' : ''}`,
+              `EXTRA_ROWS: ${table}: ${left.length - app} row(s) were added that this migration does not create${gone > 0 ? ' (or changed)' : ''}`,
             );
         }
       }

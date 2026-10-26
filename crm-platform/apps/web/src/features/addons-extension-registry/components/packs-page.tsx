@@ -334,6 +334,7 @@ function Catalogue({
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             href={`/admin/addons/${p.id}/edit`}
+                            aria-label={`${t('actions.edit')}: ${p.name}`}
                             className="inline-flex h-8 items-center rounded-lg border border-border px-2.5 text-[11.5px] font-medium hover:bg-muted"
                           >
                             {t('actions.edit')}
@@ -341,6 +342,7 @@ function Catalogue({
                           <Button
                             size="sm"
                             variant="secondary"
+                            aria-label={`${p.isActive ? t('actions.disable') : t('actions.enable')}: ${p.name}`}
                             className="rounded-lg px-2.5 text-[11.5px]"
                             disabled={togglingId === p.id}
                             onClick={() => toggle.mutate(p)}
@@ -350,6 +352,7 @@ function Catalogue({
                           <Button
                             size="sm"
                             variant="secondary"
+                            aria-label={`${t('actions.delete')}: ${p.name}`}
                             className="rounded-lg border-danger/40 px-2.5 text-[11.5px] text-danger"
                             onClick={() => {
                               remove.reset();

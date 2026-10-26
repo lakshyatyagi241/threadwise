@@ -247,6 +247,7 @@ export function parseCurl(command: string): ImportedRequest | null {
   if (data.length > 0 && !apiLibraryMethodHasBody(verb)) skipped.push({ code: 'body', name: verb });
 
   let body: unknown = undefined;
+  let formBody = false;
   if (data.length > 0) {
     const raw = data.filter((d) => d !== '').join('&');
     try {
@@ -254,13 +255,26 @@ export function parseCurl(command: string): ImportedRequest | null {
     } catch {
       body = raw;
     }
+    // curl sends `-d` as a web form unless a header says otherwise. This API sends JSON or multipart form-data, so the form's fields
+    // become a JSON object and the import says so: left as text the body would only fail later as "not valid JSON".
+    const named = /^[^=&\s]+=/.test(raw);
+    if (
+      typeof body === 'string' &&
+      named &&
+      (typeHeader === '' || typeHeader.includes('x-www-form-urlencoded'))
+    ) {
+      body = Object.fromEntries(new URLSearchParams(raw));
+      formBody = true;
+      skipped.push({ code: 'form', name: 'application/x-www-form-urlencoded' });
+    }
   }
   return {
     method: verb as ApiLibraryMethod,
     url,
-    headers: typeHeader.includes('multipart/form-data')
-      ? headers.filter((h) => h.key.toLowerCase() !== 'content-type')
-      : headers,
+    headers:
+      typeHeader.includes('multipart/form-data') || (formBody && typeHeader !== '')
+        ? headers.filter((h) => h.key.toLowerCase() !== 'content-type')
+        : headers,
     body,
     payloadType: 'application/json',
     ...(skipped.length > 0 ? { skipped } : {}),

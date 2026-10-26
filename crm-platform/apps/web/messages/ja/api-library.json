@@ -16,8 +16,8 @@
       "failed": "失敗",
       "source": {
         "test": "テスト",
-        "flow": "フロー",
-        "automation": "オートメーション"
+        "flow": "シンプルフロー",
+        "automation": "アドバンストフロー"
       },
       "errorKind": {
         "blocked": "アドレスがブロックされています",
@@ -98,7 +98,9 @@
       "published": "公開済み",
       "draft": "下書き",
       "nodes": "{count, plural, other {#ステップ}}",
-      "blocked": "フローがこのAPIを使用している間は削除できません。これらのフローからこのAPIのステップを削除するか、別のAPIを選択してから、ここで削除してください。"
+      "blocked": "フローがこのAPIを使用している間は削除できません。これらのフローからこのAPIのステップを削除するか、別のAPIを選択してから、ここで削除してください。",
+      "publishedCopy": "公開中のバージョンがまだ呼び出しています",
+      "republish": "このステップを外してフローを再公開してから、APIを削除してください。"
     },
     "logs": {
       "title": "API ログ",
@@ -170,7 +172,9 @@
         "user": "実行者（ユーザー ID）",
         "noContext": "フローや連絡先は関係していません。"
       },
-      "unsaved": "未保存"
+      "unsaved": "未保存",
+      "export": "CSV で書き出す",
+      "exporting": "書き出し中…"
     },
     "variables": {
       "insertFor": "{label} に変数を挿入",
@@ -323,6 +327,7 @@
       "functionHint": "送信前に JavaScript でペイロードを整形できます。任意です。",
       "plainHttpWarning": "このアドレスは http:// で始まるため、ヘッダーのパスワードやキーが暗号化されずに送信されます。サーバーが対応していれば https:// を使ってください。",
       "importSkipped": "貼り付けたコマンドはファイル（{names}）も送信します。ここではファイルを取り込めないため省略しました。それ以外はすべて入力されています。",
+      "importForm": "貼り付けたコマンドはデータをWebフォーム形式（a=1&b=2）で送ります。このAPIはJSONまたはmultipart form-dataで送るため、フォームの項目をJSONオブジェクトに変換しました。呼び出し先のAPIがJSONを受け付けるか確認してください。",
       "payloadTypedHint": "本物の数値や はい/いいえ を送るには、変数を引用符なしで書きます: {example}。"
     },
     "test": {
