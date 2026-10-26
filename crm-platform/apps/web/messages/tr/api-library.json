@@ -98,7 +98,9 @@
       "published": "Yayında",
       "draft": "Taslak",
       "nodes": "{count, plural, one {# adım} other {# adım}}",
-      "blocked": "Akışlar bu API'yi kullandığı sürece silinemez. Bu akışlardan adımını kaldırın veya orada başka bir API seçin, ardından burada silin."
+      "blocked": "Akışlar bu API'yi kullandığı sürece silinemez. Bu akışlardan adımını kaldırın veya orada başka bir API seçin, ardından burada silin.",
+      "publishedCopy": "Yayınlanan sürüm hâlâ bunu çağırıyor",
+      "republish": "Akışı bu adım olmadan yeniden yayınlayın, ardından API'yi silin."
     },
     "logs": {
       "title": "API günlükleri",

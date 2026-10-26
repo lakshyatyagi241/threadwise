@@ -428,7 +428,9 @@
         "buttons": "Schaltflächen",
         "buttonText": "Text der Schaltfläche",
         "buttonUrl": "Website-URL",
-        "buttonPhone": "Telefonnummer"
+        "buttonPhone": "Telefonnummer",
+        "moveUp": "Karte {n} nach oben",
+        "moveDown": "Karte {n} nach unten"
       },
       "offer": {
         "title": "Zeitlich begrenztes Angebot",

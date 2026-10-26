@@ -98,7 +98,9 @@
       "published": "Veröffentlicht",
       "draft": "Entwurf",
       "nodes": "{count, plural, one {# Schritt} other {# Schritte}}",
-      "blocked": "Diese API kann nicht gelöscht werden, solange Abläufe sie nutzen. Entfernen Sie ihren Schritt aus diesen Abläufen oder wählen Sie dort eine andere API und löschen Sie sie dann hier."
+      "blocked": "Diese API kann nicht gelöscht werden, solange Abläufe sie nutzen. Entfernen Sie ihren Schritt aus diesen Abläufen oder wählen Sie dort eine andere API und löschen Sie sie dann hier.",
+      "publishedCopy": "Die veröffentlichte Version ruft sie noch auf",
+      "republish": "Veröffentlichen Sie den Ablauf erneut ohne diesen Schritt und löschen Sie dann die API."
     },
     "logs": {
       "title": "API-Protokolle",

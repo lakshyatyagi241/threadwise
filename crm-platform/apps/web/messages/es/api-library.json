@@ -98,7 +98,9 @@
       "published": "Publicada",
       "draft": "Borrador",
       "nodes": "{count, plural, one {# paso} other {# pasos}}",
-      "blocked": "Esta API no se puede eliminar mientras la usen flujos. Quita su paso de estos flujos, o elige otra API allí, y luego elimínala aquí."
+      "blocked": "Esta API no se puede eliminar mientras la usen flujos. Quita su paso de estos flujos, o elige otra API allí, y luego elimínala aquí.",
+      "publishedCopy": "La versión publicada aún la llama",
+      "republish": "Publica el flujo de nuevo sin este paso y luego elimina la API."
     },
     "logs": {
       "title": "Registros de API",

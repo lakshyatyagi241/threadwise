@@ -98,7 +98,9 @@
       "published": "Đã xuất bản",
       "draft": "Bản nháp",
       "nodes": "{count, plural, one {# bước} other {# bước}}",
-      "blocked": "Không thể xóa API này khi còn luồng đang dùng. Hãy gỡ bước của nó khỏi các luồng này, hoặc chọn API khác ở đó, rồi xóa tại đây."
+      "blocked": "Không thể xóa API này khi còn luồng đang dùng. Hãy gỡ bước của nó khỏi các luồng này, hoặc chọn API khác ở đó, rồi xóa tại đây.",
+      "publishedCopy": "Phiên bản đã xuất bản vẫn gọi nó",
+      "republish": "Hãy xuất bản lại luồng mà không có bước này, rồi xóa API."
     },
     "logs": {
       "title": "Nhật ký API",

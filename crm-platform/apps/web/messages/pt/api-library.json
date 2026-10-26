@@ -98,7 +98,9 @@
       "published": "Publicado",
       "draft": "Rascunho",
       "nodes": "{count, plural, one {# etapa} other {# etapas}}",
-      "blocked": "Esta API não pode ser excluída enquanto fluxos a usarem. Remova o passo dela desses fluxos, ou escolha outra API neles, e depois exclua-a aqui."
+      "blocked": "Esta API não pode ser excluída enquanto fluxos a usarem. Remova o passo dela desses fluxos, ou escolha outra API neles, e depois exclua-a aqui.",
+      "publishedCopy": "A versão publicada ainda a chama",
+      "republish": "Publique o fluxo de novo sem este passo e depois exclua a API."
     },
     "logs": {
       "title": "Logs de API",

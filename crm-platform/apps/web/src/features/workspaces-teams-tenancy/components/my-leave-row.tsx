@@ -8,6 +8,7 @@ import { useMembersSummary } from '../api/hooks';
 import { useLeaveOverview } from '../api/leave';
 import { formatDay } from '../lib/leave';
 import { MemberLeaveDialog } from './member-leave-dialog';
+import { WspProviders } from './parts';
 
 /** The permission that lets a person set their own leave. Every preset role has it (scope `own` for Agent and Viewer). */
 export const MY_LEAVE_PERMISSION = 'team.leave.manage';
@@ -53,17 +54,22 @@ export function MyLeaveRow({ className, onOpen }: { className?: string; onOpen: 
   );
 }
 
-/** The leave dialog for the signed-in member. Mount it outside the popover so closing the menu does not close the dialog. */
+/**
+ * The leave dialog for the signed-in member. Mount it outside the popover so closing the menu does not close the dialog. The account menu
+ * sits in the page shell, above every screen's own toast host, and the dialog shows a toast when it saves, so it brings its own.
+ */
 export function MyLeaveDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const t = useTranslations('workspaces-teams-tenancy.myLeave');
   const { memberId } = useMyLeave();
   return (
-    <MemberLeaveDialog
-      memberId={memberId}
-      memberName={t('title')}
-      open={open && memberId !== null}
-      onClose={onClose}
-      self
-    />
+    <WspProviders>
+      <MemberLeaveDialog
+        memberId={memberId}
+        memberName={t('title')}
+        open={open && memberId !== null}
+        onClose={onClose}
+        self
+      />
+    </WspProviders>
   );
 }

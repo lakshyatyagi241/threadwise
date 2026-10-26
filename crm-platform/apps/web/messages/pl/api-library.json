@@ -98,7 +98,9 @@
       "published": "Opublikowane",
       "draft": "Szkic",
       "nodes": "{count, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}",
-      "blocked": "Tego API nie można usunąć, dopóki używają go przepływy. Usuń jego krok z tych przepływów lub wybierz tam inne API, a potem usuń je tutaj."
+      "blocked": "Tego API nie można usunąć, dopóki używają go przepływy. Usuń jego krok z tych przepływów lub wybierz tam inne API, a potem usuń je tutaj.",
+      "publishedCopy": "Opublikowana wersja nadal go wywołuje",
+      "republish": "Opublikuj przepływ ponownie bez tego kroku, a potem usuń API."
     },
     "logs": {
       "title": "Dzienniki API",

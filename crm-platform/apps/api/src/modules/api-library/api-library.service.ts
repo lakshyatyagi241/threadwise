@@ -240,6 +240,7 @@ export class ApiLibraryService {
       name: u.name,
       published: u.published,
       nodeCount: u.nodeCount,
+      publishedNodeCount: u.publishedNodeCount,
     }));
   }
 

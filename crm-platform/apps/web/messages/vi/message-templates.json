@@ -428,7 +428,9 @@
         "buttons": "Nút",
         "buttonText": "Văn bản nút",
         "buttonUrl": "URL trang web",
-        "buttonPhone": "Số điện thoại"
+        "buttonPhone": "Số điện thoại",
+        "moveUp": "Chuyển thẻ {n} lên",
+        "moveDown": "Chuyển thẻ {n} xuống"
       },
       "offer": {
         "title": "Ưu đãi có thời hạn",
