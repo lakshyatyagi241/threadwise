@@ -48,7 +48,12 @@ for (const b of bugs) {
       'claude',
       ['-p', prompt(b), '--permission-mode', 'acceptEdits', '--max-turns', '40',
         '--allowedTools', 'Read Edit Write Grep Glob Bash(pnpm:*) Bash(git diff:*) Bash(git status:*)'],
-      { stdio: 'inherit', timeout: 20 * 60_000 },
+      {
+        stdio: 'inherit',
+        timeout: 20 * 60_000,
+        // an API key in the shell would make Claude Code bill the API; drop it so the logged-in plan (Max) is used
+        env: { ...process.env, ANTHROPIC_API_KEY: undefined },
+      },
     );
     if (!git('status', '--porcelain')) {
       await call('mark', { id: b.ID, status: 'Needs human', note: 'Claude made no change (could not reproduce or fix safely)' });
