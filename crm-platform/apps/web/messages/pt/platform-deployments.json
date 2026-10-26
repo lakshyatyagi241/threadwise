@@ -95,7 +95,10 @@
         "step": "Etapa",
         "started": "Início",
         "finished": "Fim",
-        "error": "Erro"
+        "error": "Erro",
+        "pr": "Pull request",
+        "description": "O que muda",
+        "raised": "Aberto (IST)"
       },
       "state": {
         "building": "Compilando",
@@ -104,7 +107,9 @@
         "ok": "No ar",
         "failed": "Falhou",
         "rolled_back": "Revertida"
-      }
+      },
+      "noPr": "Nenhum pull request registrado",
+      "istTime": "{time} IST"
     }
   }
 }

@@ -193,15 +193,54 @@ describe('DeploymentsPage', () => {
           updatedAt: '2026-10-19T10:01:00.000Z',
           finishedAt: '2026-10-19T10:01:00.000Z',
           stalled: false,
+          prNumber: null,
+          prTitle: null,
+          prBody: null,
+          prCreatedAt: null,
         },
       ],
     });
     state.fetch.mockResolvedValue(page([]));
     await mount();
+    expect(host.textContent).toContain(en('releases.noPr'));
     expect(host.textContent).toContain('701ca2c1a');
     expect(host.textContent).toContain('29f32b7b6');
     expect(host.textContent).toContain(en('releases.state.failed'));
     expect(host.textContent).toContain('migration failed; the running release is untouched');
+  });
+
+  it('shows the pull request number, what it changes and when it was raised in Indian time', async () => {
+    state.releases.mockResolvedValue({
+      generatedAt: '2026-10-26T10:00:05.000Z',
+      live: null,
+      inProgress: false,
+      rows: [
+        {
+          id: '11111111-2222-4333-8444-555555555555',
+          tag: 'abc123def',
+          state: 'ok',
+          step: null,
+          error: null,
+          startedAt: '2026-10-26T09:00:00.000Z',
+          updatedAt: '2026-10-26T09:05:00.000Z',
+          finishedAt: '2026-10-26T09:05:00.000Z',
+          stalled: false,
+          prNumber: 823,
+          prTitle: 'Show PR details on releases',
+          prBody: 'Adds the PR number, description and raised time.',
+          prCreatedAt: '2026-10-26T08:15:00.000Z',
+        },
+      ],
+    });
+    state.fetch.mockResolvedValue(page([]));
+    await mount();
+    const q = (id: string) => host.querySelector(`[data-testid="${id}"]`)?.textContent ?? '';
+    expect(q('release-pr')).toContain('#823');
+    expect(q('release-pr')).toContain('Show PR details on releases');
+    expect(q('release-description')).toContain('Adds the PR number, description and raised time.');
+    // 08:15 UTC is 13:45 in India, whatever zone the test machine is in.
+    expect(q('release-raised')).toMatch(/1:45:00/);
+    expect(q('release-raised')).toContain('IST');
   });
 
   it('lists flow publishes with their state, attempts and error', async () => {

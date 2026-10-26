@@ -95,7 +95,10 @@
         "step": "Stap",
         "started": "Gestart",
         "finished": "Klaar",
-        "error": "Fout"
+        "error": "Fout",
+        "pr": "Pull request",
+        "description": "Wat er verandert",
+        "raised": "Aangemaakt (IST)"
       },
       "state": {
         "building": "Bouwen",
@@ -104,7 +107,9 @@
         "ok": "Live",
         "failed": "Mislukt",
         "rolled_back": "Teruggedraaid"
-      }
+      },
+      "noPr": "Geen pull request vastgelegd",
+      "istTime": "{time} IST"
     }
   }
 }

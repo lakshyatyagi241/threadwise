@@ -95,7 +95,10 @@
         "step": "الخطوة",
         "started": "بدأ",
         "finished": "انتهى",
-        "error": "الخطأ"
+        "error": "الخطأ",
+        "pr": "طلب السحب",
+        "description": "ما الذي يغيّره",
+        "raised": "تاريخ الإنشاء (IST)"
       },
       "state": {
         "building": "قيد البناء",
@@ -104,7 +107,9 @@
         "ok": "فعّال",
         "failed": "فشل",
         "rolled_back": "أُرجع"
-      }
+      },
+      "noPr": "لا يوجد طلب سحب مسجّل",
+      "istTime": "{time} IST"
     }
   }
 }

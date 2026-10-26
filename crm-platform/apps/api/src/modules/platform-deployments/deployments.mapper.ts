@@ -84,6 +84,10 @@ export function toReleaseRow(r: Raw): ReleaseRow {
     updatedAt: new Date(r.updated_at as string).toISOString(),
     finishedAt: iso(r.finished_at),
     stalled: r.stalled === true,
+    prNumber: r.pr_number == null ? null : Number(r.pr_number),
+    prTitle: r.pr_title == null ? null : String(r.pr_title),
+    prBody: r.pr_body == null ? null : String(r.pr_body),
+    prCreatedAt: iso(r.pr_created_at),
   });
 }
 

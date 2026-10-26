@@ -95,7 +95,10 @@
         "step": "Langkah",
         "started": "Mulai",
         "finished": "Selesai",
-        "error": "Galat"
+        "error": "Galat",
+        "pr": "Pull request",
+        "description": "Apa yang berubah",
+        "raised": "Dibuat (IST)"
       },
       "state": {
         "building": "Sedang dibangun",
@@ -104,7 +107,9 @@
         "ok": "Aktif",
         "failed": "Gagal",
         "rolled_back": "Dikembalikan"
-      }
+      },
+      "noPr": "Tidak ada pull request tercatat",
+      "istTime": "{time} IST"
     }
   }
 }

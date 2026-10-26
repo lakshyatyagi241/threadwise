@@ -95,7 +95,10 @@
         "step": "שלב",
         "started": "התחיל",
         "finished": "הסתיים",
-        "error": "שגיאה"
+        "error": "שגיאה",
+        "pr": "בקשת משיכה",
+        "description": "מה משתנה",
+        "raised": "נוצרה (IST)"
       },
       "state": {
         "building": "בבנייה",
@@ -104,7 +107,9 @@
         "ok": "פעיל",
         "failed": "נכשל",
         "rolled_back": "הוחזר"
-      }
+      },
+      "noPr": "לא תועדה בקשת משיכה",
+      "istTime": "{time} IST"
     }
   }
 }

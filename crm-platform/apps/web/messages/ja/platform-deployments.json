@@ -95,7 +95,10 @@
         "step": "ステップ",
         "started": "開始",
         "finished": "完了",
-        "error": "エラー"
+        "error": "エラー",
+        "pr": "プルリクエスト",
+        "description": "変更内容",
+        "raised": "作成日時 (IST)"
       },
       "state": {
         "building": "ビルド中",
@@ -104,7 +107,9 @@
         "ok": "公開中",
         "failed": "失敗",
         "rolled_back": "ロールバック済み"
-      }
+      },
+      "noPr": "プルリクエストの記録なし",
+      "istTime": "{time} IST"
     }
   }
 }

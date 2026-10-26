@@ -10,6 +10,7 @@
 #                    are recorded in platform_releases (the operator console's release history) under <attempt> (a uuid; made here when
 #                    the caller gives none). Recording never blocks a release.
 #   event <attempt> <tag> <state> [step]   records a build-side step (building, shipping, releasing, failed) with the error text on stdin.
+#   pr <attempt> <number> <created_at|->   records the pull request behind the release: title on the first stdin line, description after it.
 set -euo pipefail
 DESK_DIR=${DESK_DIR:-/opt/desk}   # overridable only so tests/ci-entry.test.sh can run against a scratch directory
 TRAEFIK_DYN=${TRAEFIK_DYN:-/etc/dokploy/traefik/dynamic/desk.yml}   # Traefik watches this directory: rewriting the file moves traffic
@@ -42,6 +43,22 @@ ON CONFLICT (attempt) DO UPDATE SET
   error = COALESCE(EXCLUDED.error, platform_releases.error),
   updated_at = now(),
   finished_at = COALESCE(EXCLUDED.finished_at, platform_releases.finished_at);
+SQL
+}
+
+# Records the pull request behind a release (the operator console shows it). Same rules as record(): never fails the caller, values go
+# to psql as variables. Title is cut to 300 characters and the description to 4000; control characters other than newline are dropped.
+# An attempt with no row yet is left alone (the UPDATE matches nothing).
+record_pr() {  # record_pr <attempt> <number> <created_at, ISO 8601 UTC, or empty> <title> <body>
+  local attempt=$1 num=$2 created=$3 title body
+  title=$(printf '%s' "$4" | LC_ALL=C tr -d '\000-\037\177' | head -c 300)
+  body=$(printf '%s' "$5" | LC_ALL=C tr -d '\000-\010\013-\037\177' | head -c 4000)
+  compose exec -T postgres sh -c 'exec psql -X -q -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -v attempt="$1" -v num="$2" -v created="$3" -v title="$4" -v body="$5" -f -' \
+    sh "$attempt" "$num" "$created" "$title" "$body" >/dev/null 2>&1 <<'SQL' || true
+UPDATE platform_releases
+   SET pr_number = :'num'::int, pr_title = NULLIF(:'title', ''), pr_body = NULLIF(:'body', ''),
+       pr_created_at = NULLIF(:'created', '')::timestamptz
+ WHERE attempt = :'attempt';
 SQL
 }
 
@@ -162,6 +179,17 @@ case "$action" in
       && "$estep" =~ ^[a-z_]{0,40}$ ]] || { echo "bad event" >&2; exit 2; }
     eerr=$(head -c 1000 || true)
     record "$eattempt" "$etag" "$estate" "$estep" "$eerr"
+    echo "recorded"
+    ;;
+  pr)
+    # The pull request behind a release: `pr <attempt> <number> <created_at|->`, then the title on the first stdin line and the
+    # description on the rest. Attempt, number and time are checked; the text only goes to psql as variables (see record_pr).
+    pattempt=${words[1]:-}; pnum=${words[2]:-}; pwhen=${words[3]:--}
+    [[ "$pattempt" =~ ^[0-9a-f-]{36}$ && "$pnum" =~ ^[1-9][0-9]{0,8}$ \
+      && ( "$pwhen" = "-" || "$pwhen" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ) ]] || { echo "bad pr" >&2; exit 2; }
+    [ "$pwhen" = "-" ] && pwhen=""
+    ptext=$(head -c 6000 || true)
+    record_pr "$pattempt" "$pnum" "$pwhen" "${ptext%%$'\n'*}" "$(printf '%s' "$ptext" | sed '1d')"
     echo "recorded"
     ;;
   release)

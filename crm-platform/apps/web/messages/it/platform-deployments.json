@@ -95,7 +95,10 @@
         "step": "Passo",
         "started": "Avvio",
         "finished": "Fine",
-        "error": "Errore"
+        "error": "Errore",
+        "pr": "Pull request",
+        "description": "Cosa cambia",
+        "raised": "Aperta (IST)"
       },
       "state": {
         "building": "In build",
@@ -104,7 +107,9 @@
         "ok": "Attiva",
         "failed": "Fallita",
         "rolled_back": "Ripristinata"
-      }
+      },
+      "noPr": "Nessuna pull request registrata",
+      "istTime": "{time} IST"
     }
   }
 }

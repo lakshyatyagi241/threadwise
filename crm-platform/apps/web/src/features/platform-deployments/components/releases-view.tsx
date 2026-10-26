@@ -18,7 +18,20 @@ const TONE: Record<ReleaseState, 'neutral' | 'warning' | 'danger' | 'success'> =
   rolled_back: 'danger',
 };
 
-const COLUMNS = ['tag', 'state', 'step', 'started', 'finished', 'error'] as const;
+const COLUMNS = [
+  'tag',
+  'pr',
+  'description',
+  'raised',
+  'state',
+  'step',
+  'started',
+  'finished',
+  'error',
+] as const;
+
+/** Operators read the console in Indian time whatever their browser's zone is. */
+const IST = 'Asia/Kolkata';
 
 /**
  * The Product releases tab: what is live on desk.wabo.ai, whether a release is running, and every attempt with its steps and error.
@@ -71,7 +84,7 @@ export function ReleasesView() {
         <EmptyState title={t('empty.title')} message={t('releases.empty')} />
       ) : (
         <div className="overflow-x-auto rounded-md border border-border">
-          <table className="w-full min-w-[960px] text-sm">
+          <table className="w-full min-w-[1280px] text-sm">
             <thead className="bg-muted/50 text-start text-xs text-muted-foreground">
               <tr>
                 {COLUMNS.map((c) => (
@@ -101,6 +114,36 @@ function ReleaseRowView({ row }: { row: ReleaseRow }) {
   return (
     <tr className="align-top">
       <td className="px-3 py-2 font-mono text-xs">{row.tag}</td>
+      <td className="max-w-[16rem] px-3 py-2" data-testid="release-pr">
+        {row.prNumber === null ? (
+          <span className="text-muted-foreground">{t('releases.noPr')}</span>
+        ) : (
+          <>
+            <span className="font-mono text-xs font-semibold">#{row.prNumber}</span>
+            {row.prTitle && <div className="break-words">{row.prTitle}</div>}
+          </>
+        )}
+      </td>
+      <td className="max-w-md px-3 py-2" data-testid="release-description">
+        {row.prBody ? (
+          <div className="max-h-40 overflow-y-auto whitespace-pre-wrap break-words text-xs">
+            {row.prBody}
+          </div>
+        ) : null}
+      </td>
+      <td className="whitespace-nowrap px-3 py-2" data-testid="release-raised">
+        {row.prCreatedAt ? (
+          t('releases.istTime', {
+            time: f.dateTime(new Date(row.prCreatedAt), {
+              dateStyle: 'medium',
+              timeStyle: 'medium',
+              timeZone: IST,
+            }),
+          })
+        ) : (
+          <span className="text-muted-foreground">{t('releases.noPr')}</span>
+        )}
+      </td>
       <td className="px-3 py-2">
         <div className="flex flex-wrap gap-1">
           <Badge tone={TONE[row.state]}>{t(`releases.state.${row.state}`)}</Badge>

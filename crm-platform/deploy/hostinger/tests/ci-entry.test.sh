@@ -68,6 +68,8 @@ check() { # check "name" cmd...
   if "$@"; then pass=$((pass + 1)); echo "  ok   $name"; else fail=$((fail + 1)); echo "  FAIL $name"; fi
 }
 unset_stubs() { unset STUB_BACKUP_RUNNING STUB_BACKUP_SCRIPT STUB_DUMP_FAIL STUB_MIGRATE_FAIL STUB_WORKER_UP_FAIL STUB_SLOT_UP_FAIL STUB_PUBLIC_FAIL STUB_WORKER_HEALTH STUB_SLOT_HEALTH STUB_RECORD_FAIL STUB_HOOKS_UP_FAIL STUB_HOOKS_HEALTH; }
+# pr <stdin text> <command words...>: the build side's pr command, title on the first line and the description after it.
+pr() { local msg=$1; shift; printf '%s' "$msg" | SSH_ORIGINAL_COMMAND="pr $*" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"; }
 # event <stdin text> <command words...>: the build side's event command, with the message on stdin.
 event() { local msg=$1; shift; printf '%s' "$msg" | SSH_ORIGINAL_COMMAND="event $*" PATH="$BIN:$PATH" bash "$ENTRY" > "$WORK/out.txt" 2>&1; echo $? > "$WORK/code"; }
 A1=11111111-2222-4333-8444-555555555555
@@ -295,6 +297,28 @@ unset_stubs; new_dir blue bbbbbbb; event "$(printf 'bad\001thing %0600d' 1)" "$A
 check "exits 0" test "$(code)" = 0
 check "no control character reaches the record" test "$(grep -c "$(printf '\001')" "$STUB_LOG")" = 0
 check "the message is cut to 500 characters" test "$(grep 'failed shipping' "$STUB_LOG" | head -1 | sed 's/.*failed shipping //' | tr -d '\n' | wc -c)" -le 500
+
+echo "pr: the pull request behind a release is recorded"
+unset_stubs; new_dir blue bbbbbbb; pr "$(printf 'Add PR details\nShows what it changes')" "$A1" 823 2026-10-26T08:15:00Z
+check "exits 0" test "$(code)" = 0
+check "attempt, number, time and title are recorded" has "$A1 823 2026-10-26T08:15:00Z Add PR details"
+check "the description is recorded" has "Shows what it changes"
+
+echo "pr: no raised-at time is recorded as empty"
+unset_stubs; new_dir blue bbbbbbb; pr "Title only" "$A1" 7 -
+check "exits 0" test "$(code)" = 0
+check "the time is empty" has "$A1 7  Title only"
+
+echo "pr: a bad attempt, number or time is refused and nothing is recorded"
+unset_stubs; new_dir blue bbbbbbb; pr "x" "not-a-uuid" 823 -
+check "exits 2 for a bad attempt" test "$(code)" = 2
+pr "x" "$A1" "8; drop table" -
+check "exits 2 for a bad number" test "$(code)" = 2
+pr "x" "$A1" 0 -
+check "exits 2 for number 0" test "$(code)" = 2
+pr "x" "$A1" 823 "yesterday"
+check "exits 2 for a bad time" test "$(code)" = 2
+check "nothing is recorded" test ! -s "$STUB_LOG"
 
 echo
 echo "$pass passed, $fail failed"

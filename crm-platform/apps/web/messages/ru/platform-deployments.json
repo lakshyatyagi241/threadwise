@@ -95,7 +95,10 @@
         "step": "Шаг",
         "started": "Начало",
         "finished": "Конец",
-        "error": "Ошибка"
+        "error": "Ошибка",
+        "pr": "Pull request",
+        "description": "Что меняется",
+        "raised": "Создан (IST)"
       },
       "state": {
         "building": "Сборка",
@@ -104,7 +107,9 @@
         "ok": "В работе",
         "failed": "Ошибка",
         "rolled_back": "Откачен"
-      }
+      },
+      "noPr": "Pull request не записан",
+      "istTime": "{time} IST"
     }
   }
 }

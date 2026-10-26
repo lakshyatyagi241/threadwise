@@ -95,7 +95,10 @@
         "step": "Krok",
         "started": "Start",
         "finished": "Koniec",
-        "error": "Błąd"
+        "error": "Błąd",
+        "pr": "Pull request",
+        "description": "Co zmienia",
+        "raised": "Utworzono (IST)"
       },
       "state": {
         "building": "Budowanie",
@@ -104,7 +107,9 @@
         "ok": "Działa",
         "failed": "Nieudane",
         "rolled_back": "Cofnięte"
-      }
+      },
+      "noPr": "Brak zapisanego pull requesta",
+      "istTime": "{time} IST"
     }
   }
 }

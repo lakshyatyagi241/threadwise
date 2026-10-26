@@ -95,7 +95,10 @@
         "step": "단계",
         "started": "시작",
         "finished": "완료",
-        "error": "오류"
+        "error": "오류",
+        "pr": "풀 리퀘스트",
+        "description": "변경 내용",
+        "raised": "생성 시각 (IST)"
       },
       "state": {
         "building": "빌드 중",
@@ -104,7 +107,9 @@
         "ok": "활성",
         "failed": "실패",
         "rolled_back": "롤백됨"
-      }
+      },
+      "noPr": "기록된 풀 리퀘스트 없음",
+      "istTime": "{time} IST"
     }
   }
 }

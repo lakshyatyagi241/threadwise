@@ -95,7 +95,10 @@
         "step": "步骤",
         "started": "开始",
         "finished": "结束",
-        "error": "错误"
+        "error": "错误",
+        "pr": "拉取请求",
+        "description": "变更内容",
+        "raised": "创建时间 (IST)"
       },
       "state": {
         "building": "构建中",
@@ -104,7 +107,9 @@
         "ok": "已上线",
         "failed": "失败",
         "rolled_back": "已回滚"
-      }
+      },
+      "noPr": "没有关联的拉取请求记录",
+      "istTime": "{time} IST"
     }
   }
 }

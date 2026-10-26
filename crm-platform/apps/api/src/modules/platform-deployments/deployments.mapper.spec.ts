@@ -146,6 +146,10 @@ const attempt = {
   updated_at: new Date('2026-10-19T11:02:00Z'),
   finished_at: null,
   stalled: false,
+  pr_number: null,
+  pr_title: null,
+  pr_body: null,
+  pr_created_at: null,
 };
 
 describe('toReleaseRow', () => {
@@ -161,7 +165,25 @@ describe('toReleaseRow', () => {
       updatedAt: '2026-10-19T11:02:00.000Z',
       finishedAt: null,
       stalled: false,
+      prNumber: null,
+      prTitle: null,
+      prBody: null,
+      prCreatedAt: null,
     });
+  });
+
+  it('carries the pull request behind the release', () => {
+    const row = toReleaseRow({
+      ...attempt,
+      pr_number: 823,
+      pr_title: 'Show PR details on releases',
+      pr_body: 'Adds the PR number and description.',
+      pr_created_at: new Date('2026-10-26T08:15:00Z'),
+    });
+    expect(row.prNumber).toBe(823);
+    expect(row.prTitle).toBe('Show PR details on releases');
+    expect(row.prBody).toBe('Adds the PR number and description.');
+    expect(row.prCreatedAt).toBe('2026-10-26T08:15:00.000Z');
   });
 
   it('cuts a long error and rejects a state the contract does not know', () => {

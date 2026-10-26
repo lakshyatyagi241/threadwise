@@ -95,7 +95,10 @@
         "step": "Adım",
         "started": "Başlangıç",
         "finished": "Bitiş",
-        "error": "Hata"
+        "error": "Hata",
+        "pr": "Pull request",
+        "description": "Neyi değiştirir",
+        "raised": "Açılış (IST)"
       },
       "state": {
         "building": "Derleniyor",
@@ -104,7 +107,9 @@
         "ok": "Canlı",
         "failed": "Başarısız",
         "rolled_back": "Geri alındı"
-      }
+      },
+      "noPr": "Kayıtlı pull request yok",
+      "istTime": "{time} IST"
     }
   }
 }

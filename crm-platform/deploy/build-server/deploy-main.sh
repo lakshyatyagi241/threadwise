@@ -44,6 +44,29 @@ report() {  # report <state> <step> [message]
     || echo "$(date -Is) could not report $1 for $TAG to production; the deploy goes on" >> "$LOGS/webhook.log"
 }
 
+# Tells production which pull request this release is, so the operator console can show what it changes and when it was raised. The
+# number comes from the tip commit ("Merge pull request #N ..." or "... (#N)"); with $CONF/github_token (read-only, the repo is private)
+# the title, description and raised-at time come from the GitHub API. Without the token, or if the call fails, the commit's own text is
+# sent and the raised time stays empty. Never stops the deploy. shortcut: only the PR of the tip commit, so several merges released
+# together show the last one; list every PR since the last release if that matters.
+report_pr() {
+  local subj num slug when="-" text
+  [ -n "${TAG:-}" ] && [ -n "${ATTEMPT:-}" ] || return 0
+  subj=$(git log -1 --format=%s)
+  num=$(printf '%s' "$subj" | sed -n 's/^Merge pull request #\([0-9][0-9]*\) .*/\1/p;t;s/.*(#\([0-9][0-9]*\))$/\1/p')
+  [ -n "$num" ] || return 0
+  text=$(case "$subj" in Merge*) git log -1 --format=%b ;; *) printf '%s\n' "$subj"; git log -1 --format=%b ;; esac)
+  slug=$(printf '%s' "$REPO_URL" | sed 's#.*github\.com[:/]##; s#\.git$##')
+  if [ -r "$CONF/github_token" ]; then
+    api=$(curl -fsS --max-time 15 -H "Authorization: Bearer $(cat "$CONF/github_token")" -H "Accept: application/vnd.github+json" \
+      "https://api.github.com/repos/$slug/pulls/$num" 2>/dev/null \
+      | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d["created_at"]); print(d["title"].replace("\n"," ")); print(d.get("body") or "")' 2>/dev/null) \
+      && { when=$(printf '%s\n' "$api" | sed -n 1p); text=$(printf '%s\n' "$api" | sed 1d); }
+  fi
+  printf '%s\n' "$text" | ssh_prod "pr $ATTEMPT $num $when" >/dev/null 2>&1 \
+    || echo "$(date -Is) could not report PR #$num for $TAG to production; the deploy goes on" >> "$LOGS/webhook.log"
+}
+
 run_once() {
   TAG=""; LOG="$LOGS/$(date +%Y%m%dT%H%M%S).log"
   exec > >(tee -a "$LOG") 2>&1
@@ -78,6 +101,7 @@ run_once() {
   fi
   status building
   report building build
+  report_pr
   echo "== building $TAG"
   docker build -f crm-platform/apps/api/Dockerfile -t "desk-api:$TAG" --build-arg "GIT_SHA=$TAG" crm-platform || return 1
   docker build -f crm-platform/apps/web/Dockerfile -t "desk-web:$TAG" \

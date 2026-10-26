@@ -133,6 +133,7 @@ export type ReleaseState = z.infer<typeof releaseStateSchema>;
 
 export const RELEASE_STALL_MINUTES = 45;
 export const RELEASE_LIST_MAX = 50;
+export const RELEASE_PR_BODY_MAX_CHARS = 4000;
 
 export const releaseRowSchema = z.object({
   /** The attempt id (uuid), shared by the build's steps and the release's steps. */
@@ -146,6 +147,13 @@ export const releaseRowSchema = z.object({
   updatedAt: z.string().datetime(),
   finishedAt: z.string().datetime().nullable(),
   stalled: z.boolean(),
+  /** The pull request behind the release; all null when none is on record (older releases, a push without a PR number). */
+  prNumber: z.number().int().positive().nullable(),
+  prTitle: z.string().nullable(),
+  /** What the PR changes, as its author wrote it (markdown text, at most `RELEASE_PR_BODY_MAX_CHARS`). */
+  prBody: z.string().nullable(),
+  /** When the PR was raised (UTC; the console shows it in Indian time). Null when the build server could not read it from GitHub. */
+  prCreatedAt: z.string().datetime().nullable(),
 });
 export type ReleaseRow = z.infer<typeof releaseRowSchema>;
 
