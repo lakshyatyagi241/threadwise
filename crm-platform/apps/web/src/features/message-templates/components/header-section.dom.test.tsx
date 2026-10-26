@@ -40,7 +40,7 @@ function renderSection() {
     root.render(
       <QueryClientProvider client={client}>
         <NextIntlClientProvider locale="en" messages={loadMessages('en')} timeZone="UTC">
-          <HeaderSection state={state} onKind={() => {}} onText={() => {}} onUploaded={() => {}} />
+          <HeaderSection state={state} onKind={vi.fn()} onText={vi.fn()} onUploaded={vi.fn()} />
         </NextIntlClientProvider>
       </QueryClientProvider>,
     );
@@ -88,7 +88,7 @@ describe('header media pick', () => {
   });
 
   it('a pick while an upload is running is ignored', async () => {
-    upload.mockReturnValue(new Promise(() => {}));
+    upload.mockReturnValue(new Promise(() => undefined));
     renderSection();
     await pick(jpeg(1024));
     await pick(jpeg(1024));
