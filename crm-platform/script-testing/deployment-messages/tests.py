@@ -9,7 +9,7 @@ NOTIFY = f"{ROOT}/deploy/build-server/notify-chat.sh"
 TOKEN = "ghp_SECRETTOKENVALUE1234567890"
 A, B = "a" * 40, "b" * 40
 results, hits, chat_posts = [], [], []
-MODE = {"fail": None, "delay": 0}  # fail: 500 | slow
+MODE = {"fail": None, "delay": 0}  # fail: 500 | slow | once
 
 
 def sha(n): return f"{n:040x}"
@@ -29,6 +29,7 @@ class Api(http.server.BaseHTTPRequestHandler):
         hits.append((self.path, self.headers.get("Authorization")))
         if MODE["delay"]: time.sleep(MODE["delay"])
         if MODE["fail"] == "500": return self._send(500, {"message": "boom"})
+        if MODE["fail"] == "once": MODE["fail"] = None; return self._send(500, {"message": "blip"})  # one failed call, then the API works again
         if MODE["fail"] == "slow": time.sleep(9)
         if self.headers.get("Authorization") != "Bearer " + TOKEN: return self._send(401, {})
         if self.path.startswith("/repos/o/r/commits?"): return self._send(200, FIX.get("bridge_commits", []))
@@ -122,7 +123,11 @@ for name, env, mode in [("API 500", {}, "500"), ("missing token", {"GITHUB_TOKEN
     check(f"fallback on {name}", "PR details unavailable" in out and "/commit/bbbbbbbbb" in out and "Version: `bbbbbbbbb`" in out and TOKEN not in out + err, out)
 MODE["fail"] = "slow"; t = time.time()
 out, _ = run("live", A, B, "5"); el = time.time() - t
-check("fallback on API timeout (bounded ~6s)", "PR details unavailable" in out and el < 12, f"{el:.1f}s")
+check("fallback on API timeout (two tries, still bounded)", "PR details unavailable" in out and el < 20, f"{el:.1f}s")
+MODE["fail"] = None
+MODE["fail"] = "once"
+out, _ = run("live", A, B, "5")
+check("one failed GitHub call is retried: the PR details still arrive", "PR details unavailable" not in out and "#34" in out, out)
 MODE["fail"] = None
 
 # 7 injection
