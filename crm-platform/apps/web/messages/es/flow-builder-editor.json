@@ -645,6 +645,7 @@
         "imported": "Se importaron {steps, plural, one {# paso} other {# pasos}} en {flows, plural, one {# flujo} other {# flujos}}. Revísalos y luego guarda.",
         "invalidJson": "Ese archivo no es un JSON válido.",
         "saved": "\"{name}\" guardado",
+        "nodeSaved": "¡Nodo actualizado correctamente!",
         "saveFailed": "Error al guardar: {error}",
         "publishedToast": "Publicado",
         "publishFailed": "Error al publicar: {error}",

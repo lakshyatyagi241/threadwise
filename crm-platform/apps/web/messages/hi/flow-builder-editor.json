@@ -1077,6 +1077,7 @@
         "imported": "{flows, plural, one {# फ़्लो} other {# फ़्लो}} में से {steps, plural, one {# स्टेप} other {# स्टेप}} इंपोर्ट हुए। इन्हें जांचें, फिर सेव करें।",
         "invalidJson": "यह फ़ाइल मान्य JSON नहीं है।",
         "saved": "“{name}” सेव हुआ",
+        "nodeSaved": "नोड सफलतापूर्वक अपडेट हो गया!",
         "saveFailed": "सेव विफल: {error}",
         "publishedToast": "प्रकाशित",
         "publishFailed": "प्रकाशन विफल: {error}",

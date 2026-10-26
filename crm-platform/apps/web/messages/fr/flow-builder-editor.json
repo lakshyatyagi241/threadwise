@@ -645,6 +645,7 @@
         "imported": "{steps, plural, one {# étape importée} other {# étapes importées}} dans {flows, plural, one {# flux} other {# flux}}. Vérifiez-les, puis enregistrez.",
         "invalidJson": "Ce fichier n’est pas un JSON valide.",
         "saved": "« {name} » enregistré",
+        "nodeSaved": "Nœud mis à jour avec succès !",
         "saveFailed": "Échec de l’enregistrement : {error}",
         "publishedToast": "Publié",
         "publishFailed": "Échec de la publication : {error}",

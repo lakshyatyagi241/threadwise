@@ -645,6 +645,7 @@
         "imported": "Zaimportowano {steps, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}} w {flows, plural, one {# przepływie} few {# przepływach} many {# przepływach} other {# przepływu}}. Sprawdź je, a następnie zapisz.",
         "invalidJson": "Ten plik nie jest prawidłowym JSON-em.",
         "saved": "Zapisano „{name}”",
+        "nodeSaved": "Węzeł został zaktualizowany!",
         "saveFailed": "Zapisywanie nie powiodło się: {error}",
         "publishedToast": "Opublikowano",
         "publishFailed": "Publikowanie nie powiodło się: {error}",
