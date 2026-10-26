@@ -10,7 +10,7 @@ import { KEYS, cancelAddonRenewal } from '../api';
 const NS = 'addons-extension-registry.workspace.renewal';
 
 /** "Cancel renewal" for one owned add-on that renews by autopay: the paid term keeps running, so the confirmation says so. */
-export function CancelAddonRenewal({ addonId }: { addonId: string }) {
+export function CancelAddonRenewal({ addonId, name }: { addonId: string; name: string }) {
   const t = useTranslations(NS);
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -38,6 +38,7 @@ export function CancelAddonRenewal({ addonId }: { addonId: string }) {
         size="sm"
         variant="secondary"
         data-testid="cancel-addon-renewal"
+        aria-label={`${t('cancel')}: ${name}`}
         onClick={() => {
           setError(null);
           setOpen(true);
@@ -51,7 +52,11 @@ export function CancelAddonRenewal({ addonId }: { addonId: string }) {
         message={
           <>
             <p>{t('confirmBody')}</p>
-            {error && <p className="mt-2 text-danger">{error}</p>}
+            {error && (
+              <p role="alert" className="mt-2 text-danger">
+                {error}
+              </p>
+            )}
           </>
         }
         confirmLabel={t('confirm')}
