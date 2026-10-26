@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Nom du nouveau groupe",
       "groupRequiredHint": "Chaque contact importé rejoint ce groupe unique. La colonne de groupe du fichier est ignorée, sauf si vous l’associez ci-dessus.",
       "customProperties": "Propriétés personnalisées",
-      "customPropertiesHint": "Une colonne dont l'en-tête est le nom de la propriété, ou attr:key tel qu'écrit par l'export, remplit cette propriété. Une cellule vide conserve la valeur que le contact possède déjà."
+      "customPropertiesHint": "Une colonne dont l'en-tête est le nom de la propriété, ou attr:key tel qu'écrit par l'export, remplit cette propriété. Une cellule vide conserve la valeur que le contact possède déjà.",
+      "propertyFormat": {
+        "checkbox": "Saisissez yes ou no. Sont aussi acceptés : true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Séparez les clés des options par une virgule, un point-virgule ou une barre verticale, par exemple vip, new_leads. Indiquez la clé, pas le libellé. La casse n’a pas d’importance."
+      }
     },
     "detail": {
       "back": "Tous les contacts",

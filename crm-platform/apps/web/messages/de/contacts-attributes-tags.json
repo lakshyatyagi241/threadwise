@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Name der neuen Gruppe",
       "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen.",
       "customProperties": "Benutzerdefinierte Eigenschaften",
-      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat."
+      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat.",
+      "propertyFormat": {
+        "checkbox": "yes oder no eintragen. Auch zulässig: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Trenne die Schlüssel der Optionen mit Komma, Semikolon oder Pipe, zum Beispiel vip, new_leads. Verwende den Schlüssel, nicht die Bezeichnung. Groß- und Kleinschreibung spielt keine Rolle."
+      }
     },
     "detail": {
       "back": "Alle Kontakte",

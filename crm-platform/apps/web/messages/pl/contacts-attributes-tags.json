@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Nazwa nowej grupy",
       "groupRequiredHint": "Każdy zaimportowany kontakt trafia do tej jednej grupy. Kolumna grupy z pliku jest ignorowana, chyba że zmapujesz ją powyżej.",
       "customProperties": "Właściwości niestandardowe",
-      "customPropertiesHint": "Kolumna, której nagłówek to nazwa właściwości (lub attr:key, tak jak zapisuje ją eksport), wypełnia tę właściwość. Pusta komórka zachowuje wartość, którą kontakt już ma."
+      "customPropertiesHint": "Kolumna, której nagłówek to nazwa właściwości (lub attr:key, tak jak zapisuje ją eksport), wypełnia tę właściwość. Pusta komórka zachowuje wartość, którą kontakt już ma.",
+      "propertyFormat": {
+        "checkbox": "Wpisz yes lub no. Akceptowane są także: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Oddziel klucze opcji przecinkiem, średnikiem lub kreską pionową, np. vip, new_leads. Wpisz klucz, a nie nazwę. Wielkość liter nie ma znaczenia."
+      }
     },
     "detail": {
       "back": "Wszystkie kontakty",

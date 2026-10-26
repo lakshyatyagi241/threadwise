@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "Yeni grup adı",
       "groupRequiredHint": "İçe aktarılan her kişi bu tek gruba katılır. Yukarıda eşleştirmediğiniz sürece dosyanın kendi grup sütunu yok sayılır.",
       "customProperties": "Özel özellikler",
-      "customPropertiesHint": "Başlığı özelliğin adı olan (ya da dışa aktarmanın yazdığı biçimiyle attr:key) bir sütun o özelliği doldurur. Boş bir hücre, kişinin zaten sahip olduğu değeri korur."
+      "customPropertiesHint": "Başlığı özelliğin adı olan (ya da dışa aktarmanın yazdığı biçimiyle attr:key) bir sütun o özelliği doldurur. Boş bir hücre, kişinin zaten sahip olduğu değeri korur.",
+      "propertyFormat": {
+        "checkbox": "yes veya no yazın. Ayrıca şunlar da kabul edilir: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Seçenek anahtarlarını virgül, noktalı virgül veya dikey çizgi ile ayırın, örneğin vip, new_leads. Etiket değil anahtarı yazın. Büyük/küçük harf fark etmez."
+      }
     },
     "detail": {
       "back": "Tüm kişiler",

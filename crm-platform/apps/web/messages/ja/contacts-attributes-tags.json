@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "新しいグループ名",
       "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。",
       "customProperties": "カスタムプロパティ",
-      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。"
+      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。",
+      "propertyFormat": {
+        "checkbox": "yes または no と入力します。true、false、y、n、1、0、x、on、off も使えます。",
+        "multiselect": "選択肢のキーはカンマ、セミコロン、縦棒で区切ります(例: vip, new_leads)。表示名ではなくキーを入力してください。大文字と小文字は区別しません。"
+      }
     },
     "detail": {
       "back": "すべての連絡先",

@@ -595,29 +595,37 @@ function PreviewPanel({
           <p className="text-xs text-muted-foreground">{t('customPropertiesHint')}</p>
           <div className="grid gap-2 sm:grid-cols-2">
             {properties.map((prop, i) => (
-              <div key={prop.key} className="flex items-center justify-between gap-2 text-sm">
-                <label
-                  htmlFor={`${uid}-property-${i}`}
-                  className="min-w-0 shrink truncate text-muted-foreground"
-                  dir="auto"
-                >
-                  {prop.label}
-                </label>
-                <Select
-                  id={`${uid}-property-${i}`}
-                  className="h-8 max-w-[11rem]"
-                  value={prop.column === null ? '' : String(prop.column)}
-                  onChange={(e) =>
-                    onMapProperty(prop.key, e.target.value === '' ? null : Number(e.target.value))
-                  }
-                >
-                  <option value="">{t('notInFile')}</option>
-                  {preview.headers.map((h, col) => (
-                    <option key={col} value={col}>
-                      {h || t('columnN', { n: col + 1 })}
-                    </option>
-                  ))}
-                </Select>
+              <div key={prop.key} className="space-y-1">
+                <div className="flex items-center justify-between gap-2 text-sm">
+                  <label
+                    htmlFor={`${uid}-property-${i}`}
+                    className="min-w-0 shrink truncate text-muted-foreground"
+                    dir="auto"
+                  >
+                    {prop.label}
+                  </label>
+                  <Select
+                    id={`${uid}-property-${i}`}
+                    className="h-8 max-w-[11rem]"
+                    value={prop.column === null ? '' : String(prop.column)}
+                    onChange={(e) =>
+                      onMapProperty(prop.key, e.target.value === '' ? null : Number(e.target.value))
+                    }
+                  >
+                    <option value="">{t('notInFile')}</option>
+                    {preview.headers.map((h, col) => (
+                      <option key={col} value={col}>
+                        {h || t('columnN', { n: col + 1 })}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                {prop.fieldType === 'checkbox' && (
+                  <p className="text-xs text-muted-foreground">{t('propertyFormat.checkbox')}</p>
+                )}
+                {prop.fieldType === 'multiselect' && (
+                  <p className="text-xs text-muted-foreground">{t('propertyFormat.multiselect')}</p>
+                )}
               </div>
             ))}
           </div>

@@ -675,7 +675,11 @@
       "groupNewPlaceholder": "새 그룹 이름",
       "groupRequiredHint": "가져온 모든 연락처가 이 그룹 하나에 추가됩니다. 위에서 매핑하지 않는 한 파일의 그룹 열은 무시됩니다.",
       "customProperties": "사용자 지정 속성",
-      "customPropertiesHint": "헤더가 속성 이름인 열(또는 내보내기가 쓰는 attr:key)이 그 속성을 채웁니다. 빈 셀은 연락처가 이미 가진 값을 유지합니다."
+      "customPropertiesHint": "헤더가 속성 이름인 열(또는 내보내기가 쓰는 attr:key)이 그 속성을 채웁니다. 빈 셀은 연락처가 이미 가진 값을 유지합니다.",
+      "propertyFormat": {
+        "checkbox": "yes 또는 no로 입력합니다. true, false, y, n, 1, 0, x, on, off도 인식됩니다.",
+        "multiselect": "옵션 키는 쉼표, 세미콜론 또는 파이프로 구분합니다(예: vip, new_leads). 이름이 아니라 키를 입력하세요. 대소문자는 구분하지 않습니다."
+      }
     },
     "detail": {
       "back": "모든 연락처",
