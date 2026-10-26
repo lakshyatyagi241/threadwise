@@ -203,7 +203,7 @@ def('RedisMemoryNearMax', {
   rb: `${P0}#redismemorynearmax`,
   q: [RMEM, ['Waiting jobs', 'sum(crm_queue_jobs_pending{state="waiting"})']],
 });
-def('DbPoolExhausted DbPoolSaturated', {
+def('DbPoolExhausted DbPoolSaturated DbPoolAcquireSlow', {
   meaning: 'Requests wait for a Postgres connection from the pool.',
   causes: [
     'Slow or locked queries holding connections (see slow-query cards)',

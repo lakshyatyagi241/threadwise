@@ -367,6 +367,7 @@
         "WebhookRateHigh",
         "WebhookLatencyHigh",
         "DbPoolSaturated",
+        "DbPoolAcquireSlow",
         "WabaIngestBacklogGrowing"
       ],
       "runbook": "docs/runbooks/p0-failure-modes.md#webhookflood",
@@ -421,6 +422,7 @@
     "RouteLatencyP95High": "vedant",
     "ApiHighErrorRate": "vedant",
     "DbPoolSaturated": "vedant",
+    "DbPoolAcquireSlow": "vedant",
     "DbPoolExhausted": "vedant",
     "RedisMemoryHigh": "vedant"
   }
