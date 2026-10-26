@@ -132,6 +132,12 @@ const audienceFields = {
   groupIds: z.array(uuidSchema).max(1_000).default([]),
   tagIds: z.array(uuidSchema).max(1_000).default([]),
   segmentIds: z.array(uuidSchema).max(1_000).default([]),
+  /**
+   * How the groups, tags and segments picked combine. `any` (the default): a contact in at least one of them. `all`: a contact in one
+   * of the picked items of each kind that has picks (any group, and any tag, and any segment). Individual contacts, numbers, CSV and
+   * previous sends are always added.
+   */
+  audienceMatch: z.enum(['any', 'all']).default('any'),
   /** One per line, or separated by commas or semicolons. */
   manualNumbers: z.string().max(500_000).default(''),
   /** The text of an uploaded CSV (`name,country_code,phone` plus any attribute columns). */
@@ -186,6 +192,7 @@ export const updateCampaignSchema = z
     groupIds: audienceFields.groupIds.optional(),
     tagIds: audienceFields.tagIds.optional(),
     segmentIds: audienceFields.segmentIds.optional(),
+    audienceMatch: audienceFields.audienceMatch.optional(),
     manualNumbers: audienceFields.manualNumbers.optional(),
     csvText: audienceFields.csvText.optional(),
     previousSends: audienceFields.previousSends,

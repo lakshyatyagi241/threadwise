@@ -158,7 +158,11 @@
       "contactsDenied": "Anda tidak memiliki akses ke daftar kontak. Pilih kontak melalui grup atau tag.",
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "colEmail": "Email",
-      "noEmail": "Tidak ada alamat email"
+      "noEmail": "Tidak ada alamat email",
+      "contactsHeading": "Kontak",
+      "matchTitle": "Cocokkan dengan grup, tag, dan segmen yang dipilih",
+      "matchAny": "Salah satu",
+      "matchAll": "Semuanya"
     },
     "overrides": {
       "title": "Isi pengiriman ini",

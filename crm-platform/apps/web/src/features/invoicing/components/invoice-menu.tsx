@@ -49,7 +49,7 @@ export function InvoiceRowMenu({
   });
 
   return (
-    <RowMenu label={label}>
+    <RowMenu label={label} placement="fixed">
       {(close) => {
         const run = (fn: () => void) => () => {
           close();
