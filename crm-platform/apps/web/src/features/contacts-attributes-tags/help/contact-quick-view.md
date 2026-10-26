@@ -33,7 +33,7 @@ The **quick view** shows one contact in a panel on the right, about 60% of the w
 
 ## Good to know
 
-- **Subscription status.** Yes means the contact is subscribed on that channel. No in red means the contact opted out of marketing messages. The proof is on the contact's **Consent** page.
+- **Subscription status.** Yes means the contact is subscribed on that channel. No in red means the contact opted out of marketing messages. The card follows the contact's consent record: a recorded opt-in reads Yes and a withdrawal reads No, even if the contact's own subscription label says otherwise. The proof is on the contact's **Consent** page. **Message** stays available for a contact who is not subscribed, because a chat reply is a service message and only marketing messages need an opt-in; a marketing template to that contact is still refused when it is sent.
 - **Files.** The list shows the files attached to the contact. Select **Add file** to add one; the same limits apply as on the details page.
 - **Web analytics** is not shown: no visit or page-view data is kept for a contact.
 - **Conversations and communication stats** count the chats found for this contact on your channels and, with the right access, their calls and open tasks. They need access to the Team inbox (and to calls) and are not shown without it.

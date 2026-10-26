@@ -322,7 +322,7 @@
         "conversationsOpen": "Открытые диалоги",
         "conversationsResolved": "Решённые диалоги",
         "conversationsClosed": "Закрытые диалоги",
-        "conversationsAssigned": "Назначенные",
+        "conversationsAssigned": "Назначены кому-либо",
         "conversationsUnassigned": "Не назначенные",
         "conversationsTotal": "{count, plural, one {# диалог} few {# диалога} many {# диалогов} other {# диалога}}"
       },

@@ -229,6 +229,7 @@ export class AttributesService {
           name: a.label,
           description: typeof a.config.description === 'string' ? a.config.description : null,
           value: typeof a.config.defaultValue === 'string' ? a.config.defaultValue : null,
+          type: a.fieldType,
         })),
       };
     });

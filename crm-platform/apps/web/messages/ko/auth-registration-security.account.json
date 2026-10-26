@@ -566,7 +566,9 @@
             "record_assignment": "레코드 배정 규칙",
             "team_hierarchy": "팀 계층 및 매니저",
             "custom_roles": "사용자 지정 역할 및 범위",
-            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원"
+            "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원",
+            "agent_status_bar": "상태 표시줄",
+            "agent_status_automation": "상태 자동화"
           },
           "cta": {
             "continueFree": "무료로 계속",

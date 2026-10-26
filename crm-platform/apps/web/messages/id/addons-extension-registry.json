@@ -370,7 +370,8 @@
         "includedOwned": "Anda juga memiliki add-on ini. Paket Anda kini sudah mencakupnya, jadi Anda dapat membatalkan add-on. Tidak ada pengembalian dana otomatis.",
         "includedEnds": "Termasuk dalam paket Anda. Add-on Anda berakhir pada {date} dan tidak akan diperpanjang.",
         "active": "Aktif",
-        "ownedCount": "Dimiliki ×{count} · membeli lagi menambah jumlahnya"
+        "ownedCount": "Dimiliki ×{count} · membeli lagi menambah jumlahnya",
+        "turnedOff": "Nonaktif"
       },
       "price": {
         "free": "Gratis",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Add-on fitur",
         "capacity": "Add-on kapasitas"
+      },
+      "activation": {
+        "turnedOffNote": "Dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+        "turnOff": "Nonaktifkan",
+        "turnOn": "Aktifkan",
+        "askOwner": "Minta pemilik akun untuk mengaktifkan atau menonaktifkannya.",
+        "doneOn": "{name} diaktifkan.",
+        "errors": {
+          "notToggleable": "{name} tidak dapat diaktifkan atau dinonaktifkan di sini. Hanya add-on yang termasuk dalam paket Anda yang dapat dialihkan.",
+          "forbidden": "Anda tidak memiliki izin untuk mengaktifkan atau menonaktifkan add-on.",
+          "generic": "Kami tidak dapat mengubah {name}. Silakan coba lagi."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Nonaktifkan {name}?",
+      "lead": "Berikut yang akan berubah. Anda dapat mengaktifkannya kembali kapan saja.",
+      "cancel": "Batal",
+      "confirm": "Nonaktifkan {name}",
+      "done": "{name} dinonaktifkan. Pengaturannya tetap disimpan.",
+      "typeLabel": "Ketik {name} untuk mengonfirmasi",
+      "typeHint": "Obrolan pelanggan atau orang akan terdampak, jadi ketik nama untuk mengonfirmasi.",
+      "groups": {
+        "stops": "Yang berhenti",
+        "kept": "Yang tetap disimpan",
+        "people": "Orang"
+      },
+      "items": {
+        "features_off": "Fitur ini berhenti berfungsi: {names}.",
+        "dependents_off": "Fitur ini bergantung padanya, jadi ikut berhenti: {names}.",
+        "roles_dormant": "{count, plural, other {# peran memiliki izin add-on ini. Izin tetap disimpan, tetapi tidak aktif sampai Anda mengaktifkannya kembali.}}",
+        "waiting_chats": "{count, plural, other {# obrolan menunggu agen. Obrolan tidak akan diarahkan otomatis, jadi seseorang harus mengambilnya.}}",
+        "routing_rules": "{count, plural, other {# aturan perutean berhenti menugaskan obrolan.}}",
+        "auto_teams": "{count, plural, other {# tim diatur untuk menugaskan obrolan secara otomatis dan akan berhenti melakukannya.}}",
+        "teams": "{count, plural, other {# tim tetap disimpan beserta anggotanya.}}",
+        "custom_role_holders": "{count, plural, other {# orang memiliki peran khusus. Perannya tetap disimpan, tetapi izin add-on ini tidak lagi berlaku.}}",
+        "kept": "Pengaturan dan data Anda tetap disimpan. Semuanya kembali seperti yang Anda tinggalkan saat Anda mengaktifkannya lagi."
       }
     }
   }

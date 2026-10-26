@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   FORM_FIELD_LIMITS,
   assertFormFieldLimits,
+  reservedTextPlan,
 } from '../../../src/modules/crm/contacts/form-field-limits';
 
 /** TW-CON-009 rule 2: the form's text fields have server-side caps (Reference: title 50, language 80, address 1000, memo 2000). */
@@ -48,5 +49,22 @@ describe('assertFormFieldLimits', () => {
       address: 1000,
       memo: 2000,
     });
+  });
+});
+
+describe('reservedTextPlan (bulk update of the form own text properties)', () => {
+  it('sets trimmed text, clears blank text and null, and ignores other keys', () => {
+    expect(
+      reservedTextPlan({ memo: '  VIP  ', language: ' ', address: null, city: 'Pune' }),
+    ).toEqual({ set: { memo: 'VIP' }, clear: ['language', 'address'] });
+  });
+
+  it('plans nothing when no reserved key is named', () => {
+    expect(reservedTextPlan({ city: 'Pune' })).toBeUndefined();
+    expect(reservedTextPlan(undefined)).toBeUndefined();
+  });
+
+  it('refuses a value that is not text', () => {
+    expect(() => reservedTextPlan({ memo: 5 })).toThrow(/Not text/);
   });
 });

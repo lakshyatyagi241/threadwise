@@ -370,7 +370,8 @@
         "includedOwned": "También tienes este complemento. Tu plan ya lo incluye, así que puedes cancelarlo. No se reembolsa nada automáticamente.",
         "includedEnds": "Incluido en tu plan. Tu complemento termina el {date} y no se renovará.",
         "active": "Activo",
-        "ownedCount": "Tienes ×{count} · comprar de nuevo suma más"
+        "ownedCount": "Tienes ×{count} · comprar de nuevo suma más",
+        "turnedOff": "Desactivado"
       },
       "price": {
         "free": "Gratis",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Complementos de funciones",
         "capacity": "Complementos de capacidad"
+      },
+      "activation": {
+        "turnedOffNote": "Desactivado para este espacio de trabajo. Su configuración se conserva.",
+        "turnOff": "Desactivar",
+        "turnOn": "Activar",
+        "askOwner": "Pide al propietario de la cuenta que lo active o lo desactive.",
+        "doneOn": "{name} está activado.",
+        "errors": {
+          "notToggleable": "{name} no se puede activar ni desactivar aquí. Solo se puede cambiar un complemento incluido en tu plan.",
+          "forbidden": "No tienes permiso para activar ni desactivar complementos.",
+          "generic": "No pudimos cambiar {name}. Inténtalo de nuevo."
+        }
+      }
+    },
+    "toggle": {
+      "title": "¿Desactivar {name}?",
+      "lead": "Esto es lo que cambia. Puedes volver a activarlo cuando quieras.",
+      "cancel": "Cancelar",
+      "confirm": "Desactivar {name}",
+      "done": "{name} está desactivado. Su configuración se conserva.",
+      "typeLabel": "Escribe {name} para confirmar",
+      "typeHint": "Esto afecta a chats de clientes o a personas, así que escribe el nombre para confirmar.",
+      "groups": {
+        "stops": "Qué se detiene",
+        "kept": "Qué se conserva",
+        "people": "Personas"
+      },
+      "items": {
+        "features_off": "Estas funciones dejan de funcionar: {names}.",
+        "dependents_off": "Estas funciones dependen de ellas, así que también se detienen: {names}.",
+        "roles_dormant": "{count, plural, one {# rol tiene permisos de este complemento. Los conserva, pero quedan inactivos hasta que lo vuelvas a activar.} other {# roles tienen permisos de este complemento. Los conservan, pero quedan inactivos hasta que lo vuelvas a activar.}}",
+        "waiting_chats": "{count, plural, one {# chat espera a un agente. No se enrutará automáticamente, así que alguien tiene que tomarlo.} other {# chats esperan a un agente. No se enrutarán automáticamente, así que alguien tiene que tomarlos.}}",
+        "routing_rules": "{count, plural, one {# regla de enrutamiento deja de asignar chats.} other {# reglas de enrutamiento dejan de asignar chats.}}",
+        "auto_teams": "{count, plural, one {# equipo está configurado para asignar chats automáticamente y deja de hacerlo.} other {# equipos están configurados para asignar chats automáticamente y dejan de hacerlo.}}",
+        "teams": "{count, plural, one {# equipo se conserva, con sus miembros.} other {# equipos se conservan, con sus miembros.}}",
+        "custom_role_holders": "{count, plural, one {# persona tiene un rol personalizado. Su rol se conserva, pero los permisos de este complemento dejan de aplicarse.} other {# personas tienen un rol personalizado. Sus roles se conservan, pero los permisos de este complemento dejan de aplicarse.}}",
+        "kept": "Tu configuración y tus datos se conservan. Vuelven como los dejaste cuando lo actives de nuevo."
       }
     }
   }

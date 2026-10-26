@@ -151,7 +151,7 @@
         "outside": "Hanya di luar jam kerja"
       },
       "thenTitle": "Tugaskan ke",
-      "thenHint": "Agen yang tidak aktif, luring, sibuk, atau tidak dapat membuka inbox akan dilewati.",
+      "thenHint": "Agen yang tidak aktif, tidak di tempat, sibuk, atau tidak dapat membuka kotak masuk dilewati.",
       "strategy": "Cara memilih",
       "strategyHint": {
         "round_robin": "Bergiliran: percakapan dibagikan ke agen yang dipilih secara bergantian, sehingga setiap orang mendapat bagian yang sama. Aturan mengingat giliran berikutnya.",
@@ -288,10 +288,10 @@
         "lastSeen": "Terakhir terlihat"
       },
       "statuses": {
-        "online": "Online",
-        "away": "Away",
+        "online": "Tersedia",
+        "away": "Tidak di tempat, di luar jam kerja",
         "busy": "Sibuk",
-        "offline": "Offline"
+        "offline": "Tidak di tempat"
       }
     },
     "businessHours": {

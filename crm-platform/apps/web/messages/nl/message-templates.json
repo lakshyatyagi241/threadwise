@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "De controles hebben problemen gevonden die Meta zou afwijzen. Er is niets verzonden. Los de fouten rechts op.",
       "TPL_META_REJECTED": "Meta heeft het sjabloon geweigerd. De reden staat hieronder; het sjabloon blijft bewaard als concept zodat je het kunt aanpassen en opnieuw kunt proberen.",
       "TPL_NO_CONNECTION": "Aan dit sjabloon is geen WhatsApp-nummer gekoppeld om het mee in te dienen. Koppel eerst een nummer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Kopbestanden hebben cloud-objectopslag nodig. Vraag de platformbeheerder om die in te schakelen.",
       "TPL_IN_USE": "Dit sjabloon kan niet worden verwijderd omdat een lopende of geplande broadcast het gebruikt.",
       "TPL_NOT_EDITABLE": "Alleen een sjabloon dat Meta nog niet heeft goedgekeurd, of een dat is afgewezen, kan worden bewerkt.",
       "TPL_EDIT_LIMIT": "Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur en tien per 30 dagen toe. Probeer het later opnieuw.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, one {+# knop meer} other {+# knoppen meer}}",
       "live": "Live voorbeeld",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Carrouselkaarten",
+      "cardEmpty": "Tekst van kaart {n}",
+      "offerExpires": "Eindigt binnenkort",
+      "offerTextEmpty": "Titel van de aanbieding"
     },
     "card": {
       "rejected": "Afgewezen: {reason}",
@@ -120,7 +125,8 @@
         "all": "Alle",
         "approved": "Goedgekeurd",
         "pending": "In beoordeling",
-        "rejected": "Afgewezen"
+        "rejected": "Afgewezen",
+        "draft": "Concept"
       },
       "quickStartTitle": "Snel starten",
       "quickStart": "Lees de <link>sjabloonrichtlijnen</link> voordat je indient bij Meta, zodat de goedkeuring binnen 24 uur klaar is.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Goedgekeurd",
         "pending": "In beoordeling",
-        "rejected": "Afgewezen"
+        "rejected": "Afgewezen",
+        "draft": "Concept"
       },
       "helpLabel": "Hulp - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Sjabloon verwijderen",
       "cancel": "Annuleren",
       "done": "\"{name}\" verwijderd.",
-      "inUseHelp": "Open de broadcast die dit sjabloon gebruikt en annuleer die of kies een ander sjabloon, en verwijder daarna dit sjabloon."
+      "inUseHelp": "Open de broadcast die dit sjabloon gebruikt en annuleer die of kies een ander sjabloon, en verwijder daarna dit sjabloon.",
+      "messageDraft": "„{name}” verwijderen? Hij is nooit naar Meta verzonden, dus hij wordt alleen hier verwijderd."
     },
     "lint": {
       "title": "Controles vóór indienen",
@@ -195,7 +203,8 @@
         "body": "Hoofdtekst",
         "footer": "Footer",
         "buttons": "Knoppen",
-        "template": "Sjabloon"
+        "template": "Sjabloon",
+        "cards": "Kaarten"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Uploaden",
         "keptSample": "Het opgeslagen voorbeeld blijft behouden. Kies een bestand om het te vervangen.",
         "noFile": "Geen bestand gekozen",
-        "limits": "Afbeelding tot 5 MB, video tot 16 MB, pdf tot 100 MB.",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB, pdf tot 10 MB.",
         "replace": "Bestand vervangen",
         "choose": "Voorbeeldbestand kiezen",
         "tooBig": "Deze {kind} is {size} MB. WhatsApp accepteert maximaal {max} MB. Kies een kleiner bestand.",
@@ -322,14 +331,18 @@
           "quick_reply": "Snel antwoord",
           "url": "Website bezoeken",
           "phone": "Telefoon bellen",
-          "copy_code": "Code kopiëren"
+          "copy_code": "Code kopiëren",
+          "form": "Formulier",
+          "catalog": "Catalogus"
         },
         "kind": {
           "quick_reply": "Snel antwoord",
           "url": "Website bezoeken",
           "phone": "Telefoon bellen",
           "copy_code": "Code kopiëren",
-          "other": "Overig"
+          "other": "Overig",
+          "form": "Formulier",
+          "catalog": "Catalogus"
         },
         "count": "{used}/{max} knoppen",
         "limitReached": "Maximaal {max} van dit type.",
@@ -358,8 +371,17 @@
           "codeRequired": "Voer een voorbeeldcode in.",
           "quickReplyVariable": "Een snel antwoord kan geen variabele bevatten.",
           "urlExampleRequired": "Geef een voorbeeldwaarde op voor de URL-variabele.",
-          "quickReplyPosition": "Snelle antwoorden moeten samen staan, aan het begin of aan het eind van de knoppen."
-        }
+          "quickReplyPosition": "Snelle antwoorden moeten samen staan, aan het begin of aan het eind van de knoppen.",
+          "flowIdRequired": "Vul het Flow-ID in.",
+          "flowIdInvalid": "Het Flow-ID is een getal.",
+          "screenRequired": "Vul het scherm-ID in.",
+          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd."
+        },
+        "catalogHint": "Opent uw WhatsApp-catalogus. De knop zegt “Catalogus bekijken” en moet de enige knop zijn.",
+        "flowId": "WhatsApp Flow-ID",
+        "flowIdHint": "Het numerieke ID van een gepubliceerde WhatsApp Flow, uit de Flows-beheerder van Meta.",
+        "screen": "Openingsscherm",
+        "screenHint": "Het ID van het scherm waarop het formulier opent, bijvoorbeeld WELCOME."
       },
       "result": {
         "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",
@@ -373,6 +395,46 @@
         "open": "Bouwen met AI",
         "applied": "Sjabloonconcept ingevuld door AI. Controleer het voordat u het indient.",
         "authHint": "Authenticatiesjablonen hebben een vaste tekst, dus er valt niets te schrijven."
+      },
+      "type": {
+        "label": "Knoptype",
+        "standard": "Standaard",
+        "carousel": "Carrousel",
+        "hint": "Kies waarmee het bericht eindigt. Een carrousel is een rij kaarten; een tijdelijke aanbieding heeft een aanbiedingstitel met optionele aftelling en een knop om een code te kopiëren of een website te openen.",
+        "none": "Geen",
+        "buttons": "Code kopiëren, website, snelle antwoorden enz.",
+        "lto": "Tijdelijke aanbieding",
+        "catalogue": "Catalogus",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Kaarten",
+        "hint": "2 tot 10 kaarten. Alle kaarten gebruiken hetzelfde soort bestand en dezelfde knoppen.",
+        "format": "Kaarten tonen",
+        "formatImage": "Afbeeldingen",
+        "formatVideo": "Video's",
+        "count": "{used}/{max} kaarten",
+        "add": "Kaart toevoegen",
+        "needTwo": "Een carrousel heeft minstens {min} kaarten nodig.",
+        "card": "Kaart {n}",
+        "remove": "Kaart {n} verwijderen",
+        "noFile": "Geen bestand gekozen",
+        "uploading": "Uploaden",
+        "text": "Kaarttekst",
+        "textCounter": "{used}/{max}",
+        "buttons": "Knoppen",
+        "buttonText": "Knoptekst",
+        "buttonUrl": "Website-URL",
+        "buttonPhone": "Telefoonnummer"
+      },
+      "offer": {
+        "title": "Tijdelijke aanbieding",
+        "hint": "Verschijnt onder de afbeelding of video: een titel en, als u wilt, een aftelling tot het einde van de aanbieding.",
+        "text": "Titel van de aanbieding",
+        "textHint": "{used}/{max}",
+        "placeholder": "Aanbieding verloopt bijna!",
+        "countdown": "Aftelling tonen",
+        "countdownHint": "WhatsApp toont de tijd die nog resteert tot het einde van de aanbieding."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Sjablonen",
       "crumbDetail": "Details",
       "notSubmittedPill": "Niet ingediend",
-      "qualityPill": "Kwaliteit · {quality}",
       "preview": {
         "title": "Voorbeeld",
         "hint": "Zo verschijnt het op WhatsApp"

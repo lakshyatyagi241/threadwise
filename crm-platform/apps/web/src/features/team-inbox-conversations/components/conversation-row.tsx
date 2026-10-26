@@ -85,8 +85,10 @@ export const ConversationRow = memo(function ConversationRow({
     return tha(AGE_KEY[age.unit], { count: age.count });
   };
 
+  // An erased contact's thread keeps the stored tombstone ("[erased]") only in the data; the screen says what it is.
+  const title = row.erased ? t('erasedTitle') : row.title;
   const label = [
-    row.title,
+    title,
     unread ? t('unreadCount', { count: row.unreadCount }) : null,
     row.imported ? t('imported') : null,
     row.preview,
@@ -124,14 +126,14 @@ export const ConversationRow = memo(function ConversationRow({
             {selected ? '✓' : ''}
           </span>
         )}
-        <Avatar id={row.id} name={row.title} />
+        <Avatar id={row.id} name={title} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
             <span
               dir="auto"
               className={cn('truncate text-sm', unread ? 'font-semibold' : 'font-medium')}
             >
-              {row.title}
+              {title}
             </span>
             {showChannel && (
               <ChannelTag decorative kind={row.channel.kind} name={row.channel.name} />
@@ -167,7 +169,8 @@ export const ConversationRow = memo(function ConversationRow({
           >
             {outbound && <span className="shrink-0 text-muted-foreground">{t('you')}</span>}
             <span dir="auto" className="truncate">
-              {row.preview ?? t('noMessages')}
+              {/* An erased contact's messages keep no text, so there is no preview to show, and "no messages yet" would be untrue. */}
+              {row.preview ?? (row.erased ? '' : t('noMessages'))}
             </span>
           </span>
           <span className="mt-1 flex flex-wrap items-center gap-1">
@@ -273,7 +276,7 @@ export const ConversationRow = memo(function ConversationRow({
         <button
           type="button"
           data-testid="inbox-row-pick"
-          aria-label={t('selectRow', { name: row.title })}
+          aria-label={t('selectRow', { name: title })}
           onClick={(e) => onPick(row.id, e.shiftKey)}
           className="absolute start-3 top-3 grid size-10 place-items-center rounded-full bg-background/95 opacity-0 shadow-sm ring-1 ring-border transition group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary max-md:hidden"
         >
@@ -287,7 +290,7 @@ export const ConversationRow = memo(function ConversationRow({
             data-testid="inbox-row-more"
             aria-haspopup="menu"
             aria-expanded={menu}
-            aria-label={t('rowMenu', { name: row.title })}
+            aria-label={t('rowMenu', { name: title })}
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => setMenu((v) => !v)}
             className={cn(

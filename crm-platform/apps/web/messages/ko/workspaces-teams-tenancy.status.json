@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "응대 가능",
+        "away": "자리 비움",
+        "onLeaveUntil": "{date}까지 휴가 중",
+        "onLeaveOpen": "휴가 중",
+        "awayHours": "근무 시간 외 자리 비움",
+        "label": "내 상태"
+      },
+      "menu": {
+        "title": "상태 메뉴",
+        "update": "상태 업데이트",
+        "setAway": "자리 비움으로 설정",
+        "setAvailable": "응대 가능으로 설정",
+        "failed": "상태를 변경하지 못했습니다.",
+        "automate": "상태 자동화",
+        "manage": "근무 시간 및 부재 관리",
+        "workingHours": "근무 시간",
+        "timeOff": "휴가",
+        "outsideNotice": "근무 시간 외",
+        "locked": "상태 표시줄은 상위 요금제에 포함되어 있습니다. 계정 메뉴의 응대 가능 / 자리 비움 스위치는 계속 사용할 수 있습니다."
+      },
+      "hours": {
+        "title": "내 근무 시간",
+        "titleFor": "{name}님의 근무 시간",
+        "lead": "응대할 수 있는 시간을 선택하세요. 이 시간 외에는 상태가 자동으로 자리 비움으로 바뀝니다.",
+        "leadOther": "이 사람이 응대할 수 있는 시간을 선택하세요. 이 시간 외에는 상태가 자동으로 자리 비움으로 바뀝니다.",
+        "locked": "근무 시간에 따른 자동 상태는 상위 요금제에 포함되어 있습니다.",
+        "viewOnly": "이 근무 시간은 볼 수만 있고 변경할 수 없습니다.",
+        "automate": "내 상태 자동화",
+        "automateHint": "이 시간 외에는 자리 비움, 시간 내에는 응대 가능입니다. 직접 설정한 상태는 다음 근무 시간 변경 시점까지 유지됩니다.",
+        "emptyWarning": "근무하는 요일이 없어 항상 응대 가능으로 표시됩니다. 요일을 하나 이상 켜세요.",
+        "timezone": "시간대",
+        "timezoneHint": "워크스페이스 시간대({zone})에서 시작합니다.",
+        "useWorkspaceZone": "워크스페이스 시간대 사용"
+      },
+      "members": {
+        "hoursAction": "근무 시간"
+      }
+    }
+  }
+}

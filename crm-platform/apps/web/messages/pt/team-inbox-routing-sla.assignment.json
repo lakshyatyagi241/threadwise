@@ -18,7 +18,7 @@
         "needsAuto": "Usado somente enquanto a Atribuição automática está ativada.",
         "auto": {
           "title": "Atribuição automática",
-          "body": "Os chats novos são divididos igualmente entre os agentes que estão aceitando chats (não offline, ocupados ou de licença). Quando todos os agentes atingem o limite de chats, os chats novos aguardam na fila.",
+          "body": "Os novos chats são divididos igualmente entre os agentes que aceitam chats (não ausentes, ocupados ou de licença). Quando todos os agentes atingem o limite de chats, os novos chats esperam na fila.",
           "limitHint": "Defina o limite de chats de cada agente no perfil dele, em <link>Membros da equipe</link>.",
           "off": "Desativado: nada é atribuído automaticamente, nem por uma regra nem pelo responsável pelo contato. Os chats aguardam na fila até que alguém os assuma ou um fluxo indique uma pessoa."
         },
@@ -85,7 +85,7 @@
         "notSet": "Ainda não configurado: os chats que nenhuma regra assume aguardam na fila.",
         "mode": "O que acontece com esses chats",
         "evenly": "Distribuir igualmente entre todos os agentes",
-        "evenlyHint": "Rodízio ou menos ocupado entre todos que podem abrir a caixa de entrada e estão disponíveis: não offline, ocupados, de licença nem no limite de chats.",
+        "evenlyHint": "Rodízio ou menos ocupado entre todos que podem abrir a caixa de entrada e estão disponíveis: não ausentes, ocupados, de licença nem no limite de chats.",
         "listed": "Escolher agentes ou equipes",
         "listedNow": "Agora: {who}.",
         "listedEdit": "Alterar os agentes ou equipes",
@@ -185,11 +185,12 @@
         "skippedTitle": "Excluídos",
         "skip": {
           "on_leave": "de licença",
-          "offline_busy_or_at_capacity": "offline, ocupado ou no limite de chats",
+          "offline_busy_or_at_capacity": "ausente, ocupado ou no limite de chats",
           "cannot_read": "não pode abrir a caixa de entrada",
           "no_owner": "o contato não tem responsável",
           "no_previous_handler_in_window": "não há agente anterior para este contato",
-          "not_an_active_member": "não é um membro ativo"
+          "not_an_active_member": "não é um membro ativo",
+          "outside_working_hours": "fora do horário de trabalho"
         },
         "outside": "Simular que está fora do horário comercial",
         "inside": "Simular que está dentro do horário comercial",

@@ -105,6 +105,33 @@ export function clockTime(iso: string, locale: string, timeZone?: string): strin
   });
 }
 
+/**
+ * A session's time range as its message key and values (`thread.session.*`): one moment, a span within one day, or both ends with
+ * their dates when the session runs over midnight.
+ */
+export function sessionRangeMessage(
+  from: string,
+  to: string,
+  locale: string,
+  timeZone?: string,
+): { key: string; values: { date?: string; time?: string; from?: string; to?: string } } {
+  if (dayKey(from, timeZone) !== dayKey(to, timeZone)) {
+    return {
+      key: 'session.across',
+      values: {
+        from: formatDateTime(from, locale, timeZone),
+        to: formatDateTime(to, locale, timeZone),
+      },
+    };
+  }
+  const date = formatDate(from, locale, timeZone);
+  const start = clockTime(from, locale, timeZone);
+  const end = clockTime(to, locale, timeZone);
+  return start === end
+    ? { key: 'session.moment', values: { date, time: start } }
+    : { key: 'session.span', values: { date, from: start, to: end } };
+}
+
 /** The list row's time: "now", "5 min. ago", the clock today, "yesterday", a weekday within a week, else the date. */
 export function listTime(
   iso: string | null,

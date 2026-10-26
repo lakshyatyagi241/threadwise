@@ -566,7 +566,9 @@
             "record_assignment": "Aturan penugasan data",
             "team_hierarchy": "Hierarki tim dan manajer",
             "custom_roles": "Peran kustom dan cakupan",
-            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
+            "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
+            "agent_status_bar": "Bilah status",
+            "agent_status_automation": "Otomatiskan status"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

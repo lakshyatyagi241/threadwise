@@ -27,6 +27,7 @@ import { EmailDeliveryService } from './email-delivery.service';
 import { EmailMessageAccess } from './email-message-access.service';
 import { ExternalChannelIngest } from './external-channel-ingest.service';
 import { InboundMessageHooks } from './inbound-hooks';
+import { MessageStatusHooks } from './status-hooks';
 import { InboundIngestService } from './inbound-ingest.service';
 import { InboundTranslationListener } from './inbound-translation.listener';
 import { MediaFetchPublisher } from './media-fetch.publisher';
@@ -103,6 +104,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     MessageViewService,
     MediaFetchPublisher,
     InboundMessageHooks,
+    MessageStatusHooks,
     InboundTranslationListener,
     InboundIngestService,
     ExternalChannelIngest,
@@ -146,6 +148,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     CloudGroupThreadReader,
     // Where the flow runtime (and any later reader of inbound traffic) listens.
     InboundMessageHooks,
+    MessageStatusHooks,
     // Where the channels' own broadcast senders report the platform's per-message fee and ask whether the wallet can pay for the next batch.
     ChatUsageReporter,
     // The pipelines the workers drive.

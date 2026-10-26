@@ -338,30 +338,6 @@ export class MembersRepository {
         chat_limit = ${v.chatLimit === undefined ? sql`user_profiles.chat_limit` : sql`${v.chatLimit}::integer`}`);
   }
 
-  /**
-   * Availability of one agent: the stored status, upserted. Only `status` and the heartbeat are written; the counters and the
-   * round-robin clock of the row stay as the inbox keeps them.
-   */
-  async setAvailability(
-    tx: Tx,
-    orgId: number,
-    userId: number,
-    status: 'online' | 'offline',
-  ): Promise<void> {
-    await tx.execute(sql`
-      INSERT INTO agent_statuses (org_id, user_id, status, last_seen_at)
-      VALUES (${orgId}, ${userId}, ${status}, now())
-      ON CONFLICT (org_id, user_id) DO UPDATE SET status = EXCLUDED.status, last_seen_at = now()`);
-  }
-
-  /** What routing reads: the stored status, and `online` when nobody has ever switched this member. */
-  async availabilityOf(tx: Tx, orgId: number, userId: number): Promise<string> {
-    const res = await tx.execute(
-      sql`SELECT status FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId}`,
-    );
-    return ((res.rows[0] as Raw | undefined)?.status as string | undefined) ?? 'online';
-  }
-
   async ensureSecurity(tx: Tx, orgId: number, userId: number): Promise<void> {
     await tx.execute(sql`
       INSERT INTO user_security (org_id, user_id) VALUES (${orgId}, ${userId})

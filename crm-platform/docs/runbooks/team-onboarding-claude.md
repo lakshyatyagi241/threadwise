@@ -18,11 +18,11 @@ Goal: your Claude claims, fixes and drafts a PR for production alerts under YOUR
    node tools/chat-bridge/incident-cli.mjs doctor
    ```
    It must end with `All good.` and shows open/claimed counts and who owns what. 401 = wrong login, 403 = wrong token, "cannot reach" = network/URL, not a password problem.
-5. Start the 5-minute schedule in Claude Code: paste the block of [incident-schedule-prompt.md](incident-schedule-prompt.md) after `/loop 5m `, with your name and repo path filled in. It runs only while that session is open and expires after 7 days; start it again then.
+5. Start the incident watch in Claude Code. Preferred: the "Event mode" block of [incident-schedule-prompt.md](incident-schedule-prompt.md), pasted once (the session wakes only when an incident opens, no polling by the model). Fallback, the 2-minute schedule: paste the block of [incident-schedule-prompt.md](incident-schedule-prompt.md) after `/loop 5m `, with your name and repo path filled in. It runs only while that session is open and expires after 7 days; start it again then.
 
 ## What you will see in Google Chat
 
-When your Claude claims an incident, a REPLY appears INSIDE the alert's thread: `👀 <name> is working on this`. Open the thread with the "N replies" link under the alert card; it is not a badge on the card itself (webhooks cannot edit cards; with the optional Google Chat app the card is edited too). Later replies: `🔧 PR #N raised by <name>`, `🤝 released`, `✅ RESOLVED` (posted by the bridge after the release, never by Claude).
+When your Claude claims an incident, a REPLY appears INSIDE the alert's thread: `👀 <name> is working on this`. Open the thread with the "N replies" link under the alert card; it is not a badge on the card itself (webhooks cannot edit cards; with the Google Chat app enabled there are no extra messages at all: the one alert card is edited in place through claim, PR and resolved, with a Timeline on it). Later replies: `🔧 PR #N raised by <name>`, `🤝 released`, `✅ RESOLVED` (posted by the bridge after the release, never by Claude).
 
 ## Two Claudes, one incident
 

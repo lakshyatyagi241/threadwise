@@ -87,3 +87,31 @@ notice and an email, and the card reads "Included in your plan. Your add-on ends
 
 Add-ons are bought only on an active PAID plan (TW-ADD-033, `eligible` in the add-ons screen and checked in checkout). A free plan lists them as **Needs an active paid plan** (Part B),
 unless the operator sets them to **Hidden** on that plan, which removes them from the list entirely.
+
+## 7. Status bar and automatic Away (two separate plan features)
+
+Not part of the Smart routing add-on and not pack-grantable. Design and matrix: [specs/agent-status-bar.md](../specs/agent-status-bar.md) and
+[specs/packaging-teams-and-smart-routing.md](../specs/packaging-teams-and-smart-routing.md) section 2.4.
+
+| Plan feature              | Operator label                                                    | What it unlocks                                                                                                              |
+| ------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `agent_status_bar`        | Status bar: Available / Away control in the top bar and the Inbox | the menu of the status pill (Set as away / available, Automate status, the Time off link)                                    |
+| `agent_status_automation` | Automate status: personal working hours and automatic Away        | saving personal working hours, Away outside them, the "Outside of working hours" notice, and routing that skips those people |
+
+How to set them: Operator console, **Plans**, the plan, **Features** tab, **Chat** line (both are in the "messaging" group). New plans start with both off. The seeded sample
+plans: Starter off, Growth and Scale on. For one workspace use the plan and overrides panel on the workspace page (an override wins in both directions); operator and test
+workspaces should be platform-owned or carry an override.
+
+What a workspace sees **without** them: the Available / Away switch in the account menu always works (it is not gated). Without `agent_status_bar` the status pill still shows
+the state but its menu is a note ("included in a higher plan") with a link to Plans. Without `agent_status_automation` the working hours dialog is read only with the same note,
+saving is 422 `PLAN_FEATURE_LOCKED`, and everyone counts as Available unless they chose Away or are on leave.
+
+**On a downgrade**: stored schedules and manual choices are kept. The schedule is ignored from the next request (nothing is cached), a manual choice keeps working, nothing is
+deleted, and switching the feature back on restores the schedule.
+
+Support checklist:
+
+- "Somebody is Available at night": they have no schedule, **Automate my status** is off, no day is open (an empty schedule never makes anyone Away), or the workspace lacks `agent_status_automation`. Check the override.
+- "Somebody is Away during the day": a manual **Set as away** beats the schedule until their hours next change (or for ever without Automate); leave also makes people Away.
+- "Try it says outside their working hours": the person's own schedule and time zone, not the workspace's business hours.
+- "The pill disagrees with another tab": it refetches on focus and every minute; there is no realtime push.

@@ -288,6 +288,29 @@ describe('simulator: nodes', () => {
     expect(await run('lt', '1', 'name')).toMatch(/NO$/);
   });
 
+  it('an answered menu can be answered again: the chat rolls back to it', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('b', 'buttons', { prompt: 'Pick', options: ['One', 'Two'], var: 'choice' }),
+      node('m0', 'message', { text: 'got {{choice}}' }),
+      node('m1', 'message', { text: 'then {{choice}}' }),
+    ];
+    const edges = [edge('t', 'out', 'b'), edge('b', 'p0', 'm0'), edge('b', 'p1', 'm1')];
+    const h = harness(nodes, edges, { onTruncate: (n) => void (cut = n) });
+    let cut = -1;
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('One');
+    await h.settle();
+    expect(h.texts()).toContain('got One');
+    const menu = h.log.findIndex((e) => e.choices?.kind === 'buttons');
+    h.sim.pickAgain(menu, 'Two');
+    await h.settle();
+    expect(cut).toBe(menu + 1);
+    expect(h.texts()).toContain('then Two');
+  });
+
   it('buttons: number and title matching, unwired port message', async () => {
     const nodes = [
       node('t', 'trigger'),
@@ -532,7 +555,7 @@ describe('simulator: integration and channel nodes (copy verified against the ru
       '(simulated) published Meta form Survey sent → out',
       'Copy sent to +911: Hi Anya',
       'Follow us\nhttps://ig.me/m/shop',
-      '(CTA)\n[url] Go → https://x.y',
+      'Go',
       '(location) HQ\n1 Road\nlat 12.5, lng 77.1',
       'Flow ended.',
     ]);
@@ -840,5 +863,340 @@ describe('simulator: Answer from FAQ', () => {
   it('stops with the usual note when the no match exit is not connected', async () => {
     const h = await run(['matched']);
     expect(h.texts().some((t) => t.includes('No path forward (port "no_match")'))).toBe(true);
+  });
+});
+
+describe('simulator: cta messages, as the runtime sends them', () => {
+  /** The bot's messages of one cta node run with these data, in order. */
+  const botMessages = async (data: Record<string, unknown>) => {
+    const h = harness(
+      [node('t', 'trigger'), node('c', 'cta', data), node('e', 'end')],
+      [edge('t', 'out', 'c'), edge('c', 'out', 'e')],
+    );
+    h.sim.start();
+    h.sim.send('x');
+    await h.settle();
+    return h.log.filter((e) => e.kind === 'bot');
+  };
+
+  it('one web link is the message button; a call stays a text line of the same message', async () => {
+    const [msg, ...more] = await botMessages({
+      bodyText: 'Read more',
+      actions: [
+        { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+        { type: 'phone', label: 'Call us', value: '+91 98765 43210' },
+      ],
+    });
+    expect(more).toHaveLength(0);
+    expect(msg!.text).toBe('Read more\n☏ Call us: +91 98765 43210');
+    expect(msg!.choices).toEqual({
+      kind: 'links',
+      prompt: 'Read more\n☏ Call us: +91 98765 43210',
+      labels: ['Shop'],
+      links: [{ type: 'url', label: 'Shop', value: 'https://example.com/shop' }],
+    });
+  });
+
+  it('each further web link is a message of its own, labelled by its text (20 characters)', async () => {
+    const [first, second, third, ...rest] = await botMessages({
+      bodyText: 'Pick one',
+      actions: [
+        { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+        { type: 'url', label: 'Docs', value: 'https://example.com/docs' },
+        {
+          type: 'url',
+          label: 'Read the full article today',
+          value: 'https://example.com/article',
+        },
+        { type: 'url', label: 'Dropped', value: 'https://example.com/dropped' },
+      ],
+    });
+    expect(rest).toHaveLength(0);
+    expect(first!.text).toBe('Pick one');
+    expect(first!.choices?.links).toEqual([
+      { type: 'url', label: 'Shop', value: 'https://example.com/shop' },
+    ]);
+    expect(second!.text).toBe('Docs');
+    expect(second!.choices?.links).toEqual([
+      { type: 'url', label: 'Docs', value: 'https://example.com/docs' },
+    ]);
+    expect(third!.text).toBe('Read the full article today'.slice(0, 20));
+    expect(third!.choices?.links?.[0]?.value).toBe('https://example.com/article');
+  });
+
+  it('header and footer frame the message; no body falls back to the button text', async () => {
+    const [msg] = await botMessages({
+      headerText: 'Deal',
+      bodyText: '',
+      footerText: 'Ends soon',
+      actions: [{ type: 'url', label: 'Go', value: 'https://example.com/go' }],
+    });
+    expect(msg!.text).toBe('*Deal*\n\nGo\n\n_Ends soon_');
+    expect(msg!.choices?.labels).toEqual(['Go']);
+  });
+
+  it('a link that is not a web address is text, not a button; a copy code is text too', async () => {
+    const [msg] = await botMessages({
+      bodyText: 'Codes',
+      actions: [
+        { type: 'url', label: 'Site', value: 'example.com' },
+        { type: 'copy', label: 'Code', value: 'SAVE10' },
+      ],
+    });
+    expect(msg!.text).toBe('Codes\n\nSite: example.com\n\nCode:\n`SAVE10`');
+    expect(msg!.choices).toBeUndefined();
+  });
+});
+
+describe('simulator: carousel (website chat)', () => {
+  const card = (image: string, title: string, buttons: Array<Record<string, unknown>> = []) => ({
+    image,
+    title,
+    text: `${title} text`,
+    buttons,
+  });
+  const reply = (label: string) => ({ type: 'reply', label, value: '', team: '', note: '' });
+  const link = (type: string, label: string, value: string) => ({
+    type,
+    label,
+    value,
+    team: '',
+    note: '',
+  });
+
+  it('shows every card with its picture, JPEG, JPG and PNG alike', async () => {
+    const cards = [
+      card('https://cdn.example.com/photo.jpeg', 'JPEG', [reply('Pick')]),
+      card('https://cdn.example.com/photo.jpg', 'JPG', [reply('Pick')]),
+      card('https://cdn.example.com/photo.png', 'PNG', [reply('Pick')]),
+    ];
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { text: 'Our range', cards, var: 'choice' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.text).toBe('Our range');
+    expect(shown.cards!.map((c) => c.image)).toEqual([
+      'https://cdn.example.com/photo.jpeg',
+      'https://cdn.example.com/photo.jpg',
+      'https://cdn.example.com/photo.png',
+    ]);
+    expect(shown.cards!.map((c) => c.title)).toEqual(['JPEG', 'JPG', 'PNG']);
+    expect(h.awaiting()).toBe(true);
+  });
+
+  it('a picture that is not a web address is not drawn, the card still shows', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { cards: [card('ftp://x/photo.jpg', 'Bad picture', [reply('Ok')])] }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![0]!.image).toBeNull();
+    expect(shown.cards![0]!.title).toBe('Bad picture');
+  });
+
+  it('a reply tap continues down that button exit, numbered in card order', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('https://cdn.example.com/a.jpg', 'First', [reply('Yes')]),
+          card('https://cdn.example.com/b.jpg', 'Second', [
+            link('url', 'Site', 'https://example.com'),
+            reply('No'),
+          ]),
+        ],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const edges = [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')];
+    const h = harness(nodes, edges);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('No', 1);
+    await h.settle();
+    expect(h.texts()).toContain('took no');
+    expect(h.texts()).not.toContain('took yes');
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![1]!.buttons).toEqual([
+      { label: 'Site', exit: null, href: 'https://example.com' },
+      { label: 'No', exit: 1, href: null },
+    ]);
+  });
+
+  it('a typed answer is matched by the reply label', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [card('', 'Only', [reply('Yes')]), card('', 'Other', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('no');
+    await h.settle();
+    expect(h.texts()).toContain('took no');
+  });
+
+  it('a carousel with no reply button carries on by its next wire', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('https://cdn.example.com/a.png', 'Only', [
+            link('url', 'Open', 'https://example.com'),
+          ]),
+        ],
+      }),
+      node('m', 'message', { text: 'carried on' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'next', 'm')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    expect(h.texts()).toContain('carried on');
+    expect(h.awaiting()).toBe(false);
+  });
+});
+
+describe('simulator: carousel answers and link buttons', () => {
+  const card = (image: string, title: string, buttons: Array<Record<string, unknown>> = []) => ({
+    image,
+    title,
+    text: `${title} text`,
+    buttons,
+  });
+  const reply = (label: string) => ({ type: 'reply', label, value: '', team: '', note: '' });
+  const link = (type: string, label: string, value: string) => ({
+    type,
+    label,
+    value,
+    team: '',
+    note: '',
+  });
+
+  it('a tap saves the label as the visitor sees it, with variables filled in', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', { var: 'choice', cards: [card('', 'Pick', [reply('Hi {{name}}')])] }),
+      node('m', 'message', { text: 'after tap' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('Hi Anya', 0);
+    await h.settle();
+    expect(h.sim.vars().choice).toBe('Hi Anya');
+    expect(h.texts()).toContain('after tap');
+  });
+
+  it('a typed answer matches the label the visitor sees, by text or by number', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        var: 'choice',
+        cards: [card('', 'A', [reply('Yes {{name}}')]), card('', 'B', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const edges = [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')];
+    const byText = harness(nodes, edges);
+    byText.sim.start();
+    byText.sim.send('go');
+    await byText.settle();
+    byText.sim.send('yes anya');
+    await byText.settle();
+    expect(byText.texts()).toContain('took yes');
+
+    const byNumber = harness(nodes, edges);
+    byNumber.sim.start();
+    byNumber.sim.send('go');
+    await byNumber.settle();
+    byNumber.sim.send('2');
+    await byNumber.settle();
+    expect(byNumber.texts()).toContain('took no');
+  });
+
+  it('a typed answer that matches no button keeps the run waiting and takes no exit', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [card('', 'A', [reply('Yes')]), card('', 'B', [reply('No')])],
+      }),
+      node('m0', 'message', { text: 'took yes' }),
+      node('m1', 'message', { text: 'took no' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    h.sim.send('maybe');
+    await h.settle();
+    expect(h.awaiting()).toBe(true);
+    expect(h.texts()).not.toContain('took yes');
+    expect(h.texts()).not.toContain('took no');
+    expect(h.texts().at(-1)).toContain('is not one of the buttons');
+  });
+
+  it('a card with only spaces in it is not shown, but its reply still takes its own exit number', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          { image: '', title: '   ', text: '', buttons: [reply('Ghost')] },
+          card('https://cdn.example.com/a.jpg', 'Real', [reply('Go')]),
+        ],
+      }),
+      node('m0', 'message', { text: 'ghost route' }),
+      node('m1', 'message', { text: 'real route' }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c'), edge('c', 'p0', 'm0'), edge('c', 'p1', 'm1')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards!.map((c) => c.title)).toEqual(['Real']);
+    h.sim.send('Go', 1);
+    await h.settle();
+    expect(h.texts()).toContain('real route');
+    expect(h.texts()).not.toContain('ghost route');
+  });
+
+  it('a link the window may not open is left out; a phone number is written as the live runtime writes it', async () => {
+    const nodes = [
+      node('t', 'trigger'),
+      node('c', 'carousel', {
+        cards: [
+          card('', 'Contact', [
+            link('url', 'Bad', 'ftp://x/y'),
+            link('phone', 'Call', '+91 98765 43210'),
+          ]),
+        ],
+      }),
+    ];
+    const h = harness(nodes, [edge('t', 'out', 'c')]);
+    h.sim.start();
+    h.sim.send('go');
+    await h.settle();
+    const shown = h.log.find((e) => e.cards)!;
+    expect(shown.cards![0]!.buttons).toEqual([
+      { label: 'Call', exit: null, href: 'tel:+919876543210' },
+    ]);
   });
 });

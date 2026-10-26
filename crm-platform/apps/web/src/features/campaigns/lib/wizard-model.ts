@@ -20,6 +20,7 @@ const STEP_OF: Record<Problem, WizardStep> = {
   time: 'schedule',
   window: 'schedule',
   throttle: 'schedule',
+  pacing: 'schedule',
   expiry: 'schedule',
 };
 

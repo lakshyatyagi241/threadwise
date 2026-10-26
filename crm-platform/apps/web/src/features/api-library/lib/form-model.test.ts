@@ -10,12 +10,18 @@ import {
   fromImport,
   fullSignature,
   headerIsSecret,
+  jsonErrorAt,
+  jsonProblemMessage,
   jsonStatus,
   keptSecretsAtRisk,
   originOf,
   requestSignature,
+  secretOverPlainHttp,
+  sentTokens,
+  sentVariables,
   syncVariables,
   usedTokens,
+  withSentVariables,
   type ApiFormState,
 } from './form-model';
 
@@ -77,8 +83,43 @@ describe('variables are declared from the tokens in use', () => {
     expect(usedTokens(f)).toEqual(['x']);
   });
 
-  it('ignores the payload of a GET', () => {
-    expect(usedTokens(form({ method: 'GET', bodyText: '{"a": "{{x}}"}' }))).toEqual([]);
+  it('keeps the payload variables of a GET in the form but does not send them', () => {
+    const f = form({ method: 'GET', bodyText: '{"a": "{{x}}"}' });
+    expect(sentTokens(f)).toEqual([]);
+    expect(usedTokens(f)).toEqual(['x']);
+    expect(sentVariables(f)).toEqual([]);
+  });
+
+  it('keeps a variable default through a switch to GET and back to POST', () => {
+    const post = form({
+      method: 'POST',
+      url: 'https://x.test/{{hv}}',
+      bodyText: '{"k": "{{mv}}"}',
+    });
+    const typed = syncVariables({
+      ...post,
+      variables: post.variables.map((v) => ({ ...v, defaultValue: 'zz' })),
+    });
+    const get = syncVariables({ ...typed, method: 'GET' });
+    expect(get.variables.map((v) => [v.name, v.defaultValue])).toEqual([
+      ['hv', 'zz'],
+      ['mv', 'zz'],
+    ]);
+    const back = syncVariables({ ...get, method: 'POST' });
+    expect(back.variables).toEqual(typed.variables);
+  });
+
+  it('shows and sends only the variables the method sends, and writes edits back to the hidden ones too', () => {
+    const f = syncVariables({
+      ...form({ method: 'POST', url: 'https://x.test/{{hv}}', bodyText: '{"k": "{{mv}}"}' }),
+      method: 'GET',
+    });
+    expect(sentVariables(f).map((v) => v.name)).toEqual(['hv']);
+    const edited = withSentVariables(f, [{ ...f.variables[0]!, defaultValue: 'zz' }]);
+    expect(edited.map((v) => [v.name, v.defaultValue])).toEqual([
+      ['hv', 'zz'],
+      ['mv', ''],
+    ]);
   });
 
   it('returns the same state when nothing changed', () => {
@@ -92,6 +133,12 @@ describe('validation with the shared rules', () => {
     const r = buildCreate(form({ url: 'https://x.test/{{order_id}}' }));
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors.fields['variable:order_id']).toMatch(/default value/i);
+  });
+
+  it('does not ask for the default of a payload variable a GET does not send', () => {
+    const post = form({ method: 'POST', bodyText: '{"k": "{{mv}}"}' });
+    const r = buildCreate({ ...post, method: 'GET' });
+    expect(r.ok && r.input.variables).toEqual([]);
   });
 
   it('accepts a filled definition and trims the URL', () => {
@@ -175,11 +222,27 @@ describe('validation with the shared rules', () => {
       mapping: [
         { id: 'm1', path: 'data.id', contactProperty: 'email', defaultValue: '' },
         { id: 'm2', path: 'data.id', contactProperty: 'phone', defaultValue: '' },
-        { id: 'm3', path: 'bad path', contactProperty: 'phone', defaultValue: '' },
+        { id: 'm3', path: 'bad path', contactProperty: 'title', defaultValue: '' },
       ],
     });
     const r = buildCreate(f);
     expect(!r.ok && Object.keys(r.errors.fields).sort()).toEqual(['mapping:m2', 'mapping:m3']);
+  });
+
+  it('flags two rows saving into one contact property, and a row with none, on the property', () => {
+    const f = form({
+      mapping: [
+        { id: 'm1', path: 'slideshow.title', contactProperty: 'decimal_number', defaultValue: '' },
+        { id: 'm2', path: 'slideshow.author', contactProperty: 'decimal_number', defaultValue: '' },
+        { id: 'm3', path: 'slideshow.date', contactProperty: '', defaultValue: '' },
+      ],
+    });
+    const r = buildCreate(f);
+    expect(!r.ok && Object.keys(r.errors.fields).sort()).toEqual([
+      'mappingProperty:m1',
+      'mappingProperty:m2',
+      'mappingProperty:m3',
+    ]);
   });
 
   it('update carries the row version and has no name', () => {
@@ -330,5 +393,34 @@ describe('signatures', () => {
     expect(fullSignature({ ...f, name: 'Other' })).not.toBe(fullSignature(f));
     expect(fullSignature({ ...f, responseVariables: ['a'] })).not.toBe(fullSignature(f));
     expect(fullSignature(f)).toBe(fullSignature({ ...f }));
+  });
+});
+
+describe('payload and address messages', () => {
+  it('says where unfinished JSON breaks, in one sentence', () => {
+    expect(jsonErrorAt('{"a": 1}')).toBeNull();
+    const at = jsonErrorAt('{"name": "x",');
+    expect(at).toEqual({ line: 1, column: expect.any(Number) });
+    const r = buildCreate(form({ method: 'POST', bodyText: '{"name": "x",' }));
+    expect(r.ok).toBe(false);
+    if (!r.ok)
+      expect(r.errors.fields.body).toMatch(
+        /^This is not valid JSON \(it breaks near line 1, column \d+\)\.$/,
+      );
+    expect(jsonProblemMessage('{"a":')).toContain('line 1');
+  });
+
+  it('asks for the address in plain words when it is empty', () => {
+    const r = buildCreate(form({ url: '   ' }));
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.fields.url).toBe('Enter the address (URL) the request goes to.');
+  });
+
+  it('warns about a password header sent over plain http only', () => {
+    const auth = { ...emptyHeader(), key: 'Authorization', value: 'Bearer x' };
+    expect(secretOverPlainHttp(form({ url: 'http://x.test/a', headers: [auth] }))).toBe(true);
+    expect(secretOverPlainHttp(form({ url: 'https://x.test/a', headers: [auth] }))).toBe(false);
+    const plain = { ...emptyHeader(), key: 'Accept', value: 'json' };
+    expect(secretOverPlainHttp(form({ url: 'http://x.test/a', headers: [plain] }))).toBe(false);
   });
 });

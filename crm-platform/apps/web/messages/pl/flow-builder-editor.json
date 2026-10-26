@@ -908,7 +908,12 @@
             },
             "prev": "Poprzednia karta",
             "next": "Następna karta",
-            "goTo": "Karta {n}"
+            "goTo": "Karta {n}",
+            "saveCopy": "Zapisz kopię",
+            "saveCopyHint": "Zapisuje to zdjęcie na naszym serwerze, aby czat każdego odwiedzającego mógł je pokazać. Zdjęcia z witryny, która nie zezwala na jego udostępnianie, nie można skopiować: prześlij je zamiast tego.",
+            "saving": "Zapisywanie…",
+            "copyFailed": "Nie udało się zapisać kopii: {message}",
+            "imageFormats": "Akceptowane formaty: JPG, JPEG lub PNG."
           },
           "condition": {
             "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (nie ma w przestrzeni roboczej)",
           "templateLabel": "Zatwierdzony szablon",
           "templateHint": "Tutaj pojawiają się tylko zatwierdzone szablony z przestrzeni roboczej. <link>Utwórz nowy →</link>",
+          "statusExits": "Dodaj wyjścia statusów (Wysłano, Dostarczono, Przeczytano, Odpowiedziano, Niepowodzenie)",
+          "statusExitsHint": "Przepływ opuszcza krok pierwszym wyjściem, do którego podłączono krok: Wysłano — gdy szablon zostanie przyjęty, Dostarczono lub Przeczytano — gdy zgłosi to WhatsApp, Odpowiedziano — gdy klient odpisze, Niepowodzenie — gdy nie udało się wysłać. Przycisk dotknięty przez klienta ma własne wyjście.",
           "type": "Typ",
           "kindText": "Tekst",
           "kindImage": "Obraz",
@@ -1379,12 +1386,12 @@
           "stageHint": "Gdy szansa zostaje przeniesiona NA ten etap lejka, powiązany kontakt jest zapisywany. Etapy zarządzasz na tablicy /deals.",
           "rulesLabel": "Powiąż z regułami słów kluczowych komentarzy",
           "rulesHint": "Zaznacz reguły, które mają uruchamiać ten przepływ. Jeśli nic nie zaznaczysz, przepływ działa przy każdej regule Komentarz → DM.",
-          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi. Utwórz je w <link>/auto-reply</link> (Instagram · wyzwalacz „Komentarz → DM”), a następnie wybierz tutaj.",
+          "rulesNone": "Brak reguł Komentarz → DM ze słowami kluczowymi, więc nie ma tu nic do wyboru.",
           "ruleFallback": "Reguła {id}",
           "ruleOff": "wył.",
           "orderPlaced": "Uruchamia się przy każdym nowym zamówieniu. Klient zamówienia zostaje dopasowany do zapisanego kontaktu i zapisany do przepływu.",
           "automatic": "Uruchamia się automatycznie — nie wymaga dodatkowej konfiguracji.",
-          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Przełącz go na stronie <link>Automatycznej odpowiedzi</link>. Każdy kontakt zapisywany jest raz.",
+          "away": "Uruchamia się przy każdej przychodzącej wiadomości, gdy włączony jest tryb <b>Nieobecność</b>. Każdy kontakt zapisywany jest raz.",
           "outOfHours": "Uruchamia się przy każdej przychodzącej wiadomości, która przyjdzie <b>poza godzinami pracy</b> przestrzeni roboczej. Ustaw godziny pracy w ustawieniach przestrzeni roboczej. Każdy kontakt zapisywany jest raz.",
           "manualEnroll": "Kontakty będziesz zapisywać ręcznie z <link>listy /flows</link> przyciskiem <b>Zapisz</b> obok tego przepływu.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Ten krótki link nie został jeszcze sprawdzony. Opuść pole lub spróbuj ponownie.",
           "resolve_failed": "Nie udało się odczytać tego linku. Sprawdź, czy otwiera się w Mapach Google, albo wpisz współrzędne."
         }
+      },
+      "flowImage": {
+        "title": "Nie załadowano obrazu",
+        "empty": "link jest pusty",
+        "notAddress": "link nie jest adresem internetowym (musi zaczynać się od https://)",
+        "failed": "nie załadowano (link może być błędny, prywatny, zablokowany lub nie być obrazem)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
       "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
       "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych",
-      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”."
+      "faqLine": "(symulacja) Odpowiedź z FAQ: w czacie testowym baza wiedzy nie jest przeszukiwana, wybrano „brak dopasowania”.",
+      "carouselNoMatch": "„{value}” nie jest żadnym z przycisków. Dotknij jednego lub wpisz jego tekst dokładnie."
     }
   }
 }

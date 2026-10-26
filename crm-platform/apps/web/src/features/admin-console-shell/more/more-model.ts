@@ -165,7 +165,7 @@ export const SHORTCUT_URL_MAX = 160;
 
 /** The five a fresh browser shows. Copy comes from messages by `id`, so the subtitle is always true. */
 export const DEFAULT_SHORTCUT_IDS = [
-  'new-auto-reply',
+  'new-broadcast',
   'schedule-send',
   'test-webhook',
   'export-history',
@@ -174,7 +174,6 @@ export const DEFAULT_SHORTCUT_IDS = [
 
 /** Presets that can be added back. Addresses are this app's screens. */
 export const SHORTCUT_PRESETS: Record<string, { href: string; icon: string }> = {
-  'new-auto-reply': { href: '/auto-reply', icon: 'reply' },
   'schedule-send': { href: '/scheduled', icon: 'clock' },
   'test-webhook': { href: '/webhooks', icon: 'webhook' },
   'export-history': { href: '/message-history', icon: 'history' },
@@ -202,7 +201,10 @@ export function normaliseHref(raw: string): string {
   return `/${v}`;
 }
 
-/** Reads the stored list: bad JSON, a non-list, or no usable entry means the defaults; custom entries that normalise to `#` are dropped. */
+/**
+ * Reads the stored list: bad JSON, a non-list, or no usable entry means the defaults; custom entries that normalise to `#` are dropped.
+ * A saved preset that is no longer offered (New auto reply, whose screen is not built) is dropped too: its address would be a 404.
+ */
 export function loadShortcuts(raw: string | null, defaults: readonly Shortcut[]): Shortcut[] {
   if (!raw) return [...defaults];
   let parsed: unknown;
@@ -217,6 +219,7 @@ export function loadShortcuts(raw: string | null, defaults: readonly Shortcut[])
     if (!e || typeof e !== 'object') continue;
     const r = e as Record<string, unknown>;
     if (typeof r.id !== 'string' || typeof r.title !== 'string') continue;
+    if (r.custom !== true && !Object.hasOwn(SHORTCUT_PRESETS, r.id)) continue;
     const href = normaliseHref(typeof r.href === 'string' ? r.href : '');
     if (r.custom === true && href === '#') continue;
     out.push({

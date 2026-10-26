@@ -107,6 +107,7 @@ const stored: PlanAdminItem = {
     email_monthly: 0,
     storage_gb: 0,
     teams: 1_000_000,
+    webbot_messages: 0,
   },
   features: {
     automation: true,
@@ -125,6 +126,8 @@ const stored: PlanAdminItem = {
     inbox_sla: false,
     inbox_routing: true,
     inbox_assignment_sticky: true,
+    agent_status_bar: true,
+    agent_status_automation: true,
     waba_calling: true,
     inbox_kanban: true,
     team_performance: true,
@@ -171,6 +174,8 @@ describe('newPlanDraft', () => {
         .map(([k]) => k)
         .sort(),
     ).toEqual([
+      'agent_status_automation',
+      'agent_status_bar',
       'appointment_confirm_buttons',
       'appointment_rebook_steps',
       'inbox_assignment_sticky',

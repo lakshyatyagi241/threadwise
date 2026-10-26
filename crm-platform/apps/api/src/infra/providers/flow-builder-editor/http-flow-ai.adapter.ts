@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FlowAiPort, FlowAiRequest } from './flow-ai.port';
+import { openAiOutputLimit } from '../openai-output-limit';
 
 const TIMEOUT_MS = 90_000;
 
@@ -45,13 +46,14 @@ export class HttpFlowAiAdapter implements FlowAiPort {
     r: FlowAiRequest,
     url = 'https://api.openai.com/v1/chat/completions',
   ): Promise<string | null> {
+    const limit = openAiOutputLimit(r.maxTokens, r.provider === 'openai');
     const j = (await this.post(
       url,
       { Authorization: `Bearer ${r.apiKey}` },
       {
         model: r.model,
         temperature: r.temperature,
-        max_tokens: r.maxTokens,
+        ...limit,
         ...(r.json ? { response_format: { type: 'json_object' } } : {}),
         messages: [
           { role: 'system', content: r.system },

@@ -908,7 +908,12 @@
             },
             "prev": "Tarjeta anterior",
             "next": "Tarjeta siguiente",
-            "goTo": "Tarjeta {n}"
+            "goTo": "Tarjeta {n}",
+            "saveCopy": "Guardar una copia",
+            "saveCopyHint": "Guarda esta imagen en nuestro servidor para que el chat de cada visitante pueda mostrarla. Una imagen de un sitio que no permite compartirla no se puede copiar: súbela en su lugar.",
+            "saving": "Guardando…",
+            "copyFailed": "No se pudo guardar una copia: {message}",
+            "imageFormats": "Formatos aceptados: JPG, JPEG o PNG."
           },
           "condition": {
             "info": "Añade reglas (una variable, una comparación y un valor). Únelas con AND u OR y anida grupos cuando lo necesites.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (no está en el espacio de trabajo)",
           "templateLabel": "Plantilla aprobada",
           "templateHint": "Aquí solo aparecen las plantillas aprobadas del espacio de trabajo. <link>Crear una nueva →</link>",
+          "statusExits": "Añadir salidas de estado (Enviado, Entregado, Leído, Respondido, Fallido)",
+          "statusExitsHint": "El flujo sale por la primera salida con un paso conectado: Enviado en cuanto se acepta la plantilla, Entregado o Leído cuando WhatsApp lo informa, Respondido cuando el cliente escribe, Fallido si no se pudo enviar. Un botón que pulse el cliente sale por su propia salida.",
           "type": "Tipo",
           "kindText": "Texto",
           "kindImage": "Imagen",
@@ -1379,12 +1386,12 @@
           "stageHint": "Cuando un negocio pasa A esta etapa del embudo, su contacto vinculado se inscribe. Gestiona las etapas en el tablero /deals.",
           "rulesLabel": "Vincular a reglas de palabras clave de comentarios",
           "rulesHint": "Marca las reglas que deben lanzar este flujo. Deja todas sin marcar para ejecutarlo con cualquier regla Comentario → mensaje directo.",
-          "rulesNone": "Aún no hay reglas de palabras clave Comentario → mensaje directo. Créalas en <link>/auto-reply</link> (Instagram · disparador \"Comentario → mensaje directo\") y elígelas aquí.",
+          "rulesNone": "Aún no hay reglas de palabras clave Comentario → mensaje directo, así que no hay nada que elegir aquí.",
           "ruleFallback": "Regla {id}",
           "ruleOff": "desactivada",
           "orderPlaced": "Se activa con cada pedido nuevo. El cliente del pedido se asocia a un contacto guardado y se inscribe.",
           "automatic": "Se activa automáticamente: no necesita más configuración.",
-          "away": "Se activa con cualquier mensaje entrante mientras el <b>modo Ausente</b> está ACTIVADO. Cambia el modo Ausente desde la página de <link>Respuesta automática</link>. Cada contacto se inscribe una sola vez.",
+          "away": "Se activa con cualquier mensaje entrante mientras el <b>modo Ausente</b> está ACTIVADO. Cada contacto se inscribe una sola vez.",
           "outOfHours": "Se activa con cualquier mensaje entrante que llegue <b>fuera del horario laboral de tu espacio de trabajo</b>. Define el horario laboral en los ajustes del espacio de trabajo. Cada contacto se inscribe una sola vez.",
           "manualEnroll": "Inscribirás contactos manualmente desde la <link>lista de /flows</link> con el botón <b>Inscribir</b> junto a este flujo.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Este enlace corto aún no se ha consultado. Sal del campo o vuelve a intentarlo.",
           "resolve_failed": "No se pudo leer este enlace. Comprueba que se abre en Google Maps o introduce las coordenadas."
         }
+      },
+      "flowImage": {
+        "title": "Imagen no cargada",
+        "empty": "el enlace está vacío",
+        "notAddress": "el enlace no es una dirección web (debe empezar por https://)",
+        "failed": "no se pudo cargar (el enlace puede estar mal, ser privado, estar bloqueado o no ser una imagen)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Compra simulada: {name} → puerto «purchased»",
       "simAbandon": "Abandono simulado → puerto «abandoned»",
       "locationSkipped": "(ubicación) omitida: no hay coordenadas válidas",
-      "faqLine": "(simulado) Responder desde preguntas frecuentes: la base de conocimiento no se consulta en el chat de prueba, se toma \"sin coincidencia\"."
+      "faqLine": "(simulado) Responder desde preguntas frecuentes: la base de conocimiento no se consulta en el chat de prueba, se toma \"sin coincidencia\".",
+      "carouselNoMatch": "“{value}” no es uno de los botones. Toca uno o escribe su texto exactamente."
     }
   }
 }

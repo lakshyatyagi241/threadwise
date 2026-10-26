@@ -415,6 +415,10 @@
         "tooLarge": "Görsel 1 MB'tan büyük."
       }
     },
+    "fullPage": {
+      "open": "Tam sayfa",
+      "close": "Tam sayfadan çık"
+    },
     "flowBot": {
       "customize": {
         "loading": "Widget yükleniyor…",

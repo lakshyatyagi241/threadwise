@@ -426,7 +426,7 @@ export class TasksRepository {
     orgId: number,
     id: number,
     done: boolean,
-    /** Completing only: the outcome to record (`null` clears it); undefined keeps what the task has. */
+    /** The outcome to record (`null` clears it); undefined keeps what the task has. */
     outcomeId?: number | null,
   ): Promise<void> {
     await tx.execute(
@@ -434,7 +434,9 @@ export class TasksRepository {
         ? sql`UPDATE tasks SET status = 'done', done_at = now()${
             outcomeId !== undefined ? sql`, outcome_id = ${outcomeId}` : sql``
           } WHERE org_id = ${orgId} AND id = ${id}`
-        : sql`UPDATE tasks SET status = 'open', done_at = NULL, reminded_at = NULL WHERE org_id = ${orgId} AND id = ${id}`,
+        : sql`UPDATE tasks SET status = 'open', done_at = NULL, reminded_at = NULL${
+            outcomeId !== undefined ? sql`, outcome_id = ${outcomeId}` : sql``
+          } WHERE org_id = ${orgId} AND id = ${id}`,
     );
   }
 

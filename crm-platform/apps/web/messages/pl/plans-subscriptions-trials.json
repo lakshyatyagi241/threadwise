@@ -48,7 +48,8 @@
       "email_mailboxes": "Skrzynki e-mail",
       "email_monthly": "E-maile miesięcznie",
       "storage_gb": "Miejsce na dane (GB)",
-      "teams": "Zespoły"
+      "teams": "Zespoły",
+      "webbot_messages": "Darmowe wiadomości chatbota na stronie miesięcznie"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -91,7 +92,9 @@
       "record_assignment": "Reguły przypisywania rekordów",
       "team_hierarchy": "Hierarchia zespołów i menedżerowie",
       "custom_roles": "Własne role i zakresy",
-      "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent"
+      "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent",
+      "agent_status_bar": "Pasek statusu: kontrolka Dostępny / Nieobecny na górnym pasku i w Skrzynce odbiorczej",
+      "agent_status_automation": "Automatyzuj status: osobiste godziny pracy i automatyczna nieobecność"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
       "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
       "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
-      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
+      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane.",
+      "webbot_messages": "Wiadomości chatbota na stronie wliczone za darmo w każdym miesiącu kalendarzowym. Każda wiadomość ponad limit jest pobierana z portfela. Puste lub 0 = brak darmowych."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",
@@ -584,7 +588,13 @@
       "askOwner": "Poproś właściciela konta o dodanie.",
       "unavailableTitle": "{addon} wymaga aktywnego płatnego planu",
       "unavailableLead": "Najpierw wybierz płatny plan, a potem możesz dodać do niego {addon}.",
-      "viewPlans": "Zobacz plany"
+      "viewPlans": "Zobacz plany",
+      "disabledTitle": "{addon} jest wyłączony",
+      "disabledLead": "Twój plan obejmuje {addon}, ale dodatek jest wyłączony dla tego obszaru roboczego. Jego ustawienia są zachowane.",
+      "disabledAsk": "Poproś właściciela konta o jego włączenie.",
+      "turnOn": "Włącz",
+      "turnOnForbidden": "Nie masz uprawnień, aby to włączyć. Poproś właściciela konta.",
+      "turnOnFailed": "Nie udało się włączyć dodatku {addon}. Spróbuj ponownie."
     }
   }
 }

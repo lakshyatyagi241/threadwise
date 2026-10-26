@@ -59,13 +59,7 @@ export const DASH_QUICK_ACCESS_CATALOG = [
     url: '/analytics',
     icon: 'bar-chart',
   },
-  {
-    key: 'auto-reply',
-    label: 'Auto-reply',
-    desc: 'Keyword and away replies',
-    url: '/auto-reply',
-    icon: 'reply',
-  },
+  // The Auto Reply page is not built yet (/auto-reply is a 404): it is offered here again when the screen ships.
   {
     key: 'devices',
     label: 'Devices',

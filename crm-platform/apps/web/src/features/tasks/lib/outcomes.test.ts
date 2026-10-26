@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { moveItem, outcomeChoices, validateOutcomeName } from './outcomes';
+import { clampOutcomeLabel, moveItem, outcomeChoices, validateOutcomeName } from './outcomes';
 
 const A = { id: 'a', name: 'Interested', isActive: true };
 const B = { id: 'b', name: 'Left message', isActive: true };
@@ -43,5 +43,19 @@ describe('validateOutcomeName', () => {
   });
   it('accepts a normal name', () => {
     expect(validateOutcomeName('Not able to reach', 191)).toBeNull();
+  });
+});
+
+describe('clampOutcomeLabel', () => {
+  it('leaves a short name alone', () => {
+    expect(clampOutcomeLabel('Interested')).toBe('Interested');
+  });
+  it('cuts a long name to the limit with an ellipsis', () => {
+    const out = clampOutcomeLabel('x'.repeat(191));
+    expect([...out]).toHaveLength(60);
+    expect(out.endsWith('\u2026')).toBe(true);
+  });
+  it('counts characters, not UTF-16 units', () => {
+    expect(clampOutcomeLabel('\u{1F600}'.repeat(10), 5)).toBe('\u{1F600}'.repeat(4) + '\u2026');
   });
 });

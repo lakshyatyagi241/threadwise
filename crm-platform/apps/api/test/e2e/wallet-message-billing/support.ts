@@ -112,7 +112,7 @@ export async function setReseller(h: BspHarness, orgId: number, on: boolean) {
 export async function setPlan(
   h: BspHarness,
   orgId: number,
-  p: { monthly?: number; planEndsAt?: string | null; platformOwned?: boolean },
+  p: { monthly?: number; webbot?: number; planEndsAt?: string | null; platformOwned?: boolean },
 ) {
   await h.owner.query(
     `INSERT INTO org_plan_state (org_id, overrides, plan_ends_at, platform_owned)
@@ -120,16 +120,24 @@ export async function setPlan(
      ON CONFLICT (org_id) DO UPDATE SET overrides = EXCLUDED.overrides, plan_ends_at = EXCLUDED.plan_ends_at, platform_owned = EXCLUDED.platform_owned`,
     [
       orgId,
-      JSON.stringify({ limits: p.monthly === undefined ? {} : { monthly_messages: p.monthly } }),
+      JSON.stringify({
+        limits: {
+          ...(p.monthly === undefined ? {} : { monthly_messages: p.monthly }),
+          ...(p.webbot === undefined ? {} : { webbot_messages: p.webbot }),
+        },
+      }),
       p.planEndsAt ?? null,
       p.platformOwned ?? false,
     ],
   );
 }
 
-/** Typed prices, the mode the engine tests assume: margin pricing off, whatever an earlier run left behind. */
+/** Typed prices, the mode the engine tests assume: margin pricing off (it is the default now, so the choice is stored), whatever an earlier run left behind. */
 export async function fixedPricing(h: BspHarness) {
-  await h.owner.query(`DELETE FROM platform_settings WHERE key = 'wallet.pricing_mode'`);
+  await h.owner.query(
+    `INSERT INTO platform_settings (key, value, is_secret) VALUES ('wallet.pricing_mode', '"fixed"'::jsonb, false)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+  );
   services(h).settings.invalidate();
 }
 

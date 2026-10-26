@@ -415,6 +415,10 @@
         "tooLarge": "A imagem é maior que 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Tela cheia",
+      "close": "Sair da tela cheia"
+    },
     "flowBot": {
       "customize": {
         "loading": "Carregando o widget…",

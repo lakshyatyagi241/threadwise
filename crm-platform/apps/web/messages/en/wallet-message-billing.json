@@ -200,7 +200,8 @@
       "ai": "AI",
       "translation": "Translation",
       "enrichment": "Contact lookup",
-      "chat_message": "Chat message"
+      "chat_message": "Chat message",
+      "webbot_message": "Website chatbot message"
     },
     "expenses": {
       "title": "Expenses",
@@ -253,7 +254,7 @@
       },
       "days": {
         "title": "Daily log",
-        "subtitle": "Messages grouped by day, status, channel and category. Open a day to see each message.",
+        "subtitle": "Messages grouped by day, type, status, channel and category. Open a day to see each message.",
         "messagesOnDay": "{count} messages",
         "viewDetails": "View details",
         "actions": "Actions",
@@ -321,7 +322,8 @@
         "widget_ai": "Website chatbot",
         "growth": "Growth",
         "telephony": "Phone calls",
-        "translation": "Translation"
+        "translation": "Translation",
+        "widget": "Website chatbot"
       }
     },
     "admin": {
@@ -659,7 +661,8 @@
             "whatsapp_call": "Every started minute of a WhatsApp call. A call nobody answered is free.",
             "voice_call": "Every started minute of a call reported by the customer's telephony provider. Call logs typed by hand are never charged.",
             "enrichment": "Each contact looked up with the platform's data provider.",
-            "chat_message": "Each message sent on Telegram, Facebook, Instagram, LINE, Viber or WeChat. Free until you set a price."
+            "chat_message": "Each message sent on Telegram, Facebook, Instagram, LINE, Viber or WeChat. Free until you set a price.",
+            "webbot_message": "Each visitor message the website chatbot handles once the plan's free messages for the month are used up."
           },
           "costPlus": {
             "title": "Charged at the vendor's cost plus a markup",

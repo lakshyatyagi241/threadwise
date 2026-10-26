@@ -908,7 +908,12 @@
             },
             "prev": "Vorherige Karte",
             "next": "Nächste Karte",
-            "goTo": "Karte {n}"
+            "goTo": "Karte {n}",
+            "saveCopy": "Kopie speichern",
+            "saveCopyHint": "Speichert dieses Bild auf unserem Server, damit der Chat es jedem Besucher zeigen kann. Ein Bild von einer Seite, die das Teilen verweigert, kann nicht kopiert werden: laden Sie es stattdessen hoch.",
+            "saving": "Wird gespeichert…",
+            "copyFailed": "Kopie konnte nicht gespeichert werden: {message}",
+            "imageFormats": "Zulässige Formate: JPG, JPEG oder PNG."
           },
           "condition": {
             "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (nicht im Arbeitsbereich)",
           "templateLabel": "Genehmigte Vorlage",
           "templateHint": "Hier werden nur genehmigte Vorlagen aus dem Arbeitsbereich angezeigt. <link>Neue erstellen →</link>",
+          "statusExits": "Status-Ausgänge hinzufügen (Gesendet, Zugestellt, Gelesen, Beantwortet, Fehlgeschlagen)",
+          "statusExitsHint": "Der Ablauf verlässt den Baustein über den ersten Ausgang mit angeschlossenem Schritt: Gesendet, sobald die Vorlage angenommen ist; Zugestellt oder Gelesen, wenn WhatsApp es meldet; Beantwortet, wenn der Kunde antwortet; Fehlgeschlagen, wenn sie nicht gesendet werden konnte. Eine vom Kunden gedrückte Schaltfläche nimmt ihren eigenen Ausgang.",
           "type": "Typ",
           "kindText": "Text",
           "kindImage": "Bild",
@@ -1379,12 +1386,12 @@
           "stageHint": "Wenn ein Deal in diese Pipeline-Phase verschoben wird, wird der verknüpfte Kontakt aufgenommen. Phasen verwalten Sie auf der Deals-Übersicht /deals.",
           "rulesLabel": "An Kommentar-Schlüsselwortregeln binden",
           "rulesHint": "Markieren Sie die Regeln, die diesen Flow starten sollen. Lassen Sie alle unmarkiert, damit er bei jeder Regel Kommentar → DM läuft.",
-          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden. Erstellen Sie sie unter <link>/auto-reply</link> (Instagram · Auslöser „Kommentar → DM“) und wählen Sie sie dann hier aus.",
+          "rulesNone": "Noch keine Kommentar-→-DM-Schlüsselwortregeln vorhanden, daher gibt es hier nichts auszuwählen.",
           "ruleFallback": "Regel {id}",
           "ruleOff": "aus",
           "orderPlaced": "Wird für jede neue Bestellung ausgelöst. Der Kunde der Bestellung wird einem gespeicherten Kontakt zugeordnet und aufgenommen.",
           "automatic": "Wird automatisch ausgelöst, keine weitere Konfiguration nötig.",
-          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Schalten Sie den Abwesenheitsmodus auf der Seite <link>Automatische Antwort</link> um. Jeder Kontakt wird einmal aufgenommen.",
+          "away": "Wird bei jeder eingehenden Nachricht ausgelöst, während der <b>Abwesenheitsmodus</b> AKTIV ist. Jeder Kontakt wird einmal aufgenommen.",
           "outOfHours": "Wird bei jeder eingehenden Nachricht ausgelöst, die <b>außerhalb der Geschäftszeiten Ihres Arbeitsbereichs</b> eingeht. Legen Sie die Geschäftszeiten in den Einstellungen Ihres Arbeitsbereichs fest. Jeder Kontakt wird einmal aufgenommen.",
           "manualEnroll": "Sie nehmen Kontakte manuell über die <link>Flows-Liste /flows</link> auf, mit der Schaltfläche <b>Aufnehmen</b> neben diesem Flow.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Dieser Kurzlink wurde noch nicht abgerufen. Verlassen Sie das Feld oder versuchen Sie es erneut.",
           "resolve_failed": "Dieser Link konnte nicht gelesen werden. Prüfen Sie, ob er in Google Maps öffnet, oder geben Sie die Koordinaten ein."
         }
+      },
+      "flowImage": {
+        "title": "Bild nicht geladen",
+        "empty": "der Link ist leer",
+        "notAddress": "der Link ist keine Webadresse (er muss mit https:// beginnen)",
+        "failed": "konnte nicht geladen werden (der Link ist möglicherweise falsch, privat, blockiert oder kein Bild)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
       "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
-      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\"."
+      "faqLine": "(simuliert) Antwort aus FAQ: Im Test-Chat wird die Wissensdatenbank nicht durchsucht, es gilt \"kein Treffer\".",
+      "carouselNoMatch": "„{value}“ ist keiner der Buttons. Tippen Sie auf einen oder geben Sie seinen Text genau ein."
     }
   }
 }

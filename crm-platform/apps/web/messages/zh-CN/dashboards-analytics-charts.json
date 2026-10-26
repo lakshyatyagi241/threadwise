@@ -322,7 +322,7 @@
         "conversationsOpen": "进行中的对话",
         "conversationsResolved": "已解决的对话",
         "conversationsClosed": "已关闭的对话",
-        "conversationsAssigned": "已分配",
+        "conversationsAssigned": "已分配给任何人",
         "conversationsUnassigned": "未分配",
         "conversationsTotal": "{count, plural, other {# 个对话}}"
       },

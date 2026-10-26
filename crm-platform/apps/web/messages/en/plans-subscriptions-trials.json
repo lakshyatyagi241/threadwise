@@ -48,7 +48,8 @@
       "email_mailboxes": "Email mailboxes",
       "email_monthly": "Emails per month",
       "storage_gb": "Storage (GB)",
-      "teams": "Teams"
+      "teams": "Teams",
+      "webbot_messages": "Free website chatbot messages per month"
     },
     "features": {
       "automation": "Automation",
@@ -67,6 +68,8 @@
       "inbox_sla": "SLA policies",
       "inbox_routing": "Smart routing: auto-assignment and rules",
       "inbox_assignment_sticky": "Smart routing: contact owner and sticky agent",
+      "agent_status_bar": "Status bar: Available / Away control in the top bar and the Inbox",
+      "agent_status_automation": "Automate status: personal working hours and automatic Away",
       "waba_calling": "WhatsApp calling",
       "inbox_kanban": "Kanban view",
       "team_performance": "Team performance",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
       "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
       "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
-      "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
+      "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed.",
+      "webbot_messages": "Website chatbot messages included free each calendar month. Every message beyond that is charged to the wallet. Blank or 0 = none included."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",
@@ -584,7 +588,13 @@
       "askOwner": "Ask your account owner to add it.",
       "unavailableTitle": "{addon} needs an active paid plan",
       "unavailableLead": "Choose a paid plan first, then you can add {addon} to it.",
-      "viewPlans": "View plans"
+      "viewPlans": "View plans",
+      "disabledTitle": "{addon} is turned off",
+      "disabledLead": "Your plan includes {addon}, but it is turned off for this workspace. Its settings are kept.",
+      "disabledAsk": "Ask your account owner to turn it on.",
+      "turnOn": "Turn it on",
+      "turnOnForbidden": "You don't have permission to turn this on. Ask your account owner.",
+      "turnOnFailed": "We couldn't turn {addon} on. Please try again."
     }
   }
 }

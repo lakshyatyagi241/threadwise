@@ -1,11 +1,13 @@
 'use client';
 
+import { AgentStatusMenu } from '@/features/workspaces-teams-tenancy/components/agent-status-menu';
 import { useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
+  isFinishedWebchat,
   uuidSchema,
   type ConversationPriority,
   type ConversationSummary,
@@ -319,7 +321,8 @@ export function InboxScreen() {
 
   const toggleResolved = useCallback(async () => {
     const d = detail.detail;
-    if (!d || !can.resolve) return;
+    // The header toggle, the resolved bar and the `e` key all come here: a resolved web chat has nothing to toggle back to.
+    if (!d || !can.resolve || isFinishedWebchat(d.channel.kind, d.status)) return;
     const reopen = d.status === 'resolved' || d.status === 'closed';
     setResolving(true);
     const ok = await guarded(() =>
@@ -357,7 +360,7 @@ export function InboxScreen() {
   const snooze = useCallback(
     async (preset: SnoozePreset) => {
       const d = detail.detail;
-      if (!d || !can.snooze) return;
+      if (!d || !can.snooze || isFinishedWebchat(d.channel.kind, d.status)) return;
       setTriaging(true);
       const ok = await guarded(async () => {
         list.placeRow(
@@ -380,7 +383,8 @@ export function InboxScreen() {
 
   const markSpam = useCallback(async () => {
     const d = detail.detail;
-    if (!d || !can.resolve || d.status === 'spam') return;
+    if (!d || !can.resolve || d.status === 'spam' || isFinishedWebchat(d.channel.kind, d.status))
+      return;
     setTriaging(true);
     const ok = await guarded(async () => {
       list.placeRow(await inboxApi.markSpam(d.id, d.rowVersion));
@@ -595,58 +599,63 @@ export function InboxScreen() {
             selectedId ? 'hidden md:block' : 'block',
           )}
         >
-          <ConversationList
-            list={list.state}
-            filters={filters}
-            onFilters={patchFilters}
-            channels={filterChannels}
-            channelsLoaded={channelsQ.isSuccess}
-            activeId={selectedId}
-            nowMs={nowMs}
-            onOpen={(id) => open(id)}
-            onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
-            onLoadMore={list.loadMore}
-            onRefresh={() => {
-              list.refresh();
-              void qc.invalidateQueries({ queryKey: KEYS.channels });
-            }}
-            searchRef={searchRef}
-            canManageChannels={can.manageChannels}
-            simulatorAvailable={simulatorAvailable}
-            onOpenSimulator={() => setSimulatorOpen((v) => !v)}
-            bulk={
-              can.bulk
-                ? {
-                    selecting: bulk.selecting,
-                    selection: bulk.selection,
-                    onToggleSelecting: bulk.toggleSelecting,
-                    onSelect: bulk.select,
-                    onPick: bulk.pick,
-                    bar: (
-                      <BulkBar
-                        count={bulk.selection.size}
-                        picked={bulk.picked}
-                        inView={list.state.rows.length}
-                        allInViewSelected={bulk.allInView}
-                        busy={bulk.busy}
-                        can={{
-                          resolve: can.resolve,
-                          assign: can.assign,
-                          assignSelf: can.assignSelf,
-                          priority: can.priority,
-                          snooze: can.snooze,
-                          tag: can.tag,
-                        }}
-                        meId={meId}
-                        onToggleAll={bulk.toggleAll}
-                        onClear={bulk.toggleSelecting}
-                        onRun={bulk.run}
-                      />
-                    ),
-                  }
-                : undefined
-            }
-          />
+          <div className="flex h-full min-h-0 flex-col">
+            <AgentStatusMenu variant="inbox" />
+            <div className="min-h-0 flex-1">
+              <ConversationList
+                list={list.state}
+                filters={filters}
+                onFilters={patchFilters}
+                channels={filterChannels}
+                channelsLoaded={channelsQ.isSuccess}
+                activeId={selectedId}
+                nowMs={nowMs}
+                onOpen={(id) => open(id)}
+                onRowPriority={can.priority ? (r, p) => void setRowPriority(r, p) : undefined}
+                onLoadMore={list.loadMore}
+                onRefresh={() => {
+                  list.refresh();
+                  void qc.invalidateQueries({ queryKey: KEYS.channels });
+                }}
+                searchRef={searchRef}
+                canManageChannels={can.manageChannels}
+                simulatorAvailable={simulatorAvailable}
+                onOpenSimulator={() => setSimulatorOpen((v) => !v)}
+                bulk={
+                  can.bulk
+                    ? {
+                        selecting: bulk.selecting,
+                        selection: bulk.selection,
+                        onToggleSelecting: bulk.toggleSelecting,
+                        onSelect: bulk.select,
+                        onPick: bulk.pick,
+                        bar: (
+                          <BulkBar
+                            count={bulk.selection.size}
+                            picked={bulk.picked}
+                            inView={list.state.rows.length}
+                            allInViewSelected={bulk.allInView}
+                            busy={bulk.busy}
+                            can={{
+                              resolve: can.resolve,
+                              assign: can.assign,
+                              assignSelf: can.assignSelf,
+                              priority: can.priority,
+                              snooze: can.snooze,
+                              tag: can.tag,
+                            }}
+                            meId={meId}
+                            onToggleAll={bulk.toggleAll}
+                            onClear={bulk.toggleSelecting}
+                            onRun={bulk.run}
+                          />
+                        ),
+                      }
+                    : undefined
+                }
+              />
+            </div>
+          </div>
         </aside>
 
         <main

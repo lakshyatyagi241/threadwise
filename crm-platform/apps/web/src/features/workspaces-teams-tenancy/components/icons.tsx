@@ -60,6 +60,12 @@ export const InfoIcon = ({ className = 'size-3' }: { className?: string }) => (
     <path d="M8 5v3l2 2" />
   </Icon>
 );
+export const ClockIcon = () => (
+  <Icon>
+    <circle cx="8" cy="8" r="5.5" />
+    <path d="M8 4.8V8l2.2 1.4" />
+  </Icon>
+);
 export const CalendarIcon = () => (
   <Icon>
     <path d="M3 4.5h10v8.5H3zM3 7.5h10M5.5 3v3M10.5 3v3" />

@@ -370,7 +370,8 @@
         "includedOwned": "你也持有此附加组件。你的套餐现已包含它，因此可以取消该附加组件。不会自动退款。",
         "includedEnds": "已包含在你的套餐中。你的附加组件将于 {date} 结束，不会续订。",
         "active": "已启用",
-        "ownedCount": "已拥有 ×{count} · 再次购买可叠加"
+        "ownedCount": "已拥有 ×{count} · 再次购买可叠加",
+        "turnedOff": "已关闭"
       },
       "price": {
         "free": "免费",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "功能附加组件",
         "capacity": "容量附加组件"
+      },
+      "activation": {
+        "turnedOffNote": "已在此工作区关闭。其设置会保留。",
+        "turnOff": "关闭",
+        "turnOn": "开启",
+        "askOwner": "请让账户所有者开启或关闭。",
+        "doneOn": "{name} 已开启。",
+        "errors": {
+          "notToggleable": "无法在此开启或关闭 {name}。只能切换套餐中包含的附加组件。",
+          "forbidden": "你没有开启或关闭附加组件的权限。",
+          "generic": "无法更改 {name}。请重试。"
+        }
+      }
+    },
+    "toggle": {
+      "title": "关闭 {name}?",
+      "lead": "以下是将发生的变化。你可以随时重新开启。",
+      "cancel": "取消",
+      "confirm": "关闭 {name}",
+      "done": "{name} 已关闭。其设置会保留。",
+      "typeLabel": "输入 {name} 以确认",
+      "typeHint": "这会影响客户聊天或相关人员,请输入名称以确认。",
+      "groups": {
+        "stops": "将停止的内容",
+        "kept": "将保留的内容",
+        "people": "人员"
+      },
+      "items": {
+        "features_off": "这些功能将停止工作:{names}。",
+        "dependents_off": "这些功能依赖它们,因此也会停止:{names}。",
+        "roles_dormant": "{count, plural, other {# 个角色拥有此附加组件的权限。权限会保留,但在你重新开启之前处于未启用状态。}}",
+        "waiting_chats": "{count, plural, other {# 个聊天正在等待客服。它们不会被自动分配,需要有人手动接手。}}",
+        "routing_rules": "{count, plural, other {# 条分配规则将停止分配聊天。}}",
+        "auto_teams": "{count, plural, other {# 个团队设置为自动分配聊天,该功能将停止。}}",
+        "teams": "{count, plural, other {# 个团队及其成员会保留。}}",
+        "custom_role_holders": "{count, plural, other {# 人拥有自定义角色。角色会保留,但此附加组件的权限将不再生效。}}",
+        "kept": "你的设置和数据会保留。重新开启后会恢复到你离开时的样子。"
       }
     }
   }

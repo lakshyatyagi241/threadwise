@@ -415,6 +415,10 @@
         "tooLarge": "Obraz jest większy niż 1 MB."
       }
     },
+    "fullPage": {
+      "open": "Cała strona",
+      "close": "Zamknij pełną stronę"
+    },
     "flowBot": {
       "customize": {
         "loading": "Ładowanie widżetu…",

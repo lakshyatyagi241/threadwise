@@ -48,7 +48,8 @@
       "email_mailboxes": "Buzones de correo",
       "email_monthly": "Correos al mes",
       "storage_gb": "Almacenamiento (GB)",
-      "teams": "Equipos"
+      "teams": "Equipos",
+      "webbot_messages": "Mensajes gratuitos del chatbot web por mes"
     },
     "features": {
       "automation": "Automatización",
@@ -91,7 +92,9 @@
       "record_assignment": "Reglas de asignación de registros",
       "team_hierarchy": "Jerarquía de equipos y gerentes",
       "custom_roles": "Roles personalizados y alcances",
-      "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo"
+      "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo",
+      "agent_status_bar": "Barra de estado: control Disponible / Ausente en la barra superior y la Bandeja",
+      "agent_status_automation": "Automatizar estado: horario laboral personal y Ausente automático"
     },
     "limitGroups": {
       "messaging": "Mensajería",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
       "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
       "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada.",
-      "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan."
+      "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan.",
+      "webbot_messages": "Mensajes del chatbot web incluidos gratis cada mes natural. Cada mensaje adicional se cobra de la cartera. En blanco o 0 = ninguno incluido."
     },
     "planAddons": {
       "title": "Complementos disponibles en tu plan",
@@ -584,7 +588,13 @@
       "askOwner": "Pide al propietario de la cuenta que lo añada.",
       "unavailableTitle": "{addon} necesita un plan de pago activo",
       "unavailableLead": "Elige primero un plan de pago y después podrás añadirle {addon}.",
-      "viewPlans": "Ver planes"
+      "viewPlans": "Ver planes",
+      "disabledTitle": "{addon} está desactivado",
+      "disabledLead": "Tu plan incluye {addon}, pero está desactivado para este espacio de trabajo. Su configuración se conserva.",
+      "disabledAsk": "Pide al propietario de la cuenta que lo active.",
+      "turnOn": "Activarlo",
+      "turnOnForbidden": "No tienes permiso para activarlo. Pídeselo al propietario de la cuenta.",
+      "turnOnFailed": "No pudimos activar {addon}. Inténtalo de nuevo."
     }
   }
 }

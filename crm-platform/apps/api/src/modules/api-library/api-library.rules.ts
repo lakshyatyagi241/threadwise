@@ -1,8 +1,11 @@
+import { brotliDecompressSync, gunzipSync, inflateSync } from 'node:zlib';
 import {
   API_LIBRARY_SECRET_MASK,
   API_LIBRARY_TOKEN_RE,
   apiLibraryIsSensitiveName,
+  apiLibraryRenderUrl,
   type ApiLibraryBody,
+  type ApiLibraryLogApi,
   type ApiLibraryMapping,
   type ApiLibraryVariable,
 } from '@crm/contracts';
@@ -56,24 +59,12 @@ export function renderText(template: string, values: VariableValues): string {
   return template.replace(TOKEN_G, (_m, raw: string) => valueOf(values, raw));
 }
 
-/** Where the part of the URL that holds the host ends: tokens up to there are not percent-encoded, so `{{base_url}}/x` still works. */
-function authorityEnd(template: string): number {
-  const scheme = template.indexOf('://');
-  const start = scheme >= 0 ? scheme + 3 : 0;
-  const rest = template.slice(start).search(/[/?#]/);
-  return rest < 0 ? template.length : start + rest;
-}
-
 /**
  * Fills the URL. A value placed in the host part goes in as typed; one in the path or the query string is percent-encoded, so a
- * contact called "A & B" cannot add a parameter or end the path.
+ * contact called "A & B" cannot add a parameter or end the path. The rule lives in @crm/contracts, where the save check runs it too.
  */
 export function renderUrl(template: string, values: VariableValues): string {
-  const hostEnd = authorityEnd(template);
-  return template.replace(TOKEN_G, (_m, raw: string, offset: number) => {
-    const v = valueOf(values, raw);
-    return offset < hostEnd ? v : encodeURIComponent(v);
-  });
+  return apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase()));
 }
 
 /** Every string leaf of a JSON payload filled in; numbers, booleans and nulls stay as they are. */
@@ -88,6 +79,15 @@ export function renderBody(body: ApiLibraryBody, values: VariableValues): ApiLib
     return v;
   };
   return body === null ? null : (walk(body) as ApiLibraryBody);
+}
+
+/** The reason a processing function's answer is refused: it must hand back the payload. */
+export const PROCESSED_PAYLOAD_PROBLEM =
+  'processPayload must return the payload (an object or a list).';
+
+/** An object or a list is the payload to send; nothing (undefined, null), text and numbers are not. The Run code box and the test run both use it. */
+export function isProcessedPayload(value: unknown): boolean {
+  return value !== null && typeof value === 'object';
 }
 
 /** A header ready to send: the value is filled in and the plain text of a secret is still here (it never reaches a log). */
@@ -128,12 +128,33 @@ export function maskHeaders(headers: readonly OutHeader[]): Record<string, strin
   return out;
 }
 
-/** Masks the value of every query parameter that reads like a secret (`?api_key=...`). The rest of the URL is kept. */
+/**
+ * The index of the `@` that ends the user part of an address (`https://user:pass@host`), or -1 when the address has none.
+ * Only the authority is searched, so an `@` in the path or the query is not taken for one.
+ */
+function userinfoEnd(url: string): number {
+  const start = url.indexOf('://') + 3;
+  if (start < 3) return -1;
+  const end = url.slice(start).search(/[/?#]/);
+  const at = url.lastIndexOf('@', end < 0 ? url.length : start + end - 1);
+  return at < start ? -1 : at;
+}
+
+/**
+ * Masks what a log or a screen must not show of an address: the user and password of `https://user:pass@host` (the mask stands in
+ * for them, so the reader still sees that there were credentials) and the value of every query parameter that reads like a secret
+ * (`?api_key=...`). The rest of the URL is kept.
+ */
 export function maskUrl(url: string): string {
-  const q = url.indexOf('?');
-  if (q < 0) return url;
-  const hash = url.indexOf('#', q);
-  const query = url.slice(q + 1, hash < 0 ? undefined : hash);
+  const at = userinfoEnd(url);
+  const bare =
+    at < 0
+      ? url
+      : `${url.slice(0, url.indexOf('://') + 3)}${API_LIBRARY_SECRET_MASK}${url.slice(at)}`;
+  const q = bare.indexOf('?');
+  if (q < 0) return bare;
+  const hash = bare.indexOf('#', q);
+  const query = bare.slice(q + 1, hash < 0 ? undefined : hash);
   const masked = query
     .split('&')
     .map((pair) => {
@@ -150,7 +171,20 @@ export function maskUrl(url: string): string {
         : pair;
     })
     .join('&');
-  return `${url.slice(0, q + 1)}${masked}${hash < 0 ? '' : url.slice(hash)}`;
+  return `${bare.slice(0, q + 1)}${masked}${hash < 0 ? '' : bare.slice(hash)}`;
+}
+
+/** The password of `https://user:pass@host`, decoded; null when the address has none. */
+function passwordIn(url: string): string | null {
+  const at = userinfoEnd(url);
+  const colon = url.indexOf(':', url.indexOf('://') + 3);
+  if (at < 0 || colon < 0 || colon > at) return null;
+  const raw = url.slice(colon + 1, at);
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
 }
 
 /** Masks the value of every key that reads like a secret, at any depth. */
@@ -210,6 +244,23 @@ export function truncateText(text: string, max: number): { text: string; truncat
   return text.length > max
     ? { text: text.slice(0, max), truncated: true }
     : { text, truncated: false };
+}
+
+/**
+ * The answer as the log keeps it. A Postgres text column refuses a NUL character, and a binary answer (an image, random bytes, a
+ * gzip body) has them: such an answer is logged as a note of its size and type, so the run still gets its line in the log.
+ */
+export function logResponseText(response: {
+  bodyText: string;
+  contentType: string | null;
+  headers: Record<string, string | string[]>;
+  sizeBytes: number;
+}): string {
+  if (!response.bodyText.includes('\u0000')) return response.bodyText;
+  const parts = [`${response.sizeBytes} bytes`, response.contentType ?? 'no content type'];
+  const encoding = response.headers['content-encoding'];
+  if (encoding) parts.push(`content-encoding ${String(encoding)}`);
+  return `[binary answer: ${parts.join(', ')}]`;
 }
 
 /** The response headers kept in a log: all of them, with cookies and anything secret-looking masked. */
@@ -288,6 +339,24 @@ export function extractByPath(root: unknown, path: string): { found: boolean; va
   return walk(root, 0);
 }
 
+/**
+ * The logs' API filter: every saved API (in the order given), then each deleted API that still has runs, named as its latest run
+ * kept it. A deleted API is not in the pickers' feed, so only the logs offer it; its id is what the log rows carry.
+ */
+export function logFilterApis(
+  live: ReadonlyArray<{ uuid: string; name: string }>,
+  logged: ReadonlyArray<{ apiUuid: string; apiName: string }>,
+): ApiLibraryLogApi[] {
+  const saved = new Set(live.map((a) => a.uuid));
+  const gone = logged
+    .filter((l) => !saved.has(l.apiUuid))
+    .sort((a, b) => a.apiName.localeCompare(b.apiName));
+  return [
+    ...live.map((a) => ({ id: a.uuid, name: a.name, deleted: false })),
+    ...gone.map((l) => ({ id: l.apiUuid, name: l.apiName, deleted: true })),
+  ];
+}
+
 /** How a value is written into a contact property or a flow variable: lists of plain values are comma-joined, records are JSON. */
 export function valueToText(v: unknown): string {
   if (v === undefined || v === null) return '';
@@ -341,4 +410,129 @@ export function responseVariableValues(
     out[`${apiName}.${p}`] = hit.found ? hit.value : '';
   }
   return out;
+}
+
+// --- reading an answer ---------------------------------------------------------------------------------------------------
+
+const BINARY_TYPE =
+  /^(image|audio|video|font)\/|^application\/(octet-stream|pdf|zip|gzip|x-tar|x-7z|vnd\.|msword|wasm)/i;
+
+/** Bytes a reader can show as text: a content type that is a file, or a NUL byte near the start, means it is not. */
+export function looksBinary(contentType: string | null, bytes: Buffer): boolean {
+  if (contentType && BINARY_TYPE.test(contentType.trim())) return true;
+  return bytes.subarray(0, 8192).includes(0);
+}
+
+export interface ReadAnswer {
+  /** What to show: the text, or one line naming what was not shown. */
+  text: string;
+  /** The answer is text (JSON can be read from it). */
+  isText: boolean;
+  /** The real size of the answer after any compression was undone. */
+  sizeBytes: number;
+}
+
+/**
+ * Turns the bytes of an answer into what the screen shows. A compressed answer (gzip, deflate, brotli: some servers send one
+ * whatever was asked) is unpacked first, with the output held to `maxBytes`; a file (image, PDF, archive) is named, not printed as
+ * symbols; the size is the bytes, not the length of a text made from them.
+ */
+export function readAnswer(
+  raw: Buffer,
+  headers: Record<string, string | string[] | undefined>,
+  maxBytes: number,
+): ReadAnswer {
+  const type = typeof headers['content-type'] === 'string' ? headers['content-type'] : null;
+  const encoding = String(headers['content-encoding'] ?? '')
+    .trim()
+    .toLowerCase();
+  let bytes = raw;
+  let note = '';
+  try {
+    if (encoding === 'gzip' || encoding === 'x-gzip')
+      bytes = gunzipSync(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'deflate') bytes = inflateSync(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'br') bytes = brotliDecompressSync(raw, { maxOutputLength: maxBytes });
+  } catch {
+    note = ' (it could not be unpacked)';
+    bytes = raw;
+  }
+  if (note !== '' || looksBinary(type, bytes)) {
+    return {
+      text: `[Not shown: ${type ?? 'binary data'}, ${bytes.length} bytes${note}]`,
+      isText: false,
+      sizeBytes: bytes.length,
+    };
+  }
+  return { text: bytes.toString('utf8'), isText: true, sizeBytes: bytes.length };
+}
+
+// --- secrets the other server repeats back ---------------------------------------------------------------------------------
+
+/** A value shorter than this is not worth hiding: it would also hit ordinary words in the reply. */
+const MIN_SECRET_LENGTH = 4;
+
+/**
+ * The secret values this request carried: the password in the address, the value of every query parameter that reads like a secret,
+ * and every secret header's value (for `Authorization: Bearer abc` also `abc` alone). A server that echoes its request (a debugging endpoint, an error page)
+ * repeats them in its answer, which would otherwise be shown and stored in the clear.
+ */
+export function secretValuesOf(url: string, headers: readonly OutHeader[]): string[] {
+  const out = new Set<string>();
+  const add = (v: string) => {
+    const t = v.trim();
+    if (t.length >= MIN_SECRET_LENGTH) out.add(t);
+  };
+  const password = passwordIn(url);
+  if (password !== null) add(password);
+  const q = url.indexOf('?');
+  if (q >= 0) {
+    const hash = url.indexOf('#', q);
+    for (const pair of url.slice(q + 1, hash < 0 ? undefined : hash).split('&')) {
+      const eq = pair.indexOf('=');
+      if (eq < 0) continue;
+      let name = pair.slice(0, eq);
+      let value = pair.slice(eq + 1);
+      try {
+        name = decodeURIComponent(name);
+        value = decodeURIComponent(value);
+      } catch {
+        /* keep the raw text */
+      }
+      if (apiLibraryIsSensitiveName(name)) add(value);
+    }
+  }
+  for (const h of headers) {
+    if (!(h.secret || apiLibraryIsSensitiveName(h.key))) continue;
+    add(h.value);
+    const word = /^\s*(?:bearer|basic|token)\s+(.+)$/i.exec(h.value);
+    if (word) add(word[1]!);
+  }
+  return [...out].sort((a, b) => b.length - a.length);
+}
+
+/** `text` with every given secret (and its URL-encoded form) replaced by the mask. */
+export function scrubSecretValues(text: string, secrets: readonly string[]): string {
+  let out = text;
+  for (const secret of secrets) {
+    for (const form of new Set([secret, encodeURIComponent(secret)])) {
+      if (form !== '') out = out.split(form).join(API_LIBRARY_SECRET_MASK);
+    }
+  }
+  return out;
+}
+
+/** The same for a response's headers (a value or a list of values). */
+export function scrubSecretHeaders(
+  headers: Readonly<Record<string, string | string[]>>,
+  secrets: readonly string[],
+): Record<string, string | string[]> {
+  return Object.fromEntries(
+    Object.entries(headers).map(([k, v]) => [
+      k,
+      Array.isArray(v)
+        ? v.map((x) => scrubSecretValues(x, secrets))
+        : scrubSecretValues(v, secrets),
+    ]),
+  );
 }

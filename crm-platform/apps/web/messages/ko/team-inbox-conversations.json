@@ -153,7 +153,10 @@
         "hours": "{count}시간",
         "days": "{count}일"
       },
-      "unsnoozesAt": "{time}에 다시 열림"
+      "unsnoozesAt": "{time}에 다시 열림",
+      "erased": "삭제된 연락처",
+      "erasedHint": "이 연락처는 삭제되었으며, 대화는 사람의 정보와 메시지 내용 없이 보관됩니다. 삭제 날짜는 기록되지 않으므로 시간은 마지막 메시지를 나타냅니다.",
+      "erasedTitle": "삭제된 연락처"
     },
     "status": {
       "received": "수신됨",
@@ -328,9 +331,16 @@
       },
       "readOnly": "이 대화는 볼 수 있지만 답장할 권한이 없습니다.",
       "resolvedBanner": "이 대화는 해결되었습니다. 답장하려면 다시 여세요.",
+      "resolvedWebchatBanner": "이 웹 채팅은 해결되어 다시 열 수 없습니다.",
       "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
+      "session": {
+        "header": "{range} · {count, plural, other {메시지 #개}}",
+        "span": "{date} {from} – {to}",
+        "moment": "{date} {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "이전 메시지 불러오기",
       "empty": "이 대화에는 아직 메시지가 없습니다.",
       "newMessageAnnounce": "새 메시지: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "일치 항목 없음",
       "searchPrev": "이전 결과",
       "searchNext": "다음 결과",
-      "searchClose": "검색 닫기"
+      "searchClose": "검색 닫기",
+      "erasedBadge": "삭제됨",
+      "erasedBanner": "이 연락처는 삭제되었습니다. 메시지 본문과 미디어가 제거되어 아무것도 보낼 수 없습니다. 타임라인과 시간은 유지됩니다."
     },
     "groupThread": {
       "openGroup": "그룹 열기",
@@ -542,17 +554,17 @@
         "onLeave": "휴가 중",
         "onLeaveUntil": "{date}까지 휴가 중",
         "availability": {
-          "online": "온라인",
-          "away": "자리 비움",
+          "online": "응대 가능",
+          "away": "자리 비움, 근무 시간 외",
           "busy": "바쁨",
-          "offline": "오프라인"
+          "offline": "자리 비움"
         }
       },
       "presence": {
-        "online": "온라인",
-        "away": "자리 비움",
+        "online": "응대 가능",
+        "away": "자리 비움, 근무 시간 외",
         "busy": "바쁨",
-        "offline": "오프라인"
+        "offline": "자리 비움"
       },
       "notes": {
         "tab": "연락처 메모",
@@ -715,6 +727,7 @@
         "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다.",
         "paused": "WhatsApp에서 일시 중지되었습니다. 중지가 해제되면 다시 보낼 수 있습니다.",
         "media_header": "이미지, 동영상 또는 문서 헤더가 있어 아직 수신함에서 보낼 수 없습니다.",
+        "carousel": "캐러셀(이미지 카드)이라서 아직 받은편지함에서 보낼 수 없습니다.",
         "header_variable": "헤더에 변수가 있어 아직 수신함에서 입력할 수 없습니다.",
         "dynamic_button": "변수가 있는 버튼 링크가 있어 아직 수신함에서 입력할 수 없습니다.",
         "authentication": "일회용 비밀번호(OTP) 템플릿은 수신함이 아닌 시스템에서 발송됩니다.",

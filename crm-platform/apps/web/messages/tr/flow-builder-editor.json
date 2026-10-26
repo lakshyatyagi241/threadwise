@@ -908,7 +908,12 @@
             },
             "prev": "Önceki kart",
             "next": "Sonraki kart",
-            "goTo": "Kart {n}"
+            "goTo": "Kart {n}",
+            "saveCopy": "Kopyasını kaydet",
+            "saveCopyHint": "Bu resmi sunucumuzda saklar, böylece her ziyaretçinin sohbeti onu gösterebilir. Paylaşıma izin vermeyen bir siteden alınan resim kopyalanamaz: bunun yerine yükleyin.",
+            "saving": "Kaydediliyor…",
+            "copyFailed": "Kopya kaydedilemedi: {message}",
+            "imageFormats": "Kabul edilen biçimler: JPG, JPEG veya PNG."
           },
           "condition": {
             "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (çalışma alanında değil)",
           "templateLabel": "Onaylı şablon",
           "templateHint": "Yalnızca çalışma alanındaki onaylı şablonlar burada görünür. <link>Yeni bir tane oluşturun →</link>",
+          "statusExits": "Durum çıkışları ekle (Gönderildi, Teslim edildi, Okundu, Yanıtlandı, Başarısız)",
+          "statusExitsHint": "Akış, bağlı bir adımı olan ilk çıkıştan ayrılır: şablon kabul edilir edilmez Gönderildi, WhatsApp bildirince Teslim edildi veya Okundu, müşteri yazınca Yanıtlandı, gönderilemezse Başarısız. Müşterinin dokunduğu düğme kendi çıkışından ayrılır.",
           "type": "Tür",
           "kindText": "Metin",
           "kindImage": "Görsel",
@@ -1379,12 +1386,12 @@
           "stageHint": "Bir fırsat bu satış hattı aşamasına taşındığında, bağlı kişi kaydedilir. Aşamaları /deals panosunda yönetin.",
           "rulesLabel": "Yorum anahtar kelime kurallarına bağla",
           "rulesHint": "Bu akışı başlatması gereken kuralları işaretleyin. Hiçbirini işaretlemezseniz herhangi bir Yorum → DM kuralında çalışır.",
-          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok. <link>/auto-reply</link> üzerinde oluşturun (Instagram · tetikleyici \"Yorum → DM\"), ardından burada seçin.",
+          "rulesNone": "Henüz Yorum → DM anahtar kelime kuralı yok, bu yüzden burada seçilecek bir şey yok.",
           "ruleFallback": "Kural {id}",
           "ruleOff": "kapalı",
           "orderPlaced": "Her yeni sipariş için tetiklenir. Siparişin müşterisi kayıtlı bir kişiyle eşleştirilir ve kaydedilir.",
           "automatic": "Otomatik tetiklenir — ek bir ayar gerekmez.",
-          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Uzakta modunu <link>Otomatik Yanıt</link> sayfasından değiştirin. Her kişi bir kez kaydedilir.",
+          "away": "<b>Uzakta modu</b> AÇIK iken gelen her mesajda tetiklenir. Her kişi bir kez kaydedilir.",
           "outOfHours": "<b>Çalışma alanınızın iş saatleri dışında</b> gelen her mesajda tetiklenir. İş saatlerini çalışma alanı ayarlarınızda belirleyin. Her kişi bir kez kaydedilir.",
           "manualEnroll": "Kişileri, <link>/flows listesinden</link> bu akışın yanındaki <b>Akışa ekle</b> düğmesiyle elle ekleyeceksiniz.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
           "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
         }
+      },
+      "flowImage": {
+        "title": "Resim yüklenemedi",
+        "empty": "bağlantı boş",
+        "notAddress": "bağlantı bir web adresi değil (https:// ile başlamalıdır)",
+        "failed": "yüklenemedi (bağlantı yanlış, özel, engellenmiş ya da bir resim olmayabilir)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "locationSkipped": "(konum) atlandı: geçerli koordinat yok",
-      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir."
+      "faqLine": "(simülasyon) SSS'den yanıtla: test sohbetinde bilgi tabanı aranmaz, \"eşleşme yok\" seçilir.",
+      "carouselNoMatch": "“{value}” düğmelerden biri değil. Birine dokunun ya da metnini aynen yazın."
     }
   }
 }

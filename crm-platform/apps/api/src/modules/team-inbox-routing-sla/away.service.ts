@@ -1,8 +1,20 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
-import { HANDOFF_GATES, MEMBER_AVAILABILITY_CHANGED, type HandoffTraceLine } from '@crm/contracts';
+import {
+  AGENT_STATUS_AUTOMATION_FEATURE,
+  HANDOFF_GATES,
+  MEMBER_AVAILABILITY_CHANGED,
+  type HandoffTraceLine,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import {
+  loadAgentStatuses,
+  manualUntil,
+  readAvailabilityPrefs,
+  readStatusRow,
+  writeAvailability,
+} from '../../common/agent-status';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -58,13 +70,18 @@ export class AwayService {
   /** Returns the person's unanswered chats to the queue. Returns how many went back. */
   async returnUnanswered(orgId: number, userId: number, reason: AwayReason): Promise<number> {
     if (!(await this.entitled(orgId))) return 0;
+    const automation = await this.entitlements.featureEnabled(
+      orgId,
+      AGENT_STATUS_AUTOMATION_FEATURE,
+    );
     const target = await this.db.txAs({ orgId }, async (tx) => {
       if (!(await this.repo.settings(tx, orgId)).away.returnUnanswered) return [];
-      // A stale event must not take chats from somebody who is back: the person must still be away, offline or on an active leave.
+      // A stale event must not take chats from somebody who is back: the person must still be away (the effective status: Away by their own
+      // choice or working hours) or, for a leave, on an active leave.
       const stillAway =
         reason === 'leave'
           ? await this.onLeave(tx, orgId, userId)
-          : await this.isOffline(tx, orgId, userId);
+          : await this.isAway(tx, orgId, userId, automation);
       if (!stillAway) return [];
       const res = await tx.execute(sql`
         SELECT c.uuid FROM conversations c
@@ -102,11 +119,16 @@ export class AwayService {
     return rowsOf(res).length > 0;
   }
 
-  private async isOffline(tx: Tx, orgId: number, userId: number): Promise<boolean> {
-    const res = await tx.execute(
-      sql`SELECT status FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId}`,
-    );
-    return rowsOf(res)[0]?.status === 'offline';
+  private async isAway(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    automation: boolean,
+  ): Promise<boolean> {
+    const st = (
+      await loadAgentStatuses(tx, orgId, [userId], { automationAllowed: automation })
+    ).get(userId);
+    return st !== undefined && !st.routable;
   }
 
   private async returnOne(
@@ -199,12 +221,22 @@ export class AwayService {
   }
 
   async offlineInactive(orgId: number, minutes: number, now: Date = new Date()): Promise<number> {
+    const automation = await this.entitlements.featureEnabled(
+      orgId,
+      AGENT_STATUS_AUTOMATION_FEATURE,
+    );
     const people = await this.db.retry.txAs({ orgId }, async (tx) => {
       const online = rowsOf(
         await tx.execute(sql`
           SELECT u.id FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
           WHERE u.org_id = ${orgId} AND u.status = 'active' AND COALESCE(s.status, 'online') = 'online'`),
       ).map((r) => Number(r.id));
+      // Only people who are Available now: somebody already Away (on leave, outside their working hours) has nothing to switch off.
+      const statuses = await loadAgentStatuses(tx, orgId, online, {
+        automationAllowed: automation,
+        now,
+      });
+      online.splice(0, online.length, ...online.filter((id) => statuses.get(id)?.routable));
       if (online.length === 0) return [];
       const sessions = rowsOf(
         await tx.execute(sql`
@@ -236,13 +268,22 @@ export class AwayService {
     let set = 0;
     for (const userId of people) {
       const changed = await this.db.txAs({ orgId }, async (tx) => {
-        const res = await tx.execute(sql`
-          INSERT INTO agent_statuses (org_id, user_id, status, last_seen_at)
-          VALUES (${orgId}, ${userId}, 'offline', now())
-          ON CONFLICT (org_id, user_id) DO UPDATE SET status = 'offline', last_seen_at = now()
-            WHERE agent_statuses.status <> 'offline'
-          RETURNING user_id`);
-        if (rowsOf(res).length === 0) return false;
+        const row = await readStatusRow(tx, orgId, userId, true);
+        if (row.status === 'offline') return false;
+        // Recorded as the person's own (manual) Away: while they automate it ends at the next schedule boundary, so the next morning the
+        // schedule decides; without automation it stays until they switch back (as it always did).
+        const prefs = readAvailabilityPrefs(row.preferences);
+        await writeAvailability(tx, orgId, userId, {
+          status: 'offline',
+          availability: {
+            manual: {
+              status: 'offline',
+              setAt: now.toISOString(),
+              until: manualUntil(prefs.hours, automation, now),
+            },
+            ...(prefs.hours ? { hours: prefs.hours } : {}),
+          },
+        });
         await tx.execute(sql`
           INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta)
           VALUES (${orgId}, NULL, 'system', 'members', ${userId}, 'member.availability_changed',

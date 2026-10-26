@@ -322,7 +322,7 @@
         "conversationsOpen": "שיחות פתוחות",
         "conversationsResolved": "שיחות שנפתרו",
         "conversationsClosed": "שיחות סגורות",
-        "conversationsAssigned": "משויכות",
+        "conversationsAssigned": "משויכות למישהו",
         "conversationsUnassigned": "לא משויכות",
         "conversationsTotal": "{count, plural, one {שיחה אחת} other {# שיחות}}"
       },

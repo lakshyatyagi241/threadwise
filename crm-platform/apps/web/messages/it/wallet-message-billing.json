@@ -273,7 +273,7 @@
       "emptyFiltered": "Nessun risultato corrisponde a questi filtri. Modificali o reimpostali.",
       "days": {
         "title": "Registro giornaliero",
-        "subtitle": "Messaggi raggruppati per giorno, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
+        "subtitle": "Messaggi raggruppati per giorno, tipo, stato, canale e categoria. Apri un giorno per vedere ogni messaggio.",
         "messagesOnDay": "{count} messaggi",
         "viewDetails": "Visualizza dettagli",
         "actions": "Azioni",
@@ -310,7 +310,8 @@
         "widget_ai": "Chatbot del sito",
         "growth": "Crescita",
         "telephony": "Chiamate telefoniche",
-        "translation": "Traduzione"
+        "translation": "Traduzione",
+        "widget": "Chatbot del sito"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Ogni minuto iniziato di una chiamata WhatsApp. Una chiamata a cui nessuno ha risposto è gratuita.",
             "voice_call": "Ogni minuto iniziato di una chiamata segnalata dal fornitore di telefonia del cliente. I registri chiamate scritti a mano non vengono mai addebitati.",
             "enrichment": "Ogni contatto cercato presso il fornitore di dati della piattaforma.",
-            "chat_message": "Ogni messaggio inviato su Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratuito finché non imposti un prezzo."
+            "chat_message": "Ogni messaggio inviato su Telegram, Facebook, Instagram, LINE, Viber o WeChat. Gratuito finché non imposti un prezzo.",
+            "webbot_message": "Ogni messaggio di un visitatore gestito dal chatbot del sito dopo l'esaurimento dei messaggi gratuiti mensili del piano."
           },
           "costPlus": {
             "title": "Addebitato al costo del fornitore più un ricarico",
@@ -1034,7 +1036,8 @@
       "ai": "IA",
       "translation": "Traduzione",
       "enrichment": "Ricerca contatto",
-      "chat_message": "Messaggio di chat"
+      "chat_message": "Messaggio di chat",
+      "webbot_message": "Messaggio del chatbot del sito"
     }
   }
 }

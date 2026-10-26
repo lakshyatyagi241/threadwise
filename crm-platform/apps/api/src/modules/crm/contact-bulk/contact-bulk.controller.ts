@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Header,
+  Headers,
   ParseUUIDPipe,
   Param,
   HttpCode,
@@ -13,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  bulkConsentContactsSchema,
   bulkDeleteContactsSchema,
   bulkGroupContactsSchema,
   bulkOwnerContactsSchema,
@@ -20,6 +22,7 @@ import {
   bulkTagContactsSchema,
   exportContactsSchema,
   exportHistoryQuerySchema,
+  type BulkConsentContactsInput,
   type BulkDeleteContactsInput,
   type BulkGroupContactsInput,
   type BulkOwnerContactsInput,
@@ -29,7 +32,12 @@ import {
   type ExportHistoryQuery,
   type RecordScope,
 } from '@crm/contracts';
-import { ActorKinds, GrantedScope, RequirePermission } from '../../../common/decorators';
+import {
+  ActorKinds,
+  GrantedScope,
+  Idempotent,
+  RequirePermission,
+} from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { ContactsService } from '../contacts/contacts.service';
 import { ContactBulkService } from './contact-bulk.service';
@@ -130,6 +138,24 @@ export class ContactBulkController {
     @GrantedScope('record.contacts.update') scope: RecordScope,
   ) {
     return this.bulk.tag(body, scope);
+  }
+
+  @Post('bulk/consent')
+  @HttpCode(HttpStatus.OK)
+  @Idempotent()
+  @RequirePermission('contacts.consent.manage')
+  @ApiOperation({
+    summary:
+      'Record marketing consent for one channel on contacts (ids, or everything matching a filter)',
+    description:
+      "Each contact gets the single edit's consent event (manual source, the note of how they agreed). A grant needs a note (422 at the body). Contacts outside the caller update scope or not found are listed in `failed`; the rest still run. `changed` counts the events recorded.",
+  })
+  async consent(
+    @Body(zodPipe(bulkConsentContactsSchema)) body: BulkConsentContactsInput,
+    @GrantedScope('record.contacts.update') scope: RecordScope,
+    @Headers('idempotency-key') key?: string,
+  ) {
+    return this.bulk.consent(body, scope, key);
   }
 
   @Get('exports')

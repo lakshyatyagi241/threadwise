@@ -72,16 +72,17 @@ export const canDuplicate = (
   templateType: string = 'standard',
 ): boolean => metaTemplateId !== null && s !== 'deleted' && BUILDABLE_TYPES.includes(templateType);
 
-/** The library's status tabs (Reference's effective status): `all`, then the three groups the API filters on. */
-export const STATUS_TABS = ['all', 'approved', 'pending', 'rejected'] as const;
+/** The library's status tabs: `all`, then the groups the API filters on (a draft is not "in review": it has not been sent to Meta). */
+export const STATUS_TABS = ['all', 'approved', 'pending', 'draft', 'rejected'] as const;
 export type StatusTab = (typeof STATUS_TABS)[number];
 
 export const SORTS = ['newest', 'oldest', 'name-asc', 'name-desc'] as const;
 
-/** The dot beside a status: green approved, amber in review, coral rejected; the tab a status counts under follows the API. */
+/** The dot beside a status: green approved, amber in review, grey draft, coral rejected; the tab a status counts under follows the API. */
 export function statusGroupOf(s: TplStatus): Exclude<StatusTab, 'all'> | null {
   if (s === 'approved') return 'approved';
-  if (s === 'pending' || s === 'draft') return 'pending';
+  if (s === 'pending') return 'pending';
+  if (s === 'draft') return 'draft';
   if (s === 'rejected' || s === 'paused' || s === 'disabled') return 'rejected';
   return null;
 }

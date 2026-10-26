@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# hora} other {# horas}}",
         "days": "{count, plural, one {# dia} other {# dias}}"
       },
-      "unsnoozesAt": "Reabre em {time}"
+      "unsnoozesAt": "Reabre em {time}",
+      "erased": "Contatos apagados",
+      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa nem o texto das mensagens. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
+      "erasedTitle": "Contato apagado"
     },
     "status": {
       "received": "Recebida",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Você pode ler esta conversa, mas não tem permissão para responder.",
       "resolvedBanner": "Esta conversa foi resolvida. Reabra-a para responder.",
+      "resolvedWebchatBanner": "Este chat do site está resolvido e não pode ser reaberto.",
       "assignedToOther": "Este chat está atribuído a outro agente. Atribua-o a você primeiro para responder.",
       "typing": "{count, plural, one {Um membro da equipe está digitando} other {# membros da equipe estão digitando}}",
       "messagesLabel": "Mensagens",
+      "session": {
+        "header": "{range} · {count, plural, one {# mensagem} other {# mensagens}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Carregar mensagens anteriores",
       "empty": "Ainda não há mensagens nesta conversa.",
       "newMessageAnnounce": "Nova mensagem: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Nenhum resultado",
       "searchPrev": "Resultado anterior",
       "searchNext": "Próximo resultado",
-      "searchClose": "Fechar pesquisa"
+      "searchClose": "Fechar pesquisa",
+      "erasedBadge": "Apagado",
+      "erasedBanner": "Este contato foi apagado. O texto e as mídias das mensagens foram removidos, por isso nada pode ser enviado. A linha do tempo e os horários são mantidos."
     },
     "groupThread": {
       "openGroup": "Abrir grupo",
@@ -542,17 +554,17 @@
         "onLeave": "De licença",
         "onLeaveUntil": "De licença até {date}",
         "availability": {
-          "online": "Online",
-          "away": "Ausente",
+          "online": "Disponível",
+          "away": "Ausente, fora do horário de trabalho",
           "busy": "Ocupado",
-          "offline": "Offline"
+          "offline": "Ausente"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Ausente",
+        "online": "Disponível",
+        "away": "Ausente, fora do horário de trabalho",
         "busy": "Ocupado",
-        "offline": "Offline"
+        "offline": "Ausente"
       },
       "notes": {
         "tab": "Notas do contato",
@@ -715,6 +727,7 @@
         "not_linked": "O canal desta conversa não está vinculado a um número de WhatsApp, por isso nenhum modelo pode ser enviado a partir dele.",
         "paused": "Pausado pelo WhatsApp. Poderá ser enviado novamente quando a pausa terminar.",
         "media_header": "Tem um cabeçalho de imagem, vídeo ou documento, que ainda não pode ser enviado pela caixa de entrada.",
+        "carousel": "É um carrossel (cartões com imagens) e ainda não pode ser enviado pela caixa de entrada.",
         "header_variable": "Tem uma variável no cabeçalho, que ainda não pode ser preenchida pela caixa de entrada.",
         "dynamic_button": "Tem um link de botão com variável, que ainda não pode ser preenchida pela caixa de entrada.",
         "authentication": "Modelos de senha de uso único são enviados pelo sistema, não pela caixa de entrada.",

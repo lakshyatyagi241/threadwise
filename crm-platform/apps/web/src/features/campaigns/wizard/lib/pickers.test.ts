@@ -2,12 +2,29 @@ import { describe, expect, it } from 'vitest';
 import {
   clockLabel,
   dateLabel,
+  dayOff,
   dialValue,
   formatClock,
   monthGrid,
   parseClock,
   shiftMonth,
+  todayIso,
 } from './pickers';
+
+describe('calendar range', () => {
+  it('opens an empty calendar on this device’s today', () => {
+    expect(todayIso(new Date(2026, 9, 24, 23, 30))).toBe('2026-10-24');
+    expect(todayIso(new Date(2026, 0, 1, 0, 5))).toBe('2026-01-01');
+  });
+
+  it('disables only the days before min or after max', () => {
+    expect(dayOff('2026-10-05', '2026-10-06', '2026-10-13')).toBe(true);
+    expect(dayOff('2026-10-06', '2026-10-06', '2026-10-13')).toBe(false);
+    expect(dayOff('2026-10-13', '2026-10-06', '2026-10-13')).toBe(false);
+    expect(dayOff('2026-10-14', '2026-10-06', '2026-10-13')).toBe(true);
+    expect(dayOff('2020-01-01')).toBe(false);
+  });
+});
 
 describe('clock', () => {
   it('reads and writes 24-hour times as a 12-hour clock', () => {

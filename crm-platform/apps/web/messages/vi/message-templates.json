@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Kiểm tra phát hiện các lỗi mà Meta sẽ từ chối. Chưa có gì được gửi. Hãy sửa các lỗi được liệt kê bên phải.",
       "TPL_META_REJECTED": "Meta đã từ chối mẫu. Lý do ở bên dưới; mẫu được giữ làm bản nháp để bạn có thể sửa và thử lại.",
       "TPL_NO_CONNECTION": "Mẫu này không có số WhatsApp nào được kết nối để gửi. Hãy kết nối một số trước.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Tệp tiêu đề cần lưu trữ đối tượng trên đám mây. Hãy nhờ quản trị viên nền tảng bật tính năng này.",
       "TPL_IN_USE": "Không thể xóa mẫu này vì có chiến dịch Gửi hàng loạt đang chạy hoặc đã lên lịch đang dùng nó.",
       "TPL_NOT_EDITABLE": "Chỉ có thể chỉnh sửa mẫu chưa được Meta duyệt hoặc mẫu bị Meta từ chối.",
       "TPL_EDIT_LIMIT": "Meta cho phép một lần chỉnh sửa trong 24 giờ và mười lần trong 30 ngày đối với mẫu đã được duyệt. Hãy thử lại sau.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, other {+# nút khác}}",
       "live": "Xem trước trực tiếp",
       "business": "Bloomly",
-      "online": "trực tuyến"
+      "online": "trực tuyến",
+      "cards": "Thẻ băng chuyền",
+      "cardEmpty": "Văn bản của thẻ {n}",
+      "offerExpires": "Sắp kết thúc",
+      "offerTextEmpty": "Tiêu đề ưu đãi"
     },
     "card": {
       "rejected": "Bị từ chối: {reason}",
@@ -120,7 +125,8 @@
         "all": "Tất cả",
         "approved": "Đã duyệt",
         "pending": "Đang xem xét",
-        "rejected": "Bị từ chối"
+        "rejected": "Bị từ chối",
+        "draft": "Bản nháp"
       },
       "quickStartTitle": "Bắt đầu nhanh",
       "quickStart": "Hãy đọc <link>Hướng dẫn về mẫu tin</link> trước khi gửi lên Meta để thời gian duyệt dưới 24 giờ.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Đã duyệt",
         "pending": "Đang xem xét",
-        "rejected": "Bị từ chối"
+        "rejected": "Bị từ chối",
+        "draft": "Bản nháp"
       },
       "helpLabel": "Trợ giúp - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Xóa mẫu",
       "cancel": "Hủy",
       "done": "Đã xóa “{name}”.",
-      "inUseHelp": "Mở chiến dịch Gửi hàng loạt đang dùng mẫu này rồi hủy hoặc chọn mẫu khác, sau đó xóa mẫu này."
+      "inUseHelp": "Mở chiến dịch Gửi hàng loạt đang dùng mẫu này rồi hủy hoặc chọn mẫu khác, sau đó xóa mẫu này.",
+      "messageDraft": "Xóa “{name}”? Mẫu này chưa từng được gửi tới Meta nên chỉ bị xóa ở đây."
     },
     "lint": {
       "title": "Kiểm tra trước khi gửi",
@@ -195,7 +203,8 @@
         "body": "Nội dung",
         "footer": "Chân trang",
         "buttons": "Nút",
-        "template": "Mẫu"
+        "template": "Mẫu",
+        "cards": "Thẻ"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Đang tải lên",
         "keptSample": "Tệp mẫu đã lưu được giữ lại. Chọn tệp để thay thế.",
         "noFile": "Chưa chọn tệp",
-        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB, PDF tối đa 100 MB.",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB, PDF tối đa 10 MB.",
         "replace": "Thay tệp",
         "choose": "Chọn tệp mẫu",
         "tooBig": "{kind} này có dung lượng {size} MB. WhatsApp chỉ chấp nhận tối đa {max} MB. Hãy chọn tệp nhỏ hơn.",
@@ -322,14 +331,18 @@
           "quick_reply": "Trả lời nhanh",
           "url": "Truy cập trang web",
           "phone": "Gọi điện thoại",
-          "copy_code": "Sao chép mã"
+          "copy_code": "Sao chép mã",
+          "form": "Biểu mẫu",
+          "catalog": "Danh mục"
         },
         "kind": {
           "quick_reply": "Trả lời nhanh",
           "url": "Truy cập trang web",
           "phone": "Gọi điện thoại",
           "copy_code": "Sao chép mã",
-          "other": "Khác"
+          "other": "Khác",
+          "form": "Biểu mẫu",
+          "catalog": "Danh mục"
         },
         "count": "{used}/{max} nút",
         "limitReached": "Tối đa {max} nút loại này.",
@@ -358,8 +371,17 @@
           "codeRequired": "Nhập mã mẫu.",
           "quickReplyVariable": "Nút trả lời nhanh không thể chứa biến.",
           "urlExampleRequired": "Nhập giá trị mẫu cho biến URL.",
-          "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút."
-        }
+          "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút.",
+          "flowIdRequired": "Nhập ID Flow.",
+          "flowIdInvalid": "ID Flow là một số.",
+          "screenRequired": "Nhập ID màn hình.",
+          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác."
+        },
+        "catalogHint": "Mở danh mục WhatsApp của bạn. Nút hiển thị “Xem danh mục” và phải là nút duy nhất.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "ID dạng số của một WhatsApp Flow đã xuất bản, lấy từ trình quản lý Flows của Meta.",
+        "screen": "Màn hình mở đầu",
+        "screenHint": "ID của màn hình mà biểu mẫu mở ra, ví dụ WELCOME."
       },
       "result": {
         "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",
@@ -373,6 +395,46 @@
         "open": "Tạo bằng AI",
         "applied": "Bản nháp mẫu đã được AI điền sẵn. Hãy xem lại trước khi gửi duyệt.",
         "authHint": "Mẫu xác thực có nội dung cố định nên không cần soạn."
+      },
+      "type": {
+        "label": "Loại nút",
+        "standard": "Tiêu chuẩn",
+        "carousel": "Băng chuyền",
+        "hint": "Chọn cách tin nhắn kết thúc. Carousel là một hàng thẻ; ưu đãi có thời hạn có tiêu đề ưu đãi kèm đếm ngược tùy chọn và nút sao chép mã hoặc trang web.",
+        "none": "Không có",
+        "buttons": "Sao chép mã, trang web, trả lời nhanh, v.v.",
+        "lto": "Ưu đãi có thời hạn",
+        "catalogue": "Danh mục",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Thẻ",
+        "hint": "Từ 2 đến 10 thẻ. Mọi thẻ dùng cùng loại tệp và cùng các nút.",
+        "format": "Thẻ hiển thị",
+        "formatImage": "Hình ảnh",
+        "formatVideo": "Video",
+        "count": "{used}/{max} thẻ",
+        "add": "Thêm thẻ",
+        "needTwo": "Băng chuyền cần ít nhất {min} thẻ.",
+        "card": "Thẻ {n}",
+        "remove": "Xóa thẻ {n}",
+        "noFile": "Chưa chọn tệp",
+        "uploading": "Đang tải lên",
+        "text": "Văn bản của thẻ",
+        "textCounter": "{used}/{max}",
+        "buttons": "Nút",
+        "buttonText": "Văn bản nút",
+        "buttonUrl": "URL trang web",
+        "buttonPhone": "Số điện thoại"
+      },
+      "offer": {
+        "title": "Ưu đãi có thời hạn",
+        "hint": "Hiển thị bên dưới hình ảnh hoặc video: một tiêu đề và, nếu muốn, bộ đếm ngược đến khi ưu đãi kết thúc.",
+        "text": "Tiêu đề ưu đãi",
+        "textHint": "{used}/{max}",
+        "placeholder": "Ưu đãi sắp hết hạn!",
+        "countdown": "Hiển thị đếm ngược",
+        "countdownHint": "WhatsApp hiển thị thời gian còn lại đến khi ưu đãi kết thúc."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Mẫu tin",
       "crumbDetail": "Chi tiết",
       "notSubmittedPill": "Chưa gửi",
-      "qualityPill": "Chất lượng · {quality}",
       "preview": {
         "title": "Xem trước",
         "hint": "Hiển thị trên WhatsApp như thế nào"

@@ -50,7 +50,8 @@ export class HttpCampaignAiAdapter implements CampaignAiPort {
       { authorization: `Bearer ${req.apiKey}` },
       {
         model: req.model,
-        max_tokens: req.maxTokens,
+        // OpenAI's current models reject `max_tokens` and take `max_completion_tokens`.
+        max_completion_tokens: req.maxTokens,
         temperature: req.temperature,
         response_format: { type: 'json_object' },
         messages: [

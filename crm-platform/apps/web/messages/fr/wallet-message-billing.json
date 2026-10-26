@@ -273,7 +273,7 @@
       "emptyFiltered": "Rien ne correspond à ces filtres. Modifiez-les ou réinitialisez-les.",
       "days": {
         "title": "Journal quotidien",
-        "subtitle": "Messages regroupées par jour, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
+        "subtitle": "Messages regroupées par jour, type, statut, canal et catégorie. Ouvrez un jour pour voir chaque message.",
         "messagesOnDay": "{count} messages",
         "viewDetails": "Voir les détails",
         "actions": "Actions",
@@ -310,7 +310,8 @@
         "widget_ai": "Chatbot du site web",
         "growth": "Croissance",
         "telephony": "Appels téléphoniques",
-        "translation": "Traduction"
+        "translation": "Traduction",
+        "widget": "Chatbot du site"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Chaque minute entamée d'un appel WhatsApp. Un appel resté sans réponse est gratuit.",
             "voice_call": "Chaque minute entamée d'un appel signalé par le fournisseur de téléphonie du client. Les appels saisis à la main ne sont jamais facturés.",
             "enrichment": "Chaque contact recherché auprès du fournisseur de données de la plateforme.",
-            "chat_message": "Chaque message envoyé sur Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuit tant que vous n'avez pas fixé de prix."
+            "chat_message": "Chaque message envoyé sur Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuit tant que vous n'avez pas fixé de prix.",
+            "webbot_message": "Chaque message de visiteur traité par le chatbot du site une fois les messages gratuits du mois du forfait épuisés."
           },
           "costPlus": {
             "title": "Facturé au coût du fournisseur plus une marge",
@@ -1034,7 +1036,8 @@
       "ai": "IA",
       "translation": "Traduction",
       "enrichment": "Recherche de contact",
-      "chat_message": "Message de chat"
+      "chat_message": "Message de chat",
+      "webbot_message": "Message du chatbot du site"
     }
   }
 }

@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# uur} other {# uur}}",
         "days": "{count, plural, one {# dag} other {# dagen}}"
       },
-      "unsnoozesAt": "Wordt weer open {time}"
+      "unsnoozesAt": "Wordt weer open {time}",
+      "erased": "Gewiste contacten",
+      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon en zonder berichttekst. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
+      "erasedTitle": "Gewist contact"
     },
     "status": {
       "received": "Ontvangen",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
       "resolvedBanner": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "resolvedWebchatBanner": "Deze webchat is opgelost en kan niet opnieuw worden geopend.",
       "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",
+      "session": {
+        "header": "{range} · {count, plural, one {# bericht} other {# berichten}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Eerdere berichten laden",
       "empty": "Nog geen berichten in dit gesprek.",
       "newMessageAnnounce": "Nieuw bericht: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Geen resultaten",
       "searchPrev": "Vorige treffer",
       "searchNext": "Volgende treffer",
-      "searchClose": "Zoeken sluiten"
+      "searchClose": "Zoeken sluiten",
+      "erasedBadge": "Gewist",
+      "erasedBanner": "Dit contact is gewist. Berichttekst en media zijn verwijderd, dus er kan niets worden verzonden. De tijdlijn en tijden blijven bewaard."
     },
     "groupThread": {
       "openGroup": "Groep openen",
@@ -542,17 +554,17 @@
         "onLeave": "Met verlof",
         "onLeaveUntil": "Met verlof tot {date}",
         "availability": {
-          "online": "Online",
-          "away": "Afwezig",
+          "online": "Beschikbaar",
+          "away": "Afwezig, buiten werktijd",
           "busy": "Bezet",
-          "offline": "Offline"
+          "offline": "Afwezig"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Afwezig",
+        "online": "Beschikbaar",
+        "away": "Afwezig, buiten werktijd",
         "busy": "Bezig",
-        "offline": "Offline"
+        "offline": "Afwezig"
       },
       "notes": {
         "tab": "Contactnotities",
@@ -715,6 +727,7 @@
         "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden.",
         "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
         "media_header": "Heeft een koptekst met afbeelding, video of document, die nog niet vanuit de inbox kan worden verzonden.",
+        "carousel": "Is een carrousel (kaarten met afbeeldingen) en kan nog niet vanuit de inbox worden verzonden.",
         "header_variable": "Heeft een variabele in de koptekst, die nog niet vanuit de inbox kan worden ingevuld.",
         "dynamic_button": "Heeft een knoppenlink met een variabele, die nog niet vanuit de inbox kan worden ingevuld.",
         "authentication": "Sjablonen met een eenmalige code worden door het systeem verzonden, niet vanuit de inbox.",

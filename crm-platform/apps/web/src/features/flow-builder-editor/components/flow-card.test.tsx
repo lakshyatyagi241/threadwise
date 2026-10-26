@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { FlowFeatured, FlowSummary } from '@crm/contracts';
@@ -50,6 +52,12 @@ describe('flow card (TW-FLB-001)', () => {
     const advanced = card({ builder: 'advanced' });
     expect(advanced).toContain('data-testid="flow-card-automation"');
     expect(advanced).not.toContain('bg-[#25D366]');
+  });
+
+  it('an Advanced messaging flow opens on the canvas, not the Simple editor, in a Simple workspace', () => {
+    const html = card({ builder: 'advanced' });
+    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flows/simple/');
   });
 
   it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
@@ -151,5 +159,14 @@ describe('featured card (TW-FLB-002)', () => {
     );
     expect(html).toContain('emptyPreview');
     expect(html).toContain('no waits');
+  });
+});
+
+describe('dark mode text on the flows screen', () => {
+  it('lifts brand-coloured text to the light primary on the dark surfaces (the featured flow was unreadable)', () => {
+    const css = readFileSync(join(__dirname, '../builder/builder.css'), 'utf8');
+    expect(css).toMatch(
+      /\[data-theme='dark'\] \.flb-root \.text-brand:not\(\[class\*='flb-mint'\]\) \{\s*color: var\(--primary\);/,
+    );
   });
 });

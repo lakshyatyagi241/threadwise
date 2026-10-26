@@ -14,7 +14,8 @@ import {
   buttonActionPatch,
   buttonActionsWithout,
 } from '../../lib/button-actions';
-import { useContext, useMemo, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { needsCopy, SaveCopy } from '../picture-copy';
 import { useTranslations } from 'next-intl';
 import {
   FLB_AGE_END_TEXT,
@@ -391,12 +392,24 @@ function HandoffFields({
  */
 function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const { toast } = useToast();
   const cards = arr(step.data.cards).map(rec);
   // One card at a time: arrows walk through them, and on the last one the right arrow is a "+" that adds the next card.
   const [at, setAt] = useState(0);
   const here = Math.min(at, Math.max(0, cards.length - 1));
   const canAdd = cards.length < FLB_CAROUSEL_MAX_CARDS;
   const setCards = (next: Array<Record<string, unknown>>) => set({ cards: next });
+  // A copy takes a moment; the cards may change meanwhile, so the copy replaces the picture by its address in the latest data.
+  const latest = useRef(step.data);
+  useEffect(() => {
+    latest.current = step.data;
+  });
+  const replacePicture = (from: string, to: string) =>
+    setCards(
+      arr(latest.current.cards)
+        .map(rec)
+        .map((c) => (str(c.image) === from ? { ...c, image: to } : c)),
+    );
   const patchCard = (i: number, p: Record<string, unknown>) =>
     setCards(cards.map((c, j) => (j === i ? { ...c, ...p } : c)));
   const buttonsOf = (c: Record<string, unknown>) => arr(c.buttons).map(rec);
@@ -492,6 +505,16 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                   placeholder="https://"
                   onChange={(e) => patchCard(ci, { image: e.target.value })}
                 />
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  {t('carousel.imageFormats')}
+                </p>
+                {needsCopy(str(c.image)) ? (
+                  <SaveCopy
+                    url={str(c.image)}
+                    onSaved={(copy) => replacePicture(str(c.image), copy)}
+                    onFailed={(message) => toast(t('carousel.copyFailed', { message }))}
+                  />
+                ) : null}
               </Field>
               <Field
                 label={

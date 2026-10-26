@@ -151,7 +151,9 @@ describe('the campaign picture and the wallet', () => {
     );
     expect(failed.wallet.chargeCall).not.toHaveBeenCalled();
     const local = make({ canStore: false });
-    await code(run(() => local.svc.generate(input)));
+    expect(await code(run(() => local.svc.generate(input)))).toBe(
+      ERROR_CODES.CAMP_AI_STORAGE_REQUIRED,
+    );
     expect(local.images.generate).not.toHaveBeenCalled();
     expect(local.wallet.chargeCall).not.toHaveBeenCalled();
   });

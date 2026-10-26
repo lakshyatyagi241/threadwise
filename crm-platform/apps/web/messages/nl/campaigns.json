@@ -241,7 +241,8 @@
         "expiry": "De einddatum moet na de verzenddatum liggen, anders zou de campagne verlopen voordat hij ooit wordt verzonden.",
         "media": "Voer een volledig adres in dat begint met http:// of https://.",
         "sender": "Kies een afzender.",
-        "subject": "Kort het onderwerp in tot maximaal 150 tekens."
+        "subject": "Kort het onderwerp in tot maximaal 150 tekens.",
+        "pacing": "Controleer Slimme aflevering: elk getal moet een geheel getal binnen het toegestane bereik zijn."
       },
       "submit": {
         "save": "Wijzigingen opslaan",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "De langste wachttijd voor een bericht.",
         "batchPauseHint": "Minuten rust na elke batch.",
         "retryFailed": "Mislukte berichten automatisch opnieuw proberen",
-        "retryFailedHint": "Een bericht dat om een tijdelijke reden mislukt, wordt een paar keer opnieuw geprobeerd, met een pauze tussen de pogingen. Zet dit uit om elk bericht maar één keer te sturen."
+        "retryFailedHint": "Een bericht dat om een tijdelijke reden mislukt, wordt een paar keer opnieuw geprobeerd, met een pauze tussen de pogingen. Zet dit uit om elk bericht maar één keer te sturen.",
+        "range": "Voer een geheel getal in van {min} tot {max}."
       },
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "draftChip": "Concept / niet opgeslagen",
@@ -595,7 +597,8 @@
           "expiry": "De einddatum moet na de verzenddatum liggen, anders verloopt de campagne voordat er iets wordt verzonden.",
           "media": "Voer een volledig adres in dat begint met http:// of https://.",
           "sender": "Kies een afzender.",
-          "subject": "Kort het onderwerp in tot maximaal 150 tekens."
+          "subject": "Kort het onderwerp in tot maximaal 150 tekens.",
+          "pacing": "Controleer Slimme aflevering: elk getal moet een geheel getal binnen het toegestane bereik zijn."
         },
         "from": "Van",
         "subject": "Onderwerp",
@@ -686,6 +689,7 @@
             "providerFailed": "De afbeeldingsservice reageerde niet. Probeer het zo meteen opnieuw.",
             "badJson": "De afbeeldingsservice stuurde een onverwacht antwoord. Probeer het opnieuw.",
             "imageRefused": "OpenAI weigerde deze afbeelding te tekenen. Pas het product, de aanbieding of de notities aan en probeer het opnieuw.",
+            "storageRequired": "Afbeeldingen hebben cloud-objectopslag nodig: vraag de platformbeheerder om die in te schakelen. De campagnetekst is bewaard.",
             "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
             "forbidden": "U hebt geen toestemming om campagnes aan te maken.",
             "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups.",
         "sequence_not_recurring": "Sjablonen om de beurt werken alleen met een terugkerende campagne. Kies een terugkerend schema of verwijder de extra sjablonen.",
         "sequence_with_ab": "Sjablonen om de beurt kunnen niet worden gecombineerd met een A/B-test. Zet de A/B-test uit of verwijder de extra sjablonen.",
-        "sequence_template_required": "Kies een sjabloon voor elke stap in de volgorde of verwijder de lege."
+        "sequence_template_required": "Kies een sjabloon voor elke stap in de volgorde of verwijder de lege.",
+        "variable_fallback_required": "Vul een terugvalwaarde in voor elke variabele die uit een contactveld komt: die wordt gebruikt voor contacten zonder waarde.",
+        "retry_end_too_far": "Nieuwe pogingen kunnen vanaf vandaag maximaal 7 dagen doorlopen. Kies een dichterbij liggende einddatum.",
+        "template_b_same": "Variant B heeft een andere sjabloon nodig dan variant A.",
+        "pacing_out_of_range": "Controleer Slimme aflevering: een getal ligt buiten het toegestane bereik."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Versie van de mededeling: {version}.",
         "modePrevious": "Verzenden naar eerdere verzendingen",
         "previousHint": "Bereik opnieuw de mensen naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, niet las, erop antwoordde of klikte.",
-        "chipPrevious": "{count, plural, one {# eerdere verzending} other {# eerdere verzendingen}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# eerdere verzending} other {# eerdere verzendingen}} ({outcome})",
+        "filterNoConditions": "Voeg een voorwaarde toe om te zien hoeveel contacten overeenkomen."
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Eerdere verzendingen: {names} ({outcome})",
         "sumSplit": "Verdeling over nummers",
         "sumSplitCount": "{count, plural, one {# ontvanger} other {# ontvangers}} ({percent}%)",
-        "sumSplitPercent": "{percent}% van de doelgroep"
+        "sumSplitPercent": "{percent}% van de doelgroep",
+        "sumCostCharged": "In rekening gebracht van uw portemonnee: {amount} (uw abonnement dekt de rest)"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Nieuwe pogingen activeren",
         "retriesToggle": "Berichten opnieuw proberen die Meta tegenhoudt",
         "retryEnd": "Een einddatum instellen",
+        "retryEndPlaceholder": "Vanaf nu, tot {days} dagen",
         "retriesInfoWhy": "Nieuwe pogingen zijn alleen voor berichten die mislukken door de frequentielimiet van Meta (fout {code}).",
         "retriesInfoWhen": "Ze worden precies om de {hours} uur uitgevoerd tot de einddatum.",
         "retriesInfoCost": "Geen extra kosten: je betaalt pas voor een bericht wanneer het is afgeleverd.",
         "recurringTitle": "Terugkerende broadcast",
         "recurringHint": "Dit volgens een terugkerend schema verzenden",
-        "occurrences": "uitvoeringen"
+        "occurrences": "uitvoeringen",
+        "recurringWarning": "Deze verzending herhaalt zich volgens het schema. Elke run gaat naar het publiek zoals het op dat moment is, en elk bericht wordt van uw portemonnee afgeschreven.",
+        "repeatRange": "Voer een geheel getal in van 1 tot {max}."
       },
       "words": {
         "now": "Direct verzonden, eenmalig.",

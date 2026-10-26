@@ -85,7 +85,13 @@
         "title": "Delete {name}?",
         "body": "Delete this add-on? Workspaces that bought it keep it until it expires.",
         "confirm": "Delete",
-        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}"
+        "inUse": "{count, plural, one {# workspace owns this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.} other {# workspaces own this add-on, so it cannot be deleted. Disable it instead; owners keep it until it ends.}}",
+        "errors": {
+          "refused": "This add-on has purchases, including ended ones, so it cannot be deleted. Disable it instead.",
+          "forbidden": "Only a super admin can delete add-ons.",
+          "notFound": "This add-on no longer exists.",
+          "failed": "The add-on could not be deleted."
+        }
       },
       "errors": {
         "generic": "The add-on could not be saved.",
@@ -370,7 +376,8 @@
         "includedOwned": "You also hold this add-on. Your plan now includes it, so you can cancel the add-on. Nothing is refunded automatically.",
         "includedEnds": "Included in your plan. Your add-on ends on {date} and will not renew.",
         "active": "Active",
-        "ownedCount": "Owned ×{count} · buying again adds more"
+        "ownedCount": "Owned ×{count} · buying again adds more",
+        "turnedOff": "Turned off"
       },
       "price": {
         "free": "Free",
@@ -398,6 +405,43 @@
       "groups": {
         "feature": "Feature add-ons",
         "capacity": "Capacity add-ons"
+      },
+      "activation": {
+        "turnedOffNote": "Turned off for this workspace. Its settings are kept.",
+        "turnOff": "Turn off",
+        "turnOn": "Turn on",
+        "askOwner": "Ask your account owner to turn this on or off.",
+        "doneOn": "{name} is turned on.",
+        "errors": {
+          "notToggleable": "{name} can't be turned on or off here. Only an add-on your plan includes can be switched.",
+          "forbidden": "You don't have permission to turn add-ons on or off.",
+          "generic": "We couldn't change {name}. Please try again."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Turn off {name}?",
+      "lead": "Here is what changes. You can turn it back on at any time.",
+      "cancel": "Cancel",
+      "confirm": "Turn off {name}",
+      "done": "{name} is turned off. Its settings are kept.",
+      "typeLabel": "Type {name} to confirm",
+      "typeHint": "Customer chats or people are affected, so type the name to confirm.",
+      "groups": {
+        "stops": "What stops",
+        "kept": "What is kept",
+        "people": "People"
+      },
+      "items": {
+        "features_off": "These features stop working: {names}.",
+        "dependents_off": "These features need them, so they stop too: {names}.",
+        "roles_dormant": "{count, plural, one {# role holds permissions of this add-on. It keeps them, but they are inactive until you turn it back on.} other {# roles hold permissions of this add-on. They keep them, but they are inactive until you turn it back on.}}",
+        "waiting_chats": "{count, plural, one {# chat is waiting for an agent. It will not be routed automatically, so someone has to claim it.} other {# chats are waiting for an agent. They will not be routed automatically, so someone has to claim them.}}",
+        "routing_rules": "{count, plural, one {# routing rule stops assigning chats.} other {# routing rules stop assigning chats.}}",
+        "auto_teams": "{count, plural, one {# team is set to assign chats automatically and stops doing so.} other {# teams are set to assign chats automatically and stop doing so.}}",
+        "teams": "{count, plural, one {# team is kept, with its members.} other {# teams are kept, with their members.}}",
+        "custom_role_holders": "{count, plural, one {# person holds a custom role. Their role is kept, but the permissions of this add-on stop applying.} other {# people hold a custom role. Their roles are kept, but the permissions of this add-on stop applying.}}",
+        "kept": "Your settings and data are kept. They come back as you left them when you turn it on again."
       }
     }
   }

@@ -10,6 +10,8 @@ export interface ChannelProfile {
   location: boolean;
   /** WhatsApp's interactive "send location" request (Cloud API only). */
   locationRequest?: boolean;
+  /** The website chat's own "Share my location" button: the question goes as plain text and the window draws the button. */
+  locationShare?: boolean;
   /** Approved templates (TW-FLR-026): only the WhatsApp Cloud API and the simulator have them; the rest get the template as text. */
   templates?: boolean;
   /** Pause between nodes (ms): the unofficial engine looks less like a bot with one (TW-FLR-016 rule 3). */
@@ -48,7 +50,15 @@ export function profileOf(kind: string): ChannelProfile {
     // The website chat widget draws up to three reply buttons itself (the thread keeps them in its meta, see `FlowSender`); a longer
     // menu or a link button is text, and a typed number answers a menu.
     case 'webchat':
-      return { buttons: true, list: false, ctaUrl: false, location: false, paceMs: 0, icons: true };
+      return {
+        buttons: true,
+        list: false,
+        ctaUrl: false,
+        location: false,
+        locationShare: true,
+        paceMs: 0,
+        icons: true,
+      };
     default:
       // TikTok, LINE, Viber, WeChat and email (TW-FLR-063, 065 to 068) are text with numbered options, like Telegram.
       return { ...PLAIN, location: false };
@@ -184,6 +194,7 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
           interactive: { type: 'location_request', body: cut(m.body, 1024) },
         };
       }
+      if (profile.locationShare) return { kind: 'text', body: m.body };
       return { kind: 'text', body: [m.body, m.hint].filter(Boolean).join('\n\n') };
     case 'buttons': {
       const n = m.buttons.length;

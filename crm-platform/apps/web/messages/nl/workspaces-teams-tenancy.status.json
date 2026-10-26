@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Beschikbaar",
+        "away": "Afwezig",
+        "onLeaveUntil": "Met verlof tot {date}",
+        "onLeaveOpen": "Met verlof",
+        "awayHours": "Afwezig buiten werktijd",
+        "label": "Jouw status"
+      },
+      "menu": {
+        "title": "Statusmenu",
+        "update": "Status bijwerken",
+        "setAway": "Instellen als afwezig",
+        "setAvailable": "Instellen als beschikbaar",
+        "failed": "Je status kon niet worden gewijzigd.",
+        "automate": "Status automatiseren",
+        "manage": "Werktijden en afwezigheid beheren",
+        "workingHours": "Werktijden",
+        "timeOff": "Verlof",
+        "outsideNotice": "Buiten werktijd",
+        "locked": "De statusbalk zit in een hoger abonnement. De schakelaar Beschikbaar / Afwezig in je accountmenu blijft werken."
+      },
+      "hours": {
+        "title": "Jouw werktijden",
+        "titleFor": "Werktijden van {name}",
+        "lead": "Kies wanneer je beschikbaar bent. Buiten deze tijden schakelt je status vanzelf naar Afwezig.",
+        "leadOther": "Kies wanneer deze persoon beschikbaar is. Buiten deze tijden schakelt de status vanzelf naar Afwezig.",
+        "locked": "Automatische status op basis van werktijden zit in een hoger abonnement.",
+        "viewOnly": "Je kunt deze tijden zien maar niet wijzigen.",
+        "automate": "Mijn status automatiseren",
+        "automateHint": "Afwezig buiten deze tijden, Beschikbaar erbinnen. Een status die je zelf instelt blijft tot de volgende wijziging van de tijden.",
+        "emptyWarning": "Er is geen dag geopend, dus je staat altijd als Beschikbaar. Open minstens één dag.",
+        "timezone": "Tijdzone",
+        "timezoneHint": "Begint bij de tijdzone van je werkruimte ({zone}).",
+        "useWorkspaceZone": "Tijdzone van de werkruimte gebruiken"
+      },
+      "members": {
+        "hoursAction": "Werktijden"
+      }
+    }
+  }
+}

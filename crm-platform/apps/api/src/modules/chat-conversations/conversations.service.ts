@@ -178,11 +178,12 @@ export class ConversationsService implements ConversationsFacade {
       const templateId = template?.templateId
         ? await this.messages.templateIdByUuid(tx, orgId, template.templateId)
         : null;
+      const media = input.kind === 'system' ? undefined : input.media;
 
       const after = await this.conversations.applyOutboundQueued(tx, orgId, conv.id, {
         messageId: alloc.id,
         arrivedAt: alloc.createdAt,
-        preview: previewOf({ kind: 'text', body: input.body }),
+        preview: previewOf({ kind: media?.mediaKind ?? 'text', body: input.body }),
         // A line on the customer's side is not something the business sent.
         ...(input.direction === 'in' ? {} : { sentAt: new Date() }),
       });
@@ -192,7 +193,7 @@ export class ConversationsService implements ConversationsFacade {
         conversationId: conv.id,
         seq: after.msgSeq,
         direction: input.direction ?? 'out',
-        kind: template ? 'template' : (input.kind ?? 'text'),
+        kind: template ? 'template' : media ? media.mediaKind : (input.kind ?? 'text'),
         templateId,
         senderKind:
           input.kind === 'system'
@@ -202,6 +203,15 @@ export class ConversationsService implements ConversationsFacade {
               : senderKindOfSource(input.source),
         senderUserId: input.senderUserId ?? null,
         body: input.body,
+        media: media
+          ? {
+              key: media.key,
+              mime: media.mime,
+              size: media.size,
+              name: media.name,
+              sha256: media.sha256,
+            }
+          : null,
         // The provider already took it: the other domain sent it, this only records it in the thread.
         status: input.direction === 'in' ? 'received' : 'sent',
         providerMessageId: input.providerMessageId ?? null,

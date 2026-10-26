@@ -1449,7 +1449,9 @@
             "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu.",
             "team_hierarchy": "Übergeordnete Teams, Teamleiter und Manager, die ihr Team und die darunterliegenden Teams sehen.",
             "custom_roles": "Rollen erstellen und bearbeiten und für jede Berechtigung einen Bereich wählen (eigene, Team oder alle Datensätze).",
-            "inbox_assignment_sticky": "Zuweisung mit Inhaber zuerst und Synchronisierung, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Teil des Add-ons Intelligentes Routing."
+            "inbox_assignment_sticky": "Zuweisung mit Inhaber zuerst und Synchronisierung, Zeitfenster für wiederkehrende Kontakte und Rückfrage bei Neuzuweisung. Teil des Add-ons Intelligentes Routing.",
+            "agent_status_bar": "Die Statusanzeige Verfügbar / Nicht verfügbar in der oberen Leiste und am Anfang des Posteingangs, mit Als nicht verfügbar / verfügbar setzen und dem Link zu Abwesenheit. Der Schalter Verfügbar / Nicht verfügbar im Kontomenü ist in jedem Tarif offen.",
+            "agent_status_automation": "Persönliche Arbeitszeiten mit Zeitzone, Nicht verfügbar außerhalb davon, der Hinweis Außerhalb der Arbeitszeit und eine Zuweisung, die Personen außerhalb ihrer Zeiten überspringt. Zum Speichern eines Zeitplans nötig; ohne bleibt ein gespeicherter Zeitplan erhalten, wird aber ignoriert."
           },
           "units": {
             "days": "Tage",
@@ -1595,7 +1597,8 @@
             "email_mailboxes": "E-Mail-Postfächer",
             "email_monthly": "E-Mails pro Monat",
             "storage_gb": "Speicher (GB)",
-            "teams": "Teams"
+            "teams": "Teams",
+            "webbot_messages": "Kostenlose Website-Chatbot-Nachrichten pro Monat"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1644,7 +1647,9 @@
             "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)",
             "team_hierarchy": "Teamhierarchie und Manager",
             "custom_roles": "Eigene Rollen und Bereiche",
-            "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
+            "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent",
+            "agent_status_bar": "Statusleiste: Verfügbar / Nicht verfügbar in der oberen Leiste und im Posteingang",
+            "agent_status_automation": "Status automatisieren: persönliche Arbeitszeiten und automatisch nicht verfügbar"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1703,7 +1708,8 @@
             "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
             "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
             "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
-            "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
+            "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt.",
+            "webbot_messages": "Website-Chatbot-Nachrichten, die in jedem Kalendermonat kostenlos enthalten sind. Jede weitere Nachricht wird dem Wallet belastet. Leer oder 0 = keine inklusive."
           },
           "productLines": {
             "chat": "Chat",

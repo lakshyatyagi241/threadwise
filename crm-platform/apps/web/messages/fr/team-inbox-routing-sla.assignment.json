@@ -18,7 +18,7 @@
         "needsAuto": "Utilisé uniquement lorsque l’attribution automatique est activée.",
         "auto": {
           "title": "Attribution automatique",
-          "body": "Les nouveaux chats sont répartis équitablement entre les agents qui acceptent des chats (ni hors ligne, ni occupés, ni en congé). Quand tous les agents ont atteint leur limite de chats, les nouveaux chats attendent dans la file d’attente.",
+          "body": "Les nouveaux chats sont répartis équitablement entre les agents qui acceptent des chats (ni absents, ni occupés, ni en congé). Quand chaque agent a atteint sa limite de chats, les nouveaux chats attendent dans la file.",
           "limitHint": "Définissez la limite de chats de chaque agent dans son profil, sous <link>Membres de l’équipe</link>.",
           "off": "Désactivé : rien n’est assigné automatiquement, ni par une règle ni via le propriétaire du contact. Les chats attendent dans la file d’attente jusqu’à ce que quelqu’un les prenne ou qu’un parcours désigne une personne."
         },
@@ -85,7 +85,7 @@
         "notSet": "Pas encore configuré : les chats qu’aucune règle ne prend attendent dans la file d’attente.",
         "mode": "Ce qui arrive à ces chats",
         "evenly": "Répartir équitablement entre tous les agents",
-        "evenlyHint": "Tour de rôle ou le moins occupé parmi tous ceux qui peuvent ouvrir la boîte de réception et sont disponibles : ni hors ligne, ni occupés, ni en congé, ni à leur limite de chats.",
+        "evenlyHint": "Tour de rôle ou le moins occupé parmi tous ceux qui peuvent ouvrir la boîte de réception et sont disponibles : ni absents, ni occupés, ni en congé, ni à leur limite de chats.",
         "listed": "Choisir des agents ou des équipes",
         "listedNow": "Actuellement : {who}.",
         "listedEdit": "Modifier les agents ou les équipes",
@@ -185,11 +185,12 @@
         "skippedTitle": "Exclus",
         "skip": {
           "on_leave": "en congé",
-          "offline_busy_or_at_capacity": "hors ligne, occupé ou à sa limite de chats",
+          "offline_busy_or_at_capacity": "absent, occupé ou à sa limite de chats",
           "cannot_read": "ne peut pas ouvrir la boîte de réception",
           "no_owner": "le contact n’a pas de propriétaire",
           "no_previous_handler_in_window": "aucun agent précédent pour ce contact",
-          "not_an_active_member": "n’est pas un membre actif"
+          "not_an_active_member": "n’est pas un membre actif",
+          "outside_working_hours": "hors de ses heures de travail"
         },
         "outside": "Simuler en dehors des heures d’ouverture",
         "inside": "Simuler pendant les heures d’ouverture",

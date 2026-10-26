@@ -29,6 +29,10 @@ export interface SegmentRow {
   ownerId: number | null;
   ownerUuid: string | null;
   ownerName: string | null;
+  createdByUuid: string | null;
+  createdByName: string | null;
+  updatedByUuid: string | null;
+  updatedByName: string | null;
   rules: Record<string, unknown>;
   rulesVersion: number;
   memberCountCache: number | null;
@@ -52,6 +56,10 @@ interface RawRow {
   owner_id: number | string | null;
   owner_uuid: string | null;
   owner_name: string | null;
+  created_by_uuid: string | null;
+  created_by_name: string | null;
+  updated_by_uuid: string | null;
+  updated_by_name: string | null;
   rules: Record<string, unknown>;
   rules_version: number;
   member_count_cache: number | null;
@@ -75,6 +83,10 @@ const toRow = (r: RawRow): SegmentRow => ({
   ownerId: r.owner_id === null ? null : Number(r.owner_id),
   ownerUuid: r.owner_uuid,
   ownerName: r.owner_name,
+  createdByUuid: r.created_by_uuid,
+  createdByName: r.created_by_name,
+  updatedByUuid: r.updated_by_uuid,
+  updatedByName: r.updated_by_name,
   rules: r.rules,
   rulesVersion: Number(r.rules_version),
   memberCountCache: r.member_count_cache === null ? null : Number(r.member_count_cache),
@@ -113,10 +125,14 @@ export class SegmentsRepository {
            to_char(s.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso,
            s.name, s.description, s.color, s.visibility, ${this.sharedWithMeSql} AS shared_with_me,
            s.shares_rev, s.owner_id, u.uuid AS owner_uuid,
-           u.full_name AS owner_name, s.rules, s.rules_version, s.member_count_cache,
+           u.full_name AS owner_name, cb.uuid AS created_by_uuid, cb.full_name AS created_by_name,
+           ub.uuid AS updated_by_uuid, ub.full_name AS updated_by_name,
+           s.rules, s.rules_version, s.member_count_cache,
            s.member_count_at, s.last_used_at, s.row_version, s.created_at, s.updated_at
     FROM segments s
     LEFT JOIN users u ON u.org_id = s.org_id AND u.id = s.owner_id
+    LEFT JOIN users cb ON cb.org_id = s.org_id AND cb.id = s.created_by
+    LEFT JOIN users ub ON ub.org_id = s.org_id AND ub.id = s.updated_by
   `;
 
   private visibleSql(v: SegmentVisibility): SQL | undefined {
@@ -197,13 +213,14 @@ export class SegmentsRepository {
       color: string | null;
       visibility: SegmentVisibilityValue;
       ownerId: number | null;
+      createdBy: number | null;
       rules: unknown;
       rulesVersion: number;
     },
   ): Promise<{ id: number; uuid: string } | undefined> {
     const res = await tx.execute(sql`
-      INSERT INTO segments (org_id, name, description, color, visibility, owner_id, rules, rules_version)
-      VALUES (${orgId}, ${v.name}, ${v.description}, ${v.color}, ${v.visibility}, ${v.ownerId},
+      INSERT INTO segments (org_id, name, description, color, visibility, owner_id, created_by, rules, rules_version)
+      VALUES (${orgId}, ${v.name}, ${v.description}, ${v.color}, ${v.visibility}, ${v.ownerId}, ${v.createdBy},
               ${JSON.stringify(v.rules)}::jsonb, ${v.rulesVersion})
       ON CONFLICT (org_id, lower(name)) DO NOTHING
       RETURNING id, uuid
@@ -233,6 +250,8 @@ export class SegmentsRepository {
       visibility: SegmentVisibilityValue;
       rules: Record<string, unknown>;
       rulesVersion: number;
+      /** Set with every change a person makes; the count cache and the usage stamp never set it. */
+      updatedBy: number | null;
       memberCountCache: number | null;
       memberCountAt: Date | null;
       /** The people list changed: moves row_version even when no other column does. */

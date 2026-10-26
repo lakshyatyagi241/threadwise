@@ -241,7 +241,8 @@
         "expiry": "Das Enddatum muss nach dem Sendedatum liegen, sonst würde die Kampagne ablaufen, bevor sie gesendet wird.",
         "media": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
         "sender": "Wählen Sie einen Absender.",
-        "subject": "Kürze den Betreff auf höchstens 150 Zeichen."
+        "subject": "Kürze den Betreff auf höchstens 150 Zeichen.",
+        "pacing": "Prüfen Sie Smart Delivery: Jede Zahl muss eine ganze Zahl innerhalb des erlaubten Bereichs sein."
       },
       "submit": {
         "save": "Änderungen speichern",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Die längste Wartezeit vor einer Nachricht.",
         "batchPauseHint": "Minuten Pause nach jeder Charge.",
         "retryFailed": "Fehlgeschlagene Nachrichten automatisch wiederholen",
-        "retryFailedHint": "Eine Nachricht, die aus einem vorübergehenden Grund fehlschlägt, wird mehrmals mit Pause dazwischen erneut versucht. Ausschalten, um jede Nachricht nur einmal zu senden."
+        "retryFailedHint": "Eine Nachricht, die aus einem vorübergehenden Grund fehlschlägt, wird mehrmals mit Pause dazwischen erneut versucht. Ausschalten, um jede Nachricht nur einmal zu senden.",
+        "range": "Geben Sie eine ganze Zahl von {min} bis {max} ein."
       },
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
       "draftChip": "Entwurf / nicht gespeichert",
@@ -595,7 +597,8 @@
           "expiry": "Das Enddatum muss nach dem Versanddatum liegen, sonst würde die Kampagne ablaufen, bevor sie gesendet wird.",
           "media": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
           "sender": "Wählen Sie einen Absender.",
-          "subject": "Kürze den Betreff auf höchstens 150 Zeichen."
+          "subject": "Kürze den Betreff auf höchstens 150 Zeichen.",
+          "pacing": "Prüfen Sie Smart Delivery: Jede Zahl muss eine ganze Zahl innerhalb des erlaubten Bereichs sein."
         },
         "from": "Von",
         "subject": "Betreff",
@@ -686,6 +689,7 @@
             "providerFailed": "Der Bilddienst hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
             "badJson": "Der Bilddienst hat eine unerwartete Antwort gesendet. Versuchen Sie es erneut.",
             "imageRefused": "OpenAI hat die Erstellung dieses Bildes abgelehnt. Ändern Sie Produkt, Angebot oder Hinweise und versuchen Sie es erneut.",
+            "storageRequired": "Bilder benötigen Cloud-Objektspeicher: Bitten Sie den Plattform-Administrator, ihn einzuschalten. Der Kampagnentext bleibt erhalten.",
             "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
             "forbidden": "Sie haben keine Berechtigung, Kampagnen zu erstellen.",
             "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Folgenachrichten funktionieren nur mit einer WhatsApp-Cloud-API-Nummer. Wählen Sie in Schritt 1 eine aus oder entfernen Sie die Folgenachrichten.",
         "sequence_not_recurring": "Vorlagen im Wechsel funktionieren nur mit einer wiederkehrenden Kampagne. Wähle einen wiederkehrenden Zeitplan oder entferne die zusätzlichen Vorlagen.",
         "sequence_with_ab": "Vorlagen im Wechsel lassen sich nicht mit einem A/B-Test kombinieren. Schalte den A/B-Test aus oder entferne die zusätzlichen Vorlagen.",
-        "sequence_template_required": "Wähle für jeden Schritt der Reihenfolge eine Vorlage oder entferne die leeren."
+        "sequence_template_required": "Wähle für jeden Schritt der Reihenfolge eine Vorlage oder entferne die leeren.",
+        "variable_fallback_required": "Geben Sie für jede Variable aus einem Kontaktfeld einen Ersatzwert ein: Er wird für Kontakte ohne Wert verwendet.",
+        "retry_end_too_far": "Wiederholungen können ab heute höchstens 7 Tage laufen. Wählen Sie ein näheres Enddatum.",
+        "template_b_same": "Variante B braucht eine andere Vorlage als Variante A.",
+        "pacing_out_of_range": "Prüfen Sie Smart Delivery: Eine Zahl liegt außerhalb des erlaubten Bereichs."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Version des Hinweises: {version}.",
         "modePrevious": "An frühere Sendungen senden",
         "previousHint": "Sprechen Sie die Personen erneut an, an die frühere Broadcasts und Kampagnen gingen, optional nur diejenigen, die gelesen, nicht gelesen, geantwortet oder geklickt haben.",
-        "chipPrevious": "{count, plural, one {# frühere Sendung} other {# frühere Sendungen}} ({outcome})"
+        "chipPrevious": "{count, plural, one {# frühere Sendung} other {# frühere Sendungen}} ({outcome})",
+        "filterNoConditions": "Fügen Sie eine Bedingung hinzu, um zu sehen, wie viele Kontakte passen."
       },
       "review": {
         "intro": "Prüfen Sie die Kosten, legen Sie fest, womit jede Vorlagenvariable gefüllt wird, und kontrollieren Sie den Broadcast.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Frühere Sendungen: {names} ({outcome})",
         "sumSplit": "Aufteilung auf Nummern",
         "sumSplitCount": "{count, plural, one {# Empfänger} other {# Empfänger}} ({percent}%)",
-        "sumSplitPercent": "{percent}% der Zielgruppe"
+        "sumSplitPercent": "{percent}% der Zielgruppe",
+        "sumCostCharged": "Von Ihrem Guthaben berechnet: {amount} (Ihr Tarif deckt den Rest)"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Wiederholungen aktivieren",
         "retriesToggle": "Nachrichten wiederholen, die von Meta zurückgehalten werden",
         "retryEnd": "Enddatum festlegen",
+        "retryEndPlaceholder": "Ab jetzt, bis zu {days} Tage",
         "retriesInfoWhy": "Wiederholungen gelten nur für Nachrichten, die wegen der Frequenzbegrenzung von Meta fehlschlagen (Fehler {code}).",
         "retriesInfoWhen": "Sie laufen genau im Abstand von {hours} Stunden bis zum Enddatum.",
         "retriesInfoCost": "Keine Zusatzkosten: Eine Nachricht wird Ihnen nur berechnet, wenn sie zugestellt wird.",
         "recurringTitle": "Wiederkehrender Broadcast",
         "recurringHint": "Dies nach einem wiederkehrenden Zeitplan senden",
-        "occurrences": "Durchläufe"
+        "occurrences": "Durchläufe",
+        "recurringWarning": "Diese Sendung wiederholt sich nach ihrem Zeitplan. Jeder Durchlauf geht an die Zielgruppe in ihrem damaligen Stand, und jede Nachricht wird von Ihrem Guthaben berechnet.",
+        "repeatRange": "Geben Sie eine ganze Zahl von 1 bis {max} ein."
       },
       "words": {
         "now": "Sofort und einmalig gesendet.",

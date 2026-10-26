@@ -10,7 +10,8 @@ export interface ModelCall {
   system: string;
   user: string;
   jsonMode: boolean;
-  maxTokens: number;
+  /** `max_completion_tokens` (OpenAI on the default endpoint) or `max_tokens` (the other vendors, and gateways). */
+  maxTokens: number | undefined;
 }
 
 /**
@@ -35,7 +36,8 @@ export async function startStubModel(): Promise<StubModel> {
     req.on('end', () => {
       const j = JSON.parse(body || '{}') as {
         model: string;
-        max_tokens: number;
+        max_tokens?: number;
+        max_completion_tokens?: number;
         response_format?: unknown;
         messages: Array<{ role: string; content: string }>;
       };
@@ -45,7 +47,7 @@ export async function startStubModel(): Promise<StubModel> {
         system: j.messages.find((m) => m.role === 'system')?.content ?? '',
         user: j.messages.find((m) => m.role === 'user')?.content ?? '',
         jsonMode: j.response_format !== undefined,
-        maxTokens: j.max_tokens,
+        maxTokens: j.max_completion_tokens ?? j.max_tokens,
       };
       stub.calls.push(call);
       const a = stub.answer(call);

@@ -90,4 +90,33 @@ describe('HttpAiChatAdapter (the vendor answer and what it used)', () => {
     expect(await adapter({ WGT_AI_OPENAI_API_KEY: 'k' }).complete(req('nope'))).toBeNull();
     expect(f).not.toHaveBeenCalled();
   });
+
+  it('sends OpenAI max_completion_tokens (not max_tokens); the other OpenAI-compatible vendors keep max_tokens', async () => {
+    const f = json({ choices: [{ message: { content: 'Hello' } }] });
+    vi.stubGlobal('fetch', f);
+    const a = adapter({ WGT_AI_OPENAI_API_KEY: 'k', WGT_AI_GROQ_API_KEY: 'k' });
+    await a.complete(req('openai'));
+    await a.complete(req('groq'));
+    const [openaiCall, groqCall] = f.mock.calls as unknown as Array<[string, RequestInit]>;
+    const openaiBody = JSON.parse(openaiCall![1].body as string) as Record<string, unknown>;
+    const groqBody = JSON.parse(groqCall![1].body as string) as Record<string, unknown>;
+    expect(openaiBody).toMatchObject({ model: 'm', max_completion_tokens: 50 });
+    expect(openaiBody).not.toHaveProperty('max_tokens');
+    expect(groqBody).toMatchObject({ model: 'm', max_tokens: 50 });
+    expect(groqBody).not.toHaveProperty('max_completion_tokens');
+  });
+
+  it('keeps max_tokens when WGT_AI_OPENAI_BASE_URL points at a gateway', async () => {
+    const f = json({ choices: [{ message: { content: 'Hello' } }] });
+    vi.stubGlobal('fetch', f);
+    await adapter({
+      WGT_AI_OPENAI_API_KEY: 'k',
+      WGT_AI_OPENAI_BASE_URL: 'http://gateway.test/v1/',
+    }).complete(req('openai'));
+    const [url, init] = f.mock.calls[0] as unknown as [string, RequestInit];
+    const body = JSON.parse(init.body as string) as Record<string, unknown>;
+    expect(url).toBe('http://gateway.test/v1/chat/completions');
+    expect(body).toMatchObject({ max_tokens: 50 });
+    expect(body).not.toHaveProperty('max_completion_tokens');
+  });
 });

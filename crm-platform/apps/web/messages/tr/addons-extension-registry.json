@@ -370,7 +370,8 @@
         "includedOwned": "Bu eklentiye de sahipsiniz. Planınız artık bunu içeriyor, bu yüzden eklentiyi iptal edebilirsiniz. Otomatik iade yapılmaz.",
         "includedEnds": "Planınıza dahil. Eklentiniz {date} tarihinde sona erer ve yenilenmez.",
         "active": "Etkin",
-        "ownedCount": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler"
+        "ownedCount": "Sahip olunan: ×{count} · tekrar satın almak daha fazlasını ekler",
+        "turnedOff": "Kapalı"
       },
       "price": {
         "free": "Ücretsiz",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Özellik eklentileri",
         "capacity": "Kapasite eklentileri"
+      },
+      "activation": {
+        "turnedOffNote": "Bu çalışma alanı için kapalı. Ayarları korunur.",
+        "turnOff": "Kapat",
+        "turnOn": "Aç",
+        "askOwner": "Açması veya kapatması için hesap sahibinden isteyin.",
+        "doneOn": "{name} açıldı.",
+        "errors": {
+          "notToggleable": "{name} burada açılamaz veya kapatılamaz. Yalnızca planınıza dahil olan bir eklenti değiştirilebilir.",
+          "forbidden": "Eklentileri açma veya kapatma yetkiniz yok.",
+          "generic": "{name} değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name} kapatılsın mı?",
+      "lead": "Değişecekler burada. İstediğiniz zaman tekrar açabilirsiniz.",
+      "cancel": "İptal",
+      "confirm": "{name} eklentisini kapat",
+      "done": "{name} kapatıldı. Ayarları korunur.",
+      "typeLabel": "Onaylamak için {name} yazın",
+      "typeHint": "Müşteri sohbetleri veya kişiler etkileniyor, bu yüzden onaylamak için adı yazın.",
+      "groups": {
+        "stops": "Neler durur",
+        "kept": "Neler korunur",
+        "people": "Kişiler"
+      },
+      "items": {
+        "features_off": "Bu özellikler çalışmayı durdurur: {names}.",
+        "dependents_off": "Bu özellikler bunlara bağlı olduğundan onlar da durur: {names}.",
+        "roles_dormant": "{count, plural, one {# rol bu eklentinin izinlerine sahip. İzinleri korur, ancak eklentiyi tekrar açana kadar etkin olmaz.} other {# rol bu eklentinin izinlerine sahip. İzinleri korurlar, ancak eklentiyi tekrar açana kadar etkin olmaz.}}",
+        "waiting_chats": "{count, plural, one {# sohbet bir temsilci bekliyor. Otomatik yönlendirilmeyecek, bu yüzden birinin üstlenmesi gerekir.} other {# sohbet bir temsilci bekliyor. Otomatik yönlendirilmeyecek, bu yüzden birinin üstlenmesi gerekir.}}",
+        "routing_rules": "{count, plural, one {# yönlendirme kuralı sohbet atamayı bırakır.} other {# yönlendirme kuralı sohbet atamayı bırakır.}}",
+        "auto_teams": "{count, plural, one {# ekip sohbetleri otomatik atayacak şekilde ayarlı ve bunu yapmayı bırakır.} other {# ekip sohbetleri otomatik atayacak şekilde ayarlı ve bunu yapmayı bırakır.}}",
+        "teams": "{count, plural, one {# ekip üyeleriyle birlikte korunur.} other {# ekip üyeleriyle birlikte korunur.}}",
+        "custom_role_holders": "{count, plural, one {# kişinin özel bir rolü var. Rolü korunur, ancak bu eklentinin izinleri geçerli olmaz.} other {# kişinin özel bir rolü var. Rolleri korunur, ancak bu eklentinin izinleri geçerli olmaz.}}",
+        "kept": "Ayarlarınız ve verileriniz korunur. Tekrar açtığınızda bıraktığınız gibi geri gelir."
       }
     }
   }

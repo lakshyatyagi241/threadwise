@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import { routingAssignSchema, type ConversationPriority, type RoutingAssign } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { onLeaveOnSql } from '../../common/workspace-calendar';
 
 type Raw = Record<string, unknown>;
 export type RuleRow = Raw;
@@ -515,17 +514,18 @@ export class RoutingRulesRepository {
   }
 
   /**
-   * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody who never
-   * switched their status counts as available, as Reference's routing did), who are not on leave, and who have not reached their
-   * own chat limit (`user_profiles.chat_limit`, the Concurrent Chat setting; no limit when empty), with the open conversations each
-   * holds right now. An agent already holding that many open conversations is left out of every strategy, so round robin and least
-   * busy both skip them.
+   * Of these people, the ones who can take a conversation now: active members whose EFFECTIVE status is Available (`statuses`, from
+   * `loadAgentStatuses`: manual choice, then leave, then the person's working hours, then Available; a member nobody has switched counts as
+   * Available, as Reference's routing did), who have not reached their own chat limit (`user_profiles.chat_limit`, the Concurrent Chat
+   * setting; no limit when empty), with the open conversations each holds right now. An agent already holding that many open
+   * conversations is left out of every strategy, so round robin and least busy both skip them. `statuses` is loaded once by the caller for
+   * the whole candidate set (no per-person query); a person missing from it counts as Available.
    */
   async available(
     tx: Tx,
     orgId: number,
     userIds: readonly number[],
-    today: string,
+    statuses: ReadonlyMap<number, { routable: boolean }>,
   ): Promise<Array<{ id: number; uuid: string; open: number }>> {
     if (userIds.length === 0) return [];
     const res = await tx.execute(sql`
@@ -535,24 +535,18 @@ export class RoutingRulesRepository {
                  WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
                    AND c.status = 'open') AS open
         FROM users u
-        LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
         LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
         WHERE u.org_id = ${orgId} AND u.status = 'active'
           AND u.id IN (${sql.join(
             userIds.map((i) => sql`${i}`),
             sql`, `,
           )})
-          AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
-          -- on leave today (the workspace's calendar): never picked by routing (BL-112)
-          AND NOT ${onLeaveOnSql('u', today)}
       ) m
       WHERE m.chat_limit IS NULL OR m.open < m.chat_limit
       ORDER BY m.id`);
-    return rowsOf(res).map((r) => ({
-      id: Number(r.id),
-      uuid: r.uuid as string,
-      open: Number(r.open),
-    }));
+    return rowsOf(res)
+      .map((r) => ({ id: Number(r.id), uuid: r.uuid as string, open: Number(r.open) }))
+      .filter((p) => statuses.get(p.id)?.routable !== false);
   }
 
   /**

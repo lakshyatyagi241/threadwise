@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import type { ChannelKind, ChannelResponse } from '@crm/contracts';
+import { channelPickerLabels } from '../lib/channel-labels';
 
 /**
  * The chat channels of the inbox channel box, one optgroup per kind (WhatsApp Cloud API, Website chat, ...) under the kind's name, the
@@ -10,6 +11,7 @@ import type { ChannelKind, ChannelResponse } from '@crm/contracts';
  */
 export function ChannelKindOptions({ channels }: { channels: ReadonlyArray<ChannelResponse> }) {
   const tk = useTranslations('team-inbox-conversations.channelKind');
+  const labels = channelPickerLabels(channels);
   const groups = new Map<ChannelKind, ChannelResponse[]>();
   for (const c of channels) {
     if (c.kind === 'email') continue;
@@ -23,7 +25,7 @@ export function ChannelKindOptions({ channels }: { channels: ReadonlyArray<Chann
         <optgroup key={kind} label={tk(kind)} data-testid={`inbox-${kind}-group`}>
           {list.map((c) => (
             <option key={c.id} value={c.id}>
-              {c.name}
+              {labels.get(c.id) ?? c.name}
             </option>
           ))}
         </optgroup>

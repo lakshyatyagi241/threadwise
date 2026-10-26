@@ -374,3 +374,32 @@ test('announce: claim, PR and RESOLVED are also posted top-level (no threadKey);
   assert.ok(!top.some((t) => t.includes('looking at logs')), 'notes stay in the thread');
   assert.ok(posts.some((p) => p.k === 'am-f1' && p.t.includes('asha is working on this')), 'thread reply kept');
 });
+
+test('watcher: the slow-statement card carries the incident key so the incident can edit that one card', async () => {
+  const sent = []; let t = 0; let calls = 10;
+  const query = async (sql) => (sql.includes('backend_type') ? { rows: [] } : { rows: [{ queryid: '7', datname: 'd', rolname: 'r', calls, total_exec_time: calls * 900, mean_exec_time: 900, max_exec_time: 2000, rows: 5, query: 'select * from t where a = $1' }] });
+  const w = createWatcher({ query, metrics: createMetrics(), send: async (c, msg, o) => sent.push(o), now: () => t, env: {} });
+  await w.poll(); calls = 12; t = 1000; await w.poll();
+  assert.equal(sent.at(-1).interactive.incidentId, 'st:7|d|r');
+});
+
+test('other channel: non-critical alerts go to the Other space only when NON_CRITICAL_CHANNEL=other; the URL loads from the secret file', async () => {
+  const w = { labels: { alertname: 'OutboxDeadRows', severity: 'warning' } };
+  assert.equal(channelFor(w, {}), 'none');
+  assert.equal(channelFor(w, { NON_CRITICAL_CHANNEL: 'other' }), 'other');
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'critical' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'critical'); // critical never moves
+  assert.equal(channelFor({ labels: { alertname: 'X', severity: 'warning', test: 'true' } }, { NON_CRITICAL_CHANNEL: 'other' }), 'none'); // tests stay out
+  const { loadUrls } = await import('./bridge.mjs');
+  const dir = fs.mkdtempSync('/tmp/gc-sec-'); fs.writeFileSync(`${dir}/gchat_other_url`, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t\n');
+  assert.equal(loadUrls({ GCHAT_SECRETS_DIR: dir }).other, 'https://chat.googleapis.com/v1/spaces/OTHER/messages?key=k&token=t');
+});
+
+test('an alert that clears on its own closes an unowned incident (so loops stop seeing it); an owned one or one with a PR stays', async () => {
+  const mk = async (key) => { const r = createResolver({ env: { ANNOUNCE_IN_SPACE: '0', INCIDENTS_DIR: fs.mkdtempSync('/tmp/inc-clr-') }, post: async () => {} }); await r.handle({ playbook: 'service', alertname: 'X', key, threadKey: 't', channel: 'critical', diagnosis: 'd', suggestion: 's' }); await r.settle(); return r; };
+  const a = await mk('am:a'); assert.equal(a.markCleared('am:a', { measured: 'm' }), true);
+  assert.equal(a.listFull()[0].status, 'resolved'); assert.equal(a.listFull()[0].resolution.kind, 'self');
+  assert.equal(a.markCleared('am:a'), false, 'already closed');
+  const b = await mk('am:b'); await b.claim(b.list()[0].id, 'asha'); assert.equal(b.markCleared('am:b'), false); assert.equal(b.listFull()[0].status, 'claimed');
+  const c = await mk('am:c'); await c.raisePr(c.list()[0].id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/5', number: 5, summary: 's' }); assert.equal(c.markCleared('am:c'), false);
+  assert.equal(c.listFull()[0].status, 'pr_raised');
+});

@@ -73,8 +73,11 @@ afterAll(async () => {
 });
 
 describe('pricing mode', () => {
-  it('keeps typed prices until an operator turns margin pricing on, and says so in the preview', async () => {
-    expect((await ops('get', '/settings')).body.pricingMode).toBe('fixed');
+  it('prices as Meta cost plus margin unless an operator chose typed prices, and says so in the preview', async () => {
+    expect((await ops('get', '/settings')).body.pricingMode).toBe('margin');
+    expect((await ops('put', '/switches').send({ pricingMode: 'fixed' })).body.pricingMode).toBe(
+      'fixed',
+    );
     const before = pricePreviewSchema.parse(
       (await ops('get', `/pricing/preview?workspaceId=${tUuid}&country=LI&category=marketing`))
         .body,
@@ -215,14 +218,14 @@ describe('platform default, plan margin, workspace override', () => {
     });
   });
 
-  it('a -100% override makes the country free for that workspace only', async () => {
+  it('a -100% override no longer makes the country free: the message is charged the minimum, for that workspace only', async () => {
     await ops('put', `/workspaces/${tUuid}/margins`).send({
       rows: [{ countryCode: 'LI', category: 'marketing', margin: '-100' }],
       note: 'Pilot customer, free for 30 days',
     });
     const before = await balanceMinor(h, t.orgId);
-    expect(await settle()).toMatchObject({ status: 'free', reason: 'rate_is_zero' });
-    expect(await balanceMinor(h, t.orgId)).toBe(before);
+    expect(await settle()).toMatchObject({ status: 'charged', chargedMinor: 1 });
+    expect(await balanceMinor(h, t.orgId)).toBe(before - 1);
   });
 
   it('removing the override returns the workspace to its plan margin', async () => {

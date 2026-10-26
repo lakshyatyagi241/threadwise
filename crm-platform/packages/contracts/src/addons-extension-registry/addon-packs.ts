@@ -312,8 +312,65 @@ export const addonCardSchema = z.object({
   includedVia: z.enum(['plan', 'support']).nullable().default(null),
   /** `feature` (unlocks a module) or `capacity` (adds to a limit); the list groups the cards by it. */
   kind: z.enum(['feature', 'capacity']).default('feature'),
+  /**
+   * The workspace's own switch (docs/specs/addons-lifecycle-and-permissions.md). Only an `included` card can be switched: `disabled` means the
+   * workspace turned an add-on its plan includes off (its features do not apply, its settings are kept). `canToggle` is false for every other state.
+   */
+  activation: z.enum(['active', 'disabled']).default('active'),
+  canToggle: z.boolean().default(false),
 });
 export type AddonCard = z.infer<typeof addonCardSchema>;
+
+// --- turning an included add-on off and on (phase 1 of the lifecycle) ----------------------------------------------------------------------
+
+/**
+ * What switching an add-on off (or on) does, in codes the screen words. Every item is data: a count, names, or nothing.
+ *   features_off   the plan features that stop applying (names)
+ *   dependents_off other features that need them and stop with them (names)
+ *   roles_dormant  roles that hold permissions of these features: kept, inactive until it is back on (count)
+ *   waiting_chats / routing_rules / auto_teams   Smart routing: chats waiting for an agent, rules, teams on an automatic method (counts)
+ *   teams / custom_role_holders                  Teams and permissions: teams, people who hold a custom role (counts)
+ *   kept           the settings and data are kept and come back with it
+ */
+export const ADDON_IMPACT_CODES = [
+  'features_off',
+  'dependents_off',
+  'roles_dormant',
+  'waiting_chats',
+  'routing_rules',
+  'auto_teams',
+  'teams',
+  'custom_role_holders',
+  'kept',
+] as const;
+export const addonImpactItemSchema = z.object({
+  code: z.enum(ADDON_IMPACT_CODES),
+  count: z.number().int().nonnegative().default(0),
+  names: z.array(z.string()).default([]),
+  /** Something customer-facing or hard to undo is at risk: the dialog asks for a typed confirmation. */
+  risk: z.boolean().default(false),
+});
+export type AddonImpactItem = z.infer<typeof addonImpactItemSchema>;
+
+export const addonImpactSchema = z.object({
+  addon: z.object({ id: uuidSchema, name: z.string(), slug: z.string() }),
+  action: z.enum(['disable', 'enable']),
+  items: z.array(addonImpactItemSchema),
+  /** True when any item carries a risk. */
+  requiresConfirm: z.boolean(),
+});
+export type AddonImpact = z.infer<typeof addonImpactSchema>;
+
+/** `POST /addons/:id/disable`: the caller has seen the impact and agrees. */
+export const disableAddonRequestSchema = z.object({ confirm: z.literal(true) });
+export type DisableAddonRequest = z.infer<typeof disableAddonRequestSchema>;
+
+export const addonActivationResponseSchema = z.object({
+  addonId: uuidSchema,
+  activation: z.enum(['active', 'disabled']),
+  changedAt: z.string().datetime(),
+});
+export type AddonActivationResponse = z.infer<typeof addonActivationResponseSchema>;
 
 export const ownedAddonSchema = z.object({
   id: uuidSchema,

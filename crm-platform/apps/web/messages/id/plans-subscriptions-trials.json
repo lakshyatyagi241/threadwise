@@ -48,7 +48,8 @@
       "email_mailboxes": "Kotak surat email",
       "email_monthly": "Email per bulan",
       "storage_gb": "Penyimpanan (GB)",
-      "teams": "Tim"
+      "teams": "Tim",
+      "webbot_messages": "Pesan chatbot situs web gratis per bulan"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -91,7 +92,9 @@
       "record_assignment": "Aturan penugasan data",
       "team_hierarchy": "Hierarki tim dan manajer",
       "custom_roles": "Peran kustom dan cakupan",
-      "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap"
+      "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
+      "agent_status_bar": "Bilah status: kontrol Tersedia / Tidak di tempat di bilah atas dan Kotak Masuk",
+      "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
       "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
       "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir.",
-      "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus."
+      "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus.",
+      "webbot_messages": "Pesan chatbot situs web yang termasuk gratis setiap bulan kalender. Setiap pesan setelahnya ditagihkan ke dompet. Kosong atau 0 = tidak ada yang gratis."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",
@@ -584,7 +588,13 @@
       "askOwner": "Minta pemilik akun untuk menambahkannya.",
       "unavailableTitle": "{addon} memerlukan paket berbayar yang aktif",
       "unavailableLead": "Pilih paket berbayar terlebih dahulu, lalu Anda dapat menambahkan {addon} ke paket itu.",
-      "viewPlans": "Lihat paket"
+      "viewPlans": "Lihat paket",
+      "disabledTitle": "{addon} nonaktif",
+      "disabledLead": "Paket Anda menyertakan {addon}, tetapi add-on ini dinonaktifkan untuk ruang kerja ini. Pengaturannya tetap disimpan.",
+      "disabledAsk": "Minta pemilik akun untuk mengaktifkannya.",
+      "turnOn": "Aktifkan",
+      "turnOnForbidden": "Anda tidak memiliki izin untuk mengaktifkannya. Minta pemilik akun.",
+      "turnOnFailed": "Kami tidak dapat mengaktifkan {addon}. Silakan coba lagi."
     }
   }
 }

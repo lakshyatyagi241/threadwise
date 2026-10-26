@@ -137,7 +137,9 @@
         "allSources": "Tutte le origini",
         "from": "Da",
         "to": "A",
-        "clear": "Rimuovi filtri"
+        "clear": "Rimuovi filtri",
+        "deletedApi": "{name} (eliminata)",
+        "searchTooLong": "La ricerca può contenere al massimo {max} caratteri. Accorciala per cercare."
       },
       "detail": {
         "title": "Dettagli log API",
@@ -168,7 +170,8 @@
         "openContact": "Apri il contatto",
         "user": "Eseguito da (ID utente)",
         "noContext": "Nessun flusso o contatto coinvolto."
-      }
+      },
+      "unsaved": "Non salvata"
     },
     "variables": {
       "insertFor": "Inserisci una variabile in {label}",
@@ -218,7 +221,8 @@
         "empty": "Lascia vuoto per non inviare alcun payload.",
         "invalid": "JSON non valido.",
         "shape": "Il payload deve essere un oggetto o un elenco JSON.",
-        "format": "Formatta JSON"
+        "format": "Formatta JSON",
+        "invalidAt": "Non è un JSON valido (si interrompe vicino alla riga {line}, colonna {column})."
       },
       "responseVarsHint": "Campi della risposta che i flussi possono leggere come '{{'ApiName.field'}}'. Sceglili dalla risposta del test.",
       "mappingHint": "Salva un campo della risposta in una proprietà del contatto ogni volta che un flusso esegue questa API.",
@@ -300,7 +304,11 @@
         "choose": "Scegli una proprietà",
         "removeN": "Rimuovi riga {n}",
         "pick": "Scegli un percorso dall'ultima risposta del test",
-        "add": "Aggiungi riga"
+        "add": "Aggiungi riga",
+        "propertyDuplicate": "Un’altra riga salva in questa proprietà. Un campo accetta un solo valore, quindi scegli un’altra proprietà.",
+        "propertyRequired": "Scegli la proprietà del contatto in cui salva questa riga.",
+        "numberText": "Un campo numerico accetta solo numeri. L’ultimo test ha restituito qui “{value}”, e quel testo verrebbe salvato così com’è.",
+        "numberUntested": "Esegui un test per verificare che questo campo della risposta restituisca un numero."
       },
       "responseVars": {
         "none": "Nessun campo esposto ai flussi ancora.",
@@ -313,7 +321,8 @@
       "tested": "Test superato",
       "requestHint": "Nome, metodo e indirizzo della chiamata.",
       "payloadHint": "Cosa viene inviato nel corpo. Usa il pulsante '{ }' per inserire una variabile in un valore.",
-      "functionHint": "Rimodella il payload con JavaScript prima dell'invio. Facoltativo."
+      "functionHint": "Rimodella il payload con JavaScript prima dell'invio. Facoltativo.",
+      "plainHttpWarning": "Questo indirizzo inizia con http://, quindi la password o la chiave negli header viaggerebbero senza crittografia. Usa https:// se il server lo supporta."
     },
     "test": {
       "title": "Risposta",
@@ -366,7 +375,8 @@
       "result": "Esito",
       "status": "Stato",
       "time": "Ora",
-      "size": "Dimensione"
+      "size": "Dimensione",
+      "truncatedShown": "Viene mostrata la prima parte di una risposta di {kb} KB"
     },
     "pagination": {
       "label": "Paginazione",

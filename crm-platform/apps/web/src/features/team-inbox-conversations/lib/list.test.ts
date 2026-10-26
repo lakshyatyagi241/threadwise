@@ -39,6 +39,13 @@ describe('matchesFilters', () => {
     expect(matchesFilters(summary({ status: 'spam' }), f({ status: 'all' }), ME)).toBe(true);
   });
 
+  it('a single Resolved status takes closed too, as the server lists it, so a closed row a socket event brings stays', () => {
+    const resolvedView = f({ status: 'resolved' });
+    expect(matchesFilters(summary({ status: 'closed' }), resolvedView, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'open' }), resolvedView, ME)).toBe(false);
+    expect(matchesFilters(summary({ status: 'snoozed' }), resolvedView, ME)).toBe(false);
+  });
+
   it('Mine is what is assigned to the caller', () => {
     const mine = summary({ assignment: assignedTo(ME) });
     const theirs = summary({ assignment: assignedTo(id(8)) });
@@ -298,5 +305,33 @@ describe("the Filters window's filters", () => {
     const newer = summary({ id: id(2), lastMessageAt: '2026-10-02T00:00:00.000Z', pinned: true });
     expect(compareRows(older, newer, true)).toBeLessThan(0);
     expect(compareRows(older, newer)).toBeGreaterThan(0);
+  });
+});
+
+describe('the erased-contacts view', () => {
+  const erasedOpen = summary({ erased: true, status: 'open' });
+  const erasedResolvedArchived = summary({ erased: true, status: 'resolved', archived: true });
+
+  it('takes every erased thread whatever its status, archive flag or tab', () => {
+    const view = f({ erased: true, tab: 'mine', status: 'open' });
+    expect(matchesFilters(erasedResolvedArchived, view, ME)).toBe(true);
+    expect(matchesFilters(erasedOpen, view, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'open' }), view, ME)).toBe(false);
+  });
+
+  it('leaves an open erased thread in the ordinary inbox, and keeps archived ones to the archive', () => {
+    expect(matchesFilters(erasedOpen, f(), ME)).toBe(true);
+    expect(matchesFilters(erasedResolvedArchived, f(), ME)).toBe(false);
+    expect(matchesFilters(erasedResolvedArchived, f({ archived: true, status: 'all' }), ME)).toBe(
+      true,
+    );
+  });
+
+  it('is a filter on the address and on the badges: the counts do not stand for the inbox', () => {
+    expect(listQuery(f({ erased: true }))).toMatchObject({ erased: true });
+    expect(listQuery(f()).erased).toBeUndefined();
+    expect(isFiltered(f({ erased: true }))).toBe(true);
+    expect(narrowsCounts(f({ erased: true }))).toBe(true);
+    expect(filtersKey(f({ erased: true }))).not.toBe(filtersKey(f()));
   });
 });

@@ -50,6 +50,7 @@ import { SubscriptionsService } from './subscriptions.service';
 import { RelayService } from './relay.service';
 import { isUniqueViolation } from './sql-helpers';
 import { AddonEntitlementService } from '../addons-extension-registry';
+import { syncAppActivation } from '../plans-subscriptions-trials';
 
 const AUDIT_MODULE = 'marketplace';
 
@@ -285,6 +286,8 @@ export class InstallationsService {
           credentialHints: creds.hints,
           installedBy: ctx.userId,
         });
+        // An install lifts the workspace's own opt-out of this app's add-on (docs/specs/addons-lifecycle-and-permissions.md).
+        await syncAppActivation(tx, ctx.orgId, target.appId, 'active', ctx.userId);
         await this.repo.insertConsent(tx, ctx.orgId, {
           installationId,
           appId: target.appId,
@@ -526,6 +529,14 @@ export class InstallationsService {
         rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('Installation');
+      // The workspace's own switch: disabling opts out of the app's add-on, enabling lifts it.
+      await syncAppActivation(
+        tx,
+        ctx.orgId,
+        row.appId,
+        enabled ? 'active' : 'disabled',
+        ctx.userId,
+      );
       if (row.connection)
         await this.repo.setConnectionStatus(
           tx,
@@ -574,6 +585,8 @@ export class InstallationsService {
         consentedBy: ctx.userId,
       });
       await this.repo.delete(tx, ctx.orgId, row.id);
+      // Uninstalling opts the workspace out of the app's add-on, so a plan that includes it does not put it back by itself.
+      await syncAppActivation(tx, ctx.orgId, row.appId, 'disabled', ctx.userId);
       // Uninstalling a paid app stops its renewal (the admin was told). The period already paid for stays, so reinstalling inside it is free.
       const renewal = await this.subscriptions.cancelOnUninstall(
         tx,

@@ -66,6 +66,9 @@ case "${1:-}" in
   --test)
     post "🧪 *TEST* - Test message, not a real deployment. The production release watcher is connected to this space. Live release right now: \`$(live_tag || echo unknown)\`."
     echo "test sent, http $(cat "$STATE/last_http" 2>/dev/null)"; exit 0 ;;
+  --announce) # text on stdin (up to 1200 chars) -> one post to the Deployments space; used by deploy-bridge.sh so bridge updates are announced
+    txt=$(head -c 1200); [ -n "$txt" ] || { echo "no text on stdin"; exit 2; }
+    post "$txt"; echo "announced, http $(cat "$STATE/last_http" 2>/dev/null)"; exit 0 ;;
   --dry-run)
     [ $# -ge 3 ] || { echo "usage: $0 --dry-run <prev_sha> <new_sha> [seconds] [started|live|unchanged]"; exit 2; }
     msg "${5:-live}" "$2" "$3" "${4:-}"; exit 0 ;;
@@ -138,10 +141,41 @@ db_poll() {
 POLL=${DESK_WATCH_POLL:-10}; SETTLE=${DESK_WATCH_SETTLE:-20}
 active=0; attempted=""; tag_before=$(live_tag || true); started=0
 echo "$(date -u +%FT%TZ) watcher started, live tag ${tag_before:-unknown}" >> "$STATE/watch.log"
-last_db=0
+last_db=0; last_stall=0; STALL_POLL=${DESK_STALL_POLL:-60}; STALL_MIN=${DESK_STALL_MIN:-10}
+# Merging to main does not deploy by itself (the build server must run the release). If main is ahead of the live tag for STALL_MIN minutes (default 10) with no
+# release event after the newest commit, post ONE warning per newest commit. Needs the read-only GitHub token; without it, silently nothing.
+stall_check() {
+  local live j newest
+  live=$(live_tag) || return 0
+  newest=0  # epoch of the newest release START (building/shipping/releasing marker); finished releases do not suppress the alarm
+  for f in "$STATE"/seen/*.building "$STATE"/seen/*.shipping "$STATE"/seen/*.releasing; do [ -e "$f" ] && { e=$(cat "$f" 2>/dev/null); [ "${e:-0}" -gt "$newest" ] 2>/dev/null && newest=$e; }; done
+  j=$(python3 "$FORMATTER" --stall "$live" "$STALL_MIN" "${newest:-0}" 2>>"$STATE/watch.log") || return 0
+  [ "$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("post"))' 2>/dev/null)" = True ] || return 0
+  local head text
+  head=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["head"][:7])') && text=$(printf '%s' "$j" | python3 -c 'import json,sys; print(json.load(sys.stdin)["text"])') || return 0
+  once "stall-$head-$(( $(date +%s) / 21600 ))" && post "$text"  # head is the OLDEST waiting commit, so it never changes during a stall: re-warn every 6 h, not once ever
+  return 0
+}
+# The Chat bridge is copied to production outside the release pipeline (deploy-bridge.sh writes its commit to $BRIDGE_DIR/.version). When that
+# commit changes, announce it once with the PR template. The first time a version is seen it is only recorded, never announced.
+BRIDGE_DIR=${DESK_BRIDGE_DIR:-/opt/chat-bridge}; BRIDGE_POLL=${DESK_BRIDGE_POLL:-30}; last_bridge=0
+component_check() { # component_check <version file> <state file> <label> <git path>: announce once when the commit in the version file changes (first sight is only recorded)
+  local v last; v=$(tr -dc '0-9a-f' < "$1" 2>/dev/null | head -c 40); [ -n "$v" ] || return 0
+  last=$(cat "$STATE/$2" 2>/dev/null || true)
+  [ "$v" = "$last" ] && return 0
+  echo "$v" > "$STATE/$2"
+  [ -n "$last" ] && post "$(DESK_ANNOUNCE_LABEL="$3" DESK_BRIDGE_PATH="$4" python3 "$FORMATTER" --bridge "$last" "$v" 2>>"$STATE/watch.log")"
+  return 0
+}
+bridge_check() {
+  component_check "$BRIDGE_DIR/.version" bridge.version "Chat alert bridge" crm-platform/tools/chat-bridge
+  component_check "$DESK/release-watch-src/.version" watcher.version "Release watcher" crm-platform/deploy/hostinger
+}
 while true; do
   date +%s > "$STATE/heartbeat"
   if [ $(( $(date +%s) - last_db )) -ge "$DB_POLL" ]; then last_db=$(date +%s); db_poll; fi
+  if [ $(( $(date +%s) - last_bridge )) -ge "$BRIDGE_POLL" ]; then last_bridge=$(date +%s); bridge_check; fi
+  if [ "$active" = 0 ] && ! deploy_running && [ $(( $(date +%s) - last_stall )) -ge "$STALL_POLL" ]; then last_stall=$(date +%s); stall_check; fi
   if deploy_running; then
     rt=$(release_tag || true)
     if [ -n "$rt" ] && [ "$active" = 0 ]; then

@@ -1449,7 +1449,9 @@
             "record_assignment": "Asigna los nuevos contactos, empresas y negocios al responsable de ventas adecuado mediante reglas por prioridad.",
             "team_hierarchy": "Equipos padre, líderes de equipo y gerentes que ven su equipo y los equipos inferiores.",
             "custom_roles": "Crea y edita roles, y elige un alcance (propios, del equipo o todos los registros) para cada permiso.",
-            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada, ventana de contacto recurrente y aviso al reasignar. Forma parte del complemento Enrutamiento inteligente."
+            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada, ventana de contacto recurrente y aviso al reasignar. Forma parte del complemento Enrutamiento inteligente.",
+            "agent_status_bar": "El control de estado Disponible / Ausente en la barra superior y al inicio de la Bandeja, con Marcar como ausente / disponible y el enlace a Tiempo libre. El interruptor Disponible / Ausente del menú de la cuenta está abierto a todos los planes.",
+            "agent_status_automation": "Horario laboral personal con zona horaria, Ausente fuera de él, el aviso Fuera del horario laboral y una asignación que omite a quien está fuera de su horario. Guardar un horario lo requiere; sin él, un horario guardado se conserva pero se ignora."
           },
           "units": {
             "days": "Días",
@@ -1595,7 +1597,8 @@
             "email_mailboxes": "Buzones de correo",
             "email_monthly": "Correos al mes",
             "storage_gb": "Almacenamiento (GB)",
-            "teams": "Equipos"
+            "teams": "Equipos",
+            "webbot_messages": "Mensajes gratuitos del chatbot web por mes"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1644,7 +1647,9 @@
             "record_assignment": "Reglas de asignación de registros (asignar automáticamente contactos, empresas y negocios)",
             "team_hierarchy": "Jerarquía de equipos y gerentes",
             "custom_roles": "Roles personalizados y alcances",
-            "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo"
+            "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo",
+            "agent_status_bar": "Barra de estado: control Disponible / Ausente en la barra superior y la Bandeja",
+            "agent_status_automation": "Automatizar estado: horario laboral personal y Ausente automático"
           },
           "problems": {
             "required": "Este campo es obligatorio.",
@@ -1703,7 +1708,8 @@
             "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
             "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
             "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada.",
-            "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan."
+            "teams": "Equipos que puede tener el espacio de trabajo. En blanco es ilimitado, 0 es individual (sin equipos). Los equipos existentes nunca se eliminan.",
+            "webbot_messages": "Mensajes del chatbot web incluidos gratis cada mes natural. Cada mensaje adicional se cobra de la cartera. En blanco o 0 = ninguno incluido."
           },
           "productLines": {
             "chat": "Chat",

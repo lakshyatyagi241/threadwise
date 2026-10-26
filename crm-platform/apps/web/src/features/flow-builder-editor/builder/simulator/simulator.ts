@@ -1,9 +1,13 @@
 import {
   flbAskFileAccepts,
+  flbCarouselReplies,
   flbCleanAskFileExtensions,
+  flbCleanCarouselCards,
+  flbImageUrl,
   flbIsCondGroup,
   flbReadLocation,
   flbSanitizeConditionGroup,
+  webLinkUrl,
   type FlbCondGroup,
   type FlowEdge,
   type FlowNode,
@@ -23,18 +27,29 @@ import { type Translate } from '../../lib/msg';
 export type LogMedia = { kind: string; url: string; filename: string };
 /** The tap targets of a Quick replies / List / Poll message: the panel draws them as buttons under the bubble, as WhatsApp does. */
 export type LogChoices = {
-  kind: 'buttons' | 'list' | 'poll';
+  kind: 'buttons' | 'list' | 'poll' | 'links';
   /** The message body without the numbered fallback lines. */
   prompt: string;
   labels: string[];
   /** The list's opener label ("Choose below"). */
   button?: string;
+  /** A Link button message: its one button opens a web address, it does not answer the bot. */
+  links?: Array<{ type: string; label: string; value: string }>;
+};
+/** A Carousel card as the test chat draws it. A reply button carries its exit number (`p<n>`); a link button carries its address. */
+export type LogCard = {
+  /** The picture address, when it is one the chat may load (http or https). */
+  image: string | null;
+  title: string;
+  text: string;
+  buttons: Array<{ label: string; exit: number | null; href: string | null }>;
 };
 export type LogEntry = {
   kind: 'system' | 'user' | 'bot';
   text: string;
   media?: LogMedia;
   choices?: LogChoices;
+  cards?: LogCard[];
 };
 
 /** Pause between two simulated steps, ms. */
@@ -86,6 +101,8 @@ export interface SimulatorOptions {
   onLog: (entry: LogEntry) => void;
   /** Called when `start()` resets the transcript. */
   onReset?: () => void;
+  /** The transcript is cut back to its first `length` entries (a menu answered again). */
+  onTruncate?: (length: number) => void;
   onAwaiting: (awaiting: boolean) => void;
   /** Random source for the simulated order id. */
   random?: () => number;
@@ -94,12 +111,14 @@ export interface SimulatorOptions {
 export interface Simulator {
   /** (Re)start a run: the bot waits for the operator's first message. */
   start: () => void;
-  /** The operator's message. */
-  send: (text: string) => void;
+  /** The operator's message. `exit` is set when the operator taps a Carousel card's reply button: that button's exit, not the label, decides. */
+  send: (text: string, exit?: number) => void;
   /** The operator answers an Ask for file / image node with a (fake) file: only its name, type and caption matter. */
   sendFile: (file: SimFile) => void;
   /** The operator answers an Ask for location node with a (fake) shared location. */
   sendLocation: (loc: SimLocation) => void;
+  /** The operator taps an option of an earlier menu: the chat rolls back to that menu (entry `index`) and answers it again. */
+  pickAgain: (index: number, label: string, exit?: number) => void;
   /** The node the run is parked on or executing; null before the first message and after the end. */
   current: () => FlowNode | null;
   /** Variables of the current run (a copy). */
@@ -161,10 +180,34 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
   /** Wrong replies given to the Ask for file / location node the run is parked on. */
   let askAttempts = 0;
 
-  const log = (kind: LogEntry['kind'], text: string, media?: LogMedia, choices?: LogChoices) =>
-    opts.onLog({ kind, text, ...(media ? { media } : {}), ...(choices ? { choices } : {}) });
+  /** The run as it stood when each menu was shown, by transcript index, so an earlier menu can be answered again. */
+  let logged = 0;
+  let snapshots = new Map<number, { node: FlowNode; vars: Vars }>();
+
+  const log = (
+    kind: LogEntry['kind'],
+    text: string,
+    media?: LogMedia,
+    choices?: LogChoices,
+    cards?: LogCard[],
+  ) => {
+    // A menu, or a Carousel with a reply button, can be answered again later: keep the run as it stood when it was shown.
+    const menu =
+      (choices && choices.kind !== 'links') ||
+      (cards ?? []).some((c) => c.buttons.some((b) => b.exit !== null));
+    if (menu && current) snapshots.set(logged, { node: current, vars: { ...vars } });
+    logged += 1;
+    opts.onLog({
+      kind,
+      text,
+      ...(media ? { media } : {}),
+      ...(choices ? { choices } : {}),
+      ...(cards?.length ? { cards } : {}),
+    });
+  };
   const sys = (t: string) => log('system', t);
-  const bot = (t: string, media?: LogMedia, choices?: LogChoices) => log('bot', t, media, choices);
+  const bot = (t: string, media?: LogMedia, choices?: LogChoices, cards?: LogCard[]) =>
+    log('bot', t, media, choices, cards);
 
   const findNode = (id: string) => nodes.find((n) => n.id === id) ?? null;
   const stop = () => {
@@ -266,6 +309,36 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
           filename: str(d.filename),
         });
         return advance('out');
+      }
+      case 'carousel': {
+        // A reply button's exit is its place in `flbCarouselReplies` (card order), the same number the graph and the runtime use.
+        // A card with nothing in it, once variables are filled in, is not shown, as the runtime leaves it out. A link button the
+        // window may not open is left out, as the runtime leaves it out too.
+        const replies = flbCarouselReplies(d.cards);
+        const exitOf = new Map(replies.map((r, i) => [`${r.card}.${r.button}`, i]));
+        const shown: LogCard[] = [];
+        flbCleanCarouselCards(d.cards).forEach((c, ci) => {
+          const title = interp(c.title, v).trim();
+          const text = interp(c.text, v).trim();
+          const image = flbImageUrl(c.image);
+          if (title === '' && text === '' && image === null) return;
+          const buttons: LogCard['buttons'] = [];
+          c.buttons.forEach((b, bi) => {
+            const label = interp(b.label, v);
+            const exit = exitOf.get(`${ci}.${bi}`);
+            if (exit !== undefined) buttons.push({ label, exit, href: null });
+            else {
+              const href = webLinkUrl(b.type, b.value);
+              if (href !== null) buttons.push({ label, exit: null, href });
+            }
+          });
+          shown.push({ image, title, text, buttons });
+        });
+        if (shown.length === 0) return advance('next');
+        bot(interp(d.text, v), undefined, undefined, shown);
+        if (replies.length === 0) return advance('next');
+        opts.onAwaiting(true);
+        return;
       }
       case 'buttons':
       case 'list':
@@ -445,13 +518,78 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         return advance('out');
       }
       case 'cta': {
+        // Message by message, as the runtime's cta step sends them. A WhatsApp link message holds one URL button: the first web link
+        // is that button, each further one (two at most) is a message of its own labelled by its text. A call, a copy code and a
+        // link that is not a web address are text lines.
         const actions = arr(d.actions).map(rec);
-        const lines = actions.length
-          ? actions
-              .map((a) => `[${str(a.type) || 'url'}] ${str(a.label)} → ${str(a.value)}`)
-              .join('\n')
-          : `[${str(d.kind) || 'url'}] ${str(d.label)} → ${str(d.url || d.phone || d.code)}`;
-        bot(tx('cta', { lines }));
+        const links = (
+          actions.length
+            ? actions.map((a) => ({
+                type: str(a.type) || 'url',
+                label: str(a.label),
+                value: str(a.value),
+              }))
+            : [
+                {
+                  type: str(d.kind) || 'url',
+                  label: str(d.label),
+                  value: str(d.url || d.phone || d.code),
+                },
+              ]
+        )
+          .filter((l) => l.value.trim() !== '')
+          .map((l) => ({ ...l, value: interp(l.value, v).trim() }));
+        const isWebLink = (l: { type: string; value: string }) =>
+          ['url', 'visit'].includes(l.type) && /^https?:\/\//.test(l.value);
+        const textLine = (l: { type: string; label: string; value: string }) => {
+          const label =
+            l.label ||
+            (l.type === 'copy'
+              ? 'Copy'
+              : l.type === 'phone' || l.type === 'call_now'
+                ? 'Call'
+                : 'Visit');
+          if (l.type === 'phone' || l.type === 'call_now')
+            return `☏ ${label}: ${l.value.replace(/^tel:/i, '')}`;
+          if (l.type === 'copy') return `${label}:\n\`${l.value}\``;
+          return `${label}: ${l.value}`;
+        };
+        const header = interp(d.headerText, v).trim();
+        const footer = interp(d.footerText, v).trim();
+        const body = interp(d.bodyText || d.text, v);
+        const web = links.find(isWebLink);
+        if (web) {
+          const extra = links
+            .filter((l) => l !== web && !isWebLink(l))
+            .slice(0, 2)
+            .map(textLine)
+            .join('\n');
+          const main = [body, extra].filter(Boolean).join('\n').trim() || web.label || 'Visit';
+          const text = [header && `*${header}*`, main, footer && `_${footer}_`]
+            .filter(Boolean)
+            .join('\n\n');
+          bot(text, undefined, { kind: 'links', prompt: text, labels: [web.label], links: [web] });
+          for (const l of links.filter((x) => x !== web && isWebLink(x)).slice(0, 2)) {
+            const label = (l.label || 'Visit').slice(0, 20);
+            bot(label, undefined, {
+              kind: 'links',
+              prompt: label,
+              labels: [label],
+              links: [{ ...l, label }],
+            });
+          }
+          return advance('out');
+        }
+        const text = [
+          header && `*${header}*`,
+          body,
+          links.map(textLine).join('\n\n'),
+          footer && `_${footer}_`,
+        ]
+          .filter(Boolean)
+          .join('\n\n')
+          .trim();
+        if (text) bot(text);
         return advance('out');
       }
       case 'location': {
@@ -620,6 +758,8 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       .filter(Boolean);
     vars = { name: 'Anya', phone: '+919876543210' };
     pendingStart = first;
+    logged = 0;
+    snapshots = new Map();
     sys(
       expectedKeywords.length
         ? tx('typeKeyword', { first: expectedKeywords[0]!, list: expectedKeywords.join(', ') })
@@ -731,7 +871,7 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     answerAsk(node, { kind: 'location', loc });
   };
 
-  const send = (value: string): void => {
+  const send = (value: string, exit?: number): void => {
     // First message: open the conversation. An off-keyword opener still runs, with a soft note.
     if (!current && pendingStart) {
       log('user', value);
@@ -770,6 +910,21 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
       if (next) later(STEP_DELAY_MS, () => stepTest(next));
       else if (handle) sys(tx('portNotConnected', { port: handle }));
       else sys(tx('nothingAfterAsk'));
+    } else if (node.type === 'carousel') {
+      // A tap names its exit. A typed answer matches a button as the visitor sees it (variables filled in), by its text or its
+      // number; anything else keeps the run waiting, as a wrong answer does, instead of taking the first exit.
+      const labels = flbCarouselReplies(d.cards).map((r) => interp(r.label, vars));
+      const typed = value.trim().toLowerCase();
+      let idx = exit ?? labels.findIndex((l) => l.trim().toLowerCase() === typed);
+      const n = Number(typed);
+      if (idx < 0 && Number.isInteger(n) && n >= 1 && n <= labels.length) idx = n - 1;
+      if (idx < 0) {
+        sys(tx('carouselNoMatch', { value }));
+        return;
+      }
+      vars[str(d.var) || 'choice'] = labels[idx] ?? value;
+      opts.onAwaiting(false);
+      route(node, `p${idx}`, tx('optionNotConnected', { port: `p${idx}`, n: idx + 1 }));
     } else if (node.type === 'buttons' || node.type === 'list' || node.type === 'poll') {
       // List items are objects: match and save their title, never the object ("[object Object]").
       const raw = arr(d.options);
@@ -815,9 +970,23 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
     }
   };
 
+  const pickAgain = (index: number, label: string, exit?: number): void => {
+    const snap = snapshots.get(index);
+    if (!snap) return;
+    runId += 1;
+    for (const k of [...snapshots.keys()]) if (k > index) snapshots.delete(k);
+    vars = { ...snap.vars };
+    current = snap.node;
+    logged = index + 1;
+    opts.onTruncate?.(index + 1);
+    opts.onAwaiting(true);
+    send(label, exit);
+  };
+
   return {
     start,
     send,
+    pickAgain,
     sendFile,
     sendLocation,
     current: () => current,

@@ -401,7 +401,37 @@
           "message": "{name} bağlı değil, bu yüzden yanıt gönderilemiyor. Dahili notlar çalışmaya devam eder."
         },
         "open": "WhatsApp ayarlarını aç",
-        "askAdmin": "Kanalları yöneten birinden yeniden bağlamasını isteyin."
+        "askAdmin": "Kanalları yöneten birinden yeniden bağlamasını isteyin.",
+        "email": {
+          "needs_reconnect": {
+            "title": "Bu posta kutusunun yeniden bağlanması gerekiyor.",
+            "message": "{name}, kayıtlı oturum açma bilgisini artık kabul etmiyor, bu yüzden yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "error": {
+            "title": "Bu posta kutusunda bir bağlantı sorunu var.",
+            "message": "{name} hata durumunda olduğu için yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "not_connected": {
+            "title": "Bu posta kutusunun bağlantısı kesildi.",
+            "message": "{name} bağlı değil, bu yüzden yeniden bağlanana kadar yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "open": "Posta kutusu ayarlarını aç"
+        },
+        "other": {
+          "needs_reconnect": {
+            "title": "Bu kanalın yeniden bağlanması gerekiyor.",
+            "message": "{name}, kayıtlı kimlik bilgilerini artık kabul etmiyor, bu yüzden yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "error": {
+            "title": "Bu kanalda bir bağlantı sorunu var.",
+            "message": "{name} hata durumunda olduğu için yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "not_connected": {
+            "title": "Bu kanal kapalı.",
+            "message": "{name} bağlı değil, bu yüzden yanıt gönderilemiyor. İç notlar çalışmaya devam eder."
+          },
+          "open": "Kanal ayarlarını aç"
+        }
       },
       "failure": {
         "openSettings": "WhatsApp ayarlarını aç",
@@ -464,7 +494,8 @@
         "groupSendUnavailable": {
           "title": "WhatsApp gruplarına gönderim henüz kullanılamıyor.",
           "hint": "WhatsApp Business uygulamasından yanıtlayın."
-        }
+        },
+        "openChannelSettings": "Kanal ayarlarını aç"
       },
       "media": {
         "downloading": "Dosya indiriliyor",
@@ -505,6 +536,13 @@
           "kindNotAllowed": "Bu numara {kind} gönderemez.",
           "unsupportedType": "WhatsApp bu dosya türünü kabul etmiyor. JPEG ve PNG görselleri, MP4 ve 3GP videoları, AAC, MP3, AMR, M4A ve OGG ses dosyalarını, PDF, Office ve metin belgelerini kabul eder.",
           "empty": "Bu dosya boş."
+        },
+        "tip": "Dosya ekle. Desteklenen biçimler ve boyutlar: {list}",
+        "tipLimit": {
+          "image": "{mb} MB'a kadar görseller ({formats})",
+          "video": "{mb} MB'a kadar videolar ({formats})",
+          "audio": "{mb} MB'a kadar ses dosyaları ({formats})",
+          "document": "{mb} MB'a kadar belgeler ({formats})"
         }
       }
     }

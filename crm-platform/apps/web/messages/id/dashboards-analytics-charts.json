@@ -322,7 +322,7 @@
         "conversationsOpen": "Percakapan terbuka",
         "conversationsResolved": "Percakapan diselesaikan",
         "conversationsClosed": "Percakapan ditutup",
-        "conversationsAssigned": "Ditugaskan",
+        "conversationsAssigned": "Ditugaskan ke siapa pun",
         "conversationsUnassigned": "Belum ditugaskan",
         "conversationsTotal": "{count, plural, other {# percakapan}}"
       },

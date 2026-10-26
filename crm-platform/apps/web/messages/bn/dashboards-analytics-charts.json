@@ -322,7 +322,7 @@
         "conversationsOpen": "চলমান কথোপকথন",
         "conversationsResolved": "সমাধান হওয়া কথোপকথন",
         "conversationsClosed": "বন্ধ কথোপকথন",
-        "conversationsAssigned": "অ্যাসাইন করা",
+        "conversationsAssigned": "যে কাউকে অ্যাসাইন করা",
         "conversationsUnassigned": "অ্যাসাইন করা হয়নি",
         "conversationsTotal": "{count, plural, one {#টি কথোপকথন} other {#টি কথোপকথন}}"
       },

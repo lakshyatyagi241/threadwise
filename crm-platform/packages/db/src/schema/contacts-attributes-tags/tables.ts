@@ -28,6 +28,8 @@ export const contactGroups = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
     createdBy: idColumn('created_by'),
+    /** Who made the last change to the group (migration 2031). Membership changes do not count: they leave the group row alone. */
+    updatedBy: idColumn('updated_by'),
     name: text('name').notNull(),
     note: text('note'),
     /** `#RRGGBB` or null. */
@@ -49,7 +51,13 @@ export const contactGroups = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_contact_groups_updated_by',
+      columns: [t.orgId, t.updatedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
     index('idx_contact_groups_user_id').on(t.orgId, t.createdBy),
+    index('idx_contact_groups_updated_by').on(t.orgId, t.updatedBy),
     index('idx_contact_groups_org_created').on(t.orgId, t.createdAt, t.id),
     // uq_contact_groups_org_lower_name (org_id, lower(name)) lives in the SQL migration: verify-schema cannot compare expression indexes.
   ],
@@ -153,7 +161,9 @@ export const contactImportJobs = pgTable(
     limitExceeded: integer('limit_exceeded').notNull().default(0),
     options: jsonb('options').$type<Record<string, unknown>>().notNull().default({}),
     rejects: jsonb('rejects')
-      .$type<Array<{ row: number; reason: string; values?: Record<string, string> }>>()
+      .$type<
+        Array<{ row: number; reason: string; column?: string; values?: Record<string, string> }>
+      >()
       .notNull()
       .default([]),
     sourceCsv: text('source_csv'),

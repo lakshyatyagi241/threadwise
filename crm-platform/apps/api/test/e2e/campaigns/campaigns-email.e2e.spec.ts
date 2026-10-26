@@ -3,6 +3,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 import type { Redis } from 'ioredis';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { CampaignJobs } from '../../../src/modules/campaigns/campaign-jobs';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
 import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { UNOFFICIAL_WHATSAPP_GATE } from '../../../src/modules/auth/unofficial-whatsapp.port';
@@ -82,6 +84,8 @@ beforeAll(async () => {
     get(CAMPAIGN_BILLING),
     get(CAMPAIGN_FLOW_STARTER),
     get(CAMPAIGN_SETTINGS),
+    get<SendWindowService>(SendWindowService),
+    get<CampaignJobs>(CampaignJobs),
     get<ConsentPolicyService>(ConsentPolicyService),
     get<ConsentGate>(ConsentGate),
   );
@@ -757,12 +761,13 @@ describe('limits, the plan and what stops a run', () => {
     expect(rig.fake.sentTo(w.address).some((m) => /x1@buyer/i.test(headers(m.raw)))).toBe(false);
   });
 
-  it('the wallet is never asked: no launch check and no per-mail charge (a WhatsApp campaign is checked)', async () => {
+  it('an email run is checked at the email price at launch, never at the WhatsApp card, and no mail is charged per send here', async () => {
     const w = await workspace('wallet');
     const get = <T>(token: unknown) => rig.p.h.app.get<T>(token as never, { strict: false });
     const wallet = get<{ precheck: (...a: unknown[]) => Promise<void> }>(WALLET_GATE);
     const billing = get<{ consume: (...a: unknown[]) => Promise<boolean> }>(CAMPAIGN_BILLING);
     const precheck = vi.spyOn(wallet, 'precheck');
+    const precheckUsage = vi.spyOn(wallet, 'precheckUsage');
     const consume = vi.spyOn(billing, 'consume');
     try {
       // The control: a WhatsApp campaign asks the wallet at launch.
@@ -785,14 +790,17 @@ describe('limits, the plan and what stops a run', () => {
       expect(wa.status, JSON.stringify(wa.body)).toBe(201);
       expect(precheck).toHaveBeenCalledTimes(1);
 
-      // An email campaign asks it neither at launch nor for any of its mails.
+      // An email campaign is checked at the email price at launch (one mail per recipient), not at the WhatsApp card, and its engine
+      // checks each mail; the per-mail charge is the email engine's, not the WhatsApp billing.
       const c = await campaign(w, [{ name: 'W1', email: 'w1@buyer.test' }]);
       expect(await run(w, c.id)).toBe('finished');
       expect(await camp(c.id)).toMatchObject({ status: 'completed', sent_count: 1 });
       expect(precheck).toHaveBeenCalledTimes(1);
+      expect(precheckUsage).toHaveBeenCalledWith(w.t.orgId, 'email', 1);
       expect(consume).not.toHaveBeenCalled();
     } finally {
       precheck.mockRestore();
+      precheckUsage.mockRestore();
       consume.mockRestore();
     }
   });

@@ -49,6 +49,8 @@ export function isApproved(t: Pick<TemplateFacts, 'status' | 'metaStatus'>): boo
 export function blockReason(t: TemplateFacts, now: Date): InboxTemplateBlockReason | null {
   if (t.pausedUntil && t.pausedUntil.getTime() > now.getTime()) return 'paused';
   if (t.templateType === 'auth') return 'authentication';
+  // Cards with their own pictures and buttons: a flow and a campaign send them; the inbox cannot yet.
+  if (t.templateType === 'carousel') return 'carousel';
   if (t.parameterFormat === 'NAMED') return 'named_variables';
   const attachment = t.attachmentType ?? 'none';
   if (attachment !== 'none') return 'media_header';

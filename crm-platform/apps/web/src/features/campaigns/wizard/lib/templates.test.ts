@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { WizardTemplate } from '@crm/contracts';
 import { slot, template, templates, uuid } from '../testing';
 import {
   NO_FILTERS,
@@ -9,6 +10,7 @@ import {
   previewModelOf,
   previewModelWithText,
   snippet,
+  templatesForSenders,
   wouldPrefill,
 } from './templates';
 
@@ -121,5 +123,27 @@ describe('prefillVariables', () => {
   it('ignores a key that is not a field', () => {
     expect(prefillVariables([{ slot: 'body.1', key: '1' }], {})).toEqual({});
     expect(uuid(1)).toBeTruthy();
+  });
+});
+
+describe('templatesForSenders', () => {
+  const A = '11111111-1111-4111-8111-111111111111';
+  const B = '22222222-2222-4222-8222-222222222222';
+  const tpl = (id: string, connectionId: string | null) =>
+    ({ id, connectionId }) as unknown as WizardTemplate;
+  const list = [tpl('a', A), tpl('b', B), tpl('none', null)];
+
+  it('offers only the chosen number templates (and ones with no known number)', () => {
+    expect(templatesForSenders(list, [`waba:${A}`]).map((t) => t.id)).toEqual(['a', 'none']);
+    expect(templatesForSenders(list, [`waba:${A}`, `waba:${B}`]).map((t) => t.id)).toEqual([
+      'a',
+      'b',
+      'none',
+    ]);
+  });
+
+  it('leaves the list alone when no WhatsApp number is chosen', () => {
+    expect(templatesForSenders(list, []).length).toBe(3);
+    expect(templatesForSenders(list, ['device:abc']).length).toBe(3);
   });
 });

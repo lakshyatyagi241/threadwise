@@ -214,11 +214,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
 
       {kind === 'date_field_match' ? (
         <Field label={t('ext.fieldLabel')} hint={t('ext.fieldHint')}>
-          <TextInput
-            value={d.field}
-            placeholder="birthday"
-            onChange={(v) => set('field', v)}
-          />
+          <TextInput value={d.field} placeholder="birthday" onChange={(v) => set('field', v)} />
         </Field>
       ) : null}
 
@@ -383,13 +379,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         <Field label={t('rulesLabel')} hint={t('rulesHint')}>
           {ctx.keywordRules.length === 0 ? (
             <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11.5px] leading-snug text-amber-800">
-              {t.rich('rulesNone', {
-                link: (chunks) => (
-                  <Link href="/auto-reply" strong>
-                    {chunks}
-                  </Link>
-                ),
-              })}
+              {t('rulesNone')}
             </div>
           ) : (
             <div className="max-h-52 divide-y divide-border overflow-y-auto rounded-lg border border-border bg-background">
@@ -421,14 +411,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
 
       {kind === 'order_placed' ? <Notice>{t('orderPlaced')}</Notice> : null}
       {kind === 'contact_created' || kind === 'opt_in' ? <Notice>{t('automatic')}</Notice> : null}
-      {kind === 'away' ? (
-        <Notice>
-          {t.rich('away', {
-            b,
-            link: (chunks) => <Link href="/auto-reply">{chunks}</Link>,
-          })}
-        </Notice>
-      ) : null}
+      {kind === 'away' ? <Notice>{t.rich('away', { b })}</Notice> : null}
       {kind === 'out_of_hours' ? <Notice>{t.rich('outOfHours', { b })}</Notice> : null}
       {kind === 'manual_enroll' ? (
         <Notice>

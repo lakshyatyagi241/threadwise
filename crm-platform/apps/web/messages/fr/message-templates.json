@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Les vérifications ont relevé des problèmes que Meta refuserait. Rien n’a été envoyé. Corrigez les erreurs listées à droite.",
       "TPL_META_REJECTED": "Meta a refusé le modèle. Le motif est indiqué ci-dessous ; le modèle est conservé en brouillon pour que vous puissiez le corriger et réessayer.",
       "TPL_NO_CONNECTION": "Ce modèle n’a pas de numéro WhatsApp connecté pour être soumis. Connectez d’abord un numéro.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Les fichiers d'en-tête nécessitent un stockage objet cloud. Demandez à l'administrateur de la plateforme de l'activer.",
       "TPL_IN_USE": "Ce modèle ne peut pas être supprimé car une diffusion en cours ou programmée l’utilise.",
       "TPL_NOT_EDITABLE": "Seul un modèle que Meta n’a pas encore approuvé, ou qu’il a rejeté, peut être modifié.",
       "TPL_EDIT_LIMIT": "Meta autorise une modification en 24 heures et dix en 30 jours pour un modèle approuvé. Réessayez plus tard.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}",
       "live": "Aperçu en direct",
       "business": "Bloomly",
-      "online": "en ligne"
+      "online": "en ligne",
+      "cards": "Cartes du carrousel",
+      "cardEmpty": "Texte de la carte {n}",
+      "offerExpires": "Se termine bientôt",
+      "offerTextEmpty": "Titre de l’offre"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
@@ -120,7 +125,8 @@
         "all": "Tous",
         "approved": "Approuvé",
         "pending": "En cours d'examen",
-        "rejected": "Refusé"
+        "rejected": "Refusé",
+        "draft": "Brouillon"
       },
       "quickStartTitle": "Démarrage rapide",
       "quickStart": "Lisez les <link>consignes relatives aux modèles</link> avant de soumettre à Meta pour garder des délais d'approbation sous 24 h.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Approuvés",
         "pending": "En cours d'examen",
-        "rejected": "Refusés"
+        "rejected": "Refusés",
+        "draft": "Brouillon"
       },
       "helpLabel": "Aide - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Supprimer le modèle",
       "cancel": "Annuler",
       "done": "« {name} » supprimé.",
-      "inUseHelp": "Ouvrez la diffusion qui utilise ce modèle, annulez-la ou choisissez un autre modèle, puis supprimez celui-ci."
+      "inUseHelp": "Ouvrez la diffusion qui utilise ce modèle, annulez-la ou choisissez un autre modèle, puis supprimez celui-ci.",
+      "messageDraft": "Supprimer « {name} » ? Il n’a jamais été envoyé à Meta, il est donc supprimé uniquement ici."
     },
     "lint": {
       "title": "Vérifications avant envoi",
@@ -195,7 +203,8 @@
         "body": "Corps",
         "footer": "Pied de page",
         "buttons": "Boutons",
-        "template": "Modèle"
+        "template": "Modèle",
+        "cards": "Cartes"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Envoi en cours",
         "keptSample": "L’exemple enregistré est conservé. Choisissez un fichier pour le remplacer.",
         "noFile": "Aucun fichier choisi",
-        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 100 Mo.",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo, PDF jusqu’à 10 Mo.",
         "replace": "Remplacer le fichier",
         "choose": "Choisir un fichier exemple",
         "tooBig": "Ce {kind} fait {size} Mo. WhatsApp accepte jusqu’à {max} Mo. Choisissez un fichier plus petit.",
@@ -322,14 +331,18 @@
           "quick_reply": "Réponse rapide",
           "url": "Visiter le site web",
           "phone": "Appeler",
-          "copy_code": "Copier le code"
+          "copy_code": "Copier le code",
+          "form": "Formulaire",
+          "catalog": "Catalogue"
         },
         "kind": {
           "quick_reply": "Réponse rapide",
           "url": "Visiter le site web",
           "phone": "Appeler",
           "copy_code": "Copier le code",
-          "other": "Autre"
+          "other": "Autre",
+          "form": "Formulaire",
+          "catalog": "Catalogue"
         },
         "count": "{used}/{max} boutons",
         "limitReached": "{max} de ce type au maximum.",
@@ -358,8 +371,17 @@
           "codeRequired": "Saisissez un code exemple.",
           "quickReplyVariable": "Une réponse rapide ne peut pas contenir de variable.",
           "urlExampleRequired": "Donnez une valeur exemple pour la variable de l’URL.",
-          "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons."
-        }
+          "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons.",
+          "flowIdRequired": "Saisissez l’ID du Flow.",
+          "flowIdInvalid": "L’ID du Flow est un nombre.",
+          "screenRequired": "Saisissez l’ID de l’écran.",
+          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons."
+        },
+        "catalogHint": "Ouvre votre catalogue WhatsApp. Le bouton affiche « Voir le catalogue » et doit être le seul bouton.",
+        "flowId": "ID du WhatsApp Flow",
+        "flowIdHint": "L’ID numérique d’un WhatsApp Flow publié, dans le gestionnaire de Flows de Meta.",
+        "screen": "Écran d’ouverture",
+        "screenHint": "L’ID de l’écran sur lequel le formulaire s’ouvre, par exemple WELCOME."
       },
       "result": {
         "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
@@ -373,6 +395,46 @@
         "open": "Créer avec l'IA",
         "applied": "Brouillon du modèle rempli par l'IA. Relisez-le avant de le soumettre.",
         "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
+      },
+      "type": {
+        "label": "Type de bouton",
+        "standard": "Standard",
+        "carousel": "Carrousel",
+        "hint": "Choisissez comment le message se termine. Un carrousel est une rangée de cartes ; une offre à durée limitée a un titre d’offre avec compte à rebours facultatif et un bouton pour copier un code ou ouvrir un site.",
+        "none": "Aucun",
+        "buttons": "Copier le code, site web, réponses rapides, etc.",
+        "lto": "Offre à durée limitée",
+        "catalogue": "Catalogue",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Cartes",
+        "hint": "De 2 à 10 cartes. Toutes utilisent le même type de fichier et les mêmes boutons.",
+        "format": "Les cartes affichent",
+        "formatImage": "Des images",
+        "formatVideo": "Des vidéos",
+        "count": "{used}/{max} cartes",
+        "add": "Ajouter une carte",
+        "needTwo": "Un carrousel nécessite au moins {min} cartes.",
+        "card": "Carte {n}",
+        "remove": "Supprimer la carte {n}",
+        "noFile": "Aucun fichier choisi",
+        "uploading": "Envoi en cours",
+        "text": "Texte de la carte",
+        "textCounter": "{used}/{max}",
+        "buttons": "Boutons",
+        "buttonText": "Texte du bouton",
+        "buttonUrl": "URL du site web",
+        "buttonPhone": "Numéro de téléphone"
+      },
+      "offer": {
+        "title": "Offre à durée limitée",
+        "hint": "Affiché sous l’image ou la vidéo : un titre et, si vous le souhaitez, un compte à rebours jusqu’à la fin de l’offre.",
+        "text": "Titre de l’offre",
+        "textHint": "{used}/{max}",
+        "placeholder": "Offre bientôt terminée !",
+        "countdown": "Afficher un compte à rebours",
+        "countdownHint": "WhatsApp affiche le temps restant avant la fin de l’offre."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Modèles",
       "crumbDetail": "Détail",
       "notSubmittedPill": "Non soumis",
-      "qualityPill": "Qualité · {quality}",
       "preview": {
         "title": "Aperçu",
         "hint": "Aspect dans WhatsApp"

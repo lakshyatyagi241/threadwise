@@ -10,6 +10,7 @@ import {
   storedFeature,
   storedLimit,
 } from '@crm/contracts';
+import { featureDependents, featureRequires } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
 import type { DatabaseService } from '../../../src/infra/db/database.service';
 import { PlanCatalogService } from '../../../src/modules/plans-subscriptions-trials/plan-catalog.service';
@@ -69,6 +70,8 @@ describe('registry', () => {
       'inbox_sla',
       'inbox_routing',
       'inbox_assignment_sticky',
+      'agent_status_bar',
+      'agent_status_automation',
       'waba_calling',
       'inbox_kanban',
       'team_performance',
@@ -143,6 +146,70 @@ describe('registry', () => {
     expect(storedLimit({}, 'devices')).toBe(0);
     expect(storedLimit(null, 'devices')).toBe(0);
     expect(storedLimit([], 'devices')).toBe(0);
+  });
+});
+
+describe('resolveFeature: the workspace switch and declared dependencies (docs/specs/addons-lifecycle-and-permissions.md)', () => {
+  it('a feature the workspace switched off is off even though the plan carries it, and an override or platform-owned status still wins', () => {
+    const e = ent({
+      planFeatures: { inbox_routing: true },
+      disabledFeatures: ['inbox_routing'],
+    });
+    expect(resolveFeature(e, 'inbox_routing')).toBe(false);
+    expect(
+      resolveFeature({ ...e, overrides: { features: { inbox_routing: true } } }, 'inbox_routing'),
+    ).toBe(true);
+    expect(resolveFeature({ ...e, platformOwned: true }, 'inbox_routing')).toBe(true);
+    // a plan with no catalogue row locks nothing, but the workspace's own switch still applies
+    expect(resolveFeature({ ...e, planKnown: false }, 'inbox_routing')).toBe(false);
+    expect(resolveFeature(ent({ planFeatures: { inbox_routing: true } }), 'inbox_routing')).toBe(
+      true,
+    );
+  });
+
+  it('a feature that needs another is on only while that one is on, whatever the plan row says', () => {
+    const both = ent({ planFeatures: { inbox_routing: true, inbox_assignment_sticky: true } });
+    expect(resolveFeature(both, 'inbox_assignment_sticky')).toBe(true);
+    expect(
+      resolveFeature(
+        ent({ planFeatures: { inbox_assignment_sticky: true } }),
+        'inbox_assignment_sticky',
+      ),
+    ).toBe(false);
+    // an operator's override ON does not lift the dependency either
+    expect(
+      resolveFeature(
+        ent({ overrides: { features: { inbox_assignment_sticky: true } } }),
+        'inbox_assignment_sticky',
+      ),
+    ).toBe(false);
+    // switching the required feature off takes the dependent with it
+    expect(
+      resolveFeature({ ...both, disabledFeatures: ['inbox_routing'] }, 'inbox_assignment_sticky'),
+    ).toBe(false);
+    // appointments: confirm buttons and rebook steps need booking
+    const appt = ent({
+      planFeatures: { appointment_confirm_buttons: true, appointment_rebook_steps: true },
+    });
+    expect(resolveFeature(appt, 'appointment_confirm_buttons')).toBe(false);
+    expect(
+      resolveFeature(
+        { ...appt, planFeatures: { ...appt.planFeatures, appointment_booking: true } },
+        'appointment_rebook_steps',
+      ),
+    ).toBe(true);
+    // a feature that needs nothing is unaffected
+    expect(resolveFeature(ent({ planFeatures: { analytics: true } }), 'analytics')).toBe(true);
+  });
+
+  it('the registry declares each dependency once, and the reverse lookup lists the dependents', () => {
+    expect(featureRequires('inbox_assignment_sticky')).toEqual(['inbox_routing']);
+    expect(featureDependents('inbox_routing')).toEqual(['inbox_assignment_sticky']);
+    expect(featureDependents('appointment_booking').sort()).toEqual([
+      'appointment_confirm_buttons',
+      'appointment_rebook_steps',
+    ]);
+    expect(featureRequires('analytics')).toEqual([]);
   });
 });
 

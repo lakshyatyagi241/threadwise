@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Las comprobaciones encontraron problemas que Meta rechazaría. No se envió nada. Corrige los errores que aparecen a la derecha.",
       "TPL_META_REJECTED": "Meta rechazó la plantilla. El motivo aparece abajo; la plantilla se guarda como borrador para que puedas corregirla y volver a intentarlo.",
       "TPL_NO_CONNECTION": "Esta plantilla no tiene un número de WhatsApp conectado para enviarla. Conecta primero un número.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Los archivos de encabezado necesitan almacenamiento de objetos en la nube. Pide al administrador de la plataforma que lo active.",
       "TPL_IN_USE": "Esta plantilla no se puede eliminar porque la usa una difusión en curso o programada.",
       "TPL_NOT_EDITABLE": "Solo se puede editar una plantilla que Meta todavía no haya aprobado o que haya rechazado.",
       "TPL_EDIT_LIMIT": "Meta permite una edición cada 24 horas y diez cada 30 días en una plantilla aprobada. Inténtalo más tarde.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, one {+# botón más} other {+# botones más}}",
       "live": "Vista previa en vivo",
       "business": "Bloomly",
-      "online": "en línea"
+      "online": "en línea",
+      "cards": "Tarjetas del carrusel",
+      "cardEmpty": "Texto de la tarjeta {n}",
+      "offerExpires": "Termina pronto",
+      "offerTextEmpty": "Título de la oferta"
     },
     "card": {
       "rejected": "Rechazada: {reason}",
@@ -120,7 +125,8 @@
         "all": "Todas",
         "approved": "Aprobada",
         "pending": "En revisión",
-        "rejected": "Rechazada"
+        "rejected": "Rechazada",
+        "draft": "Borrador"
       },
       "quickStartTitle": "Inicio rápido",
       "quickStart": "Lee las <link>Directrices de plantillas</link> antes de enviar a Meta para mantener los tiempos de aprobación por debajo de 24 h.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Aprobadas",
         "pending": "En revisión",
-        "rejected": "Rechazadas"
+        "rejected": "Rechazadas",
+        "draft": "Borrador"
       },
       "helpLabel": "Ayuda - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Eliminar plantilla",
       "cancel": "Cancelar",
       "done": "Se eliminó “{name}”.",
-      "inUseHelp": "Abre la difusión que usa esta plantilla y cancélala o elige otra plantilla; después, elimina esta."
+      "inUseHelp": "Abre la difusión que usa esta plantilla y cancélala o elige otra plantilla; después, elimina esta.",
+      "messageDraft": "¿Eliminar “{name}”? Nunca se envió a Meta, así que solo se quitará aquí."
     },
     "lint": {
       "title": "Comprobaciones previas al envío",
@@ -195,7 +203,8 @@
         "body": "Cuerpo",
         "footer": "Pie",
         "buttons": "Botones",
-        "template": "Plantilla"
+        "template": "Plantilla",
+        "cards": "Tarjetas"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Subiendo",
         "keptSample": "Se conserva el ejemplo guardado. Elige un archivo para reemplazarlo.",
         "noFile": "Ningún archivo elegido",
-        "limits": "Imagen de hasta 5 MB, video de hasta 16 MB, PDF de hasta 100 MB.",
+        "limits": "Imagen de hasta 5 MB, video de hasta 16 MB, PDF de hasta 10 MB.",
         "replace": "Reemplazar archivo",
         "choose": "Elegir archivo de ejemplo",
         "tooBig": "Este {kind} pesa {size} MB. WhatsApp acepta hasta {max} MB. Elige un archivo más pequeño.",
@@ -322,14 +331,18 @@
           "quick_reply": "Respuesta rápida",
           "url": "Visitar sitio web",
           "phone": "Llamar por teléfono",
-          "copy_code": "Copiar código"
+          "copy_code": "Copiar código",
+          "form": "Formulario",
+          "catalog": "Catálogo"
         },
         "kind": {
           "quick_reply": "Respuesta rápida",
           "url": "Visitar sitio web",
           "phone": "Llamar por teléfono",
           "copy_code": "Copiar código",
-          "other": "Otro"
+          "other": "Otro",
+          "form": "Formulario",
+          "catalog": "Catálogo"
         },
         "count": "{used}/{max} botones",
         "limitReached": "Máximo {max} de este tipo.",
@@ -358,8 +371,17 @@
           "codeRequired": "Escribe un código de ejemplo.",
           "quickReplyVariable": "Una respuesta rápida no puede contener una variable.",
           "urlExampleRequired": "Indica un valor de ejemplo para la variable de la URL.",
-          "quickReplyPosition": "Las respuestas rápidas deben ir juntas, al principio o al final de los botones."
-        }
+          "quickReplyPosition": "Las respuestas rápidas deben ir juntas, al principio o al final de los botones.",
+          "flowIdRequired": "Introduce el ID del Flow.",
+          "flowIdInvalid": "El ID del Flow es un número.",
+          "screenRequired": "Introduce el ID de la pantalla.",
+          "catalogAlone": "Un botón de catálogo no se puede combinar con otros botones."
+        },
+        "catalogHint": "Abre tu catálogo de WhatsApp. El botón dice «Ver catálogo» y debe ser el único botón.",
+        "flowId": "ID del WhatsApp Flow",
+        "flowIdHint": "El ID numérico de un WhatsApp Flow publicado, del administrador de Flows de Meta.",
+        "screen": "Pantalla de inicio",
+        "screenHint": "El ID de la pantalla con la que se abre el formulario, por ejemplo WELCOME."
       },
       "result": {
         "metaRefused": "Guardada, pero Meta rechazó la plantilla.",
@@ -373,6 +395,46 @@
         "open": "Crear con IA",
         "applied": "Borrador de plantilla completado con IA. Revísalo antes de enviarlo.",
         "authHint": "Las plantillas de autenticación tienen un texto fijo, así que no hay nada que redactar."
+      },
+      "type": {
+        "label": "Tipo de botón",
+        "standard": "Estándar",
+        "carousel": "Carrusel",
+        "hint": "Elige con qué termina el mensaje. Un carrusel es una fila de tarjetas; una oferta por tiempo limitado tiene un título de oferta con cuenta atrás opcional y un botón de copiar código o de sitio web.",
+        "none": "Ninguno",
+        "buttons": "Copiar código, sitio web, respuestas rápidas, etc.",
+        "lto": "Oferta por tiempo limitado",
+        "catalogue": "Catálogo",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Tarjetas",
+        "hint": "De 2 a 10 tarjetas. Todas usan el mismo tipo de archivo y los mismos botones.",
+        "format": "Las tarjetas muestran",
+        "formatImage": "Imágenes",
+        "formatVideo": "Vídeos",
+        "count": "{used}/{max} tarjetas",
+        "add": "Añadir tarjeta",
+        "needTwo": "Un carrusel necesita al menos {min} tarjetas.",
+        "card": "Tarjeta {n}",
+        "remove": "Quitar la tarjeta {n}",
+        "noFile": "Ningún archivo elegido",
+        "uploading": "Subiendo",
+        "text": "Texto de la tarjeta",
+        "textCounter": "{used}/{max}",
+        "buttons": "Botones",
+        "buttonText": "Texto del botón",
+        "buttonUrl": "URL del sitio web",
+        "buttonPhone": "Número de teléfono"
+      },
+      "offer": {
+        "title": "Oferta por tiempo limitado",
+        "hint": "Se muestra bajo la imagen o el vídeo: un título y, si quieres, una cuenta atrás hasta el fin de la oferta.",
+        "text": "Título de la oferta",
+        "textHint": "{used}/{max}",
+        "placeholder": "¡Oferta que caduca!",
+        "countdown": "Mostrar cuenta atrás",
+        "countdownHint": "WhatsApp muestra el tiempo que queda hasta el fin de la oferta."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Plantillas",
       "crumbDetail": "Detalle",
       "notSubmittedPill": "No enviada",
-      "qualityPill": "Calidad · {quality}",
       "preview": {
         "title": "Vista previa",
         "hint": "Cómo se ve en WhatsApp"

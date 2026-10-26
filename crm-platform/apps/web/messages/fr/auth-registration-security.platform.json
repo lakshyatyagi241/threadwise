@@ -1449,7 +1449,9 @@
             "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
             "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
             "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
-            "inbox_assignment_sticky": "Attribution propriétaire d'abord et synchronisée, fenêtre de contact récurrent et invite de réattribution. Fait partie du module Routage intelligent."
+            "inbox_assignment_sticky": "Attribution propriétaire d'abord et synchronisée, fenêtre de contact récurrent et invite de réattribution. Fait partie du module Routage intelligent.",
+            "agent_status_bar": "Le contrôle de statut Disponible / Absent dans la barre du haut et en tête de la Boîte de réception, avec Passer en absent / disponible et le lien vers Congés. L’interrupteur Disponible / Absent du menu du compte est ouvert à toutes les offres.",
+            "agent_status_automation": "Heures de travail personnelles avec fuseau horaire, Absent en dehors, l’avis Hors des heures de travail et une attribution qui ignore les personnes hors de leurs heures. Nécessaire pour enregistrer un horaire ; sans lui, un horaire enregistré est conservé mais ignoré."
           },
           "units": {
             "days": "Jours",
@@ -1595,7 +1597,8 @@
             "email_mailboxes": "Boîtes e-mail",
             "email_monthly": "E-mails par mois",
             "storage_gb": "Stockage (Go)",
-            "teams": "Équipes"
+            "teams": "Équipes",
+            "webbot_messages": "Messages gratuits du chatbot du site par mois"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1644,7 +1647,9 @@
             "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
             "team_hierarchy": "Hiérarchie des équipes et managers",
             "custom_roles": "Rôles personnalisés et périmètres",
-            "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré"
+            "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré",
+            "agent_status_bar": "Barre de statut : contrôle Disponible / Absent dans la barre du haut et la Boîte de réception",
+            "agent_status_automation": "Automatiser le statut : heures de travail personnelles et Absent automatique"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1703,7 +1708,8 @@
             "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
             "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
             "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
-            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées.",
+            "webbot_messages": "Messages du chatbot du site inclus gratuitement chaque mois civil. Chaque message au-delà est débité du portefeuille. Vide ou 0 = aucun inclus."
           },
           "productLines": {
             "chat": "Chat",

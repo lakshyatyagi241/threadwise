@@ -182,6 +182,33 @@ export class ApiLibraryLogsRepository {
     return Number((res.rows[0] as { n: number }).n);
   }
 
+  /** Whether the log holds a run of this API inside the retention window (the API itself may be deleted by now). */
+  async hasRunsOf(tx: Tx, orgId: number, apiUuid: string): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM api_library_logs l
+      WHERE l.org_id = ${orgId} AND l.api_uuid = ${apiUuid}::uuid
+        AND l.created_at >= now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS + 1})
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
+  /**
+   * Every API id the log holds inside the retention window, with the name its latest run kept (a run of a missing API keeps no name,
+   * so the latest non-empty one wins). A deleted API's name lives only here.
+   */
+  async loggedApis(tx: Tx, orgId: number): Promise<Array<{ apiUuid: string; apiName: string }>> {
+    const res = await tx.execute(sql`
+      SELECT l.api_uuid AS api_uuid,
+             (array_agg(l.api_name ORDER BY l.created_at DESC, l.id DESC) FILTER (WHERE l.api_name <> ''))[1] AS api_name
+      FROM api_library_logs l
+      WHERE l.org_id = ${orgId} AND l.api_uuid IS NOT NULL
+        AND l.created_at >= now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS + 1})
+      GROUP BY l.api_uuid`);
+    return (res.rows as Raw[])
+      .filter((r) => r.api_name !== null)
+      .map((r) => ({ apiUuid: r.api_uuid as string, apiName: r.api_name as string }));
+  }
+
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<LogRow | undefined> {
     const res = await tx.execute(
       sql`${SELECT} WHERE l.org_id = ${orgId} AND l.uuid = ${uuid}::uuid LIMIT 1`,

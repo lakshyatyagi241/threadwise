@@ -180,6 +180,21 @@ describe('a file with custom property columns (analysis)', () => {
     ]);
   });
 
+  it('names the header of the column that failed, and only for the reasons that have one', () => {
+    const bad = 'Phone,Name,Customer tier\n+919812300500,Asha,Platinum\n';
+    const a = analyzeCsv(bad, opts(), defs);
+    expect(a.invalid[0]).toEqual(
+      expect.objectContaining({
+        row: 2,
+        reason: 'invalid_property_value',
+        column: 'Customer tier',
+      }),
+    );
+
+    const noPhone = 'Phone,Name,Customer tier\n,Asha,Gold\n';
+    expect(analyzeCsv(noPhone, opts(), defs).invalid[0]).not.toHaveProperty('column');
+  });
+
   it('a request that ignores a property column leaves its values out', () => {
     const a = analyzeCsv(csv, opts({ propertyMapping: { tier: null } }), defs);
     expect(a.properties.find((p) => p.key === 'tier')!.column).toBeNull();

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { HelpAgentEnv } from '../../../config/domains/help-agent.env';
+import { openAiOutputLimit } from '../openai-output-limit';
 import {
   HelpAgentLlmError,
   type HelpAgentLlmPort,
@@ -33,12 +34,6 @@ export class HttpHelpAgentLlmAdapter implements HelpAgentLlmPort {
     const base = (this.env.HELP_AGENT_BASE_URL ?? BASE_URLS[req.provider]) as string | undefined;
     if (!base) throw new HelpAgentLlmError(0, `no adapter for the AI provider ${req.provider}`);
 
-    // OpenAI's current models reject `max_tokens` and ask for `max_completion_tokens`; the other vendors only know `max_tokens`.
-    const limit =
-      req.provider === 'openai'
-        ? { max_completion_tokens: req.maxTokens }
-        : { max_tokens: req.maxTokens };
-
     let res: Response;
     try {
       res = await fetch(`${base.replace(/\/+$/, '')}/chat/completions`, {
@@ -50,7 +45,7 @@ export class HttpHelpAgentLlmAdapter implements HelpAgentLlmPort {
           tools: req.tools,
           tool_choice: req.toolChoice,
           parallel_tool_calls: false,
-          ...limit,
+          ...openAiOutputLimit(req.maxTokens, req.provider === 'openai'),
         }),
         signal: AbortSignal.timeout(this.env.HELP_AGENT_TIMEOUT_MS),
       });

@@ -9,9 +9,16 @@ import {
   type AddAiagSourceInput,
   type AiagSource,
 } from '@crm/contracts';
-import { Button, ConfirmDialog, Spinner, cn, useToast } from '@crm/ui';
+import { Button, ConfirmDialog, Modal, Spinner, cn, useToast } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { addSource, deleteSource, KEYS, uploadSource, useSources } from '../api/training';
+import {
+  addSource,
+  deleteSource,
+  KEYS,
+  uploadSource,
+  useSourcePreview,
+  useSources,
+} from '../api/training';
 import { checkFile, FILE_ACCEPT } from '../lib/builder-model';
 import { TrashIcon } from './icons';
 
@@ -42,6 +49,7 @@ export function KnowledgeStep({
   const sources = useSources(assistantId);
   const [open, setOpen] = useState<AddKind | null>(null);
   const [pendingDelete, setPendingDelete] = useState<AiagSource | null>(null);
+  const [viewing, setViewing] = useState<AiagSource | null>(null);
   const [deleting, setDeleting] = useState(false);
 
   const refresh = () => {
@@ -151,6 +159,7 @@ export function KnowledgeStep({
                     key={s.id}
                     s={s}
                     canEdit={canEdit}
+                    onView={() => setViewing(s)}
                     onDelete={() => setPendingDelete(s)}
                   />
                 ))}
@@ -159,6 +168,8 @@ export function KnowledgeStep({
           </div>
         </>
       )}
+
+      <SourceViewer source={viewing} onClose={() => setViewing(null)} />
 
       <ConfirmDialog
         open={pendingDelete !== null}
@@ -175,18 +186,82 @@ export function KnowledgeStep({
   );
 }
 
+/** The text the agent reads from one entry (a page, a file, pasted text, or a question and its answer). */
+function SourceViewer({ source, onClose }: { source: AiagSource | null; onClose: () => void }) {
+  const t = useTranslations('aiTraining.knowledge');
+  const preview = useSourcePreview(source?.id ?? null);
+  const p = preview.data;
+  return (
+    <Modal
+      open={source !== null}
+      onClose={onClose}
+      title={source?.label ?? ''}
+      closeLabel={t('viewClose')}
+    >
+      {preview.isPending ? (
+        <div className="flex justify-center py-6">
+          <Spinner label={t('viewLoading')} />
+        </div>
+      ) : preview.isError || !p ? (
+        <p className="text-sm text-danger" role="alert">
+          {t('viewFailed')}
+        </p>
+      ) : (
+        <div className="space-y-3 text-sm">
+          {p.url && (
+            <p className="break-all font-mono text-xs text-muted-foreground" dir="ltr">
+              {p.url}
+            </p>
+          )}
+          {p.kind === 'qa' ? (
+            <dl className="space-y-2">
+              <div>
+                <dt className="text-xs font-medium text-muted-foreground">{t('viewQuestion')}</dt>
+                <dd className="whitespace-pre-wrap break-words [overflow-wrap:anywhere]" dir="auto">
+                  {p.question}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium text-muted-foreground">{t('viewAnswer')}</dt>
+                <dd className="whitespace-pre-wrap break-words [overflow-wrap:anywhere]" dir="auto">
+                  {p.answer}
+                </dd>
+              </div>
+            </dl>
+          ) : p.text ? (
+            <div
+              className="max-h-[60vh] overflow-y-auto whitespace-pre-wrap break-words rounded-md border border-border bg-muted/40 p-3 text-[13px] [overflow-wrap:anywhere]"
+              dir="auto"
+              tabIndex={0}
+            >
+              {p.text}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">
+              {p.status === 'processing' ? t('viewNotReadYet') : t('viewNoText')}
+            </p>
+          )}
+          {p.truncated && <p className="text-xs text-warning">{t('viewTruncated')}</p>}
+        </div>
+      )}
+    </Modal>
+  );
+}
+
 function SourceRow({
   s,
   canEdit,
+  onView,
   onDelete,
 }: {
   s: AiagSource;
   canEdit: boolean;
+  onView: () => void;
   onDelete: () => void;
 }) {
   const t = useTranslations('aiTraining.knowledge');
   return (
-    <li className="grid grid-cols-[1fr_44px] items-center gap-3 border-b border-border px-3 py-2 last:border-0 hover:bg-muted/40">
+    <li className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-border px-3 py-2 last:border-0 hover:bg-muted/40">
       <div className="min-w-0">
         <div className="truncate text-[13px]">{s.label}</div>
         {s.url && (
@@ -207,7 +282,17 @@ function SourceRow({
           </div>
         )}
       </div>
-      <div className="text-end">
+      <div className="flex items-center justify-end gap-1">
+        {s.status !== 'failed' && (
+          <button
+            type="button"
+            onClick={onView}
+            aria-label={t('viewNamed', { label: s.label })}
+            className="rounded px-1.5 py-0.5 text-[12px] font-medium text-brand hover:bg-brand/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {t('view')}
+          </button>
+        )}
         {canEdit && (
           <button
             type="button"

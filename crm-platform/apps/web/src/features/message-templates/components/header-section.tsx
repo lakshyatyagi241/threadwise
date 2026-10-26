@@ -24,7 +24,10 @@ export function HeaderSection({
   onKind,
   onText,
   onUploaded,
+  kinds = HEADER_KINDS,
 }: {
+  /** The header kinds on offer (a limited-time offer allows only a picture or a video). */
+  kinds?: readonly HeaderKind[];
   state: FormState;
   headerError?: string;
   onKind: (k: HeaderKind) => void;
@@ -54,7 +57,10 @@ export function HeaderSection({
   const kind = state.headerKind;
 
   function pick(file: File | undefined) {
-    if (!file || !isMediaKind(kind)) return;
+    // While an upload runs, a pick is ignored: Choose is disabled then too, and a second upload would race the first.
+    if (!file || !isMediaKind(kind) || upload.isPending) return;
+    // A new pick starts clean: an error from the last upload must not stay beside the result of this one.
+    upload.reset();
     const p = mediaProblem(kind, file);
     if (p) {
       setProblem(
@@ -89,7 +95,7 @@ export function HeaderSection({
           value={kind}
           onChange={(e) => onKind(e.target.value as HeaderKind)}
         >
-          {HEADER_KINDS.map((k) => (
+          {kinds.map((k) => (
             <option key={k} value={k}>
               {t(`kind.${k}`)}
             </option>

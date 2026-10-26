@@ -76,7 +76,7 @@
       "unknownPerson": "Ancien membre",
       "unknownTeam": "Équipe supprimée",
       "teamName": "Équipe : {name}",
-      "skipsOffline": "Ignore les personnes hors ligne",
+      "skipsOffline": "Ignore les personnes absentes",
       "reassigns": "Réattribue à la mise à jour",
       "activeFor": "La règle {name} est active",
       "dragHandle": "Faites glisser {name} pour changer sa priorité",
@@ -136,7 +136,7 @@
         "noPeople": "Aucune personne trouvée.",
         "removePerson": "Retirer {name}",
         "onLeave": "en congé",
-        "skipOffline": "Ignorer les personnes hors ligne",
+        "skipOffline": "Ignorer les personnes absentes",
         "skipOfflineHint": "Les personnes en congé sont toujours ignorées.",
         "reassign": "Réattribuer quand une mise à jour fait correspondre l'enregistrement à cette règle",
         "reassignHint": "S'applique uniquement aux enregistrements que le moteur a lui-même attribués, et seulement tant que personne n'a modifié le responsable depuis. Désactivé par défaut : un enregistrement n'est attribué qu'une fois."
@@ -220,7 +220,7 @@
         "disabled": "L'attribution des enregistrements est désactivée pour cet espace de travail, donc rien ne se passerait.",
         "has_owner": "{record} a déjà un responsable, donc aucune règle ne s'exécuterait. Un responsable défini par une personne n'est jamais remplacé.",
         "no_rule": "Aucune règle active ne correspond à {record}.",
-        "nobody_available": "Une règle correspond à {record}, mais toutes les personnes qu'elle désigne sont en congé, hors ligne ou ne sont plus là.",
+        "nobody_available": "Une règle correspond à {record}, mais toutes les personnes qu’elle nomme sont en congé, absentes ou ne sont plus là.",
         "plan": "Votre offre n'inclut pas les règles d'attribution des enregistrements.",
         "not_found": "Cet enregistrement est introuvable. Il a peut-être été supprimé ou se trouve hors de ce que vous pouvez voir."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name} : ne peut pas ouvrir ce type d'enregistrement",
         "inactive": "{name} : n'est plus actif",
         "on_leave": "{name} : en congé aujourd'hui",
-        "offline": "{name} : hors ligne"
+        "offline": "{name} : absent"
       }
     },
     "log": {

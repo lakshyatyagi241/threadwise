@@ -19,7 +19,7 @@ keywords: [customers, people, leads, import, csv, export, duplicates, tags, bulk
 3. Select **Add Contact**. A first name and a mobile number or email address are required.
 4. Select a name to open the **quick view**, a panel on the right with the contact's details, while the list stays visible behind it. See [Contact quick view](help:contact-quick-view). To open the full page, hover the row and select the open icon, or choose **See all details**. See [Contact details page](help:contact-details-page).
 5. Change a stage from the table by selecting the stage chip. A lost stage asks for a reason.
-6. Tick rows. A bar appears with **Send campaign**, **Tag**, **Assign owner**, **Change stage**, **Export**, **Delete** and **More** (**Update**, add to or remove from a group, untag). Untick everything and the bar goes away.
+6. Tick rows. A bar appears with **Send campaign**, **Tag**, **Assign owner**, **Change stage**, **Export**, **Delete** and **More** (**Update**, add to or remove from a group, untag, **Marketing consent**). **Marketing consent** records a subscription or an unsubscription on one channel for each ticked contact. A subscription needs a note of how they agreed, and you confirm before anything is written. Untick everything and the bar goes away.
 7. To change several contacts at once, tick them and choose **Assign owner**, **Change stage** or **More**, then **Update**. Set the stage, status or owner, or use **Add property** under **Custom properties** to pick a property and give it one value for everyone selected. **Clear** empties that property on all of them; the **×** in the corner of its row takes it off the list so it is left alone. Anything you do not touch stays as it is.
 
 ## The table
@@ -55,9 +55,10 @@ Every contact can have one **owner**, the person who looks after it. A contact y
 ## Options and settings
 
 - The **...** menu at the end of the toolbar holds **Bulk upload**, **Export all**, **Remove duplicates**, **New group**, **Save as segment** (when filters are on) and **Show stats**.
-- **Bulk upload** takes a CSV with a header row. The preview shows which columns were recognised and how many contacts would be created, updated or rejected. Rejected rows can be downloaded.
+- **Bulk upload** takes a CSV with a header row. The preview shows which columns were recognised and how many contacts would be created, updated or rejected. A rejected custom property names its column. Rejected rows can be downloaded. **Download sample CSV** gives a file with every built-in column and one example per custom property of your workspace, in the format the import reads (dates as 2026-05-10, multi-select options separated by commas).
 - **Remove duplicates** merges contacts sharing a phone number into the oldest one. It cannot be undone.
-- **Save as segment** turns the current filters into a [segment](help:segments-overview).
+- **Save as segment** turns the current filters into a [segment](help:segments-overview). Under **Who can see it** choose **Private**, **Shared** (everyone who can view segments) or **Specific people** (pick the people and teams who can see it).
+- **Update** on selected contacts sets the same values on all of them. **Add property** lists the built-in text properties (first name, last name, middle name, language, source, address, memo) beside your own. A phone property has a country picker, and a dependent property can be added only after the property it depends on has a value to set; its choices then follow that value.
 - The list and board buttons switch between the table and a board with one column per lifecycle stage. The refresh button reloads the list and the counts.
 - A contact can carry a quiet **Uncontacted** marker (a dot beside the name, a chip in its header): nobody on the team has reached out yet. The **Uncontacted** view and chip appear once any contact has it. Mark or unmark contacts from the **More** menu, and choose when it is set or cleared in [Uncontacted leads](help:uncontacted-leads).
 

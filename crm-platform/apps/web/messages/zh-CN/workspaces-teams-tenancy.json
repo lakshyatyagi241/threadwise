@@ -66,10 +66,10 @@
       "pending": "待处理",
       "you": "您",
       "presence": {
-        "online": "在线",
-        "away": "离开",
+        "online": "可接待",
+        "away": "离开，非工作时间",
         "busy": "忙碌",
-        "offline": "离线"
+        "offline": "离开"
       },
       "inactive": "未激活",
       "roleFor": "{name} 的角色",
@@ -410,8 +410,8 @@
     "availability": {
       "label": "在线状态",
       "available": "可接待",
-      "offline": "离线",
-      "hint": "离线期间，系统不会自动给你分配新聊天。你已有的聊天仍归你。",
+      "offline": "离开",
+      "hint": "离开期间，不会自动给你分配新的聊天。你已有的聊天仍归你。",
       "failed": "无法更改"
     },
     "myLeave": {

@@ -19,6 +19,10 @@ export const isEmailProvider = (provider: string | null | undefined): boolean =>
 export const isUsageBilled = (provider: string | null | undefined): boolean =>
   provider === 'sms' || provider === EMAIL_PROVIDER;
 
+/** The usage price a usage-billed run is checked at: `sms` for an SMS campaign, else `email` (see `isUsageBilled`). */
+export const usageKindOf = (provider: string | null | undefined): 'sms' | 'email' =>
+  provider === 'sms' ? 'sms' : 'email';
+
 /** Reference's words for a recipient the run cannot mail, stamped on the recipient row. */
 export const NO_EMAIL_ADDRESS = 'No email address on this contact';
 export const DUPLICATE_EMAIL = 'Duplicate email address — already sent on this run';

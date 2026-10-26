@@ -15,6 +15,7 @@ import { DEFAULT_FILTERS, type ListFilters } from '../lib/list';
 import { DateRangePicker } from './date-range-picker';
 import { MultiSelect } from './multi-select';
 import { TagChip } from './tag-chip';
+import { channelPickerLabels } from '../lib/channel-labels';
 
 /** The statuses the window offers: Resolved stands for resolved and closed, as everywhere else in the inbox. Spam is offered so an agent can find what was marked. */
 const STATUS_CHOICES = CONVERSATION_STATUSES.filter((s) => s !== 'closed');
@@ -86,6 +87,7 @@ function FiltersBody({ onClose, filters, onApply, channels }: FiltersDialogProps
   const library = tags.data?.data ?? [];
   // Email mailboxes have their own entry in the list's channel box; the window offers the chat channels.
   const visibleChannels = (channels ?? []).filter((c) => c.kind !== 'email');
+  const channelLabels = channelPickerLabels(visibleChannels);
 
   function apply() {
     onApply({
@@ -241,7 +243,7 @@ function FiltersBody({ onClose, filters, onApply, channels }: FiltersDialogProps
                 emptyText={f('noMatch')}
                 value={d.channelIds}
                 onChange={(channelIds) => set({ channelIds })}
-                options={visibleChannels.map((c) => ({ id: c.id, label: c.name }))}
+                options={visibleChannels.map((c) => ({ id: c.id, label: channelLabels.get(c.id) ?? c.name }))}
               />,
             )}
 

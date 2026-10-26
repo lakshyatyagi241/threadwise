@@ -196,7 +196,10 @@
       "next": "次へ",
       "pageOf": "{pages, number} ページ中 {page, number} ページ",
       "perPage": "1ページあたりのセグメント数",
-      "perPageOption": "1ページあたり {count, number} 件"
+      "perPageOption": "1ページあたり {count, number} 件",
+      "colCreatedBy": "作成者",
+      "colCreatedAt": "作成日時",
+      "colModifiedBy": "更新者"
     },
     "actions": {
       "forbidden": "その操作を行う権限がありません。",

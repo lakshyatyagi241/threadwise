@@ -908,7 +908,12 @@
             },
             "prev": "Cartão anterior",
             "next": "Próximo cartão",
-            "goTo": "Cartão {n}"
+            "goTo": "Cartão {n}",
+            "saveCopy": "Salvar uma cópia",
+            "saveCopyHint": "Guarda esta imagem no nosso servidor para que o chat de cada visitante possa mostrá-la. Uma imagem de um site que não permite compartilhá-la não pode ser copiada: envie-a no lugar.",
+            "saving": "Salvando…",
+            "copyFailed": "Não foi possível salvar uma cópia: {message}",
+            "imageFormats": "Formatos aceitos: JPG, JPEG ou PNG."
           },
           "condition": {
             "info": "Adicione regras (uma variável, uma comparação e um valor). Una-as com AND ou OR e aninhe grupos quando precisar.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (não está no espaço de trabalho)",
           "templateLabel": "Template aprovado",
           "templateHint": "Apenas templates aprovados do espaço de trabalho aparecem aqui. <link>Criar um novo →</link>",
+          "statusExits": "Adicionar saídas de status (Enviado, Entregue, Lido, Respondido, Falhou)",
+          "statusExitsHint": "O fluxo sai pela primeira saída que tem uma etapa ligada: Enviado assim que o modelo é aceito, Entregue ou Lido quando o WhatsApp informa, Respondido quando o cliente escreve, Falhou se não foi possível enviar. Um botão tocado pelo cliente sai pela própria saída.",
           "type": "Tipo",
           "kindText": "Texto",
           "kindImage": "Imagem",
@@ -1379,12 +1386,12 @@
           "stageHint": "Quando um negócio é movido PARA este estágio do funil, o contato vinculado é inscrito. Gerencie os estágios no quadro /deals.",
           "rulesLabel": "Vincular a regras de palavra-chave de comentário",
           "rulesHint": "Marque as regras que devem iniciar este fluxo. Deixe todas desmarcadas para rodar em qualquer regra de Comentário → DM.",
-          "rulesNone": "Nenhuma regra de palavra-chave de Comentário → DM ainda. Crie-as em <link>/auto-reply</link> (Instagram · gatilho “Comentário → DM”) e escolha-as aqui.",
+          "rulesNone": "Ainda não há regras de palavra-chave de Comentário → DM, por isso não há nada para escolher aqui.",
           "ruleFallback": "Regra {id}",
           "ruleOff": "desativada",
           "orderPlaced": "Dispara em todo novo pedido. O cliente do pedido é associado a um contato salvo e inscrito.",
           "automatic": "Dispara automaticamente — nenhuma configuração extra necessária.",
-          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Alterne o modo Ausente na página <link>Resposta automática</link>. Cada contato é inscrito uma vez.",
+          "away": "Dispara em qualquer mensagem recebida enquanto o <b>modo Ausente</b> está ATIVO. Cada contato é inscrito uma vez.",
           "outOfHours": "Dispara em qualquer mensagem recebida <b>fora do horário comercial do seu espaço de trabalho</b>. Defina o horário comercial nas configurações do espaço de trabalho. Cada contato é inscrito uma vez.",
           "manualEnroll": "Você inscreverá contatos manualmente na <link>lista /flows</link> pelo botão <b>Inscrever</b> ao lado deste fluxo.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Este link curto ainda não foi consultado. Saia do campo ou tente de novo.",
           "resolve_failed": "Não foi possível ler este link. Verifique se ele abre no Google Maps ou informe as coordenadas."
         }
+      },
+      "flowImage": {
+        "title": "Imagem não carregada",
+        "empty": "o link está vazio",
+        "notAddress": "o link não é um endereço da web (deve começar com https://)",
+        "failed": "não carregou (o link pode estar errado, ser privado, bloqueado ou não ser uma imagem)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
       "simAbandon": "Abandono simulado → saída \"abandonado\"",
       "locationSkipped": "(localização) ignorada: sem coordenadas válidas",
-      "faqLine": "(simulado) Responder com perguntas frequentes: a base de conhecimento não é pesquisada no chat de teste, seguindo \"sem correspondência\"."
+      "faqLine": "(simulado) Responder com perguntas frequentes: a base de conhecimento não é pesquisada no chat de teste, seguindo \"sem correspondência\".",
+      "carouselNoMatch": "“{value}” não é um dos botões. Toque em um ou digite o texto exatamente."
     }
   }
 }

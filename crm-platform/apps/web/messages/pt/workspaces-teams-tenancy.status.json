@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Disponível",
+        "away": "Ausente",
+        "onLeaveUntil": "De licença até {date}",
+        "onLeaveOpen": "De licença",
+        "awayHours": "Ausente fora do horário de trabalho",
+        "label": "Seu status"
+      },
+      "menu": {
+        "title": "Menu de status",
+        "update": "Atualizar status",
+        "setAway": "Definir como ausente",
+        "setAvailable": "Definir como disponível",
+        "failed": "Não foi possível alterar seu status.",
+        "automate": "Automatizar status",
+        "manage": "Gerenciar horário de trabalho e ausência do escritório",
+        "workingHours": "Horário de atendimento",
+        "timeOff": "Folga",
+        "outsideNotice": "Fora do horário de trabalho",
+        "locked": "A barra de status está incluída em um plano superior. A chave Disponível / Ausente do menu da sua conta continua funcionando."
+      },
+      "hours": {
+        "title": "Seu horário de trabalho",
+        "titleFor": "Horário de trabalho de {name}",
+        "lead": "Escolha quando você está disponível. Fora desse horário, seu status muda para Ausente automaticamente.",
+        "leadOther": "Escolha quando esta pessoa está disponível. Fora desse horário, o status dela muda para Ausente automaticamente.",
+        "locked": "O status automático por horário de trabalho está incluído em um plano superior.",
+        "viewOnly": "Você pode ver este horário, mas não alterá-lo.",
+        "automate": "Automatizar meu status",
+        "automateHint": "Ausente fora deste horário, Disponível dentro dele. Um status definido manualmente dura até a próxima mudança de horário.",
+        "emptyWarning": "Nenhum dia está aberto, então você sempre aparecerá como Disponível. Abra pelo menos um dia.",
+        "timezone": "Fuso horário",
+        "timezoneHint": "Começa pelo fuso horário do seu espaço de trabalho ({zone}).",
+        "useWorkspaceZone": "Usar o fuso horário do espaço de trabalho"
+      },
+      "members": {
+        "hoursAction": "Horário de atendimento"
+      }
+    }
+  }
+}

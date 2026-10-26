@@ -1,16 +1,14 @@
 import { randomBytes } from 'node:crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
-  MEMBER_AVAILABILITY_CHANGED,
+  AGENT_STATUS_AUTOMATION_FEATURE,
   ERROR_CODES,
   WSP_INVITE_TTL_DAYS,
   inviteWspMemberSchema,
   type ChangeWspMemberRoleInput,
   type InviteWspMemberInput,
   type InviteWspMemberResponse,
-  type SetWspAvailabilityInput,
   type UpdateWspMemberDetailsInput,
-  type WspAvailability,
   type ListWspMembersQuery,
   type PageResponse,
   type WspMember,
@@ -19,6 +17,7 @@ import {
   type WspRoleTier,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { presenceFor } from '../../common/agent-status';
 import { RequestContextStore, type RequestContext } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
@@ -97,6 +96,7 @@ export class MembersService {
         this.repo.rolesForUsers(tx, ctx.orgId, ids),
         this.repo.teamUuidsForUsers(tx, ctx.orgId, ids),
       ]);
+      await this.applyPresence(tx, ctx.orgId, page.rows);
       return {
         data: page.rows.map((row) =>
           toMemberResponse(
@@ -383,52 +383,6 @@ export class MembersService {
     });
   }
 
-  // --- availability -------------------------------------------------------------------------------------------------------------
-
-  /** The caller's own switch, as routing reads it: no stored status counts as `online`. */
-  async myAvailability(): Promise<WspAvailability> {
-    const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => ({
-      status:
-        (await this.repo.availabilityOf(tx, ctx.orgId, ctx.userId!)) === 'offline'
-          ? 'offline'
-          : 'online',
-    }));
-  }
-
-  /**
-   * Available / Offline for the caller only. `offline` takes the agent out of every automatic assignment (routing rules, round
-   * robin, least busy); conversations already theirs stay theirs. Anything other than offline reads available.
-   */
-  async setMyAvailability(input: SetWspAvailabilityInput): Promise<WspAvailability> {
-    const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const before = await this.repo.availabilityOf(tx, ctx.orgId, ctx.userId!);
-      await this.repo.setAvailability(tx, ctx.orgId, ctx.userId!, input.status);
-      if ((before === 'offline' ? 'offline' : 'online') !== input.status) {
-        await this.repo.audit(tx, {
-          orgId: ctx.orgId,
-          actorId: ctx.actorId,
-          actorType: ctx.actorType,
-          module: 'members',
-          recordId: ctx.userId!,
-          action: 'member.availability_changed',
-          delta: { availability: { old: before, new: input.status } },
-          requestId: ctx.requestId,
-        });
-        // Routing reacts to a person going away (the away rules): ids only, the consumer reads the rest.
-        await this.outbox.emit(tx, {
-          aggregateModule: 'members',
-          aggregateId: ctx.userId!,
-          orgId: ctx.orgId,
-          eventType: MEMBER_AVAILABILITY_CHANGED,
-          payload: { userId: ctx.userId!, status: input.status, reason: 'self' },
-        });
-      }
-      return { status: input.status };
-    });
-  }
-
   // --- remove -------------------------------------------------------------------------------------------------------------------
 
   async remove(uuid: string): Promise<void> {
@@ -620,7 +574,28 @@ export class MembersService {
       this.repo.rolesForUsers(tx, orgId, [userId]),
       this.repo.teamUuidsForUsers(tx, orgId, [userId]),
     ]);
+    await this.applyPresence(tx, orgId, [row!]);
     return toMemberResponse(row!, roles, teams.get(userId) ?? []);
+  }
+
+  /**
+   * The presence dot of the member list is the EFFECTIVE status (docs/specs/agent-status-bar.md), not the stored word: Away by working
+   * hours, on leave, and "never switched" (Available) are all decided by the one rule. A member who has not joined yet has no status.
+   */
+  private async applyPresence(tx: Tx, orgId: number, rows: MemberRow[]): Promise<void> {
+    const joined = rows.filter((r) => r.status === 'active' && r.joinedAt !== null);
+    if (joined.length === 0) return;
+    const automation = await this.entitlements.featureEnabled(
+      orgId,
+      AGENT_STATUS_AUTOMATION_FEATURE,
+    );
+    const words = await presenceFor(
+      tx,
+      orgId,
+      joined.map((r) => r.id),
+      automation,
+    );
+    for (const r of joined) r.presence = words.get(r.id) ?? 'online';
   }
 
   /** A member of this organization who has not been removed, else 404 (a removed or foreign member looks the same). */

@@ -153,7 +153,10 @@
         "hours": "{count} giờ",
         "days": "{count} ngày"
       },
-      "unsnoozesAt": "Mở lại lúc {time}"
+      "unsnoozesAt": "Mở lại lúc {time}",
+      "erased": "Liên hệ đã xóa",
+      "erasedHint": "Các liên hệ này đã bị xóa, còn cuộc trò chuyện được giữ lại mà không có thông tin cá nhân và nội dung tin nhắn. Thời gian hiển thị tin nhắn cuối vì ngày xóa không được ghi lại.",
+      "erasedTitle": "Liên hệ đã xóa"
     },
     "status": {
       "received": "Đã nhận",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
       "resolvedBanner": "Cuộc trò chuyện này đã được giải quyết. Hãy mở lại để trả lời.",
+      "resolvedWebchatBanner": "Cuộc trò chuyện web này đã được giải quyết và không thể mở lại.",
       "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",
+      "session": {
+        "header": "{range} · {count, plural, other {# tin nhắn}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Tải tin nhắn trước đó",
       "empty": "Chưa có tin nhắn trong cuộc trò chuyện này.",
       "newMessageAnnounce": "Tin nhắn mới: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Không có kết quả",
       "searchPrev": "Kết quả trước",
       "searchNext": "Kết quả sau",
-      "searchClose": "Đóng tìm kiếm"
+      "searchClose": "Đóng tìm kiếm",
+      "erasedBadge": "Đã xóa",
+      "erasedBanner": "Liên hệ này đã bị xóa. Nội dung và phương tiện của tin nhắn đã được gỡ bỏ, nên không thể gửi gì. Dòng thời gian và thời gian vẫn được giữ lại."
     },
     "groupThread": {
       "openGroup": "Mở nhóm",
@@ -542,17 +554,17 @@
         "onLeave": "Đang nghỉ phép",
         "onLeaveUntil": "Nghỉ phép đến {date}",
         "availability": {
-          "online": "Trực tuyến",
-          "away": "Vắng mặt",
+          "online": "Sẵn sàng",
+          "away": "Vắng mặt, ngoài giờ làm việc",
           "busy": "Bận",
-          "offline": "Ngoại tuyến"
+          "offline": "Vắng mặt"
         }
       },
       "presence": {
-        "online": "Trực tuyến",
-        "away": "Vắng mặt",
+        "online": "Sẵn sàng",
+        "away": "Vắng mặt, ngoài giờ làm việc",
         "busy": "Bận",
-        "offline": "Ngoại tuyến"
+        "offline": "Vắng mặt"
       },
       "notes": {
         "tab": "Ghi chú liên hệ",
@@ -715,6 +727,7 @@
         "not_linked": "Kênh của cuộc trò chuyện này chưa được liên kết với số WhatsApp nào, nên không gửi được mẫu tin nào từ đây.",
         "paused": "WhatsApp đã tạm dừng. Có thể gửi lại sau khi hết thời gian tạm dừng.",
         "media_header": "Có tiêu đề là hình ảnh, video hoặc tài liệu, hiện chưa thể gửi từ hộp thư.",
+        "carousel": "Là băng chuyền (thẻ có hình ảnh) nên chưa thể gửi từ hộp thư đến.",
         "header_variable": "Có biến trong tiêu đề, hiện chưa thể điền từ hộp thư.",
         "dynamic_button": "Có liên kết nút với biến, hiện chưa thể điền từ hộp thư.",
         "authentication": "Mẫu mã OTP do hệ thống gửi, không gửi từ hộp thư.",

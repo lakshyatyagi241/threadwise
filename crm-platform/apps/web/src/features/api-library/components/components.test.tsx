@@ -25,6 +25,7 @@ const state = vi.hoisted(() => ({
   detail: {} as Record<string, unknown>,
   logs: {} as Record<string, unknown>,
   options: {} as Record<string, unknown>,
+  logApis: {} as Record<string, unknown>,
   query: '',
 }));
 
@@ -45,15 +46,20 @@ vi.mock('../api/hooks', () => ({
   useApiLogs: () => state.logs,
   useApiLog: () => q(),
   useApiLibraryOptions: () => state.options,
+  useApiLogApis: () => state.logApis,
   useContactProperties: () =>
-    q({ data: { data: [{ key: 'email', label: 'Email', kind: 'system' }] } }),
+    q({ data: { data: [{ key: 'email', label: 'Email', type: 'email', kind: 'system' }] } }),
 }));
 
 import { ApiFormScreen } from './api-form-screen';
 import { ApiListScreen, ApiTable } from './api-list-screen';
 import { DeleteApiDialog } from './delete-api-dialog';
+import { LogFiltersBar } from './log-filters-bar';
 import { LogsPanel } from './logs-panel';
 import { LogsScreen } from './logs-screen';
+import { EMPTY_LOG_FILTERS } from '../lib/log-filters';
+import { ApiError } from '@/lib/api/errors';
+import { MappingEditor } from './mapping-editor';
 import { PageHeader } from './page-chrome';
 import { Pagination } from './pagination';
 import { ResponseTree } from './response-tree';
@@ -128,6 +134,7 @@ beforeEach(() => {
   state.usage = q({ data: { data: [] } });
   state.logs = listOf([]);
   state.options = q({ data: { data: [] } });
+  state.logApis = q({ data: { data: [] } });
   state.detail = q();
 });
 
@@ -289,9 +296,23 @@ describe('logs', () => {
   });
 
   it('has the filters of the old drawer and the new ones', () => {
-    const out = html(<LogsPanel paging={paging} apis={[{ id: ID, name: 'Orders' }]} />);
+    const out = html(
+      <LogsPanel paging={paging} apis={[{ id: ID, name: 'Orders', deleted: false }]} />,
+    );
     for (const label of ['Search', 'Result', 'Status code', 'Source', 'From', 'To', 'All APIs'])
       expect(out).toContain(label);
+  });
+
+  it('marks a deleted API in the filter, and a run with no API name shows as not saved', () => {
+    const apis = [
+      { id: ID, name: 'Orders', deleted: false },
+      { id: '00000000-0000-4000-8000-000000000002', name: 'qatestapi', deleted: true },
+    ];
+    const out = html(<LogsPanel paging={paging} apis={apis} />);
+    expect(out).toContain('qatestapi (deleted)');
+    expect(out).toContain('>Orders<');
+    state.logs = listOf([log({ apiName: '' })]);
+    expect(html(<LogsPanel paging={paging} />)).toContain('Not saved');
   });
 
   it('shows empty and error states', () => {
@@ -299,6 +320,35 @@ describe('logs', () => {
     expect(html(<LogsPanel paging={paging} />)).toContain('No runs yet');
     state.logs = listOf([], { isError: true });
     expect(html(<LogsPanel paging={paging} />)).toContain('Try again');
+  });
+
+  it('marks the search field when it is over the limit, instead of a red bar', () => {
+    const out = html(
+      <LogFiltersBar
+        value={{ ...EMPTY_LOG_FILTERS, search: 'a'.repeat(201) }}
+        onChange={() => undefined}
+        searchInvalid
+      />,
+    );
+    expect(out).toContain('Search can be at most 200 characters. Shorten it to search.');
+    expect(out).toContain('aria-invalid="true"');
+  });
+
+  it('a search the API refuses marks the field and keeps the list, with no red bar', () => {
+    state.logs = listOf([], {
+      isError: true,
+      error: new ApiError(
+        422,
+        'VALIDATION_FAILED',
+        'Request payload failed validation',
+        undefined,
+        [{ path: 'search', message: 'String must contain at most 200 character(s)' }],
+      ),
+    });
+    const out = html(<LogsPanel paging={paging} />);
+    expect(out).toContain('Search can be at most 200 characters. Shorten it to search.');
+    expect(out).not.toContain('Try again');
+    expect(out).not.toContain('Some fields are not valid');
   });
 
   it('the logs page needs the read permission', () => {
@@ -335,6 +385,66 @@ describe('response tree', () => {
   it('cannot pick a key the path syntax cannot hold', () => {
     const out = html(<ResponseTree {...props} json={{ 'a b': 1 }} />);
     expect(out).toContain('path not supported');
+  });
+});
+
+describe('response mapping warnings', () => {
+  const properties = [
+    { key: 'name', label: 'Name', type: 'text', kind: 'system' as const },
+    { key: 'decimal_number', label: 'Decimal Number', type: 'decimal', kind: 'custom' as const },
+  ];
+  const row = (id: string, path: string, contactProperty: string) => ({
+    id,
+    path,
+    contactProperty,
+    defaultValue: '',
+  });
+  const mapping = (rows: ReturnType<typeof row>[], lastJson: unknown) =>
+    html(
+      <MappingEditor
+        rows={rows}
+        onChange={() => undefined}
+        properties={properties}
+        propertiesState="ready"
+        lastJson={lastJson}
+        errors={{ fields: {}, general: [] }}
+      />,
+    );
+  const answer = { slideshow: { title: 'Sample Slide Show', author: 'Yours Truly' } };
+
+  it('says two rows cannot save into one property, on both rows', () => {
+    const out = mapping(
+      [
+        row('m1', 'slideshow.title', 'decimal_number'),
+        row('m2', 'slideshow.author', 'decimal_number'),
+      ],
+      answer,
+    );
+    expect(out.split('Another row saves into this property').length - 1).toBe(2);
+  });
+
+  it('warns when the last test returned text for a number property', () => {
+    const out = mapping([row('m1', 'slideshow.title', 'decimal_number')], answer);
+    expect(out).toContain('A number field takes numbers only');
+    expect(out).toContain('Sample Slide Show');
+  });
+
+  it('asks for a test before judging a number property, and says nothing once a number is answered', () => {
+    expect(mapping([row('m1', 'slideshow.title', 'decimal_number')], null)).toContain(
+      'Run a test to check that this response field gives a number.',
+    );
+    expect(
+      mapping([row('m1', 'slideshow.title', 'decimal_number')], { slideshow: { title: 7 } }),
+    ).not.toContain('takes numbers only');
+  });
+
+  it('stays quiet for a text property, and for a path the answer does not have', () => {
+    expect(mapping([row('m1', 'slideshow.title', 'name')], answer)).not.toContain(
+      'takes numbers only',
+    );
+    expect(mapping([row('m1', 'slideshow.missing', 'decimal_number')], answer)).not.toContain(
+      'takes numbers only',
+    );
   });
 });
 

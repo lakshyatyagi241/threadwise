@@ -908,7 +908,12 @@
             },
             "prev": "Kartu sebelumnya",
             "next": "Kartu berikutnya",
-            "goTo": "Kartu {n}"
+            "goTo": "Kartu {n}",
+            "saveCopy": "Simpan salinan",
+            "saveCopyHint": "Menyimpan gambar ini di server kami agar chat setiap pengunjung dapat menampilkannya. Gambar dari situs yang menolak membagikannya tidak bisa disalin: unggah saja.",
+            "saving": "Menyimpan…",
+            "copyFailed": "Tidak dapat menyimpan salinan: {message}",
+            "imageFormats": "Format yang diterima: JPG, JPEG, atau PNG."
           },
           "condition": {
             "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",
@@ -1262,6 +1267,8 @@
           "notInWorkspace": "{value} (tidak ada di workspace)",
           "templateLabel": "Templat yang disetujui",
           "templateHint": "Hanya templat yang disetujui dari workspace yang tampil di sini. <link>Buat yang baru →</link>",
+          "statusExits": "Tambahkan jalur status (Terkirim, Sampai, Dibaca, Dibalas, Gagal)",
+          "statusExitsHint": "Alur keluar lewat jalur pertama yang memiliki langkah terhubung: Terkirim begitu templat diterima, Sampai atau Dibaca saat WhatsApp melaporkan, Dibalas saat pelanggan menulis, Gagal jika tidak bisa dikirim. Tombol yang diketuk pelanggan keluar lewat jalurnya sendiri.",
           "type": "Jenis",
           "kindText": "Teks",
           "kindImage": "Gambar",
@@ -1379,12 +1386,12 @@
           "stageHint": "Saat deal dipindahkan KE tahap pipeline ini, kontak terkaitnya didaftarkan. Kelola tahap di papan /deals.",
           "rulesLabel": "Kaitkan ke aturan kata kunci komentar",
           "rulesHint": "Centang aturan yang harus meluncurkan alur ini. Biarkan semua tidak dicentang untuk berjalan pada aturan Komentar → DM apa pun.",
-          "rulesNone": "Belum ada aturan kata kunci Komentar → DM. Buat di <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), lalu pilih di sini.",
+          "rulesNone": "Belum ada aturan kata kunci Komentar → DM, jadi tidak ada yang bisa dipilih di sini.",
           "ruleFallback": "Aturan {id}",
           "ruleOff": "nonaktif",
           "orderPlaced": "Aktif untuk setiap pesanan baru. Pelanggan pesanan dicocokkan dengan kontak tersimpan dan didaftarkan.",
           "automatic": "Aktif otomatis — tidak perlu konfigurasi tambahan.",
-          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Ubah mode Away dari halaman <link>Balasan Otomatis</link>. Setiap kontak didaftarkan sekali.",
+          "away": "Aktif pada pesan masuk apa pun saat <b>mode Away</b> AKTIF. Setiap kontak didaftarkan sekali.",
           "outOfHours": "Aktif pada pesan masuk apa pun yang datang <b>di luar Jam Kerja workspace</b> Anda. Atur Jam Kerja di pengaturan workspace. Setiap kontak didaftarkan sekali.",
           "manualEnroll": "Anda akan mendaftarkan kontak secara manual dari <link>daftar /flows</link> melalui tombol <b>Daftarkan</b> di samping alur ini.",
           "ext": {
@@ -2050,6 +2057,12 @@
           "unresolved": "Tautan pendek ini belum diperiksa. Keluar dari kolom atau coba lagi.",
           "resolve_failed": "Tautan ini tidak dapat dibaca. Pastikan tautan terbuka di Google Maps, atau masukkan koordinat."
         }
+      },
+      "flowImage": {
+        "title": "Gambar tidak dimuat",
+        "empty": "tautan kosong",
+        "notAddress": "tautan bukan alamat web (harus diawali https://)",
+        "failed": "tidak dapat dimuat (tautan mungkin salah, privat, diblokir, atau bukan gambar)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid",
-      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\"."
+      "faqLine": "(simulasi) Jawab dari FAQ: basis pengetahuan tidak dicari di chat uji, mengambil \"tidak cocok\".",
+      "carouselNoMatch": "“{value}” bukan salah satu tombol. Ketuk salah satu, atau ketik teksnya persis."
     }
   }
 }

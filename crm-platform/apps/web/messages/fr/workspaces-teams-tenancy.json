@@ -66,10 +66,10 @@
       "pending": "en attente",
       "you": "Vous",
       "presence": {
-        "online": "En ligne",
-        "away": "Absent",
+        "online": "Disponible",
+        "away": "Absent, hors des heures de travail",
         "busy": "Occupé",
-        "offline": "Hors ligne"
+        "offline": "Absent"
       },
       "inactive": "Inactif",
       "roleFor": "Rôle de {name}",
@@ -410,8 +410,8 @@
     "availability": {
       "label": "Disponibilité",
       "available": "Disponible",
-      "offline": "Hors ligne",
-      "hint": "Tant que vous êtes hors ligne, aucun nouveau chat ne vous est attribué automatiquement. Les chats que vous avez déjà restent à vous.",
+      "offline": "Absent",
+      "hint": "Tant que vous êtes absent, aucun nouveau chat ne vous est attribué automatiquement. Les chats que vous avez déjà restent à vous.",
       "failed": "Modification impossible"
     },
     "myLeave": {

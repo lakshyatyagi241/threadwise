@@ -48,7 +48,8 @@
       "email_mailboxes": "E-Mail-Postfächer",
       "email_monthly": "E-Mails pro Monat",
       "storage_gb": "Speicher (GB)",
-      "teams": "Teams"
+      "teams": "Teams",
+      "webbot_messages": "Kostenlose Website-Chatbot-Nachrichten pro Monat"
     },
     "features": {
       "automation": "Automatisierung",
@@ -91,7 +92,9 @@
       "record_assignment": "Regeln zur Datensatzzuweisung",
       "team_hierarchy": "Teamhierarchie und Manager",
       "custom_roles": "Eigene Rollen und Bereiche",
-      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent"
+      "inbox_assignment_sticky": "Intelligentes Routing: Kontaktinhaber und fester Agent",
+      "agent_status_bar": "Statusleiste: Verfügbar / Nicht verfügbar in der oberen Leiste und im Posteingang",
+      "agent_status_automation": "Status automatisieren: persönliche Arbeitszeiten und automatisch nicht verfügbar"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
       "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
       "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
-      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
+      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt.",
+      "webbot_messages": "Website-Chatbot-Nachrichten, die in jedem Kalendermonat kostenlos enthalten sind. Jede weitere Nachricht wird dem Wallet belastet. Leer oder 0 = keine inklusive."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",
@@ -584,7 +588,13 @@
       "askOwner": "Bitte den Kontoinhaber, es hinzuzufügen.",
       "unavailableTitle": "{addon} braucht einen aktiven bezahlten Tarif",
       "unavailableLead": "Wähle zuerst einen bezahlten Tarif, dann kannst du {addon} hinzufügen.",
-      "viewPlans": "Tarife ansehen"
+      "viewPlans": "Tarife ansehen",
+      "disabledTitle": "{addon} ist ausgeschaltet",
+      "disabledLead": "Dein Tarif enthält {addon}, aber es ist für diesen Arbeitsbereich ausgeschaltet. Die Einstellungen bleiben erhalten.",
+      "disabledAsk": "Bitte den Kontoinhaber, es einzuschalten.",
+      "turnOn": "Einschalten",
+      "turnOnForbidden": "Du hast keine Berechtigung, dies einzuschalten. Bitte den Kontoinhaber.",
+      "turnOnFailed": "{addon} konnte nicht eingeschaltet werden. Bitte versuche es erneut."
     }
   }
 }

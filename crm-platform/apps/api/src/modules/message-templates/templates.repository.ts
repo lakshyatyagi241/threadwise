@@ -30,6 +30,10 @@ export interface TemplateRow {
   headerMediaKey: string | null;
   /** The pin of a `location` header (`{latitude, longitude, name, address}`). */
   headerLocation: unknown;
+  /** A carousel's cards: `[{ format, image, headerHandle, headerSampleUrl, body, buttons }]`; null for every other type. */
+  carouselData: unknown;
+  /** A limited-time-offer template's `{ text, hasExpiration }`; null for every other type. */
+  limitedOffer: unknown;
   parameterFormat: string;
   status: string;
   metaStatus: string | null;
@@ -55,7 +59,7 @@ export interface TemplateRow {
 const SELECT = sql.raw(`
   t.id, t.uuid, t.user_id, t.template_name, t.language, t.header, t.template_body, t.footer, t.code_expiration_minutes,
   t.buttons, t.variable_map, t.category, t.meta_category, t.template_type, t.attachment_type, t.attachment_file,
-  t.header_sample_url, t.header_location, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
+  t.header_sample_url, t.header_media_key, t.header_location, t.carousel_data, t.limited_offer, t.parameter_format, t.status, t.meta_status, t.meta_template_id, t.quality_score,
   t.rejection_reason, t.rejection_reason_code, t.approved_at, t.submitted_at, t.last_synced_at, t.paused_until, t.meta_edit_log,
   t.provider_config_id, c.uuid AS connection_uuid, t.row_version, t.created_at, t.updated_at,
   to_char(t.created_at at time zone 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.US"Z"') AS created_at_iso`);
@@ -87,6 +91,8 @@ function toRow(r: Raw): TemplateRow {
     headerSampleUrl: (r.header_sample_url as string | null) ?? null,
     headerMediaKey: (r.header_media_key as string | null) ?? null,
     headerLocation: r.header_location ?? null,
+    carouselData: r.carousel_data ?? null,
+    limitedOffer: r.limited_offer ?? null,
     parameterFormat: String(r.parameter_format),
     status: String(r.status),
     metaStatus: (r.meta_status as string | null) ?? null,
@@ -112,8 +118,8 @@ export interface ListFilter {
   limit: number;
   cursor?: string;
   status?: string;
-  /** The library's status tab: approved / pending (in review and drafts) / rejected (rejected, paused, disabled). */
-  statusGroup?: 'approved' | 'pending' | 'rejected';
+  /** The library's status tab: approved / pending (in review) / draft (saved, not submitted yet) / rejected (rejected, paused, disabled). */
+  statusGroup?: 'approved' | 'pending' | 'draft' | 'rejected';
   sort?: 'newest' | 'oldest' | 'name-asc' | 'name-desc';
   category?: string;
   connectionUuid?: string;
@@ -145,6 +151,8 @@ export interface NewTemplate {
   headerSampleUrl: string | null;
   headerMediaKey?: string | null;
   headerLocation?: unknown;
+  carouselData?: unknown;
+  limitedOffer?: unknown;
   parameterFormat: string;
   status: string;
   metaStatus?: string | null;
@@ -181,6 +189,8 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   headerSampleUrl: 'header_sample_url',
   headerMediaKey: 'header_media_key',
   headerLocation: 'header_location',
+  carouselData: 'carousel_data',
+  limitedOffer: 'limited_offer',
   parameterFormat: 'parameter_format',
   status: 'status',
   metaStatus: 'meta_status',
@@ -195,12 +205,20 @@ const COLUMN: Record<keyof TemplatePatch, string> = {
   metaEditLog: 'meta_edit_log',
   providerConfigId: 'provider_config_id',
 };
-const JSON_COLUMNS = new Set<string>(['buttons', 'variableMap', 'headerLocation', 'metaEditLog']);
+const JSON_COLUMNS = new Set<string>([
+  'buttons',
+  'variableMap',
+  'headerLocation',
+  'carouselData',
+  'limitedOffer',
+  'metaEditLog',
+]);
 
-/** The library's status tabs as Reference reads them: a draft is "in review", a paused or disabled template is "rejected". */
+/** The library's status tabs: a draft has a tab of its own (Reference lumped it under "in review"); a paused or disabled template is "rejected". */
 const GROUP_WHERE = {
   approved: sql`t.status IN ('approved', 'public')`,
-  pending: sql`t.status IN ('pending', 'draft')`,
+  pending: sql`t.status = 'pending'`,
+  draft: sql`t.status = 'draft'`,
   rejected: sql`t.status IN ('rejected', 'paused', 'disabled')`,
 } as const;
 
@@ -308,18 +326,26 @@ export class TemplatesRepository {
         count(*)::int AS n,
         count(*) FILTER (WHERE ${GROUP_WHERE.approved})::int AS approved,
         count(*) FILTER (WHERE ${GROUP_WHERE.pending})::int AS pending,
+        count(*) FILTER (WHERE ${GROUP_WHERE.draft})::int AS draft,
         count(*) FILTER (WHERE ${GROUP_WHERE.rejected})::int AS rejected
       FROM wa_templates t
       WHERE t.org_id = ${orgId}
       GROUP BY 1`);
     const categories: Record<string, number> = { all: 0 };
-    const statuses: Record<string, number> = { all: 0, approved: 0, pending: 0, rejected: 0 };
+    const statuses: Record<string, number> = {
+      all: 0,
+      approved: 0,
+      pending: 0,
+      draft: 0,
+      rejected: 0,
+    };
     for (const r of tabs.rows as Array<Record<string, unknown>>) {
       const n = Number(r.n);
       categories.all += n;
       statuses.all += n;
       statuses.approved += Number(r.approved);
       statuses.pending += Number(r.pending);
+      statuses.draft += Number(r.draft);
       statuses.rejected += Number(r.rejected);
       if (r.cat) categories[String(r.cat)] = (categories[String(r.cat)] ?? 0) + n;
     }
@@ -382,12 +408,12 @@ export class TemplatesRepository {
     const res = await tx.execute(sql`
       INSERT INTO wa_templates (org_id, user_id, template_name, language, header, template_body, footer,
         code_expiration_minutes, buttons, variable_map, category, meta_category, template_type, attachment_type,
-        attachment_file, header_sample_url, header_media_key, header_location, parameter_format, status, meta_status, meta_template_id, quality_score,
+        attachment_file, header_sample_url, header_media_key, header_location, carousel_data, limited_offer, parameter_format, status, meta_status, meta_template_id, quality_score,
         rejection_reason_code, approved_at, paused_until, submitted_at, last_synced_at, provider_config_id, channel)
       VALUES (${orgId}, ${v.userId}, ${v.templateName}, ${v.language}, ${v.header}, ${v.templateBody}, ${v.footer},
         ${v.codeExpirationMinutes}, ${JSON.stringify(v.buttons)}::jsonb, ${JSON.stringify(v.variableMap ?? {})}::jsonb,
         ${v.category}, ${v.metaCategory}, ${v.templateType}, ${v.attachmentType}, ${v.attachmentFile},
-        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
+        ${v.headerSampleUrl}, ${v.headerMediaKey ?? null}, ${v.headerLocation == null ? null : JSON.stringify(v.headerLocation)}::jsonb, ${v.carouselData == null ? null : JSON.stringify(v.carouselData)}::jsonb, ${v.limitedOffer == null ? null : JSON.stringify(v.limitedOffer)}::jsonb, ${v.parameterFormat}, ${v.status}, ${v.metaStatus ?? null}, ${v.metaTemplateId ?? null},
         ${v.qualityScore ?? null}, ${v.rejectionReasonCode ?? null}, ${v.approvedAt ?? null}, ${v.pausedUntil ?? null},
         ${v.submittedAt ?? null},
         ${v.lastSyncedAt ?? null}, ${v.providerConfigId}, 'waba')

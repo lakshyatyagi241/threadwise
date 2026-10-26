@@ -926,7 +926,12 @@
             },
             "prev": "Previous card",
             "next": "Next card",
-            "goTo": "Card {n}"
+            "goTo": "Card {n}",
+            "saveCopy": "Save a copy",
+            "saveCopyHint": "Keeps this picture on our server, so every visitor's chat can show it. A picture on a site that refuses to share it cannot be copied: upload it instead.",
+            "imageFormats": "Accepted formats: JPG, JPEG or PNG.",
+            "saving": "Saving…",
+            "copyFailed": "Could not save a copy: {message}"
           },
           "condition": {
             "info": "Add rules (a variable, a comparison and a value). Join them with AND or OR, and nest groups when you need to.",
@@ -1292,6 +1297,8 @@
           "notInWorkspace": "{value} (not in workspace)",
           "templateLabel": "Approved template",
           "templateHint": "Only approved templates from the workspace appear here. <link>Create a new one →</link>",
+          "statusExits": "Add status exits (Sent, Delivered, Read, Replied, Failed)",
+          "statusExitsHint": "The flow leaves by the first exit that has a step wired: Sent as soon as the template is accepted, Delivered or Read when WhatsApp reports it, Replied when the customer writes back, Failed if it could not be sent. A button the customer taps leaves by its own exit.",
           "type": "Type",
           "kindText": "Text",
           "kindImage": "Image",
@@ -1409,12 +1416,12 @@
           "stageHint": "When a deal is moved INTO this pipeline stage, its linked contact is enrolled. Manage stages on the /deals board.",
           "rulesLabel": "Bind to comment keyword rules",
           "rulesHint": "Tick the rules that should launch this flow. Leave all unticked to run on any Comment → DM rule.",
-          "rulesNone": "No Comment → DM keyword rules yet. Create them on <link>/auto-reply</link> (Instagram · trigger \"Comment → DM\"), then pick them here.",
+          "rulesNone": "No Comment → DM keyword rules yet, so there is nothing to pick here.",
           "ruleFallback": "Rule {id}",
           "ruleOff": "off",
           "orderPlaced": "Fires for every new order. The order's customer is matched to a saved contact and enrolled.",
           "automatic": "Fires automatically — no extra config needed.",
-          "away": "Fires on any incoming message while <b>Away mode</b> is ON. Toggle Away mode from the <link>Auto Reply</link> page. Each contact is enrolled once.",
+          "away": "Fires on any incoming message while <b>Away mode</b> is ON. Each contact is enrolled once.",
           "outOfHours": "Fires on any incoming message that arrives <b>outside your workspace Business Hours</b>. Set Business Hours in your workspace settings. Each contact is enrolled once.",
           "manualEnroll": "You'll enroll contacts manually from the <link>/flows list</link> via the <b>Enroll</b> button next to this flow.",
           "ext": {
@@ -1958,6 +1965,12 @@
             "description": "Today's date"
           }
         }
+      },
+      "flowImage": {
+        "title": "Image not loaded",
+        "empty": "the link is empty",
+        "notAddress": "the link is not a web address (it must start with https://)",
+        "failed": "it did not load (the link may be wrong, private, blocked, or not an image)"
       },
       "testRunner": {
         "dialogLabel": "Test runner",
@@ -2718,6 +2731,7 @@
       "waFormPrompt": "Please complete this form:",
       "selectForm": "(select a form)",
       "waFormLine": "(simulated) published Meta form {form} sent → out",
+      "carouselNoMatch": "“{value}” is not one of the buttons. Tap one, or type its text exactly.",
       "unknownNode": "(unknown node type \"{type}\" — skipping)",
       "nothingAfter": "Nothing connected after {type} — stop.",
       "canvasEmpty": "Canvas is empty. Add a trigger and at least one node, then click Restart.",

@@ -1,0 +1,44 @@
+{
+  "workspaces-teams-tenancy": {
+    "status": {
+      "pill": {
+        "available": "Tersedia",
+        "away": "Tidak di tempat",
+        "onLeaveUntil": "Cuti hingga {date}",
+        "onLeaveOpen": "Sedang cuti",
+        "awayHours": "Tidak di tempat di luar jam kerja",
+        "label": "Status Anda"
+      },
+      "menu": {
+        "title": "Menu status",
+        "update": "Perbarui status",
+        "setAway": "Setel sebagai tidak di tempat",
+        "setAvailable": "Setel sebagai tersedia",
+        "failed": "Status Anda tidak dapat diubah.",
+        "automate": "Otomatiskan status",
+        "manage": "Kelola jam kerja dan cuti dari kantor",
+        "workingHours": "Jam kerja",
+        "timeOff": "Cuti",
+        "outsideNotice": "Di luar jam kerja",
+        "locked": "Bilah status termasuk dalam paket yang lebih tinggi. Sakelar Tersedia / Tidak di tempat di menu akun Anda tetap berfungsi."
+      },
+      "hours": {
+        "title": "Jam kerja Anda",
+        "titleFor": "Jam kerja {name}",
+        "lead": "Pilih kapan Anda tersedia. Di luar jam ini status Anda otomatis berubah menjadi Tidak di tempat.",
+        "leadOther": "Pilih kapan orang ini tersedia. Di luar jam ini status mereka otomatis berubah menjadi Tidak di tempat.",
+        "locked": "Status otomatis berdasarkan jam kerja termasuk dalam paket yang lebih tinggi.",
+        "viewOnly": "Anda dapat melihat jam ini tetapi tidak dapat mengubahnya.",
+        "automate": "Otomatiskan status saya",
+        "automateHint": "Tidak di tempat di luar jam ini, Tersedia di dalamnya. Status yang Anda setel manual bertahan hingga pergantian jam berikutnya.",
+        "emptyWarning": "Tidak ada hari yang dibuka, jadi Anda akan selalu tampil sebagai Tersedia. Buka setidaknya satu hari.",
+        "timezone": "Zona waktu",
+        "timezoneHint": "Dimulai dari zona waktu ruang kerja Anda ({zone}).",
+        "useWorkspaceZone": "Gunakan zona waktu ruang kerja"
+      },
+      "members": {
+        "hoursAction": "Jam kerja"
+      }
+    }
+  }
+}

@@ -386,4 +386,28 @@ describe('AI flow generator (TW-FLB-025)', () => {
       'application/json',
     );
   });
+
+  it('OpenAI gets max_completion_tokens; OpenRouter keeps max_tokens; temperature is sent to both', async () => {
+    const bodies: Array<Record<string, unknown>> = [];
+    const adapter = new HttpFlowAiAdapter();
+    adapter.fetchImpl = (async (_url: string, init: RequestInit) => {
+      bodies.push(JSON.parse(String(init.body)));
+      return new Response(JSON.stringify({ choices: [{ message: { content: 'x' } }] }));
+    }) as unknown as typeof fetch;
+    const base = {
+      model: 'gpt-5.4-mini',
+      apiKey: 'k',
+      system: 's',
+      prompt: 'p',
+      maxTokens: 10,
+      temperature: 0.4,
+      json: false,
+    };
+    await adapter.generate({ ...base, provider: 'openai' });
+    await adapter.generate({ ...base, provider: 'openrouter' });
+    expect(bodies[0]).toMatchObject({ max_completion_tokens: 10, temperature: 0.4 });
+    expect(bodies[0]).not.toHaveProperty('max_tokens');
+    expect(bodies[1]).toMatchObject({ max_tokens: 10, temperature: 0.4 });
+    expect(bodies[1]).not.toHaveProperty('max_completion_tokens');
+  });
 });

@@ -196,7 +196,10 @@
       "next": "Sonraki",
       "pageOf": "Sayfa {page, number} / {pages, number}",
       "perPage": "Sayfa başına segment",
-      "perPageOption": "Sayfa başına {count, number}"
+      "perPageOption": "Sayfa başına {count, number}",
+      "colCreatedBy": "Oluşturan",
+      "colCreatedAt": "Oluşturulma",
+      "colModifiedBy": "Değiştiren"
     },
     "actions": {
       "forbidden": "Bunu yapmak için yetkiniz yok.",

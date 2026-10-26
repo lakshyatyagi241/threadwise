@@ -66,10 +66,10 @@
       "pending": "ausstehend",
       "you": "Sie",
       "presence": {
-        "online": "Online",
-        "away": "Abwesend",
+        "online": "Verfügbar",
+        "away": "Nicht verfügbar, außerhalb der Arbeitszeit",
         "busy": "Beschäftigt",
-        "offline": "Offline"
+        "offline": "Nicht verfügbar"
       },
       "inactive": "Inaktiv",
       "roleFor": "Rolle von {name}",
@@ -410,8 +410,8 @@
     "availability": {
       "label": "Verfügbarkeit",
       "available": "Verfügbar",
-      "offline": "Offline",
-      "hint": "Solange du offline bist, werden dir keine neuen Chats automatisch zugewiesen. Chats, die du schon hast, bleiben deine.",
+      "offline": "Nicht verfügbar",
+      "hint": "Solange du nicht verfügbar bist, werden dir keine neuen Chats automatisch zugewiesen. Chats, die du bereits hast, bleiben bei dir.",
       "failed": "Änderung nicht möglich"
     },
     "myLeave": {

@@ -41,8 +41,23 @@ export function initSentry(service: ServiceName, env: NodeJS.ProcessEnv = proces
   const dsn = env.SENTRY_DSN?.trim();
   if (!dsn || enabled) return enabled;
 
+  Sentry.init(sentryOptions(service, dsn, env));
+  enabled = true;
+  return true;
+}
+
+/**
+ * `tracePropagationTargets: []` keeps the SDK from adding `sentry-trace` and `baggage` headers (our release and workspace ids) to the
+ * requests this server makes to other people's servers: the API library's test button, webhooks, media downloads. Nothing of ours
+ * reads them on the other side.
+ */
+export function sentryOptions(
+  service: ServiceName,
+  dsn: string,
+  env: NodeJS.ProcessEnv,
+): Sentry.NodeOptions {
   const traces = Number(env.SENTRY_TRACES_SAMPLE_RATE);
-  Sentry.init({
+  return {
     dsn,
     environment: env.NODE_ENV ?? 'development',
     release: env.GIT_SHA || undefined,
@@ -54,9 +69,8 @@ export function initSentry(service: ServiceName, env: NodeJS.ProcessEnv = proces
     initialScope: { tags: { service } },
     beforeSend: scrubSentryEvent,
     beforeSendSpan: scrubSentrySpan,
-  });
-  enabled = true;
-  return true;
+    tracePropagationTargets: [],
+  };
 }
 
 export const sentryEnabled = (): boolean => enabled;
@@ -145,6 +159,17 @@ export function scrubSentrySpan<T extends ScrubbableSpan>(span: T): T {
   return span;
 }
 
+/**
+ * The module a request belongs to: the first path segment after `/api` and the version (`/v2/contacts/pql` is `contacts`). It
+ * lets Sentry group and alert per module without a per-controller edit. Ids and secrets sit deeper in the path, never here.
+ */
+export function moduleFromPath(path: string | undefined): string | undefined {
+  const segments = (path ?? '').split('?')[0]!.split('/').filter(Boolean);
+  while (segments[0] === 'api' || /^v\d+$/.test(segments[0] ?? '')) segments.shift();
+  const first = segments[0];
+  return first && /^[a-z][a-z0-9-]{0,48}$/i.test(first) ? first.toLowerCase() : undefined;
+}
+
 /** Reports an unexpected failure (a 5xx). Never throws and never blocks the response. */
 export function reportServerError(
   err: unknown,
@@ -154,8 +179,34 @@ export function reportServerError(
   try {
     Sentry.withScope((scope) => {
       if (context.requestId) scope.setTag('requestId', context.requestId);
-      if (context.path)
+      if (context.path) {
         scope.setTag('path', maskSecretUrl(context.path.split('?')[0] ?? context.path));
+        const module = moduleFromPath(context.path);
+        if (module) scope.setTag('module', module);
+      }
+      Sentry.captureException(err);
+    });
+  } catch {
+    /* reporting must never be the thing that fails */
+  }
+}
+
+/**
+ * Reports a background job that reached its final failure. BullMQ catches a processor's exception, so without this it never
+ * reached Sentry: all ~40 processors failed silently as far as error reporting was concerned. Tagged by queue (one per
+ * module's work) and job name; the job's data is never sent, it holds customer content. Never throws.
+ */
+export function reportJobFailure(
+  err: unknown,
+  job: { queue: string; name?: string; attemptsMade?: number },
+): void {
+  if (!enabled) return;
+  try {
+    Sentry.withScope((scope) => {
+      scope.setTag('queue', job.queue);
+      scope.setTag('module', job.queue);
+      if (job.name) scope.setTag('job', job.name);
+      if (job.attemptsMade !== undefined) scope.setExtra('attemptsMade', job.attemptsMade);
       Sentry.captureException(err);
     });
   } catch {

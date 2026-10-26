@@ -1261,7 +1261,12 @@
             },
             "prev": "Scheda precedente",
             "next": "Scheda successiva",
-            "goTo": "Scheda {n}"
+            "goTo": "Scheda {n}",
+            "saveCopy": "Salva una copia",
+            "saveCopyHint": "Salva questa immagine sul nostro server, così la chat di ogni visitatore può mostrarla. Un'immagine di un sito che non ne consente la condivisione non può essere copiata: caricala al suo posto.",
+            "saving": "Salvataggio…",
+            "copyFailed": "Impossibile salvare una copia: {message}",
+            "imageFormats": "Formati accettati: JPG, JPEG o PNG."
           },
           "condition": {
             "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",
@@ -1615,6 +1620,8 @@
           "notInWorkspace": "{value} (non presente nel workspace)",
           "templateLabel": "Template approvato",
           "templateHint": "Qui compaiono solo i template approvati del workspace. <link>Creane uno nuovo →</link>",
+          "statusExits": "Aggiungi uscite di stato (Inviato, Consegnato, Letto, Risposto, Non riuscito)",
+          "statusExitsHint": "Il flusso esce dalla prima uscita con un passaggio collegato: Inviato appena il modello è accettato, Consegnato o Letto quando WhatsApp lo segnala, Risposto quando il cliente scrive, Non riuscito se l'invio non è stato possibile. Un pulsante toccato dal cliente esce dalla propria uscita.",
           "type": "Tipo",
           "kindText": "Testo",
           "kindImage": "Immagine",
@@ -1732,12 +1739,12 @@
           "stageHint": "Quando una trattativa viene spostata in questa fase della pipeline, il contatto collegato viene inserito. Gestisci le fasi nella bacheca /deals.",
           "rulesLabel": "Collega alle regole di parole chiave dei commenti",
           "rulesHint": "Seleziona le regole che devono avviare questo flow. Lascia tutto deselezionato per eseguirlo con qualsiasi regola Commento → DM.",
-          "rulesNone": "Nessuna regola di parole chiave Commento → DM ancora. Creale in <link>/auto-reply</link> (Instagram · trigger «Commento → DM»), poi scegliele qui.",
+          "rulesNone": "Nessuna regola di parole chiave Commento → DM ancora, quindi qui non c’è nulla da scegliere.",
           "ruleFallback": "Regola {id}",
           "ruleOff": "disattiva",
           "orderPlaced": "Scatta per ogni nuovo ordine. Il cliente dell’ordine viene abbinato a un contatto salvato e inserito.",
           "automatic": "Scatta automaticamente — non serve altra configurazione.",
-          "away": "Scatta per ogni messaggio in arrivo mentre la <b>modalità Assente</b> è ATTIVA. Attiva o disattiva la modalità Assente dalla pagina <link>Risposta automatica</link>. Ogni contatto viene inserito una sola volta.",
+          "away": "Scatta per ogni messaggio in arrivo mentre la <b>modalità Assente</b> è ATTIVA. Ogni contatto viene inserito una sola volta.",
           "outOfHours": "Scatta per ogni messaggio in arrivo fuori dall’<b>orario di lavoro del workspace</b>. Imposta l’orario di lavoro nelle impostazioni del workspace. Ogni contatto viene inserito una sola volta.",
           "manualEnroll": "Inserirai i contatti manualmente dall’<link>elenco /flows</link> con il pulsante <b>Inserisci</b> accanto a questo flow.",
           "ext": {
@@ -1908,6 +1915,12 @@
           "unresolved": "Questo link breve non è ancora stato verificato. Esci dal campo o riprova.",
           "resolve_failed": "Impossibile leggere questo link. Controlla che si apra in Google Maps o inserisci le coordinate."
         }
+      },
+      "flowImage": {
+        "title": "Immagine non caricata",
+        "empty": "il link è vuoto",
+        "notAddress": "il link non è un indirizzo web (deve iniziare con https://)",
+        "failed": "non si è caricata (il link potrebbe essere errato, privato, bloccato o non essere un'immagine)"
       }
     },
     "contracts": {
@@ -2600,7 +2613,8 @@
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
       "simAbandon": "Abbandono simulato → porta «abbandonato»",
       "locationSkipped": "(posizione) saltata: nessuna coordinata valida",
-      "faqLine": "(simulato) Rispondi dalle FAQ: nella chat di prova la base di conoscenza non viene interrogata, si usa \"nessuna corrispondenza\"."
+      "faqLine": "(simulato) Rispondi dalle FAQ: nella chat di prova la base di conoscenza non viene interrogata, si usa \"nessuna corrispondenza\".",
+      "carouselNoMatch": "“{value}” non è uno dei pulsanti. Tocca uno di essi o scrivi esattamente il suo testo."
     },
     "templates": {
       "eyebrow": "Modelli di partenza",

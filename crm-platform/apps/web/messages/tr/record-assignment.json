@@ -76,7 +76,7 @@
       "unknownPerson": "Eski üye",
       "unknownTeam": "Kaldırılan ekip",
       "teamName": "Ekip: {name}",
-      "skipsOffline": "Çevrimdışı kişileri atlar",
+      "skipsOffline": "Uzakta olan kişileri atlar",
       "reassigns": "Güncellemede yeniden atar",
       "activeFor": "{name} kuralı etkin",
       "dragHandle": "Önceliğini değiştirmek için {name} kuralını sürükleyin",
@@ -136,7 +136,7 @@
         "noPeople": "Eşleşen kişi yok.",
         "removePerson": "{name} kişisini kaldır",
         "onLeave": "izinde",
-        "skipOffline": "Çevrimdışı kişileri atla",
+        "skipOffline": "Uzakta olan kişileri atla",
         "skipOfflineHint": "İzindeki kişiler her zaman atlanır.",
         "reassign": "Bir güncelleme bu kuralla eşleşmeyi başlattığında yeniden ata",
         "reassignHint": "Yalnızca bu motorun kendisinin atadığı kayıtlar için ve yalnızca sahibi o zamandan beri kimse tarafından değiştirilmemişse geçerlidir. Varsayılan olarak kapalıdır: bir kayıt yalnızca bir kez atanır."
@@ -220,7 +220,7 @@
         "disabled": "Kayıt atama bu çalışma alanı için kapalı, bu yüzden hiçbir şey olmaz.",
         "has_owner": "{record} zaten bir sahibe sahip, bu yüzden hiçbir kural çalışmaz. Bir kişinin belirlediği sahip hiçbir zaman değiştirilmez.",
         "no_rule": "{record} ile eşleşen etkin kural yok.",
-        "nobody_available": "Bir kural {record} ile eşleşiyor ama adı geçen herkes izinde, çevrimdışı veya artık burada değil.",
+        "nobody_available": "Bir kural {record} ile eşleşiyor, ancak adı geçen herkes izinde, uzakta veya artık burada değil.",
         "plan": "Planınız kayıt atama kurallarını içermiyor.",
         "not_found": "Bu kayıt bulunamadı. Silinmiş olabilir veya görebildiklerinizin dışında olabilir."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: bu tür kaydı açamıyor",
         "inactive": "{name}: artık aktif değil",
         "on_leave": "{name}: bugün izinli",
-        "offline": "{name}: çevrimdışı"
+        "offline": "{name}: uzakta"
       }
     },
     "log": {

@@ -370,7 +370,8 @@
         "includedOwned": "Bạn cũng đang có tiện ích này. Gói của bạn giờ đã bao gồm nó nên bạn có thể hủy tiện ích. Không có khoản nào được hoàn tự động.",
         "includedEnds": "Đã có trong gói của bạn. Tiện ích của bạn kết thúc vào {date} và sẽ không gia hạn.",
         "active": "Hoạt động",
-        "ownedCount": "Đã sở hữu ×{count} · mua lại sẽ cộng thêm"
+        "ownedCount": "Đã sở hữu ×{count} · mua lại sẽ cộng thêm",
+        "turnedOff": "Đã tắt"
       },
       "price": {
         "free": "Miễn phí",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Tiện ích bổ sung tính năng",
         "capacity": "Tiện ích bổ sung dung lượng"
+      },
+      "activation": {
+        "turnedOffNote": "Đã tắt cho không gian làm việc này. Cài đặt của nó vẫn được giữ lại.",
+        "turnOff": "Tắt",
+        "turnOn": "Bật",
+        "askOwner": "Hãy nhờ chủ tài khoản bật hoặc tắt tính năng này.",
+        "doneOn": "{name} đã được bật.",
+        "errors": {
+          "notToggleable": "Không thể bật hoặc tắt {name} tại đây. Chỉ có thể chuyển đổi tiện ích bổ sung có trong gói của bạn.",
+          "forbidden": "Bạn không có quyền bật hoặc tắt tiện ích bổ sung.",
+          "generic": "Chúng tôi không thể thay đổi {name}. Vui lòng thử lại."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Tắt {name}?",
+      "lead": "Đây là những gì sẽ thay đổi. Bạn có thể bật lại bất cứ lúc nào.",
+      "cancel": "Hủy",
+      "confirm": "Tắt {name}",
+      "done": "{name} đã được tắt. Cài đặt của nó vẫn được giữ lại.",
+      "typeLabel": "Nhập {name} để xác nhận",
+      "typeHint": "Cuộc trò chuyện với khách hàng hoặc một số người sẽ bị ảnh hưởng, vì vậy hãy nhập tên để xác nhận.",
+      "groups": {
+        "stops": "Những gì sẽ dừng",
+        "kept": "Những gì được giữ lại",
+        "people": "Mọi người"
+      },
+      "items": {
+        "features_off": "Các tính năng này ngừng hoạt động: {names}.",
+        "dependents_off": "Các tính năng này cần chúng nên cũng sẽ dừng: {names}.",
+        "roles_dormant": "{count, plural, other {# vai trò có quyền của tiện ích này. Các quyền vẫn được giữ lại nhưng không hoạt động cho đến khi bạn bật lại.}}",
+        "waiting_chats": "{count, plural, other {# cuộc trò chuyện đang chờ nhân viên. Chúng sẽ không được tự động phân công, nên cần có người nhận xử lý.}}",
+        "routing_rules": "{count, plural, other {# quy tắc phân luồng sẽ ngừng phân công cuộc trò chuyện.}}",
+        "auto_teams": "{count, plural, other {# nhóm được đặt để tự động phân công cuộc trò chuyện và sẽ ngừng làm vậy.}}",
+        "teams": "{count, plural, other {# nhóm được giữ lại cùng các thành viên.}}",
+        "custom_role_holders": "{count, plural, other {# người có vai trò tùy chỉnh. Vai trò vẫn được giữ lại nhưng quyền của tiện ích này không còn áp dụng.}}",
+        "kept": "Cài đặt và dữ liệu của bạn được giữ lại. Chúng sẽ trở lại như bạn đã để khi bạn bật lại."
       }
     }
   }

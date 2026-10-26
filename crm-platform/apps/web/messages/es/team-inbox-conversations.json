@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# hora} other {# horas}}",
         "days": "{count, plural, one {# día} other {# días}}"
       },
-      "unsnoozesAt": "Se reactiva el {time}"
+      "unsnoozesAt": "Se reactiva el {time}",
+      "erased": "Contactos borrados",
+      "erasedHint": "Estos contactos se borraron y sus conversaciones se conservaron sin sus datos ni el texto de los mensajes. Las horas muestran el último mensaje, porque no se registra la fecha de borrado.",
+      "erasedTitle": "Contacto borrado"
     },
     "status": {
       "received": "Recibido",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Puedes leer esta conversación, pero no tienes permiso para responder.",
       "resolvedBanner": "Esta conversación está resuelta. Reábrela para responder.",
+      "resolvedWebchatBanner": "Este chat web está resuelto y no se puede reabrir.",
       "assignedToOther": "Este chat está asignado a otro agente. Asígnatelo primero para responder.",
       "typing": "{count, plural, one {Un compañero está escribiendo} other {# compañeros están escribiendo}}",
       "messagesLabel": "Mensajes",
+      "session": {
+        "header": "{range} · {count, plural, one {# mensaje} other {# mensajes}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Cargar mensajes anteriores",
       "empty": "Aún no hay mensajes en esta conversación.",
       "newMessageAnnounce": "Mensaje nuevo: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Sin resultados",
       "searchPrev": "Coincidencia anterior",
       "searchNext": "Coincidencia siguiente",
-      "searchClose": "Cerrar búsqueda"
+      "searchClose": "Cerrar búsqueda",
+      "erasedBadge": "Borrado",
+      "erasedBanner": "Este contacto se borró. Se eliminaron el texto y los archivos de los mensajes, así que no se puede enviar nada. La cronología y las horas se conservan."
     },
     "groupThread": {
       "openGroup": "Abrir grupo",
@@ -542,17 +554,17 @@
         "onLeave": "De ausencia",
         "onLeaveUntil": "De ausencia hasta el {date}",
         "availability": {
-          "online": "En línea",
-          "away": "Ausente",
+          "online": "Disponible",
+          "away": "Ausente, fuera del horario laboral",
           "busy": "Ocupado",
-          "offline": "Desconectado"
+          "offline": "Ausente"
         }
       },
       "presence": {
-        "online": "En línea",
-        "away": "Ausente",
+        "online": "Disponible",
+        "away": "Ausente, fuera del horario laboral",
         "busy": "Ocupado",
-        "offline": "Sin conexión"
+        "offline": "Ausente"
       },
       "notes": {
         "tab": "Notas del contacto",
@@ -715,6 +727,7 @@
         "not_linked": "El canal de esta conversación no está vinculado a un número de WhatsApp, así que no se puede enviar ninguna plantilla.",
         "paused": "Pausada por WhatsApp. Se podrá enviar de nuevo cuando termine la pausa.",
         "media_header": "Tiene una cabecera de imagen, vídeo o documento, que todavía no se puede enviar desde la bandeja.",
+        "carousel": "Es un carrusel (tarjetas con imágenes) y aún no se puede enviar desde la bandeja.",
         "header_variable": "Tiene una variable en la cabecera, que todavía no se puede rellenar desde la bandeja.",
         "dynamic_button": "Tiene un enlace en un botón con una variable, que todavía no se puede rellenar desde la bandeja.",
         "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema, no la bandeja.",

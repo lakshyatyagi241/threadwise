@@ -73,6 +73,7 @@ const EXTRA_SOURCES = [
   'kb_embedding',
   'flow_ai',
   'widget_ai',
+  'widget',
   'growth',
   'telephony',
   'translation',
@@ -558,7 +559,7 @@ function ExpenseLog({
 }
 
 /**
- * The day log: one line per day, status, channel and category, so a day of repeated messages reads as a few lines. "View details"
+ * The day log: one line per day, type, status, channel and category, so a day of repeated messages reads as a few lines. "View details"
  * opens that day's messages in the log below. Pages by day, so a day's lines are never split across two pages.
  */
 function ExpenseDayLog({
@@ -624,6 +625,7 @@ export function DayTable({
   const tch = useTranslations('wallet-message-billing.statement.channels');
   const tsrc = useTranslations('wallet-message-billing.expenses.sources');
   const tcat = useTranslations('wallet-message-billing.categories');
+  const tk = useTranslations('wallet-message-billing.kinds');
   const tstatus = useTranslations('wallet-message-billing.expenses.status');
   const money = (minor: number, exact?: string) => formatAmount(minor, exact, currency, locale);
   if (groups.length === 0) {
@@ -640,6 +642,7 @@ export function DayTable({
             {(
               [
                 ['date', 'text-start'],
+                ['type', 'text-start'],
                 ['status', 'text-start'],
                 ['channel', 'text-start'],
                 ['category', 'text-start'],
@@ -668,7 +671,7 @@ export function DayTable({
                 >
                   {formatDay(day, locale)}
                 </th>
-                <td colSpan={7} className="px-2 py-2 text-muted-foreground">
+                <td colSpan={8} className="px-2 py-2 text-muted-foreground">
                   {t('days.messagesOnDay', { count: rows.reduce((n, r) => n + r.messages, 0) })}
                 </td>
                 <td className="px-2 py-2 text-end">
@@ -679,10 +682,11 @@ export function DayTable({
               </tr>
               {rows.map((r) => (
                 <tr
-                  key={`${r.status}-${r.source ?? ''}-${r.category ?? ''}`}
+                  key={`${r.kind}-${r.status}-${r.source ?? ''}-${r.category ?? ''}`}
                   className="border-b border-border/60 align-top last:border-0"
                 >
                   <td className="px-2 py-2" />
+                  <td className="px-2 py-2">{tk(r.kind)}</td>
                   <td className="px-2 py-2">
                     <Badge tone={statusTone(r.status)}>{tstatus(r.status)}</Badge>
                   </td>

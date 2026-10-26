@@ -35,14 +35,14 @@ The API Library holds calls to other systems that your flows can run: look up an
 4. Fill in a **default value** for each variable the form lists. A test run, and a flow that has no value of its own, use it.
 5. Add **headers** if the other system needs them, such as an `Authorization` header.
 6. For POST, PUT and PATCH, write the **payload** as JSON, or switch the payload type to multipart form data and add fields one by one.
-7. Select **Run test**. The response appears on the right: its status, time, headers and body.
+7. Select **Run test**. The response appears on the right: its status, time, headers and body. A compressed reply is unpacked for you, a file (an image or a PDF) is named with its size instead of being printed, and a long reply shows its first part with the real size. Tests are limited to 20 a minute per person. A warning appears when the address starts with `http://` and a header carries a password or key.
 8. Pick what to keep from the answer (see below), then select **Save**. An API is saved only after a test run has passed.
 
 To start from an existing call, select **Import API's** on the list and paste a cURL command. A new API opens with the method, URL, headers and payload filled in.
 
 ## Variables
 
-Every `{{name}}` you type in the URL, a header value or the payload becomes a variable in the **Variables** section, and disappears from it when you remove it from the text. Backspace right after a variable removes it whole. A variable's value at run time comes from, in order: the value typed in the flow step, the flow's own variable of that name, the contact's property of that name, and finally the default you saved.
+Every `{{name}}` you type in the URL, a header value or the payload becomes a variable in the **Variables** section, and disappears from it when you remove it from the text. Backspace right after a variable removes it whole. A GET does not send the payload, so its variables leave the list while the method is GET, with the values you typed kept; switch back to POST, PUT or PATCH and they return. A variable's value at run time comes from, in order: the value typed in the flow step, the flow's own variable of that name, the contact's property of that name, and finally the default you saved.
 
 ## Secrets
 
@@ -62,11 +62,13 @@ In the test response, select **+** beside a value to choose what it is for:
 - **Save as contact property** adds a row to the contact mapping. Choose the property it is written to, and a default to write when the field is empty.
 - **Both** does both.
 
+Two rows cannot save into the same contact property: only one value fits in a field, so the form asks you to pick another. A number property warns when the last test returned text for that row, because the text would be saved as it is.
+
 A value inside a list offers **this item** (`items[0].name`) or **every item** (`items[].name`, collected into a list). You can also add a path by hand, or pick one from the last test response.
 
 ## Logs
 
-**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status, source (test or flow) and dates, and a search over the URL, API name and error. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
+**Logs** on a row lists the runs of that API, newest first. **All logs** lists every run, with filters for the API, result, status, source (test or flow) and dates, and a search over the URL, API name and error. A deleted API stays in the API filter, marked "(deleted)", while its runs are kept. Select a run to see its request, response, status, duration and, for a flow run, the flow and contact. Secrets are masked before a log is stored, and logs are kept for 30 days.
 
 ## Deleting
 

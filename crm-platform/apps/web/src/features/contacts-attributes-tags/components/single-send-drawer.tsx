@@ -31,6 +31,17 @@ import { MailIcon, PhoneIcon, SmsIcon, WhatsAppIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.singleSend';
 
+/** The refusals the template list names (the same codes as the inbox picker); each has a sentence under `singleSend.reason`. */
+const REASONS = new Set([
+  'not_linked',
+  'paused',
+  'media_header',
+  'header_variable',
+  'dynamic_button',
+  'authentication',
+  'named_variables',
+]);
+
 const ICON: Record<SendChannel, typeof PhoneIcon> = {
   whatsapp: WhatsAppIcon,
   sms: SmsIcon,
@@ -235,7 +246,9 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
 
   const conversation = useOpenConversation(row.id, numberId);
   const templates = useConversationTemplates(conversation.data?.id);
-  const picked = templates.data?.data.find((x) => x.id === templateId);
+  // A template of another WhatsApp number can never be sent from this number: it is left out of the list instead of offered and refused.
+  const offered = (templates.data?.data ?? []).filter((x) => x.reason !== 'other_number');
+  const picked = offered.find((x) => x.id === templateId);
   const missing = picked ? missingSlots(picked, vars) : [];
 
   const send = useMutation({
@@ -326,13 +339,13 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
             }}
           >
             <option value="">{t('templatePlaceholder')}</option>
-            {templates.data?.data.map((x) => (
+            {offered.map((x) => (
               <option key={x.id} value={x.id}>
                 {x.name} ({x.language})
               </option>
             ))}
           </Select>
-          {templates.data && templates.data.data.length === 0 && (
+          {templates.data && offered.length === 0 && (
             <p className="text-xs text-muted-foreground">{t('noTemplates')}</p>
           )}
           {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
@@ -348,7 +361,9 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
 
       {picked && !picked.sendable && (
         <p role="alert" className="text-sm text-danger">
-          {t('notSendable', { reason: picked.reason ?? '-' })}
+          {picked.reason && REASONS.has(picked.reason)
+            ? t(`reason.${picked.reason}`)
+            : t('notSendable')}
         </p>
       )}
 

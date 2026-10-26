@@ -33,6 +33,7 @@ export const waTemplates = pgTable(
     codeExpirationMinutes: smallint('code_expiration_minutes'),
     buttons: jsonb('buttons'),
     carouselData: jsonb('carousel_data'),
+    limitedOffer: jsonb('limited_offer'),
     variableMap: jsonb('variable_map'),
     rejectionReason: text('rejection_reason'),
     rejectionReasonCode: text('rejection_reason_code'),

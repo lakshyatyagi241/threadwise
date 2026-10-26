@@ -149,7 +149,7 @@ describe('variables', () => {
   });
 
   it('asks for a template when there is none', () => {
-    expect(card({ template: null })).toContain('Go back and choose a template first.');
+    expect(card({ template: null })).toContain('Choose a template first.');
   });
 
   it('shows sample messages for real contacts and flags empty placeholders', () => {
@@ -520,7 +520,15 @@ describe('retries', () => {
   const card = (
     retries: WizardDraft['retries'],
     issues: Parameters<typeof RetriesCard>[0]['issues'] = [],
-  ) => html(<RetriesCard retries={retries} issues={issues} onRetries={none} />);
+  ) =>
+    html(
+      <RetriesCard
+        retries={retries}
+        range={{ min: '2026-10-06', max: '2026-10-13' }}
+        issues={issues}
+        onRetries={none}
+      />,
+    );
 
   it('has a switch and the three-bullet info box', () => {
     const out = card({ enabled: false });

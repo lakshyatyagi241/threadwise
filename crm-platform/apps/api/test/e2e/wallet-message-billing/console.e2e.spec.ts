@@ -19,6 +19,7 @@ import {
   balanceMinor,
   cleanWallet,
   events,
+  fixedPricing,
   fund,
   ledgerRows,
   newTenant,
@@ -48,6 +49,7 @@ const adjustKey = () => randomUUID();
 beforeAll(async () => {
   startedAt = new Date();
   h = await startBspHarness();
+  await fixedPricing(h); // typed prices: margin pricing is the default, and this suite checks the typed rate card
   a = await newTenant(h, 'wc-a');
   b = await newTenant(h, 'wc-b');
 }, 120_000);

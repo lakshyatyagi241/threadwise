@@ -24,7 +24,7 @@ Contact properties are everything a contact can store. Some are built in, such a
 
 ## Options and settings
 
-- Types are Text, Long text, Number, Decimal number, Date, Dropdown, Multi-select, Checkbox, Link, Email and Phone. The key and the type cannot change after creation.
+- Types are Text, Long text, Number, Decimal number, Date, Dropdown, Multi-select, Checkbox, Link, Email and Phone (a phone property has a country picker and keeps the number in international format). The key and the type cannot change after creation.
 - The table shows name, key, type, whether it is required and visible, and **In use**: how many contacts hold a value.
 - Reorder properties with the arrows or by dragging. Sections have arrows, rename and delete. Deleting a section keeps its properties and moves them to **No section**.
 - The bin on a property deactivates it. It leaves the form and the contact page, its values are kept, and **Reactivate** brings it back. Tick **Show inactive** to see deactivated properties.
@@ -57,6 +57,6 @@ Opening the screen needs permission to read contact properties. Adding needs the
 - **A dependent field offers no choices.** Choose its parent first. A parent choice with no ticked choices offers none.
 - **A dependency would make two properties wait for each other.** The dialog refuses it. Remove one of the two dependencies first.
 - **A property is missing from the dependent fields dialog.** Only dropdown, multi-select and radio properties whose choices are all in the list can take part. A property with a very long list is not offered.
-- **Bulk update and imports do not narrow dependent choices.** Choose the value in the contact form for a contact's dependent field.
+- **Imports do not narrow dependent choices.** Choose the value in the contact form for a contact's dependent field. In a bulk update a dependent property is offered once its parent property has a value to set, and then lists only the choices that value allows.
 - **Someone else changed this.** The list was refreshed. Try again.
 - **Some of your changes may have been saved.** Close the window and open the property again to check.

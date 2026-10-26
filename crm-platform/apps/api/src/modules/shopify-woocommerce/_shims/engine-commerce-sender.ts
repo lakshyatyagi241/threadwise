@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { emitDeliveryReported, deliveryProviderOf } from '../../../kernel/outbox/delivery-report';
+import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { EngineSenderRegistry } from '../../broadcasts';
+import { WalletGateService } from '../../wallet-message-billing';
 import { OutboundRegistry, SenderResolver, type SenderRef } from '../../node-bridge-runtime';
 import type { CommerceClearance } from '../commerce-consent.rules';
 import { bodyParams, renderBody, type EventContext } from '../event-rules';
@@ -23,18 +27,74 @@ export function templateText(template: EcomTemplate, ctx: EventContext): string 
  * connected) or the workspace's default engine's. Cloud API numbers send the approved template; the other engines send it as text
  * through the shared outbound layer.
  *
+ * Every message goes through the wallet like any other WhatsApp message: the gate is asked before it leaves (422 `WALLET_EMPTY` when the
+ * workspace can neither cover it with its plan's free messages nor pay for it) and the provider's id is reported once it was accepted, so
+ * the worker prices and charges it from `sent` and a later `failed` gives it back.
+ *
  * Consent (BL-141 follow-up): a template send takes the `consent` clearance its caller got from `CommerceConsentService`, which asked
  * the ConsentGate for a marketing template and let a utility one through. The ConsentGate is not asked again per message here, so a
  * broadcast of thousands costs one question per slice, not one per customer.
  */
 @Injectable()
 export class EngineCommerceSender implements CommerceSender {
+  private readonly logger = new Logger(EngineCommerceSender.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly resolver: SenderResolver,
     private readonly outbound: OutboundRegistry,
     private readonly engines: EngineSenderRegistry,
+    private readonly wallet: WalletGateService,
+    private readonly outbox: OutboxService,
   ) {}
+
+  /** Refuses before the message leaves when the wallet cannot pay for it. */
+  private async assertAffordable(
+    orgId: number,
+    sender: SenderRef,
+    to: string,
+    category: string | null,
+  ): Promise<void> {
+    if (deliveryProviderOf(sender.engine) === null) return;
+    await this.wallet.assertCanSend({ orgId, source: 'api', to, category });
+  }
+
+  /** Reports the message the provider accepted. Never throws: the message is gone, and a billing fault must not turn it into a failed send. */
+  private async report(
+    orgId: number,
+    sender: SenderRef,
+    sent: { providerMessageId: string | null },
+    m: { to: string; reference: string; category: string | null; templateName: string | null },
+  ): Promise<void> {
+    const provider = deliveryProviderOf(sender.engine);
+    if (provider === null) return;
+    try {
+      await this.db.txAs({ orgId }, (tx) =>
+        emitDeliveryReported(this.outbox, tx, {
+          orgId,
+          aggregateModule: 'store_messages',
+          aggregateId: sender.id,
+          report: {
+            provider,
+            // A provider that gave no id still sent the message: it is named by an id of its own (the caller's reference repeats across
+            // messages, and a repeat would be taken for the same message and never charged).
+            providerMessageId: sent.providerMessageId ?? `commerce:${randomUUID()}`,
+            status: 'sent',
+            recipient: m.to,
+            category: m.category,
+            source: 'api',
+            templateName: m.templateName,
+          },
+        }),
+      );
+    } catch (err) {
+      // The send stands; the miss is logged so the unbilled message can be found and settled by hand.
+      this.logger.warn(
+        { orgId, providerMessageId: sent.providerMessageId, err: String(err) },
+        'store message could not be reported for billing',
+      );
+    }
+  }
 
   /** The connected number a send goes out through, or null. `senderKey` names one; without it the default engine's is used. */
   private sender(orgId: number, senderKey: string | null | undefined): Promise<SenderRef | null> {
@@ -97,12 +157,19 @@ export class EngineCommerceSender implements CommerceSender {
     // A caller that skipped the consent step (a plain JS call, a cast) is stopped here rather than sending unchecked.
     if (!m.consent) throw new Error('A template send needs its consent clearance.');
     const sender = await this.need(orgId, m.senderKey);
+    const billed = {
+      to: m.to,
+      reference: m.reference,
+      category: m.template.category,
+      templateName: m.template.name,
+    };
+    await this.assertAffordable(orgId, sender, m.to, m.template.category);
     if (sender.engine === 'waba') {
       const adapter = this.engines.get('waba');
       if (!adapter) throw new Error('The WhatsApp Cloud API sender is not available.');
       const params = bodyParams(m.template.body, m.ctx.positional);
       const opened = await adapter.open(orgId, sender);
-      return opened.send({
+      const out = await opened.send({
         to: m.to,
         templateName: m.template.name,
         language: m.template.language,
@@ -111,15 +178,35 @@ export class EngineCommerceSender implements CommerceSender {
           ? [{ type: 'body', parameters: params.map((text) => ({ type: 'text', text })) }]
           : [],
       });
+      await this.report(orgId, sender, out, billed);
+      return out;
     }
-    return this.text(orgId, sender, m.to, templateText(m.template, m.ctx), m.reference, true);
+    const out = await this.text(
+      orgId,
+      sender,
+      m.to,
+      templateText(m.template, m.ctx),
+      m.reference,
+      true,
+    );
+    await this.report(orgId, sender, out, billed);
+    return out;
   }
 
   async sendText(
     orgId: number,
     m: { to: string; body: string; reference: string },
   ): Promise<{ providerMessageId: string | null }> {
-    return this.text(orgId, await this.need(orgId), m.to, m.body, m.reference, false);
+    const sender = await this.need(orgId);
+    await this.assertAffordable(orgId, sender, m.to, null);
+    const out = await this.text(orgId, sender, m.to, m.body, m.reference, false);
+    await this.report(orgId, sender, out, {
+      to: m.to,
+      reference: m.reference,
+      category: null,
+      templateName: null,
+    });
+    return out;
   }
 
   private async text(

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { aiCostUsd } from '../../../src/modules/wallet-message-billing/ai-cost';
+import { MIN_CHARGE_MINOR } from '../../../src/modules/wallet-message-billing/wallet-rules';
 import {
   USAGE_DEFAULTS,
   billedMinutes,
   chargeUsdOf,
+  freeUnitsOf,
   mergeUsageRates,
   priceUsage,
   usageStatementLabel,
@@ -32,6 +34,58 @@ describe('mergeUsageRates', () => {
   });
 });
 
+describe('the agreed prices', () => {
+  const rates = mergeUsageRates(undefined);
+
+  it('charges 0.15 for an email and 0.50 for an SMS segment, whatever happens to the message afterwards', () => {
+    expect(priceUsage(rates, { kind: 'email', units: 1 })).toMatchObject({
+      basis: 'unit',
+      platformMinor: 15,
+    });
+    expect(priceUsage(rates, { kind: 'sms', units: 1 })).toMatchObject({
+      basis: 'unit',
+      platformMinor: 50,
+    });
+  });
+
+  it('adds 20% to what the AI vendor charged: 1 paisa costs 1.2 paisa', () => {
+    const p = priceUsage(rates, { kind: 'ai', units: 1, vendorCostUsd: 0.01 });
+    expect(p).toMatchObject({ basis: 'cost_plus', markupBps: 2000 });
+    expect((p as { chargeUsd: number }).chargeUsd).toBeCloseTo(0.012, 10);
+  });
+
+  it('charges a website chatbot message per unit', () => {
+    expect(priceUsage(rates, { kind: 'webbot_message', units: 1 })).toMatchObject({
+      basis: 'unit',
+      platformMinor: USAGE_DEFAULTS.prices.webbot_message.priceMinor,
+    });
+  });
+});
+
+describe('freeUnitsOf (the free website chatbot messages of a plan)', () => {
+  const plan = { planActive: true };
+
+  it('covers messages until the monthly allowance is used up', () => {
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 0, limit: 10_000 })).toBe(1);
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 9_999, limit: 10_000 })).toBe(1);
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 10_000, limit: 10_000 })).toBe(0);
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 50_000, limit: 20_000 })).toBe(0);
+  });
+
+  it('splits a batch that crosses the end of the allowance', () => {
+    expect(freeUnitsOf({ ...plan, units: 5, usedBefore: 18, limit: 20 })).toBe(2);
+  });
+
+  it('gives nothing free without a number: 0, an unlimited stand-in or an ended plan', () => {
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 0, limit: 0 })).toBe(0);
+    expect(freeUnitsOf({ ...plan, units: 1, usedBefore: 0, limit: 1_000_000 })).toBe(0);
+    expect(
+      freeUnitsOf({ ...plan, planActive: false, units: 1, usedBefore: 0, limit: 10_000 }),
+    ).toBe(0);
+    expect(freeUnitsOf({ ...plan, units: 0, usedBefore: 0, limit: 10_000 })).toBe(0);
+  });
+});
+
 describe('priceUsage', () => {
   const rates = mergeUsageRates(undefined);
 
@@ -54,10 +108,10 @@ describe('priceUsage', () => {
       reason: 'no_units',
     });
     const off = mergeUsageRates({
-      prices: { sms: { enabled: false } },
+      prices: { voice_call: { enabled: false } },
       costPlus: { ai: { enabled: false } },
     });
-    expect(priceUsage(off, { kind: 'sms', units: 2 })).toEqual({
+    expect(priceUsage(off, { kind: 'voice_call', units: 2 })).toEqual({
       basis: 'none',
       reason: 'switched_off',
     });
@@ -67,10 +121,25 @@ describe('priceUsage', () => {
     });
   });
 
+  it('never makes SMS or email free: a switched-off or zero rate is charged the minimum', () => {
+    const zeroed = mergeUsageRates({
+      prices: { sms: { enabled: false, priceMinor: 0 }, email: { enabled: false, priceMinor: 0 } },
+    });
+    expect(priceUsage(zeroed, { kind: 'sms', units: 2 })).toMatchObject({
+      basis: 'unit',
+      unitMinor: MIN_CHARGE_MINOR,
+      platformMinor: 2 * MIN_CHARGE_MINOR,
+    });
+    expect(priceUsage(zeroed, { kind: 'email', units: 1 })).toMatchObject({
+      basis: 'unit',
+      unitMinor: MIN_CHARGE_MINOR,
+    });
+  });
+
   it('prices AI and translation at the vendor cost plus the markup, and an unknown cost as free', () => {
     const p = priceUsage(rates, { kind: 'ai', units: 1, vendorCostUsd: 2 });
-    expect(p).toMatchObject({ basis: 'cost_plus', costUsd: 2, markupBps: 1000 });
-    expect((p as { chargeUsd: number }).chargeUsd).toBeCloseTo(2.2, 10);
+    expect(p).toMatchObject({ basis: 'cost_plus', costUsd: 2, markupBps: 2000 });
+    expect((p as { chargeUsd: number }).chargeUsd).toBeCloseTo(2.4, 10);
     expect(priceUsage(rates, { kind: 'translation', units: 1, vendorCostUsd: null })).toEqual({
       basis: 'none',
       reason: 'no_cost',
@@ -78,15 +147,16 @@ describe('priceUsage', () => {
   });
 
   it('truncates fractional units to whole ones', () => {
-    expect(priceUsage(rates, { kind: 'email', units: 2.9 })).toMatchObject({ platformMinor: 20 });
+    expect(priceUsage(rates, { kind: 'email', units: 2.9 })).toMatchObject({ platformMinor: 30 });
   });
 });
 
 describe('helpers', () => {
   it('adds the markup only to a real cost', () => {
-    expect(chargeUsdOf(1, 1000)).toBeCloseTo(1.1, 10);
-    expect(chargeUsdOf(0, 1000)).toBe(0);
-    expect(chargeUsdOf(-3, 1000)).toBe(0);
+    expect(chargeUsdOf(1, 2000)).toBeCloseTo(1.2, 10);
+    expect(chargeUsdOf(1, 1500)).toBeCloseTo(1.15, 10);
+    expect(chargeUsdOf(0, 2000)).toBe(0);
+    expect(chargeUsdOf(-3, 2000)).toBe(0);
   });
 
   it('bills every started minute and nothing for an unanswered call', () => {

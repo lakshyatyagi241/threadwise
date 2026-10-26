@@ -287,6 +287,31 @@ export interface CostLine {
  * What the wallet is expected to be charged: every destination's messages at its price; when the plan's monthly allowance covers part
  * of the send (plan mode), only the chargeable share of it, rounded up so the estimate never under-promises.
  */
+/**
+ * The zone a campaign's times are read in: a scheduled send's own zone, else the retry window's, else the workspace's (never a
+ * hidden UTC: the Messages tab, the analytics and the CSV export all show times in it).
+ */
+export function campaignZone(f: {
+  scheduledZone: string | null;
+  retriesZone: string | null | undefined;
+  workspaceZone: string;
+}): string {
+  return f.scheduledZone ?? f.retriesZone ?? f.workspaceZone;
+}
+
+/**
+ * Whether the wallet covers the estimate the person is shown. The wallet's own launch rule (which `creditCheck` asks first) can let a
+ * send through when its internal estimate is lower than the one on the screen; the figure on the screen is what the person decides on,
+ * so a balance below it is not "sufficient". A platform-owned workspace is never billed.
+ */
+export function coversShownEstimate(f: {
+  platformOwned: boolean;
+  balanceMinor: number;
+  estimateMinor: number;
+}): boolean {
+  return f.platformOwned || f.estimateMinor <= 0 || f.balanceMinor >= f.estimateMinor;
+}
+
 export function estimateCost(
   lines: readonly CostLine[],
   chargeable: number,
@@ -321,17 +346,4 @@ export function senderGuided(o: {
   if (['DECLINED'].includes(up(m.name_status))) return false;
   if (BLOCKED_PHONE_STATUS.has(up(m.phone_status))) return false;
   return true;
-}
-
-/** Messages the wallet pays for: all of them in wallet mode; beyond the plan's remaining allowance in plan mode (a limit of 0 is unlimited). */
-export function chargeableMessages(o: {
-  mode: 'plan' | 'wallet';
-  recipients: number;
-  monthlyLimit: number;
-  usedThisMonth: number;
-  planActive: boolean;
-}): number {
-  if (o.mode === 'wallet' || !o.planActive) return o.recipients;
-  if (o.monthlyLimit <= 0) return 0;
-  return Math.max(0, Math.min(o.recipients, o.usedThisMonth + o.recipients - o.monthlyLimit));
 }

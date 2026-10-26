@@ -53,11 +53,12 @@ import {
 import { NotificationsService } from '../notifications';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
+import { assertNotFinishedWebchat } from './finished-webchat';
 import { canActOn } from '../../kernel/rbac/scope';
 
 const MODULE_KEY = 'conversations';
 
-/** The badges when nothing matches (a channel of nobody): every count is zero, the archived one too. A fresh object each time. */
+/** The badges when nothing matches (a channel of nobody): every count is zero, the archived and erased ones too. A fresh object each time. */
 const noCounts = (): InboxCounts => ({
   all: 0,
   mine: 0,
@@ -65,6 +66,7 @@ const noCounts = (): InboxCounts => ({
   unread: 0,
   waiting: 0,
   archived: 0,
+  erased: 0,
 });
 
 /** What the composer is offered when a channel's adapter is not in this deployment: nothing can be sent through it. */
@@ -195,6 +197,7 @@ export class InboxConversationsService {
       tagScope: query.tagScope,
       q: query.q,
       archived: query.archived,
+      erased: query.erased,
     };
   }
 
@@ -338,6 +341,7 @@ export class InboxConversationsService {
           [{ path: 'status', message: `${from} -> ${to} is not allowed` }],
         );
       }
+      if (to === 'open') assertNotFinishedWebchat(locked.channelKind, from, 'reopened');
 
       const finishing = to === 'resolved' || to === 'closed';
       const reopening = to === 'open' && (from === 'resolved' || from === 'closed');

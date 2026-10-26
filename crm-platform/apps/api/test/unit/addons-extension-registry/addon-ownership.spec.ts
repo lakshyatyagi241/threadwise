@@ -170,6 +170,8 @@ interface World {
   /** stored offers of the workspace's plan (plan_addon_offers), by pack row id */
   offers?: Array<{ addon_id: string; mode: string; amount: string | null }>;
   overrides?: Record<string, unknown>;
+  /** the workspace's own switches (workspace_addon_activation), by pack row id */
+  activation?: Array<{ addon_id: number; state: string }>;
   /** the operator asks for a workspace uuid that does not exist */
   missing?: boolean;
 }
@@ -198,6 +200,7 @@ function service(w: World) {
           ],
         };
       if (text.includes('FROM plan_addon_offers o')) return { rows: w.offers ?? [] };
+      if (text.includes('FROM workspace_addon_activation')) return { rows: w.activation ?? [] };
       if (text.includes('FROM workspace_addons a')) return { rows: w.owned };
       if (text.includes("kind = 'addon'")) return { rows: w.packs };
       throw new Error(`unexpected query: ${text}`);
@@ -489,5 +492,41 @@ describe("the operator's view of a workspace's add-ons", () => {
     ]);
     expect(r!.hidden.map((h) => h.slug)).toEqual(['extra_seat']);
     expect(r!.featureOverrides).toEqual({ inbox_routing: true, inbox_assignment_sticky: true });
+  });
+});
+
+describe("the workspace's own switch on an included add-on", () => {
+  it('a turned-off included add-on stays included and toggleable, shows disabled, and a bought or bought-again one cannot be toggled', async () => {
+    const off = service({
+      plan: {},
+      packs: [pack({})],
+      owned: [],
+      planGrants: ['inbox_routing', 'inbox_assignment_sticky'],
+      activation: [{ addon_id: 1, state: 'disabled' }],
+    });
+    const r = await off.svc.forWorkspace(1, true);
+    expect(r.catalog[0]).toMatchObject({
+      state: 'included',
+      activation: 'disabled',
+      canToggle: true,
+    });
+    expect(workspaceAddonsResponseSchema.safeParse(r).success).toBe(true);
+
+    const on = service({
+      plan: {},
+      packs: [pack({})],
+      owned: [],
+      planGrants: ['inbox_routing', 'inbox_assignment_sticky'],
+    });
+    expect((await on.svc.forWorkspace(1, true)).catalog[0]).toMatchObject({
+      activation: 'active',
+      canToggle: true,
+    });
+
+    const buy = service({ plan: {}, packs: [pack({})], owned: [], planGrants: [] });
+    expect((await buy.svc.forWorkspace(1, true)).catalog[0]).toMatchObject({
+      state: 'buy',
+      canToggle: false,
+    });
   });
 });

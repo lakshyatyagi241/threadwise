@@ -370,7 +370,8 @@
         "includedOwned": "Masz też ten dodatek. Twój plan już go zawiera, więc możesz go anulować. Nic nie jest zwracane automatycznie.",
         "includedEnds": "W cenie Twojego planu. Twój dodatek kończy się {date} i nie zostanie odnowiony.",
         "active": "Aktywny",
-        "ownedCount": "Posiadane ×{count} · ponowny zakup dodaje więcej"
+        "ownedCount": "Posiadane ×{count} · ponowny zakup dodaje więcej",
+        "turnedOff": "Wyłączony"
       },
       "price": {
         "free": "Bezpłatnie",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "Dodatki z funkcjami",
         "capacity": "Dodatki pojemnościowe"
+      },
+      "activation": {
+        "turnedOffNote": "Wyłączony dla tego obszaru roboczego. Jego ustawienia są zachowane.",
+        "turnOff": "Wyłącz",
+        "turnOn": "Włącz",
+        "askOwner": "Poproś właściciela konta o włączenie lub wyłączenie.",
+        "doneOn": "{name} jest włączony.",
+        "errors": {
+          "notToggleable": "Nie można tutaj włączyć ani wyłączyć dodatku {name}. Przełączyć można tylko dodatek wliczony w Twój plan.",
+          "forbidden": "Nie masz uprawnień do włączania ani wyłączania dodatków.",
+          "generic": "Nie udało się zmienić dodatku {name}. Spróbuj ponownie."
+        }
+      }
+    },
+    "toggle": {
+      "title": "Wyłączyć {name}?",
+      "lead": "Oto, co się zmieni. Możesz go ponownie włączyć w dowolnej chwili.",
+      "cancel": "Anuluj",
+      "confirm": "Wyłącz {name}",
+      "done": "{name} jest wyłączony. Jego ustawienia są zachowane.",
+      "typeLabel": "Wpisz {name}, aby potwierdzić",
+      "typeHint": "Dotyczy to czatów z klientami lub osób, więc wpisz nazwę, aby potwierdzić.",
+      "groups": {
+        "stops": "Co przestanie działać",
+        "kept": "Co zostanie zachowane",
+        "people": "Osoby"
+      },
+      "items": {
+        "features_off": "Te funkcje przestaną działać: {names}.",
+        "dependents_off": "Te funkcje ich wymagają, więc też przestaną działać: {names}.",
+        "roles_dormant": "{count, plural, one {# rola ma uprawnienia tego dodatku. Zachowa je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} few {# role mają uprawnienia tego dodatku. Zachowają je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} many {# ról ma uprawnienia tego dodatku. Zachowają je, ale będą nieaktywne, dopóki go ponownie nie włączysz.} other {# roli ma uprawnienia tego dodatku. Zachowa je, ale będą nieaktywne, dopóki go ponownie nie włączysz.}}",
+        "waiting_chats": "{count, plural, one {# czat czeka na agenta. Nie zostanie przypisany automatycznie, więc ktoś musi go przejąć.} few {# czaty czekają na agenta. Nie zostaną przypisane automatycznie, więc ktoś musi je przejąć.} many {# czatów czeka na agenta. Nie zostaną przypisane automatycznie, więc ktoś musi je przejąć.} other {# czatu czeka na agenta. Nie zostanie przypisane automatycznie, więc ktoś musi je przejąć.}}",
+        "routing_rules": "{count, plural, one {# reguła routingu przestanie przypisywać czaty.} few {# reguły routingu przestaną przypisywać czaty.} many {# reguł routingu przestanie przypisywać czaty.} other {# reguły routingu przestanie przypisywać czaty.}}",
+        "auto_teams": "{count, plural, one {# zespół jest ustawiony na automatyczne przypisywanie czatów i przestanie to robić.} few {# zespoły są ustawione na automatyczne przypisywanie czatów i przestaną to robić.} many {# zespołów jest ustawionych na automatyczne przypisywanie czatów i przestanie to robić.} other {# zespołu jest ustawionych na automatyczne przypisywanie czatów i przestanie to robić.}}",
+        "teams": "{count, plural, one {# zespół zostanie zachowany wraz z członkami.} few {# zespoły zostaną zachowane wraz z członkami.} many {# zespołów zostanie zachowanych wraz z członkami.} other {# zespołu zostanie zachowane wraz z członkami.}}",
+        "custom_role_holders": "{count, plural, one {# osoba ma rolę niestandardową. Jej rola zostanie zachowana, ale uprawnienia tego dodatku przestaną obowiązywać.} few {# osoby mają rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.} many {# osób ma rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.} other {# osoby ma rolę niestandardową. Ich role zostaną zachowane, ale uprawnienia tego dodatku przestaną obowiązywać.}}",
+        "kept": "Twoje ustawienia i dane są zachowane. Po ponownym włączeniu wrócą w takim stanie, w jakim je zostawiłeś."
       }
     }
   }

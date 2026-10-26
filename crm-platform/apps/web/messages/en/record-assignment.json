@@ -76,7 +76,7 @@
       "unknownPerson": "Former member",
       "unknownTeam": "Removed team",
       "teamName": "Team: {name}",
-      "skipsOffline": "Skips people who are offline",
+      "skipsOffline": "Skips people who are away",
       "reassigns": "Reassigns on update",
       "activeFor": "Rule {name} is active",
       "dragHandle": "Drag {name} to change its priority",
@@ -136,7 +136,7 @@
         "noPeople": "No people matched.",
         "removePerson": "Remove {name}",
         "onLeave": "on leave",
-        "skipOffline": "Skip people who are offline",
+        "skipOffline": "Skip people who are away",
         "skipOfflineHint": "People on leave are always skipped.",
         "reassign": "Reassign when an update makes this rule start matching",
         "reassignHint": "Applies only to records this engine assigned itself, and only while nobody has changed the owner since. Off by default: a record is assigned once."
@@ -220,7 +220,7 @@
         "disabled": "Record assignment is switched off for this workspace, so nothing would happen.",
         "has_owner": "{record} already has an owner, so no rule would run. An owner someone set is never replaced.",
         "no_rule": "No active rule matches {record}.",
-        "nobody_available": "A rule matches {record}, but everyone it names is on leave, offline or no longer here.",
+        "nobody_available": "A rule matches {record}, but everyone it names is on leave, away or no longer here.",
         "plan": "Your plan does not include record assignment rules.",
         "not_found": "That record was not found. It may have been deleted, or it is outside what you can see."
       },
@@ -238,7 +238,7 @@
         "no_access": "{name}: cannot open this kind of record",
         "inactive": "{name}: no longer active",
         "on_leave": "{name}: on leave today",
-        "offline": "{name}: offline"
+        "offline": "{name}: away"
       },
       "skipped": "Skipped because nobody was available: {names}"
     },

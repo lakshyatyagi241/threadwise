@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "確認でMetaが拒否する問題が見つかりました。送信はされていません。右に表示されたエラーを修正してください。",
       "TPL_META_REJECTED": "Metaがテンプレートを拒否しました。理由は下に表示されています。テンプレートは下書きとして保存されているため、修正して再度お試しください。",
       "TPL_NO_CONNECTION": "このテンプレートを申請できる連携済みのWhatsApp番号がありません。先に番号を連携してください。",
+      "TPL_HEADER_STORAGE_REQUIRED": "ヘッダーのファイルにはクラウドのオブジェクトストレージが必要です。プラットフォーム管理者に有効化を依頼してください。",
       "TPL_IN_USE": "このテンプレートは実行中または予約済みの一斉送信で使用されているため、削除できません。",
       "TPL_NOT_EDITABLE": "編集できるのは、Metaが未承認のテンプレートまたは却下されたテンプレートのみです。",
       "TPL_EDIT_LIMIT": "承認済みテンプレートは Meta により 24 時間に 1 回、30 日間に 10 回まで編集できます。しばらくしてから再試行してください。",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, other {+#個のボタン}}",
       "live": "ライブプレビュー",
       "business": "Bloomly",
-      "online": "オンライン"
+      "online": "オンライン",
+      "cards": "カルーセルのカード",
+      "cardEmpty": "カード {n} のテキスト",
+      "offerExpires": "まもなく終了",
+      "offerTextEmpty": "オファー見出し"
     },
     "card": {
       "rejected": "却下：{reason}",
@@ -120,7 +125,8 @@
         "all": "すべて",
         "approved": "承認済み",
         "pending": "審査中",
-        "rejected": "却下"
+        "rejected": "却下",
+        "draft": "下書き"
       },
       "quickStartTitle": "クイックスタート",
       "quickStart": "承認までの時間を24時間以内に保つため、Metaに送信する前に<link>テンプレートガイドライン</link>をお読みください。",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "承認済み",
         "pending": "審査中",
-        "rejected": "却下"
+        "rejected": "却下",
+        "draft": "下書き"
       },
       "helpLabel": "ヘルプ - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "テンプレートを削除",
       "cancel": "キャンセル",
       "done": "「{name}」を削除しました。",
-      "inUseHelp": "このテンプレートを使用している一斉送信を開き、キャンセルするか別のテンプレートを選んでから、このテンプレートを削除してください。"
+      "inUseHelp": "このテンプレートを使用している一斉送信を開き、キャンセルするか別のテンプレートを選んでから、このテンプレートを削除してください。",
+      "messageDraft": "「{name}」を削除しますか？ Meta には一度も送信されていないため、ここからのみ削除されます。"
     },
     "lint": {
       "title": "申請前の確認",
@@ -195,7 +203,8 @@
         "body": "本文",
         "footer": "フッター",
         "buttons": "ボタン",
-        "template": "テンプレート"
+        "template": "テンプレート",
+        "cards": "カード"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "アップロード中",
         "keptSample": "保存済みのサンプルは残ります。置き換えるにはファイルを選択してください。",
         "noFile": "ファイルが選択されていません",
-        "limits": "画像は5 MBまで、動画は16 MBまで、PDFは100 MBまでです。",
+        "limits": "画像は5 MBまで、動画は16 MBまで、PDFは10 MBまでです。",
         "replace": "ファイルを置き換え",
         "choose": "サンプルファイルを選択",
         "tooBig": "この{kind}は {size} MB です。WhatsAppは {max} MB までのファイルを受け付けます。より小さいファイルを選択してください。",
@@ -322,14 +331,18 @@
           "quick_reply": "クイック返信",
           "url": "ウェブサイトを開く",
           "phone": "電話をかける",
-          "copy_code": "コードをコピー"
+          "copy_code": "コードをコピー",
+          "form": "フォーム",
+          "catalog": "カタログ"
         },
         "kind": {
           "quick_reply": "クイック返信",
           "url": "ウェブサイトを開く",
           "phone": "電話をかける",
           "copy_code": "コードをコピー",
-          "other": "その他"
+          "other": "その他",
+          "form": "フォーム",
+          "catalog": "カタログ"
         },
         "count": "{used}/{max} 個のボタン",
         "limitReached": "この種類は最大{max}個までです。",
@@ -358,8 +371,17 @@
           "codeRequired": "サンプルコードを入力してください。",
           "quickReplyVariable": "クイック返信に変数を含めることはできません。",
           "urlExampleRequired": "URLの変数のサンプル値を入力してください。",
-          "quickReplyPosition": "クイック返信は、ボタンの先頭または末尾にまとめて配置してください。"
-        }
+          "quickReplyPosition": "クイック返信は、ボタンの先頭または末尾にまとめて配置してください。",
+          "flowIdRequired": "Flow IDを入力してください。",
+          "flowIdInvalid": "Flow IDは数字です。",
+          "screenRequired": "画面IDを入力してください。",
+          "catalogAlone": "カタログボタンは他のボタンと組み合わせられません。"
+        },
+        "catalogHint": "WhatsAppカタログを開きます。ボタンには「カタログを見る」と表示され、唯一のボタンである必要があります。",
+        "flowId": "WhatsApp Flow ID",
+        "flowIdHint": "公開済みWhatsApp Flowの数値ID（MetaのFlowsマネージャーで確認）。",
+        "screen": "開始画面",
+        "screenHint": "フォームが最初に開く画面のID（例: WELCOME）。"
       },
       "result": {
         "metaRefused": "保存しましたが、Metaがテンプレートを拒否しました。",
@@ -373,6 +395,46 @@
         "open": "AIで作成",
         "applied": "AIでテンプレートの下書きを入力しました。送信前に内容を確認してください。",
         "authHint": "認証テンプレートの文面は固定のため、下書きを作成する内容がありません。"
+      },
+      "type": {
+        "label": "ボタンの種類",
+        "standard": "標準",
+        "carousel": "カルーセル",
+        "hint": "メッセージの最後に何を付けるか選びます。カルーセルはカードの列です。期間限定オファーには、オファー見出し（任意でカウントダウン付き）と、コードコピーまたはWebサイトのボタンがあります。",
+        "none": "なし",
+        "buttons": "コードをコピー、Webサイト、クイック返信など",
+        "lto": "期間限定オファー",
+        "catalogue": "カタログ",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "カード",
+        "hint": "カードは2〜10枚。すべて同じ種類のファイルと同じボタンを使います。",
+        "format": "カードの表示",
+        "formatImage": "画像",
+        "formatVideo": "動画",
+        "count": "{used}/{max} 枚",
+        "add": "カードを追加",
+        "needTwo": "カルーセルには最低{min}枚のカードが必要です。",
+        "card": "カード {n}",
+        "remove": "カード {n} を削除",
+        "noFile": "ファイルが選択されていません",
+        "uploading": "アップロード中",
+        "text": "カードのテキスト",
+        "textCounter": "{used}/{max}",
+        "buttons": "ボタン",
+        "buttonText": "ボタンのテキスト",
+        "buttonUrl": "ウェブサイトのURL",
+        "buttonPhone": "電話番号"
+      },
+      "offer": {
+        "title": "期間限定オファー",
+        "hint": "画像または動画の下に表示されます。見出しと、必要ならオファー終了までのカウントダウンです。",
+        "text": "オファー見出し",
+        "textHint": "{used}/{max}",
+        "placeholder": "まもなく終了！",
+        "countdown": "カウントダウンを表示",
+        "countdownHint": "WhatsAppがオファー終了までの残り時間を表示します。"
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "テンプレート",
       "crumbDetail": "詳細",
       "notSubmittedPill": "未送信",
-      "qualityPill": "品質 · {quality}",
       "preview": {
         "title": "プレビュー",
         "hint": "WhatsAppでの表示イメージ"

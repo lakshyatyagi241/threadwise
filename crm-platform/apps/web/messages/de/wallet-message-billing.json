@@ -273,7 +273,7 @@
       "emptyFiltered": "Nichts entspricht diesen Filtern. Ändern oder zurücksetzen.",
       "days": {
         "title": "Tagesprotokoll",
-        "subtitle": "Nachrichten nach Tag, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
+        "subtitle": "Nachrichten nach Tag, Typ, Status, Kanal und Kategorie gruppiert. Öffnen Sie einen Tag, um jede Nachricht zu sehen.",
         "messagesOnDay": "{count} Nachrichten",
         "viewDetails": "Details anzeigen",
         "actions": "Aktionen",
@@ -310,7 +310,8 @@
         "widget_ai": "Website-Chatbot",
         "growth": "Wachstum",
         "telephony": "Telefonanrufe",
-        "translation": "Übersetzung"
+        "translation": "Übersetzung",
+        "widget": "Website-Chatbot"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Jede begonnene Minute eines WhatsApp-Anrufs. Ein Anruf, den niemand angenommen hat, ist kostenlos.",
             "voice_call": "Jede begonnene Minute eines Anrufs, den der Telefonieanbieter des Kunden meldet. Von Hand eingetragene Anrufprotokolle werden nie berechnet.",
             "enrichment": "Jeder Kontakt, der beim Datenanbieter der Plattform abgefragt wird.",
-            "chat_message": "Jede Nachricht über Telegram, Facebook, Instagram, LINE, Viber oder WeChat. Kostenlos, bis Sie einen Preis festlegen."
+            "chat_message": "Jede Nachricht über Telegram, Facebook, Instagram, LINE, Viber oder WeChat. Kostenlos, bis Sie einen Preis festlegen.",
+            "webbot_message": "Jede Besuchernachricht, die der Website-Chatbot bearbeitet, nachdem die kostenlosen Monatsnachrichten des Tarifs aufgebraucht sind."
           },
           "costPlus": {
             "title": "Zum Anbieterpreis plus Aufschlag berechnet",
@@ -1034,7 +1036,8 @@
       "ai": "KI",
       "translation": "Übersetzung",
       "enrichment": "Kontaktabfrage",
-      "chat_message": "Chat-Nachricht"
+      "chat_message": "Chat-Nachricht",
+      "webbot_message": "Website-Chatbot-Nachricht"
     }
   }
 }

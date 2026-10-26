@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# ora} other {# ore}}",
         "days": "{count, plural, one {# giorno} other {# giorni}}"
       },
-      "unsnoozesAt": "Riapre {time}"
+      "unsnoozesAt": "Riapre {time}",
+      "erased": "Contatti cancellati",
+      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona né il testo dei messaggi. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
+      "erasedTitle": "Contatto cancellato"
     },
     "status": {
       "received": "Ricevuto",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Puoi leggere questa conversazione, ma non hai l’autorizzazione per rispondere.",
       "resolvedBanner": "Questa conversazione è risolta. Riaprila per rispondere.",
+      "resolvedWebchatBanner": "Questa chat web è risolta e non può essere riaperta.",
       "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnala prima a te stesso per rispondere.",
       "typing": "{count, plural, one {Un collega sta scrivendo} other {# colleghi stanno scrivendo}}",
       "messagesLabel": "Messaggi",
+      "session": {
+        "header": "{range} · {count, plural, one {# messaggio} other {# messaggi}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Carica messaggi precedenti",
       "empty": "Nessun messaggio in questa conversazione per ora.",
       "newMessageAnnounce": "Nuovo messaggio: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Nessun risultato",
       "searchPrev": "Risultato precedente",
       "searchNext": "Risultato successivo",
-      "searchClose": "Chiudi ricerca"
+      "searchClose": "Chiudi ricerca",
+      "erasedBadge": "Cancellato",
+      "erasedBanner": "Questo contatto è stato cancellato. Testo e media dei messaggi sono stati rimossi, quindi non è possibile inviare nulla. Cronologia e orari sono conservati."
     },
     "groupThread": {
       "openGroup": "Apri gruppo",
@@ -542,17 +554,17 @@
         "onLeave": "In ferie",
         "onLeaveUntil": "In ferie fino al {date}",
         "availability": {
-          "online": "Online",
-          "away": "Assente",
+          "online": "Disponibile",
+          "away": "Assente, fuori orario di lavoro",
           "busy": "Occupato",
-          "offline": "Offline"
+          "offline": "Assente"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Assente",
+        "online": "Disponibile",
+        "away": "Assente, fuori orario di lavoro",
         "busy": "Occupato",
-        "offline": "Offline"
+        "offline": "Assente"
       },
       "notes": {
         "tab": "Note del contatto",
@@ -715,6 +727,7 @@
         "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello.",
         "paused": "Sospeso da WhatsApp. Potrà essere inviato di nuovo al termine della sospensione.",
         "media_header": "Ha un’intestazione con immagine, video o documento, che non può ancora essere inviata dall’Inbox.",
+        "carousel": "È un carosello (schede con immagini) e non può ancora essere inviato dalla posta in arrivo.",
         "header_variable": "Ha una variabile nell’intestazione, che non può ancora essere compilata dall’Inbox.",
         "dynamic_button": "Ha un link di pulsante con una variabile, che non può ancora essere compilata dall’Inbox.",
         "authentication": "I template con password monouso vengono inviati dal sistema, non dall’Inbox.",

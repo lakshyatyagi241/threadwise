@@ -132,6 +132,10 @@ export function setPackKind(d: PackDraft, kind: AddonKind): PackDraft {
   };
 }
 
+/** The price input is marked when the amount is not a price at all, or is zero on a subscription. */
+export const amountFlagged = (p: Partial<Record<PackField, true>>): boolean =>
+  !!(p.amount || p.amountPositive);
+
 /** Validates with the same schema the API uses, so the form and the server cannot disagree. */
 export function buildPackRequest(d: PackDraft): BuildResult {
   const limits: Record<string, number | null> = {};

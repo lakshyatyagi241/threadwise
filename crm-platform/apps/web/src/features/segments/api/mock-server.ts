@@ -110,6 +110,8 @@ async function create(
     sharedWith: { users: [], teams: [] },
     ownerId: ME.id,
     ownerName: ME.name,
+    createdBy: { id: ME.id, name: ME.name },
+    updatedBy: null,
     rules,
     rulesVersion: 1,
     memberCount: await counted(rules),
@@ -180,6 +182,7 @@ export async function mockCall<T>(path: string, req: ApiRequest<T> = {}): Promis
       memberCount: await counted(rules),
       memberCountAt: new Date().toISOString(),
       rowVersion: seg.rowVersion + 1,
+      updatedBy: { id: ME.id, name: ME.name },
       updatedAt: new Date().toISOString(),
     };
     save(rows.map((s) => (s.id === seg.id ? next : s)));

@@ -48,7 +48,8 @@
       "email_mailboxes": "E-mailpostvakken",
       "email_monthly": "E-mails per maand",
       "storage_gb": "Opslag (GB)",
-      "teams": "Teams"
+      "teams": "Teams",
+      "webbot_messages": "Gratis websitechatbot-berichten per maand"
     },
     "features": {
       "automation": "Automatisering",
@@ -91,7 +92,9 @@
       "record_assignment": "Regels voor recordtoewijzing",
       "team_hierarchy": "Teamhiërarchie en managers",
       "custom_roles": "Eigen rollen en bereiken",
-      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker"
+      "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker",
+      "agent_status_bar": "Statusbalk: knop Beschikbaar / Afwezig in de bovenbalk en de Inbox",
+      "agent_status_automation": "Status automatiseren: persoonlijke werktijden en automatisch afwezig"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -146,7 +149,8 @@
       "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
       "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
       "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
-      "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
+      "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd.",
+      "webbot_messages": "Websitechatbot-berichten die elke kalendermaand gratis zijn inbegrepen. Elk bericht daarboven wordt van de wallet afgeschreven. Leeg of 0 = geen inbegrepen."
     },
     "planAddons": {
       "title": "Add-ons beschikbaar in je abonnement",
@@ -584,7 +588,13 @@
       "askOwner": "Vraag de accounteigenaar om het toe te voegen.",
       "unavailableTitle": "{addon} vereist een actief betaald abonnement",
       "unavailableLead": "Kies eerst een betaald abonnement; daarna kun je {addon} toevoegen.",
-      "viewPlans": "Abonnementen bekijken"
+      "viewPlans": "Abonnementen bekijken",
+      "disabledTitle": "{addon} is uitgeschakeld",
+      "disabledLead": "Je abonnement bevat {addon}, maar het is uitgeschakeld voor deze werkruimte. De instellingen blijven bewaard.",
+      "disabledAsk": "Vraag de accounteigenaar om het in te schakelen.",
+      "turnOn": "Inschakelen",
+      "turnOnForbidden": "Je hebt geen toestemming om dit in te schakelen. Vraag het de accounteigenaar.",
+      "turnOnFailed": "We konden {addon} niet inschakelen. Probeer het opnieuw."
     }
   }
 }

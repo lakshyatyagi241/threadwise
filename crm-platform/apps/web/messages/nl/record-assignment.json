@@ -76,7 +76,7 @@
       "unknownPerson": "Voormalig lid",
       "unknownTeam": "Verwijderd team",
       "teamName": "Team: {name}",
-      "skipsOffline": "Slaat offline personen over",
+      "skipsOffline": "Slaat afwezige mensen over",
       "reassigns": "Wijst opnieuw toe bij update",
       "activeFor": "Regel {name} is actief",
       "dragHandle": "Sleep {name} om de prioriteit te wijzigen",
@@ -136,7 +136,7 @@
         "noPeople": "Geen personen gevonden.",
         "removePerson": "{name} verwijderen",
         "onLeave": "met verlof",
-        "skipOffline": "Offline personen overslaan",
+        "skipOffline": "Afwezige mensen overslaan",
         "skipOfflineHint": "Personen met verlof worden altijd overgeslagen.",
         "reassign": "Opnieuw toewijzen wanneer een update ervoor zorgt dat deze regel gaat overeenkomen",
         "reassignHint": "Geldt alleen voor records die deze engine zelf heeft toegewezen en alleen zolang niemand de eigenaar sindsdien heeft gewijzigd. Standaard uit: een record wordt één keer toegewezen."
@@ -220,7 +220,7 @@
         "disabled": "Recordtoewijzing is uitgeschakeld voor deze werkruimte, dus er zou niets gebeuren.",
         "has_owner": "{record} heeft al een eigenaar, dus er wordt geen regel uitgevoerd. Een eigenaar die iemand heeft ingesteld, wordt nooit vervangen.",
         "no_rule": "Geen actieve regel komt overeen met {record}.",
-        "nobody_available": "Een regel komt overeen met {record}, maar iedereen die erin staat is met verlof, offline of niet meer aanwezig.",
+        "nobody_available": "Een regel komt overeen met {record}, maar iedereen die erin staat is met verlof, afwezig of niet meer hier.",
         "plan": "Uw abonnement bevat geen regels voor recordtoewijzing.",
         "not_found": "Dat record is niet gevonden. Het is mogelijk verwijderd of valt buiten wat u kunt zien."
       },
@@ -239,7 +239,7 @@
         "no_access": "{name}: kan dit soort record niet openen",
         "inactive": "{name}: niet meer actief",
         "on_leave": "{name}: vandaag met verlof",
-        "offline": "{name}: offline"
+        "offline": "{name}: afwezig"
       }
     },
     "log": {

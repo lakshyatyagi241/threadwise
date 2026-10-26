@@ -15,6 +15,7 @@ import {
   type RoutingTestStep,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { loadAgentStatuses, type LoadedStatus } from '../../common/agent-status';
 import { isOutsideBusinessHours } from '../../common/business-hours';
 import { pickDelegate } from '../../common/leave-delegate';
 import { loadWorkspaceCalendar, onLeaveMap } from '../../common/workspace-calendar';
@@ -39,7 +40,11 @@ import { QueueArrivalService, type ArrivalQueued } from './queue-arrival.service
 import { explainFacts, type RoutingFacts } from './routing-matcher';
 import { decodeActions, decodeConditions, encodeActions } from './routing-rules.mapper';
 import { RoutingRulesRepository, type RuleRow } from './routing-rules.repository';
-import type { HandoffTraceLine } from '@crm/contracts';
+import {
+  AGENT_STATUS_AUTOMATION_FEATURE,
+  OUTSIDE_WORKING_HOURS_REASON,
+  type HandoffTraceLine,
+} from '@crm/contracts';
 
 /** A uuid derived from a seed (a SHA-1 shaped as a version 5 uuid), so the same seed always gives the same id. */
 const deterministicUuid = (seed: string): string => {
@@ -136,6 +141,10 @@ interface ArrivalDecision {
 /** What the engine knows about the calendar while it evaluates one conversation. */
 export interface Calendar {
   today: string;
+  /** The instant the status of every person is evaluated at (one per decision, so a boundary cannot fall between two reads). */
+  now: Date;
+  /** The workspace plan has `agent_status_automation`: people's own working hours count (docs/specs/agent-status-bar.md). */
+  statusAutomation: boolean;
   /** People a rule wanted but who are on leave today (internal ids): the notice to the leads when nobody could take the conversation. */
   blocked: Set<number>;
 }
@@ -215,6 +224,11 @@ export class RoutingEngine {
       await this.repo.stampRouted(tx, orgId, locked.id, input.messageUuid);
       const cal: Calendar = {
         today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        now,
+        statusAutomation: await this.entitlements.featureEnabled(
+          orgId,
+          AGENT_STATUS_AUTOMATION_FEATURE,
+        ),
         blocked: new Set<number>(),
       };
 
@@ -407,6 +421,11 @@ export class RoutingEngine {
       if (!due) return { applied: false, change: null as AssignmentChange | null };
       const cal: Calendar = {
         today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        now,
+        statusAutomation: await this.entitlements.featureEnabled(
+          orgId,
+          AGENT_STATUS_AUTOMATION_FEATURE,
+        ),
         blocked: new Set<number>(),
       };
       await this.decorateByRule(tx, orgId, locked, due.ruleId, due.priority, []);
@@ -864,6 +883,11 @@ export class RoutingEngine {
       const trace: HandoffTraceLine[] = [];
       const cal: Calendar = {
         today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        now,
+        statusAutomation: await this.entitlements.featureEnabled(
+          orgId,
+          AGENT_STATUS_AUTOMATION_FEATURE,
+        ),
         blocked: new Set<number>(),
       };
       const d = await this.decideArrival(
@@ -1110,19 +1134,31 @@ export class RoutingEngine {
 
     // On leave today (BL-112): never picked. A person NAMED by the rule who is away is replaced by their delegate, and the named
     // people (with their delegates) go ahead of the rule's teams; with nobody to take their place the team pool decides.
-    const away = await onLeaveMap(tx, orgId, [...origin.keys()], cal.today);
+    // Leave is read through the effective status (docs/specs/agent-status-bar.md): a person who chose Available during their own leave
+    // counts as present; everyone else is read once here for the whole candidate set and again, in the same map, for the delegates.
+    const statusOpts = { automationAllowed: cal.statusAutomation, now: cal.now };
+    const statuses = await loadAgentStatuses(tx, orgId, [...origin.keys()], statusOpts);
+    const leaveOf = (m: ReadonlyMap<number, LoadedStatus>, ids: Iterable<number>) =>
+      new Map(
+        [...ids]
+          .filter((id) => m.get(id)?.reason === 'leave')
+          .map((id) => [id, m.get(id)!.leaveUntil] as const),
+      );
+    const away = leaveOf(statuses, origin.keys());
     const delegateFor = new Map<number, string>(); // delegate id -> uuid of the absent person
     let namedAway = false;
     if (away.size > 0) {
       const awayNamed = [...away.keys()].filter((id) => origin.get(id) === null);
       namedAway = awayNamed.length > 0;
       const delegates = await this.repo.delegatesOf(tx, orgId, awayNamed);
-      const delegateAway = await onLeaveMap(
+      const delegateStatuses = await loadAgentStatuses(
         tx,
         orgId,
         [...delegates.values()].map((d) => d.id),
-        cal.today,
+        statusOpts,
       );
+      for (const [id, st] of delegateStatuses) statuses.set(id, st);
+      const delegateAway = leaveOf(statuses, delegateStatuses.keys());
       const delegateOf = new Map([...delegates].map(([p, d]) => [p, d.id] as const));
       const personUuid = await this.repo.userUuids(tx, orgId, awayNamed);
       for (const id of away.keys()) {
@@ -1144,7 +1180,7 @@ export class RoutingEngine {
     }
 
     const considered = [...origin.keys()];
-    let pool = (await this.repo.available(tx, orgId, considered, cal.today)).filter((p) =>
+    let pool = (await this.repo.available(tx, orgId, considered, statuses)).filter((p) =>
       canOpen.has(p.id),
     );
     if (trace) {
@@ -1161,11 +1197,17 @@ export class RoutingEngine {
       const inPool = new Set(pool.map((p) => p.id));
       for (const id of considered) {
         if (inPool.has(id)) continue;
+        const st = statuses.get(id);
         trace.push({
           step: 'candidate',
           who: names.get(id) ?? null,
           result: 'skipped',
-          why: canOpen.has(id) ? 'offline_busy_or_at_capacity' : 'cannot_read',
+          // Outside their own working hours has its own reason; the rest keeps the old one (Away on purpose, busy, or at their chat limit).
+          why: !canOpen.has(id)
+            ? 'cannot_read'
+            : st?.trace === 'outside_working_hours'
+              ? OUTSIDE_WORKING_HOURS_REASON
+              : 'offline_busy_or_at_capacity',
         });
       }
       for (const [d, absent] of delegateFor) {

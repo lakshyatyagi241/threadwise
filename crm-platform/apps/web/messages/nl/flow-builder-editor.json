@@ -1261,7 +1261,12 @@
             },
             "prev": "Vorige kaart",
             "next": "Volgende kaart",
-            "goTo": "Kaart {n}"
+            "goTo": "Kaart {n}",
+            "saveCopy": "Kopie opslaan",
+            "saveCopyHint": "Slaat deze afbeelding op onze server op, zodat de chat van elke bezoeker hem kan tonen. Een afbeelding van een site die delen weigert, kan niet worden gekopieerd: upload hem in plaats daarvan.",
+            "saving": "Opslaan…",
+            "copyFailed": "Kopie kon niet worden opgeslagen: {message}",
+            "imageFormats": "Toegestane formaten: JPG, JPEG of PNG."
           },
           "condition": {
             "info": "Voeg regels toe (een variabele, een vergelijking en een waarde). Koppel ze met AND of OR en nest groepen als dat nodig is.",
@@ -1615,6 +1620,8 @@
           "notInWorkspace": "{value} (niet in workspace)",
           "templateLabel": "Goedgekeurd sjabloon",
           "templateHint": "Hier verschijnen alleen goedgekeurde sjablonen uit de workspace. <link>Maak een nieuwe aan →</link>",
+          "statusExits": "Statusuitgangen toevoegen (Verzonden, Afgeleverd, Gelezen, Beantwoord, Mislukt)",
+          "statusExitsHint": "De flow verlaat de stap via de eerste uitgang met een gekoppelde stap: Verzonden zodra de sjabloon is geaccepteerd, Afgeleverd of Gelezen wanneer WhatsApp dat meldt, Beantwoord wanneer de klant terugschrijft, Mislukt als verzenden niet lukte. Een knop die de klant aantikt neemt zijn eigen uitgang.",
           "type": "Type",
           "kindText": "Tekst",
           "kindImage": "Afbeelding",
@@ -1732,12 +1739,12 @@
           "stageHint": "Wanneer een deal naar deze pipelinefase wordt verplaatst, wordt het gekoppelde contact ingeschreven. Beheer fases op het /deals-bord.",
           "rulesLabel": "Koppelen aan reactie-trefwoordregels",
           "rulesHint": "Vink de regels aan die deze flow moeten starten. Laat alles uit om te draaien bij elke Reactie → DM-regel.",
-          "rulesNone": "Nog geen Reactie → DM-trefwoordregels. Maak ze aan op <link>/auto-reply</link> (Instagram · trigger \"Reactie → DM\") en kies ze daarna hier.",
+          "rulesNone": "Nog geen Reactie → DM-trefwoordregels, dus hier valt niets te kiezen.",
           "ruleFallback": "Regel {id}",
           "ruleOff": "uit",
           "orderPlaced": "Wordt geactiveerd bij elke nieuwe bestelling. De klant van de bestelling wordt gekoppeld aan een opgeslagen contact en ingeschreven.",
           "automatic": "Wordt automatisch geactiveerd — geen extra instelling nodig.",
-          "away": "Wordt geactiveerd bij elk binnenkomend bericht terwijl de <b>Afwezigmodus</b> AAN staat. Schakel de Afwezigmodus in via de pagina <link>Automatisch antwoord</link>. Elk contact wordt één keer ingeschreven.",
+          "away": "Wordt geactiveerd bij elk binnenkomend bericht terwijl de <b>Afwezigmodus</b> AAN staat. Elk contact wordt één keer ingeschreven.",
           "outOfHours": "Wordt geactiveerd bij elk binnenkomend bericht dat binnenkomt <b>buiten de openingstijden van je workspace</b>. Stel de openingstijden in via je workspace-instellingen. Elk contact wordt één keer ingeschreven.",
           "manualEnroll": "Je schrijft contacten handmatig in via de <link>/flows-lijst</link> met de knop <b>Inschrijven</b> naast deze flow.",
           "ext": {
@@ -1908,6 +1915,12 @@
           "unresolved": "Deze korte link is nog niet opgezocht. Verlaat het veld of probeer opnieuw.",
           "resolve_failed": "Deze link kon niet worden gelezen. Controleer of hij opent in Google Maps, of voer de coördinaten in."
         }
+      },
+      "flowImage": {
+        "title": "Afbeelding niet geladen",
+        "empty": "de link is leeg",
+        "notAddress": "de link is geen webadres (het moet beginnen met https://)",
+        "failed": "is niet geladen (de link is misschien fout, privé, geblokkeerd of geen afbeelding)"
       }
     },
     "contracts": {
@@ -2742,7 +2755,8 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten",
-      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen."
+      "faqLine": "(gesimuleerd) Antwoord uit FAQ: in de testchat wordt de kennisbank niet doorzocht, \"geen match\" wordt gekozen.",
+      "carouselNoMatch": "“{value}” is geen van de knoppen. Tik op een knop, of typ de tekst ervan precies over."
     }
   }
 }

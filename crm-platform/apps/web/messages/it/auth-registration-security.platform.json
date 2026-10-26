@@ -1449,7 +1449,9 @@
             "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità.",
             "team_hierarchy": "Team padre, responsabili di team e manager che vedono il proprio team e quelli sottostanti.",
             "custom_roles": "Crea e modifica i ruoli e scegli un ambito (propri, del team o tutti i record) per ogni permesso.",
-            "inbox_assignment_sticky": "Assegnazione con priorità al proprietario e sincronizzata, finestra per i contatti di ritorno e richiesta alla riassegnazione. Fa parte del componente aggiuntivo Instradamento intelligente."
+            "inbox_assignment_sticky": "Assegnazione con priorità al proprietario e sincronizzata, finestra per i contatti di ritorno e richiesta alla riassegnazione. Fa parte del componente aggiuntivo Instradamento intelligente.",
+            "agent_status_bar": "Il controllo di stato Disponibile / Assente nella barra superiore e in cima alla Posta in arrivo, con Imposta come assente / disponibile e il link a Permessi. L’interruttore Disponibile / Assente nel menu dell’account è aperto a ogni piano.",
+            "agent_status_automation": "Orario di lavoro personale con fuso orario, Assente fuori da esso, l’avviso Fuori orario di lavoro e un’assegnazione che salta chi è fuori orario. Serve per salvare un orario; senza, l’orario salvato viene conservato ma ignorato."
           },
           "units": {
             "days": "Giorni",
@@ -1595,7 +1597,8 @@
             "email_mailboxes": "Caselle e-mail",
             "email_monthly": "E-mail al mese",
             "storage_gb": "Archiviazione (GB)",
-            "teams": "Team"
+            "teams": "Team",
+            "webbot_messages": "Messaggi gratuiti del chatbot del sito al mese"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1644,7 +1647,9 @@
             "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)",
             "team_hierarchy": "Gerarchia dei team e manager",
             "custom_roles": "Ruoli personalizzati e ambiti",
-            "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso"
+            "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso",
+            "agent_status_bar": "Barra di stato: controllo Disponibile / Assente nella barra superiore e nella Posta in arrivo",
+            "agent_status_automation": "Automatizza stato: orario di lavoro personale e Assente automatico"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1703,7 +1708,8 @@
             "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
             "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
             "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
-            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
+            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi.",
+            "webbot_messages": "Messaggi del chatbot del sito inclusi gratuitamente ogni mese di calendario. Ogni messaggio oltre il limite viene addebitato sul portafoglio. Vuoto o 0 = nessuno incluso."
           },
           "productLines": {
             "chat": "Chat",

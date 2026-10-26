@@ -60,7 +60,7 @@ describe('BulkPropertiesSection', () => {
 
   it('starts with no rows: an "Add property" button only', () => {
     const out = html(<BulkPropertiesSection {...base} fields={[f('city', 'text')]} changes={{}} />);
-    expect(out).toContain('Custom properties');
+    expect(out).toContain('Properties');
     expect(out).toContain('Add property');
     expect(out).not.toContain('Label city');
     expect(out).toContain('all 3 selected contacts');

@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Kontroller, Meta'nın reddedeceği sorunlar buldu. Hiçbir şey gönderilmedi. Sağdaki listelenen hataları düzeltin.",
       "TPL_META_REJECTED": "Meta şablonu reddetti. Nedeni aşağıda; şablonu düzeltip yeniden deneyebilmeniz için taslak olarak saklandı.",
       "TPL_NO_CONNECTION": "Bu şablonun gönderileceği bağlı bir WhatsApp numarası yok. Önce bir numara bağlayın.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Üst bilgi dosyaları bulut nesne depolama gerektirir. Platform yöneticisinden bunu açmasını isteyin.",
       "TPL_IN_USE": "Bu şablon, çalışan veya zamanlanmış bir toplu gönderim tarafından kullanıldığı için silinemez.",
       "TPL_NOT_EDITABLE": "Yalnızca Meta'nın henüz onaylamadığı veya reddettiği şablonlar düzenlenebilir.",
       "TPL_EDIT_LIMIT": "Meta, onaylı bir şablonda 24 saatte bir ve 30 günde on düzenlemeye izin verir. Daha sonra tekrar deneyin.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, other {+# düğme daha}}",
       "live": "Canlı önizleme",
       "business": "Bloomly",
-      "online": "çevrimiçi"
+      "online": "çevrimiçi",
+      "cards": "Karusel kartları",
+      "cardEmpty": "{n}. kartın metni",
+      "offerExpires": "Yakında bitiyor",
+      "offerTextEmpty": "Teklif başlığı"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
@@ -120,7 +125,8 @@
         "all": "Tümü",
         "approved": "Onaylandı",
         "pending": "İncelemede",
-        "rejected": "Reddedildi"
+        "rejected": "Reddedildi",
+        "draft": "Taslak"
       },
       "quickStartTitle": "Hızlı başlangıç",
       "quickStart": "Onay sürelerini 24 saatin altında tutmak için Meta'ya göndermeden önce <link>Şablon Yönergeleri</link>'ni okuyun.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Onaylandı",
         "pending": "İncelemede",
-        "rejected": "Reddedildi"
+        "rejected": "Reddedildi",
+        "draft": "Taslak"
       },
       "helpLabel": "Yardım - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Şablonu sil",
       "cancel": "İptal",
       "done": "\"{name}\" silindi.",
-      "inUseHelp": "Bu şablonu kullanan toplu gönderimi açın ve iptal edin ya da başka bir şablon seçin; ardından bunu silin."
+      "inUseHelp": "Bu şablonu kullanan toplu gönderimi açın ve iptal edin ya da başka bir şablon seçin; ardından bunu silin.",
+      "messageDraft": "“{name}” silinsin mi? Meta’ya hiç gönderilmedi, bu yüzden yalnızca burada kaldırılacak."
     },
     "lint": {
       "title": "Gönderim öncesi kontroller",
@@ -195,7 +203,8 @@
         "body": "Gövde",
         "footer": "Alt bilgi",
         "buttons": "Düğmeler",
-        "template": "Şablon"
+        "template": "Şablon",
+        "cards": "Kartlar"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Yükleniyor",
         "keptSample": "Kayıtlı örnek korunur. Değiştirmek için bir dosya seçin.",
         "noFile": "Dosya seçilmedi",
-        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 100 MB.",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB, PDF en fazla 10 MB.",
         "replace": "Dosyayı değiştir",
         "choose": "Örnek dosya seç",
         "tooBig": "Bu {kind} {size} MB. WhatsApp en fazla {max} MB kabul eder. Daha küçük bir dosya seçin.",
@@ -322,14 +331,18 @@
           "quick_reply": "Hızlı yanıt",
           "url": "Web sitesini ziyaret et",
           "phone": "Telefonu ara",
-          "copy_code": "Kodu kopyala"
+          "copy_code": "Kodu kopyala",
+          "form": "Form",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Hızlı yanıt",
           "url": "Web sitesini ziyaret et",
           "phone": "Telefonu ara",
           "copy_code": "Kodu kopyala",
-          "other": "Diğer"
+          "other": "Diğer",
+          "form": "Form",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} düğme",
         "limitReached": "Bu türden en fazla {max} tane.",
@@ -358,8 +371,17 @@
           "codeRequired": "Bir örnek kod girin.",
           "quickReplyVariable": "Hızlı yanıt bir değişken içeremez.",
           "urlExampleRequired": "URL değişkeni için bir örnek değer girin.",
-          "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır."
-        }
+          "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır.",
+          "flowIdRequired": "Flow kimliğini girin.",
+          "flowIdInvalid": "Flow kimliği bir sayıdır.",
+          "screenRequired": "Ekran kimliğini girin.",
+          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz."
+        },
+        "catalogHint": "WhatsApp kataloğunuzu açar. Düğmede “Kataloğu görüntüle” yazar ve tek düğme olmalıdır.",
+        "flowId": "WhatsApp Flow kimliği",
+        "flowIdHint": "Meta’nın Flows yöneticisinden yayımlanmış bir WhatsApp Flow’un sayısal kimliği.",
+        "screen": "Açılış ekranı",
+        "screenHint": "Formun açıldığı ekranın kimliği, örneğin WELCOME."
       },
       "result": {
         "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",
@@ -373,6 +395,46 @@
         "open": "Yapay zekayla oluştur",
         "applied": "Şablon taslağı yapay zekayla dolduruldu. Göndermeden önce inceleyin.",
         "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
+      },
+      "type": {
+        "label": "Düğme türü",
+        "standard": "Standart",
+        "carousel": "Karusel",
+        "hint": "Mesajın nasıl biteceğini seçin. Karusel bir kart sırasıdır; sınırlı süreli teklifte teklif başlığı (isteğe bağlı geri sayımla) ve kod kopyalama ya da web sitesi düğmesi bulunur.",
+        "none": "Yok",
+        "buttons": "Kodu kopyala, web sitesi, hızlı yanıtlar vb.",
+        "lto": "Sınırlı süreli teklif",
+        "catalogue": "Katalog",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Kartlar",
+        "hint": "2 ila 10 kart. Tüm kartlar aynı dosya türünü ve aynı düğmeleri kullanır.",
+        "format": "Kartlar şunu gösterir",
+        "formatImage": "Resimler",
+        "formatVideo": "Videolar",
+        "count": "{used}/{max} kart",
+        "add": "Kart ekle",
+        "needTwo": "Bir karusel için en az {min} kart gerekir.",
+        "card": "Kart {n}",
+        "remove": "{n}. kartı kaldır",
+        "noFile": "Dosya seçilmedi",
+        "uploading": "Yükleniyor",
+        "text": "Kart metni",
+        "textCounter": "{used}/{max}",
+        "buttons": "Düğmeler",
+        "buttonText": "Düğme metni",
+        "buttonUrl": "Web sitesi URL'si",
+        "buttonPhone": "Telefon numarası"
+      },
+      "offer": {
+        "title": "Sınırlı süreli teklif",
+        "hint": "Resmin veya videonun altında görünür: bir başlık ve isterseniz teklifin bitişine geri sayım.",
+        "text": "Teklif başlığı",
+        "textHint": "{used}/{max}",
+        "placeholder": "Süresi dolmak üzere!",
+        "countdown": "Geri sayımı göster",
+        "countdownHint": "WhatsApp teklifin bitmesine kalan süreyi gösterir."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Şablonlar",
       "crumbDetail": "Ayrıntı",
       "notSubmittedPill": "Gönderilmedi",
-      "qualityPill": "Kalite · {quality}",
       "preview": {
         "title": "Önizleme",
         "hint": "WhatsApp'ta nasıl görünür"

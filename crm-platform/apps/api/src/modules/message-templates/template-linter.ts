@@ -4,7 +4,7 @@ import {
   tokensOf,
   type VariableMap,
 } from './template-variables';
-import { normalizeTemplateName, type TemplateButton } from './template-payload';
+import { normalizeTemplateName, type TemplateButton, type TemplateCard } from './template-payload';
 
 /**
  * Predicts Meta's rejections before a submit (TW-TPL-023), so failed submissions do not lower the WABA's quality score.
@@ -14,7 +14,7 @@ import { normalizeTemplateName, type TemplateButton } from './template-payload';
 export interface LintIssue {
   code: string;
   severity: 'error' | 'warning';
-  field: 'name' | 'language' | 'header' | 'body' | 'footer' | 'buttons' | 'template';
+  field: 'name' | 'language' | 'header' | 'body' | 'footer' | 'buttons' | 'cards' | 'template';
   message: string;
 }
 
@@ -31,6 +31,10 @@ export interface LintInput {
   body: string;
   footer?: string | null;
   buttons?: TemplateButton[] | null;
+  /** `templateType: 'carousel'` only. */
+  cards?: TemplateCard[] | null;
+  /** `templateType: 'lto'` only. */
+  limitedOffer?: { text: string; hasExpiration?: boolean } | null;
   variableMap?: VariableMap | null;
   parameterFormat?: 'POSITIONAL' | 'NAMED' | null;
 }
@@ -52,10 +56,14 @@ const TRIGGER_PHRASES = [
 ];
 
 const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/gu;
-const BUTTON_LIMIT = { QUICK_REPLY: 10, URL: 2, PHONE_NUMBER: 1, COPY_CODE: 1, FLOW: 1 } as Record<
-  string,
-  number
->;
+const BUTTON_LIMIT = {
+  QUICK_REPLY: 10,
+  URL: 2,
+  PHONE_NUMBER: 1,
+  COPY_CODE: 1,
+  FLOW: 1,
+  CATALOG: 1,
+} as Record<string, number>;
 
 export function lintTemplate(t: LintInput): LintIssue[] {
   const out: LintIssue[] = [];
@@ -172,6 +180,14 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     );
   }
 
+  if (t.templateType === 'carousel') {
+    lintCarousel(t.cards ?? [], e);
+    if (category !== 'MARKETING')
+      w('carousel_category', 'template', 'Meta reviews carousel templates as Marketing templates.');
+  }
+
+  if (t.templateType === 'lto') lintOffer(t, category, e);
+
   // Buttons
   const buttons = t.buttons ?? [];
   if (buttons.length > 10) e('buttons_many', 'buttons', 'A template can have at most 10 buttons.');
@@ -181,6 +197,10 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     counts[type] = (counts[type] ?? 0) + 1;
     if (type !== 'COPY_CODE' && type !== 'FLOW' && (!b.text || b.text.length > 25))
       e('button_text', 'buttons', 'Button text is required and at most 25 characters.');
+    if (type === 'FLOW' && !b.flow_name && !b.flow_json && !/^\d+$/.test(String(b.flow_id ?? '')))
+      e('flow_id', 'buttons', 'A form button needs the numeric id of a WhatsApp Flow.');
+    if (type === 'FLOW' && b.flow_action !== 'data_exchange' && !b.navigate_screen && !b.flow_json)
+      e('flow_screen', 'buttons', 'A form button needs the screen it opens on.');
     if (type === 'QUICK_REPLY' && /\{\{[^}]+\}\}/.test(b.text ?? ''))
       e('button_variable', 'buttons', 'Quick reply text cannot contain a variable.');
     if (type === 'URL' && countPlaceholders(b.url ?? '') > 1)
@@ -193,6 +213,8 @@ export function lintTemplate(t: LintInput): LintIssue[] {
         'buttons',
         `At most ${BUTTON_LIMIT[type]} ${type.replace('_', ' ').toLowerCase()} button(s).`,
       );
+  if (buttons.length > 1 && buttons.some((b) => b.type.toUpperCase() === 'CATALOG'))
+    e('catalog_alone', 'buttons', 'A catalog button cannot be combined with other buttons.');
   const qr = buttons.map((b) => b.type.toUpperCase() === 'QUICK_REPLY');
   const first = qr.indexOf(true);
   const last = qr.lastIndexOf(true);
@@ -206,12 +228,99 @@ export function lintTemplate(t: LintInput): LintIssue[] {
     );
 
   // Trigger phrases
-  const text = `${body} ${t.header ?? ''} ${t.footer ?? ''}`.toLowerCase();
-  for (const phrase of TRIGGER_PHRASES)
-    if (text.includes(phrase))
-      w('trigger_phrase', 'body', `"${phrase}" is a phrase Meta's review often flags.`);
+  // Each phrase is reported under the part of the template that holds it, so removing it from there clears it (a phrase left in the
+  // header or footer used to be reported under the body, where it could not be found). A curly apostrophe counts as a straight one.
+  const plain = (v: string | null | undefined) => (v ?? '').replace(/[‘’]/g, "'").toLowerCase();
+  for (const [field, value] of [
+    ['body', body],
+    ['header', t.header],
+    ['footer', t.footer],
+  ] as const) {
+    const text = plain(value);
+    for (const phrase of TRIGGER_PHRASES)
+      if (text.includes(phrase))
+        w('trigger_phrase', field, `"${phrase}" is a phrase Meta's review often flags.`);
+  }
 
   return out;
+}
+
+/** Meta's limited-time-offer rules: Marketing only, a picture or video header, a heading of up to 16 characters, a short body, and a copy-code or website button. */
+function lintOffer(
+  t: LintInput,
+  category: string,
+  e: (code: string, field: LintIssue['field'], message: string) => void,
+): void {
+  const text = (t.limitedOffer?.text ?? '').trim();
+  if (category !== 'MARKETING')
+    e('lto_category', 'template', 'A limited-time offer must be a Marketing template.');
+  if (!text) e('lto_text', 'template', 'The offer needs a heading, such as "Expiring offer!".');
+  else if (text.length > 16)
+    e('lto_text_long', 'template', 'The offer heading can have at most 16 characters.');
+  const media = (t.attachmentType ?? '').toLowerCase();
+  if (media !== 'image' && media !== 'video')
+    e('lto_header', 'header', 'A limited-time offer needs a picture or video header.');
+  if (t.body.length > 600) e('lto_body', 'body', 'The body can have at most 600 characters.');
+  const types = (t.buttons ?? []).map((b) => b.type.toUpperCase());
+  if (!types.includes('COPY_CODE') && !types.includes('URL'))
+    e('lto_buttons', 'buttons', 'Add a copy-code or a website button to the offer.');
+  if (types.some((x) => x !== 'COPY_CODE' && x !== 'URL'))
+    e(
+      'lto_button_type',
+      'buttons',
+      'A limited-time offer allows only copy-code and website buttons.',
+    );
+}
+
+/** Meta's carousel rules: 2 to 10 cards, every card a picture (or every card a video) with a short text, and the same buttons on every card. */
+function lintCarousel(
+  cards: TemplateCard[],
+  e: (code: string, field: LintIssue['field'], message: string) => void,
+): void {
+  if (cards.length < 2) e('cards_few', 'cards', 'A carousel needs at least 2 cards.');
+  if (cards.length > 10) e('cards_many', 'cards', 'A carousel can have at most 10 cards.');
+  const formats = new Set(cards.map((c) => String(c.format ?? 'image').toLowerCase()));
+  if (formats.size > 1)
+    e(
+      'cards_format',
+      'cards',
+      'Every card must use the same kind of file: all pictures or all videos.',
+    );
+  const shape = (c: TemplateCard) => (c.buttons ?? []).map((b) => b.type.toUpperCase()).join(',');
+  if (new Set(cards.map(shape)).size > 1)
+    e(
+      'cards_buttons',
+      'cards',
+      'Every card must have the same buttons (same number and same types).',
+    );
+  cards.forEach((c, i) => {
+    const n = i + 1;
+    if (!c.headerHandle && !c.headerSampleUrl)
+      e('card_file', 'cards', `Card ${n} needs a picture or video.`);
+    const body = (c.body ?? '').trim();
+    if (!body) e('card_body', 'cards', `Card ${n} needs some text.`);
+    else if (body.length > 160)
+      e('card_body_long', 'cards', `Card ${n}'s text is longer than 160 characters.`);
+    if (/\{\{[^}]+\}\}/.test(c.body ?? ''))
+      e('card_variable', 'cards', `Card ${n}'s text cannot hold a variable yet.`);
+    if ((c.buttons ?? []).length === 0)
+      e('card_buttons_none', 'cards', `Card ${n} needs at least one button.`);
+    (c.buttons ?? []).forEach((b) => {
+      const type = b.type.toUpperCase();
+      if (!['QUICK_REPLY', 'URL', 'PHONE_NUMBER'].includes(type))
+        e(
+          'card_button_type',
+          'cards',
+          `Card ${n}: a card button can be a quick reply, a link or a phone number.`,
+        );
+      if (!b.text || b.text.length > 25)
+        e(
+          'card_button_text',
+          'cards',
+          `Card ${n}: button text is required and at most 25 characters.`,
+        );
+    });
+  });
 }
 
 export const hasErrors = (issues: LintIssue[]) => issues.some((i) => i.severity === 'error');

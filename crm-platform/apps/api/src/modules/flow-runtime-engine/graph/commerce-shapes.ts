@@ -79,6 +79,8 @@ export function shapeCommerceNode(
           : {}),
         preview: str(data.preview),
         keepMenuOpen: data.keepMenuOpen !== false,
+        // The node's extra exits (Sent, Delivered, Read, Replied, Failed): when on and wired, the node waits for what happens to the message.
+        statusExits: data.statusExits === true,
         // What the author chose to fill each placeholder with (`header:1`, `body:2`), and a header picture / video / file of their own.
         variableOverrides: overridesOf(data.tplVars),
         ...(str(data.tplMedia).trim() ? { headerMediaUrl: str(data.tplMedia).trim() } : {}),

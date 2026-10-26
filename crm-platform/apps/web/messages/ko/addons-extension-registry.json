@@ -370,7 +370,8 @@
         "includedOwned": "이 애드온도 보유 중입니다. 이제 요금제에 포함되어 있으므로 애드온을 해지할 수 있습니다. 자동 환불은 없습니다.",
         "includedEnds": "현재 요금제에 포함됨. 애드온은 {date}에 종료되며 갱신되지 않습니다.",
         "active": "활성",
-        "ownedCount": "×{count} 보유 · 다시 구매하면 추가됩니다"
+        "ownedCount": "×{count} 보유 · 다시 구매하면 추가됩니다",
+        "turnedOff": "꺼짐"
       },
       "price": {
         "free": "무료",
@@ -398,6 +399,43 @@
       "groups": {
         "feature": "기능 애드온",
         "capacity": "용량 애드온"
+      },
+      "activation": {
+        "turnedOffNote": "이 워크스페이스에서는 꺼져 있습니다. 설정은 그대로 유지됩니다.",
+        "turnOff": "끄기",
+        "turnOn": "켜기",
+        "askOwner": "계정 소유자에게 켜거나 끄도록 요청하세요.",
+        "doneOn": "{name}을(를) 켰습니다.",
+        "errors": {
+          "notToggleable": "{name}은(는) 여기서 켜거나 끌 수 없습니다. 요금제에 포함된 애드온만 전환할 수 있습니다.",
+          "forbidden": "애드온을 켜거나 끌 권한이 없습니다.",
+          "generic": "{name}을(를) 변경하지 못했습니다. 다시 시도해 주세요."
+        }
+      }
+    },
+    "toggle": {
+      "title": "{name}을(를) 끌까요?",
+      "lead": "변경되는 내용은 다음과 같습니다. 언제든지 다시 켤 수 있습니다.",
+      "cancel": "취소",
+      "confirm": "{name} 끄기",
+      "done": "{name}을(를) 껐습니다. 설정은 그대로 유지됩니다.",
+      "typeLabel": "확인하려면 {name}을(를) 입력하세요",
+      "typeHint": "고객 채팅이나 사람에게 영향이 있으므로 확인을 위해 이름을 입력하세요.",
+      "groups": {
+        "stops": "중단되는 것",
+        "kept": "유지되는 것",
+        "people": "사람"
+      },
+      "items": {
+        "features_off": "다음 기능이 작동을 멈춥니다: {names}.",
+        "dependents_off": "다음 기능은 위 기능에 의존하므로 함께 중단됩니다: {names}.",
+        "roles_dormant": "{count, plural, other {역할 #개가 이 애드온의 권한을 가지고 있습니다. 권한은 유지되지만 다시 켤 때까지 비활성 상태입니다.}}",
+        "waiting_chats": "{count, plural, other {채팅 #개가 상담원을 기다리고 있습니다. 자동으로 배정되지 않으므로 누군가 직접 맡아야 합니다.}}",
+        "routing_rules": "{count, plural, other {라우팅 규칙 #개가 채팅 배정을 멈춥니다.}}",
+        "auto_teams": "{count, plural, other {팀 #개가 채팅을 자동 배정하도록 설정되어 있으며, 이 기능이 중단됩니다.}}",
+        "teams": "{count, plural, other {팀 #개가 구성원과 함께 유지됩니다.}}",
+        "custom_role_holders": "{count, plural, other {#명이 사용자 지정 역할을 가지고 있습니다. 역할은 유지되지만 이 애드온의 권한은 적용되지 않습니다.}}",
+        "kept": "설정과 데이터는 유지됩니다. 다시 켜면 그대로 돌아옵니다."
       }
     }
   }

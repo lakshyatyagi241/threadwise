@@ -1,4 +1,5 @@
 import {
+  foreignKey,
   index,
   integer,
   jsonb,
@@ -10,6 +11,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from './columns';
+import { users } from './foundation';
 
 /**
  * Segments: saved rules over contacts that fill themselves (product extension). The membership is
@@ -29,6 +31,10 @@ export const segments = pgTable(
       .notNull()
       .default('private'),
     ownerId: idColumn('owner_id'),
+    /** Who made it: the owner at creation (migration 2031). Set once, never changed. */
+    createdBy: idColumn('created_by'),
+    /** Who made the last change to the row (migration 2031). Written with the change, in the same transaction. */
+    updatedBy: idColumn('updated_by'),
     rules: jsonb('rules').$type<Record<string, unknown>>().notNull(),
     rulesVersion: integer('rules_version').notNull().default(1),
     /** Bumped with every change of the people list so it moves row_version (see migration 20261106090000_seg_share_with_users). */
@@ -44,6 +50,18 @@ export const segments = pgTable(
     primaryKey({ columns: [t.orgId, t.id] }),
     uniqueIndex('segments_org_id_uuid_key').on(t.orgId, t.uuid),
     index('idx_segments_owner').on(t.orgId, t.ownerId),
+    foreignKey({
+      name: 'fk_segments_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_segments_updated_by',
+      columns: [t.orgId, t.updatedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_segments_created_by').on(t.orgId, t.createdBy),
+    index('idx_segments_updated_by').on(t.orgId, t.updatedBy),
   ],
 );
 

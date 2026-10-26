@@ -153,7 +153,10 @@
         "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
         "days": "{count, plural, one {# dzień} other {# dni}}"
       },
-      "unsnoozesAt": "Wróci {time}"
+      "unsnoozesAt": "Wróci {time}",
+      "erased": "Usunięte kontakty",
+      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby i treści wiadomości. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
+      "erasedTitle": "Usunięty kontakt"
     },
     "status": {
       "received": "Odebrano",
@@ -328,9 +331,16 @@
       },
       "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
       "resolvedBanner": "Ta rozmowa jest rozwiązana. Otwórz ją ponownie, aby odpowiedzieć.",
+      "resolvedWebchatBanner": "Ten czat ze strony jest rozwiązany i nie można go ponownie otworzyć.",
       "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
+      "session": {
+        "header": "{range} · {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}",
+        "span": "{date}, {from} – {to}",
+        "moment": "{date}, {time}",
+        "across": "{from} – {to}"
+      },
       "loadOlder": "Wczytaj wcześniejsze wiadomości",
       "empty": "Brak wiadomości w tej rozmowie.",
       "newMessageAnnounce": "Nowa wiadomość: {text}",
@@ -343,7 +353,9 @@
       "searchNone": "Brak wyników",
       "searchPrev": "Poprzedni wynik",
       "searchNext": "Następny wynik",
-      "searchClose": "Zamknij wyszukiwanie"
+      "searchClose": "Zamknij wyszukiwanie",
+      "erasedBadge": "Usunięty",
+      "erasedBanner": "Ten kontakt został usunięty. Treść i multimedia wiadomości zostały usunięte, więc nie można nic wysłać. Oś czasu i czasy są zachowane."
     },
     "groupThread": {
       "openGroup": "Otwórz grupę",
@@ -542,17 +554,17 @@
         "onLeave": "Na urlopie",
         "onLeaveUntil": "Na urlopie do {date}",
         "availability": {
-          "online": "Online",
-          "away": "Zaraz wracam",
+          "online": "Dostępny",
+          "away": "Nieobecny, poza godzinami pracy",
           "busy": "Zajęty",
-          "offline": "Offline"
+          "offline": "Nieobecny"
         }
       },
       "presence": {
-        "online": "Online",
-        "away": "Nieobecny",
+        "online": "Dostępny",
+        "away": "Nieobecny, poza godzinami pracy",
         "busy": "Zajęty",
-        "offline": "Offline"
+        "offline": "Nieobecny"
       },
       "notes": {
         "tab": "Notatki o kontakcie",
@@ -715,6 +727,7 @@
         "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu.",
         "paused": "Wstrzymany przez WhatsApp. Można go wysłać ponownie po zakończeniu wstrzymania.",
         "media_header": "Ma nagłówek z obrazem, wideo lub dokumentem, którego nie można jeszcze wysłać ze skrzynki odbiorczej.",
+        "carousel": "To karuzela (karty z obrazami), której nie można jeszcze wysłać ze skrzynki odbiorczej.",
         "header_variable": "Ma zmienną w nagłówku, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
         "dynamic_button": "Ma link przycisku ze zmienną, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
         "authentication": "Szablony jednorazowego hasła są wysyłane przez system, a nie ze skrzynki odbiorczej.",

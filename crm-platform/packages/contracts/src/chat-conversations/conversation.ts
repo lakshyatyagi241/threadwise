@@ -76,6 +76,11 @@ export const conversationSummarySchema = z.object({
   status: conversationStatusSchema,
   priority: conversationPrioritySchema,
   archived: z.boolean(),
+  /**
+   * The contact was erased with "keep conversation history": the thread keeps its timeline without the person's identity or text, and
+   * nothing can be sent to it. Optional so a client built before it ignores it.
+   */
+  erased: z.boolean().optional(),
   pinned: z.boolean(),
   muted: z.boolean(),
   unreadCount: z.number().int().nonnegative(),
@@ -180,6 +185,14 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
     .enum(['true', 'false', '1', '0'])
     .transform((v) => v === 'true' || v === '1')
     .default('false'),
+  /**
+   * The erased-contacts view: every thread whose contact was erased with its history kept, whatever the tab, status or archive flag (as
+   * the archive view ignores the tab and status). Same query-string form as `archived`.
+   */
+  erased: z
+    .enum(['true', 'false', '1', '0'])
+    .transform((v) => v === 'true' || v === '1')
+    .default('false'),
 });
 export type ListConversationsQuery = z.infer<typeof listConversationsQuerySchema>;
 
@@ -201,6 +214,8 @@ export const inboxCountsSchema = z.object({
   waiting: z.number().int().nonnegative().optional(),
   unread: z.number().int().nonnegative(),
   archived: z.number().int().nonnegative(),
+  /** Threads whose contact was erased with its history kept (any tab, any archive state). Optional so an older API still parses. */
+  erased: z.number().int().nonnegative().optional(),
 });
 export type InboxCounts = z.infer<typeof inboxCountsSchema>;
 

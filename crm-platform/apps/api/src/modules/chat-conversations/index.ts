@@ -9,6 +9,7 @@ export {
   type OutboundContent,
   type OutboundMediaRef,
   type RecordOutboundInput,
+  type RecordOutboundMedia,
   type RecordOutboundTemplate,
   type ThreadRef,
 } from './conversations.facade';
@@ -42,6 +43,11 @@ export {
 } from './chat-usage';
 export { ChatUsageReporter, type BroadcastUsageRef } from './chat-usage-reporter';
 export { CONVERSATIONS_MODULE } from './conversation-lifecycle.service';
+export {
+  MessageStatusHooks,
+  type MessageStatusEvent,
+  type MessageStatusListener,
+} from './status-hooks';
 export {
   InboundMessageHooks,
   type InboundMessageListener,

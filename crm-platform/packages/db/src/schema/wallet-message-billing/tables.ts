@@ -215,7 +215,7 @@ export const usageCharges = pgTable(
     check('chk_usage_charges_mode', sql`${t.billingMode} in ('plan', 'wallet')`),
     check(
       'chk_usage_charges_kind',
-      sql`${t.kind} in ('whatsapp_message', 'sms', 'email', 'whatsapp_call', 'voice_call', 'ai', 'translation', 'enrichment', 'chat_message')`,
+      sql`${t.kind} in ('whatsapp_message', 'sms', 'email', 'whatsapp_call', 'voice_call', 'ai', 'translation', 'enrichment', 'chat_message', 'webbot_message')`,
     ),
     check('chk_usage_charges_units', sql`${t.units} >= 0`),
     check(
@@ -299,6 +299,8 @@ export const walletUsageMonths = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     month: date('month').notNull(),
     messages: integer('messages').notNull().default(0),
+    /** Website chatbot messages counted against the plan's free allowance this month (migration 2033). */
+    webbotMessages: integer('webbot_messages').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -317,6 +319,7 @@ export const walletUsageMonths = pgTable(
       sql`${t.month} = date_trunc('month', ${t.month})::date`,
     ),
     check('chk_wallet_usage_months_messages', sql`${t.messages} >= 0`),
+    check('chk_wallet_usage_months_webbot', sql`${t.webbotMessages} >= 0`),
   ],
 );
 

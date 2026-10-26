@@ -273,7 +273,7 @@
       "emptyFiltered": "Nada corresponde a estes filtros. Altere-os ou redefina-os.",
       "days": {
         "title": "Registo diário",
-        "subtitle": "Mensagens agrupadas por dia, estado, canal e categoria. Abra um dia para ver cada mensagem.",
+        "subtitle": "Mensagens agrupadas por dia, tipo, estado, canal e categoria. Abra um dia para ver cada mensagem.",
         "messagesOnDay": "{count} mensagens",
         "viewDetails": "Ver detalhes",
         "actions": "Ações",
@@ -310,7 +310,8 @@
         "widget_ai": "Chatbot do site",
         "growth": "Crescimento",
         "telephony": "Chamadas telefônicas",
-        "translation": "Tradução"
+        "translation": "Tradução",
+        "widget": "Chatbot do site"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Cada minuto iniciado de uma chamada do WhatsApp. Uma chamada que ninguém atendeu é gratuita.",
             "voice_call": "Cada minuto iniciado de uma chamada informada pelo provedor de telefonia do cliente. Registros de chamadas digitados à mão nunca são cobrados.",
             "enrichment": "Cada contato consultado no provedor de dados da plataforma.",
-            "chat_message": "Cada mensagem enviada pelo Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuita até você definir um preço."
+            "chat_message": "Cada mensagem enviada pelo Telegram, Facebook, Instagram, LINE, Viber ou WeChat. Gratuita até você definir um preço.",
+            "webbot_message": "Cada mensagem de visitante tratada pelo chatbot do site depois de esgotadas as mensagens gratuitas do mês do plano."
           },
           "costPlus": {
             "title": "Cobrado pelo custo do fornecedor mais uma margem",
@@ -1034,7 +1036,8 @@
       "ai": "IA",
       "translation": "Tradução",
       "enrichment": "Consulta de contato",
-      "chat_message": "Mensagem de chat"
+      "chat_message": "Mensagem de chat",
+      "webbot_message": "Mensagem do chatbot do site"
     }
   }
 }

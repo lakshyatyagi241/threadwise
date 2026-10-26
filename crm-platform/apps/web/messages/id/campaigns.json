@@ -241,7 +241,8 @@
         "expiry": "Tanggal akhir harus setelah tanggal kirim, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
         "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
         "sender": "Pilih pengirim.",
-        "subject": "Persingkat subjek hingga maksimal 150 karakter."
+        "subject": "Persingkat subjek hingga maksimal 150 karakter.",
+        "pacing": "Periksa Smart Delivery: setiap angka harus berupa bilangan bulat dalam rentang yang diizinkan."
       },
       "submit": {
         "save": "Simpan perubahan",
@@ -425,7 +426,8 @@
         "throttleMaxHint": "Jeda terpanjang sebelum sebuah pesan.",
         "batchPauseHint": "Menit istirahat setelah setiap batch.",
         "retryFailed": "Coba ulang pesan yang gagal secara otomatis",
-        "retryFailedHint": "Pesan yang gagal karena alasan sementara dicoba lagi beberapa kali, dengan jeda di antara percobaan. Matikan untuk mengirim setiap pesan sekali saja."
+        "retryFailedHint": "Pesan yang gagal karena alasan sementara dicoba lagi beberapa kali, dengan jeda di antara percobaan. Matikan untuk mengirim setiap pesan sekali saja.",
+        "range": "Masukkan bilangan bulat dari {min} sampai {max}."
       },
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "draftChip": "Draf / belum disimpan",
@@ -595,7 +597,8 @@
           "expiry": "Tanggal akhir harus setelah tanggal pengiriman, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
           "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
           "sender": "Pilih pengirim.",
-          "subject": "Persingkat subjek hingga maksimal 150 karakter."
+          "subject": "Persingkat subjek hingga maksimal 150 karakter.",
+          "pacing": "Periksa Smart Delivery: setiap angka harus berupa bilangan bulat dalam rentang yang diizinkan."
         },
         "from": "Dari",
         "subject": "Subjek",
@@ -686,6 +689,7 @@
             "providerFailed": "Layanan gambar tidak merespons. Coba lagi sebentar lagi.",
             "badJson": "Layanan gambar mengirim respons yang tidak terduga. Coba lagi.",
             "imageRefused": "OpenAI menolak membuat gambar ini. Ubah produk, penawaran, atau catatan lalu coba lagi.",
+            "storageRequired": "Gambar memerlukan penyimpanan objek cloud: minta admin platform untuk mengaktifkannya. Teks kampanye tetap disimpan.",
             "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
             "forbidden": "Anda tidak memiliki izin untuk membuat kampanye.",
             "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
@@ -1177,7 +1181,11 @@
         "follow_up_cloud_api_only": "Tindak lanjut hanya berfungsi dengan nomor WhatsApp Cloud API. Pilih satu di langkah 1 atau hapus tindak lanjut.",
         "sequence_not_recurring": "Templat bergiliran hanya berfungsi dengan kampanye berulang. Pilih jadwal berulang atau hapus templat tambahan.",
         "sequence_with_ab": "Templat bergiliran tidak dapat digabungkan dengan uji A/B. Matikan uji A/B atau hapus templat tambahan.",
-        "sequence_template_required": "Pilih templat untuk setiap langkah urutan atau hapus yang kosong."
+        "sequence_template_required": "Pilih templat untuk setiap langkah urutan atau hapus yang kosong.",
+        "variable_fallback_required": "Isi nilai cadangan untuk setiap variabel yang berasal dari kolom kontak: nilai ini dipakai untuk kontak yang tidak punya nilai.",
+        "retry_end_too_far": "Percobaan ulang dapat berjalan paling lama 7 hari dari hari ini. Pilih tanggal akhir yang lebih dekat.",
+        "template_b_same": "Varian B memerlukan templat yang berbeda dari varian A.",
+        "pacing_out_of_range": "Periksa Smart Delivery: sebuah angka berada di luar rentang yang diizinkan."
       },
       "template": {
         "previewOnline": "online",
@@ -1367,7 +1375,8 @@
         "csvConsentVersion": "Versi pemberitahuan: {version}.",
         "modePrevious": "Kirim ke pengiriman sebelumnya",
         "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
-        "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})"
+        "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})",
+        "filterNoConditions": "Tambahkan kondisi untuk melihat berapa kontak yang cocok."
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",
@@ -1450,7 +1459,8 @@
         "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})",
         "sumSplit": "Pembagian antar nomor",
         "sumSplitCount": "{count, plural, other {# penerima}} ({percent}%)",
-        "sumSplitPercent": "{percent}% dari audiens"
+        "sumSplitPercent": "{percent}% dari audiens",
+        "sumCostCharged": "Dibebankan ke dompet Anda: {amount} (sisanya ditanggung paket Anda)"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1542,12 +1552,15 @@
         "retriesTitle": "Aktifkan percobaan ulang",
         "retriesToggle": "Coba ulang pesan yang ditahan Meta",
         "retryEnd": "Atur tanggal akhir",
+        "retryEndPlaceholder": "Mulai sekarang, hingga {days} hari",
         "retriesInfoWhy": "Percobaan ulang hanya untuk pesan yang gagal karena pembatasan frekuensi Meta (error {code}).",
         "retriesInfoWhen": "Dijalankan tepat pada interval {hours} jam hingga tanggal akhir.",
         "retriesInfoCost": "Tanpa biaya tambahan: Anda hanya dikenai biaya untuk pesan saat tersampaikan.",
         "recurringTitle": "Broadcast berulang",
         "recurringHint": "Kirim ini sesuai jadwal berulang",
-        "occurrences": "putaran"
+        "occurrences": "putaran",
+        "recurringWarning": "Siaran ini berulang sesuai jadwalnya. Setiap putaran dikirim ke audiens seperti kondisinya pada saat itu, dan setiap pesan dibebankan ke dompet Anda.",
+        "repeatRange": "Masukkan bilangan bulat dari 1 sampai {max}."
       },
       "words": {
         "now": "Dikirim langsung, sekali.",

@@ -33,6 +33,7 @@
       "TPL_LINT_FAILED": "Sprawdzenie wykryło problemy, które Meta by odrzuciła. Nic nie zostało wysłane. Popraw błędy wymienione po prawej.",
       "TPL_META_REJECTED": "Meta odrzuciła szablon. Powód jest poniżej; szablon został zachowany jako wersja robocza, abyś mógł go poprawić i spróbować ponownie.",
       "TPL_NO_CONNECTION": "Ten szablon nie ma połączonego numeru WhatsApp, przez który można go wysłać. Najpierw połącz numer.",
+      "TPL_HEADER_STORAGE_REQUIRED": "Pliki nagłówka wymagają chmurowego magazynu obiektów. Poproś administratora platformy o jego włączenie.",
       "TPL_IN_USE": "Tego szablonu nie można usunąć, ponieważ używa go trwająca lub zaplanowana wiadomość masowa.",
       "TPL_NOT_EDITABLE": "Edytować można tylko szablon, którego Meta jeszcze nie zatwierdziła, lub odrzucony.",
       "TPL_EDIT_LIMIT": "Meta zezwala na jedną edycję w ciągu 24 godzin i dziesięć w ciągu 30 dni dla zatwierdzonego szablonu. Spróbuj później.",
@@ -58,7 +59,11 @@
       "moreButtons": "{count, plural, one {+# kolejny przycisk} few {+# kolejne przyciski} many {+# kolejnych przycisków} other {+# kolejnego przycisku}}",
       "live": "Podgląd na żywo",
       "business": "Bloomly",
-      "online": "online"
+      "online": "online",
+      "cards": "Karty karuzeli",
+      "cardEmpty": "Tekst karty {n}",
+      "offerExpires": "Wkrótce koniec",
+      "offerTextEmpty": "Nagłówek oferty"
     },
     "card": {
       "rejected": "Odrzucone: {reason}",
@@ -120,7 +125,8 @@
         "all": "Wszystkie",
         "approved": "Zatwierdzone",
         "pending": "W weryfikacji",
-        "rejected": "Odrzucone"
+        "rejected": "Odrzucone",
+        "draft": "Wersja robocza"
       },
       "quickStartTitle": "Szybki start",
       "quickStart": "Przeczytaj <link>Wytyczne dotyczące szablonów</link> przed wysłaniem do Meta, aby zatwierdzenie trwało poniżej 24 godz.",
@@ -152,7 +158,8 @@
       "legend": {
         "approved": "Zatwierdzone",
         "pending": "W weryfikacji",
-        "rejected": "Odrzucone"
+        "rejected": "Odrzucone",
+        "draft": "Wersja robocza"
       },
       "helpLabel": "Pomoc - 0{n}",
       "help": {
@@ -176,7 +183,8 @@
       "confirm": "Usuń szablon",
       "cancel": "Anuluj",
       "done": "Usunięto „{name}”.",
-      "inUseHelp": "Otwórz wiadomość masową, która używa tego szablonu, i anuluj ją albo wybierz inny szablon, a następnie usuń ten."
+      "inUseHelp": "Otwórz wiadomość masową, która używa tego szablonu, i anuluj ją albo wybierz inny szablon, a następnie usuń ten.",
+      "messageDraft": "Usunąć „{name}”? Szablon nigdy nie został wysłany do Meta, więc zostanie usunięty tylko tutaj."
     },
     "lint": {
       "title": "Sprawdzenie przed wysłaniem",
@@ -195,7 +203,8 @@
         "body": "Treść",
         "footer": "Stopka",
         "buttons": "Przyciski",
-        "template": "Szablon"
+        "template": "Szablon",
+        "cards": "Karty"
       }
     },
     "form": {
@@ -278,7 +287,7 @@
         "uploading": "Przesyłanie",
         "keptSample": "Zapisany przykład zostaje. Wybierz plik, aby go zastąpić.",
         "noFile": "Nie wybrano pliku",
-        "limits": "Obraz do 5 MB, wideo do 16 MB, PDF do 100 MB.",
+        "limits": "Obraz do 5 MB, wideo do 16 MB, PDF do 10 MB.",
         "replace": "Zastąp plik",
         "choose": "Wybierz plik przykładowy",
         "tooBig": "Ten plik ({kind}) ma {size} MB. WhatsApp przyjmuje do {max} MB. Wybierz mniejszy plik.",
@@ -322,14 +331,18 @@
           "quick_reply": "Szybka odpowiedź",
           "url": "Odwiedź stronę",
           "phone": "Zadzwoń",
-          "copy_code": "Kopiuj kod"
+          "copy_code": "Kopiuj kod",
+          "form": "Formularz",
+          "catalog": "Katalog"
         },
         "kind": {
           "quick_reply": "Szybka odpowiedź",
           "url": "Odwiedź stronę",
           "phone": "Zadzwoń",
           "copy_code": "Kopiuj kod",
-          "other": "Inne"
+          "other": "Inne",
+          "form": "Formularz",
+          "catalog": "Katalog"
         },
         "count": "{used}/{max} przycisków",
         "limitReached": "Najwyżej {max} tego rodzaju.",
@@ -358,8 +371,17 @@
           "codeRequired": "Podaj przykładowy kod.",
           "quickReplyVariable": "Szybka odpowiedź nie może zawierać zmiennej.",
           "urlExampleRequired": "Podaj przykładową wartość dla zmiennej w adresie URL.",
-          "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków."
-        }
+          "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków.",
+          "flowIdRequired": "Wpisz ID Flow.",
+          "flowIdInvalid": "ID Flow to liczba.",
+          "screenRequired": "Wpisz ID ekranu.",
+          "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami."
+        },
+        "catalogHint": "Otwiera Twój katalog WhatsApp. Przycisk ma napis „Zobacz katalog” i musi być jedynym przyciskiem.",
+        "flowId": "ID WhatsApp Flow",
+        "flowIdHint": "Numeryczny identyfikator opublikowanego WhatsApp Flow z menedżera Flows w Meta.",
+        "screen": "Ekran startowy",
+        "screenHint": "Identyfikator ekranu, na którym otwiera się formularz, np. WELCOME."
       },
       "result": {
         "metaRefused": "Zapisano, ale Meta odrzuciła szablon.",
@@ -373,6 +395,46 @@
         "open": "Utwórz z AI",
         "applied": "Szablon został uzupełniony przez AI. Sprawdź go przed wysłaniem do weryfikacji.",
         "authHint": "Szablony uwierzytelniania mają stały tekst, więc nie ma czego przygotowywać."
+      },
+      "type": {
+        "label": "Typ przycisku",
+        "standard": "Standardowy",
+        "carousel": "Karuzela",
+        "hint": "Wybierz, czym kończy się wiadomość. Karuzela to rząd kart; oferta czasowa ma nagłówek oferty z opcjonalnym odliczaniem oraz przycisk kopiowania kodu lub strony internetowej.",
+        "none": "Brak",
+        "buttons": "Kopiuj kod, strona internetowa, szybkie odpowiedzi itp.",
+        "lto": "Oferta czasowa",
+        "catalogue": "Katalog",
+        "flow": "Flow"
+      },
+      "cards": {
+        "title": "Karty",
+        "hint": "Od 2 do 10 kart. Wszystkie używają tego samego rodzaju pliku i tych samych przycisków.",
+        "format": "Karty pokazują",
+        "formatImage": "Obrazy",
+        "formatVideo": "Wideo",
+        "count": "{used}/{max} kart",
+        "add": "Dodaj kartę",
+        "needTwo": "Karuzela wymaga co najmniej {min} kart.",
+        "card": "Karta {n}",
+        "remove": "Usuń kartę {n}",
+        "noFile": "Nie wybrano pliku",
+        "uploading": "Przesyłanie",
+        "text": "Tekst karty",
+        "textCounter": "{used}/{max}",
+        "buttons": "Przyciski",
+        "buttonText": "Tekst przycisku",
+        "buttonUrl": "Adres URL strony",
+        "buttonPhone": "Numer telefonu"
+      },
+      "offer": {
+        "title": "Oferta czasowa",
+        "hint": "Wyświetlany pod obrazem lub filmem: nagłówek i, jeśli chcesz, odliczanie do końca oferty.",
+        "text": "Nagłówek oferty",
+        "textHint": "{used}/{max}",
+        "placeholder": "Oferta wkrótce wygasa!",
+        "countdown": "Pokaż odliczanie",
+        "countdownHint": "WhatsApp pokazuje czas pozostały do końca oferty."
       }
     },
     "detail": {
@@ -476,7 +538,6 @@
       "crumbTemplates": "Szablony",
       "crumbDetail": "Szczegóły",
       "notSubmittedPill": "Nie przesłano",
-      "qualityPill": "Jakość · {quality}",
       "preview": {
         "title": "Podgląd",
         "hint": "Tak wygląda w WhatsApp"

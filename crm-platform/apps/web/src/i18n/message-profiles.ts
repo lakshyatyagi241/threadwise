@@ -66,6 +66,7 @@ export const MESSAGE_PROFILES: readonly MessageProfile[] = [
     ],
     namespaces: [
       'common',
+      'admin-console-shell.workspaceSettings.general.hours',
       'appointments.common',
       'appointments.errors',
       'appointments.picker',

@@ -84,7 +84,11 @@ describe('phone and chat limit', () => {
         chatLimit: 5,
       });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
-    expect(res.body.member).toMatchObject({ phone: '+919876543210', chatLimit: 5, lastLoginAt: null });
+    expect(res.body.member).toMatchObject({
+      phone: '+919876543210',
+      chatLimit: 5,
+      lastLoginAt: null,
+    });
     const row = (
       await h.owner.query(
         `SELECT p.phone_e164, p.chat_limit FROM user_profiles p JOIN users u ON u.org_id = p.org_id AND u.id = p.user_id
@@ -124,7 +128,12 @@ describe('phone and chat limit', () => {
           ...extra,
         });
     const roleId = await roleUuid(t, 'Agent');
-    for (const extra of [{ phone: '98765' }, { chatLimit: 0 }, { chatLimit: 1001 }, { chatLimit: 2.5 }]) {
+    for (const extra of [
+      { phone: '98765' },
+      { chatLimit: 0 },
+      { chatLimit: 1001 },
+      { chatLimit: 2.5 },
+    ]) {
       const res = await send({ roleId, ...extra });
       expect([400, 422], JSON.stringify(extra)).toContain(res.status);
     }
@@ -193,9 +202,8 @@ describe('phone and chat limit', () => {
 
   it('a manager cannot change the Owner (nobody edits a member above them)', async () => {
     const mgr = await addMember(t, 'Mia Manager', 'Manager');
-    const owner = (
-      await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [t.adminUserId])
-    ).rows[0].uuid as string;
+    const owner = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [t.adminUserId]))
+      .rows[0].uuid as string;
     // The Manager preset does not hold the invite permission at all, so the key refuses first.
     const res = await api
       .as(await signIn(t.slug, mgr.email))
@@ -243,24 +251,34 @@ describe('my availability', () => {
 
     const first = await api.as(ta).get('/v2/workspace/members/me/availability');
     expect(first.status).toBe(200);
-    expect(first.body).toEqual({ status: 'online' });
+    expect(first.body).toMatchObject({ status: 'online', state: 'available' });
 
-    const off = await api.as(ta).put('/v2/workspace/members/me/availability').send({ status: 'offline' });
+    const off = await api
+      .as(ta)
+      .put('/v2/workspace/members/me/availability')
+      .send({ status: 'offline' });
     expect(off.status, JSON.stringify(off.body)).toBe(200);
-    expect(off.body).toEqual({ status: 'offline' });
-    expect((await api.as(ta).get('/v2/workspace/members/me/availability')).body.status).toBe('offline');
+    expect(off.body).toMatchObject({ status: 'offline', state: 'away', reason: 'manual' });
+    expect((await api.as(ta).get('/v2/workspace/members/me/availability')).body.status).toBe(
+      'offline',
+    );
 
     const stored = await h.owner.query(
       `SELECT user_id, status FROM agent_statuses WHERE org_id = $1 ORDER BY user_id`,
       [t.orgId],
     );
     // Only the caller's own row exists: nobody else was touched.
-    expect(stored.rows).toEqual([{ user_id: String(a.userId), status: 'offline' }]);
+    expect(stored.rows.map((r) => ({ user_id: Number(r.user_id), status: r.status }))).toEqual([
+      { user_id: a.userId, status: 'offline' },
+    ]);
     expect((await member(t.admin, a.uuid)).presence).toBe('offline');
     expect(b.userId).not.toBe(a.userId);
 
-    const on = await api.as(ta).put('/v2/workspace/members/me/availability').send({ status: 'online' });
-    expect(on.body).toEqual({ status: 'online' });
+    const on = await api
+      .as(ta)
+      .put('/v2/workspace/members/me/availability')
+      .send({ status: 'online' });
+    expect(on.body).toMatchObject({ status: 'online', state: 'available' });
     expect((await member(t.admin, a.uuid)).presence).toBe('online');
   });
 
@@ -268,7 +286,10 @@ describe('my availability', () => {
     const t = await api.signup('mav2');
     const a = await addMember(t, 'Cy Agent', 'Agent');
     const ta = await signIn(t.slug, a.email);
-    const bad = await api.as(ta).put('/v2/workspace/members/me/availability').send({ status: 'busy' });
+    const bad = await api
+      .as(ta)
+      .put('/v2/workspace/members/me/availability')
+      .send({ status: 'busy' });
     expect([400, 422]).toContain(bad.status);
     expect((await api.http().get('/v2/workspace/members/me/availability')).status).toBe(401);
   });

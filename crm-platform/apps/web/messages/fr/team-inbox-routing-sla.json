@@ -151,7 +151,7 @@
         "outside": "Uniquement en dehors des heures d’ouverture"
       },
       "thenTitle": "Assigner à",
-      "thenHint": "Les agents inactifs, hors ligne, occupés ou sans accès à la boîte de réception sont ignorés.",
+      "thenHint": "Les agents inactifs, absents, occupés ou qui ne peuvent pas ouvrir la boîte de réception sont ignorés.",
       "strategy": "Mode de sélection",
       "strategyHint": {
         "round_robin": "Tour de rôle : les conversations sont réparties à tour de rôle entre les agents choisis, pour que chacun en reçoive la même part. La règle retient à qui revient le tour.",
@@ -288,10 +288,10 @@
         "lastSeen": "Dernière activité"
       },
       "statuses": {
-        "online": "En ligne",
-        "away": "Absent",
+        "online": "Disponible",
+        "away": "Absent, hors des heures de travail",
         "busy": "Occupé",
-        "offline": "Hors ligne"
+        "offline": "Absent"
       }
     },
     "businessHours": {

@@ -415,6 +415,10 @@
         "tooLarge": "تصویر 1 MB سے بڑی ہے۔"
       }
     },
+    "fullPage": {
+      "open": "پوری صفحہ",
+      "close": "پوری صفحہ بند کریں"
+    },
     "flowBot": {
       "customize": {
         "loading": "ویجیٹ لوڈ ہو رہا ہے…",

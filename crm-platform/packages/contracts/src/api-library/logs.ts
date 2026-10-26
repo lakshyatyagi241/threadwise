@@ -14,6 +14,9 @@ export type ApiLibraryLogSource = z.infer<typeof apiLibraryLogSourceSchema>;
  */
 export const API_LIBRARY_LOG_RETENTION_DAYS = 30;
 
+/** The longest `search` the logs take, in characters after trimming. The page refuses a longer one before it asks the API. */
+export const API_LIBRARY_LOG_SEARCH_MAX = 200;
+
 export const apiLibraryLogItemSchema = z.object({
   id: uuidSchema,
   /** The API that ran. Null for a test of a definition that was never saved. The id outlives the API (a deleted API's log stays; `apiName` remembers it). */
@@ -60,9 +63,21 @@ export const listApiLibraryLogsQuerySchema = paginationQuerySchema.extend({
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
   /** Matches the URL, the API name and the error text, ignoring case. */
-  search: z.string().trim().max(200).optional(),
+  search: z.string().trim().max(API_LIBRARY_LOG_SEARCH_MAX).optional(),
 });
 export type ListApiLibraryLogsQuery = z.infer<typeof listApiLibraryLogsQuerySchema>;
 
 export const listApiLibraryLogsResponseSchema = numberedPageResponseSchema(apiLibraryLogItemSchema);
 export type ListApiLibraryLogsResponse = z.infer<typeof listApiLibraryLogsResponseSchema>;
+
+/** One entry of the logs' API filter: a saved API, or a deleted one whose runs are still listed. */
+export const apiLibraryLogApiSchema = z.object({
+  id: uuidSchema,
+  /** The current name; for a deleted API, the name its latest run kept. */
+  name: z.string(),
+  deleted: z.boolean(),
+});
+export type ApiLibraryLogApi = z.infer<typeof apiLibraryLogApiSchema>;
+
+export const apiLibraryLogApisResponseSchema = z.object({ data: z.array(apiLibraryLogApiSchema) });
+export type ApiLibraryLogApisResponse = z.infer<typeof apiLibraryLogApisResponseSchema>;

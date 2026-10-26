@@ -5,7 +5,21 @@ summary: Schedule a meeting from the contact, see the meetings booked online bes
 area: audience
 order: 13
 documents: [nav:contacts]
-keywords: [meeting, meetings, schedule, booked online, booking, appointment, join link, cancelled, upcoming, past, read-only, contact]
+keywords:
+  [
+    meeting,
+    meetings,
+    schedule,
+    booked online,
+    booking,
+    appointment,
+    join link,
+    cancelled,
+    upcoming,
+    past,
+    read-only,
+    contact,
+  ]
 ---
 
 ## What it is for

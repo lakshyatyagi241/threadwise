@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AddonPack, AddonPlanOffer } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import {
+  amountFlagged,
   buildPackRequest,
   buildPlanOffersRequest,
   changedPlanOfferCount,
@@ -361,5 +362,23 @@ describe('add-on type (feature or capacity)', () => {
     expect(packProblemsFromError(refused('limits.users'))).toEqual({ limits: true });
     expect(packProblemsFromError(refused('name'))).toEqual({});
     expect(packProblemsFromError(new Error('x'))).toEqual({});
+  });
+});
+
+describe('amountFlagged', () => {
+  it('marks the price input for a zero price on a new subscription', () => {
+    const d = { ...newPackDraft(), name: 'Boost', amount: '0' };
+    const r = buildPackRequest(d);
+    expect(r.ok).toBe(false);
+    if (!r.ok) {
+      expect(r.problems.amountPositive).toBe(true);
+      expect(amountFlagged(r.problems)).toBe(true);
+    }
+  });
+
+  it('marks it for an amount that is not a price, and leaves other fields alone', () => {
+    expect(amountFlagged({ amount: true })).toBe(true);
+    expect(amountFlagged({ name: true })).toBe(false);
+    expect(amountFlagged({})).toBe(false);
   });
 });

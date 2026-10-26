@@ -203,6 +203,7 @@ describe('Build with AI (campaign text), picture option', () => {
     ['CAMP_AI_NO_KEY', 'Pictures need an OpenAI key, and none is enabled'],
     ['CAMP_AI_LIMIT_REACHED', 'used its AI allowance'],
     ['CAMP_AI_PROVIDER_FAILED', 'The picture service did not answer'],
+    ['CAMP_AI_STORAGE_REQUIRED', 'Pictures need cloud object storage'],
     ['SOMETHING_ELSE', 'Could not create the picture'],
   ])('the picture failing with %s gets its own sentence', async (code, sentence) => {
     image.mockRejectedValue(new ApiError(422, code, 'x'));

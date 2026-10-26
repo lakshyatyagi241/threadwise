@@ -273,7 +273,7 @@
       "emptyFiltered": "Không có gì khớp với bộ lọc này. Hãy thay đổi hoặc đặt lại.",
       "days": {
         "title": "Nhật ký theo ngày",
-        "subtitle": "Tin nhắn được nhóm theo ngày, trạng thái, kênh và danh mục. Mở một ngày để xem từng tin nhắn.",
+        "subtitle": "Tin nhắn được nhóm theo ngày, loại, trạng thái, kênh và danh mục. Mở một ngày để xem từng tin nhắn.",
         "messagesOnDay": "{count} tin nhắn",
         "viewDetails": "Xem chi tiết",
         "actions": "Thao tác",
@@ -310,7 +310,8 @@
         "widget_ai": "Chatbot trên website",
         "growth": "Tăng trưởng",
         "telephony": "Cuộc gọi điện thoại",
-        "translation": "Dịch"
+        "translation": "Dịch",
+        "widget": "Chatbot trên website"
       }
     },
     "admin": {
@@ -648,7 +649,8 @@
             "whatsapp_call": "Mỗi phút đã bắt đầu của một cuộc gọi WhatsApp. Cuộc gọi không ai trả lời thì miễn phí.",
             "voice_call": "Mỗi phút đã bắt đầu của một cuộc gọi do nhà cung cấp điện thoại của khách hàng báo cáo. Nhật ký cuộc gọi nhập tay không bao giờ bị tính phí.",
             "enrichment": "Mỗi liên hệ được tra cứu qua nhà cung cấp dữ liệu của nền tảng.",
-            "chat_message": "Mỗi tin nhắn gửi qua Telegram, Facebook, Instagram, LINE, Viber hoặc WeChat. Miễn phí cho đến khi bạn đặt giá."
+            "chat_message": "Mỗi tin nhắn gửi qua Telegram, Facebook, Instagram, LINE, Viber hoặc WeChat. Miễn phí cho đến khi bạn đặt giá.",
+            "webbot_message": "Mỗi tin nhắn của khách truy cập mà chatbot trên website xử lý sau khi hết số tin nhắn miễn phí hằng tháng của gói."
           },
           "costPlus": {
             "title": "Tính theo chi phí của nhà cung cấp cộng phụ phí",
@@ -1034,7 +1036,8 @@
       "ai": "AI",
       "translation": "Dịch",
       "enrichment": "Tra cứu liên hệ",
-      "chat_message": "Tin nhắn trò chuyện"
+      "chat_message": "Tin nhắn trò chuyện",
+      "webbot_message": "Tin nhắn chatbot trên website"
     }
   }
 }

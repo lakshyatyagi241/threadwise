@@ -8,13 +8,7 @@ import { TimezoneCombobox } from './timezone-combobox';
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
-const ZONES = [
-  'UTC',
-  'Asia/Kolkata',
-  'America/New_York',
-  'America/Los_Angeles',
-  'Europe/London',
-];
+const ZONES = ['UTC', 'Asia/Kolkata', 'America/New_York', 'America/Los_Angeles', 'Europe/London'];
 
 let host: HTMLElement;
 let root: Root;
@@ -41,10 +35,7 @@ const optionTexts = () =>
 const open = () => act(() => input().click());
 const type = (text: string) =>
   act(() => {
-    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(
-      input(),
-      text,
-    );
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input(), text);
     input().dispatchEvent(new Event('input', { bubbles: true }));
   });
 /** Returns true when the key was not cancelled (Enter on an open list must be cancelled, so the form does not submit). */
@@ -57,7 +48,8 @@ const key = (k: string) => {
   });
   return live;
 };
-const leave = () => act(() => void input().dispatchEvent(new FocusEvent('focusout', { bubbles: true })));
+const leave = () =>
+  act(() => void input().dispatchEvent(new FocusEvent('focusout', { bubbles: true })));
 
 afterEach(() => {
   act(() => root.unmount());
