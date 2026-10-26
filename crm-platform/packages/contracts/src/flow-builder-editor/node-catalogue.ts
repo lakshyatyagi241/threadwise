@@ -150,7 +150,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('book_appointment', 'Book appointment', 'Engage', 'Book one of your services in chat'),
   def('ai_call', 'AI voice call', 'Engage', 'Call the customer with an AI voice agent'),
   def('google_meet', 'Google Meet', 'Engage', 'Create + send a Meet link'),
-  def('wa_form', 'WhatsApp form', 'Engage', 'Send a published Meta form'),
+  def('wa_form', 'WhatsApp Flow (form)', 'Engage', 'Send a published WhatsApp Flow (Meta form)'),
   // Not a Reference node: the owner asked for the old console's API Library to come over (docs/api/api-library.md). WhatsApp only.
   def('api_library', 'API (from library)', 'Integrations', 'Call a saved API from the API Library'),
   def('google_sheets', 'Google Sheets', 'Integrations', 'Write or read a row'),

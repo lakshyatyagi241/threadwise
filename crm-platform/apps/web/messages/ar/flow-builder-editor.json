@@ -2274,8 +2274,8 @@
           "description": "إنشاء رابط Meet وإرساله"
         },
         "wa_form": {
-          "label": "نموذج WhatsApp",
-          "description": "إرسال نموذج Meta منشور"
+          "label": "WhatsApp Flow (نموذج)",
+          "description": "إرسال WhatsApp Flow (نموذج Meta) منشور"
         },
         "google_sheets": {
           "label": "Google Sheets",
