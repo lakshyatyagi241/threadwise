@@ -92,6 +92,10 @@ export function useWizard(initial: WizardDraftResponse | null) {
     id: meta.id,
     rowVersion: () => saver.current?.rowVersion ?? meta.rowVersion,
     unsaved:
-      status === 'pending' || status === 'saving' || status === 'error' || status === 'conflict',
+      status === 'pending' ||
+      status === 'saving' ||
+      status === 'error' ||
+      status === 'conflict' ||
+      status === 'nameTaken',
   };
 }

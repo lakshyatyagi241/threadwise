@@ -48,6 +48,7 @@ export function StepTemplate({
   hidden,
   templates,
   issues,
+  nameTaken = false,
   disabled,
   onName,
   onTemplate,
@@ -68,6 +69,8 @@ export function StepTemplate({
   templates: TemplatesQuery;
   /** Shown only after the person tried to continue. */
   issues: StepIssue[];
+  /** The server refused the name: another campaign or draft already has it. */
+  nameTaken?: boolean;
   disabled?: boolean;
   onName: (name: string) => void;
   onTemplate: (t: WizardTemplate) => void;
@@ -110,14 +113,14 @@ export function StepTemplate({
           label={t('nameLabel')}
           htmlFor="wizard-name"
           hint={t('nameHint')}
-          error={nameIssue ? ti(nameIssue.code) : undefined}
+          error={nameTaken ? t('nameTaken') : nameIssue ? ti(nameIssue.code) : undefined}
         >
           <Input
             id="wizard-name"
             value={name}
             maxLength={WIZARD_NAME_MAX}
             disabled={disabled}
-            invalid={Boolean(nameIssue)}
+            invalid={Boolean(nameIssue) || nameTaken}
             autoComplete="off"
             onChange={(e) => onName(e.target.value)}
             placeholder={t('namePlaceholder')}

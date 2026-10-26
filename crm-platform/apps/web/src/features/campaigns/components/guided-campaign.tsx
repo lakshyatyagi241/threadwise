@@ -128,6 +128,7 @@ export function GuidedCampaign({
 }) {
   const t = useTranslations('campaigns.builder');
   const tg = useTranslations('campaigns.builder.guided');
+  const tsave = useTranslations('campaigns.wizard.save');
   const tw = useTranslations('campaigns.wizard');
   const ti = useTranslations('campaigns.wizard.issues');
   const { toast } = useToast();
@@ -445,6 +446,7 @@ export function GuidedCampaign({
                       <SetupFields
                         name={draft.name}
                         onName={(name) => act({ type: 'name', name })}
+                        nameError={w.status === 'nameTaken' ? tsave('nameTaken') : undefined}
                         senderKey={senderKey}
                         onSender={pickSender}
                         senders={senders}

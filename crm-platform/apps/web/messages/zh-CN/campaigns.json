@@ -1126,7 +1126,8 @@
         "saved": "草稿已保存",
         "saving": "正在保存...",
         "failed": "无法保存",
-        "retry": "重试"
+        "retry": "重试",
+        "nameTaken": "已存在同名活动"
       },
       "errors": {
         "network": "无法连接到服务器。请检查网络连接后重试。",
@@ -1226,7 +1227,8 @@
         "shareHint": "勾选要发送的号码，并为每个号码设置份额。受众按份额拆分，每位联系人只会收到来自一个号码的消息。份额为空或为 0 时按 1 计算。",
         "shareWeight": "份额",
         "shareWeightLabel": "{name} 的份额",
-        "shareKeepOne": "至少保留一个号码处于勾选状态。"
+        "shareKeepOne": "至少保留一个号码处于勾选状态。",
+        "nameTaken": "已存在同名活动"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",

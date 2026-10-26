@@ -1169,7 +1169,8 @@
         "saved": "Draft saved",
         "saving": "Saving...",
         "failed": "Could not save",
-        "retry": "Retry"
+        "retry": "Retry",
+        "nameTaken": "Same campaign name already exists"
       },
       "errors": {
         "network": "Could not reach the server. Check your connection and try again.",
@@ -1269,7 +1270,8 @@
         "pickSender": "Choose a number",
         "classicOption": "classic builder",
         "buildWithAi": "Build with AI",
-        "aiNote": "Draft a new template with AI. You review it on the template page; Meta then reviews it before it can be sent, so come back and pick it once it is approved."
+        "aiNote": "Draft a new template with AI. You review it on the template page; Meta then reviews it before it can be sent, so come back and pick it once it is approved.",
+        "nameTaken": "Same campaign name already exists"
       },
       "audience": {
         "selectionTitle": "Chosen in the Contact Hub",

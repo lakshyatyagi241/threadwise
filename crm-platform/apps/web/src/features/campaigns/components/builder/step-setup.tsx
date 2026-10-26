@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Field, Input, Select, Switch } from '@crm/ui';
-import type { ComposeSender, SenderHidden } from '@crm/contracts';
+import { WIZARD_NAME_MAX, type ComposeSender, type SenderHidden } from '@crm/contracts';
 import { editorType, type BuilderForm } from '../../lib/builder-model';
 import { isEmailEngine, isSmsEngine, kindsFor } from '../../lib/engine-gate';
 import { SenderEmptyNotice, SenderLoading } from '../sender-empty';
@@ -97,6 +97,7 @@ export function StepSetup({
 export function SetupFields({
   name,
   onName,
+  nameError,
   senderKey,
   senderKeys = [],
   senderShare = {},
@@ -111,6 +112,8 @@ export function SetupFields({
 }: {
   name: string;
   onName: (name: string) => void;
+  /** Why the name was refused (another campaign already has it), shown under the box. */
+  nameError?: string | undefined;
   senderKey: string;
   /** The numbers a send is shared across when more than one is ticked, and their weights (TW-BCAST-006). */
   senderKeys?: readonly string[] | undefined;
@@ -138,11 +141,17 @@ export function SetupFields({
   const ticked = senderKeys.length > 1 ? [...senderKeys] : senderKey ? [senderKey] : [];
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <Field label={`${t('setup.name')} *`} htmlFor="camp-name" hint={t('setup.nameHint')}>
+      <Field
+        label={`${t('setup.name')} *`}
+        htmlFor="camp-name"
+        hint={t('setup.nameHint')}
+        error={nameError}
+      >
         <Input
           id="camp-name"
           value={name}
-          maxLength={191}
+          invalid={Boolean(nameError)}
+          maxLength={WIZARD_NAME_MAX}
           onChange={(e) => onName(e.target.value)}
           placeholder={t('setup.namePlaceholder')}
         />

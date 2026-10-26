@@ -1126,7 +1126,8 @@
         "saved": "Rascunho salvo",
         "saving": "Salvando...",
         "failed": "Não foi possível salvar",
-        "retry": "Tentar novamente"
+        "retry": "Tentar novamente",
+        "nameTaken": "Já existe uma campanha com o mesmo nome"
       },
       "errors": {
         "network": "Não foi possível alcançar o servidor. Verifique sua conexão e tente novamente.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Marque os números de envio e dê uma parte a cada um. O público é dividido por essas partes e cada contato recebe a mensagem de um único número. Uma parte vazia ou 0 conta como 1.",
         "shareWeight": "Parte",
         "shareWeightLabel": "Parte de {name}",
-        "shareKeepOne": "Pelo menos um número deve continuar marcado."
+        "shareKeepOne": "Pelo menos um número deve continuar marcado.",
+        "nameTaken": "Já existe uma campanha com o mesmo nome"
       },
       "audience": {
         "selectionTitle": "Escolhidos no Hub de Contatos",

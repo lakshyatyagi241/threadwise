@@ -384,6 +384,7 @@ function WizardBody({
             hidden={hidden}
             templates={templates}
             issues={visible}
+            nameTaken={w.status === 'nameTaken'}
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
             onSender={pickSender}

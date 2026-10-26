@@ -1126,7 +1126,8 @@
         "saved": "Taslak kaydedildi",
         "saving": "Kaydediliyor...",
         "failed": "Kaydedilemedi",
-        "retry": "Yeniden dene"
+        "retry": "Yeniden dene",
+        "nameTaken": "Aynı ada sahip bir kampanya zaten var"
       },
       "errors": {
         "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -1226,7 +1227,8 @@
         "shareHint": "Gönderilecek numaraları işaretleyin ve her birine bir pay verin. Kitle bu paylara göre bölünür ve her kişiye mesaj yalnızca tek bir numaradan gönderilir. Boş veya 0 olan pay 1 sayılır.",
         "shareWeight": "Pay",
         "shareWeightLabel": "{name} payı",
-        "shareKeepOne": "En az bir numara işaretli kalmalı."
+        "shareKeepOne": "En az bir numara işaretli kalmalı.",
+        "nameTaken": "Aynı ada sahip bir kampanya zaten var"
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
