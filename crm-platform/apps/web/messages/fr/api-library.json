@@ -170,7 +170,9 @@
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
       },
-      "unsaved": "Non enregistrée"
+      "unsaved": "Non enregistrée",
+      "export": "Exporter en CSV",
+      "exporting": "Export en cours…"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",

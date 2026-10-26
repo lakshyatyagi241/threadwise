@@ -3,9 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { useDeferredValue, useState } from 'react';
 import type { ApiLibraryLogApi } from '@crm/contracts';
-import { EmptyState, cn } from '@crm/ui';
+import { Button, EmptyState, cn, useToast } from '@crm/ui';
+import { apiLibraryApi } from '../api/service';
 import { useApiLogs } from '../api/hooks';
 import { errorKey, serverFieldProblems } from '../lib/errors';
+import { downloadCsv } from '../lib/download';
 import {
   EMPTY_LOG_FILTERS,
   hasLogFilters,
@@ -41,6 +43,8 @@ export function LogsPanel({
   const te = useTranslations('api-library.errors');
   const [filters, setFilters] = useState<LogFilterForm>(EMPTY_LOG_FILTERS);
   const [open, setOpen] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const { toast } = useToast();
   // Typing in the search box must not fire a request per keystroke.
   const deferred = useDeferredValue(filters);
   // A search over the limit is not sent: the query stays off and the last results stay on screen, with the field marked.
@@ -53,6 +57,18 @@ export function LogsPanel({
   useFallBackToLastPage(paging, q.data, q.isSuccess && !q.isPlaceholderData);
   const items = q.data?.data ?? [];
   const filtered = hasLogFilters(filters);
+
+  // The export takes the filters on screen (not the page), newest first; the server caps the file.
+  async function exportCsv() {
+    setExporting(true);
+    try {
+      downloadCsv('api-library-logs.csv', await apiLibraryApi.logsCsv(logQuery(deferred, apiId)));
+    } catch (e) {
+      toast(te(errorKey(e)), 'danger');
+    } finally {
+      setExporting(false);
+    }
+  }
   // The API refused the search field (the page checks the same limit first, so this should not happen). Show the field message, not the red bar.
   const searchRefused = q.isError && serverFieldProblems(q.error).some((e) => e.path === 'search');
 
@@ -69,6 +85,16 @@ export function LogsPanel({
           apis={apis}
           searchInvalid={tooLong || searchRefused}
         />
+      </div>
+      <div className="flex justify-end">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => void exportCsv()}
+          disabled={exporting || tooLong || !q.data || q.data.total === 0}
+        >
+          {exporting ? t('exporting') : t('export')}
+        </Button>
       </div>
       {q.isError && !searchRefused ? (
         <LoadError message={te(errorKey(q.error))} onRetry={() => void q.refetch()} />

@@ -170,7 +170,9 @@
         "user": "Uitgevoerd door (gebruikers-ID)",
         "noContext": "Er was geen flow of contact bij betrokken."
       },
-      "unsaved": "Niet opgeslagen"
+      "unsaved": "Niet opgeslagen",
+      "export": "CSV exporteren",
+      "exporting": "Bezig met exporteren…"
     },
     "variables": {
       "insertFor": "Een variabele invoegen in {label}",

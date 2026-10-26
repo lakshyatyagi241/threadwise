@@ -170,7 +170,9 @@
         "user": "Çalıştıran (kullanıcı kimliği)",
         "noContext": "Bir akış veya kişi yer almadı."
       },
-      "unsaved": "Kaydedilmedi"
+      "unsaved": "Kaydedilmedi",
+      "export": "CSV olarak dışa aktar",
+      "exporting": "Dışa aktarılıyor…"
     },
     "variables": {
       "insertFor": "{label} alanına değişken ekle",
