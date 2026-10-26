@@ -3,7 +3,8 @@
 //   node tools/alerting/check-alert-runbooks.mjs [repoRoot]        exit 1 with the list of problems
 // Rules checked (see check() below): alert missing from the matrix, matrix alert missing from the rules, alert with no runbook
 // annotation (required in p0-failure-modes.rules.yml, otherwise the matrix runbook counts), runbook file or #anchor missing,
-// "tested" status without a promtool case or live result, "gap" without a named missing metric.
+// "tested" status without a promtool case or live result, "gap" without a named missing metric, and (alertOwners) an alert whose
+// owner label is missing or differs from the matrix.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -39,6 +40,7 @@ export function check(root) {
       alerts.set(name, {
         file: f,
         runbook: /^\s*runbook:\s*'?"?([^'"\n]+)/m.exec(b)?.[1]?.trim() ?? null,
+        owner: /^\s*labels:\s*\{[^}]*\bowner:\s*([\w-]+)/m.exec(b)?.[1] ?? null,
       });
     }
   }
@@ -71,6 +73,15 @@ export function check(root) {
         `${name} (${a.file}): no runbook annotation${a.file === 'p0-failure-modes.rules.yml' ? '' : ' and no runbook in the matrix'}`,
       );
     else runbookOk(ref, name);
+  }
+  // Sheet3 D-05: the alerts named in alertOwners carry an owner label that agrees with the matrix.
+  for (const [name, owner] of Object.entries(matrix.alertOwners ?? {})) {
+    const a = alerts.get(name);
+    if (!a) problems.push(`alertOwners: ${name} is not in any rules file`);
+    else if (a.owner !== owner)
+      problems.push(
+        `${name} (${a.file}): owner label is ${a.owner ?? 'missing'}, the matrix says ${owner}`,
+      );
   }
   const live = fs.existsSync(path.join(root, 'docs/performance/alerting/live-test-results.json'))
     ? JSON.parse(read('docs/performance/alerting/live-test-results.json')).results

@@ -381,6 +381,31 @@
       "alerts": ["Watchdog", "SlowQueryBurst", "SlowQueryWatcherDown", "ChatBridgeDeliveryFailing", "ChatBridgeNoWatchdog"],
       "runbook": "docs/runbooks/google-chat-alerts.md",
       "status": "tested-promtool"
+    },
+    {
+      "id": "db-statement-slow",
+      "p0": false,
+      "failureMode": "A SQL statement averages 120 ms or more per call over 5 minutes (Sheet 3 D-04)",
+      "severity": "warning",
+      "alerts": ["SlowQueryMeanOver120ms"],
+      "runbook": "docs/runbooks/db-and-route-alerts.md#slowquerymeanover120ms",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "route-p95-slow",
+      "p0": false,
+      "failureMode": "A route's p95 is over 120 ms, counting routes with at least 50 requests in 15 minutes (Sheet 3 D-05)",
+      "severity": "warning",
+      "alerts": ["RouteLatencyP95High"],
+      "runbook": "docs/runbooks/db-and-route-alerts.md#routelatencyp95high",
+      "status": "tested-promtool"
     }
-  ]
+  ],
+  "alertOwners": {
+    "SlowQueryMeanOver120ms": "vedant",
+    "RouteLatencyP95High": "vedant",
+    "ApiHighErrorRate": "vedant",
+    "DbPoolSaturated": "vedant",
+    "DbPoolExhausted": "vedant"
+  }
 }

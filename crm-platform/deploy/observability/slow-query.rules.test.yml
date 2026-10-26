@@ -17,7 +17,24 @@ tests:
         values: '60x200'
       - series: 'up{job="crm-chat-bridge"}'
         values: '1x200'
+      - series: 'crm_slow_query_window_statements_over{job="crm-chat-bridge"}'
+        values: '0 0 0 1 1 1 1 1 0x200'
     alert_rule_test:
+      # D-04: the window mean goes over 120 ms at minute 3 -> pending, fires at minute 4 (for: 1m), well inside 5 minutes of the calls
+      - eval_time: 2m
+        alertname: SlowQueryMeanOver120ms
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: SlowQueryMeanOver120ms
+        exp_alerts:
+          - exp_labels: { severity: warning, group: slow_query, owner: vedant }
+            exp_annotations:
+              summary: 'A SQL statement averaged 120 ms or more per call over the last 5 minutes'
+              description: 'The slow-query watcher found a statement with at least 3 new calls whose mean time per call is over 120 ms. The log line slow_statement_window_mean and the slow-query card name it.'
+              runbook_url: docs/runbooks/db-and-route-alerts.md#slowquerymeanover120ms
+      - eval_time: 12m
+        alertname: SlowQueryMeanOver120ms
+        exp_alerts: []
       - eval_time: 12m
         alertname: SlowQueryBurst
         exp_alerts:

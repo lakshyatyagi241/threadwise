@@ -36,10 +36,11 @@ groups:
             / (max by (service, pool) (crm_db_pool_max) > 0) >= 0.9
           and max by (service, pool) (crm_db_pool_connections{state="idle"}) == 0
         for: 2m
-        labels: { severity: warning }
+        labels: { severity: warning, owner: vedant }
         annotations:
           summary: 'The {{ $labels.pool }} DB pool of {{ $labels.service }} is at its maximum with no idle connection'
           description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+          runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolsaturated'
 
       - alert: WabaIngestBacklogGrowing
         expr: max(crm_queue_jobs_pending{queue="waba-ingest", state="waiting"}) > 5000

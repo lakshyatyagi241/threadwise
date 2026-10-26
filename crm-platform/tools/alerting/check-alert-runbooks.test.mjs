@@ -89,3 +89,34 @@ test('fails: claimed tested but no promtool case', () => {
   );
   assert.match(check(d).join('\n'), /RedisMemoryNearMax claimed tested but has no promtool case/);
 });
+
+test('fails: an alert with an owner in the matrix has lost its owner label', () => {
+  const d = copy();
+  edit(d, 'deploy/observability/slow-query.rules.yml', (s) =>
+    s.replace(
+      'labels: { severity: warning, group: slow_query, owner: vedant }',
+      'labels: { severity: warning, group: slow_query }',
+    ),
+  );
+  assert.match(
+    check(d).join('\n'),
+    /SlowQueryMeanOver120ms .*owner label is missing, the matrix says vedant/,
+  );
+});
+
+test('fails: owner label differs from the matrix', () => {
+  const d = copy();
+  edit(d, P0, (s) => s.replace('owner: vedant', 'owner: someone-else'));
+  assert.match(check(d).join('\n'), /owner label is someone-else, the matrix says vedant/);
+});
+
+test('fails: alertOwners names an alert that does not exist', () => {
+  const d = copy();
+  edit(d, MX, (s) =>
+    s.replace(
+      '"DbPoolExhausted": "vedant"',
+      '"DbPoolExhausted": "vedant",\n    "NoSuchAlert": "vedant"',
+    ),
+  );
+  assert.match(check(d).join('\n'), /alertOwners: NoSuchAlert is not in any rules file/);
+});

@@ -25,7 +25,7 @@ groups:
       - alert: DbPoolExhausted
         expr: max by (service, pool) (crm_db_pool_waiting) > 0
         for: 3m
-        labels: { severity: critical }
+        labels: { severity: critical, owner: vedant }
         annotations:
           summary: 'Callers have waited for a {{ $labels.pool }} Postgres connection for 3 min on {{ $labels.service }}'
           description: 'The client pool is exhausted: requests queue behind it and time out. Either Postgres is slow or connections leak.'
@@ -66,11 +66,26 @@ groups:
           )
           and sum by (service) (rate(crm_http_request_duration_seconds_count[5m])) > 0.1
         for: 5m
-        labels: { severity: critical }
+        labels: { severity: critical, owner: vedant }
         annotations:
           summary: 'More than 5% of {{ $labels.service }} requests answer 5xx'
           description: 'Ignored below 0.1 request/s so a single failure on an idle service does not page.'
           runbook: 'docs/runbooks/p0-failure-modes.md#apihigherrorrate'
+
+      # D-05 (Sheet 3): p95 per route over 120 ms. Only routes with at least 50 requests in the window count, because a route that
+      # answered 3 requests right after a deploy has no p95 worth paging on (the prod baseline, P-16). Needs the app metrics on
+      # (OBS_METRICS_PORT_API, docs/performance/event-loop/event-loop-observability-runbook.md).
+      - alert: RouteLatencyP95High
+        expr: |
+          histogram_quantile(0.95, sum by (le, service, route) (rate(crm_http_request_duration_seconds_bucket[15m]))) > 0.12
+            and on (service, route)
+          sum by (service, route) (increase(crm_http_request_duration_seconds_count[15m])) >= 50
+        for: 10m
+        labels: { severity: warning, owner: vedant }
+        annotations:
+          summary: 'p95 of {{ $labels.route }} on {{ $labels.service }} is over 120 ms'
+          description: 'Over the last 15 minutes, with at least 50 requests. Look at the slow-query card for the same time and at DbPoolSaturated before blaming the route.'
+          runbook: 'docs/runbooks/db-and-route-alerts.md#routelatencyp95high'
 
       - alert: DeadLetterCaptureFailing
         expr: sum by (service) (increase(crm_dead_letter_capture_failures_total[10m])) > 0
