@@ -145,6 +145,8 @@ export const waFormSchema = z.object({
   status: waFormStatusSchema,
   /** `status === 'published' && metaFlowId` is set — the same rule the flow-builder picker uses. */
   isLive: z.boolean(),
+  /** Meta's id of the Flow (what a template's Form button points at); null until the form was sent to Meta by Test form or Publish. */
+  metaFlowId: z.string().nullable().default(null),
   publishedAt: z.string().nullable(),
   publishError: z.string().nullable(),
   fieldsCount: z.number().int(),
@@ -153,6 +155,10 @@ export const waFormSchema = z.object({
   rowVersion: z.number().int(),
 });
 export type WaForm = z.infer<typeof waFormSchema>;
+
+/** `POST /v2/wa-forms/:id/preview`: Meta's own preview of the saved form, to try it before publishing. */
+export const waFormPreviewSchema = z.object({ url: z.string().url(), flowId: z.string() });
+export type WaFormPreview = z.infer<typeof waFormPreviewSchema>;
 
 export const waFormStatsSchema = z.object({
   all: z.number().int(),

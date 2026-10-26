@@ -26,6 +26,7 @@ const form = (over: Partial<WaForm> = {}): WaForm => ({
   },
   status: 'published',
   isLive: true,
+  metaFlowId: null,
   publishedAt: '2026-10-08T00:00:00.000Z',
   publishError: null,
   fieldsCount: 1,

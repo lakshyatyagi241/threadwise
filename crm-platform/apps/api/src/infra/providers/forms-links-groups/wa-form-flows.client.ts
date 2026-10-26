@@ -90,6 +90,16 @@ export class WaFormFlowsClient implements WaFormFlowsPort {
     return out;
   }
 
+  async previewUrl(conn: WabaConnection, flowId: string): Promise<string | null> {
+    const bearer = requireMetaBearer(conn);
+    const res = await this.http.graph<{ preview?: { preview_url?: string } }>(bearer, {
+      method: 'GET',
+      path: `/${flowId}`,
+      query: { fields: 'preview.invalidate(false)' },
+    });
+    return res.preview?.preview_url ?? null;
+  }
+
   async publish(conn: WabaConnection, flowId: string): Promise<void> {
     const bearer = requireMetaBearer(conn);
     await this.http.graph(bearer, { method: 'POST', path: `/${flowId}/publish`, json: {} });

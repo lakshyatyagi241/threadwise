@@ -71,6 +71,15 @@ export function usePublishWaForm(id: string) {
   });
 }
 
+/** Meta's preview of the saved form. The form now has a Flow id at Meta, so the form is read again. */
+export function usePreviewWaForm(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => waFormsApi.preview(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: WA_FORM_KEYS.detail(id) }),
+  });
+}
+
 export function useDuplicateWaForm() {
   const qc = useQueryClient();
   return useMutation({

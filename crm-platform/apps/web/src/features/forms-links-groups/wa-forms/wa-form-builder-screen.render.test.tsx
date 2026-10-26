@@ -37,6 +37,7 @@ const form = (fields: WaFormField[] = DEFAULT_FIELDS): WaForm => ({
   definition: { screens: [{ id: 'A', fields }] },
   status: 'draft',
   isLive: false,
+  metaFlowId: null,
   publishedAt: null,
   publishError: null,
   fieldsCount: fields.length,
@@ -109,5 +110,49 @@ describe('the WhatsApp Form builder — privacy mapping (age, date of birth, con
       { id: 'fld_notes', kind: 'paragraph', label: 'Notes', required: false },
     ]);
     expect(html).not.toContain('Privacy &amp; consent');
+  });
+});
+
+function renderForm(f: WaForm) {
+  const seed: Seed = [
+    [WA_FORM_KEYS.detail(f.id), f],
+    [KEYS.attributePicker, feed()],
+  ];
+  return renderAccount(
+    <ToastProvider dismissLabel="x">
+      <WaFormBuilderScreen id={f.id} />
+    </ToastProvider>,
+    { session: makeSession({ permissions: ALL as never }), seed },
+  );
+}
+
+describe('the WhatsApp Form builder — Flow ID, test and screen order', () => {
+  it('shows the Flow ID of a form that has one, with a copy button, and a Test form button', () => {
+    const html = renderForm({ ...form(), metaFlowId: '1234567890123' });
+    expect(html).toContain('Flow ID');
+    expect(html).toContain('1234567890123');
+    expect(html).toContain('Copy');
+    expect(html).toContain('Test form');
+  });
+
+  it('shows no Flow ID before the form was ever sent to Meta', () => {
+    expect(renderForm(form())).not.toContain('Flow ID');
+  });
+
+  it('lets screens be moved up and down once there are two', () => {
+    const f = form();
+    const two = {
+      ...f,
+      definition: {
+        screens: [
+          { id: 'A', fields: [] },
+          { id: 'B', fields: [] },
+        ],
+      },
+    };
+    const html = renderForm(two);
+    expect(html).toContain('aria-label="Move screen 1 down"');
+    expect(html).toContain('aria-label="Move screen 2 up"');
+    expect(renderForm(f)).not.toContain('Move screen 1 down');
   });
 });

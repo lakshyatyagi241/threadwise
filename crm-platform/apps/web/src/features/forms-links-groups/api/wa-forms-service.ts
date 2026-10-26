@@ -1,5 +1,6 @@
 import {
   waFormListSchema,
+  waFormPreviewSchema,
   waFormSchema,
   waFormSubmissionListSchema,
   waFormSyncResponseSchema,
@@ -24,6 +25,8 @@ export const waFormsApi = {
   sync: () => apiFetch(`${base}/sync`, { method: 'POST', schema: waFormSyncResponseSchema }),
   publish: (id: string) =>
     apiFetch(`${base}/${id}/publish`, { method: 'POST', schema: waFormSchema }),
+  preview: (id: string) =>
+    apiFetch(`${base}/${id}/preview`, { method: 'POST', schema: waFormPreviewSchema }),
   duplicate: (id: string) =>
     apiFetch(`${base}/${id}/duplicate`, { method: 'POST', schema: waFormSchema }),
   remove: (id: string) => apiFetch(`${base}/${id}`, { method: 'DELETE' }),

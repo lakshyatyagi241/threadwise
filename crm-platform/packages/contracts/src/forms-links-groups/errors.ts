@@ -13,6 +13,8 @@ export const WFL_ERROR_CODES = {
   WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED: 'WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED',
   /** Meta refused the publish call for another reason; `message` carries Meta's own wording. */
   WFL_FORM_PUBLISH_FAILED: 'WFL_FORM_PUBLISH_FAILED',
+  /** Meta could not make the preview of the form; `message` carries Meta's own wording. */
+  WFL_FORM_PREVIEW_FAILED: 'WFL_FORM_PREVIEW_FAILED',
   /** Meta's list of Flows could not be read (Sync with Meta); `message` carries Meta's own wording. */
   WFL_FORM_SYNC_FAILED: 'WFL_FORM_SYNC_FAILED',
   /** The public link is missing, paused or past its expiry. */
