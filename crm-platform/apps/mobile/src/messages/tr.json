@@ -2399,7 +2399,7 @@
     },
     "callerId": {
       "title": "Arayan kimliği",
-      "intro": "Bir kişi sizi aradığında GetaApp adını arama ekranının üstünde gösterir. Kişiyi açmak için karta dokunun.",
+      "intro": "Bir kişi sizi aradığında Geta CRM adını arama ekranının üstünde gösterir. Kişiyi açmak için karta dokunun.",
       "privacy": "Bunun için kişilerinizin adları ve telefon numaraları yalnızca bu telefonda tutulur. Bunu kapattığınızda veya çıkış yaptığınızda silinir. Çağrı geldiğinde hiçbir şey gönderilmez.",
       "requirements": "Neye ihtiyaç duyar",
       "reqPhone": "Telefonun ne zaman çaldığını bilmek",

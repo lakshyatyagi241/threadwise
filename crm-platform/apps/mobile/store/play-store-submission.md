@@ -6,7 +6,7 @@ What to type into Play Console, taken from what the app's code does (read from t
 
 ```bash
 # 0. BEFORE the first build: the package name cannot change after the first upload to Play.
-#    app.config.ts defaults to the placeholder ai.geta.crm and the name "GetaApp". Set the real ones first:
+#    app.config.ts defaults to the placeholder ai.geta.crm and the name "Geta CRM". Set the real ones first:
 eas env:create --environment production --name APP_BUNDLE_ID --value <final package name> --visibility plaintext
 eas env:create --environment production --name APP_NAME --value "<name under the icon>" --visibility plaintext
 

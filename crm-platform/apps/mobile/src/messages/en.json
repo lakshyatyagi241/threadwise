@@ -2399,7 +2399,7 @@
     },
     "callerId": {
       "title": "Caller ID",
-      "intro": "When a contact calls you, GetaApp shows their name over the call screen. Tap the card to open the contact.",
+      "intro": "When a contact calls you, Geta CRM shows their name over the call screen. Tap the card to open the contact.",
       "privacy": "To do this, the names and phone numbers of your contacts are kept on this phone only. They are removed when you turn this off or sign out. Nothing is sent when a call comes in.",
       "requirements": "What it needs",
       "reqPhone": "Know when the phone rings",

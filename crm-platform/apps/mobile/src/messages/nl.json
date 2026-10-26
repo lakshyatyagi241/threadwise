@@ -2399,7 +2399,7 @@
     },
     "callerId": {
       "title": "Bellers-ID",
-      "intro": "Als een contact je belt, toont GetaApp zijn of haar naam boven het belscherm. Tik op de kaart om het contact te openen.",
+      "intro": "Als een contact je belt, toont Geta CRM zijn of haar naam boven het belscherm. Tik op de kaart om het contact te openen.",
       "privacy": "Daarvoor worden de namen en telefoonnummers van je contacten alleen op deze telefoon bewaard. Ze worden verwijderd als je dit uitzet of uitlogt. Er wordt niets verstuurd als er een gesprek binnenkomt.",
       "requirements": "Wat het nodig heeft",
       "reqPhone": "Weten wanneer de telefoon rinkelt",

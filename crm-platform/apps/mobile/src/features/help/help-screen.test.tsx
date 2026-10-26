@@ -40,7 +40,7 @@ beforeEach(() => {
 describe('HelpScreen', () => {
   it('opens with the product bar, a welcome with three tips, and a card for each group of guides', async () => {
     await show();
-    expect(screen.getByText('GetaApp')).toBeTruthy();
+    expect(screen.getByText('Geta CRM')).toBeTruthy();
     expect(screen.getByRole('header', { name: 'Help Center' })).toBeTruthy();
     expect(screen.getByText(/Everything you need to get the most out of the app/)).toBeTruthy();
     for (const lead of ['Get started quickly:', 'Explore key features:', 'Need help?']) {

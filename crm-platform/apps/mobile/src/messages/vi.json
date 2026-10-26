@@ -2370,7 +2370,7 @@
     },
     "callerId": {
       "title": "Nhận diện người gọi",
-      "intro": "Khi một liên hệ gọi cho bạn, GetaApp hiển thị tên họ phía trên màn hình cuộc gọi. Chạm vào thẻ để mở liên hệ.",
+      "intro": "Khi một liên hệ gọi cho bạn, Geta CRM hiển thị tên họ phía trên màn hình cuộc gọi. Chạm vào thẻ để mở liên hệ.",
       "privacy": "Để làm vậy, tên và số điện thoại của các liên hệ chỉ được lưu trên điện thoại này. Chúng sẽ bị xóa khi bạn tắt tính năng hoặc đăng xuất. Không có gì được gửi đi khi có cuộc gọi đến.",
       "requirements": "Cần những gì",
       "reqPhone": "Biết khi nào điện thoại đổ chuông",

@@ -2428,7 +2428,7 @@
     },
     "callerId": {
       "title": "Identificazione chiamante",
-      "intro": "Quando un contatto ti chiama, GetaApp mostra il suo nome sopra la schermata della chiamata. Tocca la scheda per aprire il contatto.",
+      "intro": "Quando un contatto ti chiama, Geta CRM mostra il suo nome sopra la schermata della chiamata. Tocca la scheda per aprire il contatto.",
       "privacy": "Per farlo, nomi e numeri dei tuoi contatti restano solo su questo telefono. Vengono rimossi se disattivi la funzione o esci dall'account. Alla ricezione di una chiamata non viene inviato nulla.",
       "requirements": "Di cosa ha bisogno",
       "reqPhone": "Sapere quando il telefono squilla",

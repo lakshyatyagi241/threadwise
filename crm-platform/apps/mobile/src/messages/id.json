@@ -2370,7 +2370,7 @@
     },
     "callerId": {
       "title": "ID penelepon",
-      "intro": "Saat kontak menelepon Anda, GetaApp menampilkan namanya di atas layar panggilan. Ketuk kartu untuk membuka kontak.",
+      "intro": "Saat kontak menelepon Anda, Geta CRM menampilkan namanya di atas layar panggilan. Ketuk kartu untuk membuka kontak.",
       "privacy": "Untuk itu, nama dan nomor telepon kontak Anda disimpan hanya di ponsel ini. Data dihapus saat Anda mematikan fitur ini atau keluar. Tidak ada yang dikirim saat panggilan masuk.",
       "requirements": "Yang dibutuhkan",
       "reqPhone": "Mengetahui saat ponsel berdering",

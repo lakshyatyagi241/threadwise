@@ -71,7 +71,7 @@ describe('enableCallerId and updateCallerId', () => {
     expect(native.configureCallerId).toHaveBeenCalledWith(
       true,
       expect.objectContaining({
-        appName: 'GetaApp',
+        appName: 'Geta CRM',
         subtitle: 'Contact',
         closeLabel: 'Close',
         openUrl: 'crm-dev://contact/__ID__',

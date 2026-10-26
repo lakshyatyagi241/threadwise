@@ -2428,7 +2428,7 @@
     },
     "callerId": {
       "title": "Identificador de chamadas",
-      "intro": "Quando um contato liga para você, o GetaApp mostra o nome dele sobre a tela da chamada. Toque no cartão para abrir o contato.",
+      "intro": "Quando um contato liga para você, o Geta CRM mostra o nome dele sobre a tela da chamada. Toque no cartão para abrir o contato.",
       "privacy": "Para isso, os nomes e telefones dos seus contatos ficam guardados apenas neste telefone. Eles são removidos quando você desativa o recurso ou sai da conta. Nada é enviado quando uma chamada chega.",
       "requirements": "O que ele precisa",
       "reqPhone": "Saber quando o telefone toca",

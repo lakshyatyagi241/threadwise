@@ -2428,7 +2428,7 @@
     },
     "callerId": {
       "title": "Identification de l'appelant",
-      "intro": "Quand un contact vous appelle, GetaApp affiche son nom sur l'écran d'appel. Touchez la carte pour ouvrir le contact.",
+      "intro": "Quand un contact vous appelle, Geta CRM affiche son nom sur l'écran d'appel. Touchez la carte pour ouvrir le contact.",
       "privacy": "Pour cela, les noms et numéros de vos contacts sont conservés sur ce téléphone uniquement. Ils sont supprimés si vous désactivez la fonction ou vous déconnectez. Rien n'est envoyé quand un appel arrive.",
       "requirements": "Ce qu'il faut",
       "reqPhone": "Savoir quand le téléphone sonne",

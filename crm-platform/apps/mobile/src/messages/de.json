@@ -2399,7 +2399,7 @@
     },
     "callerId": {
       "title": "Anrufer-ID",
-      "intro": "Wenn ein Kontakt Sie anruft, zeigt GetaApp seinen Namen über dem Anrufbildschirm. Tippen Sie auf die Karte, um den Kontakt zu öffnen.",
+      "intro": "Wenn ein Kontakt Sie anruft, zeigt Geta CRM seinen Namen über dem Anrufbildschirm. Tippen Sie auf die Karte, um den Kontakt zu öffnen.",
       "privacy": "Dafür werden die Namen und Telefonnummern Ihrer Kontakte nur auf diesem Telefon gespeichert. Sie werden entfernt, wenn Sie dies ausschalten oder sich abmelden. Bei einem Anruf wird nichts gesendet.",
       "requirements": "Was dafür nötig ist",
       "reqPhone": "Erkennen, wann das Telefon klingelt",
