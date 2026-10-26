@@ -16,6 +16,7 @@ import {
   type CardFormat,
   type CardRow,
 } from '../lib/form-model';
+import { toggleSelection } from '../lib/format';
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, mediaProblem, megabytes } from '../lib/media';
 import { ErrorAlert } from './error-line';
 import { ArrowDownIcon, ArrowUpIcon, ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
@@ -23,6 +24,14 @@ import { useErrorText } from './use-error-text';
 
 /** The button kinds a card can carry (Meta: a quick reply, a link or a phone number; up to two, the same on every card). */
 const CARD_KINDS: readonly AddableKind[] = ['quick_reply', 'url', 'phone'];
+
+/** The marks a card's text takes, as the message body takes them. */
+const CARD_MARKS = [
+  { id: 'bold', marker: '*' },
+  { id: 'italic', marker: '_' },
+  { id: 'strike', marker: '~' },
+  { id: 'code', marker: '```' },
+] as const;
 
 /**
  * A carousel's cards: 2 to 10, each a picture or video (one kind for all), a short text and up to two buttons. The files go to Meta
@@ -147,6 +156,20 @@ function CardItem({
   });
   const kind = card.format;
   const Icon = kind === 'video' ? VideoIcon : ImageIcon;
+  const tf = useTranslations('message-templates.form.body');
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  // The marks of the message body (bold, italic, strikethrough, code), applied to this card's text the same way.
+  function mark(marker: string) {
+    const el = bodyRef.current;
+    if (!el) return;
+    const r = toggleSelection(card.body, el.selectionStart, el.selectionEnd, marker, tf('wrapSample'));
+    onPatch({ body: r.value });
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(r.start, r.end);
+    });
+  }
 
   function pick(file: File | undefined) {
     if (!file) return;
@@ -249,6 +272,13 @@ function CardItem({
         {problem && <Alert tone="danger">{problem}</Alert>}
         {upload.isError && <ErrorAlert error={errorText(upload.error)} />}
 
+        <div className="flex flex-wrap gap-1.5">
+          {CARD_MARKS.map((m) => (
+            <Button key={m.id} size="sm" variant="secondary" onClick={() => mark(m.marker)}>
+              {tf(`format.${m.id}`)}
+            </Button>
+          ))}
+        </div>
         <Field
           label={t('text')}
           htmlFor={`${base}-body`}
@@ -256,6 +286,7 @@ function CardItem({
         >
           <Textarea
             id={`${base}-body`}
+            ref={bodyRef}
             rows={2}
             value={card.body}
             maxLength={CARD_BODY_MAX + 40}
