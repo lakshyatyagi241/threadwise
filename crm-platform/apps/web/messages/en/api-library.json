@@ -170,7 +170,9 @@
         "openContact": "Open the contact",
         "user": "Run by (user id)",
         "noContext": "No flow or contact was involved."
-      }
+      },
+      "export": "Export CSV",
+      "exporting": "Exporting…"
     },
     "variables": {
       "insertFor": "Insert a variable into {label}",

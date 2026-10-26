@@ -170,7 +170,9 @@
         "user": "実行者（ユーザー ID）",
         "noContext": "フローや連絡先は関係していません。"
       },
-      "unsaved": "未保存"
+      "unsaved": "未保存",
+      "export": "CSV で書き出す",
+      "exporting": "書き出し中…"
     },
     "variables": {
       "insertFor": "{label} に変数を挿入",
