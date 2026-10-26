@@ -143,7 +143,7 @@ function OwnedList({ owned }: { owned: readonly OwnedAddon[] }) {
                     : t('owned.ends', { date: date(o.endsAt) })}
               </p>
             </div>
-            {o.renews && <CancelAddonRenewal addonId={o.id} />}
+            {o.renews && <CancelAddonRenewal addonId={o.id} name={o.name} />}
           </li>
         ))}
       </ul>
