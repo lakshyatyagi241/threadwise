@@ -72,7 +72,7 @@ A value inside a list offers **this item** (`items[0].name`) or **every item** (
 
 ## Deleting
 
-**Delete** first checks which flows use the API. If some do, they are listed and the button becomes **Delete anyway**; those steps then leave through their error port. The API's logs are kept.
+**Delete** first checks which flows use the API. If some do, they are listed and **Delete** stays off until you remove the API step from those flows (or pick another API there). The API's logs are kept.
 
 ## Using it in a flow
 

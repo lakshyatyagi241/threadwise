@@ -244,7 +244,7 @@ describe('delete with the usage guard', () => {
     expect(out).not.toContain('Delete anyway');
   });
 
-  it('lists the flows and offers Delete anyway when some use it', () => {
+  it('lists the flows and blocks the delete when some use it', () => {
     state.usage = q({
       data: {
         data: [{ kind: 'flow', id: 'f1', name: 'Welcome flow', published: true, nodeCount: 2 }],
@@ -255,7 +255,9 @@ describe('delete with the usage guard', () => {
     expect(out).toContain('Welcome flow');
     expect(out).toContain('href="/flows/builder/f1"');
     expect(out).toContain('2 steps');
-    expect(out).toContain('Delete anyway');
+    expect(out).toContain('cannot be deleted while flows use it');
+    expect(out).not.toContain('Delete anyway');
+    expect(out).toMatch(/<button[^>]*disabled[^>]*>[^<]*Delete</);
   });
 
   it('waits for the check before it lets the person confirm', () => {

@@ -174,7 +174,8 @@
         "status": "Status",
         "schedule": "Zeitplan",
         "actions": "Aktionen"
-      }
+      },
+      "newCampaignAny": "Neue Kampagne"
     },
     "builder": {
       "loadError": "Diese Kampagne konnte nicht geladen werden.",
@@ -725,7 +726,11 @@
         "balanceShort": "Das Guthaben reicht nicht aus: Es fehlen {shortfall}.",
         "balanceLowFull": "Das Guthaben liegt unter den vollen Kosten von {full}: Ihr Tarif deckt sie jetzt ab, aber nicht mehr, sobald der Tarif aufgebraucht ist.",
         "chargedNowLabel": "Jetzt Ihrem Wallet belastet"
-      }
+      },
+      "kickerEmail": "E-Mail-Kampagnen / Neu",
+      "kickerEditEmail": "E-Mail-Kampagnen / Bearbeiten",
+      "titleEmail": "Neue E-Mail erstellen",
+      "titleEditEmail": "E-Mail bearbeiten"
     },
     "detail": {
       "notFound": "Diese Kampagne wurde nicht gefunden.",

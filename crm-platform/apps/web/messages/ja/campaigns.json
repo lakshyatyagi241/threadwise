@@ -174,7 +174,8 @@
         "status": "ステータス",
         "schedule": "スケジュール",
         "actions": "操作"
-      }
+      },
+      "newCampaignAny": "新規キャンペーン"
     },
     "builder": {
       "loadError": "このキャンペーンを読み込めませんでした。",
@@ -725,7 +726,11 @@
         "balanceShort": "残高が不足しています。あと {shortfall} 必要です。",
         "balanceLowFull": "残高が全額 {full} を下回っています。現在はプランで賄えますが、プランが終了すると賄えません。",
         "chargedNowLabel": "今回ウォレットから請求される金額"
-      }
+      },
+      "kickerEmail": "メールキャンペーン / 新規",
+      "kickerEditEmail": "メールキャンペーン / 編集",
+      "titleEmail": "新しいメールを作成",
+      "titleEditEmail": "メールを編集"
     },
     "detail": {
       "notFound": "そのキャンペーンが見つかりませんでした。",

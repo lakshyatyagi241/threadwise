@@ -91,7 +91,6 @@
       "title": "API löschen",
       "message": "Möchtest du {name} wirklich löschen? Dies kann nicht rückgängig gemacht werden.",
       "delete": "Löschen",
-      "deleteAnyway": "Trotzdem löschen",
       "done": "{name} wurde gelöscht.",
       "checking": "Es wird geprüft, welche Flows sie verwenden ...",
       "usageFailed": "Es konnte nicht geprüft werden, welche Flows diese API verwenden. Falls ein Flow sie verwendet, verlässt der Schritt beim Löschen seinen Fehlerausgang.",
@@ -99,7 +98,7 @@
       "published": "Veröffentlicht",
       "draft": "Entwurf",
       "nodes": "{count, plural, one {# Schritt} other {# Schritte}}",
-      "forceNote": "Wenn du sie trotzdem löschst, funktionieren diese Schritte nicht mehr und verlassen ihren Fehlerausgang. Die Protokolle bleiben erhalten."
+      "blocked": "Diese API kann nicht gelöscht werden, solange Abläufe sie nutzen. Entfernen Sie ihren Schritt aus diesen Abläufen oder wählen Sie dort eine andere API und löschen Sie sie dann hier."
     },
     "logs": {
       "title": "API-Protokolle",
