@@ -607,7 +607,7 @@ function ApiForm({ saved, initial }: { saved?: ApiLibraryDetail; initial: ApiFor
             <SectionCard id="alib-s-mapping" title={t('sections.mapping')} hint={t('mappingHint')}>
               <MappingEditor
                 rows={form.mapping}
-                properties={props.data?.data ?? []}
+                properties={(props.data?.data ?? []).filter((p) => !p.readOnly)}
                 propertiesState={props.isPending ? 'loading' : props.isError ? 'error' : 'ready'}
                 lastJson={lastJson}
                 errors={errors}

@@ -46,6 +46,23 @@ export const WRITABLE_CONTACT_FIELDS: ReadonlyArray<{ key: string; label: string
     { key: 'address', label: 'Address', type: 'text' },
   ];
 
+/**
+ * The contact details a variable can READ (the run seeds each as a flow variable, see `seedVariables`) but an answer is never saved
+ * into: the number, the opt-out, the owner, the groups and the stage are changed by their own rules, not by an API's answer.
+ */
+export const READABLE_CONTACT_FIELDS: ReadonlyArray<{ key: string; label: string; type: string }> =
+  [
+    { key: 'phone', label: 'Mobile number', type: 'phone' },
+    { key: 'middle_name', label: 'Middle name', type: 'text' },
+    { key: 'memo', label: 'Memo', type: 'long_text' },
+    { key: 'source', label: 'Source', type: 'text' },
+    { key: 'lifecycle_stage', label: 'Lifecycle stage', type: 'text' },
+    { key: 'status', label: 'Status', type: 'text' },
+    { key: 'groups', label: 'Groups', type: 'text' },
+    { key: 'owner', label: 'Owner', type: 'text' },
+    { key: 'opt_out', label: 'Marketing opt-out', type: 'text' },
+  ];
+
 export function isUniqueViolation(err: unknown): boolean {
   const e = err as { code?: string; cause?: { code?: string } } | null;
   return e?.code === '23505' || e?.cause?.code === '23505';
@@ -213,10 +230,13 @@ export class ApiLibraryService {
    */
   async contactProperties(): Promise<ApiLibraryContactPropertiesResponse> {
     const feed = await this.attributes.pickerFeed();
-    const taken = new Set(WRITABLE_CONTACT_FIELDS.map((f) => f.key));
+    const taken = new Set(
+      [...WRITABLE_CONTACT_FIELDS, ...READABLE_CONTACT_FIELDS].map((f) => f.key),
+    );
     return {
       data: [
         ...WRITABLE_CONTACT_FIELDS.map((f) => ({ ...f, kind: 'system' as const })),
+        ...READABLE_CONTACT_FIELDS.map((f) => ({ ...f, kind: 'system' as const, readOnly: true })),
         ...feed.custom
           .filter((c) => !taken.has(c.key))
           .map((c) => ({
