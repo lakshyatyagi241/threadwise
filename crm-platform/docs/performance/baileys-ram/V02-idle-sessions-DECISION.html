@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>V-02 Idle sessions and Baileys vs Cloud API</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;color:#1b1f23}table{border-collapse:collapse;width:100%;margin:.5rem 0 1.2rem}td,th{border:1px solid #d0d7de;padding:6px 10px;text-align:left;vertical-align:top}th{background:#f6f8fa}code,pre{background:#f6f8fa;border-radius:4px}pre{padding:10px;overflow:auto}code{padding:1px 4px}.note{border-left:4px solid #d4a72c;background:#fff8c5;padding:8px 12px}</style></head><body>
+<h1>V-02: idle session unloading, and Baileys against the Cloud API</h1>
+<p>Sheet4 task V-02 (owner Vishal). Scope agreed with the owner: the decision document, and idle unloading built behind a switch that is <b>off by default</b>, because no timeout has been agreed and unloading changes when a customer's message reaches the inbox.</p>
+
+<h2>What was built</h2>
+<table><tr><th>Piece</th><th>Behaviour</th></tr>
+<tr><td>Switch</td><td><code>WA_IDLE_UNLOAD_MINUTES</code> (default <b>0 = never</b>) and <code>WA_IDLE_WAKE_MINUTES</code> (default 15). With 0, nothing changes: a test pins that an open number is never touched, however long it is quiet.</td></tr>
+<tr><td>Idle</td><td>No message in or out for the unload time, the number open and past its first pairing, no QR showing. Any message in, send, action or group call counts as use.</td></tr>
+<tr><td>Unload</td><td>The socket is closed and its five caches emptied (V-01). The saved session and the lease stay, so no other worker takes the number and nothing logs it out. The screens still show it connected: the owning worker keeps its heartbeat, so the stale-device sweep does not mark it disconnected.</td></tr>
+<tr><td>Wake for held messages</td><td>Every wake interval the number reconnects, takes what WhatsApp delivers, and goes back to sleep after 2 minutes if nothing arrived. A message that arrives keeps it up for the whole idle time again. No "connecting" or "open" status is reported, so the device screen does not flicker; a wake that fails is an ordinary drop with the normal statuses and retries.</td></tr>
+<tr><td>Wake for a send</td><td>A send, action or group call to an unloaded number wakes it and waits up to 30 s for the socket (a cold connect), not the usual 8 s.</td></tr>
+<tr><td>Worker heartbeat</td><td>Adds <code>ready</code>, <code>unloaded</code> and <code>rssMb</code> to each worker's <code>wa:worker:*</code> key, so production memory per open session can be read: (rssMb minus the worker's own base) divided by ready.</td></tr></table>
+
+<h2>What unloading saves (measured) and what is not known</h2>
+<ul>
+<li><b>Measured (V-01, real factory, local fake endpoint):</b> an idle, connecting session costs about <b>0.36 MB of RSS</b> (0.12 MB heap). 1,000 numbers is about 360 MB of that. After sessions are ended nothing stays behind (0 caches, 0 timers per reconnect), so unload and wake cycles do not leak.</li>
+<li><b>Not measured:</b> a <i>connected</i> session with real chats. The fake endpoint never completes the WhatsApp handshake, so the signal sessions, app state and groups of a real number are not in the 0.36 MB. That is the figure the decision needs, and it needs a real linked number or the new heartbeat fields on a worker that holds real numbers.</li>
+</ul>
+
+<h2>What unloading costs</h2>
+<ul>
+<li><b>Inbound latency:</b> a message sent to an unloaded number reaches the inbox at the next wake: up to the wake interval (15 min by default). With the switch on, "idle" numbers are no longer real time.</li>
+<li><b>Assumed, not tested here:</b> that WhatsApp holds messages for a linked device that is offline and delivers them on reconnect, and that regular short reconnects do not look unusual to WhatsApp. Both must be checked on a real test number before the switch is turned on anywhere (checklist below). A linked device that stays offline too long is unlinked by WhatsApp, so the wake interval must stay far below that.</li>
+<li><b>Scope:</b> the saving is the socket memory only. The device object, its lease renewal and its row stay.</li></ul>
+
+<h2>Baileys against the Cloud API for high-volume workspaces</h2>
+<table><tr><th></th><th>Baileys (unofficial, per number)</th><th>WhatsApp Cloud API</th></tr>
+<tr><td>Memory on our servers</td><td>One socket per number: 0.36 MB idle measured; connected figure unknown; grows with the number of numbers</td><td>None per number: webhooks in, HTTPS out</td></tr>
+<tr><td>Cost per message</td><td>None from WhatsApp</td><td>Meta's per-message charges by category; needs the current rate card (not quoted here)</td></tr>
+<tr><td>Reliability and rules</td><td>Unofficial: can be restricted or unlinked; a lost session means a new QR scan; the platform keeps the engine off unless a super admin turns it on (owner decision, 2026-10-05)</td><td>Official, supported; templates and the 24-hour window apply</td></tr>
+<tr><td>Features</td><td>Personal-number behaviour, groups</td><td>Template and 24-hour-window rules for business-started messages; whether the groups a workspace uses are covered has to be checked per workspace</td></tr>
+<tr><td>High volume</td><td>One socket serialises sends; provider limits are not published</td><td>Documented messaging limits per number; our queues already carry the retry and rate-limit handling</td></tr></table>
+<p><b>Engineering input to the owner's decision.</b> At 0.36 MB idle per number (connected: unknown), memory is not what separates the two: 1,000 numbers is a few hundred MB either way of the order measured, and unloading recovers the idle part. The deciding factors are the risk of restriction, the features needed (groups) and Meta's per-message cost. Recommendation: keep Baileys where groups or personal-number behaviour are needed and the Cloud API does not cover them and volume is modest; steer high-volume business numbers to the Cloud API for reliability; use idle unloading only for Baileys numbers that really are quiet, after the checklist below. This is a recommendation to weigh, not a measurement: the cost comparison needs Meta's current rates and the workspace's real message mix.</p>
+
+<h2>Checklist before turning the switch on</h2>
+<ol>
+<li>On a real linked test number set <code>WA_IDLE_UNLOAD_MINUTES=5</code>, <code>WA_IDLE_WAKE_MINUTES=2</code> on one worker.</li>
+<li>Wait for the unload (worker log and <code>unloaded</code> in <code>wa:worker:*</code> rises); the device screen must still say Connected.</li>
+<li>Send a message to the number from another phone while it is unloaded: record when it reaches the inbox (expected: at the next wake).</li>
+<li>Send a message from the inbox while unloaded: it must go out within a few seconds of the wake.</li>
+<li>Leave it unloaded for a day: the number must not be unlinked and no status flapping may appear in the device history.</li>
+<li>Read <code>rssMb</code> and <code>ready</code> with and without the switch for the real per-session figure, and put it in this document.</li></ol>
+
+<div class="note"><b>Not proven.</b> Nothing here has run against a real WhatsApp number. The behaviour is tested with a fake socket (unload, wake, quiet reconnect, send wake, failed wake) and the unload/wake memory behaviour is the V-01 churn result. The checklist above is what proves the rest.</div>
+
+<h2>Scripts</h2>
+<pre>cd apps/api
+npx vitest run test/unit/node-bridge-runtime/device-session.spec.ts     # 8 session tests + 3 runtime-pass tests for this change
+node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode churn --cycles 300 --label after   # unload/wake cycles do not leak (V-01)
+# switch (off by default):  WA_IDLE_UNLOAD_MINUTES=60  WA_IDLE_WAKE_MINUTES=15
+docker exec crm-platform-redis redis-cli --scan --pattern 'wa:worker:*' | xargs -r -n1 docker exec crm-platform-redis redis-cli get   # devices, ready, unloaded, rssMb</pre>
+</body></html>

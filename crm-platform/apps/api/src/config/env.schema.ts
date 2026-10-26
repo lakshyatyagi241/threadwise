@@ -57,6 +57,15 @@ export const envSchema = z.object({
   /** true = BullMQ processors only, no HTTP listener. Same image, different role. */
   WORKER_MODE: booleanish.default(false),
 
+  // --- WhatsApp (Baileys) sessions -----------------------------------------
+  /**
+   * Minutes without a message in or out after which a linked number's socket is closed to free its memory (V-02). 0 = never, the default:
+   * unloading changes when a customer's message reaches the inbox (at the next wake), so it is switched on per deployment, on purpose.
+   */
+  WA_IDLE_UNLOAD_MINUTES: z.coerce.number().int().min(0).max(10080).default(0),
+  /** While unloaded, a number reconnects this often for a short time to take the messages WhatsApp held for it. Used only when unloading is on. */
+  WA_IDLE_WAKE_MINUTES: z.coerce.number().int().min(1).max(1440).default(15),
+
   // --- database ------------------------------------------------------------
   /** Application connection. MUST be a non-superuser, or RLS is bypassed. */
   DATABASE_URL: z.string().min(1),
