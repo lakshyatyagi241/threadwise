@@ -88,8 +88,10 @@ export function attachJobFailureReporting(worker: ObservableWorker): void {
 
 export function attachJobMetrics(
   worker: ObservableWorker,
-  monitor: Pick<RuntimeMonitor, 'observeJob'>,
+  monitor: Pick<RuntimeMonitor, 'observeJob'> & Partial<Pick<RuntimeMonitor, 'registerQueue'>>,
 ): void {
+  // The failed series exists at 0 before the first failure, so a single failed job is an increase Prometheus can see.
+  monitor.registerQueue?.(worker.name);
   const record = (outcome: 'completed' | 'failed') => (job: JobTimingFields | undefined) => {
     try {
       const t = jobTimings(job);

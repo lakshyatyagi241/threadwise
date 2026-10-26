@@ -399,6 +399,15 @@
       "alerts": ["RouteLatencyP95High"],
       "runbook": "docs/runbooks/db-and-route-alerts.md#routelatencyp95high",
       "status": "tested-promtool"
+    },
+    {
+      "id": "queue-job-failed",
+      "p0": false,
+      "failureMode": "A queue job used up its attempts and failed for good (Sheet 3 D-14)",
+      "severity": "warning",
+      "alerts": ["QueueJobFailed"],
+      "runbook": "docs/performance/queue-capacity/queue-observability-runbook.md#queuejobfailed",
+      "status": "tested-promtool"
     }
   ],
   "alertOwners": {
@@ -406,6 +415,7 @@
     "RouteLatencyP95High": "vedant",
     "ApiHighErrorRate": "vedant",
     "DbPoolSaturated": "vedant",
-    "DbPoolExhausted": "vedant"
+    "DbPoolExhausted": "vedant",
+    "QueueJobFailed": "vedant"
   }
 }

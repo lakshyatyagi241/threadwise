@@ -53,6 +53,20 @@ groups:
         annotations:
           summary: 'Queue {{ $labels.queue }}: {{ $value }} jobs failed in 15 min'
 
+      # D-14 (Sheet 3): a job that gave up for good tells the team channel within minutes. crm_queue_jobs_total{outcome="failed"} is one
+      # observation per job that reaches its final state (a retried attempt is not counted, job-metrics.ts), and the series exists at 0 from
+      # worker start (registerQueue), so the first failure is an increase. QueueFailedJobsGrowing above is the volume alarm (over 50 in
+      # 15 minutes); this one answers "something is failing". webhook-deliver and webhook-forward are left out: a dead customer endpoint or
+      # platform target is expected to use up its retries, and their own failure policy records each one.
+      - alert: QueueJobFailed
+        expr: sum by (queue) (increase(crm_queue_jobs_total{outcome="failed",queue!~"webhook-deliver|webhook-forward"}[5m])) > 0
+        for: 0m
+        labels: { severity: warning, owner: vedant }
+        annotations:
+          summary: 'Queue {{ $labels.queue }}: a job failed for good in the last 5 minutes'
+          description: 'Its last attempt failed, so nothing will retry it. The error is in Sentry (tagged by queue) and the failed job is kept for the removeOnFail window of its queue.'
+          runbook: 'docs/performance/queue-capacity/queue-observability-runbook.md#queuejobfailed'
+
       - alert: QueueRetryAmplification
         expr: sum by (queue) (rate(crm_queue_job_retries_total[10m])) > 0.5 * sum by (queue) (rate(crm_queue_jobs_total[10m])) and sum by (queue) (rate(crm_queue_jobs_total[10m])) > 0.1
         for: 10m
