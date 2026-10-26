@@ -158,7 +158,11 @@
       "contactsDenied": "Nie masz dostępu do listy kontaktów. Wybierz kontakty przez grupy lub tagi.",
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
       "colEmail": "E-mail",
-      "noEmail": "Brak adresu e-mail"
+      "noEmail": "Brak adresu e-mail",
+      "contactsHeading": "Kontakty",
+      "matchTitle": "Dopasuj do wybranych grup, tagów i segmentów",
+      "matchAny": "Dowolne z nich",
+      "matchAll": "Wszystkie z nich"
     },
     "overrides": {
       "title": "Uzupełnij tę wysyłkę",

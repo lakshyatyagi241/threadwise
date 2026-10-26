@@ -158,7 +158,11 @@
       "contactsDenied": "No tienes acceso a la lista de contactos. Elige contactos mediante grupos o etiquetas.",
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "colEmail": "Correo electrónico",
-      "noEmail": "Sin dirección de correo"
+      "noEmail": "Sin dirección de correo",
+      "contactsHeading": "Contactos",
+      "matchTitle": "Coincidir con los grupos, etiquetas y segmentos elegidos",
+      "matchAny": "Cualquiera de ellos",
+      "matchAll": "Todos ellos"
     },
     "overrides": {
       "title": "Completa este envío",

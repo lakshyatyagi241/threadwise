@@ -158,7 +158,11 @@
       "contactsDenied": "Je hebt geen toegang tot de contactenlijst. Kies contacten via groepen of tags.",
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "colEmail": "E-mail",
-      "noEmail": "Geen e-mailadres"
+      "noEmail": "Geen e-mailadres",
+      "contactsHeading": "Contacten",
+      "matchTitle": "Overeenkomen met gekozen groepen, tags en segmenten",
+      "matchAny": "Een van deze",
+      "matchAll": "Alle van deze"
     },
     "overrides": {
       "title": "Deze verzending invullen",

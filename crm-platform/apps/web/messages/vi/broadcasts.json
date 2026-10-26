@@ -158,7 +158,11 @@
       "contactsDenied": "Bạn không có quyền truy cập danh sách liên hệ. Hãy chọn liên hệ qua nhóm hoặc thẻ.",
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "colEmail": "Email",
-      "noEmail": "Không có địa chỉ email"
+      "noEmail": "Không có địa chỉ email",
+      "contactsHeading": "Liên hệ",
+      "matchTitle": "Khớp với nhóm, thẻ và phân đoạn đã chọn",
+      "matchAny": "Bất kỳ cái nào",
+      "matchAll": "Tất cả"
     },
     "overrides": {
       "title": "Điền thông tin cho lần gửi này",

@@ -121,6 +121,8 @@ export function StepRecipients({
           onGroups={(groupIds) => patch({ groupIds })}
           onSegments={(segmentIds) => patch({ segmentIds })}
           onContacts={(contactIds) => patch({ contactIds })}
+          match={form.audienceMatch}
+          onMatch={(audienceMatch) => patch({ audienceMatch })}
         />
       )}
 
