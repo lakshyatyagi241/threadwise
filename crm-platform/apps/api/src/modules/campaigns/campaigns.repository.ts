@@ -25,6 +25,14 @@ const list = (values: readonly (string | number)[], cast: 'uuid' | 'bigint' | 't
 export const AGG_SENT = `r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
 export const AGG_DELIVERED = `r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
 export const AGG_READ = `r.status IN ('read','responded') OR r.read_at IS NOT NULL`;
+/**
+ * A recipient who opted out: the row itself says so (a STOP reported for this campaign), or the contact opted out after this campaign's
+ * message reached them (a STOP typed in the inbox, the contact screen, a consent change), which the row is never told about. Needs the
+ * contact joined as `c` (a LEFT JOIN: a recipient with no contact has none).
+ */
+export const OPTED_OUT = sql.raw(
+  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND r.sent_at IS NOT NULL AND coalesce(c.unsubscribed_at, r.sent_at) >= r.sent_at))`,
+);
 export const AGG = sql.raw(`
   count(*) FILTER (WHERE ${AGG_SENT})::int AS a_sent,
   count(*) FILTER (WHERE ${AGG_DELIVERED})::int AS a_delivered,
@@ -1535,9 +1543,10 @@ export class CampaignsRepository {
   async audienceMakeup(tx: Tx, orgId: number, campaignId: number) {
     const manual = await tx.execute(sql`
       SELECT count(*)::int AS n,
-             count(*) FILTER (WHERE phone_number IS NULL AND contact_id IS NULL)::int AS invalid,
-             count(*) FILTER (WHERE status = 'unsubscribed' OR is_unsubscribed)::int AS opted_out
-      FROM wp_campaign_contacts WHERE org_id = ${orgId} AND campaign_id = ${campaignId}`);
+             count(*) FILTER (WHERE r.phone_number IS NULL AND r.contact_id IS NULL)::int AS invalid,
+             count(*) FILTER (WHERE ${OPTED_OUT})::int AS opted_out
+      FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId}`);
     const m = manual.rows[0] as { n: number; invalid: number; opted_out: number };
     const groups = await tx.execute(sql`
       SELECT g.name AS name, count(*)::int AS n
@@ -1566,8 +1575,9 @@ export class CampaignsRepository {
       SELECT g.name AS name, count(DISTINCT r.id)::int AS recipients,
              count(DISTINCT r.id) FILTER (WHERE r.responded_at IS NOT NULL)::int AS replies,
              count(DISTINCT r.id) FILTER (WHERE r.read_at IS NOT NULL)::int AS reads,
-             count(DISTINCT r.id) FILTER (WHERE r.is_unsubscribed OR r.status = 'unsubscribed')::int AS opt_outs
+             count(DISTINCT r.id) FILTER (WHERE ${OPTED_OUT})::int AS opt_outs
       FROM wp_campaign_contacts r
+      LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       JOIN contact_group_members gm ON gm.org_id = r.org_id AND gm.contact_id = r.contact_id
       JOIN contact_groups g ON g.org_id = gm.org_id AND g.id = gm.group_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId}
@@ -1600,10 +1610,10 @@ export class CampaignsRepository {
   async optOuts(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
       SELECT coalesce(r.recipient_name, c.name, '') AS name, coalesce(r.phone_number, ${REACHED_AT}, '') AS phone,
-             r.unsubscribed_at, r.sent_at
+             coalesce(r.unsubscribed_at, c.unsubscribed_at) AS unsubscribed_at, r.sent_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
-      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND (r.is_unsubscribed OR r.status = 'unsubscribed')
-      ORDER BY coalesce(r.unsubscribed_at, r.sent_at) DESC NULLS LAST, r.id DESC LIMIT ${limit}`);
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND ${OPTED_OUT}
+      ORDER BY coalesce(r.unsubscribed_at, c.unsubscribed_at, r.sent_at) DESC NULLS LAST, r.id DESC LIMIT ${limit}`);
     return (res.rows as Raw[]).map((r) => ({
       name: String(r.name),
       phone: String(r.phone),

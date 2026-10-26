@@ -100,7 +100,7 @@ export class ShellUserService {
       return res.rows.length;
     });
     // After the commit: the person's other tabs and devices drop their badge and list too, the same event as a mark-all-read.
-    if (cleared > 0) await this.publisher.read(orgId, userId, 'all');
+    if (cleared > 0) await this.publisher.read(orgId, userId, 'all', { cleared: true });
     return { cleared };
   }
 

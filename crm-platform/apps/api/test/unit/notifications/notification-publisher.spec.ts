@@ -138,6 +138,8 @@ describe('NotificationPublisher', () => {
       realtimeEventSchemas[REALTIME_EVENT.notificationRead].parse(e.payload);
     }
     expect(emitted[1]!.payload).toEqual({ unread: 0, notificationIds: 'all' });
+    await publisher.read(4, 7, 'all', { cleared: true });
+    expect(emitted[2]!.payload).toEqual({ unread: 0, notificationIds: 'all', cleared: true });
   });
 });
 
