@@ -41,7 +41,7 @@
       "assignedToOther": "Deze chat is aan een andere agent toegewezen. Wijs hem eerst aan jezelf toe om een bericht te sturen."
     },
     "list": {
-      "title": "Contact Hub",
+      "title": "Contacthub",
       "subtitle": "Beheer al je contacten moeiteloos op één plek voor sales, support en meer",
       "dedupe": "Duplicaten verwijderen",
       "exportAll": "Alles exporteren",
@@ -98,7 +98,7 @@
       "unnamed": "Geen naam",
       "colGroups": "Groepen",
       "colTags": "Tags",
-      "colMemo": "Memo",
+      "colMemo": "Notitie",
       "colDateOfBirth": "Geboortedatum",
       "colMinor": "Minderjarig",
       "minorBadge": "Minderjarig",
@@ -118,11 +118,11 @@
       "moreActions": "Meer acties",
       "modifyColumns": "Kolommen aanpassen",
       "resetColumns": "Standaard herstellen",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Kolommen zoeken",
+      "columnsSelectAll": "Alles selecteren",
+      "dragToReorder": "Sleep om kolommen te herordenen",
+      "removeColumn": "{name} verwijderen",
+      "columnsSave": "Opslaan",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
       "colEmailId": "E-mailadres",
@@ -297,7 +297,8 @@
       "allTeams": "Alle teams",
       "teamFormer": "Voormalig team",
       "unhideColumn": "Kolom tonen",
-      "resizeColumn": "Sleep om {column} te vergroten of verkleinen; dubbelklik om te herstellen"
+      "resizeColumn": "Sleep om {column} te vergroten of verkleinen; dubbelklik om te herstellen",
+      "pqlNoKey": "Engels zoeken is voor deze werkruimte nog niet ingesteld. Vraag een beheerder om een OpenRouter-sleutel toe te voegen onder AI-sleutels."
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -396,7 +397,7 @@
       "languagePlaceholder": "Engels",
       "source": "Bron",
       "sourcePlaceholder": "bijv. Websiteformulier",
-      "memo": "Memo",
+      "memo": "Notitie",
       "memoPlaceholder": "Notities over dit contact",
       "address": "Adres",
       "addressPlaceholder": "Voer adres in",
@@ -447,7 +448,8 @@
         "number": "Voer een getal in.",
         "integer": "Voer een geheel getal in.",
         "email": "Voer een geldig e-mailadres in.",
-        "url": "Voer een volledige link in die met http:// of https:// begint."
+        "url": "Voer een volledige link in die met http:// of https:// begint.",
+        "phone": "Voer een geldig telefoonnummer in voor het gekozen land."
       },
       "readOnlyField": "Alleen-lezen",
       "yes": "Ja",
@@ -492,7 +494,7 @@
       "quickHintPick": "Kies meerdere tags uit de lijst."
     },
     "groups": {
-      "eyebrow": "Workspace · {workspace}",
+      "eyebrow": "Werkruimte · {workspace}",
       "title": "Contactgroepen",
       "subtitle": "Segmenten waarop je kunt filteren, waarin je kunt importeren en waaraan je campagnes kunt sturen.",
       "allContacts": "Alle contacten",
@@ -584,7 +586,7 @@
         "tags": "Tags",
         "title": "Aanhef",
         "address": "Adres",
-        "memo": "Memo",
+        "memo": "Notitie",
         "status": "Status",
         "source": "Bron",
         "consent": "Marketingtoestemming (ja / nee)",
@@ -941,7 +943,7 @@
       "status": {
         "eyebrow": "Contactstatus",
         "addTitle": "Status toevoegen",
-        "namePlaceholder": "Key account",
+        "namePlaceholder": "Sleutelaccount",
         "listLabel": "Contactstatussen",
         "help": "Een fase is waar een contact zich in je verkooptraject bevindt; een status is een stap daarbinnen, zoals Offerte verzonden bij Gekwalificeerd, of Niet geïnteresseerd bij Verloren. Laat een status op Alle fasen staan voor labels zoals Niet benaderen.",
         "add": "Status toevoegen",
@@ -967,7 +969,7 @@
         "won": "Gewonnen",
         "lost": "Verloren",
         "allStages": "Alle fasen",
-        "inStage": "In {stage}",
+        "inStage": "In fase {stage}",
         "defaultInStage": "Standaard in fase",
         "unsetDefault": "Voorkomen dat {name} de standaard van zijn fase is",
         "makeStageDefault": "{name} de standaard van zijn fase maken"
@@ -1349,7 +1351,10 @@
       "save": "Opslaan en regels openen",
       "created": "Het segment \"{name}\" is aangemaakt. Verfijn de regels hieronder.",
       "forbidden": "Je hebt geen toestemming om segmenten aan te maken.",
-      "failed": "Het segment kon niet worden aangemaakt. Probeer het opnieuw."
+      "failed": "Het segment kon niet worden aangemaakt. Probeer het opnieuw.",
+      "specific": "Specifieke personen",
+      "specificHint": "Alleen de personen en teams die je kiest, plus jij en personen die elk segment kunnen bewerken.",
+      "shareRequired": "Kies minstens één persoon of team om mee te delen."
     },
     "bulkUpdate": {
       "title": "{count, plural, one {# contact} other {# contacten}} bijwerken",
@@ -1376,7 +1381,8 @@
         "setValue": "Waarde instellen",
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",
-        "problemEmpty": "Voer een waarde in of kies Wissen."
+        "problemEmpty": "Voer een waarde in of kies Wissen.",
+        "parentFirst": "Werk eerst {parent} bij en dan deze eigenschap: de keuzes ervan hangen daarvan af."
       },
       "titleAll": "Alle overeenkomende contacten bijwerken",
       "hintAll": "Stel dezelfde waarden in voor elk contact dat overeenkomt met de huidige filters. Velden die op Behouden staan, worden niet gewijzigd.",
@@ -1399,7 +1405,7 @@
       "when": "Wanneer",
       "rejectsFailed": "De afgewezen rijen konden niet worden gedownload. Probeer het opnieuw.",
       "imports": {
-        "title": "Imports",
+        "title": "Importeren",
         "hint": "Geüploade contactbestanden, nieuwste eerst. Afgewezen rijen kun je downloaden om ze te herstellen en opnieuw te uploaden.",
         "empty": "Nog geen imports.",
         "file": "Bestand",
@@ -1418,7 +1424,7 @@
         "by": "Geïmporteerd door"
       },
       "exports": {
-        "title": "Exports",
+        "title": "Exporteren",
         "hint": "Contactexports vanuit de Hub, nieuwste eerst. Elk bestand wordt 30 dagen bewaard, zodat jij en collega's met exportrechten het opnieuw kunnen downloaden.",
         "empty": "Nog geen exports.",
         "by": "Door",
@@ -1486,6 +1492,15 @@
       },
       "openApp": {
         "sms": "Openen in je berichten-app"
+      },
+      "reason": {
+        "not_linked": "Dit nummer is niet gekoppeld aan een WhatsApp Business-account, dus er kan geen sjabloon worden verzonden.",
+        "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
+        "media_header": "Heeft een koptekst met afbeelding, video of document, die je hier nog niet kunt verzenden.",
+        "header_variable": "Heeft een variabele in de koptekst, die je hier nog niet kunt invullen.",
+        "dynamic_button": "Heeft een knoplink met een variabele, die je hier nog niet kunt invullen.",
+        "authentication": "Sjablonen met eenmalig wachtwoord worden door het systeem verzonden, niet vanaf hier.",
+        "named_variables": "Gebruikt benoemde variabelen, die je hier nog niet kunt invullen."
       }
     },
     "views": {

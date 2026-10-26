@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# Aufgabe gelöscht.} other {# Aufgaben gelöscht.}}",
       "deleteTitle": "Die ausgewählten Aufgaben löschen?",
       "deleteMessage": "{count, plural, one {# Aufgabe wird für alle gelöscht. Dies kann nicht rückgängig gemacht werden.} other {# Aufgaben werden für alle gelöscht. Dies kann nicht rückgängig gemacht werden.}}",
-      "keep": "Behalten"
+      "keep": "Behalten",
+      "reopen": "Wieder öffnen",
+      "completeWithOutcome": "Mit Aufgabenergebnis abschließen",
+      "reopenWithOutcome": "Mit Aufgabenergebnis wieder öffnen",
+      "pickOutcome": "Aufgabenergebnis",
+      "reopened": "{count, plural, one {# Aufgabe wieder geöffnet.} other {# Aufgaben wieder geöffnet.}}"
     },
     "quick": {
       "label": "Aufgabe hinzufügen",

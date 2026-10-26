@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# टास्क हटाया गया।} other {# टास्क हटाए गए।}}",
       "deleteTitle": "चुने गए टास्क हटाएँ?",
       "deleteMessage": "{count, plural, one {# टास्क सभी के लिए हटा दिया जाएगा। इसे वापस नहीं लिया जा सकता।} other {# टास्क सभी के लिए हटा दिए जाएँगे। इसे वापस नहीं लिया जा सकता।}}",
-      "keep": "रखें"
+      "keep": "रखें",
+      "reopen": "फिर से खोलें",
+      "completeWithOutcome": "टास्क परिणाम के साथ पूरा करें",
+      "reopenWithOutcome": "टास्क परिणाम के साथ फिर से खोलें",
+      "pickOutcome": "टास्क परिणाम",
+      "reopened": "{count, plural, one {# टास्क फिर से खोला गया।} other {# टास्क फिर से खोले गए।}}"
     },
     "quick": {
       "label": "टास्क जोड़ें",

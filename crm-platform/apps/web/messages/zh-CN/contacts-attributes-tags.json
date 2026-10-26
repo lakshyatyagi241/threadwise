@@ -118,11 +118,11 @@
       "moreActions": "更多操作",
       "modifyColumns": "调整列",
       "resetColumns": "恢复默认",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "搜索列",
+      "columnsSelectAll": "全选",
+      "dragToReorder": "拖动以重新排列列",
+      "removeColumn": "移除{name}",
+      "columnsSave": "保存",
       "colContactName": "联系人姓名",
       "colPhone": "电话号码",
       "colEmailId": "电子邮箱",
@@ -297,7 +297,8 @@
       "allTeams": "所有团队",
       "teamFormer": "原团队",
       "unhideColumn": "显示列",
-      "resizeColumn": "拖动以调整“{column}”的宽度；双击重置"
+      "resizeColumn": "拖动以调整“{column}”的宽度；双击重置",
+      "pqlNoKey": "此工作区尚未设置英文搜索。请让管理员在 AI 密钥中添加 OpenRouter 密钥。"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -393,7 +394,7 @@
       "email": "电子邮箱",
       "emailPlaceholder": "输入电子邮箱",
       "language": "语言",
-      "languagePlaceholder": "English",
+      "languagePlaceholder": "英语",
       "source": "来源",
       "sourcePlaceholder": "例如：网站表单",
       "memo": "备忘",
@@ -447,7 +448,8 @@
         "number": "请输入数字。",
         "integer": "请输入整数。",
         "email": "请输入有效的电子邮箱地址。",
-        "url": "请输入以 http:// 或 https:// 开头的完整链接。"
+        "url": "请输入以 http:// 或 https:// 开头的完整链接。",
+        "phone": "请输入所选国家或地区的有效电话号码。"
       },
       "readOnlyField": "只读",
       "yes": "是",
@@ -1349,7 +1351,10 @@
       "save": "保存并打开规则",
       "created": "已创建细分“{name}”。请在下方进一步调整其规则。",
       "forbidden": "您无权创建细分。",
-      "failed": "无法创建该细分。请重试。"
+      "failed": "无法创建该细分。请重试。",
+      "specific": "特定人员",
+      "specificHint": "仅对您选择的人员和团队可见，另外还有您自己以及可以编辑所有分段的人员。",
+      "shareRequired": "请至少选择一位人员或团队进行共享。"
     },
     "bulkUpdate": {
       "title": "更新 {count, plural, other {# 个联系人}}",
@@ -1376,7 +1381,8 @@
         "setValue": "设置值",
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",
-        "problemEmpty": "请输入值，或选择“清空”。"
+        "problemEmpty": "请输入值，或选择“清空”。",
+        "parentFirst": "请先更新{parent}，再更新此属性：其选项取决于它。"
       },
       "titleAll": "更新所有匹配的联系人",
       "hintAll": "将相同的值设置到符合当前筛选条件的每个联系人。保持不变的字段不会被更改。",
@@ -1486,6 +1492,15 @@
       },
       "openApp": {
         "sms": "在短信应用中打开"
+      },
+      "reason": {
+        "not_linked": "此号码未关联 WhatsApp 商业账户，因此无法发送任何模板。",
+        "paused": "已被 WhatsApp 暂停。暂停结束后可再次发送。",
+        "media_header": "模板包含图片、视频或文档标题，目前无法从这里发送。",
+        "header_variable": "标题中包含变量，目前无法在这里填写。",
+        "dynamic_button": "按钮链接中包含变量，目前无法在这里填写。",
+        "authentication": "一次性密码模板由系统发送，无法从这里发送。",
+        "named_variables": "使用了命名变量，目前无法在这里填写。"
       }
     },
     "views": {

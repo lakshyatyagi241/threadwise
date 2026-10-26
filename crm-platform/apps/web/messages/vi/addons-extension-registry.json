@@ -85,7 +85,13 @@
         "title": "Xóa {name}?",
         "body": "Xóa tiện ích bổ sung này? Các không gian làm việc đã mua vẫn giữ nó cho đến khi hết hạn.",
         "confirm": "Xóa",
-        "inUse": "{count, plural, other {# không gian làm việc đang sở hữu tiện ích bổ sung này nên không thể xóa. Hãy tắt nó; chủ sở hữu vẫn giữ cho đến khi hết hạn.}}"
+        "inUse": "{count, plural, other {# không gian làm việc đang sở hữu tiện ích bổ sung này nên không thể xóa. Hãy tắt nó; chủ sở hữu vẫn giữ cho đến khi hết hạn.}}",
+        "errors": {
+          "refused": "Tiện ích này có giao dịch mua, kể cả đã kết thúc, nên không thể xóa. Hãy tắt nó đi.",
+          "forbidden": "Chỉ siêu quản trị viên mới có thể xóa tiện ích.",
+          "notFound": "Tiện ích này không còn tồn tại.",
+          "failed": "Không thể xóa tiện ích."
+        }
       },
       "errors": {
         "generic": "Không thể lưu tiện ích bổ sung.",

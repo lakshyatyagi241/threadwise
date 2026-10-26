@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# tâche supprimée.} other {# tâches supprimées.}}",
       "deleteTitle": "Supprimer les tâches sélectionnées ?",
       "deleteMessage": "{count, plural, one {# tâche sera supprimée pour tout le monde. Cette action est irréversible.} other {# tâches seront supprimées pour tout le monde. Cette action est irréversible.}}",
-      "keep": "Conserver"
+      "keep": "Conserver",
+      "reopen": "Rouvrir",
+      "completeWithOutcome": "Terminer avec le résultat de la tâche",
+      "reopenWithOutcome": "Rouvrir avec le résultat de la tâche",
+      "pickOutcome": "Résultat de la tâche",
+      "reopened": "{count, plural, one {# tâche rouverte.} other {# tâches rouvertes.}}"
     },
     "quick": {
       "label": "Ajouter une tâche",

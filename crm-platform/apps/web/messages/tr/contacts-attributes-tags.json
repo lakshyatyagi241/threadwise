@@ -118,11 +118,11 @@
       "moreActions": "Diğer işlemler",
       "modifyColumns": "Sütunları değiştir",
       "resetColumns": "Varsayılana sıfırla",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Sütunlarda ara",
+      "columnsSelectAll": "Tümünü seç",
+      "dragToReorder": "Sütunların sırasını değiştirmek için sürükleyin",
+      "removeColumn": "{name} sütununu kaldır",
+      "columnsSave": "Kaydet",
       "colContactName": "Kişi adı",
       "colPhone": "Telefon numarası",
       "colEmailId": "E-posta kimliği",
@@ -297,7 +297,8 @@
       "allTeams": "Tüm ekipler",
       "teamFormer": "Eski ekip",
       "unhideColumn": "Sütunu göster",
-      "resizeColumn": "{column} sütununu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın"
+      "resizeColumn": "{column} sütununu yeniden boyutlandırmak için sürükleyin; sıfırlamak için çift tıklayın",
+      "pqlNoKey": "Bu çalışma alanı için İngilizce arama henüz ayarlanmadı. Bir yöneticiden, Yapay zeka anahtarları bölümüne bir OpenRouter anahtarı eklemesini isteyin."
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -447,7 +448,8 @@
         "number": "Bir sayı girin.",
         "integer": "Bir tam sayı girin.",
         "email": "Geçerli bir e-posta adresi girin.",
-        "url": "http:// veya https:// ile başlayan tam bir bağlantı girin."
+        "url": "http:// veya https:// ile başlayan tam bir bağlantı girin.",
+        "phone": "Seçilen ülke için geçerli bir telefon numarası girin."
       },
       "readOnlyField": "Salt okunur",
       "yes": "Evet",
@@ -1349,7 +1351,10 @@
       "save": "Kaydet ve kuralları aç",
       "created": "\"{name}\" segmenti oluşturuldu. Kurallarını aşağıda ayrıntılandırın.",
       "forbidden": "Segment oluşturma izniniz yok.",
-      "failed": "Segment oluşturulamadı. Tekrar deneyin."
+      "failed": "Segment oluşturulamadı. Tekrar deneyin.",
+      "specific": "Belirli kişiler",
+      "specificHint": "Yalnızca sizin seçtiğiniz kişiler ve ekipler, ayrıca siz ve tüm segmentleri düzenleyebilen kişiler.",
+      "shareRequired": "Paylaşmak için en az bir kişi veya ekip seçin."
     },
     "bulkUpdate": {
       "title": "{count, plural, one {# kişiyi} other {# kişiyi}} güncelle",
@@ -1376,7 +1381,8 @@
         "setValue": "Değer ayarla",
         "willClear": "{count, plural, one {Seçili kişide} other {seçili # kişinin tümünde}} boşaltılacak.",
         "requiredNoClear": "Zorunlu bir özellik temizlenemez.",
-        "problemEmpty": "Bir değer girin veya Temizle'yi seçin."
+        "problemEmpty": "Bir değer girin veya Temizle'yi seçin.",
+        "parentFirst": "Önce {parent} alanını güncelleyin, sonra bu özelliği; seçenekleri ona bağlıdır."
       },
       "titleAll": "Eşleşen tüm kişileri güncelle",
       "hintAll": "Geçerli filtrelerle eşleşen her kişiye aynı değerleri uygula. Koru olarak bırakılan alanlar değiştirilmez.",
@@ -1486,6 +1492,15 @@
       },
       "openApp": {
         "sms": "Mesaj uygulamanızda açın"
+      },
+      "reason": {
+        "not_linked": "Bu numara bir WhatsApp Business hesabına bağlı değil, bu yüzden şablon gönderilemez.",
+        "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
+        "media_header": "Resim, video veya belge üstbilgisi var; şimdilik buradan gönderilemez.",
+        "header_variable": "Üst bilgide bir değişken var; şimdilik buradan doldurulamaz.",
+        "dynamic_button": "Değişken içeren bir düğme bağlantısı var; şimdilik buradan doldurulamaz.",
+        "authentication": "Tek kullanımlık şifre şablonlarını sistem gönderir, buradan gönderilemez.",
+        "named_variables": "Adlandırılmış değişkenler kullanıyor; şimdilik buradan doldurulamaz."
       }
     },
     "views": {

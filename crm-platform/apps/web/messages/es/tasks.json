@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {# tarea eliminada.} other {# tareas eliminadas.}}",
       "deleteTitle": "¿Eliminar las tareas seleccionadas?",
       "deleteMessage": "{count, plural, one {# tarea se eliminará para todos. No se puede deshacer.} other {# tareas se eliminarán para todos. No se puede deshacer.}}",
-      "keep": "Conservar"
+      "keep": "Conservar",
+      "reopen": "Reabrir",
+      "completeWithOutcome": "Completar con resultado de la tarea",
+      "reopenWithOutcome": "Reabrir con resultado de la tarea",
+      "pickOutcome": "Resultado de la tarea",
+      "reopened": "{count, plural, one {# tarea reabierta.} other {# tareas reabiertas.}}"
     },
     "quick": {
       "label": "Añadir una tarea",

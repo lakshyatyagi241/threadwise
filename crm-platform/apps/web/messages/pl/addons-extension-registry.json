@@ -85,7 +85,13 @@
         "title": "Usunąć {name}?",
         "body": "Usunąć ten dodatek? Przestrzenie robocze, które go kupiły, zachowają go do wygaśnięcia.",
         "confirm": "Usuń",
-        "inUse": "{count, plural, one {# przestrzeń robocza posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} few {# przestrzenie robocze posiadają ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} many {# przestrzeni roboczych posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} other {# przestrzeni roboczej posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.}}"
+        "inUse": "{count, plural, one {# przestrzeń robocza posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} few {# przestrzenie robocze posiadają ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} many {# przestrzeni roboczych posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.} other {# przestrzeni roboczej posiada ten dodatek, więc nie można go usunąć. Wyłącz go zamiast tego; właściciele zachowają go do końca okresu.}}",
+        "errors": {
+          "refused": "Ten dodatek ma zakupy, także zakończone, więc nie można go usunąć. Wyłącz go zamiast tego.",
+          "forbidden": "Dodatki może usuwać tylko super administrator.",
+          "notFound": "Ten dodatek już nie istnieje.",
+          "failed": "Nie udało się usunąć dodatku."
+        }
       },
       "errors": {
         "generic": "Nie udało się zapisać dodatku.",

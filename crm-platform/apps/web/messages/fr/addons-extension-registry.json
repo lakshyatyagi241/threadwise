@@ -85,7 +85,13 @@
         "title": "Supprimer {name} ?",
         "body": "Supprimer ce module complémentaire ? Les espaces de travail qui l’ont acheté le conservent jusqu’à son expiration.",
         "confirm": "Supprimer",
-        "inUse": "{count, plural, one {# espace de travail possède ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.} other {# espaces de travail possèdent ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.}}"
+        "inUse": "{count, plural, one {# espace de travail possède ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.} other {# espaces de travail possèdent ce module complémentaire, il ne peut donc pas être supprimé. Désactivez-le plutôt ; les propriétaires le conservent jusqu’à son terme.}}",
+        "errors": {
+          "refused": "Cette extension a des achats, y compris terminés, donc elle ne peut pas être supprimée. Désactivez-la à la place.",
+          "forbidden": "Seul un super administrateur peut supprimer des extensions.",
+          "notFound": "Cette extension n'existe plus.",
+          "failed": "L'extension n'a pas pu être supprimée."
+        }
       },
       "errors": {
         "generic": "Le module complémentaire n’a pas pu être enregistré.",

@@ -155,7 +155,12 @@
       "deleted": "{count, plural, other {# 件のタスクを削除しました。}}",
       "deleteTitle": "選択したタスクを削除しますか？",
       "deleteMessage": "{count, plural, other {# 件のタスクを全員から削除します。この操作は元に戻せません。}}",
-      "keep": "残す"
+      "keep": "残す",
+      "reopen": "再度開く",
+      "completeWithOutcome": "タスクの結果を付けて完了",
+      "reopenWithOutcome": "タスクの結果を付けて再度開く",
+      "pickOutcome": "タスクの結果",
+      "reopened": "{count, plural, other {{count} 件のタスクを再度開きました。}}"
     },
     "quick": {
       "label": "タスクを追加",

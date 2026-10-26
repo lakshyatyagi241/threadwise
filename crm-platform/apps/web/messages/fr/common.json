@@ -12,6 +12,7 @@
       "body": "La page n’a pas pu se charger. Le problème a été signalé. Réessayez, et s’il persiste, contactez l’assistance.",
       "bodyWithDigest": "La page n’a pas pu se charger. Le problème a été signalé. Réessayez, et s’il persiste, contactez l’assistance en indiquant {digest}.",
       "home": "Retour à l’accueil"
-    }
+    },
+    "clearSearch": "Effacer la recherche"
   }
 }

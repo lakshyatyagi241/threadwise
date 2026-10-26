@@ -12,6 +12,7 @@
       "body": "De pagina kon niet worden geladen. Het is gemeld. Probeer het opnieuw en neem contact op met support als het blijft gebeuren.",
       "bodyWithDigest": "De pagina kon niet worden geladen. Het is gemeld. Probeer het opnieuw en neem contact op met support als het blijft gebeuren, onder vermelding van {digest}.",
       "home": "Terug naar het begin"
-    }
+    },
+    "clearSearch": "Zoekopdracht wissen"
   }
 }
