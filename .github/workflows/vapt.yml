@@ -25,9 +25,9 @@ jobs:
         image: redis:7
         ports: ['56379:6379']
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: crm-platform/.nvmrc, cache: pnpm, cache-dependency-path: crm-platform/pnpm-lock.yaml }
       - name: Install and build workspace packages
         run: |
@@ -40,6 +40,6 @@ jobs:
         run: |
           docker pull ghcr.io/zaproxy/zaproxy:stable
           bash script-testing/vapt/run.sh --zap-cap 15
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with: { name: vapt-reports, path: 'crm-platform/qa-results/vapt/**' }
