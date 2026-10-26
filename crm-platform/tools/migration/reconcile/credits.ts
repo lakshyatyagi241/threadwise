@@ -782,7 +782,13 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
     }
   }
   const wantKeys = new Set(want.rows.map((r) => r.key));
-  const extra = rows.filter((r) => !wantKeys.has(r.key));
+  // the app's own rows written after the live balance was read (wallet-history keeps them): real spend, not a finding
+  const readMs = new Date(h.asOf).getTime();
+  const appRows = rows.filter(
+    (r) => !r.key.startsWith(`waboo:${client}:`) && Number(r.ms) > readMs,
+  );
+  const appSum = appRows.reduce((n, r) => n + (fourDigits(r.amount) ?? 0n), 0n);
+  const extra = rows.filter((r) => !wantKeys.has(r.key) && !appRows.includes(r));
   if (missing + differ > 0)
     alarm(
       `HISTORY_MISMATCH: the wallet ledger differs from the one recomputed from the dump and core.json (${missing} missing, ${differ} different): ${bad.join(' | ')}`,
@@ -791,10 +797,17 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
     alarm(
       `HISTORY_EXTRA_ROWS: ${extra.length} wallet_transactions row(s) that the dump and core.json do not account for (first ${lim(extra[0]!.key)})`,
     );
-  if (balanceText !== '' && fourDigits(balanceText) !== fourDigits(h.target))
+  // the live balance is rounded to the cent (the chain ends there); the app's rows after the read are real spend and sit on top of it
+  const liveNow = fourDigits(balanceText);
+  if (
+    balanceText !== '' &&
+    liveNow !== null &&
+    ((liveNow + 50n) / 100n) * 100n !== fourDigits(h.target)
+  )
     warnings.push(
       `WALLET HISTORY: core.json now says the live balance is ${balanceText} but the ledger was built for ${h.target}: run wallet-history again`,
     );
+  const expectWallet = (fourDigits(h.target) ?? 0n) + appSum;
   const w = (
     await withTenant(db, { orgId }, (tx) =>
       tx.execute(
@@ -802,9 +815,9 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
       ),
     )
   ).rows[0] as { balance: string } | undefined;
-  if ((!w || fourDigits(w.balance) !== fourDigits(h.target)) && !a.allowExtraRows)
+  if ((!w || fourDigits(w.balance) !== expectWallet) && !a.allowExtraRows)
     alarm(
-      `HISTORY_BALANCE: wallets.balance ${w?.balance ?? '(none)'} is not the live Waboo balance the history ends at (${h.target})`,
+      `HISTORY_BALANCE: wallets.balance ${w?.balance ?? '(none)'} is not the live Waboo balance the history ends at (${h.target}) plus the app's rows after the read (${text4(expectWallet)})`,
     );
   warnings.push(
     `WALLET HISTORY: ${want.rows.length} ledger row(s) recomputed from the dump and core.json (opening ${text4(want.opening / 100n)} ${unit}); ${want.rows.length - missing - differ} match the database`,
