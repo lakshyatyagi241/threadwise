@@ -275,14 +275,14 @@ test('one card: one create, then PATCH for claim, PR, note, resolved; no second 
   assert.equal(posts().filter((x) => x.body.cardsV2[0].card.header.title.includes('FIRING')).length, 1);
   await b.resolver.claim(id, 'Vedant-Claude');
   assert.equal(f.log.api.at(-1).method, 'PATCH');
-  assert.match(txt(f.log.api.at(-1).body), /Vedant-Claude is working on this since/);
+  assert.match(txt(f.log.api.at(-1).body), /Vedant-Claude is working on this \(since/);
   await b.resolver.addNote(id, 'Vedant-Claude', 'Pool <b>starved</b> by report job');
   await b.resolver.raisePr(id, 'Vedant-Claude', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/77', number: 77, summary: 'Index the report query' });
   let last = f.log.api.at(-1);
   assert.equal(last.method, 'PATCH');
   assert.match(last.url, /messages\/m1\?updateMask=text,cardsV2/);
   assert.match(txt(last.body), /PR #77 \(Index the report query\)/);
-  assert.match(txt(last.body), /What Vedant-Claude found/);
+  assert.match(txt(last.body), /Note from Vedant-Claude/);
   assert.ok(!txt(last.body).includes('<b>starved'), 'note escaped');
   assert.match(txt(last.body), /Timeline/);
   await b.resolver.setRelease('abcdef1234567', [77]);
@@ -294,7 +294,7 @@ test('one card: one create, then PATCH for claim, PR, note, resolved; no second 
   assert.match(txt(last.body), /Fixed by PR #77/);
   assert.match(txt(last.body), /release abcdef1/);
   assert.ok(!/Value now/.test(txt(last.body)));
-  assert.equal(posts().filter((x) => /working on this|raised|RESOLVED|released/.test(txt(x.body))).length, 0, 'no lifecycle message posted: the card carries it');
+  assert.equal(posts().filter((x) => /working on this|PR #\d+ raised|RESOLVED|released/.test(txt(x.body))).length, 0, 'no lifecycle message posted: the card carries it');
   assert.equal(f.log.hooks.length, 0, 'no webhook post, no announce');
   assert.ok(f.log.api.filter((x) => x.method === 'PATCH').length >= 4);
   close();
@@ -344,19 +344,19 @@ test('status line: open, claimed, PR raised, resolved by PR, cleared on its own;
   const { renderCard } = await import('./chat-app.mjs');
   const pr = 'https://github.com/lakshyatyagi241/threadwise/pull/77';
   let m = renderCard(mk(), { incidentId: 'i' });
-  assert.equal(statusOf(m), '🟡 Status: Open, nobody has taken it yet');
+  assert.equal(statusOf(m), '🟡 <b>Open</b> · waiting for someone to pick this up');
   assert.match(txt(m), /Claim it/);
   m = renderCard(mk(), { incidentId: 'i', snap: { status: 'claimed', owner: '<b>Ved</b>', claimedAt: Date.UTC(2026, 0, 1, 9, 5) } });
-  assert.equal(statusOf(m), '🔵 Status: In progress, <b>&lt;b&gt;Ved&lt;/b&gt;</b> is working on this since 09:05 UTC');
+  assert.equal(statusOf(m), '🔵 <b>In progress</b> · <b>&lt;b&gt;Ved&lt;/b&gt;</b> is working on this (since 14:35 IST)');
   assert.ok(!/Claim it/.test(txt(m)), 'stale suggestion removed');
   m = renderCard(mk(), { incidentId: 'i', snap: { status: 'pr_raised', owner: 'Vedant-Claude', prNumber: 77, prUrl: pr } });
-  assert.equal(statusOf(m), `🔵 Status: In progress, <a href="${pr}">PR #77</a> raised by <b>Vedant-Claude</b>`);
+  assert.equal(statusOf(m), `🔵 <b>Fix in review</b> · <a href="${pr}">PR #77</a> raised by <b>Vedant-Claude</b>, waiting for a review`);
   m = renderCard(mk(), { incidentId: 'i', snap: { status: 'resolved', owner: 'Vedant-Claude', prNumber: 77, prUrl: pr, resolution: { kind: 'pr', at: 1, durationMs: 1 } } });
-  assert.equal(statusOf(m), `✅ Status: Resolved by <a href="${pr}">PR #77</a> (<b>Vedant-Claude</b>)`);
+  assert.equal(statusOf(m), `✅ <b>Resolved</b> · fixed by <a href="${pr}">PR #77</a> (<b>Vedant-Claude</b>)`);
   assert.ok(!/Claim it/.test(txt(m)));
   assert.match(txt(m), /Fixed by PR #77/);
   m = renderCard(mk(), { incidentId: 'i', snap: { status: 'resolved', resolution: { kind: 'self', at: 1, durationMs: 1 } } });
-  assert.equal(statusOf(m), '✅ Status: Cleared on its own');
+  assert.equal(statusOf(m), '✅ <b>Resolved</b> · cleared on its own, no change was needed');
 });
 
 async function deployRig({ apiFails = false, enabled = true } = {}) {
@@ -377,15 +377,15 @@ test('deploy_failure in app mode: one create, then only edits (claim, PR, releas
   const id = resolver.byKey('deploy:bbbbbbb1').id;
   assert.equal(api.creates.length, 1);
   assert.equal(api.creates[0].ch, 'deploy');
-  assert.equal(api.creates[0].body.cardsV2[0].card.sections[0].widgets[0].decoratedText.text, '🟡 Status: Open, nobody has taken it yet');
-  assert.ok(!/unknown|Live|Took/.test(txt(api.creates[0].body)), 'unknown facts omitted');
-  assert.match(txt(api.creates[0].body), /Attempted[\s\S]*bbbbbbb[\s\S]*#5[\s\S]*@bob/);
+  assert.equal(api.creates[0].body.cardsV2[0].card.sections[0].widgets[0].decoratedText.text, '🟡 <b>Open</b> · waiting for someone to pick this up');
+  assert.ok(!/unknown|Still live|Build time/.test(txt(api.creates[0].body)), 'unknown facts omitted');
+  assert.match(txt(api.creates[0].body), /Release attempted[\s\S]*bbbbbbb[\s\S]*#5[\s\S]*@bob/);
   await resolver.claim(id, 'Asha');
-  assert.match(txt(api.updates.at(-1).body), /In progress, <b>Asha<\/b> is working on this since/);
+  assert.match(txt(api.updates.at(-1).body), /<b>In progress<\/b> · <b>Asha<\/b> is working on this \(since/);
   await resolver.raisePr(id, 'Asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/80', number: 80, summary: 'fix build' });
   assert.match(txt(api.updates.at(-1).body), /PR #80<\/a> raised by <b>Asha/);
   await resolver.setRelease('ccccccc1', [80]);
-  assert.match(txt(api.updates.at(-1).body), /✅ Status: Resolved by .*PR #80.*Asha/);
+  assert.match(txt(api.updates.at(-1).body), /✅ <b>Resolved<\/b> · fixed by .*PR #80.*Asha/);
   assert.match(txt(api.updates.at(-1).body), /RESOLVED/);
   assert.equal(api.creates.length, 1);
   assert.equal(posts.length, 0, 'webhook/post never used: no thread reply, no announce');
@@ -394,14 +394,14 @@ test('deploy_failure in app mode: one create, then only edits (claim, PR, releas
 test('deploy_failure: a release alone resolves the card; webhook mode and API failure keep today\'s text + Incident update card', async () => {
   let r = await deployRig();
   await r.resolver.openDeployFailure(spec); await r.resolver.setRelease('ccccccc1', []);
-  assert.match(txt(r.api.updates.at(-1).body), /✅ Status: Resolved by release ccccccc/);
+  assert.match(txt(r.api.updates.at(-1).body), /✅ <b>Resolved<\/b> · fixed in release ccccccc/);
   for (const o of [{ enabled: false }, { apiFails: true }]) {
     r = await deployRig(o);
     await r.resolver.openDeployFailure(spec);
     assert.equal(r.posts.length, 1);
-    assert.match(r.posts[0].m.text, /Deploy failed or was refused: needs a human or a fix PR/);
+    assert.match(r.posts[0].m.text, /Release did not go live: a person or a fix is needed/);
     assert.equal(r.posts[0].m.cardsV2[0].card.header.title, 'Incident update');
-    assert.match(txt(r.posts[0].m), /\(live: unknown\)/);
+    assert.match(txt(r.posts[0].m), /\(still live: unknown\)/);
     await r.resolver.claim(r.resolver.byKey('deploy:bbbbbbb1').id, 'Asha');
     assert.ok(r.posts.length > 1, 'lifecycle lines still arrive as messages');
   }
@@ -427,12 +427,12 @@ test('PR merged: card edited once to the merged status, no new post, then releas
   assert.equal(g.calls.length, 1, 'merged incident is not polled again');
   assert.match(g.calls[0].u, /repos\/lakshyatyagi241\/threadwise\/pulls\/971$/);
   assert.equal(patches().length, n0 + 1);
-  assert.match(txt(patches().at(-1).body), /🟣 Status: .*PR #971.* merged by lakshya-ty at 10:05 UTC, waiting for the release to go live/);
+  assert.match(txt(patches().at(-1).body), /🟣 <b>Merged<\/b> · .*PR #971.* merged by lakshya-ty at 15:35 IST; waiting for the release to go live/);
   assert.match(txt(patches().at(-1).body), /PR #971 merged by lakshya-ty/);
   assert.equal(f.log.api.filter((x) => x.method === 'POST').length, posts);
   assert.equal(b.resolver.get(id).prMerged.sha7, 'abcdef1');
   await b.resolver.setRelease('abcdef1234567', [971]); await b.resolver.settle(); await am('resolved'); await b.resolver.settle();
-  assert.match(txt(patches().at(-1).body), /✅ Status: Resolved by/);
+  assert.match(txt(patches().at(-1).body), /✅ <b>Resolved<\/b> · fixed by/);
   p.stop(); close();
 });
 test('PR closed without merge: card says so, needs a human, not resolved', async () => {
@@ -455,7 +455,7 @@ test('PR poll: no token file = disabled; token never logged; hostile login not t
   assert.equal(b.resolver.get(id).prMerged.by, null); close();
 });
 
-test('a note without a claim (or after a release) shows "Reviewed by <name>, needs a human" instead of "nobody has taken it"', async () => {
+test('a note without a claim (or after a release) shows "<name> reviewed this, needs a person" instead of "waiting for someone"', async () => {
   const { createChatApp } = await import('./chat-app.mjs');
   const { createResolver } = await import('./resolver.mjs');
   const calls = [];
@@ -470,7 +470,7 @@ test('a note without a claim (or after a release) shows "Reviewed by <name>, nee
   await app.send('other', base, { threadKey: 't5', interactive: { incidentId: id } });
   await resolver.addNote(id, 'Punya-Claude', 'one outbox row is dead; needs the operator CLI');
   const last = calls.at(-1) ?? '';
-  assert.ok(last.includes('Reviewed by <b>Punya-Claude</b>'), 'reviewed status shown');
-  assert.ok(!last.includes('nobody has taken it yet'), 'not shown as untouched');
+  assert.ok(last.includes('<b>Punya-Claude</b> reviewed this at'), 'reviewed status shown');
+  assert.ok(!last.includes('waiting for someone to pick this up'), 'not shown as untouched');
   assert.ok(last.includes('needs the operator CLI'), 'the note stays on the card');
 });

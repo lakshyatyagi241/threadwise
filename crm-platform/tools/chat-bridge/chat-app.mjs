@@ -24,7 +24,8 @@ const clean = (x, n = 200) => {
   return t.length > n ? `${t.slice(0, n - 1)}…` : t;
 };
 const PR_URL = /^https:\/\/github\.com\/lakshyatyagi241\/threadwise\/pull\/\d+$/;
-const hm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
+const IST_MS = 19800000; // Indian Standard Time, UTC+5:30: the team reads these cards in IST
+const hm = (t) => `${new Date(new Date(t).getTime() + IST_MS).toISOString().slice(11, 16)} IST`;
 const dur = (ms) => { const m = Math.max(0, Math.round(ms / 60000)); return m < 1 ? `${Math.max(0, Math.round(ms / 1000))} s` : m < 120 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`; };
 const MAX_BYTES = 30000; // Chat caps a message at 32,000 bytes
 const row = (k, v) => ({ decoratedText: { topLabel: k, text: v, wrapText: true } });
@@ -43,21 +44,21 @@ function lifeWidgets({ owner, snap, firedAt }) {
       : `Cleared on its own, no code change, after ${dur(res.durationMs)}.`;
     w.push(row('✅ How it was resolved', how));
     if (res.measured) w.push(row('What it measured', clean(res.measured, 120)));
-    w.push(row('How long / peak', `lasted ${dur(res.durationMs)}${res.peak ? `; peak ${clean(res.peak, 40)}${res.threshold ? ` vs threshold ${clean(res.threshold, 40)}` : ''}` : ''}; verified clear at ${hm(res.at)}`));
+    w.push(row('Duration', `Lasted ${dur(res.durationMs)}${res.peak ? ` · peak ${clean(res.peak, 40)}${res.threshold ? ` against a threshold of ${clean(res.threshold, 40)}` : ''}` : ''} · confirmed clear at ${hm(res.at)}`));
   } else if (snap?.status === 'released') {
     w.push(row('🚀 In release', `${pr} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}; verifying that the problem is gone.`));
   } else if (snap?.prUrl) {
-    w.push(snap.prMerged ? row('🟣 PR merged', `${pr} is merged. Next step: none, wait for the release; this card resolves itself once it is live and verified.`) : row('🔧 PR raised', `${pr}${who ? ` by ${who}` : ''}. Next step: review and merge it; this card resolves itself when the alert clears after the release.`));
+    w.push(snap.prMerged ? row('🟣 PR merged', `${pr} is merged. Nothing more to do for now: this card resolves itself once the release is live and verified.`) : row('🔧 PR raised', `${pr}${who ? ` by ${who}` : ''}. Please review and merge it. Once the release is live and the alert clears, this card resolves itself.`));
   } else if (who && (snap?.status === 'claimed' || !snap)) {
-    w.push({ decoratedText: { text: `👀 ${who} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`, wrapText: true } });
-    w.push(row('Owner / next step', `${who} owns it. Next step: find the cause (see "What to check"), then raise a PR or note what was found.`));
+    w.push({ decoratedText: { text: `👀 ${who} is working on this${snap?.claimedAt ? ` (since ${hm(snap.claimedAt)})` : ''}`, wrapText: true } });
+    w.push(row('Next step', `${who} has this. They will find the cause (see "What to check"), then raise a PR or leave a note.`));
   } else {
-    w.push(row('Owner / next step', 'Nobody yet. Press "I\'m on it", then follow "What to check" above.'));
+    w.push(row('Next step', 'Nobody has picked this up yet. Select "I\'m on it" to take it, then work through "What to check" above.'));
   }
   const found = (snap?.notes ?? []).at(-1);
-  if (found) w.push(row(`What ${clean(found.who, 40)} found`, clean(found.text, 600)));
-  const tl = [...(firedAt ? [{ t: firedAt, who: snap?.kind === 'deploy_failure' ? 'Deploy' : snap?.kind === 'sentry_issue' ? 'Sentry' : 'Alertmanager', text: snap?.kind === 'deploy_failure' ? 'deploy failed' : snap?.kind === 'sentry_issue' ? 'issue seen' : 'alert fired' }] : []), ...(snap?.tl ?? [])].slice(-MAX_TL);
-  if (tl.length) w.push(row('Timeline', tl.map((e) => `${hm(e.t)}  ${clean(e.who, 40)}: ${clean(e.text, 160)}`).join('\n')));
+  if (found) w.push(row(`Note from ${clean(found.who, 40)}`, clean(found.text, 600)));
+  const tl = [...(firedAt ? [{ t: firedAt, who: snap?.kind === 'deploy_failure' ? 'Deploy' : snap?.kind === 'sentry_issue' ? 'Sentry' : 'Alertmanager', text: snap?.kind === 'deploy_failure' ? 'release did not go live' : snap?.kind === 'sentry_issue' ? 'issue first seen' : 'alert raised' }] : []), ...(snap?.tl ?? [])].slice(-MAX_TL);
+  if (tl.length) w.push(row('Timeline', tl.map((e) => `${hm(e.t)} · ${clean(e.who, 40)}: ${clean(e.text, 160)}`).join('\n')));
   return w;
 }
 
@@ -67,21 +68,21 @@ function statusLine({ owner, snap }) {
   const pr = n ? (snap.prUrl && PR_URL.test(snap.prUrl) ? `<a href="${snap.prUrl}">PR #${n}</a>` : `PR #${n}`) : '';
   const res = snap?.resolution;
   if (snap?.status === 'resolved') {
-    if (res?.kind === 'pr' || (pr && res?.kind !== 'self')) return `✅ Status: Resolved by ${pr || 'a PR'}${nm ? ` (${nm})` : ''}`;
-    if (res?.kind === 'release') return `✅ Status: Resolved by release ${clean(String(res.sha ?? '').slice(0, 7), 12)}`;
-    if (res?.kind === 'action') return '✅ Status: Resolved automatically';
-    if (res?.kind === 'sentry') return `✅ Status: Resolved in Sentry by ${clean(res.by, 40)}`;
-    return '✅ Status: Cleared on its own';
+    if (res?.kind === 'pr' || (pr && res?.kind !== 'self')) return `✅ <b>Resolved</b> · fixed by ${pr || 'a PR'}${nm ? ` (${nm})` : ''}`;
+    if (res?.kind === 'release') return `✅ <b>Resolved</b> · fixed in release ${clean(String(res.sha ?? '').slice(0, 7), 12)}`;
+    if (res?.kind === 'action') return '✅ <b>Resolved</b> · fixed automatically';
+    if (res?.kind === 'sentry') return `✅ <b>Resolved</b> · marked resolved in Sentry by ${clean(res.by, 40)}`;
+    return '✅ <b>Resolved</b> · cleared on its own, no change was needed';
   }
-  if (snap?.status === 'released') return `🔵 Status: In progress, ${pr || 'the PR'} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}, verifying`;
-  if (snap?.prMerged && pr) return `🟣 Status: ${pr} merged${snap.prMerged.by ? ` by ${clean(snap.prMerged.by, 40)}` : ''} at ${hm(snap.prMerged.at)}, waiting for the release to go live`;
-  if (snap?.prClosed && !pr) return `🟠 Status: PR #${Number(snap.prClosed.number) || 0} was closed without merging, needs a human`;
-  if (pr) return `🔵 Status: In progress, ${pr} raised${nm ? ` by ${nm}` : ''}`;
-  if (nm && (snap?.status === 'claimed' || !snap)) return `🔵 Status: In progress, ${nm} is working on this${snap?.claimedAt ? ` since ${hm(snap.claimedAt)}` : ''}`;
+  if (snap?.status === 'released') return `🔵 <b>Verifying</b> · ${pr || 'the PR'} is live in release ${clean(String(snap.releasedSha ?? '').slice(0, 7), 12)}; checking that the problem has gone`;
+  if (snap?.prMerged && pr) return `🟣 <b>Merged</b> · ${pr} merged${snap.prMerged.by ? ` by ${clean(snap.prMerged.by, 40)}` : ''} at ${hm(snap.prMerged.at)}; waiting for the release to go live`;
+  if (snap?.prClosed && !pr) return `🟠 <b>Needs a person</b> · PR #${Number(snap.prClosed.number) || 0} was closed without merging`;
+  if (pr) return `🔵 <b>Fix in review</b> · ${pr} raised${nm ? ` by ${nm}` : ''}, waiting for a review`;
+  if (nm && (snap?.status === 'claimed' || !snap)) return `🔵 <b>In progress</b> · ${nm} is working on this${snap?.claimedAt ? ` (since ${hm(snap.claimedAt)})` : ''}`;
   // Someone (a teammate's Claude) looked, left a note and let go: say so instead of going back to "nobody has taken it".
   const rev = [...(snap?.notes ?? [])].reverse().find((n) => n.who && n.who !== 'bridge');
-  if (rev) return `🟠 Status: Reviewed by <b>${clean(rev.who, 40)}</b> at ${hm(rev.t)}, needs a human to take it`;
-  return '🟡 Status: Open, nobody has taken it yet';
+  if (rev) return `🟠 <b>Needs a person</b> · <b>${clean(rev.who, 40)}</b> reviewed this at ${hm(rev.t)} and left a note, see what they found below`;
+  return '🟡 <b>Open</b> · waiting for someone to pick this up';
 }
 
 // base = the plain alert message (no buttons). owner = display name when claimed. snap = incident snapshot (resolver.get) for the full life.
