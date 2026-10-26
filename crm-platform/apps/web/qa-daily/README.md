@@ -34,7 +34,20 @@ AUTOFIX=1 qa-daily/run-daily.sh          # also fix up to AUTOFIX_MAX=5 open bug
 `AUTOFIX_PUSH=1` pushes the fix branch. Nothing is merged for you: open a PR from `qa-autofix/<date>` and review it.
 Teammates can run it at the same time: each fix is claimed in the sheet first.
 
-## Every day
+## Every day, for the whole team: GitHub Actions (`.github/workflows/qa-daily.yml`)
+Runs at 03:00 IST on a fresh seeded stack (Postgres + Redis service containers), explores every page and fills the sheet. No Claude,
+no API key. One person adds two repo secrets (Settings > Secrets and variables > Actions): `QA_SHEET_URL`, `QA_SHEET_TOKEN`.
+Run it by hand from the Actions tab (qa-daily > Run workflow; `limit` = 10 for a smoke run). The screenshots and logs are in the run's
+`qa-daily` artifact. A manual run only works once the workflow file is on the default branch.
+
+## Fixing the open rows: on a developer's machine, with a Claude Max login (no API key)
+Claude Code logged in with the Max plan; `ANTHROPIC_API_KEY` is ignored by the script on purpose. One person is enough: rows are claimed.
+```bash
+cd apps/web && AUTOFIX_MAX=3 node qa-daily/autofix.mjs
+```
+Review the `qa-autofix/<date>` branch it makes and open a PR.
+
+## Alternative: cron on your own machine
 `crontab -e` (the machine must be awake and the stack up):
 ```
 0 9 * * 1-5  cd /path/to/crm-platform/apps/web && AUTOFIX=1 qa-daily/run-daily.sh >> /tmp/wadesk-qa.log 2>&1
