@@ -2338,7 +2338,9 @@
       "contact": "연락처",
       "type": "통화 유형",
       "outbound": "발신",
+      "inbound": "수신",
       "status": "발신 통화 상태",
+      "statusIncoming": "수신 통화 상태",
       "completed": "완료됨",
       "notAnswered": "응답 없음",
       "startTime": "통화 시작 시간",
@@ -2347,6 +2349,7 @@
       "durationInvalid": "통화 시간을 분:초 형식으로 입력하세요. 예: 02:30.",
       "subject": "제목",
       "subjectDefault": "{{name}}님에게 발신한 통화",
+      "subjectIncoming": "{{name}}님에게서 수신한 통화",
       "subjectInvalid": "255자 이내의 제목을 입력하세요.",
       "notes": "설명",
       "save": "통화 저장",
@@ -2364,6 +2367,30 @@
         "project": "프로젝트",
         "desk": "데스크"
       }
+    },
+    "callerId": {
+      "title": "발신자 표시",
+      "intro": "연락처에서 전화가 오면 GetaApp이 통화 화면 위에 이름을 표시합니다. 카드를 누르면 연락처가 열립니다.",
+      "privacy": "이를 위해 연락처의 이름과 전화번호는 이 휴대폰에만 저장됩니다. 기능을 끄거나 로그아웃하면 삭제됩니다. 전화가 올 때 아무것도 전송되지 않습니다.",
+      "requirements": "필요한 것",
+      "reqPhone": "전화가 울리는 것 알기",
+      "reqLog": "걸려 오는 번호 읽기",
+      "reqOverlay": "다른 앱 위에 표시",
+      "allowed": "허용됨",
+      "missing": "허용 안 됨",
+      "allow": "허용",
+      "statusOn": "발신자 표시가 켜져 있습니다",
+      "statusOff": "발신자 표시가 꺼져 있습니다",
+      "hintOn": "켜짐",
+      "hintOff": "꺼짐",
+      "ready": "준비된 연락처: {{number}}",
+      "updated": "업데이트: {{when}}",
+      "turnOn": "켜기",
+      "turnOff": "끄기",
+      "updateNow": "지금 업데이트",
+      "noAccess": "내 역할로는 연락처를 읽을 수 없어 표시할 사람이 없습니다.",
+      "failed": "연락처를 읽지 못했습니다. 다시 시도하세요.",
+      "unavailable": "이 앱 버전은 발신자를 표시할 수 없습니다. 최신 버전을 설치하세요."
     }
   },
   "notifications": {

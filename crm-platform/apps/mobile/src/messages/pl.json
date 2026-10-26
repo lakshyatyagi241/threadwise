@@ -2425,7 +2425,9 @@
       "contact": "Kontakt",
       "type": "Typ połączenia",
       "outbound": "Wychodzące",
+      "inbound": "Przychodzące",
       "status": "Status połączenia wychodzącego",
+      "statusIncoming": "Status połączenia przychodzącego",
       "completed": "Zakończone",
       "notAnswered": "Bez odpowiedzi",
       "startTime": "Czas rozpoczęcia połączenia",
@@ -2434,6 +2436,7 @@
       "durationInvalid": "Podaj długość jako minuty:sekundy, na przykład 02:30.",
       "subject": "Temat",
       "subjectDefault": "Połączenie wychodzące do: {{name}}",
+      "subjectIncoming": "Połączenie przychodzące od: {{name}}",
       "subjectInvalid": "Podaj temat do 255 znaków.",
       "notes": "Opis",
       "save": "Zapisz połączenie",
@@ -2451,6 +2454,30 @@
         "project": "Projekt",
         "desk": "Obsługa"
       }
+    },
+    "callerId": {
+      "title": "Identyfikator rozmówcy",
+      "intro": "Gdy dzwoni do Ciebie kontakt, GetaApp pokazuje jego nazwę nad ekranem połączenia. Dotknij karty, aby otworzyć kontakt.",
+      "privacy": "W tym celu nazwy i numery telefonów kontaktów są przechowywane tylko na tym telefonie. Znikają po wyłączeniu funkcji lub wylogowaniu. Przy połączeniu nic nie jest wysyłane.",
+      "requirements": "Czego potrzebuje",
+      "reqPhone": "Wiedzieć, kiedy telefon dzwoni",
+      "reqLog": "Odczytać numer dzwoniącego",
+      "reqOverlay": "Wyświetlanie nad innymi aplikacjami",
+      "allowed": "Dozwolone",
+      "missing": "Niedozwolone",
+      "allow": "Zezwól",
+      "statusOn": "Identyfikator rozmówcy jest włączony",
+      "statusOff": "Identyfikator rozmówcy jest wyłączony",
+      "hintOn": "Włączony",
+      "hintOff": "Wyłączony",
+      "ready": "Gotowe kontakty: {{number}}",
+      "updated": "Zaktualizowano {{when}}",
+      "turnOn": "Włącz",
+      "turnOff": "Wyłącz",
+      "updateNow": "Aktualizuj teraz",
+      "noAccess": "Twoja rola nie może czytać kontaktów, więc nie ma kogo nazywać.",
+      "failed": "Nie udało się odczytać kontaktów. Spróbuj ponownie.",
+      "unavailable": "Ta wersja aplikacji nie może pokazywać dzwoniących. Zainstaluj najnowszą wersję."
     }
   },
   "notifications": {

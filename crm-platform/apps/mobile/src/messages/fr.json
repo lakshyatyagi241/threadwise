@@ -2396,7 +2396,9 @@
       "contact": "Contact",
       "type": "Type d’appel",
       "outbound": "Sortant",
+      "inbound": "Entrant",
       "status": "Statut de l’appel sortant",
+      "statusIncoming": "Statut de l’appel entrant",
       "completed": "Terminé",
       "notAnswered": "Sans réponse",
       "startTime": "Heure de début de l’appel",
@@ -2405,6 +2407,7 @@
       "durationInvalid": "Saisissez la durée au format minutes:secondes, par exemple 02:30.",
       "subject": "Objet",
       "subjectDefault": "Appel sortant vers {{name}}",
+      "subjectIncoming": "Appel entrant de {{name}}",
       "subjectInvalid": "Saisissez un objet de 255 caractères maximum.",
       "notes": "Description",
       "save": "Enregistrer l’appel",
@@ -2422,6 +2425,30 @@
         "project": "Projet",
         "desk": "Support"
       }
+    },
+    "callerId": {
+      "title": "Identification de l'appelant",
+      "intro": "Quand un contact vous appelle, GetaApp affiche son nom sur l'écran d'appel. Touchez la carte pour ouvrir le contact.",
+      "privacy": "Pour cela, les noms et numéros de vos contacts sont conservés sur ce téléphone uniquement. Ils sont supprimés si vous désactivez la fonction ou vous déconnectez. Rien n'est envoyé quand un appel arrive.",
+      "requirements": "Ce qu'il faut",
+      "reqPhone": "Savoir quand le téléphone sonne",
+      "reqLog": "Lire le numéro de l'appelant",
+      "reqOverlay": "Afficher par-dessus les autres applications",
+      "allowed": "Autorisé",
+      "missing": "Non autorisé",
+      "allow": "Autoriser",
+      "statusOn": "L'identification est activée",
+      "statusOff": "L'identification est désactivée",
+      "hintOn": "Activée",
+      "hintOff": "Désactivée",
+      "ready": "Contacts prêts : {{number}}",
+      "updated": "Mis à jour {{when}}",
+      "turnOn": "Activer",
+      "turnOff": "Désactiver",
+      "updateNow": "Mettre à jour",
+      "noAccess": "Votre rôle ne peut pas lire les contacts, il n'y a donc personne à nommer.",
+      "failed": "Impossible de lire les contacts. Réessayez.",
+      "unavailable": "Cette version de l'application ne peut pas afficher l'appelant. Installez la dernière version."
     }
   },
   "notifications": {

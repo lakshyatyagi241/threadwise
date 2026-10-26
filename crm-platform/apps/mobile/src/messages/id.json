@@ -2338,7 +2338,9 @@
       "contact": "Kontak",
       "type": "Jenis panggilan",
       "outbound": "Keluar",
+      "inbound": "Masuk",
       "status": "Status panggilan keluar",
+      "statusIncoming": "Status panggilan masuk",
       "completed": "Selesai",
       "notAnswered": "Tidak dijawab",
       "startTime": "Waktu mulai panggilan",
@@ -2347,6 +2349,7 @@
       "durationInvalid": "Masukkan durasi dengan format menit:detik, misalnya 02:30.",
       "subject": "Subjek",
       "subjectDefault": "Panggilan keluar ke {{name}}",
+      "subjectIncoming": "Panggilan masuk dari {{name}}",
       "subjectInvalid": "Masukkan subjek maksimal 255 karakter.",
       "notes": "Deskripsi",
       "save": "Simpan panggilan",
@@ -2364,6 +2367,30 @@
         "project": "Proyek",
         "desk": "Desk"
       }
+    },
+    "callerId": {
+      "title": "ID penelepon",
+      "intro": "Saat kontak menelepon Anda, GetaApp menampilkan namanya di atas layar panggilan. Ketuk kartu untuk membuka kontak.",
+      "privacy": "Untuk itu, nama dan nomor telepon kontak Anda disimpan hanya di ponsel ini. Data dihapus saat Anda mematikan fitur ini atau keluar. Tidak ada yang dikirim saat panggilan masuk.",
+      "requirements": "Yang dibutuhkan",
+      "reqPhone": "Mengetahui saat ponsel berdering",
+      "reqLog": "Membaca nomor yang menelepon",
+      "reqOverlay": "Tampil di atas aplikasi lain",
+      "allowed": "Diizinkan",
+      "missing": "Tidak diizinkan",
+      "allow": "Izinkan",
+      "statusOn": "ID penelepon aktif",
+      "statusOff": "ID penelepon nonaktif",
+      "hintOn": "Aktif",
+      "hintOff": "Nonaktif",
+      "ready": "Kontak siap: {{number}}",
+      "updated": "Diperbarui {{when}}",
+      "turnOn": "Aktifkan",
+      "turnOff": "Nonaktifkan",
+      "updateNow": "Perbarui sekarang",
+      "noAccess": "Peran Anda tidak dapat membaca kontak, jadi tidak ada yang bisa diberi nama.",
+      "failed": "Kontak tidak dapat dibaca. Coba lagi.",
+      "unavailable": "Versi aplikasi ini tidak dapat menampilkan penelepon. Pasang versi terbaru."
     }
   },
   "notifications": {

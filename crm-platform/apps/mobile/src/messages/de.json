@@ -2367,7 +2367,9 @@
       "contact": "Kontakt",
       "type": "Anruftyp",
       "outbound": "Ausgehend",
+      "inbound": "Eingehend",
       "status": "Status des ausgehenden Anrufs",
+      "statusIncoming": "Status des eingehenden Anrufs",
       "completed": "Abgeschlossen",
       "notAnswered": "Nicht angenommen",
       "startTime": "Beginn des Anrufs",
@@ -2376,6 +2378,7 @@
       "durationInvalid": "Geben Sie die Dauer als Minuten:Sekunden ein, zum Beispiel 02:30.",
       "subject": "Betreff",
       "subjectDefault": "Ausgehender Anruf an {{name}}",
+      "subjectIncoming": "Eingehender Anruf von {{name}}",
       "subjectInvalid": "Geben Sie einen Betreff mit höchstens 255 Zeichen ein.",
       "notes": "Beschreibung",
       "save": "Anruf speichern",
@@ -2393,6 +2396,30 @@
         "project": "Projekt",
         "desk": "Support"
       }
+    },
+    "callerId": {
+      "title": "Anrufer-ID",
+      "intro": "Wenn ein Kontakt Sie anruft, zeigt GetaApp seinen Namen über dem Anrufbildschirm. Tippen Sie auf die Karte, um den Kontakt zu öffnen.",
+      "privacy": "Dafür werden die Namen und Telefonnummern Ihrer Kontakte nur auf diesem Telefon gespeichert. Sie werden entfernt, wenn Sie dies ausschalten oder sich abmelden. Bei einem Anruf wird nichts gesendet.",
+      "requirements": "Was dafür nötig ist",
+      "reqPhone": "Erkennen, wann das Telefon klingelt",
+      "reqLog": "Die Nummer des Anrufers lesen",
+      "reqOverlay": "Über anderen Apps anzeigen",
+      "allowed": "Erlaubt",
+      "missing": "Nicht erlaubt",
+      "allow": "Erlauben",
+      "statusOn": "Anrufer-ID ist an",
+      "statusOff": "Anrufer-ID ist aus",
+      "hintOn": "An",
+      "hintOff": "Aus",
+      "ready": "Bereite Kontakte: {{number}}",
+      "updated": "Aktualisiert {{when}}",
+      "turnOn": "Einschalten",
+      "turnOff": "Ausschalten",
+      "updateNow": "Jetzt aktualisieren",
+      "noAccess": "Ihre Rolle darf keine Kontakte lesen, daher gibt es niemanden zu benennen.",
+      "failed": "Die Kontakte konnten nicht gelesen werden. Versuchen Sie es erneut.",
+      "unavailable": "Diese Version der App kann keine Anrufer anzeigen. Installieren Sie die neueste Version."
     }
   },
   "notifications": {

@@ -12,6 +12,7 @@ import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { BRAND_NAME } from '@/config/brand';
 import { signOut } from '@/lib/auth/sign-out';
+import { callerIdAvailable, callerIdStatus } from '@/lib/device/caller-id';
 import { openPermissionSettings } from '@/lib/device/open-settings';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
@@ -245,6 +246,16 @@ export function MenuScreen() {
             label={t('notificationPrefs.title')}
             onPress={() => router.navigate('/notification-preferences')}
           />
+          {callerIdAvailable() ? (
+            <Row
+              icon="call-outline"
+              label={t('calls.callerId.title')}
+              hint={t(
+                callerIdStatus().enabled ? 'calls.callerId.hintOn' : 'calls.callerId.hintOff',
+              )}
+              onPress={() => router.navigate('/caller-id')}
+            />
+          ) : null}
           <Row
             icon="phone-portrait-outline"
             label={t('menu.devicePermissions')}

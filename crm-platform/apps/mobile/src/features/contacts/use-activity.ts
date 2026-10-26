@@ -1,6 +1,7 @@
-import type { CreateContactActivityInput } from '@crm/contracts';
+import type { CreateContactActivityInput, LogCallInput } from '@crm/contracts';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { createContactActivity, listContactActivities } from './activity-api';
+import { logCall } from './call-log-api';
 import { useActionKey } from './record-support';
 import { contactKey } from './use-contacts';
 
@@ -34,6 +35,25 @@ export function useCreateActivity(contactId: string) {
     gcTime: NO_KEEP,
     mutationFn: (body: CreateContactActivityInput) =>
       createContactActivity(contactId, body, key.current()),
+    onError: key.failed,
+    onSuccess: () => {
+      key.renew();
+      void queryClient.invalidateQueries({ queryKey: contactActivitiesKey(contactId) });
+      void queryClient.invalidateQueries({ queryKey: contactKey(contactId) });
+    },
+  });
+}
+
+/** Logs a call on the call log. The contact's timeline and the contact reload (its "last activity" moves). */
+export function useLogCall(contactId: string) {
+  const queryClient = useQueryClient();
+  const key = useActionKey();
+  return useMutation({
+    gcTime: NO_KEEP,
+    mutationFn: (body: Omit<LogCallInput, 'contactId' | 'externalId'>) => {
+      const id = key.current();
+      return logCall({ ...body, contactId, externalId: id }, id);
+    },
     onError: key.failed,
     onSuccess: () => {
       key.renew();

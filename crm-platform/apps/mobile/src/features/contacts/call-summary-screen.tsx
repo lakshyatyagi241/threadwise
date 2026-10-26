@@ -1,4 +1,4 @@
-import { createContactActivitySchema } from '@crm/contracts';
+import { CALL_NOTES_MAX, logCallInputSchema } from '@crm/contracts';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +26,8 @@ import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { formatMoment } from './contact-display';
 import { formatDuration, parseDuration, wholeNumber } from './call-summary-support';
-import { firstParam, joinMeta } from './record-support';
-import { useCreateActivity } from './use-activity';
+import { firstParam } from './record-support';
+import { useLogCall } from './use-activity';
 
 type Status = 'completed' | 'notAnswered';
 
@@ -82,11 +82,13 @@ function FormRow({ label, required, locked, error, children }: RowProps) {
 }
 
 /**
- * The "Add call" page that opens when a call placed from the app ends (/call-summary?contactId=…&name=…&startedAt=…&durationSec=…):
+ * The "Add call" page that opens when a call placed from the app ends, or a call from a contact (`&direction=incoming`, and `&status=notAnswered`
+ * for one that was cut or missed) ends (/call-summary?contactId=…&name=…&startedAt=…&durationSec=…):
  * the call as the phone saw it (contact, type, start, length), to be completed with a subject, the outcome, a purpose, a result
  * and notes, then saved on the contact's timeline as a "call". On Android the call-monitor service opens it the moment the call
  * ends; elsewhere the app opens it when the person comes back to the app (see `use-call-return`). The length is the time from
- * dialling to hanging up, so it can be changed. Logging needs `record.contacts.update`, like any entry on the timeline.
+ * dialling to hanging up, so it can be changed. It is saved as a call record (`POST /v2/calls/log`, right `call.logs.create`), which
+ * the Call logs screen and the contact's timeline both show.
  */
 export function CallSummaryScreen() {
   const { t, i18n } = useTranslation();
@@ -98,25 +100,33 @@ export function CallSummaryScreen() {
     name?: string | string[];
     startedAt?: string | string[];
     durationSec?: string | string[];
+    direction?: string | string[];
+    status?: string | string[];
   }>();
   const contactId = firstParam(params.contactId);
   const name = firstParam(params.name);
+  // A call from a contact (`direction=incoming`, set by the caller card) is inbound; `status=notAnswered` is one that was cut or missed.
+  const incoming = firstParam(params.direction) === 'incoming';
   // Opened without a start time (it always has one): the moment the page opened, kept for as long as it is open.
   const [openedAt] = useState(() => Date.now());
   const startedAt = wholeNumber(firstParam(params.startedAt), openedAt);
-  const create = useCreateActivity(contactId);
+  const create = useLogCall(contactId);
   // This call is on screen now: the app must not offer it a second time when the person comes back to it (`use-call-return`).
   useEffect(() => {
     takeEndedCall();
     forgetCall();
   }, []);
 
-  const [status, setStatus] = useState<Status>('completed');
+  const [status, setStatus] = useState<Status>(
+    firstParam(params.status) === 'notAnswered' ? 'notAnswered' : 'completed',
+  );
   const [purpose, setPurpose] = useState<Purpose>('none');
   const [duration, setDuration] = useState(
     formatDuration(wholeNumber(firstParam(params.durationSec), 0)),
   );
-  const [subject, setSubject] = useState(t('calls.summary.subjectDefault', { name }));
+  const [subject, setSubject] = useState(
+    t(incoming ? 'calls.summary.subjectIncoming' : 'calls.summary.subjectDefault', { name }),
+  );
   const [result, setResult] = useState('');
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<{ duration?: string; subject?: string }>({});
@@ -137,19 +147,24 @@ export function CallSummaryScreen() {
     if (title === '') next.subject = t('calls.summary.subjectInvalid');
     const outcome = result.trim();
     const details = notes.trim();
-    const parsed = createContactActivitySchema.safeParse({
-      activityType: 'call',
+    // The call record has no fields of its own for these, so they are written into its notes, one per line.
+    const lines = [
       title,
-      body:
-        joinMeta([
-          t('calls.summary.outbound'),
-          t(`calls.summary.${status}`),
-          seconds === null ? null : formatDuration(seconds),
-          purpose === 'none' ? null : t(`calls.summary.purposes.${purpose}`),
-        ]) +
-        (outcome ? `\n${t('calls.summary.result')}: ${outcome}` : '') +
-        (details ? `\n${details}` : ''),
-      occurredAt: new Date(startedAt).toISOString(),
+      purpose === 'none'
+        ? null
+        : `${t('calls.summary.purpose')}: ${t(`calls.summary.purposes.${purpose}`)}`,
+      outcome ? `${t('calls.summary.result')}: ${outcome}` : null,
+      details || null,
+    ].filter((line): line is string => line !== null && line !== '');
+    const parsed = logCallInputSchema.safeParse({
+      contactId,
+      direction: incoming ? 'inbound' : 'outbound',
+      // A call that was picked up was connected; one that was not is `no_answer` (the phone cannot tell a cut call from a missed one).
+      outcome: status === 'notAnswered' ? 'no_answer' : 'connected',
+      startedAt: new Date(startedAt).toISOString(),
+      durationSec: seconds ?? 0,
+      notes: lines.join('\n').slice(0, CALL_NOTES_MAX),
+      source: 'manual',
     });
     if (!parsed.success && !next.subject) next.subject = t('calls.summary.subjectInvalid');
     setErrors(next);
@@ -161,7 +176,7 @@ export function CallSummaryScreen() {
   };
 
   const canLog =
-    session.data !== undefined && contactId !== '' && can(session.data, 'record.contacts.update');
+    session.data !== undefined && contactId !== '' && can(session.data, 'call.logs.create');
 
   let body;
   if (session.data === undefined) {
@@ -187,12 +202,14 @@ export function CallSummaryScreen() {
           <Text style={styles.valueText}>{name}</Text>
         </FormRow>
         <FormRow label={t('calls.summary.type')} required locked>
-          <Text style={styles.valueText}>{t('calls.summary.outbound')}</Text>
+          <Text style={styles.valueText}>
+            {t(incoming ? 'calls.summary.inbound' : 'calls.summary.outbound')}
+          </Text>
         </FormRow>
-        <FormRow label={t('calls.summary.status')}>
+        <FormRow label={t(incoming ? 'calls.summary.statusIncoming' : 'calls.summary.status')}>
           <SelectField
             variant="plain"
-            label={t('calls.summary.status')}
+            label={t(incoming ? 'calls.summary.statusIncoming' : 'calls.summary.status')}
             placeholder={t('calls.summary.completed')}
             options={[
               { value: 'completed', label: t('calls.summary.completed') },

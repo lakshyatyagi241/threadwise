@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, View } from 'react-native';
 import { AccountGateScreen } from '@/features/auth/gates/account-gate-screen';
 import { useAccountGate } from '@/features/auth/gates/use-account-gate';
+import { useCallerIdSync } from '@/features/contacts/use-caller-id';
 import { useCallReturn } from '@/features/contacts/use-call-return';
 import { ThemeSync } from '@/features/menu/theme-sync';
 import { RealtimeProvider } from '@/lib/realtime';
@@ -26,6 +27,7 @@ export default function AppLayout() {
   const session = useSession();
   const gate = useAccountGate(session.data);
   useCallReturn();
+  useCallerIdSync();
 
   // The first answer decides whether the app or a lock screen opens. Offline (the read is paused) the app opens as it always did.
   if (session.isPending && session.fetchStatus !== 'paused') {

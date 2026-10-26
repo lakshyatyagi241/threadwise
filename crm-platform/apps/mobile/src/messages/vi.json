@@ -2338,7 +2338,9 @@
       "contact": "Liên hệ",
       "type": "Loại cuộc gọi",
       "outbound": "Gọi đi",
+      "inbound": "Gọi đến",
       "status": "Trạng thái cuộc gọi đi",
+      "statusIncoming": "Trạng thái cuộc gọi đến",
       "completed": "Hoàn tất",
       "notAnswered": "Không trả lời",
       "startTime": "Giờ bắt đầu cuộc gọi",
@@ -2347,6 +2349,7 @@
       "durationInvalid": "Nhập thời lượng theo dạng phút:giây, ví dụ 02:30.",
       "subject": "Chủ đề",
       "subjectDefault": "Cuộc gọi đi đến {{name}}",
+      "subjectIncoming": "Cuộc gọi đến từ {{name}}",
       "subjectInvalid": "Nhập chủ đề tối đa 255 ký tự.",
       "notes": "Mô tả",
       "save": "Lưu cuộc gọi",
@@ -2364,6 +2367,30 @@
         "project": "Dự án",
         "desk": "Bàn làm việc"
       }
+    },
+    "callerId": {
+      "title": "Nhận diện người gọi",
+      "intro": "Khi một liên hệ gọi cho bạn, GetaApp hiển thị tên họ phía trên màn hình cuộc gọi. Chạm vào thẻ để mở liên hệ.",
+      "privacy": "Để làm vậy, tên và số điện thoại của các liên hệ chỉ được lưu trên điện thoại này. Chúng sẽ bị xóa khi bạn tắt tính năng hoặc đăng xuất. Không có gì được gửi đi khi có cuộc gọi đến.",
+      "requirements": "Cần những gì",
+      "reqPhone": "Biết khi nào điện thoại đổ chuông",
+      "reqLog": "Đọc số đang gọi",
+      "reqOverlay": "Hiển thị trên các ứng dụng khác",
+      "allowed": "Đã cho phép",
+      "missing": "Chưa cho phép",
+      "allow": "Cho phép",
+      "statusOn": "Nhận diện người gọi đang bật",
+      "statusOff": "Nhận diện người gọi đang tắt",
+      "hintOn": "Bật",
+      "hintOff": "Tắt",
+      "ready": "Liên hệ sẵn sàng: {{number}}",
+      "updated": "Đã cập nhật {{when}}",
+      "turnOn": "Bật",
+      "turnOff": "Tắt",
+      "updateNow": "Cập nhật ngay",
+      "noAccess": "Vai trò của bạn không đọc được liên hệ nên không có ai để hiển thị tên.",
+      "failed": "Không đọc được liên hệ. Hãy thử lại.",
+      "unavailable": "Phiên bản ứng dụng này không hiển thị được người gọi. Hãy cài phiên bản mới nhất."
     }
   },
   "notifications": {

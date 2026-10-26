@@ -2,6 +2,7 @@ import { tokenPairSchema, type TokenPair } from '@crm/contracts';
 import { env } from '@/config/env';
 import { ApiError, CLIENT_ERROR_CODES, toApiError } from '@/lib/api/errors';
 import { clientHeaders } from '@/lib/api/client-headers';
+import { disableCallerId } from '@/lib/device/caller-id';
 import { clearReceivedFiles } from '@/lib/device/received-files';
 import { clearTokens, readTokens, writeTokens, type StoredTokens } from './token-store';
 
@@ -66,6 +67,8 @@ export async function endSession(): Promise<void> {
   refreshing = null;
   // Every way a session ends (sign-out, a refused refresh) removes the customer files opened during it, even if clearing the keychain then fails.
   clearReceivedFiles();
+  // The phone must not go on naming the previous person's contacts to whoever holds it next.
+  disableCallerId();
   await clearTokens();
   set({ status: 'signedOut', tokens: null });
 }

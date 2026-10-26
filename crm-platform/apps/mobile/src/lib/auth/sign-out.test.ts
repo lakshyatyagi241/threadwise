@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+import { disableCallerId } from '@/lib/device/caller-id';
 import { clearReceivedFiles } from '@/lib/device/received-files';
 import { log } from '@/lib/observability/logger';
 import { identifyUser } from '@/lib/observability/sentry';
@@ -8,6 +9,7 @@ import { signOut } from './sign-out';
 
 jest.mock('@/lib/observability/sentry', () => ({ identifyUser: jest.fn() }));
 jest.mock('@/lib/device/received-files', () => ({ clearReceivedFiles: jest.fn() }));
+jest.mock('@/lib/device/caller-id', () => ({ disableCallerId: jest.fn() }));
 
 beforeEach(async () => {
   resetSessionForTests();
@@ -30,6 +32,8 @@ describe('signOut', () => {
     expect(identifyUser).toHaveBeenCalledWith(null);
     // A document opened from a conversation does not stay on the phone for the next person.
     expect(clearReceivedFiles).toHaveBeenCalled();
+    // Nor does the phone go on naming the previous person's contacts when a call comes in.
+    expect(disableCallerId).toHaveBeenCalled();
   });
 
   it('signs out without an error report when the server answers with no body at all', async () => {

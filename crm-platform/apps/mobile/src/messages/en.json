@@ -2367,7 +2367,9 @@
       "contact": "Contact",
       "type": "Call type",
       "outbound": "Outbound",
+      "inbound": "Inbound",
       "status": "Outgoing call status",
+      "statusIncoming": "Incoming call status",
       "completed": "Completed",
       "notAnswered": "Not answered",
       "startTime": "Call start time",
@@ -2376,6 +2378,7 @@
       "durationInvalid": "Enter the length as minutes:seconds, for example 02:30.",
       "subject": "Subject",
       "subjectDefault": "Outgoing call to {{name}}",
+      "subjectIncoming": "Incoming call from {{name}}",
       "subjectInvalid": "Enter a subject of up to 255 characters.",
       "notes": "Description",
       "save": "Save call",
@@ -2393,6 +2396,30 @@
         "project": "Project",
         "desk": "Desk"
       }
+    },
+    "callerId": {
+      "title": "Caller ID",
+      "intro": "When a contact calls you, GetaApp shows their name over the call screen. Tap the card to open the contact.",
+      "privacy": "To do this, the names and phone numbers of your contacts are kept on this phone only. They are removed when you turn this off or sign out. Nothing is sent when a call comes in.",
+      "requirements": "What it needs",
+      "reqPhone": "Know when the phone rings",
+      "reqLog": "Read the number that is calling",
+      "reqOverlay": "Display over other apps",
+      "allowed": "Allowed",
+      "missing": "Not allowed",
+      "allow": "Allow",
+      "statusOn": "Caller ID is on",
+      "statusOff": "Caller ID is off",
+      "hintOn": "On",
+      "hintOff": "Off",
+      "ready": "Contacts ready: {{number}}",
+      "updated": "Updated {{when}}",
+      "turnOn": "Turn on",
+      "turnOff": "Turn off",
+      "updateNow": "Update now",
+      "noAccess": "Your role cannot read contacts, so there is nobody to name.",
+      "failed": "Could not read the contacts. Try again.",
+      "unavailable": "This version of the app cannot show callers. Install the latest version."
     }
   },
   "notifications": {

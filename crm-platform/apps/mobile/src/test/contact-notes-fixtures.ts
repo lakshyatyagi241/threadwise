@@ -123,10 +123,11 @@ const withPermissions = (permissions: SessionResponse['permissions']): SessionRe
   permissions,
 });
 
-/** May read and change contacts (so notes, activity and files) and read tasks. */
+/** May read and change contacts (so notes, activity and files), log calls, and read tasks. */
 export const sessionFull = withPermissions({
   'record.contacts.read': 'all',
   'record.contacts.update': 'all',
+  'call.logs.create': 'all',
   'record.tasks.read': 'all',
 });
 

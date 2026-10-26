@@ -40,6 +40,29 @@ class CallMonitorModule : Module() {
     /** The "log this call" address of the call that just ended, handed over once (null when there is none). */
     Function("takeEndedCall") { CallMonitorService.takeEnded() }
 
+    /**
+     * Caller ID: `display` is the card's words and colours (translated and themed in the app), `enabled` the switch. The receiver
+     * reads both when a call rings, so they are kept here rather than asked for then.
+     */
+    Function("configureCallerId") { enabled: Boolean, display: Map<String, String> ->
+      CallerDirectory.configure(context, enabled, display)
+    }
+
+    /** Replaces the contacts the phone can name; `json` is an array of {id, name, phone}. Answers how many it can name. */
+    Function("setCallerDirectory") { json: String -> CallerDirectory.replace(context, json) }
+
+    /** Forgets every contact and switches caller ID off. */
+    Function("clearCallerId") { CallerDirectory.clear(context) }
+
+    /** The switch, how many contacts the phone can name, and when they were last updated (milliseconds, 0: never). */
+    Function("callerIdStatus") {
+      mapOf(
+        "enabled" to CallerDirectory.enabled(context),
+        "count" to CallerDirectory.count(context),
+        "updatedAt" to CallerDirectory.updatedAt(context).toDouble(),
+      )
+    }
+
     Function("stop") {
       context.stopService(Intent(context, CallMonitorService::class.java))
     }

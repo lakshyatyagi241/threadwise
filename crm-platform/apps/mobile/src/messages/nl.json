@@ -2367,7 +2367,9 @@
       "contact": "Contact",
       "type": "Gesprekstype",
       "outbound": "Uitgaand",
+      "inbound": "Inkomend",
       "status": "Status van uitgaand gesprek",
+      "statusIncoming": "Status van inkomend gesprek",
       "completed": "Voltooid",
       "notAnswered": "Niet beantwoord",
       "startTime": "Starttijd van het gesprek",
@@ -2376,6 +2378,7 @@
       "durationInvalid": "Voer de duur in als minuten:seconden, bijvoorbeeld 02:30.",
       "subject": "Onderwerp",
       "subjectDefault": "Uitgaand gesprek met {{name}}",
+      "subjectIncoming": "Inkomend gesprek van {{name}}",
       "subjectInvalid": "Voer een onderwerp in van maximaal 255 tekens.",
       "notes": "Beschrijving",
       "save": "Gesprek opslaan",
@@ -2393,6 +2396,30 @@
         "project": "Project",
         "desk": "Balie"
       }
+    },
+    "callerId": {
+      "title": "Bellers-ID",
+      "intro": "Als een contact je belt, toont GetaApp zijn of haar naam boven het belscherm. Tik op de kaart om het contact te openen.",
+      "privacy": "Daarvoor worden de namen en telefoonnummers van je contacten alleen op deze telefoon bewaard. Ze worden verwijderd als je dit uitzet of uitlogt. Er wordt niets verstuurd als er een gesprek binnenkomt.",
+      "requirements": "Wat het nodig heeft",
+      "reqPhone": "Weten wanneer de telefoon rinkelt",
+      "reqLog": "Het nummer van de beller lezen",
+      "reqOverlay": "Weergeven over andere apps",
+      "allowed": "Toegestaan",
+      "missing": "Niet toegestaan",
+      "allow": "Toestaan",
+      "statusOn": "Bellers-ID staat aan",
+      "statusOff": "Bellers-ID staat uit",
+      "hintOn": "Aan",
+      "hintOff": "Uit",
+      "ready": "Contacten klaar: {{number}}",
+      "updated": "Bijgewerkt {{when}}",
+      "turnOn": "Aanzetten",
+      "turnOff": "Uitzetten",
+      "updateNow": "Nu bijwerken",
+      "noAccess": "Je rol kan geen contacten lezen, dus er is niemand om te benoemen.",
+      "failed": "De contacten konden niet worden gelezen. Probeer het opnieuw.",
+      "unavailable": "Deze versie van de app kan bellers niet tonen. Installeer de nieuwste versie."
     }
   },
   "notifications": {

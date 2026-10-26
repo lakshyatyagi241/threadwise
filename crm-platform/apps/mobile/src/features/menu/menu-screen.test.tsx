@@ -3,6 +3,7 @@ import * as Linking from 'expo-linking';
 import * as Updates from 'expo-updates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { signOut } from '@/lib/auth/sign-out';
+import { callerIdAvailable, callerIdStatus } from '@/lib/device/caller-id';
 import { openPermissionSettings } from '@/lib/device/open-settings';
 import { initI18n } from '@/lib/i18n';
 import { fetchSession } from '@/lib/session/api';
@@ -16,6 +17,7 @@ let mockUpdatesEnabled = false;
 jest.mock('expo-router', () => ({ useRouter: () => ({ navigate: mockNavigate }) }));
 jest.mock('expo-linking', () => ({ openURL: jest.fn(), openSettings: jest.fn() }));
 jest.mock('@/lib/device/open-settings');
+jest.mock('@/lib/device/caller-id');
 jest.mock('expo-updates', () => ({
   get isEnabled() {
     return mockUpdatesEnabled;
@@ -267,6 +269,21 @@ describe('MenuScreen', () => {
     ] as const)('says "%s" accounts are in %s', async (theme, label) => {
       await show(session.permissions, theme);
       expect(screen.getByText(label)).toBeTruthy();
+    });
+
+    it('opens Caller ID, with its state, in a build that has it, and has no row in one that does not', async () => {
+      jest.mocked(callerIdAvailable).mockReturnValue(true);
+      jest.mocked(callerIdStatus).mockReturnValue({ enabled: true, count: 3, updatedAt: 1 });
+      await show();
+      expect(screen.getByText('On')).toBeTruthy();
+      await press('Caller ID');
+      expect(mockNavigate).toHaveBeenLastCalledWith('/caller-id');
+    });
+
+    it('shows no Caller ID row when the build cannot show callers', async () => {
+      jest.mocked(callerIdAvailable).mockReturnValue(false);
+      await show();
+      expect(screen.queryByRole('button', { name: 'Caller ID' })).toBeNull();
     });
 
     it("opens this app's permissions page on the phone for the device permissions", async () => {

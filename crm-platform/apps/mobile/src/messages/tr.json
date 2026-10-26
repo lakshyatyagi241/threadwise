@@ -2367,7 +2367,9 @@
       "contact": "Kişi",
       "type": "Arama türü",
       "outbound": "Giden",
+      "inbound": "Gelen",
       "status": "Giden arama durumu",
+      "statusIncoming": "Gelen arama durumu",
       "completed": "Tamamlandı",
       "notAnswered": "Yanıtlanmadı",
       "startTime": "Arama başlangıç saati",
@@ -2376,6 +2378,7 @@
       "durationInvalid": "Süreyi dakika:saniye olarak girin, örneğin 02:30.",
       "subject": "Konu",
       "subjectDefault": "{{name}} kişisine giden arama",
+      "subjectIncoming": "{{name}} kişisinden gelen arama",
       "subjectInvalid": "En fazla 255 karakterlik bir konu girin.",
       "notes": "Açıklama",
       "save": "Aramayı kaydet",
@@ -2393,6 +2396,30 @@
         "project": "Proje",
         "desk": "Masa"
       }
+    },
+    "callerId": {
+      "title": "Arayan kimliği",
+      "intro": "Bir kişi sizi aradığında GetaApp adını arama ekranının üstünde gösterir. Kişiyi açmak için karta dokunun.",
+      "privacy": "Bunun için kişilerinizin adları ve telefon numaraları yalnızca bu telefonda tutulur. Bunu kapattığınızda veya çıkış yaptığınızda silinir. Çağrı geldiğinde hiçbir şey gönderilmez.",
+      "requirements": "Neye ihtiyaç duyar",
+      "reqPhone": "Telefonun ne zaman çaldığını bilmek",
+      "reqLog": "Arayan numarayı okumak",
+      "reqOverlay": "Diğer uygulamaların üzerinde göster",
+      "allowed": "İzin verildi",
+      "missing": "İzin verilmedi",
+      "allow": "İzin ver",
+      "statusOn": "Arayan kimliği açık",
+      "statusOff": "Arayan kimliği kapalı",
+      "hintOn": "Açık",
+      "hintOff": "Kapalı",
+      "ready": "Hazır kişi sayısı: {{number}}",
+      "updated": "Güncellendi {{when}}",
+      "turnOn": "Aç",
+      "turnOff": "Kapat",
+      "updateNow": "Şimdi güncelle",
+      "noAccess": "Rolünüz kişileri okuyamaz, bu yüzden adlandırılacak kimse yok.",
+      "failed": "Kişiler okunamadı. Tekrar deneyin.",
+      "unavailable": "Uygulamanın bu sürümü arayanları gösteremez. En son sürümü yükleyin."
     }
   },
   "notifications": {

@@ -2396,7 +2396,9 @@
       "contact": "Contacto",
       "type": "Tipo de llamada",
       "outbound": "Saliente",
+      "inbound": "Entrante",
       "status": "Estado de la llamada saliente",
+      "statusIncoming": "Estado de la llamada entrante",
       "completed": "Completada",
       "notAnswered": "Sin respuesta",
       "startTime": "Hora de inicio de la llamada",
@@ -2405,6 +2407,7 @@
       "durationInvalid": "Introduce la duración como minutos:segundos, por ejemplo 02:30.",
       "subject": "Asunto",
       "subjectDefault": "Llamada saliente a {{name}}",
+      "subjectIncoming": "Llamada entrante de {{name}}",
       "subjectInvalid": "Introduce un asunto de hasta 255 caracteres.",
       "notes": "Descripción",
       "save": "Guardar llamada",
@@ -2422,6 +2425,30 @@
         "project": "Proyecto",
         "desk": "Atención en mostrador"
       }
+    },
+    "callerId": {
+      "title": "Identificador de llamadas",
+      "intro": "Cuando un contacto te llama, GetaApp muestra su nombre sobre la pantalla de la llamada. Toca la tarjeta para abrir el contacto.",
+      "privacy": "Para ello, los nombres y teléfonos de tus contactos se guardan solo en este teléfono. Se eliminan al desactivarlo o cerrar sesión. No se envía nada cuando entra una llamada.",
+      "requirements": "Qué necesita",
+      "reqPhone": "Saber cuándo suena el teléfono",
+      "reqLog": "Leer el número que llama",
+      "reqOverlay": "Mostrar sobre otras apps",
+      "allowed": "Permitido",
+      "missing": "No permitido",
+      "allow": "Permitir",
+      "statusOn": "El identificador está activado",
+      "statusOff": "El identificador está desactivado",
+      "hintOn": "Activado",
+      "hintOff": "Desactivado",
+      "ready": "Contactos listos: {{number}}",
+      "updated": "Actualizado {{when}}",
+      "turnOn": "Activar",
+      "turnOff": "Desactivar",
+      "updateNow": "Actualizar ahora",
+      "noAccess": "Tu rol no puede leer contactos, así que no hay a quién nombrar.",
+      "failed": "No se pudieron leer los contactos. Inténtalo de nuevo.",
+      "unavailable": "Esta versión de la app no puede mostrar quién llama. Instala la última versión."
     }
   },
   "notifications": {

@@ -2396,7 +2396,9 @@
       "contact": "Contatto",
       "type": "Tipo di chiamata",
       "outbound": "In uscita",
+      "inbound": "In entrata",
       "status": "Stato della chiamata in uscita",
+      "statusIncoming": "Stato della chiamata in entrata",
       "completed": "Completata",
       "notAnswered": "Senza risposta",
       "startTime": "Ora di inizio della chiamata",
@@ -2405,6 +2407,7 @@
       "durationInvalid": "Inserisci la durata come minuti:secondi, ad esempio 02:30.",
       "subject": "Oggetto",
       "subjectDefault": "Chiamata in uscita a {{name}}",
+      "subjectIncoming": "Chiamata in entrata da {{name}}",
       "subjectInvalid": "Inserisci un oggetto di massimo 255 caratteri.",
       "notes": "Descrizione",
       "save": "Salva chiamata",
@@ -2422,6 +2425,30 @@
         "project": "Progetto",
         "desk": "Assistenza"
       }
+    },
+    "callerId": {
+      "title": "Identificazione chiamante",
+      "intro": "Quando un contatto ti chiama, GetaApp mostra il suo nome sopra la schermata della chiamata. Tocca la scheda per aprire il contatto.",
+      "privacy": "Per farlo, nomi e numeri dei tuoi contatti restano solo su questo telefono. Vengono rimossi se disattivi la funzione o esci dall'account. Alla ricezione di una chiamata non viene inviato nulla.",
+      "requirements": "Di cosa ha bisogno",
+      "reqPhone": "Sapere quando il telefono squilla",
+      "reqLog": "Leggere il numero che chiama",
+      "reqOverlay": "Mostra sopra altre app",
+      "allowed": "Consentito",
+      "missing": "Non consentito",
+      "allow": "Consenti",
+      "statusOn": "L'identificazione è attiva",
+      "statusOff": "L'identificazione è disattivata",
+      "hintOn": "Attiva",
+      "hintOff": "Disattivata",
+      "ready": "Contatti pronti: {{number}}",
+      "updated": "Aggiornato {{when}}",
+      "turnOn": "Attiva",
+      "turnOff": "Disattiva",
+      "updateNow": "Aggiorna ora",
+      "noAccess": "Il tuo ruolo non può leggere i contatti, quindi non c'è nessuno da nominare.",
+      "failed": "Impossibile leggere i contatti. Riprova.",
+      "unavailable": "Questa versione dell'app non può mostrare i chiamanti. Installa l'ultima versione."
     }
   },
   "notifications": {

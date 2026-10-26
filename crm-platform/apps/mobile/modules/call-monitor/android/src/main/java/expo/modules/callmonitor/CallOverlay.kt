@@ -14,10 +14,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 /**
- * The contact card drawn over the phone's call screen while a call placed from the app is on: the app's name with a close button,
+ * The contact card drawn over the phone's call screen while a call is on (one placed from the app, or one from a contact that rang): the app's name with a close button,
  * and under it the contact's initials, name, what they are, and the number. It takes no focus, so the call screen stays usable.
  */
-class CallOverlay(private val context: Context, private val data: android.os.Bundle) {
+class CallOverlay(
+  private val context: Context,
+  private val data: android.os.Bundle,
+  /** When given, the card can be pressed (an incoming caller opens its contact in the app). */
+  private val onOpen: (() -> Unit)? = null,
+) {
   private val windows = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
   private var view: View? = null
 
@@ -96,6 +101,11 @@ class CallOverlay(private val context: Context, private val data: android.os.Bun
       gravity = Gravity.CENTER_VERTICAL
       setPadding(dp(16), dp(16), dp(16), dp(16))
       background = rounded(primary, 16)
+      if (onOpen != null) {
+        isClickable = true
+        contentDescription = name
+        setOnClickListener { onOpen.invoke() }
+      }
       addView(avatar, LinearLayout.LayoutParams(dp(48), dp(48)))
       addView(words, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(12) })
     }

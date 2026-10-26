@@ -1,6 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- Hear that a call placed from the app has started and ended (no call log, no numbers: only the phone's state). -->
   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <!-- The number of a call that is ringing (Android gives it only to an app that may read the call log). It is looked up in the
+       contacts kept on the phone and never stored or sent. -->
+  <uses-permission android:name="android.permission.READ_CALL_LOG" />
   <!-- The contact card over the phone's call screen, and bringing the app back when the call ends. -->
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -15,5 +18,10 @@
         android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
         android:value="Watches the phone's call state while a call placed from the app is on, to show the contact on the call screen and offer to log the call afterwards" />
     </service>
+    <receiver android:name=".IncomingCallReceiver" android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.PHONE_STATE" />
+      </intent-filter>
+    </receiver>
   </application>
 </manifest>

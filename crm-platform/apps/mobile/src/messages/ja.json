@@ -2338,7 +2338,9 @@
       "contact": "連絡先",
       "type": "通話の種類",
       "outbound": "発信",
+      "inbound": "着信",
       "status": "発信のステータス",
+      "statusIncoming": "着信のステータス",
       "completed": "完了",
       "notAnswered": "不在",
       "startTime": "通話の開始時刻",
@@ -2347,6 +2349,7 @@
       "durationInvalid": "長さは分:秒の形式で入力してください(例: 02:30)。",
       "subject": "件名",
       "subjectDefault": "{{name}} への発信",
+      "subjectIncoming": "{{name}} からの着信",
       "subjectInvalid": "255文字以内で件名を入力してください。",
       "notes": "説明",
       "save": "通話を保存",
@@ -2364,6 +2367,30 @@
         "project": "プロジェクト",
         "desk": "デスク"
       }
+    },
+    "callerId": {
+      "title": "発信者表示",
+      "intro": "連絡先から電話がかかると、GetaApp が通話画面の上に相手の名前を表示します。カードをタップすると連絡先が開きます。",
+      "privacy": "そのため、連絡先の名前と電話番号はこの端末内にのみ保存されます。オフにするかサインアウトすると削除されます。着信時に何かが送信されることはありません。",
+      "requirements": "必要なもの",
+      "reqPhone": "電話が鳴ったことを知る",
+      "reqLog": "かけてきた番号を読み取る",
+      "reqOverlay": "他のアプリの上に重ねて表示",
+      "allowed": "許可済み",
+      "missing": "未許可",
+      "allow": "許可する",
+      "statusOn": "発信者表示はオンです",
+      "statusOff": "発信者表示はオフです",
+      "hintOn": "オン",
+      "hintOff": "オフ",
+      "ready": "準備できた連絡先：{{number}}",
+      "updated": "更新：{{when}}",
+      "turnOn": "オンにする",
+      "turnOff": "オフにする",
+      "updateNow": "今すぐ更新",
+      "noAccess": "あなたのロールは連絡先を読み取れないため、表示できる相手がいません。",
+      "failed": "連絡先を読み込めませんでした。もう一度お試しください。",
+      "unavailable": "このバージョンのアプリは発信者を表示できません。最新バージョンをインストールしてください。"
     }
   },
   "notifications": {

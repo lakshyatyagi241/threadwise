@@ -2338,7 +2338,9 @@
       "contact": "联系人",
       "type": "通话类型",
       "outbound": "呼出",
+      "inbound": "呼入",
       "status": "呼出通话状态",
+      "statusIncoming": "呼入通话状态",
       "completed": "已完成",
       "notAnswered": "未接听",
       "startTime": "通话开始时间",
@@ -2347,6 +2349,7 @@
       "durationInvalid": "请按“分钟:秒”格式输入时长，例如 02:30。",
       "subject": "主题",
       "subjectDefault": "致 {{name}} 的呼出电话",
+      "subjectIncoming": "来自 {{name}} 的呼入电话",
       "subjectInvalid": "请输入不超过 255 个字符的主题。",
       "notes": "描述",
       "save": "保存通话",
@@ -2364,6 +2367,30 @@
         "project": "项目",
         "desk": "服务台"
       }
+    },
+    "callerId": {
+      "title": "来电显示",
+      "intro": "联系人来电时，GetaApp 会在通话界面上方显示对方姓名。点按卡片即可打开该联系人。",
+      "privacy": "为此，联系人的姓名和电话号码只保存在这部手机上。关闭此功能或退出登录后会被删除。来电时不会发送任何内容。",
+      "requirements": "需要什么",
+      "reqPhone": "得知手机何时响铃",
+      "reqLog": "读取来电号码",
+      "reqOverlay": "显示在其他应用上层",
+      "allowed": "已允许",
+      "missing": "未允许",
+      "allow": "允许",
+      "statusOn": "来电显示已开启",
+      "statusOff": "来电显示已关闭",
+      "hintOn": "开",
+      "hintOff": "关",
+      "ready": "已就绪的联系人：{{number}}",
+      "updated": "更新于 {{when}}",
+      "turnOn": "开启",
+      "turnOff": "关闭",
+      "updateNow": "立即更新",
+      "noAccess": "你的角色无法读取联系人，因此没有可显示的人。",
+      "failed": "无法读取联系人。请重试。",
+      "unavailable": "此版本的应用无法显示来电者。请安装最新版本。"
     }
   },
   "notifications": {
