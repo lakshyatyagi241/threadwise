@@ -19,7 +19,10 @@ import {
   emailChannels,
   missingSlots,
   previewOf,
+  resolveVariables,
   sendBlock,
+  VARIABLE_FIELDS,
+  type SlotSource,
   whatsappChannels,
   type SendChannel,
 } from '../lib/single-send';
@@ -239,7 +242,7 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   const numbers = useMemo(() => whatsappChannels(channels.data?.data ?? []), [channels.data]);
   const [chosenNumber, setNumberId] = useState('');
   const [templateId, setTemplateId] = useState('');
-  const [vars, setVars] = useState<Record<string, string>>({});
+  const [sources, setSources] = useState<Record<string, SlotSource>>({});
 
   // One number is the obvious choice; with several the person picks.
   const numberId = chosenNumber || (numbers.length === 1 ? numbers[0]!.id : '');
@@ -249,13 +252,17 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
   // A template of another WhatsApp number can never be sent from this number: it is left out of the list instead of offered and refused.
   const offered = (templates.data?.data ?? []).filter((x) => x.reason !== 'other_number');
   const picked = offered.find((x) => x.id === templateId);
+  const vars = useMemo(
+    () => (picked ? resolveVariables(picked, sources, row) : {}),
+    [picked, sources, row],
+  );
   const missing = picked ? missingSlots(picked, vars) : [];
 
   const send = useMutation({
     mutationFn: () =>
       sendTemplate(conversation.data!.id, {
         templateId,
-        variables: Object.fromEntries(Object.entries(vars).map(([k, v]) => [k, v.trim()])),
+        variables: vars,
         clientMessageId: crypto.randomUUID(),
       }),
     onSuccess: () => {
@@ -296,7 +303,7 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
           onChange={(e) => {
             setNumberId(e.target.value);
             setTemplateId('');
-            setVars({});
+            setSources({});
           }}
         >
           {numbers.length > 1 && <option value="">{t('templatePlaceholder')}</option>}
@@ -335,7 +342,7 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
             disabled={templates.isPending}
             onChange={(e) => {
               setTemplateId(e.target.value);
-              setVars({});
+              setSources({});
             }}
           >
             <option value="">{t('templatePlaceholder')}</option>
@@ -371,17 +378,13 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
         <fieldset className="space-y-3">
           <legend className="text-sm font-medium">{t('variables')}</legend>
           {picked.slots.map((s) => (
-            <div key={s.key} className="space-y-1">
-              <label htmlFor={`ss-var-${s.key}`} className="text-xs text-muted-foreground">
-                {s.label || t('slot', { key: s.key })}
-              </label>
-              <Input
-                id={`ss-var-${s.key}`}
-                value={vars[s.key] ?? ''}
-                placeholder={s.example ?? ''}
-                onChange={(e) => setVars((o) => ({ ...o, [s.key]: e.target.value }))}
-              />
-            </div>
+            <SlotInput
+              key={s.key}
+              slot={s}
+              row={row}
+              source={sources[s.key]}
+              onChange={(next) => setSources((o) => ({ ...o, [s.key]: next }))}
+            />
           ))}
         </fieldset>
       )}
@@ -406,6 +409,86 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
         </Button>
       </div>
     </form>
+  );
+}
+
+/** One template variable: typed text, or a detail of this contact with the value to use when the contact has none. */
+function SlotInput({
+  slot,
+  row,
+  source,
+  onChange,
+}: {
+  slot: { key: string; label?: string | null; example?: string | null };
+  row: RowView;
+  source: SlotSource | undefined;
+  onChange: (source: SlotSource) => void;
+}) {
+  const t = useTranslations(NS);
+  const kind = source?.kind ?? 'text';
+  const customKeys = Object.keys(row.custom);
+  const label = slot.label || t('slot', { key: slot.key });
+  const field = source?.kind === 'field' ? source.field : (VARIABLE_FIELDS[0] as string);
+  return (
+    <div className="space-y-1">
+      <label htmlFor={`ss-var-${slot.key}`} className="text-xs text-muted-foreground">
+        {label}
+      </label>
+      <div className="flex flex-wrap gap-2">
+        <Select
+          aria-label={t('source', { name: label })}
+          value={kind}
+          className="w-36"
+          onChange={(e) =>
+            onChange(
+              e.target.value === 'field'
+                ? { kind: 'field', field, fallback: '' }
+                : { kind: 'text', text: '' },
+            )
+          }
+        >
+          <option value="text">{t('sourceText')}</option>
+          <option value="field">{t('sourceField')}</option>
+        </Select>
+        {source?.kind === 'field' ? (
+          <>
+            <Select
+              id={`ss-var-${slot.key}`}
+              aria-label={t('fieldOf', { name: label })}
+              value={source.field}
+              className="w-40"
+              onChange={(e) => onChange({ ...source, field: e.target.value })}
+            >
+              {VARIABLE_FIELDS.map((f) => (
+                <option key={f} value={f}>
+                  {t(`field.${f}`)}
+                </option>
+              ))}
+              {customKeys.map((k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ))}
+            </Select>
+            <Input
+              aria-label={t('fallbackOf', { name: label })}
+              className="min-w-0 flex-1"
+              value={source.fallback}
+              placeholder={t('fallbackPlaceholder')}
+              onChange={(e) => onChange({ ...source, fallback: e.target.value })}
+            />
+          </>
+        ) : (
+          <Input
+            id={`ss-var-${slot.key}`}
+            className="min-w-0 flex-1"
+            value={source?.kind === 'text' ? source.text : ''}
+            placeholder={slot.example ?? ''}
+            onChange={(e) => onChange({ kind: 'text', text: e.target.value })}
+          />
+        )}
+      </div>
+    </div>
   );
 }
 
