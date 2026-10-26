@@ -9,6 +9,7 @@ import {
   fromDetail,
   bodyToText,
   bodyOf,
+  rememberVariableSource,
   fromImport,
   fullSignature,
   headerIsSecret,
@@ -448,5 +449,22 @@ describe('a variable written without quotes in the JSON', () => {
   it('leaves real mistakes as invalid JSON', () => {
     expect(jsonStatus('{"a": {{}}}')).toBe('invalid');
     expect(jsonStatus('{"a": {{b}')).toBe('invalid');
+  });
+});
+
+describe('where a variable put in from the menu comes from', () => {
+  it('a name added from the Flow variable box is a flow variable, an existing field a contact property', () => {
+    rememberVariableSource('order_total', 'flow');
+    rememberVariableSource('first_name', 'contact');
+    const s = syncVariables({
+      ...emptyForm(),
+      url: 'https://api.example.com/x/{{order_total}}/{{first_name}}/{{Orders.data.id}}/{{other}}',
+    });
+    expect(Object.fromEntries(s.variables.map((v) => [v.name, v.source]))).toEqual({
+      order_total: 'flow',
+      first_name: 'contact',
+      'Orders.data.id': 'api',
+      other: 'contact',
+    });
   });
 });
