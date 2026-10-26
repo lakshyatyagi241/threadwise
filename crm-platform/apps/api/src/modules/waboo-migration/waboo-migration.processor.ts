@@ -32,8 +32,9 @@ export class WabooMigrationProcessor extends WorkerHost implements OnModuleInit 
   }
 
   /**
-   * Recovery on worker start: fail runs stuck 'running' (a worker that died) and re-enqueue every scheduled run or batch whose job
-   * is missing (the worker or Redis was down when its time came). Idempotent: an existing job is never duplicated.
+   * Recovery on worker start: fail runs stuck 'running' (a worker that died), except the remote runs an agent is still following, which
+   * are resumed; and re-enqueue every scheduled run or batch whose job is missing (the worker or Redis was down when its time came).
+   * Idempotent: an existing job is never duplicated.
    */
   async onModuleInit(): Promise<void> {
     try {
@@ -55,7 +56,12 @@ export class WabooMigrationProcessor extends WorkerHost implements OnModuleInit 
 
   private execute = (runUuid: string): Promise<ExecOutcome> =>
     executeRun(
-      { store: this.stores.exec, runner: this.runner, timeoutMin: timeoutMs(process.env) / 60_000 },
+      {
+        store: this.stores.exec,
+        runner: this.runner,
+        timeoutMin: timeoutMs(process.env) / 60_000,
+        resume: runnerMode(process.env) === 'remote',
+      },
       runUuid,
     );
 

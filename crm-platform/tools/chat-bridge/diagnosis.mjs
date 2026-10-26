@@ -203,7 +203,7 @@ def('RedisMemoryNearMax', {
   rb: `${P0}#redismemorynearmax`,
   q: [RMEM, ['Waiting jobs', 'sum(crm_queue_jobs_pending{state="waiting"})']],
 });
-def('DbPoolExhausted DbPoolSaturated', {
+def('DbPoolExhausted DbPoolSaturated DbPoolAcquireSlow', {
   meaning: 'Requests wait for a Postgres connection from the pool.',
   causes: [
     'Slow or locked queries holding connections (see slow-query cards)',
@@ -339,6 +339,30 @@ def('RouteLatencyP95High', {
       'Slowest route p95 (s)',
       'max(histogram_quantile(0.95, sum by (le, route) (rate(crm_http_request_duration_seconds_bucket[15m]))))',
     ],
+  ],
+});
+def('QueueJobFailed', {
+  rb: 'docs/performance/queue-capacity/queue-observability-runbook.md#queuejobfailed',
+  meaning: 'A queue job used up its attempts and failed for good: nothing will retry it.',
+  causes: [
+    'A provider or internal dependency failing for longer than the retry window',
+    'A bad deploy that throws in the processor',
+    'A poison payload that fails every time',
+    'A job whose queue allows only one attempt (attempts: 1) and failed once',
+  ],
+  check: [
+    'Sentry, filtered by the queue tag, for the error',
+    'The failed job in Redis (kept for the removeOnFail window) and the failed-operation row for queues in the failure policy',
+    'Whether the same queue failed more than once (QueueFailedJobsGrowing)',
+  ],
+  action:
+    'Fix the cause, then replay the job from the failed-operations screen where the queue is covered, or re-enqueue it; do not just clear it.',
+  q: [
+    [
+      'Failed jobs (5 min)',
+      'sum by (queue) (increase(crm_queue_jobs_total{outcome="failed"}[5m]))',
+    ],
+    ['Retries (10 min)', 'sum by (queue) (rate(crm_queue_job_retries_total[10m]))'],
   ],
 });
 def('RedisMemoryHigh', {

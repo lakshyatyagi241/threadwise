@@ -51,6 +51,12 @@ describe('feedAfterRead (notification.read to the cached list)', () => {
     expect(next.meta.unread).toBe(0);
   });
 
+  it('empties the list when the rows were cleared (deleted) in another tab', () => {
+    const next = feedAfterRead(feed(), { unread: 0, notificationIds: 'all', cleared: true }, NOW)!;
+    expect(next.data).toEqual([]);
+    expect(next.meta.unread).toBe(0);
+  });
+
   it('returns the same object when nothing changes (no needless render) and tolerates no cache', () => {
     const f = feed([row(A, 'x')], 0);
     expect(feedAfterRead(f, { unread: 0, notificationIds: [B] }, NOW)).toBe(f);

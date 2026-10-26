@@ -195,23 +195,21 @@ export class ApiLibraryService {
 
   /**
    * Deletes the API. While a flow still calls it the answer is 409 ALIB_IN_USE with the flows in `details` (path = flow id, message =
-   * flow name); `force` deletes anyway (the node then leaves by its `error` port and logs that the API is gone). The runs it logged stay.
+   * flow name), and nothing is deleted: the flows must stop calling it first. The runs it logged stay.
    */
-  async remove(uuid: string, force: boolean): Promise<void> {
+  async remove(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('API', uuid);
-      if (!force) {
-        const used = await this.usageOf(tx, ctx.orgId, row.uuid);
-        if (used.length > 0) {
-          throw new AppError(
-            ERROR_CODES.ALIB_IN_USE,
-            `"${row.name}" is used by ${used.length} flow${used.length === 1 ? '' : 's'}. Remove it from them first, or delete it anyway.`,
-            HttpStatus.CONFLICT,
-            used.map((u) => ({ path: u.id, message: u.name })),
-          );
-        }
+      const used = await this.usageOf(tx, ctx.orgId, row.uuid);
+      if (used.length > 0) {
+        throw new AppError(
+          ERROR_CODES.ALIB_IN_USE,
+          `"${row.name}" is used by ${used.length} flow${used.length === 1 ? '' : 's'}. Remove it from them first, then delete it.`,
+          HttpStatus.CONFLICT,
+          used.map((u) => ({ path: u.id, message: u.name })),
+        );
       }
       await this.repo.remove(tx, ctx.orgId, row.id);
       await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'delete' });
@@ -262,6 +260,7 @@ export class ApiLibraryService {
       name: u.name,
       published: u.published,
       nodeCount: u.nodeCount,
+      publishedNodeCount: u.publishedNodeCount,
     }));
   }
 

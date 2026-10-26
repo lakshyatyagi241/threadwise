@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,14 +15,14 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   createApiLibraryApiSchema,
-  deleteApiLibraryApiQuerySchema,
+  exportApiLibraryLogsQuerySchema,
   listApiLibraryApisQuerySchema,
   listApiLibraryLogsQuerySchema,
   testApiLibraryApiSchema,
   testApiLibraryFunctionSchema,
   updateApiLibraryApiSchema,
   type CreateApiLibraryApiInput,
-  type DeleteApiLibraryApiQuery,
+  type ExportApiLibraryLogsQuery,
   type ListApiLibraryApisQuery,
   type ListApiLibraryLogsQuery,
   type TestApiLibraryApiInput,
@@ -128,13 +129,10 @@ export class ApiLibraryController {
   @ApiOperation({
     summary: 'Delete an API',
     description:
-      '409 ALIB_IN_USE (the flows are in `details`) while a flow calls it; `?force=true` deletes it anyway. Its logs stay.',
+      '409 ALIB_IN_USE (the flows are in `details`) while a flow calls it; nothing is deleted until they stop using it. Its logs stay.',
   })
-  async remove(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Query(zodPipe(deleteApiLibraryApiQuerySchema)) query: DeleteApiLibraryApiQuery,
-  ): Promise<void> {
-    await this.apis.remove(id, query.force);
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    await this.apis.remove(id);
   }
 
   @Get('apis/:id/usage')
@@ -163,6 +161,15 @@ export class ApiLibraryController {
     return this.logs.list(query);
   }
 
+  @Get('logs/bots')
+  @RequirePermission('integ.apilibrary.read')
+  @ApiOperation({
+    summary: 'The bots the logs filter offers: each bot that has runs, by its current name',
+  })
+  logBots() {
+    return this.logs.filterBots();
+  }
+
   @Get('logs/apis')
   @RequirePermission('integ.apilibrary.read')
   @ApiOperation({
@@ -170,6 +177,20 @@ export class ApiLibraryController {
   })
   logApis() {
     return this.logs.filterApis();
+  }
+
+  // Declared before `logs/:id`, which would otherwise take "export" as a run id.
+  @Get('logs/export')
+  @RequirePermission('integ.apilibrary.read')
+  @Header('Content-Type', 'text/csv; charset=utf-8')
+  @Header('Content-Disposition', 'attachment; filename="api-library-logs.csv"')
+  @ApiOperation({
+    summary: 'Export the run log as CSV: the list filters, newest first, at most 5,000 runs',
+  })
+  exportLogs(
+    @Query(zodPipe(exportApiLibraryLogsQuerySchema)) query: ExportApiLibraryLogsQuery,
+  ): Promise<string> {
+    return this.logs.exportCsv(query);
   }
 
   @Get('logs/:id')

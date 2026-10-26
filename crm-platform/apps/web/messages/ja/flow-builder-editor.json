@@ -645,6 +645,7 @@
         "imported": "{flows, plural, other {#個のフロー}}から{steps, plural, other {#ステップ}}をインポートしました。確認してから保存してください。",
         "invalidJson": "そのファイルは有効なJSONではありません。",
         "saved": "「{name}」を保存しました",
+        "nodeSaved": "ノードを更新しました！",
         "saveFailed": "保存に失敗しました: {error}",
         "publishedToast": "公開済み",
         "publishFailed": "公開に失敗しました: {error}",

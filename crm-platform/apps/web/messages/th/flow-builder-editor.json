@@ -645,6 +645,7 @@
         "imported": "นำเข้า {steps, plural, other {# ขั้นตอน}} ใน {flows, plural, other {# โฟลว์}} กรุณาตรวจสอบแล้วกดบันทึก",
         "invalidJson": "ไฟล์นี้ไม่ใช่ JSON ที่ถูกต้อง",
         "saved": "บันทึก \"{name}\" แล้ว",
+        "nodeSaved": "อัปเดตโหนดสำเร็จแล้ว!",
         "saveFailed": "บันทึกไม่สำเร็จ: {error}",
         "publishedToast": "เผยแพร่แล้ว",
         "publishFailed": "เผยแพร่ไม่สำเร็จ: {error}",

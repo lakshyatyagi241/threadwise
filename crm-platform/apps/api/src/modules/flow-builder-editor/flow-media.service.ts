@@ -14,6 +14,7 @@ import {
   UnsafeMediaUrlError,
 } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { UploadPolicyService, type ValidatedUpload } from '../auth';
+import { upright } from './image-orientation';
 
 /** Reference's limit for a builder upload: 51200 KB. */
 export const FLOW_MEDIA_MAX_BYTES = 51_200 * 1024;
@@ -63,7 +64,7 @@ export class FlowMediaService {
       allow: ['image', 'media', 'document'],
       maxBytes: FLOW_MEDIA_MAX_BYTES,
     });
-    const url = await this.save(orgKey, v.storedName, file.buffer, v.mime);
+    const url = await this.save(orgKey, v.storedName, await upright(file.buffer, v.mime), v.mime);
     // `filename` is the server name (Reference's quirk, kept): the builder prefers the node's own label when it has one.
     return { url, filename: v.storedName, type, mimeType: v.mime };
   }
@@ -108,7 +109,12 @@ export class FlowMediaService {
         throw copyNotPicture();
       throw err;
     }
-    const url = await this.save(orgKey, v.storedName, fetched.buffer, v.mime);
+    const url = await this.save(
+      orgKey,
+      v.storedName,
+      await upright(fetched.buffer, v.mime),
+      v.mime,
+    );
     return { url, filename: v.storedName, type: 'image', mimeType: v.mime };
   }
 

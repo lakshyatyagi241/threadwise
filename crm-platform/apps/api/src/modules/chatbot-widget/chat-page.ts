@@ -117,6 +117,7 @@ body[data-corner="square"] .bubble, body[data-corner="square"] .bubble.out, body
 .bubble.out { border-radius: 20px 20px 6px 20px; background: var(--accent); color: var(--accent-ink); border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,.14); }
 .time { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: #8b8fa8; padding: 0 4px; }
 .row.out .time svg { color: var(--accent); }
+.bubble a { color: inherit; text-decoration: underline; word-break: break-all; }
 .bubble code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; background: rgba(30,32,60,.08); border-radius: 4px; padding: 0 3px; }
 .bubble.media { padding: 5px; }
 .bubble.media .cap { padding: 7px 10px 5px; white-space: pre-wrap; }
@@ -1098,6 +1099,22 @@ const SCRIPT = `
   // WhatsApp's own marks in a line the bot sent: *bold*, _italic_, ~strike~ and three backticks for monospace. Built as elements with
   // textContent, never as markup, so nothing in the text can add any. A mark inside a word (snake_case, a link) is left as typed.
   var MARKS = /\\x60\\x60\\x60([^\\n]+?)\\x60\\x60\\x60|\\*(?=\\S)([^*\\n]*?\\S)\\*|_(?=\\S)([^_\\n]*?\\S)_|~(?=\\S)([^~\\n]*?\\S)~/g;
+  // Plain text with its web addresses made into links (http and https only), for a map pin or any link the bot writes into a line.
+  function textInto(el, text) {
+    var re = /https?:[/][/][^\\s<>"']+/g;
+    var last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      var url = m[0].replace(/[.,;:!?)\\]]+$/, '');
+      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      var a = document.createElement('a');
+      a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.textContent = url;
+      el.appendChild(a);
+      last = m.index + url.length;
+      re.lastIndex = last;
+    }
+    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+  }
   function fmtInto(el, text) {
     // Its own regex per call: the nested call for *bold _italic_* must not move this one's position.
     var re = new RegExp(MARKS.source, 'g');
@@ -1105,7 +1122,7 @@ const SCRIPT = `
     while ((m = re.exec(text)) !== null) {
       var mono = m[1] !== undefined;
       if (!mono && (/\\w/.test(text.charAt(m.index - 1)) || /\\w/.test(text.charAt(m.index + m[0].length)))) { re.lastIndex = m.index + 1; continue; }
-      if (m.index > last) el.appendChild(document.createTextNode(text.slice(last, m.index)));
+      if (m.index > last) textInto(el, text.slice(last, m.index));
       var tag = mono ? 'code' : m[2] !== undefined ? 'b' : m[3] !== undefined ? 'i' : 's';
       var inner = mono ? m[1] : m[2] !== undefined ? m[2] : m[3] !== undefined ? m[3] : m[4];
       var n = document.createElement(tag);
@@ -1113,7 +1130,7 @@ const SCRIPT = `
       el.appendChild(n);
       last = m.index + m[0].length;
     }
-    if (last < text.length) el.appendChild(document.createTextNode(text.slice(last)));
+    if (last < text.length) textInto(el, text.slice(last));
   }
   // The same line without its marks, for the voice that reads it out.
   function plain(text) {

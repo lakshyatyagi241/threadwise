@@ -174,7 +174,8 @@
         "status": "Durum",
         "schedule": "Zamanlama",
         "actions": "İşlemler"
-      }
+      },
+      "newCampaignAny": "Yeni kampanya"
     },
     "builder": {
       "loadError": "Bu kampanya yüklenemedi.",
@@ -725,7 +726,11 @@
         "balanceShort": "Bakiye yeterli değil: {shortfall} daha gerekiyor.",
         "balanceLowFull": "Bakiye, {full} tutarındaki tam maliyetin altında: planınız şimdilik karşılıyor, ancak plan bittiğinde karşılamayacak.",
         "chargedNowLabel": "Şimdi cüzdanınızdan tahsil edilen"
-      }
+      },
+      "kickerEmail": "E-posta kampanyaları / Yeni",
+      "kickerEditEmail": "E-posta kampanyaları / Düzenle",
+      "titleEmail": "Yeni e-posta oluştur",
+      "titleEditEmail": "E-postanı düzenle"
     },
     "detail": {
       "notFound": "Bu kampanya bulunamadı.",

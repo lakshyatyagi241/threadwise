@@ -174,7 +174,8 @@
         "status": "Status",
         "schedule": "Jadwal",
         "actions": "Tindakan"
-      }
+      },
+      "newCampaignAny": "Kampanye baru"
     },
     "builder": {
       "loadError": "Tidak dapat memuat kampanye ini.",
@@ -725,7 +726,11 @@
         "balanceShort": "Saldo tidak cukup: Anda membutuhkan {shortfall} lagi.",
         "balanceLowFull": "Saldo lebih rendah dari biaya penuh sebesar {full}: paket Anda menanggungnya sekarang, tetapi tidak setelah paket habis.",
         "chargedNowLabel": "Dibebankan ke dompet Anda sekarang"
-      }
+      },
+      "kickerEmail": "Kampanye email / Baru",
+      "kickerEditEmail": "Kampanye email / Ubah",
+      "titleEmail": "Buat email baru",
+      "titleEditEmail": "Ubah email Anda"
     },
     "detail": {
       "notFound": "Kampanye itu tidak ditemukan.",

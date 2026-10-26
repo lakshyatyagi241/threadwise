@@ -1,20 +1,24 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Menu } from '@crm/ui';
+import { Menu, type MenuProps } from '@crm/ui';
 
 /** The "..." button at the end of a row. `children` is a function that receives `close`. */
 export function RowMenu({
   label,
+  placement = 'anchored',
   children,
 }: {
   label: string;
+  /** `fixed` when the row sits in a scrolling table, so the panel is not clipped by it (see `Menu`). */
+  placement?: MenuProps['placement'];
   children: (close: () => void) => ReactNode;
 }) {
   return (
     <Menu
       label={label}
       align="end"
+      placement={placement}
       triggerClassName="size-8 shrink-0 border-transparent bg-transparent px-0 text-muted-foreground hover:bg-background hover:text-foreground"
       triggerProps={{ 'aria-label': label }}
       trigger={

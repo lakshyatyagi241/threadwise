@@ -174,7 +174,8 @@
         "status": "Status",
         "schedule": "Agendamento",
         "actions": "Ações"
-      }
+      },
+      "newCampaignAny": "Nova campanha"
     },
     "builder": {
       "loadError": "Não foi possível carregar esta campanha.",
@@ -725,7 +726,11 @@
         "balanceShort": "O saldo não é suficiente: faltam {shortfall}.",
         "balanceLowFull": "O saldo é menor que o custo total de {full}: seu plano cobre agora, mas não depois que o plano acabar.",
         "chargedNowLabel": "Cobrado agora da sua carteira"
-      }
+      },
+      "kickerEmail": "Campanhas de e-mail / Nova",
+      "kickerEditEmail": "Campanhas de e-mail / Editar",
+      "titleEmail": "Criar novo e-mail",
+      "titleEditEmail": "Edite o seu e-mail"
     },
     "detail": {
       "notFound": "Essa campanha não foi encontrada.",

@@ -428,7 +428,9 @@
         "buttons": "Boutons",
         "buttonText": "Texte du bouton",
         "buttonUrl": "URL du site web",
-        "buttonPhone": "Numéro de téléphone"
+        "buttonPhone": "Numéro de téléphone",
+        "moveUp": "Monter la carte {n}",
+        "moveDown": "Descendre la carte {n}"
       },
       "offer": {
         "title": "Offre à durée limitée",

@@ -16,8 +16,8 @@
       "failed": "Thất bại",
       "source": {
         "test": "Kiểm thử",
-        "flow": "Luồng",
-        "automation": "Tự động hóa"
+        "flow": "Luồng đơn giản",
+        "automation": "Luồng nâng cao"
       },
       "errorKind": {
         "blocked": "Địa chỉ bị chặn",
@@ -91,7 +91,6 @@
       "title": "Xóa API",
       "message": "Bạn có chắc muốn xóa {name}? Thao tác này không thể hoàn tác.",
       "delete": "Xóa",
-      "deleteAnyway": "Vẫn xóa",
       "done": "Đã xóa {name}.",
       "checking": "Đang kiểm tra luồng nào đang dùng API...",
       "usageFailed": "Không thể kiểm tra luồng nào đang dùng API này. Nếu có luồng dùng, xóa API sẽ khiến bước đó thoát qua cổng lỗi.",
@@ -99,7 +98,9 @@
       "published": "Đã xuất bản",
       "draft": "Bản nháp",
       "nodes": "{count, plural, one {# bước} other {# bước}}",
-      "forceNote": "Nếu vẫn xóa, các bước đó sẽ ngừng hoạt động và thoát qua cổng lỗi. Nhật ký vẫn được giữ lại."
+      "blocked": "Không thể xóa API này khi còn luồng đang dùng. Hãy gỡ bước của nó khỏi các luồng này, hoặc chọn API khác ở đó, rồi xóa tại đây.",
+      "publishedCopy": "Phiên bản đã xuất bản vẫn gọi nó",
+      "republish": "Hãy xuất bản lại luồng mà không có bước này, rồi xóa API."
     },
     "logs": {
       "title": "Nhật ký API",
@@ -114,7 +115,8 @@
         "source": "Nguồn",
         "result": "Kết quả",
         "statusCode": "Mã trạng thái",
-        "duration": "Thời lượng"
+        "duration": "Thời lượng",
+        "bot": "Bot"
       },
       "openLog": "Mở lần chạy lúc {when}",
       "drawerTitle": "Nhật ký: {name}",
@@ -139,7 +141,9 @@
         "to": "Đến",
         "clear": "Xóa bộ lọc",
         "deletedApi": "{name} (đã xóa)",
-        "searchTooLong": "Nội dung tìm kiếm tối đa {max} ký tự. Hãy rút ngắn để tìm kiếm."
+        "searchTooLong": "Nội dung tìm kiếm tối đa {max} ký tự. Hãy rút ngắn để tìm kiếm.",
+        "bot": "Bot",
+        "allBots": "Tất cả bot"
       },
       "detail": {
         "title": "Chi tiết nhật ký API",
@@ -171,7 +175,10 @@
         "user": "Chạy bởi (ID người dùng)",
         "noContext": "Không có luồng hoặc liên hệ nào liên quan."
       },
-      "unsaved": "Chưa lưu"
+      "unsaved": "Chưa lưu",
+      "export": "Xuất CSV",
+      "exporting": "Đang xuất…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Chèn biến vào {label}",
@@ -324,6 +331,7 @@
       "functionHint": "Định dạng lại payload bằng JavaScript trước khi gửi. Không bắt buộc.",
       "plainHttpWarning": "Địa chỉ này bắt đầu bằng http://, nên mật khẩu hoặc khóa trong tiêu đề sẽ được gửi không mã hóa. Hãy dùng https:// nếu máy chủ hỗ trợ.",
       "importSkipped": "Lệnh đã dán cũng gửi một tệp ({names}). Không thể nhập tệp ở đây nên đã bỏ qua. Mọi thứ khác đã được điền.",
+      "importForm": "Lệnh đã dán gửi dữ liệu dưới dạng biểu mẫu web (a=1&b=2). API này gửi JSON hoặc multipart form-data nên các trường biểu mẫu đã được chuyển thành đối tượng JSON. Hãy kiểm tra API bạn gọi có chấp nhận JSON không.",
       "payloadTypedHint": "Để gửi số thật hoặc có/không, hãy viết biến không có dấu ngoặc kép: {example}."
     },
     "test": {

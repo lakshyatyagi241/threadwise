@@ -101,7 +101,30 @@ const SENSITIVE_PARTS = [
   'bearer',
   'privatekey',
   'xauth',
+  'cardnumber',
+  'sessionid',
+  'sessiontoken',
+  'otpcode',
 ];
+
+/**
+ * Short names that only count when they are the whole name: `pin` or `otp` as a part would also match `shipping` and `footprint`, and
+ * `pincode` is a postal code. Compared compact and lower-case, like the parts above.
+ */
+const SENSITIVE_EXACT = new Set([
+  'pwd',
+  'pin',
+  'otp',
+  'cvv',
+  'cvv2',
+  'cvc',
+  'ssn',
+  'jwt',
+  'session',
+  'sessionkey',
+  'cardno',
+  'creditcard',
+]);
 
 /**
  * Whether a header, query-parameter or JSON key reads like a secret (Authorization, X-API-Key, access_token, client_secret, ...). The
@@ -109,7 +132,11 @@ const SENSITIVE_PARTS = [
  */
 export function apiLibraryIsSensitiveName(name: string): boolean {
   const compact = name.toLowerCase().replace(/[-_.\s]/g, '');
-  return compact === 'auth' || SENSITIVE_PARTS.some((p) => compact.includes(p));
+  return (
+    compact === 'auth' ||
+    SENSITIVE_EXACT.has(compact) ||
+    SENSITIVE_PARTS.some((p) => compact.includes(p))
+  );
 }
 
 /** A response path: `data.items[0].name` (one element) or `data.items[].name` (every element, collected into a list). */

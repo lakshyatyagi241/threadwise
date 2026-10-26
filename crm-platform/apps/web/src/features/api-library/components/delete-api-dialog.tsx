@@ -15,9 +15,9 @@ interface Target {
 }
 
 /**
- * Delete with the usage guard: the flows that call this API are listed first. With none, a plain confirm; with some, the button says
- * "Delete anyway" and sends `?force=true` (their node then leaves by its error port). A 409 from the plain attempt (a flow started using
- * it after the list loaded) turns the same dialog into the "in use" state instead of failing.
+ * Delete with the usage guard: the flows that call this API are listed first. With none, a plain confirm; with some, deleting is
+ * blocked until their steps are removed. A 409 from the attempt (a flow started using it after the list loaded) turns the same dialog
+ * into the "in use" state instead of failing.
  */
 export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose: () => void }) {
   const t = useTranslations('api-library.delete');
@@ -41,7 +41,7 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
     if (!api) return;
     setBusy(true);
     try {
-      await apiLibraryApi.remove(api.id, inUse);
+      await apiLibraryApi.remove(api.id);
       toast(t('done', { name: api.name }), 'success');
       await refreshApis(qc);
       onClose();
@@ -70,10 +70,10 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
           <Button
             variant="danger"
             onClick={() => void confirm()}
-            disabled={busy || (usage.isPending && api !== null)}
+            disabled={busy || inUse || (usage.isPending && api !== null)}
           >
             {busy && <Spinner />}
-            {inUse ? t('deleteAnyway') : t('delete')}
+            {t('delete')}
           </Button>
         </>
       }
@@ -96,12 +96,15 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
                     name: f.name,
                     extra: f.published,
                     nodes: f.nodeCount,
+                    // The draft no longer calls it, but the copy that runs still does: the flow has to be published again.
+                    stale: f.nodeCount === 0 && f.publishedNodeCount > 0,
                   }))
                 : racing.map((f) => ({
                     id: f.id,
                     name: f.name,
                     extra: undefined,
                     nodes: undefined,
+                    stale: false,
                   }))
               ).map((f) => (
                 <li key={f.id}>
@@ -111,15 +114,18 @@ export function DeleteApiDialog({ api, onClose }: { api: Target | null; onClose:
                   {f.extra !== undefined && (
                     <span className="text-xs">
                       {' · '}
-                      {f.extra ? t('published') : t('draft')}
-                      {' · '}
-                      {t('nodes', { count: f.nodes ?? 0 })}
+                      {f.stale
+                        ? t('publishedCopy')
+                        : `${f.extra ? t('published') : t('draft')} · ${t('nodes', { count: f.nodes ?? 0 })}`}
                     </span>
                   )}
                 </li>
               ))}
             </ul>
-            <p className="mt-2">{t('forceNote')}</p>
+            <p className="mt-2">{t('blocked')}</p>
+            {flows.some((f) => f.nodeCount === 0 && f.publishedNodeCount > 0) && (
+              <p className="mt-2">{t('republish')}</p>
+            )}
           </Alert>
         ) : null}
       </div>

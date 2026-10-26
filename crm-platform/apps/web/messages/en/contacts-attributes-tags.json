@@ -1485,6 +1485,19 @@
         "authentication": "One-time-password templates are sent by the system, not from here.",
         "named_variables": "Uses named variables, which cannot be filled in from here yet."
       },
+      "source": "Source of {name}",
+      "sourceText": "Type text",
+      "sourceField": "Contact detail",
+      "fieldOf": "Contact detail for {name}",
+      "fallbackOf": "Fallback for {name}",
+      "fallbackPlaceholder": "Used when the contact has none",
+      "field": {
+        "name": "Full name",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "phone": "Phone"
+      },
       "variables": "Template variables",
       "preview": "Preview",
       "slot": "Variable {key}",

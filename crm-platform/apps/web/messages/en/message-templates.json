@@ -421,7 +421,9 @@
         "buttons": "Buttons",
         "buttonText": "Button text",
         "buttonUrl": "Website URL",
-        "buttonPhone": "Phone number"
+        "buttonPhone": "Phone number",
+        "moveUp": "Move card {n} up",
+        "moveDown": "Move card {n} down"
       },
       "offer": {
         "title": "Limited time offer",

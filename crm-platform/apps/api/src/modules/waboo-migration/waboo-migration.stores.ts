@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { AuthAuditService, PlatformStore } from '../auth';
+import type { WabooMigrationStep } from '@crm/contracts';
 import {
   batchFinalStatus,
   scrub,
@@ -20,6 +21,7 @@ type HeadRow = {
   mode: RunMode;
   skip_whatsapp: boolean;
   status: string;
+  steps?: unknown;
 };
 const head = (r: HeadRow): RunHead => ({
   id: Number(r.id),
@@ -29,7 +31,22 @@ const head = (r: HeadRow): RunHead => ({
   mode: r.mode,
   skipWhatsapp: r.skip_whatsapp === true,
   status: r.status,
+  steps: Array.isArray(r.steps) ? (r.steps as WabooMigrationStep[]) : [],
 });
+
+/**
+ * The running runs an agent is still following: its job is queued, or claimed and heard from in the last two minutes (the agent
+ * reports at least every 15 seconds while the pipeline runs). The recovery sweep keeps these instead of failing them.
+ */
+const followedRunUuids = sql`
+  SELECT r.uuid::text FROM waboo_migration_runs r
+  JOIN waboo_migration_runner_jobs j ON j.run_uuid = r.uuid
+  WHERE r.status = 'running'
+    AND (j.status = 'queued' OR (j.status = 'claimed' AND j.last_seen_at > now() - interval '2 minutes'))`;
+/** the run uuids in `keep` (a JSON array of text, as the sweep passes it) */
+const notKept = (keep: string[]) =>
+  sql`uuid::text NOT IN (SELECT jsonb_array_elements_text(${JSON.stringify(keep)}::jsonb))`;
+
 const pgCode = (err: unknown): string | undefined => {
   const e = err as { code?: string; cause?: { code?: string } };
   return e.code ?? e.cause?.code;
@@ -74,7 +91,7 @@ export class WabooMigrationStores {
     peek: async (uuid) => {
       const res = await this.store.tx((tx) =>
         tx.execute(sql`
-          SELECT id, uuid, source_client, source_db, mode, skip_whatsapp, status FROM waboo_migration_runs WHERE uuid = ${uuid}::uuid
+          SELECT id, uuid, source_client, source_db, mode, skip_whatsapp, status, steps FROM waboo_migration_runs WHERE uuid = ${uuid}::uuid
         `),
       );
       const r = res.rows[0] as unknown as HeadRow | undefined;
@@ -244,12 +261,13 @@ export class WabooMigrationStores {
   };
 
   readonly sweep: SweepStore = {
-    failStale: (timeoutMs) =>
+    failStale: (timeoutMs, keep) =>
       this.store.tx(async (tx) => {
         const res = await tx.execute(sql`
           UPDATE waboo_migration_runs SET status = 'failed', finished_at = now(),
             error = 'The worker stopped before this run finished.'
           WHERE status = 'running' AND started_at < now() - (${Math.ceil(timeoutMs / 1000)} * interval '1 second')
+            AND ${notKept(keep)}
           RETURNING uuid, source_client, mode
         `);
         for (const r of res.rows as unknown as Array<{
@@ -272,12 +290,18 @@ export class WabooMigrationStores {
         return res.rows.length;
       }),
 
-    failOrphanedRemote: () =>
+    resumableRemote: () =>
+      this.store.tx(async (tx) => {
+        const res = await tx.execute(sql`${followedRunUuids}`);
+        return (res.rows as Array<{ uuid: string }>).map((r) => r.uuid);
+      }),
+
+    failOrphanedRemote: (keep) =>
       this.store.tx(async (tx) => {
         const res = await tx.execute(sql`
           UPDATE waboo_migration_runs SET status = 'failed', finished_at = now(),
             error = 'The worker restarted while this run was in progress, so it was marked failed and the runner was told to stop. Check the last step shown, then run a catch-up.'
-          WHERE status = 'running'
+          WHERE status = 'running' AND ${notKept(keep)}
           RETURNING uuid, source_client, mode
         `);
         for (const r of res.rows as unknown as Array<{

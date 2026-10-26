@@ -428,7 +428,9 @@
         "buttons": "Przyciski",
         "buttonText": "Tekst przycisku",
         "buttonUrl": "Adres URL strony",
-        "buttonPhone": "Numer telefonu"
+        "buttonPhone": "Numer telefonu",
+        "moveUp": "Przesuń kartę {n} w górę",
+        "moveDown": "Przesuń kartę {n} w dół"
       },
       "offer": {
         "title": "Oferta czasowa",

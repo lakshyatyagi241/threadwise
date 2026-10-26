@@ -82,6 +82,7 @@ export {
   previousWindow,
   recipientTimeline,
   resolveWindow,
+  chartZone,
   safeZone,
   type HistoryWindow,
   type HistoryWindowProblem,

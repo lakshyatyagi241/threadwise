@@ -373,14 +373,17 @@ function AddPanel({
         setProgress(0);
         await uploadSource(assistantId, file!, label.trim(), setProgress, abort.current.signal);
       } else if (kind === 'faq') {
-        // One entry per row, in order; a blank row is skipped. The entry's label is its question.
-        for (const r of rows.filter((x) => x.question.trim() || x.answer.trim()))
+        // One entry per row, in order; a blank row is skipped. The entry's label is its question. A row leaves the form once its
+        // entry is saved, so when a save fails part-way the form keeps only the rows not yet saved and a retry cannot save one twice.
+        for (const r of rows.filter((x) => x.question.trim() || x.answer.trim())) {
           await addSource(assistantId, {
             kind: 'qa',
             label: r.question.trim().slice(0, AIAG_SOURCE_LIMITS.label),
             question: r.question,
             answer: r.answer,
           });
+          setRows((cur) => cur.filter((x) => x !== r));
+        }
       } else {
         const body: AddAiagSourceInput =
           kind === 'url'

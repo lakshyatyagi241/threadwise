@@ -94,7 +94,10 @@ export function VolumeChart({
             <div
               key={p.at}
               className="group relative flex h-full min-w-0 flex-1 flex-col justify-end"
-              title={`${bucketLabel(p.at, bucket, days, locale, tz)}: ${total}`}
+              title={[
+                `${bucketLabel(p.at, bucket, days, locale, tz)}: ${formatCount(total, locale)}`,
+                ...SERIES.map((s) => `${t(`series.${s.key}`)}: ${formatCount(p[s.key], locale)}`),
+              ].join('\n')}
             >
               <div
                 className="flex w-full flex-col-reverse overflow-hidden rounded-t-sm"
@@ -105,6 +108,7 @@ export function VolumeChart({
                   return v === 0 ? null : (
                     <div
                       key={s.key}
+                      title={`${bucketLabel(p.at, bucket, days, locale, tz)} · ${t(`series.${s.key}`)}: ${formatCount(v, locale)}`}
                       className={s.bar}
                       style={{ height: `${(v / total) * 100}%` }}
                     />

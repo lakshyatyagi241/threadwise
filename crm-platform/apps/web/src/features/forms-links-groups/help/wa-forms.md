@@ -31,6 +31,7 @@ Unofficial API (QR-paired) or Twilio number.
    date, and the choice fields (dropdown, radio buttons, checkboxes). Mark a field **Required** if the customer
    must answer it before continuing.
    Screens can be moved with the arrows beside each screen title. Once a form has been sent to Meta its **Flow ID** shows under the title with a **Copy** button; paste it where a Flow ID is asked for. **Test form** saves the form, sends it to Meta as a draft and gives you Meta's preview to try; nothing is published.
+   For a choice field, type its options in the **Options** box separated by commas (or one per line).
 4. For each field, you can pick what it **maps to**: a contact field (full name, first name, last name, email,
    job title, language, address), any of your workspace's custom properties, or a **Privacy & consent** option on
    a matching field — **Age** or **Date of birth** on a number or date field (runs the minor check, same rule as

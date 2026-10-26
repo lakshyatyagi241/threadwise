@@ -131,7 +131,11 @@
         "required": "入力必須です。",
         "tooLong": "長すぎます（最大{limit}文字）。",
         "subjectLines": "件名は1行で入力してください。"
-      }
+      },
+      "bodyMode": "本文の形式",
+      "bodyRich": "リッチテキスト",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>メールのHTMLを書いてください。下の変数で個別化できます。</p>"
     },
     "preview": {
       "title": "サンプルデータでプレビュー",

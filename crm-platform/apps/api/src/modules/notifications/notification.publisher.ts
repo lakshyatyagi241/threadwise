@@ -110,12 +110,18 @@ export class NotificationPublisher {
   }
 
   /** Several rows of one person were marked read (`'all'` for mark-all). Other tabs and devices converge on `unread`. */
-  async read(orgId: number, userId: number, notificationIds: string[] | 'all'): Promise<void> {
+  async read(
+    orgId: number,
+    userId: number,
+    notificationIds: string[] | 'all',
+    options: { cleared?: boolean } = {},
+  ): Promise<void> {
     try {
       const unread = await this.unread(orgId, userId);
       await this.emitter.emitToUsers(orgId, [userId], REALTIME_EVENT.notificationRead, {
         unread,
         notificationIds,
+        ...(options.cleared ? { cleared: true } : {}),
       });
     } catch (err) {
       this.logger.warn({ err, orgId, userId }, 'could not publish notification.read');

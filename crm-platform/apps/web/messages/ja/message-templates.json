@@ -428,7 +428,9 @@
         "buttons": "ボタン",
         "buttonText": "ボタンのテキスト",
         "buttonUrl": "ウェブサイトのURL",
-        "buttonPhone": "電話番号"
+        "buttonPhone": "電話番号",
+        "moveUp": "カード{n}を上へ移動",
+        "moveDown": "カード{n}を下へ移動"
       },
       "offer": {
         "title": "期間限定オファー",

@@ -375,6 +375,7 @@
         "imported": "تم استيراد {steps, plural, zero {# خطوة} one {خطوة واحدة} two {خطوتين} few {# خطوات} many {# خطوة} other {# خطوة}} في {flows, plural, zero {# تدفق} one {تدفق واحد} two {تدفقين} few {# تدفقات} many {# تدفقًا} other {# تدفق}}. راجعها ثم احفظ.",
         "invalidJson": "هذا الملف ليس JSON صالحًا.",
         "saved": "تم حفظ «{name}»",
+        "nodeSaved": "تم تحديث العقدة بنجاح!",
         "saveFailed": "فشل الحفظ: {error}",
         "publishedToast": "منشور",
         "publishFailed": "فشل النشر: {error}",
@@ -2274,8 +2275,8 @@
           "description": "إنشاء رابط Meet وإرساله"
         },
         "wa_form": {
-          "label": "نموذج WhatsApp",
-          "description": "إرسال نموذج Meta منشور"
+          "label": "WhatsApp Flow (نموذج)",
+          "description": "إرسال WhatsApp Flow (نموذج Meta) منشور"
         },
         "google_sheets": {
           "label": "Google Sheets",

@@ -428,7 +428,9 @@
         "buttons": "الأزرار",
         "buttonText": "نص الزر",
         "buttonUrl": "رابط الموقع",
-        "buttonPhone": "رقم الهاتف"
+        "buttonPhone": "رقم الهاتف",
+        "moveUp": "نقل البطاقة {n} لأعلى",
+        "moveDown": "نقل البطاقة {n} لأسفل"
       },
       "offer": {
         "title": "عرض لفترة محدودة",

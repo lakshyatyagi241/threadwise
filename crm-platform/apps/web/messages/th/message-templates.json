@@ -428,7 +428,9 @@
         "buttons": "ปุ่ม",
         "buttonText": "ข้อความปุ่ม",
         "buttonUrl": "URL เว็บไซต์",
-        "buttonPhone": "หมายเลขโทรศัพท์"
+        "buttonPhone": "หมายเลขโทรศัพท์",
+        "moveUp": "ย้ายการ์ด {n} ขึ้น",
+        "moveDown": "ย้ายการ์ด {n} ลง"
       },
       "offer": {
         "title": "ข้อเสนอแบบจำกัดเวลา",

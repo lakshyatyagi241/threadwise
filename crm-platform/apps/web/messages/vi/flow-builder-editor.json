@@ -645,6 +645,7 @@
         "imported": "Đã nhập {steps, plural, other {# bước}} trong {flows, plural, other {# luồng}}. Hãy kiểm tra, rồi Lưu.",
         "invalidJson": "Tệp này không phải JSON hợp lệ.",
         "saved": "Đã lưu “{name}”",
+        "nodeSaved": "Đã cập nhật nút thành công!",
         "saveFailed": "Lưu thất bại: {error}",
         "publishedToast": "Đã xuất bản",
         "publishFailed": "Xuất bản thất bại: {error}",

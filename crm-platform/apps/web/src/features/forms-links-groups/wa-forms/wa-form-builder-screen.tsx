@@ -36,6 +36,42 @@ function randomScreenId(): string {
   return `scr_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** Splits the typed text into the choices: separated by commas (also the Arabic and full-width ones) or new lines, trimmed, blanks dropped. */
+export function parseOptions(text: string): string[] {
+  return text
+    .split(/[,،，、\r\n]/)
+    .map((o) => o.trim())
+    .filter(Boolean);
+}
+
+/**
+ * The choices of a dropdown / radio / checkbox field. It keeps what was typed, so a comma (or the space after it) is not eaten while the
+ * next option is being typed; the field gets the parsed list on every change.
+ */
+function OptionsInput({
+  options,
+  onChange,
+  placeholder,
+}: {
+  options: string[];
+  onChange: (options: string[]) => void;
+  placeholder: string;
+}) {
+  const [text, setText] = useState(options.join(', '));
+  // another edit changed the list (not this box): show it
+  if (options.join('|') !== parseOptions(text).join('|')) setText(options.join(', '));
+  return (
+    <Input
+      value={text}
+      onChange={(e) => {
+        setText(e.target.value);
+        onChange(parseOptions(e.target.value));
+      }}
+      placeholder={placeholder}
+    />
+  );
+}
+
 /** `/wa-forms/[id]` (Reference form builder): basics + a screen/field editor. Editing a published form drops it to draft — server-enforced. */
 export function WaFormBuilderScreen({ id }: { id: string }) {
   const t = useTranslations('forms-links-groups.forms');
@@ -419,16 +455,9 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                   </div>
                   {WA_FORM_CHOICE_FIELD_KINDS.includes(field.kind) && (
                     <Field label={t('builder.options')} className="mt-2">
-                      <Input
-                        value={(field.options ?? []).join(', ')}
-                        onChange={(e) =>
-                          updateField(screenIndex, fieldIndex, {
-                            options: e.target.value
-                              .split(',')
-                              .map((o) => o.trim())
-                              .filter(Boolean),
-                          })
-                        }
+                      <OptionsInput
+                        options={field.options ?? []}
+                        onChange={(options) => updateField(screenIndex, fieldIndex, { options })}
                         placeholder={t('builder.optionsPlaceholder')}
                       />
                     </Field>

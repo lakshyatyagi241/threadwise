@@ -102,6 +102,8 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
 const QUIET_DISABLED =
   'disabled:opacity-100 disabled:border-border disabled:bg-muted disabled:text-muted-foreground';
 
+const AUTOSAVE_MS = 1500;
+
 export function SimpleScreen({
   flowId: initialFlowId,
   channel = 'chat',
@@ -280,6 +282,7 @@ function Editor({
   const queuedSave = useRef<Promise<FlowDetail> | null>(null);
   const inFlight = useRef(0);
   const failToast = useRef<number | null>(null);
+  const failedAtEdit = useRef(-1);
   // Every saved flow has FAQs beside Build (for a person who may read AI agents' knowledge); a website chat or WhatsApp bot also has Customize and Deploy.
   const canFaqs = useCan('aiag.training.read');
   const canEditFaqs = useCan('aiag.training.update');
@@ -571,9 +574,28 @@ function Editor({
     closeAndSave.current = () => {
       setActiveId(null);
       if (!dirtyRef.current || !canEditFlow) return;
-      persist().catch(saveFailed);
+      persist()
+        .then(() => toast(t('nodeSaved'), 'success'))
+        .catch(saveFailed);
     };
   });
+
+  // A saved flow keeps itself saved: a moment after the last change (a step added or moved, an answer's next step, the name) the draft
+  // goes to the server, so the page has no Save button to press. A flow not saved yet is created by Save or Publish.
+  useEffect(() => {
+    // After a failed save the next try waits for the next edit, so a refusal does not repeat itself every moment.
+    if (!dirty || !flowId || !canEditFlow || busy || failedAtEdit.current === editSeq.current)
+      return;
+    const timer = window.setTimeout(() => {
+      const at = editSeq.current;
+      persist().catch((e) => {
+        failedAtEdit.current = at;
+        saveFailed(e);
+      });
+    }, AUTOSAVE_MS);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- persist and saveFailed read refs, so a new render must not restart the wait
+  }, [dirty, doc, name, flowId, canEditFlow, busy]);
 
   useEffect(() => {
     if (!activeId) return;
@@ -742,15 +764,17 @@ function Editor({
             >
               {tTool('test')}
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
-              className={QUIET_DISABLED}
-              onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
-            >
-              {t('save')}
-            </Button>
+            {onCustomizeTab || !flowId ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
+                className={QUIET_DISABLED}
+                onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
+              >
+                {t('save')}
+              </Button>
+            ) : null}
             <Button
               variant={published && !unpublished && !dirty ? 'secondary' : 'brand'}
               size="sm"
