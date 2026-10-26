@@ -12,6 +12,13 @@ const out = resolve(
 const read = (n) => JSON.parse(readFileSync(join(dir, n), 'utf8'));
 const churn = { before: read('before-churn.json'), after: read('after-churn.json') };
 const per = { before: read('before-per-session.json'), after: read('after-per-session.json') };
+const long = (() => {
+  try {
+    return read('after-long-soak.json');
+  } catch {
+    return null;
+  }
+})();
 const soak = { before: read('before-soak.json'), after: read('after-soak.json') };
 const f = (x, d = 1) => (Number.isFinite(x) ? Number(x).toFixed(d) : 'n/a');
 const THRESHOLD = 5;
@@ -68,6 +75,19 @@ ${row('RSS growth, 12 h, upper bound', f(soak.before.rssGrowthPct12hUpper), f(so
 ${row('Timers at the end', soak.before.rows.at(-1).timers, soak.after.rows.at(-1).timers)}
 ${row('Caches at the end', soak.before.rows.at(-1).nodeCaches, soak.after.rows.at(-1).nodeCaches)}</table>
 <p>Before: timers over time.<br>${svg(soak.before.rows, 'timers', '#cf222e')}</p><p>After: timers over time.<br>${svg(soak.after.rows, 'timers', '#1a7f37')}</p>
+<h2>3b. Longer soak (after the fix only)</h2>
+${
+  long
+    ? `<table><tr><th></th><th>After, ${f((long.rows.at(-1)?.t ?? 0) / 60, 0)} min</th></tr>
+${row('Sessions / reconnects', `${long.sessions} / ${long.reconnects}`, '').replace('<td></td>', '')}
+${row('RSS slope', `${f(long.rssSlopeMbPerH.slope, 2)} (${f(long.rssSlopeMbPerH.lo, 2)} to ${f(long.rssSlopeMbPerH.hi, 2)})`, '', ' MB/h').replace('<td></td>', '')}
+${row('Heap slope', f(long.heapSlopeMbPerH.slope, 2), '', ' MB/h').replace('<td></td>', '')}
+${row('RSS growth over the window', f(long.rssGrowthPctOverWindow, 2), '', ' %').replace('<td></td>', '')}
+${row('RSS growth, 12 h, upper bound', f(long.rssGrowthPct12hUpper), '', ' %').replace('<td></td>', '')}
+${row('Timers / caches at the end', `${long.rows.at(-1).timers} / ${long.rows.at(-1).nodeCaches}`, '').replace('<td></td>', '')}</table>
+<p>The slope interval spans zero (${f(long.rssSlopeMbPerH.lo, 2)} to ${f(long.rssSlopeMbPerH.hi, 2)} MB/h): no growth can be told apart from none. Extrapolated to 12 h the upper bound is ${f(long.rssGrowthPct12hUpper)}%, at the 5% target and not clearly under it, and it is still an extrapolation from ${f((long.rows.at(-1)?.t ?? 0) / 60, 0)} minutes. This run used the build before the write-time sweep of expired entries (the sweep only lowers retention).</p>`
+    : '<p>Not run.</p>'
+}
 <h2>The fix</h2>
 <p>The factory gives each socket its own five caches (<code>apps/api/src/infra/providers/node-bridge-runtime/ttl-cache.ts</code>): same lifetimes as Baileys' (5 min for signal keys, device lists and call offers; 1 h for retry counters and placeholder resends), a size cap each, no timer, and <code>end()</code> empties them. An evicted signal key is read again from the database, so the cap costs a read, not correctness.</p>
 <h2>Scripts</h2>
@@ -76,6 +96,8 @@ ${row('Caches at the end', soak.before.rows.at(-1).nodeCaches, soak.after.rows.a
 node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode per-session --sessions 1,5,10,25,50,100 --label after
 node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode churn --cycles 300 --label after
 node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode soak --sessions 10 --minutes 720 --interval 30 --reconnect 60 --label after
+# the 90 min run on 10 sessions
+node --expose-gc --import tsx ../../tools/perf/baileys-ram.mjs --mode soak --sessions 10 --minutes 90 --interval 30 --reconnect 60 --warmup 20 --label after-long
 # this report
 node ../../tools/perf/baileys-ram-report.mjs
 # the test that pins the fix (fails without it: 100 timers left)
