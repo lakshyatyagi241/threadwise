@@ -40,6 +40,16 @@ export const Icon = ({ d, className = 'h-4 w-4' }: { d: string; className?: stri
   </svg>
 );
 
+/** The node(s) an output port is wired to, written beside the port so the card says where it leads without following the line. */
+function PortTarget({ ids }: { ids: readonly string[] | undefined }) {
+  if (!ids || ids.length === 0) return null;
+  return (
+    <span data-testid="port-target" className="port-target">
+      → {ids.join(', ')}
+    </span>
+  );
+}
+
 interface Props {
   node: FlowNode;
   ctx: FlbBuilderContext;
@@ -50,6 +60,8 @@ interface Props {
   /** While another node is selected: how this one relates to it (`dim` = not wired to it). */
   focus?: 'upstream' | 'downstream' | 'dim' | null;
   hoveredPort: string | null;
+  /** Where each output goes: the ids of the nodes it is wired to, by port (handle) id. Drawn beside the port, outside the card. */
+  outTo?: Readonly<Record<string, readonly string[]>>;
   onPointerDown: (e: React.PointerEvent, id: string) => void;
   onSelect: (id: string) => void;
   /** Double-click on the card: select it and open the inspector. */
@@ -73,6 +85,7 @@ export const NodeCard = memo(function NodeCard({
   dragging,
   focus,
   hoveredPort,
+  outTo,
   onPointerDown,
   onSelect,
   onOpen,
@@ -246,7 +259,9 @@ export const NodeCard = memo(function NodeCard({
                 onMouseLeave={() => onPortHover(null)}
                 className={`port out ${r.kind === 'yes' ? 'is-yes ' : r.kind === 'no' ? 'is-no ' : ''}${hoveredPort === `${node.id}:${r.id}` ? 'active' : ''}`}
                 title={tn('outPort', { label: portLabel(tf, node, r) })}
-              />
+              >
+                <PortTarget ids={outTo?.[r.id]} />
+              </div>
             </div>
           ))}
         </div>
@@ -264,7 +279,9 @@ export const NodeCard = memo(function NodeCard({
           className={`port out ${hoveredPort === `${node.id}:${rows[0]!.id}` ? 'active' : ''}`}
           style={{ top: '50%' }}
           title={tn('output')}
-        />
+        >
+          <PortTarget ids={outTo?.[rows[0]!.id]} />
+        </div>
       ) : null}
     </div>
   );

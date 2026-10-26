@@ -141,6 +141,22 @@
   transform: translateY(-50%);
   position: absolute;
 }
+.flb-root .port-target {
+  position: absolute;
+  left: 18px;
+  bottom: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9.5px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
 .flb-root .port.in {
   cursor: cell;
   left: -7px;
