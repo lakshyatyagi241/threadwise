@@ -30,6 +30,13 @@ export interface DbClientOptions {
   url: string;
   poolMax?: number;
   statementTimeoutMs?: number;
+  /** Fail a statement that waits this long for a lock (row, advisory, DDL), instead of waiting out the statement timeout. Off when unset or 0. */
+  lockTimeoutMs?: number;
+  /**
+   * End a session that sits idle inside an open transaction this long, so one forgotten transaction cannot hold a pooled connection
+   * (and its locks) for ever. Off when unset or 0. A transaction that legitimately waits (the outbox drain) needs a longer value.
+   */
+  idleInTransactionTimeoutMs?: number;
   applicationName?: string;
   /** Emit every statement. Development only — it logs parameter values. */
   logQueries?: boolean;
@@ -56,7 +63,15 @@ export function createDbClient(options: DbClientOptions): DbClient {
     application_name: options.applicationName ?? 'crm-api',
     // Server-side statement timeout: a runaway query dies at the database
     // rather than holding a pooled connection until the client gives up.
-    options: `-c statement_timeout=${statementTimeoutMs}`,
+    options: [
+      `-c statement_timeout=${statementTimeoutMs}`,
+      options.lockTimeoutMs ? `-c lock_timeout=${options.lockTimeoutMs}` : '',
+      options.idleInTransactionTimeoutMs
+        ? `-c idle_in_transaction_session_timeout=${options.idleInTransactionTimeoutMs}`
+        : '',
+    ]
+      .filter(Boolean)
+      .join(' '),
     // Client-side backstop for the case the server cannot help with: the connection is up but the other end stopped answering (a
     // dropped route, a frozen host), so the server-side timeout above never fires and the query would wait for ever, holding a request
     // or a worker tick. A little longer than the server's own timeout, so a slow-but-alive database still reports its own error.
