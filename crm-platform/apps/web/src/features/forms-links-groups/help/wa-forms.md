@@ -30,6 +30,7 @@ Unofficial API (QR-paired) or Twilio number.
 3. Add screens and fields from the field list: headings, short text, paragraphs, email, phone number, number,
    date, and the choice fields (dropdown, radio buttons, checkboxes). Mark a field **Required** if the customer
    must answer it before continuing.
+   For a choice field, type its options in the **Options** box separated by commas (or one per line).
 4. For each field, you can pick what it **maps to**: a contact field (full name, first name, last name, email,
    job title, language, address), any of your workspace's custom properties, or a **Privacy & consent** option on
    a matching field — **Age** or **Date of birth** on a number or date field (runs the minor check, same rule as

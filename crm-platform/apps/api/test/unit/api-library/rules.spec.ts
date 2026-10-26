@@ -1,7 +1,8 @@
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { API_LIBRARY_SECRET_MASK } from '@crm/contracts';
+import { API_LIBRARY_SECRET_MASK, apiLibraryIsSensitiveName } from '@crm/contracts';
 import {
+  addressMovedFromSaved,
   applyMapping,
   buildMultipart,
   extractByPath,
@@ -14,6 +15,7 @@ import {
   maskResponseHeaders,
   maskUrl,
   looksBinary,
+  maskResponseText,
   readAnswer,
   scrubSecretHeaders,
   scrubSecretValues,
@@ -440,6 +442,56 @@ describe('the logs API filter', () => {
     );
     expect(out.map((a) => a.name)).toEqual(['alpha', 'zeta']);
     expect(out.every((a) => a.deleted)).toBe(true);
+  });
+});
+
+describe('addressMovedFromSaved', () => {
+  const vars = (o: Record<string, string>) =>
+    new Map(Object.entries(o).map(([k, v]) => [k.toLowerCase(), v]));
+  it('is false while a flow value only changes the path or query, true when it changes the host', () => {
+    const url = 'https://{{host}}/orders/{{id}}?k=1';
+    const defaults = vars({ host: 'api.example.com', id: '1' });
+    expect(addressMovedFromSaved(url, vars({ host: 'api.example.com', id: '99' }), defaults)).toBe(
+      false,
+    );
+    expect(addressMovedFromSaved(url, vars({ host: 'evil.test', id: '1' }), defaults)).toBe(true);
+    expect(addressMovedFromSaved('https://api.example.com/x', vars({}), vars({}))).toBe(false);
+  });
+});
+
+describe('more secret names, and a reply that echoes them', () => {
+  it('knows pwd, pin, otp, cvv, card number, ssn, jwt and session, but not words that only contain them', () => {
+    for (const n of [
+      'pwd',
+      'PIN',
+      'otp',
+      'cvv',
+      'card_number',
+      'ssn',
+      'jwt',
+      'session',
+      'sessionId',
+    ])
+      expect(apiLibraryIsSensitiveName(n), n).toBe(true);
+    for (const n of ['shipping', 'footprint', 'pincode', 'mapping', 'sessions_count', 'name'])
+      expect(apiLibraryIsSensitiveName(n), n).toBe(false);
+  });
+
+  it('masks them in a JSON reply at any depth, also when the JSON is cut off', () => {
+    const json = maskResponseText(
+      '{"user":{"pwd":"abc123","pin":"4321","name":"Asha"},"card_number":"4111111111111111"}',
+    );
+    expect(json).not.toMatch(/abc123|4321|4111111111111111/);
+    expect(json).toContain('Asha');
+    const cut = maskJsonText('{"otp":"99887","jwt":"eyJ.x.y","name":"A');
+    expect(cut).not.toMatch(/99887|eyJ/);
+  });
+
+  it('masks name=value and name: value pairs in a plain-text or form-encoded echo', () => {
+    const out = maskResponseText('user=asha&pwd=hunter22&pin=5555\nsession: s3cr3t\nshipping=fast');
+    expect(out).not.toMatch(/hunter22|5555|s3cr3t/);
+    expect(out).toContain('user=asha');
+    expect(out).toContain('shipping=fast');
   });
 });
 
