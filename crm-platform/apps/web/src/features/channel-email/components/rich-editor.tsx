@@ -158,7 +158,7 @@ export function RichEditor({
   };
 
   const tool =
-    'flex h-7 min-w-7 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
+    'flex h-7 min-w-7 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
   // Buttons must not take the selection away from the text.
   const keep = (e: { preventDefault: () => void }) => e.preventDefault();
 
@@ -169,7 +169,7 @@ export function RichEditor({
       role="toolbar"
       aria-label={t('toolbar')}
       data-testid="email-editor-toolbar"
-      className="mt-2 flex flex-wrap items-center gap-0.5 rounded-lg border border-border bg-muted/40 p-0.5"
+      className="mt-1.5 flex flex-wrap items-center gap-0.5"
     >
       {BUTTONS.slice(0, 3).map((b) => (
         <button
