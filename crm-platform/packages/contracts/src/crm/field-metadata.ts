@@ -242,6 +242,40 @@ export const fieldOptionDependencyResponseSchema = z.object({
 });
 export type FieldOptionDependencyResponse = z.infer<typeof fieldOptionDependencyResponseSchema>;
 
+/**
+ * The same option pairs, grouped: one entry per parent option and child field, with the ids of every child option it allows. The flat
+ * list repeats four uuids per pair (17.5 MB for 52,500 pairs); this carries each parent once and is about a tenth of that.
+ */
+export const fieldOptionDependencyGroupSchema = z.object({
+  parentFieldId: uuidSchema,
+  parentOptionId: uuidSchema,
+  childFieldId: uuidSchema,
+  childOptionIds: z.array(uuidSchema),
+});
+export type FieldOptionDependencyGroup = z.infer<typeof fieldOptionDependencyGroupSchema>;
+export const fieldOptionDependencyGroupsResponseSchema = z.array(fieldOptionDependencyGroupSchema);
+
+/**
+ * Flat pairs from the grouped form, for code that works one pair at a time. A grouped pair has no row of its own, so `id` is
+ * "<parent option>:<child option>" (stable, not a server id) and `createdAt` is the epoch; nothing reads either.
+ */
+export function expandOptionPairGroups(
+  groups: readonly FieldOptionDependencyGroup[],
+): FieldOptionDependencyResponse[] {
+  const out: FieldOptionDependencyResponse[] = [];
+  for (const g of groups)
+    for (const childOptionId of g.childOptionIds)
+      out.push({
+        id: `${g.parentOptionId}:${childOptionId}`,
+        parentFieldId: g.parentFieldId,
+        parentOptionId: g.parentOptionId,
+        childFieldId: g.childFieldId,
+        childOptionId,
+        createdAt: new Date(0).toISOString(),
+      });
+  return out;
+}
+
 export const createFieldOptionDependencySchema = z
   .object({
     parentOptionId: uuidSchema,

@@ -576,6 +576,30 @@ export class FieldsService {
     });
   }
 
+  /**
+   * The ETag of one module's option-pair list in this workspace. A workspace can hold tens of thousands of pairs (a 52,000-row list is
+   * 17 MB of JSON), they change rarely, and every contact or company form asks for them, so the controller answers "not modified"
+   * from this stamp without building the list. Same permission as the list; the workspace is in the tag so another tenant never matches.
+   */
+  async optionDependenciesTag(
+    query: FieldUsageQuery,
+    shape: 'flat' | 'grouped' = 'flat',
+  ): Promise<string> {
+    const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
+    const s = await this.db.tx((tx) => this.dependenciesRepo.optionPairStamp(tx, ctx.orgId));
+    return `W/"fod${shape === 'grouped' ? 'g' : ''}-${ctx.orgId}-${query.moduleKey}-${s.count}-${s.last}"`;
+  }
+
+  /** The same pairs as listModuleOptionDependencies, grouped by parent option: about a tenth of the size for a big workspace. */
+  async listModuleOptionDependencyGroups(query: FieldUsageQuery) {
+    const ctx = RequestContextStore.require();
+    this.requireModulePermission(query.moduleKey, 'read');
+    return this.db.tx((tx) =>
+      this.dependenciesRepo.listOptionPairGroupsByModule(tx, ctx.orgId, query.moduleKey),
+    );
+  }
+
   /** Every cascade option pair of one module's fields (the choices a cascade child allows under each parent choice). */
   async listModuleOptionDependencies(
     query: FieldUsageQuery,
