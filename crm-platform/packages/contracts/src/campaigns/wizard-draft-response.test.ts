@@ -24,5 +24,7 @@ describe('wizard draft response', () => {
       const { wizardDraftResponseSchema } = await import('./broadcast-wizard');
       expect(wizardDraftResponseSchema.safeParse(savedDraft).success).toBe(true);
     },
+    // Loading the whole contracts index on a fresh module graph takes longer than vitest's 5 s default.
+    30_000,
   );
 });
