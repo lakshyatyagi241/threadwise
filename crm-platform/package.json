@@ -57,7 +57,7 @@
     "prepare": "husky",
     "audit:resource-limits": "node tools/resource-limits/check.mjs --check && node --test tools/resource-limits/lib.test.mjs",
     "test:redis-pressure": "bash tools/resource-limits/redis-pressure.sh",
-    "audit:queue-capacity": "node tools/queue-capacity/inventory.mjs --check && node --test tools/queue-capacity/model.test.mjs",
+    "audit:queue-capacity": "node tools/queue-capacity/inventory.mjs --check && node tools/queue-capacity/reliability.mjs --check && node --test tools/queue-capacity/model.test.mjs tools/queue-capacity/reliability.test.mjs",
     "bench:queues": "node tools/queue-capacity/bench.mjs",
     "fuzz": "node tools/quality/fuzz.mjs",
     "fuzz:ci": "node tools/quality/fuzz.mjs --profile ci --no-http"

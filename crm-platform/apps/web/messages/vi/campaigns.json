@@ -174,7 +174,8 @@
         "status": "Trạng thái",
         "schedule": "Lịch gửi",
         "actions": "Thao tác"
-      }
+      },
+      "newCampaignAny": "Chiến dịch mới"
     },
     "builder": {
       "loadError": "Không thể tải chiến dịch này.",
@@ -725,7 +726,11 @@
         "balanceShort": "Số dư không đủ: bạn cần thêm {shortfall}.",
         "balanceLowFull": "Số dư thấp hơn toàn bộ chi phí {full}: gói của bạn đang chi trả được lúc này, nhưng sẽ không còn khi gói hết hạn.",
         "chargedNowLabel": "Trừ vào ví của bạn ngay bây giờ"
-      }
+      },
+      "kickerEmail": "Chiến dịch email / Mới",
+      "kickerEditEmail": "Chiến dịch email / Chỉnh sửa",
+      "titleEmail": "Tạo email mới",
+      "titleEditEmail": "Chỉnh sửa email của bạn"
     },
     "detail": {
       "notFound": "Không tìm thấy chiến dịch đó.",

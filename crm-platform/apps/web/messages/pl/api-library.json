@@ -91,7 +91,6 @@
       "title": "Usuń API",
       "message": "Czy na pewno chcesz usunąć {name}? Tej operacji nie można cofnąć.",
       "delete": "Usuń",
-      "deleteAnyway": "Usuń mimo to",
       "done": "Usunięto: {name}.",
       "checking": "Sprawdzanie, które przepływy go używają...",
       "usageFailed": "Nie udało się sprawdzić, które przepływy korzystają z tego API. Jeśli jakieś korzystają, usunięcie go spowoduje, że ten krok zakończy się przez port błędu.",
@@ -99,7 +98,7 @@
       "published": "Opublikowane",
       "draft": "Szkic",
       "nodes": "{count, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}",
-      "forceNote": "Jeśli mimo to je usuniesz, te kroki przestaną działać i zakończą się przez port błędu. Dzienniki API zostaną zachowane."
+      "blocked": "Tego API nie można usunąć, dopóki używają go przepływy. Usuń jego krok z tych przepływów lub wybierz tam inne API, a potem usuń je tutaj."
     },
     "logs": {
       "title": "Dzienniki API",

@@ -317,6 +317,7 @@ function Builder({
   return (
     <div className="min-h-full">
       <BuilderHeader
+        email={engine === 'email'}
         editing={editing}
         backHref={id ? `/campaigns/${id}` : '/campaigns'}
         busy={busy}

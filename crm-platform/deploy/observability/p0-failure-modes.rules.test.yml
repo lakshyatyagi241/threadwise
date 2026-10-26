@@ -25,6 +25,11 @@ tests:
         values: '5000x24'
       - series: 'crm_redis_memory_max_bytes{service="web"}'
         values: '0x24'
+      # the cache Redis at 99%: by design, alerts nothing
+      - series: 'crm_redis_memory_used_bytes{service="worker",redis="cache"}'
+        values: '990x24'
+      - series: 'crm_redis_memory_max_bytes{service="worker",redis="cache"}'
+        values: '1000x24'
       - series: 'crm_db_pool_waiting{service="api",pool="primary"}'
         values: '0x4 3x20'
       - series: 'crm_db_pool_waiting{service="api",pool="replica"}'
@@ -85,6 +90,18 @@ tests:
               summary: 'Redis memory above 90% of maxmemory for 5 min'
               description: 'At maxmemory Redis evicts or rejects writes; BullMQ jobs can be lost or enqueue can fail.'
               runbook: 'docs/runbooks/p0-failure-modes.md#redismemorynearmax'
+      # D-15: over 70% for 15 minutes warns; the 50% queue Redis, the unlimited one and the 99% cache Redis stay quiet
+      - eval_time: 12m
+        alertname: RedisMemoryHigh
+        exp_alerts: [] # under the 15 m hold
+      - eval_time: 20m
+        alertname: RedisMemoryHigh
+        exp_alerts:
+          - exp_labels: { severity: warning, owner: vedant, service: api }
+            exp_annotations:
+              summary: 'Redis memory above 70% of maxmemory for 15 min'
+              description: 'The queue Redis refuses writes at maxmemory (noeviction). Finished-job history is trimmed automatically from here; a growing backlog or a key without a TTL is the usual cause.'
+              runbook: 'docs/runbooks/redis-cache-split.md#redismemoryhigh'
       - eval_time: 12m
         alertname: DbPoolExhausted
         exp_alerts:

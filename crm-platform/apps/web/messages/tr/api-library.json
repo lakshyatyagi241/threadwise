@@ -91,7 +91,6 @@
       "title": "API'yi sil",
       "message": "{name} silinsin mi? Bu işlem geri alınamaz.",
       "delete": "Sil",
-      "deleteAnyway": "Yine de sil",
       "done": "{name} silindi.",
       "checking": "Hangi akışların kullandığı kontrol ediliyor...",
       "usageFailed": "Bu API'yi hangi akışların kullandığı kontrol edilemedi. Kullanan bir akış varsa, silindiğinde o adım hata çıkışından ayrılır.",
@@ -99,7 +98,7 @@
       "published": "Yayında",
       "draft": "Taslak",
       "nodes": "{count, plural, one {# adım} other {# adım}}",
-      "forceNote": "Yine de silerseniz bu adımlar çalışmayı durdurur ve hata çıkışından ayrılır. Günlükleri saklanır."
+      "blocked": "Akışlar bu API'yi kullandığı sürece silinemez. Bu akışlardan adımını kaldırın veya orada başka bir API seçin, ardından burada silin."
     },
     "logs": {
       "title": "API günlükleri",

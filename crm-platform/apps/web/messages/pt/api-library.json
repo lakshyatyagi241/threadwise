@@ -91,7 +91,6 @@
       "title": "Excluir API",
       "message": "Tem certeza de que deseja excluir {name}? Esta ação não pode ser desfeita.",
       "delete": "Excluir",
-      "deleteAnyway": "Excluir mesmo assim",
       "done": "{name} foi excluída.",
       "checking": "Verificando quais fluxos a usam...",
       "usageFailed": "Não foi possível verificar quais fluxos usam esta API. Se algum usar, ao excluí-la essa etapa sairá pela porta de erro.",
@@ -99,7 +98,7 @@
       "published": "Publicado",
       "draft": "Rascunho",
       "nodes": "{count, plural, one {# etapa} other {# etapas}}",
-      "forceNote": "Se você excluí-la mesmo assim, essas etapas deixarão de funcionar e sairão pela porta de erro. Os logs dela serão mantidos."
+      "blocked": "Esta API não pode ser excluída enquanto fluxos a usarem. Remova o passo dela desses fluxos, ou escolha outra API neles, e depois exclua-a aqui."
     },
     "logs": {
       "title": "Logs de API",

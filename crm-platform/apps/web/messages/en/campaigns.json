@@ -217,7 +217,8 @@
         "status": "Status",
         "schedule": "Schedule",
         "actions": "Actions"
-      }
+      },
+      "newCampaignAny": "New campaign"
     },
     "builder": {
       "loadError": "Could not load this campaign.",
@@ -768,7 +769,11 @@
         "balanceShort": "Balance is not enough: you need {shortfall} more.",
         "balanceLowFull": "Balance is lower than the full cost of {full}: your plan covers it now, but not once the plan runs out.",
         "chargedNowLabel": "Charged to your wallet now"
-      }
+      },
+      "kickerEmail": "Email campaigns / New",
+      "kickerEditEmail": "Email campaigns / Edit",
+      "titleEmail": "Create new email",
+      "titleEditEmail": "Edit your email"
     },
     "detail": {
       "notFound": "That campaign was not found.",

@@ -378,10 +378,13 @@
           "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
         },
         "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
-        "flowId": "WhatsApp-Flow-ID",
-        "flowIdHint": "Die numerische ID eines veröffentlichten WhatsApp Flows aus dem Flows-Manager von Meta.",
-        "screen": "Startbildschirm",
-        "screenHint": "Die ID des Bildschirms, mit dem sich das Formular öffnet, zum Beispiel WELCOME."
+        "flowPick": "WhatsApp-Formular",
+        "flowPickHint": "Wählen Sie eines Ihrer veröffentlichten WhatsApp-Formulare. Die Schaltfläche öffnet es in WhatsApp.",
+        "flowChoose": "WhatsApp-Formular auswählen",
+        "flowLoading": "Formulare werden geladen…",
+        "flowNone": "Sie haben noch keine veröffentlichten WhatsApp-Formulare.",
+        "flowNoneLink": "Eines erstellen und veröffentlichen",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",

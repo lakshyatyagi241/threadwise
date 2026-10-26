@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Deze link is gepauzeerd of verlopen.",
       "ROW_VERSION_CONFLICT": "Dit is elders gewijzigd. Vernieuw de pagina en probeer het opnieuw.",
       "VALIDATION_FAILED": "Controleer de gemarkeerde velden en probeer het opnieuw.",
-      "PLAN_FEATURE_LOCKED": "Upgrade je abonnement om deze functie te gebruiken."
+      "PLAN_FEATURE_LOCKED": "Upgrade je abonnement om deze functie te gebruiken.",
+      "WFL_FORM_SYNC_FAILED": "De formulieren konden niet van Meta worden gelezen."
     },
     "forms": {
       "heading": "WhatsApp-formulieren",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Nog geen formulieren",
-        "description": "Maak een formulier en verstuur het daarna vanuit een WhatsApp-formulierstap in een flow."
+        "description": "Maak een formulier en verstuur het daarna vanuit een WhatsApp-formulierstap in een flow.",
+        "noMatch": "Geen formulieren komen overeen met “{q}”."
       },
       "table": {
         "form": "Formulier",
@@ -143,6 +145,14 @@
           "contact": "Contact",
           "phone": "Telefoon"
         }
+      },
+      "sync": {
+        "cta": "Synchroniseren met Meta",
+        "syncing": "Synchroniseren…",
+        "done": "Gesynchroniseerd met Meta: {checked} gecontroleerd, {updated} bijgewerkt, {missing} niet gevonden in Meta, {metaOnly} alleen in Meta."
+      },
+      "search": {
+        "placeholder": "Formulieren zoeken"
       }
     },
     "links": {

@@ -378,10 +378,13 @@
           "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz."
         },
         "catalogHint": "WhatsApp kataloğunuzu açar. Düğmede “Kataloğu görüntüle” yazar ve tek düğme olmalıdır.",
-        "flowId": "WhatsApp Flow kimliği",
-        "flowIdHint": "Meta’nın Flows yöneticisinden yayımlanmış bir WhatsApp Flow’un sayısal kimliği.",
-        "screen": "Açılış ekranı",
-        "screenHint": "Formun açıldığı ekranın kimliği, örneğin WELCOME."
+        "flowPick": "WhatsApp Formu",
+        "flowPickHint": "Yayımlanmış WhatsApp formlarınızdan birini seçin. Düğme formu WhatsApp içinde açar.",
+        "flowChoose": "Bir WhatsApp formu seçin",
+        "flowLoading": "Formlar yükleniyor…",
+        "flowNone": "Henüz yayımlanmış bir WhatsApp formunuz yok.",
+        "flowNoneLink": "Bir tane oluşturun ve yayımlayın",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",

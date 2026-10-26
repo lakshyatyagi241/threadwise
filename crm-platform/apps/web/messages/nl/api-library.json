@@ -91,7 +91,6 @@
       "title": "API verwijderen",
       "message": "Weet je zeker dat je {name} wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
       "delete": "Verwijderen",
-      "deleteAnyway": "Toch verwijderen",
       "done": "{name} is verwijderd.",
       "checking": "Controleren welke flows hem gebruiken...",
       "usageFailed": "Kon niet controleren welke flows deze API gebruiken. Als er een flow is die hem gebruikt, verlaat die stap na verwijdering de flow via de foutpoort.",
@@ -99,7 +98,7 @@
       "published": "Gepubliceerd",
       "draft": "Concept",
       "nodes": "{count, plural, one {# stap} other {# stappen}}",
-      "forceNote": "Als je hem toch verwijdert, werken die stappen niet meer en verlaten ze de flow via hun foutpoort. De logs blijven bewaard."
+      "blocked": "Deze API kan niet worden verwijderd zolang flows hem gebruiken. Verwijder de stap uit deze flows of kies daar een andere API, en verwijder hem dan hier."
     },
     "logs": {
       "title": "API-logs",

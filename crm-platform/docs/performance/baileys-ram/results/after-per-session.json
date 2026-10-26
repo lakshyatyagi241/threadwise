@@ -1,0 +1,86 @@
+{
+  "mode": "per-session",
+  "label": "after",
+  "node": "v24.19.0",
+  "at": "2026-10-26T08:48:14.918Z",
+  "rows": [
+    {
+      "sessions": 1,
+      "rssMb": 202.4,
+      "heapUsedMb": 56.1,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 2,
+      "nodeCaches": 0
+    },
+    {
+      "sessions": 5,
+      "rssMb": 202.4,
+      "heapUsedMb": 57.2,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 6,
+      "nodeCaches": 0
+    },
+    {
+      "sessions": 10,
+      "rssMb": 204.5,
+      "heapUsedMb": 58.4,
+      "externalMb": 76.2,
+      "arrayBuffersMb": 64.4,
+      "timers": 11,
+      "nodeCaches": 0
+    },
+    {
+      "sessions": 25,
+      "rssMb": 211.8,
+      "heapUsedMb": 60.4,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 27,
+      "nodeCaches": 0
+    },
+    {
+      "sessions": 50,
+      "rssMb": 218.6,
+      "heapUsedMb": 63.2,
+      "externalMb": 76.3,
+      "arrayBuffersMb": 64.5,
+      "timers": 53,
+      "nodeCaches": 0
+    },
+    {
+      "sessions": 100,
+      "rssMb": 237.6,
+      "heapUsedMb": 68.5,
+      "externalMb": 76.4,
+      "arrayBuffersMb": 64.6,
+      "timers": 111,
+      "nodeCaches": 0
+    }
+  ],
+  "baseline": {
+    "rssMb": 234.6,
+    "heapUsedMb": 58.7,
+    "externalMb": 76.2,
+    "arrayBuffersMb": 64.4,
+    "timers": 1,
+    "nodeCaches": 0
+  },
+  "afterEnd": {
+    "rssMb": 231.3,
+    "heapUsedMb": 60.7,
+    "externalMb": 76.3,
+    "arrayBuffersMb": 64.5,
+    "timers": 26,
+    "nodeCaches": 0
+  },
+  "perSessionRssMb": 0.36,
+  "perSessionHeapMb": 0.121,
+  "perSessionTimers": 1.1,
+  "retainedAfterEndRssMb": -3.3,
+  "retainedAfterEndHeapMb": 2,
+  "retainedTimers": 25,
+  "retainedNodeCaches": 0,
+  "cpuSeconds": 10.8
+}

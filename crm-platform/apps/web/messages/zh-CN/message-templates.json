@@ -378,10 +378,13 @@
           "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
         },
         "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "已发布的 WhatsApp Flow 的数字 ID，可在 Meta 的 Flows 管理器中查看。",
-        "screen": "起始页面",
-        "screenHint": "表单打开时显示的页面 ID，例如 WELCOME。"
+        "flowPick": "WhatsApp 表单",
+        "flowPickHint": "从已发布的 WhatsApp 表单中选择一个。按钮会在 WhatsApp 内打开它。",
+        "flowChoose": "选择 WhatsApp 表单",
+        "flowLoading": "正在加载表单…",
+        "flowNone": "你还没有已发布的 WhatsApp 表单。",
+        "flowNoneLink": "创建并发布一个",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",

@@ -1,14 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { WaForm } from '@crm/contracts';
-import { Alert, Button, ConfirmDialog, EmptyState, Spinner, StatTile } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, EmptyState, Input, Spinner, StatTile } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
   useCreateWaForm,
   useDeleteWaForm,
   useDuplicateWaForm,
+  useSyncWaForms,
   useWaForms,
 } from '../api/wa-forms-hooks';
 import { useErrorText } from '../components/use-error-text';
@@ -27,12 +28,31 @@ export function WaFormsListScreen() {
   const canManage = useCan('wfl.forms.manage');
   const canDelete = useCan('wfl.forms.delete');
 
-  const forms = useWaForms();
+  const [search, setSearch] = useState('');
+  const [q, setQ] = useState('');
+  useEffect(() => {
+    const timer = setTimeout(() => setQ(search.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+  const forms = useWaForms(q);
+  const sync = useSyncWaForms();
   const create = useCreateWaForm();
   const duplicate = useDuplicateWaForm();
   const remove = useDeleteWaForm();
   const [deleting, setDeleting] = useState<WaForm | null>(null);
   const [notice, setNotice] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
+
+  const onSync = () => {
+    setNotice(null);
+    sync.mutate(undefined, {
+      onSuccess: (r) => setNotice({ tone: 'success', text: t('sync.done', r) }),
+      onError: (err) =>
+        setNotice({
+          tone: 'danger',
+          text: errorText(err).text + (errorText(err).detail ? ` ${errorText(err).detail}` : ''),
+        }),
+    });
+  };
 
   const items = forms.data?.items ?? [];
   const stats = forms.data?.stats;
@@ -71,11 +91,19 @@ export function WaFormsListScreen() {
           <h1 className="text-3xl font-semibold leading-none">{t('heading')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
         </div>
-        {canCreate && (
-          <Button onClick={onCreate} disabled={create.isPending}>
-            {create.isPending ? t('create.creating') : t('create.cta')}
-          </Button>
-        )}
+        <div className="flex flex-wrap items-center gap-2">
+          {canManage && (
+            <Button variant="secondary" onClick={onSync} disabled={sync.isPending}>
+              {sync.isPending ? <Spinner /> : null}
+              {sync.isPending ? t('sync.syncing') : t('sync.cta')}
+            </Button>
+          )}
+          {canCreate && (
+            <Button onClick={onCreate} disabled={create.isPending}>
+              {create.isPending ? t('create.creating') : t('create.cta')}
+            </Button>
+          )}
+        </div>
       </header>
 
       {notice && (
@@ -93,7 +121,18 @@ export function WaFormsListScreen() {
         </div>
       )}
 
-      <div className="mt-6">
+      <div className="mt-5 max-w-sm">
+        <Input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t('search.placeholder')}
+          aria-label={t('search.placeholder')}
+          data-testid="wa-forms-search"
+        />
+      </div>
+
+      <div className="mt-4">
         {forms.isPending ? (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Spinner /> {t('loading')}
@@ -106,7 +145,10 @@ export function WaFormsListScreen() {
             </button>
           </Alert>
         ) : items.length === 0 ? (
-          <EmptyState title={t('empty.title')} message={t('empty.description')} />
+          <EmptyState
+            title={q ? t('empty.noMatch', { q }) : t('empty.title')}
+            message={q ? '' : t('empty.description')}
+          />
         ) : (
           <div className="overflow-x-auto rounded-lg border border-border">
             <table className="w-full text-sm">

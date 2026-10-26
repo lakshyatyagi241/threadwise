@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Liên kết này đang tạm dừng hoặc đã hết hạn.",
       "ROW_VERSION_CONFLICT": "Mục này đã được thay đổi ở nơi khác. Hãy tải lại và thử lại.",
       "VALIDATION_FAILED": "Kiểm tra các trường được đánh dấu và thử lại.",
-      "PLAN_FEATURE_LOCKED": "Nâng cấp gói của bạn để sử dụng tính năng này."
+      "PLAN_FEATURE_LOCKED": "Nâng cấp gói của bạn để sử dụng tính năng này.",
+      "WFL_FORM_SYNC_FAILED": "Không đọc được biểu mẫu từ Meta."
     },
     "forms": {
       "heading": "Biểu mẫu WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Chưa có biểu mẫu nào",
-        "description": "Tạo một biểu mẫu, sau đó gửi nó từ bước Biểu mẫu WhatsApp trong một luồng."
+        "description": "Tạo một biểu mẫu, sau đó gửi nó từ bước Biểu mẫu WhatsApp trong một luồng.",
+        "noMatch": "Không có biểu mẫu nào khớp với “{q}”."
       },
       "table": {
         "form": "Biểu mẫu",
@@ -143,6 +145,14 @@
           "contact": "Liên hệ",
           "phone": "Điện thoại"
         }
+      },
+      "sync": {
+        "cta": "Đồng bộ với Meta",
+        "syncing": "Đang đồng bộ…",
+        "done": "Đã đồng bộ với Meta: kiểm tra {checked}, cập nhật {updated}, không thấy trên Meta {missing}, chỉ có trên Meta {metaOnly}."
+      },
+      "search": {
+        "placeholder": "Tìm biểu mẫu"
       }
     },
     "links": {

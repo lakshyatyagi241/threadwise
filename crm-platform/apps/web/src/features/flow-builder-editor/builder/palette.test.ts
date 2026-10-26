@@ -91,6 +91,12 @@ describe('palette (TW-FLB-016)', () => {
     expect(ids('chat', 'answer from faq')).toEqual(['faq']);
   });
 
+  it('"API (from library)" is offered on a website bot too, not only on WhatsApp', () => {
+    expect(ids('web')).toContain('api_library');
+    expect(ids('chat')).toContain('api_library');
+    expect(ids('web', 'saved api')).toEqual(['api_library']);
+  });
+
   it('legacy (hidden) Instagram nodes are never offered', () => {
     const all = ids('instagram');
     for (const id of ['ig_send_dm', 'ig_quick', 'ig_ai', 'ig_ask']) expect(all).not.toContain(id);

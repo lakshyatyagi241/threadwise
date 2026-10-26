@@ -378,10 +378,13 @@
           "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti."
         },
         "catalogHint": "Apre il tuo catalogo WhatsApp. Il pulsante riporta «Vedi catalogo» e deve essere l’unico pulsante.",
-        "flowId": "ID del WhatsApp Flow",
-        "flowIdHint": "L’ID numerico di un WhatsApp Flow pubblicato, dal gestore Flows di Meta.",
-        "screen": "Schermata iniziale",
-        "screenHint": "L’ID della schermata con cui si apre il modulo, ad esempio WELCOME."
+        "flowPick": "Modulo WhatsApp",
+        "flowPickHint": "Scegli uno dei tuoi moduli WhatsApp pubblicati. Il pulsante lo apre dentro WhatsApp.",
+        "flowChoose": "Scegli un modulo WhatsApp",
+        "flowLoading": "Caricamento dei moduli…",
+        "flowNone": "Non hai ancora moduli WhatsApp pubblicati.",
+        "flowNoneLink": "Creane e pubblicane uno",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Salvato, ma Meta ha rifiutato il template.",

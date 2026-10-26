@@ -1,0 +1,14 @@
+{
+  "owners": [
+    {
+      "family": "bull:*:*",
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "reason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12)."
+    },
+    {
+      "family": "infra:workers",
+      "owner": "platform-infrastructure (observability/worker-heartbeat.service.ts)",
+      "reason": "One sorted-set member per worker process; every beat removes members older than twice the alive window (zremrangebyscore) and a clean stop removes its own."
+    }
+  ]
+}

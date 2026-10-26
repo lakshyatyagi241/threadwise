@@ -89,7 +89,8 @@ export function withoutDotSegments(url: string): string {
  * knows to send the value as what it looks like (a number, a yes/no) and not as text.
  */
 export const RAW_TOKEN_MARK = '\u0001';
-const RAW_TOKEN_RE = /^\u0001\{\{\s*([^{}]+?)\s*\}\}$/;
+// The body of a marked token: the mark is cut off first, so no control character has to sit in a pattern.
+const RAW_TOKEN_BODY_RE = /^\{\{\s*([^{}]+?)\s*\}\}$/;
 
 /** The text of a value as a JSON value: `19.99` is a number, `yes` or `true` is true, `no` or `false` is false, empty is null; any other text stays text. */
 export function typedValue(text: string): string | number | boolean | null {
@@ -105,9 +106,12 @@ export function typedValue(text: string): string | number | boolean | null {
 export function renderBody(body: ApiLibraryBody, values: VariableValues): ApiLibraryBody {
   const walk = (v: unknown): unknown => {
     if (typeof v === 'string') {
-      const raw = RAW_TOKEN_RE.exec(v);
-      if (raw) return typedValue(valueOf(values, raw[1]!));
-      return renderText(v.startsWith(RAW_TOKEN_MARK) ? v.slice(1) : v, values);
+      if (v.startsWith(RAW_TOKEN_MARK)) {
+        const rest = v.slice(RAW_TOKEN_MARK.length);
+        const raw = RAW_TOKEN_BODY_RE.exec(rest);
+        return raw ? typedValue(valueOf(values, raw[1]!)) : renderText(rest, values);
+      }
+      return renderText(v, values);
     }
     if (Array.isArray(v)) return v.map(walk);
     if (v !== null && typeof v === 'object')

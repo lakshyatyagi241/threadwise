@@ -35,3 +35,34 @@ tests:
             exp_annotations:
               summary: 'Bulk queue campaign has had a growing backlog of 5800 jobs for 30 min'
               description: 'Bulk work may be slow by design; this means it is still falling behind. Check the provider rate limit before adding workers.'
+
+  # D-14: any job that fails for good alerts within minutes; the two webhook delivery queues are left out; a queue that only completes is silent
+  - interval: 1m
+    input_series:
+      - series: 'crm_queue_jobs_total{queue="mail-sync",outcome="failed"}'
+        values: '0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1'
+      - series: 'crm_queue_jobs_total{queue="webhook-deliver",outcome="failed"}'
+        values: '0+5x15'
+      - series: 'crm_queue_jobs_total{queue="webhook-forward",outcome="failed"}'
+        values: '0 0 0 3 3 3 3 3 3 3 3 3 3 3 3 3'
+      - series: 'crm_queue_jobs_total{queue="waba-ingest",outcome="completed"}'
+        values: '0+10x15'
+      - series: 'crm_queue_jobs_total{queue="waba-ingest",outcome="failed"}'
+        values: '0x15'
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: QueueJobFailed
+        exp_alerts: []
+      # the job failed at minute 3: it alerts at the next evaluation, well inside 5 minutes
+      - eval_time: 4m
+        alertname: QueueJobFailed
+        exp_alerts:
+          - exp_labels: { severity: warning, owner: vedant, queue: mail-sync }
+            exp_annotations:
+              summary: 'Queue mail-sync: a job failed for good in the last 5 minutes'
+              description: 'Its last attempt failed, so nothing will retry it. The error is in Sentry (tagged by queue) and the failed job is kept for the removeOnFail window of its queue.'
+              runbook: 'docs/performance/queue-capacity/queue-observability-runbook.md#queuejobfailed'
+      # no new failure for more than 5 minutes: resolved
+      - eval_time: 12m
+        alertname: QueueJobFailed
+        exp_alerts: []

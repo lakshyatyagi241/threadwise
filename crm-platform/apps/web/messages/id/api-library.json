@@ -91,7 +91,6 @@
       "title": "Hapus API",
       "message": "Yakin ingin menghapus {name}? Tindakan ini tidak dapat dibatalkan.",
       "delete": "Hapus",
-      "deleteAnyway": "Tetap hapus",
       "done": "{name} telah dihapus.",
       "checking": "Memeriksa alur yang menggunakannya...",
       "usageFailed": "Tidak dapat memeriksa alur yang menggunakan API ini. Jika ada, menghapusnya membuat langkah tersebut keluar melalui port error-nya.",
@@ -99,7 +98,7 @@
       "published": "Terbit",
       "draft": "Draf",
       "nodes": "{count, plural, one {# langkah} other {# langkah}}",
-      "forceNote": "Jika tetap dihapus, langkah-langkah tersebut berhenti berfungsi dan keluar melalui port error-nya. Log-nya tetap disimpan."
+      "blocked": "API ini tidak dapat dihapus selama masih dipakai alur. Hapus langkahnya dari alur tersebut, atau pilih API lain di sana, lalu hapus di sini."
     },
     "logs": {
       "title": "Log API",
