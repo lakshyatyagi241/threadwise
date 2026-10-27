@@ -190,6 +190,14 @@ export class FlowsRepository {
     return (res.rows as Raw[]).map(toRow);
   }
 
+  /** The names that are `base` or `base 2`, `base 3`... (the pattern escapes nothing: `base` is a fixed placeholder). */
+  async namesLike(tx: Tx, orgId: number, base: string): Promise<string[]> {
+    const res = await tx.execute(sql`
+      SELECT flow_name FROM flows
+      WHERE org_id = ${orgId} AND (lower(flow_name) = lower(${base}) OR lower(flow_name) LIKE lower(${base}) || ' %')`);
+    return res.rows.map((r) => String((r as Raw).flow_name));
+  }
+
   async count(tx: Tx, orgId: number, filter: FlowFilter): Promise<number> {
     const res = await tx.execute(
       sql`SELECT count(*) AS n FROM flows f WHERE ${sql.join(conds(orgId, filter), sql` AND `)}`,

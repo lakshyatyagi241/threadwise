@@ -100,6 +100,8 @@ export const flowSummarySchema = z.object({
   isPublished: z.boolean(),
   isActive: z.boolean(),
   triggerKind: z.string(),
+  /** The flow starts on any message (no keyword to match). */
+  triggerAnyMessage: z.boolean().optional(),
   nodeCount: z.int(),
   edgeCount: z.int(),
   subscribers: flowSubscriberCountsSchema,

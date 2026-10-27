@@ -99,6 +99,7 @@
       "triggerGroup": "Automático · ao entrar no grupo",
       "triggerManual": "Inscrição manual",
       "triggerKeyword": "Palavra-chave",
+      "triggerAny": "Qualquer mensagem",
       "active": "ativos",
       "done": "concluídos",
       "failed": "com falha",
@@ -130,7 +131,10 @@
         "reEngagement": "Reativa contatos inativos com uma oferta personalizada ou um contato de acompanhamento.",
         "lead": "Nutre novos leads com conteúdos educativos antes de passá-los para vendas.",
         "event": "Transmissão com prazo definido em torno de um lançamento, promoção ou data sazonal.",
-        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos."
+        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos.",
+        "defaultWeb": "Bot de chat do site criado no editor de fluxos.",
+        "defaultCall": "Chamada automatizada criada no editor de fluxos.",
+        "defaultOther": "Conversa automatizada criada no editor de fluxos."
       }
     },
     "featured": {

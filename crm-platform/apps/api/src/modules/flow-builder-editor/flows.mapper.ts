@@ -22,6 +22,7 @@ export function toFlowSummary(row: FlowRow): FlowSummary {
     isPublished: row.isPublished,
     isActive: row.isActive,
     triggerKind: row.triggerKind,
+    triggerAnyMessage: row.triggerKeywords?.trim().toLowerCase() === 'any',
     nodeCount: row.nodeCount,
     edgeCount: row.edgeCount,
     subscribers: row.subscribers,

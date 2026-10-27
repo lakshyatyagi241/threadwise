@@ -99,6 +99,7 @@
       "triggerGroup": "자동 · 그룹 가입 시",
       "triggerManual": "수동 등록",
       "triggerKeyword": "키워드",
+      "triggerAny": "모든 메시지",
       "active": "활성",
       "done": "완료",
       "failed": "실패",
@@ -130,7 +131,10 @@
         "reEngagement": "휴면 연락처에 맞춤 오퍼나 안부 메시지로 다시 접근합니다.",
         "lead": "영업팀에 넘기기 전에 교육 콘텐츠로 신규 리드를 육성합니다.",
         "event": "출시, 세일, 시즌 이벤트에 맞춘 기간 한정 브로드캐스트입니다.",
-        "default": "플로우 편집기에서 만든 자동화된 WhatsApp 여정입니다."
+        "default": "플로우 편집기에서 만든 자동화된 WhatsApp 여정입니다.",
+        "defaultWeb": "플로우 편집기에서 만든 웹사이트 채팅 봇입니다.",
+        "defaultCall": "플로우 편집기에서 만든 자동 통화입니다.",
+        "defaultOther": "플로우 편집기에서 만든 자동 대화입니다."
       }
     },
     "featured": {

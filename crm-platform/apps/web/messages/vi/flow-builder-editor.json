@@ -99,6 +99,7 @@
       "triggerGroup": "Tự động · khi tham gia nhóm",
       "triggerManual": "Ghi danh thủ công",
       "triggerKeyword": "Từ khóa",
+      "triggerAny": "Bất kỳ tin nhắn nào",
       "active": "đang hoạt động",
       "done": "hoàn tất",
       "failed": "thất bại",
@@ -130,7 +131,10 @@
         "reEngagement": "Kích hoạt lại các liên hệ không hoạt động bằng ưu đãi hoặc lời hỏi thăm được cá nhân hóa.",
         "lead": "Nuôi dưỡng khách tiềm năng mới bằng nội dung hữu ích trước khi chuyển cho bộ phận bán hàng.",
         "event": "Chương trình gửi có thời hạn xoay quanh đợt ra mắt, khuyến mãi hoặc dịp theo mùa.",
-        "default": "Hành trình WhatsApp tự động được xây dựng trong trình chỉnh sửa luồng."
+        "default": "Hành trình WhatsApp tự động được xây dựng trong trình chỉnh sửa luồng.",
+        "defaultWeb": "Chatbot trên website được tạo trong trình chỉnh sửa luồng.",
+        "defaultCall": "Cuộc gọi tự động được tạo trong trình chỉnh sửa luồng.",
+        "defaultOther": "Cuộc trò chuyện tự động được tạo trong trình chỉnh sửa luồng."
       }
     },
     "featured": {

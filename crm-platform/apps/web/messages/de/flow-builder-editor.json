@@ -99,6 +99,7 @@
       "triggerGroup": "Automatisch · bei Gruppenbeitritt",
       "triggerManual": "Manuelle Einschreibung",
       "triggerKeyword": "Schlüsselwort",
+      "triggerAny": "Jede Nachricht",
       "active": "aktiv",
       "done": "fertig",
       "failed": "fehlgeschlagen",
@@ -130,7 +131,10 @@
         "reEngagement": "Aktiviert ruhende Kontakte mit einem persönlichen Angebot oder einer Kontaktaufnahme wieder.",
         "lead": "Pflegt neue Leads mit informativen Kontakten, bevor sie an den Vertrieb übergeben werden.",
         "event": "Zeitlich begrenzter Broadcast rund um einen Launch, einen Verkauf oder einen saisonalen Anlass.",
-        "default": "Automatisierte WhatsApp-Journey, erstellt im Flow-Editor."
+        "default": "Automatisierte WhatsApp-Journey, erstellt im Flow-Editor.",
+        "defaultWeb": "Im Flow-Editor erstellter Website-Chatbot.",
+        "defaultCall": "Im Flow-Editor erstellter automatischer Anruf.",
+        "defaultOther": "Im Flow-Editor erstellte automatisierte Unterhaltung."
       }
     },
     "featured": {

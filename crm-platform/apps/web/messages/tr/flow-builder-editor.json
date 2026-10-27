@@ -99,6 +99,7 @@
       "triggerGroup": "Otomatik · gruba katılınca",
       "triggerManual": "Manuel kayıt",
       "triggerKeyword": "Anahtar sözcük",
+      "triggerAny": "Herhangi bir mesaj",
       "active": "etkin",
       "done": "tamamlandı",
       "failed": "başarısız",
@@ -130,7 +131,10 @@
         "reEngagement": "Uykudaki kişileri kişiselleştirilmiş bir teklif veya kontrol mesajıyla yeniden etkinleştirir.",
         "lead": "Yeni potansiyel müşterileri satışa devretmeden önce eğitici dokunuşlarla besler.",
         "event": "Bir lansman, indirim veya sezonluk dönem etrafında süreli toplu gönderim.",
-        "default": "Akış düzenleyicide oluşturulmuş otomatik WhatsApp yolculuğu."
+        "default": "Akış düzenleyicide oluşturulmuş otomatik WhatsApp yolculuğu.",
+        "defaultWeb": "Akış düzenleyicide oluşturulan web sitesi sohbet botu.",
+        "defaultCall": "Akış düzenleyicide oluşturulan otomatik arama.",
+        "defaultOther": "Akış düzenleyicide oluşturulan otomatik görüşme."
       }
     },
     "featured": {

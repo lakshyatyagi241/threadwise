@@ -99,6 +99,7 @@
       "triggerGroup": "Otomatis · saat bergabung grup",
       "triggerManual": "Pendaftaran manual",
       "triggerKeyword": "Kata kunci",
+      "triggerAny": "Pesan apa pun",
       "active": "aktif",
       "done": "selesai",
       "failed": "gagal",
@@ -130,7 +131,10 @@
         "reEngagement": "Mengaktifkan kembali kontak yang tidak aktif dengan penawaran yang dipersonalisasi atau sapaan.",
         "lead": "Memelihara prospek baru dengan sentuhan edukatif sebelum diserahkan ke sales.",
         "event": "Siaran terbatas waktu seputar peluncuran, penjualan, atau momen musiman.",
-        "default": "Perjalanan WhatsApp otomatis yang dibangun di editor alur."
+        "default": "Perjalanan WhatsApp otomatis yang dibangun di editor alur.",
+        "defaultWeb": "Bot obrolan situs web yang dibuat di editor alur.",
+        "defaultCall": "Panggilan otomatis yang dibuat di editor alur.",
+        "defaultOther": "Percakapan otomatis yang dibuat di editor alur."
       }
     },
     "featured": {

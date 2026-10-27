@@ -152,7 +152,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
   const tf = useFlb();
   const m = useMsg();
   const tl = useTranslations('flb.list.state');
-  const tk = useTranslations('flb.list.create');
+  const tk = useTranslations('flb.create');
   const sty = STATE_STYLE[flow.state];
   const cat = categoryStyle(flow.category);
   const hasSubs =
@@ -286,7 +286,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
 
       <div className="mb-1 text-[14px] font-semibold">{flow.name || t('untitled')}</div>
       <p className="text-[12.5px] leading-relaxed text-muted-foreground">
-        {m(purposeOf(flow.category))}
+        {m(purposeOf(flow.category, flow.flowType))}
       </p>
 
       <ul className="mt-3 space-y-1 text-[12px] text-foreground/70">
@@ -296,7 +296,9 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
         </li>
         <li className="flex items-center gap-2">
           <Check />
-          {t(triggerLabelKey(flow.triggerKind))}
+          {flow.triggerAnyMessage && flow.triggerKind === 'keyword'
+            ? t('triggerAny')
+            : t(triggerLabelKey(flow.triggerKind))}
         </li>
         <li className="flex items-center gap-2">
           <Check />
