@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import type { TaxRateResponse } from '@crm/contracts';
 import { Button, Field, Input, Select, Textarea } from '@crm/ui';
+import { ItemPicker, type PickedItem } from '@/features/products-services';
 import {
   TAX_DEFAULT,
   TAX_NONE,
@@ -86,6 +87,19 @@ export function InvoiceLinesEditor({
     ]);
   };
   const active = taxRates.filter((r) => r.isActive);
+  /** A picked product or service fills the line's starting values; the tax is set only when an active rate has the same percent. */
+  const fromItem = (item: PickedItem): Partial<DraftLine> => {
+    const rate =
+      item.taxPercent === ''
+        ? undefined
+        : active.find((r) => Number(r.rate) === Number(item.taxPercent));
+    return {
+      description: item.name,
+      sku: item.sku,
+      ...(item.price ? { price: item.price } : {}),
+      ...(rate ? { taxRateId: rate.id, taxSnapshot: null } : {}),
+    };
+  };
   const defaultRate = taxRates.find((r) => r.isDefault && r.isActive) ?? null;
 
   return (
@@ -106,6 +120,12 @@ export function InvoiceLinesEditor({
             role="group"
             aria-label={t('lineN', { n: i + 1 })}
           >
+            <ItemPicker
+              currency={currency}
+              locale={locale}
+              disabled={disabled}
+              onPick={(item) => set(l.key, fromItem(item))}
+            />
             <div className="flex items-start gap-2">
               <Field
                 label={t('description')}

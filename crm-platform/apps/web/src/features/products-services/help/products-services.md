@@ -34,6 +34,12 @@ details again on every quote and invoice. It is an add-on: the menu entry appear
 Viewing, adding, editing and deleting are separate permissions in **Settings > Roles** (they appear once your workspace has the app). The Owner and Admin roles have
 them all; the Manager role can view, add and edit.
 
+## Use it on an invoice or estimate
+
+On every line of an invoice, estimate, recurring invoice or sales order, a **Pick from your price list** box appears above the description (only if you may view the
+list). Pick an item and the line gets its name, SKU and price, and the tax rate that matches its default tax. Everything stays editable, and a line you type by hand
+works exactly as before. Items priced in another currency than the document are listed but cannot be picked.
+
 ## What comes next
 
-Picking an item from this list on an invoice, estimate or deal is planned for a later step. For now the list is where you keep the prices.
+Products on a deal are planned for a later step.

@@ -12,5 +12,5 @@ nothing else reads it yet. The names below are the real ones; the spec's working
 | API | `/v2/products-services` (list, create idempotent, get, patch with `rowVersion`, delete); whole controller `@RequirePlanFeature('products_services')`; duplicate SKU is `409 PRD_SKU_TAKEN` |
 | Screen | `/products-services` (sales group in the sidebar, shown only with the permission and the app); en and ar messages; help article |
 
-Not in step 1, by design: the picker on estimate and invoice lines, products on a deal, a `sales_item_id` on document lines, a dev seed, and the
+Step 2 (built) adds the picker on document lines (`ItemPicker`, shown only with the add-on on and `record.sales-items.read`; it fills description, SKU, price and the matching tax rate, nothing is stored on the line). Not built: products on a deal, a `sales_item_id` on document lines, a dev seed, and the
 operator's price for the listing. Those are steps 2 onward and keep working without this add-on, because lines stay free text.

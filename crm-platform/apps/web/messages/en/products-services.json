@@ -85,6 +85,11 @@
         "changedMeanwhile": "This item was changed by someone else. Close this and open it again.",
         "failed": "It could not be saved. Try again."
       }
+    },
+    "picker": {
+      "label": "Pick from your price list",
+      "placeholder": "Pick a product or service (optional)",
+      "otherCurrency": "another currency"
     }
   }
 }
