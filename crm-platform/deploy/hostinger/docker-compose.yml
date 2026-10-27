@@ -63,7 +63,6 @@ x-api-env: &api-env
   CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS: ${CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS:-}
   # Error reporting. The DSN is public by design (it only lets events in), so it is the default here; set SENTRY_DSN= (empty) in .env to turn reporting off.
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
-  CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
   # api and worker are separate containers: media must live in the bucket, not on a container's own disk. The bucket is Cloudflare R2
   # (any S3-compatible store works); every value comes from .env and a release refuses to start without them.
   MEDIA_STORAGE_DRIVER: s3

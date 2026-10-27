@@ -40,7 +40,6 @@
     "seed:lead-scoring": "node dist/src/modules/marketplace/cli/seed-lead-scoring.js"
   },
   "dependencies": {
-    "@clerk/backend": "^3.26.1",
     "@crm/contracts": "workspace:*",
     "@crm/db": "workspace:*",
     "@crm/observability": "workspace:*",
@@ -83,7 +82,7 @@
     "socks-proxy-agent": "8.0.5",
     "unpdf": "^1.9.1",
     "web-push": "^3.6.7",
-    "zod": "^3.24.1"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",

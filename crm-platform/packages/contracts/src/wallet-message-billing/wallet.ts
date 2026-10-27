@@ -20,27 +20,27 @@ export const exactAmountSchema = z.string().regex(/^-?\d+\.\d{2,4}$/);
 
 export const walletSummarySchema = z.object({
   currency: z.string(),
-  balanceMinor: z.number().int(),
+  balanceMinor: z.int(),
   balanceExact: exactAmountSchema.optional(),
   /** `wallet` = every delivered message is charged; `plan` = the plan's monthly messages are free, the wallet pays beyond them. */
   billingMode: walletBillingModeSchema,
   perCountryEnabled: z.boolean(),
   /** The flat price of a message when per-country pricing is off (hundredths). */
-  flatPriceMinor: z.number().int(),
+  flatPriceMinor: z.int(),
   /** About how many messages the balance buys at the flat price; null when per-country prices apply or the price is 0. */
-  approxMessages: z.number().int().nullable(),
-  spent30dMinor: z.number().int(),
+  approxMessages: z.int().nullable(),
+  spent30dMinor: z.int(),
   spent30dExact: exactAmountSchema.optional(),
   /** Earnings only (referral payouts): Reference also counted top-ups and refunds here. */
-  earned30dMinor: z.number().int(),
+  earned30dMinor: z.int(),
   earned30dExact: exactAmountSchema.optional(),
-  toppedUp30dMinor: z.number().int(),
-  refunded30dMinor: z.number().int(),
-  lowBalanceThresholdMinor: z.number().int(),
+  toppedUp30dMinor: z.int(),
+  refunded30dMinor: z.int(),
+  lowBalanceThresholdMinor: z.int(),
   lowBalance: z.boolean(),
   plan: z.object({
-    monthlyMessagesLimit: z.number().int(),
-    usedThisMonth: z.number().int(),
+    monthlyMessagesLimit: z.int(),
+    usedThisMonth: z.int(),
     active: z.boolean(),
     endsAt: z.string().nullable(),
   }),
@@ -49,13 +49,13 @@ export const walletSummarySchema = z.object({
 export type WalletSummary = z.infer<typeof walletSummarySchema>;
 
 export const walletTransactionSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   type: walletTxTypeSchema,
   direction: walletDirectionSchema,
   /** Signed: money in is positive, money out is negative. */
-  amountMinor: z.number().int(),
+  amountMinor: z.int(),
   amountExact: exactAmountSchema.optional(),
-  balanceAfterMinor: z.number().int(),
+  balanceAfterMinor: z.int(),
   balanceAfterExact: exactAmountSchema.optional(),
   source: z.string().nullable(),
   description: z.string().nullable(),
@@ -66,7 +66,7 @@ export const walletTransactionSchema = z.object({
 export type WalletTransaction = z.infer<typeof walletTransactionSchema>;
 
 export const walletLedgerQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(10),
+  limit: z.coerce.number().int().min(1).max(100).prefault(10),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type WalletLedgerQuery = z.infer<typeof walletLedgerQuerySchema>;
@@ -100,7 +100,7 @@ export const statementQuerySchema = z.object({
   from: isoDate,
   to: isoDate,
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type StatementQuery = z.infer<typeof statementQuerySchema>;
@@ -133,9 +133,9 @@ export const statementDetailColumnSchema = z.enum(STATEMENT_DETAIL_COLUMNS);
 export type StatementDetailColumn = z.infer<typeof statementDetailColumnSchema>;
 
 export const statementRowSchema = walletTransactionSchema.extend({
-  moneyInMinor: z.number().int(),
+  moneyInMinor: z.int(),
   moneyInExact: exactAmountSchema.optional(),
-  moneyOutMinor: z.number().int(),
+  moneyOutMinor: z.int(),
   moneyOutExact: exactAmountSchema.optional(),
   context: messageContextSchema.nullable(),
 });
@@ -145,15 +145,15 @@ export const statementResponseSchema = z.object({
   currency: z.string(),
   /** Over the WHOLE filtered set, not just this page. */
   summary: z.object({
-    currentBalanceMinor: z.number().int(),
+    currentBalanceMinor: z.int(),
     currentBalanceExact: exactAmountSchema.optional(),
-    moneyInMinor: z.number().int(),
+    moneyInMinor: z.int(),
     moneyInExact: exactAmountSchema.optional(),
-    moneyOutMinor: z.number().int(),
+    moneyOutMinor: z.int(),
     moneyOutExact: exactAmountSchema.optional(),
-    netMinor: z.number().int(),
+    netMinor: z.int(),
     netExact: exactAmountSchema.optional(),
-    count: z.number().int(),
+    count: z.int(),
   }),
   /** The optional columns with a value on at least one row of the WHOLE filtered set, in CSV order (the CSV has the same ones). */
   detailColumns: z.array(statementDetailColumnSchema),
@@ -169,15 +169,15 @@ export type StatementResponse = z.infer<typeof statementResponseSchema>;
 export const walletSnapshotSchema = z.object({
   billingMode: walletBillingModeSchema,
   currency: z.string(),
-  balanceMinor: z.number().int(),
-  flatPriceMinor: z.number().int(),
+  balanceMinor: z.int(),
+  flatPriceMinor: z.int(),
   /** Wallet mode: how many messages the balance buys at the flat price. Plan mode: what is left of the plan allowance. -1 = unlimited. */
-  messagesRemaining: z.number().int(),
+  messagesRemaining: z.int(),
   /** Plan mode only: messages the wallet would cover once the allowance is used. */
-  walletBufferMessages: z.number().int().nullable(),
-  spentThisMonthMinor: z.number().int(),
+  walletBufferMessages: z.int().nullable(),
+  spentThisMonthMinor: z.int(),
   planActive: z.boolean(),
-  monthlyMessagesLimit: z.number().int(),
-  usedThisMonth: z.number().int(),
+  monthlyMessagesLimit: z.int(),
+  usedThisMonth: z.int(),
 });
 export type WalletSnapshot = z.infer<typeof walletSnapshotSchema>;

@@ -25,7 +25,7 @@ export const publicSalesDocSchema = z.object({
   seller: z.object({ name: z.string() }),
   buyer: z.object({ name: z.string().nullable(), company: z.string().nullable() }),
   currency: z.string(),
-  exponent: z.number().int(),
+  exponent: z.int(),
   taxRate: z.string(),
   discount: salesDocDiscountSchema.nullable(),
   lines: z.array(salesDocLineSchema),
@@ -33,7 +33,7 @@ export const publicSalesDocSchema = z.object({
   notes: z.string().nullable(),
   terms: z.string().nullable(),
   validUntil: z.string().nullable(),
-  sentAt: z.string().datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
   /** The buyer may accept or decline now: sent or viewed, not past its valid-until date, current revision. */
   canDecide: z.boolean(),
   /** Why not, when `canDecide` is false and the document is still open: `expired`. Null otherwise. */
@@ -41,11 +41,11 @@ export const publicSalesDocSchema = z.object({
   decision: z
     .object({
       status: z.enum(['accepted', 'declined']),
-      decidedAt: z.string().datetime(),
+      decidedAt: z.iso.datetime(),
       signerName: z.string().nullable(),
     })
     .nullable(),
-  revision: z.number().int(),
+  revision: z.int(),
 });
 export type PublicSalesDoc = z.infer<typeof publicSalesDocSchema>;
 
@@ -77,7 +77,7 @@ export type PublicDeclineInput = z.infer<typeof publicDeclineSchema>;
 
 export const publicDecisionResponseSchema = z.object({
   status: z.enum(['accepted', 'declined']),
-  decidedAt: z.string().datetime(),
+  decidedAt: z.iso.datetime(),
   /** The same call twice is the same answer: `true` when this call changed nothing because the decision was already recorded. */
   replay: z.boolean(),
 });

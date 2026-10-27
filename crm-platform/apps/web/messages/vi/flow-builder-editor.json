@@ -99,6 +99,7 @@
       "triggerGroup": "Tự động · khi tham gia nhóm",
       "triggerManual": "Ghi danh thủ công",
       "triggerKeyword": "Từ khóa",
+      "triggerAny": "Bất kỳ tin nhắn nào",
       "active": "đang hoạt động",
       "done": "hoàn tất",
       "failed": "thất bại",
@@ -130,7 +131,10 @@
         "reEngagement": "Kích hoạt lại các liên hệ không hoạt động bằng ưu đãi hoặc lời hỏi thăm được cá nhân hóa.",
         "lead": "Nuôi dưỡng khách tiềm năng mới bằng nội dung hữu ích trước khi chuyển cho bộ phận bán hàng.",
         "event": "Chương trình gửi có thời hạn xoay quanh đợt ra mắt, khuyến mãi hoặc dịp theo mùa.",
-        "default": "Hành trình WhatsApp tự động được xây dựng trong trình chỉnh sửa luồng."
+        "default": "Hành trình WhatsApp tự động được xây dựng trong trình chỉnh sửa luồng.",
+        "defaultWeb": "Chatbot trên website được tạo trong trình chỉnh sửa luồng.",
+        "defaultCall": "Cuộc gọi tự động được tạo trong trình chỉnh sửa luồng.",
+        "defaultOther": "Cuộc trò chuyện tự động được tạo trong trình chỉnh sửa luồng."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "Không có @. Liên kết sẽ là ig.me/m/thuonghieu — chạm vào sẽ mở tin nhắn riêng tới tài khoản của bạn.",
           "igMessage": "Tin nhắn WhatsApp",
           "igMessageHint": "Gửi cho khách trên WhatsApp kèm liên kết Instagram. Hỗ trợ '{{'biến'}}'.",
-          "igMessagePlaceholder": "Tiếp tục với chúng tôi trên Instagram 👇"
+          "igMessagePlaceholder": "Tiếp tục với chúng tôi trên Instagram 👇",
+          "templateFills": "Điều gì điền vào mỗi số",
+          "templateFillsHint": "Nhập nội dung cho từng số của mẫu, hoặc nhấn / để chèn thông tin liên hệ hay biến của luồng. Để trống để dùng nội dung của mẫu.",
+          "templateHeaderMedia": "Tệp tiêu đề",
+          "templateHeaderMediaHint": "Hình ảnh, video hoặc tệp ở tiêu đề của mẫu này. Cần khi mẫu không có tệp riêng.",
+          "templateHeaderMediaMissing": "Hãy thêm tệp tiêu đề: mẫu này chưa có và WhatsApp sẽ không gửi nếu thiếu."
         },
         "sequence": {
           "info": "Mỗi phản hồi được gửi theo thứ tự tới khách. Kết hợp văn bản, ảnh, video, âm thanh và tài liệu trong một nút — phù hợp cho thẻ sản phẩm hoặc bộ tài liệu hướng dẫn.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Kích hoạt chatbot khác"
+          "description": "Chuyển cuộc trò chuyện cho tác nhân AI"
         },
         "whatsapp_shop": {
           "label": "Cửa hàng WhatsApp",

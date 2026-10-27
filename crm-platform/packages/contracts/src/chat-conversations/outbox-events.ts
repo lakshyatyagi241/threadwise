@@ -25,6 +25,6 @@ export const messageReceivedPayloadSchema = z.object({
   preview: z.string().max(NOTIFICATION_PREVIEW_MAX),
   contactName: z.string().max(200).nullable(),
   /** When the message was stored (ISO). A consumer compares it with a person's last "read" moment. */
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 export type MessageReceivedPayload = z.infer<typeof messageReceivedPayloadSchema>;

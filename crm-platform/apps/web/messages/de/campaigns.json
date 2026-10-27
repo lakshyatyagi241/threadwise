@@ -315,7 +315,22 @@
         "previousTitle": "Frühere Sendungen",
         "previousHint": "Fügen Sie die Personen hinzu, an die frühere Broadcasts und Kampagnen gingen, optional nur diejenigen, die gelesen, geantwortet oder geklickt haben.",
         "previousEstimate": "{count, plural, one {Bis zu # Person aus den früheren Sendungen (Schätzwert: Wer in zwei Sendungen vorkommt, wird doppelt gezählt).} other {Bis zu # Personen aus den früheren Sendungen (Schätzwert: Wer in zwei Sendungen vorkommt, wird doppelt gezählt).}}",
-        "previousEditHint": "Ihre frühere Auswahl der Sendungen wird beim Bearbeiten nicht angezeigt: Diese Kampagne enthält ihre Empfänger bereits als Kontakte. Wählen Sie erneut aus, um weitere Personen hinzuzufügen."
+        "previousEditHint": "Ihre frühere Auswahl der Sendungen wird beim Bearbeiten nicht angezeigt: Diese Kampagne enthält ihre Empfänger bereits als Kontakte. Wählen Sie erneut aus, um weitere Personen hinzuzufügen.",
+        "emails": "E-Mails manuell",
+        "emailsHint": "Eine pro Zeile, oder durch Komma oder Semikolon getrennt.",
+        "emailsPlaceholder": "Eine E-Mail-Adresse pro Zeile",
+        "emailsCount": "{count} Adressen",
+        "emailCsvHint": "Spalten: Name, E-Mail. Jede weitere Spalte wird zu einer Variable, die Sie in der Nachricht verwenden können.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV hochladen",
+            "hint": "Importieren Sie die E-Mail-Adressen für diese Kampagne."
+          },
+          "manual": {
+            "title": "E-Mails manuell",
+            "hint": "Fügen Sie eine E-Mail-Adresse pro Zeile ein."
+          }
+        }
       },
       "message": {
         "title": "Nachricht",
@@ -432,6 +447,7 @@
       },
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
       "draftChip": "Entwurf / nicht gespeichert",
+      "draftSavedChip": "Entwurf · gespeichert",
       "steps": {
         "label": "Kampagnenschritte",
         "required": "erforderlich",
@@ -707,6 +723,8 @@
       "guided": {
         "template": "Vorlage",
         "pickTemplate": "— Vorlage auswählen —",
+        "searchTemplates": "Vorlagen nach Name oder Sprache suchen",
+        "noTemplateMatch": "Keine Vorlage passt zu Ihrer Suche.",
         "templateHint": "Nur genehmigte Vorlagen der gewählten Nummer. Die Variablen werden unten ausgefüllt.",
         "noTemplates": "Diese Nummer hat noch keine genehmigten Vorlagen. Erstellen Sie eine und warten Sie auf die Genehmigung.",
         "deliveryTitle": "Zustellung",
@@ -1363,7 +1381,6 @@
         "csvPreviewCaption": "Vorschau der gültigen Nummern in der Datei",
         "csvLine": "Zeile",
         "csvName": "Name",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Neuer Kontakt",
           "existing": "Vorhandener Kontakt",
@@ -1383,7 +1400,14 @@
         "modePrevious": "An frühere Sendungen senden",
         "previousHint": "Sprechen Sie die Personen erneut an, an die frühere Broadcasts und Kampagnen gingen, optional nur diejenigen, die gelesen, nicht gelesen, geantwortet oder geklickt haben.",
         "chipPrevious": "{count, plural, one {# frühere Sendung} other {# frühere Sendungen}} ({outcome})",
-        "filterNoConditions": "Fügen Sie eine Bedingung hinzu, um zu sehen, wie viele Kontakte passen."
+        "filterNoConditions": "Fügen Sie eine Bedingung hinzu, um zu sehen, wie viele Kontakte passen.",
+        "csvConsentCol": "Einwilligung",
+        "csvContactCol": "Kontakt",
+        "csvConsent": {
+          "optedIn": "Angemeldet",
+          "optedOut": "Abgemeldet"
+        },
+        "clearAudience": "Zielgruppe leeren"
       },
       "review": {
         "intro": "Prüfen Sie die Kosten, legen Sie fest, womit jede Vorlagenvariable gefüllt wird, und kontrollieren Sie den Broadcast.",

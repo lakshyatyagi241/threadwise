@@ -21,8 +21,8 @@ export const helpAgentStatusSchema = z.object({
   /** The caller may change the workspace setting (`help.agent.manage`). */
   canManage: z.boolean(),
   limits: z.object({
-    maxSteps: z.number().int(),
-    tasksLeftToday: z.number().int(),
+    maxSteps: z.int(),
+    tasksLeftToday: z.int(),
   }),
 });
 export type HelpAgentStatus = z.infer<typeof helpAgentStatusSchema>;
@@ -37,24 +37,24 @@ export const startHelpAgentTaskSchema = z.object({
   /** The person's interface language (a message locale). */
   locale: z.string().trim().min(2).max(12),
   /** Only the LENGTH of the task sentence is sent: the sentence itself is never stored. */
-  taskLength: z.number().int().min(1).max(HELP_AGENT_MAX_TASK_CHARS),
+  taskLength: z.int().min(1).max(HELP_AGENT_MAX_TASK_CHARS),
   /** The page path the task starts on (no query, no hash). */
   route: z.string().trim().min(1).max(300),
 });
 export type StartHelpAgentTaskInput = z.infer<typeof startHelpAgentTaskSchema>;
 
 export const helpAgentTaskStartedSchema = z.object({
-  taskId: z.string().uuid(),
-  maxSteps: z.number().int(),
+  taskId: z.guid(),
+  maxSteps: z.int(),
   expiresAt: z.string(),
 });
 export type HelpAgentTaskStarted = z.infer<typeof helpAgentTaskStartedSchema>;
 
 export const finishHelpAgentTaskSchema = z.object({
   outcome: z.enum(HELP_AGENT_OUTCOMES),
-  steps: z.number().int().min(0).max(1000),
-  confirmedActions: z.number().int().min(0).max(1000),
-  deniedActions: z.number().int().min(0).max(1000),
+  steps: z.int().min(0).max(1000),
+  confirmedActions: z.int().min(0).max(1000),
+  deniedActions: z.int().min(0).max(1000),
 });
 export type FinishHelpAgentTaskInput = z.infer<typeof finishHelpAgentTaskSchema>;
 

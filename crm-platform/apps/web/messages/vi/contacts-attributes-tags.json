@@ -1424,10 +1424,15 @@
         "by": "Người nhập"
       },
       "exports": {
-        "title": "Lần xuất",
-        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
+        "title": "Lịch sử xuất dữ liệu",
+        "hint": "Các lần xuất từ Hub, mới nhất trước, kèm nguồn của từng lần. Mỗi tệp được giữ 30 ngày để bạn và đồng đội có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
+        "source": "Nguồn",
+        "sources": {
+          "contacts": "Liên hệ",
+          "campaigns": "Chiến dịch"
+        },
         "rows": "Liên hệ",
         "selection": "Phạm vi",
         "unknown": "Không xác định",

@@ -107,7 +107,6 @@
  "POST /v2/auth/login/mfa/webauthn-options",
  "POST /v2/auth/login/workspace",
  "POST /v2/auth/partner/login",
- "POST /v2/auth/clerk/session",
  "POST /v2/auth/refresh",
  "POST /v2/auth/logout",
  "POST /v2/auth/workspaces/switch",

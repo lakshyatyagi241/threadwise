@@ -11,7 +11,7 @@ import { z } from 'zod';
 export const cursorSchema = z.string().min(1).max(512);
 
 export const paginationQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: cursorSchema.optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
 });
@@ -23,12 +23,12 @@ export type PaginationQuery = z.infer<typeof paginationQuerySchema>;
 export const pageInfoSchema = z.object({
   nextCursor: z.string().nullable(),
   hasMore: z.boolean(),
-  limit: z.number().int(),
+  limit: z.int(),
 });
 export type PageInfo = z.infer<typeof pageInfoSchema>;
 
 /** Standard list envelope: `{ data: [...], page: {...} }`. */
-export function pageResponseSchema<T extends z.ZodTypeAny>(item: T) {
+export function pageResponseSchema<T extends z.ZodType>(item: T) {
   return z.object({ data: z.array(item), page: pageInfoSchema });
 }
 

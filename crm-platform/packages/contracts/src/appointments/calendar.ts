@@ -32,7 +32,7 @@ export const calendarStatusResponseSchema = z.object({
   /** The calendar bookings are written to (`primary` until an admin picks another). */
   calendarId: z.string().nullable(),
   calendarName: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
 });
 export type CalendarStatusResponse = z.infer<typeof calendarStatusResponseSchema>;
 
@@ -52,9 +52,9 @@ export type CalendarConnectStartInput = z.infer<typeof calendarConnectStartInput
 
 export const calendarConnectStartResponseSchema = z.object({
   /** Google's consent URL: send the browser there. */
-  url: z.string().url(),
+  url: z.url(),
   /** The `state` in the URL is good for this long; after it the callback answers `expired`. */
-  expiresInSeconds: z.number().int(),
+  expiresInSeconds: z.int(),
 });
 export type CalendarConnectStartResponse = z.infer<typeof calendarConnectStartResponseSchema>;
 

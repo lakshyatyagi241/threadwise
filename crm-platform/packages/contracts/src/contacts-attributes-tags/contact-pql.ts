@@ -8,9 +8,9 @@ import { segmentRulesSchema } from '../segments/rules';
  */
 export const PQL_QUERY_MAX = 500;
 
-export const pqlRequestSchema = z
-  .object({ query: z.string().trim().min(1).max(PQL_QUERY_MAX) })
-  .strict();
+export const pqlRequestSchema = z.strictObject({
+  query: z.string().trim().min(1).max(PQL_QUERY_MAX),
+});
 export type PqlRequest = z.infer<typeof pqlRequestSchema>;
 
 export const PQL_SUMMARY_MAX = 300;

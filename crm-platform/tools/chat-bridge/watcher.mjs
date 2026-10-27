@@ -221,7 +221,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
       metrics.set('crm_slow_query_watcher_last_poll_timestamp', 'gauge', now() / 1000);
     } catch (e) {
       metrics.inc('crm_slow_query_watcher_errors_total');
-      log({ evt: 'watcher_poll_error', code: e.code ?? 'error' });
+      log({ evt: 'watcher_poll_error', code: e.code ?? 'error', msg: String(e?.message ?? e).slice(0, 300), at: String(e?.stack ?? '').split('\n')[1]?.trim().slice(0, 200) }); // a bare "error" hid why this monitor stopped
     }
   }
   return { poll, intervalMs: c.intervalMs, offenders: () => offenders, open };
@@ -229,17 +229,35 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
 
 const readSecret = (v, file) => { if (v) return v; try { return fs.readFileSync(file, 'utf8').trim(); } catch { return ''; } };
 
+// One long-lived database connection that is REPLACED when it dies. A pg Client never reconnects: once a database restart or a connection
+// reset ended the old one, the watcher polled that dead client for ever ("Client has encountered a connection error and is not queryable",
+// logged as a bare "error" every 15 s; SlowQueryWatcherDown since 26 Oct 12:36, the start of a release). `open(onDead)` makes a ready client
+// and calls `onDead` when it errors. A failure without a SQL code is a connection failure and drops the client; a SQL error keeps it.
+export function reconnectingQuery(open) {
+  let cur = null;
+  const reset = (p) => { if (cur === p) cur = null; };
+  const query = async (sql, params) => {
+    let p; p = cur ??= open(() => reset(p));
+    let c;
+    try { c = await p; } catch (e) { reset(p); throw e; }
+    try { return await c.query(sql, params); }
+    catch (e) { if (!e.code) { reset(p); Promise.resolve(c.end?.()).catch(() => {}); } throw e; }
+  };
+  query.close = async () => { const p = cur; cur = null; try { await Promise.resolve((await p)?.end?.()); } catch { /* already gone */ } };
+  return query;
+}
+
 export function startWatcher({ env, metrics, send, log, resolverFactory }) {
   const url = readSecret(env.SLOW_PG_URL, env.SLOW_PG_URL_FILE ?? '/run/secrets/slow_query_pg_url');
   if (!url) { log({ evt: 'watcher_disabled', reason: 'no SLOW_PG_URL or secret file' }); return null; }
   const { Client } = createRequire(`${process.cwd()}/`)('pg');
-  const client = new Client({ connectionString: url, application_name: 'gchat-watcher', statement_timeout: 5000 });
-  client.on('error', () => { /* reconnect on next poll */ });
-  let connected = false;
-  const query = async (sql, params) => {
-    if (!connected) { await client.connect(); await client.query('set default_transaction_read_only = on'); connected = true; }
-    return client.query(sql, params);
-  };
+  const query = reconnectingQuery(async (onDead) => {
+    const client = new Client({ connectionString: url, application_name: 'gchat-watcher', statement_timeout: 5000 });
+    client.on('error', onDead);
+    await client.connect();
+    await client.query('set default_transaction_read_only = on');
+    return client;
+  });
   // Separate OPTIONAL role for the two actions; without it the resolver only suggests and ESCALATES.
   const curl = readSecret(env.SLOW_CANCEL_PG_URL, env.SLOW_CANCEL_PG_URL_FILE ?? '/run/secrets/slow_query_cancel_pg_url');
   let db = {}, cc;
@@ -260,5 +278,5 @@ export function startWatcher({ env, metrics, send, log, resolverFactory }) {
   const dt = setInterval(() => digest.tick(), 60_000);
   dt.unref?.();
   digest.tick();
-  return { stop: () => { clearInterval(t); clearInterval(dt); client.end().catch(() => {}); cc?.end().catch(() => {}); } };
+  return { stop: () => { clearInterval(t); clearInterval(dt); query.close(); cc?.end().catch(() => {}); } };
 }

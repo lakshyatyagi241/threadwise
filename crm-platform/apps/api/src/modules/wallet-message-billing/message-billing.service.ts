@@ -164,6 +164,9 @@ export class MessageBillingService {
         shortfallMinor = decision.shortfallMinor + (decision.chargedMinor - posted.appliedMinor);
         txRowId = posted.transactionRowId;
         balanceAfter = posted.balanceAfterMinor;
+        // The send was held when it was allowed (WalletGateService.assertCanSend): the charge settles that hold, in this transaction.
+        await this.repo.settleHold(tx, input.orgId, currency);
+        await this.repo.capReserved(tx, input.orgId, currency);
       } else {
         freeReason = decision.reason;
         shortfallMinor = decision.shortfallMinor;

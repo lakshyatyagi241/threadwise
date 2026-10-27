@@ -14,7 +14,7 @@ export const signupRequestSchema = z.object({
   /** E.164. Required: a mobile number verified by a one-time code (unless an operator turned that off). */
   phone: phoneSchema.optional(),
   password: passwordSchema,
-  acceptTerms: z.literal(true, { errorMap: () => ({ message: 'You must accept the terms.' }) }),
+  acceptTerms: z.literal(true, { error: () => 'You must accept the terms.' }),
   referralCode: z
     .string()
     .trim()
@@ -40,9 +40,9 @@ export const signupStartResponseSchema = z.object({
   token: z.string(),
   /** "a••••a@example.com" — never the full address. */
   maskedEmail: z.string(),
-  expiresInSeconds: z.number().int().positive(),
-  resendCooldownSeconds: z.number().int().nonnegative(),
-  codeLength: z.number().int().min(4).max(8),
+  expiresInSeconds: z.int().positive(),
+  resendCooldownSeconds: z.int().nonnegative(),
+  codeLength: z.int().min(4).max(8),
 });
 export type SignupStartResponse = z.infer<typeof signupStartResponseSchema>;
 
@@ -60,15 +60,15 @@ export const signupResendEmailCodeRequestSchema = z.object({ token: z.string().m
 export type SignupResendEmailCodeRequest = z.infer<typeof signupResendEmailCodeRequestSchema>;
 
 export const signupResendEmailCodeResponseSchema = z.object({
-  expiresInSeconds: z.number().int().positive(),
-  resendCooldownSeconds: z.number().int().nonnegative(),
+  expiresInSeconds: z.int().positive(),
+  resendCooldownSeconds: z.int().nonnegative(),
 });
 export type SignupResendEmailCodeResponse = z.infer<typeof signupResendEmailCodeResponseSchema>;
 
 export const signupSetPasswordRequestSchema = z.object({
   token: z.string().min(1),
   password: passwordSchema,
-  acceptTerms: z.literal(true, { errorMap: () => ({ message: 'You must accept the terms.' }) }),
+  acceptTerms: z.literal(true, { error: () => 'You must accept the terms.' }),
   referralCode: z
     .string()
     .trim()
@@ -83,9 +83,9 @@ export const otpRequiredSchema = z.object({
   challengeId: z.string(),
   /** "+91 •••• ••21" — never the full number. */
   maskedPhone: z.string(),
-  expiresInSeconds: z.number().int().positive(),
-  resendCooldownSeconds: z.number().int().nonnegative(),
-  codeLength: z.number().int().min(4).max(8),
+  expiresInSeconds: z.int().positive(),
+  resendCooldownSeconds: z.int().nonnegative(),
+  codeLength: z.int().min(4).max(8),
 });
 export type OtpRequired = z.infer<typeof otpRequiredSchema>;
 
@@ -105,8 +105,8 @@ export const signupResendOtpRequestSchema = z.object({ challengeId: z.string().m
 export type SignupResendOtpRequest = z.infer<typeof signupResendOtpRequestSchema>;
 
 export const signupResendOtpResponseSchema = z.object({
-  expiresInSeconds: z.number().int().positive(),
-  resendCooldownSeconds: z.number().int().nonnegative(),
+  expiresInSeconds: z.int().positive(),
+  resendCooldownSeconds: z.int().nonnegative(),
 });
 
 /** Public, unauthenticated: drives the guest pages (TW-AUTH-019/021/023). */
@@ -121,7 +121,6 @@ export const authPageContentSchema = z.object({
     .optional(),
   /** https URL; uploads move to object storage with the storage adapter. */
   mediaUrl: z
-    .string()
     .url()
     .max(2048)
     .refine((u) => u.startsWith('https://'), 'must be an https address')
@@ -145,7 +144,7 @@ export const registrationConfigResponseSchema = z.object({
   appName: z.string(),
   registrationOpen: z.boolean(),
   emailVerification: z.enum(['off', 'banner', 'block']),
-  trialDays: z.number().int().nonnegative(),
+  trialDays: z.int().nonnegative(),
   /** False when an administrator turned "keep me signed in" off; the checkbox is then hidden. */
   rememberMeEnabled: z.boolean(),
   otp: z.object({ enabled: z.boolean() }),
@@ -159,7 +158,7 @@ export const registrationConfigResponseSchema = z.object({
   social: z.object({ google: z.boolean(), facebook: z.boolean() }),
   defaultCountryIso: z.string().length(2).nullable(),
   authPages: z.object({
-    variant: z.number().int().min(1).max(6),
+    variant: z.int().min(1).max(6),
     login: authPageContentSchema,
     register: authPageContentSchema,
     forgot: authPageContentSchema,
@@ -174,9 +173,9 @@ export const registrationConfigResponseSchema = z.object({
     }),
     /** Optional showcase copy for the split layout (hero text, stats, feature chips). */
     extra: z.object({
-      login: z.record(z.string().max(600)),
-      register: z.record(z.string().max(600)),
-      forgot: z.record(z.string().max(600)).default({}),
+      login: z.record(z.string(), z.string().max(600)),
+      register: z.record(z.string(), z.string().max(600)),
+      forgot: z.record(z.string(), z.string().max(600)).default({}),
     }),
   }),
   links: z.object({

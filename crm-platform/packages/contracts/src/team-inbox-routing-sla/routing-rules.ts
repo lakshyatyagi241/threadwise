@@ -54,33 +54,30 @@ export const ROUTING_TARGETS_MAX = 50;
 export const ROUTING_LIST_MAX = 100;
 
 /** When a rule applies. Every part that is set must hold (AND); an empty part is not a condition. A rule with no condition is a catch-all. */
-export const routingConditionsSchema = z
-  .object({
-    /** Whether the customer is a new or a returning contact. Known at arrival, unlike the saved details below. */
-    contactKind: routingContactKindSchema.default('any'),
-    /**
-     * Fields of the customer's contact that are ALREADY SAVED, evaluated with the segments rule engine (AND/OR groups, tags, owner, custom
-     * fields). A contact created by this very message has nothing saved yet (stage "new", no tags, no owner, no custom field), so a condition
-     * on a saved detail matches only contacts that already have it.
-     */
-    contact: segmentRulesSchema.nullable().default(null),
-    /** The channel the customer wrote on. */
-    channelKinds: z.array(channelKindSchema).max(10).default([]),
-    /** Words in the customer's first message (case-insensitive substring): any of them, or all of them. */
-    keywords: z
-      .object({
-        mode: z.enum(['any', 'all']).default('any'),
-        words: z.array(z.string().trim().min(1).max(100)).min(1).max(ROUTING_KEYWORDS_MAX),
-      })
-      .strict()
-      .nullable()
-      .default(null),
-    /** The customer's language (`en`, `ar`, ...), as the translation reading stored it; unknown language never matches. */
-    languages: z.array(z.string().trim().min(2).max(16)).max(20).default([]),
-    /** Whether the message arrives inside or outside the workspace's business hours. */
-    businessHours: z.enum(['any', 'inside', 'outside']).default('any'),
-  })
-  .strict();
+export const routingConditionsSchema = z.strictObject({
+  /** Whether the customer is a new or a returning contact. Known at arrival, unlike the saved details below. */
+  contactKind: routingContactKindSchema.default('any'),
+  /**
+   * Fields of the customer's contact that are ALREADY SAVED, evaluated with the segments rule engine (AND/OR groups, tags, owner, custom
+   * fields). A contact created by this very message has nothing saved yet (stage "new", no tags, no owner, no custom field), so a condition
+   * on a saved detail matches only contacts that already have it.
+   */
+  contact: segmentRulesSchema.nullable().default(null),
+  /** The channel the customer wrote on. */
+  channelKinds: z.array(channelKindSchema).max(10).default([]),
+  /** Words in the customer's first message (case-insensitive substring): any of them, or all of them. */
+  keywords: z
+    .strictObject({
+      mode: z.enum(['any', 'all']).default('any'),
+      words: z.array(z.string().trim().min(1).max(100)).min(1).max(ROUTING_KEYWORDS_MAX),
+    })
+    .nullable()
+    .default(null),
+  /** The customer's language (`en`, `ar`, ...), as the translation reading stored it; unknown language never matches. */
+  languages: z.array(z.string().trim().min(2).max(16)).max(20).default([]),
+  /** Whether the message arrives inside or outside the workspace's business hours. */
+  businessHours: z.enum(['any', 'inside', 'outside']).default('any'),
+});
 export type RoutingConditions = z.infer<typeof routingConditionsSchema>;
 
 /**
@@ -90,7 +87,7 @@ export type RoutingConditions = z.infer<typeof routingConditionsSchema>;
  * the set is available and a team is listed, the conversation goes to that team's queue (no person) instead.
  */
 export const routingAssignSchema = z
-  .object({
+  .strictObject({
     strategy: routingStrategySchema,
     userIds: z.array(uuidSchema).max(ROUTING_TARGETS_MAX).default([]),
     teamIds: z.array(uuidSchema).max(ROUTING_TARGETS_MAX).default([]),
@@ -100,7 +97,6 @@ export const routingAssignSchema = z
      */
     everyone: z.boolean().default(false),
   })
-  .strict()
   .superRefine((v, ctx) => {
     if (v.everyone) {
       if (v.userIds.length + v.teamIds.length > 0) {
@@ -168,15 +164,14 @@ export const ROUTING_ESCALATION_MAX_MINUTES = 1440;
  * cancels it.
  */
 export const routingEscalationSchema = z
-  .object({
-    minutes: z.number().int().min(1).max(ROUTING_ESCALATION_MAX_MINUTES),
+  .strictObject({
+    minutes: z.int().min(1).max(ROUTING_ESCALATION_MAX_MINUTES),
     reassign: z.boolean(),
     priority: conversationPrioritySchema.nullable(),
   })
-  .strict()
   .refine((v) => v.reassign || v.priority !== null, {
-    message: 'Reassign it, set a priority, or both.',
     path: ['reassign'],
+    error: 'Reassign it, set a priority, or both.',
   });
 export type RoutingEscalation = z.infer<typeof routingEscalationSchema>;
 
@@ -242,21 +237,21 @@ export const routingRuleSchema = z.object({
   /** "Only for conversations that match" is off: the rule applies to every conversation and `conditions` (kept) are ignored. */
   appliesToAll: z.boolean(),
   /** Position in the order rules are tried (1 = first). */
-  position: z.number().int().positive(),
-  firedCount: z.number().int().nonnegative(),
-  lastFiredAt: z.string().datetime().nullable(),
+  position: z.int().positive(),
+  firedCount: z.int().nonnegative(),
+  lastFiredAt: z.iso.datetime().nullable(),
   /** Agents or teams of the action that no longer exist or can no longer take conversations (the rule skips them). */
-  unavailableTargets: z.number().int().nonnegative(),
-  rowVersion: z.number().int().positive(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  unavailableTargets: z.int().nonnegative(),
+  rowVersion: z.int().positive(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type RoutingRule = z.infer<typeof routingRuleSchema>;
 
 /** `GET /inbox/routing/rules`: search by name, page with the cursor. Ordered by priority. */
 export const listRoutingRulesQuerySchema = z.object({
   q: z.string().trim().min(1).max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(ROUTING_LIST_MAX).default(50),
+  limit: z.coerce.number().int().min(1).max(ROUTING_LIST_MAX).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListRoutingRulesQuery = z.infer<typeof listRoutingRulesQuerySchema>;
@@ -265,8 +260,8 @@ export const routingRuleListResponseSchema = z.object({
   data: z.array(routingRuleSchema),
   page: pageInfoSchema,
   /** All rules of the workspace, for "n of limit". `limit` null = unlimited. */
-  total: z.number().int().nonnegative(),
-  limit: z.number().int().nonnegative().nullable(),
+  total: z.int().nonnegative(),
+  limit: z.int().nonnegative().nullable(),
 });
 export type RoutingRuleListResponse = z.infer<typeof routingRuleListResponseSchema>;
 
@@ -297,10 +292,10 @@ export function hasRoutingConditions(c: RoutingConditions): boolean {
 
 /** `POST /inbox/routing/rules`. `activate: true` is the form's "Save and Activate"; the default saves it switched off. */
 export const createRoutingRuleSchema = z
-  .object({
+  .strictObject({
     name: nameSchema,
     description: descriptionSchema.default(''),
-    conditions: routingConditionsSchema.default({}),
+    conditions: routingConditionsSchema.prefault({}),
     assign: routingAssignSchema.nullable().default(null),
     markSpam: z.boolean().default(false),
     priority: conversationPrioritySchema.nullable().default(null),
@@ -314,7 +309,6 @@ export const createRoutingRuleSchema = z
     appliesToAll: z.boolean().default(false),
     isActive: z.boolean().default(false),
   })
-  .strict()
   .superRefine(conditionsRefine)
   .superRefine((v, ctx) => {
     if (!hasRoutingActions(v)) {
@@ -328,25 +322,23 @@ export const createRoutingRuleSchema = z
 export type CreateRoutingRuleInput = z.infer<typeof createRoutingRuleSchema>;
 
 /** `PATCH /inbox/routing/rules/:id`: any subset, with the row version read. A body of only `isActive` is the list's toggle. */
-export const updateRoutingRuleSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    name: nameSchema.optional(),
-    description: descriptionSchema.optional(),
-    conditions: routingConditionsSchema.optional(),
-    assign: routingAssignSchema.nullable().optional(),
-    markSpam: z.boolean().optional(),
-    priority: conversationPrioritySchema.nullable().optional(),
-    addTags: z.array(routingTagSchema).max(ROUTING_TAGS_MAX).optional(),
-    escalation: routingEscalationSchema.nullable().optional(),
-    autoReply: routingAutoReplySchema.nullable().optional(),
-    triggerFlowId: uuidSchema.nullable().optional(),
-    stopOnMatch: z.boolean().optional(),
-    isFallback: z.boolean().optional(),
-    appliesToAll: z.boolean().optional(),
-    isActive: z.boolean().optional(),
-  })
-  .strict();
+export const updateRoutingRuleSchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  name: nameSchema.optional(),
+  description: descriptionSchema.optional(),
+  conditions: routingConditionsSchema.optional(),
+  assign: routingAssignSchema.nullable().optional(),
+  markSpam: z.boolean().optional(),
+  priority: conversationPrioritySchema.nullable().optional(),
+  addTags: z.array(routingTagSchema).max(ROUTING_TAGS_MAX).optional(),
+  escalation: routingEscalationSchema.nullable().optional(),
+  autoReply: routingAutoReplySchema.nullable().optional(),
+  triggerFlowId: uuidSchema.nullable().optional(),
+  stopOnMatch: z.boolean().optional(),
+  isFallback: z.boolean().optional(),
+  appliesToAll: z.boolean().optional(),
+  isActive: z.boolean().optional(),
+});
 export type UpdateRoutingRuleInput = z.infer<typeof updateRoutingRuleSchema>;
 
 /**
@@ -354,11 +346,10 @@ export type UpdateRoutingRuleInput = z.infer<typeof updateRoutingRuleSchema>;
  * theirs. Dragging inside one loaded page therefore never disturbs rules on other pages.
  */
 export const reorderRoutingRulesSchema = z
-  .object({ ids: z.array(uuidSchema).min(2).max(ROUTING_LIST_MAX) })
-  .strict()
+  .strictObject({ ids: z.array(uuidSchema).min(2).max(ROUTING_LIST_MAX) })
   .refine((v) => new Set(v.ids).size === v.ids.length, {
-    message: 'Each rule once',
     path: ['ids'],
+    error: 'Each rule once',
   });
 export type ReorderRoutingRulesInput = z.infer<typeof reorderRoutingRulesSchema>;
 
@@ -372,7 +363,7 @@ export const routingSettingsSchema = z.object({
   keepContactAgent: z.boolean(),
 });
 export type RoutingSettings = z.infer<typeof routingSettingsSchema>;
-export const updateRoutingSettingsSchema = routingSettingsSchema.strict();
+export const updateRoutingSettingsSchema = z.strictObject(routingSettingsSchema.shape);
 export type UpdateRoutingSettingsInput = z.infer<typeof updateRoutingSettingsSchema>;
 
 // --- "Try it": the dry run ---------------------------------------------------------------------------------------------------
@@ -381,18 +372,16 @@ export type UpdateRoutingSettingsInput = z.infer<typeof updateRoutingSettingsSch
  * `POST /inbox/routing/test`: which step of the arrival pipeline would decide for this contact, channel and message, and why. It runs the
  * engine's own decision code in a read-only transaction: nothing is assigned, counted, moved or sent. Needs `inbox.settings.read`.
  */
-export const routingTestRequestSchema = z
-  .object({
-    /** The contact (uuid) the sample conversation belongs to; omitted = a brand-new contact nobody knows yet. */
-    contactId: uuidSchema.nullable().default(null),
-    channelKind: channelKindSchema,
-    messageText: z.string().trim().max(2000).default(''),
-    /** The customer's language, when the sample should have one. */
-    language: z.string().trim().min(2).max(16).nullable().default(null),
-    /** Pretend the message arrives inside/outside business hours; null = decide from the clock and the saved hours now. */
-    outsideHours: z.boolean().nullable().default(null),
-  })
-  .strict();
+export const routingTestRequestSchema = z.strictObject({
+  /** The contact (uuid) the sample conversation belongs to; omitted = a brand-new contact nobody knows yet. */
+  contactId: uuidSchema.nullable().default(null),
+  channelKind: channelKindSchema,
+  messageText: z.string().trim().max(2000).default(''),
+  /** The customer's language, when the sample should have one. */
+  language: z.string().trim().min(2).max(16).nullable().default(null),
+  /** Pretend the message arrives inside/outside business hours; null = decide from the clock and the saved hours now. */
+  outsideHours: z.boolean().nullable().default(null),
+});
 export type RoutingTestRequest = z.infer<typeof routingTestRequestSchema>;
 
 export const ROUTING_TEST_PARTS = [
@@ -457,7 +446,7 @@ export const routingTestResponseSchema = z.object({
     kind: z.enum(['new', 'returning']).nullable(),
     stage: z.string().nullable(),
     hasOwner: z.boolean(),
-    tagCount: z.number().int().nonnegative(),
+    tagCount: z.int().nonnegative(),
   }),
   /** Whether the sample counted as outside business hours. */
   outsideHours: z.boolean(),

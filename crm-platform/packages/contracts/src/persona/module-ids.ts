@@ -40,7 +40,9 @@ export const moduleIdSchema = z
       const area = MODULE_AREAS[kind];
       return area === undefined || id.startsWith(`${kind}:${area}.`);
     },
-    { message: 'unknown area for this module kind' },
+    {
+      error: 'unknown area for this module kind',
+    },
   );
 export type ModuleId = string;
 

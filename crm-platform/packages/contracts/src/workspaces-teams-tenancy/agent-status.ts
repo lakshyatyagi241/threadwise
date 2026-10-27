@@ -40,17 +40,15 @@ export const personalWorkingHoursSchema = z.object({
   /** "Automate my status": outside the hours the person is Away by themselves. */
   automate: z.boolean(),
   /** IANA zone the hours are in. */
-  timezone: z
-    .string()
-    .min(1)
-    .max(64)
-    .refine(isIanaZone, { message: 'Not an IANA timezone.' }),
+  timezone: z.string().min(1).max(64).refine(isIanaZone, {
+    error: 'Not an IANA timezone.',
+  }),
   days: businessHoursDaysSchema,
 });
 export type PersonalWorkingHours = z.infer<typeof personalWorkingHoursSchema>;
 
 /** `PUT /workspace/members/me/working-hours` and `PUT /workspace/members/:id/working-hours`. */
-export const updateMemberWorkingHoursSchema = personalWorkingHoursSchema.strict();
+export const updateMemberWorkingHoursSchema = z.strictObject(personalWorkingHoursSchema.shape);
 export type UpdateMemberWorkingHoursInput = z.infer<typeof updateMemberWorkingHoursSchema>;
 
 /** `GET /workspace/members/me/working-hours` and `GET /workspace/members/:id/working-hours`. */
@@ -73,7 +71,7 @@ export const memberWorkingHoursSchema = z.object({
   status: z.object({
     state: agentStatusStateSchema,
     reason: agentStatusReasonSchema,
-    changesAt: z.string().datetime().nullable(),
+    changesAt: z.iso.datetime().nullable(),
   }),
 });
 export type MemberWorkingHours = z.infer<typeof memberWorkingHoursSchema>;
@@ -89,7 +87,7 @@ export const agentStatusSchema = z.object({
   /** The person's own choice is what decides (reason `manual`). */
   manual: z.boolean(),
   /** When the status changes by itself (next schedule boundary, or the end of a manual choice that expires); null = it does not. */
-  changesAt: z.string().datetime().nullable(),
+  changesAt: z.iso.datetime().nullable(),
   /** Reason `leave`: the last day away (workspace calendar), null = open-ended. */
   leaveUntil: z.string().nullable(),
   hours: z.object({

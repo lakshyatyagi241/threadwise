@@ -103,47 +103,42 @@ export const assignmentTakesCustom = (subject: AssignmentSubject, field: string)
 
 // --- the rule tree --------------------------------------------------------------------------------------------------------------
 
-const conditionShape = z
-  .object({
-    type: z.literal('condition'),
-    field: z
-      .string()
-      .max(110)
-      .refine((f) => BUILTIN_FIELD.test(f) || CUSTOM_FIELD.test(f) || COMPANY_FIELD.test(f), {
-        message: 'unknown field',
-      }),
-    operator: segmentOperatorSchema,
-    value: segmentValueSchema.optional(),
-  })
-  .strict();
+const conditionShape = z.strictObject({
+  type: z.literal('condition'),
+  field: z
+    .string()
+    .max(110)
+    .refine((f) => BUILTIN_FIELD.test(f) || CUSTOM_FIELD.test(f) || COMPANY_FIELD.test(f), {
+      error: 'unknown field',
+    }),
+  operator: segmentOperatorSchema,
+  value: segmentValueSchema.optional(),
+});
 
 const combinator = z.enum(['and', 'or']);
-const kids = <T extends z.ZodTypeAny>(item: T) =>
-  z.array(item).min(1).max(SEGMENT_MAX_GROUP_CHILDREN);
+const kids = <T extends z.ZodType>(item: T) => z.array(item).min(1).max(SEGMENT_MAX_GROUP_CHILDREN);
 
 // Structural depth limit (three levels, no recursion), as for segments.
-const groupLevel3 = z
-  .object({ type: z.literal('group'), combinator, children: kids(conditionShape) })
-  .strict();
-const groupLevel2 = z
-  .object({
-    type: z.literal('group'),
-    combinator,
-    children: kids(z.discriminatedUnion('type', [conditionShape, groupLevel3])),
-  })
-  .strict();
-const groupLevel1 = z
-  .object({
-    type: z.literal('group'),
-    combinator,
-    children: kids(z.discriminatedUnion('type', [conditionShape, groupLevel2])),
-  })
-  .strict();
+const groupLevel3 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: kids(conditionShape),
+});
+const groupLevel2 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: kids(z.discriminatedUnion('type', [conditionShape, groupLevel3])),
+});
+const groupLevel1 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: kids(z.discriminatedUnion('type', [conditionShape, groupLevel2])),
+});
 
 export const assignmentRulesSchema = groupLevel1.superRefine((rules, ctx) => {
   if (collectConditions(rules as SegmentGroup).length > SEGMENT_MAX_CONDITIONS) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       message: `at most ${SEGMENT_MAX_CONDITIONS} conditions per rule`,
     });
   }
@@ -231,17 +226,17 @@ const ruleBody = {
 export const createAssignmentRuleSchema = z
   .object(ruleBody)
   .refine((v) => v.userIds.length + v.teamIds.length > 0, {
-    message: 'Name at least one person or team',
     path: ['userIds'],
+    error: 'Name at least one person or team',
   })
   .refine((v) => v.strategy !== 'fixed' || (v.userIds.length === 1 && v.teamIds.length === 0), {
-    message: 'A specific-user rule names exactly one person',
     path: ['userIds'],
+    error: 'A specific-user rule names exactly one person',
   });
 export type CreateAssignmentRuleInput = z.infer<typeof createAssignmentRuleSchema>;
 
 export const updateAssignmentRuleSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   name: ruleBody.name.optional(),
   description: z.string().trim().max(500).optional(),
   rules: assignmentRulesSchema.nullable().optional(),
@@ -275,17 +270,17 @@ export const assignmentRuleSchema = z.object({
   /** True when the rule has no condition: it matches everything and runs last. */
   isFallback: z.boolean(),
   /** Place in the list of its module (drag order, every rule). */
-  position: z.number().int(),
+  position: z.int(),
   /** Priority among the ACTIVE rules of its module (1 = runs first, fallbacks last); null for an inactive rule. */
-  priority: z.number().int().nullable(),
-  firedCount: z.number().int(),
-  lastFiredAt: z.string().datetime().nullable(),
+  priority: z.int().nullable(),
+  firedCount: z.int(),
+  lastFiredAt: z.iso.datetime().nullable(),
   /** Conditions that point at something deleted (a removed property, tag or person): they match nothing until fixed. */
-  brokenConditions: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  brokenConditions: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   lastModifiedBy: z.object({ id: uuidSchema, name: z.string() }).nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type AssignmentRule = z.infer<typeof assignmentRuleSchema>;
 
@@ -392,7 +387,7 @@ export const assignmentRunSchema = z.object({
   origin: z.string(),
   trigger: z.enum(['created', 'updated']),
   trace: z.array(assignmentTraceEntrySchema),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type AssignmentRun = z.infer<typeof assignmentRunSchema>;
 
@@ -402,7 +397,7 @@ export const listAssignmentRunsQuerySchema = z.object({
   recordId: uuidSchema.optional(),
   outcome: z.enum(ASSIGNMENT_RUN_OUTCOMES).optional(),
   cursor: z.string().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type ListAssignmentRunsQuery = z.infer<typeof listAssignmentRunsQuerySchema>;
 

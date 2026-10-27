@@ -172,7 +172,8 @@
         "type": "ประเภท",
         "members": "สมาชิก",
         "permissions": "สิทธิ์",
-        "lastEdited": "แก้ไขล่าสุด",
+        "lastEdited": "แก้ไขล่าสุดเมื่อ",
+        "lastEditedBy": "โดย {name}",
         "actions": "การดำเนินการ"
       },
       "row": {

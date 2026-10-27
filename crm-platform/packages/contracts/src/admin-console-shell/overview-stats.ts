@@ -5,7 +5,7 @@ import { z } from 'zod';
  * each tool card, the plan card and the recent activity. Every figure is the caller's own workspace. A number that could not be
  * read is `null` and the card falls back to its plain caption (Reference wrapped each lookup in a try and showed 0).
  */
-const count = z.number().int().nullable();
+const count = z.int().nullable();
 
 export const overviewActivitySchema = z.object({
   at: z.string(),

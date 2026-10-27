@@ -51,7 +51,7 @@ export const CALL_INGEST_MAX_BATCH = 100;
 /** The longest a list row's notes preview runs. */
 export const CALL_NOTES_PREVIEW_MAX = 140;
 
-const startedAt = z.string().datetime({ offset: true });
+const startedAt = z.iso.datetime({ offset: true });
 const phoneText = z.string().trim().min(3).max(32);
 
 // --- the entry as the API returns it -------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ export const callLogEntrySchema = z.object({
   /** The outcome as the workspace's Phone activity lists it (a custom outcome counts as `outcome` in reports); null on an older entry. */
   outcomeOption: activityOptionRefSchema.nullable().optional(),
   startedAt: z.string(),
-  durationSec: z.number().int().nonnegative(),
+  durationSec: z.int().nonnegative(),
   contactId: uuidSchema.nullable(),
   contactName: z.string().nullable(),
   /** E.164 with the plus; null for a caller who withheld the number. */
@@ -80,7 +80,7 @@ export const callLogEntrySchema = z.object({
   createdById: uuidSchema.nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   /** The caller may edit or delete this entry now (their own manual entry inside the window, or call.logging.manage). */
   editable: z.boolean(),
 });
@@ -113,7 +113,7 @@ export const logCallInputSchema = z
     /** A current outcome of the Phone activity (Settings > Sales Activities). */
     outcomeOptionId: uuidSchema.optional(),
     startedAt: startedAt.optional(),
-    durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
+    durationSec: z.int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
     notes: z.string().trim().max(CALL_NOTES_MAX).optional(),
     ourPhone: phoneText.optional(),
     numberLabel: z.string().trim().max(80).optional(),
@@ -125,12 +125,12 @@ export const logCallInputSchema = z
     suggestStageNudge: z.boolean().default(false),
   })
   .refine((v) => v.contactId !== undefined || v.customerPhone !== undefined, {
-    message: 'Give the contact or the phone number.',
     path: ['contactId'],
+    error: 'Give the contact or the phone number.',
   })
   .refine((v) => v.outcome !== undefined || v.outcomeOptionId !== undefined, {
-    message: 'Give the outcome.',
     path: ['outcome'],
+    error: 'Give the outcome.',
   });
 export type LogCallInput = z.infer<typeof logCallInputSchema>;
 
@@ -159,17 +159,17 @@ export const updateCallLogEntryInputSchema = z.object({
   outcomeOptionId: uuidSchema.optional(),
   direction: z.enum(CALL_ENTRY_DIRECTIONS).optional(),
   startedAt: startedAt.optional(),
-  durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).optional(),
+  durationSec: z.int().min(0).max(CALL_MAX_DURATION_SEC).optional(),
   /** `null` clears the notes. */
   notes: z.string().trim().max(CALL_NOTES_MAX).nullable().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateCallLogEntryInput = z.infer<typeof updateCallLogEntryInputSchema>;
 
 // --- the contact's calls -------------------------------------------------------------------------------------------------------
 
 export const contactCallsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
   source: callLogSourceSchema.optional(),
 });
@@ -182,17 +182,17 @@ export const callLoggingSettingsSchema = z.object({
   /** Off by default: a call from a number nobody knows is not stored, so a personal call never creates a record about a stranger. */
   createContactsFromUnknownCallers: z.boolean(),
   /** How long the person who logged a call may still edit or delete it (1 to 720 hours). */
-  editWindowHours: z.number().int().min(1).max(720),
-  rowVersion: z.number().int().positive().nullable(),
+  editWindowHours: z.int().min(1).max(720),
+  rowVersion: z.int().positive().nullable(),
   updatedAt: z.string().nullable(),
 });
 export type CallLoggingSettings = z.infer<typeof callLoggingSettingsSchema>;
 
 export const updateCallLoggingSettingsInputSchema = z.object({
   createContactsFromUnknownCallers: z.boolean(),
-  editWindowHours: z.number().int().min(1).max(720),
+  editWindowHours: z.int().min(1).max(720),
   /** Omit on the first save. */
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateCallLoggingSettingsInput = z.infer<typeof updateCallLoggingSettingsInputSchema>;
 
@@ -217,7 +217,7 @@ export const ingestCallEntrySchema = z.object({
   deviceCallId: z.string().trim().min(1).max(100),
   direction: z.enum(CALL_ENTRY_DIRECTIONS),
   startedAt,
-  durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC),
+  durationSec: z.int().min(0).max(CALL_MAX_DURATION_SEC),
   customerPhone: phoneText,
   /** From the phone's call log. Ignored when `outcome` is given. */
   deviceCallType: z.enum(DEVICE_CALL_TYPES).optional(),
@@ -259,7 +259,7 @@ export type IngestReason = (typeof INGEST_REASONS)[number];
 
 export const ingestResultSchema = z.object({
   /** The position of the entry in the request. */
-  index: z.number().int().nonnegative(),
+  index: z.int().nonnegative(),
   status: z.enum(INGEST_STATUSES),
   id: uuidSchema.nullable(),
   contactId: uuidSchema.nullable(),
@@ -270,10 +270,10 @@ export type IngestResult = z.infer<typeof ingestResultSchema>;
 export const ingestCallsResultSchema = z.object({
   results: z.array(ingestResultSchema),
   counts: z.object({
-    created: z.number().int().nonnegative(),
-    duplicate: z.number().int().nonnegative(),
-    ignored: z.number().int().nonnegative(),
-    rejected: z.number().int().nonnegative(),
+    created: z.int().nonnegative(),
+    duplicate: z.int().nonnegative(),
+    ignored: z.int().nonnegative(),
+    rejected: z.int().nonnegative(),
   }),
 });
 export type IngestCallsResult = z.infer<typeof ingestCallsResultSchema>;
@@ -348,8 +348,8 @@ export const clickToCallInputSchema = z
     purpose: z.enum(['service', 'marketing']).default('service'),
   })
   .refine((v) => v.contactId !== undefined || v.customerPhone !== undefined, {
-    message: 'Give the contact or the phone number.',
     path: ['contactId'],
+    error: 'Give the contact or the phone number.',
   });
 export type ClickToCallInput = z.infer<typeof clickToCallInputSchema>;
 
@@ -368,8 +368,8 @@ export const callCheckInputSchema = z
     purpose: z.enum(['service', 'marketing']).default('service'),
   })
   .refine((v) => v.contactId !== undefined || v.customerPhone !== undefined, {
-    message: 'Give the contact or the phone number.',
     path: ['contactId'],
+    error: 'Give the contact or the phone number.',
   });
 export type CallCheckInput = z.infer<typeof callCheckInputSchema>;
 
@@ -411,7 +411,7 @@ export const telephonyCallEventSchema = z.object({
     from: z.string().max(40).nullable().optional(),
     to: z.string().max(40).nullable().optional(),
     startedAt,
-    durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
+    durationSec: z.int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
     recordingRef: z.string().max(500).nullable().optional(),
   }),
 });

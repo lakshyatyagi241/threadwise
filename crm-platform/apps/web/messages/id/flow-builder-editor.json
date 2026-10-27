@@ -99,6 +99,7 @@
       "triggerGroup": "Otomatis · saat bergabung grup",
       "triggerManual": "Pendaftaran manual",
       "triggerKeyword": "Kata kunci",
+      "triggerAny": "Pesan apa pun",
       "active": "aktif",
       "done": "selesai",
       "failed": "gagal",
@@ -130,7 +131,10 @@
         "reEngagement": "Mengaktifkan kembali kontak yang tidak aktif dengan penawaran yang dipersonalisasi atau sapaan.",
         "lead": "Memelihara prospek baru dengan sentuhan edukatif sebelum diserahkan ke sales.",
         "event": "Siaran terbatas waktu seputar peluncuran, penjualan, atau momen musiman.",
-        "default": "Perjalanan WhatsApp otomatis yang dibangun di editor alur."
+        "default": "Perjalanan WhatsApp otomatis yang dibangun di editor alur.",
+        "defaultWeb": "Bot obrolan situs web yang dibuat di editor alur.",
+        "defaultCall": "Panggilan otomatis yang dibuat di editor alur.",
+        "defaultOther": "Percakapan otomatis yang dibuat di editor alur."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "Tanpa @. Tautan menjadi ig.me/m/yourbrand — mengetuknya membuka DM ke akun Anda.",
           "igMessage": "Pesan WhatsApp",
           "igMessageHint": "Dikirim ke pelanggan di WhatsApp dengan tautan Instagram. Mendukung '{{'variables'}}'.",
-          "igMessagePlaceholder": "Lanjutkan bersama kami di Instagram 👇"
+          "igMessagePlaceholder": "Lanjutkan bersama kami di Instagram 👇",
+          "templateFills": "Apa yang mengisi tiap nomor",
+          "templateFillsHint": "Ketik teks untuk setiap nomor pada templat, atau tekan / untuk menyisipkan detail kontak atau variabel alur. Biarkan kosong untuk memakai isi templat.",
+          "templateHeaderMedia": "File header",
+          "templateHeaderMediaHint": "Gambar, video, atau file di header templat ini. Diperlukan jika templat tidak punya file sendiri.",
+          "templateHeaderMediaMissing": "Tambahkan file header: templat ini tidak punya, dan WhatsApp tidak akan mengirimnya tanpa file."
         },
         "sequence": {
           "info": "Setiap balasan dikirim berurutan ke pelanggan. Gabungkan teks, gambar, video, audio, dan dokumen dalam satu node — cocok untuk kartu produk atau kit onboarding.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Picu chatbot lain"
+          "description": "Serahkan obrolan ke agen AI"
         },
         "whatsapp_shop": {
           "label": "Toko WhatsApp",

@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · on group join",
       "triggerManual": "Manual enroll",
       "triggerKeyword": "Keyword",
+      "triggerAny": "Any message",
       "active": "active",
       "done": "done",
       "failed": "failed",
@@ -130,7 +131,10 @@
         "reEngagement": "Re-activates dormant contacts with a personalised offer or check-in.",
         "lead": "Nurtures new leads with educational touches before handing to sales.",
         "event": "Time-boxed broadcast around a launch, sale, or seasonal moment.",
-        "default": "Automated WhatsApp journey built in the flow editor."
+        "default": "Automated WhatsApp journey built in the flow editor.",
+        "defaultWeb": "Website chat bot built in the flow editor.",
+        "defaultCall": "Automated call built in the flow editor.",
+        "defaultOther": "Automated conversation built in the flow editor."
       }
     },
     "featured": {
@@ -1339,7 +1343,12 @@
           "igUsernameHint": "Without the @. The link becomes ig.me/m/yourbrand — tapping it opens a DM to your account.",
           "igMessage": "WhatsApp message",
           "igMessageHint": "Sent to the customer on WhatsApp with the Instagram link. Supports '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue with us on Instagram 👇"
+          "igMessagePlaceholder": "Continue with us on Instagram 👇",
+          "templateFills": "What fills each number",
+          "templateFillsHint": "Type the text for each number of the template, or press / to insert a contact detail or a flow variable. Leave one empty to use what the template says.",
+          "templateHeaderMedia": "Header file",
+          "templateHeaderMediaHint": "The picture, video or file in this template's header. Needed when the template has no file of its own.",
+          "templateHeaderMediaMissing": "Add the header file: this template has none, and WhatsApp will not send it without one."
         },
         "sequence": {
           "info": "Each reply is sent in order to the customer. Combine text, images, video, audio, and documents in one node — perfect for product cards or onboarding kits.",
@@ -2248,7 +2257,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Trigger another chatbot"
+          "description": "Hand the chat to an AI agent"
         },
         "whatsapp_shop": {
           "label": "WhatsApp Shop",

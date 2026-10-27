@@ -5,6 +5,5 @@
     "orgSlug": "census",
     "email": "census@example.test",
     "password": "census-password"
-  },
-  "POST /v2/auth/clerk/session": { "orgSlug": "census", "clerkToken": "census-token" }
+  }
 }

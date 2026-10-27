@@ -6,8 +6,8 @@ import { join } from 'node:path';
 import type { Env } from '../../../config/env.schema';
 import type { FlowMediaStore, StoredFlowMedia } from './flow-media.port';
 
-const SAFE = /^[A-Za-z0-9_-]{1,64}$/;
-const SAFE_NAME = /^\d{6,}_[a-f0-9]{24}\.[a-z0-9]{1,5}$/;
+export const SAFE = /^[A-Za-z0-9_-]{1,64}$/;
+export const SAFE_NAME = /^\d{6,}_[a-f0-9]{24}\.[a-z0-9]{1,5}$/;
 
 const MIME: Record<string, string> = {
   jpg: 'image/jpeg',
@@ -34,6 +34,12 @@ const MIME: Record<string, string> = {
   csv: 'text/csv',
 };
 
+/** The content type a stored file is served with, from its extension. */
+export function flowMediaMime(name: string): string {
+  const ext = name.split('.').pop() ?? '';
+  return MIME[ext] ?? 'application/octet-stream';
+}
+
 /**
  * Local-disk store for flow media. Files live under `FLB_MEDIA_DIR` (default: a folder in the OS temp dir) at
  * `<org key>/<server name>`; both path parts are validated against a strict pattern so a request can never reach outside.
@@ -57,8 +63,7 @@ export class LocalFlowMediaAdapter implements FlowMediaStore {
     if (!SAFE.test(orgKey) || !SAFE_NAME.test(name)) return null;
     try {
       const data = await readFile(join(this.dir, orgKey, name));
-      const ext = name.split('.').pop() ?? '';
-      return { data, mime: MIME[ext] ?? 'application/octet-stream' };
+      return { data, mime: flowMediaMime(name) };
     } catch {
       return null;
     }

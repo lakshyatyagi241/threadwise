@@ -99,6 +99,7 @@
       "triggerGroup": "Automático · ao entrar no grupo",
       "triggerManual": "Inscrição manual",
       "triggerKeyword": "Palavra-chave",
+      "triggerAny": "Qualquer mensagem",
       "active": "ativos",
       "done": "concluídos",
       "failed": "com falha",
@@ -130,7 +131,10 @@
         "reEngagement": "Reativa contatos inativos com uma oferta personalizada ou um contato de acompanhamento.",
         "lead": "Nutre novos leads com conteúdos educativos antes de passá-los para vendas.",
         "event": "Transmissão com prazo definido em torno de um lançamento, promoção ou data sazonal.",
-        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos."
+        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos.",
+        "defaultWeb": "Bot de chat do site criado no editor de fluxos.",
+        "defaultCall": "Chamada automatizada criada no editor de fluxos.",
+        "defaultOther": "Conversa automatizada criada no editor de fluxos."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "Sem o @. O link vira ig.me/m/suamarca — tocar nele abre uma DM para a sua conta.",
           "igMessage": "Mensagem de WhatsApp",
           "igMessageHint": "Enviada ao cliente no WhatsApp com o link do Instagram. Aceita '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇"
+          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇",
+          "templateFills": "O que preenche cada número",
+          "templateFillsHint": "Digite o texto de cada número do modelo, ou pressione / para inserir um dado do contato ou uma variável do fluxo. Deixe vazio para usar o que o modelo diz.",
+          "templateHeaderMedia": "Arquivo do cabeçalho",
+          "templateHeaderMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+          "templateHeaderMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
         },
         "sequence": {
           "info": "Cada resposta é enviada em ordem ao cliente. Combine texto, imagens, vídeo, áudio e documentos em um só nó — ótimo para cartões de produto ou kits de integração.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Acionar outro chatbot"
+          "description": "Passa a conversa para um agente de IA"
         },
         "whatsapp_shop": {
           "label": "Loja do WhatsApp",

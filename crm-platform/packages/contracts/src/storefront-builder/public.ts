@@ -17,13 +17,13 @@ export const publicVariantSchema = z.object({
   title: z.string(),
   optionValues: z.array(z.string()),
   sku: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   priceDisplay: z.string(),
-  comparePriceMinor: z.number().int().nullable(),
+  comparePriceMinor: z.int().nullable(),
   comparePriceDisplay: z.string().nullable(),
   imageUrl: z.string().nullable(),
   /** Null means unlimited. A variant with 0 is shown as sold out and cannot be added. */
-  stockQty: z.number().int().nullable(),
+  stockQty: z.int().nullable(),
 });
 export type PublicVariant = z.infer<typeof publicVariantSchema>;
 
@@ -35,9 +35,9 @@ export const publicProductSchema = z.object({
   sku: z.string().nullable(),
   description: z.string().nullable(),
   bodyHtml: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   priceDisplay: z.string(),
-  comparePriceMinor: z.number().int().nullable(),
+  comparePriceMinor: z.int().nullable(),
   comparePriceDisplay: z.string().nullable(),
   onSale: z.boolean(),
   currencyCode: z.string(),
@@ -45,12 +45,12 @@ export const publicProductSchema = z.object({
   galleryUrls: z.array(z.string()),
   category: z.string().nullable(),
   /** Null means unlimited; the cart never offers more than this. */
-  stockQty: z.number().int().nullable(),
+  stockQty: z.int().nullable(),
   brand: z.string().nullable(),
   /** True when the product was created within the last 14 days (the card's "New" badge). Absent on an older server. */
   isNew: z.boolean().optional(),
   /** Shown in the product page's meta list; absent when unset. */
-  weightGrams: z.number().int().nullable().optional(),
+  weightGrams: z.int().nullable().optional(),
   tags: z.array(z.string()).optional(),
   /** Present only for a product with variants: the options the buyer picks and the active variants. A card shows "from priceMinor". */
   options: z.array(z.object({ name: z.string(), values: z.array(z.string()) })).optional(),
@@ -75,8 +75,8 @@ export const publicShopSchema = z.object({
   /** Digits of the number "Order on WhatsApp" opens; null when the shop has no sending number. */
   waNumber: z.string().nullable(),
   shipping: z.object({
-    flatMinor: z.number().int(),
-    freeAboveMinor: z.number().int(),
+    flatMinor: z.int(),
+    freeAboveMinor: z.int(),
     note: z.string().nullable(),
   }),
   /** Provider key and the handle or link the buyer is shown after ordering; never a secret. */
@@ -86,7 +86,7 @@ export const publicShopSchema = z.object({
 export type PublicShop = z.infer<typeof publicShopSchema>;
 
 export const publicHomeQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).prefault(1),
   /** `1` on a "Show more" fetch: the call is not a page view, so the daily view counter is left alone (TW-STORE-020). */
   partial: z.enum(['1']).optional(),
 });
@@ -98,20 +98,20 @@ export const publicHomeSchema = z.object({
   /** Categories of the products on this page only. */
   categories: z.array(z.string()),
   /** Cheapest and dearest price of this page in major units (the filter slider's range). */
-  priceMin: z.number().int(),
-  priceMax: z.number().int(),
+  priceMin: z.int(),
+  priceMax: z.int(),
   hasMore: z.boolean(),
-  total: z.number().int(),
-  page: z.number().int(),
+  total: z.int(),
+  page: z.int(),
 });
 export type PublicHome = z.infer<typeof publicHomeSchema>;
 
 export const publicReviewSchema = z.object({
   id: uuidSchema,
   customerName: z.string().nullable(),
-  rating: z.number().int(),
+  rating: z.int(),
   body: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 
 export const publicProductPageSchema = z.object({
@@ -120,7 +120,7 @@ export const publicProductPageSchema = z.object({
   related: z.array(publicProductSchema),
   reviews: z.array(publicReviewSchema),
   ratingAvg: z.number().nullable(),
-  ratingCount: z.number().int(),
+  ratingCount: z.int(),
 });
 export type PublicProductPage = z.infer<typeof publicProductPageSchema>;
 
@@ -128,7 +128,7 @@ export const cartLineSchema = z.object({
   id: uuidSchema,
   /** Required for a product with variants (the server answers 422 without it); ignored for one without. */
   variantId: uuidSchema.optional(),
-  qty: z.number().int().min(1).max(STORE_CART_MAX_QTY),
+  qty: z.int().min(1).max(STORE_CART_MAX_QTY),
 });
 const cartItems = z.array(cartLineSchema).min(1).max(STORE_CART_MAX_LINES);
 
@@ -137,7 +137,7 @@ export const STORE_PAYMENT_METHODS = ['prepaid', 'cod'] as const;
 export const checkoutSchema = z.object({
   name: z.string().trim().min(1).max(120),
   phone: z.string().trim().min(1).max(32),
-  email: z.string().trim().email().max(160).nullish().or(z.literal('')),
+  email: z.string().trim().pipe(z.email().max(160)).nullish().or(z.literal('')),
   address: z.string().max(1000).nullish(),
   note: z.string().max(1000).nullish(),
   coupon: z.string().trim().max(64).nullish(),
@@ -148,7 +148,7 @@ export type CheckoutInput = z.infer<typeof checkoutSchema>;
 
 export const checkoutResponseSchema = z.object({
   /** The order number the buyer is shown ("#123"). */
-  orderNo: z.number().int(),
+  orderNo: z.int(),
   /** `wa.me` link with the confirmation text; null when the shop has no number. */
   waUrl: z.string().nullable(),
   /** Public path of the tracking page. */
@@ -164,9 +164,9 @@ export const couponQuoteSchema = z.object({
 export type CouponQuoteInput = z.infer<typeof couponQuoteSchema>;
 export const couponQuoteResponseSchema = z.object({
   code: z.string(),
-  discountMinor: z.number().int(),
-  shippingMinor: z.number().int(),
-  totalMinor: z.number().int(),
+  discountMinor: z.int(),
+  shippingMinor: z.int(),
+  totalMinor: z.int(),
   freeShipping: z.boolean(),
 });
 export type CouponQuoteResponse = z.infer<typeof couponQuoteResponseSchema>;
@@ -183,7 +183,7 @@ export const abandonCartResponseSchema = z.object({ scheduled: z.boolean() });
 export const publicReviewInputSchema = z.object({
   productId: uuidSchema,
   name: z.string().trim().min(1).max(120),
-  rating: z.number().int().min(1).max(5),
+  rating: z.int().min(1).max(5),
   body: z.string().trim().max(1000).nullish(),
 });
 export type PublicReviewInput = z.infer<typeof publicReviewInputSchema>;
@@ -193,7 +193,7 @@ export const publicReviewResponseSchema = z.object({ message: z.string() });
 export const publicOrderSchema = z.object({
   shop: publicShopSchema,
   order: z.object({
-    orderNo: z.number().int(),
+    orderNo: z.int(),
     status: z.string(),
     paymentMethod: z.string(),
     customerName: z.string().nullable(),
@@ -204,18 +204,18 @@ export const publicOrderSchema = z.object({
         name: z.string(),
         /** "M / Red" for a variant line. */
         variantTitle: z.string().nullable().optional(),
-        qty: z.number().int(),
-        priceMinor: z.number().int(),
+        qty: z.int(),
+        priceMinor: z.int(),
         image: z.string().nullable(),
       }),
     ),
-    shippingMinor: z.number().int(),
-    discountMinor: z.number().int(),
-    totalMinor: z.number().int(),
+    shippingMinor: z.int(),
+    discountMinor: z.int(),
+    totalMinor: z.int(),
     currencyCode: z.string(),
     paymentLink: z.string().nullable(),
-    createdAt: z.string().datetime(),
-    updatedAt: z.string().datetime(),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime(),
   }),
 });
 export type PublicOrder = z.infer<typeof publicOrderSchema>;
@@ -233,7 +233,7 @@ export type HostResolveResponse = z.infer<typeof hostResolveResponseSchema>;
  */
 export const razorpayWebhookResponseSchema = z.object({
   ok: z.literal(true),
-  order: z.number().int().nullable().optional(),
+  order: z.int().nullable().optional(),
   ignored: z.string().optional(),
   rejected: z.enum(['order_not_in_shop', 'amount_mismatch', 'order_cancelled']).optional(),
 });

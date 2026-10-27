@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
-import { scrubEvent, scrubLog } from './scrub';
+import { createThrottle, scrubEvent, scrubLog, throttleKey } from './scrub';
 
 /**
  * Settings shared by the browser, Node and edge entry points. Errors are always on once a DSN is present. Tracing is off unless
@@ -29,8 +29,14 @@ export function sentryOptions() {
       Sentry.captureConsoleIntegration({ levels: ['error'] }),
       Sentry.consoleLoggingIntegration({ levels: ['warn'] }),
     ],
-    beforeSend: scrubEvent,
+    beforeSend: (event: Sentry.ErrorEvent) =>
+      allowEvent(throttleKey(event)) ? scrubEvent(event) : null,
     beforeSendTransaction: scrubEvent,
-    beforeSendLog: scrubLog,
+    beforeSendLog: (log: Sentry.Log) => (allowLog(String(log.message)) ? scrubLog(log) : null),
   };
 }
+
+// One table per runtime (browser tab, Node process, edge isolate): an API outage fails every poll the same way, and 5 reports a
+// minute of one error say what 5,000 would.
+const allowEvent = createThrottle(5);
+const allowLog = createThrottle(60);

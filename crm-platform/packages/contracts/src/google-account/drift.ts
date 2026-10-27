@@ -34,11 +34,11 @@ export const calendarSyncSchema = z.object({
    */
   state: z.enum(['in_sync', 'drifted', 'unreadable']).nullable(),
   reason: z.union([calendarDriftReasonSchema, calendarUnreadableReasonSchema]).nullable(),
-  detectedAt: z.string().datetime().nullable(),
+  detectedAt: z.iso.datetime().nullable(),
   /** What Google shows when the time was moved (`time_changed`). */
-  googleStartsAt: z.string().datetime().nullable(),
-  googleEndsAt: z.string().datetime().nullable(),
-  checkedAt: z.string().datetime().nullable(),
+  googleStartsAt: z.iso.datetime().nullable(),
+  googleEndsAt: z.iso.datetime().nullable(),
+  checkedAt: z.iso.datetime().nullable(),
 });
 export type CalendarSync = z.infer<typeof calendarSyncSchema>;
 

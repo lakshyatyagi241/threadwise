@@ -23,6 +23,21 @@ const forwardStages = (stages: readonly Stage[]): Stage[] =>
  * The work the workers do for the pilot on a schedule or after an event, one workspace at a time and only after the gate has said yes:
  * the engagement stage rule, the guarded automatic stage change, and the scans that raise lapsed, service-due and unanswered actions.
  */
+/** The stage moves the automation may apply: forward, into a stage that is neither won nor lost (#1181). */
+export function eligibleMoves(
+  stages: ReadonlyArray<{ value: string; position: number; isWon: boolean; isLost: boolean }>,
+): Array<{ from: string; to: string }> {
+  const out: Array<{ from: string; to: string }> = [];
+  for (const to of stages) {
+    if (to.isWon || to.isLost) continue;
+    for (const from of stages) {
+      if (from.value !== to.value && from.position < to.position)
+        out.push({ from: from.value, to: to.value });
+    }
+  }
+  return out;
+}
+
 @Injectable()
 export class GrowthAutomationService {
   private readonly logger = new Logger(GrowthAutomationService.name);
@@ -126,6 +141,8 @@ export class GrowthAutomationService {
         orgId,
         ctx.config.autoStage.minConfidence,
         200,
+        eligibleMoves(stages),
+        onlyContact,
       ),
     }));
     let room = ctx.config.autoStage.dailyCap - applied;

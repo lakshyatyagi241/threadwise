@@ -53,7 +53,7 @@ export const storefrontSettingsSchema = z.object({
   heroText: z.string().nullable(),
   footerText: z.string().nullable(),
   cartRecoveryEnabled: z.boolean(),
-  cartRecoveryDelayMin: z.number().int(),
+  cartRecoveryDelayMin: z.int(),
   cartRecoveryMessage: z.string().nullable(),
 });
 export type StorefrontSettings = z.infer<typeof storefrontSettingsSchema>;
@@ -93,9 +93,9 @@ export const storefrontResponseSchema = z.object({
   sendingLabel: z.string().nullable(),
   /** A WhatsApp device is bound to the shop. */
   hasUsableConnection: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type StorefrontResponse = z.infer<typeof storefrontResponseSchema>;
 
@@ -118,12 +118,12 @@ export const updateStorefrontSchema = z.object({
   themeKey: storeThemeSchema,
   enabled: z.boolean().default(true),
   customDomain: z.string().trim().max(191).regex(DOMAIN_RE).nullish().or(z.literal('')),
-  logoUrl: z.string().trim().url().max(1024).nullish().or(z.literal('')),
+  logoUrl: z.string().trim().pipe(z.url().max(1024)).nullish().or(z.literal('')),
   brandColor: hexColor.nullish().or(z.literal('')),
   heroText: z.string().max(280).nullish(),
   footerText: z.string().max(280).nullish(),
   cartRecoveryEnabled: z.boolean().default(false),
-  cartRecoveryDelayMin: z.number().int().min(5).max(1440).nullish(),
+  cartRecoveryDelayMin: z.int().min(5).max(1440).nullish(),
   cartRecoveryMessage: z.string().max(1024).nullish(),
   currencyCode: productCurrencySchema.nullish(),
   shippingFlat: money.nullish().or(z.literal('')),
@@ -134,7 +134,7 @@ export const updateStorefrontSchema = z.object({
   rzpKeyId: z.string().max(191).nullish(),
   rzpKeySecret: z.string().max(191).nullish(),
   rzpWebhookSecret: z.string().max(191).nullish(),
-  rowVersion: z.number().int().min(1).optional(),
+  rowVersion: z.int().min(1).optional(),
 });
 export type UpdateStorefrontInput = z.infer<typeof updateStorefrontSchema>;
 
@@ -210,8 +210,8 @@ export const resetStoreSchema = z.object({ confirm: z.string().optional() });
 export type ResetStoreInput = z.infer<typeof resetStoreSchema>;
 
 export const resetStoreResponseSchema = z.object({
-  shops: z.number().int(),
-  orders: z.number().int(),
-  products: z.number().int(),
+  shops: z.int(),
+  orders: z.int(),
+  products: z.int(),
 });
 export type ResetStoreResponse = z.infer<typeof resetStoreResponseSchema>;

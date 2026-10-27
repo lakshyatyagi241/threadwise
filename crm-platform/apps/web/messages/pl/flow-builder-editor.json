@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · po dołączeniu do grupy",
       "triggerManual": "Ręczne zapisanie",
       "triggerKeyword": "Słowo kluczowe",
+      "triggerAny": "Dowolna wiadomość",
       "active": "aktywny",
       "done": "gotowe",
       "failed": "nieudany",
@@ -130,7 +131,10 @@
         "reEngagement": "Reaktywuje uśpionych kontakty spersonalizowaną ofertą lub odezwaniem się.",
         "lead": "Pielęgnuje nowe leady edukacyjnymi wiadomościami, zanim przekaże je sprzedaży.",
         "event": "Ograniczona czasowo wiadomość masowa wokół premiery, wyprzedaży lub sezonowej okazji.",
-        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów."
+        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów.",
+        "defaultWeb": "Czatbot na stronę internetową utworzony w edytorze przepływów.",
+        "defaultCall": "Automatyczne połączenie utworzone w edytorze przepływów.",
+        "defaultOther": "Automatyczna rozmowa utworzona w edytorze przepływów."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "Bez @. Link będzie miał postać ig.me/m/twojamarka — kliknięcie otwiera DM do Twojego konta.",
           "igMessage": "Wiadomość WhatsApp",
           "igMessageHint": "Wysyłana klientowi na WhatsApp z linkiem do Instagrama. Obsługuje '{{'zmienne'}}'.",
-          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇"
+          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇",
+          "templateFills": "Czym wypełnić każdy numer",
+          "templateFillsHint": "Wpisz tekst dla każdego numeru szablonu albo naciśnij /, aby wstawić dane kontaktu lub zmienną przepływu. Zostaw puste, aby użyć wartości z szablonu.",
+          "templateHeaderMedia": "Plik nagłówka",
+          "templateHeaderMediaHint": "Obraz, film lub plik w nagłówku tego szablonu. Potrzebny, gdy szablon nie ma własnego pliku.",
+          "templateHeaderMediaMissing": "Dodaj plik nagłówka: ten szablon go nie ma, a WhatsApp nie wyśle go bez pliku."
         },
         "sequence": {
           "info": "Każda odpowiedź jest wysyłana klientowi po kolei. Połącz tekst, obrazy, wideo, audio i dokumenty w jednym węźle — idealne do kart produktów lub zestawów powitalnych.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Uruchom inny chatbot"
+          "description": "Przekaż czat agentowi AI"
         },
         "whatsapp_shop": {
           "label": "Sklep WhatsApp",

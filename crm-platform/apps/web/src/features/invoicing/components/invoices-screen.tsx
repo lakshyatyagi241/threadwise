@@ -20,10 +20,11 @@ import {
 import { EMPTY_SELECTION, headerState, selectionReducer } from '../lib/selection';
 import type { InvoiceTab } from '../lib/status';
 import { BulkBar, BulkVoidDialog, eligibleRows } from './bulk-bar';
-import { InvoiceIcon, PlusIcon } from './icons';
+import { InvoiceIcon } from './icons';
 import { InvoicesTable } from './invoices-table';
 import { InvoicesTabs } from './invoices-tabs';
 import { InvoicesToolbar } from './invoices-toolbar';
+import { CreateInvoiceMenu } from './create-invoice-menu';
 import { OutstandingStrip } from './outstanding-strip';
 import { ErrorLine, useErrorText, useInvoicingCan } from './parts';
 import { useInvoiceDialogs } from './use-invoice-dialogs';
@@ -142,14 +143,7 @@ export function InvoicesScreen() {
           >
             {t('payments')}
           </Link>
-          {can.create && (
-            <Link
-              href="/invoices/new"
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-foreground hover:opacity-90"
-            >
-              <PlusIcon /> {t('newInvoice')}
-            </Link>
-          )}
+          <CreateInvoiceMenu canCreate={can.create} canCreateRecurring={can.createRecurring} />
         </div>
       </header>
 

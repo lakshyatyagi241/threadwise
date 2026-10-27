@@ -14,8 +14,8 @@ export const mailOutboundAttachmentSchema = z.object({
   id: uuidSchema,
   name: z.string().max(255),
   mime: z.string().max(127),
-  size: z.number().int().min(1),
-  expiresAt: z.string().datetime(),
+  size: z.int().min(1),
+  expiresAt: z.iso.datetime(),
 });
 export type MailOutboundAttachment = z.infer<typeof mailOutboundAttachmentSchema>;
 

@@ -82,10 +82,10 @@ export const taxRateResponseSchema = z.object({
   /** Pre-fills the HSN/SAC of a line that uses this rate. */
   defaultHsnSac: z.string().nullable(),
   /** Invoice lines that point at it right now (a deleted rate leaves those lines' snapshots intact). */
-  usedBy: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  usedBy: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type TaxRateResponse = z.infer<typeof taxRateResponseSchema>;
 
@@ -127,7 +127,7 @@ export const updateTaxRateSchema = z.object({
   effectiveTo: taxRateBase.effectiveTo,
   defaultHsnSac: taxRateBase.defaultHsnSac,
   isActive: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateTaxRateInput = z.infer<typeof updateTaxRateSchema>;
 

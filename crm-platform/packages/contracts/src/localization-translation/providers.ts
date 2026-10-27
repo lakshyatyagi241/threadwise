@@ -53,12 +53,12 @@ export const translationProviderItemSchema = z.object({
   description: z.string().nullable(),
   isActive: z.boolean(),
   isDefault: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   official: z.boolean(),
   /** True when the lockdown is on and this provider is one it removes. */
   skippedByLockdown: z.boolean(),
   credentialFields: z.array(credentialFieldSchema),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type TranslationProviderItem = z.infer<typeof translationProviderItemSchema>;
 
@@ -73,17 +73,17 @@ export type TranslationProviderListResponse = z.infer<typeof translationProvider
  * to drop a stored credential).
  */
 export const updateTranslationProviderRequestSchema = z.object({
-  credentials: z.record(z.string().trim().max(1024)).optional(),
+  credentials: z.record(z.string(), z.string().trim().max(1024)).optional(),
   clear: z.array(z.string().max(64)).max(10).optional(),
-  sortOrder: z.number().int().min(0).max(32767).optional(),
-  rowVersion: z.number().int().positive(),
+  sortOrder: z.int().min(0).max(32767).optional(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateTranslationProviderRequest = z.infer<
   typeof updateTranslationProviderRequestSchema
 >;
 
 export const providerVersionRequestSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type ProviderVersionRequest = z.infer<typeof providerVersionRequestSchema>;
 

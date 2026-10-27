@@ -21,13 +21,13 @@ const booleanish = z
  */
 const optionalUrl = z.preprocess(
   (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
-  z.string().url().optional(),
+  z.url().optional(),
 );
 
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-  APP_URL: z.string().url().default('http://localhost:3000'),
+  PORT: z.coerce.number().int().min(1).max(65535).prefault(3000),
+  APP_URL: z.url().default('http://localhost:3000'),
   /**
    * Which proxies' X-Forwarded-For to believe (express `trust proxy`): a hop count, 'loopback', or a
    * comma-separated list of addresses/CIDRs. The client IP feeds the login lockout, the operator IP
@@ -41,9 +41,9 @@ export const envSchema = z.object({
    * Requests in flight at once before the API answers 503 + Retry-After instead of queueing (QA 54 load shedding). /health, /ready and
    * /metrics are never shed. 0 turns it off. 256 is well above what one process serves at once on a healthy day (the database pool is 28).
    */
-  API_MAX_INFLIGHT: z.coerce.number().int().min(0).max(100_000).default(256),
+  API_MAX_INFLIGHT: z.coerce.number().int().min(0).max(100_000).prefault(256),
   /** A request that takes at least this long (ms) is logged at warn with its route, organisation and duration. 0 turns it off (QA 51). */
-  SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).default(500),
+  SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).prefault(500),
   CORS_ORIGINS: z
     .string()
     .default('')
@@ -62,9 +62,9 @@ export const envSchema = z.object({
    * Minutes without a message in or out after which a linked number's socket is closed to free its memory (V-02). 0 = never, the default:
    * unloading changes when a customer's message reaches the inbox (at the next wake), so it is switched on per deployment, on purpose.
    */
-  WA_IDLE_UNLOAD_MINUTES: z.coerce.number().int().min(0).max(10080).default(0),
+  WA_IDLE_UNLOAD_MINUTES: z.coerce.number().int().min(0).max(10080).prefault(0),
   /** While unloaded, a number reconnects this often for a short time to take the messages WhatsApp held for it. Used only when unloading is on. */
-  WA_IDLE_WAKE_MINUTES: z.coerce.number().int().min(1).max(1440).default(15),
+  WA_IDLE_WAKE_MINUTES: z.coerce.number().int().min(1).max(1440).prefault(15),
 
   // --- database ------------------------------------------------------------
   /** Application connection. MUST be a non-superuser, or RLS is bypassed. */
@@ -72,19 +72,19 @@ export const envSchema = z.object({
   DATABASE_REPLICA_URL: z.string().min(1).optional(),
   /** Owner connection, used only by the migration/seed CLI. */
   MIGRATION_DATABASE_URL: z.string().min(1).optional(),
-  DB_POOL_MAX: z.coerce.number().int().min(1).max(200).default(20),
+  DB_POOL_MAX: z.coerce.number().int().min(1).max(200).prefault(20),
   /**
    * Connections the public webhook receivers may hold, in a pool of their own: a delivery flood can fill this one and never the pool
    * the dashboard and the readiness probe use.
    */
-  WEBHOOK_DB_POOL_MAX: z.coerce.number().int().min(1).max(100).default(6),
+  WEBHOOK_DB_POOL_MAX: z.coerce.number().int().min(1).max(100).prefault(6),
   /** A reserved pool for the readiness probe, so `/ready` answers truthfully while the main pool is busy. */
-  HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).default(2),
-  DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(15_000),
+  HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).prefault(2),
+  DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).prefault(15_000),
   // A statement that waits this long for a lock fails (55P03) instead of waiting out the statement timeout; 0 turns it off.
-  DB_LOCK_TIMEOUT_MS: z.coerce.number().int().min(0).default(5_000),
+  DB_LOCK_TIMEOUT_MS: z.coerce.number().int().min(0).prefault(5_000),
   // A session idle inside an open transaction this long is ended (25P03), so a forgotten transaction cannot hold a connection; 0 turns it off.
-  DB_IDLE_IN_TX_TIMEOUT_MS: z.coerce.number().int().min(0).default(30_000),
+  DB_IDLE_IN_TX_TIMEOUT_MS: z.coerce.number().int().min(0).prefault(30_000),
 
   // --- redis ---------------------------------------------------------------
   REDIS_URL: z.string().min(1),
@@ -117,15 +117,6 @@ export const envSchema = z.object({
   WEBAUTHN_ORIGINS: z.string().optional(),
 
   /**
-   * Clerk verifies the credential (password, Google) client-side and hands
-   * the frontend a Clerk session token. This backend never sees a password —
-   * it verifies that token server-side with this key, then issues its own
-   * short-lived JWT pair as usual so every existing guard/service is
-   * unchanged. See modules/auth/clerk.service.ts.
-   */
-  CLERK_SECRET_KEY: z.string().min(1),
-
-  /**
    * AES-256-GCM key for reversible secrets (channel tokens, API-key HMAC
    * secrets, gateway credentials). 32 bytes, base64: openssl rand -base64 32
    */
@@ -154,7 +145,7 @@ export const envSchema = z.object({
 
   // --- email ---------------------------------------------------------------
   SMTP_HOST: z.string().default('localhost'),
-  SMTP_PORT: z.coerce.number().int().default(1025),
+  SMTP_PORT: z.coerce.number().int().prefault(1025),
   SMTP_FROM: z.string().default('no-reply@localhost'),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
@@ -165,7 +156,7 @@ export const envSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
 
   // --- web app / branding (links in transactional mail, OAuth redirects) ----
-  WEB_APP_URL: z.string().url().default('http://localhost:3001'),
+  WEB_APP_URL: z.url().default('http://localhost:3001'),
   /** Brand name used in mail and the TOTP issuer until the branding domain lands. */
   APP_NAME: z.string().default('CRM Platform'),
 
@@ -177,7 +168,7 @@ export const envSchema = z.object({
     .default('true')
     .transform((v) => v.toLowerCase() !== 'false'),
   /** How long a tracked link works, in days; never below 7. */
-  LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).default(90),
+  LINK_TRACKING_TTL_DAYS: z.coerce.number().int().min(7).prefault(90),
   WHATSAPP_VERIFY_TOKEN: z.string().optional(),
   WHATSAPP_APP_SECRET: z.string().optional(),
   /** The Meta app Facebook logs in through (TW-FB-002). Each falls back to the WhatsApp app's value, as in Reference. */
@@ -211,7 +202,7 @@ export const envSchema = z.object({
    * How long the platform keeps its own sales records (orders) after a workspace is erased, without the buyer's identity. Tax law sets
    * the period; 8 years covers India's GST rules. Confirm with legal before changing.
    */
-  FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).default(8),
+  FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).prefault(8),
   // Event-based analytics (docs/superpowers/specs/2026-10-16-event-based-analytics-design.md).
   /** Master switch for writing analytics events. Off = `AnalyticsEvents.record` does nothing. */
   ANALYTICS_EVENTS_ENABLED: booleanish.default(true),
@@ -249,12 +240,12 @@ export const envSchema = z.object({
   EASEBUZZ_SALT: z.string().optional(),
 
   // --- public api ----------------------------------------------------------
-  PUBLIC_API_HMAC_WINDOW_SECONDS: z.coerce.number().int().min(30).max(3600).default(300),
-  PUBLIC_API_RATE_LIMIT_PER_MINUTE: z.coerce.number().int().min(1).default(120),
+  PUBLIC_API_HMAC_WINDOW_SECONDS: z.coerce.number().int().min(30).max(3600).prefault(300),
+  PUBLIC_API_RATE_LIMIT_PER_MINUTE: z.coerce.number().int().min(1).prefault(120),
 
   // --- observability -------------------------------------------------------
   SENTRY_DSN: z.string().optional(),
-  SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).default(0.1),
+  SENTRY_TRACES_SAMPLE_RATE: z.coerce.number().min(0).max(1).prefault(0.1),
 });
 
 export type Env = z.infer<typeof envSchema>;

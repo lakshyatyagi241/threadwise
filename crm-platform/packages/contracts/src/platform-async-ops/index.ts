@@ -8,7 +8,7 @@ import { z } from 'zod';
 /** Outbox events that ran out of retries, grouped by type. No payload is ever returned: it can hold personal data. */
 export const deadOutboxGroupSchema = z.object({
   eventType: z.string(),
-  count: z.number().int().nonnegative(),
+  count: z.int().nonnegative(),
   oldestAt: z.string(),
   /** The most recent failure reason of one event of the group, cut to 300 characters. */
   lastError: z.string().nullable(),
@@ -21,34 +21,34 @@ export const outboxReplayRequestSchema = z.object({
     .min(1)
     .max(120)
     .regex(/^[A-Za-z0-9_.:-]+$/),
-  limit: z.number().int().min(1).max(1000).default(200),
+  limit: z.int().min(1).max(1000).default(200),
 });
 export type OutboxReplayRequest = z.infer<typeof outboxReplayRequestSchema>;
 
 export const outboxReplayResultSchema = z.object({
-  replayed: z.number().int().nonnegative(),
+  replayed: z.int().nonnegative(),
   /** Dead events of this type left alone because their workspace is no longer active. */
-  skippedInactiveWorkspace: z.number().int().nonnegative(),
+  skippedInactiveWorkspace: z.int().nonnegative(),
 });
 export type OutboxReplayResult = z.infer<typeof outboxReplayResultSchema>;
 
 /** A WhatsApp webhook payload job that failed for good. The payload itself (message text, phone numbers) is never returned. */
 export const failedIngestJobSchema = z.object({
   jobId: z.string(),
-  attemptsMade: z.number().int().nonnegative(),
+  attemptsMade: z.int().nonnegative(),
   failedReason: z.string().nullable(),
   failedAt: z.string().nullable(),
 });
 export type FailedIngestJob = z.infer<typeof failedIngestJobSchema>;
 
 export const wabaReplayRequestSchema = z.object({
-  limit: z.number().int().min(1).max(500).default(100),
+  limit: z.int().min(1).max(500).default(100),
 });
 export type WabaReplayRequest = z.infer<typeof wabaReplayRequestSchema>;
 
 export const wabaReplayResultSchema = z.object({
-  replayed: z.number().int().nonnegative(),
+  replayed: z.int().nonnegative(),
   /** Jobs left alone: no longer failed (another operator got there first), or failed on purpose before using their attempts. */
-  skipped: z.number().int().nonnegative(),
+  skipped: z.int().nonnegative(),
 });
 export type WabaReplayResult = z.infer<typeof wabaReplayResultSchema>;

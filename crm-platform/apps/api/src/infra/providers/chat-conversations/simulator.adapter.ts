@@ -90,7 +90,7 @@ const payloadSchema = z.object({
             address: z.string().optional(),
           })
           .optional(),
-        sentAt: z.string().datetime(),
+        sentAt: z.iso.datetime(),
       }),
     )
     .default([]),
@@ -99,7 +99,7 @@ const payloadSchema = z.object({
       z.object({
         id: z.string(),
         status: receiptStatusSchema,
-        at: z.string().datetime(),
+        at: z.iso.datetime(),
         errorCode: z.string().optional(),
         errorMessage: z.string().optional(),
       }),

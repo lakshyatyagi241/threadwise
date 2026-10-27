@@ -6764,12 +6764,6 @@
    "public": false
   },
   {
-   "route": "POST /v2/auth/clerk/session",
-   "class": "B",
-   "reason": "write: validates, writes, audits and emits an event",
-   "public": true
-  },
-  {
    "route": "POST /v2/auth/find-workspaces",
    "class": "B",
    "reason": "write: validates, writes, audits and emits an event",

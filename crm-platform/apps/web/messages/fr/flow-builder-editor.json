@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · à l’arrivée dans un groupe",
       "triggerManual": "Inscription manuelle",
       "triggerKeyword": "Mot-clé",
+      "triggerAny": "N'importe quel message",
       "active": "actifs",
       "done": "terminés",
       "failed": "échoués",
@@ -130,7 +131,10 @@
         "reEngagement": "Réactive les contacts dormants avec une offre personnalisée ou un message de prise de nouvelles.",
         "lead": "Fait mûrir les nouveaux leads avec des contenus pédagogiques avant de les passer aux ventes.",
         "event": "Diffusion limitée dans le temps autour d’un lancement, de soldes ou d’un moment saisonnier.",
-        "default": "Parcours WhatsApp automatisé créé dans l’éditeur de flux."
+        "default": "Parcours WhatsApp automatisé créé dans l’éditeur de flux.",
+        "defaultWeb": "Chatbot de site web créé dans l'éditeur de flux.",
+        "defaultCall": "Appel automatisé créé dans l'éditeur de flux.",
+        "defaultOther": "Conversation automatisée créée dans l'éditeur de flux."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "Sans le @. Le lien devient ig.me/m/votremarque : le toucher ouvre un DM vers votre compte.",
           "igMessage": "Message WhatsApp",
           "igMessageHint": "Envoyé au client sur WhatsApp avec le lien Instagram. Prend en charge les '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continuez avec nous sur Instagram 👇"
+          "igMessagePlaceholder": "Continuez avec nous sur Instagram 👇",
+          "templateFills": "Ce qui remplit chaque numéro",
+          "templateFillsHint": "Saisissez le texte de chaque numéro du modèle, ou appuyez sur / pour insérer une information du contact ou une variable du flux. Laissez vide pour utiliser la valeur du modèle.",
+          "templateHeaderMedia": "Fichier d'en-tête",
+          "templateHeaderMediaHint": "L'image, la vidéo ou le fichier de l'en-tête de ce modèle. Nécessaire quand le modèle n'a pas de fichier propre.",
+          "templateHeaderMediaMissing": "Ajoutez le fichier d'en-tête : ce modèle n'en a aucun et WhatsApp ne l'enverra pas sans."
         },
         "sequence": {
           "info": "Chaque réponse est envoyée dans l’ordre au client. Combinez texte, images, vidéo, audio et documents dans un seul nœud : parfait pour les fiches produit ou les kits d’accueil.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Déclencher un autre chatbot"
+          "description": "Passer la conversation à un agent IA"
         },
         "whatsapp_shop": {
           "label": "Boutique WhatsApp",

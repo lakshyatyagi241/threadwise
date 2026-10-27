@@ -179,6 +179,7 @@
       "quote": "عرض السعر",
       "salesOrder": "أمر البيع",
       "recurring": "الجدولة المتكررة",
+      "makeRecurringNotInPlan": "الفواتير المتكررة غير متاحة في باقتك.",
       "makeRecurring": "اجعلها متكررة",
       "reference": "المرجع",
       "owner": "المسؤول",

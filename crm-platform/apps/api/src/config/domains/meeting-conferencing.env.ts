@@ -12,7 +12,7 @@ import { z } from 'zod';
  */
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const optional = (max = 512) => z.preprocess(blank, z.string().max(max).optional());
-const urlOr = (dflt: string) => z.preprocess(blank, z.string().url().default(dflt));
+const urlOr = (dflt: string) => z.preprocess(blank, z.url().default(dflt));
 
 const schema = z.object({
   /** Where the browser is sent for Zoom consent, and the code exchange and refresh. */
@@ -23,29 +23,29 @@ const schema = z.object({
   ZOOM_CLIENT_ID: optional(200),
   ZOOM_CLIENT_SECRET: optional(400),
   /** Overrides the callback address (default `<APP_URL>/v2/public/conferencing/zoom/callback`). */
-  ZOOM_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  ZOOM_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
 
   /** A separate Entra app for Teams, instead of the calendar's. */
   TEAMS_CLIENT_ID: optional(200),
   TEAMS_CLIENT_SECRET: optional(400),
   TEAMS_TENANT: optional(100),
   /** Overrides the callback address (default `<APP_URL>/v2/public/conferencing/teams/callback`). */
-  TEAMS_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  TEAMS_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
 
   /** Ceiling for one call to a video provider, in ms. A meeting is saved before this is spent; the link follows. */
   CONFERENCING_HTTP_TIMEOUT_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(500).max(60_000).default(8_000),
+    z.coerce.number().int().min(500).max(60_000).prefault(8_000),
   ),
   /** Extra attempts after a 429, a 5xx, a timeout or a network error, for calls that are safe to repeat (not the create of a Zoom meeting). */
-  CONFERENCING_RETRIES: z.preprocess(blank, z.coerce.number().int().min(0).max(5).default(2)),
+  CONFERENCING_RETRIES: z.preprocess(blank, z.coerce.number().int().min(0).max(5).prefault(2)),
   CONFERENCING_RETRY_BASE_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(1).max(10_000).default(300),
+    z.coerce.number().int().min(1).max(10_000).prefault(300),
   ),
   CONFERENCING_RETRY_AFTER_CAP_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(60).default(5),
+    z.coerce.number().int().min(0).max(60).prefault(5),
   ),
   /**
    * `1` binds the in-memory fake Zoom and Teams adapters instead of the real ones: for a development stack and the end-to-end browser pass,

@@ -99,14 +99,14 @@ export function fullFeatures(raw: unknown, opts?: { keepUnknown?: boolean }): Pl
 export function withStoredUnknownLimits(
   stored: unknown,
   edited: PlanLimits,
-  modules: Record<string, number> = {},
+  modules: Partial<Record<string, number>> = {},
 ): Record<string, unknown> {
   return { ...unknownKeys(stored, PLAN_LIMIT_KEYS), ...modules, ...edited };
 }
 export function withStoredUnknownFeatures(
   stored: unknown,
   edited: PlanFeatures,
-  modules: Record<string, boolean> = {},
+  modules: Partial<Record<string, boolean>> = {},
 ): Record<string, unknown> {
   return { ...unknownKeys(stored, PLAN_FEATURE_KEYS), ...modules, ...edited };
 }

@@ -28,7 +28,7 @@ export type LeadInboxStatusFilter = z.infer<typeof leadInboxStatusFilterSchema>;
 export const statusesOfFilter = (f: LeadInboxStatusFilter): LeadEventStatus[] =>
   f === 'attention' ? ['needs_review', 'failed'] : [f];
 
-const instant = z.string().datetime({ offset: true });
+const instant = z.iso.datetime({ offset: true });
 
 export const leadInboxFilterSchema = z.object({
   sourceId: uuidSchema.optional(),
@@ -53,7 +53,7 @@ export const leadInboxFilterSchema = z.object({
 export type LeadInboxFilter = z.infer<typeof leadInboxFilterSchema>;
 
 export const listLeadInboxQuerySchema = leadInboxFilterSchema.extend({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type ListLeadInboxQuery = z.infer<typeof listLeadInboxQuerySchema>;
@@ -86,12 +86,12 @@ export const LEAD_INBOX_DEFAULT_WINDOW_DAYS = 30;
 
 export const leadInboxSummaryResponseSchema = z.object({
   /** Every status, zero when none. */
-  counts: z.record(leadEventStatusSchema, z.number().int().min(0)),
+  counts: z.partialRecord(leadEventStatusSchema, z.int().min(0)),
   /** `needs_review` plus `failed`. */
-  attention: z.number().int().min(0),
-  total: z.number().int().min(0),
-  from: z.string().datetime(),
-  to: z.string().datetime().nullable(),
+  attention: z.int().min(0),
+  total: z.int().min(0),
+  from: z.iso.datetime(),
+  to: z.iso.datetime().nullable(),
 });
 export type LeadInboxSummaryResponse = z.infer<typeof leadInboxSummaryResponseSchema>;
 
@@ -101,7 +101,7 @@ export type LeadInboxSummaryResponse = z.infer<typeof leadInboxSummaryResponseSc
  * source's own event route (audited as `export`).
  */
 export const leadInboxDetailResponseSchema = leadInboxItemSchema.extend({
-  payload: z.record(z.unknown()).nullable(),
+  payload: z.record(z.string(), z.unknown()).nullable(),
   /** At least one value was masked or redacted. */
   payloadMasked: z.boolean(),
 });
@@ -116,7 +116,9 @@ export const retryLeadInboxSchema = z.object({
     .array(uuidSchema)
     .min(1)
     .max(LEAD_INBOX_RETRY_MAX)
-    .refine((ids) => new Set(ids).size === ids.length, { message: 'each lead once' }),
+    .refine((ids) => new Set(ids).size === ids.length, {
+      error: 'each lead once',
+    }),
 });
 export type RetryLeadInboxInput = z.infer<typeof retryLeadInboxSchema>;
 
@@ -141,8 +143,8 @@ export type LeadRetryResult = z.infer<typeof leadRetryResultSchema>;
 
 export const retryLeadInboxResponseSchema = z.object({
   results: z.array(leadRetryResultSchema),
-  retried: z.number().int().min(0),
-  skipped: z.number().int().min(0),
+  retried: z.int().min(0),
+  skipped: z.int().min(0),
 });
 export type RetryLeadInboxResponse = z.infer<typeof retryLeadInboxResponseSchema>;
 
@@ -170,21 +172,21 @@ export const leadSyncRunSchema = z.object({
   kind: leadSyncKindSchema,
   status: leadSyncStatusSchema,
   /** A backfill's range. Null for "sync now" (everything since the last time). */
-  rangeFrom: z.string().datetime().nullable(),
-  rangeTo: z.string().datetime().nullable(),
+  rangeFrom: z.iso.datetime().nullable(),
+  rangeTo: z.iso.datetime().nullable(),
   /** Leads the source returned, and what became of them: new to us, already known, not handed over. */
-  fetched: z.number().int().min(0),
-  accepted: z.number().int().min(0),
-  duplicates: z.number().int().min(0),
-  failed: z.number().int().min(0),
+  fetched: z.int().min(0),
+  accepted: z.int().min(0),
+  duplicates: z.int().min(0),
+  failed: z.int().min(0),
   /** A backfill is pulled window by window: how many are done of how many are expected. */
-  windowsDone: z.number().int().min(0),
-  windowsTotal: z.number().int().min(0),
+  windowsDone: z.int().min(0),
+  windowsTotal: z.int().min(0),
   /** A stable code when `failed` or `partial` (`too_soon`, `provider_error`, `credentials_refused`, `interrupted`...). Never provider text. */
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
 });
 export type LeadSyncRun = z.infer<typeof leadSyncRunSchema>;
 
@@ -197,11 +199,11 @@ export const leadPullSourceSchema = z.object({
   canSync: z.boolean(),
   canBackfill: z.boolean(),
   /** The source's own limit: no two requests sooner than this. "Sync now" is refused until it has passed. */
-  minIntervalSeconds: z.number().int().min(0),
+  minIntervalSeconds: z.int().min(0),
   /** How far back a backfill may reach, in days (the source keeps no older history). Null when it cannot backfill. */
-  maxBackfillDays: z.number().int().min(1).nullable(),
+  maxBackfillDays: z.int().min(1).nullable(),
   /** The first instant "Sync now" is accepted again; null = now. */
-  nextSyncAt: z.string().datetime().nullable(),
+  nextSyncAt: z.iso.datetime().nullable(),
   activeRun: leadSyncRunSchema.nullable(),
   lastRun: leadSyncRunSchema.nullable(),
 });
@@ -221,8 +223,8 @@ export const backfillLeadsSchema = z
     sourceIds: z.array(uuidSchema).min(1).max(50).optional(),
   })
   .refine((v) => new Date(v.from).getTime() < new Date(v.to).getTime(), {
-    message: 'the start must be before the end',
     path: ['to'],
+    error: 'the start must be before the end',
   })
   .refine(
     (v) =>
@@ -252,7 +254,7 @@ export type BackfillLeadsResponse = z.infer<typeof backfillLeadsResponseSchema>;
 
 export const listLeadSyncRunsQuerySchema = z.object({
   sourceId: uuidSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(10),
+  limit: z.coerce.number().int().min(1).max(50).prefault(10),
 });
 export type ListLeadSyncRunsQuery = z.infer<typeof listLeadSyncRunsQuerySchema>;
 

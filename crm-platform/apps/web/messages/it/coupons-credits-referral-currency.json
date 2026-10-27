@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "vuoto = illimitati",
           "maxUsesHint": "Su tutti i clienti.",
           "perUser": "Limite per utente",
-          "perUserHint": "Numero di utilizzi consentiti per ogni cliente.",
+          "perUserHint": "Numero di utilizzi consentiti per ogni cliente, in tutti gli spazi di lavoro.",
           "firstPurchaseTitle": "Solo primo acquisto",
-          "firstPurchaseHint": "Solo i Workspace che non hanno ancora effettuato un ordine a pagamento",
+          "firstPurchaseHint": "Solo gli acquirenti che non hanno mai pagato un ordine in nessuno spazio di lavoro",
           "stackableTitle": "Cumulabile con altri coupon",
           "stackableHint": "Permette ai clienti di usarlo insieme a un altro codice attivo al checkout"
         }

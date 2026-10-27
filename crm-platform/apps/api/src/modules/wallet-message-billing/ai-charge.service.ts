@@ -40,7 +40,7 @@ export class AiChargeService {
    * call and the wallet cannot. A workspace on its own key, or no key at all, passes: the platform pays nothing there.
    */
   async guardCall(orgId: number, keySource: 'admin' | 'workspace' | 'none'): Promise<void> {
-    if (keySource === 'admin') await this.assertCanAfford(orgId);
+    if (keySource === 'admin') await this.usage.holdAiCall(orgId);
   }
 
   /**

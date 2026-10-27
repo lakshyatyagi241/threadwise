@@ -20,13 +20,13 @@ export const publicLeadReadSchema = z.object({
   mobile: z.string().nullable(),
   lifecycleStage: z.string().nullable(),
   collegeTag: z.string().nullable(),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PublicLeadRead = z.infer<typeof publicLeadReadSchema>;
 
 export const publicLeadSubmitSchema = z.object({
   name: z.string().min(1).max(255),
-  email: z.string().email(),
+  email: z.email(),
   mobile: z.string().min(6).max(20),
   source: z.string().max(100).default('partner_api'),
   collegeTag: z.string().max(200).optional(),
@@ -35,7 +35,7 @@ export const publicLeadSubmitSchema = z.object({
    * "13th parameter" from the requirements call) — the platform stores and
    * echoes these but never branches on them.
    */
-  custom: z.record(z.string()).optional(),
+  custom: z.record(z.string(), z.string()).optional(),
   /**
    * Only when the person agreed to marketing messages on the caller's side: the wording they were shown (`text`, with its `version`)
    * or how they agreed (`note`), and optionally when (`at`). Without it the lead is stored with NO marketing consent. With it the

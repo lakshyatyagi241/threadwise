@@ -19,7 +19,7 @@ export const publicInvoiceSchema = z.object({
   docType: invoiceDocTypeSchema,
   status: invoiceStatusSchema,
   currency: z.string(),
-  currencyExponent: z.number().int(),
+  currencyExponent: z.int(),
   issueDate: z.string(),
   dueDate: z.string().nullable(),
   seller: invoiceSellerSchema,
@@ -46,7 +46,7 @@ export const publicInvoiceSchema = z.object({
       kind: z.enum(['payment', 'refund']),
       amount: z.string(),
       method: z.string(),
-      paidAt: z.string().datetime(),
+      paidAt: z.iso.datetime(),
       receiptNumber: z.string().nullable(),
     }),
   ),
@@ -55,12 +55,15 @@ export const publicInvoiceSchema = z.object({
   paymentOptions: z.object({
     /** Bank transfer instructions, when the workspace has set them. */
     bankTransfer: z
-      .object({ instructions: z.string().nullable(), details: z.record(z.string()).nullable() })
+      .object({
+        instructions: z.string().nullable(),
+        details: z.record(z.string(), z.string()).nullable(),
+      })
       .nullable(),
     /** An online provider is connected: `POST .../pay` returns a checkout. */
     online: z.boolean(),
   }),
-  voidedAt: z.string().datetime().nullable(),
+  voidedAt: z.iso.datetime().nullable(),
   voidReason: z.string().nullable(),
 });
 export type PublicInvoice = z.infer<typeof publicInvoiceSchema>;
@@ -83,7 +86,7 @@ export const publicPayResponseSchema = z.object({
   currency: z.string(),
   url: z.string().nullable(),
   instructions: z.string().nullable(),
-  details: z.record(z.string()).nullable(),
+  details: z.record(z.string(), z.string()).nullable(),
   /** The page is display-only: only a verified webhook marks the invoice paid, never what the browser comes back with. */
   note: z.string(),
 });

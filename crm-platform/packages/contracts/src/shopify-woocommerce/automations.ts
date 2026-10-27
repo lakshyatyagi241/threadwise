@@ -16,15 +16,15 @@ export const automationSchema = z.object({
   eventType: z.string(),
   isActive: z.boolean(),
   /** The WhatsApp template sent; null while none is chosen. */
-  templateUuid: z.string().uuid().nullable(),
+  templateUuid: z.guid().nullable(),
   templateName: z.string().nullable(),
   /** Order field names, in order, filling `{{1}}`, `{{2}}`, ...; empty means the default (name, order, total). */
   varMap: z.array(z.string()),
   sendTo: sendToSchema,
   adminNumber: z.string().nullable(),
-  delaySeconds: z.number().int().min(0).max(MAX_DELAY_SECONDS),
+  delaySeconds: z.int().min(0).max(MAX_DELAY_SECONDS),
   /** How many deliveries of this event the store has logged. */
-  fired: z.number().int().min(0),
+  fired: z.int().min(0),
 });
 export type Automation = z.infer<typeof automationSchema>;
 
@@ -38,11 +38,11 @@ export type AutomationsView = z.infer<typeof automationsViewSchema>;
 export const automationInputSchema = z.object({
   eventType: z.string().min(1).max(64),
   isActive: z.boolean(),
-  templateUuid: z.string().uuid().nullable(),
+  templateUuid: z.guid().nullable(),
   varMap: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
   sendTo: sendToSchema.default('customer'),
   adminNumber: z.string().trim().max(32).nullable().default(null),
-  delaySeconds: z.number().int().min(0).max(MAX_DELAY_SECONDS).default(0),
+  delaySeconds: z.int().min(0).max(MAX_DELAY_SECONDS).default(0),
 });
 export type AutomationInput = z.infer<typeof automationInputSchema>;
 

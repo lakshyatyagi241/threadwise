@@ -34,7 +34,7 @@ export const connectWechatChannelSchema = z
   })
   .refine((v) => v.encMode !== 'safe' || v.encodingAesKey !== undefined, {
     path: ['encodingAesKey'],
-    message: 'Safe mode needs the EncodingAESKey.',
+    error: 'Safe mode needs the EncodingAESKey.',
   });
 export type ConnectWechatChannelInput = z.infer<typeof connectWechatChannelSchema>;
 
@@ -47,13 +47,13 @@ export const wechatChannelSchema = z.object({
   encMode: z.enum(WECHAT_ENC_MODES),
   hasEncodingAesKey: z.boolean(),
   active: z.boolean(),
-  connectedAt: z.string().datetime().nullable(),
-  lastInboundAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastInboundAt: z.iso.datetime().nullable(),
   /** Why the credentials or the last token refresh failed; null when healthy. */
   lastError: z.string().nullable(),
   /** The address to paste into the WeChat console as Server address (URL). Always https. */
   webhookUrl: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WechatChannel = z.infer<typeof wechatChannelSchema>;
 

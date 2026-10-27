@@ -8,6 +8,7 @@ import {
   languageOptions,
   prefillVariables,
   previewModelOf,
+  previewModelWithExamples,
   previewModelWithText,
   snippet,
   templatesForSenders,
@@ -97,6 +98,25 @@ describe('preview model', () => {
       footer: null,
     });
     expect(m).toMatchObject({ headerText: 'H Asha', body: 'Hi Asha', footer: '' });
+  });
+});
+
+describe('previewModelWithExamples', () => {
+  it('shows the sample of each placeholder that has one and keeps the rest as placeholders', () => {
+    const m = previewModelWithExamples(
+      template({
+        header: 'Hi {{1}}',
+        body: 'Dear {{1}}, order {{2}} is {{3}}',
+        slots: [
+          slot('header', 1, '', 'Team'),
+          slot('body', 1, '', 'Aditya'),
+          slot('body', 2, '', '4521'),
+          slot('body', 3, '', null),
+        ],
+      }),
+    );
+    expect(m.headerText).toBe('Hi Team');
+    expect(m.body).toBe('Dear Aditya, order 4521 is {{3}}');
   });
 });
 

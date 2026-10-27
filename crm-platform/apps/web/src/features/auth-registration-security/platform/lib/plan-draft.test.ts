@@ -140,9 +140,11 @@ const stored: PlanAdminItem = {
     outbound_webhooks: true,
     storefront_builder: true,
     invoicing: true,
+    recurring_invoices: true,
     forms_and_links: true,
     extra_channels: true,
     form_builder: false,
+    products_services: false,
     waba_groups: false,
     sms: false,
     help_agent: false,
@@ -567,12 +569,12 @@ describe('the teams cap (0 is solo, blank is unlimited)', () => {
       teams: 1_000_000,
       users: 0,
     });
-    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits.teams).toBe(
-      0,
-    );
-    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits.teams).toBe(
-      7,
-    );
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits?.teams,
+    ).toBe(0);
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits?.teams,
+    ).toBe(7);
   });
 
   it('only a blank teams box counts as unlimited; a typed 0 is a cap', () => {
@@ -645,7 +647,7 @@ describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
     expect(hidden.features.inbox_assignment_sticky).toBe(false);
     expect('inbox_routing' in hidden.features).toBe(true);
     const paid = setAddonOffer(on, SMART, 'paid', PACKS);
-    expect(paid.features.inbox_routing).toBe(false);
+    expect(paid.features?.inbox_routing).toBe(false);
   });
 
   it('a pack with limits: only its features move; limits and the rest of the draft stay', () => {
@@ -699,7 +701,7 @@ describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
       { addonId: SMART.id, mode: 'included', amount: null },
       { addonId: SEATS.id, mode: 'paid', amount: '199.00' },
     ]);
-    expect(body.features.inbox_routing).toBe(true);
+    expect(body.features?.inbox_routing).toBe(true);
     // an untouched plan with no stored offer sends none: nothing about any add-on changes
     expect(buildPlanRequest(filled(), { addonPacks: PACKS }).body!.addonOffers).toEqual([]);
     expect(createPlanRequestSchema.safeParse(body).success).toBe(true);
@@ -708,18 +710,18 @@ describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
   it('a plan that carries only part of an add-on keeps it on a save that never touched the add-on', () => {
     const d = filled({ features: { ...allOff(), inbox_routing: true, team_hierarchy: true } });
     const body = buildPlanRequest(d, { addonPacks: PACKS }).body!;
-    expect(body.features.inbox_routing).toBe(true);
-    expect(body.features.team_hierarchy).toBe(true);
+    expect(body.features?.inbox_routing).toBe(true);
+    expect(body.features?.team_hierarchy).toBe(true);
     // switching another add-on does not touch it either
     const other = buildPlanRequest(setAddonOffer(d, SEATS, 'hidden', PACKS), {
       addonPacks: PACKS,
     }).body!;
-    expect(other.features.inbox_routing).toBe(true);
+    expect(other.features?.inbox_routing).toBe(true);
     // choosing Paid for it on purpose turns its features off, as the API stores
     const paid = buildPlanRequest(setAddonOffer(d, SMART, 'paid', PACKS), {
       addonPacks: PACKS,
     }).body!;
-    expect(paid.features.inbox_routing).toBe(false);
+    expect(paid.features?.inbox_routing).toBe(false);
   });
 
   it('without the pack list only the stored offers are sent back, and the features are left as drafted', () => {
@@ -730,7 +732,7 @@ describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
     });
     const body = buildPlanRequest(d).body!;
     expect(body.addonOffers).toEqual([{ addonId: SEATS.id, mode: 'hidden', amount: null }]);
-    expect(body.features.inbox_routing).toBe(true);
+    expect(body.features?.inbox_routing).toBe(true);
     expect(buildPlanRequest(filled()).body!.addonOffers).toEqual([]);
   });
 
@@ -777,8 +779,8 @@ describe('plain add-on offers (Included | Paid | Hidden per plan)', () => {
     expect(unlistedPackFeatures(SMART)).toEqual([]);
     const on = setAddonOffer(filled(), OUTSIDE, 'included', [OUTSIDE]);
     const body = buildPlanRequest(on, { addonPacks: [OUTSIDE] }).body!;
-    expect(body.moduleFeatures.some_module_flag).toBe(true);
-    expect(body.features.inbox_routing).toBe(true);
+    expect(body.moduleFeatures?.some_module_flag).toBe(true);
+    expect(body.features?.inbox_routing).toBe(true);
   });
 
   it('counts the included feature add-ons, and the add-ons offered (Included + Paid, never Hidden)', () => {

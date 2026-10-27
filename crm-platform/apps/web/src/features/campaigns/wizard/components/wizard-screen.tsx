@@ -239,7 +239,14 @@ function WizardBody({
   const countable = countableAudience(draft.audience);
   const settled = useSettled(countable, 500);
   const count = useAudienceCount(view >= 2 ? settled.value : null);
-  const credit = useCreditCheck(view >= 3 ? draft.templateId : null, countable ?? draft.audience);
+  // The wallet is checked from the Recipients step on, once the audience is complete (step 2 blocks Next on a short balance). Recipients
+  // asks about the settled audience, as the count does, so a fast selection is not checked on every click.
+  const creditAudience = view === 2 ? settled.value : countable;
+  const walletStep = view === 3 || (view === 2 && creditAudience !== null);
+  const credit = useCreditCheck(
+    walletStep ? draft.templateId : null,
+    creditAudience ?? draft.audience,
+  );
   const countKnown = settled.settled && !count.isFetching && !count.isPlaceholderData;
 
   const now = new Date();
@@ -249,8 +256,8 @@ function WizardBody({
     now,
     count: countKnown ? count.data : null,
     credit: credit.data,
-    creditPending: view === 3 && Boolean(draft.templateId) && credit.isPending,
-    creditFailed: view === 3 && Boolean(draft.templateId) && credit.isError,
+    creditPending: walletStep && Boolean(draft.templateId) && credit.isPending,
+    creditFailed: walletStep && Boolean(draft.templateId) && credit.isError,
   };
   const issues = stepIssues(view, draft, ctx);
 
@@ -286,7 +293,7 @@ function WizardBody({
       setNotice(f);
       if (f.kind === 'wallet') {
         void credit.refetch();
-        go(3);
+        go(2);
       } else if (f.kind === 'incomplete') {
         setAttempted((a) => ({ ...a, [f.step]: true }));
         go(f.step);

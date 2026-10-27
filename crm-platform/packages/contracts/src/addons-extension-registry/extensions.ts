@@ -16,9 +16,9 @@ const navItemSchema = z.object({
 
 /** What a module contributes, summarised for the list. */
 export const moduleContributionsSchema = z.object({
-  navItems: z.number().int().nonnegative(),
-  planFeatures: z.number().int().nonnegative(),
-  planLimits: z.number().int().nonnegative(),
+  navItems: z.int().nonnegative(),
+  planFeatures: z.int().nonnegative(),
+  planLimits: z.int().nonnegative(),
 });
 
 /** A package installed from a ZIP: its registry row. */
@@ -28,10 +28,10 @@ export const installedExtensionSchema = z.object({
   name: z.string(),
   version: z.string(),
   status: extensionStatusSchema,
-  fileCount: z.number().int().nonnegative(),
+  fileCount: z.int().nonnegative(),
   contributions: moduleContributionsSchema,
-  installedAt: z.string().datetime().nullable(),
-  rowVersion: z.number().int(),
+  installedAt: z.iso.datetime().nullable(),
+  rowVersion: z.int(),
 });
 export type InstalledExtension = z.infer<typeof installedExtensionSchema>;
 
@@ -55,7 +55,7 @@ export const engineStateSchema = z.object({
   brand: z.string(),
   connected: z.boolean(),
   hasSecret: z.boolean(),
-  lastCheckAt: z.string().datetime().nullable(),
+  lastCheckAt: z.iso.datetime().nullable(),
   /** Why the last connect failed (kept so the card can show it after a reload). */
   lastError: z.string().nullable(),
   /** Instagram only: a native module owns the engine, so a remote one cannot be connected. */
@@ -68,7 +68,7 @@ export const extensionsPageResponseSchema = z.object({
   extensions: z.array(installedExtensionSchema),
   modules: z.array(inPlaceModuleSchema),
   /** Uploaded extensions plus in-place-only modules (the count chip, TW-ADD-001). */
-  installedCount: z.number().int().nonnegative(),
+  installedCount: z.int().nonnegative(),
   engines: z.object({ instagram: engineStateSchema, email: engineStateSchema }),
 });
 export type ExtensionsPageResponse = z.infer<typeof extensionsPageResponseSchema>;
@@ -85,27 +85,27 @@ export const uploadExtensionResponseSchema = z.object({
   ok: z.literal(true),
   message: z.string(),
   extension: installedExtensionSchema,
-  filesWritten: z.number().int().nonnegative(),
-  skipped: z.number().int().nonnegative(),
+  filesWritten: z.int().nonnegative(),
+  skipped: z.int().nonnegative(),
   /** True when the slug already existed (an upgrade, TW-ADD-005 rule 6). */
   upgraded: z.boolean(),
 });
 export type UploadExtensionResponse = z.infer<typeof uploadExtensionResponseSchema>;
 
-export const toggleExtensionRequestSchema = z.object({ rowVersion: z.number().int().positive() });
+export const toggleExtensionRequestSchema = z.object({ rowVersion: z.int().positive() });
 export type ToggleExtensionRequest = z.infer<typeof toggleExtensionRequestSchema>;
 
 export const toggleExtensionResponseSchema = z.object({
   ok: z.literal(true),
   status: extensionStatusSchema,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ToggleExtensionResponse = z.infer<typeof toggleExtensionResponseSchema>;
 
 export const removeExtensionResponseSchema = z.object({
   ok: z.literal(true),
   message: z.string(),
-  removedFiles: z.number().int().nonnegative(),
+  removedFiles: z.int().nonnegative(),
 });
 export type RemoveExtensionResponse = z.infer<typeof removeExtensionResponseSchema>;
 
@@ -119,7 +119,7 @@ export type ToggleModuleResponse = z.infer<typeof toggleModuleResponseSchema>;
 // --- engine connections (TW-ADD-017..020) ------------------------------------------------------------------
 
 export const connectEngineRequestSchema = z.object({
-  url: z.string().trim().url().max(255),
+  url: z.string().trim().pipe(z.url().max(255)),
   /** Blank keeps the engine's default display name. */
   brand: z.string().trim().max(40).default(''),
   /** Blank keeps the stored secret. */
@@ -157,8 +157,6 @@ export const grantFieldsResponseSchema = z.object({
   /** Active currencies for the price (the form's Currency list, TW-ADD-026). */
   currencies: z.array(z.object({ code: z.string(), name: z.string() })).default([]),
   features: z.array(grantFieldSchema),
-  limits: z.array(
-    grantFieldSchema.extend({ default: z.number().int().nullable(), hint: z.string() }),
-  ),
+  limits: z.array(grantFieldSchema.extend({ default: z.int().nullable(), hint: z.string() })),
 });
 export type GrantFieldsResponse = z.infer<typeof grantFieldsResponseSchema>;

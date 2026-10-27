@@ -99,6 +99,7 @@
       "triggerGroup": "自动 · 加入群组时",
       "triggerManual": "手动加入",
       "triggerKeyword": "关键词",
+      "triggerAny": "任意消息",
       "active": "进行中",
       "done": "已完成",
       "failed": "失败",
@@ -130,7 +131,10 @@
         "reEngagement": "通过个性化优惠或问候重新激活沉睡联系人。",
         "lead": "在交给销售之前，通过教育性触达培育新线索。",
         "event": "围绕新品发布、促销或节日时点的限时群发。",
-        "default": "在流程编辑器中构建的自动化 WhatsApp 旅程。"
+        "default": "在流程编辑器中构建的自动化 WhatsApp 旅程。",
+        "defaultWeb": "在流程编辑器中创建的网站聊天机器人。",
+        "defaultCall": "在流程编辑器中创建的自动通话。",
+        "defaultOther": "在流程编辑器中创建的自动对话。"
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "不带 @。链接形如 ig.me/m/yourbrand，点击后会打开与您账号的私信。",
           "igMessage": "WhatsApp 消息",
           "igMessageHint": "通过 WhatsApp 连同 Instagram 链接发送给客户。支持 '{{'variables'}}'。",
-          "igMessagePlaceholder": "在 Instagram 上继续与我们互动 👇"
+          "igMessagePlaceholder": "在 Instagram 上继续与我们互动 👇",
+          "templateFills": "每个编号填什么",
+          "templateFillsHint": "输入模板中每个编号的文字，或按 / 插入联系人信息或流程变量。留空则使用模板自带的内容。",
+          "templateHeaderMedia": "头部文件",
+          "templateHeaderMediaHint": "此模板头部的图片、视频或文件。模板自身没有文件时需要提供。",
+          "templateHeaderMediaMissing": "请添加头部文件：此模板没有文件，没有它 WhatsApp 不会发送。"
         },
         "sequence": {
           "info": "每条回复会按顺序发送给客户。可在一个节点中组合文本、图片、视频、音频和文档，非常适合商品卡片或入门资料包。",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "聊天机器人",
-          "description": "触发另一个聊天机器人"
+          "description": "将对话交给 AI 代理"
         },
         "whatsapp_shop": {
           "label": "WhatsApp 商店",

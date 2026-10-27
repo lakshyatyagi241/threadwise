@@ -13,7 +13,7 @@ export const workspaceAiKeyItemSchema = z.object({
   provider: aiProviderSlugSchema,
   isActive: z.boolean(),
   keyLast4: z.string().nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   updatedAt: z.string(),
 });
 export type WorkspaceAiKeyItem = z.infer<typeof workspaceAiKeyItemSchema>;

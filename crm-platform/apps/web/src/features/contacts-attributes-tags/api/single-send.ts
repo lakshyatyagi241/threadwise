@@ -7,7 +7,7 @@ import {
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
 
-const openedSchema = z.object({ id: z.string().uuid() });
+const openedSchema = z.object({ id: z.guid() });
 
 export const sendKeys = {
   channels: ['contacts', 'single-send', 'channels'] as const,

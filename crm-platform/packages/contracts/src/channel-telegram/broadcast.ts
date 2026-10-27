@@ -16,8 +16,8 @@ export const telegramChatSchema = z.object({
   title: z.string(),
   /** private, group or channel. */
   type: z.string(),
-  lastMessageAt: z.string().datetime().nullable(),
-  unread: z.number().int(),
+  lastMessageAt: z.iso.datetime().nullable(),
+  unread: z.int(),
 });
 export type TelegramChat = z.infer<typeof telegramChatSchema>;
 export const telegramChatListSchema = z.object({ data: z.array(telegramChatSchema) });
@@ -52,7 +52,7 @@ export const createTgBroadcastSchema = z.object({
   body: z.string().trim().max(4096).optional(),
   chatIds: z.array(z.string().trim().min(1).max(32)).min(1).max(5000),
   /** One optional attachment, sent with the body as its caption: a public address. Uploading a file waits on the storage domain. */
-  mediaUrl: z.string().trim().url().max(2048).optional(),
+  mediaUrl: z.string().trim().pipe(z.url().max(2048)).optional(),
 });
 export type CreateTgBroadcastInput = z.infer<typeof createTgBroadcastSchema>;
 
@@ -63,20 +63,20 @@ export const tgBroadcastSchema = z.object({
   botUsername: z.string().nullable(),
   templateId: uuidSchema.nullable(),
   status: z.enum(TG_BROADCAST_STATUSES),
-  total: z.number().int(),
-  sent: z.number().int(),
-  failed: z.number().int(),
-  blocked: z.number().int(),
+  total: z.int(),
+  sent: z.int(),
+  failed: z.int(),
+  blocked: z.int(),
   /** Whole percent; blocked counts as done (nothing more can be done for them). */
-  progress: z.number().int(),
+  progress: z.int(),
   /** BL-191: chats held for the workspace's quiet hours (still pending), and the first instant one of them may be messaged. */
-  held: z.number().int(),
-  heldUntil: z.string().datetime().nullable(),
+  held: z.int(),
+  heldUntil: z.iso.datetime().nullable(),
   hasMedia: z.boolean(),
   lastError: z.string().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type TgBroadcast = z.infer<typeof tgBroadcastSchema>;
 
@@ -84,14 +84,14 @@ export const tgBroadcastListSchema = z.object({
   data: z.array(tgBroadcastSchema),
   /** Across every broadcast of the workspace, not only the 50 listed. */
   stats: z.object({
-    total: z.number().int(),
-    sent: z.number().int(),
-    failed: z.number().int(),
-    blocked: z.number().int(),
-    audience: z.number().int(),
-    sending: z.number().int(),
+    total: z.int(),
+    sent: z.int(),
+    failed: z.int(),
+    blocked: z.int(),
+    audience: z.int(),
+    sending: z.int(),
   }),
 });
 export type TgBroadcastList = z.infer<typeof tgBroadcastListSchema>;
 
-export const retryTgBroadcastResponseSchema = z.object({ retried: z.number().int() });
+export const retryTgBroadcastResponseSchema = z.object({ retried: z.int() });

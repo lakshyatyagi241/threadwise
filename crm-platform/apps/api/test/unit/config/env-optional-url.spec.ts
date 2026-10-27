@@ -6,7 +6,6 @@ const base = {
   REDIS_URL: 'redis://localhost:6379',
   JWT_ACCESS_SECRET: 'a'.repeat(40),
   JWT_REFRESH_SECRET: 'b'.repeat(40),
-  CLERK_SECRET_KEY: 'sk_test_x',
   CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 3).toString('base64'),
 };
 
@@ -37,6 +36,6 @@ describe('optional URL settings in the environment schema', () => {
   });
 
   it.each(OPTIONAL_URLS)('%s: a malformed value is still refused', (name) => {
-    expect(() => validateEnv({ ...base, [name]: 'not a url' })).toThrow(/Invalid url/);
+    expect(() => validateEnv({ ...base, [name]: 'not a url' })).toThrow(/Invalid URL/);
   });
 });

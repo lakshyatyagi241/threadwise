@@ -596,11 +596,18 @@ export class GrowthRepository {
   }
 
   /** Open suggestions confident enough to apply by themselves, newest first. */
+  /**
+   * The newest, most confident pending suggestions that the automation may apply: only the stage moves in `eligible` (a forward move
+   * into a stage that is neither won nor lost), so a window of `limit` rows is never taken up by moves that will not apply (#1181).
+   * `onlyContact` narrows it to one contact (the handover path).
+   */
   async autoStageCandidates(
     tx: Tx,
     orgId: number,
     minConfidence: number,
     limit: number,
+    eligible: ReadonlyArray<{ from: string; to: string }>,
+    onlyContact: number | null,
   ): Promise<
     Array<{
       id: number;
@@ -611,9 +618,13 @@ export class GrowthRepository {
       confidence: number;
     }>
   > {
+    if (eligible.length === 0) return [];
+    const pairs = JSON.stringify(eligible.map((e) => ({ f: e.from, t: e.to })));
     const res = await tx.execute(sql`
       SELECT s.id, s.uuid, s.contact_id, s.from_stage, s.to_stage, s.confidence FROM lifecycle_stage_suggestions s
        WHERE s.org_id = ${orgId} AND s.status = 'pending' AND s.confidence >= ${minConfidence}
+         AND (s.from_stage, s.to_stage) IN (SELECT p.f, p.t FROM json_to_recordset(${pairs}::json) AS p(f text, t text))
+         AND (${onlyContact}::bigint IS NULL OR s.contact_id = ${onlyContact}::bigint)
        ORDER BY s.confidence DESC, s.created_at DESC LIMIT ${limit}`);
     return (res.rows as Raw[]).map((r) => ({
       id: num(r.id),

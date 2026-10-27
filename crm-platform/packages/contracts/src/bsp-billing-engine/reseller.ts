@@ -122,16 +122,16 @@ export const bspAllocationSchema = z.object({
   currency: z.string(),
   status: bspAllocationStatusSchema,
   lastError: z.string().nullable(),
-  attachedAt: z.string().datetime().nullable(),
-  revokedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  attachedAt: z.iso.datetime().nullable(),
+  revokedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type BspAllocation = z.infer<typeof bspAllocationSchema>;
 
 export const listBspAllocationsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: cursorSchema.optional(),
   status: bspAllocationStatusSchema.optional(),
 });
@@ -167,11 +167,11 @@ export const attachCreditSchema = z.object({
 export type AttachCreditInput = z.infer<typeof attachCreditSchema>;
 
 export const attachAllResultSchema = z.object({
-  attached: z.number().int(),
-  failed: z.number().int(),
-  skipped: z.number().int(),
+  attached: z.int(),
+  failed: z.int(),
+  skipped: z.int(),
   /** Connected WABAs not yet looked at because the batch limit was reached: run it again. */
-  remaining: z.number().int(),
+  remaining: z.int(),
 });
 export type AttachAllResult = z.infer<typeof attachAllResultSchema>;
 
@@ -197,7 +197,7 @@ export const bspDashboardQuerySchema = z.object({
     .toUpperCase()
     .regex(/^[A-Z]{3}$/)
     .optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(100),
+  limit: z.coerce.number().int().min(1).max(200).prefault(100),
 });
 export type BspDashboardQuery = z.infer<typeof bspDashboardQuerySchema>;
 
@@ -206,13 +206,13 @@ const money = z.string().regex(/^-?\d+(\.\d+)?$/);
 
 export const bspDashboardTotalsSchema = z.object({
   /** Billed (status `charged`) messages in the month. */
-  billedMessages: z.number().int(),
-  freeMessages: z.number().int(),
+  billedMessages: z.int(),
+  freeMessages: z.int(),
   revenue: money,
   metaCost: money,
   margin: money,
   /** Billed messages whose Meta cost is unknown: margin counts them as pure revenue (TW-BSP-014 rule 3). */
-  unpricedMessages: z.number().int(),
+  unpricedMessages: z.int(),
   /** Money held in customer wallets in the base currency, across every workspace. */
   walletFloat: money,
 });
@@ -220,7 +220,7 @@ export const bspDashboardTotalsSchema = z.object({
 export const bspDashboardWorkspaceSchema = z.object({
   workspaceId: uuidSchema,
   workspaceName: z.string(),
-  billedMessages: z.number().int(),
+  billedMessages: z.int(),
   revenue: money,
   metaCost: money,
   margin: money,
@@ -229,8 +229,8 @@ export const bspDashboardWorkspaceSchema = z.object({
 
 export const bspDashboardSchema = z.object({
   month: z.string(),
-  from: z.string().datetime(),
-  to: z.string().datetime(),
+  from: z.iso.datetime(),
+  to: z.iso.datetime(),
   currency: z.string(),
   /** Every currency with charges that month or money held in a wallet, so the page can offer a switch. */
   currencies: z.array(z.string()),
@@ -245,7 +245,7 @@ export const bspStatusSchema = z.object({
   module: z.literal('bsp'),
   configured: z.boolean(),
   graphVersion: z.string(),
-  allocations: z.number().int(),
+  allocations: z.int(),
 });
 export type BspStatus = z.infer<typeof bspStatusSchema>;
 

@@ -21,7 +21,7 @@ export const storageLevelSchema = z.enum(STORAGE_LEVELS);
 export const storageModeSchema = z.enum(STORAGE_MODES);
 export const storageObjectStateSchema = z.enum(STORAGE_OBJECT_STATES);
 
-const bytes = z.number().int().nonnegative();
+const bytes = z.int().nonnegative();
 
 /** `details` of a STORAGE_QUOTA_EXCEEDED problem, in the field names of PLAN_LIMIT_REACHED. */
 export const storageQuotaExceededDetailsSchema = z.object({
@@ -52,9 +52,9 @@ export const storageSummarySchema = z.object({
   coldBytes: bytes,
   capBytes: bytes,
   level: storageLevelSchema,
-  overSince: z.string().datetime().nullable(),
+  overSince: z.iso.datetime().nullable(),
   byCategory: z.array(storageCategoryUsageSchema),
-  lastReconciledAt: z.string().datetime().nullable(),
+  lastReconciledAt: z.iso.datetime().nullable(),
 });
 export type StorageSummary = z.infer<typeof storageSummarySchema>;
 
@@ -70,14 +70,14 @@ export const storageFleetWorkspaceSchema = z.object({
   reservedBytes: bytes,
   capBytes: bytes,
   level: storageLevelSchema,
-  lastReconciledAt: z.string().datetime().nullable(),
+  lastReconciledAt: z.iso.datetime().nullable(),
 });
 export type StorageFleetWorkspace = z.infer<typeof storageFleetWorkspaceSchema>;
 
 export const storageFleetResponseSchema = z.object({
   /** The platform mode in force, so the console says plainly that observe mode refuses nothing. */
   mode: storageModeSchema,
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   totals: z.object({
     workspaces: bytes,
     hotBytes: bytes,
@@ -89,10 +89,10 @@ export const storageFleetResponseSchema = z.object({
   /** The 20 workspaces holding the most hot bytes. */
   top: z.array(storageFleetWorkspaceSchema),
   /** How many workspaces are at each level (computed against the plan's `storage_gb`; nothing is enforced in observe mode). */
-  levels: z.record(storageLevelSchema, bytes),
+  levels: z.partialRecord(storageLevelSchema, bytes),
   /** The nightly counter check: when it last ran, how many workspaces it found drifting, and by how many bytes in total. */
   drift: z.object({
-    lastRunAt: z.string().datetime().nullable(),
+    lastRunAt: z.iso.datetime().nullable(),
     workspacesWithDrift: bytes,
     driftBytes: bytes,
   }),

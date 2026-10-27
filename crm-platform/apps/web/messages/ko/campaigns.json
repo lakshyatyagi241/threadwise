@@ -315,7 +315,22 @@
         "previousTitle": "이전 발송",
         "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 추가하세요. 읽었거나 답장했거나 클릭한 사람만 선택할 수도 있습니다.",
         "previousEstimate": "{count, plural, other {이전 발송에서 최대 #명 (추정치: 두 발송에 모두 포함된 사람은 두 번 계산됩니다).}}",
-        "previousEditHint": "수정할 때는 이전에 선택한 발송이 표시되지 않습니다. 이 캠페인은 이미 수신자를 연락처로 보유하고 있습니다. 더 추가하려면 다시 선택하세요."
+        "previousEditHint": "수정할 때는 이전에 선택한 발송이 표시되지 않습니다. 이 캠페인은 이미 수신자를 연락처로 보유하고 있습니다. 더 추가하려면 다시 선택하세요.",
+        "emails": "이메일 직접 입력",
+        "emailsHint": "한 줄에 하나씩, 또는 쉼표나 세미콜론으로 구분하세요.",
+        "emailsPlaceholder": "한 줄에 이메일 주소 하나",
+        "emailsCount": "주소 {count}개",
+        "emailCsvHint": "열: 이름, 이메일. 다른 열은 메시지에서 쓸 수 있는 변수가 됩니다.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV 업로드",
+            "hint": "이 캠페인의 이메일 주소를 가져옵니다."
+          },
+          "manual": {
+            "title": "이메일 직접 입력",
+            "hint": "한 줄에 이메일 주소 하나씩 붙여넣으세요."
+          }
+        }
       },
       "message": {
         "title": "메시지",
@@ -432,6 +447,7 @@
       },
       "unofficialDisabled": "개인 WhatsApp 번호(비공식 API)를 통한 발송은 이 워크스페이스에서 사용할 수 없습니다. 공식 WhatsApp Business API 번호를 선택하세요.",
       "draftChip": "초안 / 저장되지 않음",
+      "draftSavedChip": "임시 저장 · 저장됨",
       "steps": {
         "label": "캠페인 단계",
         "required": "필수",
@@ -707,6 +723,8 @@
       "guided": {
         "template": "템플릿",
         "pickTemplate": "— 템플릿 선택 —",
+        "searchTemplates": "이름 또는 언어로 템플릿 검색",
+        "noTemplateMatch": "검색과 일치하는 템플릿이 없습니다.",
         "templateHint": "선택한 번호의 승인된 템플릿만 표시됩니다. 변수는 아래에서 입력하세요.",
         "noTemplates": "이 번호에는 승인된 템플릿이 아직 없습니다. 템플릿을 만들고 승인을 기다리세요.",
         "deliveryTitle": "발송",
@@ -1363,7 +1381,6 @@
         "csvPreviewCaption": "파일의 유효한 번호 미리보기",
         "csvLine": "행",
         "csvName": "이름",
-        "csvStatus": "상태",
         "csvRow": {
           "new": "신규 연락처",
           "existing": "기존 연락처",
@@ -1383,7 +1400,14 @@
         "modePrevious": "이전 발송 대상에게 보내기",
         "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 다시 대상으로 지정하세요. 읽었거나, 읽지 않았거나, 답장했거나, 클릭한 사람만 선택할 수도 있습니다.",
         "chipPrevious": "{count, plural, other {이전 발송 #개}} ({outcome})",
-        "filterNoConditions": "조건을 추가하면 일치하는 연락처 수를 볼 수 있습니다."
+        "filterNoConditions": "조건을 추가하면 일치하는 연락처 수를 볼 수 있습니다.",
+        "csvConsentCol": "동의",
+        "csvContactCol": "연락처",
+        "csvConsent": {
+          "optedIn": "수신 동의",
+          "optedOut": "수신 거부"
+        },
+        "clearAudience": "대상 지우기"
       },
       "review": {
         "intro": "비용을 확인하고, 각 템플릿 변수를 무엇으로 채울지 알려 주시고, 브로드캐스트를 검토하세요.",

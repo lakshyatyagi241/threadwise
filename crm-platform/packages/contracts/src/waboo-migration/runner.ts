@@ -49,7 +49,7 @@ export const wabooMigrationRunnerReportResponseSchema = z.object({ cancel: z.boo
 
 export const wabooMigrationRunnerFinishSchema = z.object({
   runner: wabooMigrationRunnerNameSchema,
-  exitCode: z.number().int().min(-1).max(255).nullable(),
+  exitCode: z.int().min(-1).max(255).nullable(),
   timedOut: z.boolean(),
   stderrTail: z.string().max(8192).default(''),
 });

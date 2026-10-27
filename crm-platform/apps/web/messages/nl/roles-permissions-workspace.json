@@ -172,7 +172,8 @@
         "type": "Type",
         "members": "Leden",
         "permissions": "Machtigingen",
-        "lastEdited": "Laatst bewerkt",
+        "lastEdited": "Laatst bewerkt op",
+        "lastEditedBy": "door {name}",
         "actions": "Acties"
       },
       "row": {

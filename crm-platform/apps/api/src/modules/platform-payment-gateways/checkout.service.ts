@@ -540,6 +540,14 @@ export class CheckoutService {
   ): Promise<{ priced: Priced; coupon: CouponResolution | null }> {
     if (!code?.trim() || p.kind === 'wallet_topup') return { priced: p, coupon: null };
     const ctx = RequestContextStore.require();
+    const buyer = await this.db.tx(
+      async (tx) =>
+        (
+          await tx.execute(
+            sql`SELECT email::text AS email FROM users WHERE org_id = ${ctx.orgId} AND id = ${ctx.userId ?? null}`,
+          )
+        ).rows[0] as { email: string } | undefined,
+    );
     const coupon = await this.coupons.resolve({
       code,
       planSlug: p.planSlug,
@@ -547,6 +555,7 @@ export class CheckoutService {
       currency: p.currency,
       orgId: ctx.orgId,
       userId: ctx.userId ?? null,
+      buyerEmail: buyer?.email ?? null,
     });
     if (!coupon.ok) return { priced: p, coupon };
     return {

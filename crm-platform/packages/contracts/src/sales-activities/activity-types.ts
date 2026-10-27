@@ -77,7 +77,7 @@ export const activityOptionSchema = z.object({
   isSystem: z.boolean(),
   /** Phone outcomes only: the built-in outcome this one counts as in the call log. Null on a built-in one. */
   countsAs: phoneCountsAsSchema.nullable(),
-  position: z.number().int(),
+  position: z.int(),
 });
 export type ActivityOption = z.infer<typeof activityOptionSchema>;
 
@@ -104,7 +104,7 @@ export const salesActivityTypeSchema = z.object({
   isDefault: z.boolean(),
   behavesAs: activityBehaviourSchema,
   icon: z.string(),
-  position: z.number().int(),
+  position: z.int(),
   /** "Show this activity in My calendar on Activities Dashboard". */
   showInCalendar: z.boolean(),
   /** "Allow users to mark this activity as completed". */
@@ -118,7 +118,7 @@ export const salesActivityTypeSchema = z.object({
   /** The task types (only a task-like activity has them), in order. */
   taskTypes: z.array(activityOptionSchema),
   outcomes: z.array(activityOptionSchema),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type SalesActivityType = z.infer<typeof salesActivityTypeSchema>;
 
@@ -193,7 +193,7 @@ export const updateActivityTypeSchema = z.object({
   allowEditCompleted: z.boolean().optional(),
   mobileCheckIn: z.boolean().optional(),
   outcomesEnabled: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateActivityTypeInput = z.infer<typeof updateActivityTypeSchema>;
 
@@ -222,9 +222,9 @@ export const meetingResultSchema = z.object({
   meetingId: uuidSchema,
   outcome: activityOptionRefSchema.nullable(),
   note: z.string().nullable(),
-  completedAt: z.string().datetime(),
+  completedAt: z.iso.datetime(),
   completedBy: uuidSchema.nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type MeetingResult = z.infer<typeof meetingResultSchema>;
 
@@ -235,6 +235,6 @@ export type MeetingResultsResponse = z.infer<typeof meetingResultsResponseSchema
 export const setMeetingResultSchema = z.object({
   outcomeId: uuidSchema.nullish(),
   note: z.string().trim().max(MEETING_RESULT_NOTE_MAX).nullish(),
-  completedAt: z.string().datetime({ offset: true }).optional(),
+  completedAt: z.iso.datetime({ offset: true }).optional(),
 });
 export type SetMeetingResultInput = z.infer<typeof setMeetingResultSchema>;

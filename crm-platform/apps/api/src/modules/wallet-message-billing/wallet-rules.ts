@@ -374,16 +374,25 @@ export type LaunchVerdict = { ok: true } | { ok: false; reason: 'empty' | 'insuf
  * A plan workspace whose allowance covers every recipient launches on any balance: those messages are free. Beyond the allowance,
  * the usual rule applies.
  */
-export function launchVerdict(f: LaunchFacts): LaunchVerdict {
-  if (f.platformOwned) return { ok: true };
+/**
+ * Whether the launch is paid from the wallet at all. Platform-owned workspaces, sends inside a plan's monthly allowance (plan billing
+ * only) and free messages are not: they pass without a balance check and without a hold.
+ */
+export function isChargedLaunch(f: LaunchFacts): boolean {
+  if (f.platformOwned) return false;
   if (!f.payPerMessage) {
     const fits =
       f.planActive &&
       !isUnlimitedLimit(f.monthlyLimit) &&
       f.usedThisMonth + Math.max(1, f.recipients) <= f.monthlyLimit;
-    if (fits) return { ok: true };
+    if (fits) return false;
   }
-  if (f.freeAllowed && f.estimateMinor === 0) return { ok: true };
+  if (f.freeAllowed && f.estimateMinor === 0) return false;
+  return true;
+}
+
+export function launchVerdict(f: LaunchFacts): LaunchVerdict {
+  if (!isChargedLaunch(f)) return { ok: true };
   if (f.balanceMinor <= 0) return { ok: false, reason: 'empty' };
   if (f.coveragePercent > 0 && f.estimateMinor !== null && f.estimateMinor > 0) {
     const needed = Math.ceil((f.estimateMinor * f.coveragePercent) / 100);

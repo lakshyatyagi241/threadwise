@@ -315,7 +315,22 @@
         "previousTitle": "Önceki gönderimler",
         "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri ekleyin; isterseniz yalnızca okuyan, yanıtlayan veya tıklayanları seçin.",
         "previousEstimate": "{count, plural, one {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).} other {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).}}",
-        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin."
+        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin.",
+        "emails": "Elle e-postalar",
+        "emailsHint": "Her satıra bir tane, ya da virgül veya noktalı virgülle ayırın.",
+        "emailsPlaceholder": "Her satıra bir e-posta adresi",
+        "emailsCount": "{count} adres",
+        "emailCsvHint": "Sütunlar: ad, e-posta. Diğer her sütun, mesajda kullanabileceğiniz bir değişkene dönüşür.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV yükle",
+            "hint": "Bu kampanya için e-posta adreslerini içe aktarın."
+          },
+          "manual": {
+            "title": "Elle e-postalar",
+            "hint": "Her satıra bir e-posta adresi yapıştırın."
+          }
+        }
       },
       "message": {
         "title": "Mesaj",
@@ -432,6 +447,7 @@
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
+      "draftSavedChip": "Taslak · kaydedildi",
       "steps": {
         "label": "Kampanya adımları",
         "required": "zorunlu",
@@ -707,6 +723,8 @@
       "guided": {
         "template": "Şablon",
         "pickTemplate": "— Şablon seçin —",
+        "searchTemplates": "Şablonları ada veya dile göre ara",
+        "noTemplateMatch": "Aramanızla eşleşen şablon yok.",
         "templateHint": "Yalnızca seçilen numaranın onaylı şablonları. Değişkenleri aşağıda doldurulur.",
         "noTemplates": "Bu numaranın henüz onaylı şablonu yok. Bir şablon oluşturun ve onaylanmasını bekleyin.",
         "deliveryTitle": "Gönderim",
@@ -1363,7 +1381,6 @@
         "csvPreviewCaption": "Dosyadaki geçerli numaraların önizlemesi",
         "csvLine": "Satır",
         "csvName": "Ad",
-        "csvStatus": "Durum",
         "csvRow": {
           "new": "Yeni kişi",
           "existing": "Mevcut kişi",
@@ -1383,7 +1400,14 @@
         "modePrevious": "Önceki gönderimlere gönder",
         "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri yeniden hedefleyin; isterseniz yalnızca okuyan, okumayan, yanıtlayan veya tıklayanları seçin.",
         "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})",
-        "filterNoConditions": "Kaç kişinin eşleştiğini görmek için bir koşul ekleyin."
+        "filterNoConditions": "Kaç kişinin eşleştiğini görmek için bir koşul ekleyin.",
+        "csvConsentCol": "Onay",
+        "csvContactCol": "Kişi",
+        "csvConsent": {
+          "optedIn": "Abone",
+          "optedOut": "Abonelikten çıktı"
+        },
+        "clearAudience": "Kitleyi temizle"
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",

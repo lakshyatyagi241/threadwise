@@ -36,15 +36,13 @@ export const ageGateActionSchema = z.enum(AGE_GATE_ACTIONS);
 export type AgeGateAction = z.infer<typeof ageGateActionSchema>;
 
 /** The age gate of a form or of a widget's intake form. Off by default: nothing asks for an age unless a person turns it on. */
-export const ageGateSchema = z
-  .object({
-    enabled: z.boolean().default(false),
-    mode: ageGateModeSchema.default('declaration'),
-    /** The age a person must have reached. Null: the workspace's minor age (`workspaceMinorAge`). */
-    minAge: z.number().int().min(MIN_GATE_AGE).max(MAX_GATE_AGE).nullable().default(null),
-    whenUnder: ageGateActionSchema.default('block'),
-  })
-  .strict();
+export const ageGateSchema = z.strictObject({
+  enabled: z.boolean().default(false),
+  mode: ageGateModeSchema.default('declaration'),
+  /** The age a person must have reached. Null: the workspace's minor age (`workspaceMinorAge`). */
+  minAge: z.int().min(MIN_GATE_AGE).max(MAX_GATE_AGE).nullable().default(null),
+  whenUnder: ageGateActionSchema.default('block'),
+});
 export type AgeGate = z.infer<typeof ageGateSchema>;
 
 export const OFF_AGE_GATE: AgeGate = {

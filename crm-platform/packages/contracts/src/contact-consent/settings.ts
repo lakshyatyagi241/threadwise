@@ -65,7 +65,7 @@ export const CONSENT_SETTINGS_DEFAULTS: ConsentSettingsValues = {
 
 /** A save replaces the whole document (the screen edits all of it); `rowVersion` is absent on the first save. */
 export const updateConsentSettingsSchema = consentSettingsSchema.extend({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateConsentSettingsInput = z.infer<typeof updateConsentSettingsSchema>;
 

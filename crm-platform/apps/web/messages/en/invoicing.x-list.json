@@ -179,6 +179,7 @@
       "quote": "Quote",
       "salesOrder": "Sales order",
       "recurring": "Recurring schedule",
+      "makeRecurringNotInPlan": "Recurring invoices are not in your plan.",
       "makeRecurring": "Make recurring",
       "reference": "Reference",
       "owner": "Owner",

@@ -98,7 +98,25 @@ export function AudienceBody({
   return (
     <div className="flex min-h-0 min-w-0 flex-col gap-3">
       <AudienceModes mode={mode} tally={tally} onMode={setMode} panelId={panelId} />
-      <AudienceSummary tally={tally} allTotal={audience.allMatching ? allTotal : null} />
+      <AudienceSummary
+        tally={tally}
+        allTotal={audience.allMatching ? allTotal : null}
+        onClear={
+          disabled
+            ? undefined
+            : () =>
+                onAudience({
+                  groupIds: [],
+                  segmentIds: [],
+                  contactIds: [],
+                  excludedContactIds: [],
+                  allMatching: null,
+                  selection: null,
+                  csv: null,
+                  previous: null,
+                })
+        }
+      />
       {issue && <Alert tone="danger">{ti(issue.code)}</Alert>}
       {audience.selection && (
         <WizardCard title={t('selectionTitle')} hint={t('selectionHint')} id="audience-selection">

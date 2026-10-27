@@ -78,9 +78,9 @@ export type WabooMigrationStep = z.infer<typeof wabooMigrationStepSchema>;
 export const wabooMigrationReportSchema = z.object({
   green: z.boolean(),
   verdict: z.enum(WMIG_VERDICTS),
-  unaccounted: z.number().int(),
-  integrityErrors: z.number().int(),
-  alarms: z.number().int(),
+  unaccounted: z.int(),
+  integrityErrors: z.int(),
+  alarms: z.int(),
   summary: z.string(),
 });
 export type WabooMigrationReport = z.infer<typeof wabooMigrationReportSchema>;
@@ -101,7 +101,7 @@ export const wabooMigrationRunSchema = z.object({
   report: wabooMigrationReportSchema.nullable(),
   error: z.string().nullable(),
   batchId: uuidSchema.nullable(),
-  position: z.number().int().nullable(),
+  position: z.int().nullable(),
   runAt: z.string().nullable(),
   startedAt: z.string().nullable(),
   finishedAt: z.string().nullable(),
@@ -118,7 +118,7 @@ const organizationIdSchema = z
   .string()
   .trim()
   .regex(WMIG_DB_RE, 'Letters, digits, underscore and plus only');
-const runAtSchema = z.string().datetime({ offset: true });
+const runAtSchema = z.iso.datetime({ offset: true });
 
 /** Accepts the previous field names (sourceDb, confirmClient) so older callers keep working. */
 const legacy = (v: unknown): unknown => {
@@ -173,8 +173,8 @@ export const wabooMigrationBatchSchema = z.object({
   runAt: z.string().nullable(),
   concurrency: z.literal(1),
   stopOnFailure: z.boolean(),
-  total: z.number().int(),
-  counts: z.record(z.string(), z.number().int()),
+  total: z.int(),
+  counts: z.record(z.string(), z.int()),
   startedAt: z.string().nullable(),
   finishedAt: z.string().nullable(),
   createdAt: z.string(),
@@ -211,6 +211,6 @@ export const wabooMigrationReadinessSchema = z.object({
 export type WabooMigrationReadiness = z.infer<typeof wabooMigrationReadinessSchema>;
 
 export const wabooMigrationRunsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
 });
 export type WabooMigrationRunsQuery = z.infer<typeof wabooMigrationRunsQuerySchema>;

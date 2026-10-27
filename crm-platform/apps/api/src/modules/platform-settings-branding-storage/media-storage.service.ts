@@ -226,6 +226,24 @@ export class MediaStorageService {
     return Number.isFinite(length) ? length : null;
   }
 
+  /**
+   * The bytes of an object on the bucket, or null when it is not there or media is local (the caller then looks on its own disk).
+   */
+  async read(key: string): Promise<Buffer | null> {
+    const d = await this.destination();
+    if (d.disk !== 'cloud' || !d.target) return null;
+    const req = signS3Request(d.target, 'GET', this.fullKey(d, key), Buffer.alloc(0));
+    const res = await fetch(req.url, {
+      method: 'GET',
+      headers: req.headers,
+      redirect: 'manual',
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (res.status === 404 || res.status === 403) return null;
+    if (!res.ok) throw new Error(`Object storage refused the read (HTTP ${res.status})`);
+    return Buffer.from(await res.arrayBuffer());
+  }
+
   private async removeObject(key: string): Promise<void> {
     const d = await this.destination();
     if (d.disk !== 'cloud' || !d.target) return;

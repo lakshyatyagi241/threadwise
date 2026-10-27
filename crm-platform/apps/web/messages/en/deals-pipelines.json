@@ -177,11 +177,17 @@
       "me": "Me ({name})",
       "contact": "Contact",
       "contactHint": "Optional. Search by name or phone number.",
+      "loadingPipelines": "Loading pipelines",
+      "noPipelines": "There is no pipeline to add the deal to yet. Create one in Deals settings.",
+      "pipelinesFailed": "The pipelines could not be loaded. Close this and try again.",
       "expectedClose": "Expected close date",
+      "pipeline": "Pipeline",
+      "expectedCloseHint": "Today or later: the day you expect to win the deal.",
       "errors": {
         "titleRequired": "Enter a title for the deal.",
         "valueInvalid": "Enter a number, for example 1250.50.",
         "valueTooLarge": "That value is too large.",
+        "closePast": "The expected close date cannot be before today.",
         "stageInvalid": "Choose a stage from this pipeline."
       },
       "company": "Company",
@@ -197,6 +203,7 @@
       "none": "No contacts found"
     },
     "drawer": {
+      "closePast": "The expected close date cannot be before today. Pick today or a later day.",
       "loading": "Loading deal",
       "close": "Close",
       "eyebrow": "Deal via {source}",

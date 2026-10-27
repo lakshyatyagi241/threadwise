@@ -57,7 +57,7 @@ describe('expectContract', () => {
       expectContract({ status: 200, body: { id: 'nope', name: 1, color: null } }, tag, {
         label: 'GET /v2/tags',
       }),
-    ).toThrow(/GET \/v2\/tags.*id: Invalid uuid/);
+    ).toThrow(/GET \/v2\/tags.*id: Invalid UUID/);
     expect(contractStats().responses).toBe(0);
   });
   it('fails on an unexpected status and shows the body', () => {

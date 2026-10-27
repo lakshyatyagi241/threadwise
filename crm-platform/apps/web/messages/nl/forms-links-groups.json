@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Opgeslagen.",
-        "published": "Gepubliceerd op WhatsApp."
+        "published": "Gepubliceerd op WhatsApp.",
+        "connectHint": "Formulieren worden alleen gepubliceerd via een directe WhatsApp Cloud API-verbinding. Vraag een beheerder er een te koppelen onder Kanalen → WhatsApp.",
+        "connectLink": "WhatsApp-kanalen openen"
       },
       "builder": {
         "back": "Terug naar formulieren",

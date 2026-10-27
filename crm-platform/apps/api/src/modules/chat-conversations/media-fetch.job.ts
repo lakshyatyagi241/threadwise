@@ -8,10 +8,10 @@ import { z } from 'zod';
 export const MEDIA_FETCH_JOB = 'media.fetch';
 
 export const mediaFetchJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  messageUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  messageUuid: z.guid(),
   /** 1 for the first run, +1 per manual Retry of a failed file (so it gets a job id the earlier run's finished job does not hold). */
-  generation: z.number().int().positive(),
+  generation: z.int().positive(),
 });
 export type MediaFetchJob = z.infer<typeof mediaFetchJobSchema>;
 

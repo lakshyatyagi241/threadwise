@@ -32,9 +32,7 @@ import { ResellerCreditService } from './reseller-credit.service';
 import { ResellerReportService } from './reseller-report.service';
 import { ResellerSettingsService } from './reseller-settings.service';
 
-const revokeBodySchema = z
-  .object({ rowVersion: z.number().int().positive().optional() })
-  .default({});
+const revokeBodySchema = z.object({ rowVersion: z.int().positive().optional() }).default({});
 
 function operatorId(): number {
   const id = RequestContextStore.require().actorId;

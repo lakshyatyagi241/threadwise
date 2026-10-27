@@ -29,7 +29,7 @@ export const dncEntrySchema = z.object({
   source: dncSourceSchema,
   note: z.string().nullable(),
   addedBy: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type DncEntry = z.infer<typeof dncEntrySchema>;
 
@@ -37,7 +37,7 @@ export const dncListQuerySchema = z.object({
   /** Digits of the number to look for (a part of it is enough). */
   q: z.string().trim().max(40).optional(),
   cursor: z.string().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
 });
 export type DncListQuery = z.infer<typeof dncListQuerySchema>;
 
@@ -45,7 +45,7 @@ export const dncListSchema = z.object({
   data: z.array(dncEntrySchema),
   page: pageInfoSchema,
   /** How many numbers the workspace has listed. */
-  total: z.number().int().min(0),
+  total: z.int().min(0),
 });
 export type DncList = z.infer<typeof dncListSchema>;
 
@@ -69,11 +69,11 @@ export type ImportDncInput = z.infer<typeof importDncSchema>;
 
 export const dncAddResultSchema = z.object({
   /** New entries. */
-  added: z.number().int().min(0),
+  added: z.int().min(0),
   /** Numbers that were already on the list (left as they were). */
-  alreadyListed: z.number().int().min(0),
+  alreadyListed: z.int().min(0),
   /** Entries that are not a phone number. */
-  invalid: z.number().int().min(0),
+  invalid: z.int().min(0),
   /** The first few of them, as written, so the person can fix the list. */
   invalidSamples: z.array(z.string()).max(10),
 });
@@ -86,9 +86,9 @@ export type DncAddResult = z.infer<typeof dncAddResultSchema>;
  */
 export const consentManagerEventSchema = z.object({
   eventId: z.string().min(1).max(100),
-  occurredAt: z.string().datetime(),
+  occurredAt: z.iso.datetime(),
   principal: z
-    .object({ phone: z.string().max(40).optional(), email: z.string().email().max(200).optional() })
+    .object({ phone: z.string().max(40).optional(), email: z.email().max(200).optional() })
     .refine((p) => Boolean(p.phone || p.email), 'a phone number or an email address is required'),
   purpose: z.enum(['marketing', 'service']),
   channels: z
@@ -97,6 +97,6 @@ export const consentManagerEventSchema = z.object({
     .max(4),
   action: z.enum(['granted', 'withdrawn']),
   consentArtifactId: z.string().min(1).max(200),
-  expiresAt: z.string().datetime().optional(),
+  expiresAt: z.iso.datetime().optional(),
 });
 export type ConsentManagerEvent = z.infer<typeof consentManagerEventSchema>;

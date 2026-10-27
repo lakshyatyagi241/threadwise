@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "บันทึกแล้ว",
-        "published": "เผยแพร่ไปยัง WhatsApp แล้ว"
+        "published": "เผยแพร่ไปยัง WhatsApp แล้ว",
+        "connectHint": "ฟอร์มจะเผยแพร่ได้ผ่านการเชื่อมต่อ WhatsApp Cloud API โดยตรงเท่านั้น ขอให้ผู้ดูแลเชื่อมต่อใน ช่องทาง → WhatsApp",
+        "connectLink": "เปิดช่องทาง WhatsApp"
       },
       "builder": {
         "back": "กลับไปที่ฟอร์ม",

@@ -315,7 +315,22 @@
         "previousTitle": "Envíos anteriores",
         "previousHint": "Añade a las personas a las que llegaron difusiones y campañas anteriores, opcionalmente solo quienes lo leyeron, respondieron o hicieron clic.",
         "previousEstimate": "{count, plural, one {Hasta # persona de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).} many {Hasta # de personas de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).} other {Hasta # personas de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).}}",
-        "previousEditHint": "Tu elección anterior de envíos previos no se muestra al editar: esta campaña ya guarda sus destinatarios como contactos. Vuelve a elegir para añadir más personas."
+        "previousEditHint": "Tu elección anterior de envíos previos no se muestra al editar: esta campaña ya guarda sus destinatarios como contactos. Vuelve a elegir para añadir más personas.",
+        "emails": "Correos manuales",
+        "emailsHint": "Uno por línea, o separados por coma o punto y coma.",
+        "emailsPlaceholder": "Una dirección de correo por línea",
+        "emailsCount": "{count} direcciones",
+        "emailCsvHint": "Columnas: nombre, correo. Cualquier otra columna se convierte en una variable que puedes usar en el mensaje.",
+        "emailModes": {
+          "csv": {
+            "title": "Subir CSV",
+            "hint": "Importa las direcciones de correo de esta campaña."
+          },
+          "manual": {
+            "title": "Correos manuales",
+            "hint": "Pega una dirección de correo por línea."
+          }
+        }
       },
       "message": {
         "title": "Mensaje",
@@ -432,6 +447,7 @@
       },
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "draftChip": "Borrador / sin guardar",
+      "draftSavedChip": "Borrador · guardado",
       "steps": {
         "label": "Pasos de la campaña",
         "required": "obligatorio",
@@ -707,6 +723,8 @@
       "guided": {
         "template": "Plantilla",
         "pickTemplate": "— Selecciona una plantilla —",
+        "searchTemplates": "Buscar plantillas por nombre o idioma",
+        "noTemplateMatch": "Ninguna plantilla coincide con tu búsqueda.",
         "templateHint": "Solo plantillas aprobadas del número elegido. Sus variables se rellenan más abajo.",
         "noTemplates": "Este número aún no tiene plantillas aprobadas. Crea una y espera su aprobación.",
         "deliveryTitle": "Entrega",
@@ -1363,7 +1381,6 @@
         "csvPreviewCaption": "Vista previa de los números válidos del archivo",
         "csvLine": "Línea",
         "csvName": "Nombre",
-        "csvStatus": "Estado",
         "csvRow": {
           "new": "Contacto nuevo",
           "existing": "Contacto existente",
@@ -1383,7 +1400,14 @@
         "modePrevious": "Enviar a envíos anteriores",
         "previousHint": "Vuelve a dirigirte a las personas a las que llegaron difusiones y campañas anteriores, opcionalmente solo quienes lo leyeron, no lo leyeron, respondieron o hicieron clic.",
         "chipPrevious": "{count, plural, one {# envío anterior} many {# de envíos anteriores} other {# envíos anteriores}} ({outcome})",
-        "filterNoConditions": "Añade una condición para ver cuántos contactos coinciden."
+        "filterNoConditions": "Añade una condición para ver cuántos contactos coinciden.",
+        "csvConsentCol": "Consentimiento",
+        "csvContactCol": "Contacto",
+        "csvConsent": {
+          "optedIn": "Suscrito",
+          "optedOut": "Dado de baja"
+        },
+        "clearAudience": "Borrar audiencia"
       },
       "review": {
         "intro": "Revisa el coste, indica con qué se rellena cada variable de la plantilla y comprueba la difusión.",

@@ -69,12 +69,12 @@ export const inboxContactSummarySchema = z.object({
   isUnsubscribed: z.boolean(),
   whatsappSubscriptionStatus: z.string().nullable(),
   /** AI lead scoring: the contact's score and who set it, the same fields the contact page reads (null: never scored). */
-  leadScore: z.number().int().min(0).max(100).nullable(),
+  leadScore: z.int().min(0).max(100).nullable(),
   leadScoreSource: z.enum(['manual', 'ai']).nullable(),
   leadScoreReasons: z.array(z.string()).nullable(),
-  leadScoredAt: z.string().datetime().nullable(),
+  leadScoredAt: z.iso.datetime().nullable(),
   leadScoreModel: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   /**
    * The contact's own tags (they describe the person: VIP, lead, region), from the same workspace tag library as the thread's tags.
    * Read-only here; they are edited on the contact.
@@ -90,9 +90,9 @@ export const pastConversationSchema = z.object({
   title: z.string(),
   preview: z.string().nullable(),
   status: conversationStatusSchema,
-  lastMessageAt: z.string().datetime().nullable(),
+  lastMessageAt: z.iso.datetime().nullable(),
   /** When the thread began. */
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type PastConversation = z.infer<typeof pastConversationSchema>;
 
@@ -108,7 +108,7 @@ export type InboxConversationDetail = z.infer<typeof inboxConversationDetailSche
 /** `POST .../read` answers with where the counter stands afterwards (it never goes up, and never below what is still unread). */
 export const markConversationReadResponseSchema = z.object({
   conversationId: uuidSchema,
-  unreadCount: z.number().int().nonnegative(),
+  unreadCount: z.int().nonnegative(),
 });
 export type MarkConversationReadResponse = z.infer<typeof markConversationReadResponseSchema>;
 
@@ -172,8 +172,8 @@ export const conversationEventSchema = z.object({
     name: z.string().nullable(),
   }),
   /** Type-specific details with ids as uuids (`from`/`to` status, the previous and new assignee, the note id). */
-  payload: z.record(z.unknown()),
-  createdAt: z.string().datetime(),
+  payload: z.record(z.string(), z.unknown()),
+  createdAt: z.iso.datetime(),
 });
 export type ConversationEvent = z.infer<typeof conversationEventSchema>;
 
@@ -202,10 +202,10 @@ export const inboxMediaUploadSchema = z.object({
   kind: inboxMediaKindSchema,
   mime: z.string(),
   name: z.string(),
-  sizeBytes: z.number().int().nonnegative(),
+  sizeBytes: z.int().nonnegative(),
   /** A link for a preview in the composer: authenticated, valid for minutes. Do not store it. */
   previewUrl: z.string(),
-  expiresAt: z.string().datetime(),
+  expiresAt: z.iso.datetime(),
 });
 export type InboxMediaUpload = z.infer<typeof inboxMediaUploadSchema>;
 
@@ -214,7 +214,7 @@ export type InboxMediaUpload = z.infer<typeof inboxMediaUploadSchema>;
  * and a contact with a number). The first message to a contact outside the 24 hour window must then be a template.
  */
 export const openConversationSchema = z.object({
-  contactId: z.string().uuid(),
-  channelId: z.string().uuid(),
+  contactId: z.guid(),
+  channelId: z.guid(),
 });
 export type OpenConversationInput = z.infer<typeof openConversationSchema>;

@@ -8,6 +8,7 @@ import {
   formFieldKindSchema,
   formOptionSchema,
 } from './definition';
+import { patchOf } from '../common/patch';
 
 /**
  * Forms, as the admin screens see them (docs/specs/forms-builder-app.md sections 4 and 7.1). A form is a draft document plus the
@@ -107,17 +108,20 @@ export const formNotifySchema = z.object({
   /** Also tell these users (uuids). */
   userIds: z.array(uuidSchema).max(20).default([]),
   /** Also email these addresses (a notification email per submission). */
-  emails: z.array(z.string().trim().toLowerCase().email().max(254)).max(5).default([]),
+  emails: z
+    .array(z.string().trim().toLowerCase().pipe(z.email().max(254)))
+    .max(5)
+    .default([]),
 });
 export type FormNotify = z.infer<typeof formNotifySchema>;
 
 export const formRateLimitsSchema = z.object({
   /** Submissions from one address per minute. */
-  perIpPerMinute: z.number().int().min(1).max(600).default(20),
+  perIpPerMinute: z.int().min(1).max(600).default(20),
   /** Submissions to this form per minute, from anywhere. */
-  perFormPerMinute: z.number().int().min(1).max(6000).default(120),
+  perFormPerMinute: z.int().min(1).max(6000).default(120),
   /** Submissions with the same email address or phone number per hour. */
-  perContactPerHour: z.number().int().min(1).max(100).default(5),
+  perContactPerHour: z.int().min(1).max(100).default(5),
 });
 export type FormRateLimits = z.infer<typeof formRateLimitsSchema>;
 
@@ -130,13 +134,12 @@ export const formLiveSettingsSchema = z.object({
   honeypot: z.boolean().default(true),
   /** Days the answers are kept; `null` keeps them until a person deletes them. */
   retentionDays: z
-    .number()
     .int()
     .min(FORM_RETENTION_MIN_DAYS)
     .max(FORM_RETENTION_MAX_DAYS)
     .nullable()
     .default(FORM_RETENTION_DEFAULT_DAYS),
-  rateLimits: formRateLimitsSchema.default({}),
+  rateLimits: formRateLimitsSchema.prefault({}),
 });
 export type FormLiveSettings = z.infer<typeof formLiveSettingsSchema>;
 
@@ -160,18 +163,18 @@ export const formSummarySchema = z.object({
   status: formStatusSchema,
   publicKey: z.string(),
   /** The number of the live version, null while the form was never published. */
-  publishedVersion: z.number().int().nullable(),
-  publishedAt: z.string().datetime().nullable(),
+  publishedVersion: z.int().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
   /** The draft differs from the live version: Publish would change what the public sees. */
   hasUnpublishedChanges: z.boolean(),
-  views: z.number().int(),
+  views: z.int(),
   /** Accepted submissions: every status but `spam`. */
-  submissions: z.number().int(),
-  needsReview: z.number().int(),
-  lastSubmissionAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  submissions: z.int(),
+  needsReview: z.int(),
+  lastSubmissionAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type FormSummary = z.infer<typeof formSummarySchema>;
 
@@ -200,24 +203,24 @@ export const createFormSchema = z
     templateKey: z.string().trim().min(1).max(60).optional(),
     /** Or from a definition you hold (a duplicate, an import). Not with `templateKey`. */
     definition: formDefinitionSchema.optional(),
-    settings: formLiveSettingsSchema.partial().optional(),
+    settings: patchOf(formLiveSettingsSchema).optional(),
   })
   .refine((v) => !(v.templateKey && v.definition), {
     path: ['definition'],
-    message: 'send a template key or a definition, not both',
+    error: 'send a template key or a definition, not both',
   });
 export type CreateFormInput = z.infer<typeof createFormSchema>;
 
 export const updateFormSchema = z.object({
   name: z.string().trim().min(1).max(120).optional(),
   definition: formDefinitionSchema.optional(),
-  settings: formLiveSettingsSchema.partial().optional(),
-  rowVersion: z.number().int().positive(),
+  settings: patchOf(formLiveSettingsSchema).optional(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateFormInput = z.infer<typeof updateFormSchema>;
 
 /** Publish, pause, resume, archive, duplicate and rotate-key carry only the version the caller last read. */
-export const formActionSchema = z.object({ rowVersion: z.number().int().positive() });
+export const formActionSchema = z.object({ rowVersion: z.int().positive() });
 export type FormActionInput = z.infer<typeof formActionSchema>;
 
 export const duplicateFormSchema = formActionSchema.extend({
@@ -227,8 +230,8 @@ export const duplicateFormSchema = formActionSchema.extend({
 export type DuplicateFormInput = z.infer<typeof duplicateFormSchema>;
 
 export const formVersionSchema = z.object({
-  version: z.number().int(),
-  publishedAt: z.string().datetime(),
+  version: z.int(),
+  publishedAt: z.iso.datetime(),
   publishedBy: z.object({ id: uuidSchema, name: z.string() }).nullable(),
   /** This is the version the public sees now. */
   isLive: z.boolean(),
@@ -305,9 +308,9 @@ export const formProtectionSchema = z.object({
     available: z.boolean(),
     version: z.enum(['v2', 'v3']).nullable(),
   }),
-  blockedThisMonth: z.number().int().min(0),
-  heldAsSpam: z.number().int().min(0),
+  blockedThisMonth: z.int().min(0),
+  heldAsSpam: z.int().min(0),
   /** What the age gate's settings need to explain themselves (BL-217): the workspace's minor age, and whether its children question is answered. */
-  age: z.object({ workspaceMinorAge: z.number().int(), childrenAnswered: z.boolean() }),
+  age: z.object({ workspaceMinorAge: z.int(), childrenAnswered: z.boolean() }),
 });
 export type FormProtection = z.infer<typeof formProtectionSchema>;

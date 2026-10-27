@@ -7,6 +7,7 @@ import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
 import { apiHttpLoggerOptions } from './common/logging/http-logger';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
+import { HttpDrainService } from './common/http/http-drain';
 import { SlowRequestInterceptor } from './common/interceptors/slow-request.interceptor';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
@@ -85,6 +86,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
+import { ProductsServicesModule } from './modules/products-services';
 import { KnowledgeBaseModule } from './modules/knowledge-base';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
@@ -233,6 +235,7 @@ import { HealthModule } from './health/health.module';
     WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
+    ProductsServicesModule,
     KnowledgeBaseModule,
     LeadScoringModule,
     GrowthPilotModule,
@@ -262,6 +265,8 @@ import { HealthModule } from './health/health.module';
   ],
   providers: [
     CryptoService,
+    // Waits for running requests before the database pools close (a no-op until main.ts installs the request counter).
+    HttpDrainService,
     { provide: APP_FILTER, useClass: ProblemExceptionFilter },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     // An operator acting as a workspace owner (TW-WSP-032/033): read-only sessions cannot write, nobody touches the owner's credentials.

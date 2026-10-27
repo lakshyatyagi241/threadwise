@@ -21,19 +21,19 @@ const schema = z.object({
     .number()
     .int()
     .positive()
-    .default(5 * MIB),
+    .prefault(5 * MIB),
   MEDIA_MAX_BYTES_MEDIA: z.coerce
     .number()
     .int()
     .positive()
-    .default(16 * MIB),
+    .prefault(16 * MIB),
   MEDIA_MAX_BYTES_DOCUMENT: z.coerce
     .number()
     .int()
     .positive()
-    .default(100 * MIB),
+    .prefault(100 * MIB),
   /** How long a media link works. Short: the link is minted when a thread is read, not stored. */
-  MEDIA_TOKEN_TTL_SECONDS: z.coerce.number().int().min(30).max(3600).default(300),
+  MEDIA_TOKEN_TTL_SECONDS: z.coerce.number().int().min(30).max(3600).prefault(300),
 });
 
 export interface ChatMediaConfig {

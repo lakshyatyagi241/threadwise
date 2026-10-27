@@ -30,10 +30,11 @@ export type PushPublicKeyResponse = z.infer<typeof pushPublicKeyResponseSchema>;
  */
 export const pushSubscriptionInputSchema = z.object({
   endpoint: z
-    .string()
     .url()
     .max(2048)
-    .refine((v) => v.startsWith('https://'), { message: 'Push endpoints are https' }),
+    .refine((v) => v.startsWith('https://'), {
+      error: 'Push endpoints are https',
+    }),
   expirationTime: z.number().nullish(),
   keys: z.object({
     p256dh: z
@@ -55,9 +56,9 @@ export const pushDeviceSchema = z.object({
   id: uuidSchema,
   /** "Chrome on Windows", worked out from the browser's user agent when it subscribed. */
   label: z.string(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   /** The last time the push service accepted a push to this device; null = never. */
-  lastUsedAt: z.string().datetime().nullable(),
+  lastUsedAt: z.iso.datetime().nullable(),
 });
 export type PushDevice = z.infer<typeof pushDeviceSchema>;
 
@@ -75,9 +76,9 @@ export const pushTestResponseSchema = z.object({
    */
   inApp: z.boolean(),
   /** Devices the push service accepted the test for. */
-  sent: z.number().int().nonnegative(),
+  sent: z.int().nonnegative(),
   /** Devices that could not be reached right now (removed by the browser, or the push service refused). */
-  failed: z.number().int().nonnegative(),
+  failed: z.int().nonnegative(),
 });
 export type PushTestResponse = z.infer<typeof pushTestResponseSchema>;
 

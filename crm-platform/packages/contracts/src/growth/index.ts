@@ -59,8 +59,8 @@ export const serviceRuleSchema = z.object({
     .max(60)
     .regex(/^[a-z0-9_]+$/i),
   /** Contacts whose date is this many days ago or more (and less than `untilDays`) are due. */
-  afterDays: z.number().int().min(0).max(3650),
-  untilDays: z.number().int().min(1).max(7300).optional(),
+  afterDays: z.int().min(0).max(3650),
+  untilDays: z.int().min(1).max(7300).optional(),
 });
 export type ServiceRule = z.infer<typeof serviceRuleSchema>;
 
@@ -85,21 +85,21 @@ export const growthConfigSchema = z.object({
   /** A reading this sure that the contact is ready to buy raises a hot-lead alert. */
   hotLeadConfidence: z.number().min(0.5).max(1),
   /** A buying or price question nobody answered for this many hours is flagged. */
-  unansweredHours: z.number().int().min(1).max(168),
+  unansweredHours: z.int().min(1).max(168),
   /** A customer who opened or wrote nothing for this many days is lapsed. */
-  lapsedDays: z.number().int().min(7).max(730),
+  lapsedDays: z.int().min(7).max(730),
   /** Campaigns opened in 30 days that make a contact "engaged". */
-  engagedOpens: z.number().int().min(1).max(50),
+  engagedOpens: z.int().min(1).max(50),
   /** The stage rule: a contact in the first stage that opened this many campaigns in `windowDays`, and is in at least one group, may move on. */
   stageRule: z.object({
-    minOpens: z.number().int().min(1).max(50),
-    windowDays: z.number().int().min(1).max(180),
+    minOpens: z.int().min(1).max(50),
+    windowDays: z.int().min(1).max(180),
     requireGroup: z.boolean(),
   }),
   /** Guarded automatic stage changes. */
   autoStage: z.object({
     minConfidence: z.number().min(0.8).max(1),
-    dailyCap: z.number().int().min(1).max(500),
+    dailyCap: z.int().min(1).max(500),
   }),
   /** Contact property keys that hold a repair or order status; used to draft a status reply. */
   statusFields: z.array(z.string().trim().min(1).max(60)).max(10),
@@ -126,12 +126,12 @@ export const GROWTH_CONFIG_DEFAULTS: GrowthConfig = {
 
 export const updateGrowthSettingsSchema = z
   .object({
-    features: z.record(z.enum(GROWTH_FEATURES), z.boolean()).optional(),
+    features: z.partialRecord(z.enum(GROWTH_FEATURES), z.boolean()).optional(),
     config: growthConfigSchema.partial().optional(),
-    rowVersion: z.number().int().positive().optional(),
+    rowVersion: z.int().positive().optional(),
   })
   .refine((v) => v.features !== undefined || v.config !== undefined, {
-    message: 'Nothing to change.',
+    error: 'Nothing to change.',
   });
 export type UpdateGrowthSettingsInput = z.infer<typeof updateGrowthSettingsSchema>;
 
@@ -181,7 +181,7 @@ export const growthActionsQuerySchema = z.object({
   status: z.enum(GROWTH_ACTION_STATUSES).default('open'),
   type: z.enum(GROWTH_ACTION_TYPES).optional(),
   cursor: z.string().min(1).max(512).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type GrowthActionsQuery = z.infer<typeof growthActionsQuerySchema>;
 
@@ -194,7 +194,7 @@ export interface GrowthActionsResponse {
 
 export const growthActionDecisionSchema = z.object({
   action: z.enum(['accept', 'dismiss']),
-  ids: z.array(z.string().uuid()).min(1).max(100),
+  ids: z.array(z.guid()).min(1).max(100),
 });
 export type GrowthActionDecisionInput = z.infer<typeof growthActionDecisionSchema>;
 export interface GrowthActionDecisionResult {

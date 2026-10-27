@@ -12,6 +12,7 @@ import { SparkIcon } from './parts';
  */
 export function BuilderHeader({
   editing,
+  saved = false,
   backHref,
   busy,
   canDraft,
@@ -23,6 +24,8 @@ export function BuilderHeader({
   /** The campaign goes out as an email, so the bar says email instead of WhatsApp. */
   email?: boolean;
   editing: boolean;
+  /** The draft has no unsaved change (the guided flow autosaves); left out, the chip stays "unsaved". */
+  saved?: boolean;
   backHref: string;
   busy: boolean;
   canDraft: boolean;
@@ -58,7 +61,7 @@ export function BuilderHeader({
         <div className="flex items-center gap-2">
           {!editing && (
             <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-mono text-[11px] font-medium text-muted-foreground">
-              {t('draftChip')}
+              {t(saved ? 'draftSavedChip' : 'draftChip')}
             </span>
           )}
           {onAi && (

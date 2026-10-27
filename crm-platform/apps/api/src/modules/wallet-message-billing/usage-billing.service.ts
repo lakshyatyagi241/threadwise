@@ -38,6 +38,9 @@ export type UsageOutcome =
 
 const NO_ORG = 0;
 
+/** How long an AI call's hold lasts if its charge never posts (the vendor call failed after the hold). See the wallet_holds migration. */
+const AI_HOLD_TTL_SECONDS = 10 * 60;
+
 /** What a refund of each kind says on the statement. */
 const REFUND_TEXT: Record<WalletReportedKind, string> = {
   sms: 'Refund - SMS not delivered',
@@ -229,6 +232,11 @@ export class UsageBillingService {
     if (status === 'charged' || freeReason === 'wallet_empty') {
       await this.messages.alertIfLow(tx, orgId, wallet, balanceAfter, currency);
     }
+    // The AI call held its price before the vendor was called (holdAiCall): its hold is settled here, charged or not, under the same lock.
+    if (input.kind === 'ai') {
+      await this.repo.settleHold(tx, orgId, currency);
+      await this.repo.capReserved(tx, orgId, currency);
+    }
 
     return status === 'charged'
       ? { status: 'charged', chargedMinor, shortfallMinor, balanceAfterMinor: balanceAfter }
@@ -264,6 +272,39 @@ export class UsageBillingService {
         kind === 'ai'
           ? 'Your wallet balance is empty. Top up to use AI features.'
           : `Your wallet balance is too low for this ${USAGE_KIND_LABELS[kind].toLowerCase()}. Top up to continue.`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'balanceMinor', message: String(need.balance) }],
+      );
+    }
+  }
+
+  /**
+   * Holds the price of one AI call on the platform's key before the vendor is called (#1164): the balance is checked and the price taken
+   * out of the available balance in one step, so parallel calls cannot all pass the same balance. The call's charge settles the hold
+   * (see `charge`). Refused with 422 `WALLET_EMPTY`; a failure to look the wallet up lets the call through, like `assertCanAfford`.
+   */
+  async holdAiCall(orgId: number): Promise<void> {
+    let need: { balance: number; priceMinor: number } | null;
+    try {
+      need = await this.balanceAndPrice(orgId, 'ai', 1);
+    } catch {
+      return;
+    }
+    if (!need) return;
+    const amount = Math.max(1, need.priceMinor);
+    const held = await this.db.retry.txAs({ orgId, userId: null }, async (tx) =>
+      this.repo.holdMinor(
+        tx,
+        orgId,
+        await this.billing.forOrg(tx, orgId),
+        amount,
+        AI_HOLD_TTL_SECONDS,
+      ),
+    );
+    if (held === null) {
+      throw new AppError(
+        ERROR_CODES.WALLET_EMPTY,
+        'Your wallet balance is empty. Top up to use AI features.',
         HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'balanceMinor', message: String(need.balance) }],
       );

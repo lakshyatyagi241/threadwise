@@ -48,11 +48,11 @@ const serverUrlSchema = z
 
 export const nodePacingSchema = z.object({
   /** Seconds between consecutive sends. */
-  msgGap: z.number().int().min(1).max(600),
+  msgGap: z.int().min(1).max(600),
   /** Recipients per batch. */
-  batchesGap: z.number().int().min(1).max(10000),
+  batchesGap: z.int().min(1).max(10000),
   /** Minutes between batches. */
-  bwMsgGap: z.number().int().min(1).max(1440),
+  bwMsgGap: z.int().min(1).max(1440),
   enableBatches: z.boolean(),
 });
 export type NodePacing = z.infer<typeof nodePacingSchema>;
@@ -62,16 +62,16 @@ export const nodeBridgeResponseSchema = z.object({
   /** The shared secret is write-only: only whether one is saved is ever returned. */
   tokenSet: z.boolean(),
   /** Version of the address + token document, sent back on save. */
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   pacing: nodePacingSchema,
-  pacingRowVersion: z.number().int(),
+  pacingRowVersion: z.int(),
   /**
    * Whether the unofficial WhatsApp engine (personal numbers over Baileys, channel `whatsapp_qr`) is on for the whole
    * platform. Off unless a super admin turns it on (owner decision 2026-10-05).
    */
   unofficialEnabled: z.boolean(),
   /** How many workspaces are on the unofficial engine's allow-list (owner decision 2026-10-06). Counted whether or not the platform switch is on. */
-  unofficialWorkspaceCount: z.number().int().min(0),
+  unofficialWorkspaceCount: z.int().min(0),
 });
 export type NodeBridgeResponse = z.infer<typeof nodeBridgeResponseSchema>;
 
@@ -79,12 +79,12 @@ export const updateNodeBridgeSchema = z.object({
   serverUrl: serverUrlSchema,
   /** Blank keeps the stored token; a value replaces it (TW-NODE-052). */
   token: z.string().trim().max(191).optional(),
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
 });
 export type UpdateNodeBridgeInput = z.infer<typeof updateNodeBridgeSchema>;
 
 export const updateNodePacingSchema = nodePacingSchema.extend({
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
 });
 export type UpdateNodePacingInput = z.infer<typeof updateNodePacingSchema>;
 
@@ -123,9 +123,9 @@ export type NodeBridgeTestResult = z.infer<typeof nodeBridgeTestResultSchema>;
  */
 export const nodeMessageSettingsSchema = z.object({
   success: z.literal(true),
-  msg_gap: z.number().int(),
-  batches_gap: z.number().int(),
-  bw_msg_gap: z.number().int(),
+  msg_gap: z.int(),
+  batches_gap: z.int(),
+  bw_msg_gap: z.int(),
   enable_batches: z.union([z.literal(0), z.literal(1)]),
 });
 export type NodeMessageSettings = z.infer<typeof nodeMessageSettingsSchema>;
@@ -135,27 +135,27 @@ export type NodeMessageSettings = z.infer<typeof nodeMessageSettingsSchema>;
 // a platform super admin put the workspace on this list.
 
 export const unofficialWorkspaceSchema = z.object({
-  orgUuid: z.string().uuid(),
+  orgUuid: z.guid(),
   name: z.string(),
   slug: z.string(),
   planSlug: z.string().nullable(),
-  enabledAt: z.string().datetime({ offset: true }),
+  enabledAt: z.iso.datetime({ offset: true }),
   /** The operator who allowed the workspace; null when that operator no longer exists. */
   enabledBy: z
-    .object({ operatorUuid: z.string().uuid().optional(), name: z.string().optional() })
+    .object({ operatorUuid: z.guid().optional(), name: z.string().optional() })
     .nullable(),
   note: z.string(),
   /** Devices rows of the workspace. */
-  deviceCount: z.number().int().min(0),
+  deviceCount: z.int().min(0),
   /** Devices whose status is `connected`. */
-  activeDeviceCount: z.number().int().min(0),
+  activeDeviceCount: z.int().min(0),
 });
 export type UnofficialWorkspace = z.infer<typeof unofficialWorkspaceSchema>;
 
 export const unofficialWorkspaceListQuerySchema = z.object({
   /** Substring of the workspace name or slug. */
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type UnofficialWorkspaceListQuery = z.infer<typeof unofficialWorkspaceListQuerySchema>;
@@ -165,7 +165,7 @@ export type UnofficialWorkspaceListResponse = z.infer<typeof unofficialWorkspace
 
 /** One hit of the "add workspace" picker. */
 export const unofficialWorkspaceOptionSchema = z.object({
-  orgUuid: z.string().uuid(),
+  orgUuid: z.guid(),
   name: z.string(),
   slug: z.string(),
   planSlug: z.string().nullable(),
@@ -177,7 +177,7 @@ export type UnofficialWorkspaceOption = z.infer<typeof unofficialWorkspaceOption
 export const unofficialWorkspaceOptionsQuerySchema = z.object({
   /** Substring of the workspace name, slug or the owner's email. */
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(20).default(20),
+  limit: z.coerce.number().int().min(1).max(20).prefault(20),
 });
 export type UnofficialWorkspaceOptionsQuery = z.infer<typeof unofficialWorkspaceOptionsQuerySchema>;
 

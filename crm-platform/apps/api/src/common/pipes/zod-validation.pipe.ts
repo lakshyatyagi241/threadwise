@@ -1,5 +1,5 @@
 import { Injectable, type PipeTransform } from '@nestjs/common';
-import type { ZodType, ZodTypeDef } from 'zod';
+import type { ZodType } from 'zod';
 import { AppError } from '../errors/app-error';
 
 /**
@@ -15,7 +15,7 @@ import { AppError } from '../errors/app-error';
 @Injectable()
 export class ZodValidationPipe<T> implements PipeTransform<unknown, T> {
   // The input type is open: a schema may transform a query string (`"true"` to `true`), so what goes in is not what comes out.
-  constructor(private readonly schema: ZodType<T, ZodTypeDef, unknown>) {}
+  constructor(private readonly schema: ZodType<T, unknown>) {}
 
   transform(value: unknown): T {
     // PostgreSQL text cannot hold a NUL (0x00): the write fails and the caller used to get a 500 for input that is theirs to fix.
@@ -27,7 +27,7 @@ export class ZodValidationPipe<T> implements PipeTransform<unknown, T> {
     }
     // A schema can throw instead of failing: `z.coerce.number()` on `{"toString": []}` (a query string `?limit[toString]=1` parses to
     // that) is a TypeError, and a `.refine` that stringifies a very deep body is a RangeError. Both are the caller's bad input.
-    let result: ReturnType<ZodType<T, ZodTypeDef, unknown>['safeParse']>;
+    let result: ReturnType<ZodType<T, unknown>['safeParse']>;
     try {
       result = this.schema.safeParse(value);
     } catch (e) {
@@ -77,5 +77,5 @@ export function findNul(value: unknown, path = ''): string | null {
 }
 
 /** Convenience factory so call sites read as `ZodBody(schema)`. */
-export const zodPipe = <T>(schema: ZodType<T, ZodTypeDef, unknown>): ZodValidationPipe<T> =>
+export const zodPipe = <T>(schema: ZodType<T, unknown>): ZodValidationPipe<T> =>
   new ZodValidationPipe(schema);

@@ -212,7 +212,7 @@ export const updateNotificationPreferencesRequestSchema = z.object({
     .min(1)
     .max(60)
     .refine((items) => new Set(items.map((i) => i.type)).size === items.length, {
-      message: 'Each type may appear once',
+      error: 'Each type may appear once',
     }),
 });
 export type UpdateNotificationPreferencesRequest = z.infer<
@@ -238,9 +238,9 @@ export const sendOutcomeNotificationDataSchema = z.object({
   id: uuidSchema,
   name: z.string().nullable().optional(),
   status: z.string(),
-  total: z.number().int().nonnegative().optional(),
-  sent: z.number().int().nonnegative().optional(),
-  failed: z.number().int().nonnegative().optional(),
+  total: z.int().nonnegative().optional(),
+  sent: z.int().nonnegative().optional(),
+  failed: z.int().nonnegative().optional(),
   /** The failure reason, cut to 200 characters; text, never HTML. */
   reason: z.string().max(200).nullable().optional(),
 });
@@ -253,7 +253,7 @@ export const teamChatNotificationDataSchema = z.object({
   messageId: uuidSchema.optional(),
   authorName: z.string().nullable().optional(),
   preview: z.string().max(80).nullable().optional(),
-  count: z.number().int().min(1).optional(),
+  count: z.int().min(1).optional(),
   direct: z.boolean().optional(),
 });
 export type TeamChatNotificationData = z.infer<typeof teamChatNotificationDataSchema>;
@@ -268,7 +268,7 @@ export const wabaGroupNotificationDataSchema = z.object({
   connectionId: uuidSchema.optional(),
   groupName: z.string().nullable().optional(),
   /** Join requests only: how many people the row stands for. */
-  count: z.number().int().min(1).optional(),
+  count: z.int().min(1).optional(),
 });
 export type WabaGroupNotificationData = z.infer<typeof wabaGroupNotificationDataSchema>;
 
@@ -283,6 +283,6 @@ export const deviceGroupNotificationDataSchema = z.object({
   deviceId: uuidSchema.optional(),
   groupName: z.string().nullable().optional(),
   /** Join requests only: how many people the row stands for. */
-  count: z.number().int().min(1).optional(),
+  count: z.int().min(1).optional(),
 });
 export type DeviceGroupNotificationData = z.infer<typeof deviceGroupNotificationDataSchema>;

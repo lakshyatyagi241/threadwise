@@ -78,14 +78,60 @@ export function sentryOptions(
       }),
     ],
     initialScope: { tags: { service } },
-    beforeSend: scrubSentryEvent,
-    beforeSendLog: scrubSentryLog,
+    beforeSend: (event: Sentry.ErrorEvent) =>
+      allowEvent(throttleKey(event)) ? scrubSentryEvent(event) : null,
+    beforeSendLog: (log: Sentry.Log) =>
+      allowLog(
+        `${String(log.message)}|${String(log.attributes?.code)}|${String(log.attributes?.module)}`,
+      )
+        ? scrubSentryLog(log)
+        : null,
     beforeSendSpan: scrubSentrySpan,
     tracePropagationTargets: [],
   };
 }
 
 export const sentryEnabled = (): boolean => enabled;
+
+/**
+ * A rate limit per key: at most `limit` pass in each `windowMs`, the rest are refused. Sentry bills every event, a failing
+ * dependency produces the same error on every request or job (an API outage made tens of thousands of identical events in a few
+ * hours and used up the quota, after which nothing at all was recorded), and the 5th copy of an error in a minute says what the
+ * 5,000th would. Grouping does not help: it saves reading, not events. A quiet window starts a fresh count. The table is capped
+ * so a stream of distinct keys cannot grow it without bound. Per process, which is enough to turn a flood into a trickle.
+ */
+export function createThrottle(
+  limit: number,
+  windowMs = 60_000,
+  now: () => number = Date.now,
+  maxKeys = 500,
+): (key: string) => boolean {
+  const seen = new Map<string, { start: number; n: number }>();
+  return (key) => {
+    const t = now();
+    const entry = seen.get(key);
+    if (entry && t - entry.start < windowMs) return ++entry.n <= limit;
+    if (!entry && seen.size >= maxKeys) {
+      for (const [k, v] of seen) if (t - v.start >= windowMs) seen.delete(k);
+      if (seen.size >= maxKeys) seen.clear();
+    }
+    seen.set(key, { start: t, n: 1 });
+    return true;
+  };
+}
+
+/** What makes two error reports "the same": the exception type and the start of its text, or the message of a captured message. */
+export function throttleKey(event: {
+  message?: string;
+  exception?: { values?: Array<{ type?: string; value?: string }> };
+}): string {
+  const ex = event.exception?.values?.[0];
+  return `${ex?.type ?? ''}:${(ex?.value ?? event.message ?? '').slice(0, 120)}`;
+}
+
+const allowEvent = createThrottle(5);
+/** Logs are meant to be plentiful (one per refused request), so the same line may repeat more before it is cut. */
+const allowLog = createThrottle(60);
 
 interface ScrubbableEvent {
   /** The name of the request being handled when the error happened: `GET /path`. */

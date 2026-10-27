@@ -13,14 +13,14 @@ export const TASK_OUTCOMES_MAX = 200;
 export const taskOutcomeResponseSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   /** `false` hides it from pickers; the tasks that already carry it keep it. */
   isActive: z.boolean(),
   /** Tasks that currently carry this outcome. */
-  taskCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  taskCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type TaskOutcomeResponse = z.infer<typeof taskOutcomeResponseSchema>;
 
@@ -52,7 +52,7 @@ export type CreateTaskOutcomeInput = z.infer<typeof createTaskOutcomeSchema>;
 export const updateTaskOutcomeSchema = z.object({
   name: z.string().trim().min(1).max(TASK_OUTCOME_NAME_MAX).optional(),
   isActive: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateTaskOutcomeInput = z.infer<typeof updateTaskOutcomeSchema>;
 

@@ -237,8 +237,8 @@ export const retentionSpecOf = (id: RetentionItemId): RetentionItemSpec =>
   RETENTION_ITEMS.find((i) => i.id === id)!;
 
 export const retentionValuesSchema = z.object({
-  liveDays: z.number().int(),
-  archiveDays: z.number().int().nullable(),
+  liveDays: z.int(),
+  archiveDays: z.int().nullable(),
 });
 export type RetentionValues = z.infer<typeof retentionValuesSchema>;
 
@@ -293,19 +293,18 @@ export function retentionCrossProblem(
 export const retentionDeleteAfterDays = (v: RetentionValues): number | null =>
   v.archiveDays === null ? null : v.liveDays + v.archiveDays;
 
-export const retentionSaveRequestSchema = z
-  .object({
-    liveDays: z.number().int(),
-    archiveDays: z.number().int().nullable(),
-    /** The `rowVersion` read with the item; `null` when the item still has no saved policy. */
-    rowVersion: z.number().int().min(1).nullable(),
-  })
-  .strict();
+export const retentionSaveRequestSchema = z.strictObject({
+  liveDays: z.int(),
+  archiveDays: z.int().nullable(),
+  /** The `rowVersion` read with the item; `null` when the item still has no saved policy. */
+  rowVersion: z.int().min(1).nullable(),
+});
 export type RetentionSaveRequest = z.infer<typeof retentionSaveRequestSchema>;
 
-export const retentionPreviewRequestSchema = z
-  .object({ liveDays: z.number().int(), archiveDays: z.number().int().nullable() })
-  .strict();
+export const retentionPreviewRequestSchema = z.strictObject({
+  liveDays: z.int(),
+  archiveDays: z.int().nullable(),
+});
 export type RetentionPreviewRequest = z.infer<typeof retentionPreviewRequestSchema>;
 
 export const retentionRunSchema = z.object({
@@ -314,7 +313,7 @@ export const retentionRunSchema = z.object({
   mode: z.enum(['live', 'dry_run']),
   outcome: z.enum(['ok', 'partial', 'failed']),
   /** Whole months moved to the archive and dropped from the database. */
-  archivedMonths: z.number().int(),
+  archivedMonths: z.int(),
   archivedRows: z.number(),
   archivedBytes: z.number(),
   /** Archive months, rows or files deleted because their archive window ended. */
@@ -330,16 +329,16 @@ export const retentionItemViewSchema = z.object({
   group: z.enum(RETENTION_GROUPS),
   canArchive: z.boolean(),
   source: z.enum(['default', 'custom']),
-  liveDays: z.number().int(),
-  archiveDays: z.number().int().nullable(),
-  deleteAfterDays: z.number().int().nullable(),
+  liveDays: z.int(),
+  archiveDays: z.int().nullable(),
+  deleteAfterDays: z.int().nullable(),
   defaults: retentionValuesSchema,
   limits: z.object({
     live: z.object({ min: z.number(), max: z.number() }),
     archive: z.object({ min: z.number(), max: z.number() }),
   }),
   /** Null until the first save; send it back with the next save. */
-  rowVersion: z.number().int().nullable(),
+  rowVersion: z.int().nullable(),
   updatedAt: z.string().nullable(),
   /** Whether the saved values are being applied now (false while the archive engine is off or only logging). */
   applied: z.boolean(),
@@ -347,7 +346,7 @@ export const retentionItemViewSchema = z.object({
     bytes: z.number(),
     /** Estimated, from the catalog: no table scan. Null before the first ANALYZE. */
     rows: z.number().nullable(),
-    partitions: z.number().int().nullable(),
+    partitions: z.int().nullable(),
     oldestMonth: z.string().nullable(),
   }),
   archive: z.object({ objects: z.number(), bytes: z.number(), measuredAt: z.string() }).nullable(),

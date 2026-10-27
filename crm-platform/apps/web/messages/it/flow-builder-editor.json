@@ -99,6 +99,7 @@
       "triggerGroup": "Automatico · all’ingresso nel gruppo",
       "triggerManual": "Iscrizione manuale",
       "triggerKeyword": "Parola chiave",
+      "triggerAny": "Qualsiasi messaggio",
       "active": "attivo",
       "done": "completato",
       "failed": "fallito",
@@ -130,7 +131,10 @@
         "reEngagement": "Riattiva i contatti inattivi con un’offerta personalizzata o un check-in.",
         "lead": "Coltiva i nuovi lead con contenuti educativi prima di passarli alle vendite.",
         "event": "Broadcast a tempo intorno a un lancio, una vendita o un momento stagionale.",
-        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow."
+        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow.",
+        "defaultWeb": "Chatbot del sito creato nell'editor dei flussi.",
+        "defaultCall": "Chiamata automatizzata creata nell'editor dei flussi.",
+        "defaultOther": "Conversazione automatizzata creata nell'editor dei flussi."
       }
     },
     "featured": {
@@ -1741,7 +1745,12 @@
           "igUsernameHint": "Senza la @. Il link diventa ig.me/m/yourbrand — toccandolo si apre un DM al tuo account.",
           "igMessage": "Messaggio WhatsApp",
           "igMessageHint": "Inviato al cliente su WhatsApp con il link Instagram. Supporta '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continua con noi su Instagram 👇"
+          "igMessagePlaceholder": "Continua con noi su Instagram 👇",
+          "templateFills": "Cosa riempie ogni numero",
+          "templateFillsHint": "Scrivi il testo per ogni numero del modello, oppure premi / per inserire un dato del contatto o una variabile del flusso. Lascia vuoto per usare il valore del modello.",
+          "templateHeaderMedia": "File dell'intestazione",
+          "templateHeaderMediaHint": "L'immagine, il video o il file nell'intestazione di questo modello. Serve quando il modello non ha un file proprio.",
+          "templateHeaderMediaMissing": "Aggiungi il file dell'intestazione: questo modello non ne ha uno e WhatsApp non lo invierà senza."
         },
         "sequence": {
           "info": "Ogni risposta viene inviata al cliente in ordine. Combina testo, immagini, video, audio e documenti in un solo nodo — perfetto per schede prodotto o kit di benvenuto.",
@@ -2107,7 +2116,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Attiva un altro chatbot"
+          "description": "Passa la chat a un agente IA"
         },
         "whatsapp_shop": {
           "label": "Negozio WhatsApp",

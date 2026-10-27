@@ -64,7 +64,10 @@ const optionalString = (max: number, field: string) =>
   z.preprocess(
     blankToNull,
     z
-      .string({ invalid_type_error: `The ${field} field must be a string.` })
+      .string({
+        error: (issue) =>
+          issue.input === undefined ? undefined : `The ${field} field must be a string.`,
+      })
       .max(max, `The ${field} field must not be greater than ${max} characters.`)
       .nullable()
       .optional(),
@@ -79,7 +82,10 @@ const coordinate = (field: string, limit: number) =>
       return b;
     },
     z
-      .number({ invalid_type_error: `The ${field} field must be a number.` })
+      .number({
+        error: (issue) =>
+          issue.input === undefined ? undefined : `The ${field} field must be a number.`,
+      })
       .min(-limit, `The ${field} field must be between -${limit} and ${limit}.`)
       .max(limit, `The ${field} field must be between -${limit} and ${limit}.`)
       .nullable()
@@ -91,8 +97,10 @@ export const v1SendMessageSchema = z.object({
     blankToNull,
     z
       .string({
-        required_error: 'The to field is required.',
-        invalid_type_error: 'The to field must be a string.',
+        error: (issue) =>
+          issue.input === undefined
+            ? 'The to field is required.'
+            : 'The to field must be a string.',
       })
       .max(V1_TO_MAX, `The to field must not be greater than ${V1_TO_MAX} characters.`),
   ),
@@ -111,7 +119,7 @@ export const v1SendMessageSchema = z.object({
   type: z.preprocess(
     blankToNull,
     z
-      .enum(V1_SEND_TYPES, { errorMap: () => ({ message: 'The selected type is invalid.' }) })
+      .enum(V1_SEND_TYPES, { error: () => 'The selected type is invalid.' })
       .nullable()
       .optional(),
   ),
@@ -119,7 +127,6 @@ export const v1SendMessageSchema = z.object({
   media_url: z.preprocess(
     blankToNull,
     z
-      .string({ invalid_type_error: 'The media url field must be a valid URL.' })
       .url('The media url field must be a valid URL.')
       .max(
         V1_MEDIA_URL_MAX,
@@ -136,7 +143,7 @@ export type V1SendMessageInput = z.infer<typeof v1SendMessageSchema>;
 // --- the message (TW-API-120) -------------------------------------------------------------------------------------------------------
 
 export const v1MessageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   /** The recipient's number as digits; for an inbound message the business number. A send answers the string exactly as it was sent. */
   to: z.string().nullable(),
   /** `text`, `image`, `video`, `document`, `audio`, `location` or another stored kind (`sticker`, `voice`, `contact`). */
@@ -144,11 +151,11 @@ export const v1MessageSchema = z.object({
   status: z.enum(V1_MESSAGE_STATUSES),
   failure_reason: z.string().nullable(),
   /** The provider's typed code (Meta: 131047) as a number, a platform code (`AUTH_SEND_HALTED`) as text; null when there is none. */
-  error_code: z.union([z.number().int(), z.string()]).nullable(),
+  error_code: z.union([z.int(), z.string()]).nullable(),
   body: z.string().nullable(),
   /** The stored file, fetched with the same key (`GET /media/...`); null when the message has no file. */
   media_url: z.string().nullable(),
-  created_at: z.string().datetime(),
+  created_at: z.iso.datetime(),
 });
 export type V1Message = z.infer<typeof v1MessageSchema>;
 
@@ -169,7 +176,7 @@ export function v1ClampedListQuery(opts: { defaultLimit: number; maxLimit: numbe
     .superRefine((q, ctx) => {
       if (q.page !== undefined) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           path: ['page'],
           message:
             'Page numbers are not supported. Pass the `cursor` from `meta.next_cursor` of the previous page.',
@@ -208,13 +215,13 @@ export type V1ListConversationsQuery = z.infer<typeof v1ListConversationsQuerySc
 export const V1_CHANNEL_CODES = { whatsapp_qr: 'W', whatsapp_cloud: 'WB' } as const;
 
 export const v1ConversationSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   /** Digits of the peer's number (`null` when there are none). */
   contact: z.string().nullable(),
   name: z.string().nullable(),
   last_message: z.string().nullable(),
-  last_message_at: z.string().datetime().nullable(),
-  unread: z.number().int().nonnegative(),
+  last_message_at: z.iso.datetime().nullable(),
+  unread: z.int().nonnegative(),
   /** The send state of the thread: `pending`, `sent` or `failed` (Reference's queue status, not the inbox's open/resolved). */
   status: z.string(),
   /** Reference's engine code: `W` unofficial WhatsApp, `WB` WhatsApp Cloud; any other channel is its kind (`telegram`, `instagram`). */
@@ -228,7 +235,7 @@ export const V1_DEVICE_ENGINES = ['unofficial', 'whatsapp_cloud', 'twilio', 'unk
 
 export const v1DeviceSchema = z.object({
   /** The device's uuid (unofficial number) or the connection's uuid (Cloud API, Twilio): either is a valid `device_id` of a send. */
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   /** Digits; empty text for an unofficial number without one, null for a connection without one (Reference). */
   phone: z.string().nullable(),
@@ -236,7 +243,7 @@ export const v1DeviceSchema = z.object({
   /** Unofficial numbers: `connected`, `disconnected`, `needs_pair`, `failed`. Connections: `connected` or `disconnected`. */
   status: z.string(),
   active: z.boolean(),
-  last_seen_at: z.string().datetime().nullable(),
+  last_seen_at: z.iso.datetime().nullable(),
 });
 export type V1Device = z.infer<typeof v1DeviceSchema>;
 
@@ -248,6 +255,6 @@ export const v1MediaUploadSchema = z.object({
   path: z.string(),
   type: z.enum(['image', 'video', 'audio', 'document']),
   mime: z.string(),
-  size: z.number().int().nonnegative(),
+  size: z.int().nonnegative(),
 });
 export type V1MediaUpload = z.infer<typeof v1MediaUploadSchema>;

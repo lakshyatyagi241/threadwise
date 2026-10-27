@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "محفوظ ہو گیا۔",
-        "published": "WhatsApp پر شائع ہو گیا۔"
+        "published": "WhatsApp پر شائع ہو گیا۔",
+        "connectHint": "فارمز صرف براہ راست WhatsApp Cloud API کنکشن کے ذریعے شائع ہوتے ہیں۔ کسی منتظم سے چینلز ← WhatsApp میں ایک کنکشن جوڑنے کو کہیں۔",
+        "connectLink": "WhatsApp چینلز کھولیں"
       },
       "builder": {
         "back": "فارمز پر واپس جائیں",

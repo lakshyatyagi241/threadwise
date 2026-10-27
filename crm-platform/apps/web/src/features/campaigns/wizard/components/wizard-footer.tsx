@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Button, Spinner } from '@crm/ui';
+import { Button, Spinner, cn } from '@crm/ui';
 import { WIZARD_STEP_COUNT } from '@crm/contracts';
 import type { LaunchKind } from '../lib/schedule';
 
@@ -46,7 +46,13 @@ export function WizardFooter({
   const reasons = (
     <>
       {blocked.length > 0 && (
-        <p id="wizard-blocked" role="status" className="min-w-0 text-sm text-danger">
+        <p
+          id="wizard-blocked"
+          role="status"
+          title={blocked.join('\n')}
+          // In the header the reason is one line, so the bar does not grow taller when Next is refused.
+          className={cn('min-w-0 text-sm text-danger', inline && 'max-w-[16rem] truncate')}
+        >
           {blocked[0]}
           {blocked.length > 1 && ` ${t('moreIssues', { count: blocked.length - 1 })}`}
         </p>

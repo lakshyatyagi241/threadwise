@@ -1424,10 +1424,15 @@
         "by": "Importado por"
       },
       "exports": {
-        "title": "Exportações",
-        "hint": "Exportações de contatos do Hub, das mais recentes às mais antigas. Cada arquivo é mantido por 30 dias para que você e os colegas com permissão de exportar possam baixá-lo de novo.",
+        "title": "Histórico de exportações",
+        "hint": "Exportações do Hub, das mais recentes para as mais antigas, com a origem de cada uma. Cada arquivo fica guardado por 30 dias para que você e colegas que podem exportar possam baixá-lo de novo.",
         "empty": "Ainda não há exportações.",
         "by": "Por",
+        "source": "Origem",
+        "sources": {
+          "contacts": "Contatos",
+          "campaigns": "Campanhas"
+        },
         "rows": "Contatos",
         "selection": "Escopo",
         "unknown": "Desconhecido",

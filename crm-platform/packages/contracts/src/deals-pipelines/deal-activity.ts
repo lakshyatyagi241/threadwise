@@ -41,8 +41,8 @@ export const dealActivityResponseSchema = z.object({
   /** Null for `stage_change`. Encrypted at rest. */
   body: z.string().nullable(),
   /** Tasks only. */
-  dueAt: z.string().datetime().nullable(),
-  doneAt: z.string().datetime().nullable(),
+  dueAt: z.iso.datetime().nullable(),
+  doneAt: z.iso.datetime().nullable(),
   done: z.boolean(),
   /** Tasks only: who is to do it. */
   assignee: dealUserRefSchema.nullable(),
@@ -50,9 +50,9 @@ export const dealActivityResponseSchema = z.object({
   author: dealUserRefSchema.nullable(),
   /** `stage_change` only; the names are kept with the row so a deleted stage still reads. `from` is null for the first placement. */
   stageChange: z.object({ from: stageNameRef.nullable(), to: stageNameRef }).nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type DealActivityResponse = z.infer<typeof dealActivityResponseSchema>;
 
@@ -61,13 +61,13 @@ export const createDealActivitySchema = z
     type: manualActivityTypeSchema,
     body: z.string().trim().min(1).max(ACTIVITY_BODY_MAX),
     /** Tasks only (422 for other types, not silently dropped as Reference did). A full timestamp, not a date at midnight. */
-    dueAt: z.string().datetime({ offset: true }).optional(),
+    dueAt: z.iso.datetime({ offset: true }).optional(),
     /** Tasks only. Omit for the caller. */
     assigneeId: uuidSchema.nullish(),
   })
   .refine((v) => v.type === 'task' || (v.dueAt === undefined && v.assigneeId === undefined), {
-    message: 'dueAt and assigneeId apply to tasks only',
     path: ['dueAt'],
+    error: 'dueAt and assigneeId apply to tasks only',
   });
 export type CreateDealActivityInput = z.infer<typeof createDealActivitySchema>;
 
@@ -83,7 +83,7 @@ export const dealActivityPageResponseSchema = z.object({
 
 /** Open tasks across deals ("my tasks"), soonest due first. */
 export const listDealTasksQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   /** Tasks assigned to the caller. Without it, the tasks the caller's record scope can see. */
   mine: queryBoolean().optional(),

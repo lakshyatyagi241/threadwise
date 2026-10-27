@@ -172,7 +172,8 @@
         "type": "ধরন",
         "members": "সদস্য",
         "permissions": "অনুমতি",
-        "lastEdited": "শেষ সম্পাদনা",
+        "lastEdited": "শেষ সম্পাদনার তারিখ",
+        "lastEditedBy": "দ্বারা {name}",
         "actions": "কার্যক্রম"
       },
       "row": {

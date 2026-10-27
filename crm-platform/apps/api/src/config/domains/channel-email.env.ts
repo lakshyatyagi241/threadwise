@@ -13,9 +13,9 @@ import { z } from 'zod';
  */
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const optional = (max = 512) => z.preprocess(blank, z.string().max(max).optional());
-const urlOr = (dflt: string) => z.preprocess(blank, z.string().url().default(dflt));
+const urlOr = (dflt: string) => z.preprocess(blank, z.url().default(dflt));
 const int = (min: number, max: number, dflt: number) =>
-  z.preprocess(blank, z.coerce.number().int().min(min).max(max).default(dflt));
+  z.preprocess(blank, z.coerce.number().int().min(min).max(max).prefault(dflt));
 const flag = (dflt: boolean) =>
   z.preprocess(
     (v) =>
@@ -36,7 +36,7 @@ const schema = z.object({
   /** Fallback for the console's client id / secret / redirect address. */
   GOOGLE_MAIL_CLIENT_ID: optional(200),
   GOOGLE_MAIL_CLIENT_SECRET: optional(200),
-  GOOGLE_MAIL_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  GOOGLE_MAIL_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
 
   /**
    * Microsoft 365 / Outlook through Microsoft Graph (TW-MAIL-034). The identity platform and Graph hosts (a test aims them at a local
@@ -48,7 +48,7 @@ const schema = z.object({
   MICROSOFT_MAIL_CLIENT_SECRET: optional(300),
   /** `common` (work, school and personal accounts), `organizations`, `consumers`, or one directory's id. */
   MICROSOFT_MAIL_TENANT: optional(100),
-  MICROSOFT_MAIL_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  MICROSOFT_MAIL_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
   /** Ceiling for one call to Microsoft, in ms. */
   MICROSOFT_MAIL_HTTP_TIMEOUT_MS: int(1_000, 120_000, 20_000),
   /**
@@ -57,7 +57,7 @@ const schema = z.object({
    * unless `MICROSOFT_MAIL_NOTIFICATION_URL` names another one (a reverse proxy, a tunnel in staging). Without push the Inbox is polled.
    */
   MAIL_GRAPH_PUSH_ENABLED: flag(false),
-  MICROSOFT_MAIL_NOTIFICATION_URL: z.preprocess(blank, z.string().url().optional()),
+  MICROSOFT_MAIL_NOTIFICATION_URL: z.preprocess(blank, z.url().optional()),
 
   /**
    * Gmail push (TW-MAIL-033). Fallbacks for the console's pubsubTopic / pushAudience / pushServiceAccount: the Pub/Sub topic the Gmail

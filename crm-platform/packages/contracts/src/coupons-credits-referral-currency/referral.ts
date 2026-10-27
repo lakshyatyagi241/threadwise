@@ -34,14 +34,14 @@ export const REFERRAL_TOP_CODES_LIMIT = 5;
 
 export const referralRowSchema = z.object({
   id: uuidSchema,
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   /** The referee's name, or null when the account has none (the screen shows a generic label). */
   refereeName: z.string().nullable(),
   refereeEmail: z.string().nullable(),
   /** What the referee typed or arrived with (upper-case). */
   codeUsed: z.string(),
   /** Hundredths of the platform currency; 0 until the first payment pays out. */
-  creditsAwardedMinor: z.number().int().nonnegative(),
+  creditsAwardedMinor: z.int().nonnegative(),
   status: z.enum(['paid', 'pending']),
   /** The wallet entry of the payout, or null while unpaid. */
   walletTxId: uuidSchema.nullable(),
@@ -57,16 +57,16 @@ const moneyShape = {
 export const referralOverviewSchema = z.object({
   ...moneyShape,
   code: z.string(),
-  link: z.string().url(),
+  link: z.url(),
   /** What the referrer earns when the referee makes the first payment (0: the programme pays nothing right now). */
-  rewardMinor: z.number().int().nonnegative(),
+  rewardMinor: z.int().nonnegative(),
   /** The flat price of one message, so the screen can say how many messages a reward covers. */
-  messagePriceMinor: z.number().int().positive(),
+  messagePriceMinor: z.int().positive(),
   /** True when the platform bills per message, which is the only case a reward "spends per message". */
   payPerMessage: z.boolean(),
-  lifetimeCount: z.number().int().nonnegative(),
-  last30dCount: z.number().int().nonnegative(),
-  earnedMinor: z.number().int().nonnegative(),
+  lifetimeCount: z.int().nonnegative(),
+  last30dCount: z.int().nonnegative(),
+  earnedMinor: z.int().nonnegative(),
   recent: z.array(referralRowSchema).max(REFERRAL_RECENT_LIMIT),
 });
 export type ReferralOverview = z.infer<typeof referralOverviewSchema>;
@@ -77,7 +77,7 @@ export const referralListQuerySchema = z.object({
   bucket: referralBucketSchema.optional(),
   q: z.string().trim().max(120).optional(),
   cursor: cursorSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(REFERRAL_PAGE_SIZE),
+  limit: z.coerce.number().int().min(1).max(100).prefault(REFERRAL_PAGE_SIZE),
 });
 export type ReferralListQuery = z.input<typeof referralListQuerySchema>;
 export type ReferralListParams = z.output<typeof referralListQuerySchema>;
@@ -90,47 +90,47 @@ export type ReferralExportQuery = z.output<typeof referralExportQuerySchema>;
 export const referralVolumePointSchema = z.object({
   /** First day of the bucket (UTC), `YYYY-MM-DD`. */
   start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  signups: z.number().int().nonnegative(),
-  creditsMinor: z.number().int().nonnegative(),
+  signups: z.int().nonnegative(),
+  creditsMinor: z.int().nonnegative(),
 });
 export type ReferralVolumePoint = z.infer<typeof referralVolumePointSchema>;
 
 export const referralStatsSchema = z.object({
   /** Sign-ups inside the selected range. */
-  signupsInRange: z.number().int().nonnegative(),
+  signupsInRange: z.int().nonnegative(),
   /** Sign-ups in the window of the same length right before it. */
-  signupsPrevious: z.number().int().nonnegative(),
+  signupsPrevious: z.int().nonnegative(),
   /** Whole percent against the previous window; +100 when the previous window had none and this one has, else 0. */
-  deltaPercent: z.number().int(),
-  signupsLifetime: z.number().int().nonnegative(),
-  signups30d: z.number().int().nonnegative(),
-  creditsEarnedMinor: z.number().int().nonnegative(),
-  credits30dMinor: z.number().int().nonnegative(),
+  deltaPercent: z.int(),
+  signupsLifetime: z.int().nonnegative(),
+  signups30d: z.int().nonnegative(),
+  creditsEarnedMinor: z.int().nonnegative(),
+  credits30dMinor: z.int().nonnegative(),
   /** Lifetime credits over lifetime sign-ups, rounded; 0 with no sign-ups. */
-  avgPerSignupMinor: z.number().int().nonnegative(),
+  avgPerSignupMinor: z.int().nonnegative(),
 });
 export type ReferralStats = z.infer<typeof referralStatsSchema>;
 
 export const referralTopCodeSchema = z.object({
   code: z.string(),
-  signups: z.number().int().nonnegative(),
-  creditsMinor: z.number().int().nonnegative(),
+  signups: z.int().nonnegative(),
+  creditsMinor: z.int().nonnegative(),
 });
 
 export const referralPayoutSchema = z.object({
   id: uuidSchema,
-  amountMinor: z.number().int().positive(),
-  createdAt: z.string().datetime(),
-  balanceAfterMinor: z.number().int(),
+  amountMinor: z.int().positive(),
+  createdAt: z.iso.datetime(),
+  balanceAfterMinor: z.int(),
 });
 
 /** GET /v2/me/referrals: one page of the table plus everything the dashboard draws, over the same range. */
 export const referralListResponseSchema = z.object({
   ...moneyShape,
   code: z.string(),
-  link: z.string().url(),
-  rewardMinor: z.number().int().nonnegative(),
-  messagePriceMinor: z.number().int().positive(),
+  link: z.url(),
+  rewardMinor: z.int().nonnegative(),
+  messagePriceMinor: z.int().positive(),
   payPerMessage: z.boolean(),
   filters: z.object({
     range: referralRangeSchema,
@@ -141,9 +141,9 @@ export const referralListResponseSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
     /** Rows matching the range and the search (the table footer's "of N"). */
-    total: z.number().int().nonnegative(),
+    total: z.int().nonnegative(),
   }),
   /** Computed over the range and ignore the search text. */
   stats: referralStatsSchema,

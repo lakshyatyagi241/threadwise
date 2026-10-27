@@ -5,10 +5,10 @@ export const MARKETING_MEDIA_MAX_BYTES = 20 * 1024 * 1024;
 
 export const marketingMediaSchema = z.object({
   /** An address the provider can fetch; a private bucket with no CDN gets a signed link that lasts seven days. */
-  url: z.string().url(),
+  url: z.url(),
   name: z.string(),
   mime: z.string(),
   kind: z.enum(['image', 'video', 'audio', 'document']),
-  size: z.number().int().nonnegative(),
+  size: z.int().nonnegative(),
 });
 export type MarketingMedia = z.infer<typeof marketingMediaSchema>;

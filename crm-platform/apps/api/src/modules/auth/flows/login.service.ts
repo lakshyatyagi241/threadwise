@@ -344,8 +344,8 @@ export class LoginService {
 
   /**
    * Refuses (and audits) while the lockout counter for `key` is at the limit.
-   * Used by password sign-in, the Clerk exchange and the partner portal so all
-   * of them stop at the same place.
+   * Used by password sign-in and the partner portal so both stop at the same
+   * place.
    */
   async assertNotLocked(
     key: string,
@@ -622,7 +622,7 @@ export class LoginService {
       // With verification off every account counts as verified, so the address
       // is stamped the first time the person signs in (Reference stamps on the fly).
       const autoVerify = registration.emailVerification === 'off';
-      // Social and Clerk accounts hold a password nobody knows, so a maximum
+      // Social accounts hold a password nobody knows, so a maximum
       // password age has nothing to measure from: their clock starts now.
       const stampPassword = input.method === 'social';
       await this.db.txAs({ orgId: org.id, userId: user.id }, async (tx) => {

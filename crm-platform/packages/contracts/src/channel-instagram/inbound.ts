@@ -22,8 +22,8 @@ export type IgInbound = z.infer<typeof igInboundSchema>;
 export const igInboundResultSchema = z.object({
   ok: z.literal(true),
   /** Set for a `message` event. */
-  message_id: z.number().int().optional(),
-  conversation_id: z.number().int().optional(),
+  message_id: z.int().optional(),
+  conversation_id: z.int().optional(),
   /** Set for an event that is acknowledged and not stored (`status`, `conversation`). */
   received: z.string().optional(),
 });

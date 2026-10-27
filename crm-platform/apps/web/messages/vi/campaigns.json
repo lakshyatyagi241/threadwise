@@ -315,7 +315,22 @@
         "previousTitle": "Lần gửi trước",
         "previousHint": "Thêm những người mà các broadcast và chiến dịch trước đó đã gửi đến, có thể chỉ gồm người đã đọc, trả lời hoặc nhấp vào liên kết.",
         "previousEstimate": "{count, plural, other {Tối đa # người từ các lần gửi trước (ước tính: người nằm trong hai lần gửi được tính hai lần).}}",
-        "previousEditHint": "Lựa chọn lần gửi trước của bạn không hiển thị khi chỉnh sửa: chiến dịch này đã lưu người nhận dưới dạng liên hệ. Hãy chọn lại để thêm người."
+        "previousEditHint": "Lựa chọn lần gửi trước của bạn không hiển thị khi chỉnh sửa: chiến dịch này đã lưu người nhận dưới dạng liên hệ. Hãy chọn lại để thêm người.",
+        "emails": "Email nhập tay",
+        "emailsHint": "Mỗi dòng một địa chỉ, hoặc ngăn cách bằng dấu phẩy hay dấu chấm phẩy.",
+        "emailsPlaceholder": "Mỗi dòng một địa chỉ email",
+        "emailsCount": "{count} địa chỉ",
+        "emailCsvHint": "Cột: tên, email. Mọi cột khác sẽ thành biến mà bạn có thể dùng trong tin nhắn.",
+        "emailModes": {
+          "csv": {
+            "title": "Tải lên CSV",
+            "hint": "Nhập các địa chỉ email cho chiến dịch này."
+          },
+          "manual": {
+            "title": "Email nhập tay",
+            "hint": "Dán mỗi dòng một địa chỉ email."
+          }
+        }
       },
       "message": {
         "title": "Tin nhắn",
@@ -432,6 +447,7 @@
       },
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "draftChip": "Bản nháp / chưa lưu",
+      "draftSavedChip": "Bản nháp · đã lưu",
       "steps": {
         "label": "Các bước chiến dịch",
         "required": "bắt buộc",
@@ -707,6 +723,8 @@
       "guided": {
         "template": "Mẫu",
         "pickTemplate": "— Chọn một mẫu —",
+        "searchTemplates": "Tìm mẫu theo tên hoặc ngôn ngữ",
+        "noTemplateMatch": "Không có mẫu nào khớp với tìm kiếm của bạn.",
         "templateHint": "Chỉ gồm các mẫu đã được duyệt của số đã chọn. Các biến của mẫu được điền bên dưới.",
         "noTemplates": "Số này chưa có mẫu nào được duyệt. Hãy tạo một mẫu và chờ được duyệt.",
         "deliveryTitle": "Gửi",
@@ -1363,7 +1381,6 @@
         "csvPreviewCaption": "Xem trước các số hợp lệ trong tệp",
         "csvLine": "Dòng",
         "csvName": "Tên",
-        "csvStatus": "Trạng thái",
         "csvRow": {
           "new": "Liên hệ mới",
           "existing": "Liên hệ hiện có",
@@ -1383,7 +1400,14 @@
         "modePrevious": "Gửi đến các lần gửi trước",
         "previousHint": "Nhắm lại những người mà các broadcast và chiến dịch trước đó đã gửi đến, có thể chỉ gồm người đã đọc, chưa đọc, đã trả lời hoặc đã nhấp vào liên kết.",
         "chipPrevious": "{count, plural, other {# lần gửi trước}} ({outcome})",
-        "filterNoConditions": "Thêm một điều kiện để xem có bao nhiêu liên hệ phù hợp."
+        "filterNoConditions": "Thêm một điều kiện để xem có bao nhiêu liên hệ phù hợp.",
+        "csvConsentCol": "Sự đồng ý",
+        "csvContactCol": "Liên hệ",
+        "csvConsent": {
+          "optedIn": "Đã đăng ký",
+          "optedOut": "Đã hủy đăng ký"
+        },
+        "clearAudience": "Xóa đối tượng"
       },
       "review": {
         "intro": "Kiểm tra chi phí, cho chúng tôi biết mỗi biến của mẫu được điền bằng gì, và xem lại đợt gửi hàng loạt.",

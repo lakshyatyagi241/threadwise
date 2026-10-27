@@ -31,6 +31,8 @@ export class CouponService {
     currency: string;
     orgId: number;
     userId: number | null;
+    /** The buyer's email: the buyer is one person across every workspace (#1069), so limits count by it. */
+    buyerEmail?: string | null;
   }): Promise<CouponResolution> {
     const code = input.code.trim().toUpperCase();
     const none = (message: string): CouponResolution => ({
@@ -68,10 +70,21 @@ export class CouponService {
         firstPurchaseOnly: r.first_purchase_only === true,
       };
       let buyer: { paidOrders: number; usedThisCoupon: number } | null = null;
-      if (input.userId !== null && (facts.firstPurchaseOnly || facts.perUserLimit !== null)) {
-        const c = await tx.execute(sql`
+      const email = input.buyerEmail?.trim().toLowerCase() || null;
+      if (
+        (input.userId !== null || email !== null) &&
+        (facts.firstPurchaseOnly || facts.perUserLimit !== null)
+      ) {
+        // The buyer's paid orders in every workspace, by email. Without an email (never expected) the workspace's own user counts.
+        const c = await tx.execute(
+          email !== null
+            ? sql`
           SELECT count(*)::int AS paid, count(*) FILTER (WHERE coupon_id = ${facts.id})::int AS used
-          FROM orders WHERE org_id = ${input.orgId} AND user_id = ${input.userId} AND status = 'paid'`);
+          FROM orders WHERE lower(customer_email) = ${email} AND status = 'paid'`
+            : sql`
+          SELECT count(*)::int AS paid, count(*) FILTER (WHERE coupon_id = ${facts.id})::int AS used
+          FROM orders WHERE org_id = ${input.orgId} AND user_id = ${input.userId} AND status = 'paid'`,
+        );
         const row = c.rows[0] as { paid: number; used: number };
         buyer = { paidOrders: row.paid, usedThisCoupon: row.used };
       }

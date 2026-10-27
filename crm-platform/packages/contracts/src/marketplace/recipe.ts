@@ -50,13 +50,13 @@ export const RECIPE_TRANSFORMS = ['trim', 'lower', 'upper', 'digits', 'phone', '
 export const recipeValueMapSchema = z.record(z.string().max(60), z.string().max(120));
 
 export const recipeSourceSchema = z.union([
-  z.object({ from: recipePathSchema, map: recipeValueMapSchema.optional() }).strict(),
-  z.object({ const: scalarSchema }).strict(),
+  z.strictObject({ from: recipePathSchema, map: recipeValueMapSchema.optional() }),
+  z.strictObject({ const: scalarSchema }),
 ]);
 export type RecipeSource = z.infer<typeof recipeSourceSchema>;
 
 export const recipeFieldRuleSchema = z
-  .object({
+  .strictObject({
     /** The lead or contact field it fills: `name`, `phone`, `email`, `company`, `city`, `message`, or a custom field key. */
     to: recipeFieldKeySchema,
     from: recipePathSchema.optional(),
@@ -71,7 +71,6 @@ export const recipeFieldRuleSchema = z
     required: z.boolean().default(false),
     default: scalarSchema.nullable().optional(),
   })
-  .strict()
   .superRefine((r, ctx) => {
     if ((r.from === undefined) === (r.const === undefined)) {
       ctx.addIssue({ code: 'custom', message: 'Give exactly one of from and const.' });
@@ -90,13 +89,11 @@ export type RecipeFieldRule = z.infer<typeof recipeFieldRuleSchema>;
  * Where the time a portal says a lead arrived is, and how it is written. `iso`: ISO 8601, or `2024-04-10 11:17:14` (a time with no zone
  * is read in the portal's own zone, `utcOffsetMinutes` east of UTC: IST is 330). `epoch_seconds` and `epoch_millis` are unambiguous.
  */
-export const recipeTimeSchema = z
-  .object({
-    from: recipePathSchema,
-    format: z.enum(['iso', 'epoch_seconds', 'epoch_millis']).default('iso'),
-    utcOffsetMinutes: z.number().int().min(-720).max(840).default(0),
-  })
-  .strict();
+export const recipeTimeSchema = z.strictObject({
+  from: recipePathSchema,
+  format: z.enum(['iso', 'epoch_seconds', 'epoch_millis']).default('iso'),
+  utcOffsetMinutes: z.int().min(-720).max(840).default(0),
+});
 export type RecipeTime = z.infer<typeof recipeTimeSchema>;
 
 /**
@@ -104,36 +101,30 @@ export type RecipeTime = z.infer<typeof recipeTimeSchema>;
  * overlap, a retry, push and pull both delivering it) is one lead. Parts are read after their transforms (`phone` makes `98765 43210` and
  * `+919876543210` the same); when any part is missing the hash of the whole item is the id, which still recognises an identical repeat.
  */
-export const recipeDerivedIdSchema = z
-  .object({
-    parts: z
-      .array(
-        z
-          .object({
-            from: recipePathSchema,
-            transform: z.array(z.enum(RECIPE_TRANSFORMS)).max(4).optional(),
-          })
-          .strict(),
-      )
-      .min(1)
-      .max(6),
-    prefix: z
-      .string()
-      .regex(/^[a-z0-9]{1,8}$/)
-      .default('d'),
-  })
-  .strict();
+export const recipeDerivedIdSchema = z.strictObject({
+  parts: z
+    .array(
+      z.strictObject({
+        from: recipePathSchema,
+        transform: z.array(z.enum(RECIPE_TRANSFORMS)).max(4).optional(),
+      }),
+    )
+    .min(1)
+    .max(6),
+  prefix: z
+    .string()
+    .regex(/^[a-z0-9]{1,8}$/)
+    .default('d'),
+});
 export type RecipeDerivedId = z.infer<typeof recipeDerivedIdSchema>;
 
-export const recipeAttributionSchema = z
-  .object({
-    platform: recipeSourceSchema.optional(),
-    campaign: recipeSourceSchema.optional(),
-    adset: recipeSourceSchema.optional(),
-    ad: recipeSourceSchema.optional(),
-    form: recipeSourceSchema.optional(),
-  })
-  .strict();
+export const recipeAttributionSchema = z.strictObject({
+  platform: recipeSourceSchema.optional(),
+  campaign: recipeSourceSchema.optional(),
+  adset: recipeSourceSchema.optional(),
+  ad: recipeSourceSchema.optional(),
+  form: recipeSourceSchema.optional(),
+});
 
 /**
  * Proof of consent a portal or an ad platform sends with a lead (BL-168, privacy spec 4.3.2). OPTIONAL: a recipe without it never grants
@@ -141,22 +132,20 @@ export const recipeAttributionSchema = z
  * reads); the rest is the evidence kept with the grant: the wording shown, its version, when they agreed, and the provider's form and ad
  * ids. A lead whose `given` is not a yes carries no consent, whatever else is mapped.
  */
-export const recipeConsentSchema = z
-  .object({
-    given: recipeSourceSchema,
-    text: recipeSourceSchema.optional(),
-    version: recipeSourceSchema.optional(),
-    at: recipeTimeSchema.optional(),
-    formId: recipeSourceSchema.optional(),
-    adId: recipeSourceSchema.optional(),
-    /** The channels the wording covers. Omitted: a phone is WhatsApp, an address is email (SMS only when named here). */
-    channels: z
-      .array(z.enum(['whatsapp', 'sms', 'email']))
-      .min(1)
-      .max(3)
-      .optional(),
-  })
-  .strict();
+export const recipeConsentSchema = z.strictObject({
+  given: recipeSourceSchema,
+  text: recipeSourceSchema.optional(),
+  version: recipeSourceSchema.optional(),
+  at: recipeTimeSchema.optional(),
+  formId: recipeSourceSchema.optional(),
+  adId: recipeSourceSchema.optional(),
+  /** The channels the wording covers. Omitted: a phone is WhatsApp, an address is email (SMS only when named here). */
+  channels: z
+    .array(z.enum(['whatsapp', 'sms', 'email']))
+    .min(1)
+    .max(3)
+    .optional(),
+});
 export type RecipeConsent = z.infer<typeof recipeConsentSchema>;
 
 export const recipeMappingSchema = z.discriminatedUnion('mode', [
@@ -164,54 +153,50 @@ export const recipeMappingSchema = z.discriminatedUnion('mode', [
    * Generic: well-known names (name, phone, email, ...) are found by alias and every other scalar is carried over as it came. A portal
    * whose payload is only PROPOSED (nobody has seen a real one) uses this until a sample shows the real names, and still labels its leads.
    */
-  z
-    .object({
-      mode: z.literal('auto'),
-      /** The attribution platform when the payload names none (`justdial`). */
-      platform: z.string().trim().min(1).max(60).optional(),
-      /** Prefix added to a bare 10 digit number. */
-      defaultCountryCode: z
-        .string()
-        .regex(/^\d{1,3}$/)
-        .default('91'),
-      /** A hash of these values is the lead id when the payload carries none. */
-      externalIdDerive: recipeDerivedIdSchema.optional(),
-      /** The portal sends no time: the lead is stamped with the time it was received, and says so (`received_at_approximate`). */
-      receivedAtApproximate: z.boolean().default(false),
-      /** A time the payload does send, written with no zone, is the portal's own: minutes east of UTC (IST is 330). */
-      utcOffsetMinutes: z.number().int().min(-720).max(840).default(0),
-    })
-    .strict(),
-  z
-    .object({
-      mode: z.literal('explicit'),
-      /** Where the sender's own id for the lead is. Without one, a hash of the delivery is the id (a repeat of the same delivery is still a duplicate). */
-      externalId: z.object({ from: recipePathSchema }).strict().optional(),
-      /** For a portal with no lead id: the values a hash is made of (see `recipeDerivedIdSchema`). */
-      externalIdDerive: recipeDerivedIdSchema.optional(),
-      receivedAt: recipeTimeSchema.optional(),
-      /** The portal sends no time of its own: the lead carries `received_at_approximate`. */
-      receivedAtApproximate: z.boolean().default(false),
-      /** When one delivery carries several leads, the path to the array. */
-      itemsPath: recipePathSchema.optional(),
-      fields: z.array(recipeFieldRuleSchema).min(1).max(40),
-      attribution: recipeAttributionSchema.optional(),
-      /** Where the lead says the person agreed to be contacted, and the wording they saw. Optional; see `recipeConsentSchema`. */
-      consent: recipeConsentSchema.optional(),
-      /** Prefix added to a bare 10 digit number by the `phone` transform. */
-      defaultCountryCode: z
-        .string()
-        .regex(/^\d{1,3}$/)
-        .default('91'),
-    })
-    .strict(),
+  z.strictObject({
+    mode: z.literal('auto'),
+    /** The attribution platform when the payload names none (`justdial`). */
+    platform: z.string().trim().min(1).max(60).optional(),
+    /** Prefix added to a bare 10 digit number. */
+    defaultCountryCode: z
+      .string()
+      .regex(/^\d{1,3}$/)
+      .default('91'),
+    /** A hash of these values is the lead id when the payload carries none. */
+    externalIdDerive: recipeDerivedIdSchema.optional(),
+    /** The portal sends no time: the lead is stamped with the time it was received, and says so (`received_at_approximate`). */
+    receivedAtApproximate: z.boolean().default(false),
+    /** A time the payload does send, written with no zone, is the portal's own: minutes east of UTC (IST is 330). */
+    utcOffsetMinutes: z.int().min(-720).max(840).default(0),
+  }),
+  z.strictObject({
+    mode: z.literal('explicit'),
+    /** Where the sender's own id for the lead is. Without one, a hash of the delivery is the id (a repeat of the same delivery is still a duplicate). */
+    externalId: z.strictObject({ from: recipePathSchema }).optional(),
+    /** For a portal with no lead id: the values a hash is made of (see `recipeDerivedIdSchema`). */
+    externalIdDerive: recipeDerivedIdSchema.optional(),
+    receivedAt: recipeTimeSchema.optional(),
+    /** The portal sends no time of its own: the lead carries `received_at_approximate`. */
+    receivedAtApproximate: z.boolean().default(false),
+    /** When one delivery carries several leads, the path to the array. */
+    itemsPath: recipePathSchema.optional(),
+    fields: z.array(recipeFieldRuleSchema).min(1).max(40),
+    attribution: recipeAttributionSchema.optional(),
+    /** Where the lead says the person agreed to be contacted, and the wording they saw. Optional; see `recipeConsentSchema`. */
+    consent: recipeConsentSchema.optional(),
+    /** Prefix added to a bare 10 digit number by the `phone` transform. */
+    defaultCountryCode: z
+      .string()
+      .regex(/^\d{1,3}$/)
+      .default('91'),
+  }),
 ]);
 export type RecipeMapping = z.infer<typeof recipeMappingSchema>;
 
 // --- auth fields -----------------------------------------------------------------------------------------------------------------
 
 export const recipeAuthFieldSchema = z
-  .object({
+  .strictObject({
     key: z
       .string()
       .regex(
@@ -225,13 +210,12 @@ export const recipeAuthFieldSchema = z
     help: text(300).optional(),
     placeholder: text(80).optional(),
     options: z
-      .array(z.object({ value: text(80), label: text(80) }).strict())
+      .array(z.strictObject({ value: text(80), label: text(80) }))
       .max(30)
       .optional(),
     /** A regular expression the value must match (checked on save). */
     pattern: text(200).optional(),
   })
-  .strict()
   .superRefine((f, ctx) => {
     if (f.kind === 'select' && (!f.options || f.options.length === 0)) {
       ctx.addIssue({ code: 'custom', path: ['options'], message: 'A select lists its options.' });
@@ -271,49 +255,42 @@ const hostUrlSchema = z.string().superRefine((raw, ctx) => {
 export const RECIPE_INBOUND_METHODS = ['POST', 'GET'] as const;
 export const RECIPE_INBOUND_FORMATS = ['json', 'form', 'xml', 'query'] as const;
 export const inboundDeliverySchema = z
-  .object({
+  .strictObject({
     methods: z.array(z.enum(RECIPE_INBOUND_METHODS)).min(1).max(2).default(['POST']),
     formats: z.array(z.enum(RECIPE_INBOUND_FORMATS)).min(1).max(4).default(['json']),
     mode: z.enum(['sync', 'async']).default('sync'),
   })
-  .strict()
-  .default({});
+  .prefault({});
 export type InboundDelivery = z.infer<typeof inboundDeliverySchema>;
 
-export const webhookRelayConfigSchema = z
-  .object({
-    type: z.literal('webhook_relay'),
-    /**
-     * `token`: the sender repeats the connection's secret in a header (Zapier, Make). `hmac`: the sender signs the body. `either`: both
-     * are accepted. `path`: the secret is the second segment of the address (`.../hooks/<key>/<secret>`), for a sender that sets no header.
-     */
-    auth: z.enum(['token', 'hmac', 'either', 'path']).default('either'),
-    delivery: inboundDeliverySchema,
-  })
-  .strict();
+export const webhookRelayConfigSchema = z.strictObject({
+  type: z.literal('webhook_relay'),
+  /**
+   * `token`: the sender repeats the connection's secret in a header (Zapier, Make). `hmac`: the sender signs the body. `either`: both
+   * are accepted. `path`: the secret is the second segment of the address (`.../hooks/<key>/<secret>`), for a sender that sets no header.
+   */
+  auth: z.enum(['token', 'hmac', 'either', 'path']).default('either'),
+  delivery: inboundDeliverySchema,
+});
 
-export const pushConfigSchema = z
-  .object({
-    type: z.literal('push'),
-    auth: z
-      .object({
-        /**
-         * `path_token`: the secret is the second segment of the address and no header is involved (IndiaMART allows an identifier in
-         * the path; JustDial's backend team configures a URL and nothing else). The others carry it in `header`.
-         */
-        scheme: z.enum(['header_token', 'hmac_sha256', 'path_token']),
-        /** The header that carries the token or the signature. Not used by `path_token`. */
-        header: z
-          .string()
-          .regex(/^[A-Za-z][A-Za-z0-9-]{1,59}$/)
-          .optional(),
-        /** The auth field holding the secret the portal uses. Absent: the secret the platform generates for the connection. */
-        credentialField: z.string().optional(),
-      })
-      .strict(),
-    delivery: inboundDeliverySchema,
-  })
-  .strict();
+export const pushConfigSchema = z.strictObject({
+  type: z.literal('push'),
+  auth: z.strictObject({
+    /**
+     * `path_token`: the secret is the second segment of the address and no header is involved (IndiaMART allows an identifier in
+     * the path; JustDial's backend team configures a URL and nothing else). The others carry it in `header`.
+     */
+    scheme: z.enum(['header_token', 'hmac_sha256', 'path_token']),
+    /** The header that carries the token or the signature. Not used by `path_token`. */
+    header: z
+      .string()
+      .regex(/^[A-Za-z][A-Za-z0-9-]{1,59}$/)
+      .optional(),
+    /** The auth field holding the secret the portal uses. Absent: the secret the platform generates for the connection. */
+    credentialField: z.string().optional(),
+  }),
+  delivery: inboundDeliverySchema,
+});
 
 const paramName = z.string().regex(/^[A-Za-z][A-Za-z0-9_.-]{0,39}$/);
 
@@ -326,134 +303,117 @@ const paramName = z.string().regex(/^[A-Za-z][A-Za-z0-9_.-]{0,39}$/);
  * `format` writes `{{window_start}}` and `{{window_end}}`: tokens `YYYY`, `MM`, `DD`, `HH`, `mm`, `ss`, `MON` (JAN to DEC) and the word
  * `epoch` (seconds), everything else as typed (`DD-MM-YYYYHH:mm:ss` is IndiaMART's own, with no space between date and time).
  */
-export const pullWindowSchema = z
-  .object({
-    format: z.string().min(2).max(40),
-    /** The portal's clock, minutes east of UTC (IST is 330). The window is written in it. */
-    utcOffsetMinutes: z.number().int().min(-720).max(840).default(0),
-    /** The longest span one request may cover: the portal's own limit (IndiaMART: 7 days). */
-    maxSeconds: z
-      .number()
-      .int()
-      .min(300)
-      .max(31 * 86_400),
-    /** Each window starts this long before where the last one ended. */
-    overlapSeconds: z.number().int().min(0).max(86_400).default(0),
-    /** The first poll of a new connection reaches back this far. */
-    initialLookbackSeconds: z
-      .number()
-      .int()
-      .min(60)
-      .max(365 * 86_400)
-      .default(86_400),
-    /** No poll reaches back further than this (the portal's own history limit: IndiaMART 365 days). */
-    maxLookbackSeconds: z
-      .number()
-      .int()
-      .min(3600)
-      .max(5 * 365 * 86_400)
-      .optional(),
-  })
-  .strict();
+export const pullWindowSchema = z.strictObject({
+  format: z.string().min(2).max(40),
+  /** The portal's clock, minutes east of UTC (IST is 330). The window is written in it. */
+  utcOffsetMinutes: z.int().min(-720).max(840).default(0),
+  /** The longest span one request may cover: the portal's own limit (IndiaMART: 7 days). */
+  maxSeconds: z
+    .int()
+    .min(300)
+    .max(31 * 86_400),
+  /** Each window starts this long before where the last one ended. */
+  overlapSeconds: z.int().min(0).max(86_400).default(0),
+  /** The first poll of a new connection reaches back this far. */
+  initialLookbackSeconds: z
+    .int()
+    .min(60)
+    .max(365 * 86_400)
+    .default(86_400),
+  /** No poll reaches back further than this (the portal's own history limit: IndiaMART 365 days). */
+  maxLookbackSeconds: z
+    .int()
+    .min(3600)
+    .max(5 * 365 * 86_400)
+    .optional(),
+});
 export type PullWindow = z.infer<typeof pullWindowSchema>;
 
 /** Paging inside one request window, for a portal that pages its answer. The poll stops at a short page or at `maxPages`. */
-export const pullPaginationSchema = z
-  .object({
-    style: z.literal('page'),
-    pageParam: paramName,
-    sizeParam: paramName.optional(),
-    pageSize: z.number().int().min(1).max(1000),
-    startPage: z.number().int().min(0).max(1).default(1),
-    maxPages: z.number().int().min(1).max(50).default(10),
-  })
-  .strict();
+export const pullPaginationSchema = z.strictObject({
+  style: z.literal('page'),
+  pageParam: paramName,
+  sizeParam: paramName.optional(),
+  pageSize: z.int().min(1).max(1000),
+  startPage: z.int().min(0).max(1).default(1),
+  maxPages: z.int().min(1).max(50).default(10),
+});
 
 /**
  * A signed request (Housing.com): `signatureParam` carries HMAC-SHA256 (hex) of the request time, in whole epoch seconds as a decimal
  * string, keyed with the secret auth field `keyField`; `timestampParam` carries that time. The portal refuses a time too far from its
  * own clock, so the time is the moment of the call, never a stored value.
  */
-export const pullSigningSchema = z
-  .object({
-    algorithm: z.literal('hmac_sha256'),
-    keyField: z.string(),
-    timestampParam: paramName,
-    signatureParam: paramName,
-  })
-  .strict();
+export const pullSigningSchema = z.strictObject({
+  algorithm: z.literal('hmac_sha256'),
+  keyField: z.string(),
+  timestampParam: paramName,
+  signatureParam: paramName,
+});
 
-export const pullConfigSchema = z
-  .object({
-    type: z.literal('pull'),
-    request: z
-      .object({
-        method: z.enum(['GET', 'POST']).default('GET'),
-        baseUrl: hostUrlSchema,
-        path: z
-          .string()
-          .regex(/^\/[^\s?#]{0,200}$/, 'Start with / and leave the query out.')
-          .default('/'),
-        query: z.record(z.string().max(60), z.string().max(300)).default({}),
-        headers: z
-          .record(z.string().regex(/^[A-Za-z][A-Za-z0-9-]{1,59}$/), z.string().max(300))
-          .default({}),
-        body: z.record(z.string().max(60), z.string().max(300)).optional(),
-        sign: pullSigningSchema.optional(),
-      })
-      .strict(),
-    response: z
-      .object({
-        /** Where the list of leads is. Absent: the answer is the list, or an object holding exactly one list. */
-        itemsPath: recipePathSchema.optional(),
-        /**
-         * Some portals answer HTTP 200 and put their own status in the body (IndiaMART: `CODE` 204, 401, 429). The number at this path is
-         * then the status the recipe's error mapping and `emptyStatuses` see.
-         */
-        statusPath: recipePathSchema.optional(),
-        /** Statuses that mean "no leads in this window": a success that hands nothing over. */
-        emptyStatuses: z.array(z.number().int().min(100).max(599)).max(5).default([204]),
-      })
-      .strict()
+export const pullConfigSchema = z.strictObject({
+  type: z.literal('pull'),
+  request: z.strictObject({
+    method: z.enum(['GET', 'POST']).default('GET'),
+    baseUrl: hostUrlSchema,
+    path: z
+      .string()
+      .regex(/^\/[^\s?#]{0,200}$/, 'Start with / and leave the query out.')
+      .default('/'),
+    query: z.record(z.string().max(60), z.string().max(300)).default({}),
+    headers: z
+      .record(z.string().regex(/^[A-Za-z][A-Za-z0-9-]{1,59}$/), z.string().max(300))
       .default({}),
-    /** How a poll resumes, for a portal that pages by id: the greatest value of this path is sent as `{{cursor}}` next time. Not with `window`. */
-    cursor: z.object({ from: recipePathSchema }).strict().optional(),
-    /** How a poll resumes, for a portal that answers a time range. Not with `cursor`. */
-    window: pullWindowSchema.optional(),
-    pagination: pullPaginationSchema.optional(),
-    pollIntervalSeconds: z.number().int().min(60).max(86_400).default(300),
-    /**
-     * The portal's own limits, kept by the worker: no two requests for one connection closer than `minIntervalSeconds` (also what Sync
-     * now waits for) and no more than `requestsPerMinute` (the pages of one poll are spaced by it).
-     */
-    limits: z
-      .object({
-        minIntervalSeconds: z.number().int().min(1).max(86_400).default(60),
-        requestsPerMinute: z.number().int().min(1).max(600).default(30),
-      })
-      .strict()
-      .default({}),
-    /** Items taken from one answer at most, so one slow portal cannot hold the worker. A window that holds more is asked again in halves. */
-    maxItemsPerPoll: z.number().int().min(1).max(5000).default(100),
-    /**
-     * The same recipe also receives deliveries (IndiaMART pushes in real time and is polled to fill the gaps): the connection has a public
-     * address too, authenticated by a secret in its path and read by the same mapping. A lead that arrives by both doors is one lead.
-     */
-    push: z.object({ delivery: inboundDeliverySchema }).strict().optional(),
-  })
-  .strict();
+    body: z.record(z.string().max(60), z.string().max(300)).optional(),
+    sign: pullSigningSchema.optional(),
+  }),
+  response: z
+    .strictObject({
+      /** Where the list of leads is. Absent: the answer is the list, or an object holding exactly one list. */
+      itemsPath: recipePathSchema.optional(),
+      /**
+       * Some portals answer HTTP 200 and put their own status in the body (IndiaMART: `CODE` 204, 401, 429). The number at this path is
+       * then the status the recipe's error mapping and `emptyStatuses` see.
+       */
+      statusPath: recipePathSchema.optional(),
+      /** Statuses that mean "no leads in this window": a success that hands nothing over. */
+      emptyStatuses: z.array(z.int().min(100).max(599)).max(5).default([204]),
+    })
+    .prefault({}),
+  /** How a poll resumes, for a portal that pages by id: the greatest value of this path is sent as `{{cursor}}` next time. Not with `window`. */
+  cursor: z.strictObject({ from: recipePathSchema }).optional(),
+  /** How a poll resumes, for a portal that answers a time range. Not with `cursor`. */
+  window: pullWindowSchema.optional(),
+  pagination: pullPaginationSchema.optional(),
+  pollIntervalSeconds: z.int().min(60).max(86_400).default(300),
+  /**
+   * The portal's own limits, kept by the worker: no two requests for one connection closer than `minIntervalSeconds` (also what Sync
+   * now waits for) and no more than `requestsPerMinute` (the pages of one poll are spaced by it).
+   */
+  limits: z
+    .strictObject({
+      minIntervalSeconds: z.int().min(1).max(86_400).default(60),
+      requestsPerMinute: z.int().min(1).max(600).default(30),
+    })
+    .prefault({}),
+  /** Items taken from one answer at most, so one slow portal cannot hold the worker. A window that holds more is asked again in halves. */
+  maxItemsPerPoll: z.int().min(1).max(5000).default(100),
+  /**
+   * The same recipe also receives deliveries (IndiaMART pushes in real time and is polled to fill the gaps): the connection has a public
+   * address too, authenticated by a secret in its path and read by the same mapping. A lead that arrives by both doors is one lead.
+   */
+  push: z.strictObject({ delivery: inboundDeliverySchema }).optional(),
+});
 
-export const oauthConfigSchema = z
-  .object({
-    type: z.literal('oauth'),
-    authorizeUrl: hostUrlSchema,
-    tokenUrl: hostUrlSchema,
-    scopes: z.array(text(120)).max(30).default([]),
-    pkce: z.boolean().default(true),
-    /** The platform setting group that holds the OAuth client (id and sealed secret) for this provider, as the Google Calendar card does. */
-    clientSettingKey: z.string().regex(/^[a-z][A-Za-z0-9_]{0,39}$/),
-  })
-  .strict();
+export const oauthConfigSchema = z.strictObject({
+  type: z.literal('oauth'),
+  authorizeUrl: hostUrlSchema,
+  tokenUrl: hostUrlSchema,
+  scopes: z.array(text(120)).max(30).default([]),
+  pkce: z.boolean().default(true),
+  /** The platform setting group that holds the OAuth client (id and sealed secret) for this provider, as the Google Calendar card does. */
+  clientSettingKey: z.string().regex(/^[a-z][A-Za-z0-9_]{0,39}$/),
+});
 
 const regexText = (max: number) =>
   text(max).refine((p) => {
@@ -465,42 +425,36 @@ const regexText = (max: number) =>
     }
   }, 'Not a valid regular expression.');
 
-export const emailParseConfigSchema = z
-  .object({
-    type: z.literal('email_parse'),
-    /** The alert emails come from these addresses or domains (`alerts@justdial.com`, `@99acres.com`). */
-    senders: z.array(text(120)).min(1).max(10),
-    subjectContains: text(120).optional(),
-    rules: z
-      .array(
-        z
-          .object({
-            to: recipeFieldKeySchema,
-            /** A regular expression run on the plain-text body; the first capture group is the value. */
-            pattern: regexText(200),
-            required: z.boolean().default(false),
-          })
-          .strict(),
-      )
-      .min(1)
-      .max(30),
-  })
-  .strict();
+export const emailParseConfigSchema = z.strictObject({
+  type: z.literal('email_parse'),
+  /** The alert emails come from these addresses or domains (`alerts@justdial.com`, `@99acres.com`). */
+  senders: z.array(text(120)).min(1).max(10),
+  subjectContains: text(120).optional(),
+  rules: z
+    .array(
+      z.strictObject({
+        to: recipeFieldKeySchema,
+        /** A regular expression run on the plain-text body; the first capture group is the value. */
+        pattern: regexText(200),
+        required: z.boolean().default(false),
+      }),
+    )
+    .min(1)
+    .max(30),
+});
 
 /**
  * A client: software the member installs elsewhere and signs in to with their own account. Installing the listing records the workspace's
  * consent and unlocks the per-app permission key; each member then connects from the client itself. Nothing is received or issued here.
  */
-export const clientConfigSchema = z
-  .object({
-    type: z.literal('client'),
-    /** Where the member gets the client (a store page). Empty until the operator has the real address. */
-    stores: z
-      .array(z.object({ label: text(60), url: marketLinkSchema }).strict())
-      .max(4)
-      .default([]),
-  })
-  .strict();
+export const clientConfigSchema = z.strictObject({
+  type: z.literal('client'),
+  /** Where the member gets the client (a store page). Empty until the operator has the real address. */
+  stores: z
+    .array(z.strictObject({ label: text(60), url: marketLinkSchema }))
+    .max(4)
+    .default([]),
+});
 
 export const recipeConnectorSchema = z.discriminatedUnion('type', [
   webhookRelayConfigSchema,
@@ -515,12 +469,10 @@ export type RecipeConnector = z.infer<typeof recipeConnectorSchema>;
 // --- the recipe ------------------------------------------------------------------------------------------------------------------
 
 export const recipeErrorMappingSchema = z
-  .object({
+  .strictObject({
     /** An exact HTTP status, or a range: give one of the two. */
-    status: z.number().int().min(100).max(599).optional(),
-    statusRange: z
-      .tuple([z.number().int().min(100).max(599), z.number().int().min(100).max(599)])
-      .optional(),
+    status: z.int().min(100).max(599).optional(),
+    statusRange: z.tuple([z.int().min(100).max(599), z.int().min(100).max(599)]).optional(),
     bodyContains: text(100).optional(),
     code: z.string().regex(/^[a-z][a-z0-9_]{1,39}$/),
     message: text(200),
@@ -529,9 +481,8 @@ export const recipeErrorMappingSchema = z
     /** What the connection's health becomes. */
     health: z.enum(['degraded', 'error', 'needs_reauth']).default('error'),
     /** The portal's stated penalty or wait (IndiaMART blocks a key for 15 minutes): the next poll is no sooner than this. */
-    retryAfterSeconds: z.number().int().min(1).max(86_400).optional(),
+    retryAfterSeconds: z.int().min(1).max(86_400).optional(),
   })
-  .strict()
   .superRefine((e, ctx) => {
     if (e.status === undefined && e.statusRange === undefined && e.bodyContains === undefined) {
       ctx.addIssue({
@@ -542,7 +493,7 @@ export const recipeErrorMappingSchema = z
   });
 
 export const recipeSchema = z
-  .object({
+  .strictObject({
     schemaVersion: z.literal(RECIPE_SCHEMA_VERSION),
     /** The app's slug (checked against the manifest). */
     key: marketSlugSchema,
@@ -552,38 +503,34 @@ export const recipeSchema = z
     logo: marketLinkSchema.nullable().default(null),
     connector: recipeConnectorSchema,
     authFields: z.array(recipeAuthFieldSchema).max(10).default([]),
-    mapping: recipeMappingSchema.default({ mode: 'auto' }),
+    mapping: recipeMappingSchema.prefault({ mode: 'auto' }),
     rateLimits: z
-      .object({
+      .strictObject({
         /** Deliveries accepted per minute from one connection; more is answered 429. */
-        perMinute: z.number().int().min(1).max(6000).default(120),
-        perDay: z.number().int().min(1).max(1_000_000).optional(),
+        perMinute: z.int().min(1).max(6000).default(120),
+        perDay: z.int().min(1).max(1_000_000).optional(),
       })
-      .strict()
-      .default({}),
+      .prefault({}),
     errorMapping: z.array(recipeErrorMappingSchema).max(20).default([]),
     setupInstructions: z
-      .array(z.object({ title: text(80), body: text(1000) }).strict())
+      .array(z.strictObject({ title: text(80), body: text(1000) }))
       .max(12)
       .default([]),
     testPayloads: z
       .array(
-        z
-          .object({
-            name: text(60),
-            payload: z
-              .unknown()
-              .refine(
-                (p) => JSON.stringify(p ?? null).length <= 8192,
-                'A test payload is at most 8 KB.',
-              ),
-          })
-          .strict(),
+        z.strictObject({
+          name: text(60),
+          payload: z
+            .unknown()
+            .refine(
+              (p) => JSON.stringify(p ?? null).length <= 8192,
+              'A test payload is at most 8 KB.',
+            ),
+        }),
       )
       .max(5)
       .default([]),
   })
-  .strict()
   .superRefine((r, ctx) => {
     const keys = r.authFields.map((f) => f.key);
     if (new Set(keys).size !== keys.length) {

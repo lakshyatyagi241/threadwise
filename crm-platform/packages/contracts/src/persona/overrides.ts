@@ -18,13 +18,15 @@ const moduleEntryBase = {
 };
 
 /** An operator decision on one module. `locked` makes it win over the workspace layer and over "Show more modules". */
-export const operatorModuleOverrideSchema = z
-  .object({ ...moduleEntryBase, locked: z.boolean().default(false) })
-  .strict();
+export const operatorModuleOverrideSchema = z.strictObject({
+  ...moduleEntryBase,
+  locked: z.boolean().default(false),
+});
 /** A workspace decision. It carries no `locked`: a workspace cannot lock itself. */
-export const workspaceModuleOverrideSchema = z
-  .object({ ...moduleEntryBase, reason: moduleEntryBase.reason.optional() })
-  .strict();
+export const workspaceModuleOverrideSchema = z.strictObject({
+  ...moduleEntryBase,
+  reason: moduleEntryBase.reason.optional(),
+});
 
 const overrideBody = {
   v: z.literal(1),
@@ -38,7 +40,7 @@ const nounKeysOnly = (value: Record<string, unknown>, ctx: z.RefinementCtx) => {
   for (const key of Object.keys(value)) {
     if (!personaNounSchema.safeParse(key).success) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['vocab', key],
         message: 'not a persona noun',
       });

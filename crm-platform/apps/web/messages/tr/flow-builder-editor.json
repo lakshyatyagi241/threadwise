@@ -99,6 +99,7 @@
       "triggerGroup": "Otomatik · gruba katılınca",
       "triggerManual": "Manuel kayıt",
       "triggerKeyword": "Anahtar sözcük",
+      "triggerAny": "Herhangi bir mesaj",
       "active": "etkin",
       "done": "tamamlandı",
       "failed": "başarısız",
@@ -130,7 +131,10 @@
         "reEngagement": "Uykudaki kişileri kişiselleştirilmiş bir teklif veya kontrol mesajıyla yeniden etkinleştirir.",
         "lead": "Yeni potansiyel müşterileri satışa devretmeden önce eğitici dokunuşlarla besler.",
         "event": "Bir lansman, indirim veya sezonluk dönem etrafında süreli toplu gönderim.",
-        "default": "Akış düzenleyicide oluşturulmuş otomatik WhatsApp yolculuğu."
+        "default": "Akış düzenleyicide oluşturulmuş otomatik WhatsApp yolculuğu.",
+        "defaultWeb": "Akış düzenleyicide oluşturulan web sitesi sohbet botu.",
+        "defaultCall": "Akış düzenleyicide oluşturulan otomatik arama.",
+        "defaultOther": "Akış düzenleyicide oluşturulan otomatik görüşme."
       }
     },
     "featured": {
@@ -1309,7 +1313,12 @@
           "igUsernameHint": "@ olmadan. Bağlantı ig.me/m/yourbrand olur — dokununca hesabınıza özel mesaj açılır.",
           "igMessage": "WhatsApp mesajı",
           "igMessageHint": "Instagram bağlantısıyla birlikte müşteriye WhatsApp üzerinden gönderilir. '{{'değişkenleri'}}' destekler.",
-          "igMessagePlaceholder": "Instagram'da bizimle devam edin 👇"
+          "igMessagePlaceholder": "Instagram'da bizimle devam edin 👇",
+          "templateFills": "Her numarayı ne doldurur",
+          "templateFillsHint": "Şablondaki her numara için metni yazın ya da / tuşuyla bir kişi bilgisi veya akış değişkeni ekleyin. Şablonun kendi değerini kullanmak için boş bırakın.",
+          "templateHeaderMedia": "Üst bilgi dosyası",
+          "templateHeaderMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+          "templateHeaderMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
         },
         "sequence": {
           "info": "Her yanıt müşteriye sırayla gönderilir. Metin, görsel, video, ses ve belgeleri tek bir düğümde birleştirin — ürün kartları veya başlangıç kitleri için idealdir.",
@@ -2249,7 +2258,7 @@
         },
         "chatbot": {
           "label": "Sohbet botu",
-          "description": "Başka bir sohbet botunu tetikle"
+          "description": "Sohbeti bir yapay zekâ ajanına devret"
         },
         "whatsapp_shop": {
           "label": "WhatsApp Mağaza",

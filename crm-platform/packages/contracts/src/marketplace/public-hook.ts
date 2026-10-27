@@ -27,12 +27,12 @@ export const marketHookResultSchema = z.object({
   /** `queued`: stored and being processed (the counts below are then zero); the others are the outcome of a delivery handled inline. */
   status: z.enum(['accepted', 'duplicate', 'queued']),
   /** Leads in the delivery: more than one when the recipe reads an array. */
-  received: z.number().int(),
-  accepted: z.number().int(),
-  duplicates: z.number().int(),
+  received: z.int(),
+  accepted: z.int(),
+  duplicates: z.int(),
   /** Leads in the delivery that the recipe's mapping could not turn into a lead (a required field is missing). */
-  rejected: z.number().int(),
+  rejected: z.int(),
   /** `queued` only: the stored delivery's id, to quote to support. */
-  event: z.string().uuid().optional(),
+  event: z.guid().optional(),
 });
 export type MarketHookResult = z.infer<typeof marketHookResultSchema>;

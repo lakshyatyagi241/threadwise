@@ -17,10 +17,8 @@ export const aiagResponderSchema = z.object({
 });
 export type AiagResponder = z.infer<typeof aiagResponderSchema>;
 
-export const saveAiagResponderSchema = z
-  .object({
-    mode: z.enum(AIAG_RESPONDER_MODES),
-    metaAgentEnabled: z.boolean().default(false),
-  })
-  .strict();
+export const saveAiagResponderSchema = z.strictObject({
+  mode: z.enum(AIAG_RESPONDER_MODES),
+  metaAgentEnabled: z.boolean().default(false),
+});
 export type SaveAiagResponderInput = z.input<typeof saveAiagResponderSchema>;

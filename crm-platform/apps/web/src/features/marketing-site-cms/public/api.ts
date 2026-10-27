@@ -5,7 +5,7 @@ import { apiBase } from '@/lib/auth/server';
 /** Reads a public CMS endpoint on the server. Returns null for 404 and for any failure, so a page can render "not found". */
 export async function cmsPublic<T>(
   path: string,
-  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  schema: z.ZodType<T, unknown>,
   query?: Record<string, string | undefined>,
 ): Promise<T | null> {
   const qs = new URLSearchParams();
@@ -29,7 +29,7 @@ export async function cmsPublic<T>(
 /** Reads any public API path (not only `/public/cms`) on the server; null for any failure. */
 export async function publicApi<T>(
   path: string,
-  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  schema: z.ZodType<T, unknown>,
   query?: Record<string, string>,
 ): Promise<T | null> {
   const qs = new URLSearchParams(query).toString();

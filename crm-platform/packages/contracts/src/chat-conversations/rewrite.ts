@@ -28,7 +28,7 @@ export const inboxRewriteSchema = z
   })
   .refine((v) => v.action !== 'translate' || v.language !== undefined, {
     path: ['language'],
-    message: 'Choose the language to translate to.',
+    error: 'Choose the language to translate to.',
   });
 export type InboxRewriteInput = z.infer<typeof inboxRewriteSchema>;
 

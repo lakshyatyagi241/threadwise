@@ -61,25 +61,27 @@ export const updateLscPlatformConfigSchema = z
   .object({
     platformEnabled: z.boolean(),
     model: modelSlug,
-    scoresPerHour: z.number().int().min(0).max(100_000),
-    retentionDays: z.number().int().min(7).max(730),
+    scoresPerHour: z.int().min(0).max(100_000),
+    retentionDays: z.int().min(7).max(730),
   })
   .partial()
-  .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to change.' });
+  .refine((v) => Object.keys(v).length > 0, {
+    error: 'Nothing to change.',
+  });
 export type UpdateLscPlatformConfigInput = z.infer<typeof updateLscPlatformConfigSchema>;
 
 export const lscPlatformRunsQuerySchema = z.object({
   /** Narrow to one workspace (its uuid). */
-  workspaceId: z.string().uuid().optional(),
+  workspaceId: z.guid().optional(),
   status: z.enum(['ok', 'kept', 'failed', 'skipped']).optional(),
   cursor: z.string().min(1).max(512).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type LscPlatformRunsQuery = z.infer<typeof lscPlatformRunsQuerySchema>;
 
 export const lscPlatformWorkspacesQuerySchema = z.object({
   search: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type LscPlatformWorkspacesQuery = z.infer<typeof lscPlatformWorkspacesQuerySchema>;
 

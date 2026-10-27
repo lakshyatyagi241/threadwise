@@ -5,22 +5,22 @@ import { z } from 'zod';
  * bundle checkout, so this is the catalogue only; a package whose wallet credit is above its price is a top-up bonus.
  */
 export const creditPackageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   slug: z.string(),
   currency: z.string(),
   /** What the customer pays, hundredths. */
-  priceMinor: z.number().int().nonnegative(),
+  priceMinor: z.int().nonnegative(),
   /** What lands in the wallet, hundredths. */
-  walletCreditMinor: z.number().int().positive(),
+  walletCreditMinor: z.int().positive(),
   /** Extra wallet credit over the price, percent (0 when there is none). */
   bonusPercent: z.number(),
   badge: z.string().nullable(),
   description: z.string().nullable(),
   isActive: z.boolean(),
   isFeatured: z.boolean(),
-  sortOrder: z.number().int(),
-  rowVersion: z.number().int(),
+  sortOrder: z.int(),
+  rowVersion: z.int(),
 });
 export type CreditPackage = z.infer<typeof creditPackageSchema>;
 
@@ -49,10 +49,10 @@ export const creditPackageInputSchema = z.object({
   currency: z.string().trim().toUpperCase().length(3),
   walletCredit: money.refine((v) => Number(v) > 0, 'Must be greater than 0'),
   badge: z.string().trim().max(32).default(''),
-  sortOrder: z.number().int().min(0).max(9999).default(0),
+  sortOrder: z.int().min(0).max(9999).default(0),
   isActive: z.boolean().default(true),
   isFeatured: z.boolean().default(false),
   /** Required when editing: a stale form is refused. */
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type CreditPackageInput = z.infer<typeof creditPackageInputSchema>;

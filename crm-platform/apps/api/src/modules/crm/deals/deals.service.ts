@@ -32,7 +32,7 @@ import { assertCompanyReadable, companyLinkRefused } from '../companies/company-
 import { PipelinesRepository, type StageRow } from '../pipelines/pipelines.repository';
 import { DealsPlan } from './deals-plan';
 import { between, onTop } from './deal-ordering';
-import { stampsForKind } from './deal-rules';
+import { isPastCloseDate, stampsForKind } from './deal-rules';
 import { DEAL_MODULE, DealEngine, type LostReasonValue } from './deal-engine.service';
 import { addTo, moneyList, type CurrencySums } from './deal-money';
 import { dealEventPayload, toDealResponse } from './deals.mapper';
@@ -207,6 +207,14 @@ export class DealsService {
         companyId = await this.resolveCompany(tx, ctx.orgId, input.companyId);
       }
 
+      // A deal a person makes (screen, API) cannot expect to close on a day that has gone; a flow, an import or a sync is not asked.
+      if (
+        source === 'manual' &&
+        input.expectedCloseDate &&
+        isPastCloseDate(input.expectedCloseDate, new Date())
+      )
+        throw closeDatePast();
+
       const stamps = stampsForKind(stage.kind, null, new Date());
       const top = onTop(await this.repo.minOrder(tx, ctx.orgId, stage.id));
       const created = await this.repo.insert(tx, ctx.orgId, {
@@ -291,8 +299,17 @@ export class DealsService {
 
       if (input.title !== undefined) patch.title = input.title;
       if (input.notes !== undefined) patch.notes = input.notes;
-      if (input.expectedCloseDate !== undefined)
+      if (input.expectedCloseDate !== undefined) {
+        // Only a date that is being set on an open deal is checked: the date it already has (overdue) can stay, and a won or lost deal keeps its history.
+        if (
+          deal.status === 'open' &&
+          input.expectedCloseDate !== null &&
+          input.expectedCloseDate !== deal.expectedCloseDate &&
+          isPastCloseDate(input.expectedCloseDate, new Date())
+        )
+          throw closeDatePast();
         patch.expected_close_date = input.expectedCloseDate;
+      }
 
       // The amount and its currency change together: relabelling 100 USD as 100 EUR is a different deal, never a side effect.
       const currency = input.currency ?? deal.currency;
@@ -753,6 +770,12 @@ function stageMismatch(): AppError {
     HttpStatus.UNPROCESSABLE_ENTITY,
     [{ path: 'stageId', message: "not in the deal's pipeline" }],
   );
+}
+
+function closeDatePast(): AppError {
+  return AppError.validation('The expected close date cannot be before today.', [
+    { path: 'expectedCloseDate', message: 'cannot be before today' },
+  ]);
 }
 
 function parseValue(value: string, currency: string): bigint {

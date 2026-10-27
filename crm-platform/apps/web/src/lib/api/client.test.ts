@@ -70,7 +70,7 @@ describe('apiFetch', () => {
 
   it('takes a schema with defaults and returns its parsed output', async () => {
     fetchMock.mockResolvedValue(new Response(JSON.stringify({}), { status: 200 }));
-    const schema = z.object({ extra: z.record(z.string()).default({}) });
+    const schema = z.object({ extra: z.record(z.string(), z.string()).default({}) });
     const out = await apiFetch('/x', { schema });
     expect(out.extra).toEqual({});
   });

@@ -682,7 +682,6 @@ try {
     REDIS_URL: `redis://127.0.0.1:${P.redis}`,
     JWT_ACCESS_SECRET: `access-${token}-secret-for-load-0123456789`,
     JWT_REFRESH_SECRET: `refresh-${token}-secret-for-load-0123456789`,
-    CLERK_SECRET_KEY: 'sk_test_unused',
     CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 9).toString('base64'),
     OBS_METRICS_HOST: '127.0.0.1',
     OBS_RUNTIME_INTERVAL_SECONDS: '5',

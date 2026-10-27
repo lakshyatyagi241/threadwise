@@ -17,31 +17,31 @@ const schema = z.object({
    */
   NOTIFY_CONVERSATIONS_ENABLED: booleanish.optional(),
   /** The most people one event notifies (an unassigned new chat in a big workspace); the rest are dropped with a warning. */
-  NOTIFY_MAX_RECIPIENTS: z.coerce.number().int().min(1).max(500).default(50),
+  NOTIFY_MAX_RECIPIENTS: z.coerce.number().int().min(1).max(500).prefault(50),
   /** A burst in one chat pings a person at most once in this many seconds (the row still collapses and the badge still moves). */
-  NOTIFY_THROTTLE_SECONDS: z.coerce.number().int().min(0).max(300).default(5),
+  NOTIFY_THROTTLE_SECONDS: z.coerce.number().int().min(0).max(300).prefault(5),
   /**
    * The "waiting for a reply" nudge (BL-098). An unassigned, open chat whose latest customer message has gone unanswered this many
    * minutes tells the people who may reply, once per waiting episode. A workspace setting for it was left out on purpose: one default for
    * everyone is enough until an owner asks, and a per-workspace value would put a settings join into the sweep.
    */
-  NOTIFY_WAITING_MINUTES: z.coerce.number().int().min(1).max(1440).default(5),
+  NOTIFY_WAITING_MINUTES: z.coerce.number().int().min(1).max(1440).prefault(5),
   /** Off switch of the nudge alone (the conversation notifications switch above must also be on). */
   NOTIFY_WAITING_ENABLED: booleanish.default(true),
   /** A chat whose latest message is older than this many hours is not nudged: switching the feature on must not wake up an old backlog. */
-  NOTIFY_WAITING_LOOKBACK_HOURS: z.coerce.number().int().min(1).max(168).default(24),
+  NOTIFY_WAITING_LOOKBACK_HOURS: z.coerce.number().int().min(1).max(168).prefault(24),
   /** The most chats one sweep handles (the sweep runs every minute; the rest are picked up by the next one). */
-  NOTIFY_WAITING_BATCH: z.coerce.number().int().min(1).max(1000).default(100),
+  NOTIFY_WAITING_BATCH: z.coerce.number().int().min(1).max(1000).prefault(100),
   /** Retention (decision D5): the daily prune of the bell feed. Off switch for an environment that wants to keep everything. */
   NOTIFY_RETENTION_ENABLED: booleanish.default(true),
   /** Rows already read are deleted once they are older than this many days. Never below 30. */
-  NOTIFY_RETENTION_READ_DAYS: z.coerce.number().int().min(30).max(3650).default(90),
+  NOTIFY_RETENTION_READ_DAYS: z.coerce.number().int().min(30).max(3650).prefault(90),
   /** Rows still unread are deleted once they are older than this many days. Raised to the read age if set lower. */
-  NOTIFY_RETENTION_UNREAD_DAYS: z.coerce.number().int().min(30).max(3650).default(180),
+  NOTIFY_RETENTION_UNREAD_DAYS: z.coerce.number().int().min(30).max(3650).prefault(180),
   /** Rows deleted per statement (each batch is its own short transaction). */
-  NOTIFY_RETENTION_BATCH_SIZE: z.coerce.number().int().min(100).max(50_000).default(5_000),
+  NOTIFY_RETENTION_BATCH_SIZE: z.coerce.number().int().min(100).max(50_000).prefault(5_000),
   /** Statements per run and per kind of row, so one pass is bounded; the next day continues where this one stopped. */
-  NOTIFY_RETENTION_MAX_BATCHES: z.coerce.number().int().min(1).max(10_000).default(200),
+  NOTIFY_RETENTION_MAX_BATCHES: z.coerce.number().int().min(1).max(10_000).prefault(200),
 });
 
 export interface NotifyConfig {

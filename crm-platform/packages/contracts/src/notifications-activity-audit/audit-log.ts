@@ -53,7 +53,7 @@ export const auditActAsSchema = z.object({
   /** The reason the operator gave when starting the session. Null if the session row is gone. */
   reason: z.string().nullable(),
   readOnly: z.boolean().nullable(),
-  startedAt: z.string().datetime().nullable(),
+  startedAt: z.iso.datetime().nullable(),
 });
 export type AuditActAs = z.infer<typeof auditActAsSchema>;
 
@@ -65,7 +65,7 @@ export const auditRecordLinkSchema = z.object({
 export const auditLogEntrySchema = z.object({
   /** Opaque. Pass it to `GET /v2/audit-log/:id`. */
   id: z.string().min(1),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   actor: auditActorSchema,
   module: z.string(),
   action: z.string(),
@@ -89,7 +89,7 @@ export type AuditDeltaValue = z.infer<typeof auditDeltaValueSchema>;
 
 export const auditLogDetailSchema = auditLogEntrySchema.extend({
   /** Field by field, old to new, after the PII-safe renderer. Empty when the row carries no field changes. */
-  delta: z.record(auditDeltaValueSchema),
+  delta: z.record(z.string(), auditDeltaValueSchema),
   /** True when the viewer may see personal values unmasked (secrets are never shown). */
   canReveal: z.boolean(),
 });
@@ -97,8 +97,8 @@ export type AuditLogDetail = z.infer<typeof auditLogDetailSchema>;
 
 export const auditLogFiltersSchema = z.object({
   /** Inclusive start / exclusive end of the window. Default: the last AUDIT_LOG_DEFAULT_RANGE_DAYS days. */
-  from: z.string().datetime({ offset: true }).optional(),
-  to: z.string().datetime({ offset: true }).optional(),
+  from: z.iso.datetime({ offset: true }).optional(),
+  to: z.iso.datetime({ offset: true }).optional(),
   actorId: uuidSchema.optional(),
   actorType: auditActorKindSchema.optional(),
   module: z.string().min(1).max(120).optional(),
@@ -113,7 +113,7 @@ export const auditLogFiltersSchema = z.object({
 export type AuditLogFilters = z.infer<typeof auditLogFiltersSchema>;
 
 export const auditLogQuerySchema = auditLogFiltersSchema.extend({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type AuditLogQuery = z.infer<typeof auditLogQuerySchema>;
@@ -122,7 +122,7 @@ export const auditLogListResponseSchema = z.object({
   data: z.array(auditLogEntrySchema),
   page: pageInfoSchema,
   /** The window the rows were read from (after defaults and clamping). */
-  range: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
+  range: z.object({ from: z.iso.datetime(), to: z.iso.datetime() }),
 });
 export type AuditLogListResponse = z.infer<typeof auditLogListResponseSchema>;
 
@@ -143,7 +143,7 @@ export type AuditLogFacets = z.infer<typeof auditLogFacetsSchema>;
 /** The facts the screen shows around the table (retention note, what the viewer may do). */
 export const auditLogSettingsSchema = z.object({
   /** Days an entry is kept; 0 means forever. Null when the policy cannot be read. */
-  retentionDays: z.number().int().min(0).nullable(),
+  retentionDays: z.int().min(0).nullable(),
   canExport: z.boolean(),
   canReveal: z.boolean(),
 });
@@ -163,12 +163,12 @@ export type AuditLogExportStatus = z.infer<typeof auditLogExportStatusSchema>;
 export const auditLogExportSchema = z.object({
   id: uuidSchema,
   status: auditLogExportStatusSchema,
-  rowCount: z.number().int().nonnegative().nullable(),
-  fileBytes: z.number().int().nonnegative().nullable(),
+  rowCount: z.int().nonnegative().nullable(),
+  fileBytes: z.int().nonnegative().nullable(),
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   emailedTo: z.string().nullable(),
   /** The window and filters the file was built with. */
   filters: auditLogFiltersSchema,

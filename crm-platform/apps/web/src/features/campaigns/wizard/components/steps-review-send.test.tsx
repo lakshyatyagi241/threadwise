@@ -138,7 +138,7 @@ describe('variables', () => {
       ],
     });
     expect(out).toContain('2 variables are not mapped yet:');
-    expect(out).toContain('body.1, body.2');
+    expect(out).toContain('Body {{1}}, Body {{2}}');
     expect(out).toContain('Not mapped');
     expect(card()).not.toContain('not mapped yet');
   });

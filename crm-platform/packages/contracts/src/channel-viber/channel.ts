@@ -8,18 +8,16 @@ import { uuidSchema } from '../common/ids';
 
 export const VIBER_TOKEN_MIN = 20;
 
-export const connectViberChannelSchema = z
-  .object({
-    authToken: z
-      .string()
-      .trim()
-      .min(
-        VIBER_TOKEN_MIN,
-        'That does not look like a Viber auth token. Copy the whole token from your bot.',
-      )
-      .max(255),
-  })
-  .strict();
+export const connectViberChannelSchema = z.strictObject({
+  authToken: z
+    .string()
+    .trim()
+    .min(
+      VIBER_TOKEN_MIN,
+      'That does not look like a Viber auth token. Copy the whole token from your bot.',
+    )
+    .max(255),
+});
 export type ConnectViberChannelInput = z.infer<typeof connectViberChannelSchema>;
 
 export const viberChannelSchema = z.object({
@@ -31,13 +29,13 @@ export const viberChannelSchema = z.object({
   uri: z.string().nullable(),
   avatar: z.string().nullable(),
   active: z.boolean(),
-  connectedAt: z.string().datetime().nullable(),
-  lastInboundAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastInboundAt: z.iso.datetime().nullable(),
   /** Why the webhook or the last send failed; null when healthy. */
   lastError: z.string().nullable(),
   /** The address Viber pushes to for this channel (always https). */
   webhookUrl: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ViberChannelResponse = z.infer<typeof viberChannelSchema>;
 

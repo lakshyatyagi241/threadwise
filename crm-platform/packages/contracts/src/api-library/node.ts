@@ -12,7 +12,7 @@ export const FLOW_API_LIBRARY_SAVE_DEFAULT = 'api_response';
 
 export const apiLibraryNodeDataSchema = z.object({
   /** The saved API's id, or '' until one is picked. */
-  apiId: z.union([z.string().uuid(), z.literal('')]),
+  apiId: z.union([z.guid(), z.literal('')]),
   /** Shown on the node card; the runtime uses `apiId`. */
   apiName: z.string().default(''),
   /** Per-variable overrides: a value or `{{flow_variable}}` for a variable the API declares. Not listed: the run's variable, the contact property, then the default. */

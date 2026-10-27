@@ -19,18 +19,18 @@ const schema = z.object({
     .number()
     .int()
     .positive()
-    .default(100 * 1024 * 1024),
+    .prefault(100 * 1024 * 1024),
   /** Guards the unpacked size so a small ZIP cannot expand into the disk (Reference had no such limit). */
   ADDONS_MAX_UNPACKED_BYTES: z.coerce
     .number()
     .int()
     .positive()
-    .default(400 * 1024 * 1024),
-  ADDONS_MAX_ENTRIES: z.coerce.number().int().positive().default(5000),
+    .prefault(400 * 1024 * 1024),
+  ADDONS_MAX_ENTRIES: z.coerce.number().int().positive().prefault(5000),
   /** Installing needs a purchase code the server re-checks (the licence model itself belongs to INST). */
   ADDONS_REQUIRE_PURCHASE_CODE: booleanish.default(true),
   /** How long the registry answers from memory before re-reading (Reference: 300 s). */
-  ADDONS_REGISTRY_TTL_MS: z.coerce.number().int().min(0).default(30_000),
+  ADDONS_REGISTRY_TTL_MS: z.coerce.number().int().min(0).prefault(30_000),
   /**
    * Engine URLs on private, loopback or link-local addresses are refused (SSRF). Self-hosted installs whose engines
    * live on the same network turn this on.

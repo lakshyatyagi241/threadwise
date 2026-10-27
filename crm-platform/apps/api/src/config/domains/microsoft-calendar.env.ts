@@ -10,7 +10,7 @@ import { z } from 'zod';
  */
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const optional = (max = 512) => z.preprocess(blank, z.string().max(max).optional());
-const urlOr = (dflt: string) => z.preprocess(blank, z.string().url().default(dflt));
+const urlOr = (dflt: string) => z.preprocess(blank, z.url().default(dflt));
 
 const schema = z.object({
   /** The Microsoft identity platform, without a trailing slash: `<login>/<tenant>/oauth2/v2.0/{authorize,token}`. */
@@ -23,33 +23,36 @@ const schema = z.object({
   MICROSOFT_CALENDAR_CLIENT_SECRET: optional(400),
   MICROSOFT_CALENDAR_TENANT: optional(100),
   /** Overrides the callback address (default `<APP_URL>/v2/public/appointments/calendar/microsoft/callback`) when no console value is saved. */
-  MICROSOFT_CALENDAR_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  MICROSOFT_CALENDAR_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
 
   /** Ceiling for one call to Microsoft, in ms. A booking never waits longer for a calendar. */
   MICROSOFT_CALENDAR_HTTP_TIMEOUT_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(500).max(60_000).default(8_000),
+    z.coerce.number().int().min(500).max(60_000).prefault(8_000),
   ),
   /** Extra attempts after a 429, a 5xx, a timeout or a network error, for the calls that are safe to repeat. Full jitter. */
-  MICROSOFT_CALENDAR_RETRIES: z.preprocess(blank, z.coerce.number().int().min(0).max(5).default(2)),
+  MICROSOFT_CALENDAR_RETRIES: z.preprocess(
+    blank,
+    z.coerce.number().int().min(0).max(5).prefault(2),
+  ),
   MICROSOFT_CALENDAR_RETRY_BASE_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(1).max(10_000).default(300),
+    z.coerce.number().int().min(1).max(10_000).prefault(300),
   ),
   /** A `Retry-After` longer than this is not waited for here: the caller (outbox, worker) tries again later. */
   MICROSOFT_CALENDAR_RETRY_AFTER_CAP_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(60).default(5),
+    z.coerce.number().int().min(0).max(60).prefault(5),
   ),
   /** How long one busy-time answer is reused, in seconds (0 turns the cache off). */
   MICROSOFT_CALENDAR_BUSY_CACHE_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(600).default(30),
+    z.coerce.number().int().min(0).max(600).prefault(30),
   ),
   /** After a failed busy-time call, how long to answer "no busy data" at once instead of waiting on Microsoft again. */
   MICROSOFT_CALENDAR_BUSY_BACKOFF_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(600).default(20),
+    z.coerce.number().int().min(0).max(600).prefault(20),
   ),
 });
 
