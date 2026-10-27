@@ -21,9 +21,9 @@
   "hosts": {
     "hostinger": {
       "memoryBytes": null,
-      "cpuCores": null,
+      "cpuCores": 4,
       "diskBytes": null,
-      "note": "Shared Dokploy host. Size not recorded anywhere in the repo; ask the operator (RES-002). Setting memoryBytes turns the host-budget check from BLOCKED into a real comparison."
+      "note": "Shared Dokploy host. Size not recorded anywhere in the repo; ask the operator (RES-002). Setting memoryBytes turns the host-budget check from BLOCKED into a real comparison. CPU cores: 4, told by the owner on 2026-10-27 (not read from the host); the CPU caps in the compose files stay at or under it."
     },
     "prod-reference": {
       "memoryBytes": null,
@@ -112,18 +112,6 @@
   ],
   "acceptedGaps": [
     {
-      "id": "hostinger:cpu-limit",
-      "finding": "RL-01",
-      "reason": "No container has a CPU limit on a host shared with other apps. Needs the host's core count and a measured baseline before choosing numbers; the proposed values are in the deployment-limits patch for owner review.",
-      "expires": "2027-01-31"
-    },
-    {
-      "id": "hostinger:pids-limit",
-      "finding": "RL-02",
-      "reason": "No container has a PID limit. Same patch.",
-      "expires": "2027-01-31"
-    },
-    {
       "id": "hostinger:host-budget",
       "finding": "RL-03",
       "reason": "Host RAM is not recorded. Steady-state limits sum to 4.44 GiB and the blue-green release overlap to 6.19 GiB; whether that fits is unknown until the operator fills hosts.hostinger.memoryBytes.",
@@ -169,12 +157,6 @@
       "id": "prod-reference:host-budget",
       "finding": "RL-05",
       "reason": "Same as above.",
-      "expires": "2027-03-31"
-    },
-    {
-      "id": "prod-reference:redis-maxmemory",
-      "finding": "RL-05",
-      "reason": "Same as above; also a Redis with no maxmemory grows until the container or host is out of memory.",
       "expires": "2027-03-31"
     }
   ],

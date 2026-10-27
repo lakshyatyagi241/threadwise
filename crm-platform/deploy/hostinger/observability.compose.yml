@@ -51,6 +51,8 @@ services:
     command: ['node', 'dist/src/tools/event-loop-probe.js']
     restart: unless-stopped
     mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 128
     logging: *obs-logging
     volumes:
       - ./backups:/backups:ro
@@ -86,6 +88,8 @@ services:
     restart: unless-stopped
     container_name: desk-prometheus
     mem_limit: 384m
+    cpus: 1
+    pids_limit: 256
     logging: *obs-logging
     command:
       - --config.file=/etc/prometheus/prometheus.yml
@@ -120,6 +124,8 @@ services:
     image: prom/alertmanager:v0.27.0
     restart: unless-stopped
     mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 128
     logging: *obs-logging
     command:
       - --config.file=/etc/alertmanager/alertmanager.yml
@@ -146,6 +152,8 @@ services:
     container_name: desk-gchat-bridge
     restart: unless-stopped
     mem_limit: 96m
+    cpus: 0.25
+    pids_limit: 128
     logging: *obs-logging
     environment:
       NODE_ENV: production
@@ -210,6 +218,8 @@ services:
     container_name: desk-grafana
     restart: unless-stopped
     mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 256
     logging: *obs-logging
     environment:
       GF_SECURITY_ADMIN_USER: admin

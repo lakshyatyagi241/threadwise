@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>V-05 Docker images and container limits</title>
+<style>body{font:15px/1.5 system-ui,sans-serif;max-width:940px;margin:2rem auto;padding:0 1rem;color:#1b1f23}table{border-collapse:collapse;width:100%;margin:.5rem 0 1.2rem}td,th{border:1px solid #d0d7de;padding:6px 10px;text-align:left;vertical-align:top}th{background:#f6f8fa}code,pre{background:#f6f8fa;border-radius:4px}pre{padding:10px;overflow:auto}code{padding:1px 4px}.note{border-left:4px solid #d4a72c;background:#fff8c5;padding:8px 12px}</style></head><body>
+<h1>V-05: image size and container limits</h1>
+<p>Sheet4 V-05 (owner Vishal). Targets: image size down 30%; CPU and memory limits on 100% of services. Host: 4 cores (given by the owner; the repo did not record it). Run 2026-10-27 on a laptop, images built with the repo's Dockerfiles, containers run with the limits that <code>deploy/hostinger/docker-compose.yml</code> ships.</p>
+
+<h2>Verdict</h2>
+<ul>
+<li><b>API/worker image: 813 MB to 479 MB, -41%</b> (as <code>docker image ls</code> lists it); compressed layers (what a release ships) 154 MB to 97 MB, -37%. Target met.</li>
+<li><b>Web image: 856 MB to 820 MB, -4%.</b> Target <b>not</b> met. The image is already the traced standalone server (an earlier build shipped about 3 GB). Of the 820 MB, 333 MB is Next's route bundles under <code>.next/server</code>, which come from the app's build, not from packaging.</li>
+<li><b>Limits: every service in the deployed compose files now has a memory, CPU and PID limit</b> (10 services in <code>docker-compose.yml</code>, plus the 6 in <code>redis-cache.compose.yml</code> and <code>observability.compose.yml</code>). The resource-limits check passes with the two accepted gaps (RL-01, RL-02) and one stale gap removed. That check reads the main file only; the other two files are not covered by it.</li>
+<li><b>Measured, not guessed:</b> the API, worker and web ran as containers with their limits under load. No OOM kill; memory peak 27%, 33% and 50% of the limits; PIDs 19, 19 and 18 of 512; no limit was the bottleneck. Two limits were changed because of it (below).</li></ul>
+
+<h2>Image size: what came out of the API image</h2>
+<table><tr><th>What</th><th>Size</th><th>Why it is safe</th></tr>
+<tr><td>Source maps, 10,466 files</td><td>135 MB</td><td>The app does not run with <code>--enable-source-maps</code>, and no release step uploads maps from the image (they are built from the repo).</td></tr>
+<tr><td>Type declarations (<code>.d.ts</code>, <code>.d.mts</code>, <code>.d.cts</code>)</td><td>63 MB</td><td>Nothing reads them at run time.</td></tr>
+<tr><td>Build tools: webpack, @swc/core, esbuild, lightningcss, rollup, caniuse-lite, a Sentry CLI</td><td>about 80 MB</td><td>@sentry/node 11 depends on <code>@sentry/bundler-plugins</code>, whose peers pnpm auto-installs. Requiring @sentry/node loads none of them (checked).</td></tr>
+<tr><td>Markdown, tsbuildinfo</td><td>7 MB</td><td>LICENSE files are kept.</td></tr>
+<tr><td>App directory</td><td>453 MB to 195 MB</td><td>The build fails if a package the API needs stops loading (a check at the end of the prune step).</td></tr></table>
+<p>The web image also drops its source maps, type declarations and the glibc build of sharp's libvips (the image is Alpine); the build checks that sharp's musl build still loads, and the container serves pages (below).</p>
+<p>The size is held by a budget (<code>docs/performance/container-limits/budgets.json</code>: API 520 MB, web 840 MB) that the runner checks, so bringing the maps or the build tools back fails it.</p>
+
+<h2>Limits per service (4 core host)</h2>
+<table><tr><th>Service</th><th>Memory</th><th>CPU cap</th><th>PIDs</th><th>Basis</th></tr>
+<tr><td>api-blue / api-green</td><td>1536m</td><td><b>2</b></td><td>512</td><td>Measured: 19 PIDs, 421 MB, average 1.25 cores at saturation</td></tr>
+<tr><td>worker</td><td>1g</td><td>1.5</td><td>512</td><td>Measured: 19 PIDs, 338 MB, 0.07 cores (idle queues; a real backlog was not run)</td></tr>
+<tr><td>api-hooks</td><td>1g</td><td><b>1.5</b></td><td>512</td><td>Same image as the API, webhook role; not run</td></tr>
+<tr><td>web-blue / web-green</td><td>768m</td><td><b>2</b></td><td>512</td><td>Measured: 18 PIDs, 386 MB; see the cap test</td></tr>
+<tr><td>postgres</td><td>3g</td><td>3</td><td>1024</td><td>Reasoned, not run: a process per connection, max_connections 100</td></tr>
+<tr><td>redis</td><td>512m</td><td>1</td><td>256</td><td>Reasoned, not run: single-threaded; the AOF rewrite forks one child</td></tr>
+<tr><td>backup / offsite</td><td>192m / 256m</td><td>0.5 each</td><td>128 / 256</td><td>Reasoned, not run</td></tr>
+<tr><td>redis-cache, probe, prometheus, alertmanager, gchat-bridge, grafana</td><td>as before</td><td>0.5, 0.25, 1, 0.25, 0.25, 0.5</td><td>128 to 256</td><td>Reasoned, not run</td></tr></table>
+<p>The one-shot <code>migrate</code> job has no limits (the check covers long-running services only). The caps add up to more than 4 cores on purpose: they are ceilings per container, the second slot of a blue/green pair is idle outside a release, and the host is shared. Docker refuses a <code>cpus</code> value above the host's core count, so no value exceeds 4.</p>
+
+<h2>The CPU cap test (why web and API got 2)</h2>
+<table><tr><th>Web, 600 requests, 8 at a time</th><th>Total</th><th>/login p50 / p95</th><th>Periods throttled</th></tr>
+<tr><td>cap 1</td><td>14.4 s</td><td>215 / 555 ms</td><td>196 of 225 (87%)</td></tr>
+<tr><td>cap 2</td><td>6.9 s</td><td>125 / 401 ms</td><td>32 of 131 (24%)</td></tr>
+<tr><td>cap 4</td><td>5.3 s</td><td>116 / 160 ms</td><td>3 of 111 (3%)</td></tr></table>
+<p>A 1 core cap would have doubled the time a web slot needs under load; the first draft of the limits had 1. The API gave the same requests per second with a 1.5 and a 2 core cap (about 100) and similar p95, so its cap is not the bottleneck either way: Node's single event loop is. The 2 leaves room for bursts (11 to 15% of periods were throttled at saturation with 2; 20% with 1.5).</p>
+
+<div class="note"><b>What this does not prove.</b> One laptop, one run per case, a 40,000 message scratch database and no real WhatsApp numbers: Baileys sockets add memory and PIDs that were not exercised (V-01 measured 0.36 MB per idle session). The worker ran with idle queues. Postgres, redis, backup, offsite, api-hooks and the observability services were not run under their limits; their numbers are reasoned from their configuration and should be watched after a release (<code>deploy/observability/resource-limits.rules.yml</code> alerts on memory, OOM and PIDs). The 4 core figure comes from the owner and is not read from the host. The local Docker has no BuildKit, so the images were built with the Dockerfiles' <code>--mount</code> cache lines taken out (same steps otherwise); CI with BuildKit builds the files as committed, and their prune and package-load checks run in the same step.</div>
+
+<h2>Found on the way, not changed</h2>
+<ul>
+<li>The web container logs at start: "[Sentry] Failed to register diagnostics-channel injection hooks (Cannot find module '.../@sentry/core/build/esm/index.js')". It also happens on the image before this change. Channel-based Sentry integrations do not record spans in the web server until it is fixed.</li>
+<li>The root cause of the build tools in the API image is pnpm auto-installing the peers of <code>@sentry/bundler-plugins</code>. Preventing the install (a <code>peerDependencyRules</code> or override) would also shrink the install and the CI cache; this change prunes after the install because it is contained in the Dockerfile.</li></ul>
+
+<h2>Scripts</h2>
+<pre>bash script-testing/container-limits/run.sh --quick     # cgroup reader tests + the resource-limits check
+IMAGE=desk-api:v05-slim WEB_IMAGE=desk-web:v05-slim bash script-testing/container-limits/run.sh   # about 4 min: size budget, migrate with the image, API + worker + web as containers with their limits, ramp, cgroup verdict
+node tools/resource-limits/check.mjs --check            # every deployed service has memory, CPU and PID limits
+# building without BuildKit (what was done here): take the "--mount=..." part out of the RUN lines, then docker build -f &lt;that file&gt; .</pre>
+</body></html>

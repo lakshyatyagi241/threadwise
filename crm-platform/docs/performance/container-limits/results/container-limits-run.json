@@ -1,0 +1,127 @@
+{
+  "at": "2026-10-27T05:48:54.889Z",
+  "image": "desk-api:v05-slim",
+  "imageBytes": 479000000,
+  "runs": [
+    {
+      "who": "api",
+      "limits": {
+        "memoryBytes": 1610612736,
+        "cpus": 2,
+        "pids": 512
+      },
+      "usage": {
+        "cpuAvgCores": 1.25,
+        "throttledPeriods": 56,
+        "periods": 459,
+        "throttledPct": 12.2,
+        "throttledSeconds": 10.37,
+        "memoryPeakMb": 420.6,
+        "oomKills": 0,
+        "pidsPeak": 19
+      },
+      "checks": [
+        {
+          "name": "no-oom-kill",
+          "ok": true,
+          "detail": "0 kills"
+        },
+        {
+          "name": "memory-peak",
+          "ok": true,
+          "detail": "420.6 MB = 27% of the limit (budget 90%)"
+        },
+        {
+          "name": "pids-peak",
+          "ok": true,
+          "detail": "19 of 512 = 4% (budget 50%)"
+        },
+        {
+          "name": "cpu-throttling",
+          "ok": true,
+          "detail": "12.2% of periods throttled, 10.37 s held back, average 1.25 cores of 2"
+        }
+      ]
+    },
+    {
+      "who": "worker",
+      "limits": {
+        "memoryBytes": 1073741824,
+        "cpus": 1.5,
+        "pids": 512
+      },
+      "usage": {
+        "cpuAvgCores": 0.07,
+        "throttledPeriods": 6,
+        "periods": 300,
+        "throttledPct": 2,
+        "throttledSeconds": 1.42,
+        "memoryPeakMb": 337.9,
+        "oomKills": 0,
+        "pidsPeak": 19
+      },
+      "checks": [
+        {
+          "name": "no-oom-kill",
+          "ok": true,
+          "detail": "0 kills"
+        },
+        {
+          "name": "memory-peak",
+          "ok": true,
+          "detail": "337.9 MB = 33% of the limit (budget 90%)"
+        },
+        {
+          "name": "pids-peak",
+          "ok": true,
+          "detail": "19 of 512 = 4% (budget 50%)"
+        },
+        {
+          "name": "cpu-throttling",
+          "ok": true,
+          "detail": "2% of periods throttled, 1.42 s held back, average 0.07 cores of 1.5"
+        }
+      ]
+    },
+    {
+      "who": "web",
+      "limits": {
+        "memoryBytes": 805306368,
+        "cpus": 2,
+        "pids": 512
+      },
+      "usage": {
+        "cpuAvgCores": 1.68,
+        "throttledPeriods": 30,
+        "periods": 86,
+        "throttledPct": 34.9,
+        "throttledSeconds": 5.82,
+        "memoryPeakMb": 386.4,
+        "oomKills": 0,
+        "pidsPeak": 18
+      },
+      "checks": [
+        {
+          "name": "no-oom-kill",
+          "ok": true,
+          "detail": "0 kills"
+        },
+        {
+          "name": "memory-peak",
+          "ok": true,
+          "detail": "386.4 MB = 50% of the limit (budget 90%)"
+        },
+        {
+          "name": "pids-peak",
+          "ok": true,
+          "detail": "18 of 512 = 4% (budget 50%)"
+        },
+        {
+          "name": "cpu-throttling",
+          "ok": true,
+          "detail": "34.9% of periods throttled, 5.82 s held back, average 1.68 cores of 2"
+        }
+      ]
+    }
+  ]
+}

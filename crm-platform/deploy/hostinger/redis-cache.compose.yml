@@ -30,6 +30,8 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 128
     logging: *redis-cache-logging
     command:
       [

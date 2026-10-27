@@ -1,0 +1,12 @@
+{
+  "note": "Same image, same 600 requests (8 at a time, alternating /login and /api/health), only --cpus changed. 2026-10-27, one laptop, one run each.",
+  "web": [
+    { "cpus": 1, "totalMs": 14387, "loginP50": 215, "loginP95": 555, "healthP95": 605, "periods": 225, "throttled": 196 },
+    { "cpus": 2, "totalMs": 6917, "loginP50": 125, "loginP95": 401, "healthP95": 253, "periods": 131, "throttled": 32 },
+    { "cpus": 4, "totalMs": 5313, "loginP50": 116, "loginP95": 160, "healthP95": 146, "periods": 111, "throttled": 3 }
+  ],
+  "api": [
+    { "cpus": 1.5, "rps": [70, 94, 96], "p95": [240, 420, 938], "steps": [5, 10, 25] },
+    { "cpus": 2, "rps": [69, 105, 99], "p95": [206, 306, 1113], "steps": [5, 10, 25] }
+  ]
+}

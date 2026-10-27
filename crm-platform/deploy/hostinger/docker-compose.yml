@@ -11,6 +11,15 @@ name: desk
 # the object store were first left without it so that adding it would not restart the database. They have it now (the slow-query log and
 # pg_stat_statements make postgres the chattiest container): the FIRST `docker compose up -d` after this change recreates them
 # (a few seconds of downtime, data is on the named volumes), so take that release at a quiet hour. Later releases do not touch them.
+# CPU and PID limits (V-05, RL-01, RL-02), for a 4 core shared host. A cap, not a reservation: the sum is above 4 because the second slot of the
+# API/web pairs is idle outside a release and the host is shared. Docker refuses a `cpus` above the host's cores, so never set one above 4 here.
+# Basis (docs/performance/container-limits): one API process saturated one core at about 110 req/s in the V-06 stress run; as a container with a
+# 1.5 core cap it was throttled in 20% of periods at saturation (average 1.22 cores), so the API slots get 2. The web slots get 2 for the same
+# reason, measured: 600 page requests took 14.4 s at a 1 core cap (98% of periods throttled), 6.9 s at 2 and 5.3 s at 4.
+# Redis gets 1.5, not 1: its main thread is one core and the AOF rewrite runs as a forked child in the same cgroup, so a cap of 1 would make the
+# rewrite compete with the queue traffic (reasoned, not measured).
+# PIDs count threads: Postgres starts a process per connection (max_connections 100), so it needs the most. Change a live container with
+# `docker update --cpus <n> --pids-limit <n> <name>`.
 x-app-logging: &app-logging
   driver: json-file
   options:
@@ -120,6 +129,8 @@ x-api-slot: &api-slot
   pull_policy: never
   restart: unless-stopped
   mem_limit: 1536m
+  cpus: 2
+  pids_limit: 512
   # Docker kills a container 10 s after SIGTERM by default. The API closes HTTP and websocket connections on SIGTERM; give slow
   # requests time to finish instead of cutting them off on every release.
   stop_grace_period: 30s
@@ -152,6 +163,8 @@ x-web-slot: &web-slot
   pull_policy: never
   restart: unless-stopped
   mem_limit: 768m
+  cpus: 2
+  pids_limit: 512
   stop_grace_period: 20s
   logging: *app-logging
   # Same idea as the API's alias: `web` resolves to whichever slot is running.
@@ -201,6 +214,8 @@ services:
     # database sat at 1.75 of 2 GB while the host had 8 GB of free cache; prod was raised live with `docker update`, this keeps it on recreate); keep PG_SHARED_BUFFERS about a quarter of it and PG_EFFECTIVE_CACHE_SIZE about three quarters.
     # max_connections=100 covers the API slots (two during a switch), the webhook API and the worker at their pool sizes.
     mem_limit: 3g
+    cpus: 3
+    pids_limit: 1024
     logging: *app-logging
     command:
       - postgres
@@ -233,6 +248,8 @@ services:
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache.
     mem_limit: 512m
+    cpus: 1.5
+    pids_limit: 256
     logging: *app-logging
     command:
       [
@@ -260,6 +277,8 @@ services:
     image: pgvector/pgvector:pg16
     restart: unless-stopped
     mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 128
     logging: *app-logging
     entrypoint: ['bash', '-c']
     command:
@@ -352,6 +371,8 @@ services:
       ]
     restart: on-failure
     mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 256
     logging: *app-logging
     environment:
       NODE_ENV: production
@@ -428,6 +449,8 @@ services:
     container_name: desk-api-hooks
     image: desk-api:${HOOKS_TAG:-${IMAGE_TAG:-local}}
     mem_limit: 1g
+    cpus: 1.5
+    pids_limit: 512
     networks:
       default: {}
       dokploy-network: {}
@@ -466,6 +489,8 @@ services:
     command: ['node', 'dist/src/worker.js']
     restart: unless-stopped
     mem_limit: 1g
+    cpus: 1.5
+    pids_limit: 512
     # On SIGTERM the worker stops taking jobs and waits for the running ones (BullMQ) and the current outbox batch. Killed at
     # the default 10 s, a long job is abandoned and its outbox rows stay in 'processing'.
     stop_grace_period: 60s
