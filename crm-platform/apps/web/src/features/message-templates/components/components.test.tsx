@@ -165,7 +165,7 @@ describe('buttons editor', () => {
       );
     const base = { ...newRow('form'), text: 'Open' };
     expect(withQuery({ ...base, flowId: 'abc', screen: 'A' })).toContain(
-      'The Flow ID is a number.',
+      'This form is not a Meta Flow yet',
     );
     expect(withQuery({ ...base, flowId: '123', screen: '' })).toContain('Enter the screen ID.');
   });
