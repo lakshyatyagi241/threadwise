@@ -43,6 +43,15 @@ RUN --mount=type=secret,id=sentry_auth_token,required=false \
     NODE_OPTIONS=--max-old-space-size=6144 \
     pnpm --filter @crm/web build
 
+# Take out of the traced server what is never read at run time (V-05, measured on the image): source maps (7.5 MB; the build has already
+# uploaded them to Sentry when a token was given), type declarations and markdown, and the glibc build of sharp's libvips (18 MB; this image is
+# Alpine, so only the musl build is loaded). Done here, before the COPY into the runtime stage, because deleting after a COPY frees nothing.
+RUN cd apps/web/.next/standalone \
+ && find . \( -name '*.map' -o -name '*.d.ts' -o -name '*.d.mts' -o -name '*.d.cts' \) -type f -delete \
+ && find . -name '*.md' -type f ! -iname 'LICEN*' -delete \
+ && rm -rf node_modules/.pnpm/@img+sharp-libvips-linux-x64@* node_modules/.pnpm/@img+sharp-linux-x64@* \
+ && node -e "const fs=require('fs'),p='node_modules/.pnpm/',d=fs.readdirSync(p).find((x)=>x.startsWith('sharp@')); require('./'+p+d+'/node_modules/sharp'); console.log('sharp (musl) loads')"
+
 # The runtime is a clean image holding only Next's traced server (`output: 'standalone'` in next.config.ts): the compiled server, the
 # production dependencies the trace found, the static assets and `public`. It used to be the whole build stage plus a production install
 # (about 3 GB: the repo sources, every workspace, the build cache and the compiler), which every release shipped over SSH. Nothing in

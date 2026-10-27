@@ -52,9 +52,22 @@ RUN pnpm --filter @crm/api --prod deploy /out \
  && cp -r apps/api/dist /out/dist \
  && cp -r packages/db/migrations /out/migrations \
  && cd /out \
- && rm -rf src test scripts incidents README.md Dockerfile nest-cli.json tsconfig*.json vitest.config.ts \
+ && rm -rf src test scripts incidents README.md Dockerfile nest-cli.json tsconfig*.json vitest.config.ts *.tsbuildinfo \
  && rm -rf node_modules/@crm/*/src node_modules/@crm/*/tsconfig*.json \
- && rm -rf node_modules/.pnpm/*-linux-x64-gnu@* node_modules/.pnpm/@img+sharp-linux-x64@* node_modules/.pnpm/@img+sharp-libvips-linux-x64@*
+ && rm -rf node_modules/.pnpm/*-linux-x64-gnu@* node_modules/.pnpm/@img+sharp-linux-x64@* node_modules/.pnpm/@img+sharp-libvips-linux-x64@* \
+ && find node_modules dist \( -name '*.map' -o -name '*.d.ts' -o -name '*.d.mts' -o -name '*.d.cts' -o -name '*.tsbuildinfo' \) -type f -delete \
+ && find node_modules \( -name '*.md' -o -name '*.markdown' \) -type f ! -iname 'LICEN*' -delete \
+ && (cd node_modules/.pnpm && rm -rf webpack@* webpack-sources@* terser@* terser-webpack-plugin@* @swc+core@* @swc+core-* @esbuild+* esbuild@* \
+      lightningcss@* lightningcss-* caniuse-lite@* browserslist@* electron-to-chromium@* baseline-browser-mapping@* @rollup+* rollup@* \
+      sentry@* @sentry+bundler-plugins@*) \
+ && node --input-type=module -e "for (const m of ['@sentry/node','@nestjs/core','@nestjs/swagger','@nestjs/bullmq','bullmq','pg','drizzle-orm','ioredis','sharp','baileys']) await import(m); console.log('runtime packages load')"
+
+# What the three prune lines after `deploy` take out of what ships (V-05; measured on the image, 453 MB of /app before, 195 MB after):
+#  - source maps (135 MB, 10,466 files), type declarations (63 MB) and markdown (7 MB): nothing at run time reads them. The app does not run
+#    with --enable-source-maps and no release step uploads maps from the image (they are built from the repo). LICENSE files are kept.
+#  - the Sentry bundler plugins and the build tools that pnpm installs for them: @sentry/node 11 depends on @sentry/bundler-plugins, whose
+#    peers (webpack, @swc/core, esbuild, lightningcss, rollup, a Sentry CLI) are auto-installed, about 80 MB. @sentry/node never loads them
+#    (checked: requiring it loads none of these packages). The last command fails the build if a package the API needs no longer loads.
 
 # --- runtime ---------------------------------------------------------------
 FROM node:22-alpine AS runtime

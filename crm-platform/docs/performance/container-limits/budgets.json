@@ -1,0 +1,12 @@
+{
+  "api": {
+    "imageMaxMb": 520,
+    "baselineMb": 813,
+    "note": "V-05: 813 MB before the prune, 479 MB after. The budget leaves room for dependency growth and fails a change that brings the build tools or the source maps back."
+  },
+  "web": {
+    "imageMaxMb": 840,
+    "baselineMb": 856,
+    "note": "V-05: the web image was already the traced standalone server (856 MB); the prune of source maps and the glibc sharp libvips takes about 25 MB. Next's own route bundles (333 MB under .next/server) are the rest and are not touched here."
+  }
+}
