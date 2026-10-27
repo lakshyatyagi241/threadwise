@@ -87,18 +87,18 @@ const DELIVERED = {
 } as const;
 
 describe('MessageBillingService.settleDelivered: a charged delivery settles its hold', () => {
-  it('consumes the oldest hold and caps reserved, after the ledger post and in the same transaction', async () => {
+  it('consumes the oldest hold before the ledger post lowers the balance, and caps reserved after it, in the same transaction', async () => {
     const { service, repo, ledger } = build({ priceMinor: 100, balanceMinor: 500 });
     const out = await service.settleDelivered({ ...DELIVERED } as never);
     expect(out).toMatchObject({ status: 'charged' });
     expect(ledger.post).toHaveBeenCalledTimes(1);
     expect(repo.settleHold).toHaveBeenCalledWith(expect.anything(), 7, 'USD');
     expect(repo.capReserved).toHaveBeenCalledWith(expect.anything(), 7, 'USD');
+    // The hold leaves `reserved` first: the balance check is per statement, so the post must not lower the balance under `reserved`.
     const postAt = ledger.post.mock.invocationCallOrder[0]!;
-    expect(repo.settleHold.mock.invocationCallOrder[0]!).toBeGreaterThan(postAt);
-    expect(repo.capReserved.mock.invocationCallOrder[0]!).toBeGreaterThan(
-      repo.settleHold.mock.invocationCallOrder[0]!,
-    );
+    const settleAt = repo.settleHold.mock.invocationCallOrder[0]!;
+    expect(settleAt).toBeLessThan(postAt);
+    expect(repo.capReserved.mock.invocationCallOrder[0]!).toBeGreaterThan(postAt);
   });
 
   it('settles nothing for a delivery the empty wallet could not pay: it was never held', async () => {
