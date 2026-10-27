@@ -151,10 +151,24 @@ describe('connecting (TW-FLB-015 rule 3)', () => {
     expect(twice.edges[0]!.id).not.toBe(once.edges[0]!.id);
   });
 
-  it('the same handle may fan out to several targets; a `no` handle marks the edge', () => {
+  it('a port has one target: connecting it to another node replaces the old edge', () => {
     let r = connect(s, { nodeId: 'a', handleId: 'out' }, 'b');
     r = connect(r, { nodeId: 'a', handleId: 'out' }, 'c');
-    expect(r.edges.map((e) => e.target)).toEqual(['b', 'c']);
+    expect(r.edges.map((e) => e.target)).toEqual(['c']);
+  });
+
+  it('other ports and other nodes keep their edges', () => {
+    let r = connect(s, { nodeId: 'a', handleId: 'yes' }, 'b');
+    r = connect(r, { nodeId: 'a', handleId: 'no' }, 'c');
+    r = connect(r, { nodeId: 'b', handleId: 'out' }, 'c');
+    expect(r.edges.map((e) => [e.source, e.sourceHandle, e.target])).toEqual([
+      ['a', 'yes', 'b'],
+      ['a', 'no', 'c'],
+      ['b', 'out', 'c'],
+    ]);
+  });
+
+  it('a `no` handle marks the edge', () => {
     expect(connect(s, { nodeId: 'a', handleId: 'no' }, 'b').edges[0]!.kind).toBe('no');
     expect(connect(s, { nodeId: 'a', handleId: 'yes' }, 'b').edges[0]!.kind).toBeNull();
   });
