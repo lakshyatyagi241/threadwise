@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · al unirse a un grupo",
       "triggerManual": "Inscripción manual",
       "triggerKeyword": "Palabra clave",
+      "triggerAny": "Cualquier mensaje",
       "active": "activos",
       "done": "completados",
       "failed": "fallidos",
@@ -130,7 +131,10 @@
         "reEngagement": "Reactiva contactos inactivos con una oferta personalizada o un saludo.",
         "lead": "Cultiva a los nuevos leads con contenidos educativos antes de pasarlos a ventas.",
         "event": "Difusión con límite de tiempo en torno a un lanzamiento, una venta o una temporada.",
-        "default": "Recorrido automatizado de WhatsApp creado en el editor de flujos."
+        "default": "Recorrido automatizado de WhatsApp creado en el editor de flujos.",
+        "defaultWeb": "Bot de chat web creado en el editor de flujos.",
+        "defaultCall": "Llamada automatizada creada en el editor de flujos.",
+        "defaultOther": "Conversación automatizada creada en el editor de flujos."
       }
     },
     "featured": {

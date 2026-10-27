@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · po dołączeniu do grupy",
       "triggerManual": "Ręczne zapisanie",
       "triggerKeyword": "Słowo kluczowe",
+      "triggerAny": "Dowolna wiadomość",
       "active": "aktywny",
       "done": "gotowe",
       "failed": "nieudany",
@@ -130,7 +131,10 @@
         "reEngagement": "Reaktywuje uśpionych kontakty spersonalizowaną ofertą lub odezwaniem się.",
         "lead": "Pielęgnuje nowe leady edukacyjnymi wiadomościami, zanim przekaże je sprzedaży.",
         "event": "Ograniczona czasowo wiadomość masowa wokół premiery, wyprzedaży lub sezonowej okazji.",
-        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów."
+        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów.",
+        "defaultWeb": "Czatbot na stronę internetową utworzony w edytorze przepływów.",
+        "defaultCall": "Automatyczne połączenie utworzone w edytorze przepływów.",
+        "defaultOther": "Automatyczna rozmowa utworzona w edytorze przepływów."
       }
     },
     "featured": {

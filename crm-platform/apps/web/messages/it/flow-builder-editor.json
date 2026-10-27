@@ -99,6 +99,7 @@
       "triggerGroup": "Automatico · all’ingresso nel gruppo",
       "triggerManual": "Iscrizione manuale",
       "triggerKeyword": "Parola chiave",
+      "triggerAny": "Qualsiasi messaggio",
       "active": "attivo",
       "done": "completato",
       "failed": "fallito",
@@ -130,7 +131,10 @@
         "reEngagement": "Riattiva i contatti inattivi con un’offerta personalizzata o un check-in.",
         "lead": "Coltiva i nuovi lead con contenuti educativi prima di passarli alle vendite.",
         "event": "Broadcast a tempo intorno a un lancio, una vendita o un momento stagionale.",
-        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow."
+        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow.",
+        "defaultWeb": "Chatbot del sito creato nell'editor dei flussi.",
+        "defaultCall": "Chiamata automatizzata creata nell'editor dei flussi.",
+        "defaultOther": "Conversazione automatizzata creata nell'editor dei flussi."
       }
     },
     "featured": {

@@ -99,6 +99,7 @@
       "triggerGroup": "Automatisch · bij groepslidmaatschap",
       "triggerManual": "Handmatig inschrijven",
       "triggerKeyword": "Trefwoord",
+      "triggerAny": "Elk bericht",
       "active": "actief",
       "done": "klaar",
       "failed": "mislukt",
@@ -130,7 +131,10 @@
         "reEngagement": "Activeert slapende contacten opnieuw met een persoonlijke aanbieding of check-in.",
         "lead": "Koestert nieuwe leads met leerzame berichten voordat ze naar sales gaan.",
         "event": "Broadcast met een beperkte looptijd rond een lancering, actie of seizoensmoment.",
-        "default": "Geautomatiseerde WhatsApp-reis, gebouwd in de flow-editor."
+        "default": "Geautomatiseerde WhatsApp-reis, gebouwd in de flow-editor.",
+        "defaultWeb": "Website-chatbot gemaakt in de flow-editor.",
+        "defaultCall": "Geautomatiseerd gesprek gemaakt in de flow-editor.",
+        "defaultOther": "Geautomatiseerde conversatie gemaakt in de flow-editor."
       }
     },
     "featured": {

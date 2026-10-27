@@ -44,6 +44,8 @@ import {
 } from './flows.repository';
 
 export const FLOW_MODULE = 'flows';
+/** What the builders call a flow nobody has named yet (the web app's default name). */
+const NEW_FLOW_NAME = 'New flow';
 
 /** Which table holds the sender a Trigger's `deviceId` (`<engine>:<uuid>`) points at. */
 const ENGINE_TABLE: Record<string, RefTable> = {
@@ -227,7 +229,7 @@ export class FlowsService {
       await this.assertFlowLinks(tx, ctx.orgId, graph, input.flowType ?? 'chat', null, false);
       this.assertWhatsappLimits(input.flowType ?? 'chat', graph);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
-        name: input.name,
+        name: await this.freshName(tx, ctx.orgId, input.name),
         graph,
         category: input.category?.trim() || null,
         flowType: input.flowType ?? 'chat',
@@ -235,6 +237,18 @@ export class FlowsService {
       });
       return this.afterInsert(tx, ctx.orgId, id, 'flow.created');
     });
+  }
+
+  /** The builders name a new flow "New flow": a second one is "New flow 2", so the cards in the list can be told apart. */
+  private async freshName(tx: Tx, orgId: number, name: string): Promise<string> {
+    if (name.trim().toLowerCase() !== NEW_FLOW_NAME.toLowerCase()) return name;
+    const taken = new Set(
+      (await this.repo.namesLike(tx, orgId, NEW_FLOW_NAME)).map((n) => n.toLowerCase()),
+    );
+    if (!taken.has(NEW_FLOW_NAME.toLowerCase())) return NEW_FLOW_NAME;
+    let n = 2;
+    while (taken.has(`${NEW_FLOW_NAME} ${n}`.toLowerCase())) n += 1;
+    return `${NEW_FLOW_NAME} ${n}`;
   }
 
   /** Save of an existing flow: rewrites the whole graph, re-derives the trigger columns, never re-checks the cap. */
@@ -450,6 +464,15 @@ export class FlowsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lock(tx, ctx.orgId, uuid);
+      // A flow with no trigger (an empty canvas) would go live and never start.
+      if (published) {
+        const nodes = (row.graph?.flowNodes ?? []) as Array<{ type: string }>;
+        if (!nodes.some((n) => n.type === 'trigger')) {
+          throw AppError.validation('Add a trigger before publishing this flow.', [
+            { path: 'flowNodes', message: 'The flow needs a trigger.' },
+          ]);
+        }
+      }
       // Going live also needs every bot a step starts to exist: a draft may still point at one that was deleted since.
       if (published)
         await this.assertFlowLinks(
