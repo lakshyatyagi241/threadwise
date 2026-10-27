@@ -168,6 +168,7 @@ export function PromptBox({
 
   const pop = (children: ReactNode) => (
     <div
+      data-flb-popup=""
       className="absolute bottom-full start-0 z-30 mb-1 rounded-lg border border-border bg-background p-1.5 shadow-lg"
       onPointerDown={(e) => e.stopPropagation()}
     >

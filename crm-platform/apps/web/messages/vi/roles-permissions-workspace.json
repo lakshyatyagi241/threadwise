@@ -172,7 +172,8 @@
         "type": "Loại",
         "members": "Thành viên",
         "permissions": "Quyền",
-        "lastEdited": "Chỉnh sửa lần cuối",
+        "lastEdited": "Sửa lần cuối lúc",
+        "lastEditedBy": "bởi {name}",
         "actions": "Thao tác"
       },
       "row": {

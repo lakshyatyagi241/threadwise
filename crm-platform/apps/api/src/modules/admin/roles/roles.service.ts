@@ -291,6 +291,11 @@ export class RolesService {
       rows.map((r) => r.id),
     );
     const grantable = new Set(await this.roleRules.grantableRoleIds(tx, orgId, actorUserId));
+    const editors = await this.repo.lastEditors(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+    );
     const out = new Map<number, RoleViewContext>();
     for (const r of rows) {
       out.set(r.id, {
@@ -298,6 +303,7 @@ export class RolesService {
         membersWithoutTeam: noTeam.get(r.id) ?? 0,
         grantable: grantable.has(r.id),
         editable: await this.roleRules.canEditRole(tx, orgId, actorUserId, r),
+        updatedBy: editors.get(r.id) ?? null,
       });
     }
     return out;

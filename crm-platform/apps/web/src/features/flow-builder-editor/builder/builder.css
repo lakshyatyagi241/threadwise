@@ -257,6 +257,10 @@
   z-index: 25;
   animation: flb-pop-in 0.12s ease;
 }
+/* The toolbar floats above the canvas layer, so it would sit over a card's open format/emoji menu. */
+.flb-root:has([data-flb-popup]) .node-actions {
+  display: none;
+}
 .flb-root .node-actions button {
   width: 30px;
   height: 30px;

@@ -172,7 +172,8 @@
         "type": "प्रकार",
         "members": "सदस्य",
         "permissions": "अनुमतियाँ",
-        "lastEdited": "अंतिम संपादन",
+        "lastEdited": "अंतिम बार संपादित",
+        "lastEditedBy": "द्वारा {name}",
         "actions": "कार्य"
       },
       "row": {

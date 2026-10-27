@@ -57,6 +57,8 @@ export const roleResponseSchema = z.object({
   rowVersion: z.int(),
   createdAt: z.iso.datetime(),
   updatedAt: z.iso.datetime(),
+  /** The name of the person who last saved the role; null when the audit trail has no one. */
+  updatedBy: z.string().nullish(),
 });
 export type RoleResponse = z.infer<typeof roleResponseSchema>;
 

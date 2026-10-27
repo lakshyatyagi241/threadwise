@@ -172,7 +172,8 @@
         "type": "Tür",
         "members": "Üyeler",
         "permissions": "İzinler",
-        "lastEdited": "Son düzenleme",
+        "lastEdited": "Son düzenleme tarihi",
+        "lastEditedBy": "{name} tarafından",
         "actions": "İşlemler"
       },
       "row": {
