@@ -221,7 +221,7 @@ export function createWatcher({ query, env = process.env, metrics, send, log = (
       metrics.set('crm_slow_query_watcher_last_poll_timestamp', 'gauge', now() / 1000);
     } catch (e) {
       metrics.inc('crm_slow_query_watcher_errors_total');
-      log({ evt: 'watcher_poll_error', code: e.code ?? 'error' });
+      log({ evt: 'watcher_poll_error', code: e.code ?? 'error', msg: String(e?.message ?? e).slice(0, 300), at: String(e?.stack ?? '').split('\n')[1]?.trim().slice(0, 200) }); // a bare "error" hid why this monitor stopped
     }
   }
   return { poll, intervalMs: c.intervalMs, offenders: () => offenders, open };
