@@ -33,7 +33,10 @@ import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
 import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
 import { FLOW_MEDIA_STORE } from '../../infra/providers/flow-builder-editor/flow-media.port';
-import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor/local-flow-media.adapter';
+import {
+  PlatformSettingsModule,
+  StorageFlowMediaStore,
+} from '../platform-settings-branding-storage';
 import { ApiLibraryNodes } from './runtime/nodes/integrations/api-library-node';
 import { IntegrationNodes } from './runtime/nodes/integrations/integrations-nodes';
 import { IntegrationNodesModule } from './runtime/nodes/integrations/integrations-nodes.module';
@@ -51,6 +54,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
  */
 @Module({
   imports: [
+    PlatformSettingsModule,
     ChatConversationsModule,
     ContactConsentModule,
     PlansCoreModule,
@@ -67,7 +71,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     ApiKeyGuard,
     SafeFetch,
     // The store a builder upload went to, so the runtime reads its own files back instead of fetching them over the web.
-    { provide: FLOW_MEDIA_STORE, useClass: LocalFlowMediaAdapter },
+    { provide: FLOW_MEDIA_STORE, useExisting: StorageFlowMediaStore },
     CapTally,
     PacingRuntime,
     RunRepository,
