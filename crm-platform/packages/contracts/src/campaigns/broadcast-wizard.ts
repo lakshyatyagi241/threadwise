@@ -564,6 +564,10 @@ export const wizardCsvReportSchema = z.object({
       phone: z.string(),
       name: z.string().nullable(),
       status: z.enum(['new', 'existing', 'optedOut']),
+      /** Whether the number is a contact already, whatever its consent (`status` hides this for an opted-out one). */
+      contact: z.enum(['new', 'existing']),
+      /** Whether that contact has opted out (a number that is not a contact yet has not). */
+      optedOut: z.boolean(),
     }),
   ),
   /** The first rejected rows (the whole list is the download). */

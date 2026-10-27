@@ -690,9 +690,30 @@ describe('CSV mode', () => {
     existing: 2,
     newContacts: 3,
     preview: [
-      { line: 2, phone: '+919876520001', name: 'Eva', status: 'existing' as const },
-      { line: 4, phone: '+919876520003', name: null, status: 'new' as const },
-      { line: 3, phone: '+919876520002', name: 'Olga', status: 'optedOut' as const },
+      {
+        line: 2,
+        phone: '+919876520001',
+        name: 'Eva',
+        status: 'existing' as const,
+        contact: 'existing' as const,
+        optedOut: false,
+      },
+      {
+        line: 4,
+        phone: '+919876520003',
+        name: null,
+        status: 'new' as const,
+        contact: 'new' as const,
+        optedOut: false,
+      },
+      {
+        line: 3,
+        phone: '+919876520002',
+        name: 'Olga',
+        status: 'optedOut' as const,
+        contact: 'existing' as const,
+        optedOut: true,
+      },
     ],
     issues: [
       { line: 5, value: '+91 98765 20003', reason: 'duplicate' as const },
@@ -729,6 +750,8 @@ describe('CSV mode', () => {
     }
     expect(out).toContain('+919876520001');
     expect(out).toContain('Existing contact');
+    expect(out).toContain('Opted in');
+    expect(out).toContain('New contact');
     expect(out).toContain('3 rows cannot be used');
     expect(out).toContain('Line 5');
     expect(out).toContain('12345');

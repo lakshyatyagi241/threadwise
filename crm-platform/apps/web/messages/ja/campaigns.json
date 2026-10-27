@@ -315,7 +315,22 @@
         "previousTitle": "過去の配信",
         "previousHint": "過去の一斉配信やキャンペーンの配信先を追加します。既読、返信、クリックした人だけに絞ることもできます。",
         "previousEstimate": "{count, plural, other {過去の配信から最大#人(概算: 2件の配信に含まれる人は2回数えられます)。}}",
-        "previousEditHint": "編集時には、以前に選択した過去の配信は表示されません。このキャンペーンの受信者はすでに連絡先として保存されています。さらに追加するには、もう一度選択してください。"
+        "previousEditHint": "編集時には、以前に選択した過去の配信は表示されません。このキャンペーンの受信者はすでに連絡先として保存されています。さらに追加するには、もう一度選択してください。",
+        "emails": "メールアドレスを手入力",
+        "emailsHint": "1行に1件、またはカンマかセミコロンで区切ります。",
+        "emailsPlaceholder": "1行に1つのメールアドレス",
+        "emailsCount": "{count} 件のアドレス",
+        "emailCsvHint": "列: 名前、メール。それ以外の列はメッセージで使える変数になります。",
+        "emailModes": {
+          "csv": {
+            "title": "CSVをアップロード",
+            "hint": "このキャンペーンのメールアドレスをインポートします。"
+          },
+          "manual": {
+            "title": "メールアドレスを手入力",
+            "hint": "1行に1つのメールアドレスを貼り付けてください。"
+          }
+        }
       },
       "message": {
         "title": "メッセージ",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "ファイル内の有効な番号のプレビュー",
         "csvLine": "行",
         "csvName": "名前",
-        "csvStatus": "ステータス",
         "csvRow": {
           "new": "新規連絡先",
           "existing": "既存の連絡先",
@@ -1383,7 +1397,14 @@
         "modePrevious": "過去の配信先に送信",
         "previousHint": "過去の一斉配信やキャンペーンの配信先に再度送信します。既読、未読、返信、クリックした人だけに絞ることもできます。",
         "chipPrevious": "{count, plural, other {過去の配信#件}}({outcome})",
-        "filterNoConditions": "条件を追加すると、一致する連絡先の数がわかります。"
+        "filterNoConditions": "条件を追加すると、一致する連絡先の数がわかります。",
+        "csvConsentCol": "同意",
+        "csvContactCol": "連絡先",
+        "csvConsent": {
+          "optedIn": "オプトイン",
+          "optedOut": "オプトアウト"
+        },
+        "clearAudience": "対象者をクリア"
       },
       "review": {
         "intro": "コストを確認し、各テンプレート変数に何を入力するかを指定して、一斉配信を確認します。",
