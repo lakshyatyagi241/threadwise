@@ -112,7 +112,7 @@ describe('write-route plan features', () => {
     ['credit notes', CreditNotesController, 'invoicing'],
     ['invoice settings', InvoiceSettingsController, 'invoicing'],
     ['payments', PaymentsController, 'invoicing'],
-    ['recurring invoices', RecurringInvoicesController, 'invoicing'],
+    ['recurring invoices', RecurringInvoicesController, 'recurring_invoices'],
     ['sales orders', SalesOrdersController, 'invoicing'],
     ['tax rates', TaxRatesController, 'invoicing'],
     ['storefront admin', StoreController, 'storefront_builder'],

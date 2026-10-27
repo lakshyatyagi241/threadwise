@@ -70,3 +70,14 @@ export function winRatePercent(won: number, lost: number): number {
   const closed = won + lost;
   return closed === 0 ? 0 : Math.round((won / closed) * 100);
 }
+
+/**
+ * The expected close date of an open deal is the day the person expects to win it, so a date that SETS a day already gone is refused (a
+ * deal already past its date stays overdue until it is moved forward, won or lost). The clock is the caller's. A day of grace is allowed
+ * so a person in a time zone ahead of UTC is not refused for choosing their own today.
+ */
+export function isPastCloseDate(day: string, now: Date): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) return false;
+  const floor = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  return day < floor;
+}

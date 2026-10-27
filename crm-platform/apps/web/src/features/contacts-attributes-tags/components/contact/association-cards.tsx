@@ -3,15 +3,17 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFormatter, useLocale, useTranslations } from 'next-intl';
-import { cn } from '@crm/ui';
+import { useQueryClient } from '@tanstack/react-query';
+import { cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useContactConsent } from '@/features/contact-consent';
 import { CompanyLink, useCanPickCompany } from '@/features/companies';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, bandOf, useLeadScoringEnabled } from '@/features/lead-scoring';
+import { NewDealForContact } from '@/features/deals-pipelines';
 import { usePersonaVisibility } from '@/features/persona';
 import { TaskCompleteCheck, useTasksList } from '@/features/tasks';
-import { useContactDeals } from '../../api/deals';
+import { DEALS_KEY, useContactDeals } from '../../api/deals';
 import { useContactFields } from '../../api/properties';
 import type { ContactRow } from '../../api/schemas';
 import { countryOfPhone, timeZoneOf } from '../../lib/contact-overview';
@@ -91,6 +93,10 @@ function DealsCard({
   const canCreate = useCan('record.deals.create');
   const locale = useLocale();
   const deals = useContactDeals(contact.id, canRead);
+  const qc = useQueryClient();
+  const { toast } = useToast();
+  // "+ Add" opens the new-deal form right here, with this contact already in it, instead of sending the person to the Deals page.
+  const [adding, setAdding] = useState(false);
   if (!canRead || (deals.isError && isNotAvailableToYou(deals.error))) return null;
   const list = deals.data?.deals ?? [];
   return (
@@ -99,7 +105,7 @@ function DealsCard({
       title={t('deals')}
       count={deals.isSuccess ? list.length : null}
       summary={deals.isSuccess && list.length === 0 ? t('dealsNone') : undefined}
-      action={canCreate ? { label: t('add'), href: '/deals' } : undefined}
+      action={canCreate ? { label: t('add'), onClick: () => setAdding(true) } : undefined}
     >
       {list.length === 0 ? (
         <p className="text-muted-foreground">{t('dealsNone')}</p>
@@ -128,6 +134,17 @@ function DealsCard({
       )}
       {list.length > 4 && onOpenSection && (
         <ViewAll label={t('viewAll')} onClick={() => onOpenSection('deals')} />
+      )}
+      {adding && (
+        <NewDealForContact
+          contact={{ id: contact.id, name: contact.name, phone: contact.phone }}
+          onClose={() => setAdding(false)}
+          onCreated={(deal) => {
+            setAdding(false);
+            void qc.invalidateQueries({ queryKey: DEALS_KEY(contact.id) });
+            toast(t('dealAdded', { title: deal.title }), 'success');
+          }}
+        />
       )}
     </CollapseCard>
   );

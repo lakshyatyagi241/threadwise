@@ -234,6 +234,12 @@
       "title": "Invoices",
       "subtitle": "Bill your customers, follow what is paid and what is late.",
       "payments": "Payments",
+      "create": "Create",
+      "createMenu": "What do you want to create?",
+      "createOneTime": "Create one-time invoice",
+      "createRecurring": "Create recurring invoices",
+      "notInPlan": "Not in your plan",
+      "seePlans": "See plans to unlock recurring invoices",
       "newInvoice": "New invoice",
       "tableLabel": "Invoice list",
       "empty": {

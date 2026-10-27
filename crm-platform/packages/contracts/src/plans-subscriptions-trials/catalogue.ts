@@ -229,6 +229,15 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'outbound_webhooks', group: 'integrations', productLine: 'platform', default: true },
   { key: 'storefront_builder', group: 'advanced', productLine: 'platform', default: true },
   { key: 'invoicing', group: 'advanced', productLine: 'crm', default: true },
+  // Recurring invoices: schedules that issue an invoice on a rhythm. They were part of `invoicing` until now, so the default is true and every plan row
+  // that predates the key keeps them; the owner switches it off on a plan that sells one-time invoices only (the basic plan). Needs `invoicing`.
+  {
+    key: 'recurring_invoices',
+    group: 'advanced',
+    productLine: 'crm',
+    default: true,
+    requires: ['invoicing'],
+  },
   { key: 'forms_and_links', group: 'messaging', productLine: 'chat', default: true },
   // Telegram, Facebook, Instagram and the other non-WhatsApp channels.
   { key: 'extra_channels', group: 'messaging', productLine: 'chat', default: true },
@@ -333,6 +342,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   outbound_webhooks: 'Outbound webhooks',
   storefront_builder: 'Storefront builder',
   invoicing: 'Invoicing',
+  recurring_invoices: 'Recurring invoices',
   forms_and_links: 'Forms and links',
   extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
@@ -395,6 +405,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'outbound_webhooks',
   'storefront_builder',
   'invoicing',
+  'recurring_invoices',
   'forms_and_links',
   'extra_channels',
   'form_builder',

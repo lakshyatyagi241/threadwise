@@ -72,6 +72,7 @@
           "tasks": "Open tasks",
           "tasksNone": "Nothing is waiting.",
           "deals": "Deals",
+          "dealAdded": "Deal “{title}” added.",
           "dealsNone": "No deals yet.",
           "add": "+ Add",
           "viewAll": "View all"

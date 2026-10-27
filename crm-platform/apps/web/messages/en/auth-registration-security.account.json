@@ -595,6 +595,7 @@
             "outbound_webhooks": "Outbound webhooks",
             "storefront_builder": "Storefront builder",
             "invoicing": "Invoicing",
+            "recurring_invoices": "Recurring invoices",
             "forms_and_links": "Forms and links",
             "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat",
             "form_builder": "Forms",
