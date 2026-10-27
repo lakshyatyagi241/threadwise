@@ -67,6 +67,23 @@ Share is of all database time in the rollup-off sweep (41.9 s over 37,359 calls)
 After the rollup and JIT off, exactly three statements are still over 120 ms mean: the export card (671), the History top-conversations list (302) and the dashboard
 summary (229). Ranks 5 and 7 to 20 are all under 120 ms.
 
+## D-01: the four statements over 120 ms from the 19 October run
+
+Re-checked against the fresh sweep (same data set). The first two match by text; the last two changed their parameter numbering and match by shape (ranks 4 and 8 above).
+
+| 19 Oct statement                              | Mean then | Now, rollup off | Now, rollup on + JIT off |
+| --------------------------------------------- | --------- | --------------- | ------------------------ |
+| History summary, per-conversation first reply | 534       | 1,406           | gone                     |
+| History charts, grouping sets                 | 397       | 524             | gone                     |
+| History summary counts by status              | 162       | 204             | gone                     |
+| Admin hub delivered share and counts          | 150       | 155             | gone                     |
+
+So all four are still over 120 ms while the rollup is off (the two runs are on different machines, so compare the shape, not the digits), and all four
+disappear once it is on. What replaces them is under 120 ms except the History top-conversations list (302 ms), which groups by conversation.
+Statements over 120 ms mean in the sweeps: 6 (rollup off), 5 (rollup on, JIT on), 3 (rollup on, JIT off: the export card counts at 671, the top-conversations list at 302,
+the dashboard summary at 229). That is the local answer. The sheet's target is about production, which was not read: production's `pg_stat_statements` is the
+query at the end of this page, and the weekly database digest (D-06) and the 5-minute alert (D-04) flag any statement over 120 ms from then on.
+
 ## Decisions and steps for a person
 
 1. **Rollup**: run `pnpm --filter @crm/api backfill:message-feed` per workspace, set `ANALYTICS_SOURCES='{"msg_feed":"shadow","msg_feed_overview":"shadow"}'` first (the old
