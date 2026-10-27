@@ -2,20 +2,26 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { useRef } from 'react';
 import { PLAN_UPGRADE_PATH } from '@crm/contracts';
+import { useModalFocus } from '@/lib/use-modal-focus';
 
 /**
  * The upgrade sheet over a page the plan does not include (TW-WGT-027). Reference let the page render and put this over it;
- * every change is refused by the server anyway, so the sheet is what tells the person why.
+ * every change is refused by the server anyway, so the sheet is what tells the person why. It is a modal (see `useModalFocus`).
  */
 export function PlanPaywall() {
   const t = useTranslations('chatbotWidget.paywall');
+  const ref = useRef<HTMLDivElement>(null);
+  useModalFocus(ref);
   return (
     <div
+      ref={ref}
       role="dialog"
       aria-modal="true"
       aria-labelledby="wgt-paywall-title"
-      className="fixed inset-0 z-40 grid place-items-center bg-background/80 p-4 backdrop-blur-sm"
+      tabIndex={-1}
+      className="fixed inset-0 z-40 grid place-items-center bg-background/80 p-4 outline-none backdrop-blur-sm"
     >
       <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 text-center shadow-lg">
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
