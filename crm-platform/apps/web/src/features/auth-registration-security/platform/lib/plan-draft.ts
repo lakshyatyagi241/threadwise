@@ -175,7 +175,7 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
             ? String(p.limits[k])
             : '',
       ]),
-      ...Object.entries(p.moduleLimits).map(([k, v]) => [k, v > 0 ? String(v) : '']),
+      ...Object.entries(p.moduleLimits).map(([k, v]) => [k, (v ?? 0) > 0 ? String(v) : '']),
     ]),
     features: { ...p.moduleFeatures, ...p.features },
     visibleAddons: [...p.visibleAddons],
