@@ -48,10 +48,11 @@ describe('scope registry', () => {
     expect(highestScopeRisk(['email.read', 'email.write'])).toBe('high');
   });
 
-  it('scope ids are unique and lowercase dotted', () => {
+  it('scope ids are unique and lowercase dotted, with hyphens in a word (sales-items.read)', () => {
+    // A scope id is stored on installations and granted to apps, so a hyphenated id that is already shipped stays as it is.
     const ids = MARKET_SCOPES.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);
-    for (const id of ids) expect(id).toMatch(/^[a-z]+\.[a-z]+$/);
+    for (const id of ids) expect(id).toMatch(/^[a-z]+(-[a-z]+)*\.[a-z]+(-[a-z]+)*$/);
   });
 
   it('maps scopes to permission keys, once each, and unknown scopes to nothing', () => {
