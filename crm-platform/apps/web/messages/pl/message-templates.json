@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta zezwala na jedną edycję w ciągu 24 godzin i dziesięć w ciągu 30 dni dla zatwierdzonego szablonu. Spróbuj później.",
       "ROW_VERSION_CONFLICT": "Ktoś zmienił ten szablon, gdy go edytowałeś. Wczytaj ponownie, aby zobaczyć najnowszą wersję, a następnie zastosuj zmianę jeszcze raz.",
       "VALIDATION_FAILED": "Niektóre pola są nieprawidłowe. Sprawdź pola poniżej.",
-      "INTERNAL": "Serwer nie mógł obsłużyć tego żądania. Spróbuj ponownie za chwilę."
+      "INTERNAL": "Serwer nie mógł obsłużyć tego żądania. Spróbuj ponownie za chwilę.",
+      "uploadTooLarge": "Plik jest za duży. Obrazy mogą mieć do 5 MB, filmy do 16 MB, a pliki PDF do 10 MB.",
+      "uploadRejected": "Ten plik nie został przyjęty: niezależnie od nazwy jego zawartość nie jest obrazem JPG lub PNG, filmem MP4 lub 3GP ani plikiem PDF.",
+      "uploadProviderBusy": "WhatsApp nie mógł teraz przyjąć pliku. Poczekaj minutę i spróbuj ponownie.",
+      "uploadRefused": "Nie udało się przesłać pliku.",
+      "uploadNetwork": "Przesyłanie nie zakończyło się. Sprawdź połączenie i spróbuj ponownie."
     },
     "preview": {
       "title": "Podgląd",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Wpisz ID Flow.",
           "flowIdInvalid": "ID Flow to liczba.",
           "screenRequired": "Wpisz ID ekranu.",
-          "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami."
+          "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami.",
+          "flowIdNotMeta": "Ten formularz nie jest jeszcze Flow Meta (jego Flow ID nie jest liczbą). Otwórz Formularze WhatsApp, zapisz i opublikuj go, a potem wybierz tutaj."
         },
         "catalogHint": "Otwiera Twój katalog WhatsApp. Przycisk ma napis „Zobacz katalog” i musi być jedynym przyciskiem.",
         "flowPick": "Formularz WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Wczytywanie formularzy…",
         "flowNone": "Nie masz jeszcze opublikowanych formularzy WhatsApp.",
         "flowNoneLink": "Utwórz i opublikuj formularz",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (najpierw opublikuj w Meta)"
       },
       "result": {
         "metaRefused": "Zapisano, ale Meta odrzuciła szablon.",

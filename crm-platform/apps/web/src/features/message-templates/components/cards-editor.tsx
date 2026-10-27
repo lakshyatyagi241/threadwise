@@ -20,7 +20,7 @@ import { toggleSelection } from '../lib/format';
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, mediaProblem, megabytes } from '../lib/media';
 import { ErrorAlert } from './error-line';
 import { ArrowDownIcon, ArrowUpIcon, ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
-import { useErrorText } from './use-error-text';
+import { useUploadErrorText } from './use-error-text';
 
 /** The button kinds a card can carry (Meta: a quick reply, a link or a phone number; up to two, the same on every card). */
 const CARD_KINDS: readonly AddableKind[] = ['quick_reply', 'url', 'phone'];
@@ -140,7 +140,7 @@ function CardItem({
   const t = useTranslations('message-templates.form.cards');
   const th = useTranslations('message-templates.form.header');
   const tb = useTranslations('message-templates.form.buttons');
-  const errorText = useErrorText();
+  const errorText = useUploadErrorText();
   const base = useId();
   const input = useRef<HTMLInputElement>(null);
   const [problem, setProblem] = useState<string | null>(null);
@@ -163,7 +163,13 @@ function CardItem({
   function mark(marker: string) {
     const el = bodyRef.current;
     if (!el) return;
-    const r = toggleSelection(card.body, el.selectionStart, el.selectionEnd, marker, tf('wrapSample'));
+    const r = toggleSelection(
+      card.body,
+      el.selectionStart,
+      el.selectionEnd,
+      marker,
+      tf('wrapSample'),
+    );
     onPatch({ body: r.value });
     requestAnimationFrame(() => {
       el.focus();
@@ -247,6 +253,7 @@ function CardItem({
             ) : (
               <span className="text-muted-foreground">{t('noFile')}</span>
             )}
+            <p className="text-xs text-muted-foreground">{th('limits')}</p>
           </div>
           <input
             ref={input}

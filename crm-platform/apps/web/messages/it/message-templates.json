@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta consente una modifica ogni 24 ore e dieci in 30 giorni per un modello approvato. Riprova più tardi.",
       "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo template mentre lo stavi modificando. Ricarica la pagina per vedere la versione più recente, poi applica di nuovo la modifica.",
       "VALIDATION_FAILED": "Alcuni campi non sono validi. Controlla i campi qui sotto.",
-      "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco."
+      "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco.",
+      "uploadTooLarge": "Il file è troppo grande. Le immagini arrivano a 5 MB, i video a 16 MB e i PDF a 10 MB.",
+      "uploadRejected": "Questo file non è stato accettato: il contenuto non è un'immagine JPG o PNG, un video MP4 o 3GP, né un PDF, qualunque sia il nome.",
+      "uploadProviderBusy": "WhatsApp non ha potuto ricevere il file ora. Attendi un minuto e riprova.",
+      "uploadRefused": "Impossibile caricare il file.",
+      "uploadNetwork": "Il caricamento non è terminato. Controlla la connessione e riprova."
     },
     "preview": {
       "title": "Anteprima",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Inserisci l’ID del Flow.",
           "flowIdInvalid": "L’ID del Flow è un numero.",
           "screenRequired": "Inserisci l’ID della schermata.",
-          "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti."
+          "catalogAlone": "Un pulsante catalogo non può essere combinato con altri pulsanti.",
+          "flowIdNotMeta": "Questo modulo non è ancora un Flow di Meta (il suo ID Flow non è un numero). Apri i moduli WhatsApp, salvalo e pubblicalo, poi sceglilo qui."
         },
         "catalogHint": "Apre il tuo catalogo WhatsApp. Il pulsante riporta «Vedi catalogo» e deve essere l’unico pulsante.",
         "flowPick": "Modulo WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Caricamento dei moduli…",
         "flowNone": "Non hai ancora moduli WhatsApp pubblicati.",
         "flowNoneLink": "Creane e pubblicane uno",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (pubblicalo prima su Meta)"
       },
       "result": {
         "metaRefused": "Salvato, ma Meta ha rifiutato il template.",

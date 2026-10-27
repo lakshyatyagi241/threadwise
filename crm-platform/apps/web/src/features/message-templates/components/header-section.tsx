@@ -15,7 +15,7 @@ import {
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, mediaProblem, megabytes } from '../lib/media';
 import { ErrorAlert } from './error-line';
 import { DocumentIcon, ImageIcon, PinIcon, VideoIcon } from './icons';
-import { useErrorText } from './use-error-text';
+import { useUploadErrorText } from './use-error-text';
 
 /** TW-TPL-009: no header, a text header (one variable), a media header with an uploaded sample, or a location pin. */
 export function HeaderSection({
@@ -40,7 +40,7 @@ export function HeaderSection({
   }) => void;
 }) {
   const t = useTranslations('message-templates.form.header');
-  const errorText = useErrorText();
+  const errorText = useUploadErrorText();
   const base = useId();
   const input = useRef<HTMLInputElement>(null);
   const [problem, setProblem] = useState<string | null>(null);

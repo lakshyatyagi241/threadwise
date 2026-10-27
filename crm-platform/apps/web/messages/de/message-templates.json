@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta erlaubt bei einer genehmigten Vorlage eine Bearbeitung in 24 Stunden und zehn in 30 Tagen. Versuchen Sie es später erneut.",
       "ROW_VERSION_CONFLICT": "Jemand hat diese Vorlage geändert, während Sie sie bearbeitet haben. Laden Sie neu, um die neueste Version zu sehen, und wenden Sie Ihre Änderung dann erneut an.",
       "VALIDATION_FAILED": "Einige Felder sind ungültig. Prüfen Sie die Felder unten.",
-      "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut."
+      "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut.",
+      "uploadTooLarge": "Die Datei ist zu groß. Bilder dürfen bis zu 5 MB, Videos bis zu 16 MB und PDFs bis zu 10 MB groß sein.",
+      "uploadRejected": "Diese Datei wurde nicht akzeptiert: Ihr Inhalt ist kein JPG- oder PNG-Bild, kein MP4- oder 3GP-Video und kein PDF, egal wie sie heißt.",
+      "uploadProviderBusy": "WhatsApp konnte die Datei gerade nicht annehmen. Warten Sie eine Minute und versuchen Sie es erneut.",
+      "uploadRefused": "Die Datei konnte nicht hochgeladen werden.",
+      "uploadNetwork": "Der Upload wurde nicht abgeschlossen. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
     },
     "preview": {
       "title": "Vorschau",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Geben Sie die Flow-ID ein.",
           "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
           "screenRequired": "Geben Sie die Bildschirm-ID ein.",
-          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
+          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren.",
+          "flowIdNotMeta": "Dieses Formular ist noch kein Meta-Flow (seine Flow-ID ist keine Zahl). Öffnen Sie WhatsApp-Formulare, speichern und veröffentlichen Sie es und wählen Sie es dann hier aus."
         },
         "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
         "flowPick": "WhatsApp-Formular",
@@ -384,7 +390,8 @@
         "flowLoading": "Formulare werden geladen…",
         "flowNone": "Sie haben noch keine veröffentlichten WhatsApp-Formulare.",
         "flowNoneLink": "Eines erstellen und veröffentlichen",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (zuerst bei Meta veröffentlichen)"
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",

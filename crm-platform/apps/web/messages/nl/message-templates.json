@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur en tien per 30 dagen toe. Probeer het later opnieuw.",
       "ROW_VERSION_CONFLICT": "Iemand heeft dit sjabloon gewijzigd terwijl jij het bewerkte. Laad de pagina opnieuw om de nieuwste versie te zien en pas daarna je wijziging opnieuw toe.",
       "VALIDATION_FAILED": "Sommige velden zijn ongeldig. Controleer de velden hieronder.",
-      "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw."
+      "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw.",
+      "uploadTooLarge": "Het bestand is te groot. Afbeeldingen mogen tot 5 MB, video's tot 16 MB en pdf's tot 10 MB.",
+      "uploadRejected": "Dit bestand is niet geaccepteerd: wat de naam ook zegt, de inhoud is geen JPG- of PNG-afbeelding, MP4- of 3GP-video of pdf.",
+      "uploadProviderBusy": "WhatsApp kon het bestand nu niet aannemen. Wacht een minuut en probeer het opnieuw.",
+      "uploadRefused": "Het bestand kon niet worden geüpload.",
+      "uploadNetwork": "De upload is niet voltooid. Controleer je verbinding en probeer het opnieuw."
     },
     "preview": {
       "title": "Voorbeeld",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Vul het Flow-ID in.",
           "flowIdInvalid": "Het Flow-ID is een getal.",
           "screenRequired": "Vul het scherm-ID in.",
-          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd."
+          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd.",
+          "flowIdNotMeta": "Dit formulier is nog geen Meta Flow (de Flow-ID is geen getal). Open WhatsApp-formulieren, sla het op en publiceer het, en kies het dan hier."
         },
         "catalogHint": "Opent uw WhatsApp-catalogus. De knop zegt “Catalogus bekijken” en moet de enige knop zijn.",
         "flowPick": "WhatsApp-formulier",
@@ -384,7 +390,8 @@
         "flowLoading": "Formulieren laden…",
         "flowNone": "Je hebt nog geen gepubliceerde WhatsApp-formulieren.",
         "flowNoneLink": "Maak er een en publiceer het",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publiceer eerst bij Meta)"
       },
       "result": {
         "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",

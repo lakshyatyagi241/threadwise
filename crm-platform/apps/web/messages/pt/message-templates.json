@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "A Meta permite uma edição a cada 24 horas e dez a cada 30 dias em um modelo aprovado. Tente novamente mais tarde.",
       "ROW_VERSION_CONFLICT": "Outra pessoa alterou este modelo enquanto você editava. Recarregue para ver a versão mais recente e aplique sua alteração novamente.",
       "VALIDATION_FAILED": "Alguns campos são inválidos. Verifique os campos abaixo.",
-      "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes."
+      "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes.",
+      "uploadTooLarge": "O arquivo é grande demais. Imagens aceitam até 5 MB, vídeos até 16 MB e PDFs até 10 MB.",
+      "uploadRejected": "Este arquivo não foi aceito: o conteúdo não é uma imagem JPG ou PNG, um vídeo MP4 ou 3GP, nem um PDF, seja qual for o nome.",
+      "uploadProviderBusy": "O WhatsApp não conseguiu receber o arquivo agora. Aguarde um minuto e tente de novo.",
+      "uploadRefused": "Não foi possível enviar o arquivo.",
+      "uploadNetwork": "O envio não terminou. Verifique sua conexão e tente de novo."
     },
     "preview": {
       "title": "Pré-visualização",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Informe o ID do Flow.",
           "flowIdInvalid": "O ID do Flow é um número.",
           "screenRequired": "Informe o ID da tela.",
-          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
+          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões.",
+          "flowIdNotMeta": "Este formulário ainda não é um Flow da Meta (o ID do Flow não é um número). Abra Formulários do WhatsApp, salve e publique, e depois escolha aqui."
         },
         "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
         "flowPick": "Formulário do WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Carregando formulários…",
         "flowNone": "Você ainda não tem formulários do WhatsApp publicados.",
         "flowNoneLink": "Crie e publique um",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publique primeiro na Meta)"
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",

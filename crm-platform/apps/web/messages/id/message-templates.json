@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta mengizinkan satu edit dalam 24 jam dan sepuluh dalam 30 hari untuk template yang disetujui. Coba lagi nanti.",
       "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
       "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
-      "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi."
+      "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi.",
+      "uploadTooLarge": "Berkas terlalu besar. Gambar maksimal 5 MB, video 16 MB, dan PDF 10 MB.",
+      "uploadRejected": "Berkas ini tidak diterima: apa pun namanya, isinya bukan gambar JPG atau PNG, video MP4 atau 3GP, maupun PDF.",
+      "uploadProviderBusy": "WhatsApp belum dapat menerima berkas sekarang. Tunggu semenit lalu coba lagi.",
+      "uploadRefused": "Berkas tidak dapat diunggah.",
+      "uploadNetwork": "Unggahan tidak selesai. Periksa koneksi Anda dan coba lagi."
     },
     "preview": {
       "title": "Pratinjau",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Masukkan ID Flow.",
           "flowIdInvalid": "ID Flow berupa angka.",
           "screenRequired": "Masukkan ID layar.",
-          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
+          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain.",
+          "flowIdNotMeta": "Formulir ini belum menjadi Flow Meta (Flow ID-nya bukan angka). Buka Formulir WhatsApp, simpan dan publikasikan, lalu pilih di sini."
         },
         "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
         "flowPick": "Formulir WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Memuat formulir…",
         "flowNone": "Anda belum punya formulir WhatsApp yang dipublikasikan.",
         "flowNoneLink": "Buat dan publikasikan satu",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publikasikan ke Meta dulu)"
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
