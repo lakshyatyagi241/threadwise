@@ -6,7 +6,6 @@ import {
   MailError,
   type MailPort,
 } from '../../../src/infra/providers/auth-registration-security/mail.port';
-import { ClerkService } from '../../../src/modules/auth/clerk.service';
 import { LoginService } from '../../../src/modules/auth/flows/login.service';
 import { MailService } from '../../../src/modules/auth/mail/mail.service';
 import { OperatorAuthService } from '../../../src/modules/auth/platform/operator-auth.service';
@@ -225,29 +224,6 @@ describe('suspended users (TW-AUTH-016)', () => {
     expect(again.status).toBe(201);
     expect(again.body.flags.suspended).toBe(true);
   });
-
-  it('can come in through the Clerk exchange too', async () => {
-    const a = await signup();
-    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE email = $1`, [a.email]);
-    await flushGates();
-    const clerk = h.app.get(ClerkService);
-    const original = clerk.verifySession.bind(clerk);
-    clerk.verifySession = async () => ({
-      clerkUserId: 'clerk_susp',
-      email: a.email,
-      fullName: 'Test Person',
-    });
-    try {
-      const res = await api()
-        .post('/v2/auth/clerk/session')
-        .set('x-forwarded-for', nextIp())
-        .send({ orgSlug: a.slug, clerkToken: 't' });
-      expect(res.status, JSON.stringify(res.body)).toBe(201);
-      expect(res.body.flags.suspended).toBe(true);
-    } finally {
-      clerk.verifySession = original;
-    }
-  });
 });
 
 // ===================================================================================================
@@ -436,71 +412,7 @@ describe('second-factor attempt budget (TW-AUTH-030)', () => {
 });
 
 // ===================================================================================================
-describe('the Clerk exchange and the partner portal (TW-AUTH-030/032)', () => {
-  const asClerk = async <T>(identity: { email: string; id?: string }, fn: () => Promise<T>) => {
-    const clerk = h.app.get(ClerkService);
-    const original = clerk.verifySession.bind(clerk);
-    clerk.verifySession = async () => ({
-      clerkUserId: identity.id ?? `clerk_${identity.email}`,
-      email: identity.email,
-      fullName: 'Clerk Person',
-    });
-    try {
-      return await fn();
-    } finally {
-      clerk.verifySession = original;
-    }
-  };
-  const exchange = (a: Pick<Account, 'slug'>, ip: string) =>
-    api()
-      .post('/v2/auth/clerk/session')
-      .set('x-forwarded-for', ip)
-      .send({ orgSlug: a.slug, clerkToken: 'verified-elsewhere' });
-
-  it('challenges a person who has two-factor on instead of opening a session', async () => {
-    const a = await signup();
-    const { recovery } = await enrol(a);
-    await asClerk({ email: a.email }, async () => {
-      const res = await exchange(a, nextIp());
-      expect(res.status, JSON.stringify(res.body)).toBe(201);
-      expect(res.body.status).toBe('mfa_required');
-      expect(res.body.tokens).toBeUndefined();
-      const done = await api()
-        .post('/v2/auth/login/mfa')
-        .send({ challengeToken: res.body.challengeToken, recoveryCode: recovery[0] });
-      expect(done.status).toBe(201);
-      expect(done.body.status).toBe('authenticated');
-    });
-  });
-
-  it('opens a session at once when there is no second factor', async () => {
-    const a = await signup();
-    await asClerk({ email: a.email }, async () => {
-      const res = await exchange(a, nextIp());
-      expect(res.status).toBe(201);
-      expect(res.body.status).toBe('authenticated');
-    });
-  });
-
-  it('is refused while the person is locked out, and counts identities with no account', async () => {
-    const a = await signup();
-    const ip = nextIp();
-    for (let i = 0; i < 5; i++) expect((await login({ ...a, ip }, `bad-${i}`)).status).toBe(401);
-    await asClerk({ email: a.email }, async () => {
-      const res = await exchange(a, ip);
-      expect(res.status).toBe(429);
-      expect(res.body.code).toBe('AUTH_ACCOUNT_LOCKED');
-    });
-
-    // An identity that matches nobody counts as a failed attempt, five of them lock that address.
-    const stranger = `stranger${Date.now()}@example.test`;
-    const ip2 = nextIp();
-    await asClerk({ email: stranger, id: 'clerk_stranger' }, async () => {
-      for (let i = 0; i < 5; i++) expect((await exchange(a, ip2)).status).toBe(401);
-      expect((await exchange(a, ip2)).status).toBe(429);
-    });
-  });
-
+describe('the partner portal (TW-AUTH-030/032)', () => {
   it('applies the sign-in lockout to partner agents, on a counter of their own', async () => {
     const a = await signup();
     const { orgId } = await ids(a);

@@ -4,7 +4,6 @@ import { sql } from 'drizzle-orm';
 import type { LoginResponse, TokenPair } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
-import { ClerkService } from './clerk.service';
 import { LoginService, type ClientMeta } from './flows/login.service';
 import { SecurityPolicyService } from './platform/security-policy.service';
 import { AccountAttackGuard } from './security/account-attack.service';
@@ -25,7 +24,7 @@ interface LoginRow {
 
 /**
  * The pools that are not staff password login: partner agents (stateless
- * refresh), the Clerk exchange, and the refresh dispatcher.
+ * refresh) and the refresh dispatcher.
  *
  * Staff login, MFA, sign-up and recovery live in `flows/`.
  */
@@ -36,7 +35,6 @@ export class AuthService {
   constructor(
     private readonly db: DatabaseService,
     private readonly tokens: TokenService,
-    private readonly clerk: ClerkService,
     private readonly tenants: TenantDirectory,
     private readonly sessions: SessionService,
     private readonly login: LoginService,
@@ -104,81 +102,6 @@ export class AuthService {
       typ: 'partner_agent',
       uid: row!.uuid,
       ep: await this.epoch.current(),
-    });
-  }
-
-  /**
-   * Staff login through a Clerk session token. Clerk verified the credential;
-   * this links it to an EXISTING local user, by `auth_subject` and then by
-   * email, and opens a normal session.
-   *
-   * It no longer creates users. The old version auto-provisioned a user for
-   * any valid Clerk identity in any organization the caller named, which let
-   * anyone with a Clerk account join any tenant (known issue). A
-   * person with no row is now told to ask for an invitation.
-   */
-  clerkConfigured(): boolean {
-    return this.clerk.isConfigured();
-  }
-
-  async loginViaClerk(
-    orgSlug: string,
-    clerkToken: string,
-    meta: ClientMeta,
-  ): Promise<LoginResponse> {
-    const identity = await this.clerk.verifySession(clerkToken);
-    const org = await this.tenants.findOrgBySlug(orgSlug);
-    if (!org || org.status !== 'active') throw AppError.unauthenticated('Invalid credentials');
-
-    // The same lockout as a password sign-in, on the same counter (org + email + IP): a
-    // locked-out person is refused whichever door they use, and an identity that has no
-    // local account counts as a failed attempt (TW-AUTH-002).
-    const policy = await this.policy.policy();
-    const lockKey = AuthKeys.lockout(org.id, identity.email, normalizeIp(meta.ip) ?? 'unknown');
-    await this.login.assertNotLocked(lockKey, policy, { orgId: org.id, email: identity.email });
-
-    const row = await this.db.txAs({ orgId: org.id }, async (tx) => {
-      const bySubject = await tx.execute(sql`
-        SELECT id, uuid, email, full_name, status FROM users
-        WHERE org_id = ${org.id} AND auth_subject = ${identity.clerkUserId}
-      `);
-      if (bySubject.rows[0]) return bySubject.rows[0];
-      const linked = await tx.execute(sql`
-        UPDATE users SET auth_subject = ${identity.clerkUserId}
-        WHERE org_id = ${org.id} AND email = ${identity.email} AND auth_subject IS NULL
-        RETURNING id, uuid, email, full_name, status
-      `);
-      return linked.rows[0];
-    });
-    const user = row as unknown as
-      { id: number; uuid: string; email: string; full_name: string; status: string } | undefined;
-    // A suspended person gets in and is held at the suspended screen, as with a password (TW-AUTH-016).
-    if (!user) {
-      await this.login.recordFailedSignIn(lockKey, policy);
-      throw AppError.unauthenticated('Invalid credentials');
-    }
-
-    this.logger.log({ orgId: org.id, userId: user.id }, 'clerk login');
-    await this.login.clearLockout(lockKey);
-
-    // Clerk vouched for the first factor only. A person who turned on two-factor here is
-    // challenged exactly as after a password (TW-AUTH-030/032); the exchange is not a back door.
-    const loaded = await this.login.loadOrgAndUser(org.id, user.id);
-    if (loaded?.user.mfa_enabled) {
-      return this.login.issueMfaChallenge({
-        orgId: org.id,
-        userId: user.id,
-        remember: false,
-        method: 'social',
-      });
-    }
-    return this.login.completeLogin({
-      org,
-      user: { id: user.id, uuid: user.uuid, email: user.email, fullName: user.full_name },
-      remember: false,
-      mfaVerified: false,
-      method: 'social',
-      meta,
     });
   }
 

@@ -20,7 +20,6 @@ export const DEMO_WRITE_ALLOWLIST: ReadonlySet<string> = new Set([
   'POST /v2/auth/staff/login',
   'POST /v2/auth/login/mfa',
   'POST /v2/auth/partner/login',
-  'POST /v2/auth/clerk/session',
   'POST /v2/auth/refresh',
   'POST /v2/auth/logout',
   'POST /v2/auth/workspaces/switch',
