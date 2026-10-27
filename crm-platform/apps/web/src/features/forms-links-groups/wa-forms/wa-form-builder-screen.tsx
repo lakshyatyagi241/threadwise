@@ -72,11 +72,16 @@ function OptionsInput({
   );
 }
 
+type FormNotice = { tone: 'success' | 'danger'; text: string } | null;
+
 /** `/wa-forms/[id]` (Reference form builder): basics + a screen/field editor. Editing a published form drops it to draft — server-enforced. */
 export function WaFormBuilderScreen({ id }: { id: string }) {
   const t = useTranslations('forms-links-groups.forms');
   const errorText = useErrorText();
   const form = useWaForm(id);
+  // Kept here, not in the form: a save remounts the form (keyed by rowVersion), and a notice or a test link must survive that.
+  const [notice, setNotice] = useState<FormNotice>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   if (form.isPending) {
     return (
@@ -100,11 +105,29 @@ export function WaFormBuilderScreen({ id }: { id: string }) {
       key={`${form.data.id}:${form.data.rowVersion}`}
       id={id}
       initial={form.data}
+      notice={notice}
+      onNotice={setNotice}
+      previewUrl={previewUrl}
+      onPreviewUrl={setPreviewUrl}
     />
   );
 }
 
-function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
+function WaFormBuilderForm({
+  id,
+  initial,
+  notice,
+  onNotice,
+  previewUrl,
+  onPreviewUrl,
+}: {
+  id: string;
+  initial: WaForm;
+  notice: FormNotice;
+  onNotice: (n: FormNotice) => void;
+  previewUrl: string | null;
+  onPreviewUrl: (url: string | null) => void;
+}) {
   const t = useTranslations('forms-links-groups.forms');
   const errorText = useErrorText();
   const save = useSaveWaForm(id);
@@ -118,8 +141,6 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
   const [sendButtonLabel, setSendButtonLabel] = useState(initial.sendButtonLabel);
   const [thankYouNote, setThankYouNote] = useState(initial.thankYouNote ?? '');
   const [definition, setDefinition] = useState<WaFormDefinition>(initial.definition);
-  const [notice, setNotice] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const input = (): SaveWaFormInput => ({
@@ -136,35 +157,41 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
 
   // Save/publish update the query cache (see the hooks); the parent remounts this component on the new
   // (id, rowVersion) key, which is how the fresh server state (including the drop-to-draft on edit) shows up.
-  const onSave = () =>
-    save.mutate(input(), {
-      onSuccess: () => setNotice({ tone: 'success', text: t('notice.saved') }),
-      onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-    });
+  // The chained calls use mutateAsync: a callback given to mutate() is dropped when this component unmounts, and
+  // that would stop the publish or the test right after the save.
+  const onSave = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      onNotice({ tone: 'success', text: t('notice.saved') });
+    } catch (err) {
+      onNotice({ tone: 'danger', text: errorText(err).text });
+    }
+  };
 
-  const onPublish = () =>
-    save.mutate(input(), {
-      onSuccess: () =>
-        publish.mutate(undefined, {
-          onSuccess: () => setNotice({ tone: 'success', text: t('notice.published') }),
-          onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-        }),
-      onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-    });
+  const onPublish = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      await publish.mutateAsync();
+      onNotice({ tone: 'success', text: t('notice.published') });
+    } catch (err) {
+      onNotice({ tone: 'danger', text: errorText(err).text });
+    }
+  };
 
   // Meta's own preview of the form as saved: the draft is saved first, so what is tried is what is on the screen.
-  const onTest = () =>
-    save.mutate(input(), {
-      onSuccess: () =>
-        preview.mutate(undefined, {
-          onSuccess: (r) => {
-            setNotice(null);
-            setPreviewUrl(r.url);
-          },
-          onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-        }),
-      onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-    });
+  const onTest = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      const r = await preview.mutateAsync();
+      onNotice(null);
+      onPreviewUrl(r.url);
+    } catch (err) {
+      onNotice({ tone: 'danger', text: errorText(err).text });
+    }
+  };
 
   const copyFlowId = () => {
     if (!initial.metaFlowId) return;
