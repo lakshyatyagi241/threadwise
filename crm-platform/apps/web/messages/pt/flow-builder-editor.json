@@ -1309,7 +1309,12 @@
           "igUsernameHint": "Sem o @. O link vira ig.me/m/suamarca — tocar nele abre uma DM para a sua conta.",
           "igMessage": "Mensagem de WhatsApp",
           "igMessageHint": "Enviada ao cliente no WhatsApp com o link do Instagram. Aceita '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇"
+          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇",
+          "templateFills": "O que preenche cada número",
+          "templateFillsHint": "Digite o texto de cada número do modelo, ou pressione / para inserir um dado do contato ou uma variável do fluxo. Deixe vazio para usar o que o modelo diz.",
+          "templateHeaderMedia": "Arquivo do cabeçalho",
+          "templateHeaderMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+          "templateHeaderMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
         },
         "sequence": {
           "info": "Cada resposta é enviada em ordem ao cliente. Combine texto, imagens, vídeo, áudio e documentos em um só nó — ótimo para cartões de produto ou kits de integração.",

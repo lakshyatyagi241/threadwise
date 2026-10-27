@@ -1309,7 +1309,12 @@
           "igUsernameHint": "Bez @. Link będzie miał postać ig.me/m/twojamarka — kliknięcie otwiera DM do Twojego konta.",
           "igMessage": "Wiadomość WhatsApp",
           "igMessageHint": "Wysyłana klientowi na WhatsApp z linkiem do Instagrama. Obsługuje '{{'zmienne'}}'.",
-          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇"
+          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇",
+          "templateFills": "Czym wypełnić każdy numer",
+          "templateFillsHint": "Wpisz tekst dla każdego numeru szablonu albo naciśnij /, aby wstawić dane kontaktu lub zmienną przepływu. Zostaw puste, aby użyć wartości z szablonu.",
+          "templateHeaderMedia": "Plik nagłówka",
+          "templateHeaderMediaHint": "Obraz, film lub plik w nagłówku tego szablonu. Potrzebny, gdy szablon nie ma własnego pliku.",
+          "templateHeaderMediaMissing": "Dodaj plik nagłówka: ten szablon go nie ma, a WhatsApp nie wyśle go bez pliku."
         },
         "sequence": {
           "info": "Każda odpowiedź jest wysyłana klientowi po kolei. Połącz tekst, obrazy, wideo, audio i dokumenty w jednym węźle — idealne do kart produktów lub zestawów powitalnych.",

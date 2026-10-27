@@ -54,8 +54,27 @@ export function TemplateForm({ data: d, set, setMany, env }: FormProps) {
   // Picking stamps both the name (what the runtime sends) and the template id, like Reference.
   const pick = (name: string) => {
     const hit = templates.find((tpl) => tpl.name === name);
-    setMany({ tpl: name, tplId: hit ? hit.id : null });
+    setMany({ tpl: name, tplId: hit ? hit.id : null, tplVars: {}, tplMedia: '' });
   };
+  const chosen = templates.find((tpl) => tpl.name === str(d.tpl));
+  const variables = chosen?.variables ?? [];
+  const fills = (d.tplVars && typeof d.tplVars === 'object' ? d.tplVars : {}) as Record<
+    string,
+    string
+  >;
+  const setFill = (id: string, value: string) => {
+    const next = { ...fills, [id]: value };
+    if (value === '') delete next[id];
+    set('tplVars', next);
+  };
+  // A header that is a picture, video or file needs a file to send: the template's own sample, or the one set here.
+  const attachment = str(chosen?.attachmentType).toLowerCase();
+  const needsMedia = ['image', 'photo', 'video', 'document'].includes(attachment);
+  const mediaKind = attachment === 'photo' ? 'image' : attachment;
+  const ownFile = /^https?:\/\//i.test(str(chosen?.attachmentFile))
+    ? str(chosen?.attachmentFile)
+    : '';
+  const tp = useTranslations('flb.builder.formsCore.parts');
   return (
     <>
       <TemplatePreview d={d} templates={templates} />
@@ -71,6 +90,53 @@ export function TemplateForm({ data: d, set, setMany, env }: FormProps) {
         <div className="mt-1 font-mono text-[10.5px] text-muted-foreground">
           template_id = {str(d.tplId)}
         </div>
+      ) : null}
+      {variables.length > 0 ? (
+        <Field label={t('templateFills')} hint={t('templateFillsHint')}>
+          <div className="space-y-2">
+            {variables.map((x) => {
+              const id = `${x.section}:${x.slot}`;
+              return (
+                <div key={id} className="flex items-center gap-2">
+                  <span className="shrink-0 font-mono text-[12.5px]">{`{{${x.slot}}}`}</span>
+                  <div className="min-w-0 flex-1">
+                    <TextInput
+                      value={fills[id] ?? ''}
+                      placeholder={x.field}
+                      aria-label={`{{${x.slot}}}`}
+                      onChange={(value) => setFill(id, value)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Field>
+      ) : null}
+      {needsMedia ? (
+        <Field label={t('templateHeaderMedia')} hint={t('templateHeaderMediaHint')}>
+          <UploadBox
+            accept={acceptFor(mediaKind)}
+            label={
+              d.tplMedia
+                ? t('replaceFile')
+                : t(`chooseKind.${mediaKind === 'photo' ? 'image' : (mediaKind as 'image')}`)
+            }
+            onFile={(file) =>
+              uploadFile(tp, env, file, mediaKind as 'image', (res) => set('tplMedia', res.url))
+            }
+          />
+          <TextInput
+            value={d.tplMedia}
+            placeholder={ownFile || 'https://'}
+            onChange={(value) => set('tplMedia', value)}
+          />
+          {!ownFile && !str(d.tplMedia).trim() ? (
+            <p role="alert" className="mt-1 text-[12px] font-medium text-danger">
+              {t('templateHeaderMediaMissing')}
+            </p>
+          ) : null}
+        </Field>
       ) : null}
       <Field hint={t('statusExitsHint')}>
         <Check checked={d.statusExits === true} onChange={(on) => set('statusExits', on)}>

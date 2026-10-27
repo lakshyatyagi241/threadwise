@@ -1309,7 +1309,12 @@
           "igUsernameHint": "@ olmadan. Bağlantı ig.me/m/yourbrand olur — dokununca hesabınıza özel mesaj açılır.",
           "igMessage": "WhatsApp mesajı",
           "igMessageHint": "Instagram bağlantısıyla birlikte müşteriye WhatsApp üzerinden gönderilir. '{{'değişkenleri'}}' destekler.",
-          "igMessagePlaceholder": "Instagram'da bizimle devam edin 👇"
+          "igMessagePlaceholder": "Instagram'da bizimle devam edin 👇",
+          "templateFills": "Her numarayı ne doldurur",
+          "templateFillsHint": "Şablondaki her numara için metni yazın ya da / tuşuyla bir kişi bilgisi veya akış değişkeni ekleyin. Şablonun kendi değerini kullanmak için boş bırakın.",
+          "templateHeaderMedia": "Üst bilgi dosyası",
+          "templateHeaderMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+          "templateHeaderMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
         },
         "sequence": {
           "info": "Her yanıt müşteriye sırayla gönderilir. Metin, görsel, video, ses ve belgeleri tek bir düğümde birleştirin — ürün kartları veya başlangıç kitleri için idealdir.",

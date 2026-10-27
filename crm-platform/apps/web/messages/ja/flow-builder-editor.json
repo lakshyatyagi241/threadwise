@@ -1309,7 +1309,12 @@
           "igUsernameHint": "@は付けません。リンクはig.me/m/yourbrandの形式になり、タップするとアカウントへのDMが開きます。",
           "igMessage": "WhatsAppメッセージ",
           "igMessageHint": "Instagramのリンクとともに、WhatsAppで顧客に送信されます。'{{'variables'}}' を使用できます。",
-          "igMessagePlaceholder": "Instagramでもつながりましょう 👇"
+          "igMessagePlaceholder": "Instagramでもつながりましょう 👇",
+          "templateFills": "各番号に入れる内容",
+          "templateFillsHint": "テンプレートの各番号に入れる文字を入力するか、/ を押して連絡先の情報やフローの変数を挿入します。空欄の場合はテンプレートの値が使われます。",
+          "templateHeaderMedia": "ヘッダーファイル",
+          "templateHeaderMediaHint": "このテンプレートのヘッダーにある画像、動画、ファイルです。テンプレート自体にファイルがない場合に必要です。",
+          "templateHeaderMediaMissing": "ヘッダーファイルを追加してください。このテンプレートにはファイルがなく、WhatsApp はファイルなしでは送信しません。"
         },
         "sequence": {
           "info": "各返信は順番に顧客へ送信されます。テキスト、画像、動画、音声、ドキュメントを1つのノードで組み合わせられるため、商品カードやオンボーディングキットに最適です。",

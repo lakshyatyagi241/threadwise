@@ -10,7 +10,7 @@ import { Avatar } from './parts';
 
 const SERIES = [
   { key: 'sent', bar: 'bg-brand', dot: 'bg-brand' },
-  { key: 'received', bar: 'bg-primary', dot: 'bg-primary' },
+  { key: 'received', bar: 'bg-success', dot: 'bg-success' },
   { key: 'failed', bar: 'bg-danger', dot: 'bg-danger' },
 ] as const;
 
@@ -162,7 +162,7 @@ export function DirectionDonut({ insights }: { insights: MessageHistoryInsights 
   let offset = 0;
   const color = {
     sent: 'var(--brand)',
-    received: 'var(--primary)',
+    received: 'var(--success)',
     failed: 'var(--danger)',
   } as const;
   return (
