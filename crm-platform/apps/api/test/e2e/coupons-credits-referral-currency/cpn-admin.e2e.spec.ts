@@ -5,7 +5,6 @@ import {
   currencyListResponseSchema,
   type CouponItem,
 } from '@crm/contracts';
-import { PlatformStore } from '../../../src/modules/auth';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
 import {
   OPERATOR_EMAIL,

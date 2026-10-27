@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DatabaseService } from '../../../src/infra/db/database.service';
-import { PlatformStore } from '../../../src/modules/auth';
 import { SessionService } from '../../../src/modules/auth/sessions/session.service';
 import { SecurityPolicyService } from '../../../src/modules/auth/platform/security-policy.service';
 import { TokenService } from '../../../src/modules/auth/token.service';
