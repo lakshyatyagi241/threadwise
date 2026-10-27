@@ -215,6 +215,17 @@ export class WalletRepository {
       WHERE org_id = ${orgId} AND unit = ${unit}`);
   }
 
+  /**
+   * Before a charge of `spendMinor` lowers the balance: `reserved` is capped to what the balance keeps after it, in the same statement
+   * order as the charge. chk_wallet_invariant is checked on every statement, so this runs before the ledger post, not after it.
+   */
+  async fitReservedBefore(tx: Tx, orgId: number, unit: string, spendMinor: number): Promise<void> {
+    const spend = minorToDecimal(spendMinor);
+    await tx.execute(sql`
+      UPDATE wallets SET reserved = LEAST(reserved, balance - ${spend}::numeric)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+  }
+
   async markAlerted(tx: Tx, orgId: number, walletId: number, at: Date): Promise<void> {
     await tx.execute(sql`
       UPDATE wallets SET low_balance_alerted_at = ${at.toISOString()}::timestamptz

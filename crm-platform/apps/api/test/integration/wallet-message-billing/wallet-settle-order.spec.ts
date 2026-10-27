@@ -113,4 +113,34 @@ describe('wallet charge and hold settlement: the balance check holds at every st
       { status: 'held', n: 4 },
     ]);
   });
+
+  /** A charge of `units` whole units, as the ledger writes it: the balance goes down by that much. */
+  const chargeUnits = (tx: never, units: number) =>
+    (tx as unknown as { execute: (q: unknown) => Promise<unknown> }).execute(
+      sql`UPDATE wallets SET balance = balance - ${String(units)}::numeric WHERE org_id = ${orgId} AND unit = ${unit}`,
+    );
+
+  it('refuses a charge dearer than its hold when the balance it leaves cannot carry the reserved amount', async () => {
+    // Balance 4, reserved 4 (three holds left after the settlement, one consumed): a 2-unit charge leaves 2 for 3 holds.
+    const err = await inOrg(async (tx) => {
+      await repo.settleHold(tx, orgId, unit);
+      await chargeUnits(tx as never, 2);
+    }).catch((e: unknown) => e);
+    expect(messageChain(err)).toMatch(/chk_wallet_invariant/);
+    expect(await wallet()).toEqual({ balance: '4.0000', reserved: '4.0000' });
+  });
+
+  it('lets that charge through once reserved is capped to the balance it leaves, before the balance falls', async () => {
+    await inOrg(async (tx) => {
+      await repo.settleHold(tx, orgId, unit);
+      await repo.fitReservedBefore(tx, orgId, unit, 200);
+      await chargeUnits(tx as never, 2);
+      await repo.capReserved(tx, orgId, unit);
+    });
+    expect(await wallet()).toEqual({ balance: '2.0000', reserved: '2.0000' });
+    expect(await holdStatuses()).toEqual([
+      { status: 'consumed', n: 2 },
+      { status: 'held', n: 3 },
+    ]);
+  });
 });

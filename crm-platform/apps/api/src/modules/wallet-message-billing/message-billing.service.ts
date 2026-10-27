@@ -142,8 +142,15 @@ export class MessageBillingService {
       if (decision.outcome === 'charge') {
         const label = ['WhatsApp message', priced.country, category].filter(Boolean).join(' · ');
         // The send was held when it was allowed (WalletGateService.assertCanSend): the hold leaves `reserved` before the charge lowers the
-        // balance, so reserved never sits above balance (chk_wallet_invariant is checked on every statement).
+        // balance, and a charge dearer than its hold caps what is still reserved to the balance it leaves (chk_wallet_invariant is checked
+        // on every statement, so both run before the post).
         await this.repo.settleHold(tx, input.orgId, currency);
+        await this.repo.fitReservedBefore(
+          tx,
+          input.orgId,
+          currency,
+          Math.min(decision.chargedMinor, wallet.balanceMinor),
+        );
         const posted = await this.ledger.post(tx, {
           orgId: input.orgId,
           unit: currency,

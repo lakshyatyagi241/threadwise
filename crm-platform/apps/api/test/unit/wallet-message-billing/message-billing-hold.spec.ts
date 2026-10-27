@@ -17,6 +17,7 @@ function build(s: Setup = {}) {
       lowBalanceAlertedAt: null,
     })),
     settleHold: vi.fn(async () => undefined),
+    fitReservedBefore: vi.fn(async () => undefined),
     capReserved: vi.fn(async () => undefined),
   };
   const answers: Array<Array<Record<string, unknown>>> = [
@@ -94,10 +95,15 @@ describe('MessageBillingService.settleDelivered: a charged delivery settles its 
     expect(ledger.post).toHaveBeenCalledTimes(1);
     expect(repo.settleHold).toHaveBeenCalledWith(expect.anything(), 7, 'USD');
     expect(repo.capReserved).toHaveBeenCalledWith(expect.anything(), 7, 'USD');
-    // The hold leaves `reserved` first: the balance check is per statement, so the post must not lower the balance under `reserved`.
+    // The hold leaves `reserved` first, and reserved is capped to the balance the charge leaves, both before the post: the balance check
+    // is per statement, so the post must not lower the balance under `reserved`.
     const postAt = ledger.post.mock.invocationCallOrder[0]!;
     const settleAt = repo.settleHold.mock.invocationCallOrder[0]!;
     expect(settleAt).toBeLessThan(postAt);
+    expect(repo.fitReservedBefore.mock.invocationCallOrder[0]!).toBeLessThan(postAt);
+    expect(repo.fitReservedBefore.mock.invocationCallOrder[0]!).toBeGreaterThan(settleAt);
+    // The charge is 1.00 out of a balance of 5.00 (in minor units: 100 of 500).
+    expect(repo.fitReservedBefore).toHaveBeenCalledWith(expect.anything(), 7, 'USD', 100);
     expect(repo.capReserved.mock.invocationCallOrder[0]!).toBeGreaterThan(postAt);
   });
 

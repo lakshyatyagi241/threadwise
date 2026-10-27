@@ -160,6 +160,8 @@ export class UsageBillingService {
       shortfallMinor = priceMinor;
     } else {
       const wanted = Math.min(priceMinor, wallet.balanceMinor);
+      // A charge dearer than the hold it settles caps what is still reserved to the balance it leaves, before the post (see above).
+      await this.repo.fitReservedBefore(tx, orgId, currency, wanted);
       const posted = await this.ledger.post(tx, {
         orgId,
         unit: currency,
