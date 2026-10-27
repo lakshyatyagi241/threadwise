@@ -2,11 +2,10 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Readable } from 'node:stream';
 import { promisify } from 'node:util';
-import { gunzip, gzip } from 'node:zlib';
+import { gunzip } from 'node:zlib';
 import { and, eq, sql } from 'drizzle-orm';
 import {
   BULK_FILTER_MAX,
-  EXPORT_KEEP_DAYS,
   EXPORT_MAX_ROWS,
   ERROR_CODES,
   canonicalizePhone,
@@ -38,6 +37,7 @@ import { contactConditions, contactScopeCondition, whereOf } from '../contacts/c
 import { resolveContactFilter } from '../contacts/contact-filter.resolver';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { TagsRepository } from '../tags/tags.repository';
+import { keepExportFile } from './export-file';
 import { TagsService } from '../tags/tags.service';
 import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { ContactBulkRepository, type ActorMeta } from './contact-bulk.repository';
@@ -53,7 +53,6 @@ const EXPORT_BATCH = 2000;
 // The whole export file is compressed once and read back whole. Synchronous zlib holds the event loop for the full call (about 14 ms
 // per MB to compress on the benchmark machine, tools/event-loop-audit/measure-zlib.mjs); the async form does the same work on the
 // libuv pool and returns the same bytes.
-const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
 
 type Selection = {
@@ -460,7 +459,7 @@ export class ContactBulkService {
         LEFT JOIN users u ON a.actor_type = 'user' AND u.org_id = a.org_id AND u.id = a.actor_id
         LEFT JOIN contact_exports e ON e.org_id = a.org_id AND e.expires_at > now()
           AND e.uuid::text = a.delta -> 'exportId' ->> 'new'
-        WHERE a.org_id = ${ctx.orgId} AND a.module = 'contacts' AND a.action = 'export'
+        WHERE a.org_id = ${ctx.orgId} AND a.module IN ('contacts', 'campaigns') AND a.action = 'export'
         ORDER BY a.at DESC LIMIT ${query.limit}`);
       const data = (
         res.rows as Array<{
@@ -671,30 +670,15 @@ export class ContactBulkService {
       }
     }
 
-    const save = async () => {
-      const gz = await gzipAsync(Buffer.concat(keep));
-      await db.txAs({ orgId, userId }, async (tx) => {
-        // Expired files of this workspace go with the next export; there is no separate sweep.
-        await tx.delete(contactExports).where(
-          and(
-            eq(contactExports.orgId, orgId),
-            sql`${contactExports.expiresAt} <= now()`,
-            // A generated file may be evidence: kept while the workspace is under a workspace-wide legal hold (BL-295).
-            sql`NOT is_subject_held(${contactExports.orgId}, 'contact', NULL)`,
-          ),
-        );
-        await tx.insert(contactExports).values({
-          orgId,
-          uuid: exportId,
-          createdBy: userId ?? null,
-          fileName: 'contacts-export.csv',
-          rowCount: rowsMatched,
-          byteSize: gz.length,
-          csvGz: gz,
-          expiresAt: new Date(Date.now() + EXPORT_KEEP_DAYS * 86_400_000),
-        });
+    const save = () =>
+      keepExportFile(db, {
+        orgId,
+        userId,
+        exportId,
+        fileName: 'contacts-export.csv',
+        rowCount: rowsMatched,
+        csv: Buffer.concat(keep),
       });
-    };
 
     async function* lines(): AsyncGenerator<string> {
       for await (const chunk of produce()) {

@@ -1413,6 +1413,18 @@ export class CampaignsRepository {
     };
   }
 
+  /** How many recipients the given campaigns (runs) have: the row count of an export. */
+  async recipientCount(tx: Tx, orgId: number, campaignIds: number[]): Promise<number> {
+    if (campaignIds.length === 0) return 0;
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM wp_campaign_contacts r
+      WHERE r.org_id = ${orgId} AND r.campaign_id IN (${sql.join(
+        campaignIds.map((id) => sql`${id}`),
+        sql`, `,
+      )})`);
+    return Number((res.rows[0] as { n?: number } | undefined)?.n ?? 0);
+  }
+
   /** Every recipient, newest first, for the CSV export (read in pages by the caller). */
   async recipientsAfter(
     tx: Tx,

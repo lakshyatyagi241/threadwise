@@ -10,9 +10,11 @@ import {
   HttpStatus,
   Post,
   Query,
+  Res,
   StreamableFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import {
   bulkConsentContactsSchema,
   bulkDeleteContactsSchema,
@@ -175,7 +177,6 @@ export class ContactBulkController {
   @Get('exports/:id/download')
   @RequirePermission('record.contacts.export')
   @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="contacts-export.csv"')
   @ApiOperation({
     summary: 'Download a saved export again',
     description:
@@ -184,8 +185,11 @@ export class ContactBulkController {
   async downloadExport(
     @Param('id', ParseUUIDPipe) id: string,
     @GrantedScope('record.contacts.export') scope: RecordScope,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const { csv } = await this.bulk.downloadExport(id, scope);
+    const { csv, fileName } = await this.bulk.downloadExport(id, scope);
+    // A campaign's recipients are saved here too, so the name comes from the saved file.
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
     return new StreamableFile(csv);
   }
 

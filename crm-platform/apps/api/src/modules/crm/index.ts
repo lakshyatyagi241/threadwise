@@ -18,6 +18,7 @@ export {
 } from './contacts';
 export type { ContactRow, ContactConsentContext } from './contacts';
 export { contactConditions, whereOf } from './contacts';
+export { ExportKeeper, keepExportFile } from './contact-bulk/export-file';
 export { missingRequired, requiredPropertiesError, isBlank } from './contacts';
 export type { RequiredRule } from './contacts';
 export { CompaniesService, CompaniesRepository, normaliseCompanyDomain } from './companies';
