@@ -320,11 +320,12 @@ export type WizardSequenceTemplate = z.infer<typeof wizardSequenceTemplateSchema
 
 export const wizardDraftSchema = z.object({
   /** Step 1. */
+  // The default goes last: a transform after it hides it from `patchOf`, and every patch would then carry `name: ''`.
   name: z
     .string()
     .trim()
-    .default('')
-    .transform((s) => s.slice(0, WIZARD_NAME_MAX)),
+    .transform((s) => s.slice(0, WIZARD_NAME_MAX))
+    .default(''),
   templateId: uuidSchema.nullable().default(null),
   /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
   senderKey: senderKeySchema.nullable().default(null),
