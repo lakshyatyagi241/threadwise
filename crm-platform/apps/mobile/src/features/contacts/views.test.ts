@@ -1,6 +1,7 @@
 import { ALL_CONTACTS, RECENT_DAYS, isAllContacts, viewFilters, type ChosenView } from './views';
 
 const USER = '11111111-1111-4111-8111-111111111111';
+const TAG = '22222222-2222-4222-8222-222222222222';
 const NOW = new Date('2026-10-12T10:00:00.000Z');
 
 describe('viewFilters', () => {
@@ -29,7 +30,7 @@ describe('viewFilters', () => {
     });
   });
 
-  it('hands a saved view to the server as rules text', () => {
+  it('hands a bare condition tree to the server as rules text', () => {
     const view: ChosenView = {
       kind: 'custom',
       id: 'v1',
@@ -37,6 +38,60 @@ describe('viewFilters', () => {
       filter: { op: 'and', conditions: [{ field: 'city', value: 'Pune' }] },
     };
     expect(viewFilters(view, USER, NOW)).toEqual({ rules: JSON.stringify(view.filter) });
+  });
+
+  it('reads the parameters a view saved on the web', () => {
+    const rules = JSON.stringify({ op: 'and', conditions: [] });
+    const view: ChosenView = {
+      kind: 'custom',
+      id: 'v3',
+      name: 'Hot leads',
+      filter: {
+        v: 1,
+        params: {
+          stage: 'lead',
+          status: 'hot',
+          consent: 'subscribed',
+          owner: `${USER},none`,
+          group: 'no_group',
+          tag: TAG,
+          minor: 'no',
+          followUp: 'overdue',
+          rules,
+          sort: 'name',
+        },
+        columns: ['name'],
+      },
+    };
+    expect(viewFilters(view, undefined, NOW)).toEqual({
+      lifecycleStage: 'lead',
+      status: 'hot',
+      subscribed: true,
+      ownerIds: USER,
+      unassigned: true,
+      noGroup: true,
+      tagIds: TAG,
+      minor: false,
+      followUp: 'overdue',
+      rules,
+    });
+  });
+
+  it('reads the rules of a migrated view', () => {
+    const rules = JSON.stringify({ op: 'or', conditions: [] });
+    expect(
+      viewFilters({ kind: 'custom', id: 'v4', name: 'Old', filter: { rules } }, USER, NOW),
+    ).toEqual({ rules });
+  });
+
+  it('drops values it cannot read', () => {
+    const view: ChosenView = {
+      kind: 'custom',
+      id: 'v5',
+      name: 'Odd',
+      filter: { params: { tag: 'nope', owner: 'x,y', rules: 'not json', stage: 'Bad Stage' } },
+    };
+    expect(viewFilters(view, USER, NOW)).toEqual({});
   });
 
   it('treats a saved view with no conditions as everything', () => {

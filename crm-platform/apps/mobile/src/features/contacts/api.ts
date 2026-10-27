@@ -32,7 +32,17 @@ export type ContactFilters = Pick<
   | 'createdFrom'
   | 'createdTo'
   | 'rules'
+  | 'groupId'
+  | 'noGroup'
+  | 'imported'
+  | 'subscribed'
+  | 'minor'
+  | 'followUp'
+  | 'segmentId'
+  | 'teamId'
 > & {
+  /** Contacts carrying any of these tags: their ids, comma-joined. Only a saved view asks for it. */
+  tagIds?: string;
   /** Contacts owned by any of these people: their ids, comma-joined as the query string takes them. */
   ownerIds?: string;
 };

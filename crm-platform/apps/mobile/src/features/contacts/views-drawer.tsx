@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * The list of views, sliding in from the right: a search box, "System default views" (the built-in ones) and "Custom views" (the
+ * The list of views, sliding in from the left: a search box, "System default views" (the built-in ones) and "Custom views" (the
  * workspace's saved ones). Choosing one closes the drawer and the list shows that view.
  */
 export function ViewsDrawer({ chosen, canReadSaved, onChoose, onClose }: Props) {
@@ -58,14 +58,8 @@ export function ViewsDrawer({ chosen, canReadSaved, onChoose, onClose }: Props) 
   );
 
   return (
-    <Modal transparent visible animationType="slide" onRequestClose={onClose}>
+    <Modal transparent visible animationType="fade" onRequestClose={onClose}>
       <View style={styles.root}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('contacts.views.close')}
-          style={[styles.scrim, { backgroundColor: colors.scrim }]}
-          onPress={onClose}
-        />
         <View
           accessibilityViewIsModal
           style={[styles.panel, { backgroundColor: colors.surface, borderColor: colors.border }]}
@@ -144,6 +138,12 @@ export function ViewsDrawer({ chosen, canReadSaved, onChoose, onClose }: Props) 
             {nothing ? <Text muted>{t('contacts.views.none')}</Text> : null}
           </ScrollView>
         </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('contacts.views.close')}
+          style={[styles.scrim, { backgroundColor: colors.scrim }]}
+          onPress={onClose}
+        />
       </View>
     </Modal>
   );
@@ -157,9 +157,9 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     padding: spacing.lg,
     paddingTop: spacing.xxl,
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderTopLeftRadius: radius.lg,
-    borderBottomLeftRadius: radius.lg,
+    borderRightWidth: StyleSheet.hairlineWidth,
+    borderTopRightRadius: radius.lg,
+    borderBottomRightRadius: radius.lg,
   },
   head: { flexDirection: 'row', alignItems: 'center' },
   close: {

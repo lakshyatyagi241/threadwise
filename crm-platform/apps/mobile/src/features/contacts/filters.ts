@@ -40,5 +40,15 @@ export function cleanFilters(filters: ContactFilters): ContactFilters {
     ...(filters.createdFrom ? { createdFrom: filters.createdFrom } : {}),
     ...(filters.createdTo ? { createdTo: filters.createdTo } : {}),
     ...(filters.rules ? { rules: filters.rules } : {}),
+    // The rest only a saved view sets (see `views.ts`).
+    ...(filters.groupId ? { groupId: filters.groupId } : {}),
+    ...(filters.noGroup ? { noGroup: true } : {}),
+    ...(filters.tagIds ? { tagIds: filters.tagIds } : {}),
+    ...(filters.imported ? { imported: true } : {}),
+    ...(filters.subscribed !== undefined ? { subscribed: filters.subscribed } : {}),
+    ...(filters.minor !== undefined ? { minor: filters.minor } : {}),
+    ...(filters.followUp ? { followUp: filters.followUp } : {}),
+    ...(filters.segmentId ? { segmentId: filters.segmentId } : {}),
+    ...(filters.teamId ? { teamId: filters.teamId } : {}),
   };
 }
