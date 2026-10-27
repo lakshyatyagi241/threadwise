@@ -5,6 +5,7 @@ import {
   FLOW_EXPORT_MARKER,
   flbExtractTrigger,
   flbFlowLinkProblems,
+  flbFlowLinks,
   flbIsFlowType,
   flbNormalizeGraph,
   flbTriggerKeywordsTooLong,
@@ -547,7 +548,8 @@ export class FlowsService {
     }>;
     // Nothing to look up for a graph with no links: the common save stays one query lighter.
     if (!nodes.some((n) => n.type === 'subflow' || n.data?.optionActions)) return;
-    const flows = await this.repo.linkTargets(tx, orgId);
+    const linked = [...new Set(flbFlowLinks(nodes).map((l) => l.flowId))];
+    const flows = await this.repo.linkTargets(tx, orgId, linked);
     const problems = flbFlowLinkProblems(
       nodes,
       { channel: flowType, selfId: selfUuid, flows },
