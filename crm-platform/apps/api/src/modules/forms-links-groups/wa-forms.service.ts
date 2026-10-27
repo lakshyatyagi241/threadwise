@@ -470,6 +470,13 @@ export class WaFormsService {
       const form = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!form) throw AppError.notFound('Form', uuid);
       const rows = await this.repo.submissionsForExport(tx, ctx.orgId, form.id);
+      // The export carries names, phone numbers and answers: it is a read of personal data, recorded like the forms-builder export (#1166).
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: form.id,
+        action: 'export',
+        delta: { submissions: { old: null, new: rows.length } },
+      });
       const labels = fieldLabelsOf(form.definition_json);
       const fieldIds = Object.keys(labels);
       const header = ['Submitted', 'Contact', 'Phone', ...fieldIds.map((id) => labels[id])];
