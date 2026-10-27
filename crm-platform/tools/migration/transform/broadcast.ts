@@ -114,6 +114,10 @@ export const RECIPIENT_FIELDS: FieldMap = {
   reverted_at: `drop:${NOT_PRESENT}; refund time, credits step`,
   refund_run_id: `drop:${NOT_PRESENT}; refund run, credits step`,
   interakt_reponse_time: 'drop:telemetry of the Waboo sender',
+  phone_number_id:
+    'drop:the Meta id of the sending phone number; the number is linked by the channel map (the provider config), not copied onto a recipient',
+  meta_pricing:
+    "drop:Meta's price breakdown of the send; the money is kept by the credits step (amount and cost on the usage charge)",
   template_id: `drop:${NOT_PRESENT}; wp_campaign_contacts has no template column: the recipient points at its campaign, which carries the template (the value equals the campaign's on every campaign checked)`,
   meta_template_id: `drop:${NOT_PRESENT}; read (not stored) to confirm / find the campaign's template (broadcast/template-link.ts)`,
   template_category: `drop:${NOT_PRESENT}; Meta category of the send (proposal P1)`,
