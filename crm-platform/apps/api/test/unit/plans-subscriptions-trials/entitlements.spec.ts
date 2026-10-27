@@ -84,6 +84,7 @@ describe('registry', () => {
       'outbound_webhooks',
       'storefront_builder',
       'invoicing',
+      'recurring_invoices',
       'forms_and_links',
       'extra_channels',
       'form_builder',

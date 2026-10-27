@@ -553,6 +553,7 @@
             "outbound_webhooks": "ويب هوك الصادر",
             "storefront_builder": "منشئ المتجر",
             "invoicing": "الفوترة",
+            "recurring_invoices": "الفواتير المتكررة",
             "forms_and_links": "النماذج والروابط",
             "extra_channels": "تيليجرام وفيسبوك وإنستغرام وLINE وViber وWeChat",
             "form_builder": "النماذج",

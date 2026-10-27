@@ -10,6 +10,8 @@
     },
     "recurring": {
       "title": "Recurring invoices",
+      "notInPlan": "Recurring invoices are not in your plan.",
+      "notInPlanShort": "Recurring: not in your plan",
       "subtitle": "Schedules that make invoices by themselves, on the dates you set.",
       "new": "New schedule",
       "invoices": "Invoices",

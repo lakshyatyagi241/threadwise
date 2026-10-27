@@ -140,6 +140,7 @@ const stored: PlanAdminItem = {
     outbound_webhooks: true,
     storefront_builder: true,
     invoicing: true,
+    recurring_invoices: true,
     forms_and_links: true,
     extra_channels: true,
     form_builder: false,

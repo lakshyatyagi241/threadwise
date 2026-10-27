@@ -57,7 +57,7 @@ export class RecurringInvoicesController {
   }
 
   // Plan feature on write routes only: a downgraded workspace still reads and prints the documents it has; public invoice pages and the gateway webhook are separate open controllers.
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Post()
   @Idempotent()
   @RequirePermission('record.recurring-invoices.create')
@@ -94,7 +94,7 @@ export class RecurringInvoicesController {
     return this.recurring.runs(id, query, scope);
   }
 
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Patch(':id')
   @RequirePermission('record.recurring-invoices.update')
   @ApiOperation({
@@ -108,7 +108,7 @@ export class RecurringInvoicesController {
     return this.recurring.update(id, body, scope);
   }
 
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Post(':id/pause')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
@@ -120,7 +120,7 @@ export class RecurringInvoicesController {
     return this.recurring.pause(id, scope);
   }
 
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Post(':id/resume')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('record.recurring-invoices.update')
@@ -136,7 +136,7 @@ export class RecurringInvoicesController {
     return this.recurring.resume(id, scope);
   }
 
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Post(':id/run')
   @HttpCode(HttpStatus.OK)
   @Idempotent()
@@ -149,7 +149,7 @@ export class RecurringInvoicesController {
     return this.recurring.runNow(id, scope);
   }
 
-  @RequirePlanFeature('invoicing')
+  @RequirePlanFeature('recurring_invoices')
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.recurring-invoices.delete')

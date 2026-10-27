@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useId, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { PLAN_UPGRADE_PATH } from '@crm/contracts';
+import { usePlanFeature } from '@/lib/plan-features';
 import { Button, EmptyState, Input, Spinner, cn } from '@crm/ui';
 import { useRecurringList } from '../api/hooks';
 import {
@@ -66,13 +68,24 @@ export function RecurringInvoicesScreen() {
     document.getElementById(`${panelId}-tab-${RECURRING_TABS[next]}`)?.focus();
   };
 
+  const inPlan = usePlanFeature('recurring_invoices');
   const newLink = can.createRecurring ? (
-    <Link
-      href="/recurring-invoices/new"
-      className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-foreground hover:opacity-90"
-    >
-      <PlusIcon /> {t('new')}
-    </Link>
+    !inPlan ? (
+      <Link
+        href={PLAN_UPGRADE_PATH}
+        title={t('notInPlan')}
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-5 text-sm font-medium text-muted-foreground hover:bg-muted"
+      >
+        {t('notInPlanShort')}
+      </Link>
+    ) : (
+      <Link
+        href="/recurring-invoices/new"
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-brand px-5 text-sm font-medium text-brand-foreground hover:opacity-90"
+      >
+        <PlusIcon /> {t('new')}
+      </Link>
+    )
   ) : null;
 
   return (
