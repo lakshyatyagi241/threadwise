@@ -42,10 +42,11 @@
       "INTERNAL": "فشل الخادم في معالجة هذا الطلب. حاول مرة أخرى بعد قليل.",
       "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
       "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
-      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
       "uploadRefused": "The file could not be uploaded.",
       "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
-      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "معاينة",

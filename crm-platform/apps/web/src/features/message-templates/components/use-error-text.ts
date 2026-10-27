@@ -62,8 +62,8 @@ export function useUploadErrorText(): (e: unknown, kind?: TplAttachment) => Erro
     const fixed: Record<string, string> = {
       PAYLOAD_TOO_LARGE: 'uploadTooLarge',
       AUTH_UPLOAD_REJECTED: 'uploadRejected',
-      WABA_PROVIDER_UNAVAILABLE: 'uploadProviderBusy',
-      RATE_LIMITED: 'uploadProviderBusy',
+      WABA_PROVIDER_UNAVAILABLE: 'uploadProviderDown',
+      RATE_LIMITED: 'uploadRateLimited',
       TPL_HEADER_STORAGE_REQUIRED: 'TPL_HEADER_STORAGE_REQUIRED',
       TPL_NO_CONNECTION: 'TPL_NO_CONNECTION',
     };
