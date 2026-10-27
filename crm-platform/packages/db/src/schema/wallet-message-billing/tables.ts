@@ -261,6 +261,34 @@ export const wallets = pgTable(
 export type WalletsRow = typeof wallets.$inferSelect;
 export type NewWalletsRow = typeof wallets.$inferInsert;
 
+/** A send allowed against the balance and not yet charged; see the wallet_holds migration. */
+export const walletHolds = pgTable(
+  'wallet_holds',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    unit: text('unit').notNull(),
+    amount: numeric('amount', { precision: 20, scale: 4 }).notNull(),
+    status: text('status').notNull().default('held'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    settledAt: timestamp('settled_at', { withTimezone: true }),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    foreignKey({
+      name: 'fk_wallet_holds_wallet',
+      columns: [t.orgId, t.unit],
+      foreignColumns: [wallets.orgId, wallets.unit],
+    }).onDelete('cascade'),
+    check('chk_wallet_holds_amount', sql.raw('amount > 0')),
+    check('chk_wallet_holds_status', sql.raw("status IN ('held', 'consumed', 'expired')")),
+  ],
+);
+
+export type WalletHoldsRow = typeof walletHolds.$inferSelect;
+export type NewWalletHoldsRow = typeof walletHolds.$inferInsert;
+
 export const usageChargeKeys = pgTable(
   'usage_charge_keys',
   {
