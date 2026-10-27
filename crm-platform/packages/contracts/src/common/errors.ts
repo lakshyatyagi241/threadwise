@@ -39,6 +39,7 @@ import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log
 import { REVENUE_ERROR_CODES } from '../crm/revenue-report';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
+import { PRD_ERROR_CODES } from '../products-services/errors';
 import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 import { STORAGE_ERROR_CODES } from '../storage-quota/errors';
 import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
@@ -55,6 +56,7 @@ export const ERROR_CODES = {
   ...REVENUE_ERROR_CODES,
   ...PQL_ERROR_CODES,
   ...WFL_ERROR_CODES,
+  ...PRD_ERROR_CODES,
   ...AICRM_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...GOOGLE_ERROR_CODES,

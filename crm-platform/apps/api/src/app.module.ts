@@ -85,6 +85,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
+import { ProductsServicesModule } from './modules/products-services';
 import { KnowledgeBaseModule } from './modules/knowledge-base';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
@@ -233,6 +234,7 @@ import { HealthModule } from './health/health.module';
     WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
+    ProductsServicesModule,
     KnowledgeBaseModule,
     LeadScoringModule,
     GrowthPilotModule,

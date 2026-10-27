@@ -87,6 +87,7 @@ describe('registry', () => {
       'forms_and_links',
       'extra_channels',
       'form_builder',
+      'products_services',
       'waba_groups',
       'sms',
       'help_agent',

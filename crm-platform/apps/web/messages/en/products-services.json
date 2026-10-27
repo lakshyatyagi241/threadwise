@@ -1,0 +1,90 @@
+{
+  "products-services": {
+    "nav": {
+      "title": "Products and services"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "title": "Products and services",
+    "subtitle": "What you sell, each with a price, a unit and a default tax.",
+    "add": "Add",
+    "tabsLabel": "Show",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "kindFilter": "Type",
+    "allKinds": "Products and services",
+    "search": "Search by name or SKU",
+    "loading": "Loading the list",
+    "loadFailed": "The list could not be loaded.",
+    "retry": "Try again",
+    "emptyTitle": "Nothing on the list yet",
+    "empty": "Add the products and services you sell, with a price and a default tax.",
+    "noMatchTitle": "Nothing matches",
+    "noMatch": "Change the tab, the type or the search.",
+    "caption": "Products and services",
+    "col": {
+      "name": "Name",
+      "kind": "Type",
+      "price": "Price",
+      "tax": "Tax",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "statusActive": "Active",
+    "statusInactive": "Inactive",
+    "edit": "Edit",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "delete": "Delete",
+    "deleteTitle": "Delete {name}?",
+    "deleteMessage": "It is removed from the list. Documents that were already made keep their lines. To keep it but stop offering it, deactivate it instead.",
+    "paging": "Pages",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {pages}",
+    "toast": {
+      "saved": "{name} saved.",
+      "activated": "{name} is active again.",
+      "deactivated": "{name} is inactive.",
+      "deleted": "{name} deleted.",
+      "failed": "That did not work. Try again."
+    },
+    "form": {
+      "addTitle": "Add a product or service",
+      "editTitle": "Edit product or service",
+      "close": "Close",
+      "cancel": "Cancel",
+      "add": "Add",
+      "save": "Save",
+      "kind": "Type",
+      "kinds": {
+        "product": "Product",
+        "service": "Service"
+      },
+      "name": "Name",
+      "sku": "SKU",
+      "skuHint": "Optional. Unique in your workspace.",
+      "currency": "Currency",
+      "price": "Unit price",
+      "unit": "Unit",
+      "unitHint": "For example pcs, kg, hour, month.",
+      "tax": "Default tax (%)",
+      "taxHint": "A new line starts with this tax. Leave empty for none.",
+      "description": "Description",
+      "active": "Active (offered on new documents)",
+      "errors": {
+        "nameRequired": "Enter a name.",
+        "currencyInvalid": "Use a three-letter currency code, for example INR.",
+        "priceInvalid": "Enter a price, for example 1250.50.",
+        "taxInvalid": "Enter a percentage from 0 to 100.",
+        "skuTaken": "Another item already has this SKU.",
+        "changedMeanwhile": "This item was changed by someone else. Close this and open it again.",
+        "failed": "It could not be saved. Try again."
+      }
+    }
+  }
+}
