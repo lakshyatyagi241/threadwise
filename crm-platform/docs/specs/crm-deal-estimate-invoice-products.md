@@ -33,13 +33,13 @@ past its date after it was created; what was wrong is only that a NEW date could
 
 Rule decided (and why):
 
-| Case | Rule |
-|---|---|
-| A deal is created by a person (screen or API) | the date is today or later |
-| A deal is made by a flow, an import or a sync | not asked (the source is not a person choosing a date) |
-| An open deal's date is changed | the NEW date is today or later |
-| An open deal keeps a date that has passed | allowed: it stays "overdue" until moved forward, won or lost |
-| A won or lost deal | any change allowed: the date is history |
+| Case                                          | Rule                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| A deal is created by a person (screen or API) | the date is today or later                                   |
+| A deal is made by a flow, an import or a sync | not asked (the source is not a person choosing a date)       |
+| An open deal's date is changed                | the NEW date is today or later                               |
+| An open deal keeps a date that has passed     | allowed: it stays "overdue" until moved forward, won or lost |
+| A won or lost deal                            | any change allowed: the date is history                      |
 
 The server allows one day of grace (`isPastCloseDate`), so a person ahead of UTC is not refused for choosing their own today. The form uses the browser's today
 as the input's `min` and says why in a hint and an error.
@@ -84,15 +84,15 @@ Decisions:
 
 Findings (read from the schema and the code):
 
-| Object | What exists | Link to a product |
-|---|---|---|
-| Store product | `wa_products` (name, sku, description, `price_minor`, currency, status, stock and reserved stock, category, brand, Shopify and Woo ids). Belongs to the WhatsApp catalog and storefront domain; permission `cat.products.*` | is the only product object |
-| CRM product or service module | **none**. There is no product, service or price-list object in the CRM (`crm/` has deals, companies, contacts, invoicing, sales-docs, no products) | none |
-| Deal | `deals`: title, value, pipeline, stage, contact, company, owner, expected close date. **No line items**: the value is a typed number | none |
-| Estimate or proposal line | `sales_doc_items`: description, qty, unit price, discount, tax | none (free text) |
-| Invoice line | `invoice_items`: description, `sku` (text), qty, unit price, discount, tax, HSN or SAC | `sku` text only, **no foreign key** |
-| Store order line | `wa_order_items.product_id` | yes, to `wa_products` |
-| Store order to invoice | `ExternalOrderBilling` builds an invoice from a store order: description and sku copied | by `sku` text |
+| Object                        | What exists                                                                                                                                                                                                                 | Link to a product                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Store product                 | `wa_products` (name, sku, description, `price_minor`, currency, status, stock and reserved stock, category, brand, Shopify and Woo ids). Belongs to the WhatsApp catalog and storefront domain; permission `cat.products.*` | is the only product object          |
+| CRM product or service module | **none**. There is no product, service or price-list object in the CRM (`crm/` has deals, companies, contacts, invoicing, sales-docs, no products)                                                                          | none                                |
+| Deal                          | `deals`: title, value, pipeline, stage, contact, company, owner, expected close date. **No line items**: the value is a typed number                                                                                        | none                                |
+| Estimate or proposal line     | `sales_doc_items`: description, qty, unit price, discount, tax                                                                                                                                                              | none (free text)                    |
+| Invoice line                  | `invoice_items`: description, `sku` (text), qty, unit price, discount, tax, HSN or SAC                                                                                                                                      | `sku` text only, **no foreign key** |
+| Store order line              | `wa_order_items.product_id`                                                                                                                                                                                                 | yes, to `wa_products`               |
+| Store order to invoice        | `ExternalOrderBilling` builds an invoice from a store order: description and sku copied                                                                                                                                     | by `sku` text                       |
 
 Object relationships that ARE kept: invoice, estimate and deal each reference contact and company; an invoice references its deal (`deal_id`), its estimate
 (`quote_id`), its recurring schedule and its sales order; a store order references the invoice it made (`wa_order_id`). These are enforced by composite foreign
@@ -106,13 +106,13 @@ Object relationships that are NOT there, and are what the owner is asking about:
 
 ## 2. Do (what this change builds)
 
-| Point | Built |
-|---|---|
-| 1 | `NewDealForContact` (deals domain), the contact Deals card opens it, refreshes the card, shows a toast; `DealFormModal` takes `lockedContact` and an optional pipeline list |
-| 2 | `isPastCloseDate` on the server (create by a person, change on an open deal) and in the form; `min` on both date inputs; messages in English and Arabic |
-| 3 | nothing (analysis only) |
-| 4 | `recurring_invoices` plan feature (catalogue, labels, the operator plan form), the server gate, the `CreateInvoiceMenu`, the switched-off items |
-| 5 | nothing (analysis and proposal only) |
+| Point | Built                                                                                                                                                                       |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | `NewDealForContact` (deals domain), the contact Deals card opens it, refreshes the card, shows a toast; `DealFormModal` takes `lockedContact` and an optional pipeline list |
+| 2     | `isPastCloseDate` on the server (create by a person, change on an open deal) and in the form; `min` on both date inputs; messages in English and Arabic                     |
+| 3     | nothing (analysis only)                                                                                                                                                     |
+| 4     | `recurring_invoices` plan feature (catalogue, labels, the operator plan form), the server gate, the `CreateInvoiceMenu`, the switched-off items                             |
+| 5     | nothing (analysis and proposal only)                                                                                                                                        |
 
 ## 3. Check
 
@@ -163,13 +163,13 @@ Principle: **additive and optional**, so nothing that exists changes behaviour. 
 
 ### 5.4 Risks and what keeps them from breaking anything
 
-| Risk | Control |
-|---|---|
-| Price list edits rewrite old invoices | lines copy values on pick; the link is reference only |
-| Two product objects drift (store and CRM) | one-way import by sku, the link is explicit, no automatic two-way write |
-| Tax and currency | the item holds a default currency; a line on a document of another currency is priced by hand, never converted silently |
-| A required field blocks the current flow | every new column is nullable; free-text lines keep working |
-| Plan and permission | its own plan feature (default off) and permission keys, added through the same packaging path as `recurring_invoices` |
+| Risk                                      | Control                                                                                                                 |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Price list edits rewrite old invoices     | lines copy values on pick; the link is reference only                                                                   |
+| Two product objects drift (store and CRM) | one-way import by sku, the link is explicit, no automatic two-way write                                                 |
+| Tax and currency                          | the item holds a default currency; a line on a document of another currency is priced by hand, never converted silently |
+| A required field blocks the current flow  | every new column is nullable; free-text lines keep working                                                              |
+| Plan and permission                       | its own plan feature (default off) and permission keys, added through the same packaging path as `recurring_invoices`   |
 
 ## 6. Verification record
 

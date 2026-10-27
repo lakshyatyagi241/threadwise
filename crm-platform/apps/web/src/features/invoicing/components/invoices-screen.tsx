@@ -20,7 +20,7 @@ import {
 import { EMPTY_SELECTION, headerState, selectionReducer } from '../lib/selection';
 import type { InvoiceTab } from '../lib/status';
 import { BulkBar, BulkVoidDialog, eligibleRows } from './bulk-bar';
-import { InvoiceIcon, PlusIcon } from './icons';
+import { InvoiceIcon } from './icons';
 import { InvoicesTable } from './invoices-table';
 import { InvoicesTabs } from './invoices-tabs';
 import { InvoicesToolbar } from './invoices-toolbar';

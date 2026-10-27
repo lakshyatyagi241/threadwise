@@ -231,7 +231,13 @@ export const PLAN_FEATURE_DEFS = [
   { key: 'invoicing', group: 'advanced', productLine: 'crm', default: true },
   // Recurring invoices: schedules that issue an invoice on a rhythm. They were part of `invoicing` until now, so the default is true and every plan row
   // that predates the key keeps them; the owner switches it off on a plan that sells one-time invoices only (the basic plan). Needs `invoicing`.
-  { key: 'recurring_invoices', group: 'advanced', productLine: 'crm', default: true, requires: ['invoicing'] },
+  {
+    key: 'recurring_invoices',
+    group: 'advanced',
+    productLine: 'crm',
+    default: true,
+    requires: ['invoicing'],
+  },
   { key: 'forms_and_links', group: 'messaging', productLine: 'chat', default: true },
   // Telegram, Facebook, Instagram and the other non-WhatsApp channels.
   { key: 'extra_channels', group: 'messaging', productLine: 'chat', default: true },
