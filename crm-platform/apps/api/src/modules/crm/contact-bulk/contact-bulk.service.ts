@@ -453,7 +453,7 @@ export class ContactBulkService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT a.at, u.full_name AS by_name, a.delta,
+        SELECT a.at, a.module, u.full_name AS by_name, a.delta,
                e.uuid AS file_id, e.byte_size AS file_bytes, e.expires_at, e.created_by AS file_owner
         FROM audit_log a
         LEFT JOIN users u ON a.actor_type = 'user' AND u.org_id = a.org_id AND u.id = a.actor_id
@@ -464,6 +464,7 @@ export class ContactBulkService {
       const data = (
         res.rows as Array<{
           at: string;
+          module: string;
           by_name: string | null;
           delta: unknown;
           file_id: string | null;
@@ -479,6 +480,7 @@ export class ContactBulkService {
         return {
           at: new Date(r.at).toISOString(),
           by: r.by_name,
+          source: r.module === 'campaigns' ? ('campaigns' as const) : ('contacts' as const),
           rows: Number(d.rows?.new ?? 0),
           selection: d.selection?.new === 'ids' ? ('ids' as const) : ('filter' as const),
           fileId: mayDownload ? r.file_id : null,

@@ -1424,10 +1424,15 @@
         "by": "Imported by"
       },
       "exports": {
-        "title": "Exports",
-        "hint": "Contact exports from the Hub, newest first. Each file is kept for 30 days so you and teammates who can export can download it again.",
+        "title": "Export history",
+        "hint": "Exports from the Hub, newest first, with where each one came from. Each file is kept for 30 days so you and teammates who can export can download it again.",
         "empty": "No exports yet.",
         "by": "By",
+        "source": "Source",
+        "sources": {
+          "contacts": "Contacts",
+          "campaigns": "Campaigns"
+        },
         "rows": "Contacts",
         "selection": "Scope",
         "unknown": "Unknown",

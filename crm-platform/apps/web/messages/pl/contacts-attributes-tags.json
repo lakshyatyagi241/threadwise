@@ -1424,10 +1424,15 @@
         "by": "Zaimportował"
       },
       "exports": {
-        "title": "Eksporty",
-        "hint": "Eksporty kontaktów z Hubu, od najnowszych. Każdy plik jest przechowywany 30 dni, aby Ty i współpracownicy z uprawnieniem do eksportu mogli pobrać go ponownie.",
+        "title": "Historia eksportów",
+        "hint": "Eksporty z Hub, od najnowszych, z informacją, skąd pochodzą. Każdy plik jest przechowywany przez 30 dni, aby Ty i członkowie zespołu z uprawnieniami do eksportu mogli go ponownie pobrać.",
         "empty": "Brak eksportów.",
         "by": "Przez",
+        "source": "Źródło",
+        "sources": {
+          "contacts": "Kontakty",
+          "campaigns": "Kampanie"
+        },
         "rows": "Kontakty",
         "selection": "Zakres",
         "unknown": "Nieznany",

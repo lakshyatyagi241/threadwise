@@ -551,6 +551,8 @@ export const exportHistoryItemSchema = z.object({
   rows: z.int(),
   /** `ids`: the rows ticked; `filter`: everything the filter matched ("select all N matching" or Export all). */
   selection: z.enum(['ids', 'filter']),
+  /** Where the export came from: the contacts list, or a campaign's recipients. */
+  source: z.enum(['contacts', 'campaigns']),
   /** The saved file's id while it can still be downloaded (30 days, and only for exports made since files were kept). */
   fileId: z.guid().nullable(),
   fileBytes: z.int().nullable(),
