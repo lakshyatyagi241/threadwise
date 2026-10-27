@@ -26,10 +26,10 @@ export const ownerReassignPreviewSchema = z.object({ fromUserId: uuidSchema });
 export type OwnerReassignPreviewInput = z.infer<typeof ownerReassignPreviewSchema>;
 
 export const ownerReassignPreviewResponseSchema = z.object({
-  contacts: z.number().int().nonnegative(),
-  openDeals: z.number().int().nonnegative(),
+  contacts: z.int().nonnegative(),
+  openDeals: z.int().nonnegative(),
   /** The most one run moves of each kind. */
-  runMax: z.number().int(),
+  runMax: z.int(),
 });
 export type OwnerReassignPreview = z.infer<typeof ownerReassignPreviewResponseSchema>;
 
@@ -59,25 +59,25 @@ export const ownerReassignBatchSchema = z.object({
   reason: z.string().nullable(),
   restoreOn: leaveDaySchema.nullable(),
   status: z.enum(OWNER_REASSIGN_STATUSES),
-  movedContacts: z.number().int(),
-  movedDeals: z.number().int(),
-  restoredContacts: z.number().int(),
-  restoredDeals: z.number().int(),
+  movedContacts: z.int(),
+  movedDeals: z.int(),
+  restoredContacts: z.int(),
+  restoredDeals: z.int(),
   /** Left where they are at restore: somebody else changed them since, or they were deleted. */
-  notRestored: z.number().int(),
+  notRestored: z.int(),
   /** Still waiting to be moved because the run hit its limit: run it again. */
-  remaining: z.number().int(),
-  undoUntil: z.string().datetime(),
+  remaining: z.int(),
+  undoUntil: z.iso.datetime(),
   /** Whether the person asking may bring the work back now (status applied, inside the undo window or an opted-in return). */
   canRestore: z.boolean(),
-  createdAt: z.string().datetime(),
-  restoredAt: z.string().datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  restoredAt: z.iso.datetime().nullable(),
 });
 export type OwnerReassignBatch = z.infer<typeof ownerReassignBatchSchema>;
 
 export const ownerReassignListQuerySchema = z.object({
   fromUserId: uuidSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
 });
 export type OwnerReassignListQuery = z.infer<typeof ownerReassignListQuerySchema>;
 

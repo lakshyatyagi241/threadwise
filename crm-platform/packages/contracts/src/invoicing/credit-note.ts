@@ -60,8 +60,8 @@ export const creditNoteLineInputSchema = z
     taxRateId: uuidSchema.nullish(),
   })
   .refine((l) => (l.invoiceLineId ? true : !!l.description && !!l.amount), {
-    message: 'a free-form line needs a description and an amount',
     path: ['description'],
+    error: 'a free-form line needs a description and an amount',
   });
 export type CreditNoteLineInput = z.infer<typeof creditNoteLineInputSchema>;
 
@@ -85,12 +85,12 @@ export const updateCreditNoteSchema = z.object({
   lines: z.array(creditNoteLineInputSchema).min(1).max(100).optional(),
   full: z.boolean().optional(),
   issueDate: calendarDaySchema.nullish(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateCreditNoteInput = z.infer<typeof updateCreditNoteSchema>;
 
 export const issueCreditNoteSchema = z.object({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type IssueCreditNoteInput = z.infer<typeof issueCreditNoteSchema>;
 
@@ -101,7 +101,7 @@ export type VoidCreditNoteInput = z.infer<typeof voidCreditNoteSchema>;
 
 export const creditNoteLineResponseSchema = z.object({
   id: uuidSchema,
-  position: z.number().int(),
+  position: z.int(),
   invoiceLineId: uuidSchema.nullable(),
   description: z.string(),
   hsnSac: z.string().nullable(),
@@ -129,8 +129,8 @@ export const creditNoteSummarySchema = z.object({
   applied: z.string(),
   refunded: z.string(),
   issueDate: z.string().nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type CreditNoteSummary = z.infer<typeof creditNoteSummarySchema>;
 
@@ -148,7 +148,7 @@ export const creditNoteResponseSchema = creditNoteSummarySchema.extend({
   /** What the invoice looks like after this credit note (balance, credited). */
   invoiceAmounts: invoiceAmountsSchema,
   voidReason: z.string().nullable(),
-  voidedAt: z.string().datetime().nullable(),
+  voidedAt: z.iso.datetime().nullable(),
 });
 export type CreditNoteResponse = z.infer<typeof creditNoteResponseSchema>;
 
@@ -158,7 +158,7 @@ export const creditNotePageSchema = z.object({
 });
 
 export const listCreditNotesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   status: queryList(creditNoteStatusSchema).optional(),
   invoiceId: uuidSchema.optional(),

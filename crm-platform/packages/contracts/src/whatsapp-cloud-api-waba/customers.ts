@@ -7,7 +7,7 @@ import { z } from 'zod';
 /** `GET /v2/waba/customers`: name, phone or company contains `q` (wildcards in `q` are literal); 20 a page, name then phone. */
 export const listCustomersQuerySchema = z.object({
   q: z.string().trim().max(100).optional(),
-  page: z.coerce.number().int().min(1).max(10_000).default(1),
+  page: z.coerce.number().int().min(1).max(10_000).prefault(1),
 });
 export type ListCustomersQuery = z.infer<typeof listCustomersQuerySchema>;
 
@@ -29,7 +29,7 @@ export const saveCustomerInputSchema = z.object({
 export type SaveCustomerInput = z.infer<typeof saveCustomerInputSchema>;
 
 export const customerProfileSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   /** Digits only, country code included. */
   phone: z.string(),
   name: z.string().nullable(),
@@ -41,8 +41,8 @@ export type CustomerProfile = z.infer<typeof customerProfileSchema>;
 
 export const customerListSchema = z.object({
   items: z.array(customerProfileSchema),
-  page: z.number().int(),
-  pageSize: z.number().int(),
-  total: z.number().int(),
+  page: z.int(),
+  pageSize: z.int(),
+  total: z.int(),
 });
 export type CustomerList = z.infer<typeof customerListSchema>;

@@ -68,7 +68,7 @@ export const paygwQuoteSchema = z.object({
   tax: z.string(),
   total: z.string(),
   /** Wallet top-ups only: what the wallet gains, in minor units of the platform currency. */
-  walletCreditMinor: z.number().int().nullable(),
+  walletCreditMinor: z.int().nullable(),
   gateways: z.array(paygwCheckoutGatewaySchema),
   /** The coupon asked for, when one was: `ok: false` carries the reason and no discount was applied. */
   coupon: z
@@ -77,7 +77,7 @@ export const paygwQuoteSchema = z.object({
   /** The country dropdown of the billing form (billing settings, TW-PAYGW-007). */
   countries: z.array(z.string()),
   /** The money-back guarantee line under the summary; `enabled: false` hides it. */
-  refund: z.object({ enabled: z.boolean(), days: z.number().int() }),
+  refund: z.object({ enabled: z.boolean(), days: z.int() }),
 });
 export type PaygwQuote = z.infer<typeof paygwQuoteSchema>;
 
@@ -85,7 +85,7 @@ const text = (max: number) => z.string().trim().max(max).optional();
 
 export const paygwBillingSchema = z.object({
   customerName: text(191),
-  customerEmail: z.string().trim().email().max(191).optional(),
+  customerEmail: z.string().trim().pipe(z.email().max(191)).optional(),
   company: text(191),
   address: text(255),
   city: text(120),
@@ -121,7 +121,7 @@ export const placeOrderResponseSchema = z.object({
   orderNumber: z.string(),
   orderId: uuidSchema,
   next: z.discriminatedUnion('type', [
-    z.object({ type: z.literal('redirect'), url: z.string().url() }),
+    z.object({ type: z.literal('redirect'), url: z.url() }),
     z.object({
       type: z.literal('client_action'),
       provider: z.enum(['razorpay', 'paddle', 'cashfree', 'hyperpay', 'braintree']),
@@ -130,7 +130,7 @@ export const placeOrderResponseSchema = z.object({
     /** The browser POSTs these fields to the provider's page (PayU): built from plain data, never from server HTML. */
     z.object({
       type: z.literal('form_post'),
-      url: z.string().url(),
+      url: z.url(),
       fields: z.record(z.string(), z.string()),
     }),
     /** Bank transfer and offline gateways: what to do, then upload proof (TW-PAYGW-013). The order number is the payment reference. */
@@ -169,7 +169,7 @@ export const paygwOrderItemSchema = z.object({
 export type PaygwOrderItem = z.infer<typeof paygwOrderItemSchema>;
 
 export const paygwOrdersQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type PaygwOrdersQuery = z.infer<typeof paygwOrdersQuerySchema>;
@@ -178,9 +178,7 @@ export const paygwOrdersResponseSchema = z.object({
   data: z.array(paygwOrderItemSchema),
   page: pageInfoSchema,
   /** Lifetime paid total per currency (no silent conversion between currencies). */
-  lifetimeSpend: z.array(
-    z.object({ currency: z.string(), total: z.string(), orders: z.number().int() }),
-  ),
+  lifetimeSpend: z.array(z.object({ currency: z.string(), total: z.string(), orders: z.int() })),
 });
 export type PaygwOrdersResponse = z.infer<typeof paygwOrdersResponseSchema>;
 

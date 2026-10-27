@@ -55,14 +55,14 @@ export type MetaLeadSyncState = z.infer<typeof metaLeadSyncStateSchema>;
 export const metaLeadSyncSchema = z.object({
   enabled: z.boolean(),
   state: metaLeadSyncStateSchema,
-  subscribedAt: z.string().datetime().nullable(),
+  subscribedAt: z.iso.datetime().nullable(),
   /** When the last lead of this Page arrived (webhook or sweep). */
-  lastLeadAt: z.string().datetime().nullable(),
+  lastLeadAt: z.iso.datetime().nullable(),
   /** When the reconciliation sweep last read this Page's forms to the end. */
-  lastSweepAt: z.string().datetime().nullable(),
+  lastSweepAt: z.iso.datetime().nullable(),
   /** The last thing Meta refused, in words; cleared by the next success. */
   lastError: z.string().nullable(),
-  formsConnected: z.number().int().min(0),
+  formsConnected: z.int().min(0),
 });
 export type MetaLeadSync = z.infer<typeof metaLeadSyncSchema>;
 
@@ -121,15 +121,15 @@ export const metaLeadFormSchema = z.object({
   /** Meta's status: ACTIVE, ARCHIVED, DELETED or DRAFT. */
   status: z.string().nullable(),
   locale: z.string().nullable(),
-  leadsCount: z.number().int().min(0).nullable(),
-  createdTime: z.string().datetime().nullable(),
+  leadsCount: z.int().min(0).nullable(),
+  createdTime: z.iso.datetime().nullable(),
   questions: z.array(metaLeadQuestionSchema),
   /** The form carries a consent checkbox with wording of its own: a ticked one is recorded as proof of consent. */
   hasConsentCheckbox: z.boolean(),
   connected: z.boolean(),
   /** The lead source this form feeds (`/lead-sources/:id`), once connected. */
   sourceId: uuidSchema.nullable(),
-  lastLeadAt: z.string().datetime().nullable(),
+  lastLeadAt: z.iso.datetime().nullable(),
   lastError: z.string().nullable(),
 });
 export type MetaLeadForm = z.infer<typeof metaLeadFormSchema>;
@@ -159,12 +159,12 @@ export const metaLeadSourceHealthSchema = z.object({
   leadAccess: metaLeadAccessSchema.nullable(),
   state: metaLeadSyncStateSchema.nullable(),
   subscribed: z.boolean(),
-  lastLeadAt: z.string().datetime().nullable(),
+  lastLeadAt: z.iso.datetime().nullable(),
   lastError: z.string().nullable(),
 });
 export type MetaLeadSourceHealth = z.infer<typeof metaLeadSourceHealthSchema>;
 
-export const metaLeadConnectStartSchema = z.object({ url: z.string().url() });
+export const metaLeadConnectStartSchema = z.object({ url: z.url() });
 export type MetaLeadConnectStart = z.infer<typeof metaLeadConnectStartSchema>;
 
 // --- the queue between the Facebook webhook and the lead worker -----------------------------------------------------------------
@@ -172,7 +172,7 @@ export type MetaLeadConnectStart = z.infer<typeof metaLeadConnectStartSchema>;
 /** One `leadgen` event of a Page's webhook, queued for the worker. Ids only: the lead itself is fetched from Meta by the worker. */
 export const META_LEADGEN_JOB = 'leadgen.received';
 export const metaLeadgenJobSchema = z.object({
-  orgId: z.number().int().positive(),
+  orgId: z.int().positive(),
   /** Meta's Page id. */
   pageId: z.string().min(1),
   /** Meta's lead id: the idempotency key. */
@@ -185,7 +185,7 @@ export type MetaLeadgenJob = z.infer<typeof metaLeadgenJobSchema>;
 /** One Page's reconciliation sweep. */
 export const META_LEAD_SWEEP_JOB = 'lead-sweep.page';
 export const metaLeadSweepJobSchema = z.object({
-  orgId: z.number().int().positive(),
+  orgId: z.int().positive(),
   pageId: z.string().min(1),
 });
 export type MetaLeadSweepJob = z.infer<typeof metaLeadSweepJobSchema>;

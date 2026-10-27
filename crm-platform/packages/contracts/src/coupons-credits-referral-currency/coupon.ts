@@ -24,13 +24,10 @@ const decimal = z
   .trim()
   .regex(/^\d{1,8}(\.\d{1,4})?$/, 'Enter a number such as 10 or 12.5.');
 const optionalDecimal = z.preprocess(blankToNull, decimal.nullable());
-const optionalCount = z.preprocess(
-  blankToNull,
-  z.number().int().min(1).max(2_000_000_000).nullable(),
-);
+const optionalCount = z.preprocess(blankToNull, z.int().min(1).max(2_000_000_000).nullable());
 const optionalText = (max: number) =>
   z.preprocess(blankToNull, z.string().trim().max(max).nullable());
-const optionalDate = z.preprocess(blankToNull, z.string().datetime({ offset: true }).nullable());
+const optionalDate = z.preprocess(blankToNull, z.iso.datetime({ offset: true }).nullable());
 
 /** Upper-cased, trimmed; the database stores it that way and a CHECK keeps it so. */
 export const couponCodeSchema = z
@@ -59,7 +56,7 @@ const couponFieldsShape = {
         .transform((v) => v.toUpperCase())
         .nullable(),
     )
-    .default(null),
+    .prefault(null),
   minOrderAmount: optionalDecimal.default(null),
   maxUses: optionalCount.default(null),
   perUserLimit: optionalCount.default(null),
@@ -85,7 +82,7 @@ export function couponWindowIssue(
 
 export const createCouponRequestSchema = z.object(couponFieldsShape).superRefine((v, ctx) => {
   const issue = couponWindowIssue(v.startsAt, v.expiresAt);
-  if (issue) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['expiresAt'], message: issue });
+  if (issue) ctx.addIssue({ code: 'custom', path: ['expiresAt'], message: issue });
 });
 export type CreateCouponRequest = z.input<typeof createCouponRequestSchema>;
 export type CreateCouponPayload = z.output<typeof createCouponRequestSchema>;
@@ -97,17 +94,17 @@ export type CreateCouponPayload = z.output<typeof createCouponRequestSchema>;
 export const updateCouponRequestSchema = z
   .object(couponFieldsShape)
   .partial()
-  .extend({ rowVersion: z.number().int().positive() })
+  .extend({ rowVersion: z.int().positive() })
   .superRefine((v, ctx) => {
     const issue = couponWindowIssue(v.startsAt, v.expiresAt);
-    if (issue) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['expiresAt'], message: issue });
+    if (issue) ctx.addIssue({ code: 'custom', path: ['expiresAt'], message: issue });
   });
 export type UpdateCouponRequest = z.input<typeof updateCouponRequestSchema>;
 export type UpdateCouponPayload = z.output<typeof updateCouponRequestSchema>;
 
 export const setCouponActiveRequestSchema = z.object({
   isActive: z.boolean(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type SetCouponActiveRequest = z.infer<typeof setCouponActiveRequestSchema>;
 
@@ -120,7 +117,7 @@ export const couponListQuerySchema = z.object({
     .transform((v) => v || undefined),
   /** Anything but the three known values behaves as `all`, as in Reference. */
   status: couponStatusFilterSchema.catch('all').default('all'),
-  page: z.coerce.number().int().min(1).max(100_000).catch(1).default(1),
+  page: z.coerce.number().int().min(1).max(100_000).catch(1).prefault(1),
 });
 export type CouponListQuery = z.infer<typeof couponListQuerySchema>;
 
@@ -134,24 +131,24 @@ export const couponItemSchema = z.object({
   maxDiscountAmount: z.string().nullable(),
   currencyCode: z.string().nullable(),
   minOrderAmount: z.string().nullable(),
-  maxUses: z.number().int().nullable(),
-  perUserLimit: z.number().int().nullable(),
-  usesCount: z.number().int().nonnegative(),
+  maxUses: z.int().nullable(),
+  perUserLimit: z.int().nullable(),
+  usesCount: z.int().nonnegative(),
   applicablePlans: z.array(z.string()),
-  startsAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  startsAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   isActive: z.boolean(),
   firstPurchaseOnly: z.boolean(),
   stackableWithOther: z.boolean(),
   /** `expiresAt` is in the past (computed on the server clock, so every viewer agrees). */
   isExpired: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type CouponItem = z.infer<typeof couponItemSchema>;
 
-const count = z.number().int().nonnegative();
+const count = z.int().nonnegative();
 
 export const couponListResponseSchema = z.object({
   data: z.array(couponItemSchema),
@@ -159,8 +156,8 @@ export const couponListResponseSchema = z.object({
   summary: z.object({ total: count, active: count, expired: count, redeemed: count }),
   /** The numbers on the pills (global as well). */
   counts: z.object({ all: count, active: count, disabled: count, expired: count }),
-  page: z.number().int().min(1),
-  pageSize: z.number().int().min(1),
+  page: z.int().min(1),
+  pageSize: z.int().min(1),
   /** The platform default currency: what a fixed amount is shown in when the coupon has no currency lock of its own. */
   defaultCurrency: z.string(),
   /** Rows matching the search and the pill. */
@@ -188,7 +185,7 @@ export const billingOptionsResponseSchema = z.object({
       code: z.string(),
       symbol: z.string().nullable(),
       name: z.string().nullable(),
-      precision: z.number().int().min(0).max(6),
+      precision: z.int().min(0).max(6),
     }),
   ),
 });

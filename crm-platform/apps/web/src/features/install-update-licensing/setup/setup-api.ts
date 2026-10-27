@@ -16,7 +16,7 @@ import { toApiError } from '@/lib/api/errors';
  */
 async function call<T>(
   path: string,
-  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  schema: z.ZodType<T, unknown>,
   init?: { method: 'POST'; body: unknown },
 ): Promise<T> {
   const res = await fetch(`/api/v2/setup/${path}`, {
@@ -42,7 +42,7 @@ async function call<T>(
   return schema.parse(json);
 }
 
-const post = <T>(path: string, schema: z.ZodType<T, z.ZodTypeDef, unknown>, body: unknown) =>
+const post = <T>(path: string, schema: z.ZodType<T, unknown>, body: unknown) =>
   call(path, schema, { method: 'POST', body });
 
 export const fetchSetupStatus = () => call('status', setupStatusResponseSchema);

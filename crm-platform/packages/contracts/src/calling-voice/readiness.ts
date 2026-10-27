@@ -142,14 +142,14 @@ export type CallingReadinessList = z.infer<typeof callingReadinessListSchema>;
 export const callingSettingsSchema = z.object({
   autoEnableOnConnect: z.boolean(),
   /** Null until the first save; required on every later save. */
-  rowVersion: z.number().int().nullable(),
+  rowVersion: z.int().nullable(),
   updatedAt: z.string().nullable(),
 });
 export type CallingSettings = z.infer<typeof callingSettingsSchema>;
 
 export const updateCallingSettingsInputSchema = z.object({
   autoEnableOnConnect: z.boolean(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateCallingSettingsInput = z.infer<typeof updateCallingSettingsInputSchema>;
 

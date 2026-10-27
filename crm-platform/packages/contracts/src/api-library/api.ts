@@ -20,9 +20,9 @@ export const apiLibraryItemSchema = z.object({
   url: z.string(),
   payloadType: apiLibraryPayloadTypeSchema,
   hasFunction: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type ApiLibraryItem = z.infer<typeof apiLibraryItemSchema>;
 
@@ -75,9 +75,9 @@ export const apiLibraryUsageItemSchema = z.object({
   name: z.string(),
   published: z.boolean(),
   /** How many nodes of the flow's draft call this API. */
-  nodeCount: z.number().int(),
+  nodeCount: z.int(),
   /** How many nodes of its published copy (what runs) call it: above 0 with a `nodeCount` of 0 means only the published copy still does. */
-  publishedNodeCount: z.number().int(),
+  publishedNodeCount: z.int(),
 });
 export type ApiLibraryUsageItem = z.infer<typeof apiLibraryUsageItemSchema>;
 

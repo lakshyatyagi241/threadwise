@@ -39,7 +39,7 @@ export const profileResponseSchema = z.object({
    * The largest photo the server stores, in bytes (always sent). A client that
    * shrinks photos before upload keeps an animated GIF as it is when it fits.
    */
-  avatarMaxBytes: z.number().int().positive().optional(),
+  avatarMaxBytes: z.int().positive().optional(),
   /** The workspace's timezone, shown to every member (read-only unless `canEditWorkspaceTimezone`). */
   workspaceTimezone: z.string().nullable(),
   /**
@@ -124,8 +124,8 @@ export type UpdateBrandingRequest = z.infer<typeof updateBrandingRequestSchema>;
 
 export const mfaStatusResponseSchema = z.object({
   enabled: z.boolean(),
-  confirmedAt: z.string().datetime().nullable(),
-  recoveryCodesRemaining: z.number().int().nonnegative(),
+  confirmedAt: z.iso.datetime().nullable(),
+  recoveryCodesRemaining: z.int().nonnegative(),
   /** Policy says this user must enrol. */
   required: z.boolean(),
 });
@@ -135,7 +135,7 @@ export const mfaSetupResponseSchema = z.object({
   /** Base32, for manual entry. Rendered as a QR in the browser, never sent to a third party. */
   secret: z.string(),
   otpauthUrl: z.string(),
-  expiresInSeconds: z.number().int().positive(),
+  expiresInSeconds: z.int().positive(),
 });
 export type MfaSetupResponse = z.infer<typeof mfaSetupResponseSchema>;
 
@@ -184,8 +184,8 @@ export const sessionItemSchema = z.object({
   device: z.string(),
   deviceKind: z.enum(['desktop', 'mobile', 'unknown']),
   ip: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  lastUsedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  lastUsedAt: z.iso.datetime(),
   remember: z.boolean(),
 });
 export type SessionItem = z.infer<typeof sessionItemSchema>;
@@ -193,17 +193,17 @@ export type SessionItem = z.infer<typeof sessionItemSchema>;
 /** What the devices screen states about how long a sign-in lasts, so it never hard-codes it. */
 export const sessionListMetaSchema = z.object({
   /** Absolute lifetime of a session signed in without "keep me signed in". */
-  sessionLifetimeSeconds: z.number().int().positive(),
+  sessionLifetimeSeconds: z.int().positive(),
   /** Absolute lifetime of a remembered session. */
-  rememberLifetimeSeconds: z.number().int().positive(),
+  rememberLifetimeSeconds: z.int().positive(),
   /** Idle minutes after which a non-remembered session ends. 0 = no idle limit. */
-  idleTimeoutMinutes: z.number().int().nonnegative(),
+  idleTimeoutMinutes: z.int().nonnegative(),
 });
 export type SessionListMeta = z.infer<typeof sessionListMetaSchema>;
 
 export const sessionListQuerySchema = z.object({
   /** Reference shows ten devices per page. */
-  limit: z.coerce.number().int().min(1).max(100).default(10),
+  limit: z.coerce.number().int().min(1).max(100).prefault(10),
   cursor: cursorSchema.optional(),
 });
 export type SessionListQuery = z.infer<typeof sessionListQuerySchema>;
@@ -214,9 +214,9 @@ export type SessionListQuery = z.infer<typeof sessionListQuerySchema>;
  * ("showing 1-10 of 23"), `meta` carries the lifetimes for the subtitle.
  */
 export const sessionListResponseSchema = pageResponseSchema(sessionItemSchema).extend({
-  total: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
   meta: sessionListMetaSchema,
 });
 export type SessionListResponse = z.infer<typeof sessionListResponseSchema>;
 
-export const revokeOthersResponseSchema = z.object({ revoked: z.number().int().nonnegative() });
+export const revokeOthersResponseSchema = z.object({ revoked: z.int().nonnegative() });

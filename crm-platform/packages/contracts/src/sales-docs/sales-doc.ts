@@ -126,14 +126,14 @@ export const updateSalesDocSchema = z.object({
   notes: z.string().trim().max(SALES_DOC_NOTES_MAX).nullish(),
   terms: z.string().trim().max(SALES_DOC_TERMS_MAX).nullish(),
   lines: z.array(salesDocLineInputSchema).min(1).max(SALES_DOC_MAX_LINES).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateSalesDocInput = z.infer<typeof updateSalesDocSchema>;
 
 // --- responses -------------------------------------------------------------------------------------------------------------
 
 export const salesDocLineSchema = z.object({
-  position: z.number().int(),
+  position: z.int(),
   description: z.string(),
   qty: z.string(),
   unitPrice: z.string(),
@@ -196,24 +196,24 @@ export const salesDocSummarySchema = z.object({
   validUntil: z.string().nullable(),
   /** Open (sent or viewed) and past its valid-until date, whether or not the sweep has marked it yet. */
   overdue: z.boolean(),
-  sentAt: z.string().datetime().nullable(),
-  firstViewedAt: z.string().datetime().nullable(),
-  decidedAt: z.string().datetime().nullable(),
-  revision: z.number().int(),
+  sentAt: z.iso.datetime().nullable(),
+  firstViewedAt: z.iso.datetime().nullable(),
+  decidedAt: z.iso.datetime().nullable(),
+  revision: z.int(),
   source: salesDocSourceSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type SalesDocSummary = z.infer<typeof salesDocSummarySchema>;
 
 export const salesDocLinkStateSchema = z.object({
   /** Reachable by the buyer: not revoked, not past its expiry, and the document is out (not a draft). */
   active: z.boolean(),
-  expiresAt: z.string().datetime().nullable(),
-  revokedAt: z.string().datetime().nullable(),
-  viewCount: z.number().int(),
-  lastViewedAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
+  revokedAt: z.iso.datetime().nullable(),
+  viewCount: z.int(),
+  lastViewedAt: z.iso.datetime().nullable(),
 });
 
 export const salesDocResponseSchema = salesDocSummarySchema.extend({
@@ -222,14 +222,14 @@ export const salesDocResponseSchema = salesDocSummarySchema.extend({
     email: z.string().nullable(),
     phone: z.string().nullable(),
   }),
-  exponent: z.number().int(),
+  exponent: z.int(),
   /** The document's default tax rate, a percent. */
   taxRate: z.string(),
   discount: salesDocDiscountSchema.nullable(),
   lines: z.array(salesDocLineSchema),
   notes: z.string().nullable(),
   terms: z.string().nullable(),
-  acceptedRevision: z.number().int().nullable(),
+  acceptedRevision: z.int().nullable(),
   duplicatedFromId: uuidSchema.nullable(),
   invoice: z.object({ id: uuidSchema }).nullable(),
   createdBy: personRef.nullable(),
@@ -263,7 +263,7 @@ const salesDocFilterShape = {
 };
 
 export const listSalesDocsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   status: queryList(salesDocStatusSchema).optional(),
   ...salesDocFilterShape,
@@ -281,15 +281,15 @@ export const salesDocCountsQuerySchema = z.object({ ...salesDocFilterShape });
 export type SalesDocCountsQuery = z.infer<typeof salesDocCountsQuerySchema>;
 
 export const salesDocCountsResponseSchema = z.object({
-  total: z.number().int(),
+  total: z.int(),
   byStatus: z.object({
-    draft: z.number().int(),
-    sent: z.number().int(),
-    viewed: z.number().int(),
-    accepted: z.number().int(),
-    declined: z.number().int(),
-    expired: z.number().int(),
-    converted: z.number().int(),
+    draft: z.int(),
+    sent: z.int(),
+    viewed: z.int(),
+    accepted: z.int(),
+    declined: z.int(),
+    expired: z.int(),
+    converted: z.int(),
   }),
   /** Sent, viewed and accepted-not-yet-converted documents: the "open value" tile, one total per currency. */
   openValue: z.array(moneyTotalSchema),
@@ -312,7 +312,7 @@ export const sendSalesDocSchema = z.object({
   to: z.string().trim().max(255).optional(),
   /** A line added above the link. */
   message: z.string().trim().max(2000).optional(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type SendSalesDocInput = z.infer<typeof sendSalesDocSchema>;
 
@@ -323,8 +323,8 @@ export const salesDocShareLinkSchema = z.object({
   /** The absolute link on the configured web origin. */
   url: z.string(),
   active: z.boolean(),
-  expiresAt: z.string().datetime().nullable(),
-  revokedAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
+  revokedAt: z.iso.datetime().nullable(),
 });
 export type SalesDocShareLink = z.infer<typeof salesDocShareLinkSchema>;
 
@@ -343,25 +343,25 @@ export type SendSalesDocResponse = z.infer<typeof sendSalesDocResponseSchema>;
 /** Staff accepting or declining on the buyer's behalf (a signed copy, a phone call): recorded as such in the timeline. */
 export const staffDecisionSchema = z.object({
   note: z.string().trim().max(1000).optional(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type StaffDecisionInput = z.infer<typeof staffDecisionSchema>;
 
 export const reviseSalesDocSchema = z.object({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type ReviseSalesDocInput = z.infer<typeof reviseSalesDocSchema>;
 
 /** A new valid-until date on an open or expired document; an expired one is open again. */
 export const extendSalesDocSchema = z.object({
   validUntil: date,
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type ExtendSalesDocInput = z.infer<typeof extendSalesDocSchema>;
 
 /** A new link (the old one stops working at once); optionally with its own expiry in days (null: no expiry of its own). */
 export const regenerateLinkSchema = z.object({
-  expiresInDays: z.number().int().min(1).max(3650).nullish(),
+  expiresInDays: z.int().min(1).max(3650).nullish(),
 });
 export type RegenerateLinkInput = z.infer<typeof regenerateLinkSchema>;
 
@@ -411,7 +411,7 @@ export const salesDocEventSchema = z.object({
   actor: z.object({ kind: z.enum(['user', 'buyer', 'system']), user: personRef.nullable() }),
   fromStatus: salesDocStatusSchema.nullable(),
   toStatus: salesDocStatusSchema.nullable(),
-  revision: z.number().int(),
+  revision: z.int(),
   channel: z.string().nullable(),
   /** Buyer evidence (encrypted at rest): who signed, from where. */
   signerName: z.string().nullable(),
@@ -420,8 +420,8 @@ export const salesDocEventSchema = z.object({
   comment: z.string().nullable(),
   ip: z.string().nullable(),
   userAgent: z.string().nullable(),
-  meta: z.record(z.unknown()),
-  createdAt: z.string().datetime(),
+  meta: z.record(z.string(), z.unknown()),
+  createdAt: z.iso.datetime(),
 });
 export type SalesDocEvent = z.infer<typeof salesDocEventSchema>;
 
@@ -431,17 +431,17 @@ export const salesDocEventDetailSchema = salesDocEventSchema.extend({
 });
 
 export const listSalesDocEventsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(100),
+  limit: z.coerce.number().int().min(1).max(200).prefault(100),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListSalesDocEventsQuery = z.infer<typeof listSalesDocEventsQuerySchema>;
 
 export const salesDocRevisionSchema = z.object({
-  revision: z.number().int(),
+  revision: z.int(),
   status: salesDocStatusSchema,
   totalMinor: z.string(),
   createdBy: personRef.nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type SalesDocRevision = z.infer<typeof salesDocRevisionSchema>;
 

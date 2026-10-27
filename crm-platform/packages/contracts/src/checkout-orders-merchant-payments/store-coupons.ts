@@ -33,15 +33,15 @@ export type StoreCouponState = z.infer<typeof storeCouponStateSchema>;
 const couponFields = {
   code: storeCouponCodeSchema,
   type: storeCouponTypeSchema,
-  amount: z.number().int().min(0),
-  minSubtotalMinor: z.number().int().min(0).nullish(),
-  maxDiscountMinor: z.number().int().min(0).nullish(),
+  amount: z.int().min(0),
+  minSubtotalMinor: z.int().min(0).nullish(),
+  maxDiscountMinor: z.int().min(0).nullish(),
   freeShipping: z.boolean().default(false),
   active: z.boolean().default(true),
-  startsAt: z.string().datetime({ offset: true }).nullish(),
-  expiresAt: z.string().datetime({ offset: true }).nullish(),
+  startsAt: z.iso.datetime({ offset: true }).nullish(),
+  expiresAt: z.iso.datetime({ offset: true }).nullish(),
   /** Total redemptions allowed; null is unlimited. */
-  usageLimit: z.number().int().min(1).nullish(),
+  usageLimit: z.int().min(1).nullish(),
   /** One shop of the workspace, or null for every shop. */
   storefrontId: uuidSchema.nullish(),
 };
@@ -51,41 +51,41 @@ const validWindow = (v: { startsAt?: string | null; expiresAt?: string | null })
 
 export const createStoreCouponSchema = z
   .object(couponFields)
-  .refine(validWindow, { path: ['expiresAt'], message: 'Must be after the start' });
+  .refine(validWindow, { path: ['expiresAt'], error: 'Must be after the start' });
 export type CreateStoreCouponInput = z.infer<typeof createStoreCouponSchema>;
 
 /** A full edit (Reference resubmits the whole form) guarded by the row version. */
 export const updateStoreCouponSchema = z
-  .object({ ...couponFields, rowVersion: z.number().int().positive() })
-  .refine(validWindow, { path: ['expiresAt'], message: 'Must be after the start' });
+  .object({ ...couponFields, rowVersion: z.int().positive() })
+  .refine(validWindow, { path: ['expiresAt'], error: 'Must be after the start' });
 export type UpdateStoreCouponInput = z.infer<typeof updateStoreCouponSchema>;
 
 export const storeCouponSchema = z.object({
   id: uuidSchema,
   code: z.string(),
   type: z.string(),
-  amount: z.number().int(),
-  minSubtotalMinor: z.number().int().nullable(),
-  maxDiscountMinor: z.number().int().nullable(),
+  amount: z.int(),
+  minSubtotalMinor: z.int().nullable(),
+  maxDiscountMinor: z.int().nullable(),
   freeShipping: z.boolean(),
   active: z.boolean(),
-  startsAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
-  usageLimit: z.number().int().nullable(),
-  usedCount: z.number().int(),
+  startsAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
+  usageLimit: z.int().nullable(),
+  usedCount: z.int(),
   state: storeCouponStateSchema,
   storefrontId: uuidSchema.nullable(),
   storefrontName: z.string().nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type StoreCoupon = z.infer<typeof storeCouponSchema>;
 
 export const listStoreCouponsQuerySchema = z.object({
   q: z.string().trim().max(64).optional(),
   state: storeCouponStateSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStoreCouponsQuery = z.infer<typeof listStoreCouponsQuerySchema>;
@@ -96,19 +96,19 @@ export type StoreCouponListResponse = z.infer<typeof storeCouponListResponseSche
 /** An order that used the coupon. */
 export const storeCouponUsageSchema = z.object({
   orderId: uuidSchema,
-  orderNo: z.number().int(),
+  orderNo: z.int(),
   customerName: z.string().nullable(),
   customerPhone: z.string().nullable(),
-  discountMinor: z.number().int(),
-  totalMinor: z.number().int(),
+  discountMinor: z.int(),
+  totalMinor: z.int(),
   currencyCode: z.string(),
   status: z.string(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type StoreCouponUsage = z.infer<typeof storeCouponUsageSchema>;
 
 export const listStoreCouponUsagesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStoreCouponUsagesQuery = z.infer<typeof listStoreCouponUsagesQuerySchema>;

@@ -19,7 +19,9 @@ export const contactTimezoneSchema = z
   .trim()
   .min(1)
   .max(64)
-  .refine((v) => isZone(v), { message: 'must be an IANA time zone, for example Asia/Kolkata' })
+  .refine((v) => isZone(v), {
+    error: 'must be an IANA time zone, for example Asia/Kolkata',
+  })
   // Stored the way the runtime spells it, so `asia/kolkata` and `Asia/Kolkata` are one zone to the filter.
   .transform((v) => canonicalZone(v) ?? v);
 
@@ -40,9 +42,9 @@ export const contactSendWindowSchema = z.object({
   /** `off`: no quiet hours are switched on. `open`: a marketing message may go now. `held`: it would wait. */
   quietHours: z.enum(['off', 'open', 'held']),
   /** When held: the first instant a marketing message may go (ISO 8601). */
-  nextSendAt: z.string().datetime().nullable(),
+  nextSendAt: z.iso.datetime().nullable(),
   /** Messages and recipients already waiting for the quiet hours for this contact, and the first instant one of them goes. */
-  heldCount: z.number().int(),
-  heldUntil: z.string().datetime().nullable(),
+  heldCount: z.int(),
+  heldUntil: z.iso.datetime().nullable(),
 });
 export type ContactSendWindow = z.infer<typeof contactSendWindowSchema>;

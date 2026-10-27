@@ -125,14 +125,14 @@ export const emailTemplateSchema = z.object({
   status: emailTemplateStatusSchema,
   /** The canonical variable keys the subject and body use. */
   variables: z.array(z.string()),
-  usedCount: z.number().int().nonnegative(),
-  lastUsedAt: z.string().datetime().nullable(),
+  usedCount: z.int().nonnegative(),
+  lastUsedAt: z.iso.datetime().nullable(),
   createdByName: z.string().nullable(),
   /** Whether the caller may edit, archive or delete it. */
   canEdit: z.boolean(),
-  rowVersion: z.number().int().positive(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int().positive(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type EmailTemplate = z.infer<typeof emailTemplateSchema>;
 
@@ -179,10 +179,10 @@ export const updateEmailTemplateSchema = z
     category: categoryField.nullable().optional(),
     purpose: emailTemplatePurposeSchema.optional(),
     status: emailTemplateStatusSchema.optional(),
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
   })
   .refine((v) => Object.keys(v).some((k) => k !== 'rowVersion'), {
-    message: 'Nothing to change',
+    error: 'Nothing to change',
   });
 export type UpdateEmailTemplateInput = z.infer<typeof updateEmailTemplateSchema>;
 
@@ -194,7 +194,7 @@ export const listEmailTemplatesQuerySchema = z.object({
   status: z.enum(['active', 'archived', 'all']).default('active'),
   category: categoryField.optional(),
   cursor: z.string().min(1).max(512).optional(),
-  limit: z.coerce.number().int().min(1).max(EMAIL_TEMPLATE_LIST_MAX).default(50),
+  limit: z.coerce.number().int().min(1).max(EMAIL_TEMPLATE_LIST_MAX).prefault(50),
 });
 export type ListEmailTemplatesQuery = z.infer<typeof listEmailTemplatesQuerySchema>;
 
@@ -229,7 +229,7 @@ export type EmailTemplateRenderResponse = z.infer<typeof emailTemplateRenderResp
  * `POST /v2/inbox/email-templates/:id/render`: the template for THIS conversation, variables filled from its contact, the sending agent
  * and the workspace. Sends nothing and counts nothing (a use is counted when the reply is sent); the agent reads it in the composer first.
  */
-export const renderEmailTemplateSchema = z.object({ conversationId: uuidSchema }).strict();
+export const renderEmailTemplateSchema = z.strictObject({ conversationId: uuidSchema });
 export type RenderEmailTemplateInput = z.infer<typeof renderEmailTemplateSchema>;
 
 /** `POST /v2/email/templates/preview`: renders unsaved text with the sample data, for the editor's live preview. */

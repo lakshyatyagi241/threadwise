@@ -877,8 +877,11 @@ describe('SMS is paid for from the wallet', () => {
     expect(res.body.code).toBe('WALLET_EMPTY');
     expect(sms.sendCalls).toHaveLength(0);
     expect(
-      (await h.owner.query(`SELECT count(*)::int AS n FROM broadcasts WHERE org_id = $1`, [a.t.orgId]))
-        .rows[0],
+      (
+        await h.owner.query(`SELECT count(*)::int AS n FROM broadcasts WHERE org_id = $1`, [
+          a.t.orgId,
+        ])
+      ).rows[0],
     ).toMatchObject({ n: 0 });
     expect(await used(a.t)).toBe(0);
     expect(await usageEvents(h, a.t)).toEqual([]);
@@ -947,13 +950,6 @@ describe('SMS is paid for from the wallet', () => {
       ).rows[0];
       return { id: Number(row.id), orgId: a.t.orgId };
     }
-    const statuses = async (id: number) =>
-      (
-        await h.owner.query(
-          `SELECT status FROM wp_campaign_contacts WHERE campaign_id = $1 ORDER BY id`,
-          [id],
-        )
-      ).rows.map((r) => r.status as string);
     const runCampaign = (c: { id: number; orgId: number }) =>
       RequestContextStore.run(
         {
@@ -991,8 +987,11 @@ describe('SMS is paid for from the wallet', () => {
       expect(res.body.code).toBe('WALLET_EMPTY');
       expect(sms.sendCalls).toHaveLength(0);
       expect(
-        (await h.owner.query(`SELECT count(*)::int AS n FROM wpcampaigns WHERE org_id = $1`, [a.t.orgId]))
-          .rows[0],
+        (
+          await h.owner.query(`SELECT count(*)::int AS n FROM wpcampaigns WHERE org_id = $1`, [
+            a.t.orgId,
+          ])
+        ).rows[0],
       ).toMatchObject({ n: 0 });
       expect(await usageEvents(h, a.t)).toEqual([]);
     });

@@ -19,12 +19,12 @@ export const orderParseInputSchema = z.object({
 export type OrderParseInput = z.infer<typeof orderParseInputSchema>;
 
 export const orderLineSchema = z.object({
-  product_id: z.number().int(),
+  product_id: z.int(),
   retailer_id: z.string().nullable(),
   name: z.string(),
   image_url: z.string().nullable(),
-  qty: z.number().int(),
-  price_minor: z.number().int(),
+  qty: z.int(),
+  price_minor: z.int(),
   currency: z.string().nullable(),
   /** The variant bought (its uuid) and its title ("M / Red"); absent for a product without variants and for older carts. */
   variant_id: z.string().nullish(),
@@ -34,9 +34,9 @@ export type OrderLine = z.infer<typeof orderLineSchema>;
 
 export const orderUnavailableSchema = z.object({
   name: z.string(),
-  qty: z.number().int(),
+  qty: z.int(),
   reason: z.enum(['not_found', 'out_of_stock', 'option_required']),
-  available: z.number().int().nullable().optional(),
+  available: z.int().nullable().optional(),
   /** `option_required`: the options the customer has to pick, e.g. [{ name: "Size", values: ["S","M"] }]. */
   options: z.array(z.object({ name: z.string(), values: z.array(z.string()) })).optional(),
 });
@@ -57,7 +57,7 @@ export const orderParseResultSchema = z.object({
   order_ok: z.enum(['yes', 'no']),
   items: z.array(orderLineSchema),
   unavailable: z.array(orderUnavailableSchema),
-  total_minor: z.number().int(),
+  total_minor: z.int(),
   currency: z.string().nullable(),
   saved_shipping: savedShippingSchema.nullable(),
   summary: z.string(),
@@ -89,8 +89,8 @@ export type OrderConfirmInput = z.infer<typeof orderConfirmInputSchema>;
 
 export const orderConfirmResultSchema = z.object({
   ok: z.boolean(),
-  order_id: z.number().int().nullable().optional(),
-  total_minor: z.number().int().optional(),
+  order_id: z.int().nullable().optional(),
+  total_minor: z.int().optional(),
   currency: z.string().nullable().optional(),
   error: z.string().optional(),
   summary: z.string(),
@@ -107,7 +107,7 @@ export type OrderCancelInput = z.infer<typeof orderCancelInputSchema>;
 export const orderCancelResultSchema = z.object({
   ok: z.literal(true),
   summary: z.string(),
-  released: z.number().int(),
+  released: z.int(),
 });
 export type OrderCancelResult = z.infer<typeof orderCancelResultSchema>;
 
@@ -122,7 +122,7 @@ export const ORDER_REPLY_INTENTS = ['confirm', 'cancel', 'unclear'] as const;
 export const orderReplyResultSchema = z.object({
   ok: z.literal(true),
   intent: z.enum(ORDER_REPLY_INTENTS),
-  order_id: z.number().int().nullable().optional(),
+  order_id: z.int().nullable().optional(),
   summary: z.string(),
 });
 export type OrderReplyResult = z.infer<typeof orderReplyResultSchema>;

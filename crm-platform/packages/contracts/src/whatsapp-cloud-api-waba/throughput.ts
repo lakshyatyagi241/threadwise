@@ -28,19 +28,19 @@ export const wabaThroughputSettingsSchema = z.object({
   /** Master switch. Off: no pacing and no holds; Meta's own 130429 handling still applies. */
   enabled: z.boolean(),
   /** The rate of a number whose throughput Meta has not reported yet. */
-  defaultMps: z.number().int().min(1).max(WABA_HIGH_MPS),
+  defaultMps: z.int().min(1).max(WABA_HIGH_MPS),
   /** Share of the number's cap left unused as headroom for inbound traffic and clock skew. */
-  safetyMarginPct: z.number().int().min(0).max(50),
+  safetyMarginPct: z.int().min(0).max(50),
   /** A send that would wait longer than this is handed back to its queue (with that wait) instead of holding a worker. */
-  maxLocalWaitMs: z.number().int().min(0).max(60_000),
+  maxLocalWaitMs: z.int().min(0).max(60_000),
   /** After Meta answers 130429, send slower and win the rate back gradually. */
   adaptiveBackoff: z.boolean(),
   /** Share of the daily messaging tier at which a number is flagged. */
-  tierWarnPct: z.number().int().min(50).max(99),
+  tierWarnPct: z.int().min(50).max(99),
   /** Hold template sends that would pass the tier's daily cap (an estimate: see the usage note on the page). Off: only flagged. */
   enforceTierCap: z.boolean(),
   /** How often each number's throughput and tier are re-read from Meta. */
-  syncIntervalMinutes: z.number().int().min(5).max(1440),
+  syncIntervalMinutes: z.int().min(5).max(1440),
 });
 export type WabaThroughputSettings = z.infer<typeof wabaThroughputSettingsSchema>;
 
@@ -56,12 +56,12 @@ export const WABA_THROUGHPUT_SETTINGS_DEFAULTS: WabaThroughputSettings = {
 };
 
 export const updateWabaThroughputSettingsSchema = wabaThroughputSettingsSchema.extend({
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
 });
 export type UpdateWabaThroughputSettingsInput = z.infer<typeof updateWabaThroughputSettingsSchema>;
 
 export const wabaThroughputSettingsResponseSchema = wabaThroughputSettingsSchema.extend({
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WabaThroughputSettingsResponse = z.infer<typeof wabaThroughputSettingsResponseSchema>;
 
@@ -71,15 +71,15 @@ export const wabaNumberLiveSchema = z.object({
   /** Sends per second over the last 10 seconds. */
   mpsNow: z.number(),
   /** Highest sends in one second over the last 60 seconds. */
-  peak1m: z.number().int(),
-  sent5m: z.number().int(),
+  peak1m: z.int(),
+  sent5m: z.int(),
   /** Sends that waited for their turn in the last 5 minutes, and their mean wait. */
-  waited5m: z.number().int(),
-  avgWaitMs5m: z.number().int(),
+  waited5m: z.int(),
+  avgWaitMs5m: z.int(),
   /** Sends handed back to the queue because the wait was too long, or because the number is paused or its tier is full. */
-  deferred5m: z.number().int(),
+  deferred5m: z.int(),
   /** Times Meta itself answered 130429 or 131057 in the last 5 minutes. */
-  metaThrottled5m: z.number().int(),
+  metaThrottled5m: z.int(),
   /** 1 = full speed; below 1 the number is slowed after a Meta throttle and recovering. */
   speedFactor: z.number(),
 });
@@ -89,9 +89,9 @@ export const wabaNumberTierSchema = z.object({
   /** Meta's label, e.g. TIER_1K, or null when unknown. */
   name: z.string().nullable(),
   /** Unique recipients per 24 hours the tier allows; null for unlimited or unknown. */
-  cap: z.number().int().nullable(),
+  cap: z.int().nullable(),
   /** Unique recipients of template messages in the last 24 hours, counted here (an estimate within about 1%). */
-  used24h: z.number().int(),
+  used24h: z.int(),
   pct: z.number().nullable(),
   state: z.enum(WABA_TIER_STATES),
 });
@@ -99,7 +99,7 @@ export type WabaNumberTier = z.infer<typeof wabaNumberTierSchema>;
 
 export const wabaNumberControlSchema = z.object({
   /** An operator-set rate that replaces Meta's value; null follows Meta. */
-  overrideMps: z.number().int().min(1).max(WABA_HIGH_MPS).nullable(),
+  overrideMps: z.int().min(1).max(WABA_HIGH_MPS).nullable(),
   paused: z.boolean(),
   pauseReason: z.string().nullable(),
   updatedAt: z.string().nullable(),
@@ -108,7 +108,7 @@ export type WabaNumberControl = z.infer<typeof wabaNumberControlSchema>;
 
 export const wabaNumberThroughputSchema = z.object({
   /** The connection's uuid. */
-  id: z.string().uuid(),
+  id: z.guid(),
   workspace: z.string(),
   phoneNumberId: z.string(),
   displayPhoneNumber: z.string().nullable(),
@@ -118,9 +118,9 @@ export const wabaNumberThroughputSchema = z.object({
   coexistence: z.boolean(),
   /** Meta's throughput level (STANDARD, HIGH) and the mps it stands for, when Meta reported one. */
   metaLevel: z.string().nullable(),
-  metaMps: z.number().int().nullable(),
+  metaMps: z.int().nullable(),
   /** The rate sends are paced to now (override, coexistence cap or Meta's value, less the safety margin). */
-  effectiveMps: z.number().int(),
+  effectiveMps: z.int(),
   source: z.enum(WABA_RATE_SOURCES),
   control: wabaNumberControlSchema,
   tier: wabaNumberTierSchema,
@@ -128,19 +128,19 @@ export const wabaNumberThroughputSchema = z.object({
   syncedAt: z.string().nullable(),
   /** Why the last read from Meta failed, when it did. */
   syncError: z.string().nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WabaNumberThroughput = z.infer<typeof wabaNumberThroughputSchema>;
 
 export const wabaThroughputTotalsSchema = z.object({
-  numbers: z.number().int(),
-  paused: z.number().int(),
-  throttled: z.number().int(),
-  tierWarn: z.number().int(),
+  numbers: z.int(),
+  paused: z.int(),
+  throttled: z.int(),
+  tierWarn: z.int(),
   mpsNow: z.number(),
-  sent5m: z.number().int(),
-  deferred5m: z.number().int(),
-  metaThrottled5m: z.number().int(),
+  sent5m: z.int(),
+  deferred5m: z.int(),
+  metaThrottled5m: z.int(),
 });
 export type WabaThroughputTotals = z.infer<typeof wabaThroughputTotalsSchema>;
 
@@ -181,9 +181,9 @@ export type WabaThroughputEvent = z.infer<typeof wabaThroughputEventSchema>;
 export const wabaThroughputSeriesPointSchema = z.object({
   /** Start of the second or minute, ISO. */
   at: z.string(),
-  sent: z.number().int(),
-  deferred: z.number().int(),
-  metaThrottled: z.number().int(),
+  sent: z.int(),
+  deferred: z.int(),
+  metaThrottled: z.int(),
 });
 export type WabaThroughputSeriesPoint = z.infer<typeof wabaThroughputSeriesPointSchema>;
 
@@ -201,15 +201,13 @@ export type WabaNumberThroughputDetail = z.infer<typeof wabaNumberThroughputDeta
 
 // --- operator actions ------------------------------------------------------------------------------------------------------------
 
-export const updateWabaNumberControlSchema = z
-  .object({
-    /** `null` clears the override and follows Meta again. */
-    overrideMps: z.number().int().min(1).max(WABA_HIGH_MPS).nullable(),
-    paused: z.boolean(),
-    pauseReason: z.string().trim().max(200).nullable().optional(),
-    rowVersion: z.number().int().min(1),
-  })
-  .strict();
+export const updateWabaNumberControlSchema = z.strictObject({
+  /** `null` clears the override and follows Meta again. */
+  overrideMps: z.int().min(1).max(WABA_HIGH_MPS).nullable(),
+  paused: z.boolean(),
+  pauseReason: z.string().trim().max(200).nullable().optional(),
+  rowVersion: z.int().min(1),
+});
 export type UpdateWabaNumberControlInput = z.infer<typeof updateWabaNumberControlSchema>;
 
 export const wabaThroughputListQuerySchema = z.object({

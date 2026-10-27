@@ -11,7 +11,7 @@ import { GOOGLE_CAPABILITY_SCOPES, googleScopesFor } from '@crm/contracts';
  */
 const blank = (v: unknown) => (typeof v === 'string' && v.trim() === '' ? undefined : v);
 const optional = (max = 512) => z.preprocess(blank, z.string().max(max).optional());
-const urlOr = (dflt: string) => z.preprocess(blank, z.string().url().default(dflt));
+const urlOr = (dflt: string) => z.preprocess(blank, z.url().default(dflt));
 
 const schema = z.object({
   /** Where the browser is sent for consent. */
@@ -37,36 +37,36 @@ const schema = z.object({
   GOOGLE_CALENDAR_CLIENT_ID: optional(200),
   GOOGLE_CALENDAR_CLIENT_SECRET: optional(200),
   /** Overrides the callback address (default `<APP_URL>/v2/public/appointments/calendar/google/callback`) when no console value is saved. */
-  GOOGLE_CALENDAR_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
+  GOOGLE_CALENDAR_REDIRECT_URI: z.preprocess(blank, z.url().optional()),
 
   /** Ceiling for one call to Google, in ms. A booking never waits longer for a calendar. */
   GOOGLE_HTTP_TIMEOUT_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(500).max(60_000).default(8_000),
+    z.coerce.number().int().min(500).max(60_000).prefault(8_000),
   ),
   /**
    * Extra attempts after a 429, a 5xx, a timeout or a network error, for the calls that are safe to repeat (everything but the one-time
    * code exchange and the busy-time lookup a visitor is waiting on). Each waits a random time up to base x 2^attempt (full jitter);
    * a `Retry-After` longer than the cap below is not waited for here: the caller (outbox, flow run) tries again later.
    */
-  GOOGLE_RETRIES: z.preprocess(blank, z.coerce.number().int().min(0).max(5).default(2)),
+  GOOGLE_RETRIES: z.preprocess(blank, z.coerce.number().int().min(0).max(5).prefault(2)),
   GOOGLE_RETRY_BASE_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(1).max(10_000).default(300),
+    z.coerce.number().int().min(1).max(10_000).prefault(300),
   ),
   GOOGLE_RETRY_AFTER_CAP_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(60).default(5),
+    z.coerce.number().int().min(0).max(60).prefault(5),
   ),
   /** How long one busy-time answer is reused, in seconds (0 turns the cache off). */
   GOOGLE_BUSY_CACHE_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(600).default(30),
+    z.coerce.number().int().min(0).max(600).prefault(30),
   ),
   /** After a failed busy-time call, how long to answer "no busy data" at once instead of waiting on Google again, in seconds. */
   GOOGLE_BUSY_BACKOFF_SECONDS: z.preprocess(
     blank,
-    z.coerce.number().int().min(0).max(600).default(20),
+    z.coerce.number().int().min(0).max(600).prefault(20),
   ),
 });
 

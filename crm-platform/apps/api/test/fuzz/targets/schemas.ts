@@ -23,9 +23,70 @@ const isSchema = (v: unknown): v is Z =>
   typeof v === 'object' &&
   v !== null &&
   typeof (v as Z).safeParse === 'function' &&
-  typeof (v as Z)._def === 'object';
+  (typeof (v as Z)._def === 'object' || typeof (v as { _zod?: unknown })._zod === 'object');
 
-const defOf = (s: unknown): Def => (s as Z)._def;
+/**
+ * Zod 4 keeps its definition on `_zod.def` with lower-case `type` names. This maps it onto the zod 3 field names the walker
+ * below reads, so the walk (and the "rewrites its input" test) keeps working after the upgrade.
+ */
+const V4_TYPES: Record<string, string> = {
+  object: 'ZodObject',
+  string: 'ZodString',
+  number: 'ZodNumber',
+  boolean: 'ZodBoolean',
+  enum: 'ZodEnum',
+  literal: 'ZodLiteral',
+  array: 'ZodArray',
+  tuple: 'ZodTuple',
+  record: 'ZodRecord',
+  map: 'ZodMap',
+  set: 'ZodSet',
+  union: 'ZodUnion',
+  intersection: 'ZodIntersection',
+  optional: 'ZodOptional',
+  nullable: 'ZodNullable',
+  default: 'ZodDefault',
+  prefault: 'ZodDefault',
+  catch: 'ZodCatch',
+  readonly: 'ZodReadonly',
+  lazy: 'ZodLazy',
+  pipe: 'ZodPipeline',
+  promise: 'ZodPromise',
+};
+const V4_CHECKS: Record<string, string> = {
+  min_length: 'min',
+  greater_than: 'min',
+  max_length: 'max',
+  less_than: 'max',
+  regex: 'regex',
+};
+
+function v4Def(s: { _zod: { def: Record<string, unknown> } }): Def {
+  const d = s._zod.def as Record<string, unknown> & { type: string };
+  const checks = ((d.checks as Array<{ _zod?: { def?: Record<string, unknown> } }>) ?? []).map(
+    (c) => {
+      const cd = c._zod?.def ?? {};
+      return {
+        kind: V4_CHECKS[String(cd.check)] ?? String(cd.check),
+        value: cd.value ?? cd.minimum ?? cd.maximum ?? cd.length,
+      };
+    },
+  );
+  return {
+    ...d,
+    typeName: V4_TYPES[d.type] ?? `Zod:${d.type}`,
+    type: d.type === 'array' ? d.element : d.type,
+    values: d.type === 'enum' ? Object.values(d.entries as Record<string, unknown>) : d.values,
+    innerType: d.innerType,
+    checks,
+  } as Def;
+}
+
+/** Zod 4 also exposes `_def` as an alias of `_zod.def`, so the v4 check comes first. */
+const defOf = (s: unknown): Def => {
+  const v = s as Z & { _zod?: { def: Record<string, unknown> } };
+  return v._zod ? v4Def(v as { _zod: { def: Record<string, unknown> } }) : v._def;
+};
 
 /** The schemas an object holds, one level down. */
 function children(s: Z): unknown[] {

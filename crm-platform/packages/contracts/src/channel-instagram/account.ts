@@ -15,11 +15,11 @@ export const igAccountSchema = z.object({
   avatar: z.string().nullable(),
   /** `connected` or `disconnected` (as the engine last reported it). */
   status: z.string(),
-  followers: z.number().int().nullable(),
+  followers: z.int().nullable(),
   /** When the profile was last read from the engine; null shows as "live". */
-  syncedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  syncedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type IgAccount = z.infer<typeof igAccountSchema>;
 
@@ -59,16 +59,16 @@ export const linkIgAccountSchema = z.object({
   username: z.string().trim().max(190).optional(),
   name: z.string().trim().max(190).optional(),
   avatar: z.string().trim().max(1024).optional(),
-  followers: z.number().int().min(0).optional(),
+  followers: z.int().min(0).optional(),
 });
 export type LinkIgAccountInput = z.infer<typeof linkIgAccountSchema>;
 
 /** The sign-in popup's address for connecting a new account on the engine. */
-export const igConnectStartResponseSchema = z.object({ url: z.string().url() });
+export const igConnectStartResponseSchema = z.object({ url: z.url() });
 export type IgConnectStartResponse = z.infer<typeof igConnectStartResponseSchema>;
 
 export const igUnlinkResultSchema = z.object({
   /** Instagram threads deleted because the last account went; 0 while other accounts remain. */
-  purgedThreads: z.number().int().min(0),
+  purgedThreads: z.int().min(0),
 });
 export type IgUnlinkResult = z.infer<typeof igUnlinkResultSchema>;

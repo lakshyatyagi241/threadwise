@@ -63,11 +63,11 @@ export const formSubmissionSummarySchema = z.object({
   contact: linkSchema.nullable(),
   company: linkSchema.nullable(),
   /** The version of the form the visitor saw. */
-  formVersion: z.number().int(),
+  formVersion: z.int(),
   consentGiven: z.boolean().nullable(),
   /** The workspace erased the answers (kept as a tombstone) or the retention sweep purged them. */
   answersRemoved: z.boolean(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type FormSubmissionSummary = z.infer<typeof formSubmissionSummarySchema>;
 
@@ -83,9 +83,9 @@ export const formPaymentAttemptSchema = z.object({
   status: z.enum(FORM_PAYMENT_ATTEMPT_STATUSES),
   settledVia: z.enum(['gateway', 'manual']).nullable(),
   providerRef: z.string().nullable(),
-  paidAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime(),
-  createdAt: z.string().datetime(),
+  paidAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type FormPaymentAttempt = z.infer<typeof formPaymentAttemptSchema>;
 
@@ -101,7 +101,7 @@ export const formSubmissionDetailSchema = formSubmissionSummarySchema.extend({
     .object({ name: z.string(), email: z.string().nullable(), phone: z.string().nullable() })
     .nullable(),
   attribution: z.object({
-    utm: z.record(z.string()),
+    utm: z.record(z.string(), z.string()),
     referrer: z.string().nullable(),
     pageUrl: z.string().nullable(),
     userAgent: z.string().nullable(),
@@ -110,13 +110,13 @@ export const formSubmissionDetailSchema = formSubmissionSummarySchema.extend({
     .object({
       given: z.boolean(),
       text: z.string(),
-      version: z.number().int(),
-      at: z.string().datetime(),
+      version: z.int(),
+      at: z.iso.datetime(),
     })
     .nullable(),
   error: z.string().nullable(),
-  spamScore: z.number().int(),
-  updatedAt: z.string().datetime(),
+  spamScore: z.int(),
+  updatedAt: z.iso.datetime(),
 });
 export type FormSubmissionDetail = z.infer<typeof formSubmissionDetailSchema>;
 
@@ -130,8 +130,8 @@ export const listFormSubmissionsQuerySchema = paginationQuerySchema.extend({
   status: formSubmissionStatusSchema.optional(),
   /** A convenience for the two tabs the screen has: everything that needs a person, and the spam bin. */
   tab: z.enum(['all', 'needs_attention', 'spam']).optional(),
-  from: z.string().datetime().optional(),
-  to: z.string().datetime().optional(),
+  from: z.iso.datetime().optional(),
+  to: z.iso.datetime().optional(),
   /** Matches the name, email or phone the visitor gave. */
   q: z.string().trim().min(1).max(120).optional(),
   contactId: uuidSchema.optional(),
@@ -140,8 +140,8 @@ export type ListFormSubmissionsQuery = z.infer<typeof listFormSubmissionsQuerySc
 
 export const exportFormSubmissionsSchema = z.object({
   status: formSubmissionStatusSchema.optional(),
-  from: z.string().datetime().optional(),
-  to: z.string().datetime().optional(),
+  from: z.iso.datetime().optional(),
+  to: z.iso.datetime().optional(),
   contactId: uuidSchema.optional(),
 });
 export type ExportFormSubmissionsInput = z.infer<typeof exportFormSubmissionsSchema>;
@@ -183,9 +183,7 @@ export const publicFormSubmitSchema = z.object({
       page_url: z.string().max(500).optional(),
     })
     .default({}),
-  consent: z
-    .object({ given: z.boolean(), textVersion: z.number().int().min(1).max(10_000) })
-    .optional(),
+  consent: z.object({ given: z.boolean(), textVersion: z.int().min(1).max(10_000) }).optional(),
   captchaToken: z.string().max(4096).optional(),
   /**
    * The age gate's declaration (BL-217): the box "I confirm I am at least N years old" was ticked. Sent only by a page whose form asks it;
@@ -196,14 +194,14 @@ export const publicFormSubmitSchema = z.object({
   guardian: z
     .object({
       name: z.string().trim().min(1).max(120),
-      email: z.string().trim().email().max(191).optional(),
+      email: z.string().trim().pipe(z.email().max(191)).optional(),
       phone: z.string().trim().max(40).optional(),
     })
     .optional(),
   /** The honeypot: a real visitor never fills it (the field is hidden from people). */
   hp: z.string().max(500).optional(),
   /** Milliseconds between the page's `start` event and the submit, when the page tracked it. */
-  elapsedMs: z.number().int().min(0).max(86_400_000).optional(),
+  elapsedMs: z.int().min(0).max(86_400_000).optional(),
 });
 export type PublicFormSubmitInput = z.infer<typeof publicFormSubmitSchema>;
 
@@ -242,7 +240,7 @@ export type PublicFormSubmissionStatus = z.infer<typeof publicFormSubmissionStat
 export const publicFormEventSchema = z.object({
   visitId: z.string().regex(/^[A-Za-z0-9_-]{8,64}$/),
   kind: formEventKindSchema,
-  step: z.number().int().min(0).max(9).optional(),
+  step: z.int().min(0).max(9).optional(),
 });
 export type PublicFormEventInput = z.infer<typeof publicFormEventSchema>;
 

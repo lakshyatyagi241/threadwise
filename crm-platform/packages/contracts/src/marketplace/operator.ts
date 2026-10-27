@@ -27,35 +27,31 @@ const text = (max: number, min = 0) => z.string().trim().min(min).max(max);
 
 // --- categories --------------------------------------------------------------------------------------------------------------------
 
-export const createMarketCategorySchema = z
-  .object({
-    kind: marketAppKindSchema,
-    slug: marketSlugSchema,
-    name: text(60, 2),
-    description: text(300).optional(),
-    icon: z
-      .string()
-      .regex(/^[a-z0-9-]{1,32}$/)
-      .optional(),
-    sortOrder: z.number().int().min(0).max(10_000).default(100),
-  })
-  .strict();
+export const createMarketCategorySchema = z.strictObject({
+  kind: marketAppKindSchema,
+  slug: marketSlugSchema,
+  name: text(60, 2),
+  description: text(300).optional(),
+  icon: z
+    .string()
+    .regex(/^[a-z0-9-]{1,32}$/)
+    .optional(),
+  sortOrder: z.int().min(0).max(10_000).default(100),
+});
 export type CreateMarketCategoryInput = z.infer<typeof createMarketCategorySchema>;
 
-export const updateMarketCategorySchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    name: text(60, 2).optional(),
-    description: text(300).nullable().optional(),
-    icon: z
-      .string()
-      .regex(/^[a-z0-9-]{1,32}$/)
-      .nullable()
-      .optional(),
-    sortOrder: z.number().int().min(0).max(10_000).optional(),
-    isActive: z.boolean().optional(),
-  })
-  .strict();
+export const updateMarketCategorySchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  name: text(60, 2).optional(),
+  description: text(300).nullable().optional(),
+  icon: z
+    .string()
+    .regex(/^[a-z0-9-]{1,32}$/)
+    .nullable()
+    .optional(),
+  sortOrder: z.int().min(0).max(10_000).optional(),
+  isActive: z.boolean().optional(),
+});
 export type UpdateMarketCategoryInput = z.infer<typeof updateMarketCategorySchema>;
 
 export const marketOperatorCategorySchema = z.object({
@@ -65,11 +61,11 @@ export const marketOperatorCategorySchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   icon: z.string().nullable(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   isActive: z.boolean(),
   /** Apps in the category in any status. */
-  appCount: z.number().int(),
-  rowVersion: z.number().int(),
+  appCount: z.int(),
+  rowVersion: z.int(),
 });
 export type MarketOperatorCategory = z.infer<typeof marketOperatorCategorySchema>;
 export const marketOperatorCategoryListSchema = z.object({
@@ -85,7 +81,7 @@ export const marketOperatorAppListQuerySchema = z.object({
   /** `paid`: priced listings; `free`: the rest. */
   pricing: z.enum(['free', 'paid']).optional(),
   q: z.string().trim().max(80).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type MarketOperatorAppListQuery = z.infer<typeof marketOperatorAppListQuerySchema>;
@@ -105,19 +101,19 @@ export const marketOperatorAppSchema = z.object({
   /** What the app costs: the operator's catalogue pricing, which is the authority (the manifest's `pricing` is only a proposal). */
   pricing: marketPricingViewSchema,
   /** Workspaces whose subscription to it is in force (paid, trial or comp, not ending or ended). */
-  activeSubscriptions: z.number().int(),
-  sortOrder: z.number().int(),
+  activeSubscriptions: z.int(),
+  sortOrder: z.int(),
   connectorType: connectorTypeSchema.nullable(),
   /** The published version, or null when nothing is published. */
   publishedVersion: z.string().nullable(),
   latestVersion: z.string().nullable(),
-  installCount: z.number().int(),
+  installCount: z.int(),
   killReason: z.string().nullable(),
-  killedAt: z.string().datetime().nullable(),
-  publishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  killedAt: z.iso.datetime().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type MarketOperatorApp = z.infer<typeof marketOperatorAppSchema>;
 
@@ -140,85 +136,79 @@ export type MarketOperatorAppDetail = z.infer<typeof marketOperatorAppDetailSche
 
 export const marketOperatorAppDetailQuerySchema = z.object({ versionId: uuidSchema.optional() });
 
-export const createMarketAppSchema = z
-  .object({
-    /** Manifest v1. The slug, name, kind and category of the listing come from it. */
-    manifest: z.unknown(),
-    /** Integrations: the connector recipe. */
-    recipe: z.unknown().optional(),
-    tagline: text(140, 5),
-    listing: marketListingSchema.default({}),
-    firstParty: z.boolean().default(false),
-    featured: z.boolean().default(false),
-    planFeature: z
-      .string()
-      .regex(/^[a-z][a-z0-9_]{0,63}$/)
-      .nullable()
-      .optional(),
-    sortOrder: z.number().int().min(0).max(10_000).default(100),
-    changelog: text(2000).default('First version.'),
-  })
-  .strict();
+export const createMarketAppSchema = z.strictObject({
+  /** Manifest v1. The slug, name, kind and category of the listing come from it. */
+  manifest: z.unknown(),
+  /** Integrations: the connector recipe. */
+  recipe: z.unknown().optional(),
+  tagline: text(140, 5),
+  listing: marketListingSchema.prefault({}),
+  firstParty: z.boolean().default(false),
+  featured: z.boolean().default(false),
+  planFeature: z
+    .string()
+    .regex(/^[a-z][a-z0-9_]{0,63}$/)
+    .nullable()
+    .optional(),
+  sortOrder: z.int().min(0).max(10_000).default(100),
+  changelog: text(2000).default('First version.'),
+});
 export type CreateMarketAppInput = z.infer<typeof createMarketAppSchema>;
 
-export const updateMarketAppSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    tagline: text(140, 5).optional(),
-    listing: marketListingSchema.optional(),
-    firstParty: z.boolean().optional(),
-    featured: z.boolean().optional(),
-    planFeature: z
-      .string()
-      .regex(/^[a-z][a-z0-9_]{0,63}$/)
-      .nullable()
-      .optional(),
-    sortOrder: z.number().int().min(0).max(10_000).optional(),
-  })
-  .strict();
+export const updateMarketAppSchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  tagline: text(140, 5).optional(),
+  listing: marketListingSchema.optional(),
+  firstParty: z.boolean().optional(),
+  featured: z.boolean().optional(),
+  planFeature: z
+    .string()
+    .regex(/^[a-z][a-z0-9_]{0,63}$/)
+    .nullable()
+    .optional(),
+  sortOrder: z.int().min(0).max(10_000).optional(),
+});
 export type UpdateMarketAppInput = z.infer<typeof updateMarketAppSchema>;
 
-export const saveMarketVersionSchema = z
-  .object({
-    manifest: z.unknown(),
-    recipe: z.unknown().optional(),
-    changelog: text(2000, 1),
-  })
-  .strict();
+export const saveMarketVersionSchema = z.strictObject({
+  manifest: z.unknown(),
+  recipe: z.unknown().optional(),
+  changelog: text(2000, 1),
+});
 export type SaveMarketVersionInput = z.infer<typeof saveMarketVersionSchema>;
 
-export const approveMarketVersionSchema = z.object({ note: text(500).optional() }).strict();
+export const approveMarketVersionSchema = z.strictObject({ note: text(500).optional() });
 export type ApproveMarketVersionInput = z.infer<typeof approveMarketVersionSchema>;
 
-export const rejectMarketVersionSchema = z.object({ note: text(500, 5) }).strict();
+export const rejectMarketVersionSchema = z.strictObject({ note: text(500, 5) });
 export type RejectMarketVersionInput = z.infer<typeof rejectMarketVersionSchema>;
 
 /** Publishes an approved version (the latest approved one when `versionId` is absent). */
-export const publishMarketAppSchema = z.object({ versionId: uuidSchema.optional() }).strict();
+export const publishMarketAppSchema = z.strictObject({ versionId: uuidSchema.optional() });
 export type PublishMarketAppInput = z.infer<typeof publishMarketAppSchema>;
 
-export const killMarketAppSchema = z.object({ reason: text(300, 5) }).strict();
+export const killMarketAppSchema = z.strictObject({ reason: text(300, 5) });
 export type KillMarketAppInput = z.infer<typeof killMarketAppSchema>;
 
 export const marketKillResultSchema = z.object({
   app: marketOperatorAppSchema,
   /** Installations switched off by this call. */
-  disabledInstallations: z.number().int(),
+  disabledInstallations: z.int(),
   /**
    * Card renewals of the app's subscribers ended at the payment provider (at the end of the period each paid for), and how many could NOT
    * be: those still charge until the operator ends them at the provider (the Subscriptions screen lists them as failed cancellations).
    */
-  renewalsStopped: z.number().int(),
-  renewalsNotStopped: z.number().int(),
+  renewalsStopped: z.int(),
+  renewalsNotStopped: z.int(),
 });
 export type MarketKillResult = z.infer<typeof marketKillResultSchema>;
 
 export const marketPublishResultSchema = z.object({
   app: marketOperatorAppSchema,
   /** Installations moved to the new version at once (it asked for no new scopes). */
-  upgraded: z.number().int(),
+  upgraded: z.int(),
   /** Installations that keep the old version until their admin accepts the new permission list. */
-  awaitingConsent: z.number().int(),
+  awaitingConsent: z.int(),
 });
 export type MarketPublishResult = z.infer<typeof marketPublishResultSchema>;
 
@@ -228,7 +218,7 @@ export const marketOperatorRequestListQuerySchema = z.object({
   status: marketRequestStatusSchema.optional(),
   kind: marketAppKindSchema.optional(),
   q: z.string().trim().max(80).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type MarketOperatorRequestListQuery = z.infer<typeof marketOperatorRequestListQuerySchema>;
@@ -240,13 +230,13 @@ export const marketOperatorRequestSchema = z.object({
   categorySlug: z.string().nullable(),
   website: z.string().nullable(),
   status: marketRequestStatusSchema,
-  voteCount: z.number().int(),
+  voteCount: z.int(),
   /** Notes of the workspaces that asked, newest first (at most five). */
   notes: z.array(z.string()),
   firstWorkspace: z.object({ id: uuidSchema, name: z.string() }).nullable(),
   operatorNote: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type MarketOperatorRequest = z.infer<typeof marketOperatorRequestSchema>;
 export const marketOperatorRequestListSchema = z.object({
@@ -255,22 +245,20 @@ export const marketOperatorRequestListSchema = z.object({
 });
 export type MarketOperatorRequestList = z.infer<typeof marketOperatorRequestListSchema>;
 
-export const updateMarketRequestSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    status: marketRequestStatusSchema.optional(),
-    operatorNote: text(500).nullable().optional(),
-  })
-  .strict();
+export const updateMarketRequestSchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  status: marketRequestStatusSchema.optional(),
+  operatorNote: text(500).nullable().optional(),
+});
 export type UpdateMarketRequestInput = z.infer<typeof updateMarketRequestSchema>;
 
 // --- usage -----------------------------------------------------------------------------------------------------------------------------
 
 const eventCountsSchema = z.object({
-  accepted: z.number().int(),
-  duplicate: z.number().int(),
-  rejected: z.number().int(),
-  failed: z.number().int(),
+  accepted: z.int(),
+  duplicate: z.int(),
+  rejected: z.int(),
+  failed: z.int(),
 });
 
 export const marketUsageRowSchema = z.object({
@@ -280,17 +268,17 @@ export const marketUsageRowSchema = z.object({
   kind: marketAppKindSchema,
   status: marketAppStatusSchema,
   installs: z.object({
-    active: z.number().int(),
-    disabled: z.number().int(),
-    killed: z.number().int(),
-    total: z.number().int(),
+    active: z.int(),
+    disabled: z.int(),
+    killed: z.int(),
+    total: z.int(),
   }),
   health: z.object({
-    healthy: z.number().int(),
-    degraded: z.number().int(),
-    error: z.number().int(),
-    needsReauth: z.number().int(),
-    unknown: z.number().int(),
+    healthy: z.int(),
+    degraded: z.int(),
+    error: z.int(),
+    needsReauth: z.int(),
+    unknown: z.int(),
   }),
   events: z.object({ last24h: eventCountsSchema, last7d: eventCountsSchema }),
 });

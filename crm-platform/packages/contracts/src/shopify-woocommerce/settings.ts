@@ -12,9 +12,9 @@ export const shopifyPlatformSettingsSchema = z.object({
   hasSecret: z.boolean(),
   scopes: z.string(),
   redirectUri: z.string(),
-  integrationsCount: z.number().int().min(0),
-  eventsCount: z.number().int().min(0),
-  logsCount: z.number().int().min(0),
+  integrationsCount: z.int().min(0),
+  eventsCount: z.int().min(0),
+  logsCount: z.int().min(0),
 });
 export type ShopifyPlatformSettings = z.infer<typeof shopifyPlatformSettingsSchema>;
 
@@ -25,15 +25,15 @@ export const updateShopifySettingsSchema = z.object({
   clientSecret: z.string().trim().max(191).optional(),
   scopes: z.string().trim().max(500).optional(),
   /** Empty means the default address on this install. */
-  redirectUri: z.union([z.literal(''), z.string().trim().url().max(255)]).optional(),
+  redirectUri: z.union([z.literal(''), z.string().trim().pipe(z.url().max(255))]).optional(),
 });
 export type UpdateShopifySettingsInput = z.infer<typeof updateShopifySettingsSchema>;
 
 export const woocommercePlatformSettingsSchema = z.object({
   enabled: z.boolean(),
-  integrationsCount: z.number().int().min(0),
-  eventsCount: z.number().int().min(0),
-  logsCount: z.number().int().min(0),
+  integrationsCount: z.int().min(0),
+  eventsCount: z.int().min(0),
+  logsCount: z.int().min(0),
 });
 export type WoocommercePlatformSettings = z.infer<typeof woocommercePlatformSettingsSchema>;
 

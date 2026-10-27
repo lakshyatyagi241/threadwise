@@ -31,7 +31,7 @@ export const googleAccountResponseSchema = z.object({
   status: googleAccountStatusSchema,
   /** The connected Google account's email, also while it needs reconnecting. */
   account: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
   /** One row per capability, in the order the page lists them. */
   capabilities: z.array(googleCapabilityStateSchema),
   /** The calendar bookings and Meet links are written to. */
@@ -41,13 +41,13 @@ export const googleAccountResponseSchema = z.object({
   lastError: z
     .object({
       code: z.string(),
-      at: z.string().datetime(),
+      at: z.iso.datetime(),
       /** Which permission's call failed, when it is known. */
       capability: googleCapabilitySchema.nullable(),
     })
     .nullable(),
   /** The last time a flow node or a booking used the account. */
-  lastUsedAt: z.string().datetime().nullable(),
+  lastUsedAt: z.iso.datetime().nullable(),
 });
 export type GoogleAccountResponse = z.infer<typeof googleAccountResponseSchema>;
 
@@ -66,8 +66,8 @@ export type GoogleConnectInput = z.infer<typeof googleConnectInputSchema>;
 
 export const googleConnectResponseSchema = z.object({
   /** Google's consent URL: send the browser there. */
-  url: z.string().url(),
-  expiresInSeconds: z.number().int(),
+  url: z.url(),
+  expiresInSeconds: z.int(),
 });
 export type GoogleConnectResponse = z.infer<typeof googleConnectResponseSchema>;
 

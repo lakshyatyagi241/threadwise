@@ -34,22 +34,22 @@ export const contactResponseSchema = z.object({
   lifecycleState: recordLifecycleSchema,
   lifecycleStage: z.string().nullable(),
   /** When the current lifecycleStage was set — server-maintained, never client-set. */
-  lifecycleStageDate: z.string().datetime().nullable(),
+  lifecycleStageDate: z.iso.datetime().nullable(),
   previousLifecycleStage: z.string().nullable(),
-  previousLifecycleStageDate: z.string().datetime().nullable(),
+  previousLifecycleStageDate: z.iso.datetime().nullable(),
   status: z.string().nullable(),
   /** Meaningful only when status is a "closed lost" value. Options via status_options. */
   lostReason: z.string().nullable(),
   otherLostReason: z.string().nullable(),
   /** Stamped when the contact enters a won / lost lifecycle stage (Contact stages screen), cleared when it leaves. */
-  wonAt: z.string().datetime().nullable(),
-  lostAt: z.string().datetime().nullable(),
-  leadScore: z.number().int().nullable(),
+  wonAt: z.iso.datetime().nullable(),
+  lostAt: z.iso.datetime().nullable(),
+  leadScore: z.int().nullable(),
   /** Who set the score: a person ('manual', or null on a score typed before AI scoring existed) or the AI lead scorer ('ai'). */
   leadScoreSource: z.enum(['manual', 'ai']).nullable(),
   /** For an AI score: the short reasons the model gave. */
   leadScoreReasons: z.array(z.string()).nullable(),
-  leadScoredAt: z.string().datetime().nullable(),
+  leadScoredAt: z.iso.datetime().nullable(),
   leadScoreModel: z.string().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
@@ -62,18 +62,18 @@ export const contactResponseSchema = z.object({
   /** The contact is flagged as a minor (BL-190). Server-derived from the privacy flags; set through the Consent card or `POST /v1/contacts/:id/privacy`. */
   isMinor: z.boolean(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
-  lastActivityAt: z.string().datetime().nullable(),
+  lastActivityAt: z.iso.datetime().nullable(),
   /** BL-290: null = contacted; a timestamp = uncontacted since then (marker set by the workspace's lead handling settings or by hand). */
-  uncontactedSince: z.string().datetime().nullable(),
+  uncontactedSince: z.iso.datetime().nullable(),
   /** BL-291: the contact's one open follow-up (a task of kind `follow_up`); `dueAt` null is "someday". Null when there is none. */
   nextFollowUp: z
     .object({
       id: uuidSchema,
-      dueAt: z.string().datetime().nullable(),
+      dueAt: z.iso.datetime().nullable(),
       assigneeId: uuidSchema.nullable(),
     })
     .nullable(),
-  customFields: z.record(z.unknown()),
+  customFields: z.record(z.string(), z.unknown()),
   /** Where the contact came from: the import's source knob, "import", an API client... */
   source: z.string().nullable(),
   /** The contact's own IANA time zone (BL-193): the quiet hours are read on it. Null: read from the number's country, then the workspace. */
@@ -88,9 +88,9 @@ export const contactResponseSchema = z.object({
   tags: z
     .array(z.object({ id: uuidSchema, name: z.string(), color: z.string().nullable() }))
     .optional(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type ContactResponse = z.infer<typeof contactResponseSchema>;
 
@@ -108,7 +108,7 @@ export const createContactSchema = z
     status: z.string().max(64).optional(),
     lostReason: z.string().max(255).optional(),
     otherLostReason: z.string().max(500).optional(),
-    leadScore: z.number().int().min(0).max(100).optional(),
+    leadScore: z.int().min(0).max(100).optional(),
     whatsappSubscriptionStatus: z.string().max(64).optional(),
     smsSubscriptionStatus: z.string().max(64).optional(),
     emailSubscriptionStatus: z.string().max(64).optional(),
@@ -128,13 +128,13 @@ export const createContactSchema = z
      * contact.
      */
     consent: consentProofSchema.optional(),
-    customFields: z.record(z.unknown()).default({}),
+    customFields: z.record(z.string(), z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
   // deduplicated, and cannot be resolved from an inbound message. Reject it.
   .refine((v) => Boolean(v.email || v.phone), {
-    message: 'contact requires at least one of: email, phone',
     path: ['email'],
+    error: 'contact requires at least one of: email, phone',
   });
 export type CreateContactInput = z.infer<typeof createContactSchema>;
 
@@ -150,7 +150,7 @@ export const updateContactSchema = z.object({
   status: z.string().max(64).nullish(),
   lostReason: z.string().max(255).nullish(),
   otherLostReason: z.string().max(500).nullish(),
-  leadScore: z.number().int().min(0).max(100).nullish(),
+  leadScore: z.int().min(0).max(100).nullish(),
   whatsappSubscriptionStatus: z.string().max(64).nullish(),
   smsSubscriptionStatus: z.string().max(64).nullish(),
   emailSubscriptionStatus: z.string().max(64).nullish(),
@@ -165,9 +165,9 @@ export const updateContactSchema = z.object({
   isUnsubscribed: z.boolean().optional(),
   /** The proof that the person agreed to marketing; see `createContactSchema`. Needed when a status changes to `subscribed`. */
   consent: consentProofSchema.optional(),
-  customFields: z.record(z.unknown()).optional(),
+  customFields: z.record(z.string(), z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 
@@ -196,13 +196,13 @@ export const listContactsQuerySchema = paginationQuerySchema
     ...contactFilterShape,
     /** What `order` applies to. Text columns sort case-insensitively with empty values last, ties broken by id. */
     sort: contactSortSchema.default('createdAt'),
-    limit: z.coerce.number().int().min(1).max(CONTACT_LIST_MAX_LIMIT).default(50),
+    limit: z.coerce.number().int().min(1).max(CONTACT_LIST_MAX_LIMIT).prefault(50),
     /** `groups`, `tags` or `groups,tags`: adds the chips for each row. */
     expand: queryList(z.enum(['groups', 'tags'])).optional(),
     /** Adds `meta.total`, the count of every contact matching the filter ("Showing 1-50 of N"). */
     includeTotal: queryBoolean().default(false),
     /** A single tag, the way Reference's chip link sends it; merged into `tagIds`. */
-    tagId: z.string().uuid().optional(),
+    tagId: z.guid().optional(),
   })
   .refine((v) => !(v.groupId && v.noGroup), {
     message: 'groupId and noGroup cannot be combined',
@@ -234,7 +234,7 @@ export type ContactSelectItem = z.infer<typeof contactSelectItemSchema>;
 
 export const contactSelectQuerySchema = z.object({
   q: z.string().min(1).max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
 });
 export type ContactSelectQuery = z.infer<typeof contactSelectQuerySchema>;
 
@@ -282,7 +282,7 @@ export const bulkUpdateContactsSchema = z.object({
      * (422 VALIDATION_FAILED, nothing written). `null` (or a blank text / empty list) clears that key on every
      * contact; keys not named are left alone.
      */
-    customFields: z.record(z.unknown()).optional(),
+    customFields: z.record(z.string(), z.unknown()).optional(),
   }),
 });
 export type BulkUpdateContactsInput = z.infer<typeof bulkUpdateContactsSchema>;
@@ -326,7 +326,7 @@ export const fieldHistoryEntrySchema = z.object({
   changedByUserId: uuidSchema.nullable(),
   /** The name of the person who made the change (null for the system, the API, or a person no longer in the workspace). */
   changedByName: z.string().nullable().optional(),
-  changedAt: z.string().datetime(),
+  changedAt: z.iso.datetime(),
 });
 export type FieldHistoryEntry = z.infer<typeof fieldHistoryEntrySchema>;
 

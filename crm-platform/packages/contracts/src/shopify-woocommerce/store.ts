@@ -7,7 +7,7 @@ import { uuidSchema } from '../common/ids';
  * row, mapping and logs but reads as not connected.
  */
 
-const iso = z.string().datetime().nullable();
+const iso = z.iso.datetime().nullable();
 
 const storeBase = {
   id: uuidSchema,
@@ -26,8 +26,8 @@ const storeBase = {
   webhookUrl: z.string(),
   /** The webhooks registered on the store: topic to the store's id for it. */
   webhookIds: z.record(z.string(), z.string()),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 };
 
 export const shopifyStoreSchema = z.object({
@@ -71,7 +71,7 @@ export type WoocommerceOverview = z.infer<typeof woocommerceOverviewSchema>;
 export const connectShopifySchema = z.object({ shop: z.string().trim().min(1).max(191) });
 export type ConnectShopifyInput = z.infer<typeof connectShopifySchema>;
 
-export const shopifyConnectStartSchema = z.object({ url: z.string().url() });
+export const shopifyConnectStartSchema = z.object({ url: z.url() });
 export type ShopifyConnectStart = z.infer<typeof shopifyConnectStartSchema>;
 
 export const connectWoocommerceSchema = z.object({

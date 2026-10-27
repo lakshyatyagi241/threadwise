@@ -103,5 +103,5 @@ export function greetingKey(hour: number): GreetingKey {
 export const firstName = (name: string): string => name.trim().split(/\s+/)[0] ?? '';
 
 /** DELETE /v2/shell/notifications: the bell's "Clear all" removed this many of my notifications (TW-ASHELL-018). */
-export const clearNotificationsResponseSchema = z.object({ cleared: z.number().int() });
+export const clearNotificationsResponseSchema = z.object({ cleared: z.int() });
 export type ClearNotificationsResponse = z.infer<typeof clearNotificationsResponseSchema>;

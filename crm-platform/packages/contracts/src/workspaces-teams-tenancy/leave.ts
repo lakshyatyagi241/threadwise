@@ -14,9 +14,9 @@ import { parseDateValue } from '../common/dates';
  */
 
 /** A calendar day, `YYYY-MM-DD`, that exists (no 2026-02-31). */
-export const leaveDaySchema = z
-  .string()
-  .refine((v) => parseDateValue(v)?.kind === 'day', { message: 'Use a calendar day, YYYY-MM-DD' });
+export const leaveDaySchema = z.string().refine((v) => parseDateValue(v)?.kind === 'day', {
+  error: 'Use a calendar day, YYYY-MM-DD',
+});
 
 export const MEMBER_LEAVE_STATUSES = ['scheduled', 'active', 'ended', 'cancelled'] as const;
 export const memberLeaveStatusSchema = z.enum(MEMBER_LEAVE_STATUSES);
@@ -36,10 +36,10 @@ export const memberLeaveSchema = z.object({
   status: memberLeaveStatusSchema,
   /** True when today (workspace calendar) lies inside the range and the leave still counts. */
   onLeaveNow: z.boolean(),
-  startedAt: z.string().datetime().nullable(),
-  endedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  startedAt: z.iso.datetime().nullable(),
+  endedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type MemberLeave = z.infer<typeof memberLeaveSchema>;
 
@@ -51,21 +51,21 @@ export const createMemberLeaveSchema = z
     reason: z.string().trim().max(MEMBER_LEAVE_REASON_MAX).nullable().optional(),
   })
   .refine((v) => v.endsOn == null || v.endsOn >= v.startsOn, {
-    message: 'The last day cannot be before the first day',
     path: ['endsOn'],
+    error: 'The last day cannot be before the first day',
   });
 export type CreateMemberLeaveInput = z.infer<typeof createMemberLeaveSchema>;
 
 /** `PATCH /workspace/leaves/:id`. An active leave keeps its start; its end and reason can change. */
 export const updateMemberLeaveSchema = z
   .object({
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
     startsOn: leaveDaySchema.optional(),
     endsOn: leaveDaySchema.nullable().optional(),
     reason: z.string().trim().max(MEMBER_LEAVE_REASON_MAX).nullable().optional(),
   })
   .refine((v) => v.startsOn !== undefined || v.endsOn !== undefined || v.reason !== undefined, {
-    message: 'Nothing to change',
+    error: 'Nothing to change',
   });
 export type UpdateMemberLeaveInput = z.infer<typeof updateMemberLeaveSchema>;
 
@@ -73,7 +73,7 @@ export const listMemberLeavesQuerySchema = z.object({
   /** `open` (default): ongoing and coming up. `all`: with the ended and cancelled ones. */
   view: z.enum(['open', 'all']).default('open'),
   memberId: uuidSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(100),
+  limit: z.coerce.number().int().min(1).max(200).prefault(100),
 });
 export type ListMemberLeavesQuery = z.infer<typeof listMemberLeavesQuerySchema>;
 
@@ -113,8 +113,8 @@ export const memberLeaveOverviewSchema = z.object({
   /** What would be stranded while they are away: for the "Reassign" shortcut. Counted live; null when the caller may not know. */
   workload: z
     .object({
-      ownedContacts: z.number().int().nonnegative(),
-      openConversations: z.number().int().nonnegative(),
+      ownedContacts: z.int().nonnegative(),
+      openConversations: z.int().nonnegative(),
     })
     .nullable(),
   /** What the caller may do on this member. */

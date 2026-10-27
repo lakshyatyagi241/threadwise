@@ -15,8 +15,8 @@ export const LINE_MEDIA_KINDS = ['image', 'video', 'audio'] as const;
 export const lineAudienceUserSchema = z.object({
   userId: z.string(),
   title: z.string(),
-  lastMessageAt: z.string().datetime().nullable(),
-  unread: z.number().int(),
+  lastMessageAt: z.iso.datetime().nullable(),
+  unread: z.int(),
 });
 export type LineAudienceUser = z.infer<typeof lineAudienceUserSchema>;
 export const lineAudienceListSchema = z.object({ data: z.array(lineAudienceUserSchema) });
@@ -52,7 +52,7 @@ export const createLineBroadcastSchema = z.object({
   body: z.string().trim().max(5000).optional(),
   userIds: z.array(z.string().trim().min(1).max(64)).min(1).max(5000),
   /** One optional attachment sent as its own bubble before the message: a public address (LINE fetches it over https). */
-  mediaUrl: z.string().trim().url().max(2048).optional(),
+  mediaUrl: z.string().trim().pipe(z.url().max(2048)).optional(),
 });
 export type CreateLineBroadcastInput = z.infer<typeof createLineBroadcastSchema>;
 
@@ -63,20 +63,20 @@ export const lineBroadcastSchema = z.object({
   channelName: z.string().nullable(),
   templateId: uuidSchema.nullable(),
   status: z.enum(LINE_BROADCAST_STATUSES),
-  total: z.number().int(),
-  sent: z.number().int(),
-  failed: z.number().int(),
-  blocked: z.number().int(),
+  total: z.int(),
+  sent: z.int(),
+  failed: z.int(),
+  blocked: z.int(),
   /** Whole percent; blocked counts as done (nothing more can be done for them). */
-  progress: z.number().int(),
+  progress: z.int(),
   /** BL-191: people held for the workspace's quiet hours (still pending), and the first instant one of them may be messaged. */
-  held: z.number().int(),
-  heldUntil: z.string().datetime().nullable(),
+  held: z.int(),
+  heldUntil: z.iso.datetime().nullable(),
   hasMedia: z.boolean(),
   lastError: z.string().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type LineBroadcast = z.infer<typeof lineBroadcastSchema>;
 
@@ -84,14 +84,14 @@ export const lineBroadcastListSchema = z.object({
   data: z.array(lineBroadcastSchema),
   /** Across every broadcast of the workspace, not only the 50 listed. */
   stats: z.object({
-    total: z.number().int(),
-    sent: z.number().int(),
-    failed: z.number().int(),
-    blocked: z.number().int(),
-    audience: z.number().int(),
-    sending: z.number().int(),
+    total: z.int(),
+    sent: z.int(),
+    failed: z.int(),
+    blocked: z.int(),
+    audience: z.int(),
+    sending: z.int(),
   }),
 });
 export type LineBroadcastList = z.infer<typeof lineBroadcastListSchema>;
 
-export const retryLineBroadcastResponseSchema = z.object({ retried: z.number().int() });
+export const retryLineBroadcastResponseSchema = z.object({ retried: z.int() });

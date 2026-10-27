@@ -425,7 +425,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       JSON.stringify({
         at: Date.now(),
         devices: this.owned.size,
-        // What a reader needs to divide this process's memory by the sessions that are really open (V-01, V-02).
+        // What a reader needs to divide the memory of this process by the sessions that are really open (V-01, V-02).
         ready: [...this.owned.values()].filter((o) => o.session.isReady).length,
         unloaded: [...this.owned.values()].filter((o) => o.session.isUnloaded).length,
         rssMb: Math.round(process.memoryUsage().rss / 1048576),

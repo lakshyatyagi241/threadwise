@@ -54,7 +54,7 @@ export const expenseFilterSchema = z.object({
 export type ExpenseFilter = z.infer<typeof expenseFilterSchema>;
 
 export const expenseListQuerySchema = expenseFilterSchema.extend({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ExpenseListQuery = z.infer<typeof expenseListQuerySchema>;
@@ -66,7 +66,7 @@ export type ExpenseSummaryQuery = z.infer<typeof expenseSummaryQuerySchema>;
 
 /** The day log pages by day, not by row: a day's groups always arrive together. `cursor` is the last day of the previous page. */
 export const expenseDaysQuerySchema = expenseFilterSchema.extend({
-  limit: z.coerce.number().int().min(1).max(31).default(14),
+  limit: z.coerce.number().int().min(1).max(31).prefault(14),
   cursor: isoDay.optional(),
 });
 export type ExpenseDaysQuery = z.infer<typeof expenseDaysQuerySchema>;
@@ -77,7 +77,7 @@ export const expenseEventSchema = z.object({
   /** What this expense is for. */
   kind: walletUsageKindSchema,
   /** What the price was taken over: segments, minutes; 1 for a message, an email or an AI call. */
-  units: z.number().int().min(0),
+  units: z.int().min(0),
   createdAt: z.string(),
   status: expenseStatusSchema,
   billingMode: walletBillingModeSchema,
@@ -92,16 +92,16 @@ export const expenseEventSchema = z.object({
   template: z.string().nullable(),
   subjectName: z.string().nullable(),
   /** What the wallet took for this message, in hundredths, and to the ledger's exact precision. */
-  chargedMinor: z.number().int(),
+  chargedMinor: z.int(),
   chargedExact: exactAmountSchema.optional(),
   /** What came back when the message failed. */
-  refundedMinor: z.number().int(),
+  refundedMinor: z.int(),
   refundedExact: exactAmountSchema.optional(),
   /** Charged minus refunded: what this message cost in the end. */
-  netMinor: z.number().int(),
+  netMinor: z.int(),
   netExact: exactAmountSchema.optional(),
   /** Part of the price the balance could not cover (it ran out mid-message). */
-  uncollectedMinor: z.number().int(),
+  uncollectedMinor: z.int(),
   refundedAt: z.string().nullable(),
 });
 export type ExpenseEvent = z.infer<typeof expenseEventSchema>;
@@ -116,18 +116,18 @@ export type ExpenseListResponse = z.infer<typeof expenseListResponseSchema>;
 /** One line of the summary: the totals of the messages that share one value of the grouped dimension. `key` null = not recorded. */
 export const expenseGroupSchema = z.object({
   key: z.string().nullable(),
-  messages: z.number().int(),
+  messages: z.int(),
   /** Messages that were billed at some point (`charged` and `refunded`). */
-  charged: z.number().int(),
+  charged: z.int(),
   /** Billed messages that were reversed. */
-  refunded: z.number().int(),
+  refunded: z.int(),
   /** Messages the plan or the wallet did not bill. */
-  free: z.number().int(),
-  chargedMinor: z.number().int(),
+  free: z.int(),
+  chargedMinor: z.int(),
   chargedExact: exactAmountSchema.optional(),
-  refundedMinor: z.number().int(),
+  refundedMinor: z.int(),
   refundedExact: exactAmountSchema.optional(),
-  netMinor: z.number().int(),
+  netMinor: z.int(),
   netExact: exactAmountSchema.optional(),
 });
 export type ExpenseGroup = z.infer<typeof expenseGroupSchema>;
@@ -150,12 +150,12 @@ export const expenseDayGroupSchema = z.object({
   status: expenseStatusSchema,
   source: z.string().nullable(),
   category: z.string().nullable(),
-  messages: z.number().int(),
-  chargedMinor: z.number().int(),
+  messages: z.int(),
+  chargedMinor: z.int(),
   chargedExact: exactAmountSchema.optional(),
-  refundedMinor: z.number().int(),
+  refundedMinor: z.int(),
   refundedExact: exactAmountSchema.optional(),
-  netMinor: z.number().int(),
+  netMinor: z.int(),
   netExact: exactAmountSchema.optional(),
 });
 export type ExpenseDayGroup = z.infer<typeof expenseDayGroupSchema>;

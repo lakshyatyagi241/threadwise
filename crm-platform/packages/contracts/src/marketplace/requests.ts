@@ -11,16 +11,14 @@ import { marketLinkSchema } from './manifest';
  * Asking and voting need `market.apps.read`.
  */
 
-export const createMarketRequestSchema = z
-  .object({
-    name: z.string().trim().min(2).max(80),
-    kind: marketAppKindSchema.default('integration'),
-    categorySlug: marketSlugSchema.optional(),
-    website: marketLinkSchema.optional(),
-    /** What the workspace wants it for. Visible to the platform operator only. */
-    note: z.string().trim().max(500).optional(),
-  })
-  .strict();
+export const createMarketRequestSchema = z.strictObject({
+  name: z.string().trim().min(2).max(80),
+  kind: marketAppKindSchema.default('integration'),
+  categorySlug: marketSlugSchema.optional(),
+  website: marketLinkSchema.optional(),
+  /** What the workspace wants it for. Visible to the platform operator only. */
+  note: z.string().trim().max(500).optional(),
+});
 export type CreateMarketRequestInput = z.infer<typeof createMarketRequestSchema>;
 
 export const marketRequestListQuerySchema = z.object({
@@ -28,7 +26,7 @@ export const marketRequestListQuerySchema = z.object({
   kind: marketAppKindSchema.optional(),
   status: marketRequestStatusSchema.optional(),
   sort: z.enum(['votes', 'new']).default('votes'),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type MarketRequestListQuery = z.infer<typeof marketRequestListQuerySchema>;
@@ -39,10 +37,10 @@ export const marketRequestSchema = z.object({
   kind: marketAppKindSchema,
   categorySlug: z.string().nullable(),
   status: marketRequestStatusSchema,
-  voteCount: z.number().int(),
+  voteCount: z.int(),
   /** This workspace has voted for (or created) the request. */
   hasVoted: z.boolean(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type MarketRequest = z.infer<typeof marketRequestSchema>;
 

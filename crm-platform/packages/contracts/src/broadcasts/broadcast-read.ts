@@ -14,7 +14,7 @@ export const BROADCAST_RANGES = ['all', '7d', '30d', '90d'] as const;
 
 /** Reference listed 12 per page; a cursor page of the same size is the default. */
 export const listBroadcastsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({
-  limit: z.coerce.number().int().min(1).max(100).default(12),
+  limit: z.coerce.number().int().min(1).max(100).prefault(12),
   /** Any status string, compared for equality (scheduled, processing, completed, completed_with_errors, failed, paused). */
   status: z.string().trim().min(1).max(40).optional(),
   range: z.enum(BROADCAST_RANGES).default('all'),
@@ -30,7 +30,7 @@ export const broadcastListItemSchema = broadcastResponseSchema.extend({
 });
 export type BroadcastListItem = z.infer<typeof broadcastListItemSchema>;
 export const listBroadcastsResponseSchema = pageResponseSchema(broadcastListItemSchema).extend({
-  meta: z.object({ total: z.number().int() }).optional(),
+  meta: z.object({ total: z.int() }).optional(),
 });
 export type ListBroadcastsResponse = z.infer<typeof listBroadcastsResponseSchema>;
 
@@ -38,24 +38,24 @@ export type ListBroadcastsResponse = z.infer<typeof listBroadcastsResponseSchema
 export const broadcastSummarySchema = z.object({
   stats: z.object({
     /** Number of broadcasts. */
-    total: z.number().int(),
+    total: z.int(),
     /** Sum of the audience sizes. */
-    recipients: z.number().int(),
-    sent: z.number().int(),
-    delivered: z.number().int(),
-    read: z.number().int(),
-    failed: z.number().int(),
-    clicked: z.number().int(),
+    recipients: z.int(),
+    sent: z.int(),
+    delivered: z.int(),
+    read: z.int(),
+    failed: z.int(),
+    clicked: z.int(),
     /** Recipients being sent or sent and not yet delivered. */
-    processing: z.number().int(),
+    processing: z.int(),
     /** Recipients waiting to be sent. */
-    queued: z.number().int(),
+    queued: z.int(),
     /** delivered / sent, read / delivered, failed / sent: one decimal, 0 when the base is 0. */
     deliveryPct: z.number(),
     readPct: z.number(),
     failedPct: z.number(),
   }),
-  statusCounts: z.record(z.number().int()),
+  statusCounts: z.record(z.string(), z.int()),
 });
 export type BroadcastSummary = z.infer<typeof broadcastSummarySchema>;
 
@@ -77,17 +77,17 @@ export const IN_FLIGHT_STATUSES = [
 
 export const broadcastLiveStatsSchema = z.object({
   status: z.string(),
-  total: z.number().int(),
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  failed: z.number().int(),
-  queued: z.number().int(),
+  total: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  failed: z.int(),
+  queued: z.int(),
   /** Of `queued`, the recipients waiting for the end of the workspace's quiet hours (BL-177). */
-  held: z.number().int().optional(),
+  held: z.int().optional(),
   pct: pctSchema,
   inFlight: z.boolean(),
-  fetchedAt: z.string().datetime(),
+  fetchedAt: z.iso.datetime(),
 });
 export type BroadcastLiveStats = z.infer<typeof broadcastLiveStatsSchema>;
 
@@ -110,47 +110,47 @@ export const broadcastDetailSchema = z.object({
   sender: z.object({ engine: z.string(), label: z.string(), phone: z.string() }).nullable(),
   /** From the recipient rows: total is the number of rows, sent includes delivered and read, delivered includes read. */
   counts: z.object({
-    total: z.number().int(),
-    sent: z.number().int(),
-    delivered: z.number().int(),
-    read: z.number().int(),
-    failed: z.number().int(),
-    queued: z.number().int(),
+    total: z.int(),
+    sent: z.int(),
+    delivered: z.int(),
+    read: z.int(),
+    failed: z.int(),
+    queued: z.int(),
     /** Of `queued`, the recipients held for the quiet hours: not failed, not lost, they go when the hours open (BL-177). */
-    held: z.number().int().optional(),
+    held: z.int().optional(),
     /** Contacts who tapped a tracked link (TW-BCAST-042). */
-    clicked: z.number().int(),
+    clicked: z.int(),
   }),
   /** `clicked` is the click-through rate: contacts who clicked over delivered. */
   pct: pctSchema.extend({ clicked: z.number() }),
   donut: z.object({
     labels: z.array(z.string()),
-    series: z.array(z.number().int()),
+    series: z.array(z.int()),
     /** round((total - failed - queued) / total x 100). */
-    successPct: z.number().int(),
+    successPct: z.int(),
   }),
   /** Hourly buckets in the broadcast's own time zone, at most 24, labelled `H:00`. */
   deliveryCurve: z.object({
     labels: z.array(z.string()),
-    sent: z.array(z.number().int()),
-    delivered: z.array(z.number().int()),
-    read: z.array(z.number().int()),
+    sent: z.array(z.int()),
+    delivered: z.array(z.int()),
+    read: z.array(z.int()),
   }),
   /** Top 8 failure reasons by count, the rest summed into `Other`. */
-  failureReasons: z.array(z.object({ reason: z.string(), count: z.number().int() })),
+  failureReasons: z.array(z.object({ reason: z.string(), count: z.int() })),
   /** Why a paused broadcast stopped, and when it can resume by itself (a daily cap, the quiet hours); null when it is not paused. */
   pause: z
     .object({
       reason: z.enum(['daily_cap', 'halt', 'quiet_hours', 'manual']),
-      at: z.string().datetime(),
-      resumeAfter: z.string().datetime().nullable(),
+      at: z.iso.datetime(),
+      resumeAfter: z.iso.datetime().nullable(),
     })
     .nullable(),
   events: z.object({
-    createdAt: z.string().datetime(),
-    scheduledAt: z.string().datetime().nullable(),
+    createdAt: z.iso.datetime(),
+    scheduledAt: z.iso.datetime().nullable(),
     status: z.string(),
-    completedAt: z.string().datetime().nullable(),
+    completedAt: z.iso.datetime().nullable(),
   }),
 });
 export type BroadcastDetail = z.infer<typeof broadcastDetailSchema>;
@@ -158,7 +158,7 @@ export type BroadcastDetail = z.infer<typeof broadcastDetailSchema>;
 export const listBroadcastRecipientsQuerySchema = paginationQuerySchema
   .omit({ order: true })
   .extend({
-    limit: z.coerce.number().int().min(1).max(200).default(50),
+    limit: z.coerce.number().int().min(1).max(200).prefault(50),
     status: z.string().trim().min(1).max(40).optional(),
     /** Name or phone, case-insensitive substring. */
     q: z.string().trim().min(1).max(100).optional(),
@@ -173,15 +173,15 @@ export const broadcastRecipientSchema = z.object({
   status: z.string(),
   error: z.string().nullable(),
   providerMessageId: z.string().nullable(),
-  queuedAt: z.string().datetime(),
+  queuedAt: z.iso.datetime(),
   /** While the recipient waits for the quiet hours to end (BL-177): when it may go and why. Null otherwise. */
-  heldUntil: z.string().datetime().nullable().optional(),
+  heldUntil: z.iso.datetime().nullable().optional(),
   heldReason: sendHoldReasonSchema.nullable().optional(),
-  sentAt: z.string().datetime().nullable(),
-  deliveredAt: z.string().datetime().nullable(),
-  readAt: z.string().datetime().nullable(),
-  clicks: z.number().int(),
-  lastClickAt: z.string().datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
+  deliveredAt: z.iso.datetime().nullable(),
+  readAt: z.iso.datetime().nullable(),
+  clicks: z.int(),
+  lastClickAt: z.iso.datetime().nullable(),
 });
 export type BroadcastRecipient = z.infer<typeof broadcastRecipientSchema>;
 export const listBroadcastRecipientsResponseSchema = pageResponseSchema(broadcastRecipientSchema);
@@ -192,7 +192,7 @@ export const DELETABLE_STATUSES = ['scheduled', 'failed'] as const;
 
 export const retryBroadcastResponseSchema = z.object({
   /** Recipients put back to `pending`. */
-  retried: z.number().int(),
+  retried: z.int(),
   status: z.string(),
 });
 export type RetryBroadcastResponse = z.infer<typeof retryBroadcastResponseSchema>;

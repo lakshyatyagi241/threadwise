@@ -53,7 +53,7 @@ export const listLeadEventsQuerySchema = z.object({
     .enum(['true', 'false'])
     .transform((v) => v === 'true')
     .optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type ListLeadEventsQuery = z.infer<typeof listLeadEventsQuerySchema>;
@@ -71,12 +71,12 @@ export const leadEventResponseSchema = z.object({
   dealId: uuidSchema.nullable(),
   /** The raw payload is kept for the source's retention period, then purged: `false` after that. */
   hasPayload: z.boolean(),
-  payloadExpiresAt: z.string().datetime().nullable(),
-  attempts: z.number().int(),
+  payloadExpiresAt: z.iso.datetime().nullable(),
+  attempts: z.int(),
   /** How many times the same lead was delivered again and acknowledged without writing anything. */
-  duplicateCount: z.number().int(),
-  receivedAt: z.string().datetime(),
-  processedAt: z.string().datetime().nullable(),
+  duplicateCount: z.int(),
+  receivedAt: z.iso.datetime(),
+  processedAt: z.iso.datetime().nullable(),
   /** The automatic first message of this lead and where it stands; null when the source sends none (or it was switched off at the time). */
   firstReply: leadFirstReplyResponseSchema.nullable(),
 });
@@ -90,7 +90,7 @@ export type LeadEventListResponse = z.infer<typeof leadEventListResponseSchema>;
 
 /** One event with its stored payload. Opening it is audited: the payload is personal data. */
 export const leadEventDetailResponseSchema = leadEventResponseSchema.extend({
-  payload: z.record(z.unknown()).nullable(),
+  payload: z.record(z.string(), z.unknown()).nullable(),
 });
 export type LeadEventDetailResponse = z.infer<typeof leadEventDetailResponseSchema>;
 
@@ -116,7 +116,7 @@ export const attributionTouchSchema = z.object({
   moduleType: z.string().nullable().optional(),
   /** The lead source it came through; null once that source was deleted. */
   leadSourceId: uuidSchema.nullable(),
-  capturedAt: z.string().datetime(),
+  capturedAt: z.iso.datetime(),
 });
 export type AttributionTouch = z.infer<typeof attributionTouchSchema>;
 
@@ -127,6 +127,6 @@ export const contactAttributionResponseSchema = z.object({
   latest: attributionTouchSchema.nullable(),
   /** Every touch, newest first (at most 50). */
   touches: z.array(attributionTouchSchema),
-  total: z.number().int().min(0),
+  total: z.int().min(0),
 });
 export type ContactAttributionResponse = z.infer<typeof contactAttributionResponseSchema>;

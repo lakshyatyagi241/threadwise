@@ -7,7 +7,7 @@ import { toApiError } from '@/lib/api/errors';
  * demands the same type on both sides. The cast below is the one place that difference is bridged.
  */
 export type ApiRequest<T> = Omit<BaseRequest<T>, 'schema'> & {
-  schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
+  schema?: z.ZodType<T, unknown>;
 };
 
 /**

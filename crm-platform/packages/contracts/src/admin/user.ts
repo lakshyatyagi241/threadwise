@@ -41,9 +41,9 @@ export const userResponseSchema = z.object({
    * themself; deactivated managers are left out.
    */
   managers: z.array(userManagerRefSchema),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type UserResponse = z.infer<typeof userResponseSchema>;
 
@@ -61,7 +61,7 @@ export const updateUserSchema = z.object({
   status: userStatusSchema.optional(),
   /** Full replacement of the user's role set, when present. */
   roleIds: z.array(uuidSchema).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 

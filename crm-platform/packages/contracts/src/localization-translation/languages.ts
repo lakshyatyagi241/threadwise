@@ -11,8 +11,8 @@ export const languageItemSchema = z.object({
   direction: textDirectionSchema,
   isActive: z.boolean(),
   isDefault: z.boolean(),
-  sortOrder: z.number().int(),
-  rowVersion: z.number().int(),
+  sortOrder: z.int(),
+  rowVersion: z.int(),
 });
 export type LanguageItem = z.infer<typeof languageItemSchema>;
 
@@ -20,8 +20,8 @@ export type LanguageItem = z.infer<typeof languageItemSchema>;
 export const languageListResponseSchema = z.object({
   data: z.array(languageItemSchema),
   stats: z.object({
-    total: z.number().int(),
-    active: z.number().int(),
+    total: z.int(),
+    active: z.int(),
     defaultCode: z.string(),
   }),
 });
@@ -33,14 +33,14 @@ export const updateLanguageRequestSchema = z.object({
   nativeName: z.string().trim().max(80).nullable(),
   direction: textDirectionSchema,
   isActive: z.boolean(),
-  sortOrder: z.number().int().min(0).max(32767),
-  rowVersion: z.number().int().positive(),
+  sortOrder: z.int().min(0).max(32767),
+  rowVersion: z.int().positive(),
 });
 export type UpdateLanguageRequest = z.infer<typeof updateLanguageRequestSchema>;
 
 /** Toggle, set-default and delete carry the version the operator saw, so a stale page cannot act on a newer state. */
 export const languageVersionRequestSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type LanguageVersionRequest = z.infer<typeof languageVersionRequestSchema>;
 

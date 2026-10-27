@@ -8,7 +8,7 @@ import { uuidSchema } from '../common/ids';
 
 export const SMS_PROVIDERS = ['twilio', 'msg91'] as const;
 export const smsProviderSchema = z.enum(SMS_PROVIDERS, {
-  errorMap: () => ({ message: 'The selected sms provider is invalid.' }),
+  error: () => 'The selected sms provider is invalid.',
 });
 export type SmsProvider = z.infer<typeof smsProviderSchema>;
 
@@ -54,8 +54,8 @@ export const smsSenderResponseSchema = z.object({
   lastError: z.string().nullable(),
   /** MSG91 only: the address for THIS sender's delivery reports (it carries a secret, so each sender has its own). Null for Twilio, which is told per message. */
   deliveryReportUrl: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
-  rowVersion: z.number().int(),
+  connectedAt: z.iso.datetime().nullable(),
+  rowVersion: z.int(),
 });
 export type SmsSenderResponse = z.infer<typeof smsSenderResponseSchema>;
 
@@ -70,7 +70,7 @@ export type SmsSenderListResponse = z.infer<typeof smsSenderListResponseSchema>;
 
 export const toggleSmsSenderSchema = z.object({
   active: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ToggleSmsSenderInput = z.infer<typeof toggleSmsSenderSchema>;
 

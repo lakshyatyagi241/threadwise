@@ -47,19 +47,19 @@ export type MarginSource = 'workspace' | 'plan' | 'platform';
 export const marginScopeSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('platform') }),
   z.object({ type: z.literal('plan'), planSlug: z.string() }),
-  z.object({ type: z.literal('workspace'), workspaceId: z.string().uuid() }),
+  z.object({ type: z.literal('workspace'), workspaceId: z.guid() }),
 ]);
 
 export const marginRowSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   countryCode: z.string(),
   countryName: z.string(),
   category: rateCategorySchema,
-  marginBps: z.number().int(),
+  marginBps: z.int(),
   /** Meta's cost for this country and category, a decimal string; null = unknown (the fixed price applies instead). */
   metaCost: z.string().nullable(),
   /** What a message costs the customer at this margin, hundredths; null when Meta's cost is unknown. */
-  priceMinor: z.number().int().nullable(),
+  priceMinor: z.int().nullable(),
   /** Workspace overrides only: why, and who. */
   note: z.string().nullable(),
   setBy: z.string().nullable(),
@@ -99,27 +99,29 @@ export type SavePlanMarginsInput = z.infer<typeof savePlanMarginsSchema>;
 export const saveWorkspaceMarginsSchema = z
   .object({
     rows: z.array(marginInputSchema).max(500).default([]),
-    removeIds: z.array(z.string().uuid()).max(500).default([]),
+    removeIds: z.array(z.guid()).max(500).default([]),
     note: z
       .string()
       .trim()
       .min(WALLET_LIMITS.noteMin, `Say why in at least ${WALLET_LIMITS.noteMin} characters`)
       .max(WALLET_LIMITS.noteMax),
   })
-  .refine((v) => v.rows.length > 0 || v.removeIds.length > 0, { message: 'Nothing to save' });
+  .refine((v) => v.rows.length > 0 || v.removeIds.length > 0, {
+    error: 'Nothing to save',
+  });
 export type SaveWorkspaceMarginsInput = z.infer<typeof saveWorkspaceMarginsSchema>;
 
 export const saveMarginsResultSchema = z.object({
-  saved: z.number().int(),
-  removed: z.number().int(),
-  skipped: z.array(z.object({ index: z.number().int(), reason: z.string() })),
+  saved: z.int(),
+  removed: z.int(),
+  skipped: z.array(z.object({ index: z.int(), reason: z.string() })),
 });
 export type SaveMarginsResult = z.infer<typeof saveMarginsResultSchema>;
 
 export const removePlanMarginResultSchema = z.object({ deleted: z.boolean() });
 
 export const pricePreviewQuerySchema = z.object({
-  workspaceId: z.string().uuid().optional(),
+  workspaceId: z.guid().optional(),
   country: z
     .string()
     .trim()
@@ -137,11 +139,11 @@ export const pricePreviewSchema = z.object({
   country: z.string(),
   category: z.string(),
   metaCost: z.string().nullable(),
-  marginBps: z.number().int().nullable(),
+  marginBps: z.int().nullable(),
   marginSource: z.enum(['workspace', 'plan', 'platform']).nullable(),
   /** Which margin row matched, e.g. `IN|marketing`. */
   matchedMargin: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   /** `margin` when Meta cost x margin set it, `fixed` when a typed price or the flat price did. */
   basis: z.enum(['margin', 'fixed']),
   matchedPrice: z.string(),

@@ -62,7 +62,7 @@ export const previousSendsAudienceSchema = z
     // A broadcast keeps no replies or clicks, so it cannot be narrowed by them (it would silently match nobody).
     if (v.sends.some((s) => !previousOutcomeAllowed(s.kind, v.outcome))) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['outcome'],
         message: 'previous_outcome_unsupported',
       });
@@ -80,12 +80,12 @@ export const previousSendOptionSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   /** When it went out (or was last worked), ISO; null when unknown. */
-  at: z.string().datetime().nullable(),
-  recipients: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  replied: z.number().int().nullable(),
-  clicked: z.number().int().nullable(),
-  failed: z.number().int(),
+  at: z.iso.datetime().nullable(),
+  recipients: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  replied: z.int().nullable(),
+  clicked: z.int().nullable(),
+  failed: z.int(),
 });
 export type PreviousSendOption = z.infer<typeof previousSendOptionSchema>;

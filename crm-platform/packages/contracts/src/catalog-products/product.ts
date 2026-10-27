@@ -116,11 +116,11 @@ export const productResponseSchema = productVariantsResponseSchema.extend({
   slug: z.string(),
   description: z.string().nullable(),
   bodyHtml: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   /** `priceMinor / 100` as a plain decimal string ("1299" or "1299.5"), what the form shows back. */
   priceMajor: z.string(),
   priceDisplay: z.string(),
-  comparePriceMinor: z.number().int().nullable(),
+  comparePriceMinor: z.int().nullable(),
   comparePriceMajor: z.string().nullable(),
   comparePriceDisplay: z.string().nullable(),
   /** Compare price above the price. */
@@ -130,13 +130,13 @@ export const productResponseSchema = productVariantsResponseSchema.extend({
   galleryUrls: z.array(z.string()),
   inStock: z.boolean(),
   /** Null means unlimited. */
-  stockQty: z.number().int().nullable(),
-  reservedQty: z.number().int(),
+  stockQty: z.int().nullable(),
+  reservedQty: z.int(),
   /** `stockQty - reservedQty`, never below 0; null when stock is unlimited. */
-  availableQty: z.number().int().nullable(),
-  sortOrder: z.number().int(),
+  availableQty: z.int().nullable(),
+  sortOrder: z.int(),
   status: productStatusSchema,
-  weightGrams: z.number().int().nullable(),
+  weightGrams: z.int().nullable(),
   category: z.string().nullable(),
   tags: z.array(z.string()),
   aliases: z.array(z.string()),
@@ -152,11 +152,11 @@ export const productResponseSchema = productVariantsResponseSchema.extend({
   retailerId: z.string(),
   metaRetailerId: z.string().nullable(),
   metaSyncStatus: z.string().nullable(),
-  metaSyncedAt: z.string().datetime().nullable(),
+  metaSyncedAt: z.iso.datetime().nullable(),
   metaLastError: z.string().nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type ProductResponse = z.infer<typeof productResponseSchema>;
 
@@ -167,7 +167,7 @@ const majorAmount = z
   .pipe(z.string().regex(/^\d+(\.\d+)?$/, 'Enter a number'))
   .refine((v) => Number(v) <= PRODUCT_PRICE_MAX, `At most ${PRODUCT_PRICE_MAX}`);
 
-const optionalUrl = z.string().trim().url().max(1024);
+const optionalUrl = z.string().trim().pipe(z.url().max(1024));
 
 /** A product as the form sends it (create and update share the fields). */
 export const productFieldsSchema = z.object({
@@ -179,10 +179,10 @@ export const productFieldsSchema = z.object({
   comparePriceMajor: majorAmount.nullish(),
   currencyCode: productCurrencySchema,
   inStock: z.boolean().default(true),
-  stockQty: z.number().int().min(0).max(1_000_000).nullish(),
-  sortOrder: z.number().int().min(0).max(9999).nullish(),
+  stockQty: z.int().min(0).max(1_000_000).nullish(),
+  sortOrder: z.int().min(0).max(9999).nullish(),
   status: productStatusSchema.default('active'),
-  weightGrams: z.number().int().min(0).max(1_000_000).nullish(),
+  weightGrams: z.int().min(0).max(1_000_000).nullish(),
   category: waString(96).nullish(),
   /** Free tags; trimmed, de-duplicated, blanks dropped by the server. A tag may be as long as the whole tags box (1024). */
   tags: z.array(waTag(PRODUCT_TAGS_MAX)).max(512).default([]),
@@ -199,12 +199,12 @@ export const createProductSchema = productFieldsSchema.and(productVariantsFields
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 
 export const updateProductSchema = productFieldsSchema
-  .extend({ rowVersion: z.number().int().min(1) })
+  .extend({ rowVersion: z.int().min(1) })
   .and(productVariantsFieldsSchema);
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 
 export const listProductsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({
-  limit: z.coerce.number().int().min(1).max(100).default(PRODUCTS_PAGE_SIZE),
+  limit: z.coerce.number().int().min(1).max(100).prefault(PRODUCTS_PAGE_SIZE),
   /** Case-insensitive substring of the name or the SKU. */
   q: z.string().trim().min(1).max(100).optional(),
   includeTotal: queryBoolean().default(false),
@@ -212,7 +212,7 @@ export const listProductsQuerySchema = paginationQuerySchema.omit({ order: true 
 export type ListProductsQuery = z.infer<typeof listProductsQuerySchema>;
 
 export const listProductsResponseSchema = pageResponseSchema(productResponseSchema).extend({
-  meta: z.object({ total: z.number().int() }).optional(),
+  meta: z.object({ total: z.int() }).optional(),
 });
 export type ListProductsResponse = z.infer<typeof listProductsResponseSchema>;
 
@@ -223,7 +223,7 @@ export const productPickerItemSchema = z.object({
   sku: z.string().nullable(),
   imageUrl: z.string().nullable(),
   category: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   priceDisplay: z.string(),
   currency: z.string(),
   retailerId: z.string(),

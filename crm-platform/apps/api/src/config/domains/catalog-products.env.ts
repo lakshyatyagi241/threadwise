@@ -14,11 +14,11 @@ const catalogEnvSchema = z.object({
     .regex(/^v\d{1,2}\.\d{1,2}$/, 'Use a Graph API version such as v23.0')
     .default('v23.0'),
   /** Reference's `baileys_server_url` (else `SERVER_URL`), default `http://localhost:8888`. */
-  BAILEYS_SERVER_URL: z.string().url().default('http://localhost:8888'),
+  BAILEYS_SERVER_URL: z.url().default('http://localhost:8888'),
   /** Sent as `X-Node-Token` when set. */
   BAILEYS_SERVER_TOKEN: z.string().min(1).optional(),
   /** How often the Meta resync sweep runs (TW-CAT-013); Reference recommended hourly. */
-  CAT_RESYNC_INTERVAL_MS: z.coerce.number().int().min(60_000).default(3_600_000),
+  CAT_RESYNC_INTERVAL_MS: z.coerce.number().int().min(60_000).prefault(3_600_000),
   /** The Meta app and its catalog login configuration (see META_CATALOGUE_CONFIG_ID); the same app WhatsApp Embedded Signup uses. */
   META_APP_ID: z.string().optional(),
   META_APP_SECRET: z.string().optional(),

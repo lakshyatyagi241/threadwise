@@ -23,14 +23,14 @@ export const consentExportSchema = z.object({
   id: uuidSchema,
   status: consentExportStatusSchema,
   /** Rows in the file, once it is ready. */
-  rowCount: z.number().int().nonnegative().nullable(),
-  fileBytes: z.number().int().nonnegative().nullable(),
+  rowCount: z.int().nonnegative().nullable(),
+  fileBytes: z.int().nonnegative().nullable(),
   /** A sentence for a failed export. */
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
   /** After this the file is deleted and the export is `expired`. */
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   /** The address the file was announced to. */
   emailedTo: z.string().nullable(),
 });
@@ -39,7 +39,7 @@ export type ConsentExport = z.infer<typeof consentExportSchema>;
 export const consentExportListSchema = z.object({
   data: z.array(consentExportSchema),
   /** Events in the ledger, counted up to CONSENT_EXPORT_SYNC_MAX + 1: above CONSENT_EXPORT_SYNC_MAX the direct download is cut short. */
-  ledgerRows: z.number().int().nonnegative(),
+  ledgerRows: z.int().nonnegative(),
   /** True when `ledgerRows` is more than the direct download carries: the screen offers the prepared file instead. */
   needsAsync: z.boolean(),
 });

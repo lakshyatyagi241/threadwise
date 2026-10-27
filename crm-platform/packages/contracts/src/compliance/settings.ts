@@ -14,7 +14,7 @@ const optionalHttpsUrl = z
   .transform((v) => (v ? v : null));
 
 const text = (max: number) => z.string().trim().max(max);
-const emailOrEmpty = z.union([z.literal(''), z.string().trim().max(200).email()]);
+const emailOrEmpty = z.union([z.literal(''), z.string().trim().max(200).pipe(z.email())]);
 
 /** The person a regulator or a data subject can reach: a data protection officer, a privacy contact, a grievance officer. */
 export const officerContactSchema = z.object({
@@ -67,7 +67,7 @@ export const callingWindowSchema = z.object({
   end: complianceClockSchema,
   /** ISO weekdays, 1 Monday to 7 Sunday. */
   days: z
-    .array(z.number().int().min(1).max(7))
+    .array(z.int().min(1).max(7))
     .max(7)
     .transform((d) => [...new Set(d)].sort((a, b) => a - b)),
 });
@@ -115,7 +115,7 @@ export type ComplianceSettingsValues = z.infer<typeof complianceSettingsValuesSc
 export const updateComplianceSettingsSchema = z.object({
   ...settingsFields,
   /** The version that was read; absent on the first save. */
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateComplianceSettingsInput = z.infer<typeof updateComplianceSettingsSchema>;
 
@@ -143,7 +143,7 @@ export const SUGGESTION_SOURCES = ['billing', 'onboarding'] as const;
 
 export const complianceSettingsSchema = complianceSettingsValuesSchema.extend({
   /** Null until the first save. */
-  rowVersion: z.number().int().nullable(),
+  rowVersion: z.int().nullable(),
   updatedAt: z.string().nullable(),
   /** When a person last confirmed the profile choice; null = never confirmed (the profiles shown are only the suggestion). */
   regimesConfirmedAt: z.string().nullable(),
@@ -191,13 +191,13 @@ export const subprocessorInputSchema = z.object({
 export type SubprocessorInput = z.infer<typeof subprocessorInputSchema>;
 
 export const updateSubprocessorSchema = subprocessorInputSchema.extend({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateSubprocessorInput = z.infer<typeof updateSubprocessorSchema>;
 
 export const subprocessorSchema = subprocessorInputSchema.extend({
   id: uuidSchema,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

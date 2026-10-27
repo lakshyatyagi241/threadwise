@@ -64,7 +64,7 @@ export type Invitee = z.infer<typeof inviteeSchema>;
 /** The invitee as typed: a name, and at least a phone or an email so there is somebody to tell. */
 export const inviteeInputSchema = z.object({
   name: z.string().trim().min(1).max(191),
-  email: z.string().trim().toLowerCase().email().max(191).nullish(),
+  email: z.string().trim().toLowerCase().pipe(z.email().max(191)).nullish(),
   /** Any phone format; it is normalised to E.164 (a number it cannot read is 422). */
   phone: z.string().trim().min(5).max(32).nullish(),
 });
@@ -93,7 +93,7 @@ export const appointmentPaymentSchema = z.object({
   /** A cancel or no-show fee recorded against the booking (never charged here). */
   feeRecorded: z.string(),
   /** When an unpaid pending booking stops holding its slot. */
-  holdExpiresAt: z.string().datetime().nullable(),
+  holdExpiresAt: z.iso.datetime().nullable(),
 });
 export type AppointmentPayment = z.infer<typeof appointmentPaymentSchema>;
 
@@ -125,21 +125,21 @@ export type AppointmentReminderAttempt = z.infer<typeof appointmentReminderAttem
 /** A tap on one of the Confirm / Reschedule / Cancel buttons of a reminder that did something, and when. */
 export const appointmentReminderButtonReplySchema = z.object({
   action: z.enum(['confirm', 'reschedule', 'cancel']),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 export type AppointmentReminderButtonReply = z.infer<typeof appointmentReminderButtonReplySchema>;
 
 export const appointmentReminderSchema = z.object({
   kind: z.enum(['before', 'after', 'event']),
   stepKind: bookingReminderStepKindSchema.nullable().default(null),
-  offsetMinutes: z.number().int(),
+  offsetMinutes: z.int(),
   label: z.string().nullable(),
   /** The moment the message is due (start minus the offset, or end plus it). */
-  dueAt: z.string().datetime(),
+  dueAt: z.iso.datetime(),
   status: appointmentReminderStatusSchema,
   reason: z.string().nullable(),
   channel: bookingReminderRecordChannelSchema.nullable(),
-  sentAt: z.string().datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
   /** The channels tried, in order, with the reason each was used or skipped. */
   attempts: z.array(appointmentReminderAttemptSchema).default([]),
   /** What the provider reported for the message afterwards (WhatsApp only): `unknown` while nothing is known. */
@@ -154,8 +154,8 @@ export const appointmentResponseSchema = z.object({
   status: appointmentStatusSchema,
   title: z.string(),
   description: z.string().nullable(),
-  startsAt: z.string().datetime(),
-  endsAt: z.string().datetime(),
+  startsAt: z.iso.datetime(),
+  endsAt: z.iso.datetime(),
   /** The booking type's zone at booking time (the one staff read the time in). */
   timezone: z.string(),
   /** The zone the invitee booked from, when they said. */
@@ -167,11 +167,11 @@ export const appointmentResponseSchema = z.object({
       id: uuidSchema,
       name: z.string(),
       color: z.string().nullable(),
-      durationMinutes: z.number().int(),
+      durationMinutes: z.int(),
       locationType: bookingLocationTypeSchema,
     })
     .nullable(),
-  seat: z.number().int(),
+  seat: z.int(),
   invitee: inviteeSchema,
   contact: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
   host: z.object({ id: uuidSchema, name: z.string() }).nullable(),
@@ -182,11 +182,11 @@ export const appointmentResponseSchema = z.object({
   payment: appointmentPaymentSchema,
   /** Confirmed, ended and nobody marked it completed or no-show. */
   needsReview: z.boolean(),
-  checkedInAt: z.string().datetime().nullable(),
-  statusChangedAt: z.string().datetime(),
-  cancelledAt: z.string().datetime().nullable(),
+  checkedInAt: z.iso.datetime().nullable(),
+  statusChangedAt: z.iso.datetime(),
+  cancelledAt: z.iso.datetime().nullable(),
   /** When the customer tapped Confirm on a reminder (a second fact next to the business confirming the booking); null until they do. */
-  customerConfirmedAt: z.string().datetime().nullable().optional(),
+  customerConfirmedAt: z.iso.datetime().nullable().optional(),
   cancelledBy: appointmentCancellerSchema.nullable(),
   cancelReason: z.string().nullable(),
   calendar: z.object({
@@ -199,9 +199,9 @@ export const appointmentResponseSchema = z.object({
   manageUrl: z.string().nullable(),
   /** The reminders and follow-ups of this booking and their outcome. Only on a single booking read, not on a list. */
   reminders: z.array(appointmentReminderSchema).optional(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type AppointmentResponse = z.infer<typeof appointmentResponseSchema>;
 
@@ -213,7 +213,7 @@ export type AppointmentPageResponse = z.infer<typeof appointmentPageResponseSche
 
 // --- requests ---------------------------------------------------------------------------------------------------------------
 
-const startsAt = z.string().datetime({ offset: true });
+const startsAt = z.iso.datetime({ offset: true });
 
 /** Staff book for a customer. The result is `confirmed` whatever the type's approval rule (staff are the approval). */
 export const createAppointmentSchema = z
@@ -235,8 +235,8 @@ export const createAppointmentSchema = z
     notify: z.boolean().default(true),
   })
   .refine((v) => v.contactId || v.invitee, {
-    message: 'send a contactId or an invitee',
     path: ['invitee'],
+    error: 'send a contactId or an invitee',
   });
 export type CreateAppointmentInput = z.infer<typeof createAppointmentSchema>;
 
@@ -249,11 +249,11 @@ export const updateAppointmentSchema = z.object({
   hostId: uuidSchema.nullish(),
   contactId: uuidSchema.nullish(),
   invitee: inviteeInputSchema.partial().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateAppointmentInput = z.infer<typeof updateAppointmentSchema>;
 
-const optionalVersion = z.number().int().positive().optional();
+const optionalVersion = z.int().positive().optional();
 
 export const rescheduleAppointmentSchema = z.object({
   startsAt,
@@ -299,13 +299,13 @@ const filterShape = {
   /** Hosted by the caller (the "my appointments" tab). */
   mine: queryBoolean().optional(),
   /** Starts at or after / before these instants. */
-  from: z.string().datetime({ offset: true }).optional(),
-  to: z.string().datetime({ offset: true }).optional(),
+  from: z.iso.datetime({ offset: true }).optional(),
+  to: z.iso.datetime({ offset: true }).optional(),
   needsReview: queryBoolean().optional(),
 };
 
 export const listAppointmentsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   /** `upcoming` (not started, pending or confirmed; soonest first), `past` (started; latest first), `all`. */
   scope: appointmentScopeSchema.default('upcoming'),
@@ -320,20 +320,20 @@ export const appointmentCountsQuerySchema = z.object(filterShape);
 export type AppointmentCountsQuery = z.infer<typeof appointmentCountsQuerySchema>;
 
 export const appointmentCountsResponseSchema = z.object({
-  pending: z.number().int(),
-  confirmed: z.number().int(),
-  cancelled: z.number().int(),
-  declined: z.number().int(),
-  completed: z.number().int(),
-  noShow: z.number().int(),
-  total: z.number().int(),
+  pending: z.int(),
+  confirmed: z.int(),
+  cancelled: z.int(),
+  declined: z.int(),
+  completed: z.int(),
+  noShow: z.int(),
+  total: z.int(),
   /** Pending or confirmed and not started yet (the "Upcoming" tab). */
-  upcoming: z.number().int(),
+  upcoming: z.int(),
   /** Started already, any status (the "Past" tab). */
-  past: z.number().int(),
-  needsReview: z.number().int(),
+  past: z.int(),
+  needsReview: z.int(),
   /** The caller's own upcoming bookings. */
-  mine: z.object({ upcoming: z.number().int() }),
+  mine: z.object({ upcoming: z.int() }),
 });
 export type AppointmentCountsResponse = z.infer<typeof appointmentCountsResponseSchema>;
 

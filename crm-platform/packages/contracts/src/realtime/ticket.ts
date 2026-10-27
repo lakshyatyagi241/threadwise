@@ -7,6 +7,6 @@ import { z } from 'zod';
  */
 export const realtimeTicketResponseSchema = z.object({
   ticket: z.string().min(16),
-  expiresIn: z.number().int().positive(),
+  expiresIn: z.int().positive(),
 });
 export type RealtimeTicketResponse = z.infer<typeof realtimeTicketResponseSchema>;

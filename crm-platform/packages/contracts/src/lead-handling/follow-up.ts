@@ -17,7 +17,7 @@ export const taskKindSchema = z.enum(TASK_KINDS);
 export type TaskKind = (typeof TASK_KINDS)[number];
 
 /** `PUT /contacts/:id/follow-up`: set or move the contact's next follow-up. `dueAt: null` makes it a "someday" follow-up. */
-export const setFollowUpSchema = z.object({ dueAt: z.string().datetime().nullable() });
+export const setFollowUpSchema = z.object({ dueAt: z.iso.datetime().nullable() });
 export type SetFollowUpInput = z.infer<typeof setFollowUpSchema>;
 
 /** `POST /contacts/:id/follow-up/snooze`: move it to the preset's day at the workspace's default alert time. */

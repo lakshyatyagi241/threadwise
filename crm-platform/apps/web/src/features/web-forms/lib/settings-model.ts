@@ -64,7 +64,7 @@ export function ownerRuleForMode(
 
 export type EmailIssue = 'empty' | 'invalid' | 'duplicate' | 'max';
 
-const emailSchema = z.string().max(254).email();
+const emailSchema = z.email().max(254);
 
 /** One address for the "also email" list: trimmed and lower-cased like the contract does, never twice, at most five. */
 export function checkEmail(

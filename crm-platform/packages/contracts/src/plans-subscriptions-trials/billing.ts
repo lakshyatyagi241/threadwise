@@ -50,14 +50,14 @@ export type PlanState = z.infer<typeof planStateSchema>;
 
 export const planValiditySchema = z.object({
   state: planStateSchema,
-  trialEndsAt: z.string().datetime().nullable(),
-  planEndsAt: z.string().datetime().nullable(),
+  trialEndsAt: z.iso.datetime().nullable(),
+  planEndsAt: z.iso.datetime().nullable(),
   /** Whole days, rounded up with a floor of 1 while the date is still ahead; null when there is no date. */
-  daysLeft: z.number().int().nullable(),
+  daysLeft: z.int().nullable(),
   /** In the last 7 days of a paid period (TW-PLAN-013 renewal bar). */
   renewalWindow: z.boolean(),
   /** In `paid_grace`: when access ends unless the next charge succeeds; otherwise null. */
-  graceEndsAt: z.string().datetime().nullable(),
+  graceEndsAt: z.iso.datetime().nullable(),
 });
 export type PlanValidity = z.infer<typeof planValiditySchema>;
 
@@ -85,13 +85,13 @@ export type BillingPlan = z.infer<typeof billingPlanSchema>;
 /** The workspace's renewing subscription, if any (TW-PLAN-012): it is what makes "Cancel auto-renew" appear. */
 export const billingSubscriptionSchema = z.object({
   status: z.enum(['active', 'past_due']),
-  renewsAt: z.string().datetime().nullable(),
+  renewsAt: z.iso.datetime().nullable(),
   /** The provider's id of the subscription (Zoho, Razorpay, ...), as the old subscription page showed it. */
   subscriptionId: z.string().nullable().optional(),
   /** When the subscription started. */
-  activatedAt: z.string().datetime().nullable().optional(),
+  activatedAt: z.iso.datetime().nullable().optional(),
   /** The last date the subscription was billed, when the provider or the import recorded it. */
-  previousBillingAt: z.string().datetime().nullable().optional(),
+  previousBillingAt: z.iso.datetime().nullable().optional(),
 });
 export type BillingSubscription = z.infer<typeof billingSubscriptionSchema>;
 
@@ -100,7 +100,7 @@ export const cancelSubscriptionResponseSchema = z.object({
   /** Whether the gateway was told: `ok`, `failed` (the local row is cancelled anyway, the operator reconciles) or `unsupported`. */
   remote: z.enum(['ok', 'failed', 'unsupported']),
   /** The paid period keeps running until this date. */
-  planEndsAt: z.string().datetime().nullable(),
+  planEndsAt: z.iso.datetime().nullable(),
 });
 export type CancelSubscriptionResponse = z.infer<typeof cancelSubscriptionResponseSchema>;
 
@@ -120,7 +120,7 @@ export const billingPlansResponseSchema = z.object({
   /** The add-ons available on the workspace's current plan, with owned or not ("Add-ons available on your plan"). */
   visibleAddons: z.array(visibleAddonSchema),
   /** The Monthly/Yearly switch: on when the operator setting is on AND at least one card has a yearly price. */
-  yearlyToggle: z.object({ enabled: z.boolean(), discountPct: z.number().int().min(0).max(100) }),
+  yearlyToggle: z.object({ enabled: z.boolean(), discountPct: z.int().min(0).max(100) }),
 });
 export type BillingPlansResponse = z.infer<typeof billingPlansResponseSchema>;
 
@@ -138,11 +138,11 @@ export type BillingStatus = z.infer<typeof billingStatusSchema>;
 
 export const usageMeterSchema = z.object({
   key: z.string(),
-  used: z.number().int().nonnegative(),
+  used: z.int().nonnegative(),
   /** 0 = unlimited. */
-  limit: z.number().int().nonnegative(),
+  limit: z.int().nonnegative(),
   /** 0..100, null when unlimited. */
-  percent: z.number().int().min(0).max(100).nullable(),
+  percent: z.int().min(0).max(100).nullable(),
   /** 'month' meters reset on the first of the calendar month; 'total' meters are lifetime counts. */
   window: z.enum(['month', 'total']),
 });
@@ -155,7 +155,7 @@ export const billingUsageResponseSchema = z.object({
   meters: z.array(usageMeterSchema),
   features: z.array(z.object({ key: z.string(), enabled: z.boolean() })),
   /** First instant of next calendar month: when the 'month' meters reset. */
-  cycleResetsAt: z.string().datetime(),
+  cycleResetsAt: z.iso.datetime(),
 });
 export type BillingUsageResponse = z.infer<typeof billingUsageResponseSchema>;
 
@@ -182,9 +182,7 @@ export const changePlanResponseSchema = z.object({
   direction: z.enum(['upgrade', 'downgrade', 'switch']),
   validity: planValiditySchema,
   /** Caps the new plan sets below what the workspace already holds: nothing is deleted, but adding more is blocked. */
-  overLimit: z.array(
-    z.object({ key: z.string(), used: z.number().int(), limit: z.number().int() }),
-  ),
+  overLimit: z.array(z.object({ key: z.string(), used: z.int(), limit: z.int() })),
 });
 export type ChangePlanResponse = z.infer<typeof changePlanResponseSchema>;
 
@@ -193,7 +191,7 @@ export type ChangePlanResponse = z.infer<typeof changePlanResponseSchema>;
 /** Per-workspace overrides beat the plan (TW-PLAN-007 rule 1). Limits: whole numbers, -1 = unlimited. */
 export const planOverridesSchema = z.object({
   limits: z
-    .record(z.string(), z.number().int().min(-1).max(2_000_000_000))
+    .record(z.string(), z.int().min(-1).max(2_000_000_000))
     .default({})
     .refine(
       (r) => Object.keys(r).every((k) => (PLAN_LIMIT_KEYS as string[]).includes(k)),
@@ -207,7 +205,7 @@ export const planOverridesSchema = z.object({
       'Unknown feature key.',
     ),
   /** Data retention for this workspace alone (TW-PLAN-023): days after its paid plan lapses. null = the plan's value; 0 = never wipe this workspace. */
-  dataRetentionDays: z.number().int().min(0).max(3650).nullable().default(null),
+  dataRetentionDays: z.int().min(0).max(3650).nullable().default(null),
 });
 export type PlanOverrides = z.infer<typeof planOverridesSchema>;
 export type PlanOverrideLimitKey = PlanLimitKey;
@@ -224,7 +222,7 @@ export const workspaceAddonsSchema = z.object({
       id: uuidSchema,
       packSlug: z.string(),
       app: z.object({ id: uuidSchema, slug: z.string(), name: z.string() }),
-      endsAt: z.string().datetime().nullable(),
+      endsAt: z.iso.datetime().nullable(),
       visibleOnPlan: z.boolean(),
     }),
   ),
@@ -248,7 +246,7 @@ export const workspacePlanSchema = z.object({
   planFeatures: planFeaturesSchema,
   /** What the workspace owns of the Marketplace versus what its plan makes visible. */
   addons: workspaceAddonsSchema,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WorkspacePlan = z.infer<typeof workspacePlanSchema>;
 
@@ -256,7 +254,7 @@ export const workspacePlanListQuerySchema = z.object({
   search: z.string().trim().max(120).optional(),
   plan: planSlugSchema.optional(),
   cursor: z.string().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type WorkspacePlanListQuery = z.infer<typeof workspacePlanListQuerySchema>;
 
@@ -275,11 +273,11 @@ export type WorkspacePlanListResponse = z.infer<typeof workspacePlanListResponse
  */
 export const attachPlanRequestSchema = z.object({
   planSlug: planSlugSchema,
-  planEndsAt: z.string().datetime().nullable().optional(),
+  planEndsAt: z.iso.datetime().nullable().optional(),
   overrides: planOverridesSchema.optional(),
   /** The free-trial end for this workspace: a date extends or shortens it, null ends the trial now. Omitted: unchanged (a changed plan always clears it). */
-  trialEndsAt: z.string().datetime().nullable().optional(),
-  rowVersion: z.number().int().min(1),
+  trialEndsAt: z.iso.datetime().nullable().optional(),
+  rowVersion: z.int().min(1),
 });
 export type AttachPlanRequest = z.infer<typeof attachPlanRequestSchema>;
 
@@ -295,8 +293,8 @@ export const RETENTION_CONFIRM = 'WIPE';
 export const retentionRunRequestSchema = z
   .object({ dryRun: z.boolean().default(true), confirm: z.string().optional() })
   .refine((v) => v.dryRun || v.confirm === RETENTION_CONFIRM, {
-    message: 'Type WIPE to confirm a real run.',
     path: ['confirm'],
+    error: 'Type WIPE to confirm a real run.',
   });
 export type RetentionRunRequest = z.input<typeof retentionRunRequestSchema>;
 
@@ -306,7 +304,7 @@ export const retentionRunResponseSchema = z.object({
     z.object({
       slug: z.string(),
       wiped: z.boolean(),
-      rows: z.record(z.string(), z.number().int()),
+      rows: z.record(z.string(), z.int()),
     }),
   ),
 });
@@ -317,7 +315,7 @@ export type RetentionRunResponse = z.infer<typeof retentionRunResponseSchema>;
 /** The two pricing settings checkout, the plan picker and the public page all read (`pricing.yearly_toggle_enabled`, `pricing.yearly_discount_pct`). */
 export const planSettingsSchema = z.object({
   yearlyToggleEnabled: z.boolean(),
-  yearlyDiscountPct: z.number().int().min(0).max(90),
+  yearlyDiscountPct: z.int().min(0).max(90),
 });
 export type PlanSettings = z.infer<typeof planSettingsSchema>;
 
@@ -342,7 +340,7 @@ export const featureAddonSchema = z.object({
   amount: z.string(),
   currency: z.string(),
   billingUnit: z.string(),
-  billingDuration: z.number().int(),
+  billingDuration: z.int(),
 });
 export type FeatureAddon = z.infer<typeof featureAddonSchema>;
 
@@ -383,14 +381,14 @@ export const subscriptionItemSchema = z.object({
   billingCycle: z.enum(['monthly', 'yearly']),
   gateway: z.string(),
   /** Paid until: the next charge date while it renews, the last day of access once it was cancelled. */
-  currentPeriodEnd: z.string().datetime().nullable(),
-  renewalsCount: z.number().int().nonnegative(),
+  currentPeriodEnd: z.iso.datetime().nullable(),
+  renewalsCount: z.int().nonnegative(),
   /** It will charge again: active or past due, and not cancelled. */
   autoRenew: z.boolean(),
   /** The latest charge failed and the provider is retrying: access continues for the grace days. */
   paymentFailed: z.boolean(),
-  canceledAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  canceledAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type SubscriptionItem = z.infer<typeof subscriptionItemSchema>;
 
@@ -403,10 +401,10 @@ export const subscriptionChargeSchema = z.object({
   amount: z.string(),
   currency: z.string(),
   status: z.enum(['paid', 'issued', 'failed', 'cancelled', 'expired', 'other']),
-  issuedAt: z.string().datetime().nullable(),
-  paidAt: z.string().datetime().nullable(),
+  issuedAt: z.iso.datetime().nullable(),
+  paidAt: z.iso.datetime().nullable(),
   /** The provider's receipt page; only an https address. */
-  receiptUrl: z.string().url().nullable(),
+  receiptUrl: z.url().nullable(),
 });
 export type SubscriptionCharge = z.infer<typeof subscriptionChargeSchema>;
 

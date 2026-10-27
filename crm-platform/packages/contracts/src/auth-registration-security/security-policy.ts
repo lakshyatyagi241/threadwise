@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { patchOf } from '../common/patch';
 
 /**
  * The platform security policy (TW-AUTH-037): one typed document, one partial
@@ -29,17 +30,17 @@ export const securityPolicySchema = z.object({
     .min(1)
     .default(['totp', 'email']),
   /** Idle minutes before a non-remembered session expires. 0 cannot be saved, as in Reference. */
-  sessionTimeoutMinutes: z.number().int().min(5).max(1440).default(60),
+  sessionTimeoutMinutes: z.int().min(5).max(1440).default(60),
   /** Devices signed in at once. 0 cannot be saved, as in Reference. */
-  maxConcurrentSessions: z.number().int().min(1).max(50).default(5),
+  maxConcurrentSessions: z.int().min(1).max(50).default(5),
   rememberMeEnabled: z.boolean().default(true),
   /** Failed sign-ins before a lockout. 0 cannot be saved, as in Reference. */
-  lockoutAfterFailures: z.number().int().min(1).max(50).default(5),
-  lockoutWindowMinutes: z.number().int().min(1).max(1440).default(15),
+  lockoutAfterFailures: z.int().min(1).max(50).default(5),
+  lockoutWindowMinutes: z.int().min(1).max(1440).default(15),
   // --- password rules (sign-up, reset, change, admin-set)
   // Strong by default (ASVS 5.0 floor is 8; NIST asks 15 for password-only sign-in). An administrator can lower it to 8, never below:
   // a stored value under the floor (older range) reads back as this default, per key.
-  passwordMinLength: z.number().int().min(8).max(128).default(12),
+  passwordMinLength: z.int().min(8).max(128).default(12),
   passwordRequireUpper: z.boolean().default(true),
   passwordRequireNumber: z.boolean().default(true),
   passwordRequireSymbol: z.boolean().default(false),
@@ -48,13 +49,13 @@ export const securityPolicySchema = z.object({
   /** Refuse passwords found in public breaches (Pwned Passwords, k-anonymity: only a 5-character hash prefix leaves the server). Fails open if the service is unreachable. */
   passwordBreachCheck: z.boolean().default(true),
   /** 0 = never expires. */
-  passwordMaxAgeDays: z.number().int().min(0).max(3650).default(0),
+  passwordMaxAgeDays: z.int().min(0).max(3650).default(0),
   // --- send guardrails
   waGuardrailsMode: z.enum(['off', 'monitor', 'enforce']).default('off'),
-  waMaxSendsPerMinute: z.number().int().min(0).max(10_000).default(0),
-  waMaxSendsPerDay: z.number().int().min(0).max(1_000_000).default(0),
+  waMaxSendsPerMinute: z.int().min(0).max(10_000).default(0),
+  waMaxSendsPerDay: z.int().min(0).max(1_000_000).default(0),
   waHoldOnScamPattern: z.boolean().default(false),
-  waHoldOnLinksCount: z.number().int().min(0).max(50).default(0),
+  waHoldOnLinksCount: z.int().min(0).max(50).default(0),
   waRequireTemplateReview: z.boolean().default(false),
   // --- abuse filters
   abuseBlockFinanceTerms: z.boolean().default(false),
@@ -66,12 +67,12 @@ export const securityPolicySchema = z.object({
     })
     .default([]),
   // --- API and webhooks
-  apiRateLimitPerMinute: z.number().int().min(1).max(100_000).default(600),
+  apiRateLimitPerMinute: z.int().min(1).max(100_000).default(600),
   webhookSignatureRequired: z.boolean().default(true),
-  webhookReplayWindowSec: z.number().int().min(10).max(3600).default(300),
+  webhookReplayWindowSec: z.int().min(10).max(3600).default(300),
   // --- devices
   deviceTrustRequired: z.boolean().default(false),
-  deviceLogoutOnInactiveDays: z.number().int().min(0).max(3650).default(30),
+  deviceLogoutOnInactiveDays: z.int().min(0).max(3650).default(30),
   ipAllowlistEnabled: z.boolean().default(false),
   /** IPv4/IPv6 addresses or CIDRs. Applies to /v2/platform/* only. */
   ipAllowlistCidrs: z.array(z.string().trim().min(1).max(64)).max(200).default([]),
@@ -79,11 +80,11 @@ export const securityPolicySchema = z.object({
   alertOnNewDevice: z.boolean().default(true),
   alertOnNewCountry: z.boolean().default(true),
   alertChannel: z.enum(['email', 'whatsapp', 'both']).default('email'),
-  auditLogRetentionDays: z.number().int().min(0).max(3650).default(365),
+  auditLogRetentionDays: z.int().min(0).max(3650).default(365),
 });
 export type SecurityPolicy = z.infer<typeof securityPolicySchema>;
 
-export const securityPolicyPatchSchema = securityPolicySchema.partial();
+export const securityPolicyPatchSchema = patchOf(securityPolicySchema);
 export type SecurityPolicyPatch = z.infer<typeof securityPolicyPatchSchema>;
 
 export const enforcementStatusSchema = z.enum(['enforced', 'partial', 'reserved']);
@@ -115,15 +116,15 @@ export const riskItemSchema = z.object({
   /** Who did it: the person's name, never the actor type. 'System' when there is no actor. */
   actor: z.string(),
   actorKind: z.enum(['user', 'platform_operator', 'system']),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 
 export const coverageBucketSchema = z.object({
   key: z.enum(['admin_access', 'send_abuse', 'api_hardening', 'incident_readiness']),
-  percent: z.number().int().min(0).max(100),
+  percent: z.int().min(0).max(100),
   /** Controls switched on in this bucket, and how many it has ("2/4"). */
-  enabled: z.number().int().nonnegative(),
-  total: z.number().int().positive(),
+  enabled: z.int().nonnegative(),
+  total: z.int().positive(),
 });
 
 export const securityOverviewResponseSchema = z.object({
@@ -133,14 +134,14 @@ export const securityOverviewResponseSchema = z.object({
   emergencyHalt: z.boolean(),
   kpis: z.object({
     /** 0-100, ten points per enabled control. */
-    score: z.number().int().min(0).max(100),
-    openRisks: z.number().int().nonnegative(),
-    highPriorityRisks: z.number().int().nonnegative(),
-    blockedAttempts24h: z.number().int().nonnegative(),
-    warnings24h: z.number().int().nonnegative(),
+    score: z.int().min(0).max(100),
+    openRisks: z.int().nonnegative(),
+    highPriorityRisks: z.int().nonnegative(),
+    blockedAttempts24h: z.int().nonnegative(),
+    warnings24h: z.int().nonnegative(),
     operatorMfa: z.object({
-      enrolled: z.number().int().nonnegative(),
-      total: z.number().int().nonnegative(),
+      enrolled: z.int().nonnegative(),
+      total: z.int().nonnegative(),
     }),
     webhookFailurePct: z.number().min(0).max(100),
   }),
@@ -161,32 +162,32 @@ export const dangerActionResponseSchema = z.object({
     'resume_sends',
   ]),
   /** Users, sessions or workspaces touched, depending on the action. */
-  affected: z.number().int().nonnegative(),
+  affected: z.int().nonnegative(),
 });
 export type DangerActionResponse = z.infer<typeof dangerActionResponseSchema>;
 
 export const securityEventSchema = z.object({
   id: z.string(),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   event: z.string(),
   status: z.enum(['success', 'failure', 'warning', 'info']),
   actorType: z.string(),
   /** The actor's public id (user or operator uuid); null for system events or a deleted account. */
-  actorId: z.string().uuid().nullable(),
+  actorId: z.guid().nullable(),
   /** Resolved at read time, so it is current: null when the actor no longer exists. */
   actorName: z.string().nullable(),
   actorEmail: z.string().nullable(),
   /** Organization uuid when the event belongs to one. */
-  orgId: z.string().uuid().nullable(),
+  orgId: z.guid().nullable(),
   orgSlug: z.string().nullable(),
   orgName: z.string().nullable(),
   ip: z.string().nullable(),
   userAgent: z.string().nullable(),
   requestId: z.string().nullable(),
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
 });
 export const securityEventListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().max(256).optional(),
   event: z.string().max(80).optional(),
   /** Case-insensitive text search in the event name (what the risk queue's Inspect link uses). */

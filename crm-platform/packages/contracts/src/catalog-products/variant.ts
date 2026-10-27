@@ -39,10 +39,10 @@ export const productVariantInputSchema = z.object({
   /** Absent or null: the variant sells at the product price. */
   priceMajor: optionalMajor.nullish(),
   comparePriceMajor: optionalMajor.nullish(),
-  imageUrl: z.string().trim().url().max(1024).nullish(),
-  weightGrams: z.number().int().min(0).max(1_000_000).nullish(),
+  imageUrl: z.string().trim().pipe(z.url().max(1024)).nullish(),
+  weightGrams: z.int().min(0).max(1_000_000).nullish(),
   /** Null or absent means unlimited. */
-  stockQty: z.number().int().min(0).max(1_000_000).nullish(),
+  stockQty: z.int().min(0).max(1_000_000).nullish(),
   /** An inactive variant is kept but cannot be bought. */
   active: z.boolean().default(true),
 });
@@ -114,24 +114,24 @@ export const productVariantResponseSchema = z.object({
   title: z.string(),
   sku: z.string().nullable(),
   /** The variant's own price; the product price when the variant has none. Always set. */
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   priceMajor: z.string(),
   priceDisplay: z.string(),
   /** The override as typed (null = follows the product). */
   priceOverrideMajor: z.string().nullable(),
-  comparePriceMinor: z.number().int().nullable(),
+  comparePriceMinor: z.int().nullable(),
   comparePriceMajor: z.string().nullable(),
   comparePriceDisplay: z.string().nullable(),
   imageUrl: z.string().nullable(),
-  weightGrams: z.number().int().nullable(),
-  stockQty: z.number().int().nullable(),
-  reservedQty: z.number().int(),
-  availableQty: z.number().int().nullable(),
+  weightGrams: z.int().nullable(),
+  stockQty: z.int().nullable(),
+  reservedQty: z.int(),
+  availableQty: z.int().nullable(),
   active: z.boolean(),
-  position: z.number().int(),
+  position: z.int(),
   /** The id the variant has on Meta and in a WhatsApp message: stored one, else the SKU, else `<product retailer id>-<n>`. */
   retailerId: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ProductVariantResponse = z.infer<typeof productVariantResponseSchema>;
 

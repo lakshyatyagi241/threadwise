@@ -72,7 +72,7 @@ export function mergeUncontactedSettings(stored: unknown): UncontactedSettingsVa
 
 /** A save replaces the whole section (the screen edits all of it); `rowVersion` is absent on the first save. */
 export const updateUncontactedSettingsSchema = uncontactedSettingsSchema.extend({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateUncontactedSettingsInput = z.infer<typeof updateUncontactedSettingsSchema>;
 
@@ -86,7 +86,7 @@ export type UncontactedSettings = UncontactedSettingsValues & {
 /** The date an automatic follow-up is set to, counted from the day of the touch in the workspace's time zone. */
 export const followUpDefaultDateSchema = z.discriminatedUnion('kind', [
   /** A number of days later: 1 day, 3 days, 1 week (7) or a custom number. */
-  z.object({ kind: z.literal('days'), days: z.number().int().min(1).max(365) }),
+  z.object({ kind: z.literal('days'), days: z.int().min(1).max(365) }),
   /** The same day of the next calendar month (the last day when that month is shorter). */
   z.object({ kind: z.literal('month') }),
   /** An open follow-up without a date: it stays in the Someday list and is never reminded. */
@@ -141,7 +141,7 @@ export function mergeFollowUpSettings(stored: unknown): FollowUpSettingsValues {
 }
 
 export const updateFollowUpSettingsSchema = followUpSettingsSchema.extend({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateFollowUpSettingsInput = z.infer<typeof updateFollowUpSettingsSchema>;
 
@@ -175,7 +175,7 @@ export function mergeDuplicateSettings(stored: unknown): DuplicateSettingsValues
 }
 
 export const updateDuplicateSettingsSchema = duplicateSettingsSchema.extend({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateDuplicateSettingsInput = z.infer<typeof updateDuplicateSettingsSchema>;
 

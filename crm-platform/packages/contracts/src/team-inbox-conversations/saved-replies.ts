@@ -184,15 +184,15 @@ export const savedReplySchema = z.object({
   /** Channel kinds the reply may be inserted on. Empty = every channel. */
   channelKinds: z.array(channelKindSchema),
   scope: savedReplyScopeSchema,
-  usedCount: z.number().int().nonnegative(),
-  lastUsedAt: z.string().datetime().nullable(),
+  usedCount: z.int().nonnegative(),
+  lastUsedAt: z.iso.datetime().nullable(),
   /** Name of the member who created a shared reply (null once that member is gone). */
   createdByName: z.string().nullable(),
   /** Whether the caller may edit or delete it (a shared reply needs the manage right, a personal one is its owner's). */
   canEdit: z.boolean(),
-  rowVersion: z.number().int().positive(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int().positive(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type SavedReply = z.infer<typeof savedReplySchema>;
 
@@ -230,31 +230,27 @@ const channelKindsInput = z
   .transform((v) => [...new Set(v)]);
 
 /** `POST /inbox/saved-replies`. `scope: 'mine'` makes a personal reply (Reference's "Personal - only visible to me"); it cannot change later. */
-export const createSavedReplySchema = z
-  .object({
-    shortcut: shortcutInput,
-    title: titleInput,
-    body: bodyInput,
-    category: categoryInput.default(null),
-    language: languageInput.default(null),
-    channelKinds: channelKindsInput.default([]),
-    scope: savedReplyScopeSchema.default('shared'),
-  })
-  .strict();
+export const createSavedReplySchema = z.strictObject({
+  shortcut: shortcutInput,
+  title: titleInput,
+  body: bodyInput,
+  category: categoryInput.default(null),
+  language: languageInput.default(null),
+  channelKinds: channelKindsInput.default([]),
+  scope: savedReplyScopeSchema.default('shared'),
+});
 export type CreateSavedReplyInput = z.infer<typeof createSavedReplySchema>;
 
 /** `PATCH /inbox/saved-replies/:id`: any subset with the `rowVersion` read. The scope is not editable (as in Reference). */
-export const updateSavedReplySchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    shortcut: shortcutInput.optional(),
-    title: titleInput.optional(),
-    body: bodyInput.optional(),
-    category: categoryInput.optional(),
-    language: languageInput.optional(),
-    channelKinds: channelKindsInput.optional(),
-  })
-  .strict();
+export const updateSavedReplySchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  shortcut: shortcutInput.optional(),
+  title: titleInput.optional(),
+  body: bodyInput.optional(),
+  category: categoryInput.optional(),
+  language: languageInput.optional(),
+  channelKinds: channelKindsInput.optional(),
+});
 export type UpdateSavedReplyInput = z.infer<typeof updateSavedReplySchema>;
 
 /** `GET /inbox/saved-replies`: search (shortcut, title, body), tab, channel, category. Most used first. */
@@ -264,7 +260,7 @@ export const listSavedRepliesQuerySchema = z.object({
   /** Only replies that may be inserted on this channel kind (those restricted to others are left out). */
   channelKind: channelKindSchema.optional(),
   category: z.string().trim().min(1).max(SAVED_REPLY_CATEGORY_MAX).optional(),
-  limit: z.coerce.number().int().min(1).max(SAVED_REPLY_LIST_MAX).default(50),
+  limit: z.coerce.number().int().min(1).max(SAVED_REPLY_LIST_MAX).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListSavedRepliesQuery = z.infer<typeof listSavedRepliesQuerySchema>;
@@ -274,21 +270,21 @@ export const savedReplyListResponseSchema = z.object({
   page: pageInfoSchema,
   /** What the caller can see, ignoring the search and the tab. */
   counts: z.object({
-    all: z.number().int().nonnegative(),
-    shared: z.number().int().nonnegative(),
-    mine: z.number().int().nonnegative(),
+    all: z.int().nonnegative(),
+    shared: z.int().nonnegative(),
+    mine: z.int().nonnegative(),
   }),
   /** Distinct categories among the replies the caller can see, for the filter. */
   categories: z.array(z.string()),
   /** Every reply of the workspace, personal ones included (what the plan counts). */
-  total: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
   /** The plan's cap; null = unlimited. */
-  limit: z.number().int().positive().nullable(),
+  limit: z.int().positive().nullable(),
 });
 export type SavedReplyListResponse = z.infer<typeof savedReplyListResponseSchema>;
 
 /** `POST /inbox/saved-replies/:id/use`: render the reply for this conversation and count the use. */
-export const useSavedReplySchema = z.object({ conversationId: uuidSchema }).strict();
+export const useSavedReplySchema = z.strictObject({ conversationId: uuidSchema });
 export type UseSavedReplyInput = z.infer<typeof useSavedReplySchema>;
 
 export const savedReplyIssueSchema = z.object({
@@ -302,7 +298,7 @@ export const useSavedReplyResponseSchema = z.object({
   /** The body with its variables filled in. A variable that could not be filled is left as written (see `issues`). */
   text: z.string(),
   issues: z.array(savedReplyIssueSchema),
-  usedCount: z.number().int().nonnegative(),
+  usedCount: z.int().nonnegative(),
 });
 export type UseSavedReplyResponse = z.infer<typeof useSavedReplyResponseSchema>;
 
@@ -355,7 +351,7 @@ export const SAVED_REPLY_IMPORT_ACTIONS = ['create', 'update', 'skip', 'invalid'
 
 export const savedReplyImportRowSchema = z.object({
   /** 1-based line in the file, header included. */
-  line: z.number().int(),
+  line: z.int(),
   shortcut: z.string(),
   action: z.enum(SAVED_REPLY_IMPORT_ACTIONS),
   /** Why a row is `invalid`, or `skip`ped (`duplicate` = the shortcut exists and the policy is skip). */
@@ -366,20 +362,20 @@ export const savedReplyImportResultSchema = z.object({
   dryRun: z.boolean(),
   duplicatePolicy: savedReplyDuplicatePolicySchema,
   totals: z.object({
-    rows: z.number().int(),
-    create: z.number().int(),
-    update: z.number().int(),
-    skip: z.number().int(),
-    invalid: z.number().int(),
+    rows: z.int(),
+    create: z.int(),
+    update: z.int(),
+    skip: z.int(),
+    invalid: z.int(),
   }),
   /** The rows that are not a plain create (every problem first), capped at SAVED_REPLY_IMPORT_ROWS_SHOWN. */
   rows: z.array(savedReplyImportRowSchema),
   rowsTruncated: z.boolean(),
   /** The plan's `saved_replies` limit (null = unlimited) and what the workspace holds now. */
   plan: z.object({
-    limit: z.number().int().nullable(),
-    used: z.number().int(),
-    remaining: z.number().int().nullable(),
+    limit: z.int().nullable(),
+    used: z.int(),
+    remaining: z.int().nullable(),
   }),
 });
 export type SavedReplyImportResult = z.infer<typeof savedReplyImportResultSchema>;

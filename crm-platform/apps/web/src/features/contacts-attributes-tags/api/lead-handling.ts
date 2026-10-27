@@ -23,7 +23,7 @@ import { run } from './bulk';
  * contact's "Uncontacted" marker. The contracts type responses as interfaces, so the boundary check is the fields each screen reads.
  */
 
-const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
+const shape = <T>(...required: string[]): z.ZodType<T, unknown> =>
   z.custom<T>(
     (v) =>
       typeof v === 'object' &&

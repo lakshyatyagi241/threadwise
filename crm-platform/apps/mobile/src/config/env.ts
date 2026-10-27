@@ -11,7 +11,6 @@ import { z } from 'zod';
  */
 const envSchema = z.object({
   apiUrl: z
-    .string({ required_error: 'EXPO_PUBLIC_API_URL is not set (see apps/mobile/.env.example)' })
     .url('EXPO_PUBLIC_API_URL must be a full URL such as http://localhost:3000')
     .transform((u) => u.replace(/\/+$/, '')),
   sentryDsn: z

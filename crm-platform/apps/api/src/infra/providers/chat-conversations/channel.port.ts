@@ -46,7 +46,7 @@ const common = {
    */
   clientReference: z.string().trim().min(1).max(128),
   /** 1 on the first try, +1 per retry. Lets a simulated fault depend on the attempt without keeping state. */
-  attempt: z.number().int().min(1).default(1),
+  attempt: z.int().min(1).default(1),
   replyToProviderMessageId: z.string().trim().min(1).max(128).optional(),
 };
 
@@ -63,9 +63,18 @@ export const outboundTextMaxFor = (channelKind: string): number =>
  */
 export const outboundEmailSchema = z.object({
   /** Recipients: the sender of the newest inbound mail. */
-  to: z.array(z.string().trim().email().max(320)).min(1).max(20),
-  cc: z.array(z.string().trim().email().max(320)).max(20).default([]),
-  bcc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  to: z
+    .array(z.string().trim().pipe(z.email().max(320)))
+    .min(1)
+    .max(20),
+  cc: z
+    .array(z.string().trim().pipe(z.email().max(320)))
+    .max(20)
+    .default([]),
+  bcc: z
+    .array(z.string().trim().pipe(z.email().max(320)))
+    .max(20)
+    .default([]),
   /** The reply's subject (`Re: <original>` unless the agent overrode it). */
   subject: z.string().trim().min(1).max(998),
   /** RFC 5322 Message-ID (no angle brackets) of the mail this answers; null when unknown. */
@@ -75,13 +84,13 @@ export const outboundEmailSchema = z.object({
   /** The provider's thread key (Gmail threadId, a header-derived key): the reply is sent inside it. */
   threadId: z.string().max(128),
   /** Staged composer uploads (`mail_outbound_attachments.uuid`) sent with this reply (TW-MAIL-027). */
-  attachmentIds: z.array(z.string().uuid()).max(10).optional(),
+  attachmentIds: z.array(z.guid()).max(10).optional(),
   /** A specific signature to append (`mail_signatures.uuid`); absent = the default for the sender and mailbox. */
-  signatureId: z.string().uuid().optional(),
+  signatureId: z.guid().optional(),
   /** `false`: no signature at all. */
   signature: z.boolean().optional(),
   /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
-  sentBy: z.number().int().nullable().optional(),
+  sentBy: z.int().nullable().optional(),
   /**
    * A marketing email (BL-141): the ConsentGate treats it as `marketing_messaging`, and the adapter adds the signed unsubscribe link
    * and the RFC 8058 `List-Unsubscribe` headers. Replies and transactional mail leave it unset.
@@ -90,7 +99,7 @@ export const outboundEmailSchema = z.object({
   /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
   bodyHtml: z.string().max(200_000).optional(),
   /** The email template (`email_templates.uuid`) the reply was filled from: a sent reply counts one use of it. */
-  templateId: z.string().uuid().optional(),
+  templateId: z.guid().optional(),
 });
 export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;
@@ -135,12 +144,12 @@ export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
     template: z.object({
       name: z.string().trim().min(1).max(512),
       language: z.string().trim().min(2).max(16),
-      variables: z.record(z.string()).default({}),
+      variables: z.record(z.string(), z.string()).default({}),
       /**
        * The provider's own component list for this recipient (header media, buttons, carousel), already built by whoever owns the
        * template library. When set it is sent as it is and `variables` is ignored.
        */
-      components: z.array(z.record(z.unknown())).optional(),
+      components: z.array(z.record(z.string(), z.unknown())).optional(),
     }),
   }),
   z.object({
@@ -224,7 +233,7 @@ export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
         header: z.string().max(60).optional(),
         footer: z.string().max(60).optional(),
         text: z.string().min(1).max(20),
-        url: z.string().url().max(2000),
+        url: z.url().max(2000),
       }),
       z.object({
         /** A WhatsApp Form (a Meta flow message): the published form behind `flowId`, opened by one button. */

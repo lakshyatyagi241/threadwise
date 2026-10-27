@@ -135,7 +135,7 @@ export function useRecipients(id: string, q: { status: string; q: string; page: 
 }
 
 const created = z.object({
-  campaign: z.object({ id: z.string() }).passthrough(),
+  campaign: z.looseObject({ id: z.string() }),
   message: z.string(),
 });
 

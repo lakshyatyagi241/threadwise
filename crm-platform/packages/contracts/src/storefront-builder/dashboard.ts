@@ -6,41 +6,41 @@ import { storefrontResponseSchema } from './storefront';
 
 export const storeStatsSchema = z.object({
   /** Sum of order totals of the last 30 days, in minor units (the currency of the shop). */
-  revenue30: z.number().int(),
-  orders30: z.number().int(),
+  revenue30: z.int(),
+  orders30: z.int(),
   /** Average order value, rounded, minor units. */
-  aov: z.number().int(),
-  products: z.number().int(),
-  storefrontViews30: z.number().int(),
+  aov: z.int(),
+  products: z.int(),
+  storefrontViews30: z.int(),
 });
 
 export const storeRecentOrderSchema = z.object({
   id: uuidSchema,
-  orderNo: z.number().int(),
+  orderNo: z.int(),
   customerName: z.string().nullable(),
   customerPhone: z.string().nullable(),
   /** Number of lines of the order ("N item(s)"). */
-  itemsCount: z.number().int(),
-  totalMinor: z.number().int(),
+  itemsCount: z.int(),
+  totalMinor: z.int(),
   currencyCode: z.string(),
   status: z.string(),
   source: z.string(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 
 /** The numbers beside the store sidebar entries (Reference shows each when above zero). Workspace-wide, every shop. */
 export const storeSidebarCountsSchema = z.object({
-  orders: z.number().int(),
-  products: z.number().int(),
-  groups: z.number().int(),
-  coupons: z.number().int(),
+  orders: z.int(),
+  products: z.int(),
+  groups: z.int(),
+  coupons: z.int(),
   /** Reviews waiting for a decision. */
-  reviewsPending: z.number().int(),
+  reviewsPending: z.int(),
   /** Payment configurations of the workspace. */
-  payments: z.number().int(),
+  payments: z.int(),
   /** Active workspace-level checkout gateways. */
-  gateways: z.number().int(),
-  customers: z.number().int(),
+  gateways: z.int(),
+  customers: z.int(),
 });
 export type StoreSidebarCounts = z.infer<typeof storeSidebarCountsSchema>;
 
@@ -66,10 +66,10 @@ export const storeOverviewSchema = z.object({
   salesByDay: z.object({
     labels: z.array(z.string()),
     /** Major units, whole numbers. */
-    revenue: z.array(z.number().int()),
-    orders: z.array(z.number().int()),
+    revenue: z.array(z.int()),
+    orders: z.array(z.int()),
   }),
-  topProducts: z.array(z.object({ name: z.string(), qty: z.number().int() })),
+  topProducts: z.array(z.object({ name: z.string(), qty: z.int() })),
   recentOrders: z.array(storeRecentOrderSchema),
 });
 export type StoreOverview = z.infer<typeof storeOverviewSchema>;

@@ -79,22 +79,22 @@ export const platformRoleSummarySchema = z.object({
   isLocked: z.boolean(),
   /** The "System role" badge; every other role reads "Custom role". */
   isSystem: z.boolean(),
-  userCount: z.number().int(),
-  permissionCount: z.number().int(),
-  updatedAt: z.string().datetime(),
+  userCount: z.int(),
+  permissionCount: z.int(),
+  updatedAt: z.iso.datetime(),
 });
 export type PlatformRoleSummary = z.infer<typeof platformRoleSummarySchema>;
 
 export const platformRoleListResponseSchema = z.object({
   data: z.array(platformRoleSummarySchema),
   kpis: z.object({
-    totalRoles: z.number().int(),
-    systemRoles: z.number().int(),
-    customRoles: z.number().int(),
-    totalPermissions: z.number().int(),
+    totalRoles: z.int(),
+    systemRoles: z.int(),
+    customRoles: z.int(),
+    totalPermissions: z.int(),
     /** Sum of per-role user counts: an operator holding two roles counts twice, as in Reference. */
-    usersWithRole: z.number().int(),
-    rolesWithoutUsers: z.number().int(),
+    usersWithRole: z.int(),
+    rolesWithoutUsers: z.int(),
   }),
 });
 export type PlatformRoleListResponse = z.infer<typeof platformRoleListResponseSchema>;
@@ -102,7 +102,7 @@ export type PlatformRoleListResponse = z.infer<typeof platformRoleListResponseSc
 export const platformRoleDetailSchema = platformRoleSummarySchema.extend({
   /** Permission names the role holds. */
   permissions: z.array(z.string()),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   /** Every other role, by name, for the reassign select. */
   otherRoles: z.array(z.object({ id: uuidSchema, name: z.string() })),
 });
@@ -116,7 +116,7 @@ export const createPlatformRoleSchema = z.object({
 export type CreatePlatformRoleInput = z.infer<typeof createPlatformRoleSchema>;
 
 export const updatePlatformRoleSchema = createPlatformRoleSchema.extend({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdatePlatformRoleInput = z.infer<typeof updatePlatformRoleSchema>;
 
@@ -124,7 +124,7 @@ export const reassignRoleSchema = z.object({ targetRoleId: uuidSchema });
 export type ReassignRoleInput = z.infer<typeof reassignRoleSchema>;
 
 export const reassignRoleResponseSchema = z.object({
-  moved: z.number().int(),
+  moved: z.int(),
   from: z.string(),
   to: z.string(),
 });
@@ -138,19 +138,19 @@ export const platformPermissionSchema = z.object({
   /** The text before the first dot; a name without a dot is its own module. */
   module: z.string(),
   isSystem: z.boolean(),
-  roleCount: z.number().int(),
-  createdAt: z.string().datetime(),
+  roleCount: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type PlatformPermission = z.infer<typeof platformPermissionSchema>;
 
 export const platformPermissionListResponseSchema = z.object({
   data: z.array(platformPermissionSchema),
   kpis: z.object({
-    total: z.number().int(),
-    modules: z.number().int(),
-    usedInRoles: z.number().int(),
-    orphans: z.number().int(),
-    lastAdded: z.object({ name: z.string(), at: z.string().datetime() }).nullable(),
+    total: z.int(),
+    modules: z.int(),
+    usedInRoles: z.int(),
+    orphans: z.int(),
+    lastAdded: z.object({ name: z.string(), at: z.iso.datetime() }).nullable(),
   }),
 });
 export type PlatformPermissionListResponse = z.infer<typeof platformPermissionListResponseSchema>;

@@ -141,7 +141,7 @@ export const waDeviceGroupSchema = z.object({
   subject: z.string().nullable(),
   description: z.string().nullable(),
   /** Members, as WhatsApp last said. */
-  size: z.number().int().nonnegative(),
+  size: z.int().nonnegative(),
   /** Is OUR number an admin: every change needs it. */
   isAdmin: z.boolean(),
   /** Only admins may send. */
@@ -155,8 +155,8 @@ export const waDeviceGroupSchema = z.object({
   hasInviteLink: z.boolean(),
   pictureUrl: z.string().nullable(),
   participantsPreview: z.array(waDeviceGroupPreviewMemberSchema).max(WA_DEVICE_GROUP_PREVIEW_MAX),
-  participantsCount: z.number().int().nonnegative(),
-  pendingRequestCount: z.number().int().nonnegative(),
+  participantsCount: z.int().nonnegative(),
+  pendingRequestCount: z.int().nonnegative(),
   /** The inbox conversation of this group, when it has one. */
   conversationId: uuidSchema.nullable(),
   /** When WhatsApp created the group. */
@@ -167,24 +167,24 @@ export const waDeviceGroupSchema = z.object({
   /** The number left or was removed: the group is kept, read-only. */
   left: z.boolean(),
   leftAt: z.string().nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WaDeviceGroup = z.infer<typeof waDeviceGroupSchema>;
 
 export const waDeviceGroupStatsSchema = z.object({
-  groups: z.number().int(),
-  members: z.number().int(),
-  joinRequests: z.number().int(),
+  groups: z.int(),
+  members: z.int(),
+  joinRequests: z.int(),
   /** Groups where our number is an admin. */
-  admin: z.number().int(),
-  left: z.number().int(),
+  admin: z.int(),
+  left: z.int(),
 });
 export type WaDeviceGroupStats = z.infer<typeof waDeviceGroupStatsSchema>;
 
 /** `GET /v2/wa-groups?deviceId=&limit=&cursor=`: newest first by keyset (created_at, id). `stats` covers every group of the number. */
 export const waDeviceGroupListQuerySchema = z.object({
   deviceId: uuidSchema,
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(200).optional(),
   /** Part of the subject. */
   q: z.string().trim().min(1).max(100).optional(),
@@ -204,8 +204,8 @@ export type WaDeviceGroupList = z.infer<typeof waDeviceGroupListSchema>;
 
 /** One counter of the per-device limiter. `remaining` never goes below 0; `resetsAt` is an ISO time or null when nothing was used. */
 export const waGroupLimitCounterSchema = z.object({
-  limit: z.number().int().nonnegative(),
-  remaining: z.number().int().nonnegative(),
+  limit: z.int().nonnegative(),
+  remaining: z.int().nonnegative(),
   resetsAt: z.string().nullable(),
 });
 export type WaGroupLimitCounter = z.infer<typeof waGroupLimitCounterSchema>;
@@ -217,7 +217,7 @@ export const waGroupLimitsSchema = z.object({
   joinByLinkPerDay: waGroupLimitCounterSchema,
   /** Set while the number is cooling down after a refusal that looked like a limit or ban signal. */
   cooldownUntil: z.string().nullable(),
-  participantsPerCall: z.number().int(),
+  participantsPerCall: z.int(),
 });
 export type WaGroupLimits = z.infer<typeof waGroupLimitsSchema>;
 
@@ -284,14 +284,14 @@ export const updateWaDeviceGroupInputSchema = z
     memberAddMode: waGroupMemberAddModeSchema.optional(),
   })
   .refine((v) => Object.values(v).some((x) => x !== undefined), {
-    message: 'Send at least one field to change',
+    error: 'Send at least one field to change',
   });
 export type UpdateWaDeviceGroupInput = z.infer<typeof updateWaDeviceGroupInputSchema>;
 
 /** `PUT /v2/wa-groups/:id/picture` (multipart, field `file`). The answer is the group. A non-image or one over the cap is 422. */
 export const waDeviceGroupPictureMetaSchema = z.object({
   mimeType: z.enum(WA_DEVICE_GROUP_PICTURE_MIME_TYPES),
-  sizeBytes: z.number().int().positive().max(WA_DEVICE_GROUP_PICTURE_MAX_BYTES),
+  sizeBytes: z.int().positive().max(WA_DEVICE_GROUP_PICTURE_MAX_BYTES),
 });
 export type WaDeviceGroupPictureMeta = z.infer<typeof waDeviceGroupPictureMetaSchema>;
 
@@ -337,8 +337,8 @@ export type WaGroupParticipantResult = z.infer<typeof waGroupParticipantResultSc
 
 /** The answer of a participants call. Partial success is a success, and so is "nobody could be added" (the reasons are in `results`); refusals before WhatsApp (not admin, limits, left) are 4xx with the group error code. */
 export const waGroupParticipantResultsSchema = z.object({
-  okCount: z.number().int().nonnegative(),
-  failCount: z.number().int().nonnegative(),
+  okCount: z.int().nonnegative(),
+  failCount: z.int().nonnegative(),
   results: z.array(waGroupParticipantResultSchema),
 });
 export type WaGroupParticipantResults = z.infer<typeof waGroupParticipantResultsSchema>;
@@ -358,14 +358,14 @@ export type WaDeviceGroupMember = z.infer<typeof waDeviceGroupMemberSchema>;
 
 /** `GET /v2/wa-groups/:id/participants?limit=&cursor=&q=`: paged from the cached roster; `q` matches name or number. */
 export const waDeviceGroupMembersQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: z.string().min(1).max(200).optional(),
   q: z.string().trim().min(1).max(100).optional(),
 });
 export type WaDeviceGroupMembersQuery = z.infer<typeof waDeviceGroupMembersQuerySchema>;
 export const waDeviceGroupMembersSchema = z.object({
   members: z.array(waDeviceGroupMemberSchema),
-  total: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
   page: pageInfoSchema,
 });
 export type WaDeviceGroupMembers = z.infer<typeof waDeviceGroupMembersSchema>;
@@ -402,7 +402,7 @@ export type WaDeviceGroupJoinRequestsResult = z.infer<typeof waDeviceGroupJoinRe
 /** `GET /v2/wa-groups/:id/invite-link` and `POST .../invite-link/reset`. A bearer secret: `wa.groups.manage`, never logged, never in audit. */
 export const waDeviceGroupInviteLinkSchema = z.object({
   code: z.string(),
-  url: z.string().url(),
+  url: z.url(),
 });
 export type WaDeviceGroupInviteLink = z.infer<typeof waDeviceGroupInviteLinkSchema>;
 
@@ -428,7 +428,7 @@ const inviteInputSchema = z
   .transform((v, ctx) => {
     const code = parseWaGroupInviteCode(v);
     if (!code) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Not a WhatsApp invite link or code' });
+      ctx.addIssue({ code: 'custom', message: 'Not a WhatsApp invite link or code' });
       return z.NEVER;
     }
     return code;
@@ -443,7 +443,7 @@ export const waDeviceGroupJoinPreviewInputSchema = z.object({
 export type WaDeviceGroupJoinPreviewInput = z.infer<typeof waDeviceGroupJoinPreviewInputSchema>;
 export const waDeviceGroupJoinPreviewSchema = z.object({
   subject: z.string().nullable(),
-  size: z.number().int().nonnegative().nullable(),
+  size: z.int().nonnegative().nullable(),
   /** The number is already in this group. */
   alreadyMember: z.boolean(),
   /** Joining needs an admin's approval (it becomes a request). */
@@ -524,9 +524,9 @@ export type ChangeWaGroupParticipantsInput = z.infer<typeof changeWaGroupPartici
 /** `POST /v2/devices/:id/groups/sync`: read the whole group list from WhatsApp now (counted, and at most once a minute per number). */
 export const waDeviceGroupsSyncResultSchema = z.object({
   /** Groups the number is in after the read. */
-  groups: z.number().int().nonnegative(),
+  groups: z.int().nonnegative(),
   /** Groups newly found to be left by this read. */
-  left: z.number().int().nonnegative(),
+  left: z.int().nonnegative(),
   /** The read was skipped because one ran in the last minute; nothing was asked of WhatsApp. */
   throttled: z.boolean(),
 });

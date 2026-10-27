@@ -17,17 +17,17 @@ export const facebookPageSchema = z.object({
   category: z.string().nullable(),
   username: z.string().nullable(),
   pictureUrl: z.string().nullable(),
-  fanCount: z.number().int().nullable(),
+  fanCount: z.int().nullable(),
   /** `expired` means Meta revoked the token: the card shows "Reconnect needed". */
   status: z.enum(FB_PAGE_STATUSES),
   connectMethod: z.enum(FB_CONNECT_METHODS),
   lastError: z.string().nullable(),
   /** Meta's separate 90 day data-access clock; the hub warns before it lapses. */
-  dataAccessExpiresAt: z.string().datetime().nullable(),
+  dataAccessExpiresAt: z.iso.datetime().nullable(),
   /** What the Page's token may do (MANAGE, CREATE_CONTENT, MODERATE, MESSAGING, ANALYZE). */
   tasks: z.array(z.string()),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type FacebookPage = z.infer<typeof facebookPageSchema>;
 
@@ -49,7 +49,7 @@ export type FacebookConnectConfig = z.infer<typeof facebookConnectConfigSchema>;
 
 export const startConnectResponseSchema = z.object({
   /** The Facebook login dialog the browser is sent to. */
-  url: z.string().url(),
+  url: z.url(),
 });
 export type StartConnectResponse = z.infer<typeof startConnectResponseSchema>;
 

@@ -37,6 +37,6 @@ export const consentProofSchema = z.object({
   /** The version of that wording. */
   version: z.string().trim().max(64).optional(),
   /** When they agreed, if that was before this write. Omitted: now. */
-  at: z.string().datetime().optional(),
+  at: z.iso.datetime().optional(),
 });
 export type ConsentProof = z.infer<typeof consentProofSchema>;

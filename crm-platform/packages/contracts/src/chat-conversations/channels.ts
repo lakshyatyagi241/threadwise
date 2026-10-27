@@ -51,7 +51,7 @@ export type ReceiptStatus = z.infer<typeof receiptStatusSchema>;
 
 export const channelCapabilitiesSchema = z.object({
   /** Free-form replies are allowed this many hours after the customer's last message; null = no window rule. */
-  windowHours: z.number().int().positive().nullable(),
+  windowHours: z.int().positive().nullable(),
   templates: z.boolean(),
   media: z.array(messageMediaKindSchema),
   reactions: z.boolean(),
@@ -67,16 +67,14 @@ export type ChannelCapabilities = z.infer<typeof channelCapabilitiesSchema>;
 // --- settings -----------------------------------------------------------------------------------------------------------
 
 export const SIMULATOR_LATENCY_MAX_MS = 60_000;
-const latencyMs = z.number().int().min(0).max(SIMULATOR_LATENCY_MAX_MS);
+const latencyMs = z.int().min(0).max(SIMULATOR_LATENCY_MAX_MS);
 
-export const simulatorSettingsSchema = z
-  .object({
-    /** When the simulated provider reports each step after accepting a send. */
-    latencyMs: z.object({ sent: latencyMs, delivered: latencyMs, read: latencyMs }),
-    /** auto: the 24 hour rule from the customer's last message. open / closed force the answer (to exercise the template-only screen). */
-    window: z.enum(['auto', 'open', 'closed']),
-  })
-  .strict();
+export const simulatorSettingsSchema = z.strictObject({
+  /** When the simulated provider reports each step after accepting a send. */
+  latencyMs: z.object({ sent: latencyMs, delivered: latencyMs, read: latencyMs }),
+  /** auto: the 24 hour rule from the customer's last message. open / closed force the answer (to exercise the template-only screen). */
+  window: z.enum(['auto', 'open', 'closed']),
+});
 export type SimulatorSettings = z.infer<typeof simulatorSettingsSchema>;
 
 export const SIMULATOR_DEFAULTS: SimulatorSettings = {
@@ -84,32 +82,27 @@ export const SIMULATOR_DEFAULTS: SimulatorSettings = {
   window: 'auto',
 };
 
-export const channelSettingsSchema = z
-  .object({
-    /** false: sends through this channel never count toward the plan's monthly messages and never charge the wallet. */
-    metered: z.boolean(),
-    simulator: simulatorSettingsSchema.optional(),
-  })
-  .strict();
+export const channelSettingsSchema = z.strictObject({
+  /** false: sends through this channel never count toward the plan's monthly messages and never charge the wallet. */
+  metered: z.boolean(),
+  simulator: simulatorSettingsSchema.optional(),
+});
 export type ChannelSettings = z.infer<typeof channelSettingsSchema>;
 
 /** What a client may change; omitted keys keep their value (the nested simulator object is merged one level down). */
 export const channelSettingsPatchSchema = z
-  .object({
+  .strictObject({
     metered: z.boolean(),
     simulator: z
-      .object({
+      .strictObject({
         latencyMs: z
-          .object({ sent: latencyMs, delivered: latencyMs, read: latencyMs })
-          .partial()
-          .strict(),
+          .strictObject({ sent: latencyMs, delivered: latencyMs, read: latencyMs })
+          .partial(),
         window: z.enum(['auto', 'open', 'closed']),
       })
-      .partial()
-      .strict(),
+      .partial(),
   })
-  .partial()
-  .strict();
+  .partial();
 export type ChannelSettingsPatch = z.infer<typeof channelSettingsPatchSchema>;
 
 // --- health -------------------------------------------------------------------------------------------------------------
@@ -133,7 +126,7 @@ export const channelHealthSchema = z.object({
   ok: z.boolean(),
   /** blocked: a critical issue; attention: a warning; healthy otherwise. */
   overall: z.enum(['healthy', 'attention', 'blocked']),
-  checkedAt: z.string().datetime(),
+  checkedAt: z.iso.datetime(),
   /** The name Meta verified for the number. */
   displayName: z.string().nullable(),
   displayPhoneNumber: z.string().nullable(),
@@ -149,7 +142,7 @@ export const channelHealthSchema = z.object({
   token: z.object({
     /** null: not asked (no app id stored), or the read failed. */
     valid: z.boolean().nullable(),
-    expiresAt: z.string().datetime().nullable(),
+    expiresAt: z.iso.datetime().nullable(),
     scopes: z.array(z.string()).nullable(),
   }),
   webhook: z.object({
@@ -167,7 +160,7 @@ export type ChannelHealth = z.infer<typeof channelHealthSchema>;
 export const channelLastErrorSchema = z.object({
   code: z.string(),
   message: z.string(),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 export type ChannelLastError = z.infer<typeof channelLastErrorSchema>;
 
@@ -175,7 +168,7 @@ export type ChannelLastError = z.infer<typeof channelLastErrorSchema>;
 export const channelHealthResponseSchema = channelHealthSchema.extend({
   status: channelStatusSchema,
   /** The channel's version after the check wrote its snapshot: the next PATCH must send this one, not the one read before. */
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ChannelHealthResponse = z.infer<typeof channelHealthResponseSchema>;
 
@@ -197,17 +190,17 @@ export const channelResponseSchema = z.object({
   businessAccountId: z.string().nullable().optional(),
   hasCredentials: z.boolean(),
   /** Last four characters of each stored secret, for recognising which token is connected. */
-  credentialHints: z.record(z.string()),
+  credentialHints: z.record(z.string(), z.string()),
   /** The last health check (null: never run). Always sent by the API; optional only so a fixture built before it still parses. */
   health: channelHealthSchema.nullable().optional(),
   /** Why the system last stopped trusting the channel; cleared when it is switched on again. */
   lastError: channelLastErrorSchema.nullable().optional(),
   /** Where the provider posts (absolute). Null for a channel no provider can reach (the simulator). */
   webhookUrl: z.string().nullable(),
-  lastEventAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  lastEventAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type ChannelResponse = z.infer<typeof channelResponseSchema>;
 
@@ -227,7 +220,7 @@ export type CreateSimulatorChannelInput = z.infer<typeof createSimulatorChannelS
 
 export const updateChannelSchema = z
   .object({
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
     name: channelName.optional(),
     /** A person can switch a channel on or off; `error` is only ever set by the system. */
     status: z.enum(['connected', 'disconnected']).optional(),
@@ -235,7 +228,7 @@ export const updateChannelSchema = z
     displayAddress: z.string().trim().min(1).max(40).nullable().optional(),
   })
   .refine((v) => Object.keys(v).some((k) => k !== 'rowVersion'), {
-    message: 'Nothing to update',
+    error: 'Nothing to update',
   });
 export type UpdateChannelInput = z.infer<typeof updateChannelSchema>;
 
@@ -263,7 +256,7 @@ export const simulatorInboundSchema = z
         mediaKind: messageMediaKindSchema.exclude(['location', 'contact']),
         mime: z.string().trim().min(3).max(127),
         name: z.string().trim().max(255).optional(),
-        sizeBytes: z.number().int().nonnegative().optional(),
+        sizeBytes: z.int().nonnegative().optional(),
       })
       .optional(),
     location: z
@@ -277,7 +270,7 @@ export const simulatorInboundSchema = z
     providerMessageId: z.string().trim().min(1).max(128).optional(),
     fault: z.enum(['dup']).optional(),
     /** When the customer "sent" it; defaults to now. */
-    sentAt: z.string().datetime().optional(),
+    sentAt: z.iso.datetime().optional(),
   })
   .superRefine((v, ctx) => {
     if (v.kind === 'text' && !v.text?.trim())
@@ -296,7 +289,7 @@ export type SimulatorInboundInput = z.infer<typeof simulatorInboundSchema>;
 export const simulatorInboundResponseSchema = z.object({
   providerMessageId: z.string(),
   /** How many times the same message was queued (3 for a duplicate delivery). */
-  deliveries: z.number().int().positive(),
+  deliveries: z.int().positive(),
 });
 export type SimulatorInboundResponse = z.infer<typeof simulatorInboundResponseSchema>;
 
@@ -306,7 +299,7 @@ export const simulatorReceiptSchema = z.object({
   status: receiptStatusSchema,
   errorCode: z.string().trim().max(64).optional(),
   errorMessage: z.string().trim().max(500).optional(),
-  delayMs: z.number().int().min(0).max(SIMULATOR_LATENCY_MAX_MS).default(0),
+  delayMs: z.int().min(0).max(SIMULATOR_LATENCY_MAX_MS).default(0),
 });
 export type SimulatorReceiptInput = z.infer<typeof simulatorReceiptSchema>;
 

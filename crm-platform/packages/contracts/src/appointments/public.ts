@@ -27,7 +27,7 @@ export const publicBookingTypeSchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   introMessage: z.string().nullable(),
-  durationMinutes: z.number().int(),
+  durationMinutes: z.int(),
   locationType: bookingLocationTypeSchema,
   /** The address, phone or link; shown on the page, not secret. */
   locationValue: z.string().nullable(),
@@ -46,7 +46,7 @@ export const publicBookingTypeSchema = z.object({
    * Booking never needs it; only a visitor who ticks it is recorded as agreeing.
    */
   consent: z
-    .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
+    .object({ text: z.string(), version: z.int().min(1), url: z.string().nullable() })
     .nullable()
     .default(null),
 });
@@ -71,7 +71,7 @@ export type PublicBookingTypeView = z.infer<typeof publicBookingTypeViewSchema>;
 
 export const publicBookInputSchema = z
   .object({
-    startsAt: z.string().datetime({ offset: true }),
+    startsAt: z.iso.datetime({ offset: true }),
     name: inviteeInputSchema.shape.name,
     email: inviteeInputSchema.shape.email,
     phone: inviteeInputSchema.shape.phone,
@@ -80,18 +80,18 @@ export const publicBookInputSchema = z
     notes: z.string().trim().max(2000).nullish(),
     answers: answersInputSchema.optional(),
     /** The visitor ticked the consent line, which was at this version. Ignored when the page has no such line or the version is unknown. */
-    consent: z.object({ given: z.boolean(), version: z.number().int().min(1) }).optional(),
+    consent: z.object({ given: z.boolean(), version: z.int().min(1) }).optional(),
   })
   .refine((v) => v.email || v.phone, {
-    message: 'give an email or a phone number so we can reach you',
     path: ['email'],
+    error: 'give an email or a phone number so we can reach you',
   });
 export type PublicBookInput = z.infer<typeof publicBookInputSchema>;
 
 export const publicBookResponseSchema = z.object({
   status: appointmentStatusSchema,
-  startsAt: z.string().datetime(),
-  endsAt: z.string().datetime(),
+  startsAt: z.iso.datetime(),
+  endsAt: z.iso.datetime(),
   timezone: z.string(),
   /** True when the booking waits for staff approval. */
   requiresApproval: z.boolean(),
@@ -112,14 +112,14 @@ export const publicManageViewSchema = z.object({
   bookingType: z
     .object({
       name: z.string(),
-      durationMinutes: z.number().int(),
+      durationMinutes: z.int(),
       locationType: bookingLocationTypeSchema,
       locationValue: z.string().nullable(),
     })
     .nullable(),
   title: z.string(),
-  startsAt: z.string().datetime(),
-  endsAt: z.string().datetime(),
+  startsAt: z.iso.datetime(),
+  endsAt: z.iso.datetime(),
   timezone: z.string(),
   meetUrl: z.string().nullable(),
   canCancel: z.boolean(),
@@ -130,7 +130,7 @@ export const publicManageViewSchema = z.object({
 export type PublicManageView = z.infer<typeof publicManageViewSchema>;
 
 export const publicRescheduleInputSchema = z.object({
-  startsAt: z.string().datetime({ offset: true }),
+  startsAt: z.iso.datetime({ offset: true }),
 });
 export type PublicRescheduleInput = z.infer<typeof publicRescheduleInputSchema>;
 

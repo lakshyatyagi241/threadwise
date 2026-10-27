@@ -16,11 +16,11 @@ const getaPublishEnvSchema = z.object({
    */
   GETA_PUBLISH_MODE: z.enum(['live', 'fixture']).optional(),
   /** Per request, in milliseconds. */
-  GETA_PUBLISH_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(120_000).default(15_000),
+  GETA_PUBLISH_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(120_000).prefault(15_000),
   /** Total tries per call: a network error, a timeout, a 429 or a 5xx is tried again with backoff; other 4xx never. */
-  GETA_PUBLISH_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(6).default(3),
+  GETA_PUBLISH_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(6).prefault(3),
   /** First backoff; it doubles on every further try. */
-  GETA_PUBLISH_BACKOFF_MS: z.coerce.number().int().min(0).max(30_000).default(500),
+  GETA_PUBLISH_BACKOFF_MS: z.coerce.number().int().min(0).max(30_000).prefault(500),
   /** Lets the base URL point at a private or loopback address (a local stub). Never on in production. */
   GETA_PUBLISH_ALLOW_PRIVATE_HOSTS: bool.default(false),
 });

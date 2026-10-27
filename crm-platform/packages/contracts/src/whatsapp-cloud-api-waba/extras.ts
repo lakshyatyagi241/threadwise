@@ -46,7 +46,7 @@ export type CreateQrCodeInput = z.infer<typeof createQrCodeInputSchema>;
 /** `POST /v2/waba/numbers/:id/sync-history`: Meta pushes history once, shortly after onboarding; this re-asks and reports what arrived. */
 export const wabaSyncHistoryResultSchema = z.object({
   requested: z.literal(true),
-  importedMessages: z.number().int(),
+  importedMessages: z.int(),
   /** Whether the subscription now points at this platform (the only lever Meta offers). */
   inboundWired: z.boolean().nullable(),
   warnings: z.array(z.string()),
@@ -56,11 +56,11 @@ export type WabaSyncHistoryResult = z.infer<typeof wabaSyncHistoryResultSchema>;
 /** The free monthly service-conversation allowance, from Meta's conversation analytics (TW-WABA-023). */
 export const WABA_FREE_CONVERSATIONS_PER_MONTH = 1000;
 export const wabaConversationsSchema = z.object({
-  freeUsed: z.number().int(),
-  freeTotal: z.number().int(),
-  freeLeft: z.number().int(),
-  paid: z.number().int(),
-  total: z.number().int(),
+  freeUsed: z.int(),
+  freeTotal: z.int(),
+  freeLeft: z.int(),
+  paid: z.int(),
+  total: z.int(),
   cost: z.number(),
 });
 export type WabaConversations = z.infer<typeof wabaConversationsSchema>;

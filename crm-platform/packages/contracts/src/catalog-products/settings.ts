@@ -13,11 +13,11 @@ export const CATALOG_DEFAULT_CURRENCY = 'USD';
 
 export const catalogSettingsUsageSchema = z.object({
   /** Workspaces with a saved catalog id. */
-  workspacesConnected: z.number().int(),
+  workspacesConnected: z.int(),
   /** Products whose Meta sync status is `synced`. */
-  productsSynced: z.number().int(),
+  productsSynced: z.int(),
   /** Rows of the catalog send log that were sent. */
-  messagesSent: z.number().int(),
+  messagesSent: z.int(),
 });
 
 export const catalogSettingsResponseSchema = z.object({
@@ -31,12 +31,12 @@ export const catalogSettingsResponseSchema = z.object({
   defaultCurrency: z.string(),
   usage: catalogSettingsUsageSchema,
   /** Version of the settings document, sent back on save. */
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type CatalogSettingsResponse = z.infer<typeof catalogSettingsResponseSchema>;
 
 export const updateCatalogSettingsSchema = z.object({
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
   catalogEnabled: z.boolean().optional(),
   commerceEnabled: z.boolean().optional(),
   /** `vNN.N`. Blank clears the saved value, so the server default applies (Reference saved a blank and broke the URLs; fixed). */

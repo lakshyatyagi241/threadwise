@@ -67,7 +67,7 @@ export const registrationSettingsSchema = z.object({
   blockedEmailDomains: z.array(z.string().max(253)).max(500).default([]),
   /** A verified mobile number is mandatory: sign-up fails closed when the code step cannot run. */
   requirePhoneVerification: z.boolean().default(true),
-  trialDays: z.number().int().min(0).max(365).default(14),
+  trialDays: z.int().min(0).max(365).default(14),
   defaultTimezone: z.string().max(64).default('UTC'),
   defaultCountryIso: z.string().length(2).nullable().default(null),
   termsUrl: z.string().max(512).default('/legal/terms'),
@@ -83,12 +83,12 @@ export const registrationSettingsSchema = z.object({
        * template endpoints, never written by the settings patch.
        */
       template: otpTemplateStateSchema.nullable().default(null),
-      ttlMinutes: z.number().int().min(1).max(90).default(5),
-      length: z.number().int().min(4).max(8).default(6),
-      resendCooldownSec: z.number().int().min(15).max(600).default(60),
-      maxAttempts: z.number().int().min(1).max(20).default(5),
+      ttlMinutes: z.int().min(1).max(90).default(5),
+      length: z.int().min(4).max(8).default(6),
+      resendCooldownSec: z.int().min(15).max(600).default(60),
+      maxAttempts: z.int().min(1).max(20).default(5),
     })
-    .default({}),
+    .prefault({}),
 });
 export type RegistrationSettings = z.infer<typeof registrationSettingsSchema>;
 
@@ -97,10 +97,10 @@ const otpSettingsPatchSchema = z.object({
   /** Must be a sender in the OTP sender registry; null clears the choice. */
   sender: otpSenderRefSchema.nullable().optional(),
   // A blank knob (null) means "use the default" (5 min / 6 digits / 60 s / 5 tries), never 0.
-  ttlMinutes: z.number().int().min(1).max(90).nullable().optional(),
-  length: z.number().int().min(4).max(8).nullable().optional(),
-  resendCooldownSec: z.number().int().min(15).max(600).nullable().optional(),
-  maxAttempts: z.number().int().min(1).max(20).nullable().optional(),
+  ttlMinutes: z.int().min(1).max(90).nullable().optional(),
+  length: z.int().min(4).max(8).nullable().optional(),
+  resendCooldownSec: z.int().min(15).max(600).nullable().optional(),
+  maxAttempts: z.int().min(1).max(20).nullable().optional(),
 });
 
 export const registrationSettingsPatchSchema = z.object({
@@ -109,12 +109,9 @@ export const registrationSettingsPatchSchema = z.object({
   defaultPlanId: z.string().max(64).nullable().optional(),
   businessEmailOnly: z.boolean().optional(),
   blockDisposableEmail: z.boolean().optional(),
-  blockedEmailDomains: z
-    .array(z.string().trim().toLowerCase().max(253))
-    .max(500)
-    .optional(),
+  blockedEmailDomains: z.array(z.string().trim().toLowerCase().max(253)).max(500).optional(),
   requirePhoneVerification: z.boolean().optional(),
-  trialDays: z.number().int().min(0).max(365).optional(),
+  trialDays: z.int().min(0).max(365).optional(),
   defaultTimezone: z.string().max(64).optional(),
   defaultCountryIso: z.string().length(2).nullable().optional(),
   termsUrl: z.string().max(512).optional(),
@@ -234,7 +231,7 @@ export const AUTH_PAGE_EXTRA_KEYS = [
   'chip6',
 ] as const;
 
-export const authPageExtraSchema = z.record(z.string().max(600));
+export const authPageExtraSchema = z.record(z.string(), z.string().max(600));
 
 export const authPagesResponseSchema = z.object({
   /** The shipped copy shown wherever a field is empty, so the editor need not mirror it. */
@@ -243,7 +240,7 @@ export const authPagesResponseSchema = z.object({
     register: authPageContentSchema,
     forgot: authPageContentSchema,
   }),
-  variant: z.number().int().min(1).max(6),
+  variant: z.int().min(1).max(6),
   login: authPageContentSchema,
   register: authPageContentSchema,
   forgot: authPageContentSchema,
@@ -262,7 +259,6 @@ export type AuthPagesResponse = z.infer<typeof authPagesResponseSchema>;
 /** In a patch an empty string means "clear this field, show the shipped default". */
 const empty = z.literal('');
 const httpsUrl = z
-  .string()
   .url()
   .max(2048)
   .refine((u) => u.startsWith('https://'), 'must be an https address');
@@ -277,7 +273,7 @@ export const authPageContentPatchSchema = z.object({
 });
 
 export const authPagesPatchSchema = z.object({
-  variant: z.number().int().min(1).max(6).optional(),
+  variant: z.int().min(1).max(6).optional(),
   login: authPageContentPatchSchema.optional(),
   register: authPageContentPatchSchema.optional(),
   forgot: authPageContentPatchSchema.optional(),

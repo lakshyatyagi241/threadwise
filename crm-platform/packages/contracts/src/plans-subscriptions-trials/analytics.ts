@@ -40,54 +40,52 @@ export const leaderboardRowSchema = z.object({
   name: z.string(),
   price: money,
   currency: z.string(),
-  subscribers: z.number().int(),
+  subscribers: z.int(),
   mrr: money,
   arpa: money,
   ltv: money,
-  netNew: z.number().int(),
-  cancellations: z.number().int(),
+  netNew: z.int(),
+  cancellations: z.int(),
   churnPct: z.string(),
 });
 export type LeaderboardRow = z.infer<typeof leaderboardRowSchema>;
 
 export const planAnalyticsSchema = z.object({
-  days: z.number().int(),
+  days: z.int(),
   currency: z.string(),
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   kpis: z.object({
     /** Active recurring revenue per month, normalised to one month (not the sum of paid orders, which Reference called MRR). */
     mrr: money,
-    subscribers: z.number().int(),
-    netNew: z.number().int(),
+    subscribers: z.int(),
+    netNew: z.int(),
     arpa: money,
     /** ARPA x 28 months, Reference's constant. */
     ltv: money,
     churnPct: z.string(),
-    cancellations: z.number().int(),
+    cancellations: z.int(),
     trialToPaidPct: z.string(),
-    trials: z.number().int(),
+    trials: z.int(),
     windowRevenue: money,
-    newPaidOrders: z.number().int(),
+    newPaidOrders: z.int(),
   }),
   mrrTrend: z.object({
     labels: z.array(z.string()),
     series: z.array(z.object({ plan: z.string(), values: z.array(z.number()) })),
   }),
-  planShare: z.array(z.object({ plan: z.string(), subscribers: z.number().int() })),
+  planShare: z.array(z.object({ plan: z.string(), subscribers: z.int() })),
   leaderboard: z.array(leaderboardRowSchema),
   upgradePaths: z.array(
     z.object({
       from: z.string(),
       to: z.string(),
       kind: z.enum(['upgrade', 'downgrade', 'first_paid']),
-      count: z.number().int(),
+      count: z.int(),
     }),
   ),
   /** Reasons are not collected on cancellation, so this is empty until they are (Reference's list was always empty too). */
-  cancellationReasons: z.array(z.object({ reason: z.string(), count: z.number().int() })),
-  featureAdoption: z.array(
-    z.object({ feature: z.string(), workspaces: z.number().int(), pct: z.string() }),
-  ),
+  cancellationReasons: z.array(z.object({ reason: z.string(), count: z.int() })),
+  featureAdoption: z.array(z.object({ feature: z.string(), workspaces: z.int(), pct: z.string() })),
 });
 export type PlanAnalytics = z.infer<typeof planAnalyticsSchema>;
 
@@ -101,9 +99,9 @@ export const financialSchema = z.object({
   kpis: z.object({ revenue: delta, mrr: money, arr: money, refunds: money, outstanding: money }),
   revenueByDay: z.array(z.object({ date: z.string(), revenue: z.number(), refunds: z.number() })),
   paymentMethods: z.array(z.object({ gateway: z.string(), amount: money })),
-  orderStatus: z.array(z.object({ status: z.string(), count: z.number().int() })),
+  orderStatus: z.array(z.object({ status: z.string(), count: z.int() })),
   topWorkspaces: z.array(
-    z.object({ slug: z.string(), name: z.string(), orders: z.number().int(), amount: money }),
+    z.object({ slug: z.string(), name: z.string(), orders: z.int(), amount: money }),
   ),
   recentOrders: z.array(
     z.object({
@@ -122,16 +120,16 @@ export const premiumSchema = z.object({
   window: z.enum(FINANCIAL_WINDOWS),
   currency: z.string(),
   kpis: z.object({
-    paidWorkspaces: z.number().int(),
-    freeWorkspaces: z.number().int(),
+    paidWorkspaces: z.int(),
+    freeWorkspaces: z.int(),
     arpu: money,
     conversion: delta,
   }),
-  planDistribution: z.array(z.object({ plan: z.string(), workspaces: z.number().int() })),
+  planDistribution: z.array(z.object({ plan: z.string(), workspaces: z.int() })),
   revenueByPlan: z.array(z.object({ plan: z.string(), amount: money })),
-  newPaidSignups: z.array(z.object({ date: z.string(), workspaces: z.number().int() })),
+  newPaidSignups: z.array(z.object({ date: z.string(), workspaces: z.int() })),
   /** Top five by paid orders in the last 90 days, whatever the window (Reference rule 7). */
-  popularPlans: z.array(z.object({ plan: z.string(), orders: z.number().int() })),
+  popularPlans: z.array(z.object({ plan: z.string(), orders: z.int() })),
   plans: z.array(
     z.object({
       slug: z.string(),
@@ -139,7 +137,7 @@ export const premiumSchema = z.object({
       price: money,
       currency: z.string(),
       duration: z.string(),
-      workspaces: z.number().int(),
+      workspaces: z.int(),
       mrr: money,
       windowRevenue: money,
       isActive: z.boolean(),

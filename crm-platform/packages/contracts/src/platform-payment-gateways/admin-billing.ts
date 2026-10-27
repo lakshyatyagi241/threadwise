@@ -10,16 +10,16 @@ import { paygwOrderStatusSchema } from './checkout';
 
 export const PAYGW_ADMIN_PAGE_SIZE = 12;
 
-const pageSchema = z.coerce.number().int().min(1).max(100000).default(1);
+const pageSchema = z.coerce.number().int().min(1).max(100000).prefault(1);
 const searchSchema = z.string().trim().max(120).optional();
 
 export const adminMoneySchema = z.object({ currency: z.string(), amount: z.string() });
 export type AdminMoney = z.infer<typeof adminMoneySchema>;
 
 export const adminPagedSchema = z.object({
-  total: z.number().int(),
-  page: z.number().int(),
-  pageSize: z.number().int(),
+  total: z.int(),
+  page: z.int(),
+  pageSize: z.int(),
 });
 
 /** Where the buyer's workspace is shown. `slug` leads to the workspace screens. */
@@ -126,13 +126,13 @@ export const adminOrdersResponseSchema = adminPagedSchema.extend({
   data: z.array(adminOrderRowSchema),
   awaiting: z.array(awaitingApprovalRowSchema),
   kpis: z.object({
-    total: z.number().int(),
+    total: z.int(),
     /** Percent change against the previous window of the same length, one decimal. */
     totalDeltaPct: z.number(),
-    upgrades: z.object({ count: z.number().int(), money: adminMoneySchema }),
-    downgrades: z.object({ count: z.number().int(), money: adminMoneySchema }),
-    addons: z.object({ count: z.number().int(), money: adminMoneySchema }),
-    cancellations: z.object({ count: z.number().int(), money: adminMoneySchema }),
+    upgrades: z.object({ count: z.int(), money: adminMoneySchema }),
+    downgrades: z.object({ count: z.int(), money: adminMoneySchema }),
+    addons: z.object({ count: z.int(), money: adminMoneySchema }),
+    cancellations: z.object({ count: z.int(), money: adminMoneySchema }),
   }),
   reportingCurrency: z.string(),
 });
@@ -204,12 +204,12 @@ export const billingHistoryResponseSchema = adminPagedSchema.extend({
   kpis: z.object({
     gross: adminMoneySchema,
     grossDeltaPct: z.number(),
-    charges: z.number().int(),
-    failed: z.number().int(),
+    charges: z.int(),
+    failed: z.int(),
     successPct: z.number(),
-    refunds: z.number().int(),
+    refunds: z.int(),
     refundsMoney: adminMoneySchema,
-    chargebacks: z.number().int(),
+    chargebacks: z.int(),
     chargebacksMoney: adminMoneySchema,
   }),
   trend: trendSchema,
@@ -233,22 +233,22 @@ export const billingAnalyticsResponseSchema = z.object({
     net: adminMoneySchema,
     netPct: z.number(),
     successPct: z.number(),
-    totalCharges: z.number().int(),
-    paidCount: z.number().int(),
+    totalCharges: z.int(),
+    paidCount: z.int(),
     failed: adminMoneySchema,
-    failedCount: z.number().int(),
+    failedCount: z.int(),
     refunds: adminMoneySchema,
-    refundsCount: z.number().int(),
+    refundsCount: z.int(),
     chargebacks: adminMoneySchema,
-    chargebacksCount: z.number().int(),
+    chargebacksCount: z.int(),
   }),
   trend: trendSchema,
   gatewayMix: z.array(z.object({ label: z.string(), value: z.number() })),
-  statusMix: z.array(z.object({ label: z.string(), value: z.number().int() })),
+  statusMix: z.array(z.object({ label: z.string(), value: z.int() })),
   topWorkspaces: z.array(
     z.object({
       workspace: adminWorkspaceRefSchema.nullable(),
-      orders: z.number().int(),
+      orders: z.int(),
       total: z.string(),
     }),
   ),
@@ -267,34 +267,34 @@ export type OrderAnalyticsQuery = z.infer<typeof orderAnalyticsQuerySchema>;
 export const orderAnalyticsResponseSchema = z.object({
   reportingCurrency: z.string(),
   kpis: z.object({
-    total: z.number().int(),
+    total: z.int(),
     totalDeltaPct: z.number(),
     newMrr: z.string(),
-    paidCount: z.number().int(),
+    paidCount: z.int(),
     lostMrr: z.string(),
-    cancels: z.number().int(),
+    cancels: z.int(),
     avgOrderValue: z.string(),
     attachPct: z.number(),
-    addons: z.number().int(),
+    addons: z.int(),
     conversionPct: z.number(),
-    signups: z.number().int(),
+    signups: z.int(),
   }),
   motion: z.object({
     labels: z.array(z.string()),
-    paid: z.array(z.number().int()),
-    cancelled: z.array(z.number().int()),
+    paid: z.array(z.int()),
+    cancelled: z.array(z.int()),
   }),
-  typeMix: z.array(z.object({ label: z.string(), value: z.number().int() })),
-  addons: z.array(z.object({ label: z.string(), count: z.number().int(), total: z.string() })),
+  typeMix: z.array(z.object({ label: z.string(), value: z.int() })),
+  addons: z.array(z.object({ label: z.string(), count: z.int(), total: z.string() })),
   /** Real counts only; Reference invented visits, trials and active-in-trial from fixed ratios. */
-  funnel: z.array(z.object({ label: z.string(), count: z.number().int() })),
+  funnel: z.array(z.object({ label: z.string(), count: z.int() })),
   /** Paid orders by the billing country the buyer entered at checkout (Reference read a users.country_code column that is empty in practice). */
-  byCountry: z.array(z.object({ country: z.string(), count: z.number().int() })),
+  byCountry: z.array(z.object({ country: z.string(), count: z.int() })),
   cohorts: z.array(
     z.object({
       label: z.string(),
-      size: z.number().int(),
-      cells: z.array(z.number().int().nullable()),
+      size: z.int(),
+      cells: z.array(z.int().nullable()),
     }),
   ),
 });
@@ -349,7 +349,7 @@ export const invoiceRowSchema = z.object({
   total: z.string(),
   badge: invoiceBadgeSchema,
   /** Days past due for an overdue invoice (counted from the due date, not from creation). */
-  daysLate: z.number().int(),
+  daysLate: z.int(),
   manual: z.boolean(),
 });
 export type InvoiceRow = z.infer<typeof invoiceRowSchema>;
@@ -358,12 +358,12 @@ export const invoicesResponseSchema = adminPagedSchema.extend({
   data: z.array(invoiceRowSchema),
   reportingCurrency: z.string(),
   kpis: z.object({
-    total: z.number().int(),
-    paid: z.number().int(),
+    total: z.int(),
+    paid: z.int(),
     paidPct: z.number(),
-    outstanding: z.number().int(),
+    outstanding: z.int(),
     outstandingMoney: adminMoneySchema,
-    overdue: z.number().int(),
+    overdue: z.int(),
     thisMonth: adminMoneySchema,
     thisMonthDeltaPct: z.number(),
   }),
@@ -375,7 +375,7 @@ export type InvoicesResponse = z.infer<typeof invoicesResponseSchema>;
 export const manualInvoiceRequestSchema = z.object({
   workspaceId: uuidSchema,
   customerName: z.string().trim().max(191).optional(),
-  customerEmail: z.string().trim().email().max(191).optional().or(z.literal('')),
+  customerEmail: z.string().trim().pipe(z.email().max(191)).optional().or(z.literal('')),
   description: z.string().trim().min(1).max(500),
   amount: z
     .string()
@@ -467,7 +467,7 @@ export type InvoiceView = z.infer<typeof invoiceViewSchema>;
 export const exportResponseSchema = z.object({
   filename: z.string(),
   csv: z.string(),
-  rows: z.number().int(),
+  rows: z.int(),
   /** True when the export stopped at the row cap. */
   truncated: z.boolean(),
 });
@@ -478,22 +478,22 @@ export type ExportResponse = z.infer<typeof exportResponseSchema>;
 export const billingSettingsSchema = z.object({
   taxEnabled: z.boolean(),
   /** Whole percent 0..100 (Reference's form takes an integer). */
-  taxRate: z.number().int().min(0).max(100),
+  taxRate: z.int().min(0).max(100),
   taxLabel: z.string().trim().min(1).max(32),
   refundEnabled: z.boolean(),
-  refundDays: z.number().int().min(0).max(365),
+  refundDays: z.int().min(0).max(365),
   yearlyToggleEnabled: z.boolean(),
-  yearlyDiscountPct: z.number().int().min(0).max(100),
+  yearlyDiscountPct: z.int().min(0).max(100),
   recurringEnabled: z.boolean(),
   /** Days a paid plan or add-on stays active after its period ends while autopay is still retrying (0 = no grace). */
-  graceDays: z.number().int().min(0).max(30).default(7),
+  graceDays: z.int().min(0).max(30).default(7),
   /** One country per line in the form; a de-duplicated list here. */
   countries: z.array(z.string().trim().min(1).max(100)).max(300),
   companyName: z.string().trim().max(160),
   companyAddress: z.string().trim().max(500),
   companyTaxId: z.string().trim().max(64),
   companyRegNo: z.string().trim().max(64),
-  companyEmail: z.string().trim().email().max(160).or(z.literal('')),
+  companyEmail: z.string().trim().pipe(z.email().max(160)).or(z.literal('')),
   companyPhone: z.string().trim().max(40),
 });
 export type BillingSettings = z.infer<typeof billingSettingsSchema>;
@@ -504,8 +504,8 @@ export const billingSettingsResponseSchema = billingSettingsSchema.extend({
   invoiceLogoUrl: z.string().nullable(),
   /** Optimistic lock: send it back on save. */
   version: z.string(),
-  couponCount: z.number().int().nullable(),
-  faqCount: z.number().int().nullable(),
+  couponCount: z.int().nullable(),
+  faqCount: z.int().nullable(),
 });
 export type BillingSettingsResponse = z.infer<typeof billingSettingsResponseSchema>;
 
@@ -547,21 +547,21 @@ export const adminSubscriptionRowSchema = z.object({
   currency: z.string(),
   amount: z.string(),
   billingCycle: z.enum(['monthly', 'yearly']),
-  currentPeriodEnd: z.string().datetime().nullable(),
-  renewalsCount: z.number().int().nonnegative(),
-  canceledAt: z.string().datetime().nullable(),
+  currentPeriodEnd: z.iso.datetime().nullable(),
+  renewalsCount: z.int().nonnegative(),
+  canceledAt: z.iso.datetime().nullable(),
   /** The last attempt to cancel at the provider failed or was not possible: finish it in the provider's dashboard. */
   cancelFailed: z.boolean(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type AdminSubscriptionRow = z.infer<typeof adminSubscriptionRowSchema>;
 
 export const adminSubscriptionsResponseSchema = adminPagedSchema.extend({
   data: z.array(adminSubscriptionRowSchema),
   kpis: z.object({
-    active: z.number().int(),
-    pastDue: z.number().int(),
-    canceled: z.number().int(),
+    active: z.int(),
+    pastDue: z.int(),
+    canceled: z.int(),
   }),
 });
 export type AdminSubscriptionsResponse = z.infer<typeof adminSubscriptionsResponseSchema>;
@@ -616,9 +616,7 @@ export const refundResponseSchema = z.object({
 export type RefundResponse = z.infer<typeof refundResponseSchema>;
 
 export const refundListResponseSchema = z.object({
-  data: z.array(
-    refundResponseSchema.extend({ reason: z.string(), createdAt: z.string().datetime() }),
-  ),
+  data: z.array(refundResponseSchema.extend({ reason: z.string(), createdAt: z.iso.datetime() })),
 });
 export type RefundListResponse = z.infer<typeof refundListResponseSchema>;
 
@@ -629,8 +627,8 @@ export const adminSubscriptionChargeSchema = z.object({
   amountMinor: z.string(),
   currency: z.string(),
   status: z.enum(['paid', 'issued', 'failed', 'cancelled', 'expired', 'other']),
-  paidAt: z.string().datetime().nullable(),
-  receiptUrl: z.string().url().nullable(),
+  paidAt: z.iso.datetime().nullable(),
+  receiptUrl: z.url().nullable(),
 });
 export type AdminSubscriptionCharge = z.infer<typeof adminSubscriptionChargeSchema>;
 

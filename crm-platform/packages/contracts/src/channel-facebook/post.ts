@@ -18,14 +18,17 @@ export const FB_MESSAGE_MAX = 60000;
 export const createFbPostSchema = z.object({
   pageId: uuidSchema,
   message: z.string().trim().max(FB_MESSAGE_MAX).optional(),
-  link: z.string().trim().url().max(2048).optional(),
+  link: z.string().trim().pipe(z.url().max(2048)).optional(),
   /** Public image addresses (uploading a file waits on the storage domain). At most ten; extra ones are dropped. */
-  photoUrls: z.array(z.string().trim().url().max(2048)).max(50).optional(),
+  photoUrls: z
+    .array(z.string().trim().pipe(z.url().max(2048)))
+    .max(50)
+    .optional(),
   /** A public HTTPS video address (Meta fetches it). A video wins over photos. */
-  videoUrl: z.string().trim().url().max(2048).optional(),
+  videoUrl: z.string().trim().pipe(z.url().max(2048)).optional(),
   asReel: z.boolean().optional(),
   /** When to publish, as an instant: at least 10 minutes and at most 75 days from now. Absent publishes now. */
-  scheduledAt: z.string().datetime({ offset: true }).optional(),
+  scheduledAt: z.iso.datetime({ offset: true }).optional(),
 });
 export type CreateFbPostInput = z.infer<typeof createFbPostSchema>;
 
@@ -42,11 +45,11 @@ export const fbPostSchema = z.object({
   video: z.string().nullable(),
   /** Meta's id once the post is live or held. */
   fbPostId: z.string().nullable(),
-  scheduledPublishTime: z.string().datetime().nullable(),
-  publishedAt: z.string().datetime().nullable(),
+  scheduledPublishTime: z.iso.datetime().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
   /** Why Meta refused it; null when it did not. */
   error: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type FbPost = z.infer<typeof fbPostSchema>;
 
@@ -57,7 +60,7 @@ export const listFbPostsQuerySchema = z.object({
   q: z.string().trim().max(200).optional(),
   /** Only one Page's posts. */
   account: uuidSchema.optional(),
-  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).default(1),
+  page: z.coerce.number().int().min(1).max(MAX_PAGE_NUMBER).prefault(1),
 });
 export type ListFbPostsQuery = z.infer<typeof listFbPostsQuerySchema>;
 
@@ -65,25 +68,25 @@ export const fbPostListSchema = z.object({
   data: z.array(fbPostSchema),
   /** Over the Page filter only, never over the other filters. `failed` includes drafts. */
   counts: z.object({
-    scheduled: z.number().int(),
-    published: z.number().int(),
-    failed: z.number().int(),
+    scheduled: z.int(),
+    published: z.int(),
+    failed: z.int(),
   }),
   typeCounts: z.object({
-    all: z.number().int(),
-    text: z.number().int(),
-    link: z.number().int(),
-    photo: z.number().int(),
-    multi_photo: z.number().int(),
-    video: z.number().int(),
-    reel: z.number().int(),
+    all: z.int(),
+    text: z.int(),
+    link: z.int(),
+    photo: z.int(),
+    multi_photo: z.int(),
+    video: z.int(),
+    reel: z.int(),
   }),
   /** The filtered list, 15 a page. */
   meta: z.object({
-    page: z.number().int(),
-    perPage: z.number().int(),
-    total: z.number().int(),
-    lastPage: z.number().int(),
+    page: z.int(),
+    perPage: z.int(),
+    total: z.int(),
+    lastPage: z.int(),
   }),
   /** The connected Pages, so the composer and the filter can offer them. */
   pages: z.array(z.object({ id: uuidSchema, pageId: z.string(), name: z.string().nullable() })),

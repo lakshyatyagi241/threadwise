@@ -37,6 +37,6 @@ describe('optional URL settings in the environment schema', () => {
   });
 
   it.each(OPTIONAL_URLS)('%s: a malformed value is still refused', (name) => {
-    expect(() => validateEnv({ ...base, [name]: 'not a url' })).toThrow(/Invalid url/);
+    expect(() => validateEnv({ ...base, [name]: 'not a url' })).toThrow(/Invalid URL/);
   });
 });

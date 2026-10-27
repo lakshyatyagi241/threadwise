@@ -17,7 +17,7 @@ export interface ApiRequest<T> {
   query?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
   /** Parsed at the boundary: the server can be older or newer than this build. Omit for 204 responses. */
-  schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
+  schema?: z.ZodType<T, unknown>;
   /** Reuse one key across the retries of the same user action; a fresh one is made when omitted. */
   idempotencyKey?: string;
   signal?: AbortSignal;

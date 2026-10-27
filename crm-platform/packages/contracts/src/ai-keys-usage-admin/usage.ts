@@ -47,7 +47,7 @@ export const aiUsageQuerySchema = z
   });
 export type AiUsageQuery = z.infer<typeof aiUsageQuerySchema>;
 
-const count = z.number().int();
+const count = z.int();
 const providerTotal = z.object({ provider: z.string(), tokens: count, calls: count });
 const dailyPoint = z.object({ date: z.string(), tokens: count });
 const modelRow = z.object({
@@ -82,7 +82,7 @@ export const aiUsageResponseSchema = z.object({
   cap: z.object({
     used: count,
     limit: count.nullable(),
-    percent: z.number().int().min(0).max(100),
+    percent: z.int().min(0).max(100),
     /** True once a cap exists and has been reached. */
     reached: z.boolean(),
   }),

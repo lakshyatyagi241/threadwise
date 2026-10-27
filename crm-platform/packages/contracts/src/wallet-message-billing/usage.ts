@@ -88,7 +88,7 @@ export const walletUsageReportedSchema = z.object({
   /** `used` bills it; `failed` gives a bill back (the SMS was not delivered, the call never connected). */
   status: walletUsageStatusSchema.default('used'),
   /** SMS segments, call minutes... 1 for an email or an AI call. Ignored for the cost-plus kinds. */
-  units: z.number().int().min(0).max(WALLET_USAGE_LIMITS.maxUnits).default(1),
+  units: z.int().min(0).max(WALLET_USAGE_LIMITS.maxUnits).default(1),
   /** What it was, in a few words: `AI lead scoring`, `SMS`. Shown on the statement. */
   label: label(120),
   /** The recipient's number, for the country of the charge. */
@@ -110,7 +110,7 @@ export type WalletUsageReported = z.infer<typeof walletUsageReportedSchema>;
 export const walletUsagePriceSchema = z.object({
   kind: walletUnitPricedKindSchema,
   enabled: z.boolean(),
-  priceMinor: z.number().int().min(0).max(WALLET_USAGE_LIMITS.maxPriceMinor),
+  priceMinor: z.int().min(0).max(WALLET_USAGE_LIMITS.maxPriceMinor),
   /** What one unit is: segment, email, minute... */
   unit: z.string(),
 });
@@ -128,7 +128,7 @@ export const walletUsageSettingsSchema = z.object({
   prices: z.array(walletUsagePriceSchema),
   costPlus: z.array(walletUsageCostPlusSchema),
   /** The markup on a vendor cost, basis points (2000 = 20%). */
-  markupBps: z.number().int().min(0).max(WALLET_USAGE_LIMITS.maxMarkupBps),
+  markupBps: z.int().min(0).max(WALLET_USAGE_LIMITS.maxMarkupBps),
   updatedAt: z.string().nullable(),
 });
 export type WalletUsageSettings = z.infer<typeof walletUsageSettingsSchema>;
@@ -155,9 +155,9 @@ export const updateWalletUsageSettingsSchema = z
       .array(z.object({ kind: walletCostPlusKindSchema, enabled: z.boolean() }))
       .max(WALLET_COST_PLUS_KINDS.length)
       .optional(),
-    markupBps: z.number().int().min(0).max(WALLET_USAGE_LIMITS.maxMarkupBps).optional(),
+    markupBps: z.int().min(0).max(WALLET_USAGE_LIMITS.maxMarkupBps).optional(),
   })
   .refine((v) => v.prices !== undefined || v.costPlus !== undefined || v.markupBps !== undefined, {
-    message: 'Send at least one setting',
+    error: 'Send at least one setting',
   });
 export type UpdateWalletUsageSettingsInput = z.infer<typeof updateWalletUsageSettingsSchema>;
