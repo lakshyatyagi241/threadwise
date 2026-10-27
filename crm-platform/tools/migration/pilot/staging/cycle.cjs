@@ -1361,6 +1361,9 @@ async function manifestFresh(srv, client) {
   };
 }
 
+// Waboo's collections are live while they are exported: messages and broadcast logs arrive during the read, so the count taken before the
+// read and the documents written differ by the traffic of those minutes. The stream is still checked document by document.
+const LIVE_COUNT_TOLERANCE = 500;
 const exportArgs = (client, db, force = false) => [
   '--db',
   db,
@@ -1370,6 +1373,8 @@ const exportArgs = (client, db, force = false) => [
   '--i-confirm-server-is-staging',
   '--registry-classes',
   'MIGRATE,MIGRATE_LATER',
+  '--tolerance',
+  String(LIVE_COUNT_TOLERANCE),
   ...(force ? ['--force'] : []), // without it the exporter keeps a server file whose record matches, even when Waboo has moved on
 ];
 function runExport(client, db, force = false) {
