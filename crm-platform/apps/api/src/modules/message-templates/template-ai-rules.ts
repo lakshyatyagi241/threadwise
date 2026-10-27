@@ -66,6 +66,20 @@ export function templateSlug(raw: unknown): string {
  * header and footer lose any variable (Meta allows none there), at most three buttons are kept, a link button needs an http(s)
  * address and a call button a phone number, a quick reply is never kept next to a link button (Meta's order rule).
  */
+/** The wait before the one more try of a vendor call that failed with a throttle or a server error. */
+export const VENDOR_RETRY_WAIT_MS = 2_000;
+
+/**
+ * A vendor answer worth one more try: a throttle (429) or a server error (5xx), which the adapter reports as "AI provider answered
+ * <status>". A timeout or a refusal (a bad key, a bad request) is not: the same call would fail the same way.
+ */
+export function isRetryableVendorError(err: unknown): boolean {
+  const m = /AI provider answered (\d{3})\b/.exec(err instanceof Error ? err.message : '');
+  if (!m) return false;
+  const status = Number(m[1]);
+  return status === 429 || status >= 500;
+}
+
 export function parseTemplateDraft(raw: string): TplAiDraft | null {
   let clean = raw.trim();
   const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/.exec(clean);
