@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "सहेजा गया।",
-        "published": "WhatsApp पर प्रकाशित किया गया।"
+        "published": "WhatsApp पर प्रकाशित किया गया।",
+        "connectHint": "फ़ॉर्म केवल सीधे WhatsApp Cloud API कनेक्शन के ज़रिए प्रकाशित होते हैं। किसी एडमिन से चैनल → WhatsApp में एक कनेक्शन जोड़ने को कहें।",
+        "connectLink": "WhatsApp चैनल खोलें"
       },
       "builder": {
         "back": "फ़ॉर्म पर वापस जाएं",

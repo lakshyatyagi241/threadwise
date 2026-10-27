@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Đã lưu.",
-        "published": "Đã xuất bản lên WhatsApp."
+        "published": "Đã xuất bản lên WhatsApp.",
+        "connectHint": "Biểu mẫu chỉ được xuất bản qua kết nối trực tiếp WhatsApp Cloud API. Nhờ quản trị viên kết nối một số tại Kênh → WhatsApp.",
+        "connectLink": "Mở kênh WhatsApp"
       },
       "builder": {
         "back": "Về biểu mẫu",

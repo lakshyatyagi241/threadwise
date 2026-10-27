@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "保存しました。",
-        "published": "WhatsAppに公開しました。"
+        "published": "WhatsAppに公開しました。",
+        "connectHint": "フォームは WhatsApp Cloud API への直接接続でのみ公開できます。管理者にチャネル → WhatsApp で接続してもらってください。",
+        "connectLink": "WhatsApp チャネルを開く"
       },
       "builder": {
         "back": "フォーム一覧に戻る",

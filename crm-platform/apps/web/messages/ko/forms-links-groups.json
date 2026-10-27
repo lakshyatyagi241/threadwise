@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "저장되었습니다.",
-        "published": "WhatsApp에 게시되었습니다."
+        "published": "WhatsApp에 게시되었습니다.",
+        "connectHint": "양식은 WhatsApp Cloud API 직접 연결을 통해서만 게시됩니다. 관리자에게 채널 → WhatsApp에서 연결을 요청하세요.",
+        "connectLink": "WhatsApp 채널 열기"
       },
       "builder": {
         "back": "양식 목록으로",

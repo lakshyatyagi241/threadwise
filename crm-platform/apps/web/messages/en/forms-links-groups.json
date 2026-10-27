@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Saved.",
-        "published": "Published to WhatsApp."
+        "published": "Published to WhatsApp.",
+        "connectHint": "Forms publish only through a direct WhatsApp Cloud API connection. Ask an admin to connect one under Channels → WhatsApp.",
+        "connectLink": "Open WhatsApp channels"
       },
       "builder": {
         "flowId": "Flow ID",
