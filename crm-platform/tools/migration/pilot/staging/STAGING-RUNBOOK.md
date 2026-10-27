@@ -302,7 +302,7 @@ Quarantine review (counts by reason, no content):
 
 ## Step 8. Make the workspace openable [server] (proves: a person can sign in to the migrated workspace)
 
-Migrated users have no password, the owner's email is not verified, and staging has no outgoing mail and no Clerk, so the invite and reset emails cannot be sent. Set the owner's password directly. Choose the password on the server without echoing it; it is read ONLY from the environment variable, never from an argument:
+Migrated users have no password, the owner's email is not verified, and staging has no outgoing mail, so the invite and reset emails cannot be sent. Set the owner's password directly. Choose the password on the server without echoing it; it is read ONLY from the environment variable, never from an argument:
 
 ```bash
 read -rs -p 'new owner password: ' PW; echo

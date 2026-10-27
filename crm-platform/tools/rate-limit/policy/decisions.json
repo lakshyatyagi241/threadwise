@@ -325,13 +325,6 @@
       "expires": "2027-01-31"
     },
     {
-      "route": "POST /v2/auth/clerk/session",
-      "severity": "Medium",
-      "rationale": "Verifies a signed Clerk token; a forged token fails signature verification. The route returns 404 when Clerk is not configured.",
-      "owner": "platform-security",
-      "expires": "2027-01-31"
-    },
-    {
       "route": "POST /v2/auth/forgot-password",
       "severity": "Medium",
       "rationale": "Capped silently per address and per account in the service; the forgot-password-mail-flood probe sent 60 requests for one account from 31 addresses and exactly 1 mail was issued, with the same neutral reply every time.",

@@ -12,7 +12,7 @@ loadEnv({ path: resolve(process.cwd(), '.env') });
 /**
  * Development seed for the auth domain (run after `pnpm db:seed`).
  *
- * The base seed creates staff users without a password (they used Clerk), so
+ * The base seed creates staff users without a password, so
  * nobody can sign in with email and password. This gives every existing staff
  * user a known dev password and a verified email, adds one non-admin agent to
  * the first organization, and creates a platform operator.

@@ -652,7 +652,6 @@ async function main() {
     REDIS_URL: `redis://127.0.0.1:${P.redis}`,
     JWT_ACCESS_SECRET: 'access-secret-for-tests-0123456789abcdef',
     JWT_REFRESH_SECRET: 'refresh-secret-for-tests-0123456789abcdef',
-    CLERK_SECRET_KEY: 'sk_test_unused',
     CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString('base64'),
     OBS_METRICS_HOST: '0.0.0.0',
     OBS_METRICS_TOKEN: token,

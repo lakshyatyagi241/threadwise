@@ -50,7 +50,7 @@ sleep 2
 HOSTDB() { echo "$1" | sed -E 's#@(localhost|127\.0\.0\.1)([:/])#@host.docker.internal\2#'; }
 NETARGS=(--network "$NET" --add-host host.docker.internal:host-gateway)
 ENVS=(-e NODE_ENV=production -e LOG_LEVEL=error -e "DATABASE_URL=$(HOSTDB "$SEC_DB_URL")" -e "DATABASE_REPLICA_URL=$(HOSTDB "$SEC_DB_URL")" -e "MIGRATION_DATABASE_URL=$(HOSTDB "$SEC_DB_ADMIN_URL")"
-  -e "REDIS_URL=redis://$NAME_R:6379/0" -e "JWT_ACCESS_SECRET=$JA" -e "JWT_REFRESH_SECRET=$JR" -e "CREDENTIALS_ENCRYPTION_KEY=$CK" -e CHANNEL_SIMULATOR_ENABLED=false -e CLERK_SECRET_KEY=sk_test_container_limits_placeholder)
+  -e "REDIS_URL=redis://$NAME_R:6379/0" -e "JWT_ACCESS_SECRET=$JA" -e "JWT_REFRESH_SECRET=$JR" -e "CREDENTIALS_ENCRYPTION_KEY=$CK" -e CHANNEL_SIMULATOR_ENABLED=false)
 docker run --rm "${NETARGS[@]}" "${ENVS[@]}" "$IMAGE" node node_modules/@crm/db/dist/cli/migrate.js up >"$SEC_OUT/logs/migrate.log" 2>&1 || sec_fatal "the image's migrate failed, see logs/migrate.log"
 sec_check migrate PASS "image's own migrate command, database $SEC_DB"
 (cd "$CRM_ROOT" && DATABASE_URL="$SEC_DB_ADMIN_URL" MIGRATION_DATABASE_URL="$SEC_DB_ADMIN_URL" pnpm db:seed) >"$SEC_OUT/logs/seed.log" 2>&1 || sec_fatal "seed failed"

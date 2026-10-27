@@ -9,7 +9,6 @@ import { AccountService } from './account/account.service';
 import { PlanFeatureGate } from './account/plan-feature-gate';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { ClerkService } from './clerk.service';
 import { AccountController } from './controllers/account.controller';
 import { ImpersonationController } from './controllers/impersonation.controller';
 import { OnboardingController } from './controllers/onboarding.controller';
@@ -95,7 +94,6 @@ import { TokenService } from './token.service';
     // identity primitives
     AuthService,
     TokenService,
-    ClerkService,
     CryptoService,
     JwtAuthGuard,
     PermissionsGuard,
@@ -159,7 +157,6 @@ import { TokenService } from './token.service';
     OTP_SENDER_PORT,
     AuthService,
     TokenService,
-    ClerkService,
     JwtAuthGuard,
     PermissionsGuard,
     AccountGateGuard,
