@@ -244,9 +244,7 @@ export class FormSubmitService {
       honeypotEnabled: false,
       elapsedMs: body.elapsedMs,
     });
-    const used = await this.acceptedThisMonth(orgId, now);
     const cap = await this.plan.submissionsCap(orgId);
-    const capReached = !verdict.spam && cap > 0 && used >= cap;
 
     const claim: ClaimInput = {
       formId: form.id,
@@ -307,7 +305,8 @@ export class FormSubmitService {
             receipt: c.row.receiptToken,
           };
           if (claim.status === 'spam') return plain;
-          if (capReached) {
+          // Judged here, under the workspace lock, so concurrent posts cannot all count the same last free place (#1167).
+          if (await this.capReachedInTx(tx, orgId, cap, now)) {
             await this.review(tx, orgId, form, c.row, 'submissions_cap');
             return plain;
           }
@@ -1255,12 +1254,18 @@ export class FormSubmitService {
 
   // --- small reads ---------------------------------------------------------------------------------------------------------------------
 
-  private async acceptedThisMonth(orgId: number, now: Date): Promise<number> {
+  /**
+   * Whether this month's accepted submissions have reached the plan's cap. Runs inside the claim transaction, after a per-workspace
+   * advisory lock: the count and the new row are then one step for every post of the workspace, so the cap holds under concurrency.
+   */
+  private async capReachedInTx(tx: Tx, orgId: number, cap: number, now: Date): Promise<boolean> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`forms-submissions-cap:${orgId}`}, 0))`,
+    );
     const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
     const to = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
-    return this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.subs.countAccepted(tx, orgId, from, to),
-    );
+    const used = await this.subs.countAccepted(tx, orgId, from, to);
+    return cap > 0 && used >= cap;
   }
 
   private async countBlocked(orgId: number): Promise<void> {
