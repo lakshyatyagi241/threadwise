@@ -496,7 +496,7 @@ export class OutboundService {
    * 422 PLAN_FEATURE_LOCKED, the same gate as the management routes), when Meta suspended the group (D10), or when the workspace's own
    * wallet cannot cover one message to every member (D8). A group send is billed once per member, so the launch gate is asked for
    * `participant_count` recipients (at least one: the count is 0 until Meta's lifecycle webhook fills it). The gate is per workspace,
-   * passes platform-owned workspaces and a plan's free allowance, and fails open if the billing lookup itself fails.
+   * passes platform-owned workspaces and a plan's free allowance, and refuses with a retryable 503 if the billing lookup itself fails (a group send is a bulk launch, #1067).
    * Returns the member count the message is addressed to (null for any thread that is not a Cloud API group).
    */
   private async assertGroupSendable(
