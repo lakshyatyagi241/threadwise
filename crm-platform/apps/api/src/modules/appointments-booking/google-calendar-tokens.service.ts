@@ -283,7 +283,10 @@ export class GoogleCalendarTokens {
       },
       () =>
         this.db.txAs({ orgId, userId: null }, async (tx) => {
-          if (!(await this.repo.markNeedsReconnect(tx, orgId, conn.id, reason))) return;
+          if (
+            !(await this.repo.markNeedsReconnect(tx, orgId, conn.id, reason, conn.refreshTokenEnc))
+          )
+            return;
           await this.audit.record(tx, {
             module: CALENDAR_AUDIT_MODULE,
             recordId: conn.id,

@@ -122,12 +122,22 @@ export class MicrosoftCalendarConnectionRepository {
   }
 
   /** True only for the call that made the change, so the event and the audit row are written once however many callers saw the failure. */
-  async markNeedsReconnect(tx: Tx, orgId: number, id: number, reason: string): Promise<boolean> {
+  /**
+   * Flags the connection as needing a reconnect, but only the grant that failed: a refresh made with an older grant must not flag a
+   * connection that was reconnected meanwhile (#1182).
+   */
+  async markNeedsReconnect(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    reason: string,
+    forRefreshTokenEnc: string,
+  ): Promise<boolean> {
     const res = await tx.execute(sql`
       UPDATE appointment_microsoft_connections
          SET status = 'needs_reconnect', status_reason = ${reason.slice(0, 200)}, status_at = now(),
              access_token_enc = NULL, access_token_expires_at = NULL
-       WHERE org_id = ${orgId} AND id = ${id} AND status = 'active'
+       WHERE org_id = ${orgId} AND id = ${id} AND status = 'active' AND refresh_token_enc = ${forRefreshTokenEnc}
        RETURNING id`);
     return (res.rows as Raw[]).length > 0;
   }
