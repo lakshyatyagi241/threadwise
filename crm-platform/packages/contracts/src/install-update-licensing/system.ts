@@ -20,14 +20,14 @@ export type ReleaseInfo = z.infer<typeof releaseInfoSchema>;
 export const migrationRowSchema = z.object({
   id: z.string(),
   state: z.enum(['applied', 'pending', 'modified', 'missing-file']),
-  appliedAt: z.string().datetime().nullable(),
+  appliedAt: z.iso.datetime().nullable(),
 });
 export type MigrationRow = z.infer<typeof migrationRowSchema>;
 
 export const systemCheckSchema = z.object({
   key: z.enum(['database', 'redis', 'migrations']),
   status: z.enum(['up', 'down', 'degraded']),
-  latencyMs: z.number().int().nonnegative().optional(),
+  latencyMs: z.int().nonnegative().optional(),
   detail: z.string().optional(),
 });
 export type SystemCheck = z.infer<typeof systemCheckSchema>;
@@ -39,7 +39,7 @@ export type SystemCheck = z.infer<typeof systemCheckSchema>;
 export const licenceStatusSchema = z.object({
   required: z.boolean(),
   verified: z.boolean(),
-  verifiedAt: z.string().datetime().nullable(),
+  verifiedAt: z.iso.datetime().nullable(),
 });
 export type LicenceStatus = z.infer<typeof licenceStatusSchema>;
 
@@ -55,17 +55,17 @@ export type VerifyLicenceResponse = z.infer<typeof verifyLicenceResponseSchema>;
 
 export const systemStatusResponseSchema = z.object({
   release: releaseInfoSchema,
-  uptimeSeconds: z.number().int().nonnegative(),
+  uptimeSeconds: z.int().nonnegative(),
   setup: z.object({
     state: z.enum(['open', 'completed']),
-    completedAt: z.string().datetime().nullable(),
+    completedAt: z.iso.datetime().nullable(),
     completedVersion: z.string().nullable(),
     prerequisites: z.array(setupPrerequisiteSchema),
   }),
   migrations: z.object({
     /** `unknown`: the migration files are not shipped with this build, so only the ledger can be reported. */
     status: z.enum(['current', 'pending', 'drift', 'unknown']),
-    appliedCount: z.number().int().nonnegative(),
+    appliedCount: z.int().nonnegative(),
     rows: z.array(migrationRowSchema),
   }),
   checks: z.array(systemCheckSchema),

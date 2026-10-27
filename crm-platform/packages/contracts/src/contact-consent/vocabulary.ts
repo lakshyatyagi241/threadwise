@@ -203,13 +203,13 @@ export const recordConsentSchema = z.object({
   source: z.enum(['manual', 'api', 'contact_request']).default('manual'),
   /** Why: required for a grant (what the contact said or signed, where). */
   note: z.string().trim().max(500).optional(),
-  evidence: z.record(z.enum(CONSENT_EVIDENCE_KEYS), z.string().max(300)).default({}),
-  occurredAt: z.string().datetime().optional(),
+  evidence: z.partialRecord(z.enum(CONSENT_EVIDENCE_KEYS), z.string().max(300)).default({}),
+  occurredAt: z.iso.datetime().optional(),
 });
 export type RecordConsentInput = z.infer<typeof recordConsentSchema>;
 
 export const consentEventsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   channel: consentChannelSchema.optional(),
   action: consentActionSchema.optional(),

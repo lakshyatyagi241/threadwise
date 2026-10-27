@@ -9,6 +9,7 @@ import {
   type PlanLimitKey,
 } from './catalogue';
 import { isMoney, moneyCents, normaliseMoney } from './money';
+import { patchOf } from '../common/patch';
 
 /**
  * Plans (TW-PLAN-001..008, 011, 017): the catalogue the operator edits, the
@@ -41,7 +42,7 @@ const moneySchema = z
 /** A key an installed module contributes (TW-ADD-013): lowercase letters, digits and underscores. */
 const moduleKeySchema = z.string().regex(/^[a-z][a-z0-9_]{0,63}$/);
 
-const cap = z.number().int().min(0).max(2_000_000_000);
+const cap = z.int().min(0).max(2_000_000_000);
 const flag = z.boolean();
 
 // A missing key is 0 (unlimited) for most caps; for a zero-is-none cap (`teams`) it is the unlimited stand-in, so a client that does not know the
@@ -186,18 +187,18 @@ export const planAddonOfferSchema = z
     addonId: uuidSchema,
     mode: planAddonOfferModeSchema,
     /** The plan's own price for a paid offer; null or blank = the add-on's price. */
-    amount: z.preprocess(blankToNull, moneySchema.nullable()).default(null),
+    amount: z.preprocess(blankToNull, moneySchema.nullable()).prefault(null),
   })
   .superRefine((o, ctx) => {
     if (o.amount !== null && o.mode !== 'paid')
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['amount'],
         message: 'Only a paid add-on has a price.',
       });
     if (o.amount !== null && moneyCents(o.amount) === 0)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['amount'],
         message: 'Leave the price empty to use the add-on price, or choose Included.',
       });
@@ -206,8 +207,8 @@ export type PlanAddonOffer = z.output<typeof planAddonOfferSchema>;
 
 const planFieldsShape = {
   name: z.string().trim().min(1).max(120),
-  subtitle: z.preprocess(blankToNull, z.string().trim().max(191).nullable()).default(null),
-  detail: z.preprocess(blankToNull, z.string().trim().max(5000).nullable()).default(null),
+  subtitle: z.preprocess(blankToNull, z.string().trim().max(191).nullable()).prefault(null),
+  detail: z.preprocess(blankToNull, z.string().trim().max(5000).nullable()).prefault(null),
   amount: moneySchema.default('0.00'),
   offerAmount: offerSchema.default(null),
   currency: z
@@ -217,25 +218,25 @@ const planFieldsShape = {
     .regex(/^[A-Z]{3}$/, 'Use a three-letter currency code.')
     .default('USD'),
   billingUnit: planBillingUnitSchema.default('months'),
-  billingDuration: z.number().int().min(1).max(120).default(1),
+  billingDuration: z.int().min(1).max(120).default(1),
   isFree: flag.default(false),
   isLifetime: flag.default(false),
   isActive: flag.default(true),
   isDefault: flag.default(false),
   isHighlighted: flag.default(false),
   isCustomQuote: flag.default(false),
-  sortOrder: z.number().int().min(0).max(100_000).default(0),
+  sortOrder: z.int().min(0).max(100_000).default(0),
   ctaLabel: z.string().trim().min(1).max(64).default('Get started'),
   /** Days after a paid plan lapses before its workspace data is wiped (TW-PLAN-023). 0 = never. */
-  dataRetentionDays: z.number().int().min(0).max(3650).default(0),
-  limits: planLimitsSchema.default({}),
-  features: planFeaturesSchema.default({}),
+  dataRetentionDays: z.int().min(0).max(3650).default(0),
+  limits: planLimitsSchema.prefault({}),
+  features: planFeaturesSchema.prefault({}),
   /**
    * The flags and caps that installed modules add to a plan (TW-ADD-013): keys the registry above does not know, so they travel apart
    * from `features` and `limits`, which stay registry-only. On an update the keys named here replace the stored ones; others are kept.
    */
-  moduleFeatures: z.record(moduleKeySchema, flag).default({}),
-  moduleLimits: z.record(moduleKeySchema, cap).default({}),
+  moduleFeatures: z.partialRecord(moduleKeySchema, flag).default({}),
+  moduleLimits: z.partialRecord(moduleKeySchema, cap).default({}),
   /**
    * The Marketplace add-ons this plan makes VISIBLE to its workspaces: ids (uuid) of add-on packs, as listed by
    * `GET platform/plans/addon-options`. Visible is not usable: a workspace uses a paid app only once it has bought it. On an update the
@@ -260,10 +261,10 @@ const planFieldsShape = {
     .default([]),
 };
 
-function applyRules<T extends z.ZodTypeAny>(schema: T) {
+function applyRules<T extends z.ZodType>(schema: T) {
   return schema.superRefine((value, ctx) => {
     for (const issue of checkPlanRules(value as PlanRuleInput)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
+      ctx.addIssue({ code: 'custom', path: [issue.path], message: issue.message });
     }
   });
 }
@@ -280,14 +281,14 @@ export type CreatePlanPayload = z.output<typeof createPlanRequestSchema>;
  * merges the patch over the stored plan and re-checks the rules on the result,
  * so a patch that makes the stored plan inconsistent is refused too.
  */
-export const updatePlanRequestSchema = z
-  .object({
+// A patch names only the keys it changes; the rest keep their stored value.
+export const updatePlanRequestSchema = patchOf(
+  z.object({
     ...planFieldsShape,
-    // A patch names only the keys it changes; the rest keep their stored value.
-    limits: planLimitsSchema.partial(),
-    features: planFeaturesSchema.partial(),
-  })
-  .partial();
+    limits: patchOf(planLimitsSchema),
+    features: patchOf(planFeaturesSchema),
+  }),
+);
 export type UpdatePlanRequest = z.input<typeof updatePlanRequestSchema>;
 export type UpdatePlanPayload = z.output<typeof updatePlanRequestSchema>;
 
@@ -305,21 +306,21 @@ export const planAdminItemSchema = z.object({
   offerAmount: z.string().nullable(),
   currency: z.string(),
   billingUnit: planBillingUnitSchema,
-  billingDuration: z.number().int(),
+  billingDuration: z.int(),
   isFree: z.boolean(),
   isLifetime: z.boolean(),
   isActive: z.boolean(),
   isDefault: z.boolean(),
   isHighlighted: z.boolean(),
   isCustomQuote: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   ctaLabel: z.string(),
-  dataRetentionDays: z.number().int(),
+  dataRetentionDays: z.int(),
   limits: planLimitsSchema,
   features: planFeaturesSchema,
   /** Module-contributed flags and caps the plan stores (see `moduleFeatures` on the request). */
-  moduleFeatures: z.record(moduleKeySchema, flag),
-  moduleLimits: z.record(moduleKeySchema, cap),
+  moduleFeatures: z.partialRecord(moduleKeySchema, flag),
+  moduleLimits: z.partialRecord(moduleKeySchema, cap),
   /** Ids (uuid) of the Marketplace add-on packs this plan makes visible (see `planAddonOptionSchema`). */
   visibleAddons: z.array(uuidSchema),
   /** The stored offers of plain add-ons (an add-on with no row is paid at its own price). */
@@ -333,11 +334,11 @@ export const planAdminItemSchema = z.object({
     )
     .default([]),
   /** Organizations whose plan is this one (the delete guard, TW-PLAN-005). */
-  inUse: z.number().int().nonnegative(),
+  inUse: z.int().nonnegative(),
   /** True when the registration policy names this plan as the signup default. */
   isRegistrationDefault: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PlanAdminItem = z.infer<typeof planAdminItemSchema>;
 
@@ -345,11 +346,11 @@ export const planAdminListResponseSchema = z.object({
   data: z.array(planAdminItemSchema),
   /** KPI strip (TW-PLAN-001): total plans, active ones, free ones, paid ones; custom quotes are counted apart. */
   summary: z.object({
-    total: z.number().int().nonnegative(),
-    active: z.number().int().nonnegative(),
-    free: z.number().int().nonnegative(),
-    paid: z.number().int().nonnegative(),
-    customQuote: z.number().int().nonnegative(),
+    total: z.int().nonnegative(),
+    active: z.int().nonnegative(),
+    free: z.int().nonnegative(),
+    paid: z.int().nonnegative(),
+    customQuote: z.int().nonnegative(),
   }),
   /** The plan slug the registration policy names, if any (it may not exist or be active). */
   registrationDefaultSlug: z.string().nullable(),
@@ -367,7 +368,7 @@ export const planAddonOptionSchema = z.object({
   amount: z.string(),
   currency: z.string(),
   billingUnit: planBillingUnitSchema,
-  billingDuration: z.number().int(),
+  billingDuration: z.int(),
   app: z.object({
     id: uuidSchema,
     slug: z.string(),
@@ -388,7 +389,7 @@ export type PlanAddonOptionsResponse = z.infer<typeof planAddonOptionsResponseSc
  * each plain add-on pack with a subscription that still renews. Packs nobody renews are absent. A count only, no workspace is named.
  */
 export const planAddonImpactResponseSchema = z.object({
-  data: z.array(z.object({ packId: uuidSchema, renewing: z.number().int().positive() })),
+  data: z.array(z.object({ packId: uuidSchema, renewing: z.int().positive() })),
 });
 export type PlanAddonImpactResponse = z.infer<typeof planAddonImpactResponseSchema>;
 
@@ -403,7 +404,7 @@ export const visibleAddonSchema = z.object({
   price: z.object({
     amount: z.string(),
     currency: z.string(),
-    period: z.object({ unit: planBillingUnitSchema, count: z.number().int().min(1) }),
+    period: z.object({ unit: planBillingUnitSchema, count: z.int().min(1) }),
   }),
   /** The workspace holds an active purchase, trial or comp of it. */
   owned: z.boolean(),
@@ -440,12 +441,12 @@ export const planCardSchema = z.object({
     offerAmount: z.string().nullable(),
     currency: z.string(),
     /** The billing period; null for free and custom-quote plans (no price to attach it to). */
-    period: z.object({ unit: planBillingUnitSchema, count: z.number().int().min(1) }).nullable(),
+    period: z.object({ unit: planBillingUnitSchema, count: z.int().min(1) }).nullable(),
   }),
   /** A one-time price: there is no billing period to show. */
   lifetime: z.boolean(),
   /** Messages per month; 0 = unlimited. */
-  monthlyMessages: z.number().int().nonnegative(),
+  monthlyMessages: z.int().nonnegative(),
   /** At most three enabled features, in the fixed Reference order. */
   chips: z.array(z.string()).max(3),
   highlighted: z.boolean(),
@@ -460,7 +461,7 @@ export const plansResponseSchema = z.object({
   /** The caller's current plan slug (may not match any card: inactive or missing plan). */
   currentSlug: z.string().nullable(),
   /** When the free trial ends, if the workspace is on one. */
-  trialEndsAt: z.string().datetime().nullable(),
+  trialEndsAt: z.iso.datetime().nullable(),
 });
 export type PlansResponse = z.infer<typeof plansResponseSchema>;
 

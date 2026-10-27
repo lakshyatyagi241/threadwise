@@ -55,26 +55,26 @@ export const listStoreOrdersQuerySchema = z.object({
   to: day.optional(),
   /** Matches the buyer's phone (digits), name or the order number. */
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStoreOrdersQuery = z.infer<typeof listStoreOrdersQuerySchema>;
 
 export const storeOrderListItemSchema = z.object({
   id: uuidSchema,
-  orderNo: z.number().int(),
+  orderNo: z.int(),
   source: z.string(),
   status: z.string(),
   paymentStatus: storePaymentStatusSchema,
   paymentMethod: z.string(),
   customerName: z.string().nullable(),
   customerPhone: z.string().nullable(),
-  itemsCount: z.number().int(),
-  totalMinor: z.number().int(),
+  itemsCount: z.int(),
+  totalMinor: z.int(),
   currencyCode: z.string(),
   storefrontId: uuidSchema.nullable(),
   storefrontName: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type StoreOrderListItem = z.infer<typeof storeOrderListItemSchema>;
 
@@ -83,24 +83,24 @@ export type StoreOrderListResponse = z.infer<typeof storeOrderListResponseSchema
 
 /** The status tabs: one count per status plus `all` (workspace-wide, ignoring the other filters, as Reference). */
 export const storeOrderCountsSchema = z.object({
-  all: z.number().int(),
-  new: z.number().int(),
-  pending: z.number().int(),
-  confirmed: z.number().int(),
-  paid: z.number().int(),
-  processing: z.number().int(),
-  completed: z.number().int(),
-  shipped: z.number().int(),
-  cancelled: z.number().int(),
+  all: z.int(),
+  new: z.int(),
+  pending: z.int(),
+  confirmed: z.int(),
+  paid: z.int(),
+  processing: z.int(),
+  completed: z.int(),
+  shipped: z.int(),
+  cancelled: z.int(),
 });
 export type StoreOrderCounts = z.infer<typeof storeOrderCountsSchema>;
 
 export const storeOrderLineSchema = z.object({
-  productId: z.number().int().nullable(),
+  productId: z.int().nullable(),
   name: z.string(),
-  qty: z.number().int(),
-  priceMinor: z.number().int(),
-  lineTotalMinor: z.number().int(),
+  qty: z.int(),
+  priceMinor: z.int(),
+  lineTotalMinor: z.int(),
   image: z.string().nullable(),
   retailerId: z.string().nullable(),
   /** "M / Red" for a variant line; null for older lines and plain products. */
@@ -114,17 +114,17 @@ export const storeOrderPaymentSchema = z.object({
   /** Gateway slug (`razorpay`, `stripe`...) or null. */
   gateway: z.string().nullable(),
   status: storePaymentStatusSchema,
-  amountMinor: z.number().int(),
+  amountMinor: z.int(),
   currencyCode: z.string(),
   /** The provider's own payment or link id, when known. */
   reference: z.string().nullable(),
   url: z.string().nullable(),
-  at: z.string().datetime().nullable(),
+  at: z.iso.datetime().nullable(),
 });
 export type StoreOrderPayment = z.infer<typeof storeOrderPaymentSchema>;
 
 export const storeOrderTimelineEntrySchema = z.object({
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   kind: z.enum(['created', 'status_changed', 'payment_link', 'paid', 'invoice', 'note', 'updated']),
   detail: z.string().nullable(),
   /** `user`, `system` (a webhook) or `customer` (the storefront checkout). */
@@ -136,15 +136,15 @@ export const storeOrderDetailSchema = storeOrderListItemSchema.extend({
   customerEmail: z.string().nullable(),
   customerAddress: z.string().nullable(),
   items: z.array(storeOrderLineSchema),
-  subtotalMinor: z.number().int(),
-  shippingMinor: z.number().int(),
-  taxMinor: z.number().int(),
+  subtotalMinor: z.int(),
+  shippingMinor: z.int(),
+  taxMinor: z.int(),
   taxInclusive: z.boolean(),
-  discountMinor: z.number().int(),
+  discountMinor: z.int(),
   couponCode: z.string().nullable(),
   notes: z.string().nullable(),
   paymentLink: z.string().nullable(),
-  rtoScore: z.number().int().nullable(),
+  rtoScore: z.int().nullable(),
   rtoBand: z.string().nullable(),
   payments: z.array(storeOrderPaymentSchema),
   timeline: z.array(storeOrderTimelineEntrySchema),
@@ -154,8 +154,8 @@ export const storeOrderDetailSchema = storeOrderListItemSchema.extend({
   contactId: uuidSchema.nullable(),
   invoiceId: uuidSchema.nullable(),
   salesOrderId: uuidSchema.nullable(),
-  rowVersion: z.number().int(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  updatedAt: z.iso.datetime(),
 });
 export type StoreOrderDetail = z.infer<typeof storeOrderDetailSchema>;
 
@@ -166,13 +166,13 @@ export type StoreOrderDetail = z.infer<typeof storeOrderDetailSchema>;
 export const updateStoreOrderStatusSchema = z.object({
   status: storeOrderStatusSchema,
   notes: z.string().trim().max(1000).nullish(),
-  paymentLink: z.string().trim().url().max(1024).nullish(),
-  rowVersion: z.number().int().positive().optional(),
+  paymentLink: z.string().trim().pipe(z.url().max(1024)).nullish(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateStoreOrderStatusInput = z.infer<typeof updateStoreOrderStatusSchema>;
 
 export const sendStoreOrderPaymentLinkSchema = z.object({
-  paymentLink: z.string().trim().url().max(1024),
+  paymentLink: z.string().trim().pipe(z.url().max(1024)),
 });
 export type SendStoreOrderPaymentLinkInput = z.infer<typeof sendStoreOrderPaymentLinkSchema>;
 

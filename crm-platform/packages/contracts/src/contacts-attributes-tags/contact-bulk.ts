@@ -27,13 +27,13 @@ const withSelection = <S extends z.ZodRawShape>(extra: S) =>
  */
 export const bulkSelectionResultSchema = z.object({
   /** Contacts the selection resolved to (in the caller's record scope). */
-  matched: z.number().int(),
+  matched: z.int(),
   /** Contacts actually changed: not already in the group, already tagged, ... */
-  changed: z.number().int(),
+  changed: z.int(),
   succeeded: z.array(uuidSchema),
   failed: z.array(z.object({ id: uuidSchema, code: z.string(), message: z.string() })),
   /** failed.length is capped; this is the real count. */
-  failedCount: z.number().int(),
+  failedCount: z.int(),
 });
 export type BulkSelectionResult = z.infer<typeof bulkSelectionResultSchema>;
 
@@ -83,8 +83,8 @@ export const bulkConsentContactsSchema = withSelection({
   action: consentActionSchema,
   note: z.string().trim().max(500).optional(),
 }).refine((v) => v.action !== 'granted' || (v.note ?? '').length > 0, {
-  message: 'Say why the contacts agreed before subscribing them',
   path: ['note'],
+  error: 'Say why the contacts agreed before subscribing them',
 });
 export type BulkConsentContactsInput = z.infer<typeof bulkConsentContactsSchema>;
 
@@ -96,18 +96,18 @@ export type ExportContactsInput = z.infer<typeof exportContactsSchema>;
 
 /** The tiles and sidebar badges: workspace-wide, they ignore the active filter. */
 export const contactStatsSchema = z.object({
-  total: z.number().int(),
-  groups: z.number().int(),
-  subscribed: z.number().int(),
-  unsubscribed: z.number().int(),
-  noGroup: z.number().int(),
+  total: z.int(),
+  groups: z.int(),
+  subscribed: z.int(),
+  unsubscribed: z.int(),
+  noGroup: z.int(),
   /** Contacts in at least one group. */
-  grouped: z.number().int(),
-  imported: z.number().int(),
+  grouped: z.int(),
+  imported: z.int(),
   /** Contacts marked uncontacted (BL-290): the Contacts list offers the "Uncontacted" view only once there is one. */
-  uncontacted: z.number().int(),
+  uncontacted: z.int(),
   /** Contacts with an open follow-up (BL-291): the Contacts list offers the follow-up views only once there is one. */
-  withFollowUp: z.number().int(),
+  withFollowUp: z.int(),
 });
 export type ContactStats = z.infer<typeof contactStatsSchema>;
 
@@ -123,8 +123,8 @@ export const dedupeSetSchema = z.object({
 export type DedupeSet = z.infer<typeof dedupeSetSchema>;
 
 export const dedupePreviewSchema = z.object({
-  totalSets: z.number().int(),
-  totalDuplicates: z.number().int(),
+  totalSets: z.int(),
+  totalDuplicates: z.int(),
   /** The first sets, for the confirmation screen. */
   sets: z.array(dedupeSetSchema),
 });
@@ -132,16 +132,16 @@ export type DedupePreview = z.infer<typeof dedupePreviewSchema>;
 
 export const dedupeContactsSchema = z.object({
   /** Bounds one call; the answer says how many sets are left. */
-  maxSets: z.number().int().min(1).max(5000).default(1000),
+  maxSets: z.int().min(1).max(5000).default(1000),
 });
 export type DedupeContactsInput = z.infer<typeof dedupeContactsSchema>;
 
 export const dedupeResultSchema = z.object({
   /** Duplicate sets merged in this call. */
-  mergedSets: z.number().int(),
+  mergedSets: z.int(),
   /** Contacts that were folded into a survivor and removed. */
-  removed: z.number().int(),
+  removed: z.int(),
   /** Sets still waiting (call again). */
-  remainingSets: z.number().int(),
+  remainingSets: z.int(),
 });
 export type DedupeResult = z.infer<typeof dedupeResultSchema>;

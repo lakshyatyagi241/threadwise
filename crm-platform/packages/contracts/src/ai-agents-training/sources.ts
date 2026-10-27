@@ -84,7 +84,7 @@ export const aiagSourceSchema = z.object({
   url: z.string().nullable(),
   status: z.enum(AIAG_SOURCE_STATUSES),
   /** About one token per four characters of the text the assistant reads. */
-  tokensEstimate: z.number().int().nullable(),
+  tokensEstimate: z.int().nullable(),
   error: z.string().nullable(),
   /** A stored file backs the entry. The path never leaves the server. */
   hasFile: z.boolean(),

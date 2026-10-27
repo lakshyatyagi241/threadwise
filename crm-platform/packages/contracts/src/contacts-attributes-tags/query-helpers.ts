@@ -15,7 +15,7 @@ const toBoolean = (v: unknown): unknown => {
 export const queryBoolean = () => z.preprocess(toBoolean, z.boolean());
 
 /** `a,b,c` in a query string, or a JSON array in a body. */
-export const queryList = <T extends z.ZodTypeAny>(item: T) =>
+export const queryList = <T extends z.ZodType>(item: T) =>
   z.preprocess((v) => {
     if (typeof v === 'string')
       return v

@@ -19,9 +19,9 @@ export const platformAiKeyItemSchema = z.object({
   keyUnreadable: z.boolean(),
   keyLast4: z.string().nullable(),
   defaultModel: z.string().nullable(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   /** Ceiling on output tokens per request; null = none. Only on providers that carry the field. */
-  maxTokens: z.number().int().nullable(),
+  maxTokens: z.int().nullable(),
   supportsMaxTokens: z.boolean(),
   /** Hint under the key field, in Reference's words. */
   keyHint: z.string(),
@@ -37,7 +37,7 @@ export const platformAiKeyItemSchema = z.object({
   /** Extra model ids offered next to the default in the pickers. */
   extraModels: z.array(z.string()),
   modelChoices: z.array(z.string()),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   updatedAt: z.string(),
 });
 export type PlatformAiKeyItem = z.infer<typeof platformAiKeyItemSchema>;
@@ -45,11 +45,11 @@ export type PlatformAiKeyItem = z.infer<typeof platformAiKeyItemSchema>;
 export const platformAiKeysResponseSchema = z.object({
   data: z.array(platformAiKeyItemSchema),
   summary: z.object({
-    providers: z.number().int(),
-    active: z.number().int(),
+    providers: z.int(),
+    active: z.int(),
     /** Active and holding a readable key. */
-    ready: z.number().int(),
-    noKey: z.number().int(),
+    ready: z.int(),
+    noKey: z.int(),
   }),
 });
 export type PlatformAiKeysResponse = z.infer<typeof platformAiKeysResponseSchema>;
@@ -58,22 +58,22 @@ const modelId = z.string().trim().min(1).max(80);
 
 export const updatePlatformAiKeySchema = z
   .object({
-    rowVersion: z.number().int().min(1),
+    rowVersion: z.int().min(1),
     /** Blank or absent keeps the saved key; a value replaces it. */
     apiKey: z.string().max(1024).optional(),
     /** Explicitly remove the saved key (Reference had no way to); the provider is switched off with it. */
     removeKey: z.boolean().optional(),
     defaultModel: modelId.nullable().optional(),
-    sortOrder: z.number().int().min(0).max(32767).optional(),
+    sortOrder: z.int().min(0).max(32767).optional(),
     /** Positive whole number, or null to clear the ceiling. */
-    maxTokens: z.number().int().min(1).max(10_000_000).nullable().optional(),
+    maxTokens: z.int().min(1).max(10_000_000).nullable().optional(),
     extraModels: z.array(modelId).max(40).optional(),
     /** The card's optional text field; blank clears it. Ignored on providers without one. */
     textExtra: z.string().trim().max(200).optional(),
   })
   .refine((v) => !(v.removeKey && v.apiKey?.trim()), {
-    message: 'Send either a new key or removeKey, not both.',
     path: ['removeKey'],
+    error: 'Send either a new key or removeKey, not both.',
   });
 export type UpdatePlatformAiKeyInput = z.infer<typeof updatePlatformAiKeySchema>;
 

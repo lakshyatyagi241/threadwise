@@ -26,8 +26,8 @@ export const exchangeRateSchema = z
 const currencyFieldsShape = {
   name: z.string().trim().min(1).max(120),
   code: currencyCatalogCodeSchema,
-  symbol: z.preprocess(blankToNull, z.string().trim().max(20).nullable()).default(null),
-  precision: z.number().int().min(0).max(6).default(2),
+  symbol: z.preprocess(blankToNull, z.string().trim().max(20).nullable()).prefault(null),
+  precision: z.int().min(0).max(6).default(2),
   exchangeRate: exchangeRateSchema.default('1'),
   isActive: z.boolean().default(true),
 };
@@ -46,7 +46,7 @@ export const updateCurrencyRequestSchema = z
     isActive: currencyFieldsShape.isActive,
   })
   .partial()
-  .extend({ rowVersion: z.number().int().positive() });
+  .extend({ rowVersion: z.int().positive() });
 export type UpdateCurrencyRequest = z.input<typeof updateCurrencyRequestSchema>;
 export type UpdateCurrencyPayload = z.output<typeof updateCurrencyRequestSchema>;
 
@@ -63,7 +63,7 @@ export const currencyListQuerySchema = z.object({
     .max(100)
     .optional()
     .transform((v) => v || undefined),
-  page: z.coerce.number().int().min(1).max(100_000).catch(1).default(1),
+  page: z.coerce.number().int().min(1).max(100_000).catch(1).prefault(1),
 });
 export type CurrencyListQuery = z.infer<typeof currencyListQuerySchema>;
 
@@ -72,17 +72,17 @@ export const currencyItemSchema = z.object({
   code: z.string(),
   name: z.string(),
   symbol: z.string().nullable(),
-  precision: z.number().int(),
+  precision: z.int(),
   exchangeRate: z.string(),
   isActive: z.boolean(),
   isDefault: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type CurrencyItem = z.infer<typeof currencyItemSchema>;
 
-const count = z.number().int().nonnegative();
+const count = z.int().nonnegative();
 
 export const currencyListResponseSchema = z.object({
   data: z.array(currencyItemSchema),
@@ -92,8 +92,8 @@ export const currencyListResponseSchema = z.object({
   defaultChoices: z.array(
     z.object({ code: z.string(), name: z.string(), symbol: z.string().nullable() }),
   ),
-  page: z.number().int().min(1),
-  pageSize: z.number().int().min(1),
+  page: z.int().min(1),
+  pageSize: z.int().min(1),
   total: count,
   pageCount: count,
   from: count,

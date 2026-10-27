@@ -39,12 +39,12 @@ export const crmDashboardQuerySchema = z
     convertTo: currencyCodeSchema.optional(),
   })
   .refine((q) => !q.from || !q.to || q.from <= q.to, {
-    message: 'from must not be after to',
     path: ['to'],
+    error: 'from must not be after to',
   });
 export type CrmDashboardQuery = z.infer<typeof crmDashboardQuerySchema>;
 
-const countPairSchema = z.object({ current: z.number().int(), previous: z.number().int() });
+const countPairSchema = z.object({ current: z.int(), previous: z.int() });
 
 export const crmDashboardResponseSchema = z.object({
   period: z.object({
@@ -54,7 +54,7 @@ export const crmDashboardResponseSchema = z.object({
     /** `YYYY-MM-DD`, inclusive, in `timezone`. */
     fromDate: z.string(),
     toDate: z.string(),
-    days: z.number().int(),
+    days: z.int(),
     /** The window of the same length right before, used for the "vs previous" figures. */
     previous: z.object({ fromDate: z.string(), toDate: z.string() }),
     /** The day "today" is in `timezone`. */
@@ -65,45 +65,45 @@ export const crmDashboardResponseSchema = z.object({
   deals: z
     .object({
       open: z.object({
-        count: z.number().int(),
+        count: z.int(),
         value: dealTotalsSchema,
         /** Value x stage probability over OPEN deals. */
         forecast: dealTotalsSchema,
       }),
       won: z.object({
-        count: z.number().int(),
+        count: z.int(),
         value: dealTotalsSchema,
-        previousCount: z.number().int(),
+        previousCount: z.int(),
         previousValue: dealTotalsSchema,
         /** Mean won value per deal, per currency (and converted: converted total / count). Empty with no won deals. */
         averageSize: dealTotalsSchema,
         /** Mean days from creation to won, over the deals won in the period; null with none. */
         averageCycleDays: z.number().nullable(),
       }),
-      lost: z.object({ count: z.number().int(), previousCount: z.number().int() }),
+      lost: z.object({ count: z.int(), previousCount: z.int() }),
       /** Whole percent, won / (won + lost) over deals closed in the period; 0 when nothing closed. */
-      winRate: z.number().int(),
-      previousWinRate: z.number().int(),
+      winRate: z.int(),
+      previousWinRate: z.int(),
       /** Open deals whose expected close date is before today. */
-      overdueCloseCount: z.number().int(),
+      overdueCloseCount: z.int(),
       funnel: z.object({
         pipeline: z.object({ id: uuidSchema, name: z.string(), currency: z.string() }).nullable(),
         /** What `reached` counts: deals CREATED in the period in that pipeline (and in scope / filters). */
-        cohortSize: z.number().int(),
+        cohortSize: z.int(),
         stages: z.array(
           z.object({
             id: uuidSchema,
             name: z.string(),
             color: z.string(),
             kind: stageKindSchema,
-            probability: z.number().int(),
+            probability: z.int(),
             /** Cohort deals that reached this stage or a later non-lost one. Never rises from one stage to the next. */
-            reached: z.number().int(),
+            reached: z.int(),
             reachedValue: dealTotalsSchema,
             /** reached / reached of the previous stage, whole percent; null for the first stage or when the previous is 0. */
-            conversionFromPrevious: z.number().int().nullable(),
+            conversionFromPrevious: z.int().nullable(),
             /** Open deals sitting in the stage now (the live snapshot the drill-down opens). */
-            openCount: z.number().int(),
+            openCount: z.int(),
             openValue: dealTotalsSchema,
           }),
         ),
@@ -114,9 +114,9 @@ export const crmDashboardResponseSchema = z.object({
           z.object({
             /** `YYYY-MM-DD` of the first day of the bucket in the viewer's zone. */
             start: z.string(),
-            wonCount: z.number().int(),
+            wonCount: z.int(),
             wonValue: dealTotalsSchema,
-            lostCount: z.number().int(),
+            lostCount: z.int(),
           }),
         ),
       }),
@@ -124,12 +124,12 @@ export const crmDashboardResponseSchema = z.object({
         z.object({
           /** Null: deals nobody owns. */
           owner: dealUserRefSchema.nullable(),
-          wonCount: z.number().int(),
+          wonCount: z.int(),
           wonValue: dealTotalsSchema,
-          lostCount: z.number().int(),
-          openCount: z.number().int(),
+          lostCount: z.int(),
+          openCount: z.int(),
           /** Notes, calls, emails, meetings and tasks logged by the person in the period (stage moves are not counted). */
-          activities: z.number().int(),
+          activities: z.int(),
         }),
       ),
     })
@@ -138,7 +138,7 @@ export const crmDashboardResponseSchema = z.object({
   contacts: z
     .object({
       /** Contacts in the caller's scope today (Reference's "Contacts" counter), whatever the period. */
-      totalContacts: z.number().int(),
+      totalContacts: z.int(),
       newContacts: countPairSchema,
       /** New contacts that arrived with a source (a form, an ad, a webhook, an import, a marketplace). */
       newLeads: countPairSchema,
@@ -146,13 +146,13 @@ export const crmDashboardResponseSchema = z.object({
         z.object({
           /** The source label; null groups the contacts that have none. */
           source: z.string().nullable(),
-          leads: z.number().int(),
+          leads: z.int(),
           /** Leads with at least one deal (inside the caller's deal scope). */
-          withDeal: z.number().int(),
-          withWonDeal: z.number().int(),
+          withDeal: z.int(),
+          withWonDeal: z.int(),
           /** Whole percent of `leads`. */
-          dealRate: z.number().int(),
-          wonRate: z.number().int(),
+          dealRate: z.int(),
+          wonRate: z.int(),
           wonValue: dealTotalsSchema,
         }),
       ),
@@ -161,16 +161,16 @@ export const crmDashboardResponseSchema = z.object({
 
   tasks: z
     .object({
-      open: z.number().int(),
-      overdue: z.number().int(),
-      dueToday: z.number().int(),
+      open: z.int(),
+      overdue: z.int(),
+      dueToday: z.int(),
       byAssignee: z.array(
         z.object({
           /** Null: unassigned. */
           assignee: dealUserRefSchema.nullable(),
-          open: z.number().int(),
-          overdue: z.number().int(),
-          dueToday: z.number().int(),
+          open: z.int(),
+          overdue: z.int(),
+          dueToday: z.int(),
         }),
       ),
       /** The next open tasks by due date (Reference: six). */
@@ -178,7 +178,7 @@ export const crmDashboardResponseSchema = z.object({
         z.object({
           id: uuidSchema,
           title: z.string(),
-          dueAt: z.string().datetime(),
+          dueAt: z.iso.datetime(),
           overdue: z.boolean(),
           assignee: dealUserRefSchema.nullable(),
         }),
@@ -191,19 +191,19 @@ export const crmDashboardResponseSchema = z.object({
       /** Issued invoices not fully paid, as of now. */
       outstanding: dealTotalsSchema,
       overdue: dealTotalsSchema,
-      openInvoices: z.number().int(),
+      openInvoices: z.int(),
       /** Collected (payments less nothing: refunds are not netted) in the period. */
       collected: dealTotalsSchema,
       previousCollected: dealTotalsSchema,
       /** Invoices that became paid in the period. */
-      paidInvoices: z.number().int(),
+      paidInvoices: z.int(),
       aging: agingResponseSchema.shape.currencies,
       recentPayments: z.array(
         z.object({
           id: uuidSchema,
           amount: z.string(),
           currency: z.string(),
-          paidAt: z.string().datetime(),
+          paidAt: z.iso.datetime(),
           contact: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
         }),
       ),
@@ -215,7 +215,7 @@ export const crmDashboardResponseSchema = z.object({
       z.object({
         kind: z.enum(['deal', 'contact']),
         type: z.string(),
-        at: z.string().datetime(),
+        at: z.iso.datetime(),
         /** The deal title or the contact's name. */
         subject: z.string().nullable(),
         subjectId: uuidSchema,

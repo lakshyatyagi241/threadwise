@@ -14,8 +14,8 @@ export const contactActivityResponseSchema = z.object({
   body: z.string().nullable(),
   source: activitySourceSchema,
   actorId: uuidSchema.nullable(),
-  occurredAt: z.string().datetime(),
-  createdAt: z.string().datetime(),
+  occurredAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type ContactActivityResponse = z.infer<typeof contactActivityResponseSchema>;
 
@@ -24,7 +24,7 @@ export const createContactActivitySchema = z.object({
   activityType: z.string().min(1).max(100),
   title: z.string().min(1).max(255),
   body: z.string().max(10_000).optional(),
-  occurredAt: z.string().datetime().optional(),
+  occurredAt: z.iso.datetime().optional(),
 });
 export type CreateContactActivityInput = z.infer<typeof createContactActivitySchema>;
 

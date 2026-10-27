@@ -110,7 +110,7 @@ export const requestHandoffSchema = z.object({
 export type RequestHandoffInput = z.infer<typeof requestHandoffSchema>;
 
 export const claimConversationSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   /** The person saw the chat-limit warning (INBOX_CLAIM_OVER_LIMIT) and takes the chat anyway. */
   acknowledgeLimit: z.boolean().optional(),
 });
@@ -176,7 +176,7 @@ export const handoffCardSchema = z.object({
   reasonText: z.string().nullable(),
   summary: z.string().nullable(),
   /** The flow variables the author chose to pass on. */
-  answers: z.record(z.string()),
+  answers: z.record(z.string(), z.string()),
   destination: z.object({
     kind: z.enum(['person', 'team', 'rules']),
     user: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
@@ -192,15 +192,15 @@ export const handoffCardSchema = z.object({
   trace: z.array(handoffTraceLineSchema),
   /** Where the waiting queue's timers have got to for this wait (all null while nothing has fired). */
   timers: z.object({
-    remindedAt: z.string().datetime().nullable(),
-    offeredAt: z.string().datetime().nullable(),
+    remindedAt: z.iso.datetime().nullable(),
+    offeredAt: z.iso.datetime().nullable(),
     /** The team the chat was taken from when it was offered to the overflow team. */
     offeredFrom: z.object({ id: uuidSchema, name: z.string() }).nullable(),
-    finalAt: z.string().datetime().nullable(),
+    finalAt: z.iso.datetime().nullable(),
     finalAction: z.enum(['message', 'bot']).nullable(),
   }),
-  createdAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
 });
 export type HandoffCard = z.infer<typeof handoffCardSchema>;
 
@@ -258,7 +258,7 @@ export type QueueUnclaimedAction = z.infer<typeof queueUnclaimedActionSchema>;
 /** The longest wait a timer can be set to (a day); the minutes count only while the destination team is open. */
 export const QUEUE_TIMER_MAX_MINUTES = 1440;
 export const QUEUE_MESSAGE_MAX = 1000;
-const timerMinutes = z.number().int().min(1).max(QUEUE_TIMER_MAX_MINUTES).nullable();
+const timerMinutes = z.int().min(1).max(QUEUE_TIMER_MAX_MINUTES).nullable();
 
 /**
  * The waiting queue's timers (Auto-assignment > Waiting queue). Every step is off by default and only ever runs once per wait:
@@ -285,7 +285,7 @@ export type QueueTimers = z.infer<typeof queueTimersSchema>;
 export const AWAY_MAX_MINUTES = 1440;
 export const awaySchema = z.object({
   returnUnanswered: z.boolean(),
-  autoOfflineMinutes: z.number().int().min(1).max(AWAY_MAX_MINUTES).nullable(),
+  autoOfflineMinutes: z.int().min(1).max(AWAY_MAX_MINUTES).nullable(),
 });
 export type AwayRules = z.infer<typeof awaySchema>;
 
@@ -296,7 +296,7 @@ export const handoffSettingsSchema = z.object({
   claimSetsOwner: z.boolean(),
   ownerMode: ownerModeSchema,
   /** Days a returning contact keeps the person who handled the last conversation; null = no limit (today). */
-  continuityDays: z.number().int().min(1).max(365).nullable(),
+  continuityDays: z.int().min(1).max(365).nullable(),
   /** Manual reassignment of a chat offers "also make X the contact owner?". */
   promptOwnerOnReassign: z.boolean(),
   notifyQueue: z.boolean(),
@@ -321,7 +321,9 @@ export const updateHandoffSettingsSchema = handoffSettingsSchema
   .omit({ available: true, queueTimers: true, away: true })
   .extend({ queueTimers: queueTimersSchema.partial(), away: awaySchema.partial() })
   .partial()
-  .refine((v) => Object.keys(v).length > 0, { message: 'Nothing to change' });
+  .refine((v) => Object.keys(v).length > 0, {
+    error: 'Nothing to change',
+  });
 export type UpdateHandoffSettingsInput = z.infer<typeof updateHandoffSettingsSchema>;
 
 // --- owner events ---------------------------------------------------------------------------------------------------------

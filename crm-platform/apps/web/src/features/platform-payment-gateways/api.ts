@@ -101,7 +101,7 @@ export const syncSubscription = (id: string) =>
 export const cancelSubscription = (id: string) =>
   apiFetch(`/billing/subscriptions/${encodeURIComponent(id)}/cancel`, {
     method: 'POST',
-    schema: z.object({ status: z.string(), remote: z.string().optional() }).passthrough(),
+    schema: z.looseObject({ status: z.string(), remote: z.string().optional() }),
   });
 
 export const orderInvoiceKey = (id: string) => ['billing', 'orders', id, 'invoice'] as const;

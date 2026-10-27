@@ -18,7 +18,7 @@ export const stageColorSchema = z
   .string()
   .regex(/^#[0-9a-fA-F]{6}$/, 'colour must be a hex value like #6366F1');
 
-export const stageProbabilitySchema = z.number().int().min(0).max(100);
+export const stageProbabilitySchema = z.int().min(0).max(100);
 
 export const pipelineStageResponseSchema = z.object({
   id: uuidSchema,
@@ -26,14 +26,14 @@ export const pipelineStageResponseSchema = z.object({
   name: z.string(),
   color: z.string(),
   /** 0-100. A won stage is always 100 and a lost stage always 0. */
-  probability: z.number().int(),
+  probability: z.int(),
   kind: stageKindSchema,
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   /** Deals currently in the stage (every status). */
-  dealCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  dealCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PipelineStageResponse = z.infer<typeof pipelineStageResponseSchema>;
 
@@ -43,12 +43,12 @@ export const pipelineResponseSchema = z.object({
   /** The currency a new deal in this pipeline starts with. Each deal keeps its own. */
   currency: z.string(),
   isDefault: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   stages: z.array(pipelineStageResponseSchema),
-  dealCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  dealCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PipelineResponse = z.infer<typeof pipelineResponseSchema>;
 
@@ -76,7 +76,7 @@ export const updatePipelineSchema = z.object({
   currency: currencyCodeSchema.optional(),
   /** `true` makes this the default (the previous default stops being it). There is always exactly one: `false` is refused. */
   isDefault: z.literal(true).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdatePipelineInput = z.infer<typeof updatePipelineSchema>;
 
@@ -107,7 +107,7 @@ export const updateStageSchema = z.object({
   probability: stageProbabilitySchema.optional(),
   /** Only a stage that holds no deals can change kind (its deals' status follows the kind). */
   kind: stageKindSchema.optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateStageInput = z.infer<typeof updateStageSchema>;
 
@@ -130,13 +130,13 @@ export const LOST_REASON_NAME_MAX = 191;
 export const lostReasonResponseSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   isActive: z.boolean(),
   /** Deals currently lost with this reason. */
-  dealCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  dealCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type LostReasonResponse = z.infer<typeof lostReasonResponseSchema>;
 
@@ -149,7 +149,7 @@ export type CreateLostReasonInput = z.infer<typeof createLostReasonSchema>;
 export const updateLostReasonSchema = z.object({
   name: z.string().trim().min(1).max(LOST_REASON_NAME_MAX).optional(),
   isActive: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateLostReasonInput = z.infer<typeof updateLostReasonSchema>;
 
@@ -161,7 +161,7 @@ export type ReorderLostReasonsInput = z.infer<typeof reorderLostReasonsSchema>;
 export const dealSettingsResponseSchema = z.object({
   /** When on, moving a deal to a lost stage (or marking it lost) needs a reason. */
   lostReasonRequired: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type DealSettingsResponse = z.infer<typeof dealSettingsResponseSchema>;
 

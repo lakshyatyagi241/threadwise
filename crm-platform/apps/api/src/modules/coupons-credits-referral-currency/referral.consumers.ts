@@ -17,13 +17,13 @@ export const REFERRAL_ATTRIBUTED_EVENT = 'referral.attributed';
 export const ORDER_PAID_EVENT = 'paygw.order.paid';
 
 const attributedSchema = z.object({
-  referrerUserUuid: z.string().uuid(),
-  referrerOrgUuid: z.string().uuid(),
-  referredUserUuid: z.string().uuid(),
-  referredOrgUuid: z.string().uuid(),
+  referrerUserUuid: z.guid(),
+  referrerOrgUuid: z.guid(),
+  referredUserUuid: z.guid(),
+  referredOrgUuid: z.guid(),
   codeUsed: z.string().min(1).max(64),
 });
-const signupSchema = z.object({ userUuid: z.string().uuid() });
+const signupSchema = z.object({ userUuid: z.guid() });
 
 /**
  * Issues the new user's referral code the moment the account exists (TW-CPN-029). Idempotent: an existing code is returned, so a

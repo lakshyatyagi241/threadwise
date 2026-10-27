@@ -51,7 +51,7 @@ export const nounsSchema = z
   .superRefine((value, ctx) => {
     for (const key of Object.keys(value)) {
       if (!personaNounSchema.safeParse(key).success) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, path: [key], message: 'not a persona noun' });
+        ctx.addIssue({ code: 'custom', path: [key], message: 'not a persona noun' });
       }
     }
   });
@@ -85,7 +85,7 @@ export const personaPresetsSchema = z.object({
         key: presetKey,
         name: presetName,
         kind: z.enum(['appointment', 'meeting']),
-        durationMinutes: z.number().int().min(5).max(1440),
+        durationMinutes: z.int().min(5).max(1440),
         location: z.enum(['address', 'phone', 'virtual']),
       }),
     )
@@ -134,8 +134,12 @@ export const checklistStepSchema = z.object({
 export const personaDefinitionSchema = z.object({
   schemaVersion: z.literal(1),
   /** `en` is required, the other locales are optional. */
-  label: perLocale(60).refine((v) => v.en !== undefined, { message: 'en is required' }),
-  summary: perLocale(160).refine((v) => v.en !== undefined, { message: 'en is required' }),
+  label: perLocale(60).refine((v) => v.en !== undefined, {
+    error: 'en is required',
+  }),
+  summary: perLocale(160).refine((v) => v.en !== undefined, {
+    error: 'en is required',
+  }),
   icon: z.string().regex(/^[a-z][a-z0-9-]{0,39}$/),
   /** Mirrors `organizations.settings.industry` for the analytics that read it. */
   industryHint: industrySchema.optional(),

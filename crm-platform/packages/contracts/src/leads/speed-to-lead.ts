@@ -38,7 +38,7 @@ export const speedToLeadSchema = z.object({
    * `email:`. Omit for the workspace's oldest connected one. WhatsApp ignores it: the template's own number sends.
    */
   senderId: uuidSchema.nullish(),
-  delayMinutes: z.number().int().min(0).max(SPEED_TO_LEAD_MAX_DELAY_MINUTES).default(0),
+  delayMinutes: z.int().min(0).max(SPEED_TO_LEAD_MAX_DELAY_MINUTES).default(0),
   /** Wait for the workspace's business hours (Settings > Business hours) instead of messaging a lead at night. */
   businessHoursOnly: z.boolean().default(false),
   /**
@@ -47,7 +47,6 @@ export const speedToLeadSchema = z.object({
    * message older leads on purpose; the consent rules still apply to every message.
    */
   maxLeadAgeMinutes: z
-    .number()
     .int()
     .min(1)
     .max(SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES)
@@ -134,9 +133,9 @@ export const leadFirstReplyResponseSchema = z.object({
   status: leadFirstReplyStatusSchema,
   reason: z.string().nullable(),
   /** When it is due (scheduled) or next due (held). */
-  dueAt: z.string().datetime(),
-  sentAt: z.string().datetime().nullable(),
-  attempts: z.number().int().min(0),
+  dueAt: z.iso.datetime(),
+  sentAt: z.iso.datetime().nullable(),
+  attempts: z.int().min(0),
 });
 export type LeadFirstReplyResponse = z.infer<typeof leadFirstReplyResponseSchema>;
 

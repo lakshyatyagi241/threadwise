@@ -51,7 +51,7 @@ export type WspPresence = z.infer<typeof wspPresenceSchema>;
 /** Most open chats routing gives one agent at once. The Add member form starts at 4 (Waboo's default); no value = no limit. */
 export const WSP_CHAT_LIMIT_DEFAULT = 4;
 export const WSP_CHAT_LIMIT_MAX = 1000;
-export const wspChatLimitSchema = z.number().int().min(1).max(WSP_CHAT_LIMIT_MAX);
+export const wspChatLimitSchema = z.int().min(1).max(WSP_CHAT_LIMIT_MAX);
 
 /** A member's phone: E.164, or null/empty for none. Surrounding space is ignored; an empty string clears the number. */
 export const wspMemberPhoneSchema = z.preprocess(
@@ -74,20 +74,20 @@ export const wspMemberSchema = z.object({
   /** E.164; null when none is on file. */
   phone: z.string().nullable(),
   /** Most open chats routing gives this agent at once; null = no limit. */
-  chatLimit: z.number().int().nullable(),
+  chatLimit: z.int().nullable(),
   tier: wspRoleTierSchema,
   roles: z.array(wspRoleRefSchema),
   isOwner: z.boolean(),
   /** `pending` = invited, link not used yet (joinedAt is null). */
   status: wspMemberStatusSchema,
   presence: wspPresenceSchema,
-  lastSeenAt: z.string().datetime().nullable(),
+  lastSeenAt: z.iso.datetime().nullable(),
   /** The last time this member signed in (user_security.last_login_at); null = never. Read only. */
-  lastLoginAt: z.string().datetime().nullable(),
-  invitedAt: z.string().datetime().nullable(),
-  joinedAt: z.string().datetime().nullable(),
+  lastLoginAt: z.iso.datetime().nullable(),
+  invitedAt: z.iso.datetime().nullable(),
+  joinedAt: z.iso.datetime().nullable(),
   teamIds: z.array(uuidSchema),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WspMember = z.infer<typeof wspMemberSchema>;
 
@@ -106,18 +106,18 @@ export type ListWspMembersQuery = z.infer<typeof listWspMembersQuerySchema>;
 /** Role the caller may hand out, and the screen's header numbers. */
 export const wspMembersSummarySchema = z.object({
   counts: z.object({
-    all: z.number().int(),
-    owner: z.number().int(),
-    admin: z.number().int(),
-    manager: z.number().int(),
-    agent: z.number().int(),
-    viewer: z.number().int(),
-    custom: z.number().int(),
-    pending: z.number().int(),
+    all: z.int(),
+    owner: z.int(),
+    admin: z.int(),
+    manager: z.int(),
+    agent: z.int(),
+    viewer: z.int(),
+    custom: z.int(),
+    pending: z.int(),
   }),
   roles: z.array(wspRoleRefSchema.extend({ grantable: z.boolean() })),
   /** Seats used (active and pending) and the plan's limit; limit null = unlimited. */
-  seats: z.object({ used: z.number().int(), limit: z.number().int().nullable() }),
+  seats: z.object({ used: z.int(), limit: z.int().nullable() }),
   /** What this caller may do; the server enforces every one anyway. */
   me: z.object({
     id: uuidSchema,
@@ -149,7 +149,7 @@ export type InviteWspMemberResponse = z.infer<typeof inviteWspMemberResponseSche
 
 export const changeWspMemberRoleSchema = z.object({
   roleId: uuidSchema,
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type ChangeWspMemberRoleInput = z.infer<typeof changeWspMemberRoleSchema>;
 
@@ -158,10 +158,10 @@ export const updateWspMemberDetailsSchema = z
   .object({
     phone: wspMemberPhoneSchema.optional(),
     chatLimit: wspChatLimitSchema.nullable().optional(),
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
   })
   .refine((v) => v.phone !== undefined || v.chatLimit !== undefined, {
-    message: 'Nothing to change',
+    error: 'Nothing to change',
   });
 export type UpdateWspMemberDetailsInput = z.infer<typeof updateWspMemberDetailsSchema>;
 

@@ -16,15 +16,15 @@ export const viberInsightsSchema = z.object({
   /** The channel the numbers are for: the one asked for, else the oldest; null with no channel. */
   channelId: uuidSchema.nullable(),
   /** Seven days, oldest first, one row per day (a day with nothing is zeros). */
-  rows: z.array(z.object({ date: z.string(), in: z.number().int(), out: z.number().int() })),
+  rows: z.array(z.object({ date: z.string(), in: z.int(), out: z.int() })),
   totals: z.object({
-    in: z.number().int(),
-    out: z.number().int(),
+    in: z.int(),
+    out: z.int(),
     /** Threads with a message from the user in the window. */
-    users: z.number().int(),
-    delivered: z.number().int(),
-    seen: z.number().int(),
-    failed: z.number().int(),
+    users: z.int(),
+    delivered: z.int(),
+    seen: z.int(),
+    failed: z.int(),
   }),
 });
 export type ViberInsights = z.infer<typeof viberInsightsSchema>;

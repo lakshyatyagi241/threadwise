@@ -10,42 +10,38 @@ import { uuidSchema } from '../common/ids';
 export const SLA_FIRST_RESPONSE_MAX_MINUTES = 100_000;
 export const SLA_RESOLUTION_MAX_MINUTES = 1_000_000;
 
-const firstResponseSchema = z.number().int().min(1).max(SLA_FIRST_RESPONSE_MAX_MINUTES);
-const resolutionSchema = z.number().int().min(1).max(SLA_RESOLUTION_MAX_MINUTES);
+const firstResponseSchema = z.int().min(1).max(SLA_FIRST_RESPONSE_MAX_MINUTES);
+const resolutionSchema = z.int().min(1).max(SLA_RESOLUTION_MAX_MINUTES);
 
 /** Per priority, either or both targets replace the policy's own (an absent key keeps the policy's value). */
-export const slaPriorityOverrideSchema = z
-  .object({
-    firstResponseMinutes: firstResponseSchema.optional(),
-    resolutionMinutes: resolutionSchema.optional(),
-  })
-  .strict();
+export const slaPriorityOverrideSchema = z.strictObject({
+  firstResponseMinutes: firstResponseSchema.optional(),
+  resolutionMinutes: resolutionSchema.optional(),
+});
 export type SlaPriorityOverride = z.infer<typeof slaPriorityOverrideSchema>;
 
-export const slaPriorityOverridesSchema = z
-  .object({
-    low: slaPriorityOverrideSchema.optional(),
-    normal: slaPriorityOverrideSchema.optional(),
-    high: slaPriorityOverrideSchema.optional(),
-    urgent: slaPriorityOverrideSchema.optional(),
-  })
-  .strict();
+export const slaPriorityOverridesSchema = z.strictObject({
+  low: slaPriorityOverrideSchema.optional(),
+  normal: slaPriorityOverrideSchema.optional(),
+  high: slaPriorityOverrideSchema.optional(),
+  urgent: slaPriorityOverrideSchema.optional(),
+});
 export type SlaPriorityOverrides = z.infer<typeof slaPriorityOverridesSchema>;
 
 export const inboxSlaPolicySchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  firstResponseMinutes: z.number().int().nullable(),
-  resolutionMinutes: z.number().int().nullable(),
+  firstResponseMinutes: z.int().nullable(),
+  resolutionMinutes: z.int().nullable(),
   /** Count only the workspace's business hours (Settings, business hours). */
   respectBusinessHours: z.boolean(),
   priorityOverrides: slaPriorityOverridesSchema,
   isDefault: z.boolean(),
   /** Conversations whose current clock came from this policy. */
-  conversationCount: z.number().int().nonnegative(),
-  rowVersion: z.number().int().positive(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  conversationCount: z.int().nonnegative(),
+  rowVersion: z.int().positive(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type InboxSlaPolicy = z.infer<typeof inboxSlaPolicySchema>;
 
@@ -63,7 +59,7 @@ export const createInboxSlaPolicySchema = z.object({
 export type CreateInboxSlaPolicyInput = z.infer<typeof createInboxSlaPolicySchema>;
 
 export const updateInboxSlaPolicySchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   name: z.string().trim().min(1).max(128).optional(),
   firstResponseMinutes: firstResponseSchema.nullish(),
   resolutionMinutes: resolutionSchema.nullish(),
@@ -88,6 +84,6 @@ export const SLA_AT_RISK_MINUTES = 30;
 export const slaStatusSchema = z.object({
   state: slaStateSchema,
   kind: slaKindSchema,
-  dueAt: z.string().datetime(),
+  dueAt: z.iso.datetime(),
 });
 export type SlaStatus = z.infer<typeof slaStatusSchema>;

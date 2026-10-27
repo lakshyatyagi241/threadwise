@@ -8,10 +8,10 @@ import { exponentialDelayMs, providerWaitMs } from '../../infra/queue/backoff';
 export const MESSAGE_SEND_JOB = 'message.send';
 
 export const messageSendJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  messageUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  messageUuid: z.guid(),
   /** 1 for the first dispatch of a message, +1 per manual Retry (so a retry gets a job id the first run's finished job does not hold). */
-  generation: z.number().int().positive(),
+  generation: z.int().positive(),
 });
 export type MessageSendJob = z.infer<typeof messageSendJobSchema>;
 

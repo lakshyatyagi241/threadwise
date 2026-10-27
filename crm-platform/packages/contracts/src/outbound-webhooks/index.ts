@@ -63,8 +63,8 @@ export const updateWebhookSchema = z
     active: z.boolean().optional(),
   })
   .refine((v) => !(v.secret && v.clearSecret), {
-    message: 'secret and clearSecret cannot be combined',
     path: ['clearSecret'],
+    error: 'secret and clearSecret cannot be combined',
   });
 export type UpdateWebhookInput = z.infer<typeof updateWebhookSchema>;
 
@@ -79,13 +79,13 @@ export const webhookResponseSchema = z.object({
   hasSecret: z.boolean(),
   /** The last delivery (after its retries) failed. */
   isFailing: z.boolean(),
-  successCount: z.number().int(),
-  failureCount: z.number().int(),
-  lastStatusCode: z.number().int().nullable(),
-  lastLatencyMs: z.number().int().nullable(),
-  lastFiredAt: z.string().datetime().nullable(),
+  successCount: z.int(),
+  failureCount: z.int(),
+  lastStatusCode: z.int().nullable(),
+  lastLatencyMs: z.int().nullable(),
+  lastFiredAt: z.iso.datetime().nullable(),
   lastError: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type WebhookResponse = z.infer<typeof webhookResponseSchema>;
 
@@ -98,17 +98,17 @@ export type ListWebhooksResponse = z.infer<typeof listWebhooksResponseSchema>;
 export const webhookDeliveryResponseSchema = z.object({
   id: z.string(),
   event: z.string(),
-  statusCode: z.number().int().nullable(),
-  latencyMs: z.number().int().nullable(),
-  attempts: z.number().int(),
+  statusCode: z.int().nullable(),
+  latencyMs: z.int().nullable(),
+  attempts: z.int(),
   isRetry: z.boolean(),
   error: z.string().nullable(),
-  firedAt: z.string().datetime(),
+  firedAt: z.iso.datetime(),
 });
 export type WebhookDeliveryResponse = z.infer<typeof webhookDeliveryResponseSchema>;
 
 export const listWebhookDeliveriesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
 });
 export type ListWebhookDeliveriesQuery = z.infer<typeof listWebhookDeliveriesQuerySchema>;
 
@@ -124,8 +124,8 @@ export type TestWebhookResponse = z.infer<typeof testWebhookResponseSchema>;
 export const webhookEnvelopeSchema = z.object({
   id: z.string(),
   event: z.string(),
-  createdAt: z.string().datetime(),
-  data: z.record(z.unknown()),
+  createdAt: z.iso.datetime(),
+  data: z.record(z.string(), z.unknown()),
 });
 export type WebhookEnvelope = z.infer<typeof webhookEnvelopeSchema>;
 

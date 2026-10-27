@@ -57,20 +57,20 @@ export const sendIgComposerSchema = z.object({
 export type SendIgComposerInput = z.infer<typeof sendIgComposerSchema>;
 
 export const igSendResultSchema = z.object({
-  sent: z.number().int().min(0),
-  failed: z.number().int().min(0),
+  sent: z.int().min(0),
+  failed: z.int().min(0),
   /** Up to five reasons, each cut to 120 characters. */
   errors: z.array(z.string()),
   /** BL-191: people held for the workspace's quiet hours (neither sent nor failed), and the first instant one of them is messaged. */
-  held: z.number().int(),
-  heldUntil: z.string().datetime().nullable(),
+  held: z.int(),
+  heldUntil: z.iso.datetime().nullable(),
   /**
    * People the ConsentGate refused for a marketing send (the broadcasts page; the inbox composer is a reply and is never asked): not
    * messaged, neither sent nor failed. `skippedReasons` says why, by the gate's closed set of reason codes.
    */
-  skipped: z.number().int().min(0),
+  skipped: z.int().min(0),
   skippedReasons: z.array(
-    z.object({ reason: z.enum(CONSENT_GATE_REASONS), count: z.number().int().min(1) }),
+    z.object({ reason: z.enum(CONSENT_GATE_REASONS), count: z.int().min(1) }),
   ),
 });
 export type IgSendResult = z.infer<typeof igSendResultSchema>;

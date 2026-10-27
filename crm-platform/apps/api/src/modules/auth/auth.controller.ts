@@ -31,7 +31,7 @@ import { Throttle } from '../platform-infrastructure';
 
 const partnerLoginSchema = z.object({
   orgSlug: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(1),
 });
 

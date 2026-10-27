@@ -68,7 +68,7 @@ export const appointmentChannelStateSchema = z.object({
   senders: z.array(appointmentChannelSenderSchema),
   /** The chosen default sender, or null for "the first connected one". */
   defaultSenderId: uuidSchema.nullable(),
-  rowVersion: z.number().int().nullable(),
+  rowVersion: z.int().nullable(),
 });
 export type AppointmentChannelState = z.infer<typeof appointmentChannelStateSchema>;
 
@@ -127,10 +127,10 @@ export const appointmentTemplateSchema = z.object({
   /** Can be chosen for a send: active, and for WhatsApp approved. */
   usable: z.boolean(),
   /** How many booking types choose it. */
-  usedByTypes: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  usedByTypes: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type AppointmentTemplate = z.infer<typeof appointmentTemplateSchema>;
 
@@ -206,7 +206,7 @@ export const updateAppointmentTemplateSchema = z.object({
   isActive: z.boolean().optional(),
   /** WhatsApp: after changing the text, send it to Meta again. */
   submit: z.boolean().default(false),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type UpdateAppointmentTemplateInput = z.infer<typeof updateAppointmentTemplateSchema>;
 

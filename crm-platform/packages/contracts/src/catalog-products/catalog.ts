@@ -21,7 +21,7 @@ export const catalogAutomationSchema = z.object({
   orderAckPayUrl: z.string().nullable(),
   conciergeEnabled: z.boolean(),
   conciergeHeader: z.string().nullable(),
-  conciergeMax: z.number().int(),
+  conciergeMax: z.int(),
   conciergeReplyOnEmpty: z.boolean(),
   conciergeEmptyText: z.string().nullable(),
 });
@@ -36,10 +36,10 @@ export const catalogSummarySchema = z.object({
   phoneNumberId: z.string().nullable(),
   isCartEnabled: z.boolean(),
   isCatalogVisible: z.boolean(),
-  lastSyncedAt: z.string().datetime().nullable(),
+  lastSyncedAt: z.iso.datetime().nullable(),
   automation: catalogAutomationSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type CatalogSummary = z.infer<typeof catalogSummarySchema>;
 
@@ -48,18 +48,18 @@ export const catalogHealthSampleSchema = z.object({
   name: z.string(),
   sku: z.string().nullable(),
   imageUrl: z.string().nullable(),
-  priceMinor: z.number().int(),
+  priceMinor: z.int(),
   metaSyncStatus: z.string().nullable(),
 });
 
 /** Share of rows that can sell as they are; a row without an image or a price, or whose last push errored, cannot. */
 export const catalogHealthSchema = z.object({
-  score: z.number().int().nullable(),
-  total: z.number().int(),
-  noImage: z.number().int(),
-  noPrice: z.number().int(),
-  errored: z.number().int(),
-  flagged: z.number().int(),
+  score: z.int().nullable(),
+  total: z.int(),
+  noImage: z.int(),
+  noPrice: z.int(),
+  errored: z.int(),
+  flagged: z.int(),
   samples: z.array(catalogHealthSampleSchema),
 });
 export type CatalogHealth = z.infer<typeof catalogHealthSchema>;
@@ -86,12 +86,12 @@ export const catalogSendActivitySchema = z.object({
   mode: z.enum(['spm', 'mpm', 'link']),
   body: z.string().nullable(),
   header: z.string().nullable(),
-  productCount: z.number().int(),
+  productCount: z.int(),
   productNames: z.array(z.string()),
   status: z.enum(['sent', 'failed']),
   error: z.string().nullable(),
   sentBy: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type CatalogSendActivity = z.infer<typeof catalogSendActivitySchema>;
 
@@ -100,8 +100,8 @@ export const catalogOverviewSchema = z.object({
   catalog: catalogSummarySchema.nullable(),
   shops: z.array(catalogShopSchema),
   /** Counts by sync state; products never pushed are under `unsynced`. */
-  statusBuckets: z.record(z.number().int()),
-  totalProducts: z.number().int(),
+  statusBuckets: z.record(z.string(), z.int()),
+  totalProducts: z.int(),
   /** The 50 most recently changed. */
   products: z.array(productResponseSchema),
   health: catalogHealthSchema,
@@ -109,7 +109,7 @@ export const catalogOverviewSchema = z.object({
   senders: z.array(catalogSenderSchema),
   /** A connected sender exists: the Send tab works. */
   hasSender: z.boolean(),
-  sets: z.number().int(),
+  sets: z.int(),
 });
 export type CatalogOverview = z.infer<typeof catalogOverviewSchema>;
 
@@ -157,10 +157,10 @@ export type CommerceSettingsInput = z.infer<typeof commerceSettingsSchema>;
 
 export const saveAutomationSchema = z.object({
   orderAckEnabled: z.boolean().default(false),
-  orderAckPayUrl: z.string().trim().url().max(500).nullish(),
+  orderAckPayUrl: z.string().trim().pipe(z.url().max(500)).nullish(),
   conciergeEnabled: z.boolean().default(false),
   conciergeHeader: z.string().trim().max(60).nullish(),
-  conciergeMax: z.number().int().min(1).max(30).default(10),
+  conciergeMax: z.int().min(1).max(30).default(10),
   conciergeReplyOnEmpty: z.boolean().default(false),
   conciergeEmptyText: z.string().trim().max(1024).nullish(),
 });
@@ -173,26 +173,26 @@ export const syncProductsSchema = z.object({
 export type SyncProductsInput = z.infer<typeof syncProductsSchema>;
 
 export const syncProductsResponseSchema = z.object({
-  pushed: z.number().int(),
+  pushed: z.int(),
   hasMore: z.boolean(),
-  totalPending: z.number().int(),
-  totalSynced: z.number().int(),
-  totalFailed: z.number().int(),
+  totalPending: z.int(),
+  totalSynced: z.int(),
+  totalFailed: z.int(),
 });
 export type SyncProductsResponse = z.infer<typeof syncProductsResponseSchema>;
 
 export const pollBatchesResponseSchema = z.object({
-  pending: z.number().int(),
-  synced: z.number().int(),
-  failed: z.number().int(),
+  pending: z.int(),
+  synced: z.int(),
+  failed: z.int(),
 });
 export type PollBatchesResponse = z.infer<typeof pollBatchesResponseSchema>;
 
 export const importFromMetaResponseSchema = z.object({
-  imported: z.number().int(),
-  updated: z.number().int(),
-  skipped: z.number().int(),
-  total: z.number().int(),
+  imported: z.int(),
+  updated: z.int(),
+  skipped: z.int(),
+  total: z.int(),
 });
 export type ImportFromMetaResponse = z.infer<typeof importFromMetaResponseSchema>;
 
@@ -219,9 +219,9 @@ export type SendCatalogInput = z.infer<typeof sendCatalogSchema>;
 export const sendCatalogResponseSchema = z.object({
   /** At least one message went out. */
   ok: z.boolean(),
-  sent: z.number().int(),
-  failed: z.number().int(),
-  total: z.number().int(),
+  sent: z.int(),
+  failed: z.int(),
+  total: z.int(),
   /** The first 10 failures as "<number>: <reason>". */
   errors: z.array(z.string()),
 });
@@ -230,7 +230,7 @@ export type SendCatalogResponse = z.infer<typeof sendCatalogResponseSchema>;
 export const catalogAudienceGroupSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  count: z.number().int(),
+  count: z.int(),
 });
 export const catalogAudienceContactSchema = z.object({
   id: uuidSchema,
@@ -254,13 +254,13 @@ export const catalogSendOptionsSchema = z.object({
   groups: z.array(catalogAudienceGroupSchema),
   contacts: z.array(catalogAudienceContactSchema),
   recentSends: z.array(catalogSendActivitySchema),
-  totalProducts: z.number().int(),
+  totalProducts: z.int(),
   connected: z.boolean(),
 });
 export type CatalogSendOptions = z.infer<typeof catalogSendOptionsSchema>;
 
 export const catalogActivityQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
 });
 export type CatalogActivityQuery = z.infer<typeof catalogActivityQuerySchema>;
 export const catalogActivityResponseSchema = z.object({

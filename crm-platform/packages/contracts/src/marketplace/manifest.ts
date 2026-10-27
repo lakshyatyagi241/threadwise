@@ -47,48 +47,41 @@ export const MARKET_SURFACE_TYPES = [
 export const marketSurfaceTypeSchema = z.enum(MARKET_SURFACE_TYPES);
 export type MarketSurfaceType = z.infer<typeof marketSurfaceTypeSchema>;
 
-export const marketSurfaceSchema = z
-  .object({
-    type: marketSurfaceTypeSchema,
-    key: z
-      .string()
-      .regex(/^[a-z][a-z0-9_]{0,39}$/, 'Use lowercase letters, digits and underscores.'),
-    label: text(60),
-    /** Where an out-of-process app's iframe or webhook lives (phase 3). First-party surfaces are native and carry none. */
-    url: marketLinkSchema.optional(),
-  })
-  .strict();
+export const marketSurfaceSchema = z.strictObject({
+  type: marketSurfaceTypeSchema,
+  key: z.string().regex(/^[a-z][a-z0-9_]{0,39}$/, 'Use lowercase letters, digits and underscores.'),
+  label: text(60),
+  /** Where an out-of-process app's iframe or webhook lives (phase 3). First-party surfaces are native and carry none. */
+  url: marketLinkSchema.optional(),
+});
 export type MarketSurface = z.infer<typeof marketSurfaceSchema>;
 
 export const MARKET_PRICING_MODELS = ['free', 'included', 'addon'] as const;
-export const marketPricingSchema = z
-  .object({
-    /** `free`: no charge. `included`: part of the plan (the plan feature on the listing decides who has it). `addon`: bought as a billing add-on. */
-    model: z.enum(MARKET_PRICING_MODELS),
-    note: text(200).optional(),
-  })
-  .strict();
+export const marketPricingSchema = z.strictObject({
+  /** `free`: no charge. `included`: part of the plan (the plan feature on the listing decides who has it). `addon`: bought as a billing add-on. */
+  model: z.enum(MARKET_PRICING_MODELS),
+  note: text(200).optional(),
+});
 export type MarketPricing = z.infer<typeof marketPricingSchema>;
 
-export const marketSupportSchema = z
-  .object({
-    website: marketLinkSchema.optional(),
-    email: z.string().trim().email().max(200).optional(),
-    docs: marketLinkSchema.optional(),
-    privacy: marketLinkSchema.optional(),
-    terms: marketLinkSchema.optional(),
-    status: marketLinkSchema.optional(),
-  })
-  .strict();
+export const marketSupportSchema = z.strictObject({
+  website: marketLinkSchema.optional(),
+  email: z.string().trim().pipe(z.email().max(200)).optional(),
+  docs: marketLinkSchema.optional(),
+  privacy: marketLinkSchema.optional(),
+  terms: marketLinkSchema.optional(),
+  status: marketLinkSchema.optional(),
+});
 export type MarketSupport = z.infer<typeof marketSupportSchema>;
 
-export const marketDeveloperSchema = z
-  .object({ name: text(80), url: marketLinkSchema.optional() })
-  .strict();
+export const marketDeveloperSchema = z.strictObject({
+  name: text(80),
+  url: marketLinkSchema.optional(),
+});
 export type MarketDeveloper = z.infer<typeof marketDeveloperSchema>;
 
 export const marketManifestSchema = z
-  .object({
+  .strictObject({
     manifestVersion: z.literal(MARKET_MANIFEST_VERSION),
     /** The app's slug: the stable machine id and the URL segment. */
     id: marketSlugSchema,
@@ -117,7 +110,7 @@ export const marketManifestSchema = z
     support: marketSupportSchema.default({}),
     developer: marketDeveloperSchema.optional(),
     /** Integrations only: which of the five mechanisms they use. */
-    connector: z.object({ type: connectorTypeSchema }).strict().optional(),
+    connector: z.strictObject({ type: connectorTypeSchema }).optional(),
     /**
      * First-party mini apps only: the slug of the installable module in the module registry that provides the code. The app cannot be
      * installed while that module is switched off.
@@ -127,7 +120,6 @@ export const marketManifestSchema = z
       .regex(/^[a-z0-9_-]{1,64}$/)
       .optional(),
   })
-  .strict()
   .superRefine((m, ctx) => {
     if (m.kind === 'integration' && !m.connector) {
       ctx.addIssue({

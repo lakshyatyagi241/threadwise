@@ -37,32 +37,29 @@ export type MarketMaturity = z.infer<typeof marketMaturitySchema>;
 
 // --- listing content (platform-owned, edited by the operator) ----------------------------------------------------------------------
 
-export const marketListingSchema = z
-  .object({
-    /** Absent reads as `stable`. */
-    maturity: marketMaturitySchema.optional(),
-    /** One plain sentence shown beside the maturity badge on the app page (what to expect, what the customer must ask the portal for). */
-    notice: text(600).nullable().optional(),
-    /** The app's logo (an https image address). An integration without one falls back to the logo of its recipe. */
-    logo: marketLinkSchema.nullable().default(null),
-    /** The long description of the app page. Plain text; blank lines separate paragraphs. */
-    longDescription: text(8000).default(''),
-    highlights: z.array(text(120)).max(8).default([]),
-    screenshots: z
-      .array(z.object({ url: marketLinkSchema, caption: text(120).optional() }).strict())
-      .max(8)
-      .default([]),
-    /** The data-processing disclosure of the app page (DPDP): what it stores, where, and how it is deleted. */
-    dataProcessing: z
-      .object({
-        summary: text(1000).default(''),
-        regions: z.array(text(40)).max(10).default([]),
-        deletion: text(500).default(''),
-      })
-      .strict()
-      .default({}),
-  })
-  .strict();
+export const marketListingSchema = z.strictObject({
+  /** Absent reads as `stable`. */
+  maturity: marketMaturitySchema.optional(),
+  /** One plain sentence shown beside the maturity badge on the app page (what to expect, what the customer must ask the portal for). */
+  notice: text(600).nullable().optional(),
+  /** The app's logo (an https image address). An integration without one falls back to the logo of its recipe. */
+  logo: marketLinkSchema.nullable().default(null),
+  /** The long description of the app page. Plain text; blank lines separate paragraphs. */
+  longDescription: text(8000).default(''),
+  highlights: z.array(text(120)).max(8).default([]),
+  screenshots: z
+    .array(z.strictObject({ url: marketLinkSchema, caption: text(120).optional() }))
+    .max(8)
+    .default([]),
+  /** The data-processing disclosure of the app page (DPDP): what it stores, where, and how it is deleted. */
+  dataProcessing: z
+    .strictObject({
+      summary: text(1000).default(''),
+      regions: z.array(text(40)).max(10).default([]),
+      deletion: text(500).default(''),
+    })
+    .prefault({}),
+});
 export type MarketListing = z.infer<typeof marketListingSchema>;
 
 // --- categories --------------------------------------------------------------------------------------------------------------------
@@ -74,9 +71,9 @@ export const marketCategorySchema = z.object({
   name: z.string(),
   description: z.string().nullable(),
   icon: z.string().nullable(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   /** Published apps in it (a workspace sees published only). */
-  appCount: z.number().int(),
+  appCount: z.int(),
 });
 export type MarketCategory = z.infer<typeof marketCategorySchema>;
 
@@ -122,8 +119,8 @@ export const marketAppCardSchema = z.object({
   maturity: marketMaturitySchema.optional(),
   /** The listing's one-line notice (null when there is none). */
   notice: z.string().nullable().optional(),
-  installCount: z.number().int(),
-  publishedAt: z.string().datetime().nullable(),
+  installCount: z.int(),
+  publishedAt: z.iso.datetime().nullable(),
   /** The workspace's installation of it, when there is one. */
   install: marketInstallStateSchema.nullable(),
   /** Set when the workspace cannot install it (plan, module, cap). A locked app still shows, with an upgrade prompt. */
@@ -144,7 +141,7 @@ export const marketAppListQuerySchema = z.object({
     .transform((v) => v === 'true')
     .optional(),
   sort: z.enum(MARKET_APP_SORTS).default('featured'),
-  limit: z.coerce.number().int().min(1).max(100).default(24),
+  limit: z.coerce.number().int().min(1).max(100).prefault(24),
   cursor: cursorSchema.optional(),
 });
 export type MarketAppListQuery = z.infer<typeof marketAppListQuerySchema>;
@@ -169,7 +166,7 @@ export type MarketShelves = z.infer<typeof marketShelvesSchema>;
 export const marketChangelogEntrySchema = z.object({
   version: z.string(),
   notes: z.string(),
-  publishedAt: z.string().datetime().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
 });
 
 export const marketAppDetailSchema = marketAppCardSchema.extend({
@@ -196,9 +193,9 @@ export const marketOperatorVersionSchema = z.object({
   changelog: z.string(),
   scopes: z.array(z.string()),
   reviewNote: z.string().nullable(),
-  submittedAt: z.string().datetime().nullable(),
-  reviewedAt: z.string().datetime().nullable(),
-  publishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  submittedAt: z.iso.datetime().nullable(),
+  reviewedAt: z.iso.datetime().nullable(),
+  publishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type MarketOperatorVersion = z.infer<typeof marketOperatorVersionSchema>;

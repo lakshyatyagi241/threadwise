@@ -68,7 +68,7 @@ export const scheduleMediaSchema = z.object({
   name: z.string(),
   mime: z.string(),
   kind: z.enum(SCHEDULE_MEDIA_KINDS),
-  size: z.number().int().nonnegative(),
+  size: z.int().nonnegative(),
   /** A link to look at the file (signed on a private bucket). Not the address the provider is given. */
   url: z.string(),
 });

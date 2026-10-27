@@ -6,8 +6,8 @@ const dayString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const translationUsageQuerySchema = z
   .object({ from: dayString.optional(), to: dayString.optional() })
   .refine((q) => !q.from || !q.to || q.from <= q.to, {
-    message: 'from must not be after to',
     path: ['from'],
+    error: 'from must not be after to',
   });
 export type TranslationUsageQuery = z.infer<typeof translationUsageQuerySchema>;
 
@@ -15,32 +15,30 @@ export type TranslationUsageQuery = z.infer<typeof translationUsageQuerySchema>;
 const microsSchema = z.string().regex(/^\d+$/);
 
 export const translationUsageResponseSchema = z.object({
-  range: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
+  range: z.object({ from: z.iso.datetime(), to: z.iso.datetime() }),
   totals: z.object({
-    calls: z.number().int(),
-    charsIn: z.number().int(),
-    charsOut: z.number().int(),
+    calls: z.int(),
+    charsIn: z.int(),
+    charsOut: z.int(),
     costMicros: microsSchema,
-    fallbackHits: z.number().int(),
+    fallbackHits: z.int(),
   }),
   byProvider: z.array(
     z.object({
       providerSlug: z.string(),
-      calls: z.number().int(),
-      charsIn: z.number().int(),
+      calls: z.int(),
+      charsIn: z.int(),
       costMicros: microsSchema,
       ratePerMillionChars: microsSchema,
     }),
   ),
-  timeline: z.array(
-    z.object({ date: z.string(), charsIn: z.number().int(), costMicros: microsSchema }),
-  ),
+  timeline: z.array(z.object({ date: z.string(), charsIn: z.int(), costMicros: microsSchema })),
   topWorkspaces: z.array(
     z.object({
-      workspaceId: z.string().uuid(),
+      workspaceId: z.guid(),
       name: z.string(),
-      calls: z.number().int(),
-      charsIn: z.number().int(),
+      calls: z.int(),
+      charsIn: z.int(),
       costMicros: microsSchema,
     }),
   ),

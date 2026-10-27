@@ -22,7 +22,7 @@ export const metaCardFreshnessSchema = z.object({
   quarterStart: z.string(),
   /** First day of the next quarter, the next date Meta may change prices. */
   nextQuarterStart: z.string(),
-  daysUntilNext: z.number().int(),
+  daysUntilNext: z.int(),
 });
 export type MetaCardFreshness = z.infer<typeof metaCardFreshnessSchema>;
 
@@ -33,8 +33,8 @@ export const metaCardSummarySchema = z.object({
   /** When the operator last imported (and so confirmed) this card, YYYY-MM-DD. */
   checkedOn: z.string(),
   sourceLabel: z.string(),
-  markets: z.number().int(),
-  rows: z.number().int(),
+  markets: z.int(),
+  rows: z.int(),
   /** The platform currency's card also drives the Meta cost used for margins and the reseller P&L. */
   isPlatformCurrency: z.boolean(),
   freshness: metaCardFreshnessSchema,
@@ -56,7 +56,7 @@ export const metaCardMarketRowSchema = z.object({
   /** ISO countries the market covers; empty for "Other" (every country not named). */
   countries: z.array(z.string()),
   /** Cost per message as a decimal string in the card's currency; null when Meta lists none for the category. */
-  costs: z.record(z.enum(META_CARD_CATEGORIES), z.string().nullable()),
+  costs: z.partialRecord(z.enum(META_CARD_CATEGORIES), z.string().nullable()),
 });
 export type MetaCardMarketRow = z.infer<typeof metaCardMarketRowSchema>;
 
@@ -81,10 +81,10 @@ export const importMetaCardResultSchema = z.object({
   effectiveOn: z.string(),
   /** The card this one replaces, if any (its effective date), so the operator sees what they are overwriting. */
   replaces: z.string().nullable(),
-  added: z.number().int(),
-  changed: z.number().int(),
-  unchanged: z.number().int(),
-  removed: z.number().int(),
+  added: z.int(),
+  changed: z.int(),
+  unchanged: z.int(),
+  removed: z.int(),
   /** The largest moves, so a surprising card is noticed before it is applied. */
   biggestChanges: z.array(
     z.object({
@@ -99,6 +99,6 @@ export const importMetaCardResultSchema = z.object({
   /** True when this is the platform currency's card: the costs used for pricing were refreshed too. */
   appliedToPricing: z.boolean(),
   /** What refreshing the pricing costs changed (platform currency only). */
-  pricing: z.object({ added: z.number().int(), updated: z.number().int() }).nullable(),
+  pricing: z.object({ added: z.int(), updated: z.int() }).nullable(),
 });
 export type ImportMetaCardResult = z.infer<typeof importMetaCardResultSchema>;

@@ -27,15 +27,15 @@ export const adminOverviewSchema = z.object({
     totalTarget: z.string(),
   }),
   countries: z.array(
-    z.object({ code: z.string(), name: z.string(), count: z.number().int(), pct: z.string() }),
+    z.object({ code: z.string(), name: z.string(), count: z.int(), pct: z.string() }),
   ),
-  regions: z.array(z.object({ region: z.string(), count: z.number().int() })),
+  regions: z.array(z.object({ region: z.string(), count: z.int() })),
   gateways: z.array(z.object({ gateway: z.string(), amount: z.string() })),
   users: z.object({
-    total: z.number().int(),
-    premium: z.number().int(),
-    basic: z.number().int(),
-    pct: z.number().int(),
+    total: z.int(),
+    premium: z.int(),
+    basic: z.int(),
+    pct: z.int(),
   }),
   workspaces: z.array(
     z.object({
@@ -43,13 +43,13 @@ export const adminOverviewSchema = z.object({
       name: z.string(),
       owner: z.string().nullable(),
       plan: z.string(),
-      messages: z.number().int(),
+      messages: z.int(),
       health: z.enum(['good', 'active', 'low', 'idle']),
       mrr: z.string(),
     }),
   ),
   alerts: z.object({
-    open: z.number().int(),
+    open: z.int(),
     items: z.array(
       z.object({
         severity: z.enum(['high', 'medium', 'low']),
@@ -65,38 +65,38 @@ export const adminAnalyticsQuerySchema = z.object({
   days: z.preprocess((v) => {
     const n = Math.trunc(Number(v));
     return Number.isFinite(n) && n >= 1 ? Math.min(n, 365) : 30;
-  }, z.number().int().min(1).max(365)),
+  }, z.int().min(1).max(365)),
 });
 export type AdminAnalyticsQuery = z.infer<typeof adminAnalyticsQuerySchema>;
 
 export const adminAnalyticsSchema = z.object({
-  days: z.number().int(),
+  days: z.int(),
   since: z.string(),
   currency: z.string(),
   kpis: z.object({
     revenue: z.string(),
-    workspaces: z.number().int(),
-    newWorkspaces: z.number().int(),
-    users: z.number().int(),
-    newUsers: z.number().int(),
-    messages: z.number().int(),
-    messagesPerDay: z.number().int(),
-    devicesOnline: z.number().int(),
-    devicesTotal: z.number().int(),
-    openTickets: z.number().int(),
+    workspaces: z.int(),
+    newWorkspaces: z.int(),
+    users: z.int(),
+    newUsers: z.int(),
+    messages: z.int(),
+    messagesPerDay: z.int(),
+    devicesOnline: z.int(),
+    devicesTotal: z.int(),
+    openTickets: z.int(),
   }),
-  signups: z.array(z.object({ date: z.string(), count: z.number().int() })),
-  planMix: z.array(z.object({ plan: z.string(), count: z.number().int() })),
-  topDevices: z.array(z.object({ label: z.string(), sent24h: z.number().int() })),
-  deviceSends24h: z.number().int(),
+  signups: z.array(z.object({ date: z.string(), count: z.int() })),
+  planMix: z.array(z.object({ plan: z.string(), count: z.int() })),
+  topDevices: z.array(z.object({ label: z.string(), sent24h: z.int() })),
+  deviceSends24h: z.int(),
   leaderboard: z.array(
     z.object({
       slug: z.string(),
       name: z.string(),
-      orders: z.number().int(),
+      orders: z.int(),
       amount: z.string(),
     }),
   ),
-  tickets: z.array(z.object({ status: z.string(), count: z.number().int() })),
+  tickets: z.array(z.object({ status: z.string(), count: z.int() })),
 });
 export type AdminAnalytics = z.infer<typeof adminAnalyticsSchema>;

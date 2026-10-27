@@ -32,7 +32,7 @@ const offerSchema = z.preprocess((v) => {
 
 export const addonGrantsSchema = z.object({
   features: z.array(z.string()),
-  limits: z.record(z.string(), z.number().int()),
+  limits: z.record(z.string(), z.int()),
 });
 export type AddonGrants = z.infer<typeof addonGrantsSchema>;
 
@@ -69,12 +69,12 @@ export const setAddonPlanOffersRequestSchema = z.object({
         .object({
           planId: uuidSchema,
           mode: z.enum(['included', 'paid', 'hidden']),
-          amount: z.preprocess(blankToNull, moneySchema.nullable()).default(null),
+          amount: z.preprocess(blankToNull, moneySchema.nullable()).prefault(null),
         })
         .superRefine((o, ctx) => {
           if (o.amount !== null && (o.mode !== 'paid' || moneyCents(o.amount) === 0))
             ctx.addIssue({
-              code: z.ZodIssueCode.custom,
+              code: 'custom',
               path: ['amount'],
               message: 'Only a paid add-on has a price, and it is above zero.',
             });
@@ -86,12 +86,12 @@ export const setAddonPlanOffersRequestSchema = z.object({
 export type SetAddonPlanOffersRequest = z.input<typeof setAddonPlanOffersRequestSchema>;
 export type SetAddonPlanOffersPayload = z.output<typeof setAddonPlanOffersRequestSchema>;
 
-const limitInputSchema = z.union([z.number().int().min(-1).max(2_000_000_000), z.null()]);
+const limitInputSchema = z.union([z.int().min(-1).max(2_000_000_000), z.null()]);
 
 const addonFieldsShape = {
   name: z.string().trim().min(1).max(120),
-  subtitle: z.preprocess(blankToNull, z.string().trim().max(191).nullable()).default(null),
-  detail: z.preprocess(blankToNull, z.string().trim().max(2000).nullable()).default(null),
+  subtitle: z.preprocess(blankToNull, z.string().trim().max(191).nullable()).prefault(null),
+  detail: z.preprocess(blankToNull, z.string().trim().max(2000).nullable()).prefault(null),
   amount: moneySchema,
   offerAmount: offerSchema.default(null),
   currency: z
@@ -100,7 +100,7 @@ const addonFieldsShape = {
     .toUpperCase()
     .regex(/^[A-Z]{3}$/, 'Use a three-letter currency code.'),
   billingUnit: planBillingUnitSchema.default('months'),
-  billingDuration: z.number().int().min(1).max(120).default(1),
+  billingDuration: z.int().min(1).max(120).default(1),
   /**
    * `recurring` is how an add-on is sold: a monthly or yearly subscription (autopay where the gateway can, otherwise the buyer pays again at the
    * end of each term). Left out on CREATE it becomes `recurring` for a priced pack and `one_time` only for a lifetime or zero-priced one (the
@@ -109,7 +109,7 @@ const addonFieldsShape = {
   billingMode: z.enum(['one_time', 'recurring']).optional(),
   isLifetime: z.boolean().default(false),
   isActive: z.boolean().default(true),
-  sortOrder: z.number().int().min(0).max(100_000).default(0),
+  sortOrder: z.int().min(0).max(100_000).default(0),
   features: z.array(z.string().regex(ADDON_KEY_RE)).max(200).default([]),
   limits: z.record(z.string().regex(ADDON_KEY_RE), limitInputSchema).default({}),
   /**
@@ -170,19 +170,19 @@ export const createAddonRequestSchema = z
   .object(addonFieldsShape)
   .superRefine((value, ctx) => {
     for (const issue of checkAddonRules(value)) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [issue.path], message: issue.message });
+      ctx.addIssue({ code: 'custom', path: [issue.path], message: issue.message });
     }
     // Only a kind the client named is held to its grants: an older client that names none keeps creating packs as before.
     const kind = value.kind;
     if (kind === 'feature' && value.features.length === 0)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['features'],
         message: 'A feature add-on unlocks at least one feature. Tick the features it gives.',
       });
     if (kind === 'capacity' && value.features.length > 0)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['features'],
         message:
           'A capacity add-on only adds to limits. Untick its features, or make it a feature add-on.',
@@ -192,7 +192,7 @@ export const createAddonRequestSchema = z
       !Object.values(value.limits).some((v) => typeof v === 'number' && v !== 0)
     )
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['limits'],
         message: 'A capacity add-on adds to at least one limit.',
       });
@@ -220,13 +220,13 @@ export type CreateAddonPayload = z.output<typeof createAddonRequestSchema>;
 export const updateAddonRequestSchema = z
   .object(addonFieldsShape)
   .partial()
-  .extend({ rowVersion: z.number().int().positive() });
+  .extend({ rowVersion: z.int().positive() });
 export type UpdateAddonRequest = z.input<typeof updateAddonRequestSchema>;
 export type UpdateAddonPayload = z.output<typeof updateAddonRequestSchema>;
 
 export const setAddonActiveRequestSchema = z.object({
   isActive: z.boolean(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type SetAddonActiveRequest = z.infer<typeof setAddonActiveRequestSchema>;
 
@@ -240,30 +240,30 @@ export const addonPackSchema = z.object({
   offerAmount: z.string().nullable(),
   currency: z.string(),
   billingUnit: planBillingUnitSchema,
-  billingDuration: z.number().int(),
+  billingDuration: z.int(),
   billingMode: z.enum(['one_time', 'recurring']),
   isFree: z.boolean(),
   isLifetime: z.boolean(),
   isActive: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   grants: addonGrantsSchema,
   /** Workspaces holding an active purchase (the delete guard). */
-  activePurchases: z.number().int().nonnegative(),
+  activePurchases: z.int().nonnegative(),
   /** `feature` or `capacity` (derived from `grants`, see `addonKindOf`). */
   kind: z.enum(['feature', 'capacity']).default('feature'),
   /** How every plan offers this pack (every plan, also the ones with no stored row, which read `paid`). */
   planOffers: z.array(addonPlanOfferSchema).default([]),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type AddonPack = z.infer<typeof addonPackSchema>;
 
 export const addonPackListResponseSchema = z.object({
   data: z.array(addonPackSchema),
   summary: z.object({
-    total: z.number().int().nonnegative(),
-    active: z.number().int().nonnegative(),
+    total: z.int().nonnegative(),
+    active: z.int().nonnegative(),
   }),
 });
 export type AddonPackListResponse = z.infer<typeof addonPackListResponseSchema>;
@@ -276,7 +276,7 @@ export const addonBulletSchema = z.object({
   /** What the screen shows for the key (a module's own label, or the key spelled out). */
   label: z.string(),
   /** The amount for 'limit_add'. */
-  amount: z.number().int().nullable(),
+  amount: z.int().nullable(),
 });
 export type AddonBullet = z.infer<typeof addonBulletSchema>;
 
@@ -291,13 +291,13 @@ export const addonCardSchema = z.object({
   isFree: z.boolean(),
   isLifetime: z.boolean(),
   billingUnit: planBillingUnitSchema,
-  billingDuration: z.number().int(),
+  billingDuration: z.int(),
   billingMode: z.enum(['one_time', 'recurring']),
   /** At most five. */
   grantBullets: z.array(addonBulletSchema).max(5),
-  ownedCount: z.number().int().nonnegative(),
+  ownedCount: z.int().nonnegative(),
   /** Of the live purchases of this pack: the latest end (null = none, or a lifetime one), and whether any of them still renews. */
-  ownedEndsAt: z.string().datetime().nullable(),
+  ownedEndsAt: z.iso.datetime().nullable(),
   ownedRenews: z.boolean(),
   /**
    * buy | active (a feature-only pack already owned) | buy_again (a pack with limits stacks) | included (every feature of the pack is
@@ -345,7 +345,7 @@ export const ADDON_IMPACT_CODES = [
 ] as const;
 export const addonImpactItemSchema = z.object({
   code: z.enum(ADDON_IMPACT_CODES),
-  count: z.number().int().nonnegative().default(0),
+  count: z.int().nonnegative().default(0),
   names: z.array(z.string()).default([]),
   /** Something customer-facing or hard to undo is at risk: the dialog asks for a typed confirmation. */
   risk: z.boolean().default(false),
@@ -368,7 +368,7 @@ export type DisableAddonRequest = z.infer<typeof disableAddonRequestSchema>;
 export const addonActivationResponseSchema = z.object({
   addonId: uuidSchema,
   activation: z.enum(['active', 'disabled']),
-  changedAt: z.string().datetime(),
+  changedAt: z.iso.datetime(),
 });
 export type AddonActivationResponse = z.infer<typeof addonActivationResponseSchema>;
 
@@ -376,9 +376,9 @@ export const ownedAddonSchema = z.object({
   id: uuidSchema,
   packId: uuidSchema,
   name: z.string(),
-  startsAt: z.string().datetime().nullable(),
+  startsAt: z.iso.datetime().nullable(),
   /** null = lifetime. */
-  endsAt: z.string().datetime().nullable(),
+  endsAt: z.iso.datetime().nullable(),
   /** An autopay subscription is live for this purchase: it renews on its own until cancelled. */
   renews: z.boolean(),
 });

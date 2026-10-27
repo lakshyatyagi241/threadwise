@@ -67,7 +67,7 @@ export type Segment = SegmentResponse;
 
 /** `GET /segments/:id/contacts`: the contacts cursor page, with `meta.total` when the request asked for `includeTotal`. */
 export const segmentMembersPageSchema = pageResponseSchema(contactResponseSchema).extend({
-  meta: z.object({ total: z.number().int().nonnegative() }).optional(),
+  meta: z.object({ total: z.int().nonnegative() }).optional(),
 });
 export type SegmentMembersPage = z.infer<typeof segmentMembersPageSchema>;
 

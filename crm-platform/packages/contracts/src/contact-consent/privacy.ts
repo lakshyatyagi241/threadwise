@@ -71,8 +71,8 @@ export const recordPrivacyFlagSchema = z.object({
   /** Why. Required when guardian consent is given (what the guardian said or signed, and where). */
   note: z.string().trim().max(500).optional(),
   /** Ids and references only (`guardianConsentRef`, `reference`, ...); never a name, an address or free text about the person. */
-  evidence: z.record(z.enum(CONSENT_EVIDENCE_KEYS), z.string().max(300)).default({}),
-  occurredAt: z.string().datetime().optional(),
+  evidence: z.partialRecord(z.enum(CONSENT_EVIDENCE_KEYS), z.string().max(300)).default({}),
+  occurredAt: z.iso.datetime().optional(),
 });
 export type RecordPrivacyFlagInput = z.infer<typeof recordPrivacyFlagSchema>;
 

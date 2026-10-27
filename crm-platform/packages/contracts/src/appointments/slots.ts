@@ -24,10 +24,10 @@ export type SlotsQuery = z.infer<typeof slotsQuerySchema>;
 
 export const slotSchema = z.object({
   /** ISO instants (UTC). */
-  start: z.string().datetime(),
-  end: z.string().datetime(),
+  start: z.iso.datetime(),
+  end: z.iso.datetime(),
   /** Seats left in this slot (1 for a one-to-one type). */
-  remaining: z.number().int(),
+  remaining: z.int(),
 });
 export type Slot = z.infer<typeof slotSchema>;
 
@@ -41,7 +41,7 @@ export type SlotDay = z.infer<typeof slotDaySchema>;
 export const slotsResponseSchema = z.object({
   /** The zone `days` are cut in (the type's). */
   timezone: z.string(),
-  durationMinutes: z.number().int(),
+  durationMinutes: z.int(),
   /** Only days that have at least one open slot. */
   days: z.array(slotDaySchema),
 });
@@ -51,23 +51,23 @@ export type SlotsResponse = z.infer<typeof slotsResponseSchema>;
 export const previewSlotsSchema = z.object({
   draft: z.object({
     timezone: timeZoneSchema.nullish(),
-    durationMinutes: z.number().int().min(5).max(1440),
-    incrementMinutes: z.number().int().min(5).max(1440).optional(),
-    bufferBeforeMinutes: z.number().int().min(0).max(1440).default(0),
-    bufferAfterMinutes: z.number().int().min(0).max(1440).default(0),
-    minNoticeMinutes: z.number().int().min(0).max(525_600).default(0),
-    maxAdvanceDays: z.number().int().min(1).max(365).default(30),
-    maxPerDay: z.number().int().min(1).max(500).nullish(),
-    capacity: z.number().int().min(1).max(500).default(1),
+    durationMinutes: z.int().min(5).max(1440),
+    incrementMinutes: z.int().min(5).max(1440).optional(),
+    bufferBeforeMinutes: z.int().min(0).max(1440).default(0),
+    bufferAfterMinutes: z.int().min(0).max(1440).default(0),
+    minNoticeMinutes: z.int().min(0).max(525_600).default(0),
+    maxAdvanceDays: z.int().min(1).max(365).default(30),
+    maxPerDay: z.int().min(1).max(500).nullish(),
+    capacity: z.int().min(1).max(500).default(1),
     availability: availabilityListSchema.default([]),
     overrides: z.array(dateOverrideSchema).max(400).default([]),
   }),
   /** Days to preview from today (1-14). */
-  days: z.number().int().min(1).max(14).default(7),
+  days: z.int().min(1).max(14).default(7),
 });
 export type PreviewSlotsInput = z.infer<typeof previewSlotsSchema>;
 
 export const previewSlotsResponseSchema = slotsResponseSchema.extend({
-  count: z.number().int(),
+  count: z.int(),
 });
 export type PreviewSlotsResponse = z.infer<typeof previewSlotsResponseSchema>;

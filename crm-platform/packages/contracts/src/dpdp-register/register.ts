@@ -20,10 +20,10 @@ export const dpdpAttestInputSchema = z.object({
     .string()
     .trim()
     .max(2048)
-    .url()
+    .pipe(z.url())
     .refine((value) => /^https:\/\//i.test(value), 'Use an https link.')
     .optional(),
-  expiresInDays: z.number().int().min(1).max(365).default(90),
+  expiresInDays: z.int().min(1).max(365).default(90),
 });
 export type DpdpAttestInput = z.infer<typeof dpdpAttestInputSchema>;
 

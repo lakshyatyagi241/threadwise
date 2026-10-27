@@ -30,7 +30,7 @@ export const listAssignmentsQuerySchema = z.object({
     .enum(['true', 'false'])
     .transform((v) => v === 'true')
     .optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type ListAssignmentsQuery = z.infer<typeof listAssignmentsQuerySchema>;
@@ -48,9 +48,9 @@ export const workspaceAssignmentSchema = z.object({
     provider: providerSummarySchema.nullable(),
   }),
   /** Connected WABA numbers the workspace has, and how many of them are on a provider other than the effective one. */
-  numberCount: z.number().int().nonnegative(),
-  numbersOnOtherProvider: z.number().int().nonnegative(),
-  assignedAt: z.string().datetime().nullable(),
+  numberCount: z.int().nonnegative(),
+  numbersOnOtherProvider: z.int().nonnegative(),
+  assignedAt: z.iso.datetime().nullable(),
 });
 export type WorkspaceAssignment = z.infer<typeof workspaceAssignmentSchema>;
 
@@ -63,12 +63,10 @@ export const listAssignmentsResponseSchema = z.object({
 export type ListAssignmentsResponse = z.infer<typeof listAssignmentsResponseSchema>;
 
 /** Set the override of one workspace. Clearing is `DELETE`. Only an active provider can be assigned. */
-export const setAssignmentSchema = z
-  .object({
-    providerId: uuidSchema,
-    note: z.string().trim().max(500).optional(),
-  })
-  .strict();
+export const setAssignmentSchema = z.strictObject({
+  providerId: uuidSchema,
+  note: z.string().trim().max(500).optional(),
+});
 export type SetAssignmentInput = z.infer<typeof setAssignmentSchema>;
 
 // --- the switch -----------------------------------------------------------------------------------------------------------------
@@ -80,19 +78,17 @@ export type SetAssignmentInput = z.infer<typeof setAssignmentSchema>;
  * re-pointed when that worked, so a number is never left half moved. To roll back, switch back to the previous provider (the answer
  * names it per number).
  */
-export const switchWorkspaceProviderSchema = z
-  .object({
-    targetProviderId: uuidSchema,
-    /** Only numbers currently on this provider (default: every number not already on the target). */
-    fromProviderId: uuidSchema.optional(),
-    /** Only these numbers (connection ids). */
-    numberIds: z.array(uuidSchema).min(1).max(50).optional(),
-    dryRun: z.boolean().default(false),
-    /** Also set the workspace's override to the target (applied only when not a dry run). */
-    setOverride: z.boolean().default(false),
-    reason: z.string().trim().max(500).optional(),
-  })
-  .strict();
+export const switchWorkspaceProviderSchema = z.strictObject({
+  targetProviderId: uuidSchema,
+  /** Only numbers currently on this provider (default: every number not already on the target). */
+  fromProviderId: uuidSchema.optional(),
+  /** Only these numbers (connection ids). */
+  numberIds: z.array(uuidSchema).min(1).max(50).optional(),
+  dryRun: z.boolean().default(false),
+  /** Also set the workspace's override to the target (applied only when not a dry run). */
+  setOverride: z.boolean().default(false),
+  reason: z.string().trim().max(500).optional(),
+});
 export type SwitchWorkspaceProviderInput = z.infer<typeof switchWorkspaceProviderSchema>;
 
 /** What a number needs before or after the move. */
@@ -158,26 +154,24 @@ const graphIdSchema = z
  * A live test of one provider: one authenticated GET to its base URL. The optional ids and test token only fill header placeholders of
  * the call; they are used for it and forgotten (not stored, not logged, not echoed).
  */
-export const testWhatsappProviderSchema = z
-  .object({
-    /** Path under `<baseUrl>/<apiVersion>`; a read the provider answers for an authenticated caller. */
-    path: z
-      .string()
-      .trim()
-      .regex(/^\/[A-Za-z0-9_./-]{0,120}$/, 'Starts with / and holds letters, digits and . _ / -')
-      .default('/me'),
-    wabaId: graphIdSchema.optional(),
-    phoneNumberId: graphIdSchema.optional(),
-    /** For a `channel_token` provider: the token of a test number. */
-    channelToken: z
-      .string()
-      .trim()
-      .min(8)
-      .max(4096)
-      .regex(/^[\x21-\x7e]+$/)
-      .optional(),
-  })
-  .strict();
+export const testWhatsappProviderSchema = z.strictObject({
+  /** Path under `<baseUrl>/<apiVersion>`; a read the provider answers for an authenticated caller. */
+  path: z
+    .string()
+    .trim()
+    .regex(/^\/[A-Za-z0-9_./-]{0,120}$/, 'Starts with / and holds letters, digits and . _ / -')
+    .default('/me'),
+  wabaId: graphIdSchema.optional(),
+  phoneNumberId: graphIdSchema.optional(),
+  /** For a `channel_token` provider: the token of a test number. */
+  channelToken: z
+    .string()
+    .trim()
+    .min(8)
+    .max(4096)
+    .regex(/^[\x21-\x7e]+$/)
+    .optional(),
+});
 export type TestWhatsappProviderInput = z.infer<typeof testWhatsappProviderSchema>;
 
 export const testWhatsappProviderResponseSchema = z.object({

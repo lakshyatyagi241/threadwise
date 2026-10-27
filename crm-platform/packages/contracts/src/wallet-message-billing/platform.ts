@@ -9,13 +9,13 @@ import { walletTransactionSchema, walletTxTypeSchema } from './wallet';
 export const walletSettingsSchema = z.object({
   currency: z.string(),
   /** What a message costs when per-country pricing is off, hundredths (Reference: "credits per message"). */
-  flatPriceMinor: z.number().int().min(1),
+  flatPriceMinor: z.int().min(1),
   /** Paid to a referrer on the referee's first paid order, hundredths. */
-  referralSignupMinor: z.number().int().min(0),
+  referralSignupMinor: z.int().min(0),
   /** The low-balance alert fires at or under this balance, hundredths. */
-  lowBalanceThresholdMinor: z.number().int().min(0),
+  lowBalanceThresholdMinor: z.int().min(0),
   /** A bulk send is refused unless the wallet covers this share of its estimated cost (0 = refuse only an empty wallet). */
-  launchCoveragePercent: z.number().int().min(0).max(100),
+  launchCoveragePercent: z.int().min(0).max(100),
   perCountryEnabled: z.boolean(),
   payPerMessage: z.boolean(),
   /** `fixed` = typed prices; `margin` = Meta cost plus the margin of the workspace, its plan or the platform. */
@@ -46,7 +46,7 @@ export const updateWalletSettingsSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{1,7}(\.\d{1,2})?$/, 'Enter an amount with at most 2 decimals'),
-  launchCoveragePercent: z.number().int().min(0).max(100),
+  launchCoveragePercent: z.int().min(0).max(100),
 });
 export type UpdateWalletSettingsInput = z.infer<typeof updateWalletSettingsSchema>;
 
@@ -66,7 +66,7 @@ export const updateSwitchesSchema = z
       v.payPerMessage !== undefined ||
       v.pricingMode !== undefined,
     {
-      message: 'Send at least one switch',
+      error: 'Send at least one switch',
     },
   );
 export type UpdateSwitchesInput = z.infer<typeof updateSwitchesSchema>;
@@ -77,17 +77,17 @@ export const platformWalletListQuerySchema = z.object({
   q: z.string().trim().max(120).optional(),
   /** Narrow to wallets at or under their alert threshold. */
   lowOnly: z.coerce.boolean().optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type PlatformWalletListQuery = z.infer<typeof platformWalletListQuerySchema>;
 
 export const platformWalletRowSchema = z.object({
-  workspaceId: z.string().uuid(),
+  workspaceId: z.guid(),
   workspaceName: z.string(),
   slug: z.string(),
   currency: z.string(),
-  balanceMinor: z.number().int(),
+  balanceMinor: z.int(),
   billingMode: z.enum(['wallet', 'plan']),
   lowBalance: z.boolean(),
   lastActivityAt: z.string().nullable(),
@@ -99,12 +99,12 @@ export const platformWalletListSchema = z.object({
   page: pageInfoSchema,
   /** Across every workspace, not just this page. `floatMinor` is the platform currency's wallets only: currencies are never added together. */
   totals: z.object({
-    workspaces: z.number().int(),
-    floatMinor: z.number().int(),
-    lowBalance: z.number().int(),
+    workspaces: z.int(),
+    floatMinor: z.int(),
+    lowBalance: z.int(),
     /** The money held, one line per currency (the platform's included). */
     floatByCurrency: z.array(
-      z.object({ currency: z.string(), floatMinor: z.number().int(), wallets: z.number().int() }),
+      z.object({ currency: z.string(), floatMinor: z.int(), wallets: z.int() }),
     ),
   }),
   currency: z.string(),
@@ -112,16 +112,16 @@ export const platformWalletListSchema = z.object({
 export type PlatformWalletList = z.infer<typeof platformWalletListSchema>;
 
 export const platformWalletDetailSchema = z.object({
-  workspace: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
+  workspace: z.object({ id: z.guid(), name: z.string(), slug: z.string() }),
   /** The workspace's billing currency: the wallet shown, charged and topped up. */
   currency: z.string(),
   /** The currencies this workspace can be switched to (the platform's and every currency with a Meta card). */
   billableCurrencies: z.array(z.string()),
   /** Every wallet the workspace holds, one per currency; one may hold money in a currency the workspace no longer uses. */
-  wallets: z.array(z.object({ currency: z.string(), balanceMinor: z.number().int() })),
-  balanceMinor: z.number().int(),
+  wallets: z.array(z.object({ currency: z.string(), balanceMinor: z.int() })),
+  balanceMinor: z.int(),
   billingMode: z.enum(['wallet', 'plan']),
-  lowBalanceThresholdMinor: z.number().int(),
+  lowBalanceThresholdMinor: z.int(),
   lowBalance: z.boolean(),
   lastActivityAt: z.string().nullable(),
   recent: z.array(
@@ -178,20 +178,20 @@ export const setWorkspaceCurrencyResultSchema = z.object({
   currency: z.string(),
   previousCurrency: z.string(),
   /** What the wallet in the previous currency still holds, in that currency; it does not move. */
-  leftBehindMinor: z.number().int(),
+  leftBehindMinor: z.int(),
   changed: z.boolean(),
 });
 export type SetWorkspaceCurrencyResult = z.infer<typeof setWorkspaceCurrencyResultSchema>;
 
 export const adjustWalletResultSchema = z.object({
   /** Null when nothing moved (a deduction from an empty wallet). */
-  transactionId: z.string().uuid().nullable(),
+  transactionId: z.guid().nullable(),
   direction: z.enum(['credit', 'debit']),
-  requestedMinor: z.number().int(),
+  requestedMinor: z.int(),
   /** A debit never takes a wallet below 0: this is what was actually taken. Equals `requestedMinor` for a credit. */
-  appliedMinor: z.number().int(),
-  balanceBeforeMinor: z.number().int(),
-  balanceAfterMinor: z.number().int(),
+  appliedMinor: z.int(),
+  balanceBeforeMinor: z.int(),
+  balanceAfterMinor: z.int(),
   replayed: z.boolean(),
 });
 export type AdjustWalletResult = z.infer<typeof adjustWalletResultSchema>;
@@ -205,7 +205,7 @@ export const walletLogQuerySchema = z.object({
   scope: z.enum(['all', 'workspace', 'platform']).default('all'),
   event: z.string().trim().max(80).optional(),
   severity: walletLogSeveritySchema.optional(),
-  workspaceId: z.string().uuid().optional(),
+  workspaceId: z.guid().optional(),
   q: z.string().trim().max(120).optional(),
   from: z
     .string()
@@ -215,7 +215,7 @@ export const walletLogQuerySchema = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type WalletLogQuery = z.infer<typeof walletLogQuerySchema>;
@@ -226,11 +226,11 @@ export const walletLogRowSchema = z.object({
   event: z.string(),
   severity: walletLogSeveritySchema,
   message: z.string(),
-  workspaceId: z.string().uuid().nullable(),
+  workspaceId: z.guid().nullable(),
   workspaceName: z.string().nullable(),
   actorType: z.string(),
   actorLabel: z.string().nullable(),
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
   requestId: z.string().nullable(),
   createdAt: z.string(),
 });
@@ -268,14 +268,14 @@ export const WALLET_LOG_EVENTS = [
 
 export const reconciliationSchema = z.object({
   checkedAt: z.string(),
-  workspacesChecked: z.number().int(),
+  workspacesChecked: z.int(),
   mismatches: z.array(
     z.object({
-      workspaceId: z.string().uuid(),
+      workspaceId: z.guid(),
       workspaceName: z.string(),
-      balanceMinor: z.number().int(),
-      ledgerMinor: z.number().int(),
-      differenceMinor: z.number().int(),
+      balanceMinor: z.int(),
+      ledgerMinor: z.int(),
+      differenceMinor: z.int(),
     }),
   ),
 });
@@ -283,27 +283,27 @@ export type Reconciliation = z.infer<typeof reconciliationSchema>;
 
 export const platformWalletOverviewSchema = z.object({
   currency: z.string(),
-  floatMinor: z.number().int(),
-  workspacesWithBalance: z.number().int(),
-  lowBalanceWorkspaces: z.number().int(),
+  floatMinor: z.int(),
+  workspacesWithBalance: z.int(),
+  lowBalanceWorkspaces: z.int(),
   /** The wallets held in other currencies, each on its own line (never added to the platform currency's figures above). */
   otherCurrencies: z.array(
     z.object({
       currency: z.string(),
-      floatMinor: z.number().int(),
-      workspacesWithBalance: z.number().int(),
-      toppedUp30dMinor: z.number().int(),
-      charged30dMinor: z.number().int(),
+      floatMinor: z.int(),
+      workspacesWithBalance: z.int(),
+      toppedUp30dMinor: z.int(),
+      charged30dMinor: z.int(),
     }),
   ),
   last30d: z.object({
-    toppedUpMinor: z.number().int(),
-    chargedMinor: z.number().int(),
-    refundedMinor: z.number().int(),
-    adjustedInMinor: z.number().int(),
-    adjustedOutMinor: z.number().int(),
-    chargedMessages: z.number().int(),
-    freeMessages: z.number().int(),
+    toppedUpMinor: z.int(),
+    chargedMinor: z.int(),
+    refundedMinor: z.int(),
+    adjustedInMinor: z.int(),
+    adjustedOutMinor: z.int(),
+    chargedMessages: z.int(),
+    freeMessages: z.int(),
   }),
 });
 export type PlatformWalletOverview = z.infer<typeof platformWalletOverviewSchema>;

@@ -47,7 +47,7 @@ export const recurrenceEndsSchema = z.discriminatedUnion('kind', [
   /** Stops after this many runs, counted from the first one. */
   z.object({
     kind: z.literal('after'),
-    occurrences: z.number().int().min(1).max(RECURRENCE_AFTER_MAX),
+    occurrences: z.int().min(1).max(RECURRENCE_AFTER_MAX),
   }),
 ]);
 export type RecurrenceEnds = z.infer<typeof recurrenceEndsSchema>;
@@ -56,15 +56,15 @@ export const recurrenceRuleSchema = z
   .object({
     frequency: z.enum(RECURRENCE_FREQUENCIES),
     /** Every N days, weeks or months. */
-    interval: z.number().int().min(1).max(RECURRENCE_INTERVAL_MAX),
+    interval: z.int().min(1).max(RECURRENCE_INTERVAL_MAX),
     /** First day a run may fall on (a calendar date in `timezone`). */
     startDate: dateOnly,
     timeOfDay,
     timezone: zoneSchema,
     /** Weekly only. 0 is Sunday, 6 is Saturday. Empty means the weekday of `startDate`. */
-    weekdays: z.array(z.number().int().min(0).max(6)).max(7).default([]),
+    weekdays: z.array(z.int().min(0).max(6)).max(7).default([]),
     /** Monthly only: the day of the month. Empty means the day of `startDate`; a short month uses its last day. */
-    monthDay: z.number().int().min(1).max(31).nullish(),
+    monthDay: z.int().min(1).max(31).nullish(),
     ends: recurrenceEndsSchema.default({ kind: 'never' }),
   })
   .superRefine((r, ctx) => {

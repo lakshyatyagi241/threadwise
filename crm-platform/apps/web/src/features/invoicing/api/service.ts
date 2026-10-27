@@ -416,7 +416,7 @@ export const invoicingApi = {
     const doc = await call(`/sales-docs/${docId}/convert/invoice`, {
       method: 'POST',
       body: {},
-      schema: z.object({ invoice: z.object({ id: z.string().uuid() }).nullable() }).passthrough(),
+      schema: z.looseObject({ invoice: z.object({ id: z.guid() }).nullable() }),
       signal,
     });
     if (!doc.invoice) throw new Error('convert answered without an invoice');
@@ -439,25 +439,24 @@ export const invoicingApi = {
   dealById: (id: string, signal?: AbortSignal) =>
     call(`/deals/${id}`, {
       schema: z.object({
-        id: z.string().uuid(),
+        id: z.guid(),
         title: z.string(),
         currency: z.string(),
         contact: z
-          .object({
-            id: z.string().uuid(),
+          .looseObject({
+            id: z.guid(),
             name: z.string().nullable(),
             phone: z.string().nullable(),
           })
-          .passthrough()
           .nullable(),
-        company: z.object({ id: z.string().uuid(), name: z.string() }).nullable(),
+        company: z.object({ id: z.guid(), name: z.string() }).nullable(),
       }),
       signal,
     }),
   /** The invoice an accepted proposal or estimate was already converted into (null when there is none). */
   async salesDocInvoiceId(docId: string, signal?: AbortSignal): Promise<string | null> {
     const doc = await call(`/sales-docs/${docId}`, {
-      schema: z.object({ invoice: z.object({ id: z.string().uuid() }).nullable() }).passthrough(),
+      schema: z.looseObject({ invoice: z.object({ id: z.guid() }).nullable() }),
       signal,
     });
     return doc.invoice?.id ?? null;

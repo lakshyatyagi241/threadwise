@@ -21,14 +21,14 @@ export const listStorePaymentsQuerySchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStorePaymentsQuery = z.infer<typeof listStorePaymentsQuerySchema>;
 
 export const storePaymentRecordSchema = z.object({
   orderId: uuidSchema,
-  orderNo: z.number().int(),
+  orderNo: z.int(),
   customerName: z.string().nullable(),
   customerPhone: z.string().nullable(),
   status: storePaymentStatusSchema,
@@ -39,23 +39,23 @@ export const storePaymentRecordSchema = z.object({
   reference: z.string().nullable(),
   waPaymentStatus: z.string().nullable(),
   paymentLink: z.string().nullable(),
-  amountMinor: z.number().int(),
+  amountMinor: z.int(),
   currencyCode: z.string(),
   storefrontName: z.string().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type StorePaymentRecord = z.infer<typeof storePaymentRecordSchema>;
 export const storePaymentListResponseSchema = pageResponseSchema(storePaymentRecordSchema);
 export type StorePaymentListResponse = z.infer<typeof storePaymentListResponseSchema>;
 
 export const storePaymentSummarySchema = z.object({
-  paid: z.number().int(),
-  awaiting: z.number().int(),
-  cod: z.number().int(),
-  unpaid: z.number().int(),
+  paid: z.int(),
+  awaiting: z.int(),
+  cod: z.int(),
+  unpaid: z.int(),
   /** Collected money, per currency. */
-  collected: z.array(z.object({ currencyCode: z.string(), totalMinor: z.number().int() })),
+  collected: z.array(z.object({ currencyCode: z.string(), totalMinor: z.int() })),
 });
 export type StorePaymentSummary = z.infer<typeof storePaymentSummarySchema>;
 
@@ -71,8 +71,8 @@ export const whatsappPayConfigSchema = z.object({
   currency: z.string(),
   isActive: z.boolean(),
   autoCharge: z.boolean(),
-  rowVersion: z.number().int(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  updatedAt: z.iso.datetime(),
 });
 export type WhatsappPayConfig = z.infer<typeof whatsappPayConfigSchema>;
 export const whatsappPayListResponseSchema = pageResponseSchema(whatsappPayConfigSchema);

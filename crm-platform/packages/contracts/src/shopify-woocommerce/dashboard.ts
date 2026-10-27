@@ -6,7 +6,7 @@ import { z } from 'zod';
  * does not come leaves that list empty) and the CRM figures from the mirror.
  */
 
-const iso = z.string().datetime().nullable();
+const iso = z.iso.datetime().nullable();
 
 export const dashboardOrderSchema = z.object({
   name: z.string(),
@@ -32,7 +32,7 @@ export const dashboardProductSchema = z.object({
   price: z.number(),
   comparePrice: z.number().nullable(),
   /** Whole percent off the compare-at price; 0 when none. */
-  discountPct: z.number().int().min(0).max(100),
+  discountPct: z.int().min(0).max(100),
   inStock: z.boolean(),
 });
 export type DashboardProduct = z.infer<typeof dashboardProductSchema>;
@@ -41,51 +41,51 @@ export const dashboardCustomerSchema = z.object({
   name: z.string(),
   email: z.string().nullable(),
   phone: z.string().nullable(),
-  ordersCount: z.number().int().min(0),
+  ordersCount: z.int().min(0),
   totalSpent: z.number().min(0),
 });
 export type DashboardCustomer = z.infer<typeof dashboardCustomerSchema>;
 
 export const dashboardLogSchema = z.object({
-  id: z.number().int(),
+  id: z.int(),
   eventType: z.string(),
   status: z.string(),
   recipient: z.string().nullable(),
   error: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type DashboardLog = z.infer<typeof dashboardLogSchema>;
 
 export const dashboardTemplateSchema = z.object({
-  uuid: z.string().uuid(),
+  uuid: z.guid(),
   name: z.string(),
   category: z.string().nullable(),
   language: z.string(),
   /** `waba`, `twilio` or `baileys`: the engine the template belongs to. */
   engine: z.string(),
   /** The Cloud API account (provider config uuid) a WABA template is bound to; null otherwise. */
-  senderAccount: z.string().uuid().nullable(),
+  senderAccount: z.guid().nullable(),
   /** How many numbered variables ({{1}}, {{2}}, ...) the body declares; 0 means named tokens only. */
-  paramCount: z.number().int().min(0),
+  paramCount: z.int().min(0),
 });
 export type DashboardTemplate = z.infer<typeof dashboardTemplateSchema>;
 
 export const dashboardAnalyticsSchema = z.object({
   revenueTotal: z.number(),
-  ordersTotal: z.number().int(),
+  ordersTotal: z.int(),
   aov: z.number(),
-  messagesSent: z.number().int(),
-  offersSent: z.number().int(),
+  messagesSent: z.int(),
+  offersSent: z.int(),
   /** The last 14 days of revenue, oldest first. */
   trend: z.array(z.object({ label: z.string(), value: z.number() })),
   trendMax: z.number(),
-  codConfirmed: z.number().int(),
-  codCancelled: z.number().int(),
+  codConfirmed: z.int(),
+  codCancelled: z.int(),
   /** Confirmed COD orders times the average order. */
   codProtected: z.number(),
   /** Cancelled COD orders times the average order. */
   rtoAvoided: z.number(),
-  recoverySends: z.number().int(),
+  recoverySends: z.int(),
 });
 export type DashboardAnalytics = z.infer<typeof dashboardAnalyticsSchema>;
 
@@ -100,14 +100,14 @@ export type DashboardSender = z.infer<typeof dashboardSenderSchema>;
 export const storeDashboardSchema = z.object({
   currency: z.string(),
   counts: z.object({
-    products: z.number().int(),
-    orders: z.number().int(),
-    customers: z.number().int(),
+    products: z.int(),
+    orders: z.int(),
+    customers: z.int(),
   }),
-  activeEvents: z.number().int(),
-  logTotal: z.number().int(),
-  logsByStatus: z.record(z.string(), z.number().int()),
-  logsByEvent: z.record(z.string(), z.number().int()),
+  activeEvents: z.int(),
+  logTotal: z.int(),
+  logsByStatus: z.record(z.string(), z.int()),
+  logsByEvent: z.record(z.string(), z.int()),
   recentLogs: z.array(dashboardLogSchema),
   orders: z.array(dashboardOrderSchema),
   products: z.array(dashboardProductSchema),
@@ -119,22 +119,20 @@ export const storeDashboardSchema = z.object({
   /** Templates an automation or broadcast can send now. */
   templates: z.array(dashboardTemplateSchema),
   contactGroups: z.array(
-    z.object({ uuid: z.string().uuid(), name: z.string(), color: z.string().nullable() }),
+    z.object({ uuid: z.guid(), name: z.string(), color: z.string().nullable() }),
   ),
   coupons: z.array(z.object({ code: z.string(), type: z.string(), amount: z.number() })),
   /** WooCommerce: the mirrored products an offer can be about. */
-  offerProducts: z.array(
-    z.object({ uuid: z.string().uuid(), name: z.string(), priceMinor: z.number() }),
-  ),
+  offerProducts: z.array(z.object({ uuid: z.guid(), name: z.string(), priceMinor: z.number() })),
   analytics: dashboardAnalyticsSchema,
   /** Revenue shown on the overview: WooCommerce's 30 day sales report, Shopify's recent mirrored orders. */
   revenue30d: z.number(),
   /** WooCommerce only: the rest of the sales report, the numbers it can be sent from, and the chosen one. */
   woo: z
     .object({
-      orders30d: z.number().int(),
-      customers30d: z.number().int(),
-      itemsSold30d: z.number().int(),
+      orders30d: z.int(),
+      customers30d: z.int(),
+      itemsSold30d: z.int(),
       senders: z.array(dashboardSenderSchema),
       senderKey: z.string().nullable(),
     })

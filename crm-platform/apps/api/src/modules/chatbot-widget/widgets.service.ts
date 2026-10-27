@@ -21,6 +21,7 @@ import {
   type WidgetAssistantsResponse,
   parseLauncher,
 } from '@crm/contracts';
+import type { ZodType } from 'zod';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { isAssetSlot, isWindowSlot } from './asset-slots';
@@ -45,22 +46,12 @@ import { toWidget, toWidgetListItem, widgetUrls } from './widgets.mapper';
 const MODULE_KEY = 'chatbot_widgets';
 export const PLAN_FEATURE = 'access_chatbot_widgets';
 
-const parse = <T>(
-  schema: {
-    safeParse(v: unknown):
-      | { success: true; data: T }
-      | {
-          success: false;
-          error: { issues: Array<{ path: Array<string | number>; message: string }> };
-        };
-  },
-  body: unknown,
-): T => {
+const parse = <T>(schema: ZodType<T, unknown>, body: unknown): T => {
   const parsed = schema.safeParse(body);
   if (parsed.success) return parsed.data;
   throw AppError.validation(
     'Request payload failed validation',
-    parsed.error.issues.map((i) => ({ path: i.path.join('.'), message: i.message })),
+    parsed.error.issues.map((i) => ({ path: i.path.map(String).join('.'), message: i.message })),
   );
 };
 

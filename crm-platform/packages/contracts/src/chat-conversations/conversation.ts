@@ -43,14 +43,14 @@ export type ConversationAssignment = z.infer<typeof conversationAssignmentSchema
  */
 export const SETTABLE_CONVERSATION_STATUSES = ['open', 'resolved', 'closed'] as const;
 export const setConversationStatusSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   status: z.enum(SETTABLE_CONVERSATION_STATUSES),
 });
 export type SetConversationStatusInput = z.infer<typeof setConversationStatusSchema>;
 
 /** `POST /inbox/conversations/:id/read`: clear the unread counter up to a message (`seq`), so a message that arrived meanwhile stays unread. */
 export const markConversationReadSchema = z.object({
-  upToSeq: z.number().int().nonnegative(),
+  upToSeq: z.int().nonnegative(),
 });
 export type MarkConversationReadInput = z.infer<typeof markConversationReadSchema>;
 
@@ -83,7 +83,7 @@ export const conversationSummarySchema = z.object({
   erased: z.boolean().optional(),
   pinned: z.boolean(),
   muted: z.boolean(),
-  unreadCount: z.number().int().nonnegative(),
+  unreadCount: z.int().nonnegative(),
   /** The thread has no contact record because the contact quota was reached. */
   needsContact: z.boolean(),
   /** The thread was created by an imported history (personal-number import or Cloud API coexistence); the list and the header mark it. */
@@ -96,22 +96,22 @@ export const conversationSummarySchema = z.object({
    */
   handling: z.enum(['with_bot', 'waiting', 'with_person']).nullable().optional(),
   /** When the thread entered its current handling (the queue's age). */
-  handlingSince: z.string().datetime().nullable().optional(),
-  snoozedUntil: z.string().datetime().nullable(),
+  handlingSince: z.iso.datetime().nullable().optional(),
+  snoozedUntil: z.iso.datetime().nullable(),
   /** Tags on the thread, by name. The JSON field keeps its original name `labels` so existing clients keep working: it holds tags. */
   labels: z.array(conversationTagSchema),
   /** The response clock that matters now (SLA, `inbox_sla`): null when the conversation has none running. */
   slaStatus: slaStatusSchema.nullable(),
-  lastMessageAt: z.string().datetime().nullable(),
-  lastInboundAt: z.string().datetime().nullable(),
-  lastOutboundAt: z.string().datetime().nullable(),
+  lastMessageAt: z.iso.datetime().nullable(),
+  lastInboundAt: z.iso.datetime().nullable(),
+  lastOutboundAt: z.iso.datetime().nullable(),
   /** The highest message `seq`; a client that holds fewer messages has a gap to fill. */
-  lastSeq: z.number().int().nonnegative(),
+  lastSeq: z.int().nonnegative(),
   /** Free-form replies are allowed until this instant; null when the channel has no window rule. */
-  windowExpiresAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  windowExpiresAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type ConversationSummary = z.infer<typeof conversationSummarySchema>;
 
@@ -184,7 +184,7 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
   archived: z
     .enum(['true', 'false', '1', '0'])
     .transform((v) => v === 'true' || v === '1')
-    .default('false'),
+    .prefault('false'),
   /**
    * The erased-contacts view: every thread whose contact was erased with its history kept, whatever the tab, status or archive flag (as
    * the archive view ignores the tab and status). Same query-string form as `archived`.
@@ -192,7 +192,7 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
   erased: z
     .enum(['true', 'false', '1', '0'])
     .transform((v) => v === 'true' || v === '1')
-    .default('false'),
+    .prefault('false'),
 });
 export type ListConversationsQuery = z.infer<typeof listConversationsQuerySchema>;
 
@@ -208,14 +208,14 @@ export type InboxCountsQuery = z.infer<typeof inboxCountsQuerySchema>;
 
 /** Tab badges and the archived count; also what the safety poll of `GET /inbox/counts` returns. */
 export const inboxCountsSchema = z.object({
-  all: z.number().int().nonnegative(),
-  mine: z.number().int().nonnegative(),
-  unassigned: z.number().int().nonnegative(),
-  waiting: z.number().int().nonnegative().optional(),
-  unread: z.number().int().nonnegative(),
-  archived: z.number().int().nonnegative(),
+  all: z.int().nonnegative(),
+  mine: z.int().nonnegative(),
+  unassigned: z.int().nonnegative(),
+  waiting: z.int().nonnegative().optional(),
+  unread: z.int().nonnegative(),
+  archived: z.int().nonnegative(),
   /** Threads whose contact was erased with its history kept (any tab, any archive state). Optional so an older API still parses. */
-  erased: z.number().int().nonnegative().optional(),
+  erased: z.int().nonnegative().optional(),
 });
 export type InboxCounts = z.infer<typeof inboxCountsSchema>;
 
@@ -232,7 +232,7 @@ export const serviceWindowSchema = z.object({
   /** False means only a template may be sent. Always true on a channel with no window rule. */
   open: z.boolean(),
   /** Null when the channel has no window rule or the customer never wrote. */
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
 });
 export type ServiceWindow = z.infer<typeof serviceWindowSchema>;
 
@@ -251,7 +251,7 @@ export const conversationPersonalGroupSchema = z.object({
   announceOnly: z.boolean(),
   canSend: z.boolean(),
   /** Members at the last sync (0 until the directory has read the group). */
-  memberCount: z.number().int().nonnegative(),
+  memberCount: z.int().nonnegative(),
 });
 export type ConversationPersonalGroup = z.infer<typeof conversationPersonalGroupSchema>;
 
@@ -266,12 +266,12 @@ export const conversationCloudGroupSchema = z.object({
   /** The group's bare WhatsApp id (the part after `g:` in `peerKey`). */
   groupId: z.string(),
   subject: z.string().nullable(),
-  memberCount: z.number().int().nonnegative(),
+  memberCount: z.int().nonnegative(),
   suspended: z.boolean(),
   block: z.enum(['suspended', 'plan', 'ineligible']).nullable(),
   canSend: z.boolean(),
   /** What one message to every member costs, hundredths of `currency`; null when it cannot be estimated. */
-  estimate: z.object({ minor: z.number().int().nonnegative(), currency: z.string() }).nullable(),
+  estimate: z.object({ minor: z.int().nonnegative(), currency: z.string() }).nullable(),
   walletShort: z.boolean(),
 });
 export type ConversationCloudGroup = z.infer<typeof conversationCloudGroupSchema>;
@@ -290,7 +290,7 @@ export type ConversationGroupMember = z.infer<typeof conversationGroupMemberSche
 export const listConversationGroupMembersQuerySchema = z.object({
   /** Matches a name or the digits of a number. */
   q: z.string().trim().max(100).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
 });
 export type ListConversationGroupMembersQuery = z.infer<
   typeof listConversationGroupMembersQuerySchema
@@ -299,7 +299,7 @@ export type ListConversationGroupMembersQuery = z.infer<
 export const conversationGroupMembersSchema = z.object({
   members: z.array(conversationGroupMemberSchema),
   /** Every member of the group, whatever the filter. */
-  total: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
 });
 export type ConversationGroupMembers = z.infer<typeof conversationGroupMembersSchema>;
 
@@ -309,17 +309,17 @@ export const conversationDetailSchema = conversationSummarySchema.extend({
   window: serviceWindowSchema,
   customerLanguage: z.string().nullable(),
   /** Start of the current wait for a human answer (the SLA anchor). */
-  waitingSince: z.string().datetime().nullable(),
-  firstResponseAt: z.string().datetime().nullable(),
-  resolvedAt: z.string().datetime().nullable(),
+  waitingSince: z.iso.datetime().nullable(),
+  firstResponseAt: z.iso.datetime().nullable(),
+  resolvedAt: z.iso.datetime().nullable(),
   /** Set only for a thread of a group on a personal number (peer key `g:<id>` on a `whatsapp_qr` channel). */
   personalGroup: conversationPersonalGroupSchema.nullable().optional(),
   /** Set only for a thread of a group on the Cloud API (peer key `g:<id>` on a `whatsapp_cloud` channel). */
   cloudGroup: conversationCloudGroupSchema.nullable().optional(),
   /** Placeholder for the SLA domain: the due times of the current turn. */
   sla: z.object({
-    firstResponseDueAt: z.string().datetime().nullable(),
-    resolutionDueAt: z.string().datetime().nullable(),
+    firstResponseDueAt: z.iso.datetime().nullable(),
+    resolutionDueAt: z.iso.datetime().nullable(),
     breached: z.boolean(),
   }),
 });

@@ -47,17 +47,17 @@ export const historyImportStatusSchema = z.object({
   /** The choice of the run; `none` when never requested. */
   mode: historyImportModeSchema,
   /** Conversations the run created (a chat the inbox already had is not counted). */
-  chats: z.number().int().min(0),
+  chats: z.int().min(0),
   /** Contacts the run created. Groups never create one. */
-  contacts: z.number().int().min(0),
+  contacts: z.int().min(0),
   /** Messages the run stored. A redelivered one is not counted twice. */
-  messages: z.number().int().min(0),
+  messages: z.int().min(0),
   /** 0 to 100, WhatsApp's own progress figure. */
-  progress: z.number().int().min(0).max(100),
+  progress: z.int().min(0).max(100),
   /** How far back messages are kept, in days (from platform settings at the time of the run). */
-  windowDays: z.number().int().nullable(),
-  startedAt: z.string().datetime({ offset: true }).nullable(),
-  finishedAt: z.string().datetime({ offset: true }).nullable(),
+  windowDays: z.int().nullable(),
+  startedAt: z.iso.datetime({ offset: true }).nullable(),
+  finishedAt: z.iso.datetime({ offset: true }).nullable(),
   lastError: z.object({ code: historyImportErrorCodeSchema }).nullable(),
 });
 export type HistoryImportStatus = z.infer<typeof historyImportStatusSchema>;

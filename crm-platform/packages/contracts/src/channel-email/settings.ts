@@ -14,7 +14,7 @@ export const mailWorkspaceSettingsSchema = z.object({
   whoMayConnectPersonal: mailPersonalConnectorSchema,
   /** Admins may read the conversations of other people's personal mailboxes. */
   adminsCanReadPersonal: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type MailWorkspaceSettings = z.infer<typeof mailWorkspaceSettingsSchema>;
 
@@ -30,6 +30,6 @@ export const updateMailWorkspaceSettingsSchema = z.object({
   whoMayConnectPersonal: mailPersonalConnectorSchema.optional(),
   adminsCanReadPersonal: z.boolean().optional(),
   /** The version read; 0 when the workspace has never saved the policy. */
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
 });
 export type UpdateMailWorkspaceSettingsInput = z.infer<typeof updateMailWorkspaceSettingsSchema>;

@@ -264,45 +264,41 @@ const scalarValue = z.union([z.string().min(1).max(SEGMENT_TEXT_MAX), z.number()
 export const segmentValueSchema = z.union([
   scalarValue,
   z.array(scalarValue).min(1).max(SEGMENT_LIST_MAX),
-  z.object({ from: scalarValue, to: scalarValue }).strict(),
+  z.strictObject({ from: scalarValue, to: scalarValue }),
 ]);
 export type SegmentValue = z.infer<typeof segmentValueSchema>;
 
-const conditionShape = z
-  .object({
-    type: z.literal('condition'),
-    field: segmentFieldSchema,
-    operator: segmentOperatorSchema,
-    value: segmentValueSchema.optional(),
-  })
-  .strict();
+const conditionShape = z.strictObject({
+  type: z.literal('condition'),
+  field: segmentFieldSchema,
+  operator: segmentOperatorSchema,
+  value: segmentValueSchema.optional(),
+});
 export type SegmentCondition = z.infer<typeof conditionShape>;
 
 const combinator = z.enum(['and', 'or']);
 export type SegmentCombinator = z.infer<typeof combinator>;
 
-const children = <T extends z.ZodTypeAny>(item: T) =>
+const children = <T extends z.ZodType>(item: T) =>
   z.array(item).min(1).max(SEGMENT_MAX_GROUP_CHILDREN);
 
 // The depth limit is structural: three explicit levels, no recursion, so a 10,000-deep payload
 // fails on its fourth level instead of exhausting the stack.
-const groupLevel3 = z
-  .object({ type: z.literal('group'), combinator, children: children(conditionShape) })
-  .strict();
-const groupLevel2 = z
-  .object({
-    type: z.literal('group'),
-    combinator,
-    children: children(z.discriminatedUnion('type', [conditionShape, groupLevel3])),
-  })
-  .strict();
-const groupLevel1 = z
-  .object({
-    type: z.literal('group'),
-    combinator,
-    children: children(z.discriminatedUnion('type', [conditionShape, groupLevel2])),
-  })
-  .strict();
+const groupLevel3 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: children(conditionShape),
+});
+const groupLevel2 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: children(z.discriminatedUnion('type', [conditionShape, groupLevel3])),
+});
+const groupLevel1 = z.strictObject({
+  type: z.literal('group'),
+  combinator,
+  children: children(z.discriminatedUnion('type', [conditionShape, groupLevel2])),
+});
 
 export interface SegmentGroup {
   type: 'group';
@@ -420,7 +416,7 @@ export const segmentRulesSchema = groupLevel1.superRefine((rules, ctx) => {
   const all = collectConditions(rules as SegmentGroup);
   if (all.length > SEGMENT_MAX_CONDITIONS) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       message: `at most ${SEGMENT_MAX_CONDITIONS} conditions per segment`,
     });
     return;
@@ -434,7 +430,7 @@ export const segmentRulesSchema = groupLevel1.superRefine((rules, ctx) => {
         : checkCustomShape(condition.operator, condition.value);
     if (problem) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: problem,
         path: [
           ...(path ? path.split('.').map((p) => (/^\d+$/.test(p) ? Number(p) : p)) : []),

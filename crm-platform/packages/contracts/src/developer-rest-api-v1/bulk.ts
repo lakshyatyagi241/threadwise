@@ -4,7 +4,7 @@
  */
 import { z } from 'zod';
 
-const uuid = z.string().uuid();
+const uuid = z.guid();
 
 /** A plain refusal code of this group, the `error.code` the client reads. Merged into `ERROR_CODES` so `AppError` can carry them. */
 export const V1_BULK_ERROR_CODES = {
@@ -79,12 +79,12 @@ export const v1CreateBroadcastSchema = z
 export type V1CreateBroadcast = z.infer<typeof v1CreateBroadcastSchema>;
 
 const countsSchema = z.object({
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  failed: z.number().int(),
-  clicked: z.number().int(),
-  pending: z.number().int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  failed: z.int(),
+  clicked: z.int(),
+  pending: z.int(),
 });
 
 export const v1BroadcastSchema = z.object({
@@ -93,12 +93,12 @@ export const v1BroadcastSchema = z.object({
   status: z.string(),
   template_id: uuid.nullable(),
   device_id: z.string().nullable(),
-  total_recipients: z.number().int(),
+  total_recipients: z.int(),
   counts: countsSchema,
-  scheduled_at: z.string().datetime().nullable(),
-  completed_at: z.string().datetime().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  scheduled_at: z.iso.datetime().nullable(),
+  completed_at: z.iso.datetime().nullable(),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
 });
 export type V1Broadcast = z.infer<typeof v1BroadcastSchema>;
 
@@ -107,9 +107,9 @@ export const v1BroadcastRecipientSchema = z.object({
   status: z.string(),
   error: z.string().nullable(),
   wa_message_id: z.string().nullable(),
-  sent_at: z.string().datetime().nullable(),
-  delivered_at: z.string().datetime().nullable(),
-  read_at: z.string().datetime().nullable(),
+  sent_at: z.iso.datetime().nullable(),
+  delivered_at: z.iso.datetime().nullable(),
+  read_at: z.iso.datetime().nullable(),
 });
 export type V1BroadcastRecipient = z.infer<typeof v1BroadcastRecipientSchema>;
 
@@ -158,13 +158,13 @@ export const v1CreateCampaignSchema = z
 export type V1CreateCampaign = z.infer<typeof v1CreateCampaignSchema>;
 
 const campaignCountsSchema = z.object({
-  total_recipients: z.number().int(),
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  failed: z.number().int(),
-  clicked: z.number().int(),
-  responded: z.number().int(),
+  total_recipients: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  failed: z.int(),
+  clicked: z.int(),
+  responded: z.int(),
 });
 const campaignMetricsSchema = z.object({
   delivery_rate: z.number(),
@@ -182,25 +182,25 @@ export const v1CampaignSchema = z.object({
   template_id: uuid.nullable(),
   flow_id: uuid.nullable(),
   ab_testing: z.boolean(),
-  ab_split: z.number().int(),
+  ab_split: z.int(),
   counts: campaignCountsSchema,
   metrics: campaignMetricsSchema,
   schedule_type: z.string(),
-  scheduled_for: z.string().datetime().nullable(),
+  scheduled_for: z.iso.datetime().nullable(),
   timezone: z.string().nullable(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
-  completed_at: z.string().datetime().nullable(),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
+  completed_at: z.iso.datetime().nullable(),
 });
 export type V1Campaign = z.infer<typeof v1CampaignSchema>;
 
 export const v1CampaignStatisticsSchema = z.object({
   campaigns: z.object({
-    total: z.number().int(),
-    active: z.number().int(),
-    completed: z.number().int(),
-    scheduled: z.number().int(),
-    failed: z.number().int(),
+    total: z.int(),
+    active: z.int(),
+    completed: z.int(),
+    scheduled: z.int(),
+    failed: z.int(),
   }),
   messages: campaignCountsSchema.extend({}),
   rates: campaignMetricsSchema,
@@ -241,13 +241,13 @@ export const v1ScheduledSchema = z.object({
   message: z.string().nullable(),
   template_id: uuid.nullable(),
   device_id: z.string().nullable(),
-  recipient_count: z.number().int(),
-  run_at: z.string().datetime(),
-  next_run_at: z.string().datetime().nullable(),
+  recipient_count: z.int(),
+  run_at: z.iso.datetime(),
+  next_run_at: z.iso.datetime().nullable(),
   timezone: z.string(),
-  total_sent: z.number().int(),
-  total_delivered: z.number().int(),
-  total_failed: z.number().int(),
-  created_at: z.string().datetime(),
+  total_sent: z.int(),
+  total_delivered: z.int(),
+  total_failed: z.int(),
+  created_at: z.iso.datetime(),
 });
 export type V1Scheduled = z.infer<typeof v1ScheduledSchema>;

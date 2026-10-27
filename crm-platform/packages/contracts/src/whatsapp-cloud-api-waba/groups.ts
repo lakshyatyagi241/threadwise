@@ -62,7 +62,7 @@ export const wabaGroupJoinRequestSchema = z.object({
 export type WabaGroupJoinRequest = z.infer<typeof wabaGroupJoinRequestSchema>;
 
 export const wabaGroupSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   /** Meta's opaque group id. */
   groupId: z.string(),
   subject: z.string().nullable(),
@@ -71,24 +71,24 @@ export const wabaGroupSchema = z.object({
   /** Meta sends the link on a webhook moments after create: no link yet is a real state, not an error. */
   awaitingInviteLink: z.boolean(),
   joinApprovalMode: wabaGroupJoinModeSchema.nullable(),
-  participantCount: z.number().int(),
+  participantCount: z.int(),
   suspended: z.boolean(),
-  pendingJoinRequestCount: z.number().int(),
+  pendingJoinRequestCount: z.int(),
   /** Empty for a caller without `waba.groups.manage`; the count above is still true. */
   pendingJoinRequests: z.array(wabaGroupJoinRequestSchema),
   /** The creation error Meta reported on the lifecycle webhook, if any. */
   lastError: z.object({ code: z.number().nullable(), message: z.string().nullable() }).nullable(),
   syncedAt: z.string().nullable(),
   createdAt: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WabaGroup = z.infer<typeof wabaGroupSchema>;
 
 export const wabaGroupStatsSchema = z.object({
-  groups: z.number().int(),
-  members: z.number().int(),
-  joinRequests: z.number().int(),
-  suspended: z.number().int(),
+  groups: z.int(),
+  members: z.int(),
+  joinRequests: z.int(),
+  suspended: z.int(),
 });
 export type WabaGroupStats = z.infer<typeof wabaGroupStatsSchema>;
 
@@ -99,13 +99,13 @@ export const wabaGroupListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WabaGroupList = z.infer<typeof wabaGroupListSchema>;
 
 export const wabaGroupListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(200).optional(),
 });
 export type WabaGroupListQuery = z.infer<typeof wabaGroupListQuerySchema>;
@@ -134,7 +134,7 @@ export const updateWabaGroupInputSchema = z
     description: z.string().trim().max(WABA_GROUP_DESCRIPTION_MAX).optional(),
   })
   .refine((v) => v.subject !== undefined || v.description !== undefined, {
-    message: 'Send a subject, a description, or both',
+    error: 'Send a subject, a description, or both',
   });
 export type UpdateWabaGroupInput = z.infer<typeof updateWabaGroupInputSchema>;
 
@@ -151,7 +151,7 @@ export type HandleWabaGroupJoinRequestsInput = z.infer<
 >;
 export const wabaGroupJoinRequestsResultSchema = z.object({
   ok: z.literal(true),
-  handled: z.number().int(),
+  handled: z.int(),
 });
 export type WabaGroupJoinRequestsResult = z.infer<typeof wabaGroupJoinRequestsResultSchema>;
 
@@ -164,7 +164,7 @@ export type RemoveWabaGroupParticipantsInput = z.infer<
 >;
 export const wabaGroupParticipantsRemovedSchema = z.object({
   ok: z.literal(true),
-  removed: z.number().int(),
+  removed: z.int(),
 });
 export type WabaGroupParticipantsRemoved = z.infer<typeof wabaGroupParticipantsRemovedSchema>;
 
@@ -172,10 +172,10 @@ export type WabaGroupParticipantsRemoved = z.infer<typeof wabaGroupParticipantsR
 export const wabaGroupMembersSchema = z.object({
   members: z.array(z.object({ waId: z.string() })),
   /** Meta's `total_participant_count`; it leaves the business itself out. */
-  total: z.number().int(),
+  total: z.int(),
 });
 export type WabaGroupMembers = z.infer<typeof wabaGroupMembersSchema>;
 
 /** `GET /v2/waba/numbers/:id/group-count` (needs `waba.numbers.manage`): the group records that removing the number deletes (decision D6). */
-export const wabaNumberGroupCountSchema = z.object({ count: z.number().int() });
+export const wabaNumberGroupCountSchema = z.object({ count: z.int() });
 export type WabaNumberGroupCount = z.infer<typeof wabaNumberGroupCountSchema>;

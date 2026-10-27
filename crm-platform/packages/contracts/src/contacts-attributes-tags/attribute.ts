@@ -88,9 +88,9 @@ export const attributeResponseSchema = z.object({
   isActive: z.boolean(),
   /** Hidden in the property registry (an imported leftover nobody defined): kept, but not offered as a column, filter or input. */
   isHidden: z.boolean().optional(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type AttributeResponse = z.infer<typeof attributeResponseSchema>;
 
@@ -111,7 +111,7 @@ export const updateAttributeSchema = z.object({
   defaultValue: z.string().max(ATTRIBUTE_DEFAULT_MAX).nullish(),
   description: z.string().max(ATTRIBUTE_DESCRIPTION_MAX).nullish(),
   isActive: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateAttributeInput = z.infer<typeof updateAttributeSchema>;
 
@@ -124,9 +124,9 @@ export type ListAttributesQuery = z.infer<typeof listAttributesQuerySchema>;
 
 /** Tile counts: workspace-wide, they ignore the search and the status filter. */
 export const attributeCountsSchema = z.object({
-  all: z.number().int(),
-  active: z.number().int(),
-  inactive: z.number().int(),
+  all: z.int(),
+  active: z.int(),
+  inactive: z.int(),
 });
 
 export const attributeListResponseSchema = z.object({
@@ -134,7 +134,7 @@ export const attributeListResponseSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
   counts: attributeCountsSchema,
 });

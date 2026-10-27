@@ -55,7 +55,7 @@ export const listWorkspaceHubQuerySchema = z.object({
     .transform((v) => v === 'true')
     .optional(),
   sort: workspaceHubSortSchema.default('created'),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type ListWorkspaceHubQuery = z.infer<typeof listWorkspaceHubQuerySchema>;
@@ -72,10 +72,10 @@ export type WorkspaceHubHealth = z.infer<typeof workspaceHubHealthSchema>;
 
 /** Effective cap of the workspace (plan merged with its override). `null` = unlimited. */
 export const workspaceHubLimitsSchema = z.object({
-  monthlyMessages: z.number().int().nullable(),
-  users: z.number().int().nullable(),
-  contacts: z.number().int().nullable(),
-  devices: z.number().int().nullable(),
+  monthlyMessages: z.int().nullable(),
+  users: z.int().nullable(),
+  contacts: z.int().nullable(),
+  devices: z.int().nullable(),
   /** The workspace carries a per-workspace override on at least one limit or feature. */
   overridden: z.boolean(),
 });
@@ -88,14 +88,14 @@ export const workspaceHubRowSchema = z.object({
   status: z.string(),
   /** Active frozen / tos_violation / fraud flags that hold the workspace suspended. */
   suspendedBy: z.array(z.string()),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   provider: z.object({
     key: z.string(),
     name: z.string().nullable(),
     source: z.enum(['override', 'default', 'platform_setting']),
   }),
   /** Connected WhatsApp numbers (official connections). */
-  numbers: z.number().int().nonnegative(),
+  numbers: z.int().nonnegative(),
   plan: z.object({
     slug: z.string(),
     name: z.string().nullable(),
@@ -120,19 +120,19 @@ export const workspaceHubRowSchema = z.object({
     .nullable(),
   /** Monthly recurring revenue in the platform base currency, decimal string. */
   mrr: z.string(),
-  messages7d: z.number().int().nonnegative(),
-  lastActiveAt: z.string().datetime().nullable(),
+  messages7d: z.int().nonnegative(),
+  lastActiveAt: z.iso.datetime().nullable(),
   health: workspaceHubHealthSchema,
 });
 export type WorkspaceHubRow = z.infer<typeof workspaceHubRowSchema>;
 
 export const workspaceHubKpisSchema = z.object({
-  total: z.number().int(),
-  active: z.number().int(),
-  suspended: z.number().int(),
-  trial: z.number().int(),
-  newThisMonth: z.number().int(),
-  lowBalance: z.number().int(),
+  total: z.int(),
+  active: z.int(),
+  suspended: z.int(),
+  trial: z.int(),
+  newThisMonth: z.int(),
+  lowBalance: z.int(),
   mrr: z.string(),
   currency: z.string(),
 });
@@ -153,12 +153,10 @@ export type WorkspaceHubListResponse = z.infer<typeof workspaceHubListResponseSc
 /** Dashboard of one workspace (the row plus the figures a support person needs). */
 export const workspaceHubDetailSchema = z.object({
   row: workspaceHubRowSchema,
-  members: z.number().int().nonnegative(),
-  contacts: z.number().int().nonnegative(),
-  openTickets: z.number().int().nonnegative(),
-  messages30d: z.array(
-    z.object({ day: z.string(), sent: z.number().int(), delivered: z.number().int() }),
-  ),
+  members: z.int().nonnegative(),
+  contacts: z.int().nonnegative(),
+  openTickets: z.int().nonnegative(),
+  messages30d: z.array(z.object({ day: z.string(), sent: z.int(), delivered: z.int() })),
   deliveredPct: z.number().nullable(),
   adminNote: z.string().nullable(),
   /** Caller may impersonate / suspend (platform permission map). */
@@ -197,7 +195,7 @@ export const startImpersonationResponseSchema = z.object({
   workspaceName: z.string(),
   /** The workspace app URL that consumes the one-time handoff code. */
   handoffUrl: z.string(),
-  expiresAt: z.string().datetime(),
+  expiresAt: z.iso.datetime(),
 });
 export type StartImpersonationResponse = z.infer<typeof startImpersonationResponseSchema>;
 
@@ -208,7 +206,7 @@ export const impersonationStatusSchema = z.object({
   operatorName: z.string().nullable(),
   reason: z.string().nullable(),
   readOnly: z.boolean(),
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
 });
 export type ImpersonationStatus = z.infer<typeof impersonationStatusSchema>;
 
@@ -227,8 +225,8 @@ export type RedeemImpersonationRequest = z.infer<typeof redeemImpersonationReque
 export const redeemImpersonationResponseSchema = z.object({
   accessToken: z.string(),
   /** Seconds the access token lives (never longer than the session). */
-  expiresIn: z.number().int().positive(),
-  expiresAt: z.string().datetime(),
+  expiresIn: z.int().positive(),
+  expiresAt: z.iso.datetime(),
   workspaceSlug: z.string(),
 });
 export type RedeemImpersonationResponse = z.infer<typeof redeemImpersonationResponseSchema>;

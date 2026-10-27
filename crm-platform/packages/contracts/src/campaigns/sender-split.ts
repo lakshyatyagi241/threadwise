@@ -111,9 +111,9 @@ export const senderBreakdownLineSchema = z.object({
   key: z.string().nullable(),
   label: z.string(),
   engine: z.string(),
-  recipients: z.number().int(),
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  failed: z.number().int(),
+  recipients: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  failed: z.int(),
 });
 export type SenderBreakdownLine = z.infer<typeof senderBreakdownLineSchema>;

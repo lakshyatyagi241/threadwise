@@ -25,8 +25,8 @@ export const MAX_VIEW_SHARED_USERS = 200;
 export const contactViewResponseSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  filter: z.record(z.unknown()),
-  position: z.number().int(),
+  filter: z.record(z.string(), z.unknown()),
+  position: z.int(),
   /** Visible beyond the creator (any share mode but 'me'). */
   isShared: z.boolean(),
   shareMode: viewShareModeSchema,
@@ -40,9 +40,9 @@ export const contactViewResponseSchema = z.object({
   createdBy: uuidSchema.nullable(),
   /** Whether the calling user has favorited this view. */
   isFavorite: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type ContactViewResponse = z.infer<typeof contactViewResponseSchema>;
 
@@ -70,9 +70,9 @@ const viewName = z.string().trim().min(CONTACT_VIEW_NAME_MIN).max(CONTACT_VIEW_N
 export const createContactViewSchema = z
   .object({
     name: viewName,
-    filter: z.record(z.unknown()).default({}),
+    filter: z.record(z.string(), z.unknown()).default({}),
     isShared: z.boolean().default(false),
-    position: z.number().int().optional(),
+    position: z.int().optional(),
     ...sharingShape,
   })
   .refine(selectedNeedsPeople, SELECTED_NEEDS_PEOPLE);
@@ -81,10 +81,10 @@ export type CreateContactViewInput = z.infer<typeof createContactViewSchema>;
 export const updateContactViewSchema = z
   .object({
     name: viewName.optional(),
-    filter: z.record(z.unknown()).optional(),
+    filter: z.record(z.string(), z.unknown()).optional(),
     isShared: z.boolean().optional(),
     ...sharingShape,
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
   })
   .refine(selectedNeedsPeople, SELECTED_NEEDS_PEOPLE);
 export type UpdateContactViewInput = z.infer<typeof updateContactViewSchema>;

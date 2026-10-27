@@ -11,7 +11,7 @@ export type FaqPlacement = z.infer<typeof faqPlacementSchema>;
 
 const question = z.string().trim().min(1, 'Enter a question.').max(255);
 const answer = z.string().trim().min(1, 'Enter an answer.').max(5000);
-const sortOrder = z.number().int().min(0).max(9999);
+const sortOrder = z.int().min(0).max(9999);
 
 /** No sort order = the current maximum plus one (TW-PLAN-009 rule 2). */
 export const createPricingFaqRequestSchema = z.object({
@@ -30,7 +30,7 @@ export const updatePricingFaqRequestSchema = z
     sortOrder,
     placement: faqPlacementSchema,
     isActive: z.boolean(),
-    rowVersion: z.number().int().min(1),
+    rowVersion: z.int().min(1),
   })
   .partial()
   .required({ rowVersion: true });
@@ -40,12 +40,12 @@ export const pricingFaqSchema = z.object({
   id: uuidSchema,
   question: z.string(),
   answer: z.string(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   placement: faqPlacementSchema,
   isActive: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PricingFaq = z.infer<typeof pricingFaqSchema>;
 

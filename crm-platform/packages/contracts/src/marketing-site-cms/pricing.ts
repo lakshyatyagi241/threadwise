@@ -24,6 +24,6 @@ export const publicPricingResponseSchema = z.object({
   plans: z.array(publicPlanCardSchema),
   /** The Monthly/Yearly switch shows only when this is true AND some plan has a yearly price below twelve months. */
   yearlyToggle: z.boolean(),
-  yearlyDiscountPct: z.number().int().min(0).max(90),
+  yearlyDiscountPct: z.int().min(0).max(90),
 });
 export type PublicPricingResponse = z.infer<typeof publicPricingResponseSchema>;

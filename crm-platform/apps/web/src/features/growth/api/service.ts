@@ -32,7 +32,7 @@ export interface GrowthContactFacts {
  * The contracts type these responses as interfaces (the API validates its input, not its output), so the boundary check is the
  * shape each screen leans on: an object with the fields it reads first. The types are the contracts'.
  */
-const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
+const shape = <T>(...required: string[]): z.ZodType<T, unknown> =>
   z.custom<T>(
     (v) =>
       typeof v === 'object' &&

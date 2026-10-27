@@ -11,34 +11,31 @@ import { uuidSchema } from '../common/ids';
 export const SNOOZE_MIN_MINUTES = 1;
 export const SNOOZE_MAX_DAYS = 365;
 
-const snoozeUntilSchema = z
-  .string()
-  .datetime({ offset: true })
-  .superRefine((value, ctx) => {
-    const at = Date.parse(value);
-    const now = Date.now();
-    if (at < now + SNOOZE_MIN_MINUTES * 60_000) {
-      ctx.addIssue({ code: 'custom', message: 'The wake-up time must be in the future' });
-    } else if (at > now + SNOOZE_MAX_DAYS * 86_400_000) {
-      ctx.addIssue({ code: 'custom', message: `At most ${SNOOZE_MAX_DAYS} days ahead` });
-    }
-  });
+const snoozeUntilSchema = z.iso.datetime({ offset: true }).superRefine((value, ctx) => {
+  const at = Date.parse(value);
+  const now = Date.now();
+  if (at < now + SNOOZE_MIN_MINUTES * 60_000) {
+    ctx.addIssue({ code: 'custom', message: 'The wake-up time must be in the future' });
+  } else if (at > now + SNOOZE_MAX_DAYS * 86_400_000) {
+    ctx.addIssue({ code: 'custom', message: `At most ${SNOOZE_MAX_DAYS} days ahead` });
+  }
+});
 
 export const setConversationPrioritySchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   priority: conversationPrioritySchema,
 });
 export type SetConversationPriorityInput = z.infer<typeof setConversationPrioritySchema>;
 
 export const snoozeConversationSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   until: snoozeUntilSchema,
 });
 export type SnoozeConversationInput = z.infer<typeof snoozeConversationSchema>;
 
 /** Marks a thread as spam (from any status). Taking it off spam is the status route: spam to open. */
 export const markSpamConversationSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type MarkSpamConversationInput = z.infer<typeof markSpamConversationSchema>;
 
@@ -78,13 +75,13 @@ export const bulkConversationsSchema = z
     action: bulkConversationActionSchema,
   })
   .refine((v) => new Set(v.ids).size === v.ids.length, {
-    message: 'A conversation is named once',
     path: ['ids'],
+    error: 'A conversation is named once',
   })
   .refine(
     (v) =>
       v.action.type !== 'assign' || v.action.userId !== undefined || v.action.teamId !== undefined,
-    { message: 'Name a user, a team, or null to clear one', path: ['action', 'userId'] },
+    { path: ['action', 'userId'], error: 'Name a user, a team, or null to clear one' },
   );
 export type BulkConversationsInput = z.infer<typeof bulkConversationsSchema>;
 
@@ -98,10 +95,10 @@ export const bulkItemResultSchema = z.object({
 export type BulkItemResult = z.infer<typeof bulkItemResultSchema>;
 
 export const bulkConversationsResponseSchema = z.object({
-  requested: z.number().int(),
-  done: z.number().int(),
-  unchanged: z.number().int(),
-  failed: z.number().int(),
+  requested: z.int(),
+  done: z.int(),
+  unchanged: z.int(),
+  failed: z.int(),
   results: z.array(bulkItemResultSchema),
 });
 export type BulkConversationsResponse = z.infer<typeof bulkConversationsResponseSchema>;

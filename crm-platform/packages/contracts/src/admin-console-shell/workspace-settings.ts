@@ -105,8 +105,10 @@ export const defaultCategoryFlags = (): ChannelFlags => ({ ...CATEGORY_DEFAULT }
 const flagsSchema = z.object({ inapp: z.boolean(), email: z.boolean(), slack: z.boolean() });
 
 export const notificationPrefsResponseSchema = z.object({
-  events: z.array(z.object({ key: z.enum(NOTIFICATION_EVENT_KEYS) }).merge(flagsSchema)),
-  categories: z.array(z.object({ key: z.enum(NOTIFICATION_CATEGORY_KEYS) }).merge(flagsSchema)),
+  events: z.array(z.object({ key: z.enum(NOTIFICATION_EVENT_KEYS) }).extend(flagsSchema.shape)),
+  categories: z.array(
+    z.object({ key: z.enum(NOTIFICATION_CATEGORY_KEYS) }).extend(flagsSchema.shape),
+  ),
   /** The owner's own URL back to them; members get null (they only see whether it is set). */
   slackWebhook: z.string().nullable(),
   slackWebhookSet: z.boolean(),
@@ -117,14 +119,14 @@ export const notificationPrefsResponseSchema = z.object({
 export type NotificationPrefsResponse = z.infer<typeof notificationPrefsResponseSchema>;
 
 const flagMapSchema = <K extends string>(keys: readonly [K, ...K[]]) =>
-  z.record(z.enum(keys), flagsSchema.partial());
+  z.partialRecord(z.enum(keys), flagsSchema.partial());
 
 /** Whatever the form posts: a missing channel counts as off, like Reference's hidden `0` inputs. */
 export const saveNotificationPrefsRequestSchema = z.object({
   events: flagMapSchema(NOTIFICATION_EVENT_KEYS).optional(),
   categories: flagMapSchema(NOTIFICATION_CATEGORY_KEYS).optional(),
   /** Blank clears it. */
-  slackWebhook: z.union([z.literal(''), z.string().url().max(255)]).optional(),
+  slackWebhook: z.union([z.literal(''), z.url().max(255)]).optional(),
 });
 export type SaveNotificationPrefsRequest = z.infer<typeof saveNotificationPrefsRequestSchema>;
 
@@ -154,9 +156,9 @@ export const exportTypeSchema = z.enum(EXPORT_TYPES);
 export type ExportType = z.infer<typeof exportTypeSchema>;
 
 export const exportCountsResponseSchema = z.object({
-  contacts: z.number().int().nonnegative(),
-  conversations: z.number().int().nonnegative(),
-  messages: z.number().int().nonnegative(),
+  contacts: z.int().nonnegative(),
+  conversations: z.int().nonnegative(),
+  messages: z.int().nonnegative(),
   isOwner: z.boolean(),
 });
 export type ExportCountsResponse = z.infer<typeof exportCountsResponseSchema>;
@@ -252,6 +254,6 @@ export const DATA_RESIDENCY_MODES = dataResidencySchema.options;
 
 /** The informational tab: how many webhook endpoints this workspace has. */
 export const integrationsSummaryResponseSchema = z.object({
-  webhooks: z.object({ outbound: z.number().int(), inbound: z.number().int() }),
+  webhooks: z.object({ outbound: z.int(), inbound: z.int() }),
 });
 export type IntegrationsSummaryResponse = z.infer<typeof integrationsSummaryResponseSchema>;

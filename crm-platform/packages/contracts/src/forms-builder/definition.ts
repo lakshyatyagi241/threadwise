@@ -157,7 +157,7 @@ export const httpsUrlSchema = z
   .string()
   .trim()
   .max(500)
-  .url()
+  .pipe(z.url())
   .refine((u) => /^https:\/\//i.test(u), 'must be an https:// address');
 
 /**
@@ -177,29 +177,27 @@ export function isSafeFormPattern(pattern: string): boolean {
   }
 }
 
-export const formValidationSchema = z
-  .object({
-    /** number, currency and rating: the smallest and largest value. date: not used. */
-    min: z.number().finite().optional(),
-    max: z.number().finite().optional(),
-    minLen: z.number().int().min(0).max(FORM_LIMITS.maxAnswerLength).optional(),
-    maxLen: z.number().int().min(1).max(FORM_LIMITS.maxAnswerLength).optional(),
-    pattern: z
-      .string()
-      .refine(
-        isSafeFormPattern,
-        'is not a safe regular expression (max 200 characters, no backreference or lookaround)',
-      )
-      .optional(),
-  })
-  .strict();
+export const formValidationSchema = z.strictObject({
+  /** number, currency and rating: the smallest and largest value. date: not used. */
+  min: z.number().finite().optional(),
+  max: z.number().finite().optional(),
+  minLen: z.int().min(0).max(FORM_LIMITS.maxAnswerLength).optional(),
+  maxLen: z.int().min(1).max(FORM_LIMITS.maxAnswerLength).optional(),
+  pattern: z
+    .string()
+    .refine(
+      isSafeFormPattern,
+      'is not a safe regular expression (max 200 characters, no backreference or lookaround)',
+    )
+    .optional(),
+});
 export type FormValidation = z.infer<typeof formValidationSchema>;
 
 export const formOptionSchema = z.object({
   value: z.string().trim().min(1).max(100),
   label,
   /** Payment `from_field` only: what choosing this option costs, in minor units (paise, cents). Never read from a visitor. */
-  amountMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+  amountMinor: z.int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
 });
 export type FormOption = z.infer<typeof formOptionSchema>;
 
@@ -209,41 +207,40 @@ export const formBindSchema = z.object({
 });
 export type FormBind = z.infer<typeof formBindSchema>;
 
-export const formFieldBlockSchema = z
-  .object({
-    id: blockIdSchema,
-    type: z.literal('field'),
-    kind: formFieldKindSchema,
-    label,
-    help: z.string().trim().max(300).optional(),
-    placeholder: z.string().trim().max(120).optional(),
-    required: z.boolean().default(false),
-    width: z.enum(['full', 'half']).default('full'),
-    validation: formValidationSchema.optional(),
-    options: z.array(formOptionSchema).max(FORM_LIMITS.maxOptions).optional(),
-    bind: formBindSchema.optional(),
-    /** `hidden` only: where the value comes from. */
-    hiddenSource: formHiddenSourceSchema.optional(),
-    /** `hidden` with the source `constant`. */
-    constant: z.string().max(500).optional(),
-  })
-  .strict();
+export const formFieldBlockSchema = z.strictObject({
+  id: blockIdSchema,
+  type: z.literal('field'),
+  kind: formFieldKindSchema,
+  label,
+  help: z.string().trim().max(300).optional(),
+  placeholder: z.string().trim().max(120).optional(),
+  required: z.boolean().default(false),
+  width: z.enum(['full', 'half']).default('full'),
+  validation: formValidationSchema.optional(),
+  options: z.array(formOptionSchema).max(FORM_LIMITS.maxOptions).optional(),
+  bind: formBindSchema.optional(),
+  /** `hidden` only: where the value comes from. */
+  hiddenSource: formHiddenSourceSchema.optional(),
+  /** `hidden` with the source `constant`. */
+  constant: z.string().max(500).optional(),
+});
 export type FormFieldBlock = z.infer<typeof formFieldBlockSchema>;
 
-export const formHeadingBlockSchema = z
-  .object({
-    id: blockIdSchema,
-    type: z.literal('heading'),
-    text: label,
-    level: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2),
-  })
-  .strict();
-export const formParagraphBlockSchema = z
-  .object({ id: blockIdSchema, type: z.literal('paragraph'), html: richText })
-  .strict();
-export const formDividerBlockSchema = z
-  .object({ id: blockIdSchema, type: z.literal('divider') })
-  .strict();
+export const formHeadingBlockSchema = z.strictObject({
+  id: blockIdSchema,
+  type: z.literal('heading'),
+  text: label,
+  level: z.union([z.literal(1), z.literal(2), z.literal(3)]).default(2),
+});
+export const formParagraphBlockSchema = z.strictObject({
+  id: blockIdSchema,
+  type: z.literal('paragraph'),
+  html: richText,
+});
+export const formDividerBlockSchema = z.strictObject({
+  id: blockIdSchema,
+  type: z.literal('divider'),
+});
 
 export const formBlockSchema = z.discriminatedUnion('type', [
   formFieldBlockSchema,
@@ -253,13 +250,11 @@ export const formBlockSchema = z.discriminatedUnion('type', [
 ]);
 export type FormBlock = z.infer<typeof formBlockSchema>;
 
-export const formStepSchema = z
-  .object({
-    id: blockIdSchema,
-    title: z.string().trim().max(FORM_LIMITS.maxLabel).optional(),
-    blocks: z.array(formBlockSchema).max(FORM_LIMITS.maxBlocks),
-  })
-  .strict();
+export const formStepSchema = z.strictObject({
+  id: blockIdSchema,
+  title: z.string().trim().max(FORM_LIMITS.maxLabel).optional(),
+  blocks: z.array(formBlockSchema).max(FORM_LIMITS.maxBlocks),
+});
 export type FormStep = z.infer<typeof formStepSchema>;
 
 // --- styling ---------------------------------------------------------------------------------------------------------------------------
@@ -284,54 +279,50 @@ export const FORM_FONT_FAMILIES = [
  * Tokens, not CSS (spec section 8): a closed set of keys with hex colours, enums and bounded numbers. The renderer turns them into CSS
  * custom properties on one wrapper element, so theming is safe by construction.
  */
-export const formThemeSchema = z
-  .object({
-    primary: hex.default('#2563eb'),
-    background: hex.default('#ffffff'),
-    surface: hex.default('#ffffff'),
-    text: hex.default('#111827'),
-    mutedText: hex.default('#6b7280'),
-    border: hex.default('#d1d5db'),
-    error: hex.default('#dc2626'),
-    radius: z.enum(['none', 'sm', 'md', 'lg', 'pill']).default('md'),
-    density: z.enum(['compact', 'comfortable', 'spacious']).default('comfortable'),
-    fontFamily: z.enum(FORM_FONT_FAMILIES).default('system'),
-    fontScale: z.number().min(0.8).max(1.4).default(1),
-    labelPosition: z.enum(['top', 'left', 'floating']).default('top'),
-    buttonStyle: z.enum(['filled', 'outline']).default('filled'),
-    buttonWidth: z.enum(['auto', 'full']).default('full'),
-    shadow: z.enum(['none', 'sm', 'md', 'lg']).default('md'),
-    backgroundImage: httpsUrlSchema.nullable().default(null),
-    logo: httpsUrlSchema.nullable().default(null),
-    coverImage: httpsUrlSchema.nullable().default(null),
-    maxWidth: z.number().int().min(320).max(960).default(560),
-    mode: z.enum(['light', 'dark', 'auto']).default('light'),
-    layout: z.enum(['classic', 'full_width', 'split', 'minimal']).default('classic'),
-  })
-  .strict();
+export const formThemeSchema = z.strictObject({
+  primary: hex.default('#2563eb'),
+  background: hex.default('#ffffff'),
+  surface: hex.default('#ffffff'),
+  text: hex.default('#111827'),
+  mutedText: hex.default('#6b7280'),
+  border: hex.default('#d1d5db'),
+  error: hex.default('#dc2626'),
+  radius: z.enum(['none', 'sm', 'md', 'lg', 'pill']).default('md'),
+  density: z.enum(['compact', 'comfortable', 'spacious']).default('comfortable'),
+  fontFamily: z.enum(FORM_FONT_FAMILIES).default('system'),
+  fontScale: z.number().min(0.8).max(1.4).default(1),
+  labelPosition: z.enum(['top', 'left', 'floating']).default('top'),
+  buttonStyle: z.enum(['filled', 'outline']).default('filled'),
+  buttonWidth: z.enum(['auto', 'full']).default('full'),
+  shadow: z.enum(['none', 'sm', 'md', 'lg']).default('md'),
+  backgroundImage: httpsUrlSchema.nullable().default(null),
+  logo: httpsUrlSchema.nullable().default(null),
+  coverImage: httpsUrlSchema.nullable().default(null),
+  maxWidth: z.int().min(320).max(960).default(560),
+  mode: z.enum(['light', 'dark', 'auto']).default('light'),
+  layout: z.enum(['classic', 'full_width', 'split', 'minimal']).default('classic'),
+});
 export type FormTheme = z.infer<typeof formThemeSchema>;
 
 // --- settings, consent, what happens next ---------------------------------------------------------------------------------------------
 
-export const formSettingsSchema = z
-  .object({
-    submitLabel: z.string().trim().min(1).max(60).default('Submit'),
-    successMode: z.enum(['message', 'redirect']).default('message'),
-    successMessage: z
-      .string()
-      .max(FORM_LIMITS.maxRichText)
-      .default('Thanks, we received your details.'),
-    /** https only; required when `successMode` is `redirect`. */
-    redirectUrl: httpsUrlSchema.optional(),
-    locale: z.enum(['en', 'ar']).default('en'),
-    dir: z.enum(['ltr', 'rtl']).optional(),
-    /** The calling code a phone typed without a country prefix is read with ("91"). */
-    phoneCountryCode: z
-      .string()
-      .regex(/^\d{1,4}$/)
-      .optional(),
-  })
-  .strict();
+export const formSettingsSchema = z.strictObject({
+  submitLabel: z.string().trim().min(1).max(60).default('Submit'),
+  successMode: z.enum(['message', 'redirect']).default('message'),
+  successMessage: z
+    .string()
+    .max(FORM_LIMITS.maxRichText)
+    .default('Thanks, we received your details.'),
+  /** https only; required when `successMode` is `redirect`. */
+  redirectUrl: httpsUrlSchema.optional(),
+  locale: z.enum(['en', 'ar']).default('en'),
+  dir: z.enum(['ltr', 'rtl']).optional(),
+  /** The calling code a phone typed without a country prefix is read with ("91"). */
+  phoneCountryCode: z
+    .string()
+    .regex(/^\d{1,4}$/)
+    .optional(),
+});
 export type FormSettings = z.infer<typeof formSettingsSchema>;
 
 /**
@@ -341,32 +332,30 @@ export type FormSettings = z.infer<typeof formSettingsSchema>;
 export const FORM_CONSENT_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
 export type FormConsentChannel = (typeof FORM_CONSENT_CHANNELS)[number];
 
-export const formConsentSchema = z
-  .object({
-    enabled: z.boolean().default(false),
-    text: z.string().trim().min(1).max(500).default('I agree to be contacted about my request.'),
-    privacyUrl: httpsUrlSchema.optional(),
-    /** The terms the line points to, next to the privacy link (BL-175). */
-    termsUrl: httpsUrlSchema.optional(),
-    /** The box must be ticked to submit. */
-    required: z.boolean().default(true),
-    /** Ticking it records marketing opt-in on the contact. */
-    marketing: z.boolean().default(false),
-    /**
-     * The wording also tells the person they may be contacted by SMS (BL-171). Declared by the form's owner, never guessed from the
-     * text: it adds an SMS record beside WhatsApp and email when the form collects a phone number.
-     */
-    coversSms: z.boolean().default(false),
-    /**
-     * The channels the wording asks for (WhatsApp, SMS, email). A ticked box subscribes only these, and only when the form collected the
-     * matching phone or email. Absent on forms saved before this existed: those keep the old behaviour (WhatsApp and email, SMS when
-     * `coversSms`), see `consentChannels`.
-     */
-    channels: z.array(z.enum(FORM_CONSENT_CHANNELS)).max(3).optional(),
-    /** Bump when the text changes: submissions keep the version they saw. */
-    version: z.number().int().min(1).max(10_000).default(1),
-  })
-  .strict();
+export const formConsentSchema = z.strictObject({
+  enabled: z.boolean().default(false),
+  text: z.string().trim().min(1).max(500).default('I agree to be contacted about my request.'),
+  privacyUrl: httpsUrlSchema.optional(),
+  /** The terms the line points to, next to the privacy link (BL-175). */
+  termsUrl: httpsUrlSchema.optional(),
+  /** The box must be ticked to submit. */
+  required: z.boolean().default(true),
+  /** Ticking it records marketing opt-in on the contact. */
+  marketing: z.boolean().default(false),
+  /**
+   * The wording also tells the person they may be contacted by SMS (BL-171). Declared by the form's owner, never guessed from the
+   * text: it adds an SMS record beside WhatsApp and email when the form collects a phone number.
+   */
+  coversSms: z.boolean().default(false),
+  /**
+   * The channels the wording asks for (WhatsApp, SMS, email). A ticked box subscribes only these, and only when the form collected the
+   * matching phone or email. Absent on forms saved before this existed: those keep the old behaviour (WhatsApp and email, SMS when
+   * `coversSms`), see `consentChannels`.
+   */
+  channels: z.array(z.enum(FORM_CONSENT_CHANNELS)).max(3).optional(),
+  /** Bump when the text changes: submissions keep the version they saw. */
+  version: z.int().min(1).max(10_000).default(1),
+});
 export type FormConsent = z.infer<typeof formConsentSchema>;
 
 /** The channels a form's consent line covers: the chosen ones, else what forms did before the choice existed. */
@@ -399,24 +388,19 @@ export function formCollects(def: Pick<FormDefinition, 'steps'>): {
 
 /** How a company is found for a submission that carries company properties (spec 9.3). */
 export const FORM_COMPANY_MATCH = ['none', 'email_domain', 'name_or_domain'] as const;
-export const formMappingSchema = z
-  .object({
-    company: z
-      .object({ match: z.enum(FORM_COMPANY_MATCH).default('name_or_domain') })
-      .strict()
-      .default({}),
-  })
-  .strict();
+export const formMappingSchema = z.strictObject({
+  company: z
+    .strictObject({ match: z.enum(FORM_COMPANY_MATCH).default('name_or_domain') })
+    .prefault({}),
+});
 export type FormMapping = z.infer<typeof formMappingSchema>;
 
 /** What every submission adds to the contact. The visitor can never set any of it. */
-export const formAfterSchema = z
-  .object({
-    tags: z.array(z.string().trim().min(1).max(60)).max(10).default([]),
-    /** A lifecycle stage value of the workspace; checked at publish. */
-    lifecycleStage: z.string().trim().min(1).max(60).optional(),
-  })
-  .strict();
+export const formAfterSchema = z.strictObject({
+  tags: z.array(z.string().trim().min(1).max(60)).max(10).default([]),
+  /** A lifecycle stage value of the workspace; checked at publish. */
+  lifecycleStage: z.string().trim().min(1).max(60).optional(),
+});
 export type FormAfter = z.infer<typeof formAfterSchema>;
 
 /**
@@ -428,31 +412,29 @@ export const FORM_PAYMENT_AMOUNT_TYPES = ['fixed', 'from_field', 'pay_what_you_w
 export const formPaymentAmountTypeSchema = z.enum(FORM_PAYMENT_AMOUNT_TYPES);
 export type FormPaymentAmountType = z.infer<typeof formPaymentAmountTypeSchema>;
 
-export const formPaymentSchema = z
-  .object({
-    enabled: z.boolean().default(false),
-    amountType: formPaymentAmountTypeSchema.default('fixed'),
-    /** `fixed`: the price. */
-    amountMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
-    /** `from_field`: a dropdown or radio whose options carry amounts. `pay_what_you_want`: a number or currency field (major units). */
-    fieldId: blockIdSchema.optional(),
-    /** `pay_what_you_want`: the smallest and largest amount the visitor may pay, in minor units. */
-    minMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
-    maxMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
-    currency: z
-      .string()
-      .regex(/^[A-Z]{3}$/, 'must be an ISO 4217 code such as INR')
-      .default('INR'),
-    /** What the payer sees on the gateway's page. */
-    description: z.string().trim().max(120).optional(),
-  })
-  .strict();
+export const formPaymentSchema = z.strictObject({
+  enabled: z.boolean().default(false),
+  amountType: formPaymentAmountTypeSchema.default('fixed'),
+  /** `fixed`: the price. */
+  amountMinor: z.int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+  /** `from_field`: a dropdown or radio whose options carry amounts. `pay_what_you_want`: a number or currency field (major units). */
+  fieldId: blockIdSchema.optional(),
+  /** `pay_what_you_want`: the smallest and largest amount the visitor may pay, in minor units. */
+  minMinor: z.int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+  maxMinor: z.int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+  currency: z
+    .string()
+    .regex(/^[A-Z]{3}$/, 'must be an ISO 4217 code such as INR')
+    .default('INR'),
+  /** What the payer sees on the gateway's page. */
+  description: z.string().trim().max(120).optional(),
+});
 export type FormPayment = z.infer<typeof formPaymentSchema>;
 
 // --- the document -------------------------------------------------------------------------------------------------------------------------
 
 export const formDefinitionSchema = z
-  .object({
+  .strictObject({
     schemaVersion: z.literal(FORM_SCHEMA_VERSION).default(FORM_SCHEMA_VERSION),
     title: label,
     description: richText.optional(),
@@ -460,18 +442,17 @@ export const formDefinitionSchema = z
       .array(formStepSchema)
       .min(1)
       .max(FORM_LIMITS.maxStepsNow, 'Multi-step forms arrive in a later version'),
-    settings: formSettingsSchema.default({}),
-    consent: formConsentSchema.default({}),
-    theme: formThemeSchema.default({}),
+    settings: formSettingsSchema.prefault({}),
+    consent: formConsentSchema.prefault({}),
+    theme: formThemeSchema.prefault({}),
     /** Conditional rules arrive in phase 2; the array is here so the shape does not change. */
     rules: z.array(z.never()).max(0, 'Conditional logic arrives in a later version').default([]),
-    mapping: formMappingSchema.default({}),
-    after: formAfterSchema.default({}),
-    payment: formPaymentSchema.default({}),
+    mapping: formMappingSchema.prefault({}),
+    after: formAfterSchema.prefault({}),
+    payment: formPaymentSchema.prefault({}),
     /** The age gate (BL-217, spec 11.10): off unless a person turns it on. */
-    ageGate: ageGateSchema.default({}),
+    ageGate: ageGateSchema.prefault({}),
   })
-  .strict()
   .superRefine((def, ctx) => {
     const seen = new Set<string>();
     const binds = new Set<string>();

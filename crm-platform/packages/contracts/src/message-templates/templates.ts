@@ -22,19 +22,17 @@ export type TplStatus = z.infer<typeof tplStatusSchema>;
 export const TPL_NAME_MAX = 512;
 export const TPL_BODY_MAX = 1024;
 
-export const tplButtonSchema = z
-  .object({
-    type: z.string().min(1).max(32),
-    text: z.string().max(25).optional(),
-    url: z.string().max(2000).optional(),
-    phone_number: z.string().max(20).optional(),
-    example: z.union([z.string().max(2000), z.array(z.string().max(2000))]).optional(),
-  })
-  .passthrough();
+export const tplButtonSchema = z.looseObject({
+  type: z.string().min(1).max(32),
+  text: z.string().max(25).optional(),
+  url: z.string().max(2000).optional(),
+  phone_number: z.string().max(20).optional(),
+  example: z.union([z.string().max(2000), z.array(z.string().max(2000))]).optional(),
+});
 export type TplButton = z.infer<typeof tplButtonSchema>;
 
 export const tplVariableSlotSchema = z.object({
-  num: z.number().int().min(1),
+  num: z.int().min(1),
   key: z.string().max(100),
   example: z.string().max(200).optional(),
 });
@@ -122,15 +120,15 @@ export const templateSummarySchema = z.object({
   editBlock: z
     .object({
       reason: z.enum(['in_review', 'daily_limit', 'monthly_limit']),
-      until: z.string().datetime().nullable(),
+      until: z.iso.datetime().nullable(),
     })
     .nullable(),
   /** The WhatsApp number it is submitted through (uuid of the connection). */
   connectionId: uuidSchema.nullable(),
-  pausedUntil: z.string().datetime().nullable(),
-  approvedAt: z.string().datetime().nullable(),
-  submittedAt: z.string().datetime().nullable(),
-  lastSyncedAt: z.string().datetime().nullable(),
+  pausedUntil: z.iso.datetime().nullable(),
+  approvedAt: z.iso.datetime().nullable(),
+  submittedAt: z.iso.datetime().nullable(),
+  lastSyncedAt: z.iso.datetime().nullable(),
   bodyPreview: z.string(),
   /** What the library card draws: the whole message, so the card matches the detail page. */
   header: z.string().nullable(),
@@ -144,9 +142,9 @@ export const templateSummarySchema = z.object({
   cards: z.array(tplCardSchema),
   /** The offer of a limited-time-offer template (null for every other type). */
   limitedOffer: z.object({ text: z.string(), hasExpiration: z.boolean() }).nullish(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type TemplateSummary = z.infer<typeof templateSummarySchema>;
 
@@ -156,10 +154,10 @@ export const templateDetailSchema = templateSummarySchema.extend({
   /** The stored header file's key: a copy of the template names the same file (the save checks the key belongs to the workspace). */
   headerMediaKey: z.string().max(512).nullish(),
   variableMap: tplVariableMapSchema,
-  codeExpirationMinutes: z.number().int().nullable(),
+  codeExpirationMinutes: z.int().nullable(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']),
   /** The Meta create payload as it would be (or was) sent: what the review sees. */
-  metaPayload: z.record(z.unknown()),
+  metaPayload: z.record(z.string(), z.unknown()),
   lint: z.array(tplLintIssueSchema),
   /** A link to the stored header file (fresh each read); null when none was stored (Meta's sample is `headerSampleUrl`). */
   headerMediaUrl: z.string().nullable(),
@@ -183,11 +181,11 @@ export type TplRange = z.infer<typeof tplRangeSchema>;
 
 /** A day the library's date filter takes: a real `YYYY-MM-DD` inside 1900 to 2200, the years the date helpers and the database accept. */
 export const tplFilterDaySchema = z.string().refine((v) => parseDateValue(v)?.kind === 'day', {
-  message: 'Use a calendar day between 1900 and 2200, YYYY-MM-DD',
+  error: 'Use a calendar day between 1900 and 2200, YYYY-MM-DD',
 });
 
 export const listTemplatesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
   cursor: z.string().min(1).max(512).optional(),
   status: tplStatusSchema.optional(),
   statusGroup: tplStatusGroupSchema.optional(),
@@ -229,7 +227,7 @@ const templateFields = {
   /** `templateType: 'lto'` only. */
   limitedOffer: tplLimitedOfferSchema.nullish(),
   variableMap: tplVariableMapSchema.optional(),
-  codeExpirationMinutes: z.number().int().min(1).max(90).nullish(),
+  codeExpirationMinutes: z.int().min(1).max(90).nullish(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']).default('POSITIONAL'),
 };
 
@@ -243,7 +241,7 @@ export type CreateTemplateInput = z.infer<typeof createTemplateInputSchema>;
 
 export const updateTemplateInputSchema = z.object({
   ...templateFields,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   submit: z.boolean().default(false),
 });
 export type UpdateTemplateInput = z.infer<typeof updateTemplateInputSchema>;
@@ -262,7 +260,7 @@ export const lintTemplateResultSchema = z.object({
     body: z.string(),
     variableMap: tplVariableMapSchema,
   }),
-  metaPayload: z.record(z.unknown()),
+  metaPayload: z.record(z.string(), z.unknown()),
 });
 export type LintTemplateResult = z.infer<typeof lintTemplateResultSchema>;
 
@@ -289,11 +287,11 @@ export const templateCountsQuerySchema = listTemplatesQuerySchema.pick({
 export type TemplateCountsQuery = z.infer<typeof templateCountsQuerySchema>;
 export const templateCountsSchema = z.object({
   /** Every template, by Meta category (key `all` = the total). */
-  categories: z.record(z.number().int()),
+  categories: z.record(z.string(), z.int()),
   /** Every template, by status tab: `all`, `approved`, `pending`, `rejected`. */
-  statuses: z.record(z.number().int()),
+  statuses: z.record(z.string(), z.int()),
   /** Templates matching the current filters ("Showing 8 of N"). */
-  filtered: z.number().int(),
+  filtered: z.int(),
 });
 export type TemplateCounts = z.infer<typeof templateCountsSchema>;
 
@@ -304,11 +302,11 @@ export type SubmitTemplateInput = z.infer<typeof submitTemplateInputSchema>;
 export const syncTemplatesInputSchema = z.object({ connectionId: uuidSchema });
 export type SyncTemplatesInput = z.infer<typeof syncTemplatesInputSchema>;
 export const syncTemplatesResultSchema = z.object({
-  created: z.number().int(),
-  updated: z.number().int(),
+  created: z.int(),
+  updated: z.int(),
   /** Local rows Meta no longer lists (kept, flagged `deleted`; never removed on a partial fetch). */
-  missing: z.number().int(),
-  total: z.number().int(),
+  missing: z.int(),
+  total: z.int(),
 });
 export type SyncTemplatesResult = z.infer<typeof syncTemplatesResultSchema>;
 

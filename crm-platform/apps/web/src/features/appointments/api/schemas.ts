@@ -67,7 +67,7 @@ const nullableText = z.string().nullable();
 export const pageSchema = z.object({
   nextCursor: z.string().nullable(),
   hasMore: z.boolean(),
-  limit: z.number().int(),
+  limit: z.int(),
 });
 
 export const answerSchema = z.object({
@@ -120,7 +120,7 @@ export type ReminderRunStatus = (typeof REMINDER_RUN_STATUSES)[number];
 export const appointmentReminderSchema = z.object({
   kind: z.enum(REMINDER_KINDS),
   stepKind: z.enum(REMINDER_STEP_KINDS).nullable().default(null),
-  offsetMinutes: z.number().int(),
+  offsetMinutes: z.int(),
   label: nullableText,
   dueAt: instant,
   status: z.enum(REMINDER_RUN_STATUSES),
@@ -148,7 +148,7 @@ export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 
 export const appointmentSchema = z.object({
   id: z.string(),
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
   status: z.enum(APPOINTMENT_STATUSES),
   title: z.string(),
   startsAt: instant,
@@ -162,7 +162,7 @@ export const appointmentSchema = z.object({
       id: z.string(),
       name: z.string(),
       color: nullableText,
-      durationMinutes: z.number().int(),
+      durationMinutes: z.int(),
     })
     .nullable(),
   contact: z
@@ -177,7 +177,7 @@ export const appointmentSchema = z.object({
   notes: nullableText,
   source: z.string(),
   paymentStatus: z.enum(PAYMENT_STATUSES),
-  depositPaidMinor: z.number().int(),
+  depositPaidMinor: z.int(),
   currency: nullableText,
   /** The public manage page of this booking, when it has one (bookings made through a flow or the public page do). */
   manageUrl: nullableText,
@@ -201,9 +201,9 @@ export const appointmentPageSchema = z.object({
 });
 
 export const appointmentCountsSchema = z.object({
-  upcoming: z.number().int(),
-  past: z.number().int(),
-  needsReview: z.number().int().optional(),
+  upcoming: z.int(),
+  past: z.int(),
+  needsReview: z.int().optional(),
 });
 export type AppointmentCounts = z.infer<typeof appointmentCountsSchema>;
 
@@ -211,7 +211,7 @@ export type AppointmentCounts = z.infer<typeof appointmentCountsSchema>;
 
 export const availabilityRuleSchema = z.object({
   /** 0 = Sunday ... 6 = Saturday (Reference's numbering). */
-  weekday: z.number().int().min(0).max(6),
+  weekday: z.int().min(0).max(6),
   /** 24-hour "HH:MM". */
   from: z.string(),
   to: z.string(),
@@ -252,7 +252,7 @@ export const bookingTemplateSchema = z.object({
 export const bookingReminderSchema = z.object({
   /** The saved rule's id, sent back so the rule (and what it has already sent) is kept. */
   id: z.string().optional(),
-  offsetMinutes: z.number().int(),
+  offsetMinutes: z.int(),
   label: nullableText,
   isActive: z.boolean(),
   kind: z.enum(REMINDER_KINDS),
@@ -268,25 +268,25 @@ export const bookingReminderSchema = z.object({
   waTemplateName: nullableText.optional(),
   buttonsEnabled: z.boolean().optional(),
   skipIfConfirmed: z.boolean().optional(),
-  undeliveredFallbackMinutes: z.number().int().nullable().optional(),
+  undeliveredFallbackMinutes: z.int().nullable().optional(),
   serviceLabel: nullableText.optional(),
   packKey: nullableText.optional(),
-  packVersion: z.number().int().nullable().optional(),
+  packVersion: z.int().nullable().optional(),
   /** `sms_removed`: SMS reminders were removed; the step was moved to email or switched off. */
   notice: z.enum(['sms_removed']).nullable().optional(),
 });
 
 export const bookingPriceSchema = z.object({
   currency: z.string(),
-  feeMinor: z.number().int(),
+  feeMinor: z.int(),
   taxPct: z.number(),
   depositMode: z.enum(DEPOSIT_MODES),
-  depositValueMinor: z.number().int(),
+  depositValueMinor: z.int(),
   gatewaySlug: nullableText,
   autoSendLink: z.boolean(),
-  cancelFeeMinor: z.number().int(),
-  noShowFeeMinor: z.number().int(),
-  cancelWindowMinutes: z.number().int(),
+  cancelFeeMinor: z.int(),
+  noShowFeeMinor: z.int(),
+  cancelWindowMinutes: z.int(),
 });
 
 export const bookingIntegrationSchema = z.object({
@@ -298,7 +298,7 @@ export const bookingIntegrationSchema = z.object({
 
 export const bookingTypeSchema = z.object({
   id: z.string(),
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
   name: z.string(),
   /** The path part of the public link. */
   slug: z.string(),
@@ -306,20 +306,20 @@ export const bookingTypeSchema = z.object({
   locationType: z.enum(LOCATION_TYPES),
   locationValue: nullableText,
   color: nullableText,
-  durationMinutes: z.number().int(),
-  incrementMinutes: z.number().int(),
-  bufferBeforeMinutes: z.number().int(),
-  bufferAfterMinutes: z.number().int(),
-  minNoticeMinutes: z.number().int(),
-  maxAdvanceDays: z.number().int(),
-  maxPerDay: z.number().int().nullable(),
-  capacity: z.number().int(),
+  durationMinutes: z.int(),
+  incrementMinutes: z.int(),
+  bufferBeforeMinutes: z.int(),
+  bufferAfterMinutes: z.int(),
+  minNoticeMinutes: z.int(),
+  maxAdvanceDays: z.int(),
+  maxPerDay: z.int().nullable(),
+  capacity: z.int(),
   /** When true a booking waits as "pending" until staff confirm it. */
   requiresApproval: z.boolean(),
   timezone: nullableText,
   introMessage: nullableText,
   isActive: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   price: bookingPriceSchema,
   integration: bookingIntegrationSchema,
   availability: z.array(availabilityRuleSchema),
@@ -327,7 +327,7 @@ export const bookingTypeSchema = z.object({
   templates: z.array(bookingTemplateSchema),
   reminders: z.array(bookingReminderSchema),
   questions: z.array(bookingQuestionSchema),
-  appointmentsCount: z.number().int(),
+  appointmentsCount: z.int(),
   /** The page visitors book on; null while the type is paused or the workspace has no public booking. */
   publicUrl: nullableText,
   createdAt: instant,
@@ -353,7 +353,7 @@ export type BookingTypeInput = Omit<
 export const slotSchema = z.object({
   start: instant,
   end: instant,
-  remaining: z.number().int().nullable().optional(),
+  remaining: z.int().nullable().optional(),
 });
 
 export const slotListSchema = z.object({ timezone: z.string(), slots: z.array(slotSchema) });
@@ -415,12 +415,12 @@ export const calendarStartSchema = z.object({ url: z.string(), expiresInSeconds:
 
 export const bookingSettingsSchema = z.object({
   timezone: nullableText,
-  slotDurationMinutes: z.number().int(),
-  bufferBeforeMinutes: z.number().int(),
-  bufferAfterMinutes: z.number().int(),
-  maxPerDay: z.number().int(),
-  advanceDays: z.number().int(),
-  reminderMinutesBefore: z.number().int(),
+  slotDurationMinutes: z.int(),
+  bufferBeforeMinutes: z.int(),
+  bufferAfterMinutes: z.int(),
+  maxPerDay: z.int(),
+  advanceDays: z.int(),
+  reminderMinutesBefore: z.int(),
   defaultLocation: z.string(),
   /** Business hours, the default weekly windows (0 = Sunday ... 6 = Saturday). */
   businessHours: z.array(availabilityRuleSchema),
@@ -431,7 +431,7 @@ export const bookingSettingsSchema = z.object({
     reschedule: z.string(),
   }),
   calendar: calendarStatusSchema,
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
 });
 export type BookingSettings = z.infer<typeof bookingSettingsSchema>;
 export type BookingSettingsInput = Omit<BookingSettings, 'calendar' | 'rowVersion'>;
@@ -447,19 +447,19 @@ export const publicTypeSchema = z.object({
   locationType: z.enum(LOCATION_TYPES),
   locationValue: nullableText,
   color: nullableText,
-  durationMinutes: z.number().int(),
+  durationMinutes: z.int(),
   introMessage: nullableText,
   timezone: z.string(),
-  maxAdvanceDays: z.number().int(),
+  maxAdvanceDays: z.int(),
   requiresApproval: z.boolean(),
   currency: nullableText,
-  feeMinor: z.number().int(),
+  feeMinor: z.int(),
   taxPct: z.number(),
-  dueNowMinor: z.number().int(),
+  dueNowMinor: z.int(),
   questions: z.array(bookingQuestionSchema),
   /** The optional consent line under the form (BL-167); null when the workspace wrote none. */
   consent: z
-    .object({ text: z.string(), version: z.number().int(), url: nullableText })
+    .object({ text: z.string(), version: z.int(), url: nullableText })
     .nullable()
     .default(null),
 });

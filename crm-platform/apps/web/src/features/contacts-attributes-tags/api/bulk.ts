@@ -44,7 +44,7 @@ export async function startCampaignDraft(target: BulkTarget): Promise<string> {
           ? { groupIds: [], segmentIds: [], rules: null, contactIds: target.ids }
           : { groupIds: [], segmentIds: [], rules: null, selection: selectionBody(target) },
     },
-    schema: z.object({ id: z.string().uuid() }),
+    schema: z.object({ id: z.guid() }),
   });
   return draft.id;
 }

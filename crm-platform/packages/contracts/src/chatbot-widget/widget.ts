@@ -170,7 +170,7 @@ export type CreateWidgetInput = z.infer<typeof createWidgetSchema>;
 
 /** Reference re-sent the whole payload on every save; the update does the same, plus the row version it was read at. */
 export const updateWidgetSchema = widgetFieldsSchema.extend({
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
 });
 export type UpdateWidgetInput = z.infer<typeof updateWidgetSchema>;
 
@@ -220,7 +220,7 @@ export const widgetSchema = z.object({
   previewUrl: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type Widget = z.infer<typeof widgetSchema>;
 
@@ -233,7 +233,7 @@ export type Widget = z.infer<typeof widgetSchema>;
  */
 export const flowWidgetSaveSchema = widgetFieldsSchema
   .omit({ name: true, mode: true, assistantId: true })
-  .extend({ rowVersion: z.number().int().min(1).optional() });
+  .extend({ rowVersion: z.int().min(1).optional() });
 export type FlowWidgetSaveInput = z.infer<typeof flowWidgetSaveSchema>;
 
 /** `widget` is null until the owner has saved Customize once: that is the "needs customizing" state. */
@@ -266,29 +266,29 @@ export type WebBotItem = z.infer<typeof webBotItemSchema>;
 export const webBotsResponseSchema = z.object({
   data: z.array(webBotItemSchema),
   /** All website chat bots of the workspace; `data` holds the newest 200. */
-  total: z.number().int(),
+  total: z.int(),
 });
 export type WebBotsResponse = z.infer<typeof webBotsResponseSchema>;
 
 export const widgetListItemSchema = widgetSchema.extend({
   assistant: widgetAssistantRefSchema.nullable(),
   /** Visitors of this widget, all time. */
-  visitors: z.number().int(),
+  visitors: z.int(),
 });
 export type WidgetListItem = z.infer<typeof widgetListItemSchema>;
 
 /** Reference listed 20 per page, newest first; the cursor page keeps the size. */
 export const listWidgetsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
 });
 export type ListWidgetsQuery = z.infer<typeof listWidgetsQuerySchema>;
 
 export const widgetStatsSchema = z.object({
   /** Every widget of the workspace. */
-  total: z.number().int(),
-  active: z.number().int(),
+  total: z.int(),
+  active: z.int(),
   /** Visitors of every widget, including ones whose widget has been deleted. */
-  visitors: z.number().int(),
+  visitors: z.int(),
 });
 export type WidgetStats = z.infer<typeof widgetStatsSchema>;
 
@@ -310,7 +310,7 @@ export const rotateWidgetTokenResponseSchema = z.object({
   embedToken: z.string(),
   embedUrl: z.string(),
   previewUrl: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type RotateWidgetTokenResponse = z.infer<typeof rotateWidgetTokenResponseSchema>;
 
@@ -373,7 +373,7 @@ export type WidgetCard = z.infer<typeof widgetCardSchema>;
 
 /** `POST /widget/<token>/api/feedback`: a visitor's thumbs up or down on one line the bot sent them (`null` takes it back). */
 export const widgetFeedbackRequestSchema = z.object({
-  message_id: z.number().int().positive(),
+  message_id: z.int().positive(),
   value: z.enum(['up', 'down']).nullable(),
 });
 export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
@@ -383,7 +383,7 @@ export type WidgetFeedbackRequest = z.infer<typeof widgetFeedbackRequestSchema>;
  * stars on its own. The team sees it as one line on the thread; a second one on the same thread is ignored.
  */
 export const widgetRatingRequestSchema = z.object({
-  rating: z.number().int().min(1).max(5),
+  rating: z.int().min(1).max(5),
   comment: z.string().trim().max(1000).optional(),
 });
 export type WidgetRatingRequest = z.infer<typeof widgetRatingRequestSchema>;
@@ -414,7 +414,7 @@ export type WidgetMedia = z.infer<typeof widgetMediaSchema>;
 export const widgetMessageRequestSchema = z.object({
   body: z.string().trim().min(1).max(WIDGET_LIMITS.visitorBody),
   name: z.preprocess(blankToNull, z.string().max(WIDGET_LIMITS.visitorName).nullish()),
-  email: z.preprocess(blankToNull, z.string().email().max(WIDGET_LIMITS.visitorEmail).nullish()),
+  email: z.preprocess(blankToNull, z.email().max(WIDGET_LIMITS.visitorEmail).nullish()),
   phone: z.preprocess(blankToNull, z.string().max(WIDGET_LIMITS.visitorPhone).nullish()),
   visitor_uuid: z.preprocess(blankToNull, z.string().max(64).nullish()),
   /** A flow bot's reply button the visitor tapped: `body` is its title, this is its id. Ignored by a widget with no flow. */
@@ -424,10 +424,10 @@ export const widgetMessageRequestSchema = z.object({
    * line; ignored when the widget has none, when the version is not a real version of it, or when no phone or email was given.
    */
   consent: z.boolean().nullish(),
-  consent_version: z.number().int().min(1).nullish(),
+  consent_version: z.int().min(1).nullish(),
   /** The intake form's age answer (BL-218): a date of birth (YYYY-MM-DD), an age, or the box "I confirm I am at least N years old". */
   date_of_birth: z.preprocess(blankToNull, z.string().max(10).nullish()),
-  age: z.preprocess(blankToNull, z.union([z.string().max(3), z.number().int()]).nullish()),
+  age: z.preprocess(blankToNull, z.union([z.string().max(3), z.int()]).nullish()),
   age_confirmed: z.boolean().nullish(),
 });
 export type WidgetMessageRequest = z.infer<typeof widgetMessageRequestSchema>;
@@ -459,7 +459,7 @@ export const widgetPublicConfigSchema = z.object({
     age_gate: z
       .object({
         mode: z.enum(['dob', 'age', 'declaration']),
-        declaration_age: z.number().int().nullable(),
+        declaration_age: z.int().nullable(),
         /** This visitor has not passed the gate yet: the intake form must show the question (BL-218). */
         pending: z.boolean(),
       })
@@ -472,7 +472,7 @@ export const widgetPublicConfigSchema = z.object({
     flow_uuid: z.string().nullable().optional(),
     /** The consent line under the intake form: only when the widget has one switched on and asks for a phone or an email. */
     consent: z
-      .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
+      .object({ text: z.string(), version: z.int().min(1), url: z.string().nullable() })
       .nullable()
       .optional(),
   }),
@@ -486,7 +486,7 @@ export const widgetPublicConfigSchema = z.object({
   transcript: z.array(
     z.object({
       /** The message sequence number; the widget's cursor and de-duplication key, never an entity id. */
-      id: z.number().int(),
+      id: z.int(),
       dir: z.enum(['in', 'out']),
       body: z.string().nullable(),
       from: z.enum(['visitor', 'agent', 'assistant']),
@@ -507,8 +507,8 @@ export type WidgetPublicConfig = z.infer<typeof widgetPublicConfigSchema>;
 
 export const widgetMessageResponseSchema = z.object({
   ok: z.literal(true),
-  inbound: z.object({ id: z.number().int() }),
-  reply: z.object({ id: z.number().int(), body: z.string(), at: z.string() }).nullable(),
+  inbound: z.object({ id: z.int() }),
+  reply: z.object({ id: z.int(), body: z.string(), at: z.string() }).nullable(),
 });
 export type WidgetMessageResponse = z.infer<typeof widgetMessageResponseSchema>;
 
@@ -516,7 +516,7 @@ export const widgetHistoryResponseSchema = z.object({
   ok: z.literal(true),
   messages: z.array(
     z.object({
-      id: z.number().int(),
+      id: z.int(),
       body: z.string().nullable(),
       at: z.string().nullable(),
       from: z.enum(['agent', 'assistant']),

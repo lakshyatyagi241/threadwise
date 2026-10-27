@@ -13,7 +13,7 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { OperatorGuard, OperatorRoles } from '../auth';
 import { AsyncOpsService } from './async-ops.service';
 
-const limitQuery = z.coerce.number().int().min(1).max(500).default(100);
+const limitQuery = z.coerce.number().int().min(1).max(500).prefault(100);
 
 /**
  * Failed background work (ASYNC-044): what ran out of retries, and a replay. Every operator may look; only a super admin replays.

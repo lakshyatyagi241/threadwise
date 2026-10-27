@@ -70,48 +70,42 @@ export type BookingToolError = z.infer<typeof bookingToolErrorSchema>;
 
 // --- arguments -------------------------------------------------------------------------------------------------------
 
-const instant = z.string().datetime({ offset: true });
+const instant = z.iso.datetime({ offset: true });
 
-export const listServicesArgsSchema = z.object({}).strict();
+export const listServicesArgsSchema = z.strictObject({});
 
-export const checkAvailabilityArgsSchema = z
-  .object({
-    /** A service id from `list_services`. */
-    serviceId: z.string().uuid(),
-    /** The first day to look at (`YYYY-MM-DD`, the service's own zone); default today. */
-    from: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .optional(),
-    /** How many days to look at, 1 to `BOOKING_TOOL_MAX_DAYS`; default 7. */
-    days: z.number().int().min(1).max(BOOKING_TOOL_MAX_DAYS).default(7),
-  })
-  .strict();
+export const checkAvailabilityArgsSchema = z.strictObject({
+  /** A service id from `list_services`. */
+  serviceId: z.guid(),
+  /** The first day to look at (`YYYY-MM-DD`, the service's own zone); default today. */
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  /** How many days to look at, 1 to `BOOKING_TOOL_MAX_DAYS`; default 7. */
+  days: z.int().min(1).max(BOOKING_TOOL_MAX_DAYS).default(7),
+});
 
-export const bookAppointmentArgsSchema = z
-  .object({
-    serviceId: z.string().uuid(),
-    /** One of the starts `check_availability` returned. */
-    startsAt: instant,
-    /** The answers to the service's questions, by question id. */
-    answers: z.record(z.string().uuid(), z.string().max(2000)).default({}),
-    /** Only for a visitor who has no contact yet; ignored when the conversation already has one. */
-    name: z.string().trim().min(1).max(120).optional(),
-    phone: z.string().trim().min(5).max(30).optional(),
-    email: z.string().trim().email().max(254).optional(),
-    /** The customer said yes to exactly this service and time. A binding refuses `false` with `not_confirmed`. */
-    confirmed: z.boolean(),
-  })
-  .strict();
+export const bookAppointmentArgsSchema = z.strictObject({
+  serviceId: z.guid(),
+  /** One of the starts `check_availability` returned. */
+  startsAt: instant,
+  /** The answers to the service's questions, by question id. */
+  answers: z.record(z.guid(), z.string().max(2000)).default({}),
+  /** Only for a visitor who has no contact yet; ignored when the conversation already has one. */
+  name: z.string().trim().min(1).max(120).optional(),
+  phone: z.string().trim().min(5).max(30).optional(),
+  email: z.string().trim().pipe(z.email().max(254)).optional(),
+  /** The customer said yes to exactly this service and time. A binding refuses `false` with `not_confirmed`. */
+  confirmed: z.boolean(),
+});
 
-export const rescheduleAppointmentArgsSchema = z
-  .object({
-    /** The booking's id, as the customer's own bookings list returns it. */
-    appointmentId: z.string().uuid(),
-    startsAt: instant,
-    confirmed: z.boolean(),
-  })
-  .strict();
+export const rescheduleAppointmentArgsSchema = z.strictObject({
+  /** The booking's id, as the customer's own bookings list returns it. */
+  appointmentId: z.guid(),
+  startsAt: instant,
+  confirmed: z.boolean(),
+});
 
 export const BOOKING_TOOL_ARGS = {
   list_services: listServicesArgsSchema,
@@ -129,23 +123,23 @@ export const bookingToolRefusalSchema = z.object({
   message: z.string(),
 });
 
-const ok = <T extends z.ZodTypeAny>(data: T) => z.object({ ok: z.literal(true), data });
+const ok = <T extends z.ZodType>(data: T) => z.object({ ok: z.literal(true), data });
 
 export const listServicesResultSchema = ok(
   z.object({
     services: z.array(
       z.object({
-        id: z.string().uuid(),
+        id: z.guid(),
         name: z.string(),
         description: z.string().nullable(),
-        durationMinutes: z.number().int(),
+        durationMinutes: z.int(),
         locationType: z.enum(['address', 'virtual', 'phone', 'whatsapp']),
         /** What the customer owes to book, as a decimal string in major units ("0.00" when nothing). */
         dueNow: z.string(),
         currency: z.string().nullable(),
         questions: z.array(
           z.object({
-            id: z.string().uuid(),
+            id: z.guid(),
             label: z.string(),
             type: z.string(),
             required: z.boolean(),
@@ -162,7 +156,7 @@ export const checkAvailabilityResultSchema = ok(
     /** The zone the days are cut in; the model shows times in the CUSTOMER's zone, converted from the instants. */
     timezone: z.string(),
     slots: z
-      .array(z.object({ startsAt: z.string().datetime(), endsAt: z.string().datetime() }))
+      .array(z.object({ startsAt: z.iso.datetime(), endsAt: z.iso.datetime() }))
       .max(BOOKING_TOOL_MAX_SLOTS),
     /** More times exist after these: ask again with a later `from`. */
     hasMore: z.boolean(),
@@ -171,25 +165,25 @@ export const checkAvailabilityResultSchema = ok(
 
 export const bookAppointmentResultSchema = ok(
   z.object({
-    appointmentId: z.string().uuid(),
+    appointmentId: z.guid(),
     /** `confirmed`, or `pending` (needs approval, or an amount is due first). */
     status: z.enum(['confirmed', 'pending']),
-    startsAt: z.string().datetime(),
-    endsAt: z.string().datetime(),
+    startsAt: z.iso.datetime(),
+    endsAt: z.iso.datetime(),
     requiresApproval: z.boolean(),
     /** Set while a payment is due before the booking is confirmed. */
     paymentDue: z.object({ amount: z.string(), currency: z.string().nullable() }).nullable(),
     /** To show to the same customer, in this thread. */
-    manageUrl: z.string().url(),
+    manageUrl: z.url(),
   }),
 );
 
 export const rescheduleAppointmentResultSchema = ok(
   z.object({
-    appointmentId: z.string().uuid(),
+    appointmentId: z.guid(),
     status: z.enum(['confirmed', 'pending']),
-    startsAt: z.string().datetime(),
-    endsAt: z.string().datetime(),
+    startsAt: z.iso.datetime(),
+    endsAt: z.iso.datetime(),
   }),
 );
 

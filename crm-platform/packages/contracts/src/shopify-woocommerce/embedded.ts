@@ -33,8 +33,8 @@ export const shopifyEmbeddedStatusSchema = z.object({
       storeName: z.string().nullable(),
       status: z.string(),
       shopPlan: z.string().nullable(),
-      connectedAt: z.string().datetime().nullable(),
-      lastVerifiedAt: z.string().datetime().nullable(),
+      connectedAt: z.iso.datetime().nullable(),
+      lastVerifiedAt: z.iso.datetime().nullable(),
     })
     .nullable(),
   /** One plain sentence the page can show as it is. */

@@ -22,13 +22,13 @@ export const announcementSchema = z.object({
   tone: announcementToneSchema,
   isActive: z.boolean(),
   dismissible: z.boolean(),
-  sortOrder: z.number().int(),
-  startsAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  sortOrder: z.int(),
+  startsAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   status: announcementStatusSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type Announcement = z.infer<typeof announcementSchema>;
 
@@ -38,7 +38,7 @@ export const ANNOUNCEMENT_FILTERS = ['all', 'active', 'inactive', 'expired'] as 
 export const announcementListQuerySchema = z.object({
   status: z.enum(ANNOUNCEMENT_FILTERS).catch('all').default('all'),
   q: z.string().trim().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(12),
+  limit: z.coerce.number().int().min(1).max(100).prefault(12),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type AnnouncementListQuery = z.infer<typeof announcementListQuerySchema>;
@@ -48,11 +48,11 @@ export const announcementListResponseSchema = z.object({
   page: pageInfoSchema,
   /** The four tiles, plus the sidebar badge (rows switched on, whatever their window). */
   summary: z.object({
-    total: z.number().int(),
-    live: z.number().int(),
-    scheduled: z.number().int(),
-    expired: z.number().int(),
-    switchedOn: z.number().int(),
+    total: z.int(),
+    live: z.int(),
+    scheduled: z.int(),
+    expired: z.int(),
+    switchedOn: z.int(),
   }),
 });
 export type AnnouncementListResponse = z.infer<typeof announcementListResponseSchema>;
@@ -62,7 +62,7 @@ const linkUrl = z
   .trim()
   .max(500)
   .refine((v) => v === '' || (isSafeLink(v) && !/^(mailto|tel):/i.test(v)), {
-    message: 'Use an https:// address or a path starting with /',
+    error: 'Use an https:// address or a path starting with /',
   });
 
 const fields = {
@@ -72,10 +72,10 @@ const fields = {
   tone: announcementToneSchema.default('info'),
   isActive: z.boolean().default(true),
   dismissible: z.boolean().default(true),
-  sortOrder: z.number().int().min(0).max(9999).default(0),
+  sortOrder: z.int().min(0).max(9999).default(0),
   /** Instants. The editor converts a wall-clock time in the chosen zone before it sends. */
-  startsAt: z.string().datetime({ offset: true }).nullish(),
-  expiresAt: z.string().datetime({ offset: true }).nullish(),
+  startsAt: z.iso.datetime({ offset: true }).nullish(),
+  expiresAt: z.iso.datetime({ offset: true }).nullish(),
 };
 
 const windowOk = (v: { startsAt?: string | null; expiresAt?: string | null }) =>
@@ -86,12 +86,12 @@ export const createAnnouncementRequestSchema = z.object(fields).refine(windowOk,
 export type CreateAnnouncementRequest = z.infer<typeof createAnnouncementRequestSchema>;
 
 export const updateAnnouncementRequestSchema = z
-  .object({ ...fields, rowVersion: z.number().int().positive() })
+  .object({ ...fields, rowVersion: z.int().positive() })
   .refine(windowOk, windowIssue);
 export type UpdateAnnouncementRequest = z.infer<typeof updateAnnouncementRequestSchema>;
 
 export const toggleAnnouncementRequestSchema = z.object({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type ToggleAnnouncementRequest = z.infer<typeof toggleAnnouncementRequestSchema>;
 

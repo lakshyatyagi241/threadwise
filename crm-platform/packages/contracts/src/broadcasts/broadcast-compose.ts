@@ -71,7 +71,7 @@ export type SenderHiddenReason = z.infer<typeof senderHiddenReasonSchema>;
 export const senderHiddenSchema = z.object({
   engine: z.string(),
   reason: senderHiddenReasonSchema,
-  count: z.number().int().positive(),
+  count: z.int().positive(),
 });
 export type SenderHidden = z.infer<typeof senderHiddenSchema>;
 

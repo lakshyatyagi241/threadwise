@@ -24,7 +24,7 @@ export type SetupPrerequisite = z.infer<typeof setupPrerequisiteSchema>;
 export const setupStatusResponseSchema = z.object({
   /** `completed` also covers an environment that already has a platform operator. */
   state: z.enum(['open', 'completed']),
-  completedAt: z.string().datetime().nullable(),
+  completedAt: z.iso.datetime().nullable(),
   /** false: SETUP_TOKEN is not configured, so setup is disabled (use `operator:create`). */
   tokenConfigured: z.boolean(),
   /** Empty once completed. */
@@ -32,7 +32,7 @@ export const setupStatusResponseSchema = z.object({
   /** The licence step is part of the wizard only when this deployment enforces a purchase code (LICENCE_MODE). */
   licenceRequired: z.boolean(),
   /** Highest install-run step that succeeded (0 to 6), so a reload can say how far the last attempt got. */
-  runStep: z.number().int().min(0).max(6),
+  runStep: z.int().min(0).max(6),
   /** Product version shown in the wizard footer. */
   version: z.string(),
 });
@@ -102,8 +102,7 @@ export const setupAppSchema = z.object({
     .string()
     .trim()
     .max(191)
-    .url()
-    .regex(/^https?:\/\//i, 'must be an http or https URL'),
+    .pipe(z.url().regex(/^https?:\/\//i, 'must be an http or https URL')),
 });
 export type SetupApp = z.infer<typeof setupAppSchema>;
 
@@ -111,7 +110,7 @@ export type SetupApp = z.infer<typeof setupAppSchema>;
 export const NODE_TOKEN_MIN_LENGTH = 16;
 export const setupNodeSchema = z.object({
   serverUrl: setupAppSchema.shape.url,
-  port: z.number().int().min(1).max(65535),
+  port: z.int().min(1).max(65535),
   token: z.string().min(NODE_TOKEN_MIN_LENGTH).max(256),
 });
 export type SetupNode = z.infer<typeof setupNodeSchema>;
@@ -145,7 +144,7 @@ function checkOperatorPassword(v: BootstrapBase, ctx: z.RefinementCtx): void {
   });
   for (const rule of broken) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       path: ['operator', 'password'],
       message: `password rule not met: ${rule}`,
     });
@@ -156,7 +155,7 @@ export const setupBootstrapRequestSchema = setupBootstrapBase.superRefine(checkO
 export type SetupBootstrapRequest = z.infer<typeof setupBootstrapRequestSchema>;
 
 export const setupBootstrapResponseSchema = z.object({
-  completedAt: z.string().datetime(),
+  completedAt: z.iso.datetime(),
   organization: z.object({ id: uuidSchema, slug: z.string(), name: z.string() }),
   operator: z.object({ id: uuidSchema, email: z.string() }),
 });
@@ -180,12 +179,12 @@ export type SetupRunStepName = (typeof SETUP_RUN_STEPS)[number];
  * enforces their order from `platform_setup.run_step`, not from the page.
  */
 export const setupRunRequestSchema = setupBootstrapBase
-  .extend({ step: z.number().int().min(1).max(SETUP_RUN_STEPS.length) })
+  .extend({ step: z.int().min(1).max(SETUP_RUN_STEPS.length) })
   .superRefine(checkOperatorPassword);
 export type SetupRunRequest = z.infer<typeof setupRunRequestSchema>;
 
 export const setupRunResponseSchema = z.object({
-  step: z.number().int().min(1).max(SETUP_RUN_STEPS.length),
+  step: z.int().min(1).max(SETUP_RUN_STEPS.length),
   ok: z.literal(true),
   /** Set by the last step only. */
   result: setupBootstrapResponseSchema.optional(),
@@ -232,7 +231,7 @@ export type SetupDatabaseTestRequest = z.infer<typeof setupDatabaseTestRequestSc
 /** What the database form starts with: the deployment's own connection, never its password. */
 export const setupDatabaseDefaultsResponseSchema = z.object({
   host: z.string(),
-  port: z.number().int(),
+  port: z.int(),
   database: z.string(),
   username: z.string(),
 });

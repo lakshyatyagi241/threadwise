@@ -104,7 +104,7 @@ export const conferencingConnectionSchema = z.object({
   /** The listing page to install it from when it can be installed now (a deep link, never the empty list), else null. */
   listingPath: z.string().nullable(),
   account: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
   lastErrorCode: z.string().nullable(),
 });
 export type ConferencingConnection = z.infer<typeof conferencingConnectionSchema>;
@@ -122,8 +122,8 @@ export const conferencingStartInputSchema = z.object({
 export type ConferencingStartInput = z.infer<typeof conferencingStartInputSchema>;
 
 export const conferencingStartResponseSchema = z.object({
-  url: z.string().url(),
-  expiresInSeconds: z.number().int(),
+  url: z.url(),
+  expiresInSeconds: z.int(),
 });
 export type ConferencingStartResponse = z.infer<typeof conferencingStartResponseSchema>;
 
@@ -144,15 +144,13 @@ export type ConferencingConfirmInput = z.infer<typeof conferencingConfirmInputSc
  * `addToCalendar` puts the meeting on the workspace's connected calendar; `sendInvitation` also lets the calendar invite the contact (by
  * email), which only the calendar's own invitation does: our own email invitation to attendees is unchanged.
  */
-export const meetingConferencingInputSchema = z
-  .object({
-    videoProvider: videoProviderSchema.nullable().optional(),
-    addToCalendar: z.boolean().optional(),
-    sendInvitation: z.boolean().optional(),
-    /** The IANA zone the times were entered in (the browser's); calendar events and Zoom want one. Left out: UTC. */
-    timeZone: z.string().min(1).max(64).optional(),
-  })
-  .strict();
+export const meetingConferencingInputSchema = z.strictObject({
+  videoProvider: videoProviderSchema.nullable().optional(),
+  addToCalendar: z.boolean().optional(),
+  sendInvitation: z.boolean().optional(),
+  /** The IANA zone the times were entered in (the browser's); calendar events and Zoom want one. Left out: UTC. */
+  timeZone: z.string().min(1).max(64).optional(),
+});
 export type MeetingConferencingInput = z.infer<typeof meetingConferencingInputSchema>;
 
 export const VIDEO_STATUSES = ['pending', 'ready', 'failed'] as const;

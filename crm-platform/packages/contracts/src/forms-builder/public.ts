@@ -16,7 +16,7 @@ export const publicFormSchema = z.object({
   /** The form is paused: the page says it is closed and the steps are empty. A submit is answered 404. */
   closed: z.boolean(),
   /** The frozen version the visitor sees; sent back by nothing, shown to staff in the submission. */
-  version: z.number().int(),
+  version: z.int(),
   title: z.string(),
   /** Sanitised HTML. */
   description: z.string().nullable(),
@@ -43,7 +43,7 @@ export const publicFormSchema = z.object({
   ageGate: z
     .object({
       mode: z.enum(['dob', 'age', 'declaration']),
-      declarationAge: z.number().int().nullable(),
+      declarationAge: z.int().nullable(),
     })
     .nullable(),
   /** What the visitor will be asked to pay: shown before they submit. Null when the form takes no payment. */

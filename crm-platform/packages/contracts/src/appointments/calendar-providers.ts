@@ -38,7 +38,7 @@ export const calendarProviderStatusSchema = z.object({
   account: z.string().nullable(),
   calendarId: z.string().nullable(),
   calendarName: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
   /** The last failure met using the account (a stable code), cleared by the next success. */
   lastErrorCode: z.string().nullable(),
   /** Bookings are written to this provider's calendar. */
@@ -53,7 +53,7 @@ export const calendarOverviewResponseSchema = z.object({
   preferredProvider: calendarProviderSchema.nullable(),
   providers: z.array(calendarProviderStatusSchema),
   /** Upcoming confirmed bookings (within the back-fill horizon) whose event is not in the calendar bookings go to. */
-  backfillPending: z.number().int().min(0),
+  backfillPending: z.int().min(0),
 });
 export type CalendarOverviewResponse = z.infer<typeof calendarOverviewResponseSchema>;
 
@@ -99,6 +99,6 @@ export const calendarBackfillResponseSchema = z.object({
   /** True when a pass was queued; false when no calendar is connected, so there is nowhere to write to. */
   queued: z.boolean(),
   /** Upcoming confirmed bookings whose event is not in the calendar bookings go to right now (within the horizon). */
-  pending: z.number().int().min(0),
+  pending: z.int().min(0),
 });
 export type CalendarBackfillResponse = z.infer<typeof calendarBackfillResponseSchema>;

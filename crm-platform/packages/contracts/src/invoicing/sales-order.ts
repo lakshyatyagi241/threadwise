@@ -57,8 +57,8 @@ export const createSalesOrderSchema = z
     lines: z.array(invoiceLineInputSchema).max(100).optional(),
   })
   .refine((v) => !!v.quoteId || (v.lines?.length ?? 0) > 0, {
-    message: 'send a quoteId or at least one line',
     path: ['lines'],
+    error: 'send a quoteId or at least one line',
   });
 export type CreateSalesOrderInput = z.infer<typeof createSalesOrderSchema>;
 
@@ -77,7 +77,7 @@ export const updateSalesOrderSchema = z.object({
   terms: z.string().trim().max(10000).nullish(),
   /** Draft only: replaces every line. */
   lines: z.array(invoiceLineInputSchema).min(1).max(100).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateSalesOrderInput = z.infer<typeof updateSalesOrderSchema>;
 
@@ -91,15 +91,15 @@ export const invoiceFromOrderSchema = z
       .optional(),
     issueDate: date.nullish(),
     dueDate: date.nullish(),
-    paymentTermsDays: z.number().int().min(0).max(365).nullish(),
+    paymentTermsDays: z.int().min(0).max(365).nullish(),
     /** Issue the invoice at once instead of leaving a draft. */
     issue: z.boolean().default(false),
     /** Shipping is billed with the first invoice unless this is false. */
     includeShipping: z.boolean().default(true),
   })
   .refine((v) => v.all || (v.lines?.length ?? 0) > 0, {
-    message: 'send all: true or at least one line',
     path: ['lines'],
+    error: 'send all: true or at least one line',
   });
 export type InvoiceFromOrderInput = z.infer<typeof invoiceFromOrderSchema>;
 
@@ -114,8 +114,8 @@ export const fulfilOrderSchema = z
     note: z.string().trim().max(500).nullish(),
   })
   .refine((v) => v.all || (v.lines?.length ?? 0) > 0, {
-    message: 'send all: true or at least one line',
     path: ['lines'],
+    error: 'send all: true or at least one line',
   });
 export type FulfilOrderInput = z.infer<typeof fulfilOrderSchema>;
 
@@ -124,7 +124,7 @@ export type CancelOrderInput = z.infer<typeof cancelOrderSchema>;
 
 export const salesOrderLineResponseSchema = z.object({
   id: uuidSchema,
-  position: z.number().int(),
+  position: z.int(),
   description: z.string(),
   sku: z.string().nullable(),
   hsnSac: z.string().nullable(),
@@ -158,9 +158,9 @@ export const salesOrderSummarySchema = z.object({
   totalMinor: z.string(),
   expectedDate: z.string().nullable(),
   reference: z.string().nullable(),
-  invoiceCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  invoiceCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type SalesOrderSummary = z.infer<typeof salesOrderSummarySchema>;
 
@@ -190,8 +190,8 @@ export const salesOrderResponseSchema = salesOrderSummarySchema.extend({
       total: z.string(),
     }),
   ),
-  confirmedAt: z.string().datetime().nullable(),
-  cancelledAt: z.string().datetime().nullable(),
+  confirmedAt: z.iso.datetime().nullable(),
+  cancelledAt: z.iso.datetime().nullable(),
   cancelReason: z.string().nullable(),
 });
 export type SalesOrderResponse = z.infer<typeof salesOrderResponseSchema>;
@@ -202,7 +202,7 @@ export const salesOrderPageSchema = z.object({
 });
 
 export const listSalesOrdersQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   status: queryList(salesOrderStatusSchema).optional(),
   invoicingStatus: queryList(invoicingStatusSchema).optional(),
@@ -214,13 +214,13 @@ export const listSalesOrdersQuerySchema = z.object({
 export type ListSalesOrdersQuery = z.infer<typeof listSalesOrdersQuerySchema>;
 
 export const salesOrderCountsSchema = z.object({
-  all: z.number().int(),
-  draft: z.number().int(),
-  confirmed: z.number().int(),
-  cancelled: z.number().int(),
-  closed: z.number().int(),
-  toInvoice: z.number().int(),
-  toFulfil: z.number().int(),
+  all: z.int(),
+  draft: z.int(),
+  confirmed: z.int(),
+  cancelled: z.int(),
+  closed: z.int(),
+  toInvoice: z.int(),
+  toFulfil: z.int(),
   openValue: z.array(moneyTotalSchema),
 });
 export type SalesOrderCounts = z.infer<typeof salesOrderCountsSchema>;
