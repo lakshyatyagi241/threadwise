@@ -245,6 +245,9 @@ export const PLAN_FEATURE_DEFS = [
   // key (`grants_plan_features`), so no plan row grants it and a default-on feature would be refused at publish. NOT `forms_and_links`, which
   // is Reference's WhatsApp Flows forms and stays on by default.
   { key: 'form_builder', group: 'advanced', productLine: 'crm', default: false },
+  // Products and services: a price list of what the workspace sells. Default FALSE: the Marketplace app `products-services` owns this key (`grants_plan_features`),
+  // like `form_builder`, so no plan row grants it and a default-on feature would be refused at publish.
+  { key: 'products_services', group: 'advanced', productLine: 'crm', default: false },
   // WhatsApp Groups on a Cloud API number (BL-094, docs/specs/waba-groups-management.md 13). Reference had NO plan gate on its Groups page; the
   // owner decided (2026-10-08) it is a plan feature and not in every plan, so it defaults to FALSE and a plan must be given it.
   { key: 'waba_groups', group: 'messaging', productLine: 'chat', default: false },
@@ -346,6 +349,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   forms_and_links: 'Forms and links',
   extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
+  products_services: 'Products and services',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',
   help_agent: 'Help assistant',
@@ -409,6 +413,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'forms_and_links',
   'extra_channels',
   'form_builder',
+  'products_services',
   'waba_groups',
   'sms',
   'help_agent',

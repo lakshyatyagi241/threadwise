@@ -50,6 +50,7 @@ import {
   InvoicesController,
 } from '../../../src/modules/crm/invoicing/invoices.controller';
 import { PaymentsController } from '../../../src/modules/crm/invoicing/payments.controller';
+import { ProductsServicesController } from '../../../src/modules/products-services/products-services.controller';
 import { RecurringInvoicesController } from '../../../src/modules/crm/invoicing/recurring-invoices.controller';
 import { SalesOrdersController } from '../../../src/modules/crm/invoicing/sales-orders.controller';
 import { TaxRatesController } from '../../../src/modules/crm/invoicing/tax-rates.controller';
@@ -81,6 +82,7 @@ function handlers(c: Ctor) {
 describe('whole-controller plan features', () => {
   const whole: Array<[string, Ctor, string]> = [
     ['team chat', TeamChatController, 'team_chat'],
+    ['products and services', ProductsServicesController, 'products_services'],
     ['public api', PublicApiController, 'public_api'],
     ['telegram bots', BotsController, 'extra_channels'],
     ['telegram broadcasts', TgBroadcastsController, 'extra_channels'],
