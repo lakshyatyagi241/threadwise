@@ -30,6 +30,8 @@ export interface LaunchRequest {
   silent?: boolean;
   /** A message whose price is 0 passes even with an empty wallet (the per-message check; a launch is refused on an empty wallet). */
   freeAllowed?: boolean;
+  /** A bulk run refuses (retryable 503) when the balance cannot be read, because the run would send before anything rechecks the wallet. */
+  failClosed?: boolean;
 }
 
 export interface SendRequest {
@@ -54,7 +56,8 @@ const EMPTY_MESSAGE = 'Your message wallet is empty. Top up to start sending.';
  *
  * Kept from Reference: platform-owned workspaces pass; a workspace still inside its plan's free monthly messages passes with an empty
  * wallet; a refusal is written to the workspace's wallet log; a failure to LOOK UP any of this lets the send through (fail open,
- * logged as a warning) because a billing read must never be the reason a legitimate send stops.
+ * logged as a warning) because a billing read must never be the reason a legitimate send stops. A bulk run (`failClosed`) is the
+ * exception: it refuses with a retryable 503, because the run would send every recipient before the wallet is read again.
  * Changed: Reference computed an estimate and never compared it (a wallet of 1 credit launched 50,000 recipients). Here the balance
  * must cover `launchCoveragePercent` of the estimated cost (platform setting, default 100; 0 restores "block only when empty").
  */
@@ -121,9 +124,17 @@ export class WalletGateService {
       ({ verdict, balanceMinor, estimateMinor } = judged);
     } catch (err) {
       this.logger.warn(
-        { err, orgId: req.orgId },
-        '[WALLET] launch precheck failed, the send is allowed',
+        { err, orgId: req.orgId, failClosed: req.failClosed === true },
+        req.failClosed
+          ? '[WALLET] launch precheck failed, the bulk launch is refused'
+          : '[WALLET] launch precheck failed, the send is allowed',
       );
+      if (req.failClosed)
+        throw new AppError(
+          ERROR_CODES.SERVICE_UNAVAILABLE,
+          'Your wallet balance could not be checked. Try again in a moment.',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
       return;
     }
     if (verdict.ok) return;

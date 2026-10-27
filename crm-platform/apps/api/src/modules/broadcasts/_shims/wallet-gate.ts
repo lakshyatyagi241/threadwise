@@ -12,6 +12,7 @@ export class BillingWalletGate implements WalletGate {
       orgId,
       source: opts.source ?? 'broadcast',
       recipients: count,
+      failClosed: true,
       ...(opts.phones ? { phones: opts.phones } : {}),
       ...(opts.category !== undefined ? { category: opts.category } : {}),
     });
