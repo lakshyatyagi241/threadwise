@@ -31,6 +31,8 @@ function make(opts: {
   text?: string;
   fail?: boolean;
   walletEmpty?: boolean;
+  /** The vendor's error on its first call only (a throttle, a refusal); later calls answer. */
+  throttleFirst?: string;
 }) {
   const source = opts.source ?? 'admin';
   const keys = {
@@ -49,8 +51,11 @@ function make(opts: {
     }),
     chargeCall: vi.fn(async (..._a: unknown[]) => 0),
   };
+  let calls = 0;
   const ai = {
     complete: vi.fn(async (..._a: unknown[]) => {
+      calls += 1;
+      if (opts.throttleFirst && calls === 1) throw new Error(opts.throttleFirst);
       if (opts.fail) throw new Error('boom');
       return { text: opts.text ?? GOOD, promptTokens: 300, completionTokens: 180 };
     }),
@@ -141,5 +146,26 @@ describe('the template builder and the wallet', () => {
     );
     expect(spent.wallet.guardCall).not.toHaveBeenCalled();
     expect(spent.ai.complete).not.toHaveBeenCalled();
+  });
+
+  it('a throttled vendor is tried once more, and the draft comes back when that try answers', async () => {
+    const throttled = make({ throttleFirst: 'AI provider answered 429' });
+    const out = await run(() => throttled.svc.generate(input));
+    expect(out.template.body).toContain('on its way');
+    expect(throttled.ai.complete).toHaveBeenCalledTimes(2);
+    expect(throttled.wallet.chargeCall).toHaveBeenCalledTimes(1);
+  }, 10_000);
+
+  it('a timeout and a refusal are not tried again', async () => {
+    const timedOut = make({ fail: true });
+    expect(await code(run(() => timedOut.svc.generate(input)))).toBe(
+      ERROR_CODES.CAMP_AI_PROVIDER_FAILED,
+    );
+    expect(timedOut.ai.complete).toHaveBeenCalledTimes(1);
+    const refused = make({ throttleFirst: 'AI provider answered 401' });
+    expect(await code(run(() => refused.svc.generate(input)))).toBe(
+      ERROR_CODES.CAMP_AI_PROVIDER_FAILED,
+    );
+    expect(refused.ai.complete).toHaveBeenCalledTimes(1);
   });
 });
