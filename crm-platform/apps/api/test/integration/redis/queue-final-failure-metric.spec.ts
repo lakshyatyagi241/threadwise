@@ -1,11 +1,10 @@
 import { Queue, Worker } from 'bullmq';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import {
-  RuntimeMonitor,
-  attachJobMetrics,
-  type ObservableWorker,
-} from '../../../src/modules/platform-infrastructure';
+import { RuntimeMonitor, attachJobMetrics } from '../../../src/modules/platform-infrastructure';
 import { sleep, startOwnRedis, type OwnRedis } from './own-redis';
+
+// The worker shape `attachJobMetrics` reads. The platform barrel does not re-export the type, and the spec only needs the parameter.
+type ObservableWorker = Parameters<typeof attachJobMetrics>[0];
 
 /**
  * Sheet 3 D-14, against a real BullMQ worker on a private Redis: a job that uses up its attempts is ONE `failed` observation (BullMQ
