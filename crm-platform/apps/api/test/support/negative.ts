@@ -1,4 +1,4 @@
-import type { ZodTypeAny } from 'zod';
+import type { z, ZodTypeAny } from 'zod';
 import { arrayBounds, checkKinds, defOf, typeNameOf } from './zod-def';
 
 /**
@@ -52,7 +52,7 @@ export function unwrap(s: ZodTypeAny): ZodTypeAny {
 /** The object shape of a schema if it is (an effect around) an object. */
 export function shapeOf(s: ZodTypeAny): Shape | null {
   const u = unwrap(s);
-  return typeNameOf(u) === 'ZodObject' ? (u.shape as Shape) : null;
+  return typeNameOf(u) === 'ZodObject' ? ((u as z.ZodObject).shape as Shape) : null;
 }
 
 const WRONG: Record<string, unknown> = {
@@ -74,17 +74,22 @@ export function badValues(field: ZodTypeAny): Array<{ label: string; value: unkn
   const wrong = WRONG[typeName];
   if (wrong !== undefined) out.push({ label: 'wrong type', value: wrong });
   if (typeName === 'ZodString') {
-    if (u.minLength != null && u.minLength > 0)
-      out.push({ label: `shorter than min ${u.minLength}`, value: 'x'.repeat(u.minLength - 1) });
-    if (u.maxLength != null && u.maxLength < 100_000)
-      out.push({ label: `longer than max ${u.maxLength}`, value: 'x'.repeat(u.maxLength + 1) });
+    const str = u as z.ZodString;
+    if (str.minLength != null && str.minLength > 0)
+      out.push({
+        label: `shorter than min ${str.minLength}`,
+        value: 'x'.repeat(str.minLength - 1),
+      });
+    if (str.maxLength != null && str.maxLength < 100_000)
+      out.push({ label: `longer than max ${str.maxLength}`, value: 'x'.repeat(str.maxLength + 1) });
     out.push({ label: 'array instead of string', value: ['a'] });
   }
   if (typeName === 'ZodNumber') {
-    if (Number.isFinite(u.minValue))
-      out.push({ label: `below min ${u.minValue}`, value: u.minValue - 1 });
-    if (Number.isFinite(u.maxValue))
-      out.push({ label: `above max ${u.maxValue}`, value: u.maxValue + 1 });
+    const num = u as z.ZodNumber;
+    if (Number.isFinite(num.minValue))
+      out.push({ label: `below min ${num.minValue}`, value: num.minValue! - 1 });
+    if (Number.isFinite(num.maxValue))
+      out.push({ label: `above max ${num.maxValue}`, value: num.maxValue! + 1 });
     out.push({ label: 'string instead of number', value: 'abc' });
   }
   if (typeName === 'ZodArray') {
@@ -164,21 +169,23 @@ export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
     if (kinds.has('email')) return 'negative@example.test';
     if (kinds.has('url')) return 'https://example.test/x';
     if (kinds.has('datetime')) return '2026-01-01T00:00:00.000Z';
-    return 'x'.repeat(Math.max(s.minLength ?? 1, 1));
+    return 'x'.repeat(Math.max((s as z.ZodString).minLength ?? 1, 1));
   }
-  if (typeName === 'ZodNumber')
+  if (typeName === 'ZodNumber') {
     // zod 4 reports an unset bound as an infinity (zod 3 as null): only a finite bound is a real limit.
-    return Number.isFinite(s.minValue)
-      ? Math.ceil(s.minValue)
-      : Number.isFinite(s.maxValue)
-        ? Math.min(1, Math.floor(s.maxValue))
+    const num = s as z.ZodNumber;
+    return Number.isFinite(num.minValue)
+      ? Math.ceil(num.minValue!)
+      : Number.isFinite(num.maxValue)
+        ? Math.min(1, Math.floor(num.maxValue!))
         : 1;
+  }
   if (typeName === 'ZodBoolean') return true;
   if (typeName === 'ZodEnum') return (def.values as string[])[0];
   if (typeName === 'ZodLiteral') return def.value;
   if (typeName === 'ZodArray') {
     const min = arrayBounds(s).min ?? 0;
-    const item = min > 0 ? sampleOf(s.element, depth + 1) : undefined;
+    const item = min > 0 ? sampleOf((s as z.ZodArray<ZodTypeAny>).element, depth + 1) : undefined;
     return min > 0 ? Array.from({ length: min }, () => item) : [];
   }
   if (typeName === 'ZodUnion' || typeName === 'ZodDiscriminatedUnion') {
@@ -191,7 +198,7 @@ export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
   if (typeName === 'ZodRecord') return {};
   if (typeName === 'ZodObject') {
     const out: Record<string, unknown> = {};
-    for (const [k, f] of Object.entries(s.shape as Shape)) {
+    for (const [k, f] of Object.entries((s as z.ZodObject).shape as Shape)) {
       if (f.isOptional()) continue;
       const v = sampleOf(f, depth + 1);
       if (v === undefined) return undefined;
