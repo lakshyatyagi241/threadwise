@@ -29,10 +29,10 @@ open  localhost:3000/docs     # Swagger
 
 ### Seeded logins
 
-| Who         | Credentials                                                                   |
-| ----------- | ----------------------------------------------------------------------------- |
-| Staff admin | `nachiket.challawar@geta.ai` (org `Admin`, Clerk sign-in, no seeded password) |
-| Sub-agent   | `agent@Admin.test` / `$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none) (org `Admin`)                                |
+| Who         | Credentials                                                                                          |
+| ----------- | ---------------------------------------------------------------------------------------------------- |
+| Staff admin | `nachiket.challawar@geta.ai` (org `Admin`, no seeded password)                                       |
+| Sub-agent   | `agent@Admin.test` / `$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none) |
 
 A **second tenant** (`othertenant`) is seeded on purpose. Isolation tests need
 an org the first one must not be able to see — seeding one tenant makes working

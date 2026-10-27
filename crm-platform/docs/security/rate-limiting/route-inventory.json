@@ -1524,15 +1524,6 @@
       "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
     },
     {
-      "key": "POST /v2/auth/clerk/session",
-      "class": "public-write",
-      "public": true,
-      "bodySchema": "clerkSessionSchema",
-      "limiter": "none",
-      "severityIfUnlimited": "High",
-      "file": "apps/api/src/modules/auth/auth.controller.ts"
-    },
-    {
       "key": "POST /v2/auth/find-workspaces",
       "class": "credential",
       "public": true,

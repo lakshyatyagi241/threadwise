@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "تم الحفظ.",
-        "published": "تم النشر على واتساب."
+        "published": "تم النشر على واتساب.",
+        "connectHint": "تُنشر النماذج عبر اتصال مباشر بواجهة WhatsApp Cloud API فقط. اطلب من المسؤول ربط واحد من قسم القنوات ← WhatsApp.",
+        "connectLink": "فتح قنوات WhatsApp"
       },
       "builder": {
         "flowId": "معرّف التدفق",

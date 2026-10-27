@@ -313,7 +313,10 @@ export function CsvUpload({
                     {t('csvName')}
                   </th>
                   <th scope="col" className="px-3 py-1.5 text-start font-medium">
-                    {t('csvStatus')}
+                    {t('csvConsentCol')}
+                  </th>
+                  <th scope="col" className="px-3 py-1.5 text-start font-medium">
+                    {t('csvContactCol')}
                   </th>
                 </tr>
               </thead>
@@ -326,16 +329,13 @@ export function CsvUpload({
                     </td>
                     <td className="max-w-[14rem] truncate px-3 py-1.5">{r.name ?? '-'}</td>
                     <td className="px-3 py-1.5">
-                      <Chip
-                        tone={
-                          r.status === 'optedOut'
-                            ? 'warning'
-                            : r.status === 'new'
-                              ? 'brand'
-                              : 'neutral'
-                        }
-                      >
-                        {t(`csvRow.${r.status}`)}
+                      <Chip tone={r.optedOut ? 'warning' : 'brand'}>
+                        {r.optedOut ? t('csvConsent.optedOut') : t('csvConsent.optedIn')}
+                      </Chip>
+                    </td>
+                    <td className="px-3 py-1.5">
+                      <Chip tone={r.contact === 'new' ? 'brand' : 'neutral'}>
+                        {t(`csvRow.${r.contact}`)}
                       </Chip>
                     </td>
                   </tr>

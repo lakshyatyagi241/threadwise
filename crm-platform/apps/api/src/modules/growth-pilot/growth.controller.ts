@@ -28,6 +28,7 @@ import {
 import { RequestContextStore } from '../../common/context/request-context';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { Throttle } from '../platform-infrastructure';
 import { GrowthActionsService } from './growth-actions.service';
 import { GrowthAssistantService } from './growth-assistant.service';
 import { GrowthService } from './growth.service';
@@ -145,6 +146,8 @@ export class GrowthController {
   @Post('propensity/recompute')
   @HttpCode(HttpStatus.OK)
   @RequirePermission('lsc.contacts.score')
+  // Trains a model inside the request and scores every contact: a few runs an hour per caller is plenty (#1180).
+  @Throttle({ limit: 6, windowSeconds: 3600, by: 'actor' })
   @ApiOperation({
     summary: 'Learn the conversion model again from the converted contacts and score everyone',
   })

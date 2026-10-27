@@ -315,7 +315,22 @@
         "previousTitle": "Pengiriman sebelumnya",
         "previousHint": "Tambahkan orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, membalas, atau mengklik.",
         "previousEstimate": "{count, plural, other {Hingga # orang dari pengiriman sebelumnya (perkiraan: orang yang ada di dua pengiriman dihitung dua kali).}}",
-        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang."
+        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang.",
+        "emails": "Email manual",
+        "emailsHint": "Satu per baris, atau pisahkan dengan koma atau titik koma.",
+        "emailsPlaceholder": "Satu alamat email per baris",
+        "emailsCount": "{count} alamat",
+        "emailCsvHint": "Kolom: nama, email. Kolom lain menjadi variabel yang dapat dipakai dalam pesan.",
+        "emailModes": {
+          "csv": {
+            "title": "Unggah CSV",
+            "hint": "Impor alamat email untuk kampanye ini."
+          },
+          "manual": {
+            "title": "Email manual",
+            "hint": "Tempel satu alamat email per baris."
+          }
+        }
       },
       "message": {
         "title": "Pesan",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "Pratinjau nomor valid dalam file",
         "csvLine": "Baris",
         "csvName": "Nama",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Kontak baru",
           "existing": "Kontak yang ada",
@@ -1383,7 +1397,14 @@
         "modePrevious": "Kirim ke pengiriman sebelumnya",
         "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
         "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})",
-        "filterNoConditions": "Tambahkan kondisi untuk melihat berapa kontak yang cocok."
+        "filterNoConditions": "Tambahkan kondisi untuk melihat berapa kontak yang cocok.",
+        "csvConsentCol": "Persetujuan",
+        "csvContactCol": "Kontak",
+        "csvConsent": {
+          "optedIn": "Berlangganan",
+          "optedOut": "Berhenti berlangganan"
+        },
+        "clearAudience": "Hapus audiens"
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",

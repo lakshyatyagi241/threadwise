@@ -502,13 +502,11 @@ export function GuidedCampaign({
                               }
                             >
                               <option value="">{tg('pickTemplate')}</option>
-                              {usable
-                                .filter((x) => x.id !== draft.templateId)
-                                .map((x) => (
-                                  <option key={x.id} value={x.id}>
-                                    {x.name} · {x.language}
-                                  </option>
-                                ))}
+                              {usable.map((x) => (
+                                <option key={x.id} value={x.id}>
+                                  {x.name} · {x.language}
+                                </option>
+                              ))}
                             </Select>
                           </Field>
                         </div>

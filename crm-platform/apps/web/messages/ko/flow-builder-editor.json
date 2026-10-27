@@ -1309,7 +1309,12 @@
           "igUsernameHint": "@ 없이 입력하세요. 링크는 ig.me/m/yourbrand 형태가 되며, 탭하면 내 계정으로 DM이 열립니다.",
           "igMessage": "WhatsApp 메시지",
           "igMessageHint": "Instagram 링크와 함께 고객에게 WhatsApp으로 전송됩니다. '{{'variables'}}'를 지원합니다.",
-          "igMessagePlaceholder": "Instagram에서 계속 대화해요 👇"
+          "igMessagePlaceholder": "Instagram에서 계속 대화해요 👇",
+          "templateFills": "각 번호에 채울 내용",
+          "templateFillsHint": "템플릿의 각 번호에 들어갈 텍스트를 입력하거나, /를 눌러 연락처 정보나 플로우 변수를 넣으세요. 비워 두면 템플릿의 값을 사용합니다.",
+          "templateHeaderMedia": "헤더 파일",
+          "templateHeaderMediaHint": "이 템플릿 헤더의 사진, 동영상 또는 파일입니다. 템플릿에 자체 파일이 없을 때 필요합니다.",
+          "templateHeaderMediaMissing": "헤더 파일을 추가하세요. 이 템플릿에는 파일이 없고, WhatsApp은 파일 없이는 보내지 않습니다."
         },
         "sequence": {
           "info": "각 답장은 순서대로 고객에게 전송됩니다. 텍스트, 이미지, 동영상, 오디오, 문서를 한 노드에 조합할 수 있어 상품 카드나 온보딩 키트에 적합합니다.",

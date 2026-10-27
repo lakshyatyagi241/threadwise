@@ -29,12 +29,12 @@ describe('part 1: the real code passes every rule', () => {
   it('totals the report quotes', () => {
     const ins = reg.caches.filter((c) => c.instrumentation.instrumented);
     const exempt = reg.caches.filter((c) => !c.instrumentation.instrumented);
-    expect(reg.caches.length).toBe(69);
-    expect(ins.length).toBe(52);
+    expect(reg.caches.length).toBe(68);
+    expect(ins.length).toBe(51);
     expect(exempt.length).toBe(17);
     expect(exempt.filter((c) => c.instrumentation.exemption === 'not-meaningful').length).toBe(11);
     expect(exempt.filter((c) => c.instrumentation.exemption === 'not-observable').length).toBe(6);
-    expect(ins.flatMap((c) => c.instrumentation.metrics).length).toBe(55);
+    expect(ins.flatMap((c) => c.instrumentation.metrics).length).toBe(54);
     expect(ins.filter((c) => c.priority === 'P0' && c.instrumentation.hitRatioAlert).length).toBe(
       18,
     );

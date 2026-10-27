@@ -6,7 +6,6 @@ const base = {
   REDIS_URL: 'redis://localhost:6379',
   JWT_ACCESS_SECRET: 'a'.repeat(40),
   JWT_REFRESH_SECRET: 'b'.repeat(40),
-  CLERK_SECRET_KEY: 'sk_test_x',
   CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 3).toString('base64'),
 };
 const production = {

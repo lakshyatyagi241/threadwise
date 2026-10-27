@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "已保存。",
-        "published": "已发布到 WhatsApp。"
+        "published": "已发布到 WhatsApp。",
+        "connectHint": "表单只能通过直连的 WhatsApp Cloud API 发布。请让管理员在“渠道 → WhatsApp”中连接一个号码。",
+        "connectLink": "打开 WhatsApp 渠道"
       },
       "builder": {
         "back": "返回表单列表",

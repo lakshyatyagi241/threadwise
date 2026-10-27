@@ -212,8 +212,8 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         if (!Number.isInteger(roleId))
           throw new Error('the Owner preset role does not exist; cannot create the owner user');
         // an invited, not-yet-joined user: no password (NULL; the app uses an unusable random hash), no email sent, no token issued.
-        // auth_subject stays NULL: the app links the account to its Clerk id on the owner's first sign-in with this email
-        // (auth.service.ts). TODO(owner): if sign-in is not by Clerk, issue an invite/reset token through the app.
+        // auth_subject stays NULL: there is no external sign-in provider to link it to.
+        // TODO(owner): migrated users have no password, so issue an invite/reset token through the app before they can sign in.
         const u = await tx.execute(sql`
           INSERT INTO users (org_id, email, full_name, password_hash, status, invited_at, joined_at)
           VALUES (${id}, ${email}, ${o.ownerName?.trim() || email}, NULL, 'active', now(), NULL)

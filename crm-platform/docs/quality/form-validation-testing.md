@@ -54,7 +54,7 @@ The first repeat run (3 x 77 = 231 executions) had one failure: Playwright's own
 
 ## Findings
 
-- Four body schemas are defined inside a controller instead of `@crm/contracts` (`auth/clerkSessionSchema`, `auth/partnerLoginSchema`, `bsp-billing-engine/revokeBodySchema`, `marketing-site-cms/categoryBodySchema`). The generator cannot test them, and they break the repo rule that request shapes live in `@crm/contracts`. They are on a known list that only shrinks.
+- Three body schemas are defined inside a controller instead of `@crm/contracts` (`auth/partnerLoginSchema`, `bsp-billing-engine/revokeBodySchema`, `marketing-site-cms/categoryBodySchema`). The generator cannot test them, and they break the repo rule that request shapes live in `@crm/contracts`. They are on a known list that only shrinks.
 
 ## Run it
 

@@ -90,8 +90,8 @@ export function deleteEdge(s: CanvasState, id: string): CanvasState {
 }
 
 /**
- * Connect an output port to a node. A self connection is ignored; an identical (source, handle, target) edge replaces
- * itself; the same handle may fan out to several targets; there is no cycle check (Reference has none).
+ * Connect an output port to a node. A self connection is ignored. A port has one target: the runtime follows only the
+ * first edge out of a port, so a new connection from it replaces the edge it had. There is no cycle check (Reference has none).
  */
 export function connect(
   s: CanvasState,
@@ -100,7 +100,7 @@ export function connect(
 ): CanvasState {
   if (!from.nodeId || !targetId || from.nodeId === targetId) return s;
   const filtered = s.edges.filter(
-    (e) => !(e.source === from.nodeId && e.sourceHandle === from.handleId && e.target === targetId),
+    (e) => !(e.source === from.nodeId && e.sourceHandle === from.handleId),
   );
   const edge: FlowEdge = {
     id: flbNewEdgeId(),

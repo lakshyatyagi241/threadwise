@@ -1309,7 +1309,12 @@
           "igUsernameHint": "Tanpa @. Tautan menjadi ig.me/m/yourbrand — mengetuknya membuka DM ke akun Anda.",
           "igMessage": "Pesan WhatsApp",
           "igMessageHint": "Dikirim ke pelanggan di WhatsApp dengan tautan Instagram. Mendukung '{{'variables'}}'.",
-          "igMessagePlaceholder": "Lanjutkan bersama kami di Instagram 👇"
+          "igMessagePlaceholder": "Lanjutkan bersama kami di Instagram 👇",
+          "templateFills": "Apa yang mengisi tiap nomor",
+          "templateFillsHint": "Ketik teks untuk setiap nomor pada templat, atau tekan / untuk menyisipkan detail kontak atau variabel alur. Biarkan kosong untuk memakai isi templat.",
+          "templateHeaderMedia": "File header",
+          "templateHeaderMediaHint": "Gambar, video, atau file di header templat ini. Diperlukan jika templat tidak punya file sendiri.",
+          "templateHeaderMediaMissing": "Tambahkan file header: templat ini tidak punya, dan WhatsApp tidak akan mengirimnya tanpa file."
         },
         "sequence": {
           "info": "Setiap balasan dikirim berurutan ke pelanggan. Gabungkan teks, gambar, video, audio, dan dokumen dalam satu node — cocok untuk kartu produk atau kit onboarding.",

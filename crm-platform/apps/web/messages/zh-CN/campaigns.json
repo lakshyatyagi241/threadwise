@@ -315,7 +315,22 @@
         "previousTitle": "以往发送",
         "previousHint": "添加以往群发和活动的收件人，也可以只选择已读、已回复或点击过的人。",
         "previousEstimate": "{count, plural, other {来自以往发送的最多 # 人（估算值：同时在两次发送中的人会被重复计算）。}}",
-        "previousEditHint": "编辑时不会显示您之前选择的以往发送：此活动已将收件人保存为联系人。如需添加更多人，请重新选择。"
+        "previousEditHint": "编辑时不会显示您之前选择的以往发送：此活动已将收件人保存为联系人。如需添加更多人，请重新选择。",
+        "emails": "手动输入邮箱",
+        "emailsHint": "每行一个，或用逗号、分号分隔。",
+        "emailsPlaceholder": "每行一个邮箱地址",
+        "emailsCount": "{count} 个地址",
+        "emailCsvHint": "列：姓名、邮箱。其他任何列都会成为可在消息中使用的变量。",
+        "emailModes": {
+          "csv": {
+            "title": "上传 CSV",
+            "hint": "导入此活动的邮箱地址。"
+          },
+          "manual": {
+            "title": "手动输入邮箱",
+            "hint": "每行粘贴一个邮箱地址。"
+          }
+        }
       },
       "message": {
         "title": "消息",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "文件中有效号码的预览",
         "csvLine": "行",
         "csvName": "名称",
-        "csvStatus": "状态",
         "csvRow": {
           "new": "新联系人",
           "existing": "现有联系人",
@@ -1383,7 +1397,14 @@
         "modePrevious": "发送给以往发送的收件人",
         "previousHint": "重新触达以往群发和活动的收件人，也可以只选择已读、未读、已回复或点击过的人。",
         "chipPrevious": "{count, plural, other {# 个以往发送}}（{outcome}）",
-        "filterNoConditions": "添加一个条件，即可查看符合条件的联系人数量。"
+        "filterNoConditions": "添加一个条件，即可查看符合条件的联系人数量。",
+        "csvConsentCol": "同意状态",
+        "csvContactCol": "联系人",
+        "csvConsent": {
+          "optedIn": "已订阅",
+          "optedOut": "已退订"
+        },
+        "clearAudience": "清除受众"
       },
       "review": {
         "intro": "核对费用，告诉我们每个模板变量的填充内容，并检查群发。",

@@ -315,7 +315,22 @@
         "previousTitle": "Eerdere verzendingen",
         "previousHint": "Voeg de mensen toe naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, erop antwoordde of klikte.",
         "previousEstimate": "{count, plural, one {Maximaal # persoon uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).} other {Maximaal # personen uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).}}",
-        "previousEditHint": "Je eerdere keuze van verzendingen wordt niet getoond bij bewerken: deze campagne bevat haar ontvangers al als contacten. Kies opnieuw om meer mensen toe te voegen."
+        "previousEditHint": "Je eerdere keuze van verzendingen wordt niet getoond bij bewerken: deze campagne bevat haar ontvangers al als contacten. Kies opnieuw om meer mensen toe te voegen.",
+        "emails": "E-mails handmatig",
+        "emailsHint": "Eén per regel, of gescheiden door een komma of puntkomma.",
+        "emailsPlaceholder": "Eén e-mailadres per regel",
+        "emailsCount": "{count} adressen",
+        "emailCsvHint": "Kolommen: naam, e-mail. Elke andere kolom wordt een variabele die je in het bericht kunt gebruiken.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV uploaden",
+            "hint": "Importeer de e-mailadressen voor deze campagne."
+          },
+          "manual": {
+            "title": "E-mails handmatig",
+            "hint": "Plak één e-mailadres per regel."
+          }
+        }
       },
       "message": {
         "title": "Bericht",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "Voorbeeld van de geldige nummers in het bestand",
         "csvLine": "Regel",
         "csvName": "Naam",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Nieuw contact",
           "existing": "Bestaand contact",
@@ -1383,7 +1397,14 @@
         "modePrevious": "Verzenden naar eerdere verzendingen",
         "previousHint": "Bereik opnieuw de mensen naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, niet las, erop antwoordde of klikte.",
         "chipPrevious": "{count, plural, one {# eerdere verzending} other {# eerdere verzendingen}} ({outcome})",
-        "filterNoConditions": "Voeg een voorwaarde toe om te zien hoeveel contacten overeenkomen."
+        "filterNoConditions": "Voeg een voorwaarde toe om te zien hoeveel contacten overeenkomen.",
+        "csvConsentCol": "Toestemming",
+        "csvContactCol": "Contact",
+        "csvConsent": {
+          "optedIn": "Aangemeld",
+          "optedOut": "Afgemeld"
+        },
+        "clearAudience": "Doelgroep wissen"
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",

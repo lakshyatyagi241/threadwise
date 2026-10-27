@@ -29,9 +29,8 @@ curl localhost:3000/health             # {"status":"ok",...}
 open  localhost:3000/docs              # Swagger
 ```
 
-Seeded staff login: `nachiket.challawar@geta.ai` (org `Admin`, Clerk
-sign-in, the seed sets no password); sub-agent: `agent@Admin.test` /
-`$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none). Full walkthrough:
+Seeded staff login: `nachiket.challawar@geta.ai` (org `Admin`, the seed sets no password);
+sub-agent: `agent@Admin.test` / `$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none). Full walkthrough:
 [docs/runbooks/local-development.md](docs/runbooks/local-development.md).
 
 ## Layout

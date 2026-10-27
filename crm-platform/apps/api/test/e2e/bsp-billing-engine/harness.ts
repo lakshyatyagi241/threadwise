@@ -137,7 +137,6 @@ export async function startBspHarness(): Promise<BspHarness> {
     REDIS_URL: 'redis://127.0.0.1:6379/13',
     JWT_ACCESS_SECRET: 'access-secret-for-tests-0123456789abcdef',
     JWT_REFRESH_SECRET: 'refresh-secret-for-tests-0123456789abcdef',
-    CLERK_SECRET_KEY: 'sk_test_unused',
     CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString('base64'),
   });
 

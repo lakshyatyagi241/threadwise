@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Salvato.",
-        "published": "Pubblicato su WhatsApp."
+        "published": "Pubblicato su WhatsApp.",
+        "connectHint": "I moduli si pubblicano solo con una connessione diretta a WhatsApp Cloud API. Chiedi a un amministratore di collegarne una in Canali → WhatsApp.",
+        "connectLink": "Apri i canali WhatsApp"
       },
       "builder": {
         "back": "Torna ai moduli",
