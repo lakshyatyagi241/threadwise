@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Сохранено.",
-        "published": "Опубликовано в WhatsApp."
+        "published": "Опубликовано в WhatsApp.",
+        "connectHint": "Формы публикуются только через прямое подключение к WhatsApp Cloud API. Попросите администратора подключить его в разделе Каналы → WhatsApp.",
+        "connectLink": "Открыть каналы WhatsApp"
       },
       "builder": {
         "back": "Назад к формам",

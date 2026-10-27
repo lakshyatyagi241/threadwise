@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Salvo.",
-        "published": "Publicado no WhatsApp."
+        "published": "Publicado no WhatsApp.",
+        "connectHint": "Os formulários só são publicados por uma conexão direta com a WhatsApp Cloud API. Peça a um administrador para conectar uma em Canais → WhatsApp.",
+        "connectLink": "Abrir canais do WhatsApp"
       },
       "builder": {
         "back": "Voltar para formulários",

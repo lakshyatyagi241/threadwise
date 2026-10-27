@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Tersimpan.",
-        "published": "Diterbitkan ke WhatsApp."
+        "published": "Diterbitkan ke WhatsApp.",
+        "connectHint": "Formulir hanya dipublikasikan lewat koneksi langsung WhatsApp Cloud API. Minta admin menghubungkannya di Saluran → WhatsApp.",
+        "connectLink": "Buka saluran WhatsApp"
       },
       "builder": {
         "back": "Kembali ke formulir",
