@@ -10,6 +10,7 @@ import { MailRuntimeService } from './mail-runtime.service';
 import { MaintenanceGuard } from './maintenance.guard';
 import { MediaStorageService } from './media-storage.service';
 import { ProjectionService } from './projection.service';
+import { StorageFlowMediaStore } from './storage-flow-media.store';
 import { SitePublicController } from './public.controller';
 import { SettingsController } from './settings.controller';
 import { SettingsService } from './settings.service';
@@ -30,6 +31,7 @@ import { VapidService } from './vapid.service';
     BrandingService,
     VapidService,
     MediaStorageService,
+    StorageFlowMediaStore,
     CurrencyService,
     MailRuntimeService,
     ConnectionTestsService,
@@ -41,6 +43,7 @@ import { VapidService } from './vapid.service';
     ProjectionService,
     BrandingService,
     MediaStorageService,
+    StorageFlowMediaStore,
     CurrencyService,
   ],
 })
