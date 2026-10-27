@@ -43,7 +43,7 @@ Request:
 {
   "orgSlug": "Admin",
   "email": "admin@example.test",
-  "password": "Passw0rd!"
+  "password": "$DEV_SEED_PASSWORD"
 }
 ```
 
@@ -83,7 +83,7 @@ Request:
 {
   "orgSlug": "Admin",
   "email": "agent@Admin.test",
-  "password": "Passw0rd!"
+  "password": "$DEV_SEED_PASSWORD"
 }
 ```
 
@@ -201,7 +201,7 @@ Request:
 {
   "email": "neha.verma@example.test",
   "fullName": "Neha Verma",
-  "password": "Passw0rd!",
+  "password": "$DEV_SEED_PASSWORD",
   "roleIds": []
 }
 ```

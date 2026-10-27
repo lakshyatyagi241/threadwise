@@ -609,6 +609,34 @@ describe('save, versions, trigger columns and publish (TW-FLB-019, 020, 021, 022
     expect(un.body).toMatchObject({ state: 'draft', isPublished: false, publishedAt: null });
   });
 
+  it('a flow with no trigger cannot go live', async () => {
+    const empty = await create(t.admin, 'Empty', { flowNodes: [], flowEdges: [], vars: [] });
+    const refused = await api.as(t.admin).post(`/v2/flows/${empty.id}/publish`);
+    expect(refused.status).toBe(422);
+    const noTrigger = await create(t.admin, 'No trigger', {
+      flowNodes: [{ id: 'n_msg', type: 'message', x: 0, y: 0, data: { text: 'hi' } }],
+      flowEdges: [],
+      vars: [],
+    });
+    expect((await api.as(t.admin).post(`/v2/flows/${noTrigger.id}/publish`)).status).toBe(422);
+    const read = await api.as(t.admin).get(`/v2/flows/${empty.id}`);
+    expect(read.body.isPublished).toBe(false);
+  });
+
+  it('a second flow left with the default name is "New flow 2", a named one keeps its name', async () => {
+    const o = await api.signup('flbnames');
+    const first = await create(o.admin, 'New flow');
+    const second = await create(o.admin, 'New flow');
+    const third = await create(o.admin, 'new flow');
+    const named = await create(o.admin, 'Welcome');
+    expect([first.name, second.name, third.name, named.name]).toEqual([
+      'New flow',
+      'New flow 2',
+      'New flow 3',
+      'Welcome',
+    ]);
+  });
+
   it('TW-FLB-022 #3: publishing a saved flow publishes THAT row (Reference created a second flow for a never-saved graph)', async () => {
     const o = await api.signup('flbpub');
     const f = await create(o.admin, 'Only one');

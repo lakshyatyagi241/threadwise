@@ -74,6 +74,16 @@ export class ConversationsService implements ConversationsFacade {
     });
   }
 
+  async peerOfConversation(
+    orgId: number,
+    conversationId: string,
+  ): Promise<{ channelId: number; peerKey: string } | null> {
+    return this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const conv = await this.conversations.byUuid(tx, orgId, conversationId);
+      return conv ? { channelId: conv.channelId, peerKey: conv.peerKey } : null;
+    });
+  }
+
   async openConversationFor(contactId: string, channelId: string): Promise<ThreadRef> {
     const orgId = RequestContextStore.orgId();
     const created = await this.db.tx(async (tx) => {

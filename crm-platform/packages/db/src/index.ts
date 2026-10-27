@@ -6,3 +6,4 @@ export { buildOutboxDeadIndex } from './outbox-dead-index';
 export { verifySchema, type VerifyResult } from './verify';
 export { acceptedChecksums, migrationChecksum, recordedChecksumMatches } from './checksum';
 export * from './retry';
+export { devSeedPassword, seedRefusal } from './cli/seed-guard';

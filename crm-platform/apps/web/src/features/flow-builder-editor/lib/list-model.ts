@@ -88,5 +88,16 @@ const PURPOSE_KEY: Record<string, string> = {
   'special-events': 'event',
 };
 /** The static "purpose" sentence under a card title, picked by category (there is no description column). */
-export const purposeOf = (category: string | null): Msg =>
-  msg(`card.purpose.${PURPOSE_KEY[category ?? ''] ?? 'default'}`);
+export const purposeOf = (category: string | null, flowType: string = 'chat'): Msg =>
+  msg(
+    `card.purpose.${
+      PURPOSE_KEY[category ?? ''] ??
+      (flowType === 'chat'
+        ? 'default'
+        : flowType === 'web'
+          ? 'defaultWeb'
+          : flowType === 'call'
+            ? 'defaultCall'
+            : 'defaultOther')
+    }`,
+  );

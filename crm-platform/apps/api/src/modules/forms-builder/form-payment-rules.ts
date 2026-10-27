@@ -1,4 +1,4 @@
-import { currencyExponent, formFields, majorToMinor, type FormDefinition } from '@crm/contracts';
+import { formFields, majorToMinor, type FormDefinition } from '@crm/contracts';
 import type { StoredAnswer } from './form-rules';
 
 /**
@@ -55,11 +55,12 @@ export function computeAmount(
       : { ok: false, reason: 'amount_unknown' };
   }
 
-  // pay_what_you_want: the answer is a number in MAJOR units; it becomes minor units exactly (no float arithmetic).
+  // pay_what_you_want: the answer is a number in MAJOR units; it becomes minor units exactly (no float arithmetic). Its own digits go
+  // to majorToMinor, which refuses more decimals than the currency allows; toFixed would round them and charge the rounded amount.
   if (typeof answer !== 'number' || !Number.isFinite(answer) || answer <= 0) {
     return { ok: false, reason: 'amount_unknown' };
   }
-  const minor = majorToMinor(answer.toFixed(currencyExponent(currency)), currency);
+  const minor = majorToMinor(String(answer), currency);
   if (minor === null || minor <= 0n) return { ok: false, reason: 'amount_unknown' };
   if (p.minMinor !== undefined && minor < BigInt(p.minMinor)) {
     return { ok: false, reason: 'amount_out_of_range' };

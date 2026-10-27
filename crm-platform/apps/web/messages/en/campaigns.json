@@ -490,6 +490,7 @@
       },
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "draftChip": "Draft / unsaved",
+      "draftSavedChip": "Draft · saved",
       "steps": {
         "label": "Campaign steps",
         "required": "required",
@@ -765,6 +766,8 @@
       "guided": {
         "template": "Template",
         "pickTemplate": "— Select a template —",
+        "searchTemplates": "Search templates by name or language",
+        "noTemplateMatch": "No template matches your search.",
         "templateHint": "Only approved templates of the chosen number. Its variables are filled in below.",
         "noTemplates": "This number has no approved templates yet. Create one and wait for its approval.",
         "deliveryTitle": "Delivery",

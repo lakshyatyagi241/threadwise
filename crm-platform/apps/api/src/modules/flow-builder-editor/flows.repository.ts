@@ -190,6 +190,14 @@ export class FlowsRepository {
     return (res.rows as Raw[]).map(toRow);
   }
 
+  /** The names that are `base` or `base 2`, `base 3`... (the pattern escapes nothing: `base` is a fixed placeholder). */
+  async namesLike(tx: Tx, orgId: number, base: string): Promise<string[]> {
+    const res = await tx.execute(sql`
+      SELECT flow_name FROM flows
+      WHERE org_id = ${orgId} AND (lower(flow_name) = lower(${base}) OR lower(flow_name) LIKE lower(${base}) || ' %')`);
+    return res.rows.map((r) => String((r as Raw).flow_name));
+  }
+
   async count(tx: Tx, orgId: number, filter: FlowFilter): Promise<number> {
     const res = await tx.execute(
       sql`SELECT count(*) AS n FROM flows f WHERE ${sql.join(conds(orgId, filter), sql` AND `)}`,
@@ -330,14 +338,21 @@ export class FlowsRepository {
       WHERE org_id = ${orgId} AND id = ${flowId}`);
   }
 
-  /** Every bot of the workspace, slim: what a step that starts another bot is checked against (id is the uuid the graph stores). */
+  /**
+   * The bots of the workspace that `ids` name, slim: what a step that starts another bot is checked against (id is the uuid the graph
+   * stores). Only the linked bots are read, so a save does not load every bot of the workspace (#1165).
+   */
   async linkTargets(
     tx: Tx,
     orgId: number,
+    ids: readonly string[],
   ): Promise<Array<{ id: string; flowType: string; isPublished: boolean }>> {
-    const res = await tx.execute(
-      sql`SELECT uuid, flow_type, is_published FROM flows WHERE org_id = ${orgId}`,
-    );
+    if (ids.length === 0) return [];
+    const json = JSON.stringify(ids);
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_type, is_published FROM flows
+       WHERE org_id = ${orgId}
+         AND uuid::text IN (SELECT x FROM json_array_elements_text(${json}::json) AS x)`);
     return (res.rows as Raw[]).map((r) => ({
       id: String(r.uuid),
       flowType: String(r.flow_type),

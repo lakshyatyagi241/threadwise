@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
       "draftChip": "草稿 / 未保存",
+      "draftSavedChip": "草稿 · 已保存",
       "steps": {
         "label": "营销活动步骤",
         "required": "必填",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "模板",
         "pickTemplate": "— 选择模板 —",
+        "searchTemplates": "按名称或语言搜索模板",
+        "noTemplateMatch": "没有与搜索匹配的模板。",
         "templateHint": "仅显示所选号码已通过审核的模板。其变量请在下方填写。",
         "noTemplates": "此号码还没有已通过审核的模板。请创建一个并等待审核通过。",
         "deliveryTitle": "发送",

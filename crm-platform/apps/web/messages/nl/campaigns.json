@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "draftChip": "Concept / niet opgeslagen",
+      "draftSavedChip": "Concept · opgeslagen",
       "steps": {
         "label": "Campagnestappen",
         "required": "verplicht",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Sjabloon",
         "pickTemplate": "— Kies een sjabloon —",
+        "searchTemplates": "Zoek sjablonen op naam of taal",
+        "noTemplateMatch": "Geen sjabloon komt overeen met je zoekopdracht.",
         "templateHint": "Alleen goedgekeurde sjablonen van het gekozen nummer. De variabelen vul je hieronder in.",
         "noTemplates": "Dit nummer heeft nog geen goedgekeurde sjablonen. Maak er een aan en wacht op de goedkeuring.",
         "deliveryTitle": "Verzending",

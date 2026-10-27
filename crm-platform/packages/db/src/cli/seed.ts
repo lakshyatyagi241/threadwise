@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
-import { devSeedRefusal } from './dev-seed-guard';
+import { devSeedPassword, seedRefusal } from './seed-guard';
 
 loadEnv({ path: resolve(__dirname, '../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -15,11 +15,11 @@ loadEnv({ path: resolve(process.cwd(), '.env') });
  * the first must not be able to see — seeding one tenant makes it impossible to
  * tell working RLS from absent RLS.
  *
- * Passwords here are well-known and weak by design. The CLI refuses to run
- * against NODE_ENV=production.
+ * The password is generated for each run and printed once. The CLI runs only
+ * with ALLOW_DEV_SEED=1, never in production, and only against a local database.
  */
 
-const DEMO_PASSWORD = 'Passw0rd!';
+const DEMO_PASSWORD = devSeedPassword();
 
 interface SeedOrg {
   slug: string;
@@ -33,15 +33,18 @@ const ORGS: SeedOrg[] = [
 ];
 
 async function main(): Promise<void> {
+  const refusal = seedRefusal(
+    process.env,
+    process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL ?? '',
+  );
+  if (refusal) {
+    console.error(refusal);
+    process.exit(1);
+  }
   // Seeding writes across tenants, so it runs as the owner like migrations do.
   const url = process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL;
   if (!url) {
     console.error('Neither MIGRATION_DATABASE_URL nor DATABASE_URL is set.');
-    process.exit(1);
-  }
-  const refusal = devSeedRefusal(process.env, url);
-  if (refusal) {
-    console.error(refusal);
     process.exit(1);
   }
 

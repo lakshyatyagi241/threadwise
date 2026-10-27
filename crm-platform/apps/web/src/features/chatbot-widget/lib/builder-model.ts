@@ -275,7 +275,7 @@ export function fromWidget(w: Widget): BuilderState {
   };
 }
 
-/** The save body. `allowedDomains` is left out on purpose: the builder has no control for it and a save must not clear it. */
+/** The save body. `allowedDomains` is left out on purpose: the builder has no control for it and a save must not clear it (the cast: zod 4 types the key as required). */
 export function toPayload(s: BuilderState): CreateWidgetInput {
   const orNull = (v: string) => (v.trim() === '' ? null : v);
   const wa = s.mode === 'whatsapp';
@@ -313,7 +313,7 @@ export function toPayload(s: BuilderState): CreateWidgetInput {
     // A chat has no second screen, so the guardian action is never sent (the contract refuses it).
     ageGate: s.ageGate.whenUnder === 'guardian' ? { ...s.ageGate, whenUnder: 'flag' } : s.ageGate,
     launcher: launcherPayload(s.launcher),
-  };
+  } as CreateWidgetInput;
 }
 
 export type StepProblem =

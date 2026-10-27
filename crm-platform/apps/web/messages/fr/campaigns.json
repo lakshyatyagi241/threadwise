@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "draftChip": "Brouillon / non enregistré",
+      "draftSavedChip": "Brouillon · enregistré",
       "steps": {
         "label": "Étapes de la campagne",
         "required": "obligatoire",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Modèle",
         "pickTemplate": "— Sélectionner un modèle —",
+        "searchTemplates": "Rechercher des modèles par nom ou langue",
+        "noTemplateMatch": "Aucun modèle ne correspond à votre recherche.",
         "templateHint": "Uniquement les modèles approuvés du numéro choisi. Ses variables sont à renseigner ci-dessous.",
         "noTemplates": "Ce numéro n’a encore aucun modèle approuvé. Créez-en un et attendez son approbation.",
         "deliveryTitle": "Envoi",

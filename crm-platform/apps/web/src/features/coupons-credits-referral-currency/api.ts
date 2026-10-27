@@ -63,7 +63,13 @@ export {
 /** The signed-in user's own affiliate data (`/api/v2/me/*`, any authenticated user; nothing here is operator-only). */
 export const fetchReferrals = (q: ReferralListQuery, signal?: AbortSignal) =>
   apiFetch('/me/referrals', {
-    query: { range: q.range, bucket: q.bucket, q: q.q, cursor: q.cursor, limit: q.limit },
+    query: {
+      range: q.range,
+      bucket: q.bucket,
+      q: q.q,
+      cursor: q.cursor,
+      limit: q.limit as number | undefined,
+    },
     schema: referralListResponseSchema,
     signal,
   });

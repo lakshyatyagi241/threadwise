@@ -4,8 +4,8 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import { devSeedPassword, seedRefusal } from '@crm/db';
 import { bumpRolesVersionOffline } from '../../../kernel/rbac/roles-version-offline';
-import { devSeedRefusal } from './dev-seed-guard';
 
 loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -18,11 +18,11 @@ loadEnv({ path: resolve(process.cwd(), '.env') });
  * user a known dev password and a verified email, adds one non-admin agent to
  * the first organization, and creates a platform operator.
  *
- * The passwords are well known and weak by design: the script refuses to run
- * with NODE_ENV=production.
+ * The password is generated for each run and printed once; the script runs only
+ * with ALLOW_DEV_SEED=1, never in production, and only against a local database.
  */
 
-const DEV_PASSWORD = 'Passw0rd!';
+const DEV_PASSWORD = devSeedPassword();
 const OPERATOR = { email: 'operator@example.test', name: 'Platform Operator' };
 
 /**
@@ -272,14 +272,17 @@ async function seedPlans(client: Client): Promise<number> {
 }
 
 async function main(): Promise<void> {
+  const refusal = seedRefusal(
+    process.env,
+    process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL ?? '',
+  );
+  if (refusal) {
+    console.error(refusal);
+    process.exit(1);
+  }
   const url = process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL;
   if (!url) {
     console.error('Neither MIGRATION_DATABASE_URL nor DATABASE_URL is set.');
-    process.exit(1);
-  }
-  const refusal = devSeedRefusal(process.env, url);
-  if (refusal) {
-    console.error(refusal);
     process.exit(1);
   }
   const client = new Client({ connectionString: url });

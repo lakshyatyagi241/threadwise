@@ -1262,6 +1262,11 @@
       "spec": "3_000"
     },
     {
+      "file": "apps/api/src/modules/broadcasts/broadcast-orphan-sweeper.service.ts",
+      "kind": "Interval",
+      "spec": "5 * 60_000"
+    },
+    {
       "file": "apps/api/src/modules/broadcasts/broadcast-resume.service.ts",
       "kind": "Interval",
       "spec": "60_000"
