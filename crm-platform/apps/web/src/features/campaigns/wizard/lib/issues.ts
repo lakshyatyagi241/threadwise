@@ -89,15 +89,27 @@ export function stepIssues(step: WizardView, draft: WizardDraft, ctx: IssueConte
   if (step === 2 && ctx.count && ctx.count.recipients === 0 && shared.length === 0) {
     out.push({ path: 'audience', code: 'no_recipients' });
   }
-  if (step === 3) {
-    if (ctx.creditPending) out.push({ path: 'credit', code: 'checking_balance' });
-    else if (ctx.creditFailed) out.push({ path: 'credit', code: 'balance_unavailable' });
-    else if (ctx.credit) {
-      if (ctx.credit.recipients === 0) out.push({ path: 'audience', code: 'no_recipients' });
-      else if (!ctx.credit.sufficient) out.push({ path: 'credit', code: 'insufficient_balance' });
-    }
+  const wallet = step === 2 || step === 3 ? walletIssue(ctx, step) : null;
+  if (wallet) out.push(wallet);
+  if (step === 3 && !wallet && ctx.credit?.recipients === 0) {
+    out.push({ path: 'audience', code: 'no_recipients' });
   }
   return out;
+}
+
+/**
+ * The wallet check, from the Recipients step on: a broadcast does not go past a balance that is still being asked or does not cover
+ * the estimated cost of the recipients it has. A check that could not be asked stops Review only; Recipients goes on and Review asks again.
+ */
+function walletIssue(ctx: IssueContext, step: WizardView): StepIssue | null {
+  // Recipients owns the wallet step, so its issue points at the audience; Review keeps the credit path.
+  const path = step === 2 ? 'audience' : 'credit';
+  if (ctx.creditPending) return { path, code: 'checking_balance' };
+  if (ctx.creditFailed) return step === 3 ? { path, code: 'balance_unavailable' } : null;
+  if (ctx.credit && ctx.credit.recipients > 0 && !ctx.credit.sufficient) {
+    return { path, code: 'insufficient_balance' };
+  }
+  return null;
 }
 
 export const unmappedSlots = (issues: readonly StepIssue[]): string[] =>

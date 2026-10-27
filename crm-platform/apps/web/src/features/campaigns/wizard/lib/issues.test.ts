@@ -25,6 +25,54 @@ describe('stepIssues', () => {
     expect(stepIssues(2, d, { ...ctx, count: { recipients: 5 } })).toEqual([]);
   });
 
+  it('step 2 is blocked while the wallet is being checked and when it is short', () => {
+    const d = draft({ audience: audience({ groupIds: [uuid(11)] }) });
+    expect(stepIssues(2, d, { ...ctx, creditPending: true }).map((i) => i.code)).toEqual([
+      'checking_balance',
+    ]);
+    expect(
+      stepIssues(2, d, { ...ctx, credit: { sufficient: false, recipients: 10 } }).map(
+        (i) => i.code,
+      ),
+    ).toEqual(['insufficient_balance']);
+    expect(stepIssues(2, d, { ...ctx, credit: { sufficient: true, recipients: 10 } })).toEqual([]);
+    expect(
+      stepIssues(2, d, { ...ctx, credit: { sufficient: false, recipients: 0 } }).map((i) => i.code),
+    ).toEqual([]);
+  });
+
+  it('step 2 goes on when the balance cannot be checked; step 3 stops', () => {
+    const d = draft({ audience: audience({ groupIds: [uuid(11)] }) });
+    expect(stepIssues(2, d, { ...ctx, creditFailed: true })).toEqual([]);
+    expect(
+      stepIssues(
+        3,
+        draft({
+          variables: {
+            'body.1': { kind: 'fixed', text: 'x' },
+            'body.2': { kind: 'fixed', text: 'y' },
+          },
+        }),
+        {
+          ...ctx,
+          creditFailed: true,
+        },
+      ).map((i) => i.code),
+    ).toEqual(['balance_unavailable']);
+  });
+
+  it('the step 2 wallet issue points at the audience, not at step 4', () => {
+    const d = draft({ audience: audience({ groupIds: [uuid(11)] }) });
+    expect(issueFor(stepIssues(2, d, { ...ctx, creditPending: true }), 'audience')?.code).toBe(
+      'checking_balance',
+    );
+    expect(
+      stepOfPath(
+        stepIssues(2, d, { ...ctx, credit: { sufficient: false, recipients: 10 } })[0]!.path,
+      ),
+    ).toBe(2);
+  });
+
   it('step 3 lists the unmapped variables', () => {
     const d = draft({ variables: { 'body.1': { kind: 'fixed', text: 'x' } } });
     const issues = stepIssues(3, d, ctx);
