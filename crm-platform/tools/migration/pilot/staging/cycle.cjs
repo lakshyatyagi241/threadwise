@@ -1054,9 +1054,17 @@ async function cmdFiles(srv, cfg, sub, flags = {}) {
     );
   const inner = `NODE_PATH=/app/node_modules TARGET_DATABASE_URL="$DATABASE_URL" exec node /mig/files/copy-files.cjs ${a.map(shq).join(' ')}`;
   const label = `files ${sub}${sub === 'copy' ? (flags.apply ? ' (APPLY)' : ' (dry run)') : ''}`;
+  // the copy holds each file in memory while it moves it (up to maxFileMB, three at a time). At the 1 GB worker cap a run with
+  // 100 MB files was OOM-killed (exit 137, tirupatibank 2026-10-27), so the copy gets its own cap, as the verifier does.
+  const memMb =
+    sub === 'copy'
+      ? Number(process.env.CYCLE_FILES_MEM_MB) > 0
+        ? Number(process.env.CYCLE_FILES_MEM_MB)
+        : 2048
+      : 0;
   const r = await runShown(
     srv,
-    containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`] }),
+    containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`], memMb }),
     label,
     `files-${sub}-${cfg.client}.txt`,
   );
