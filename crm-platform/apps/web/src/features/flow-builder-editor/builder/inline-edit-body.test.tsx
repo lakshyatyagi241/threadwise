@@ -44,8 +44,8 @@ describe('inline edit on the card (row 288)', () => {
     expect(html).toContain('type="file"');
     expect(html).toContain('accept="image/*"');
     expect(html).toContain('Choose image');
-    expect(html).toContain('value="Look"');
-    expect(html.indexOf('type="file"')).toBeLessThan(html.indexOf('value="Look"'));
+    expect(html).toContain('>Look<');
+    expect(html.indexOf('type="file"')).toBeLessThan(html.indexOf('>Look<'));
   });
 
   it('offers Replace file once the card has a file, and names it', () => {
