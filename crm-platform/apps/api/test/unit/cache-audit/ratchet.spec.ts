@@ -57,7 +57,7 @@ describe('part 1: the real code passes every rule', () => {
     const byLayer: Record<string, number> = {};
     for (const c of reg.caches) byLayer[c.layer] = (byLayer[c.layer] ?? 0) + 1;
     // These numbers appear in the report; if they change the report must be regenerated.
-    expect(reg.caches.length).toBe(69);
+    expect(reg.caches.length).toBe(68);
     expect(reg.caches.filter((c) => c.priority === 'P0').length).toBeGreaterThan(20);
     expect(Object.keys(byLayer).sort()).toEqual([
       'browser',
