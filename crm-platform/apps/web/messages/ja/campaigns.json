@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
       "draftChip": "下書き / 未保存",
+      "draftSavedChip": "下書き · 保存済み",
       "steps": {
         "label": "キャンペーンの手順",
         "required": "必須",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "テンプレート",
         "pickTemplate": "— テンプレートを選択 —",
+        "searchTemplates": "名前または言語でテンプレートを検索",
+        "noTemplateMatch": "検索に一致するテンプレートはありません。",
         "templateHint": "選択した番号の承認済みテンプレートのみ表示されます。変数は下で入力します。",
         "noTemplates": "この番号には承認済みのテンプレートがまだありません。作成して承認されるまでお待ちください。",
         "deliveryTitle": "配信",

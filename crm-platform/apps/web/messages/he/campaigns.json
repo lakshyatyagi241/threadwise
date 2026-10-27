@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "שליחה דרך מספרי WhatsApp אישיים (ה-API הלא רשמי) אינה מופעלת בסביבת העבודה שלכם. בחרו מספר רשמי של WhatsApp Business API.",
       "draftChip": "טיוטה / לא נשמר",
+      "draftSavedChip": "טיוטה · נשמרה",
       "steps": {
         "label": "שלבי קמפיין",
         "required": "חובה",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "תבנית",
         "pickTemplate": "— בחירת תבנית —",
+        "searchTemplates": "חיפוש תבניות לפי שם או שפה",
+        "noTemplateMatch": "אין תבנית שמתאימה לחיפוש שלך.",
         "templateHint": "רק תבניות מאושרות של המספר שנבחר. המשתנים שלה ממולאים למטה.",
         "noTemplates": "למספר הזה אין עדיין תבניות מאושרות. צרו תבנית וחכו לאישורה.",
         "deliveryTitle": "שליחה",

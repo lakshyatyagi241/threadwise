@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
       "draftChip": "Entwurf / nicht gespeichert",
+      "draftSavedChip": "Entwurf · gespeichert",
       "steps": {
         "label": "Kampagnenschritte",
         "required": "erforderlich",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Vorlage",
         "pickTemplate": "— Vorlage auswählen —",
+        "searchTemplates": "Vorlagen nach Name oder Sprache suchen",
+        "noTemplateMatch": "Keine Vorlage passt zu Ihrer Suche.",
         "templateHint": "Nur genehmigte Vorlagen der gewählten Nummer. Die Variablen werden unten ausgefüllt.",
         "noTemplates": "Diese Nummer hat noch keine genehmigten Vorlagen. Erstellen Sie eine und warten Sie auf die Genehmigung.",
         "deliveryTitle": "Zustellung",

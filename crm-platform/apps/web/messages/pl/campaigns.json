@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
       "draftChip": "Szkic / niezapisane",
+      "draftSavedChip": "Szkic · zapisany",
       "steps": {
         "label": "Kroki kampanii",
         "required": "wymagane",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Szablon",
         "pickTemplate": "— Wybierz szablon —",
+        "searchTemplates": "Szukaj szablonów według nazwy lub języka",
+        "noTemplateMatch": "Żaden szablon nie pasuje do wyszukiwania.",
         "templateHint": "Tylko zatwierdzone szablony wybranego numeru. Jego zmienne uzupełnisz poniżej.",
         "noTemplates": "Ten numer nie ma jeszcze zatwierdzonych szablonów. Utwórz szablon i poczekaj na jego zatwierdzenie.",
         "deliveryTitle": "Wysyłka",

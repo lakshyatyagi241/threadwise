@@ -285,7 +285,12 @@ export function VariablesCard({
           {showIssues && missing.size > 0 && (
             <Alert tone="danger">
               <span className="block">{t('unmappedList', { count: missing.size })}</span>
-              <span className="block font-mono text-xs">{[...missing].join(', ')}</span>
+              <span className="block font-mono text-xs">
+                {slots
+                  .filter((s) => missing.has(s.slot))
+                  .map((s) => `${t(`slotSection.${s.section}`)} ${placeholderOf(s)}`)
+                  .join(', ')}
+              </span>
             </Alert>
           )}
           <ul className="space-y-2">
