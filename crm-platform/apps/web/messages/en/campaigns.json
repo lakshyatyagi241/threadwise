@@ -333,8 +333,14 @@
         "emailsCount": "{count} addresses",
         "emailCsvHint": "Columns: name, email. Any other column becomes a variable you can use in the message.",
         "emailModes": {
-          "csv": { "title": "Upload CSV", "hint": "Import email addresses for this campaign." },
-          "manual": { "title": "Manual emails", "hint": "Paste one email address per line." }
+          "csv": {
+            "title": "Upload CSV",
+            "hint": "Import email addresses for this campaign."
+          },
+          "manual": {
+            "title": "Manual emails",
+            "hint": "Paste one email address per line."
+          }
         },
         "numbers": "Manual numbers",
         "numbersHint": "One per line, comma, or semicolon. Country code required (with or without +).",
@@ -1419,7 +1425,6 @@
         "csvPreviewCaption": "Preview of the valid numbers in the file",
         "csvLine": "Line",
         "csvName": "Name",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "New contact",
           "existing": "Existing contact",
@@ -1435,7 +1440,14 @@
         },
         "csvIssuesMore": "{count} more are in the download.",
         "csvConsentOn": "You confirmed consent for these numbers. They are recorded as agreed when the broadcast launches.",
-        "csvConsentVersion": "Notice version: {version}."
+        "csvConsentVersion": "Notice version: {version}.",
+        "csvConsentCol": "Consent",
+        "csvContactCol": "Contact",
+        "csvConsent": {
+          "optedIn": "Opted in",
+          "optedOut": "Opted out"
+        },
+        "clearAudience": "Clear audience"
       },
       "review": {
         "intro": "Check the cost, tell us what each template variable is filled with, and review the campaign.",

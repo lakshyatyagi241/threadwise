@@ -315,7 +315,22 @@
         "previousTitle": "Invii precedenti",
         "previousHint": "Aggiungi le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, risposto o cliccato.",
         "previousEstimate": "{count, plural, one {Fino a # persona dagli invii precedenti (una stima: chi è in due invii viene contato due volte).} other {Fino a # persone dagli invii precedenti (una stima: chi è in due invii viene contato due volte).}}",
-        "previousEditHint": "La tua scelta precedente di invii non viene mostrata in modifica: questa campagna conserva già i suoi destinatari come contatti. Scegli di nuovo per aggiungere altre persone."
+        "previousEditHint": "La tua scelta precedente di invii non viene mostrata in modifica: questa campagna conserva già i suoi destinatari come contatti. Scegli di nuovo per aggiungere altre persone.",
+        "emails": "E-mail manuali",
+        "emailsHint": "Una per riga, oppure separate da virgola o punto e virgola.",
+        "emailsPlaceholder": "Un indirizzo e-mail per riga",
+        "emailsCount": "{count} indirizzi",
+        "emailCsvHint": "Colonne: nome, e-mail. Ogni altra colonna diventa una variabile utilizzabile nel messaggio.",
+        "emailModes": {
+          "csv": {
+            "title": "Carica CSV",
+            "hint": "Importa gli indirizzi e-mail per questa campagna."
+          },
+          "manual": {
+            "title": "E-mail manuali",
+            "hint": "Incolla un indirizzo e-mail per riga."
+          }
+        }
       },
       "message": {
         "title": "Messaggio",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "Anteprima dei numeri validi nel file",
         "csvLine": "Riga",
         "csvName": "Nome",
-        "csvStatus": "Stato",
         "csvRow": {
           "new": "Nuovo contatto",
           "existing": "Contatto esistente",
@@ -1383,7 +1397,14 @@
         "modePrevious": "Invia agli invii precedenti",
         "previousHint": "Raggiungi di nuovo le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, non ha letto, ha risposto o ha cliccato.",
         "chipPrevious": "{count, plural, one {# invio precedente} other {# invii precedenti}} ({outcome})",
-        "filterNoConditions": "Aggiungi una condizione per vedere quanti contatti corrispondono."
+        "filterNoConditions": "Aggiungi una condizione per vedere quanti contatti corrispondono.",
+        "csvConsentCol": "Consenso",
+        "csvContactCol": "Contatto",
+        "csvConsent": {
+          "optedIn": "Iscritto",
+          "optedOut": "Disiscritto"
+        },
+        "clearAudience": "Svuota il pubblico"
       },
       "review": {
         "intro": "Controlla il costo, indicaci con cosa viene compilata ogni variabile del template e rivedi il broadcast.",

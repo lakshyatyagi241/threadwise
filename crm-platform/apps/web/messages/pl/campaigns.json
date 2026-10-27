@@ -315,7 +315,22 @@
         "previousTitle": "Poprzednie wysyłki",
         "previousHint": "Dodaj osoby, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko te, które przeczytały, odpowiedziały lub kliknęły.",
         "previousEstimate": "{count, plural, one {Maksymalnie # osoba z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} few {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} many {Maksymalnie # osób z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} other {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).}}",
-        "previousEditHint": "Twój wcześniejszy wybór poprzednich wysyłek nie jest pokazywany podczas edycji: ta kampania przechowuje już swoich odbiorców jako kontakty. Wybierz ponownie, aby dodać więcej osób."
+        "previousEditHint": "Twój wcześniejszy wybór poprzednich wysyłek nie jest pokazywany podczas edycji: ta kampania przechowuje już swoich odbiorców jako kontakty. Wybierz ponownie, aby dodać więcej osób.",
+        "emails": "E-maile ręcznie",
+        "emailsHint": "Jeden w wierszu, albo rozdzielone przecinkiem lub średnikiem.",
+        "emailsPlaceholder": "Jeden adres e-mail w wierszu",
+        "emailsCount": "Adresów: {count}",
+        "emailCsvHint": "Kolumny: imię, e-mail. Każda inna kolumna staje się zmienną, której można użyć w wiadomości.",
+        "emailModes": {
+          "csv": {
+            "title": "Prześlij CSV",
+            "hint": "Zaimportuj adresy e-mail dla tej kampanii."
+          },
+          "manual": {
+            "title": "E-maile ręcznie",
+            "hint": "Wklej jeden adres e-mail w wierszu."
+          }
+        }
       },
       "message": {
         "title": "Wiadomość",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "Podgląd prawidłowych numerów w pliku",
         "csvLine": "Wiersz",
         "csvName": "Nazwa",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Nowy kontakt",
           "existing": "Istniejący kontakt",
@@ -1383,7 +1397,14 @@
         "modePrevious": "Wyślij do poprzednich wysyłek",
         "previousHint": "Ponownie dotrzyj do osób, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko tych, które przeczytały, nie przeczytały, odpowiedziały lub kliknęły.",
         "chipPrevious": "{count, plural, one {# wcześniejsza wysyłka} few {# wcześniejsze wysyłki} many {# wcześniejszych wysyłek} other {# wcześniejszej wysyłki}} ({outcome})",
-        "filterNoConditions": "Dodaj warunek, aby zobaczyć, ilu kontaktów pasuje."
+        "filterNoConditions": "Dodaj warunek, aby zobaczyć, ilu kontaktów pasuje.",
+        "csvConsentCol": "Zgoda",
+        "csvContactCol": "Kontakt",
+        "csvConsent": {
+          "optedIn": "Zapisany",
+          "optedOut": "Wypisany"
+        },
+        "clearAudience": "Wyczyść odbiorców"
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",
