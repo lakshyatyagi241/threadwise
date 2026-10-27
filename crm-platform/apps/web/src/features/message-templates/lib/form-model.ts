@@ -476,6 +476,18 @@ export function stateFromDetail(d: TemplateDetail): FormState {
   };
 }
 
+/**
+ * A new template that starts as a copy of `d`: its own name, and the original's header file. The copy names the same stored file
+ * (the API keeps a shared file while either template uses it), so the file is not uploaded again.
+ */
+export function copyState(d: TemplateDetail): FormState {
+  return {
+    ...stateFromDetail(d),
+    name: `${d.name.slice(0, 512 - '_copy'.length)}_copy`,
+    headerMediaKey: d.headerMediaKey ?? '',
+  };
+}
+
 export interface PreviewCard {
   format: CardFormat;
   imageUrl: string | null;

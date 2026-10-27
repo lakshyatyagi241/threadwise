@@ -153,6 +153,8 @@ export type TemplateSummary = z.infer<typeof templateSummarySchema>;
 export const templateDetailSchema = templateSummarySchema.extend({
   /** The pin of a `location` header. */
   headerLocation: tplHeaderLocationSchema.nullable(),
+  /** The stored header file's key: a copy of the template names the same file (the save checks the key belongs to the workspace). */
+  headerMediaKey: z.string().max(512).nullish(),
   variableMap: tplVariableMapSchema,
   codeExpirationMinutes: z.number().int().nullable(),
   parameterFormat: z.enum(['POSITIONAL', 'NAMED']),

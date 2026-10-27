@@ -657,6 +657,11 @@ export class TemplatesService {
    */
   private async releaseHeaderCopy(orgId: number, key: string): Promise<void> {
     if (!isTemplateMediaKey(orgId, key)) return;
+    // A copy shares its original's file: the file stays while any template of the workspace still names it (a failed check keeps it).
+    const inUse = await this.db
+      .tx((tx) => this.repo.headerKeyInUse(tx, orgId, key))
+      .catch(() => true);
+    if (inUse) return;
     await this.storage
       .remove(key)
       .catch((err: unknown) =>
