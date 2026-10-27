@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "आपके संपादन के दौरान किसी और ने इस टेम्पलेट को बदला है। नवीनतम संस्करण देखने के लिए रीलोड करें, फिर अपना बदलाव दोबारा लागू करें।",
       "VALIDATION_FAILED": "कुछ फ़ील्ड मान्य नहीं हैं। नीचे दिए फ़ील्ड जाँचें।",
       "INTERNAL": "सर्वर इस अनुरोध को संभाल नहीं सका। थोड़ी देर में फिर कोशिश करें।",
-      "uploadTooLarge": "फ़ाइल बहुत बड़ी है। तस्वीरें 5 MB, वीडियो 16 MB और PDF 10 MB तक हो सकते हैं।",
-      "uploadRejected": "यह फ़ाइल स्वीकार नहीं हुई: नाम चाहे कुछ भी हो, इसकी सामग्री JPG या PNG तस्वीर, MP4 या 3GP वीडियो, या PDF नहीं है।",
-      "uploadProviderBusy": "WhatsApp अभी फ़ाइल नहीं ले सका। एक मिनट रुककर दोबारा कोशिश करें।",
-      "uploadRefused": "फ़ाइल अपलोड नहीं हो सकी।",
-      "uploadNetwork": "अपलोड पूरा नहीं हुआ। अपना कनेक्शन जाँचें और फ़ाइल दोबारा आज़माएँ।"
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "पूर्वावलोकन",

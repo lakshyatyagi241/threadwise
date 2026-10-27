@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "你在编辑时此模板已被他人更改。请刷新以查看最新版本,然后重新应用你的更改。",
       "VALIDATION_FAILED": "部分字段无效。请检查下方字段。",
       "INTERNAL": "服务器无法处理此请求。请稍后重试。",
-      "uploadTooLarge": "文件太大。图片最大 5 MB，视频最大 16 MB，PDF 最大 10 MB。",
-      "uploadRejected": "此文件未被接受：无论文件名如何，其内容都不是 JPG 或 PNG 图片、MP4 或 3GP 视频，也不是 PDF。",
-      "uploadProviderBusy": "WhatsApp 目前无法接收该文件。请等待一分钟后重试。",
-      "uploadRefused": "无法上传文件。",
-      "uploadNetwork": "上传未完成。请检查网络连接后重试。"
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "预览",

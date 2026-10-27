@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "มีผู้อื่นเปลี่ยนเทมเพลตนี้ขณะที่คุณกำลังแก้ไข โหลดใหม่เพื่อดูเวอร์ชันล่าสุด แล้วใช้การเปลี่ยนแปลงของคุณอีกครั้ง",
       "VALIDATION_FAILED": "บางช่องไม่ถูกต้อง ตรวจสอบช่องด้านล่าง",
       "INTERNAL": "เซิร์ฟเวอร์ประมวลผลคำขอนี้ไม่สำเร็จ ลองอีกครั้งในไม่ช้า",
-      "uploadTooLarge": "ไฟล์ใหญ่เกินไป รูปภาพได้ไม่เกิน 5 MB วิดีโอไม่เกิน 16 MB และ PDF ไม่เกิน 10 MB",
-      "uploadRejected": "ไม่รับไฟล์นี้: ไม่ว่าชื่อจะเป็นอะไร เนื้อหาไม่ใช่รูป JPG หรือ PNG วิดีโอ MP4 หรือ 3GP หรือ PDF",
-      "uploadProviderBusy": "ขณะนี้ WhatsApp ยังรับไฟล์ไม่ได้ รอสักครู่แล้วลองอีกครั้ง",
-      "uploadRefused": "อัปโหลดไฟล์ไม่ได้",
-      "uploadNetwork": "อัปโหลดไม่เสร็จสมบูรณ์ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง"
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "ตัวอย่าง",

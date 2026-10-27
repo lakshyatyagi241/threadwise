@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
       "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
       "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi.",
-      "uploadTooLarge": "Berkas terlalu besar. Gambar maksimal 5 MB, video 16 MB, dan PDF 10 MB.",
-      "uploadRejected": "Berkas ini tidak diterima: apa pun namanya, isinya bukan gambar JPG atau PNG, video MP4 atau 3GP, maupun PDF.",
-      "uploadProviderBusy": "WhatsApp belum dapat menerima berkas sekarang. Tunggu semenit lalu coba lagi.",
-      "uploadRefused": "Berkas tidak dapat diunggah.",
-      "uploadNetwork": "Unggahan tidak selesai. Periksa koneksi Anda dan coba lagi."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Pratinjau",

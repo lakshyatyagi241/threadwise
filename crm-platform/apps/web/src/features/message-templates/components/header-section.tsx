@@ -165,7 +165,9 @@ export function HeaderSection({
             </Button>
           </div>
           {problem && <Alert tone="danger">{problem}</Alert>}
-          {upload.isError && <ErrorAlert error={errorText(upload.error)} />}
+          {upload.isError && (
+            <ErrorAlert error={errorText(upload.error, isMediaKind(kind) ? kind : undefined)} />
+          )}
           {headerError && (
             <p role="alert" className="text-xs text-danger">
               {headerError}

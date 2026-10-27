@@ -75,7 +75,7 @@ describe('header media pick', () => {
     upload.mockRejectedValueOnce(new ApiError(413, 'UNKNOWN', 'Request failed with status 413'));
     renderSection();
     await pick(jpeg(1024));
-    expect(text()).toContain('The file is too big');
+    expect(text()).toContain('This picture is too big. WhatsApp accepts a picture up to 5 MB.');
     expect(text()).not.toContain('Something went wrong');
 
     upload.mockRejectedValueOnce(

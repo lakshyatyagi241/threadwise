@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Quelqu’un a modifié ce modèle pendant que vous le modifiiez. Rechargez la page pour voir la dernière version, puis appliquez à nouveau votre modification.",
       "VALIDATION_FAILED": "Certains champs sont invalides. Vérifiez les champs ci-dessous.",
       "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant.",
-      "uploadTooLarge": "Le fichier est trop volumineux. Les images vont jusqu'à 5 Mo, les vidéos 16 Mo et les PDF 10 Mo.",
-      "uploadRejected": "Ce fichier n'a pas été accepté : son contenu n'est ni une image JPG ou PNG, ni une vidéo MP4 ou 3GP, ni un PDF, quel que soit son nom.",
-      "uploadProviderBusy": "WhatsApp n'a pas pu recevoir le fichier pour le moment. Attendez une minute puis réessayez.",
-      "uploadRefused": "Le fichier n'a pas pu être téléversé.",
-      "uploadNetwork": "Le téléversement ne s'est pas terminé. Vérifiez votre connexion et réessayez."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Aperçu",

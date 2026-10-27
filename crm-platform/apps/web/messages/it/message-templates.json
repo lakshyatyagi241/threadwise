@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Qualcuno ha modificato questo template mentre lo stavi modificando. Ricarica la pagina per vedere la versione più recente, poi applica di nuovo la modifica.",
       "VALIDATION_FAILED": "Alcuni campi non sono validi. Controlla i campi qui sotto.",
       "INTERNAL": "Il server non è riuscito a gestire questa richiesta. Riprova tra poco.",
-      "uploadTooLarge": "Il file è troppo grande. Le immagini arrivano a 5 MB, i video a 16 MB e i PDF a 10 MB.",
-      "uploadRejected": "Questo file non è stato accettato: il contenuto non è un'immagine JPG o PNG, un video MP4 o 3GP, né un PDF, qualunque sia il nome.",
-      "uploadProviderBusy": "WhatsApp non ha potuto ricevere il file ora. Attendi un minuto e riprova.",
-      "uploadRefused": "Impossibile caricare il file.",
-      "uploadNetwork": "Il caricamento non è terminato. Controlla la connessione e riprova."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Anteprima",

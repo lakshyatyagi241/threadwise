@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "מישהו שינה את התבנית הזו בזמן שערכת. טען מחדש כדי לראות את הגרסה האחרונה, ולאחר מכן החל את השינוי שלך שוב.",
       "VALIDATION_FAILED": "חלק מהשדות אינם תקינים. בדוק את השדות שלמטה.",
       "INTERNAL": "השרת לא הצליח לטפל בבקשה. נסה שוב בעוד רגע.",
-      "uploadTooLarge": "הקובץ גדול מדי. תמונות עד 5 MB, סרטונים עד 16 MB וקובצי PDF עד 10 MB.",
-      "uploadRejected": "הקובץ לא התקבל: לא משנה מה שמו, תוכנו אינו תמונת JPG או PNG, סרטון MP4 או 3GP או PDF.",
-      "uploadProviderBusy": "WhatsApp לא הצליח לקבל את הקובץ כרגע. המתינו דקה ונסו שוב.",
-      "uploadRefused": "לא ניתן היה להעלות את הקובץ.",
-      "uploadNetwork": "ההעלאה לא הושלמה. בדקו את החיבור ונסו שוב."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "תצוגה מקדימה",
