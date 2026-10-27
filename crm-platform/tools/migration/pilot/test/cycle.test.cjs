@@ -219,6 +219,23 @@ test('load guards: flag, fresh backup, successful dry with unaccounted 0, unchan
   writeCfg();
 });
 
+test('files copy: the copy container gets its own memory cap, plan keeps the worker cap', () => {
+  const override = path.join(root, 'migration/mem-override.yml');
+  const withOverride = (c) => c.some((a) => String(a).endsWith('mem-override.yml'));
+  fs.writeFileSync(dockerLog, '');
+  fs.rmSync(override, { force: true });
+  assert.equal(cycle(['files-copy', '--client', 'acme']).status, 0);
+  assert.ok(withOverride(dockerCalls().pop()));
+  assert.match(fs.readFileSync(override, 'utf8'), /mem_limit: 2048m/);
+  fs.writeFileSync(dockerLog, '');
+  assert.equal(cycle(['files-copy', '--client', 'acme'], { CYCLE_FILES_MEM_MB: '3072' }).status, 0);
+  assert.match(fs.readFileSync(override, 'utf8'), /mem_limit: 3072m/);
+  fs.rmSync(override, { force: true });
+  fs.writeFileSync(dockerLog, '');
+  assert.equal(cycle(['files-plan', '--client', 'acme']).status, 0);
+  assert.ok(!withOverride(dockerCalls().pop()));
+});
+
 test('reconcile and report: runs the bundle, copies the masked reports back', () => {
   fs.mkdirSync(path.join(root, 'migration/out/acme'), { recursive: true });
   fs.writeFileSync(
@@ -365,6 +382,8 @@ test('migrate: full chain, exporter flags, reuse of a fresh export, timings.json
       '--i-confirm-server-is-staging',
       '--registry-classes',
       'MIGRATE,MIGRATE_LATER',
+      '--tolerance',
+      '500',
     ],
   ]);
   assert.ok(!r.stdout.includes('boss@example.com'), 'exporter output is masked');
