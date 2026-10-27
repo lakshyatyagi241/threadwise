@@ -1538,7 +1538,17 @@ export class CampaignsRepository {
   async replies(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
       SELECT c.uuid AS contact_uuid, coalesce(r.recipient_name, c.name, '') AS name,
-             coalesce(r.phone_number, ${REACHED_AT}, '') AS phone, coalesce(r.response, '') AS response, r.responded_at
+             coalesce(r.phone_number, ${REACHED_AT}, '') AS phone,
+             coalesce(
+               nullif(r.response, ''),
+               -- No text was reported with the reply: show the customer's own message nearest to the moment it was recorded.
+               (SELECT coalesce(nullif(m.body, ''), '[' || m.kind || ']')
+                  FROM messages m JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+                 WHERE m.org_id = r.org_id AND cv.contact_id = r.contact_id AND m.direction = 'in'
+                   AND m.created_at BETWEEN r.responded_at - interval '1 hour' AND r.responded_at + interval '1 hour'
+                 ORDER BY abs(extract(epoch FROM (m.created_at - r.responded_at))) LIMIT 1),
+               '') AS response,
+             r.responded_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND r.responded_at IS NOT NULL
       ORDER BY r.responded_at DESC LIMIT ${limit}`);
