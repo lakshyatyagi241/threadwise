@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "vide = illimité",
           "maxUsesHint": "Tous clients confondus.",
           "perUser": "Limite par utilisateur",
-          "perUserHint": "Nombre d’utilisations autorisées pour chaque client.",
+          "perUserHint": "Nombre d'utilisations autorisées par client, tous espaces de travail confondus.",
           "firstPurchaseTitle": "Premier achat uniquement",
-          "firstPurchaseHint": "Uniquement les espaces de travail qui n’ont passé aucune commande payante",
+          "firstPurchaseHint": "Seuls les acheteurs n'ayant payé aucune commande, dans aucun espace de travail",
           "stackableTitle": "Cumulable avec d’autres coupons",
           "stackableHint": "Permet aux acheteurs de l’utiliser avec un autre code actif au paiement"
         }

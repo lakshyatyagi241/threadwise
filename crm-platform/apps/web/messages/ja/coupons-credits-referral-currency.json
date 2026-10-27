@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "空欄 = 無制限",
           "maxUsesHint": "全顧客の合計です。",
           "perUser": "ユーザーごとの上限",
-          "perUserHint": "各顧客が利用できる回数。",
+          "perUserHint": "お客様ごとに利用できる回数。すべてのワークスペースで合算します。",
           "firstPurchaseTitle": "初回購入のみ",
-          "firstPurchaseHint": "有料注文をまだ行っていないワークスペースのみ",
+          "firstPurchaseHint": "どのワークスペースでも有料注文をしたことがない購入者のみ",
           "stackableTitle": "他のクーポンと併用可能",
           "stackableHint": "チェックアウト時に他の有効なコードと併用できます"
         }

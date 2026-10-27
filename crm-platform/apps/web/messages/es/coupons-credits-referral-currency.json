@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "en blanco = ilimitado",
           "maxUsesHint": "Entre todos los clientes.",
           "perUser": "Límite por usuario",
-          "perUserHint": "Número de canjes permitidos para cada cliente.",
+          "perUserHint": "Número de canjes permitidos por cliente, en todos los espacios de trabajo.",
           "firstPurchaseTitle": "Solo primera compra",
-          "firstPurchaseHint": "Solo espacios de trabajo que no han hecho un pedido de pago",
+          "firstPurchaseHint": "Solo compradores que no han pagado ningún pedido en ningún espacio de trabajo",
           "stackableTitle": "Se puede combinar con otros cupones",
           "stackableHint": "Permite usarlo junto con otro código activo al pagar"
         }

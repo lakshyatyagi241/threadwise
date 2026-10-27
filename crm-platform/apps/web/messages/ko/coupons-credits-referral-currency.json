@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "비움 = 무제한",
           "maxUsesHint": "모든 고객 합산입니다.",
           "perUser": "사용자당 한도",
-          "perUserHint": "고객 한 명당 허용되는 사용 횟수입니다.",
+          "perUserHint": "고객 한 명당 사용할 수 있는 횟수(모든 워크스페이스 합산).",
           "firstPurchaseTitle": "첫 구매에만 적용",
-          "firstPurchaseHint": "유료 주문 이력이 없는 워크스페이스만 해당",
+          "firstPurchaseHint": "어떤 워크스페이스에서도 유료 주문을 한 적이 없는 구매자만",
           "stackableTitle": "다른 쿠폰과 함께 사용 가능",
           "stackableHint": "고객이 결제 시 다른 활성 코드와 함께 사용할 수 있습니다"
         }

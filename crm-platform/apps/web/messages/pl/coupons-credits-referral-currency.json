@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "puste = bez limitu",
           "maxUsesHint": "Dla wszystkich klientów łącznie.",
           "perUser": "Limit na użytkownika",
-          "perUserHint": "Liczba realizacji dozwolona dla każdego klienta.",
+          "perUserHint": "Liczba wykorzystań dozwolonych dla każdego klienta, we wszystkich obszarach roboczych.",
           "firstPurchaseTitle": "Tylko pierwszy zakup",
-          "firstPurchaseHint": "Tylko przestrzenie robocze, które nie złożyły płatnego zamówienia",
+          "firstPurchaseHint": "Tylko kupujący, którzy nie opłacili zamówienia w żadnym obszarze roboczym",
           "stackableTitle": "Można łączyć z innymi kuponami",
           "stackableHint": "Pozwala kupującym użyć go razem z innym aktywnym kodem przy płatności"
         }
