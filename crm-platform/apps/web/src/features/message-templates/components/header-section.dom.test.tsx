@@ -71,6 +71,27 @@ afterEach(() => {
 });
 
 describe('header media pick', () => {
+  it('says plainly when the provider is limiting uploads, and when it is not answering', async () => {
+    upload.mockRejectedValueOnce(
+      new ApiError(
+        429,
+        'RATE_LIMITED',
+        'The WhatsApp provider is limiting uploads right now.',
+        'r3',
+      ),
+    );
+    renderSection();
+    await pick(jpeg(1024));
+    expect(text()).toContain('the WhatsApp provider is limiting file uploads');
+    expect(text()).not.toContain('Something went wrong');
+
+    upload.mockRejectedValueOnce(
+      new ApiError(503, 'WABA_PROVIDER_UNAVAILABLE', 'The provider is down', 'r4'),
+    );
+    await pick(jpeg(2048));
+    expect(text()).toContain('The WhatsApp provider is not answering right now');
+  });
+
   it('names the real problem of a refused upload, never the bare generic line', async () => {
     upload.mockRejectedValueOnce(new ApiError(413, 'UNKNOWN', 'Request failed with status 413'));
     renderSection();
