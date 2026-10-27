@@ -33,7 +33,7 @@ import {
 } from '../checkout-orders-merchant-payments';
 import { ContactsRepository } from '../crm';
 import { publishProblems, type PublishContext } from './form-definition-rules';
-import { newPublicKey } from './form-key';
+import { keyRotationDelta, newPublicKey } from './form-key';
 import { FormsPlan } from './form-plan';
 import { blankDefinition, formTemplate } from './form-templates';
 import {
@@ -433,15 +433,14 @@ export class FormsService {
       const form = await this.mustFind(tx, ctx.orgId, uuid, scope, true);
       if (form.status === 'archived') throw stateInvalid('changed', form.status);
       if (form.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Form');
-      const ok = await this.repo.update(tx, ctx.orgId, form.id, input.rowVersion, {
-        publicKey: newPublicKey(),
-      });
+      const publicKey = newPublicKey();
+      const ok = await this.repo.update(tx, ctx.orgId, form.id, input.rowVersion, { publicKey });
       if (!ok) throw AppError.rowVersionConflict('Form');
       await this.audit.record(tx, {
         module: FORM_MODULE,
         recordId: form.id,
         action: 'update',
-        delta: { publicKey: { old: 'rotated', new: 'rotated' } },
+        delta: keyRotationDelta(form.publicKey, publicKey),
       });
       await this.outbox.emit(tx, {
         aggregateModule: EVENT_MODULE,
