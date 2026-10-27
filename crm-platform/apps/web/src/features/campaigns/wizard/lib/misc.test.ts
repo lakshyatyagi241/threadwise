@@ -135,9 +135,10 @@ describe('flow', () => {
       kind: 'issues',
       step: 3,
     });
+    // A short balance is owned by the Recipients step: the preflight opens it first.
     expect(
       launchPreflight(ok, { ...ctx, credit: { sufficient: false, recipients: 3 } }),
-    ).toMatchObject({ kind: 'issues', step: 3 });
+    ).toMatchObject({ kind: 'issues', step: 2 });
     expect(launchPreflight(ok, { ...ctx, creditPending: true })).toEqual({ kind: 'ok' });
   });
 });
