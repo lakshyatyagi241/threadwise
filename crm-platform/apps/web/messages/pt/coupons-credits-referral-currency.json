@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "em branco = ilimitado",
           "maxUsesHint": "Somando todos os clientes.",
           "perUser": "Limite por usuário",
-          "perUserHint": "Número de resgates permitidos para cada cliente.",
+          "perUserHint": "Número de resgates permitidos por cliente, em todos os espaços de trabalho.",
           "firstPurchaseTitle": "Somente primeira compra",
-          "firstPurchaseHint": "Somente espaços de trabalho que ainda não fizeram um pedido pago",
+          "firstPurchaseHint": "Apenas compradores que não pagaram nenhum pedido em nenhum espaço de trabalho",
           "stackableTitle": "Pode ser combinado com outros cupons",
           "stackableHint": "Permite que os clientes o usem junto com outro código ativo no checkout"
         }

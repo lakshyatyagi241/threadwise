@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "leer = unbegrenzt",
           "maxUsesHint": "Über alle Kunden hinweg.",
           "perUser": "Limit pro Nutzer",
-          "perUserHint": "Anzahl der erlaubten Einlösungen pro Kunde.",
+          "perUserHint": "Anzahl der erlaubten Einlösungen pro Kunde, über alle Arbeitsbereiche.",
           "firstPurchaseTitle": "Nur erster Kauf",
-          "firstPurchaseHint": "Nur Arbeitsbereiche, die noch keine bezahlte Bestellung aufgegeben haben",
+          "firstPurchaseHint": "Nur Käufer, die in keinem Arbeitsbereich bezahlt haben",
           "stackableTitle": "Mit anderen Gutscheinen kombinierbar",
           "stackableHint": "Erlaubt Käufern, ihn zusammen mit einem anderen aktiven Code an der Kasse zu verwenden"
         }

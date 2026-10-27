@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "để trống = không giới hạn",
           "maxUsesHint": "Trên tất cả khách hàng.",
           "perUser": "Giới hạn mỗi người dùng",
-          "perUserHint": "Số lần sử dụng cho phép với mỗi khách hàng.",
+          "perUserHint": "Số lượt sử dụng được phép cho mỗi khách hàng, trên tất cả không gian làm việc.",
           "firstPurchaseTitle": "Chỉ lần mua đầu tiên",
-          "firstPurchaseHint": "Chỉ các không gian làm việc chưa có đơn hàng đã thanh toán",
+          "firstPurchaseHint": "Chỉ người mua chưa từng thanh toán đơn hàng ở bất kỳ không gian làm việc nào",
           "stackableTitle": "Có thể kết hợp với phiếu khác",
           "stackableHint": "Cho phép người mua dùng cùng một mã đang hoạt động khác khi thanh toán"
         }
