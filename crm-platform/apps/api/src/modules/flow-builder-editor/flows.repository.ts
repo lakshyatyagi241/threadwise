@@ -338,14 +338,21 @@ export class FlowsRepository {
       WHERE org_id = ${orgId} AND id = ${flowId}`);
   }
 
-  /** Every bot of the workspace, slim: what a step that starts another bot is checked against (id is the uuid the graph stores). */
+  /**
+   * The bots of the workspace that `ids` name, slim: what a step that starts another bot is checked against (id is the uuid the graph
+   * stores). Only the linked bots are read, so a save does not load every bot of the workspace (#1165).
+   */
   async linkTargets(
     tx: Tx,
     orgId: number,
+    ids: readonly string[],
   ): Promise<Array<{ id: string; flowType: string; isPublished: boolean }>> {
-    const res = await tx.execute(
-      sql`SELECT uuid, flow_type, is_published FROM flows WHERE org_id = ${orgId}`,
-    );
+    if (ids.length === 0) return [];
+    const json = JSON.stringify(ids);
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_type, is_published FROM flows
+       WHERE org_id = ${orgId}
+         AND uuid::text IN (SELECT x FROM json_array_elements_text(${json}::json) AS x)`);
     return (res.rows as Raw[]).map((r) => ({
       id: String(r.uuid),
       flowType: String(r.flow_type),
