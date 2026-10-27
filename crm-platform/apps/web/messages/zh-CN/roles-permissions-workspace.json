@@ -172,7 +172,8 @@
         "type": "类型",
         "members": "成员",
         "permissions": "权限",
-        "lastEdited": "最后编辑",
+        "lastEdited": "最后编辑时间",
+        "lastEditedBy": "编辑人：{name}",
         "actions": "操作"
       },
       "row": {

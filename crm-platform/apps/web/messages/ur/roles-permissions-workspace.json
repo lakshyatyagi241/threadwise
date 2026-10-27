@@ -172,7 +172,8 @@
         "type": "قسم",
         "members": "ارکان",
         "permissions": "اجازتیں",
-        "lastEdited": "آخری ترمیم",
+        "lastEdited": "آخری ترمیم بتاریخ",
+        "lastEditedBy": "بذریعہ {name}",
         "actions": "اعمال"
       },
       "row": {

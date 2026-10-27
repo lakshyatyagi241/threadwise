@@ -142,7 +142,7 @@ function RolesList() {
                       {role.grants.length}
                     </td>
                     <td className="px-3 py-3 font-mono text-xs text-muted-foreground">
-                      <Edited value={role.updatedAt} />
+                      <Edited value={role.updatedAt} by={role.updatedBy} />
                     </td>
                     <td className="px-3 py-3 text-center">
                       <RowMenu role={role} onDelete={() => setDeleting(role)} />
@@ -178,7 +178,7 @@ function RolesList() {
                     <div>
                       <dt className="text-muted-foreground">{t('table.lastEdited')}</dt>
                       <dd className="mt-0.5 font-mono">
-                        <Edited value={role.updatedAt} />
+                        <Edited value={role.updatedAt} by={role.updatedBy} />
                       </dd>
                     </div>
                   </dl>
@@ -204,9 +204,17 @@ function RolesList() {
   );
 }
 
-function Edited({ value }: { value: string }) {
+function Edited({ value, by }: { value: string; by?: string | null }) {
   const f = useFormatter();
-  return <>{f.dateTime(new Date(value), { dateStyle: 'medium' })}</>;
+  const t = useTranslations(NS);
+  return (
+    <>
+      {f.dateTime(new Date(value), { dateStyle: 'medium', timeStyle: 'short' })}
+      {by ? (
+        <span className="block font-sans text-[11px]">{t('table.lastEditedBy', { name: by })}</span>
+      ) : null}
+    </>
+  );
 }
 
 function RoleName({ role }: { role: RoleResponse }) {

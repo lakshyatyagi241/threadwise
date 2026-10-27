@@ -127,6 +127,28 @@ export class RolesRepository {
     );
   }
 
+  /** The name of the person who last saved each role: the actor of its latest insert or update in the audit trail. */
+  async lastEditors(tx: Tx, orgId: number, roleIds: number[]): Promise<Map<number, string>> {
+    if (roleIds.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT DISTINCT ON (a.record_id) a.record_id, u.full_name
+      FROM audit_log a
+      JOIN users u ON u.org_id = a.org_id AND u.id = a.actor_id AND a.actor_type = 'user'
+      WHERE a.org_id = ${orgId} AND a.module = 'roles' AND a.action IN ('insert', 'update')
+        AND a.record_id IN (${sql.join(
+          roleIds.map((i) => sql`${i}`),
+          sql`, `,
+        )})
+      ORDER BY a.record_id, a.at DESC, a.id DESC
+    `);
+    return new Map(
+      (res.rows as Array<{ record_id: number | string; full_name: string }>).map((r) => [
+        Number(r.record_id),
+        r.full_name,
+      ]),
+    );
+  }
+
   /** Active members per role who are in no team (the roles editor warns about a team scope for them). */
   async membersWithoutTeam(tx: Tx, orgId: number, roleIds: number[]): Promise<Map<number, number>> {
     if (roleIds.length === 0) return new Map();
