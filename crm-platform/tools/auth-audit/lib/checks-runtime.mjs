@@ -471,7 +471,7 @@ export function testEvidenceByControl(summaries) {
 
 /** Packages whose flaws can directly weaken authentication. A high advisory here is a release blocker. */
 const AUTH_RELEVANT =
-  /^(jsonwebtoken|jws|jwa|jose|@nestjs\/jwt|@node-rs\/argon2|argon2|bcrypt\w*|@clerk\/.+|ioredis|express|body-parser|cookie|cookie-parser|socket\.io.*|engine\.io.*|ws|next|iron-session|passport.*|oauth.*|openid-client|otplib|speakeasy|@simplewebauthn\/.+|undici|path-to-regexp|qs|send|serve-static)$/;
+  /^(jsonwebtoken|jws|jwa|jose|@nestjs\/jwt|@node-rs\/argon2|argon2|bcrypt\w*|ioredis|express|body-parser|cookie|cookie-parser|socket\.io.*|engine\.io.*|ws|next|iron-session|passport.*|oauth.*|openid-client|otplib|speakeasy|@simplewebauthn\/.+|undici|path-to-regexp|qs|send|serve-static)$/;
 
 export async function runDependencyAudit(ctx) {
   if (ctx.opts.skipDeps) {

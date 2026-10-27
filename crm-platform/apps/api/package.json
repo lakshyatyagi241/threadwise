@@ -40,7 +40,6 @@
     "seed:lead-scoring": "node dist/src/modules/marketplace/cli/seed-lead-scoring.js"
   },
   "dependencies": {
-    "@clerk/backend": "^3.26.1",
     "@crm/contracts": "workspace:*",
     "@crm/db": "workspace:*",
     "@crm/observability": "workspace:*",

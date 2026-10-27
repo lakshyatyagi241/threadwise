@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Gespeichert.",
-        "published": "Auf WhatsApp veröffentlicht."
+        "published": "Auf WhatsApp veröffentlicht.",
+        "connectHint": "Formulare werden nur über eine direkte WhatsApp-Cloud-API-Verbindung veröffentlicht. Bitten Sie einen Admin, unter Kanäle → WhatsApp eine solche zu verbinden.",
+        "connectLink": "WhatsApp-Kanäle öffnen"
       },
       "builder": {
         "back": "Zurück zu Formularen",

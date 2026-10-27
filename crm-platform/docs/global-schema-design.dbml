@@ -66,7 +66,7 @@ Table users {
   email citext
   full_name text
   password_hash text
-  auth_subject text [note: "Clerk user id — null until first SSO login; partial unique (org_id, auth_subject) WHERE NOT NULL"]
+  auth_subject text [note: "External sign-in subject id, no writer since Clerk sign-in was removed; partial unique (org_id, auth_subject) WHERE NOT NULL"]
   status text
   settings jsonb
   row_version integer

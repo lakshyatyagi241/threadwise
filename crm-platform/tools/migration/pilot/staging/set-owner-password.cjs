@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sets the password of the migrated OWNER of ONE named organization, so the pilot workspace can be opened on staging (migrated users
- * have no password, the owner's email is not verified, and neither mail nor Clerk is configured there). Single file; runs inside the
+ * have no password, the owner's email is not verified, and mail is not configured there). Single file; runs inside the
  * desk-api image (needs only `pg` and `@node-rs/argon2`, which the API ships) as the WORKER login, never the owner:
  *
  *   OWNER_NEW_PASSWORD=... TARGET_DATABASE_URL=<crm_worker_user url> node set-owner-password.cjs \

@@ -8,7 +8,7 @@ export const MECHANISMS = [
   {
     pool: 'Workspace staff (users)',
     credential:
-      'Email + password (Argon2id), optional TOTP / recovery code, Google/Facebook sign-in, Clerk token exchange',
+      'Email + password (Argon2id), optional TOTP / recovery code, Google/Facebook sign-in',
     token:
       'JWT access (15 min, HS256) + JWT refresh (30 d, separate secret) in httpOnly cookies set by the Next.js BFF; API takes Authorization: Bearer',
     server:
@@ -70,7 +70,7 @@ export const STRENGTHS = [
   'Refresh-token rotation with reuse detection that revokes the whole session (and audits it); a 30 s grace for racing browser tabs.',
   'Credential-stuffing awareness: dummy Argon2 verification for unknown accounts, one fixed error, per-(account,IP) lockout, per-IP failure ceiling, MFA failure budget that survives new challenges, optional captcha.',
   'Reset / verify / invite links: 256-bit random, stored only as SHA-256, atomically single-use, built from configuration (not the Host header), and a reset signs out every device.',
-  'MFA hygiene: TOTP secret encrypted at rest, replay-proof time-step bookkeeping, recovery codes Argon2-hashed and single-use, MFA is honoured on every alternate sign-in path (social, Clerk, workspace switch).',
+  'MFA hygiene: TOTP secret encrypted at rest, replay-proof time-step bookkeeping, recovery codes Argon2-hashed and single-use, MFA is honoured on every alternate sign-in path (social, workspace switch).',
   'Tenant scope comes from the signed token and the database (row-level security), never from request parameters; workspace switch requires a verified email and re-challenges MFA.',
   'API keys stored as digests with constant-time comparison, ~190-bit random bodies, unbiased sampling.',
   'Impersonation is time-boxed, audited, individually revocable and can be read-only.',

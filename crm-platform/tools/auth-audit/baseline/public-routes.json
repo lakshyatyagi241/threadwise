@@ -22,7 +22,6 @@
     "GET /r/:token",
     "GET /ready",
     "POST /v2/account/email-change/confirm",
-    "POST /v2/auth/clerk/session",
     "POST /v2/auth/find-workspaces",
     "POST /v2/auth/forgot-password",
     "POST /v2/auth/impersonation/redeem",

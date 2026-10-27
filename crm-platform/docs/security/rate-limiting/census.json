@@ -1757,30 +1757,6 @@
       "ms": 8925
     },
     {
-      "key": "POST /v2/auth/clerk/session",
-      "class": "public-write",
-      "declared": "none",
-      "bodyKind": "override",
-      "sent": 400,
-      "cap": 400,
-      "first429": null,
-      "allowedBeforeBlock": null,
-      "limited": false,
-      "mechanism": "none",
-      "declaredLimit": null,
-      "retryAfter": null,
-      "retryAfterOk": null,
-      "code": null,
-      "contentType": null,
-      "statuses": {
-        "404": 400
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 2011
-    },
-    {
       "key": "POST /v2/auth/find-workspaces",
       "class": "credential",
       "declared": "throttle",

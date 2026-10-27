@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "Kaydedildi.",
-        "published": "WhatsApp'ta yayınlandı."
+        "published": "WhatsApp'ta yayınlandı.",
+        "connectHint": "Formlar yalnızca doğrudan bir WhatsApp Cloud API bağlantısıyla yayımlanır. Kanallar → WhatsApp bölümünden bir bağlantı kurmasını bir yöneticiden isteyin.",
+        "connectLink": "WhatsApp kanallarını aç"
       },
       "builder": {
         "back": "Formlara dön",

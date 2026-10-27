@@ -1,7 +1,9 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useState } from 'react';
+import { failureNotice, type WaFormNotice } from './wa-form-notice';
 import type {
   SaveWaFormInput,
   WaForm,
@@ -72,7 +74,7 @@ function OptionsInput({
   );
 }
 
-type FormNotice = { tone: 'success' | 'danger'; text: string } | null;
+type FormNotice = WaFormNotice | null;
 
 /** `/wa-forms/[id]` (Reference form builder): basics + a screen/field editor. Editing a published form drops it to draft — server-enforced. */
 export function WaFormBuilderScreen({ id }: { id: string }) {
@@ -165,7 +167,7 @@ function WaFormBuilderForm({
       onPreviewUrl(null);
       onNotice({ tone: 'success', text: t('notice.saved') });
     } catch (err) {
-      onNotice({ tone: 'danger', text: errorText(err).text });
+      onNotice(failureNotice(err, errorText(err).text));
     }
   };
 
@@ -176,7 +178,7 @@ function WaFormBuilderForm({
       await publish.mutateAsync();
       onNotice({ tone: 'success', text: t('notice.published') });
     } catch (err) {
-      onNotice({ tone: 'danger', text: errorText(err).text });
+      onNotice(failureNotice(err, errorText(err).text));
     }
   };
 
@@ -189,7 +191,7 @@ function WaFormBuilderForm({
       onNotice(null);
       onPreviewUrl(r.url);
     } catch (err) {
-      onNotice({ tone: 'danger', text: errorText(err).text });
+      onNotice(failureNotice(err, errorText(err).text));
     }
   };
 
@@ -315,6 +317,15 @@ function WaFormBuilderForm({
       {notice && (
         <Alert tone={notice.tone} className="mt-4">
           {notice.text}
+          {notice.connect && (
+            <>
+              {' '}
+              {t('notice.connectHint')}{' '}
+              <Link href="/channels/whatsapp" className="font-semibold underline">
+                {t('notice.connectLink')}
+              </Link>
+            </>
+          )}
         </Alert>
       )}
       {previewUrl && (
