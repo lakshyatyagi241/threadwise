@@ -600,7 +600,7 @@ describe('growth pilot SQL', () => {
         `INSERT INTO lifecycle_stage_suggestions (org_id, contact_id, from_stage, to_stage, confidence) VALUES ($1,$2,'lead','qualified',0.7)`,
         [orgA, weak],
       );
-      const found = await as(orgA, (tx) => repo.autoStageCandidates(tx, orgA, 0.9, 50));
+      const found = await as(orgA, (tx) => repo.autoStageCandidates(tx, orgA, 0.9, 50, [{ from: 'lead', to: 'qualified' }], null));
       expect(found.map((s) => s.contactId)).toContain(c);
       expect(found.map((s) => s.contactId)).not.toContain(weak);
       const before = await as(orgA, (tx) => repo.autoAppliedToday(tx, orgA));
