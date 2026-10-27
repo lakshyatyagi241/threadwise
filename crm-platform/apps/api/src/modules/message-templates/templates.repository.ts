@@ -244,6 +244,19 @@ const escapeLike = (s: string) => s.replace(/[\\%_]/g, (m) => `\\${m}`);
 /** Tenant-scoped access to `wa_templates`. Every method runs inside the caller's `DatabaseService.tx`. */
 @Injectable()
 export class TemplatesRepository {
+  /**
+   * True when a template of the workspace still names this stored file, as its header or in a carousel card. A copy shares its
+   * original's file, so the file stays while either of them uses it.
+   */
+  async headerKeyInUse(tx: Tx, orgId: number, key: string): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wa_templates t
+      WHERE t.org_id = ${orgId}
+        AND (t.header_media_key = ${key} OR position(${key} in t.carousel_data::text) > 0)
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
   async list(tx: Tx, orgId: number, f: ListFilter): Promise<TemplateRow[]> {
     const where = this.filters(orgId, f);
     const sort = f.sort ?? 'newest';

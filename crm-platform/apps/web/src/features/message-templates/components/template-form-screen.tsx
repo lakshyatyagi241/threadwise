@@ -67,6 +67,7 @@ import {
   KINDS_OF_BUTTON_TYPE,
   OFFER_TEXT_MAX,
   isOffer,
+  copyState,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
 import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
@@ -241,16 +242,6 @@ export function TemplateFormScreen({
       initial={stateFromDetail(detail.data)}
     />
   );
-}
-
-/** A new template that starts as a copy of `d`: its own name, and no media sample (a new file is chosen for the copy). */
-function copyState(d: TemplateDetail): FormState {
-  return {
-    ...stateFromDetail(d),
-    name: `${d.name.slice(0, 512 - '_copy'.length)}_copy`,
-    headerSampleUrl: '',
-    headerPreviewUrl: '',
-  };
 }
 
 interface Saved {

@@ -8,6 +8,7 @@ import {
 import { newRow } from './buttons';
 import {
   contractIssues,
+  copyState,
   hasHeaderFile,
   initialState,
   locationOf,
@@ -397,5 +398,37 @@ describe('button type', () => {
     expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'FLOW' }] })).toBe('flow');
     expect(buttonTypeOf({ templateType: 'standard', buttons: [{ type: 'URL' }] })).toBe('buttons');
     expect(buttonTypeOf({ templateType: 'standard', buttons: [] })).toBe('none');
+  });
+});
+
+describe('duplicating a saved template keeps its header file (row 316)', () => {
+  const original = {
+    id: '33333333-3333-4333-8333-333333333333',
+    name: 'promo',
+    language: 'en_GB',
+    metaCategory: 'MARKETING',
+    templateType: 'media',
+    status: 'approved',
+    connectionId: CONN,
+    header: null,
+    attachmentType: 'image',
+    headerSampleUrl: 'https://cdn.test/a.png',
+    headerMediaKey: 'template-media/15/a.png',
+    headerMediaUrl: 'https://signed.test/a.png',
+    body: 'Hi {{1}}',
+    footer: 'Bye',
+    buttons: [],
+    variableMap: { body: [] },
+    codeExpirationMinutes: null,
+    parameterFormat: 'POSITIONAL',
+  } as unknown as TemplateDetail;
+
+  it('the copy names the original file, so it submits without a new upload', () => {
+    const copy = copyState(original);
+    expect(copy.name).toBe('promo_copy');
+    expect(copy.headerMediaKey).toBe('template-media/15/a.png');
+    expect(copy.headerSampleUrl).toBe('https://cdn.test/a.png');
+    expect(copy.headerPreviewUrl).toBe('https://signed.test/a.png');
+    expect(hasHeaderFile(copy)).toBe(true);
   });
 });
