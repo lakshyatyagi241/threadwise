@@ -2,6 +2,12 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 
+/**
+ * After a Redis failure, how long requests skip Redis altogether. Without it every throttled request waits out the Redis command
+ * timeout (2 s) before failing open, so an outage would make every login and public form two seconds slower.
+ */
+export const BREAKER_OPEN_MS = 5_000;
+
 export interface ConsumeResult {
   allowed: boolean;
   limit: number;
@@ -46,6 +52,10 @@ return {1, math.ceil(est) + 1, win - elapsed}
  * cache outage into a full API outage is the worse trade. The failure is logged at most once every 30 s per process so an
  * outage does not also flood the log.
  *
+ * Circuit breaker: the first failure opens it for `BREAKER_OPEN_MS`; requests in that time are let through at once without a
+ * Redis call. Then ONE request probes Redis (the others keep skipping while it is out); success closes the breaker, failure
+ * re-opens it. So an outage costs each request nothing instead of the 2 s command timeout.
+ *
  * Clock: the window index comes from this process's clock. Skew between pods shifts a boundary by the skew, which at a
  * one-minute window is noise.
  */
@@ -53,6 +63,9 @@ return {1, math.ceil(est) + 1, win - elapsed}
 export class RateLimiter {
   private readonly logger = new Logger(RateLimiter.name);
   private lastWarnAt = 0;
+  private open = false;
+  private reopenAt = 0;
+  private probing = false;
 
   constructor(@Inject(REDIS_CLIENT) private readonly redis: Redis) {}
 
@@ -66,6 +79,11 @@ export class RateLimiter {
     const windowMs = windowSeconds * 1000;
     const index = Math.floor(nowMs / windowMs);
     const elapsed = nowMs - index * windowMs;
+    let probe = false;
+    if (this.open) {
+      if (Date.now() < this.reopenAt || this.probing) return this.degraded(limit, windowSeconds);
+      this.probing = probe = true;
+    }
     try {
       const raw = (await this.redis.eval(
         SLIDING_WINDOW,
@@ -77,6 +95,8 @@ export class RateLimiter {
         limit,
       )) as [number, number, number];
       const [allowed, used, msLeft] = raw;
+      if (this.open) this.logger.log('rate limiter reached Redis again; counting requests');
+      this.open = false;
       return {
         allowed: allowed === 1,
         limit,
@@ -85,17 +105,25 @@ export class RateLimiter {
         degraded: false,
       };
     } catch (err) {
+      this.open = true;
+      this.reopenAt = Date.now() + BREAKER_OPEN_MS; // wall clock: `nowMs` only picks the window, and tests freeze it
       if (nowMs - this.lastWarnAt > 30_000) {
         this.lastWarnAt = nowMs;
         this.logger.warn({ err }, 'rate limiter could not reach Redis; letting requests through');
       }
-      return {
-        allowed: true,
-        limit,
-        remaining: limit,
-        retryAfterSeconds: windowSeconds,
-        degraded: true,
-      };
+      return this.degraded(limit, windowSeconds);
+    } finally {
+      if (probe) this.probing = false;
     }
+  }
+
+  private degraded(limit: number, windowSeconds: number): ConsumeResult {
+    return {
+      allowed: true,
+      limit,
+      remaining: limit,
+      retryAfterSeconds: windowSeconds,
+      degraded: true,
+    };
   }
 }

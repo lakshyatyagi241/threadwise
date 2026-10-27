@@ -19,6 +19,7 @@
     "roles-permissions": "P0",
     "companies": "P1",
     "google-account": "P1",
-    "platform-deployments": "P2"
+    "platform-deployments": "P2",
+    "platform-infrastructure": "P2"
   }
 }

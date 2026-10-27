@@ -77,6 +77,16 @@ routes name `webhook` risks refusing provider callbacks that arrive from a share
 If Redis is unreachable the request is let through (fail open) and no quota headers are sent; one warning is logged per
 process every 30 seconds. A throttle that turned a cache outage into an API outage would be the worse failure.
 
+A circuit breaker keeps that failure cheap. Without it, every throttled request waited out the Redis command timeout (2 s) before
+being let through, so an outage made every login and public form two seconds slower. Now the first failure opens the breaker for
+5 seconds (`BREAKER_OPEN_MS`): requests in that time are let through at once, with no Redis call. After that one request probes
+Redis (the others keep skipping while it is out); success closes the breaker and counting resumes, failure opens it again. Measured
+on the local stack with Redis stopped: about 2 s per request before, 7 to 9 ms after (one probe per 5 s still pays the timeout).
+Counters kept in Redis survive the outage, so a caller that was over the limit is over it again once Redis is back.
+
+`auth` is not failed closed on purpose: refusing every sign-in while Redis is down would turn a cache outage into a login outage,
+and sign-in keeps its own limiter (`RateLimitService`) that does not depend on this one.
+
 ### Existing limiters
 
 Auth's `RateLimitService`, the storefront's `PublicRateLimiter` and the API-key guard keep their own counters and are
