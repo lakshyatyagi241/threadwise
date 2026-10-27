@@ -7,6 +7,7 @@ import {
   assistantPrompt,
   auc,
   buildPropensity,
+  digestDay,
   digestHighlights,
   isHotLead,
   mergeConfig,
@@ -181,6 +182,15 @@ describe('send times', () => {
     expect(safeTimezone('Asia/Kolkata')).toBe('Asia/Kolkata');
     expect(safeTimezone('Mars/Olympus')).toBe('UTC');
     expect(safeTimezone(null)).toBe('UTC');
+  });
+
+  it('names the digest day in the workspace zone, not in UTC', () => {
+    // 20:30 UTC on the 26th is already the 27th in Kolkata (UTC+5:30) and still the 26th in New York.
+    const at = new Date('2026-10-26T20:30:00Z');
+    expect(digestDay(at, 'Asia/Kolkata')).toBe('2026-10-27');
+    expect(digestDay(at, 'America/New_York')).toBe('2026-10-26');
+    expect(digestDay(at, 'UTC')).toBe('2026-10-26');
+    expect(digestDay(at, 'Mars/Olympus')).toBe('2026-10-26');
   });
 });
 
