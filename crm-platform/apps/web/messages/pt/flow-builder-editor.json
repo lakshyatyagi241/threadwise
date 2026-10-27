@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Acionar outro chatbot"
+          "description": "Passa a conversa para um agente de IA"
         },
         "whatsapp_shop": {
           "label": "Loja do WhatsApp",

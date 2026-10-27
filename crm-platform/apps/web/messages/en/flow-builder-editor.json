@@ -2253,7 +2253,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Trigger another chatbot"
+          "description": "Hand the chat to an AI agent"
         },
         "whatsapp_shop": {
           "label": "WhatsApp Shop",

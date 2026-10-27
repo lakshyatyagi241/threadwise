@@ -2253,7 +2253,7 @@
         },
         "chatbot": {
           "label": "بوت الدردشة",
-          "description": "تشغيل بوت دردشة آخر"
+          "description": "تحويل المحادثة إلى وكيل ذكاء اصطناعي"
         },
         "whatsapp_shop": {
           "label": "متجر WhatsApp",

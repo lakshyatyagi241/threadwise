@@ -2112,7 +2112,7 @@
         },
         "chatbot": {
           "label": "चैटबॉट",
-          "description": "दूसरा चैटबॉट ट्रिगर करें"
+          "description": "चैट को AI एजेंट को सौंपें"
         },
         "whatsapp_shop": {
           "label": "WhatsApp शॉप",

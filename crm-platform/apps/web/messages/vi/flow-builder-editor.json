@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Kích hoạt chatbot khác"
+          "description": "Chuyển cuộc trò chuyện cho tác nhân AI"
         },
         "whatsapp_shop": {
           "label": "Cửa hàng WhatsApp",

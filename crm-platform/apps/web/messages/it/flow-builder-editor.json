@@ -2112,7 +2112,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Attiva un altro chatbot"
+          "description": "Passa la chat a un agente IA"
         },
         "whatsapp_shop": {
           "label": "Negozio WhatsApp",

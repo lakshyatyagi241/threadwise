@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Picu chatbot lain"
+          "description": "Serahkan obrolan ke agen AI"
         },
         "whatsapp_shop": {
           "label": "Toko WhatsApp",

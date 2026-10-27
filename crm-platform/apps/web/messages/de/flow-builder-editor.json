@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Einen anderen Chatbot auslösen"
+          "description": "Chat an einen KI-Agenten übergeben"
         },
         "whatsapp_shop": {
           "label": "WhatsApp-Shop",

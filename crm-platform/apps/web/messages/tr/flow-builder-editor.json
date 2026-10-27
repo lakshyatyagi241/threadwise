@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Sohbet botu",
-          "description": "Başka bir sohbet botunu tetikle"
+          "description": "Sohbeti bir yapay zekâ ajanına devret"
         },
         "whatsapp_shop": {
           "label": "WhatsApp Mağaza",

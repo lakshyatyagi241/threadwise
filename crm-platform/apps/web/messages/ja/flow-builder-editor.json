@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "チャットボット",
-          "description": "別のチャットボットを起動"
+          "description": "チャットをAIエージェントに引き継ぐ"
         },
         "whatsapp_shop": {
           "label": "WhatsAppショップ",

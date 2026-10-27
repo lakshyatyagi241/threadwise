@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "แชตบอต",
-          "description": "เรียกแชตบอตอีกตัว"
+          "description": "ส่งต่อแชทให้เอเจนต์ AI"
         },
         "whatsapp_shop": {
           "label": "ร้านค้า WhatsApp",

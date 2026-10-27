@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "챗봇",
-          "description": "다른 챗봇 실행"
+          "description": "대화를 AI 에이전트에게 넘기기"
         },
         "whatsapp_shop": {
           "label": "WhatsApp 쇼핑",
