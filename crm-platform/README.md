@@ -18,7 +18,7 @@ pnpm infra:up                          # postgres, redis, mailpit
 pnpm --filter @crm/contracts build
 pnpm --filter @crm/db build
 pnpm --filter @crm/observability build
-pnpm db:migrate && pnpm db:seed
+ALLOW_DEV_SEED=1 DEV_SEED_PASSWORD=<a password you choose> pnpm db:migrate && pnpm db:seed
 
 pnpm dev                               # API  → http://localhost:3000
 pnpm dev:worker                        # worker, in a second terminal
@@ -31,7 +31,7 @@ open  localhost:3000/docs              # Swagger
 
 Seeded staff login: `nachiket.challawar@geta.ai` (org `Admin`, Clerk
 sign-in, the seed sets no password); sub-agent: `agent@Admin.test` /
-`Passw0rd!`. Full walkthrough:
+`$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none). Full walkthrough:
 [docs/runbooks/local-development.md](docs/runbooks/local-development.md).
 
 ## Layout

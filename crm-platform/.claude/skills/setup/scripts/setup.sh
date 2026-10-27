@@ -245,6 +245,6 @@ echo
 echo "  API docs:  http://localhost:$API_PORT/docs"
 echo
 echo "  ${c_bold}Staff login${c_reset}  nachiket.challawar@geta.ai   (org: Admin; Clerk sign-in, the seed sets no password)"
-echo "  ${c_bold}Agent login${c_reset}  agent@Admin.test / Passw0rd!"
+echo "  ${c_bold}Agent login${c_reset}  agent@Admin.test / $DEV_SEED_PASSWORD"
 echo
 echo "  Troubleshooting: docs/runbooks/local-development.md"

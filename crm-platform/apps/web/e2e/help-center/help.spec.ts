@@ -12,7 +12,7 @@ import { SETTINGS } from '../../src/features/_registry/settings.generated';
 const ORG = process.env.E2E_ORG ?? 'Admin';
 const ADMIN = {
   email: process.env.E2E_ADMIN_EMAIL ?? 'nachiket.challawar@geta.ai',
-  password: process.env.E2E_PASSWORD ?? 'Passw0rd!',
+  password: process.env.E2E_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '',
 };
 const API = process.env.API_URL ?? 'http://localhost:3000';
 

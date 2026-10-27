@@ -32,7 +32,7 @@ open  localhost:3000/docs     # Swagger
 | Who         | Credentials                                                                   |
 | ----------- | ----------------------------------------------------------------------------- |
 | Staff admin | `nachiket.challawar@geta.ai` (org `Admin`, Clerk sign-in, no seeded password) |
-| Sub-agent   | `agent@Admin.test` / `Passw0rd!` (org `Admin`)                                |
+| Sub-agent   | `agent@Admin.test` / `$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none) (org `Admin`)                                |
 
 A **second tenant** (`othertenant`) is seeded on purpose. Isolation tests need
 an org the first one must not be able to see — seeding one tenant makes working
@@ -115,7 +115,7 @@ Four spec files run in parallel by default (`TEST_NO_DOCKER_WORKERS=2` lowers it
 ```bash
 TOKEN=$(curl -s -X POST localhost:3000/v2/auth/staff/login \
   -H 'content-type: application/json' \
-  -d '{"orgSlug":"Admin","email":"admin@example.test","password":"Passw0rd!"}' \
+  -d '{"orgSlug":"Admin","email":"admin@example.test","password":"$DEV_SEED_PASSWORD"}' \
   | jq -r .accessToken)
 
 curl "localhost:3000/v2/contacts?limit=5" -H "authorization: Bearer $TOKEN"

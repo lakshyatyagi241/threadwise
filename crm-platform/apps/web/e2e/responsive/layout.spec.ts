@@ -34,7 +34,7 @@ const OUT = process.env.RESPONSIVE_OUT ?? '/tmp/responsive-results.jsonl';
 const ADMIN = {
   org: process.env.E2E_ORG ?? 'Admin',
   email: process.env.E2E_ADMIN_EMAIL ?? 'nachiket.challawar@geta.ai',
-  password: process.env.E2E_PASSWORD ?? 'Passw0rd!',
+  password: process.env.E2E_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '',
 };
 
 type Route = { url: string; authed: boolean };
