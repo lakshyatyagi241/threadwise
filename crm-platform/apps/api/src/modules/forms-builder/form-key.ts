@@ -1,4 +1,4 @@
-import { createHmac, randomInt } from 'node:crypto';
+import { createHash, createHmac, randomInt } from 'node:crypto';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -14,6 +14,19 @@ export function randomToken(length: number): string {
 
 /** The only identifier of a form that appears in a public URL (22 characters, see FORM_PUBLIC_KEY in the contracts). */
 export const newPublicKey = (): string => randomToken(22);
+
+/**
+ * The audit delta of a key rotation: a fingerprint of the retired key and of the new one. The audit log outlives the keys, so it
+ * names each key only by a hash, which still lets a leaked key be matched to the rotation that retired it.
+ */
+export function keyRotationDelta(
+  oldKey: string,
+  newKey: string,
+): { publicKey: { old: string; new: string } } {
+  const fingerprint = (key: string): string =>
+    createHash('sha256').update(key).digest('hex').slice(0, 8);
+  return { publicKey: { old: fingerprint(oldKey), new: fingerprint(newKey) } };
+}
 
 /** The receipt a visitor gets for a submission: a handle for the thank-you page, not a credential for anything. */
 export const newReceiptToken = (): string => randomToken(22);
