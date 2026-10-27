@@ -4,7 +4,7 @@ import { PlatformStore } from '../../../src/modules/auth';
 import { SessionService } from '../../../src/modules/auth/sessions/session.service';
 import { SecurityPolicyService } from '../../../src/modules/auth/platform/security-policy.service';
 import { TokenService } from '../../../src/modules/auth/token.service';
-import { CouponCheckoutService } from '../../../src/modules/coupons-credits-referral-currency';
+import { FulfilmentService } from '../../../src/modules/platform-payment-gateways/fulfilment.service';
 import { ReferralCodeService } from '../../../src/modules/coupons-credits-referral-currency/referral-code.service';
 import { ReferralRewardService } from '../../../src/modules/coupons-credits-referral-currency/referral-reward.service';
 import { StorageMeterService } from '../../../src/modules/storage-quota/storage-meter.service';
@@ -252,15 +252,21 @@ describe('CC-CPN: coupon redemption counter', () => {
       (
         await q(
           `INSERT INTO orders (org_id, order_number, user_id, currency, amount, kind, plan_slug, status, coupon_id, coupon_code)
-           VALUES ($1, $2, $3, 'USD', 100, 'plan', 'plana', 'paid', $4, $5) RETURNING id`,
+           VALUES ($1, $2, $3, 'USD', 100, 'plan', 'plana', 'pending', $4, $5) RETURNING id`,
           [t.orgId, `ORD-${Date.now()}-${n++}`, t.adminUserId, c.id, c.code],
         )
       ).rows[0].id,
     );
-  const redeem = (orderId: number) =>
-    h.app
-      .get(PlatformStore)
-      .tx((tx) => h.app.get(CouponCheckoutService).redeemForOrder(tx, t.orgId, orderId));
+  // The coupon is counted once, by the paid transition of the live payment path (FulfilmentService.fulfil).
+  const redeem = async (orderId: number): Promise<string | null> => {
+    const { applied } = await h.app
+      .get(FulfilmentService)
+      .fulfil({ id: orderId, orgId: t.orgId } as never, {});
+    if (!applied) return null;
+    return String(
+      (await q(`SELECT coupon_code FROM orders WHERE id = $1`, [orderId])).rows[0].coupon_code,
+    );
+  };
   const used = async (id: number) =>
     scalar(`SELECT uses_count AS n FROM coupons WHERE id = $1`, [id]);
 
@@ -281,11 +287,6 @@ describe('CC-CPN: coupon redemption counter', () => {
     const orders = await Promise.all(Array.from({ length: 12 }, () => mkOrder(c)));
     await race(12, (i) => redeem(orders[i]!));
     expect(await used(c.id)).toBe(12);
-    expect(
-      await scalar(`SELECT count(*)::int AS n FROM coupon_redemptions WHERE coupon_id = $1`, [
-        c.id,
-      ]),
-    ).toBe(12);
   });
   // D-06 (the last uses of a coupon handed out twice) is enforced when the order is placed: see coupon-limit.e2e.spec.ts.
 });

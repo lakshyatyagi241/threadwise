@@ -6,7 +6,6 @@ import {
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CouponAdminService } from './coupon-admin.service';
-import { CouponCheckoutService } from './coupon-checkout.service';
 import { CouponsController } from './coupons.controller';
 import { CpnStore } from './cpn-store';
 import { CurrenciesController } from './currencies.controller';
@@ -20,7 +19,7 @@ import { ReferralsController } from './referrals.controller';
 
 /**
  * Coupons, the currency catalogue and the referral programme (CPN). The operator HTTP surface, the user's own affiliate routes,
- * and the service the checkout calls (`CouponCheckoutService`, exported through the barrel). The referral consumers live in the
+ * The referral consumers live in the
  * worker module beside this one. It uses the auth module's operator guard, audit writer and platform
  * store (those are global through AuthModule) and the settings domain's currency helpers and general settings group.
  */
@@ -30,7 +29,6 @@ import { ReferralsController } from './referrals.controller';
   providers: [
     CpnStore,
     CouponAdminService,
-    CouponCheckoutService,
     CurrencyAdminService,
     ReferralCodeService,
     ReferralAttributionService,
@@ -39,12 +37,6 @@ import { ReferralsController } from './referrals.controller';
     ReferralService,
     { provide: FX_RATES, useClass: OpenErApiFxRates },
   ],
-  exports: [
-    CouponCheckoutService,
-    CpnStore,
-    ReferralCodeService,
-    ReferralAttributionService,
-    ReferralRewardService,
-  ],
+  exports: [CpnStore, ReferralCodeService, ReferralAttributionService, ReferralRewardService],
 })
 export class CouponsCreditsReferralCurrencyModule {}
