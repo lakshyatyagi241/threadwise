@@ -168,6 +168,14 @@ export interface EnqueueOutboundResult {
 export interface ConversationsFacade {
   openConversationFor(contactId: string, channelId: string): Promise<ThreadRef>;
   findThread(channelId: string, peerKey: string): Promise<ThreadRef | null>;
+  /**
+   * The channel and peer of a conversation, for a consumer that acts on the customer's side (for example ending a flow run when a
+   * person takes the thread). Internal ids, never returned to a client. Null when the conversation is not in `orgId`.
+   */
+  peerOfConversation(
+    orgId: number,
+    conversationId: string,
+  ): Promise<{ channelId: number; peerKey: string } | null>;
   recordOutbound(input: RecordOutboundInput): Promise<{ messageId: string; thread: ThreadRef }>;
 
   /**
