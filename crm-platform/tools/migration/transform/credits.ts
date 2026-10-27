@@ -116,6 +116,9 @@ export const USAGE_FIELDS: FieldMap = {
   retry_enabled: NO_BILL,
   max_retries: NO_BILL,
   interakt_reponse_time: NO_BILL,
+  phone_number_id: NO_BILL,
+  meta_pricing:
+    "drop:Meta's price breakdown of the send; the amount and cost are kept in the charge's meta",
   template_id: NO_BILL,
   meta_template_id: NO_BILL,
   origin: NO_BILL,
