@@ -104,6 +104,39 @@ Object relationships that are NOT there, and are what the owner is asking about:
 2. There is **no service object**. A service has no stock; today a person types it as a free line.
 3. The store's product (`wa_products`) is not offered in the invoice or estimate line editor, and a deal has no products at all.
 
+### 1.6 One screen or two: invoices and recurring schedules (owner question)
+
+A recurring schedule is **not an invoice**: it is a rule (template, rhythm, next date, pause, run history) that MAKES invoices. The invoices it makes are ordinary
+invoices (`invoices.recurring_id`, source `recurring`). So there are two lists, and each has a different job:
+
+| What                                                                    | Where            | Why it stays                                                                          |
+| ----------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------- |
+| Invoices (every document: one-time, made by a schedule, store, Shopify) | Invoices list    | one list for money owed and paid; the invoice already names the schedule that made it |
+| Recurring schedules (the rules)                                         | Recurring screen | pause, resume, next dates and run history have no place on an invoice list            |
+
+How to tell them apart without a second entry point: the **Create** menu is the single door (it creates a document or a schedule); the Invoices list separates by
+**origin** (a "Recurring" filter on `source=recurring`, with the schedule name shown on each such invoice); and the Recurring screen is reached from the Invoices page
+as a tab or link ("Recurring schedules"), not as a separate menu entry. The menu entry for Recurring can then be removed from the sidebar once the owner agrees; this
+change keeps it, so nothing moves without a decision. A plan without `recurring_invoices` still SEES its schedules and the invoices they made.
+
+### 1.7 Do the relationships between the objects exist? (checked in the schema)
+
+Yes, all of these are real foreign keys on `(org_id, id)`, so they also hold per tenant. Every one is `ON DELETE SET NULL`: deleting the parent clears the link
+and keeps the child, because an invoice or an estimate is evidence and must outlive a deleted deal or contact.
+
+| From                 | To                                                                                                  | Kept by                                                                                                                |
+| -------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Deal                 | contact, company, pipeline, stage, owner                                                            | `deals` columns                                                                                                        |
+| Estimate or proposal | contact, company, deal                                                                              | `fk_sales_docs_contact_id`, `_company_id`, `_deal_id`                                                                  |
+| Invoice              | contact, company, **deal**, **estimate** (`quote_id`), recurring schedule, sales order, store order | `fk_invoices_contact_id`, `_company_id`, `_deal_id`, `_quote_id`, plus `recurring_id`, `sales_order_id`, `wa_order_id` |
+| Estimate to invoice  | the invoice carries `quote_id`; the estimate becomes `converted`                                    | one transaction, unique per estimate                                                                                   |
+| Store order          | the invoice it made                                                                                 | `invoices.wa_order_id`                                                                                                 |
+
+They are also shown where the person works: the deal drawer lists its invoices and its estimates, the contact page lists its deals and documents.
+
+NOT related today: any document line to a product or service (section 1.5); a deal to its lines. Not checked in this pass: whether an invoice started from a deal
+copies that deal's contact and company by itself (read the builder before relying on it).
+
 ## 2. Do (what this change builds)
 
 | Point | Built                                                                                                                                                                       |
@@ -132,6 +165,18 @@ Manual checks the owner should do before relying on it (not done here):
 - Decide point 5 (section 5).
 
 ## 5. Proposal for point 5 (not built): products and services on documents
+
+### 5.0 Packaging decided with the owner: an add-on, plan-gated
+
+"Products and Services" is an object for the people who need it, so it is sold the way the existing add-ons are, not switched on for everyone:
+
+- A first-party **mini app** (recipe of Appointments and Forms in [addons-plan-offers.md](addons-plan-offers.md) and [forms-builder-app.md](forms-builder-app.md)): app slug
+  `products`, plan feature `catalog_items` (default **off**: it is new), `grants_plan_features` on the listing, the menu entry behind `gates.app`, permissions
+  `record.catalog-items.*` with `permission_defs.plan_feature`.
+- The plan editor then shows it as **Included**, **Paid** or **Hidden** per plan (the existing offers matrix); on Included the plan carries the feature and every gate follows.
+- A workspace without it keeps today's behaviour exactly: free-text lines, no product picker, no new menu entry. With it: the catalog screen, the picker on
+  invoice, estimate, recurring and deal lines, and the report.
+- Turning it off later keeps the catalog and the links (settings are kept, as for other add-ons); documents already made are unchanged.
 
 Principle: **additive and optional**, so nothing that exists changes behaviour. A line may point at a product; it never has to.
 
