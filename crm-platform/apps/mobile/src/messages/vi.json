@@ -2331,7 +2331,11 @@
       "endedTitle": "Cuộc gọi đã kết thúc",
       "endedText": "Chạm để ghi lại cuộc gọi của bạn với {{name}}.",
       "channelOngoing": "Cuộc gọi đang diễn ra",
-      "channelEnded": "Tóm tắt cuộc gọi"
+      "channelEnded": "Tóm tắt cuộc gọi",
+      "lastMissed": "Cuộc gọi nhỡ gần nhất",
+      "noMissed": "Không có cuộc gọi nhỡ",
+      "today": "Hôm nay",
+      "yesterday": "Hôm qua"
     },
     "summary": {
       "title": "Thêm cuộc gọi",

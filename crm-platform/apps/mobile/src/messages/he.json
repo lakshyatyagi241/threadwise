@@ -2389,7 +2389,11 @@
       "endedTitle": "השיחה הסתיימה",
       "endedText": "הקישו כדי לתעד את השיחה עם {{name}}.",
       "channelOngoing": "שיחות מתנהלות",
-      "channelEnded": "סיכומי שיחות"
+      "channelEnded": "סיכומי שיחות",
+      "lastMissed": "שיחה אחרונה שלא נענתה",
+      "noMissed": "אין שיחות שלא נענו",
+      "today": "היום",
+      "yesterday": "אתמול"
     },
     "summary": {
       "title": "הוספת שיחה",

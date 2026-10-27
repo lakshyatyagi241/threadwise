@@ -14,8 +14,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 
 /**
- * The contact card drawn over the phone's call screen while a call is on (one placed from the app, or one from a contact that rang): the app's name with a close button,
- * and under it the contact's initials, name, what they are, and the number. It takes no focus, so the call screen stays usable.
+ * The contact card drawn over the phone's call screen while a call is on (one placed from the app, or one from a contact that rang): the app's name with a close button
+ * on a deep panel, and in it the contact's card: initials, name, what they are and the number, and (for a contact that rang) a "Last Missed Call" row with when. It takes no focus, so the call screen stays usable.
  */
 class CallOverlay(
   private val context: Context,
@@ -55,24 +55,25 @@ class CallOverlay(
   }
 
   private fun build(onClose: () -> Unit): View {
-    val surface = color("surfaceColor", "#FFFFFF")
-    val text = color("textColor", "#121B2E")
-    val muted = color("mutedColor", "#4B5872")
+    // The panel is the deep brand colour and the contact's card the brighter primary one, with white words on both.
+    val panel = color("panelColor", "#0B2A5C")
+    val onPanel = color("onPanelColor", "#FFFFFF")
     val primary = color("primaryColor", "#1A56DB")
     val onPrimary = color("onPrimaryColor", "#FFFFFF")
     val name = data.getString("name").orEmpty()
+    val missedWhen = data.getString("missedWhen")
 
     val header = FrameLayout(context).apply {
       addView(
-        label(data.getString("appName").orEmpty(), 16f, text, bold = true),
-        FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, dp(48), Gravity.CENTER_VERTICAL or Gravity.START),
+        label(data.getString("appName").orEmpty(), 18f, onPanel, bold = true),
+        FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, dp(48), Gravity.CENTER_VERTICAL or Gravity.START).apply { marginStart = dp(4) },
       )
       addView(
         TextView(context).apply {
           this.text = "✕"
-          textSize = 20f
+          textSize = 22f
           gravity = Gravity.CENTER
-          setTextColor(text)
+          setTextColor(onPanel)
           contentDescription = data.getString("closeLabel")
           setOnClickListener { onClose() }
         },
@@ -82,38 +83,59 @@ class CallOverlay(
 
     val avatar = TextView(context).apply {
       this.text = initials(name)
-      textSize = 16f
+      textSize = 18f
       gravity = Gravity.CENTER
       setTypeface(typeface, Typeface.BOLD)
-      setTextColor(primary)
-      background = rounded(onPrimary, 24).apply { shape = GradientDrawable.OVAL }
+      setTextColor(Color.parseColor("#121B2E"))
+      background = rounded(onPrimary, 28).apply { shape = GradientDrawable.OVAL }
     }
 
     val words = LinearLayout(context).apply {
       orientation = LinearLayout.VERTICAL
-      addView(label(name, 17f, onPrimary, bold = true))
-      addView(label(data.getString("subtitle").orEmpty(), 14f, onPrimary))
-      addView(label(data.getString("phone").orEmpty(), 14f, onPrimary))
+      addView(label(name, 20f, onPrimary, bold = true))
+      addView(label(data.getString("subtitle").orEmpty(), 15f, onPrimary))
+      addView(label(data.getString("phone").orEmpty(), 15f, onPrimary))
+    }
+
+    val who = LinearLayout(context).apply {
+      orientation = LinearLayout.HORIZONTAL
+      gravity = Gravity.CENTER_VERTICAL
+      addView(avatar, LinearLayout.LayoutParams(dp(56), dp(56)))
+      addView(words, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(14) })
     }
 
     val card = LinearLayout(context).apply {
-      orientation = LinearLayout.HORIZONTAL
-      gravity = Gravity.CENTER_VERTICAL
-      setPadding(dp(16), dp(16), dp(16), dp(16))
-      background = rounded(primary, 16)
+      orientation = LinearLayout.VERTICAL
+      setPadding(dp(18), dp(18), dp(18), dp(18))
+      background = rounded(primary, 20)
       if (onOpen != null) {
         isClickable = true
         contentDescription = name
         setOnClickListener { onOpen.invoke() }
       }
-      addView(avatar, LinearLayout.LayoutParams(dp(48), dp(48)))
-      addView(words, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(12) })
+      addView(who, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+      // "Last Missed Call" and when: only a card that was given the row (a contact that rang) has it.
+      if (missedWhen != null) {
+        addView(
+          View(context).apply { setBackgroundColor(Color.argb(77, Color.red(onPrimary), Color.green(onPrimary), Color.blue(onPrimary))) },
+          LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(1)).apply { topMargin = dp(16); bottomMargin = dp(14) },
+        )
+        addView(
+          LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            addView(label(data.getString("missedLabel").orEmpty(), 16f, onPrimary), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            addView(label(missedWhen, 16f, onPrimary, bold = true))
+          },
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          LinearLayout.LayoutParams.WRAP_CONTENT,
+        )
+      }
     }
 
     return LinearLayout(context).apply {
       orientation = LinearLayout.VERTICAL
-      setPadding(dp(16), dp(4), dp(8), dp(16))
-      background = rounded(surface, 24)
+      setPadding(dp(12), dp(4), dp(12), dp(14))
+      background = rounded(panel, 24)
       elevation = dp(8).toFloat()
       addView(header)
       addView(card, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

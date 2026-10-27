@@ -2476,7 +2476,11 @@
       "endedTitle": "انتهت المكالمة",
       "endedText": "اضغط لتسجيل مكالمتك مع {{name}}.",
       "channelOngoing": "المكالمات الجارية",
-      "channelEnded": "ملخصات المكالمات"
+      "channelEnded": "ملخصات المكالمات",
+      "lastMissed": "آخر مكالمة فائتة",
+      "noMissed": "لا توجد مكالمات فائتة",
+      "today": "اليوم",
+      "yesterday": "أمس"
     },
     "summary": {
       "title": "إضافة مكالمة",

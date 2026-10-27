@@ -2331,7 +2331,11 @@
       "endedTitle": "通话已结束",
       "endedText": "点按以记录您与 {{name}} 的通话。",
       "channelOngoing": "进行中的通话",
-      "channelEnded": "通话摘要"
+      "channelEnded": "通话摘要",
+      "lastMissed": "最近一次未接来电",
+      "noMissed": "没有未接来电",
+      "today": "今天",
+      "yesterday": "昨天"
     },
     "summary": {
       "title": "添加通话",

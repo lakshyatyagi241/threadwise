@@ -2360,7 +2360,11 @@
       "endedTitle": "Anruf beendet",
       "endedText": "Tippen Sie, um Ihren Anruf mit {{name}} zu protokollieren.",
       "channelOngoing": "Laufende Anrufe",
-      "channelEnded": "Anrufzusammenfassungen"
+      "channelEnded": "Anrufzusammenfassungen",
+      "lastMissed": "Letzter verpasster Anruf",
+      "noMissed": "Keine verpassten Anrufe",
+      "today": "Heute",
+      "yesterday": "Gestern"
     },
     "summary": {
       "title": "Anruf hinzufügen",

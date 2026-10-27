@@ -2360,7 +2360,11 @@
       "endedTitle": "کال ختم ہو گئی",
       "endedText": "{{name}} کے ساتھ اپنی کال درج کرنے کے لیے ٹیپ کریں۔",
       "channelOngoing": "جاری کالز",
-      "channelEnded": "کال کے خلاصے"
+      "channelEnded": "کال کے خلاصے",
+      "lastMissed": "آخری مس کال",
+      "noMissed": "کوئی مس کال نہیں",
+      "today": "آج",
+      "yesterday": "کل"
     },
     "summary": {
       "title": "کال شامل کریں",

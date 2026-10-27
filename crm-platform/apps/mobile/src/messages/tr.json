@@ -2360,7 +2360,11 @@
       "endedTitle": "Arama sona erdi",
       "endedText": "{{name}} ile aramanızı kaydetmek için dokunun.",
       "channelOngoing": "Süren aramalar",
-      "channelEnded": "Arama özetleri"
+      "channelEnded": "Arama özetleri",
+      "lastMissed": "Son cevapsız çağrı",
+      "noMissed": "Cevapsız çağrı yok",
+      "today": "Bugün",
+      "yesterday": "Dün"
     },
     "summary": {
       "title": "Arama ekle",

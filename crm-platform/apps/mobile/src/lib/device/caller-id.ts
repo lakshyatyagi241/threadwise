@@ -35,6 +35,8 @@ const nativeModule = (): NativeCallerId | null =>
 
 const PHONE_STATE = PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE;
 const CALL_LOG = PermissionsAndroid.PERMISSIONS.READ_CALL_LOG;
+/** The number of a call the person places from the phone's own dialler; given with the call-log permission, as one "read the number" step. */
+const OUTGOING = PermissionsAndroid.PERMISSIONS.PROCESS_OUTGOING_CALLS;
 
 /** Whether this build can name a caller (Android, and a build that has the caller-ID part of the module). */
 export const callerIdAvailable = (): boolean =>
@@ -51,23 +53,26 @@ export function callerIdStatus(): CallerIdStatus {
   }
 }
 
-/** The two permissions the phone gives only to an app that is allowed to know about calls: their state, and the caller's number. */
+/**
+ * What the phone gives only to an app that is allowed to know about calls: their state (`phoneState`) and the number of the other
+ * side, for a call that rings and one the person places (`callLog`: both of those permissions are one "read the number" step).
+ */
 export async function callerIdPermissions(): Promise<{ phoneState: boolean; callLog: boolean }> {
   if (Platform.OS !== 'android') return { phoneState: false, callLog: false };
-  const [phoneState, callLog] = await Promise.all([
+  const [phoneState, callLog, outgoing] = await Promise.all([
     PermissionsAndroid.check(PHONE_STATE),
     PermissionsAndroid.check(CALL_LOG),
+    PermissionsAndroid.check(OUTGOING),
   ]);
-  return { phoneState, callLog };
+  return { phoneState, callLog: callLog && outgoing };
 }
 
-/** Asks for both permissions at once (the phone shows its own prompt); true when both were given. */
+/** Asks for all of them at once (the phone shows its own prompt); true when every one was given. */
 export async function requestCallerIdPermissions(): Promise<boolean> {
   if (Platform.OS !== 'android') return false;
-  const answers = await PermissionsAndroid.requestMultiple([PHONE_STATE, CALL_LOG]);
-  return (
-    answers[PHONE_STATE] === PermissionsAndroid.RESULTS.GRANTED &&
-    answers[CALL_LOG] === PermissionsAndroid.RESULTS.GRANTED
+  const answers = await PermissionsAndroid.requestMultiple([PHONE_STATE, CALL_LOG, OUTGOING]);
+  return [PHONE_STATE, CALL_LOG, OUTGOING].every(
+    (name) => answers[name] === PermissionsAndroid.RESULTS.GRANTED,
   );
 }
 
@@ -82,14 +87,21 @@ export function callerDisplay(): Record<string, string> {
     appName: BRAND_NAME,
     subtitle: t('calls.monitor.contact'),
     closeLabel: t('calls.monitor.close'),
+    // The "Last Missed Call" row: its words, what is shown when there is none, and the names of the two nearest days.
+    missedLabel: t('calls.monitor.lastMissed'),
+    missedNone: t('calls.monitor.noMissed'),
+    today: t('calls.monitor.today'),
+    yesterday: t('calls.monitor.yesterday'),
     openUrl: Linking.createURL('/contact/__ID__'),
     // The phone adds the contact, when the call started, how long it lasted and whether it was answered.
     summaryUrl: Linking.createURL('/call-summary', { queryParams: { direction: 'incoming' } }),
     surfaceColor: colors.surface,
     textColor: colors.text,
     mutedColor: colors.textMuted,
-    primaryColor: colors.action,
-    onPrimaryColor: colors.onAction,
+    panelColor: colors.brand,
+    onPanelColor: colors.onBrand,
+    primaryColor: colors.primary,
+    onPrimaryColor: colors.onPrimary,
   };
 }
 

@@ -2360,7 +2360,11 @@
       "endedTitle": "কল শেষ",
       "endedText": "{{name}}-এর সঙ্গে কলটি লগ করতে ট্যাপ করুন।",
       "channelOngoing": "চলমান কল",
-      "channelEnded": "কলের সারসংক্ষেপ"
+      "channelEnded": "কলের সারসংক্ষেপ",
+      "lastMissed": "সর্বশেষ মিসড কল",
+      "noMissed": "কোনো মিসড কল নেই",
+      "today": "আজ",
+      "yesterday": "গতকাল"
     },
     "summary": {
       "title": "কল যোগ করুন",

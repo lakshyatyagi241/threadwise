@@ -2389,7 +2389,11 @@
       "endedTitle": "Appel terminé",
       "endedText": "Touchez pour enregistrer votre appel avec {{name}}.",
       "channelOngoing": "Appels en cours",
-      "channelEnded": "Résumés d’appels"
+      "channelEnded": "Résumés d’appels",
+      "lastMissed": "Dernier appel manqué",
+      "noMissed": "Aucun appel manqué",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier"
     },
     "summary": {
       "title": "Ajouter un appel",

@@ -81,8 +81,10 @@ export async function startCallMonitor(party: CallParty): Promise<boolean> {
       surfaceColor: colors.surface,
       textColor: colors.text,
       mutedColor: colors.textMuted,
-      primaryColor: colors.action,
-      onPrimaryColor: colors.onAction,
+      panelColor: colors.brand,
+      onPanelColor: colors.onBrand,
+      primaryColor: colors.primary,
+      onPrimaryColor: colors.onPrimary,
     });
     return true;
   } catch (error) {

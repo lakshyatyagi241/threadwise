@@ -4,6 +4,9 @@
   <!-- The number of a call that is ringing (Android gives it only to an app that may read the call log). It is looked up in the
        contacts kept on the phone and never stored or sent. -->
   <uses-permission android:name="android.permission.READ_CALL_LOG" />
+  <!-- The number a call placed from the phone's own dialler is going to (the phone's state report does not carry it). Only looked up
+       in the contacts kept on the phone, never stored or sent. -->
+  <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
   <!-- The contact card over the phone's call screen, and bringing the app back when the call ends. -->
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -21,6 +24,7 @@
     <receiver android:name=".IncomingCallReceiver" android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.PHONE_STATE" />
+        <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
       </intent-filter>
     </receiver>
   </application>

@@ -2360,7 +2360,11 @@
       "endedTitle": "Call ended",
       "endedText": "Tap to log your call with {{name}}.",
       "channelOngoing": "Calls in progress",
-      "channelEnded": "Call summaries"
+      "channelEnded": "Call summaries",
+      "lastMissed": "Last Missed Call",
+      "noMissed": "No missed calls",
+      "today": "Today",
+      "yesterday": "Yesterday"
     },
     "summary": {
       "title": "Add call",

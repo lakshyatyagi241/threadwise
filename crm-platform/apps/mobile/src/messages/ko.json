@@ -2331,7 +2331,11 @@
       "endedTitle": "통화 종료",
       "endedText": "탭하여 {{name}}님과의 통화를 기록하세요.",
       "channelOngoing": "진행 중인 통화",
-      "channelEnded": "통화 요약"
+      "channelEnded": "통화 요약",
+      "lastMissed": "마지막 부재중 전화",
+      "noMissed": "부재중 전화 없음",
+      "today": "오늘",
+      "yesterday": "어제"
     },
     "summary": {
       "title": "통화 추가",

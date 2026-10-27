@@ -2418,7 +2418,11 @@
       "endedTitle": "Połączenie zakończone",
       "endedText": "Dotknij, aby zapisać połączenie z kontaktem {{name}}.",
       "channelOngoing": "Połączenia w toku",
-      "channelEnded": "Podsumowania połączeń"
+      "channelEnded": "Podsumowania połączeń",
+      "lastMissed": "Ostatnie nieodebrane połączenie",
+      "noMissed": "Brak nieodebranych połączeń",
+      "today": "Dzisiaj",
+      "yesterday": "Wczoraj"
     },
     "summary": {
       "title": "Dodaj połączenie",

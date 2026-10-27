@@ -49,6 +49,7 @@ class CallMonitorService : Service() {
       return START_NOT_STICKY
     }
     data = intent.extras ?: Bundle()
+    running = true
     startInForeground()
     listen()
     // The person may back out of the dialler without calling.
@@ -57,6 +58,7 @@ class CallMonitorService : Service() {
   }
 
   override fun onDestroy() {
+    running = false
     main.removeCallbacksAndMessages(null)
     stopListening()
     overlay?.hide()
@@ -193,6 +195,9 @@ class CallMonitorService : Service() {
 
   companion object {
     @Volatile private var ended: Ended? = null
+
+    /** True while a call placed from the app is being watched: it draws its own card, so a call from the dialler must not draw a second. */
+    @Volatile var running = false
 
     /** The "log this call" address of the call that just ended, once; null when there is none or it is old. */
     fun takeEnded(): String? {

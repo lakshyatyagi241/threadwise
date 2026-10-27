@@ -2331,7 +2331,11 @@
       "endedTitle": "通話が終了しました",
       "endedText": "タップして {{name}} との通話を記録します。",
       "channelOngoing": "通話中",
-      "channelEnded": "通話サマリー"
+      "channelEnded": "通話サマリー",
+      "lastMissed": "最後の不在着信",
+      "noMissed": "不在着信はありません",
+      "today": "今日",
+      "yesterday": "昨日"
     },
     "summary": {
       "title": "通話を追加",

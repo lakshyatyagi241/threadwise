@@ -2389,7 +2389,11 @@
       "endedTitle": "Chiamata terminata",
       "endedText": "Tocca per registrare la chiamata con {{name}}.",
       "channelOngoing": "Chiamate in corso",
-      "channelEnded": "Riepiloghi delle chiamate"
+      "channelEnded": "Riepiloghi delle chiamate",
+      "lastMissed": "Ultima chiamata persa",
+      "noMissed": "Nessuna chiamata persa",
+      "today": "Oggi",
+      "yesterday": "Ieri"
     },
     "summary": {
       "title": "Aggiungi chiamata",

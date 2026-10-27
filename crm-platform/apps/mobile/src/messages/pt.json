@@ -2389,7 +2389,11 @@
       "endedTitle": "Ligação encerrada",
       "endedText": "Toque para registrar sua ligação com {{name}}.",
       "channelOngoing": "Ligações em andamento",
-      "channelEnded": "Resumos de ligações"
+      "channelEnded": "Resumos de ligações",
+      "lastMissed": "Última chamada perdida",
+      "noMissed": "Sem chamadas perdidas",
+      "today": "Hoje",
+      "yesterday": "Ontem"
     },
     "summary": {
       "title": "Adicionar ligação",

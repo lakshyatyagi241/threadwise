@@ -2331,7 +2331,11 @@
       "endedTitle": "Panggilan berakhir",
       "endedText": "Ketuk untuk mencatat panggilan Anda dengan {{name}}.",
       "channelOngoing": "Panggilan berlangsung",
-      "channelEnded": "Ringkasan panggilan"
+      "channelEnded": "Ringkasan panggilan",
+      "lastMissed": "Panggilan tak terjawab terakhir",
+      "noMissed": "Tidak ada panggilan tak terjawab",
+      "today": "Hari ini",
+      "yesterday": "Kemarin"
     },
     "summary": {
       "title": "Tambah panggilan",

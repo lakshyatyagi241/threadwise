@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 
 /**
@@ -25,16 +27,33 @@ object IncomingCaller {
   private var offHookAt = 0L
   private var offHookWallClock = 0L
 
-  /** Shows the card for `card` (the contact and the card's words) and starts tracking this call; a second ring signal for the same call only redraws it. */
-  fun show(context: Context, card: Bundle) {
+  /** True for a call the person is placing from the dialler (the card is shown as it is dialled, and no call is "missed"). */
+  private var outgoing = false
+  private val main = Handler(Looper.getMainLooper())
+  private var abandon: Runnable? = null
+
+  /** An outgoing call that never goes off hook (the person backed out of the dialler) is forgotten after this long. */
+  private const val DIAL_WAIT_MS = 30_000L
+
+  /**
+   * Shows the card for `card` (the contact and the card's words) and starts tracking this call; a second ring signal for the same
+   * call only redraws it. `outgoing` is a call placed from the phone's dialler: it has no ringing phase, so the card is taken away
+   * if the call is never dialled.
+   */
+  fun show(context: Context, card: Bundle, outgoing: Boolean = false) {
     overlay?.hide()
     overlay = null
     if (data == null) {
       ringingWallClock = System.currentTimeMillis()
       offHookAt = 0L
       offHookWallClock = 0L
+      this.outgoing = outgoing
     }
     data = card
+    if (this.outgoing && offHookAt == 0L) {
+      abandon?.let { main.removeCallbacks(it) }
+      abandon = Runnable { if (offHookAt == 0L) forget() }.also { main.postDelayed(it, DIAL_WAIT_MS) }
+    }
     val app = context.applicationContext
     overlay = CallOverlay(app, card, onOpen = { open(app, card) }).also { it.show() }
   }
@@ -44,6 +63,17 @@ object IncomingCaller {
     if (data == null || offHookAt != 0L) return
     offHookAt = SystemClock.elapsedRealtime()
     offHookWallClock = System.currentTimeMillis()
+    abandon?.let { main.removeCallbacks(it) }
+    abandon = null
+  }
+
+  /** The call never started: take the card away and stop tracking it, without opening the "Add call" page. */
+  private fun forget() {
+    data = null
+    outgoing = false
+    abandon = null
+    overlay?.hide()
+    overlay = null
   }
 
   /** The call is over: open its "Add call" page for the contact, then take the card away. */
@@ -52,6 +82,9 @@ object IncomingCaller {
     if (card != null) runCatching { context.applicationContext.startActivity(summaryIntent(context, card)) }
     data = null
     offHookAt = 0L
+    outgoing = false
+    abandon?.let { main.removeCallbacks(it) }
+    abandon = null
     overlay?.hide()
     overlay = null
   }
@@ -59,12 +92,15 @@ object IncomingCaller {
   private fun summaryIntent(context: Context, card: Bundle): Intent {
     val answered = offHookAt != 0L
     val seconds = if (answered) (SystemClock.elapsedRealtime() - offHookAt) / 1000 else 0L
-    val uri = Uri.parse(card.getString("summaryUrl").orEmpty()).buildUpon()
+    // The address the app wrote is for a call from a contact; a call the person placed is logged as outgoing.
+    val base = card.getString("summaryUrl").orEmpty()
+    val uri = Uri.parse(if (outgoing) base.replace("direction=incoming", "direction=outgoing") else base).buildUpon()
       .appendQueryParameter("contactId", card.getString("contactId").orEmpty())
       .appendQueryParameter("name", card.getString("name").orEmpty())
       .appendQueryParameter("startedAt", (if (answered) offHookWallClock else ringingWallClock).toString())
       .appendQueryParameter("durationSec", seconds.toString())
-      .apply { if (!answered) appendQueryParameter("status", "notAnswered") }
+      // The phone cannot tell a cut or missed incoming call apart; an outgoing call goes off hook as it is dialled, so it is never "not answered" here.
+      .apply { if (!answered && !outgoing) appendQueryParameter("status", "notAnswered") }
       .build()
     return Intent(Intent.ACTION_VIEW, uri)
       .setPackage(context.packageName)

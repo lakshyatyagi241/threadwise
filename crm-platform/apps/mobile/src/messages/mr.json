@@ -2360,7 +2360,11 @@
       "endedTitle": "कॉल संपला",
       "endedText": "{{name}} सोबतचा कॉल नोंदवण्यासाठी टॅप करा.",
       "channelOngoing": "सुरू असलेले कॉल",
-      "channelEnded": "कॉल सारांश"
+      "channelEnded": "कॉल सारांश",
+      "lastMissed": "शेवटचा मिस्ड कॉल",
+      "noMissed": "कोणताही मिस्ड कॉल नाही",
+      "today": "आज",
+      "yesterday": "काल"
     },
     "summary": {
       "title": "कॉल जोडा",

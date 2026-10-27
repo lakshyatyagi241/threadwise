@@ -115,7 +115,7 @@ describe('disableCallerId and callerIdStatus', () => {
 });
 
 describe('permissions', () => {
-  it('reads both permissions, and asks for both at once', async () => {
+  it('reads the permissions, and asks for them at once', async () => {
     const { callerIdPermissions, requestCallerIdPermissions } = load('android', true);
     jest
       .spyOn(PermissionsAndroid, 'check')
@@ -126,6 +126,26 @@ describe('permissions', () => {
       'android.permission.READ_CALL_LOG': 'denied',
     } as never);
     await expect(requestCallerIdPermissions()).resolves.toBe(false);
+  });
+
+  it('counts the number of an outgoing call as part of reading the number', async () => {
+    const { callerIdPermissions, requestCallerIdPermissions } = load('android', true);
+    const check = jest.spyOn(PermissionsAndroid, 'check');
+    check.mockImplementation(async (name) => !name.endsWith('PROCESS_OUTGOING_CALLS'));
+    await expect(callerIdPermissions()).resolves.toEqual({ phoneState: true, callLog: false });
+    check.mockResolvedValue(true);
+    await expect(callerIdPermissions()).resolves.toEqual({ phoneState: true, callLog: true });
+    const ask = jest.spyOn(PermissionsAndroid, 'requestMultiple').mockResolvedValue({
+      'android.permission.READ_PHONE_STATE': 'granted',
+      'android.permission.READ_CALL_LOG': 'granted',
+      'android.permission.PROCESS_OUTGOING_CALLS': 'granted',
+    } as never);
+    await expect(requestCallerIdPermissions()).resolves.toBe(true);
+    expect(ask).toHaveBeenCalledWith([
+      'android.permission.READ_PHONE_STATE',
+      'android.permission.READ_CALL_LOG',
+      'android.permission.PROCESS_OUTGOING_CALLS',
+    ]);
   });
 
   it('is false everywhere but Android', async () => {

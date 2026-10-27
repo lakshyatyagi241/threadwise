@@ -2360,7 +2360,11 @@
       "endedTitle": "Gesprek beëindigd",
       "endedText": "Tik om je gesprek met {{name}} vast te leggen.",
       "channelOngoing": "Lopende gesprekken",
-      "channelEnded": "Gespreksoverzichten"
+      "channelEnded": "Gespreksoverzichten",
+      "lastMissed": "Laatste gemiste oproep",
+      "noMissed": "Geen gemiste oproepen",
+      "today": "Vandaag",
+      "yesterday": "Gisteren"
     },
     "summary": {
       "title": "Gesprek toevoegen",
