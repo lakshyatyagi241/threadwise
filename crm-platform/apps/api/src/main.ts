@@ -24,6 +24,7 @@ import {
   startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
+import { inflight } from './common/http/http-drain';
 import { overloadGuard } from './common/http/overload-guard';
 import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
@@ -62,6 +63,9 @@ async function bootstrap(): Promise<void> {
 
   // Load shedding (QA 54): past the cap a request gets an immediate 503 + Retry-After instead of joining an unbounded queue.
   app.use(overloadGuard(config.get('API_MAX_INFLIGHT', { infer: true })));
+
+  // Counts running requests so a shutdown waits for them (HttpDrainService) instead of closing the database under them.
+  app.use(inflight.middleware());
 
   // Smaller responses on the wire (QA 63): before the routes, after the metrics middleware so the timing still covers the handler.
   if (config.get('RESPONSE_COMPRESSION', { infer: true })) app.use(responseCompression());
