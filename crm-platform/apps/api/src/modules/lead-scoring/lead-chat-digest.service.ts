@@ -20,6 +20,7 @@ import {
   LeadScoringAiError,
   type LeadScoringAiPort,
 } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
@@ -103,7 +104,8 @@ export class LeadChatDigestService {
   // --- queueing -----------------------------------------------------------------------------------------------------
 
   async enqueue(c: DigestCandidate): Promise<void> {
-    await this.queue.add(
+    await addOrRevive(
+      this.queue,
       'digest',
       { orgId: c.orgId, contactId: c.contactId, trigger: 'chat' },
       {
