@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Người khác đã thay đổi mẫu này trong lúc bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất, rồi áp dụng lại thay đổi của bạn.",
       "VALIDATION_FAILED": "Một số trường không hợp lệ. Hãy kiểm tra các trường bên dưới.",
       "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút.",
-      "uploadTooLarge": "Tệp quá lớn. Ảnh tối đa 5 MB, video 16 MB và PDF 10 MB.",
-      "uploadRejected": "Tệp này không được chấp nhận: dù tên là gì, nội dung không phải ảnh JPG hoặc PNG, video MP4 hoặc 3GP, hay PDF.",
-      "uploadProviderBusy": "WhatsApp chưa thể nhận tệp lúc này. Hãy đợi một phút rồi thử lại.",
-      "uploadRefused": "Không thể tải tệp lên.",
-      "uploadNetwork": "Tải lên chưa hoàn tất. Kiểm tra kết nối rồi thử lại."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Xem trước",

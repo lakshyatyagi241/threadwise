@@ -277,7 +277,7 @@ function CardItem({
           </Button>
         </div>
         {problem && <Alert tone="danger">{problem}</Alert>}
-        {upload.isError && <ErrorAlert error={errorText(upload.error)} />}
+        {upload.isError && <ErrorAlert error={errorText(upload.error, kind)} />}
 
         <div className="flex flex-wrap gap-1.5">
           {CARD_MARKS.map((m) => (

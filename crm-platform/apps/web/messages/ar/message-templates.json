@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "غيّر شخص آخر هذا القالب أثناء تعديلك. أعد التحميل لرؤية أحدث إصدار ثم طبّق تغييرك مرة أخرى.",
       "VALIDATION_FAILED": "بعض الحقول غير صالحة. تحقق من الحقول أدناه.",
       "INTERNAL": "فشل الخادم في معالجة هذا الطلب. حاول مرة أخرى بعد قليل.",
-      "uploadTooLarge": "الملف كبير جدًا. يمكن أن تصل الصور إلى 5 ميغابايت والفيديو إلى 16 ميغابايت وملفات PDF إلى 10 ميغابايت.",
-      "uploadRejected": "لم يُقبل هذا الملف: محتواه ليس صورة JPG أو PNG أو فيديو MP4 أو 3GP أو ملف PDF، مهما كان اسمه.",
-      "uploadProviderBusy": "تعذّر على واتساب استلام الملف الآن. انتظر دقيقة ثم حاول مرة أخرى.",
-      "uploadRefused": "تعذّر رفع الملف.",
-      "uploadNetwork": "لم يكتمل الرفع. تحقق من اتصالك وأعد المحاولة."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "معاينة",

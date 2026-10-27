@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Iemand heeft dit sjabloon gewijzigd terwijl jij het bewerkte. Laad de pagina opnieuw om de nieuwste versie te zien en pas daarna je wijziging opnieuw toe.",
       "VALIDATION_FAILED": "Sommige velden zijn ongeldig. Controleer de velden hieronder.",
       "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw.",
-      "uploadTooLarge": "Het bestand is te groot. Afbeeldingen mogen tot 5 MB, video's tot 16 MB en pdf's tot 10 MB.",
-      "uploadRejected": "Dit bestand is niet geaccepteerd: wat de naam ook zegt, de inhoud is geen JPG- of PNG-afbeelding, MP4- of 3GP-video of pdf.",
-      "uploadProviderBusy": "WhatsApp kon het bestand nu niet aannemen. Wacht een minuut en probeer het opnieuw.",
-      "uploadRefused": "Het bestand kon niet worden geüpload.",
-      "uploadNetwork": "De upload is niet voltooid. Controleer je verbinding en probeer het opnieuw."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Voorbeeld",

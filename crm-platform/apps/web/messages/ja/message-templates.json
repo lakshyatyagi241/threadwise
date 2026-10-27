@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "編集中に、別のユーザーがこのテンプレートを変更しました。再読み込みして最新版を確認し、変更を再度適用してください。",
       "VALIDATION_FAILED": "一部の項目が正しくありません。下の項目を確認してください。",
       "INTERNAL": "サーバーでリクエストを処理できませんでした。しばらくしてから再度お試しください。",
-      "uploadTooLarge": "ファイルが大きすぎます。画像は5MB、動画は16MB、PDFは10MBまでです。",
-      "uploadRejected": "このファイルは受け付けられませんでした。名前に関係なく、内容がJPG/PNG画像、MP4/3GP動画、PDFのいずれでもありません。",
-      "uploadProviderBusy": "WhatsAppが今はファイルを受け取れません。1分待ってからもう一度お試しください。",
-      "uploadRefused": "ファイルをアップロードできませんでした。",
-      "uploadNetwork": "アップロードが完了しませんでした。接続を確認して、もう一度お試しください。"
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "プレビュー",

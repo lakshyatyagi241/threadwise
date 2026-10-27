@@ -40,11 +40,12 @@
       "ROW_VERSION_CONFLICT": "Düzenlerken bu şablonu biri değiştirdi. En son sürümü görmek için yenileyin, ardından değişikliğinizi yeniden uygulayın.",
       "VALIDATION_FAILED": "Bazı alanlar geçerli değil. Aşağıdaki alanları kontrol edin.",
       "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin.",
-      "uploadTooLarge": "Dosya çok büyük. Görseller 5 MB, videolar 16 MB, PDF'ler 10 MB'a kadar olabilir.",
-      "uploadRejected": "Bu dosya kabul edilmedi: adı ne olursa olsun içeriği bir JPG veya PNG görseli, MP4 veya 3GP videosu ya da PDF değil.",
-      "uploadProviderBusy": "WhatsApp şu anda dosyayı alamadı. Bir dakika bekleyip yeniden deneyin.",
-      "uploadRefused": "Dosya yüklenemedi.",
-      "uploadNetwork": "Yükleme tamamlanmadı. Bağlantınızı kontrol edip yeniden deneyin."
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadProviderBusy": "WhatsApp could not take the file right now. Wait a minute, then try it again.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB."
     },
     "preview": {
       "title": "Önizleme",
