@@ -52,7 +52,7 @@ pnpm db:migrate            # apply pending
 pnpm db:status             # applied / pending / modified / missing-file
 pnpm db:verify-schema      # Drizzle schema versus the migrated database (--verbose lists warnings)
 pnpm db:new <name>         # create a numbered migration file
-pnpm db:seed               # two tenants, roles, users, an agent, sample contacts
+ALLOW_DEV_SEED=1 pnpm db:seed   # two tenants, roles, users, an agent, sample contacts (local database only)
 pnpm db:reset              # dev only: drop schema, migrate, seed
 ```
 

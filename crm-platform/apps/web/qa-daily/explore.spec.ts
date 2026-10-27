@@ -14,11 +14,11 @@ const BASE = process.env.WEB_URL ?? 'http://localhost:3001';
 const ADMIN = {
   orgSlug: process.env.E2E_ORG ?? 'Admin',
   email: process.env.E2E_ADMIN_EMAIL ?? 'nachiket.challawar@geta.ai',
-  password: process.env.E2E_PASSWORD ?? 'Passw0rd!',
+  password: process.env.E2E_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '',
 };
 const OPERATOR = {
   email: process.env.E2E_OPERATOR_EMAIL ?? 'operator@example.test',
-  password: process.env.E2E_OPERATOR_PASSWORD ?? 'Passw0rd!',
+  password: process.env.E2E_OPERATOR_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '',
 };
 const DATE = new Date().toISOString().slice(0, 10);
 const OUT = join(process.cwd(), 'qa-daily/out', DATE);
@@ -55,8 +55,10 @@ const FIX: Record<string, string> = {
     'A signed-in user was sent to /login. Check the middleware/session check for this route and that the page is not calling an API that returns 401 for valid sessions.',
   overflow:
     'Content is wider than the viewport. Find the widest element (named in the description) and give it min-w-0 / max-w-full / overflow-x-auto, or let the table scroll inside its own container.',
-  'broken-image': 'An image fails to load. Fix its src (wrong path or missing asset) or give it a fallback.',
-  'no-title': 'The page has no <title>. Add metadata (generateMetadata or a translated title) for this route.',
+  'broken-image':
+    'An image fails to load. Fix its src (wrong path or missing asset) or give it a fallback.',
+  'no-title':
+    'The page has no <title>. Add metadata (generateMetadata or a translated title) for this route.',
 };
 
 const NOISE = /favicon|ResizeObserver loop|net::ERR_ABORTED|Download the React DevTools/i;
@@ -67,14 +69,20 @@ const ERROR_SCREEN =
 const stable = (s: string) =>
   s.replace(/[0-9a-f]{8}-[0-9a-f-]{27}|\b[0-9a-f]{12,}\b|\d+/gi, '#').slice(0, 160);
 const fingerprint = (route: string, kind: string, key: string) =>
-  createHash('sha1').update(`${route}|${kind}|${stable(key)}`).digest('hex').slice(0, 10);
+  createHash('sha1')
+    .update(`${route}|${kind}|${stable(key)}`)
+    .digest('hex')
+    .slice(0, 10);
 
 const bugs: Bug[] = [];
-const states: Partial<Record<'app' | 'admin', Awaited<ReturnType<BrowserContext['storageState']>>>> = {};
+const states: Partial<
+  Record<'app' | 'admin', Awaited<ReturnType<BrowserContext['storageState']>>>
+> = {};
 
 async function signIn(browser: Browser, kind: 'app' | 'admin') {
   const ctx = await browser.newContext({ baseURL: BASE });
-  const [path, data] = kind === 'app' ? ['/api/auth/login', ADMIN] : ['/api/platform-auth/login', OPERATOR];
+  const [path, data] =
+    kind === 'app' ? ['/api/auth/login', ADMIN] : ['/api/platform-auth/login', OPERATOR];
   const res = await ctx.request.post(path, { data });
   expect(res.ok(), `sign in as ${kind} (${res.status()}). Is the stack up and seeded?`).toBe(true);
   states[kind] = await ctx.storageState();
@@ -119,7 +127,8 @@ for (const r of routes) {
       if (m.type() === 'error' && !NOISE.test(m.text())) consoleErrors.push(m.text());
     });
     page.on('response', (x) => {
-      if (x.status() >= 500) serverErrors.push(`${x.request().method()} ${x.url()} -> ${x.status()}`);
+      if (x.status() >= 500)
+        serverErrors.push(`${x.request().method()} ${x.url()} -> ${x.status()}`);
     });
     page.on('requestfailed', (q) => {
       const why = q.failure()?.errorText ?? '';
@@ -137,10 +146,20 @@ for (const r of routes) {
     ) => {
       const id = fingerprint(r.url, kind, key);
       const shot = `${slug}.${id}.jpg`;
-      await page.screenshot({ path: join(OUT, shot), type: 'jpeg', quality: 60 }).catch(() => undefined);
+      await page
+        .screenshot({ path: join(OUT, shot), type: 'jpeg', quality: 60 })
+        .catch(() => undefined);
       bugs.push({
-        id, date: DATE, route: r.url, kind, severity, title, description,
-        suggestedFix: FIX[kind], viewport, screenshot: join(DATE, shot),
+        id,
+        date: DATE,
+        route: r.url,
+        kind,
+        severity,
+        title,
+        description,
+        suggestedFix: FIX[kind],
+        viewport,
+        screenshot: join(DATE, shot),
       });
     };
 
@@ -148,9 +167,21 @@ for (const r of routes) {
     await page.waitForLoadState('networkidle', { timeout: 10_000 }).catch(() => undefined);
 
     if (res instanceof Error)
-      await report('request-failed', 'Critical', `Page does not load: ${r.url}`, res.message.split('\n')[0], res.message);
+      await report(
+        'request-failed',
+        'Critical',
+        `Page does not load: ${r.url}`,
+        res.message.split('\n')[0],
+        res.message,
+      );
     else if ((res?.status() ?? 0) >= 500)
-      await report('http-5xx', 'Critical', `${r.url} returns HTTP ${res!.status()}`, `GET ${r.url} answered ${res!.status()}.`, `page ${res!.status()}`);
+      await report(
+        'http-5xx',
+        'Critical',
+        `${r.url} returns HTTP ${res!.status()}`,
+        `GET ${r.url} answered ${res!.status()}.`,
+        `page ${res!.status()}`,
+      );
     for (const e of [...new Set(serverErrors)].slice(0, 3))
       await report('http-5xx', 'High', `Server error on ${r.url}`, e, e);
     for (const e of [...new Set(pageErrors)].slice(0, 3))
@@ -160,14 +191,44 @@ for (const r of routes) {
     for (const e of [...new Set(failed)].slice(0, 3))
       await report('request-failed', 'Medium', `Network request failed on ${r.url}`, e, e);
 
-    const text = (await page.locator('body').innerText().catch(() => '')).trim();
-    if (!text) await report('blank', 'High', `Blank page: ${r.url}`, 'The page has no visible text.', 'blank');
+    const text = (
+      await page
+        .locator('body')
+        .innerText()
+        .catch(() => '')
+    ).trim();
+    if (!text)
+      await report(
+        'blank',
+        'High',
+        `Blank page: ${r.url}`,
+        'The page has no visible text.',
+        'blank',
+      );
     else if (ERROR_SCREEN.test(text.slice(0, 2000)))
-      await report('error-screen', 'High', `Error screen on ${r.url}`, text.slice(0, 300), text.slice(0, 60));
+      await report(
+        'error-screen',
+        'High',
+        `Error screen on ${r.url}`,
+        text.slice(0, 300),
+        text.slice(0, 60),
+      );
     if (r.kind !== 'public' && /^\/login\b/.test(new URL(page.url()).pathname))
-      await report('login-redirect', 'High', `Signed-in user sent to login from ${r.url}`, `Ended on ${page.url()}.`, 'login');
+      await report(
+        'login-redirect',
+        'High',
+        `Signed-in user sent to login from ${r.url}`,
+        `Ended on ${page.url()}.`,
+        'login',
+      );
     if (!(await page.title()))
-      await report('no-title', 'Low', `No page title on ${r.url}`, 'document.title is empty.', 'title');
+      await report(
+        'no-title',
+        'Low',
+        `No page title on ${r.url}`,
+        'document.title is empty.',
+        'title',
+      );
 
     const broken = await page.evaluate(() =>
       Array.from(document.images)
@@ -175,21 +236,36 @@ for (const r of routes) {
         .map((i) => i.src)
         .slice(0, 3),
     );
-    for (const src of broken) await report('broken-image', 'Low', `Broken image on ${r.url}`, src, src);
+    for (const src of broken)
+      await report('broken-image', 'Low', `Broken image on ${r.url}`, src, src);
 
     // Overflow at desktop, then phone width on the same loaded page.
-    for (const [w, h, name] of [[1280, 800, 'desktop'], [390, 844, 'mobile']] as const) {
+    for (const [w, h, name] of [
+      [1280, 800, 'desktop'],
+      [390, 844, 'mobile'],
+    ] as const) {
       await page.setViewportSize({ width: w, height: h });
       await page.waitForTimeout(250);
       const wide = await page.evaluate((width) => {
-        if (document.documentElement.scrollWidth - document.documentElement.clientWidth <= 1) return null;
+        if (document.documentElement.scrollWidth - document.documentElement.clientWidth <= 1)
+          return null;
         const el = Array.from(document.body.querySelectorAll<HTMLElement>('*')).find(
-          (e) => e.getBoundingClientRect().right > width + 1 && getComputedStyle(e).position !== 'fixed',
+          (e) =>
+            e.getBoundingClientRect().right > width + 1 && getComputedStyle(e).position !== 'fixed',
         );
-        return el ? `${el.tagName.toLowerCase()}${el.className ? '.' + String(el.className).split(' ')[0] : ''}` : 'unknown element';
+        return el
+          ? `${el.tagName.toLowerCase()}${el.className ? '.' + String(el.className).split(' ')[0] : ''}`
+          : 'unknown element';
       }, w);
       if (wide)
-        await report('overflow', name === 'mobile' ? 'Medium' : 'Low', `Horizontal overflow on ${r.url} at ${w}px`, `Page is wider than ${w}px. Widest element: ${wide}.`, `${w} ${wide}`, `${name} ${w}x${h}`);
+        await report(
+          'overflow',
+          name === 'mobile' ? 'Medium' : 'Low',
+          `Horizontal overflow on ${r.url} at ${w}px`,
+          `Page is wider than ${w}px. Widest element: ${wide}.`,
+          `${w} ${wide}`,
+          `${name} ${w}x${h}`,
+        );
     }
     await ctx.close();
   });

@@ -91,6 +91,28 @@ describe('computeAmount (spec 10.2: the server decides the amount)', () => {
       currency: 'JPY',
     });
   });
+
+  it('pay what you want: an amount with more decimals than the currency allows is refused, not rounded', () => {
+    const d = make([field('gift', 'number')], {
+      enabled: true,
+      amountType: 'pay_what_you_want',
+      fieldId: 'gift',
+      minMinor: 100,
+    });
+    expect(computeAmount(d, { gift: 1.005 })).toEqual({ ok: false, reason: 'amount_unknown' });
+    expect(computeAmount(d, { gift: 1.5 })).toMatchObject({ ok: true, amountMinor: 150n });
+  });
+
+  it('a zero-decimal currency refuses a fraction instead of rounding it', () => {
+    const d = make([field('gift', 'number')], {
+      enabled: true,
+      amountType: 'pay_what_you_want',
+      fieldId: 'gift',
+      minMinor: 100,
+      currency: 'JPY',
+    });
+    expect(computeAmount(d, { gift: 10.5 })).toEqual({ ok: false, reason: 'amount_unknown' });
+  });
 });
 
 describe('payment definition rules', () => {

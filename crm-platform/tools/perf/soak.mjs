@@ -40,7 +40,7 @@ export function parseArgs(argv) {
     thresholdMbH: 10,
     out: join(root, 'perf/results/soak'),
     email: 'nachiket.challawar@geta.ai',
-    password: 'Passw0rd!',
+    password: process.env.DEV_SEED_PASSWORD,
     worker: true,
     snapshots: false,
     profile: false,

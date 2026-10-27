@@ -168,11 +168,13 @@ Manual checks the owner should do before relying on it (not done here):
 
 ### 5.0 Packaging decided with the owner: an add-on, plan-gated
 
+> **Status:** steps 1 and 2 are built (PR 1226): the `sales_items` table, `record.sales-items.*`, plan feature `products_services`, app slug `products-services`, the list screen and the picker on document lines. Real names and what is left: [products-services-step1.md](products-services-step1.md).
+
 "Products and Services" is an object for the people who need it, so it is sold the way the existing add-ons are, not switched on for everyone:
 
 - A first-party **mini app** (recipe of Appointments and Forms in [addons-plan-offers.md](addons-plan-offers.md) and [forms-builder-app.md](forms-builder-app.md)): app slug
-  `products`, plan feature `catalog_items` (default **off**: it is new), `grants_plan_features` on the listing, the menu entry behind `gates.app`, permissions
-  `record.catalog-items.*` with `permission_defs.plan_feature`.
+  `products-services`, plan feature `products_services` (default **off**: it is new), `grants_plan_features` on the listing, the menu entry behind `gates.app`, permissions
+   `record.sales-items.*` with `permission_defs.plan_feature`.
 - The plan editor then shows it as **Included**, **Paid** or **Hidden** per plan (the existing offers matrix); on Included the plan carries the feature and every gate follows.
 - A workspace without it keeps today's behaviour exactly: free-text lines, no product picker, no new menu entry. With it: the catalog screen, the picker on
   invoice, estimate, recurring and deal lines, and the report.
@@ -183,10 +185,10 @@ Principle: **additive and optional**, so nothing that exists changes behaviour. 
 ### 5.1 The model
 
 1. One catalog object for both products and services. The existing `wa_products` is the store's and carries store concerns (stock, Meta sync, slug), so do not
-   overload it: add a CRM-side `catalog_items` table (kind `product` or `service`, name, sku, description, unit, default unit price and currency, default tax rate,
+   overload it: add a CRM-side `sales_items` table (kind `product` or `service`, name, sku, description, unit, default unit price and currency, default tax rate,
    active flag, `wa_product_id` nullable link to the store product). A store product can be **imported** as a catalog item and the two kept in step by `sku`.
-2. `invoice_items.catalog_item_id`, `sales_doc_items.catalog_item_id`, `recurring` template lines and later `deal_items.catalog_item_id`: all **nullable** foreign
-   keys on `(org_id, catalog_item_id)`. The existing `sku` text stays as the printed value.
+2. `invoice_items.sales_item_id`, `sales_doc_items.sales_item_id`, `recurring` template lines and later `deal_items.sales_item_id`: all **nullable** foreign
+   keys on `(org_id, sales_item_id)`. The existing `sku` text stays as the printed value.
 3. A line **copies** description, unit price and tax from the item when it is picked and is then its own (the document must not change when the price list does).
    The link is kept for reporting (sales by product) and for stock.
 4. Stock: a `product` item that is linked to a store product reduces the store's `reserved_qty` through the existing reservation path; a `service` never touches stock.
@@ -194,12 +196,12 @@ Principle: **additive and optional**, so nothing that exists changes behaviour. 
 ### 5.2 The screens
 
 - The line editor of the invoice, the estimate, the recurring template and the deal gets a "Pick a product or service" search above the free text. Free text stays.
-- A "Products and services" list and form under Sales (permission `record.catalog-items.*`).
+- A "Products and services" list and form under Sales (permission `record.sales-items.*`).
 - A deal gets a products section whose total can fill the deal value.
 
 ### 5.3 Rollout (PDCA)
 
-- Plan: confirm the model with the owner (one table or reuse of `wa_products`), the plan feature (`catalog_items`, default off as it is new), the permission keys.
+- Plan: confirm the model with the owner (one table or reuse of `wa_products`), the plan feature (`products_services`, default off as it is new), the permission keys.
 - Do, in three small steps, each shippable alone: (1) the table, the CRUD and the permission; (2) the picker on invoice and estimate lines, copy-on-pick;
   (3) the deal products and the report.
 - Check: the totals of an invoice made by picking equal one typed by hand; the conversion estimate to invoice carries the link; the store order to invoice
