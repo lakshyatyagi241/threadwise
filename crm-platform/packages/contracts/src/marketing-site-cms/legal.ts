@@ -25,9 +25,9 @@ export const legalPageAdminSchema = z.object({
   effectiveLabel: z.string().nullable(),
   sections: z.array(legalSectionSchema),
   isPublished: z.boolean(),
-  sort: z.number().int(),
-  rowVersion: z.number().int(),
-  updatedAt: z.string().datetime(),
+  sort: z.int(),
+  rowVersion: z.int(),
+  updatedAt: z.iso.datetime(),
 });
 export type LegalPageAdmin = z.infer<typeof legalPageAdminSchema>;
 
@@ -41,12 +41,12 @@ export const updateLegalPageRequestSchema = z.object({
   effectiveLabel: z.string().trim().max(120).nullish(),
   sections: z.array(legalSectionSchema).max(60),
   isPublished: z.boolean(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateLegalPageRequest = z.infer<typeof updateLegalPageRequestSchema>;
 
 export const toggleLegalPageRequestSchema = z.object({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type ToggleLegalPageRequest = z.infer<typeof toggleLegalPageRequestSchema>;
 
@@ -58,7 +58,7 @@ export const legalPagePublicSchema = z.object({
   updatedLabel: z.string().nullable(),
   effectiveLabel: z.string().nullable(),
   sections: z.array(legalSectionSchema),
-  readMinutes: z.number().int().min(1),
+  readMinutes: z.int().min(1),
 });
 export type LegalPagePublic = z.infer<typeof legalPagePublicSchema>;
 

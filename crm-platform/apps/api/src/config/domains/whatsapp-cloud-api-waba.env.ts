@@ -19,7 +19,7 @@ const blankToUndefined = (v: unknown) => (typeof v === 'string' && v.trim() === 
 const optionalString = (max = 512) =>
   z.preprocess(blankToUndefined, z.string().max(max).optional());
 const versionString = z.string().regex(/^v\d{1,2}\.\d{1,2}$/, 'must look like v25.0');
-const urlString = z.string().url();
+const urlString = z.url();
 
 export const wabaEnvSchema = z.object({
   /** Which route a newly connected number uses when the connect request does not say. */
@@ -84,7 +84,7 @@ export const wabaEnvSchema = z.object({
     z
       .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
       .transform((v) => v === true || v === 'true' || v === '1')
-      .default(false),
+      .prefault(false),
   ),
   /** Webhook handshake token. Normally saved in the platform settings; this is the env fallback. */
   WABA_VERIFY_TOKEN: optionalString(96),
@@ -104,7 +104,7 @@ export const wabaEnvSchema = z.object({
     z
       .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
       .transform((v) => v === true || v === 'true' || v === '1')
-      .default(false),
+      .prefault(false),
   ),
   /**
    * Comma-separated source addresses whose unsigned, key-less POSTs to the WhatsApp callback are accepted: a relay (Geta's
@@ -121,7 +121,7 @@ export const wabaEnvSchema = z.object({
           .map((x) => x.trim())
           .filter(Boolean),
       )
-      .default(''),
+      .prefault(''),
   ),
   /**
    * Development only: let a provider of the WhatsApp provider registry live on a loopback or private address over plain http (a stand-in
@@ -133,12 +133,12 @@ export const wabaEnvSchema = z.object({
     z
       .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
       .transform((v) => v === true || v === 'true' || v === '1')
-      .default(false),
+      .prefault(false),
   ),
   /** Per-request ceiling for calls to Meta/Interakt, in ms. */
   WABA_HTTP_TIMEOUT_MS: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1000).max(120_000).default(15_000),
+    z.coerce.number().int().min(1000).max(120_000).prefault(15_000),
   ),
 });
 

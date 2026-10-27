@@ -70,7 +70,6 @@ const assistantFields = {
   aiProvider: aiagProviderSchema.optional(),
   aiModel: z.string().trim().min(1).max(AIAG_LIMITS.model).optional(),
   replyMaxTokens: z
-    .number()
     .int()
     .min(AIAG_LIMITS.replyMaxTokensMin, 'Reply length must be 50–4000 tokens.')
     .max(AIAG_LIMITS.replyMaxTokensMax, 'Reply length must be 50–4000 tokens.')
@@ -87,13 +86,14 @@ const assistantFields = {
   status: z.enum(AIAG_ASSISTANT_STATUSES).optional(),
 };
 
-export const createAiagAssistantSchema = z.object(assistantFields).strict();
+export const createAiagAssistantSchema = z.strictObject(assistantFields);
 export type CreateAiagAssistantInput = z.infer<typeof createAiagAssistantSchema>;
 
 /** The whole form plus the row version it was read at; a stale one is refused with 409 ROW_VERSION_CONFLICT. */
-export const updateAiagAssistantSchema = z
-  .object({ ...assistantFields, rowVersion: z.number().int().min(0) })
-  .strict();
+export const updateAiagAssistantSchema = z.strictObject({
+  ...assistantFields,
+  rowVersion: z.int().min(0),
+});
 export type UpdateAiagAssistantInput = z.infer<typeof updateAiagAssistantSchema>;
 
 export const aiagAssistantSchema = z.object({
@@ -107,33 +107,33 @@ export const aiagAssistantSchema = z.object({
   language: z.string(),
   aiProvider: z.string(),
   aiModel: z.string(),
-  replyMaxTokens: z.number().int(),
+  replyMaxTokens: z.int(),
   temperature: z.number(),
   fallbackMessage: z.string().nullable(),
   handoffEnabled: z.boolean(),
   handoffKeyword: z.string().nullable(),
   handoffMessage: z.string().nullable(),
   /** Every source of the assistant, whatever its state (the "N entries" of the list). */
-  sourceCount: z.number().int(),
+  sourceCount: z.int(),
   createdAt: z.string(),
   updatedAt: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type AiagAssistant = z.infer<typeof aiagAssistantSchema>;
 
 export const listAiagAssistantsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
 });
 export type ListAiagAssistantsQuery = z.infer<typeof listAiagAssistantsQuerySchema>;
 
 export const aiagStatsSchema = z.object({
   /** Assistants of the workspace. */
-  all: z.number().int(),
-  active: z.number().int(),
+  all: z.int(),
+  active: z.int(),
   /** Knowledge entries of the whole workspace (every agent's). */
-  sources: z.number().int(),
+  sources: z.int(),
   /** Entries in the `ready` state (the "indexed" count). */
-  ready: z.number().int(),
+  ready: z.int(),
 });
 export type AiagStats = z.infer<typeof aiagStatsSchema>;
 
@@ -149,7 +149,7 @@ export const aiagPickerItemSchema = z.object({
   aiProvider: z.string(),
   aiModel: z.string(),
   /** Ready entries the assistant answers from (its own), as the flow picker counts them. */
-  sources: z.number().int(),
+  sources: z.int(),
 });
 export type AiagPickerItem = z.infer<typeof aiagPickerItemSchema>;
 export const aiagPickerResponseSchema = z.object({ data: z.array(aiagPickerItemSchema) });

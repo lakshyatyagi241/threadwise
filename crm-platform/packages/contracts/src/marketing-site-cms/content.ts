@@ -13,23 +13,23 @@ export const cmsEntrySchema = z.object({
   type: cmsEntryTypeSchema,
   draft: z.string().nullable(),
   published: z.string().nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type CmsEntry = z.infer<typeof cmsEntrySchema>;
 
 /** Everything the editor needs in one read: every stored row, how many have unpublished changes, the homepage switch. */
 export const operatorContentResponseSchema = z.object({
   entries: z.array(cmsEntrySchema),
-  pending: z.number().int().nonnegative(),
+  pending: z.int().nonnegative(),
   homepageEnabled: z.boolean(),
 });
 export type OperatorContentResponse = z.infer<typeof operatorContentResponseSchema>;
 
 /** What a visitor's page needs: published values only, empty values already dropped, layout arrays parsed. */
 export const publicContentResponseSchema = z.object({
-  values: z.record(z.string()),
-  hidden: z.record(z.array(z.string())),
-  order: z.record(z.array(z.string())),
+  values: z.record(z.string(), z.string()),
+  hidden: z.record(z.string(), z.array(z.string())),
+  order: z.record(z.string(), z.array(z.string())),
   homepageEnabled: z.boolean(),
   brandName: z.string(),
 });
@@ -42,7 +42,7 @@ export const saveDraftRequestSchema = z.object({
         key: z.string().min(1).max(191),
         value: z.string().max(20_000),
         /** When given, the save is refused (409) if the row moved since the editor read it. */
-        rowVersion: z.number().int().positive().optional(),
+        rowVersion: z.int().positive().optional(),
       }),
     )
     .min(1)
@@ -61,7 +61,7 @@ export const saveLayoutRequestSchema = z
     order: z.array(z.string().max(64)).max(50).optional(),
   })
   .refine((v) => v.hidden !== undefined || v.order !== undefined, {
-    message: 'Send hidden, order or both',
+    error: 'Send hidden, order or both',
   });
 export type SaveLayoutRequest = z.infer<typeof saveLayoutRequestSchema>;
 
@@ -74,7 +74,7 @@ export type SaveLayoutResponse = z.infer<typeof saveLayoutResponseSchema>;
 export const scopeRequestSchema = z.object({ scope: z.enum(CMS_SCOPES).default('all') });
 export type ScopeRequest = z.infer<typeof scopeRequestSchema>;
 
-export const countResponseSchema = z.object({ count: z.number().int().nonnegative() });
+export const countResponseSchema = z.object({ count: z.int().nonnegative() });
 export type CountResponse = z.infer<typeof countResponseSchema>;
 
 /** Reset one key, or a whole scope. Drafts only: nothing changes for visitors until Publish. */
@@ -84,7 +84,7 @@ export const resetRequestSchema = z
     scope: z.enum(CMS_SCOPES).optional(),
   })
   .refine((v) => (v.key === undefined) !== (v.scope === undefined), {
-    message: 'Send either key or scope',
+    error: 'Send either key or scope',
   });
 export type ResetRequest = z.infer<typeof resetRequestSchema>;
 

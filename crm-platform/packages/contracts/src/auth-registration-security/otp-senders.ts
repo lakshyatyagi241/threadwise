@@ -46,7 +46,11 @@ export function parseOtpSenderRef(ref: string | null | undefined): {
 }
 
 const isHttpUrl = (u: string) => /^https?:\/\//i.test(u);
-const httpUrl = z.string().trim().url().max(512).refine(isHttpUrl, 'Use an http or https address.');
+const httpUrl = z
+  .string()
+  .trim()
+  .pipe(z.url().max(512))
+  .refine(isHttpUrl, 'Use an http or https address.');
 
 const label = z.string().trim().min(1).max(60);
 const digitsId = z
@@ -187,10 +191,10 @@ export const otpTemplateStateSchema = z.object({
   metaTemplateId: z.string().max(64).nullable().default(null),
   status: z.enum(['pending', 'approved', 'rejected', 'local']),
   /** The expiry baked into the template when it was created. */
-  codeExpirationMinutes: z.number().int().min(1).max(90),
-  submittedAt: z.string().datetime().nullable().default(null),
+  codeExpirationMinutes: z.int().min(1).max(90),
+  submittedAt: z.iso.datetime().nullable().default(null),
   /** Last time the status was read back from Meta. */
-  checkedAt: z.string().datetime().nullable().default(null),
+  checkedAt: z.iso.datetime().nullable().default(null),
   rejectedReason: z.string().max(500).nullable().default(null),
   /** The copy-code button text of a WhatsApp Business authentication template (null for local text). */
   buttonLabel: z.string().max(40).nullable().optional(),
@@ -283,6 +287,6 @@ export const otpTestResponseSchema = z.object({
   /** "+91 •••• ••21": the code itself is never returned. */
   sentTo: z.string(),
   /** Test sends left in the current hour. */
-  remainingThisHour: z.number().int().min(0),
+  remainingThisHour: z.int().min(0),
 });
 export type OtpTestResponse = z.infer<typeof otpTestResponseSchema>;

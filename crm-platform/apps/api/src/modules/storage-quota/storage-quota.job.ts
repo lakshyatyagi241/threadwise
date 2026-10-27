@@ -7,7 +7,7 @@ import { z } from 'zod';
 export const STORAGE_BACKFILL_JOB = 'storage.backfill';
 export const STORAGE_RECONCILE_JOB = 'storage.reconcile';
 
-export const storageJobSchema = z.object({ orgId: z.number().int().positive() });
+export const storageJobSchema = z.object({ orgId: z.int().positive() });
 export type StorageJob = z.infer<typeof storageJobSchema>;
 
 /** A failed attempt is retried a few times with the queue's backoff; the nightly fan-out and the 10-minute pickup are the real safety nets. */

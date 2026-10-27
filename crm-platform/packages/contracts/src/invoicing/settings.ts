@@ -51,7 +51,7 @@ export const invoiceProfileSchema = z.object({
   logoUrl: z.string().nullable(),
   brandColor: z.string().nullable(),
   // payment details
-  bankDetails: z.record(z.string()).nullable(),
+  bankDetails: z.record(z.string(), z.string()).nullable(),
   paymentInstructions: z.string().nullable(),
   // numbering
   numberingPrefix: z.string(),
@@ -61,14 +61,14 @@ export const invoiceProfileSchema = z.object({
   salesOrderPrefix: z.string(),
   /** Tokens: {PREFIX}, {YEAR} (the year the series is in), {YY}, {SEQ}. Must contain {SEQ}. */
   numberFormat: z.string(),
-  numberPadding: z.number().int(),
+  numberPadding: z.int(),
   /** The counter restarts every year (every fiscal year when the fiscal year does not start in January). */
   yearlyReset: z.boolean(),
   /** 1 to 12; April = 4 for India. */
-  fiscalYearStartMonth: z.number().int(),
+  fiscalYearStartMonth: z.int(),
   // defaults
   /** Default payment terms in days; null means due on issue. */
-  dueDays: z.number().int().nullable(),
+  dueDays: z.int().nullable(),
   terms: z.string().nullable(),
   footerNote: z.string().nullable(),
   invoiceTitle: z.string().nullable(),
@@ -77,8 +77,8 @@ export const invoiceProfileSchema = z.object({
   overdueReminders: z.boolean(),
   /** Workspace currency new invoices default to (read-only here: it belongs to the workspace settings). */
   currency: z.string(),
-  rowVersion: z.number().int().nullable(),
-  updatedAt: z.string().datetime().nullable(),
+  rowVersion: z.int().nullable(),
+  updatedAt: z.iso.datetime().nullable(),
 });
 export type InvoiceProfile = z.infer<typeof invoiceProfileSchema>;
 
@@ -101,8 +101,7 @@ export const updateInvoiceProfileSchema = z.object({
   logoUrl: z
     .string()
     .trim()
-    .url()
-    .max(500)
+    .pipe(z.url().max(500))
     .refine((u) => u.startsWith('https://'), 'an https URL')
     .nullish(),
   brandColor: z
@@ -131,16 +130,16 @@ export const updateInvoiceProfileSchema = z.object({
       'unknown token: use {PREFIX}, {YEAR}, {YY} and {SEQ}',
     )
     .optional(),
-  numberPadding: z.number().int().min(1).max(10).optional(),
+  numberPadding: z.int().min(1).max(10).optional(),
   yearlyReset: z.boolean().optional(),
-  fiscalYearStartMonth: z.number().int().min(1).max(12).optional(),
-  dueDays: z.number().int().min(0).max(365).nullish(),
+  fiscalYearStartMonth: z.int().min(1).max(12).optional(),
+  dueDays: z.int().min(0).max(365).nullish(),
   terms: z.string().trim().max(10000).nullish(),
   footerNote: z.string().trim().max(2000).nullish(),
   invoiceTitle: z.string().trim().max(60).nullish(),
   defaultTaxRegime: regime.optional(),
   overdueReminders: z.boolean().optional(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateInvoiceProfileInput = z.infer<typeof updateInvoiceProfileSchema>;
 
@@ -163,7 +162,7 @@ export const invoiceGatewayResponseSchema = z.object({
   webhookPath: z.string().nullable(),
   /** Whether a signing secret is stored. The secret itself is never returned. */
   hasSecret: z.boolean(),
-  updatedAt: z.string().datetime().nullable(),
+  updatedAt: z.iso.datetime().nullable(),
 });
 export type InvoiceGatewayResponse = z.infer<typeof invoiceGatewayResponseSchema>;
 

@@ -1,20 +1,21 @@
 import { z } from 'zod';
+import { patchOf } from '../common/patch';
 import { SET_GROUP_SCHEMAS, SET_SECRET_FIELDS, setGroupSchema, type SetGroup } from './groups';
 
 /** GET /v2/platform/settings/groups/:group */
 export const setGroupResponseSchema = z.object({
   group: setGroupSchema,
   /** Non-secret fields, every one present (defaults fill what was never saved). */
-  values: z.record(z.unknown()),
+  values: z.record(z.string(), z.unknown()),
   /** One entry per secret field of the group: whether a value is stored. The value is never returned. */
-  secrets: z.record(z.object({ isSet: z.boolean() })),
+  secrets: z.record(z.string(), z.object({ isSet: z.boolean() })),
   /** Send it back unchanged with the next PATCH. 0 = never saved. */
-  rowVersion: z.number().int().min(0),
-  updatedAt: z.string().datetime().nullable(),
+  rowVersion: z.int().min(0),
+  updatedAt: z.iso.datetime().nullable(),
   /** The last connection test of a testable group (mail, storage), if any. */
-  test: z.object({ ok: z.boolean(), at: z.string().datetime() }).nullable(),
+  test: z.object({ ok: z.boolean(), at: z.iso.datetime() }).nullable(),
   /** Read-only facts that are not editable fields (the Team Inbox app's push state). Absent for most groups. */
-  extra: z.record(z.unknown()).optional(),
+  extra: z.record(z.string(), z.unknown()).optional(),
 });
 export type SetGroupResponse = z.infer<typeof setGroupResponseSchema>;
 
@@ -26,10 +27,12 @@ export type SetGroupResponse = z.infer<typeof setGroupResponseSchema>;
 export function setPatchSchemaFor(group: SetGroup) {
   const secretKeys = SET_SECRET_FIELDS[group] as readonly string[];
   return z.object({
-    rowVersion: z.number().int().min(0),
-    values: (SET_GROUP_SCHEMAS[group] as z.AnyZodObject).partial().strict().default({}),
+    rowVersion: z.int().min(0),
+    values: patchOf(SET_GROUP_SCHEMAS[group] as z.ZodObject)
+      .strict()
+      .default({}),
     secrets: z
-      .record(z.string().max(4000).nullable())
+      .record(z.string(), z.string().max(4000).nullable())
       .default({})
       .refine((s) => Object.keys(s).every((k) => secretKeys.includes(k)), 'unknown secret field'),
   });
@@ -42,20 +45,20 @@ export type SetPatchRequest = {
 
 export const setHubResponseSchema = z.object({
   kpis: z.object({
-    savedGroups: z.number().int(),
+    savedGroups: z.int(),
     /** Saved groups that hold at least one non-empty value. */
-    healthyGroups: z.number().int(),
-    totalGroups: z.number().int(),
+    healthyGroups: z.int(),
+    totalGroups: z.int(),
     /** Testable groups that are configured but have no successful test since they were last saved. */
     needsTest: z.array(setGroupSchema),
-    secretFields: z.number().int(),
-    lastUpdatedAt: z.string().datetime().nullable(),
+    secretFields: z.int(),
+    lastUpdatedAt: z.iso.datetime().nullable(),
   }),
   groups: z.array(
     z.object({
       group: setGroupSchema,
       saved: z.boolean(),
-      updatedAt: z.string().datetime().nullable(),
+      updatedAt: z.iso.datetime().nullable(),
       needsTest: z.boolean(),
     }),
   ),
@@ -65,12 +68,12 @@ export type SetHubResponse = z.infer<typeof setHubResponseSchema>;
 export const setTestResultSchema = z.object({ ok: z.boolean(), message: z.string() });
 export type SetTestResult = z.infer<typeof setTestResultSchema>;
 
-export const mailTestRequestSchema = z.object({ to: z.string().trim().email().max(200) });
+export const mailTestRequestSchema = z.object({ to: z.string().trim().pipe(z.email().max(200)) });
 export type MailTestRequest = z.infer<typeof mailTestRequestSchema>;
 
 export const setExportResponseSchema = z.object({
   app: z.string(),
-  exportedAt: z.string().datetime(),
+  exportedAt: z.iso.datetime(),
   note: z.string(),
   settings: z.array(z.object({ key: z.string(), value: z.unknown(), secret: z.boolean() })),
 });
@@ -82,7 +85,7 @@ export const publicSiteConfigSchema = z.object({
     name: z.string(),
     url: z.string(),
     faviconUrl: z.string(),
-    logos: z.record(z.string()),
+    logos: z.record(z.string(), z.string()),
     fontFamily: z.string(),
     platformFooter: z.string(),
   }),
@@ -96,12 +99,12 @@ export const publicSiteConfigSchema = z.object({
   maintenance: z.boolean(),
   /** `:root{--color-...}` for the overridden tokens, or an empty string when none differ. */
   themeCss: z.string(),
-  seo: z.record(z.string()),
+  seo: z.record(z.string(), z.string()),
   footer: z.object({
     title: z.string(),
     copyright: z.string(),
     description: z.string(),
-    social: z.record(z.string()),
+    social: z.record(z.string(), z.string()),
   }),
   cookieBanner: z.object({
     enabled: z.boolean(),
@@ -113,7 +116,7 @@ export const publicSiteConfigSchema = z.object({
     respectDoNotTrack: z.boolean(),
   }),
   /** Tracker ids to load once the visitor consents; empty ids are omitted. */
-  analytics: z.record(z.string()),
+  analytics: z.record(z.string(), z.string()),
   customCode: z.object({ css: z.string(), js: z.string() }),
   /** Head tags of the installable app (TW-SET-036): shown only when `enabled`. */
   pwa: z.object({

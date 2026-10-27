@@ -23,7 +23,7 @@ export const emailAttachmentSchema = z.object({
   id: z.string().max(128),
   name: z.string().max(255),
   mime: z.string().max(127),
-  size: z.number().int().min(0),
+  size: z.int().min(0),
   /** Shown inside the HTML body rather than as a file. */
   inline: z.boolean().default(false),
   /** Over the size cap: not stored, shown as a note. */
@@ -73,8 +73,14 @@ export type EmailMeta = z.infer<typeof emailMetaSchema>;
 
 /** What the composer adds to a reply on an email conversation. */
 export const emailReplyExtrasSchema = z.object({
-  cc: z.array(z.string().trim().email().max(320)).max(20).default([]),
-  bcc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  cc: z
+    .array(z.string().trim().pipe(z.email().max(320)))
+    .max(20)
+    .default([]),
+  bcc: z
+    .array(z.string().trim().pipe(z.email().max(320)))
+    .max(20)
+    .default([]),
   /** Overrides the default `Re: <subject>`. */
   subject: z.string().trim().min(1).max(998).optional(),
   /** Staged composer uploads (`POST /v2/email/attachments/upload`) sent with this reply (TW-MAIL-027). */

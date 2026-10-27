@@ -262,8 +262,8 @@ export function coreFeatureDefault(key: string): boolean | null {
 export const planFeatureOwnableByApp = (key: string): boolean => coreFeatureDefault(key) !== true;
 
 export const setMarketPricingSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
+  .strictObject({
+    rowVersion: z.int().positive(),
     model: marketAppPricingModelSchema,
     /** Monthly price in major units, e.g. "9.00". */
     amount: moneySchema.nullable().optional(),
@@ -277,7 +277,7 @@ export const setMarketPricingSchema = z
      * at what they last paid when this is turned on; turning it off never unlocks anyone.
      */
     priceLock: z.boolean().default(false),
-    trialDays: z.number().int().min(0).max(MARKET_TRIAL_DAYS_MAX).default(0),
+    trialDays: z.int().min(0).max(MARKET_TRIAL_DAYS_MAX).default(0),
     /** Off: no NEW subscriptions (workspaces that already subscribe may keep renewing). */
     purchasable: z.boolean().default(true),
     /** Workspaces whose plan (counting its add-ons) has this feature get the app free. */
@@ -292,10 +292,9 @@ export const setMarketPricingSchema = z
     /** The operator may comp the workspaces that already have the granted features (the explicit grandfather action). */
     grandfatherExisting: z.boolean().default(false),
   })
-  .strict()
   .superRefine((p, ctx) => {
     for (const i of pricingIssues(p))
-      ctx.addIssue({ code: z.ZodIssueCode.custom, path: [i.path], message: i.message });
+      ctx.addIssue({ code: 'custom', path: [i.path], message: i.message });
   });
 export type SetMarketPricingInput = z.infer<typeof setMarketPricingSchema>;
 export type SetMarketPricingRequest = z.input<typeof setMarketPricingSchema>;
@@ -308,11 +307,11 @@ export const marketPricingViewSchema = z.object({
   annualAmount: z.string().nullable(),
   billingMode: marketBillingModeSchema,
   priceLock: z.boolean(),
-  trialDays: z.number().int(),
+  trialDays: z.int(),
   purchasable: z.boolean(),
   includedPlanFeature: z.string().nullable(),
   includedMinPlan: z.string().nullable(),
-  priceChangedAt: z.string().datetime().nullable(),
+  priceChangedAt: z.iso.datetime().nullable(),
   grantsPlanFeatures: z.array(z.string()),
   grandfatherExisting: z.boolean(),
   /** The slug of the add-on that sells it (null until the app is first priced). */
@@ -347,7 +346,7 @@ export const marketCardPricingSchema = z.object({
   billingMode: marketBillingModeSchema.optional(),
   /** The price of a year, major units, when the app can be bought yearly. Absent in an answer from before BL-072. */
   annualAmount: z.string().nullable().optional(),
-  trialDays: z.number().int(),
+  trialDays: z.int(),
   /** The workspace may start the free trial now (the app offers one and the workspace has never had a subscription to it). */
   trialAvailable: z.boolean(),
   access: marketAccessSchema,
@@ -562,13 +561,13 @@ export const marketSubscriptionSchema = z.object({
   currency: z.string().nullable(),
   /** The period that payment was bought for. */
   period: marketBillingPeriodSchema,
-  startedAt: z.string().datetime(),
+  startedAt: z.iso.datetime(),
   /** When access ends unless renewed; null for a subscription with no end. */
-  currentPeriodEnd: z.string().datetime().nullable(),
-  trialEndsAt: z.string().datetime().nullable(),
-  canceledAt: z.string().datetime().nullable(),
-  lapsedAt: z.string().datetime().nullable(),
-  renewals: z.number().int(),
+  currentPeriodEnd: z.iso.datetime().nullable(),
+  trialEndsAt: z.iso.datetime().nullable(),
+  canceledAt: z.iso.datetime().nullable(),
+  lapsedAt: z.iso.datetime().nullable(),
+  renewals: z.int(),
   /** The listing's price now, when it differs from `amount`: what the next payment will be. */
   nextAmount: z.string().nullable(),
   nextCurrency: z.string().nullable(),
@@ -577,8 +576,8 @@ export const marketSubscriptionSchema = z.object({
   /** The next payment is `amount` whatever the listing costs now (grandfathered), until the subscription ends. */
   priceLocked: z.boolean(),
   /** The card renewal failed; the app keeps working until `graceEndsAt` while the provider retries. Null when nothing is wrong. */
-  paymentFailedAt: z.string().datetime().nullable(),
-  graceEndsAt: z.string().datetime().nullable(),
+  paymentFailedAt: z.iso.datetime().nullable(),
+  graceEndsAt: z.iso.datetime().nullable(),
   actions: z.object({ canCancel: z.boolean(), canResume: z.boolean(), canRenew: z.boolean() }),
 });
 export type MarketSubscription = z.infer<typeof marketSubscriptionSchema>;
@@ -586,13 +585,11 @@ export type MarketSubscription = z.infer<typeof marketSubscriptionSchema>;
 // --- workspace calls --------------------------------------------------------------------------------------------------------------------------
 
 /** Subscribe: with `startTrial` start the free trial the listing offers, otherwise go and pay. */
-export const subscribeAppSchema = z
-  .object({
-    startTrial: z.boolean().default(false),
-    /** `yearly` needs a yearly price on the listing (`422` otherwise). Ignored for a trial. */
-    period: marketBillingPeriodSchema.default('monthly'),
-  })
-  .strict();
+export const subscribeAppSchema = z.strictObject({
+  startTrial: z.boolean().default(false),
+  /** `yearly` needs a yearly price on the listing (`422` otherwise). Ignored for a trial. */
+  period: marketBillingPeriodSchema.default('monthly'),
+});
 export type SubscribeAppInput = z.infer<typeof subscribeAppSchema>;
 export type SubscribeAppRequest = z.input<typeof subscribeAppSchema>;
 
@@ -642,27 +639,26 @@ const text = (max: number, min = 0) => z.string().trim().min(min).max(max);
  * keeps the old price at the provider, so their card renewal is ended at the end of the period they paid for and they subscribe again at
  * the new price (they are told).
  */
-export const unlockSubscriptionPriceSchema = z.object({ reason: text(300, 5) }).strict();
+export const unlockSubscriptionPriceSchema = z.strictObject({ reason: text(300, 5) });
 export type UnlockSubscriptionPriceInput = z.infer<typeof unlockSubscriptionPriceSchema>;
 export type UnlockSubscriptionPriceRequest = z.input<typeof unlockSubscriptionPriceSchema>;
 
 export const MARKET_COMP_MAX_MONTHS = 36;
 
 /** Gives a workspace a paid app free: for a number of months, or (`months: null`) until the operator ends it. */
-export const compSubscriptionSchema = z
-  .object({
-    workspaceId: uuidSchema,
-    months: z.number().int().min(1).max(MARKET_COMP_MAX_MONTHS).nullable().default(null),
-    note: text(300, 5),
-  })
-  .strict();
+export const compSubscriptionSchema = z.strictObject({
+  workspaceId: uuidSchema,
+  months: z.int().min(1).max(MARKET_COMP_MAX_MONTHS).nullable().default(null),
+  note: text(300, 5),
+});
 export type CompSubscriptionInput = z.infer<typeof compSubscriptionSchema>;
 export type CompSubscriptionRequest = z.input<typeof compSubscriptionSchema>;
 
 /** Cancels a workspace's subscription: at the end of the period it has paid for, or right now. */
-export const cancelOperatorSubscriptionSchema = z
-  .object({ immediate: z.boolean().default(false), reason: text(300, 5) })
-  .strict();
+export const cancelOperatorSubscriptionSchema = z.strictObject({
+  immediate: z.boolean().default(false),
+  reason: text(300, 5),
+});
 export type CancelOperatorSubscriptionInput = z.infer<typeof cancelOperatorSubscriptionSchema>;
 export type CancelOperatorSubscriptionRequest = z.input<typeof cancelOperatorSubscriptionSchema>;
 
@@ -670,22 +666,20 @@ export type CancelOperatorSubscriptionRequest = z.input<typeof cancelOperatorSub
  * Comps every workspace that already has one of the app's granted plan features through its plan or its overrides and has no subscription
  * to the app yet (the "grandfather" action for a feature that becomes a paid app). `dryRun` counts and lists without writing.
  */
-export const grandfatherSubscriptionsSchema = z
-  .object({
-    months: z.number().int().min(1).max(MARKET_COMP_MAX_MONTHS).nullable().default(null),
-    note: text(300, 5),
-    dryRun: z.boolean().default(true),
-  })
-  .strict();
+export const grandfatherSubscriptionsSchema = z.strictObject({
+  months: z.int().min(1).max(MARKET_COMP_MAX_MONTHS).nullable().default(null),
+  note: text(300, 5),
+  dryRun: z.boolean().default(true),
+});
 export type GrandfatherSubscriptionsInput = z.infer<typeof grandfatherSubscriptionsSchema>;
 export type GrandfatherSubscriptionsRequest = z.input<typeof grandfatherSubscriptionsSchema>;
 
 export const marketGrandfatherResultSchema = z.object({
   dryRun: z.boolean(),
   /** Workspaces that qualify (have a granted feature now and no subscription to the app). */
-  matched: z.number().int(),
+  matched: z.int(),
   /** Subscriptions created (0 for a dry run). */
-  comped: z.number().int(),
+  comped: z.int(),
   /** Up to 25 of the workspaces, by name, so the operator can look before running it for real. */
   sample: z.array(z.object({ id: uuidSchema, name: z.string() })),
 });
@@ -698,17 +692,16 @@ export type MarketGrandfatherResult = z.infer<typeof marketGrandfatherResultSche
  * `dryRun` (the default) works the amount out and changes nothing; `endNow` also ends the subscription now once the refund went through.
  */
 export const prorateSubscriptionSchema = z
-  .object({
+  .strictObject({
     /** 5 to 250 characters; a dry run (which changes nothing) may leave it empty. */
     reason: z.string().trim().max(250).default(''),
     dryRun: z.boolean().default(true),
     endNow: z.boolean().default(false),
   })
-  .strict()
   .superRefine((v, ctx) => {
     if (!v.dryRun && v.reason.length < 5)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['reason'],
         message: 'Give a reason of at least 5 characters.',
       });
@@ -728,7 +721,7 @@ export const marketProrationSchema = z.object({
   alreadyRefundedMinor: z.string(),
   /** What may be returned now: the unused share minus what was already returned, never more than is left of the payment. */
   refundableMinor: z.string(),
-  periodEnd: z.string().datetime().nullable(),
+  periodEnd: z.iso.datetime().nullable(),
   billingPeriod: marketBillingPeriodSchema,
   /** Where the payment was made: a one-time order, or a charge of the provider's subscription. */
   source: z.enum(['order', 'charge']).nullable(),
@@ -741,7 +734,7 @@ export type MarketProration = z.infer<typeof marketProrationSchema>;
 
 /** Returns every subscriber of a WITHDRAWN (killed) app the share of their last payment from the moment the app was withdrawn. */
 export const refundWithdrawnAppSchema = z
-  .object({
+  .strictObject({
     reason: z.string().trim().max(250).default(''),
     dryRun: z.boolean().default(true),
     /** Continue after the last subscription of the previous run (`next` in its answer). */
@@ -750,11 +743,10 @@ export const refundWithdrawnAppSchema = z
       .regex(/^\d{1,15}$/)
       .optional(),
   })
-  .strict()
   .superRefine((v, ctx) => {
     if (!v.dryRun && v.reason.length < 5)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['reason'],
         message: 'Give a reason of at least 5 characters.',
       });
@@ -765,13 +757,13 @@ export type RefundWithdrawnAppRequest = z.input<typeof refundWithdrawnAppSchema>
 export const marketWithdrawnRefundSchema = z.object({
   dryRun: z.boolean(),
   /** Subscriptions looked at in this run. */
-  considered: z.number().int(),
+  considered: z.int(),
   /** Of those, the ones owed something. */
-  refundable: z.number().int(),
-  refunded: z.number().int(),
-  failed: z.number().int(),
+  refundable: z.int(),
+  refunded: z.int(),
+  failed: z.int(),
   /** Nothing owed: paid through no gateway, the period over, or already returned. */
-  skipped: z.number().int(),
+  skipped: z.int(),
   hasMore: z.boolean(),
   /** Pass as `after` to continue. */
   next: z.string().nullable(),
@@ -796,18 +788,18 @@ export const marketOperatorSubscriptionSchema = z.object({
   source: marketSubscriptionSourceSchema,
   amount: z.string().nullable(),
   currency: z.string().nullable(),
-  startedAt: z.string().datetime(),
-  currentPeriodEnd: z.string().datetime().nullable(),
-  trialEndsAt: z.string().datetime().nullable(),
-  canceledAt: z.string().datetime().nullable(),
-  lapsedAt: z.string().datetime().nullable(),
-  renewals: z.number().int(),
+  startedAt: z.iso.datetime(),
+  currentPeriodEnd: z.iso.datetime().nullable(),
+  trialEndsAt: z.iso.datetime().nullable(),
+  canceledAt: z.iso.datetime().nullable(),
+  lapsedAt: z.iso.datetime().nullable(),
+  renewals: z.int(),
   period: marketBillingPeriodSchema,
   priceLocked: z.boolean(),
   cancelAtPeriodEnd: z.boolean(),
   autoRenew: z.boolean(),
-  paymentFailedAt: z.string().datetime().nullable(),
-  graceEndsAt: z.string().datetime().nullable(),
+  paymentFailedAt: z.iso.datetime().nullable(),
+  graceEndsAt: z.iso.datetime().nullable(),
   compNote: z.string().nullable(),
   compBy: z.string().nullable(),
 });
@@ -820,7 +812,7 @@ export const marketOperatorSubscriptionListQuerySchema = z.object({
   source: marketSubscriptionSourceSchema.optional(),
   /** Part of the workspace's name. */
   q: z.string().trim().max(80).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: z.string().min(1).max(500).optional(),
 });
 export type MarketOperatorSubscriptionListQuery = z.infer<
@@ -831,7 +823,7 @@ export const marketOperatorSubscriptionListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type MarketOperatorSubscriptionList = z.infer<typeof marketOperatorSubscriptionListSchema>;
@@ -847,13 +839,13 @@ export const marketSubscriptionSummaryRowSchema = z.object({
     currency: z.string().nullable(),
   }),
   counts: z.object({
-    active: z.number().int(),
-    trialing: z.number().int(),
-    comped: z.number().int(),
-    canceling: z.number().int(),
-    pastDue: z.number().int(),
-    ended: z.number().int(),
-    total: z.number().int(),
+    active: z.int(),
+    trialing: z.int(),
+    comped: z.int(),
+    canceling: z.int(),
+    pastDue: z.int(),
+    ended: z.int(),
+    total: z.int(),
   }),
   mrr: z.array(z.object({ currency: z.string(), amount: z.string() })),
 });

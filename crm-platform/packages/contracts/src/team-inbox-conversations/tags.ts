@@ -21,8 +21,8 @@ export const inboxTagSchema = z.object({
   color: z.string().nullable(),
   description: z.string().nullable(),
   /** Conversations (of any workspace member's view: the count is workspace-wide) that carry it. */
-  conversationCount: z.number().int().nonnegative(),
-  rowVersion: z.number().int().positive(),
+  conversationCount: z.int().nonnegative(),
+  rowVersion: z.int().positive(),
 });
 export type InboxTag = z.infer<typeof inboxTagSchema>;
 
@@ -37,7 +37,7 @@ export const createInboxTagSchema = z.object({
 export type CreateInboxTagInput = z.infer<typeof createInboxTagSchema>;
 
 export const updateInboxTagSchema = z.object({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
   name: z.string().trim().min(1).max(INBOX_TAG_NAME_MAX).optional(),
   color: colorSchema.nullish(),
   description: z.string().trim().max(255).nullish(),
@@ -51,7 +51,7 @@ export const applyConversationTagSchema = z
     name: z.string().trim().min(1).max(INBOX_TAG_NAME_MAX).optional(),
   })
   .refine((v) => (v.tagId === undefined) !== (v.name === undefined), {
-    message: 'Name a tag by id or by name, not both and not neither',
     path: ['tagId'],
+    error: 'Name a tag by id or by name, not both and not neither',
   });
 export type ApplyConversationTagInput = z.infer<typeof applyConversationTagSchema>;

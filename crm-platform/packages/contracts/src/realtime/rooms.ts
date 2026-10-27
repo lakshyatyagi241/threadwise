@@ -54,7 +54,7 @@ export const realtimeRoomAckSchema = z.discriminatedUnion('ok', [
     ok: z.literal(true),
     room: z.string(),
     /** The room's sequence number now: events after this one carry `seq + 1`, `seq + 2`, ... */
-    seq: z.number().int().nonnegative(),
+    seq: z.int().nonnegative(),
   }),
   z.object({ ok: z.literal(false), code: z.enum(REALTIME_JOIN_REFUSALS) }),
 ]);

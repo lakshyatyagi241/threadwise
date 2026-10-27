@@ -45,8 +45,8 @@ export function windowSpan(w: { from: string; to: string }): [number, number] {
 export const businessHoursWindowSchema = z
   .object({ from: clock, to: closingClock })
   .refine((w) => w.to !== w.from, {
-    message: 'The closing time must differ from the opening time.',
     path: ['to'],
+    error: 'The closing time must differ from the opening time.',
   });
 export type BusinessHoursWindow = z.infer<typeof businessHoursWindowSchema>;
 
@@ -108,7 +108,7 @@ export const businessHoursHolidaysSchema = z
   .array(businessHoursHolidaySchema)
   .max(BUSINESS_HOURS_MAX_HOLIDAYS)
   .refine((list) => new Set(list.map((h) => h.date)).size === list.length, {
-    message: 'Each date may be listed once.',
+    error: 'Each date may be listed once.',
   });
 
 /** `GET /inbox/routing/business-hours` and `GET /shell/workspace/working-hours`. The schedule comes back with the Reference default (Mon-Fri 09:00-18:00) until one is saved. */
@@ -126,18 +126,18 @@ export type BusinessHours = z.infer<typeof businessHoursSchema>;
  * kept; the days are always saved. `holidays` is optional: left out, the saved holidays stay as they are (the Auto-assignment dialog
  * does not edit them). Other keys stored with the schedule (outside-hours reply, anti-spam; not in this slice yet) are kept as they are.
  */
-export const updateBusinessHoursSchema = z
-  .object({
-    timezone: z
-      .string()
-      .min(1)
-      .max(64)
-      .refine(isIanaZone, { message: 'Not an IANA timezone.' })
-      .optional(),
-    days: businessHoursDaysSchema,
-    holidays: businessHoursHolidaysSchema.optional(),
-  })
-  .strict();
+export const updateBusinessHoursSchema = z.strictObject({
+  timezone: z
+    .string()
+    .min(1)
+    .max(64)
+    .refine(isIanaZone, {
+      error: 'Not an IANA timezone.',
+    })
+    .optional(),
+  days: businessHoursDaysSchema,
+  holidays: businessHoursHolidaysSchema.optional(),
+});
 export type UpdateBusinessHoursInput = z.infer<typeof updateBusinessHoursSchema>;
 
 /**

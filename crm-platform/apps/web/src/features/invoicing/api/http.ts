@@ -7,7 +7,7 @@ import { toApiError } from '@/lib/api/errors';
  * type demands the same type on both sides. The cast below is the one place that difference is bridged.
  */
 export type ApiRequest<T> = Omit<BaseRequest<T>, 'schema'> & {
-  schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
+  schema?: z.ZodType<T, unknown>;
 };
 
 /** Every invoicing call goes through the same-origin proxy (`/api/v2/*`), which attaches the session token. */
@@ -27,7 +27,7 @@ export class PublicInvoiceGone extends Error {
  */
 export async function callPublic<T>(
   token: string,
-  schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+  schema: z.ZodType<T, unknown>,
   req: { method?: 'GET' | 'POST'; action?: 'pay'; body?: unknown } = {},
 ): Promise<T> {
   const method = req.method ?? 'GET';

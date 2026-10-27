@@ -29,18 +29,18 @@ export const apiLibraryLogItemSchema = z.object({
   method: z.string(),
   url: z.string(),
   ok: z.boolean(),
-  statusCode: z.number().int().nullable(),
-  durationMs: z.number().int(),
+  statusCode: z.int().nullable(),
+  durationMs: z.int(),
   errorKind: apiLibraryErrorKindSchema.nullable(),
   error: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type ApiLibraryLogItem = z.infer<typeof apiLibraryLogItemSchema>;
 
 export const apiLibraryLogDetailSchema = apiLibraryLogItemSchema.extend({
-  requestHeaders: z.record(z.string()),
+  requestHeaders: z.record(z.string(), z.string()),
   requestBody: z.string().nullable(),
-  responseHeaders: z.record(z.union([z.string(), z.array(z.string())])),
+  responseHeaders: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
   responseBody: z.string().nullable(),
   /** The stored response body was cut. */
   responseTruncated: z.boolean(),
@@ -65,8 +65,8 @@ export const listApiLibraryLogsQuerySchema = paginationQuerySchema.extend({
   /** An exact HTTP status code. */
   statusCode: z.coerce.number().int().min(100).max(599).optional(),
   source: apiLibraryLogSourceSchema.optional(),
-  from: z.string().datetime().optional(),
-  to: z.string().datetime().optional(),
+  from: z.iso.datetime().optional(),
+  to: z.iso.datetime().optional(),
   /** Matches the URL, the API name and the error text, ignoring case. */
   search: z.string().trim().max(API_LIBRARY_LOG_SEARCH_MAX).optional(),
 });

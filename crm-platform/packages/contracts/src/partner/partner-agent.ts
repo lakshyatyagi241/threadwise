@@ -17,7 +17,7 @@ export const partnerAgentResponseSchema = z.object({
   email: z.string(),
   phone: z.string().nullable(),
   status: z.enum(['active', 'suspended']),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type PartnerAgentResponse = z.infer<typeof partnerAgentResponseSchema>;
 
@@ -56,7 +56,7 @@ export const partnerLeadViewSchema = z.object({
   phone: z.string().nullable(),
   lifecycleStage: z.string().nullable(),
   collegeTag: z.string().nullable(),
-  submittedAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  submittedAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type PartnerLeadView = z.infer<typeof partnerLeadViewSchema>;

@@ -49,13 +49,11 @@ export interface FlowGraph {
 export const flbEmptyGraph = (): FlowGraph => ({ flowNodes: [], flowEdges: [], vars: [] });
 
 /** Loose input: what a saved row, an import file or a template may hold. Strict shape comes from `flbNormalizeGraph`. */
-export const flbLooseGraphSchema = z
-  .object({
-    flowNodes: z.array(z.record(z.unknown())).max(FLB_MAX_FLOW_NODES),
-    flowEdges: z.array(z.record(z.unknown())).max(FLB_MAX_FLOW_EDGES).optional(),
-    vars: z.array(z.unknown()).optional(),
-  })
-  .passthrough();
+export const flbLooseGraphSchema = z.looseObject({
+  flowNodes: z.array(z.record(z.string(), z.unknown())).max(FLB_MAX_FLOW_NODES),
+  flowEdges: z.array(z.record(z.string(), z.unknown())).max(FLB_MAX_FLOW_EDGES).optional(),
+  vars: z.array(z.unknown()).optional(),
+});
 
 const rand = (): string => Math.random().toString(36).slice(2, 8).padEnd(6, '0');
 export const flbNewNodeId = (): string => `n_${rand()}`;

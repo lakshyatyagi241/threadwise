@@ -39,7 +39,7 @@ export const SUPP_TICKET_NUMBER_PATTERN = /^TKT-[A-Z0-9]{4,6}(-\d{4})?$/;
 export const createSupportTicketRequestSchema = z.object({
   reason: suppTicketReasonSchema,
   name: z.string().trim().min(1).max(191),
-  email: z.string().trim().email().max(191),
+  email: z.string().trim().pipe(z.email().max(191)),
   subject: z.string().trim().min(1).max(191),
   message: z.string().trim().min(1).max(20000),
 });
@@ -49,12 +49,12 @@ export const supportReplyRequestSchema = z.object({ body: z.string().trim().min(
 export type SupportReplyRequest = z.infer<typeof supportReplyRequestSchema>;
 
 export const customerTicketListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(10),
+  limit: z.coerce.number().int().min(1).max(200).prefault(10),
 });
 export type CustomerTicketListQuery = z.infer<typeof customerTicketListQuerySchema>;
 
 export const customerTicketItemSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   excerpt: z.string(),
@@ -68,15 +68,15 @@ export const customerTicketListResponseSchema = z.object({
   data: z.array(customerTicketItemSchema),
   /** Counts for the account tab and the "more" chip: open means neither resolved nor closed. */
   summary: z.object({
-    total: z.number().int(),
-    open: z.number().int(),
-    resolved: z.number().int(),
+    total: z.int(),
+    open: z.int(),
+    resolved: z.int(),
   }),
 });
 export type CustomerTicketListResponse = z.infer<typeof customerTicketListResponseSchema>;
 
 export const customerThreadMessageSchema = z.object({
-  id: z.string().uuid().nullable(),
+  id: z.guid().nullable(),
   /** `initial` is the message typed on the form; `support` is any operator reply; `customer` a follow-up. */
   role: z.enum(['initial', 'customer', 'support']),
   body: z.string(),
@@ -96,15 +96,15 @@ export const operatorTicketListQuerySchema = z.object({
   priority: suppTicketPrioritySchema.optional(),
   agent: z.enum(['me', 'unassigned']).optional(),
   q: z.string().trim().max(191).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(12),
+  limit: z.coerce.number().int().min(1).max(100).prefault(12),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type OperatorTicketListQuery = z.infer<typeof operatorTicketListQuerySchema>;
 
-const assigneeSchema = z.object({ id: z.string().uuid(), name: z.string(), email: z.string() });
+const assigneeSchema = z.object({ id: z.guid(), name: z.string(), email: z.string() });
 
 export const operatorTicketRowSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   customerName: z.string(),
@@ -121,16 +121,16 @@ export const operatorTicketListResponseSchema = z.object({
   page: pageInfoSchema,
   /** Global numbers: they ignore the active filters. */
   kpis: z.object({
-    open: z.number().int(),
-    unassigned: z.number().int(),
-    resolved24h: z.number().int(),
-    total: z.number().int(),
+    open: z.int(),
+    unassigned: z.int(),
+    resolved24h: z.int(),
+    total: z.int(),
   }),
 });
 export type OperatorTicketListResponse = z.infer<typeof operatorTicketListResponseSchema>;
 
 export const operatorThreadMessageSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   role: z.enum(['customer', 'admin', 'system']),
   authorName: z.string(),
   body: z.string(),
@@ -140,7 +140,7 @@ export const operatorThreadMessageSchema = z.object({
 });
 
 export const operatorTicketDetailSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   /** The message typed on the form (the thread below starts after it). */
@@ -150,9 +150,9 @@ export const operatorTicketDetailSchema = z.object({
   customerEmail: z.string(),
   status: suppTicketStatusSchema,
   priority: suppTicketPrioritySchema,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   assignee: assigneeSchema.nullable(),
-  workspace: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
+  workspace: z.object({ id: z.guid(), name: z.string(), slug: z.string() }),
   createdAt: z.string(),
   firstResponseAt: z.string().nullable(),
   lastReplyAt: z.string().nullable(),
@@ -169,7 +169,7 @@ export const operatorReplyRequestSchema = z.object({
 });
 export type OperatorReplyRequest = z.infer<typeof operatorReplyRequestSchema>;
 
-const rowVersionSchema = z.number().int().min(1);
+const rowVersionSchema = z.int().min(1);
 
 export const setTicketStatusRequestSchema = z.object({
   status: suppTicketStatusSchema,
@@ -181,7 +181,7 @@ export const setTicketPriorityRequestSchema = z.object({
 });
 /** `agentId` is a platform operator's uuid, or null to unassign. */
 export const assignTicketRequestSchema = z.object({
-  agentId: z.string().uuid().nullable(),
+  agentId: z.guid().nullable(),
   rowVersion: rowVersionSchema,
 });
 export type SetTicketStatusRequest = z.infer<typeof setTicketStatusRequestSchema>;

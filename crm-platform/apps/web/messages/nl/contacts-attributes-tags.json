@@ -1424,10 +1424,15 @@
         "by": "Geïmporteerd door"
       },
       "exports": {
-        "title": "Exporteren",
-        "hint": "Contactexports vanuit de Hub, nieuwste eerst. Elk bestand wordt 30 dagen bewaard, zodat jij en collega's met exportrechten het opnieuw kunnen downloaden.",
+        "title": "Exportgeschiedenis",
+        "hint": "Exports uit de Hub, nieuwste eerst, met de bron van elke export. Elk bestand blijft 30 dagen bewaard, zodat u en teamleden die kunnen exporteren het opnieuw kunnen downloaden.",
         "empty": "Nog geen exports.",
         "by": "Door",
+        "source": "Bron",
+        "sources": {
+          "contacts": "Contacten",
+          "campaigns": "Campagnes"
+        },
         "rows": "Contacten",
         "selection": "Bereik",
         "unknown": "Onbekend",

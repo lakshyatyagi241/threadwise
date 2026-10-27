@@ -21,7 +21,7 @@ export const waChatLinkStatusSchema = z.enum(WA_CHAT_LINK_STATUSES);
 export type WaChatLinkStatus = z.infer<typeof waChatLinkStatusSchema>;
 
 export const waChatLinkSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   slug: z.string(),
   countryCode: z.string(),
@@ -30,7 +30,7 @@ export const waChatLinkSchema = z.object({
   utmSource: z.string().nullable(),
   utmMedium: z.string().nullable(),
   utmCampaign: z.string().nullable(),
-  clickCount: z.number().int(),
+  clickCount: z.int(),
   lastClickedAt: z.string().nullable(),
   expiresAt: z.string().nullable(),
   status: waChatLinkStatusSchema,
@@ -41,20 +41,20 @@ export const waChatLinkSchema = z.object({
   /** `/l/<slug>`, relative — the frontend renders it against the current origin. */
   shortPath: z.string(),
   createdAt: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WaChatLink = z.infer<typeof waChatLinkSchema>;
 
 export const waChatLinkStatsSchema = z.object({
-  all: z.number().int(),
-  live: z.number().int(),
-  totalClicks: z.number().int(),
+  all: z.int(),
+  live: z.int(),
+  totalClicks: z.int(),
   avgClicksPerLink: z.number(),
 });
 export type WaChatLinkStats = z.infer<typeof waChatLinkStatsSchema>;
 
 export const waChatLinkListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
   cursor: z.string().min(1).max(200).optional(),
   /** `live` and `paused` are server-filtered (TW-WFL-018); omitted/`all` returns everything. */
   status: z.enum(['all', 'live', 'paused']).default('all'),
@@ -67,7 +67,7 @@ export const waChatLinkListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WaChatLinkList = z.infer<typeof waChatLinkListSchema>;
@@ -90,8 +90,8 @@ export const saveWaChatLinkInputSchema = z.object({
   utmSource: z.string().trim().max(WA_CHAT_LINK_UTM_MAX).optional(),
   utmMedium: z.string().trim().max(WA_CHAT_LINK_UTM_MAX).optional(),
   utmCampaign: z.string().trim().max(WA_CHAT_LINK_UTM_MAX).optional(),
-  expiresAt: z.string().datetime().optional(),
+  expiresAt: z.iso.datetime().optional(),
   status: waChatLinkStatusSchema.default('active'),
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
 });
 export type SaveWaChatLinkInput = z.infer<typeof saveWaChatLinkInputSchema>;

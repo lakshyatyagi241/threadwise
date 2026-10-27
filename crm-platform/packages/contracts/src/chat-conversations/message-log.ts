@@ -34,7 +34,7 @@ export type MessageLogEventName = z.infer<typeof messageLogEventNameSchema>;
 /** One line of a message's log. Everything the provider or the pipeline recorded, named; the raw `detail` is kept for support. */
 export const messageLogEventSchema = z.object({
   event: messageLogEventNameSchema,
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   /** Who wrote the line: our pipeline (queued, an attempt, the provider accepting, a retry) or the provider's own receipt (sent, delivered, read, failed). */
   source: z.enum(['system', 'provider']),
   /** The provider's id of the message, on the events that carry one (`sent`, and receipts). */
@@ -44,7 +44,7 @@ export const messageLogEventSchema = z.object({
   /** The provider's or the pipeline's sentence, with the provider's own code in it (`#131049`). */
   errorMessage: z.string().nullable(),
   /** Which send attempt an `attempt` event is. */
-  attempt: z.number().int().positive().nullable(),
+  attempt: z.int().positive().nullable(),
   /** The agent who pressed Retry, on a `retry` event. Null for the system. */
   byUserId: uuidSchema.nullable(),
   /** False when the receipt did not move the message (it arrived late, or for an earlier send): shown greyed, never hidden. */
@@ -64,7 +64,7 @@ export const messageLogResponseSchema = z.object({
   providerMessageId: z.string().nullable(),
   failureCode: z.string().nullable(),
   failureReason: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   /** Oldest first. */
   events: z.array(messageLogEventSchema),
   /** True when part of the log came from the archive (events older than MESSAGE_LOG_HOT_DAYS). */
@@ -88,14 +88,12 @@ export type MessageLogExportStatus = z.infer<typeof messageLogExportStatusSchema
 const dayStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use a date as YYYY-MM-DD');
 
 /** What to export. Days are UTC. The range reaches back at most MESSAGE_LOG_RETENTION_DAYS and never into the future. */
-export const createMessageLogExportSchema = z
-  .object({
-    from: dayStringSchema,
-    to: dayStringSchema,
-    /** Only the events of messages that ended in this status ("all failed messages"); omitted = every event. */
-    messageStatus: messageStatusSchema.optional(),
-  })
-  .strict();
+export const createMessageLogExportSchema = z.strictObject({
+  from: dayStringSchema,
+  to: dayStringSchema,
+  /** Only the events of messages that ended in this status ("all failed messages"); omitted = every event. */
+  messageStatus: messageStatusSchema.optional(),
+});
 export type CreateMessageLogExportInput = z.infer<typeof createMessageLogExportSchema>;
 
 /** `events`: the delivery log (one line per event). `messages`: the Message History feed (one line per message), with the screen's filters. */
@@ -110,14 +108,14 @@ export const messageLogExportSchema = z.object({
   to: dayStringSchema,
   messageStatus: messageStatusSchema.nullable(),
   /** Rows in the file, once it is ready. */
-  rowCount: z.number().int().nonnegative().nullable(),
-  fileBytes: z.number().int().nonnegative().nullable(),
+  rowCount: z.int().nonnegative().nullable(),
+  fileBytes: z.int().nonnegative().nullable(),
   /** A sentence for a failed export. */
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
   /** After this the file is deleted and the export is `expired`. */
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   /** The address the file was announced to. */
   emailedTo: z.string().nullable(),
 });

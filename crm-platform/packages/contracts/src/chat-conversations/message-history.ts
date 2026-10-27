@@ -104,34 +104,33 @@ export const messageHistoryIdSchema = z
 
 const dayStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use a date as YYYY-MM-DD');
 
-const csv = <T extends z.ZodTypeAny>(item: T) =>
+const csv = <T extends z.ZodType>(item: T) =>
   z
     .union([z.array(item), z.string()])
     .transform((v) => (Array.isArray(v) ? v : v.split(',').filter((s) => s !== '')))
-    .pipe(z.array(item).max(12));
+    // The split output is validated by `item`; the cast only tells TypeScript the generic input type.
+    .pipe(z.array(item).max(12) as unknown as z.ZodType<z.output<T>[], string[] | z.output<T>[]>);
 
 /**
  * The filters, in the URL of the screen and in the body of an export. A preset `range` or a `from`/`to` pair of UTC days (the pair
  * wins). `source` is a comma list.
  */
-export const messageHistoryFiltersSchema = z
-  .object({
-    range: messageHistoryRangeSchema.optional(),
-    from: dayStringSchema.optional(),
-    to: dayStringSchema.optional(),
-    dir: messageHistoryDirectionSchema.optional(),
-    type: messageHistoryTypeSchema.optional(),
-    source: csv(messageHistorySourceSchema).optional(),
-    status: messageHistoryStatusSchema.optional(),
-    channelId: uuidSchema.optional(),
-    templateId: uuidSchema.optional(),
-    campaignId: uuidSchema.optional(),
-    broadcastId: uuidSchema.optional(),
-    scheduledId: uuidSchema.optional(),
-    /** A contact name, part of a phone number (digits), part of the text, or a message id. */
-    q: z.string().trim().min(1).max(100).optional(),
-  })
-  .strict();
+export const messageHistoryFiltersSchema = z.strictObject({
+  range: messageHistoryRangeSchema.optional(),
+  from: dayStringSchema.optional(),
+  to: dayStringSchema.optional(),
+  dir: messageHistoryDirectionSchema.optional(),
+  type: messageHistoryTypeSchema.optional(),
+  source: csv(messageHistorySourceSchema).optional(),
+  status: messageHistoryStatusSchema.optional(),
+  channelId: uuidSchema.optional(),
+  templateId: uuidSchema.optional(),
+  campaignId: uuidSchema.optional(),
+  broadcastId: uuidSchema.optional(),
+  scheduledId: uuidSchema.optional(),
+  /** A contact name, part of a phone number (digits), part of the text, or a message id. */
+  q: z.string().trim().min(1).max(100).optional(),
+});
 export type MessageHistoryFilters = z.infer<typeof messageHistoryFiltersSchema>;
 
 export const listMessageHistoryQuerySchema = messageHistoryFiltersSchema.extend({
@@ -163,7 +162,7 @@ export const messageHistoryRowSchema = z.object({
   status: messageHistoryRowStatusSchema,
   /** The type pill: an automated source, or what the message is made of (Reference's `classifyType`). */
   type: messageHistoryTypeSchema,
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   contact: z.object({ id: uuidSchema.nullable(), name: z.string().nullable() }),
   /** The number (or channel id) of the other side. Masked ("•••••••8988") unless the caller may read the contact. */
   recipient: z.object({ value: z.string().nullable(), masked: z.boolean() }),
@@ -176,7 +175,7 @@ export const messageHistoryRowSchema = z.object({
   /** What it cost, for a caller who may read the wallet statement; null for everyone else and for a message that was not charged. */
   cost: z
     .object({
-      minor: z.number().int().nonnegative(),
+      minor: z.int().nonnegative(),
       currency: z.string().nullable(),
       status: z.string(),
     })
@@ -197,7 +196,7 @@ export type MessageHistoryRow = z.infer<typeof messageHistoryRowSchema>;
 export const messageHistoryPageSchema = z.object({
   data: z.array(messageHistoryRowSchema),
   page: pageInfoSchema,
-  window: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
+  window: z.object({ from: z.iso.datetime(), to: z.iso.datetime() }),
 });
 export type MessageHistoryPage = z.infer<typeof messageHistoryPageSchema>;
 
@@ -221,16 +220,16 @@ export type MessageHistoryDetail = z.infer<typeof messageHistoryDetailSchema>;
 // --- summary and insights ----------------------------------------------------------------------------------------------------
 
 export const messageHistorySummarySchema = z.object({
-  window: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
-  total: z.number().int().nonnegative(),
+  window: z.object({ from: z.iso.datetime(), to: z.iso.datetime() }),
+  total: z.int().nonnegative(),
   /** Outbound and not failed (Reference's "Sent": includes messages still queued). */
-  sent: z.number().int().nonnegative(),
-  received: z.number().int().nonnegative(),
-  failed: z.number().int().nonnegative(),
-  queued: z.number().int().nonnegative(),
+  sent: z.int().nonnegative(),
+  received: z.int().nonnegative(),
+  failed: z.int().nonnegative(),
+  queued: z.int().nonnegative(),
   /** Outbound that reached `delivered` or `read`. */
-  delivered: z.number().int().nonnegative(),
-  read: z.number().int().nonnegative(),
+  delivered: z.int().nonnegative(),
+  read: z.int().nonnegative(),
   sentPct: z.number(),
   receivedPct: z.number(),
   /** failed / sent x 100, one decimal, 0 when nothing was sent (Reference's definition; it can pass 100). */
@@ -238,22 +237,22 @@ export const messageHistorySummarySchema = z.object({
   /** delivered / (outbound that is not queued) x 100, one decimal; null when nothing left the queue. */
   deliveryRate: z.number().nullable(),
   /** Change of `total` against the equal period just before the window, in percent (100 when it was 0 and now is not). */
-  deltaPct: z.number().int(),
+  deltaPct: z.int(),
   /** Average seconds from a customer's first message to the first reply, over conversations that had both; null when none. */
-  avgFirstResponseSeconds: z.number().int().nullable(),
+  avgFirstResponseSeconds: z.int().nullable(),
   dirCounts: z.object({
-    all: z.number().int().nonnegative(),
-    out: z.number().int().nonnegative(),
-    in: z.number().int().nonnegative(),
-    fail: z.number().int().nonnegative(),
+    all: z.int().nonnegative(),
+    out: z.int().nonnegative(),
+    in: z.int().nonnegative(),
+    fail: z.int().nonnegative(),
   }),
   /** Charged amounts by currency, for a caller who may read the wallet statement; null for everyone else. */
   cost: z
     .array(
       z.object({
         currency: z.string().nullable(),
-        minor: z.number().int().nonnegative(),
-        messages: z.number().int().nonnegative(),
+        minor: z.int().nonnegative(),
+        messages: z.int().nonnegative(),
       }),
     )
     .nullable(),
@@ -266,28 +265,28 @@ export const messageHistoryInsightsSchema = z.object({
   /** One point per bucket, oldest first, empty buckets included. `at` is the start of the bucket. */
   volume: z.array(
     z.object({
-      at: z.string().datetime(),
-      sent: z.number().int().nonnegative(),
-      received: z.number().int().nonnegative(),
-      failed: z.number().int().nonnegative(),
+      at: z.iso.datetime(),
+      sent: z.int().nonnegative(),
+      received: z.int().nonnegative(),
+      failed: z.int().nonnegative(),
     }),
   ),
   /** Reference's "By message type" buckets. */
   typeMix: z.object({
-    text: z.number().int().nonnegative(),
-    autoReply: z.number().int().nonnegative(),
-    campaign: z.number().int().nonnegative(),
-    broadcast: z.number().int().nonnegative(),
-    scheduled: z.number().int().nonnegative(),
-    media: z.number().int().nonnegative(),
+    text: z.int().nonnegative(),
+    autoReply: z.int().nonnegative(),
+    campaign: z.int().nonnegative(),
+    broadcast: z.int().nonnegative(),
+    scheduled: z.int().nonnegative(),
+    media: z.int().nonnegative(),
   }),
   /** The four most active conversations of the window (rows the caller may see). */
   topConversations: z.array(
     z.object({
       conversationId: uuidSchema,
       name: z.string(),
-      messages: z.number().int().nonnegative(),
-      lastAt: z.string().datetime(),
+      messages: z.int().nonnegative(),
+      lastAt: z.iso.datetime(),
     }),
   ),
 });

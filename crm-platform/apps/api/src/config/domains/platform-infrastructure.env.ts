@@ -23,7 +23,7 @@ export const infraEnvSchema = z.object({
    */
   INFRA_RATE_LIMIT_DEFAULT_PER_MINUTE: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(0).max(1_000_000).default(0),
+    z.coerce.number().int().min(0).max(1_000_000).prefault(0),
   ),
   /**
    * Largest JSON or form body, in KiB, for any route that has no class of its own below. 100 is what Express enforced before
@@ -32,7 +32,7 @@ export const infraEnvSchema = z.object({
    */
   INFRA_BODY_LIMIT_KB: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1).max(10_240).default(100),
+    z.coerce.number().int().min(1).max(10_240).prefault(100),
   ),
   /**
    * Machine-to-machine callbacks (store, channel and payment webhooks). Unauthenticated until their signature is checked,
@@ -40,12 +40,12 @@ export const infraEnvSchema = z.object({
    */
   INFRA_BODY_LIMIT_WEBHOOK_KB: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1).max(10_240).default(1024),
+    z.coerce.number().int().min(1).max(10_240).prefault(1024),
   ),
   /** WhatsApp Cloud API callbacks, which batch many events into one delivery and are the largest payloads we receive. */
   INFRA_BODY_LIMIT_WHATSAPP_WEBHOOK_KB: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1).max(10_240).default(4096),
+    z.coerce.number().int().min(1).max(10_240).prefault(4096),
   ),
   /**
    * How often each worker process says it is alive and samples the outbox. A worker counts as alive for three beats, so one
@@ -53,24 +53,24 @@ export const infraEnvSchema = z.object({
    */
   INFRA_WORKER_HEARTBEAT_SECONDS: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(2).max(60).default(10),
+    z.coerce.number().int().min(2).max(60).prefault(10),
   ),
   /** Readiness reports the outbox as lagging once its oldest due event has waited this long. Informational: never fails /ready. */
   INFRA_OUTBOX_LAG_WARN_SECONDS: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1).max(86_400).default(60),
+    z.coerce.number().int().min(1).max(86_400).prefault(60),
   ),
   /** Event-loop and runtime monitoring in every API and worker process. On by default; off only to rule it out while debugging. */
   OBS_RUNTIME_MONITOR: z.preprocess(blankToUndefined, booleanish.default(true)),
   /** Reporting window. 10 s is the standard: long enough for stable percentiles, short enough to see a stall. */
   OBS_RUNTIME_INTERVAL_SECONDS: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(1).max(60).default(10),
+    z.coerce.number().int().min(1).max(60).prefault(10),
   ),
   /** Port of the `GET /metrics` listener (own server, not an API route). 0, the default, collects but does not listen. */
   OBS_METRICS_PORT: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(0).max(65_535).default(0),
+    z.coerce.number().int().min(0).max(65_535).prefault(0),
   ),
   /** Bind address of that listener. Loopback unless the deployment puts the scraper on the container network. */
   OBS_METRICS_HOST: z.preprocess(blankToUndefined, z.string().min(1).default('127.0.0.1')),
@@ -79,7 +79,7 @@ export const infraEnvSchema = z.object({
   /** A window whose worst loop delay reaches this many ms is logged once with the slowest requests of that window. */
   OBS_BLOCKED_LOG_THRESHOLD_MS: z.preprocess(
     blankToUndefined,
-    z.coerce.number().int().min(10).max(60_000).default(250),
+    z.coerce.number().int().min(10).max(60_000).prefault(250),
   ),
 });
 

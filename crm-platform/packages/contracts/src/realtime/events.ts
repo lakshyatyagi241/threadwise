@@ -15,8 +15,8 @@ export const realtimeEnvelopeSchema = z.object({
   type: z.string().min(1),
   /** The room's client name (`user`, `conv:<uuid>`, ...). */
   room: z.string().min(1),
-  seq: z.number().int().nonnegative(),
-  at: z.string().datetime(),
+  seq: z.int().nonnegative(),
+  at: z.iso.datetime(),
   payload: z.unknown(),
 });
 export type RealtimeEnvelope<P = unknown> = Omit<
@@ -27,8 +27,8 @@ export type RealtimeEnvelope<P = unknown> = Omit<
 /** Sent once after the handshake is accepted: where each room the server put the socket in stands. */
 export const realtimeReadySchema = z.object({
   v: z.literal(1),
-  rooms: z.array(z.object({ room: z.string(), seq: z.number().int().nonnegative() })),
-  serverTime: z.string().datetime(),
+  rooms: z.array(z.object({ room: z.string(), seq: z.int().nonnegative() })),
+  serverTime: z.iso.datetime(),
 });
 export type RealtimeReady = z.infer<typeof realtimeReadySchema>;
 
@@ -62,7 +62,7 @@ export type RealtimeVisibility = z.infer<typeof realtimeVisibilitySchema>;
 
 export const realtimeDeliveryLagSchema = z.object({
   lagMs: z.number().min(0).max(300_000),
-  events: z.number().int().min(1).max(1_000_000),
+  events: z.int().min(1).max(1_000_000),
 });
 export type RealtimeDeliveryLag = z.infer<typeof realtimeDeliveryLagSchema>;
 
@@ -124,23 +124,23 @@ const messageStatusSchema = z.enum(['queued', 'sent', 'delivered', 'read', 'fail
 export const realtimeEventSchemas = {
   [REALTIME_EVENT.conversationUpsert]: z.object({
     conversationId: uuidSchema,
-    rowVersion: z.number().int(),
+    rowVersion: z.int(),
     changed: z.array(z.string()),
   }),
   [REALTIME_EVENT.messageNew]: z.object({
     conversationId: uuidSchema,
-    message: z.object({ id: uuidSchema, seq: z.number().int() }).passthrough(),
+    message: z.looseObject({ id: uuidSchema, seq: z.int() }),
   }),
   [REALTIME_EVENT.messageStatus]: z.object({
     conversationId: uuidSchema,
     messageId: uuidSchema,
     clientMessageId: uuidSchema.nullable(),
     status: messageStatusSchema,
-    at: z.string().datetime(),
+    at: z.iso.datetime(),
   }),
   [REALTIME_EVENT.unread]: z.object({
     conversationId: uuidSchema,
-    unread: z.number().int().nonnegative(),
+    unread: z.int().nonnegative(),
   }),
   [REALTIME_EVENT.assignment]: z.object({
     conversationId: uuidSchema,
@@ -164,7 +164,7 @@ export const realtimeEventSchemas = {
   }),
   /** A signal with the new figure; the client may also refetch `/wallet/summary` for the rest. Hundredths of the wallet currency. */
   [REALTIME_EVENT.walletUpdated]: z.object({
-    balanceMinor: z.number().int(),
+    balanceMinor: z.int(),
     reason: z.enum(['charge', 'refund', 'topup', 'adjustment']),
   }),
   [REALTIME_EVENT.notificationCreated]: z.object({
@@ -172,7 +172,7 @@ export const realtimeEventSchemas = {
     /** A NotificationType today; a plain string so a newer server's type does not break an older client. */
     type: z.string().min(1),
     /** The person's true unread total after this row: the badge shows it as is. */
-    unread: z.number().int().nonnegative(),
+    unread: z.int().nonnegative(),
     subjectKind: z.string().nullable(),
     subjectId: uuidSchema.nullable(),
     /** The row replaced an earlier unread row of the same chat (its count went up). */
@@ -188,7 +188,7 @@ export const realtimeEventSchemas = {
     sound: z.boolean().optional(),
   }),
   [REALTIME_EVENT.notificationRead]: z.object({
-    unread: z.number().int().nonnegative(),
+    unread: z.int().nonnegative(),
     /** The rows that were marked read, or `all`. */
     notificationIds: z.union([z.array(uuidSchema), z.literal('all')]),
     /** The rows were deleted (the bell's Clear all), not only read: other tabs drop them from their list. */

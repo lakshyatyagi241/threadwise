@@ -31,7 +31,7 @@ export const v1ErrorSchema = z.object({
     code: z.string(),
     message: z.string(),
     /** `{ field: [messages] }` for validation failures; absent otherwise. */
-    details: z.record(z.array(z.string())).optional(),
+    details: z.record(z.string(), z.array(z.string())).optional(),
     requestId: z.string().optional(),
   }),
 });
@@ -39,7 +39,7 @@ export type V1Error = z.infer<typeof v1ErrorSchema>;
 
 /** `meta` of a list answer. `count` is only present on lists that are not paged (groups, webhooks). */
 export const v1PageMetaSchema = z.object({
-  limit: z.number().int(),
+  limit: z.int(),
   next_cursor: z.string().nullable(),
   has_more: z.boolean(),
 });
@@ -79,7 +79,7 @@ export const v1ListQuerySchema = z
   .superRefine((q, ctx) => {
     if (q.page !== undefined) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['page'],
         message:
           'Page numbers are not supported. Pass the `cursor` from `meta.next_cursor` of the previous page.',

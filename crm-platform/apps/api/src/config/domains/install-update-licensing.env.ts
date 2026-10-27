@@ -52,7 +52,7 @@ export const instEnvSchema = z
     for (const key of ['ENVATO_ITEM_ID', 'ENVATO_AUTHOR_TOKEN'] as const) {
       if (v[key] === undefined) {
         ctx.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: 'custom',
           path: [key],
           message: `${key} is required when LICENCE_MODE=envato`,
         });

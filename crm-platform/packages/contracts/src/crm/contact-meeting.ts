@@ -23,14 +23,14 @@ export const contactMeetingResponseSchema = z.object({
   id: uuidSchema,
   contactId: uuidSchema,
   title: z.string(),
-  startsAt: z.string().datetime().nullable(),
-  endsAt: z.string().datetime().nullable(),
+  startsAt: z.iso.datetime().nullable(),
+  endsAt: z.iso.datetime().nullable(),
   /** A place. A web address to join the call is `joinUrl` (an older row may still hold a link here). */
   location: z.string().nullable(),
   createdBy: uuidSchema.nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   source: contactMeetingSourceSchema.optional(),
   /** The appointment this row mirrors; null when typed in, or when the appointment was deleted. */
   appointmentId: uuidSchema.nullable().optional(),
@@ -47,8 +47,8 @@ export type ContactMeetingResponse = z.infer<typeof contactMeetingResponseSchema
 
 export const createContactMeetingSchema = z.object({
   title: z.string().min(1).max(255),
-  startsAt: z.string().datetime().optional(),
-  endsAt: z.string().datetime().optional(),
+  startsAt: z.iso.datetime().optional(),
+  endsAt: z.iso.datetime().optional(),
   location: z.string().max(255).optional(),
   /** Video link and calendar entry for this meeting; left out, the meeting is saved as it always was. */
   conferencing: meetingConferencingInputSchema.optional(),
@@ -57,11 +57,11 @@ export type CreateContactMeetingInput = z.infer<typeof createContactMeetingSchem
 
 export const updateContactMeetingSchema = z.object({
   title: z.string().min(1).max(255).optional(),
-  startsAt: z.string().datetime().nullish(),
-  endsAt: z.string().datetime().nullish(),
+  startsAt: z.iso.datetime().nullish(),
+  endsAt: z.iso.datetime().nullish(),
   location: z.string().max(255).nullish(),
   conferencing: meetingConferencingInputSchema.optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateContactMeetingInput = z.infer<typeof updateContactMeetingSchema>;
 

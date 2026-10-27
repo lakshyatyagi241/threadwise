@@ -19,7 +19,7 @@ export const healthCheckSchema = z.object({
   value: z.string(),
   detail: z.string(),
   /** Round-trip milliseconds, when the probe measured one. */
-  ping: z.number().int().nonnegative().nullable(),
+  ping: z.int().nonnegative().nullable(),
 });
 export type HealthCheck = z.infer<typeof healthCheckSchema>;
 
@@ -27,7 +27,7 @@ export const healthVitalsSchema = z.object({
   nodeVersion: z.string(),
   appVersion: z.string(),
   environment: z.string(),
-  uptimeSeconds: z.number().int().nonnegative(),
+  uptimeSeconds: z.int().nonnegative(),
   memoryRssMb: z.number().nonnegative(),
   memoryHeapMb: z.number().nonnegative(),
   diskFreeGb: z.number().nonnegative().nullable(),
@@ -37,8 +37,8 @@ export type HealthVitals = z.infer<typeof healthVitalsSchema>;
 
 export const healthQueueRowSchema = z.object({
   name: z.string(),
-  pending: z.number().int().nonnegative(),
-  failed: z.number().int().nonnegative(),
+  pending: z.int().nonnegative(),
+  failed: z.int().nonnegative(),
   /** Why the newest failed job failed: one line, cut short, with the job's parameters removed. Null when nothing failed. */
   lastFailure: z.string().nullable(),
 });
@@ -46,28 +46,28 @@ export type HealthQueueRow = z.infer<typeof healthQueueRowSchema>;
 
 /** TW-DASH-049: last-24-hour counters across every workspace. */
 export const healthActivitySchema = z.object({
-  messages: z.number().int().nonnegative(),
-  aiCalls: z.number().int().nonnegative(),
-  conversations: z.number().int().nonnegative(),
-  webhooks: z.number().int().nonnegative(),
+  messages: z.int().nonnegative(),
+  aiCalls: z.int().nonnegative(),
+  conversations: z.int().nonnegative(),
+  webhooks: z.int().nonnegative(),
 });
 export type HealthActivity = z.infer<typeof healthActivitySchema>;
 
 /** One day of the 14-day message-volume line (UTC day, `YYYY-MM-DD`). */
 export const healthThroughputPointSchema = z.object({
   date: z.string(),
-  count: z.number().int().nonnegative(),
+  count: z.int().nonnegative(),
 });
 
 /** TW-DASH-050: one WhatsApp engine's numbers across every workspace (unofficial devices, WABA, Twilio). */
 export const healthEngineSchema = z.object({
   key: z.enum(['baileys', 'waba', 'twilio']),
   label: z.string(),
-  connected: z.number().int().nonnegative(),
-  total: z.number().int().nonnegative(),
+  connected: z.int().nonnegative(),
+  total: z.int().nonnegative(),
   /** idle with no numbers, up with a connected one, else down. Never affects the overall banner. */
   state: z.enum(['up', 'down', 'idle']),
-  breakdown: z.array(z.object({ status: z.string(), count: z.number().int().nonnegative() })),
+  breakdown: z.array(z.object({ status: z.string(), count: z.int().nonnegative() })),
 });
 export type HealthEngine = z.infer<typeof healthEngineSchema>;
 
@@ -93,8 +93,8 @@ export type ClearQueueRequest = z.infer<typeof clearQueueRequestSchema>;
 
 export const clearQueueResponseSchema = z.object({
   ok: z.literal(true),
-  clearedPending: z.number().int().nonnegative(),
-  clearedFailed: z.number().int().nonnegative(),
+  clearedPending: z.int().nonnegative(),
+  clearedFailed: z.int().nonnegative(),
   message: z.string(),
 });
 export type ClearQueueResponse = z.infer<typeof clearQueueResponseSchema>;

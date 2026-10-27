@@ -17,7 +17,7 @@ export const GOOGLE_CONSENT_STATUSES = [
 ] as const;
 
 export const googleConsentRequestSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   /** The Google account that consented (what the person is about to connect). */
   googleEmail: z.string().nullable(),
   workspaceName: z.string(),
@@ -28,7 +28,7 @@ export const googleConsentRequestSchema = z.object({
   missing: z.array(googleCapabilitySchema),
   /** True when this connection replaces another Google account of the workspace. */
   replacesAccount: z.string().nullable(),
-  expiresAt: z.string().datetime(),
+  expiresAt: z.iso.datetime(),
   returnTo: googleReturnPathSchema,
 });
 export type GoogleConsentRequest = z.infer<typeof googleConsentRequestSchema>;

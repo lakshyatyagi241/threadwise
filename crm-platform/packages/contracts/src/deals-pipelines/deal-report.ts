@@ -21,8 +21,8 @@ export const dealReportsQuerySchema = z
     convertTo: currencyCodeSchema.optional(),
   })
   .refine((q) => !q.from || !q.to || q.from <= q.to, {
-    message: 'from must not be after to',
     path: ['to'],
+    error: 'from must not be after to',
   });
 export type DealReportsQuery = z.infer<typeof dealReportsQuerySchema>;
 
@@ -31,22 +31,22 @@ export const dealReportsResponseSchema = z.object({
   timezone: z.string(),
   convertedTo: z.string().nullable(),
   open: z.object({
-    count: z.number().int(),
+    count: z.int(),
     value: dealTotalsSchema,
     /** Sum of value x stage probability over OPEN deals only (Reference's board also counted the won column). */
     forecast: dealTotalsSchema,
   }),
   won: z.object({
-    count: z.number().int(),
+    count: z.int(),
     value: dealTotalsSchema,
     /** Deals won since the first of the current month in `timezone` (Reference labelled all-time value "this month"). */
-    thisMonth: z.object({ count: z.number().int(), value: dealTotalsSchema }),
+    thisMonth: z.object({ count: z.int(), value: dealTotalsSchema }),
     /** Mean days from creation to won; null with no won deals. */
     avgDaysToClose: z.number().nullable(),
   }),
-  lost: z.object({ count: z.number().int(), value: dealTotalsSchema }),
+  lost: z.object({ count: z.int(), value: dealTotalsSchema }),
   /** Whole percent, won / (won + lost); 0 when nothing closed. */
-  winRate: z.number().int(),
+  winRate: z.int(),
   byStage: z.array(
     z.object({
       stageId: uuidSchema,
@@ -54,9 +54,9 @@ export const dealReportsResponseSchema = z.object({
       name: z.string(),
       color: z.string(),
       kind: stageKindSchema,
-      probability: z.number().int(),
+      probability: z.int(),
       /** OPEN deals in the stage (a won or lost stage reports 0). */
-      count: z.number().int(),
+      count: z.int(),
       value: dealTotalsSchema,
       weighted: dealTotalsSchema,
     }),
@@ -66,19 +66,19 @@ export const dealReportsResponseSchema = z.object({
     z.object({
       /** `YYYY-MM`. */
       month: z.string(),
-      wonCount: z.number().int(),
+      wonCount: z.int(),
       wonValue: dealTotalsSchema,
-      lostCount: z.number().int(),
+      lostCount: z.int(),
     }),
   ),
   /** Top ten owners of won deals. Ordered by converted value with `convertTo`, else by won count then first currency's value. */
   leaders: z.array(
     z.object({
       owner: dealUserRefSchema,
-      wonCount: z.number().int(),
+      wonCount: z.int(),
       value: dealTotalsSchema,
     }),
   ),
-  lostReasons: z.array(z.object({ reason: z.string().nullable(), count: z.number().int() })),
+  lostReasons: z.array(z.object({ reason: z.string().nullable(), count: z.int() })),
 });
 export type DealReportsResponse = z.infer<typeof dealReportsResponseSchema>;

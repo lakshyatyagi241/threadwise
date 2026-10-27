@@ -21,20 +21,20 @@ export const rateCategorySchema = z.enum(['', ...WALLET_CATEGORIES]);
 
 /** One row of the per-country x category rate card as the grid shows it. */
 export const rateRowSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   countryCode: z.string(),
   /** Display name of the country; empty for the any-country row. */
   countryName: z.string(),
   category: rateCategorySchema,
   /** What the customer is charged per message, hundredths of the currency unit. */
-  priceMinor: z.number().int().nonnegative(),
+  priceMinor: z.int().nonnegative(),
   /** What Meta charges the platform, as a decimal string with up to 6 decimals; null = unknown. */
   metaCost: z.string().nullable(),
   /** Customer price minus Meta cost, hundredths, when both are known. */
   marginMinor: z.number().nullable(),
   currency: z.string().nullable(),
   isActive: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   updatedAt: z.string(),
 });
 export type RateRow = z.infer<typeof rateRowSchema>;
@@ -68,9 +68,9 @@ export const saveRatesSchema = z.object({
 export type SaveRatesInput = z.infer<typeof saveRatesSchema>;
 
 export const saveRatesResultSchema = z.object({
-  saved: z.number().int(),
+  saved: z.int(),
   /** Per input row (same order): null when saved, otherwise why it was skipped. */
-  skipped: z.array(z.object({ index: z.number().int(), reason: z.string() })),
+  skipped: z.array(z.object({ index: z.int(), reason: z.string() })),
 });
 export type SaveRatesResult = z.infer<typeof saveRatesResultSchema>;
 
@@ -88,12 +88,12 @@ export type ImportRatesInput = z.infer<typeof importRatesSchema>;
 export const importRatesResultSchema = z.object({
   dryRun: z.boolean(),
   shape: z.enum(['wide', 'long']),
-  added: z.number().int(),
-  updated: z.number().int(),
-  skipped: z.number().int(),
+  added: z.int(),
+  updated: z.int(),
+  skipped: z.int(),
   currency: z.string(),
   /** The first rows that were skipped and why, so a bad file can be fixed. */
-  problems: z.array(z.object({ line: z.number().int(), reason: z.string() })),
+  problems: z.array(z.object({ line: z.int(), reason: z.string() })),
 });
 export type ImportRatesResult = z.infer<typeof importRatesResultSchema>;
 
@@ -106,12 +106,12 @@ export const syncMetaResultSchema = z.object({
   sourceLabel: z.string(),
   version: z.string().nullable(),
   currency: z.string(),
-  added: z.number().int(),
-  updated: z.number().int(),
+  added: z.int(),
+  updated: z.int(),
 });
 export type SyncMetaResult = z.infer<typeof syncMetaResultSchema>;
 
-export const seedRatesResultSchema = z.object({ upserted: z.number().int() });
+export const seedRatesResultSchema = z.object({ upserted: z.int() });
 
 export const deleteRateResultSchema = z.object({ deleted: z.boolean() });
 
@@ -125,7 +125,7 @@ export const messagePricingSchema = z.object({
   categories: z.array(
     z.object({
       category: z.enum(WALLET_CATEGORIES),
-      priceMinor: z.number().int(),
+      priceMinor: z.int(),
       free: z.boolean(),
     }),
   ),

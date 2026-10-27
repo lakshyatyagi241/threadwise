@@ -79,13 +79,13 @@ export const clockMinutes = (t: string): number =>
 /** One weekly interval; `weekday` 0 = Sunday ... 6 = Saturday, times in the booking type's zone. */
 export const availabilityWindowSchema = z
   .object({
-    weekday: z.number().int().min(0).max(6),
+    weekday: z.int().min(0).max(6),
     from: clockTimeSchema,
     to: clockTimeSchema,
   })
   .refine((w) => clockMinutes(w.to) > clockMinutes(w.from), {
-    message: '`to` must be after `from`',
     path: ['to'],
+    error: '`to` must be after `from`',
   });
 export type AvailabilityWindow = z.infer<typeof availabilityWindowSchema>;
 
@@ -275,7 +275,7 @@ export const bookingReminderInputSchema = z
   .object({
     id: uuidSchema.optional(),
     /** Minutes before the start (`before`), after the end (`after`; a rebook may reach a year), or the fixed offset of an event step. */
-    offsetMinutes: z.number().int().min(0).max(BOOKING_REBOOK_MAX_MINUTES),
+    offsetMinutes: z.int().min(0).max(BOOKING_REBOOK_MAX_MINUTES),
     label: z.string().trim().max(40).nullish(),
     /** A rule is OFF unless it is switched on: a new rule never sends by surprise. */
     isActive: z.boolean().default(false),
@@ -303,7 +303,6 @@ export const bookingReminderInputSchema = z
     skipIfConfirmed: z.boolean().default(false),
     /** Use the next channel when the message was not delivered after this many minutes. Null = off. */
     undeliveredFallbackMinutes: z
-      .number()
       .int()
       .min(BOOKING_UNDELIVERED_MIN)
       .max(BOOKING_UNDELIVERED_MAX)
@@ -312,7 +311,7 @@ export const bookingReminderInputSchema = z
     serviceLabel: z.string().trim().max(BOOKING_SERVICE_LABEL_MAX).nullish(),
     /** Set when the step came from a reminder pack: sent back unchanged by the editor, so the next preview knows. */
     packKey: z.string().max(40).nullish(),
-    packVersion: z.number().int().positive().nullish(),
+    packVersion: z.int().positive().nullish(),
   })
   .superRefine((r, ctx) => {
     const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
@@ -372,7 +371,7 @@ export const bookingPaymentInputSchema = z.object({
   autoSendLink: z.boolean().default(true),
   cancelFee: dealValueSchema.default('0'),
   noShowFee: dealValueSchema.default('0'),
-  cancelWindowMinutes: z.number().int().min(0).max(525_600).default(1440),
+  cancelWindowMinutes: z.int().min(0).max(525_600).default(1440),
 });
 export type BookingPaymentInput = z.infer<typeof bookingPaymentInputSchema>;
 
@@ -422,22 +421,22 @@ export const createBookingTypeSchema = z.object({
   /** A request that staff approve (pending) instead of confirming at once. */
   approvalRequired: z.boolean().default(false),
   isActive: z.boolean().default(true),
-  sortOrder: z.number().int().min(0).max(100_000).default(0),
+  sortOrder: z.int().min(0).max(100_000).default(0),
   /** The host: an active member; default the caller. */
   hostId: uuidSchema.nullish(),
-  durationMinutes: z.number().int().min(5).max(1440),
+  durationMinutes: z.int().min(5).max(1440),
   /** Start-time step; default the duration. */
-  incrementMinutes: z.number().int().min(5).max(1440).optional(),
-  bufferBeforeMinutes: z.number().int().min(0).max(1440).default(0),
-  bufferAfterMinutes: z.number().int().min(0).max(1440).default(0),
+  incrementMinutes: z.int().min(5).max(1440).optional(),
+  bufferBeforeMinutes: z.int().min(0).max(1440).default(0),
+  bufferAfterMinutes: z.int().min(0).max(1440).default(0),
   /** Smallest lead time, in minutes (Reference's form default: 4 hours). */
-  minNoticeMinutes: z.number().int().min(0).max(525_600).default(240),
+  minNoticeMinutes: z.int().min(0).max(525_600).default(240),
   /** Bookable days from today, today included. */
-  maxAdvanceDays: z.number().int().min(1).max(365).default(30),
+  maxAdvanceDays: z.int().min(1).max(365).default(30),
   /** At most this many bookings start on one local day; null = no cap. */
-  maxPerDay: z.number().int().min(1).max(500).nullish(),
+  maxPerDay: z.int().min(1).max(500).nullish(),
   /** Seats per slot: 1 = one-to-one, above 1 = a group session. */
-  capacity: z.number().int().min(1).max(500).default(1),
+  capacity: z.int().min(1).max(500).default(1),
   /** IANA zone the weekly hours are written in; null follows the workspace zone. */
   timezone: timeZoneSchema.nullish(),
   ...childShape,
@@ -455,19 +454,19 @@ export const updateBookingTypeSchema = z.object({
   introMessage: z.string().trim().max(2000).nullish(),
   approvalRequired: z.boolean().optional(),
   isActive: z.boolean().optional(),
-  sortOrder: z.number().int().min(0).max(100_000).optional(),
+  sortOrder: z.int().min(0).max(100_000).optional(),
   hostId: uuidSchema.nullish(),
-  durationMinutes: z.number().int().min(5).max(1440).optional(),
-  incrementMinutes: z.number().int().min(5).max(1440).optional(),
-  bufferBeforeMinutes: z.number().int().min(0).max(1440).optional(),
-  bufferAfterMinutes: z.number().int().min(0).max(1440).optional(),
-  minNoticeMinutes: z.number().int().min(0).max(525_600).optional(),
-  maxAdvanceDays: z.number().int().min(1).max(365).optional(),
-  maxPerDay: z.number().int().min(1).max(500).nullish(),
-  capacity: z.number().int().min(1).max(500).optional(),
+  durationMinutes: z.int().min(5).max(1440).optional(),
+  incrementMinutes: z.int().min(5).max(1440).optional(),
+  bufferBeforeMinutes: z.int().min(0).max(1440).optional(),
+  bufferAfterMinutes: z.int().min(0).max(1440).optional(),
+  minNoticeMinutes: z.int().min(0).max(525_600).optional(),
+  maxAdvanceDays: z.int().min(1).max(365).optional(),
+  maxPerDay: z.int().min(1).max(500).nullish(),
+  capacity: z.int().min(1).max(500).optional(),
   timezone: timeZoneSchema.nullish(),
   ...childShape,
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateBookingTypeInput = z.infer<typeof updateBookingTypeSchema>;
 
@@ -490,7 +489,7 @@ export const bookingQuestionSchema = z.object({
   options: z.array(z.string()).nullable(),
   required: z.boolean(),
   mapToContactField: bookingMapFieldSchema.nullable(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
 });
 export type BookingQuestion = z.infer<typeof bookingQuestionSchema>;
 
@@ -499,7 +498,7 @@ export const BOOKING_REMINDER_WA_STATUSES = ['draft', 'pending', 'approved', 're
 
 export const bookingReminderSchema = z.object({
   id: uuidSchema,
-  offsetMinutes: z.number().int(),
+  offsetMinutes: z.int(),
   label: z.string().nullable(),
   isActive: z.boolean(),
   kind: bookingReminderKindSchema,
@@ -514,11 +513,11 @@ export const bookingReminderSchema = z.object({
   libraryTemplateId: uuidSchema.nullable(),
   buttonsEnabled: z.boolean(),
   skipIfConfirmed: z.boolean(),
-  undeliveredFallbackMinutes: z.number().int().nullable(),
+  undeliveredFallbackMinutes: z.int().nullable(),
   serviceLabel: z.string().nullable(),
   /** The reminder pack this step was made from, and the version of the pack at that time; null when the owner wrote it. */
   packKey: z.string().nullable(),
-  packVersion: z.number().int().nullable(),
+  packVersion: z.int().nullable(),
   /** `sms_removed`: SMS reminders were removed; the step was moved to email or switched off, and the owner chooses WhatsApp or email. */
   notice: z.enum(['sms_removed']).nullable(),
 });
@@ -530,7 +529,7 @@ export const bookingTemplateSchema = z.object({
   waTemplateId: uuidSchema.nullable(),
   libraryTemplateId: uuidSchema.nullable(),
   plainBody: z.string().nullable(),
-  variableMap: z.record(z.string()).nullable(),
+  variableMap: z.record(z.string(), z.string()).nullable(),
 });
 export type BookingTemplate = z.infer<typeof bookingTemplateSchema>;
 
@@ -548,7 +547,7 @@ export const bookingPaymentSchema = z.object({
   autoSendLink: z.boolean(),
   cancelFee: z.string(),
   noShowFee: z.string(),
-  cancelWindowMinutes: z.number().int(),
+  cancelWindowMinutes: z.int(),
 });
 export type BookingPayment = z.infer<typeof bookingPaymentSchema>;
 
@@ -578,21 +577,21 @@ export const bookingTypeResponseSchema = z.object({
   locationValue: z.string().nullable(),
   color: z.string().nullable(),
   introMessage: z.string().nullable(),
-  durationMinutes: z.number().int(),
-  incrementMinutes: z.number().int(),
-  bufferBeforeMinutes: z.number().int(),
-  bufferAfterMinutes: z.number().int(),
-  minNoticeMinutes: z.number().int(),
-  maxAdvanceDays: z.number().int(),
-  maxPerDay: z.number().int().nullable(),
-  capacity: z.number().int(),
+  durationMinutes: z.int(),
+  incrementMinutes: z.int(),
+  bufferBeforeMinutes: z.int(),
+  bufferAfterMinutes: z.int(),
+  minNoticeMinutes: z.int(),
+  maxAdvanceDays: z.int(),
+  maxPerDay: z.int().nullable(),
+  capacity: z.int(),
   /** As stored (null = follows the workspace). */
   timezone: z.string().nullable(),
   /** The zone the hours are really read in. */
   effectiveTimezone: z.string(),
   approvalRequired: z.boolean(),
   isActive: z.boolean(),
-  sortOrder: z.number().int(),
+  sortOrder: z.int(),
   host: userRefSchema.nullable(),
   /** Where customers book it: `/book/<workspace slug>/<slug>` on the web app. */
   publicPath: z.string(),
@@ -605,12 +604,12 @@ export const bookingTypeResponseSchema = z.object({
   payment: bookingPaymentSchema,
   calendar: bookingCalendarSchema,
   /** Every booking ever made for it (all statuses). */
-  appointmentsCount: z.number().int(),
+  appointmentsCount: z.int(),
   /** Pending or confirmed bookings that have not started. */
-  upcomingCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  upcomingCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type BookingTypeResponse = z.infer<typeof bookingTypeResponseSchema>;
 
@@ -621,7 +620,7 @@ export type BookingTypeListResponse = z.infer<typeof bookingTypeListResponseSche
 export const bookingTypeOptionSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  durationMinutes: z.number().int(),
+  durationMinutes: z.int(),
   isActive: z.boolean(),
 });
 export type BookingTypeOption = z.infer<typeof bookingTypeOptionSchema>;

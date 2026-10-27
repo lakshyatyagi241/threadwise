@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { Readable } from 'node:stream';
 import {
   ERROR_CODES,
@@ -16,6 +17,7 @@ import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { ExportKeeper, keepExportFile } from '../crm';
 import { WALLET_GATE, type WalletGate } from '../broadcasts';
 import { CampaignEvents } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
@@ -281,7 +283,7 @@ export class CampaignsActionsService {
     zone: string,
     fileBase: string,
   ): Promise<{ stream: Readable; fileName: string }> {
-    const { orgId } = RequestContextStore.require();
+    const { orgId, userId } = RequestContextStore.require();
     const fmt = (d: Date | null) =>
       d
         ? new Intl.DateTimeFormat('sv-SE', {
@@ -295,9 +297,37 @@ export class CampaignsActionsService {
         : '';
     const withRun = runs.some((r) => r.run !== null);
 
+    const stamp = new Date()
+      .toISOString()
+      .replace(/[-:T]/g, '')
+      .slice(0, 14)
+      .replace(/^(\d{8})(\d{6})$/, '$1-$2');
+    const fileName = `${fileBase}-recipients-${stamp}.csv`;
+    const exportId = randomUUID();
+    // The row count and the history entry are written before the file streams, while the request still has its context.
+    const rowCount = await this.db.tx(async (tx) => {
+      const n = await this.repo.recipientCount(
+        tx,
+        orgId,
+        runs.map((r) => r.id),
+      );
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: runs[0]?.id ?? 0,
+        action: 'export',
+        delta: {
+          exportId: { old: null, new: exportId },
+          rows: { old: null, new: n },
+          selection: { old: null, new: 'filter' },
+        },
+      });
+      return n;
+    });
+
     const db = this.db;
     const repo = this.repo;
-    async function* lines(): AsyncGenerator<string> {
+    const keeper = new ExportKeeper();
+    async function* produce(): AsyncGenerator<string> {
       yield csvLine(withRun ? ['Run', ...EXPORT_HEADER] : EXPORT_HEADER);
       for (const run of runs) {
         let before: number | null = null;
@@ -329,14 +359,19 @@ export class CampaignsActionsService {
       }
     }
 
-    const stamp = new Date()
-      .toISOString()
-      .replace(/[-:T]/g, '')
-      .slice(0, 14)
-      .replace(/^(\d{8})(\d{6})$/, '$1-$2');
-    return {
-      stream: Readable.from(lines()),
-      fileName: `${fileBase}-recipients-${stamp}.csv`,
-    };
+    async function* lines(): AsyncGenerator<string> {
+      for await (const chunk of produce()) {
+        keeper.add(chunk);
+        yield chunk;
+      }
+      // A finished file is kept for a re-download, up to the keeper's limit. A save that fails keeps nothing; the person still has the file.
+      const csv = keeper.csv;
+      if (csv)
+        await keepExportFile(db, { orgId, userId, exportId, fileName, rowCount, csv }).catch(
+          () => undefined,
+        );
+    }
+
+    return { stream: Readable.from(lines()), fileName };
   }
 }

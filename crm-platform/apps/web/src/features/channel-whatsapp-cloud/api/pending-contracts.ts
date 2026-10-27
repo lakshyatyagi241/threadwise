@@ -33,7 +33,7 @@ export const templateListSchema = pageResponseSchema(templateSummarySchema);
 
 /** One slot of a template's text: the placeholder number, and the contact attribute it reads from (or the number itself). */
 export const variableSlotSchema = z.object({
-  num: z.number().int().min(1),
+  num: z.int().min(1),
   key: z.string().catch(''),
   example: z.string().nullish().catch(null),
 });

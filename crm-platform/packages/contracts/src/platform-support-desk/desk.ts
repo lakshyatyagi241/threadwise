@@ -8,16 +8,16 @@ import { suppTicketPrioritySchema, suppTicketStatusSchema } from './tickets';
  */
 
 const iso = z.string();
-const rowVersion = z.number().int().min(1);
-const minutes = z.number().int().min(0);
+const rowVersion = z.int().min(1);
+const minutes = z.int().min(0);
 
 // --- SLA ---------------------------------------------------------------------------------------------------------------------------
 
 export const slaPolicySchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
-  firstResponseMinutes: z.number().int(),
-  resolutionMinutes: z.number().int(),
+  firstResponseMinutes: z.int(),
+  resolutionMinutes: z.int(),
   respectBusinessHours: z.boolean(),
   isDefault: z.boolean(),
   rowVersion,
@@ -26,8 +26,8 @@ export type SlaPolicy = z.infer<typeof slaPolicySchema>;
 
 export const slaPolicyInputSchema = z.object({
   name: z.string().trim().min(1).max(120),
-  firstResponseMinutes: z.number().int().min(1).max(10080),
-  resolutionMinutes: z.number().int().min(1).max(43200),
+  firstResponseMinutes: z.int().min(1).max(10080),
+  resolutionMinutes: z.int().min(1).max(43200),
   respectBusinessHours: z.boolean().default(true),
   isDefault: z.boolean().default(false),
 });
@@ -39,9 +39,9 @@ export type UpdateSlaPolicyRequest = z.infer<typeof updateSlaPolicyRequestSchema
 export const SLA_BREACH_TYPES = ['first_response', 'resolution'] as const;
 export const SLA_BREACH_SEVERITIES = ['warn', 'breach', 'hard_breach'] as const;
 export const slaBreachSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   breachedAt: iso,
-  ticketId: z.string().uuid(),
+  ticketId: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   breachType: z.enum(SLA_BREACH_TYPES),
@@ -53,11 +53,11 @@ export const slaBoardResponseSchema = z.object({
   policies: z.array(slaPolicySchema),
   breaches: z.array(slaBreachSchema),
   kpis: z.object({
-    policies: z.number().int(),
+    policies: z.int(),
     /** The rows of the recent-breaches table (at most 50), as in Reference. */
-    openBreaches: z.number().int(),
+    openBreaches: z.int(),
     /** Open tickets whose running timer is in its last quarter or already overdue. */
-    atRisk: z.number().int(),
+    atRisk: z.int(),
     /** Share (0..100, one decimal) of tickets resolved in the last 7 days that never breached. */
     compliance7d: z.number(),
   }),
@@ -78,7 +78,7 @@ export const suppBoardQuerySchema = z.object({
 });
 
 export const boardCardSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   excerpt: z.string(),
@@ -107,19 +107,19 @@ export type MoveCardRequest = z.infer<typeof moveCardRequestSchema>;
 // --- agents ------------------------------------------------------------------------------------------------------------------------
 
 export const agentOperatorSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   email: z.string(),
 });
 
 export const supportAgentSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   operator: agentOperatorSchema,
   specialty: z.string().nullable(),
   isActive: z.boolean(),
-  openCount: z.number().int(),
-  resolved30d: z.number().int(),
-  avgFirstResponseMinutes: z.number().int(),
+  openCount: z.int(),
+  resolved30d: z.int(),
+  avgFirstResponseMinutes: z.int(),
   rowVersion,
 });
 export type SupportAgent = z.infer<typeof supportAgentSchema>;
@@ -129,16 +129,16 @@ export const agentsResponseSchema = z.object({
   /** Active super admin / support operators not on the roster yet. */
   candidates: z.array(agentOperatorSchema),
   kpis: z.object({
-    total: z.number().int(),
-    active: z.number().int(),
-    openTotal: z.number().int(),
-    unassigned: z.number().int(),
+    total: z.int(),
+    active: z.int(),
+    openTotal: z.int(),
+    unassigned: z.int(),
   }),
 });
 export type AgentsResponse = z.infer<typeof agentsResponseSchema>;
 
 export const createAgentRequestSchema = z.object({
-  operatorId: z.string().uuid(),
+  operatorId: z.guid(),
   specialty: z
     .string()
     .trim()
@@ -157,27 +157,27 @@ export const customersQuerySchema = z.object({ q: z.string().trim().max(120).opt
 export type CustomersQuery = z.infer<typeof customersQuerySchema>;
 
 export const supportCustomerRowSchema = z.object({
-  workspaceId: z.string().uuid(),
+  workspaceId: z.guid(),
   name: z.string(),
   slug: z.string(),
-  openTickets: z.number().int(),
-  totalTickets: z.number().int(),
-  avgResolutionMinutes: z.number().int().nullable(),
+  openTickets: z.int(),
+  totalTickets: z.int(),
+  avgResolutionMinutes: z.int().nullable(),
   lastTicketAt: iso.nullable(),
 });
 export const customersResponseSchema = z.object({
   data: z.array(supportCustomerRowSchema),
   kpis: z.object({
-    customers: z.number().int(),
-    total: z.number().int(),
-    open: z.number().int(),
-    top: z.number().int(),
+    customers: z.int(),
+    total: z.int(),
+    open: z.int(),
+    top: z.int(),
   }),
 });
 export type CustomersResponse = z.infer<typeof customersResponseSchema>;
 
 export const customerTicketRowSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   ticketNumber: z.string(),
   subject: z.string(),
   openedBy: z.string(),
@@ -185,16 +185,16 @@ export const customerTicketRowSchema = z.object({
   priority: suppTicketPrioritySchema,
   assignee: z.string().nullable(),
   createdAt: iso,
-  resolvedInMinutes: z.number().int().nullable(),
+  resolvedInMinutes: z.int().nullable(),
 });
 export const customerDetailResponseSchema = z.object({
-  workspace: z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() }),
+  workspace: z.object({ id: z.guid(), name: z.string(), slug: z.string() }),
   stats: z.object({
-    total: z.number().int(),
-    open: z.number().int(),
-    resolved: z.number().int(),
-    avgFirstResponseMinutes: z.number().int(),
-    avgResolutionMinutes: z.number().int(),
+    total: z.int(),
+    open: z.int(),
+    resolved: z.int(),
+    avgFirstResponseMinutes: z.int(),
+    avgResolutionMinutes: z.int(),
   }),
   tickets: z.array(customerTicketRowSchema),
 });
@@ -218,21 +218,21 @@ export const playbookStepSchema = z.object({
 export type PlaybookStep = z.infer<typeof playbookStepSchema>;
 
 export const playbookSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   slug: z.string(),
   triggerType: z.enum(PLAYBOOK_TRIGGERS),
   triggerValue: z.string().nullable(),
   steps: z.array(playbookStepSchema),
   isActive: z.boolean(),
-  useCount: z.number().int(),
+  useCount: z.int(),
   rowVersion,
 });
 export type Playbook = z.infer<typeof playbookSchema>;
 
 export const playbooksResponseSchema = z.object({
   data: z.array(playbookSchema),
-  kpis: z.object({ total: z.number().int(), active: z.number().int(), uses: z.number().int() }),
+  kpis: z.object({ total: z.int(), active: z.int(), uses: z.int() }),
 });
 export type PlaybooksResponse = z.infer<typeof playbooksResponseSchema>;
 
@@ -254,7 +254,7 @@ export type SetPlaybookActiveRequest = z.infer<typeof setPlaybookActiveRequestSc
 
 /** Active manual playbooks for the panel's "Run playbook" picker. */
 export const runnablePlaybooksResponseSchema = z.object({
-  data: z.array(z.object({ id: z.string().uuid(), name: z.string(), slug: z.string() })),
+  data: z.array(z.object({ id: z.guid(), name: z.string(), slug: z.string() })),
 });
 export type RunnablePlaybooksResponse = z.infer<typeof runnablePlaybooksResponseSchema>;
 
@@ -270,25 +270,25 @@ export const reportsQuerySchema = z.object({
 export type ReportsQuery = z.infer<typeof reportsQuerySchema>;
 
 export const reportsResponseSchema = z.object({
-  days: z.number().int(),
+  days: z.int(),
   kpis: z.object({
-    tickets: z.number().int(),
-    resolved: z.number().int(),
-    avgFirstResponseMinutes: z.number().int(),
-    avgResolutionMinutes: z.number().int(),
+    tickets: z.int(),
+    resolved: z.int(),
+    avgFirstResponseMinutes: z.int(),
+    avgResolutionMinutes: z.int(),
     compliance: z.number(),
   }),
   /** One entry per calendar day (UTC) of the window, zero-filled. */
-  volume: z.array(z.object({ date: z.string(), count: z.number().int() })),
+  volume: z.array(z.object({ date: z.string(), count: z.int() })),
   /** All-time, as in Reference. */
-  byStatus: z.array(z.object({ status: suppTicketStatusSchema, count: z.number().int() })),
+  byStatus: z.array(z.object({ status: suppTicketStatusSchema, count: z.int() })),
   topAgents: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.guid(),
       name: z.string(),
-      resolved: z.number().int(),
-      avgFirstResponseMinutes: z.number().int().nullable(),
-      avgResolutionMinutes: z.number().int().nullable(),
+      resolved: z.int(),
+      avgFirstResponseMinutes: z.int().nullable(),
+      avgResolutionMinutes: z.int().nullable(),
     }),
   ),
 });
@@ -308,17 +308,17 @@ export const WORKSPACE_FLAGS = [
 export const NOTE_SEVERITIES = ['info', 'warn', 'critical'] as const;
 
 export const inboxWorkspaceSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   slug: z.string(),
   plan: z.string(),
   status: z.string(),
-  openCount: z.number().int(),
-  breachCount: z.number().int(),
+  openCount: z.int(),
+  breachCount: z.int(),
   lastActiveAt: iso.nullable(),
   flags: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.guid(),
       flag: z.enum(WORKSPACE_FLAGS),
       reason: z.string().nullable(),
     }),
@@ -328,27 +328,27 @@ export type InboxWorkspace = z.infer<typeof inboxWorkspaceSchema>;
 
 export const inboxBootstrapSchema = z.object({
   /** The caller's platform permissions (all 16 keys), so the screen can hide what it cannot do. */
-  permissions: z.record(z.boolean()),
+  permissions: z.record(z.string(), z.boolean()),
   workspaces: z.array(inboxWorkspaceSchema),
   kpis: z.object({
-    workspaces: z.number().int(),
-    breachTotal: z.number().int(),
-    openTotal: z.number().int(),
+    workspaces: z.int(),
+    breachTotal: z.int(),
+    openTotal: z.int(),
   }),
 });
 export type InboxBootstrap = z.infer<typeof inboxBootstrapSchema>;
 
 export const inboxQueueQuerySchema = z.object({
   tab: z.enum(SUPP_INBOX_TABS).catch('sla_breach').default('sla_breach'),
-  workspaceId: z.string().uuid().optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  workspaceId: z.guid().optional(),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type InboxQueueQuery = z.infer<typeof inboxQueueQuerySchema>;
 
 export const inboxQueueItemSchema = z.object({
-  id: z.string().uuid(),
-  workspaceId: z.string().uuid(),
+  id: z.guid(),
+  workspaceId: z.guid(),
   workspaceName: z.string(),
   title: z.string(),
   preview: z.string().nullable(),
@@ -368,7 +368,7 @@ export const inboxQueueItemSchema = z.object({
 export const inboxQueueResponseSchema = z.object({
   data: z.array(inboxQueueItemSchema),
   page: pageInfoSchema,
-  total: z.number().int(),
+  total: z.int(),
 });
 export type InboxQueueResponse = z.infer<typeof inboxQueueResponseSchema>;
 
@@ -376,7 +376,7 @@ export const inboxConversationSchema = z.object({
   conversation: inboxQueueItemSchema.extend({ peerName: z.string().nullable(), createdAt: iso }),
   messages: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.guid(),
       direction: z.enum(['in', 'out']),
       kind: z.string(),
       body: z.string().nullable(),
@@ -387,7 +387,7 @@ export const inboxConversationSchema = z.object({
   ),
   notes: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.guid(),
       body: z.string(),
       authorName: z.string().nullable(),
       createdAt: iso,
@@ -396,7 +396,7 @@ export const inboxConversationSchema = z.object({
   events: z.array(z.object({ type: z.string(), actorType: z.string(), createdAt: iso })),
   platformNotes: z.array(
     z.object({
-      id: z.string().uuid(),
+      id: z.guid(),
       body: z.string(),
       severity: z.enum(NOTE_SEVERITIES),
       adminName: z.string().nullable(),
@@ -427,8 +427,8 @@ export const impersonateRequestSchema = z.object({ reason: z.string().trim().min
 export type ImpersonateRequest = z.infer<typeof impersonateRequestSchema>;
 
 export const inboxAuditQuerySchema = z.object({
-  workspaceId: z.string().uuid().optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  workspaceId: z.guid().optional(),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
 });
 export type InboxAuditQuery = z.infer<typeof inboxAuditQuerySchema>;
 
@@ -437,7 +437,7 @@ export const inboxAuditResponseSchema = z.object({
     z.object({
       id: z.string(),
       action: z.string(),
-      workspaceId: z.string().uuid().nullable(),
+      workspaceId: z.guid().nullable(),
       workspaceName: z.string().nullable(),
       actorName: z.string().nullable(),
       at: iso,

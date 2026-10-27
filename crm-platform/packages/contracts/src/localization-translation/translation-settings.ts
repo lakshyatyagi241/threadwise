@@ -14,16 +14,16 @@ export const translationSettingsSchema = z.object({
   /** Name of the provider a translation would try first (display only). */
   engineName: z.string().nullable(),
   residency: dataResidencySchema,
-  usageThisMonth: z.object({ characters: z.number().int(), calls: z.number().int() }),
+  usageThisMonth: z.object({ characters: z.int(), calls: z.int() }),
   /** 0 when the workspace has no settings row yet. */
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type TranslationSettings = z.infer<typeof translationSettingsSchema>;
 
 export const updateTranslationSettingsRequestSchema = z.object({
   teamLanguage: teamLanguageSchema.optional(),
   enabled: z.boolean().optional(),
-  rowVersion: z.number().int().min(0),
+  rowVersion: z.int().min(0),
 });
 export type UpdateTranslationSettingsRequest = z.infer<
   typeof updateTranslationSettingsRequestSchema

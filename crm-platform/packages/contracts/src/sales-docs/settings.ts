@@ -17,32 +17,32 @@ export const salesDocSettingsSchema = z.object({
   /** The number is `<prefix>-<counter padded to numberPadding>`: PRO-0001. */
   proposalPrefix: z.string(),
   estimatePrefix: z.string(),
-  numberPadding: z.number().int(),
+  numberPadding: z.int(),
   /** The first counter value handed out; only effective until the first document of the kind exists. */
-  proposalStart: z.number().int(),
-  estimateStart: z.number().int(),
+  proposalStart: z.int(),
+  estimateStart: z.int(),
   /** A new document without a valid-until date gets today + this many days (null: no date). */
-  defaultValidDays: z.number().int().nullable(),
+  defaultValidDays: z.int().nullable(),
   /** A public link stops working this many days after the document is first sent (null: it lives as long as the document is open). */
-  linkTtlDays: z.number().int().nullable(),
+  linkTtlDays: z.int().nullable(),
   /** The counters' current values: the next number is last + 1. */
-  proposalLast: z.number().int(),
-  estimateLast: z.number().int(),
+  proposalLast: z.int(),
+  estimateLast: z.int(),
   /** Null until the first save (send no `rowVersion` then). */
-  rowVersion: z.number().int().nullable(),
+  rowVersion: z.int().nullable(),
 });
 export type SalesDocSettings = z.infer<typeof salesDocSettingsSchema>;
 
 export const updateSalesDocSettingsSchema = z.object({
   proposalPrefix: prefix.optional(),
   estimatePrefix: prefix.optional(),
-  numberPadding: z.number().int().min(1).max(10).optional(),
-  proposalStart: z.number().int().min(1).max(999_999_999).optional(),
-  estimateStart: z.number().int().min(1).max(999_999_999).optional(),
-  defaultValidDays: z.number().int().min(1).max(3650).nullish(),
-  linkTtlDays: z.number().int().min(1).max(3650).nullish(),
+  numberPadding: z.int().min(1).max(10).optional(),
+  proposalStart: z.int().min(1).max(999_999_999).optional(),
+  estimateStart: z.int().min(1).max(999_999_999).optional(),
+  defaultValidDays: z.int().min(1).max(3650).nullish(),
+  linkTtlDays: z.int().min(1).max(3650).nullish(),
   /** Absent on the first save. */
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateSalesDocSettingsInput = z.infer<typeof updateSalesDocSettingsSchema>;
 
@@ -52,12 +52,12 @@ export const salesDocTemplateSchema = z.object({
   name: z.string(),
   terms: z.string().nullable(),
   notes: z.string().nullable(),
-  validDays: z.number().int().nullable(),
+  validDays: z.int().nullable(),
   /** The template a new document of this kind starts from. */
   isDefault: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type SalesDocTemplate = z.infer<typeof salesDocTemplateSchema>;
 
@@ -66,7 +66,7 @@ export const createSalesDocTemplateSchema = z.object({
   name: z.string().trim().min(1).max(120),
   terms: z.string().trim().max(SALES_DOC_TERMS_MAX).nullish(),
   notes: z.string().trim().max(SALES_DOC_NOTES_MAX).nullish(),
-  validDays: z.number().int().min(1).max(3650).nullish(),
+  validDays: z.int().min(1).max(3650).nullish(),
   /** Making a template the default clears the flag on the previous default of its kind. */
   isDefault: z.boolean().optional(),
 });
@@ -76,9 +76,9 @@ export const updateSalesDocTemplateSchema = z.object({
   name: z.string().trim().min(1).max(120).optional(),
   terms: z.string().trim().max(SALES_DOC_TERMS_MAX).nullish(),
   notes: z.string().trim().max(SALES_DOC_NOTES_MAX).nullish(),
-  validDays: z.number().int().min(1).max(3650).nullish(),
+  validDays: z.int().min(1).max(3650).nullish(),
   isDefault: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateSalesDocTemplateInput = z.infer<typeof updateSalesDocTemplateSchema>;
 

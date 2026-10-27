@@ -14,8 +14,8 @@ export const WORKSPACES_KEY = ['operator', 'lead-scoring', 'workspaces'] as cons
 export const WORKSPACE_OPTIONS_KEY = ['operator', 'lead-scoring', 'workspace-options'] as const;
 export const RUNS_KEY = ['operator', 'lead-scoring', 'runs'] as const;
 
-type Out<T> = z.ZodType<T, z.ZodTypeDef, unknown>;
-const count = z.number().int().nonnegative();
+type Out<T> = z.ZodType<T, unknown>;
+const count = z.int().nonnegative();
 /** USD amounts travel as decimal strings (eight decimals); a float would lose them. */
 const usd = z.string().regex(/^-?\d+(\.\d+)?$/);
 

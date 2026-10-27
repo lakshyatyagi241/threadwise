@@ -18,7 +18,7 @@ export const testApiLibraryApiSchema = withApiLibraryDefinitionRules(
     name: apiLibraryNameSchema.optional(),
     apiId: uuidSchema.optional(),
     /** Overrides for the declared variables (name -> value) for this run only. */
-    values: z.record(z.string().max(2000)).default({}),
+    values: z.record(z.string(), z.string().max(2000)).default({}),
   }),
 );
 export type TestApiLibraryApiInput = z.infer<typeof testApiLibraryApiSchema>;
@@ -40,27 +40,27 @@ export const apiLibraryRunRequestSchema = z.object({
   /** After variable substitution; secret-looking query parameters masked. */
   url: z.string(),
   /** After substitution; secret headers masked. */
-  headers: z.record(z.string()),
+  headers: z.record(z.string(), z.string()),
   /** The body as sent (after the processing function), secret-looking keys masked, as text. Null: no body. */
   body: z.string().nullable(),
 });
 
 export const apiLibraryRunResponseSchema = z.object({
-  headers: z.record(z.union([z.string(), z.array(z.string())])),
+  headers: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
   contentType: z.string().nullable(),
   /** The body as text, cut at 64 KB. */
   bodyText: z.string(),
   /** The body parsed as JSON (what the response tree and the path pickers read); null when it is not JSON or was cut. */
   bodyJson: z.unknown().nullable(),
   truncated: z.boolean(),
-  sizeBytes: z.number().int(),
+  sizeBytes: z.int(),
 });
 
 export const testApiLibraryApiResponseSchema = z.object({
   ok: z.boolean(),
   /** The HTTP status of the target's answer; null when there was none (blocked, timeout, network). */
-  status: z.number().int().nullable(),
-  durationMs: z.number().int(),
+  status: z.int().nullable(),
+  durationMs: z.int(),
   errorKind: apiLibraryErrorKindSchema.nullable(),
   error: z.string().nullable(),
   request: apiLibraryRunRequestSchema.nullable(),
@@ -84,6 +84,6 @@ export const testApiLibraryFunctionResponseSchema = z.object({
   ok: z.boolean(),
   output: z.unknown().nullable(),
   error: z.string().nullable(),
-  durationMs: z.number().int(),
+  durationMs: z.int(),
 });
 export type TestApiLibraryFunctionResponse = z.infer<typeof testApiLibraryFunctionResponseSchema>;

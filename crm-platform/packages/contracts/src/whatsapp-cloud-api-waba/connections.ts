@@ -46,16 +46,16 @@ export const wabaConnectionSchema = z.object({
   coexistence: z.boolean(),
   /** True once Meta delivers this number's inbound here, false when known broken, null when unproven (TW-WABA-013). */
   inboundWired: z.boolean().nullable(),
-  inboundCheckedAt: z.string().datetime().nullable(),
+  inboundCheckedAt: z.iso.datetime().nullable(),
   connectedVia: wabaConnectedViaSchema.nullable(),
   /** Never the token itself, only whether one is stored. */
   hasToken: z.boolean(),
-  tokenExpiresAt: z.string().datetime().nullable(),
+  tokenExpiresAt: z.iso.datetime().nullable(),
   /** The last reason a connect or health check failed, for the card. */
   lastError: z.string().nullable(),
-  connectedAt: z.string().datetime().nullable(),
-  lastHealthAt: z.string().datetime().nullable(),
-  rowVersion: z.number().int(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastHealthAt: z.iso.datetime().nullable(),
+  rowVersion: z.int(),
 });
 export type WabaConnection = z.infer<typeof wabaConnectionSchema>;
 
@@ -86,7 +86,7 @@ export const wabaPlatformCallbackSchema = z.object({
   /** The webhook fields to subscribe. */
   fields: z.array(z.string()),
   /** WABA numbers connected across every workspace (Reference: "Connected WABAs"). */
-  connectedWabas: z.number().int().nonnegative(),
+  connectedWabas: z.int().nonnegative(),
 });
 export type WabaPlatformCallback = z.infer<typeof wabaPlatformCallbackSchema>;
 
@@ -174,7 +174,7 @@ export type SetTokenInput = z.infer<typeof setTokenInputSchema>;
 
 export const updateConnectionInputSchema = z.object({
   displayLabel: z.string().trim().max(WABA_LABEL_MAX),
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
 });
 export type UpdateConnectionInput = z.infer<typeof updateConnectionInputSchema>;
 
@@ -199,7 +199,7 @@ export const wabaHealthSchema = z.object({
   issues: z.array(wabaHealthIssueSchema),
   /** The token with its middle masked; never the token. Null when none is stored. */
   tokenHint: z.string().nullable(),
-  checkedAt: z.string().datetime(),
+  checkedAt: z.iso.datetime(),
   /** What the other Meta reads found. Each part is independent: one failing read leaves the rest and adds to `errors`. */
   details: z.object({
     waba: z
@@ -217,15 +217,15 @@ export const wabaHealthSchema = z.object({
       /** null = Meta could not be asked (no app credentials on the platform). */
       valid: z.boolean().nullable(),
       scopes: z.array(z.string()),
-      expiresAt: z.string().datetime().nullable(),
+      expiresAt: z.iso.datetime().nullable(),
       appId: z.string().nullable(),
     }),
     webhook: z.object({ subscribedApps: z.array(z.string()) }).nullable(),
     templates: z
       .object({
         /** Counted over the first 100 only (Reference counts the first 200): a tally, not an inventory. */
-        sampled: z.number().int(),
-        byStatus: z.record(z.number().int()),
+        sampled: z.int(),
+        byStatus: z.record(z.string(), z.int()),
       })
       .nullable(),
     phone: z.object({
@@ -236,11 +236,11 @@ export const wabaHealthSchema = z.object({
     /** This month's free service conversations (TW-WABA-023). Null when Meta's analytics did not answer: the card is then not shown. */
     conversations: z
       .object({
-        freeUsed: z.number().int(),
-        freeTotal: z.number().int(),
-        freeLeft: z.number().int(),
-        paid: z.number().int(),
-        total: z.number().int(),
+        freeUsed: z.int(),
+        freeTotal: z.int(),
+        freeLeft: z.int(),
+        paid: z.int(),
+        total: z.int(),
         cost: z.number(),
       })
       .nullable()
@@ -299,7 +299,7 @@ export const updateBusinessProfileInputSchema = z
     about: z.string().trim().min(1).max(139),
     address: z.string().trim().max(256),
     description: z.string().trim().max(512),
-    email: z.string().trim().max(128).email().or(z.literal('')),
+    email: z.string().trim().max(128).pipe(z.email()).or(z.literal('')),
     websites: z.array(httpUrl).max(2),
     vertical: z.enum(WABA_VERTICALS),
   })
@@ -389,31 +389,31 @@ export const updateComplianceInfoInputSchema = z
     const asked = REGISTRATION_ASKED.includes(v.entityType);
     if (asked && v.isRegistered === undefined)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['isRegistered'],
         message: 'Say whether the business is registered',
       });
     if (!asked && v.isRegistered !== undefined)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['isRegistered'],
         message: 'Only asked for partnerships and other types',
       });
     if (v.entityType === 'OTHER' && !v.entityTypeCustom)
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['entityTypeCustom'],
         message: 'Enter the business type',
       });
     if (!hasOneContact(v.customerCare))
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['customerCare'],
         message: 'Enter an email, a mobile or a landline for customer care',
       });
     if (!hasOneContact(v.grievanceOfficer))
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['grievanceOfficer'],
         message: 'Enter an email, a mobile or a landline for the grievance officer',
       });

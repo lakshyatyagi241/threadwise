@@ -42,21 +42,21 @@ export const roleResponseSchema = z.object({
   isLocked: z.boolean(),
   grants: z.array(roleGrantSchema),
   /** Members holding the role. */
-  userCount: z.number().int(),
+  userCount: z.int(),
   /**
    * Active members holding the role who are in no team. A role that grants a permission at `team` or `team_and_below` shows these people
    * only their own records, so the role editor warns when this is above zero (BL-382).
    */
-  membersWithoutTeam: z.number().int().optional(),
+  membersWithoutTeam: z.int().optional(),
   /** One of the five Reference presets (Owner, Admin, Manager, Agent, Viewer): never deleted, never renamed. */
   isPreset: z.boolean(),
   /** The caller may hand this role to a member (the member-role picker offers only these). */
   grantable: z.boolean(),
   /** The caller may change this role's permissions (not locked; the Owner and Admin presets only by an Owner). */
   editable: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
   /** The name of the person who last saved the role; null when the audit trail has no one. */
   updatedBy: z.string().nullish(),
 });
@@ -72,6 +72,6 @@ export const updateRoleSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   /** Full replacement of the role's grant set, when present. */
   grants: z.array(roleGrantSchema).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateRoleInput = z.infer<typeof updateRoleSchema>;

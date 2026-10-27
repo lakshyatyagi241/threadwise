@@ -15,8 +15,8 @@ export const PASSKEY_NAME_MAX = 60;
 export const passkeyItemSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  createdAt: z.string().datetime(),
-  lastUsedAt: z.string().datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  lastUsedAt: z.iso.datetime().nullable(),
   /** singleDevice: a hardware key; multiDevice: a synced passkey (phone, password manager). */
   deviceType: z.enum(['singleDevice', 'multiDevice']),
   backedUp: z.boolean(),

@@ -31,22 +31,22 @@ export const failureCategorySchema = z.enum([
 export type FailureCategory = z.infer<typeof failureCategorySchema>;
 
 export const failedOperationSchema = z.object({
-  uuid: z.string().uuid(),
+  uuid: z.guid(),
   sourceQueue: z.string(),
   jobName: z.string(),
   originalJobId: z.string(),
   /** The workspace, when the job named it; null when the worker finds it later (a WhatsApp number). */
-  orgId: z.number().int().positive().nullable(),
+  orgId: z.int().positive().nullable(),
   status: failedOperationStatusSchema,
   failureCategory: failureCategorySchema,
   /** A stable name for the cause; dashboards and the runbook use it. */
   errorCode: z.string(),
   /** One scrubbed line, at most 300 characters. A hint, not an identifier. */
   errorSummary: z.string().nullable(),
-  attemptsMade: z.number().int().nonnegative(),
-  maxAttempts: z.number().int().positive(),
+  attemptsMade: z.int().nonnegative(),
+  maxAttempts: z.int().positive(),
   hasPayload: z.boolean(),
-  replayCount: z.number().int().nonnegative(),
+  replayCount: z.int().nonnegative(),
   lastReplayAt: z.string().nullable(),
   resolvedAt: z.string().nullable(),
   resolutionReason: z.string().nullable(),
@@ -58,7 +58,7 @@ export type FailedOperation = z.infer<typeof failedOperationSchema>;
 export const failedOperationEventSchema = z.object({
   eventType: z.string(),
   actorType: z.string(),
-  actorId: z.number().int().nullable(),
+  actorId: z.int().nullable(),
   detail: z.record(z.string(), z.unknown()),
   createdAt: z.string(),
 });
@@ -76,7 +76,7 @@ export const failedOperationsQuerySchema = z.object({
     .enum(['true', 'false'])
     .default('true')
     .transform((v) => v === 'true'),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
 });
 export type FailedOperationsQuery = z.infer<typeof failedOperationsQuerySchema>;
 
@@ -90,7 +90,7 @@ export const redriveResultSchema = z.object({
   redriven: z.boolean(),
   code: z.string(),
   reason: z.string(),
-  replay: z.number().int().positive().optional(),
+  replay: z.int().positive().optional(),
 });
 export type RedriveResult = z.infer<typeof redriveResultSchema>;
 

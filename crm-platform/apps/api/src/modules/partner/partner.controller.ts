@@ -7,7 +7,7 @@ import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PartnerService } from './partner.service';
 
 const listQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().optional(),
 });
 

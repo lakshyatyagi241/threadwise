@@ -86,13 +86,13 @@ export const personalDeviceSchema = z.object({
   region: z.string().nullable(),
   connectionState: deviceConnectionStateSchema,
   stateReason: deviceStateReasonSchema.nullable(),
-  stateChangedAt: z.string().datetime({ offset: true }).nullable(),
+  stateChangedAt: z.iso.datetime({ offset: true }).nullable(),
   /** The unchanged three-valued status. Branch screens on `connectionState`; this is for compatibility. */
   status: deviceStatusSchema,
   /** "Use for sending". */
   active: z.boolean(),
   activateAfterPairing: z.boolean(),
-  lastSeenAt: z.string().datetime({ offset: true }).nullable(),
+  lastSeenAt: z.iso.datetime({ offset: true }).nullable(),
   assignee: personRef.nullable(),
   createdBy: personRef.nullable(),
   /** Never credentials. */
@@ -101,12 +101,12 @@ export const personalDeviceSchema = z.object({
     status: z.string().nullable(),
     egressIp: z.string().nullable(),
   }),
-  sent24h: z.number().int(),
-  failed24h: z.number().int(),
+  sent24h: z.int(),
+  failed24h: z.int(),
   /** The opt-in import of existing chats (`not_requested` for a number that never chose it). */
   historyImport: historyImportStatusSchema,
-  createdAt: z.string().datetime({ offset: true }),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime({ offset: true }),
+  rowVersion: z.int(),
 });
 export type PersonalDevice = z.infer<typeof personalDeviceSchema>;
 
@@ -114,7 +114,7 @@ export type PersonalDevice = z.infer<typeof personalDeviceSchema>;
 export const personalDeviceDetailSchema = personalDeviceSchema.extend({
   /** Set when the state is `error` or `logged_out`. */
   lastError: z
-    .object({ reason: deviceStateReasonSchema, at: z.string().datetime({ offset: true }) })
+    .object({ reason: deviceStateReasonSchema, at: z.iso.datetime({ offset: true }) })
     .nullable(),
   /** True once a warm-up profile exists for the number. */
   warmerConfigured: z.boolean(),
@@ -129,18 +129,18 @@ export const listDevicesQuerySchema = z.object({
   status: deviceStatusSchema.optional(),
   /** Name or number, `ILIKE` on the plain columns. */
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type ListDevicesQuery = z.infer<typeof listDevicesQuerySchema>;
 
 export const listDevicesMetaSchema = z.object({
   /** Personal numbers the workspace holds (every state). */
-  used: z.number().int(),
+  used: z.int(),
   /** The cap that applies: the smaller of the plan's `devices` limit (0 = unlimited) and the pilot cap. */
-  limit: z.number().int(),
-  planLimit: z.number().int(),
-  pilotCap: z.number().int(),
+  limit: z.int(),
+  planLimit: z.int(),
+  pilotCap: z.int(),
   /** The notice version in force, and whether the CALLER accepted it. */
   noticeVersion: z.string(),
   noticeAccepted: z.boolean(),
@@ -185,7 +185,7 @@ export type AcknowledgementInput = z.infer<typeof acknowledgementInputSchema>;
 export const riskNoticeStatusSchema = z.object({
   version: z.string(),
   accepted: z.boolean(),
-  acceptedAt: z.string().datetime({ offset: true }).nullable(),
+  acceptedAt: z.iso.datetime({ offset: true }).nullable(),
 });
 export type RiskNoticeStatus = z.infer<typeof riskNoticeStatusSchema>;
 
@@ -216,7 +216,7 @@ export const updateDeviceInputSchema = z
     /** The number: editable only while the state is created, error or logged_out and no session exists. */
     countryCode: z.string().trim().min(1).max(DEVICE_COUNTRY_CODE_MAX).optional(),
     phone: z.string().trim().min(DEVICE_PHONE_MIN).max(DEVICE_PHONE_MAX).optional(),
-    rowVersion: z.number().int(),
+    rowVersion: z.int(),
   })
   .refine(
     (v) => Object.entries(v).some(([k, x]) => k !== 'rowVersion' && x !== undefined),
@@ -256,17 +256,17 @@ export const devicePairingSchema = z.object({
   /** The runtime's last label (`Qr generated`, `Syncing data`, `Ready`): informational, never branch on it. */
   label: z.string().nullable(),
   /** 0 to 100 (Reference's progress strip). */
-  progress: z.number().int().min(0).max(100),
+  progress: z.int().min(0).max(100),
   /** The QR string to draw client-side (it rotates about every 20 s); null when none is showing. */
   qr: z.string().nullable(),
   /** How old the QR is, so the client can run its countdown ring. */
-  qrAgeMs: z.number().int().nullable(),
+  qrAgeMs: z.int().nullable(),
   /** `XXXXXXXX` as WhatsApp issues it (show as XXXX-XXXX); null when none is showing. */
   code: z.string().nullable(),
-  codeExpiresIn: z.number().int().nullable(),
-  startedAt: z.string().datetime({ offset: true }),
+  codeExpiresIn: z.int().nullable(),
+  startedAt: z.iso.datetime({ offset: true }),
   /** After this the attempt is over (about 90 s for a QR, 3 minutes for a code). */
-  deadlineAt: z.string().datetime({ offset: true }),
+  deadlineAt: z.iso.datetime({ offset: true }),
   /** Whether the attempt was started by the caller; another person's attempt is reported, not hidden. */
   startedByMe: z.boolean(),
 });

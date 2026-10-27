@@ -35,7 +35,7 @@ export const LEGAL_HOLD_NOTICE_MAX = 1500;
 
 const caseRefSchema = z.string().trim().min(1).max(LEGAL_HOLD_CASE_REF_MAX);
 const noteSchema = z.string().trim().max(LEGAL_HOLD_NOTE_MAX);
-const instantSchema = z.string().datetime({ offset: true });
+const instantSchema = z.iso.datetime({ offset: true });
 
 export const placeLegalHoldSchema = z
   .object({
@@ -84,7 +84,9 @@ export const extendLegalHoldSchema = z
       v.expiresAt !== undefined ||
       v.addCaseRef !== undefined ||
       v.note !== undefined,
-    { message: 'Change at least one thing.' },
+    {
+      error: 'Change at least one thing.',
+    },
   );
 export type ExtendLegalHoldInput = z.infer<typeof extendLegalHoldSchema>;
 
@@ -109,7 +111,7 @@ export const listLegalHoldsQuerySchema = z.object({
   reviewDue: booleanQuery.optional(),
   /** Part of the case reference. */
   q: z.string().trim().min(1).max(LEGAL_HOLD_CASE_REF_MAX).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListLegalHoldsQuery = z.infer<typeof listLegalHoldsQuerySchema>;
@@ -130,21 +132,21 @@ export const legalHoldSchema = z.object({
   reasonCategory: legalHoldReasonCategorySchema,
   caseRef: z.string(),
   note: z.string().nullable(),
-  reviewAt: z.string().datetime().nullable(),
+  reviewAt: z.iso.datetime().nullable(),
   /** Active and past its review date. */
   reviewDue: z.boolean(),
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   status: legalHoldStatusSchema,
   placedBy: z.string().nullable(),
-  placedAt: z.string().datetime(),
+  placedAt: z.iso.datetime(),
   lastReviewedBy: z.string().nullable(),
-  lastReviewedAt: z.string().datetime().nullable(),
+  lastReviewedAt: z.iso.datetime().nullable(),
   releasedBy: z.string().nullable(),
-  releasedAt: z.string().datetime().nullable(),
+  releasedAt: z.iso.datetime().nullable(),
   releaseNote: z.string().nullable(),
   /** Rights cases waiting on this hold ("restricted: legal hold"). */
-  restrictedCases: z.number().int().nonnegative(),
-  rowVersion: z.number().int(),
+  restrictedCases: z.int().nonnegative(),
+  rowVersion: z.int(),
 });
 export type LegalHold = z.infer<typeof legalHoldSchema>;
 
@@ -152,11 +154,11 @@ export const legalHoldListSchema = pageResponseSchema(legalHoldSchema);
 export type LegalHoldList = z.infer<typeof legalHoldListSchema>;
 
 export const legalHoldHistoryEntrySchema = z.object({
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   action: z.string(),
   actor: z.string().nullable(),
   /** What changed, without the note: field names and values of the register (category, dates, status). */
-  changes: z.record(z.unknown()),
+  changes: z.record(z.string(), z.unknown()),
 });
 export type LegalHoldHistoryEntry = z.infer<typeof legalHoldHistoryEntrySchema>;
 
@@ -178,9 +180,9 @@ export type LegalHoldStatusResponse = z.infer<typeof legalHoldStatusResponseSche
 export const releaseLegalHoldResultSchema = z.object({
   hold: legalHoldSchema,
   /** Rights cases that left "restricted" because of this release. */
-  casesLifted: z.number().int().nonnegative(),
+  casesLifted: z.int().nonnegative(),
   /** Of those, erasures a person had already confirmed: the worker executes them next. */
-  erasuresResuming: z.number().int().nonnegative(),
+  erasuresResuming: z.int().nonnegative(),
 });
 export type ReleaseLegalHoldResult = z.infer<typeof releaseLegalHoldResultSchema>;
 

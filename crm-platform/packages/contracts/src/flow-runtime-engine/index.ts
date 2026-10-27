@@ -145,13 +145,13 @@ export const flowRunSummarySchema = z.object({
   lastActivityAt: z.string(),
   endedAt: z.string().nullable(),
   resumeAt: z.string().nullable(),
-  steps: z.number().int(),
+  steps: z.int(),
   /** Customer messages that reached a wait node of this run and moved it on (logged `reply` steps). */
-  replies: z.number().int().default(0),
+  replies: z.int().default(0),
   /** Node executions logged, how many of them failed, and the run's total node time (ms). */
-  nodeCount: z.number().int(),
-  errorCount: z.number().int(),
-  durationMs: z.number().int(),
+  nodeCount: z.int(),
+  errorCount: z.int(),
+  durationMs: z.int(),
 });
 export type FlowRunSummary = z.infer<typeof flowRunSummarySchema>;
 
@@ -182,21 +182,21 @@ export const flowStepIoItemSchema = z.object({
 export type FlowStepIoItem = z.infer<typeof flowStepIoItemSchema>;
 
 export const flowRunStepSchema = z.object({
-  seq: z.number().int(),
+  seq: z.int(),
   nodeId: z.string().nullable(),
   nodeType: z.string().nullable(),
   event: z.string(),
-  detail: z.record(z.unknown()),
+  detail: z.record(z.string(), z.unknown()),
   error: z.string().nullable(),
   at: z.string(),
   /** The node as it was when it ran: an edit to the flow later does not change these. Null on rows written before the log existed. */
   nodeLabel: z.string().nullable(),
   outcome: z.enum(FLOW_STEP_OUTCOMES).nullable(),
   /** The exit taken (1 is the normal exit; a Condition's yes is 1 and no is 2). */
-  port: z.number().int().nullable(),
-  durationMs: z.number().int().nullable(),
+  port: z.int().nullable(),
+  durationMs: z.int().nullable(),
   /** Which visit of the node this was: more than 1 means a loop. */
-  attempt: z.number().int().nullable(),
+  attempt: z.int().nullable(),
   summary: z.string().nullable(),
   errorCode: z.string().nullable(),
   /** What the node took in and what it produced. Values are clipped and secrets masked before they are stored. */
@@ -207,7 +207,7 @@ export type FlowRunStep = z.infer<typeof flowRunStepSchema>;
 
 export const flowRunDetailSchema = flowRunSummarySchema.extend({
   triggerText: z.string().nullable(),
-  variables: z.record(z.unknown()),
+  variables: z.record(z.string(), z.unknown()),
   /** What the run waits for, when it is parked: the node and the kind of wait. */
   waiting: z
     .object({ nodeId: z.string(), kind: z.string(), expiresAt: z.string().nullable() })
@@ -217,7 +217,7 @@ export const flowRunDetailSchema = flowRunSummarySchema.extend({
   graph: z
     .object({
       nodes: z.array(z.object({ id: z.string(), type: z.string(), label: z.string() })),
-      edges: z.array(z.object({ from: z.string(), port: z.number().int(), to: z.string() })),
+      edges: z.array(z.object({ from: z.string(), port: z.int(), to: z.string() })),
     })
     .nullable(),
   /** Whether the flow was edited after this run started, and which logged nodes are no longer in it. */
@@ -245,7 +245,7 @@ export const listFlowRunsQuerySchema = z.object({
   contactId: uuidSchema.optional(),
   status: z.enum(FLOW_RUN_STATUSES).optional(),
   source: z.enum(FLOW_RUN_SOURCES).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().max(64).optional(),
 });
 export type ListFlowRunsQuery = z.infer<typeof listFlowRunsQuerySchema>;
@@ -268,7 +268,7 @@ export const flowSubscriberSchema = z.object({
   completedAt: z.string().nullable(),
   failedAt: z.string().nullable(),
   failureReason: z.string().nullable(),
-  retryCount: z.number().int(),
+  retryCount: z.int(),
   lastRetriedAt: z.string().nullable(),
   lastRunId: uuidSchema.nullable(),
 });
@@ -276,7 +276,7 @@ export type FlowSubscriber = z.infer<typeof flowSubscriberSchema>;
 
 export const listFlowSubscribersQuerySchema = z.object({
   status: z.enum(FLOW_SUBSCRIBER_STATUSES).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(100),
+  limit: z.coerce.number().int().min(1).max(200).prefault(100),
   cursor: z.string().max(64).optional(),
 });
 export type ListFlowSubscribersQuery = z.infer<typeof listFlowSubscribersQuerySchema>;
@@ -285,10 +285,10 @@ export const flowSubscriberListSchema = z.object({
   items: z.array(flowSubscriberSchema),
   /** Over every subscriber of the flow, not only this page (Reference's API counted the page only). */
   counts: z.object({
-    active: z.number().int(),
-    paused: z.number().int(),
-    completed: z.number().int(),
-    failed: z.number().int(),
+    active: z.int(),
+    paused: z.int(),
+    completed: z.int(),
+    failed: z.int(),
   }),
   nextCursor: z.string().nullable(),
 });
@@ -301,15 +301,15 @@ export const enrollContactsInputSchema = z
     groupId: uuidSchema.optional(),
   })
   .refine((v) => (v.contactIds && v.contactIds.length > 0) || v.groupId, {
-    message: 'Choose contacts or a group.',
+    error: 'Choose contacts or a group.',
   });
 export type EnrollContactsInput = z.infer<typeof enrollContactsInputSchema>;
 
 export const enrollResultSchema = z.object({
-  enrolled: z.number().int(),
+  enrolled: z.int(),
   /** Contacts that were already in the flow and not launched again. */
-  alreadyEnrolled: z.number().int(),
-  failed: z.number().int(),
+  alreadyEnrolled: z.int(),
+  failed: z.int(),
   results: z.array(
     z.object({
       contactId: uuidSchema,
@@ -326,7 +326,9 @@ export const enrollOneInputSchema = z
     contactId: uuidSchema.optional(),
     phone: z.string().trim().min(3).max(32).optional(),
   })
-  .refine((v) => v.contactId || v.phone, { message: 'Give a contact id or a phone.' });
+  .refine((v) => v.contactId || v.phone, {
+    error: 'Give a contact id or a phone.',
+  });
 export type EnrollOneInput = z.infer<typeof enrollOneInputSchema>;
 
 export const enrollOneResultSchema = z.object({
@@ -340,8 +342,8 @@ export const enrollOneResultSchema = z.object({
 export type EnrollOneResult = z.infer<typeof enrollOneResultSchema>;
 
 export const retryResultSchema = z.object({
-  retried: z.number().int(),
-  skipped: z.number().int(),
+  retried: z.int(),
+  skipped: z.int(),
 });
 export type RetryResult = z.infer<typeof retryResultSchema>;
 
@@ -353,7 +355,7 @@ export type StartFlowOnConversationInput = z.infer<typeof startFlowOnConversatio
 
 export const flowAnalyticsQuerySchema = z.object({
   /** How many days back the numbers cover; 0 is all time (Reference's 7, 30, 90 and "All time" chips). */
-  days: z.coerce.number().int().min(0).max(3650).default(30),
+  days: z.coerce.number().int().min(0).max(3650).prefault(30),
   /** Explicit UTC days (inclusive); either end may be open, and they win over `days`. */
   dateFrom: dayStringSchema.optional(),
   dateTo: dayStringSchema.optional(),
@@ -363,12 +365,12 @@ export type FlowAnalyticsQuery = z.infer<typeof flowAnalyticsQuerySchema>;
 
 export const flowAnalyticsSchema = z.object({
   totals: z.object({
-    enrolled: z.number().int(),
-    running: z.number().int(),
-    completed: z.number().int(),
-    failed: z.number().int(),
-    cancelled: z.number().int(),
-    expired: z.number().int(),
+    enrolled: z.int(),
+    running: z.int(),
+    completed: z.int(),
+    failed: z.int(),
+    cancelled: z.int(),
+    expired: z.int(),
   }),
   /** completed / finished runs, 0..1; null while nothing has finished. */
   completionRate: z.number().nullable(),
@@ -376,30 +378,30 @@ export const flowAnalyticsSchema = z.object({
   trend: z.array(
     z.object({
       day: z.string(),
-      started: z.number().int(),
-      completed: z.number().int(),
-      failed: z.number().int(),
+      started: z.int(),
+      completed: z.int(),
+      failed: z.int(),
     }),
   ),
   failureReasons: z.array(
     z.object({
       reason: z.string(),
-      count: z.number().int(),
+      count: z.int(),
       firstSeen: z.string().nullable(),
       lastSeen: z.string().nullable(),
     }),
   ),
-  bySource: z.array(z.object({ source: z.string(), count: z.number().int() })),
+  bySource: z.array(z.object({ source: z.string(), count: z.int() })),
   leaderboard: z.array(
     z.object({
       flowId: uuidSchema,
       flowName: z.string(),
       /** Reference's three states: live (published and on), paused (published, switched off), draft (not published). */
       state: z.enum(['live', 'paused', 'draft']),
-      runs: z.number().int(),
-      running: z.number().int(),
-      completed: z.number().int(),
-      failed: z.number().int(),
+      runs: z.int(),
+      running: z.int(),
+      completed: z.int(),
+      failed: z.int(),
       /** Percent of this flow's runs, one decimal; null with no runs. */
       completionRate: z.number().nullable(),
       failureRate: z.number().nullable(),
@@ -408,13 +410,13 @@ export const flowAnalyticsSchema = z.object({
   ),
   /** The second band of tiles: reach, paused subscribers, retries and how many flows exist or ran. */
   extras: z.object({
-    contactsReached: z.number().int(),
-    pausedSubscribers: z.number().int(),
-    retriedRuns: z.number().int(),
-    retryAttempts: z.number().int(),
-    flowsTotal: z.number().int(),
-    flowsLive: z.number().int(),
-    flowsWithRuns: z.number().int(),
+    contactsReached: z.int(),
+    pausedSubscribers: z.int(),
+    retriedRuns: z.int(),
+    retryAttempts: z.int(),
+    flowsTotal: z.int(),
+    flowsLive: z.int(),
+    flowsWithRuns: z.int(),
     /** failed / all runs, 0..1; null with no runs. */
     failureRate: z.number().nullable(),
   }),
@@ -436,7 +438,7 @@ export const flowHistoryRowSchema = flowSubscriberSchema.extend({
   flowName: z.string(),
   flowState: z.enum(['live', 'paused', 'draft']),
   /** Enrolment to completion, in seconds; null until it completed. */
-  durationSeconds: z.number().int().nullable(),
+  durationSeconds: z.int().nullable(),
   /** A failed run whose flow is switched on can be run again (TW-FLR-057). */
   canRetry: z.boolean(),
 });
@@ -448,7 +450,7 @@ export const listFlowHistoryQuerySchema = z.object({
   /** Matches the failure reason, the contact's name or phone, or the flow's name. */
   q: z.string().trim().max(120).optional(),
   ...flowWindowShape,
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().max(64).optional(),
 });
 export type ListFlowHistoryQuery = z.infer<typeof listFlowHistoryQuerySchema>;
@@ -458,11 +460,11 @@ export const flowHistoryListSchema = z.object({
   nextCursor: z.string().nullable(),
   /** Per status over the same filters except `status`, plus `all`, so the tabs add up to the unfiltered result. */
   counts: z.object({
-    all: z.number().int(),
-    active: z.number().int(),
-    paused: z.number().int(),
-    completed: z.number().int(),
-    failed: z.number().int(),
+    all: z.int(),
+    active: z.int(),
+    paused: z.int(),
+    completed: z.int(),
+    failed: z.int(),
   }),
 });
 export type FlowHistoryList = z.infer<typeof flowHistoryListSchema>;
@@ -479,22 +481,20 @@ export const flowErrorGroupsSchema = z.object({
   groups: z.array(
     z.object({
       reason: z.string().nullable(),
-      count: z.number().int(),
+      count: z.int(),
       firstSeen: z.string().nullable(),
       lastSeen: z.string().nullable(),
-      flows: z.array(
-        z.object({ flowId: uuidSchema, flowName: z.string(), count: z.number().int() }),
-      ),
+      flows: z.array(z.object({ flowId: uuidSchema, flowName: z.string(), count: z.int() })),
       /** Subscribers of the newest failed runs of this group, to retry them; at most one batch. */
       subscriberIds: z.array(uuidSchema),
     }),
   ),
   totals: z.object({
-    failed: z.number().int(),
-    distinctReasons: z.number().int(),
-    affectedFlows: z.number().int(),
-    affectedContacts: z.number().int(),
-    retried: z.number().int(),
+    failed: z.int(),
+    distinctReasons: z.int(),
+    affectedFlows: z.int(),
+    affectedContacts: z.int(),
+    retried: z.int(),
   }),
 });
 export type FlowErrorGroups = z.infer<typeof flowErrorGroupsSchema>;
@@ -503,7 +503,7 @@ export const listFlowRetriesQuerySchema = z.object({
   flowId: uuidSchema.optional(),
   outcome: z.enum(FLOW_RETRY_OUTCOMES).optional(),
   ...flowWindowShape,
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().max(64).optional(),
 });
 export type ListFlowRetriesQuery = z.infer<typeof listFlowRetriesQuerySchema>;
@@ -532,11 +532,11 @@ export const flowRetryListSchema = z.object({
   nextCursor: z.string().nullable(),
   /** Per outcome over the same filters except `outcome`, plus `all`. */
   totals: z.object({
-    all: z.number().int(),
-    queued: z.number().int(),
-    succeeded: z.number().int(),
-    failed: z.number().int(),
-    skipped: z.number().int(),
+    all: z.int(),
+    queued: z.int(),
+    succeeded: z.int(),
+    failed: z.int(),
+    skipped: z.int(),
   }),
 });
 export type FlowRetryList = z.infer<typeof flowRetryListSchema>;
@@ -555,12 +555,12 @@ export const retryManyInputSchema = z.object({
 export type RetryManyInput = z.infer<typeof retryManyInputSchema>;
 
 export const retryManyResultSchema = z.object({
-  requested: z.number().int(),
-  attempted: z.number().int(),
-  queued: z.number().int(),
-  succeeded: z.number().int(),
-  failed: z.number().int(),
-  skipped: z.number().int(),
+  requested: z.int(),
+  attempted: z.int(),
+  queued: z.int(),
+  succeeded: z.int(),
+  failed: z.int(),
+  skipped: z.int(),
   results: z.array(
     z.object({
       subscriberId: uuidSchema,

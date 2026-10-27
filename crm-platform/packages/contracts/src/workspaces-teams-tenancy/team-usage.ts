@@ -7,16 +7,16 @@ import { z } from 'zod';
  */
 export const wspTeamDeletePreviewSchema = z.object({
   /** People in the team now. */
-  members: z.number().int().nonnegative(),
+  members: z.int().nonnegative(),
   /** Routing rules that name the team as a target: the team is removed from them (a rule left with nothing to do is switched off). */
-  routingRules: z.number().int().nonnegative(),
+  routingRules: z.int().nonnegative(),
   /** Record assignment rules that name the team in their pool: the team is removed from the pool. */
-  assignmentRules: z.number().int().nonnegative(),
+  assignmentRules: z.int().nonnegative(),
   /** Segments shared with the team: the share goes with the team. */
-  segmentShares: z.number().int().nonnegative(),
+  segmentShares: z.int().nonnegative(),
   /** Conversations assigned to the team: they stay, with no team. */
-  conversationsAssigned: z.number().int().nonnegative(),
+  conversationsAssigned: z.int().nonnegative(),
   /** Team members who would no longer share a team with a colleague they share one with now, so what they see through "team records" shrinks. */
-  peopleWithReachChange: z.number().int().nonnegative(),
+  peopleWithReachChange: z.int().nonnegative(),
 });
 export type WspTeamDeletePreview = z.infer<typeof wspTeamDeletePreviewSchema>;

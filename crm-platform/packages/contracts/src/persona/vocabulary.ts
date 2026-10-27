@@ -70,7 +70,7 @@ export type VocabNounRow = z.infer<typeof vocabNounRowSchema>;
 export const workspaceVocabularyResponseSchema = z.object({
   locale: localeCodeSchema,
   /** The workspace persona's `rev`: send it back on save (a stale value is a 409). */
-  rev: z.number().int().positive(),
+  rev: z.int().positive(),
   personaKey: z.string(),
   nouns: z.array(vocabNounRowSchema),
 });
@@ -83,9 +83,9 @@ export type WorkspaceVocabularyResponse = z.infer<typeof workspaceVocabularyResp
  *  - a noun left out is not touched.
  */
 export const saveWorkspaceVocabularySchema = z.object({
-  rev: z.number().int().positive(),
+  rev: z.int().positive(),
   nouns: z
-    .record(
+    .partialRecord(
       workspaceVocabNounSchema,
       z.union([z.null(), z.record(localeCodeSchema, workspaceNounFormsSchema.nullable())]),
     )

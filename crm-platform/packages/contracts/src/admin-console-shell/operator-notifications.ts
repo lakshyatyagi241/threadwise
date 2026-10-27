@@ -45,7 +45,7 @@ export type OperatorNotification = z.infer<typeof operatorNotificationSchema>;
 /** The bell: the 15 newest, plus the real unread count. */
 export const operatorNotificationsRecentSchema = z.object({
   items: z.array(operatorNotificationSchema),
-  unread: z.number().int().nonnegative(),
+  unread: z.int().nonnegative(),
 });
 export type OperatorNotificationsRecent = z.infer<typeof operatorNotificationsRecentSchema>;
 
@@ -59,12 +59,12 @@ export type OperatorNotificationsQuery = z.infer<typeof operatorNotificationsQue
 export const operatorNotificationsPageSchema = z.object({
   items: z.array(operatorNotificationSchema),
   stats: z.object({
-    total: z.number().int().nonnegative(),
-    signup: z.number().int().nonnegative(),
-    payment: z.number().int().nonnegative(),
-    ticket: z.number().int().nonnegative(),
-    contact: z.number().int().nonnegative(),
-    workspace: z.number().int().nonnegative(),
+    total: z.int().nonnegative(),
+    signup: z.int().nonnegative(),
+    payment: z.int().nonnegative(),
+    ticket: z.int().nonnegative(),
+    contact: z.int().nonnegative(),
+    workspace: z.int().nonnegative(),
   }),
 });
 export type OperatorNotificationsPage = z.infer<typeof operatorNotificationsPageSchema>;

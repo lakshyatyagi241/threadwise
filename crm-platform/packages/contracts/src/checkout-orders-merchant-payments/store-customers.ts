@@ -27,7 +27,7 @@ export const listStoreCustomersQuerySchema = z.object({
   q: z.string().trim().max(120).optional(),
   /** Only buyers who ordered from this shop (saved customers without an order there are left out). */
   storefrontId: uuidSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStoreCustomersQuery = z.infer<typeof listStoreCustomersQuerySchema>;
@@ -35,8 +35,8 @@ export type ListStoreCustomersQuery = z.infer<typeof listStoreCustomersQuerySche
 /** Totals per currency: summing minor units across currencies would be meaningless. Cancelled orders are not counted. */
 export const storeCustomerTotalSchema = z.object({
   currencyCode: z.string(),
-  totalMinor: z.number().int(),
-  orders: z.number().int(),
+  totalMinor: z.int(),
+  orders: z.int(),
 });
 export type StoreCustomerTotal = z.infer<typeof storeCustomerTotalSchema>;
 
@@ -56,17 +56,17 @@ export const storeCustomerSchema = z.object({
   /** The profile has a delivery address. False for an order-only buyer and for a profile without one. */
   hasSavedAddress: z.boolean(),
   /** Every order of this buyer's phone, any status. */
-  orderCount: z.number().int(),
+  orderCount: z.int(),
   lifetimeTotals: z.array(storeCustomerTotalSchema),
-  lastOrderAt: z.string().datetime().nullable(),
+  lastOrderAt: z.iso.datetime().nullable(),
   /** The profile's CRM contact, else the one on the buyer's latest linked order. */
   contactId: uuidSchema.nullable(),
   /** 0 for an order-only buyer (nothing to guard: editing creates the profile). */
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   /** The profile's creation, else the buyer's first order. */
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
   /** The later of the profile's last change and the buyer's latest order. */
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type StoreCustomer = z.infer<typeof storeCustomerSchema>;
 
@@ -77,11 +77,11 @@ export const storeCustomerDetailSchema = storeCustomerSchema.extend({
   recentOrders: z.array(
     z.object({
       id: uuidSchema,
-      orderNo: z.number().int(),
+      orderNo: z.int(),
       status: z.string(),
-      totalMinor: z.number().int(),
+      totalMinor: z.int(),
       currencyCode: z.string(),
-      createdAt: z.string().datetime(),
+      createdAt: z.iso.datetime(),
     }),
   ),
 });
@@ -101,6 +101,6 @@ export const updateStoreCustomerSchema = z.object({
   name: z.string().trim().max(191).nullish(),
   company: z.string().trim().max(191).nullish(),
   address: z.string().trim().max(2000).nullish(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateStoreCustomerInput = z.infer<typeof updateStoreCustomerSchema>;

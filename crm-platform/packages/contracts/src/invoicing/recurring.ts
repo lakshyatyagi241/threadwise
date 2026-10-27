@@ -91,12 +91,12 @@ export const createRecurringInvoiceSchema = z
     name: z.string().trim().min(1).max(120),
     frequency: recurringFrequencySchema,
     /** Every N days / weeks / months / years. */
-    interval: z.number().int().min(1).max(365).default(1),
+    interval: z.int().min(1).max(365).default(1),
     /** The first period; not in the past by more than the catch-up window (the first run is then immediate). */
     startDate: date,
     endDate: date.nullish(),
     /** Stop after this many invoices. */
-    maxRuns: z.number().int().min(1).max(1000).nullish(),
+    maxRuns: z.int().min(1).max(1000).nullish(),
     mode: recurringModeSchema.default('draft'),
     /** Channel raised with `issue_send`. */
     sendChannel: z.enum(['link', 'email', 'whatsapp']).default('email'),
@@ -105,26 +105,26 @@ export const createRecurringInvoiceSchema = z
     template: templateShape.optional(),
   })
   .refine((v) => (v.fromInvoiceId ? !v.template : !!v.template), {
-    message: 'send either fromInvoiceId or template',
     path: ['template'],
+    error: 'send either fromInvoiceId or template',
   })
   .refine((v) => !v.endDate || v.endDate >= v.startDate, {
-    message: 'the end date is before the start date',
     path: ['endDate'],
+    error: 'the end date is before the start date',
   });
 export type CreateRecurringInvoiceInput = z.infer<typeof createRecurringInvoiceSchema>;
 
 export const updateRecurringInvoiceSchema = z.object({
   name: z.string().trim().min(1).max(120).optional(),
-  interval: z.number().int().min(1).max(365).optional(),
+  interval: z.int().min(1).max(365).optional(),
   frequency: recurringFrequencySchema.optional(),
   endDate: date.nullish(),
-  maxRuns: z.number().int().min(1).max(1000).nullish(),
+  maxRuns: z.int().min(1).max(1000).nullish(),
   mode: recurringModeSchema.optional(),
   sendChannel: z.enum(['link', 'email', 'whatsapp']).optional(),
   /** Replaces the template for FUTURE invoices; those already generated are untouched. */
   template: templateShape.optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateRecurringInvoiceInput = z.infer<typeof updateRecurringInvoiceSchema>;
 
@@ -133,17 +133,17 @@ export const recurringInvoiceResponseSchema = z.object({
   name: z.string(),
   status: recurringStatusSchema,
   frequency: recurringFrequencySchema,
-  interval: z.number().int(),
+  interval: z.int(),
   startDate: z.string(),
   endDate: z.string().nullable(),
-  maxRuns: z.number().int().nullable(),
+  maxRuns: z.int().nullable(),
   mode: recurringModeSchema,
   sendChannel: z.string(),
   /** The date of the next invoice; null when the schedule has ended or is paused with nothing due. */
   nextRunDate: z.string().nullable(),
-  lastRunAt: z.string().datetime().nullable(),
-  runCount: z.number().int(),
-  failureCount: z.number().int(),
+  lastRunAt: z.iso.datetime().nullable(),
+  runCount: z.int(),
+  failureCount: z.int(),
   /** The next five dates, for the schedule preview. */
   upcoming: z.array(z.string()),
   buyerName: z.string().nullable(),
@@ -151,15 +151,15 @@ export const recurringInvoiceResponseSchema = z.object({
   /** The total of the next invoice in major units (what the template prices to today). */
   amount: z.string(),
   contact: z.object({ id: uuidSchema, name: z.string().nullable() }).nullable(),
-  lineCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  lineCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type RecurringInvoiceResponse = z.infer<typeof recurringInvoiceResponseSchema>;
 
 export const listRecurringInvoicesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   status: queryList(recurringStatusSchema).optional(),
   contactId: uuidSchema.optional(),
@@ -168,12 +168,12 @@ export type ListRecurringInvoicesQuery = z.infer<typeof listRecurringInvoicesQue
 
 export const recurringRunSchema = z.object({
   id: z.string(),
-  periodIndex: z.number().int(),
+  periodIndex: z.int(),
   periodDate: z.string(),
   status: z.enum(RECURRING_RUN_STATUSES),
   invoice: z.object({ id: uuidSchema, number: z.string().nullable() }).nullable(),
   error: z.string().nullable(),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 export const recurringRunsResponseSchema = z.object({
   data: z.array(recurringRunSchema),
@@ -182,7 +182,7 @@ export const recurringRunsResponseSchema = z.object({
 export type RecurringRunsResponse = z.infer<typeof recurringRunsResponseSchema>;
 
 export const listRecurringRunsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListRecurringRunsQuery = z.infer<typeof listRecurringRunsQuerySchema>;

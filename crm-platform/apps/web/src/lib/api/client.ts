@@ -10,7 +10,7 @@ export interface ApiRequest<T> {
   query?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
   /** Parsed at the boundary: the server can be older than this build. Omit for 204 responses. */
-  schema?: z.ZodType<T, z.ZodTypeDef, unknown>;
+  schema?: z.ZodType<T, unknown>;
   idempotencyKey?: string;
   signal?: AbortSignal;
 }

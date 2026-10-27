@@ -16,7 +16,7 @@ import type {
 import { apiFetch } from '@/lib/api/client';
 
 /** The contracts type responses as interfaces, so the boundary check is the fields each screen leans on. */
-const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
+const shape = <T>(...required: string[]): z.ZodType<T, unknown> =>
   z.custom<T>(
     (v) =>
       typeof v === 'object' &&

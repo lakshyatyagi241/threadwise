@@ -11,9 +11,9 @@ export const contactNoteResponseSchema = z.object({
   /** The author's name, for the notes list; null once the user is gone. */
   createdByName: z.string().nullable(),
   updatedBy: uuidSchema.nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type ContactNoteResponse = z.infer<typeof contactNoteResponseSchema>;
 
@@ -24,7 +24,7 @@ export type CreateContactNoteInput = z.infer<typeof createContactNoteSchema>;
 
 export const updateContactNoteSchema = z.object({
   body: z.string().min(1).max(10_000),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateContactNoteInput = z.infer<typeof updateContactNoteSchema>;
 

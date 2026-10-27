@@ -9,7 +9,7 @@ export const cmsContactTopicSchema = z.enum(CMS_CONTACT_TOPICS);
 
 export const cmsContactSubmitRequestSchema = z.object({
   name: z.string().trim().min(1).max(120),
-  email: z.string().trim().email().max(190),
+  email: z.string().trim().pipe(z.email().max(190)),
   company: z.string().trim().max(160).nullish(),
   topic: cmsContactTopicSchema.nullish(),
   message: z.string().trim().min(1).max(5000),
@@ -32,8 +32,8 @@ export const cmsContactMessageSchema = z.object({
   ip: z.string().nullable(),
   userAgent: z.string().nullable(),
   isRead: z.boolean(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type CmsContactMessage = z.infer<typeof cmsContactMessageSchema>;
 
@@ -42,7 +42,7 @@ export const cmsContactListQuerySchema = z.object({
   status: z.enum(['unread', 'read']).optional().catch(undefined),
   /** An unknown topic is ignored, like Reference's unknown filter. */
   topic: cmsContactTopicSchema.optional().catch(undefined),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type CmsContactListQuery = z.infer<typeof cmsContactListQuerySchema>;
@@ -50,14 +50,14 @@ export type CmsContactListQuery = z.infer<typeof cmsContactListQuerySchema>;
 export const cmsContactListResponseSchema = z.object({
   data: z.array(cmsContactMessageSchema),
   page: pageInfoSchema,
-  summary: z.object({ total: z.number().int(), unread: z.number().int() }),
+  summary: z.object({ total: z.int(), unread: z.int() }),
 });
 export type CmsContactListResponse = z.infer<typeof cmsContactListResponseSchema>;
 
 export const setCmsContactReadRequestSchema = z.object({ isRead: z.boolean() });
 export type SetCmsContactReadRequest = z.infer<typeof setCmsContactReadRequestSchema>;
 
-export const markAllCmsContactReadResponseSchema = z.object({ updated: z.number().int() });
+export const markAllCmsContactReadResponseSchema = z.object({ updated: z.int() });
 export type MarkAllCmsContactReadResponse = z.infer<typeof markAllCmsContactReadResponseSchema>;
 
 /**

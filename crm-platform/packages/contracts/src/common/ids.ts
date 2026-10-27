@@ -5,7 +5,7 @@ import { z } from 'zod';
  * storage/partitioning detail and must never leave the system — leaking it
  * would expose row counts and invite enumeration.
  */
-export const uuidSchema = z.string().uuid();
+export const uuidSchema = z.guid();
 export type Uuid = z.infer<typeof uuidSchema>;
 
 /** A staff member as a list prints them: the uuid and the name. Null wherever a row has no person (a removed user, a system write). */
@@ -20,6 +20,6 @@ export const phoneSchema = z
   .string()
   .regex(/^\+[1-9]\d{6,14}$/, 'phone must be E.164, e.g. +919876543210');
 
-export const emailSchema = z.string().email().toLowerCase();
+export const emailSchema = z.email().toLowerCase();
 
 export const currencySchema = z.string().length(3).default('INR');

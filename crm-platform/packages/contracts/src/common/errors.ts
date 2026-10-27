@@ -795,7 +795,7 @@ export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 export const problemSchema = z.object({
   type: z.string(),
   title: z.string(),
-  status: z.number().int(),
+  status: z.int(),
   detail: z.string().optional(),
   instance: z.string().optional(),
   code: z.string(),

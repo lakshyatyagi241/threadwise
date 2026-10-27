@@ -1,4 +1,5 @@
-import { z, type ZodTypeAny } from 'zod';
+import type { ZodTypeAny } from 'zod';
+import { arrayBounds, checkKinds, defOf, typeNameOf } from './zod-def';
 
 /**
  * Bad-input generator for the negative sweep (QA task 13).
@@ -20,7 +21,7 @@ type Shape = Record<string, ZodTypeAny>;
 export function unwrap(s: ZodTypeAny): ZodTypeAny {
   let cur = s;
   for (let i = 0; i < 12; i++) {
-    const def = cur._def as {
+    const def = defOf(cur) as {
       typeName?: string;
       innerType?: ZodTypeAny;
       schema?: ZodTypeAny;
@@ -35,6 +36,7 @@ export function unwrap(s: ZodTypeAny): ZodTypeAny {
         cur = def.innerType!;
         continue;
       case 'ZodEffects':
+      case 'ZodPipeline':
         cur = def.schema!;
         continue;
       case 'ZodBranded':
@@ -50,7 +52,7 @@ export function unwrap(s: ZodTypeAny): ZodTypeAny {
 /** The object shape of a schema if it is (an effect around) an object. */
 export function shapeOf(s: ZodTypeAny): Shape | null {
   const u = unwrap(s);
-  return u instanceof z.ZodObject ? (u.shape as Shape) : null;
+  return typeNameOf(u) === 'ZodObject' ? (u.shape as Shape) : null;
 }
 
 const WRONG: Record<string, unknown> = {
@@ -67,31 +69,30 @@ const WRONG: Record<string, unknown> = {
 /** Values for one field that its own schema refuses, labelled. */
 export function badValues(field: ZodTypeAny): Array<{ label: string; value: unknown }> {
   const u = unwrap(field);
-  const typeName = (u._def as { typeName: string }).typeName;
+  const typeName = typeNameOf(u);
   const out: Array<{ label: string; value: unknown }> = [];
   const wrong = WRONG[typeName];
   if (wrong !== undefined) out.push({ label: 'wrong type', value: wrong });
-  if (u instanceof z.ZodString) {
-    if (u.minLength !== null && u.minLength > 0)
+  if (typeName === 'ZodString') {
+    if (u.minLength != null && u.minLength > 0)
       out.push({ label: `shorter than min ${u.minLength}`, value: 'x'.repeat(u.minLength - 1) });
-    if (u.maxLength !== null && u.maxLength < 100_000)
+    if (u.maxLength != null && u.maxLength < 100_000)
       out.push({ label: `longer than max ${u.maxLength}`, value: 'x'.repeat(u.maxLength + 1) });
     out.push({ label: 'array instead of string', value: ['a'] });
   }
-  if (u instanceof z.ZodNumber) {
-    if (u.minValue !== null) out.push({ label: `below min ${u.minValue}`, value: u.minValue - 1 });
-    if (u.maxValue !== null) out.push({ label: `above max ${u.maxValue}`, value: u.maxValue + 1 });
+  if (typeName === 'ZodNumber') {
+    if (Number.isFinite(u.minValue))
+      out.push({ label: `below min ${u.minValue}`, value: u.minValue - 1 });
+    if (Number.isFinite(u.maxValue))
+      out.push({ label: `above max ${u.maxValue}`, value: u.maxValue + 1 });
     out.push({ label: 'string instead of number', value: 'abc' });
   }
-  if (u instanceof z.ZodArray) {
-    const d = u._def as {
-      minLength: { value: number } | null;
-      maxLength: { value: number } | null;
-    };
-    if (d.maxLength && d.maxLength.value < 10_000)
+  if (typeName === 'ZodArray') {
+    const max = arrayBounds(u).max;
+    if (max !== null && max < 10_000)
       out.push({
-        label: `more than max ${d.maxLength.value} items`,
-        value: Array.from({ length: d.maxLength.value + 1 }, () => 'x'),
+        label: `more than max ${max} items`,
+        value: Array.from({ length: max + 1 }, () => 'x'),
       });
   }
   out.push({ label: 'object instead of scalar', value: { a: 1 } });
@@ -149,45 +150,46 @@ export function schemaOfPipe(pipe: unknown): ZodTypeAny | null {
 export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
   if (depth > 6) return undefined;
   const s = unwrap(schema);
-  const def = s._def as {
+  const def = defOf(s) as {
     typeName: string;
     values?: unknown;
     value?: unknown;
     options?: ZodTypeAny[];
     type?: ZodTypeAny;
   };
-  if (s instanceof z.ZodString) {
-    const kinds = new Set(s._def.checks.map((c) => c.kind));
+  const typeName = typeNameOf(s);
+  if (typeName === 'ZodString') {
+    const kinds = checkKinds(s);
     if (kinds.has('uuid')) return '11111111-1111-4111-8111-111111111111';
     if (kinds.has('email')) return 'negative@example.test';
     if (kinds.has('url')) return 'https://example.test/x';
     if (kinds.has('datetime')) return '2026-01-01T00:00:00.000Z';
     return 'x'.repeat(Math.max(s.minLength ?? 1, 1));
   }
-  if (s instanceof z.ZodNumber)
-    return s.minValue !== null
+  if (typeName === 'ZodNumber')
+    // zod 4 reports an unset bound as an infinity (zod 3 as null): only a finite bound is a real limit.
+    return Number.isFinite(s.minValue)
       ? Math.ceil(s.minValue)
-      : s.maxValue !== null
+      : Number.isFinite(s.maxValue)
         ? Math.min(1, Math.floor(s.maxValue))
         : 1;
-  if (s instanceof z.ZodBoolean) return true;
-  if (s instanceof z.ZodEnum) return (def.values as string[])[0];
-  if (s instanceof z.ZodNativeEnum) return Object.values(def.values as object)[0];
-  if (s instanceof z.ZodLiteral) return def.value;
-  if (s instanceof z.ZodArray) {
-    const min = (s._def as { minLength: { value: number } | null }).minLength?.value ?? 0;
+  if (typeName === 'ZodBoolean') return true;
+  if (typeName === 'ZodEnum') return (def.values as string[])[0];
+  if (typeName === 'ZodLiteral') return def.value;
+  if (typeName === 'ZodArray') {
+    const min = arrayBounds(s).min ?? 0;
     const item = min > 0 ? sampleOf(s.element, depth + 1) : undefined;
     return min > 0 ? Array.from({ length: min }, () => item) : [];
   }
-  if (s instanceof z.ZodUnion || s instanceof z.ZodDiscriminatedUnion) {
+  if (typeName === 'ZodUnion' || typeName === 'ZodDiscriminatedUnion') {
     const options = (def.options as unknown as ZodTypeAny[] | Map<string, ZodTypeAny>) ?? [];
     const first = Array.isArray(options)
       ? options[0]
       : [...(options as Map<string, ZodTypeAny>).values()][0];
     return first ? sampleOf(first, depth + 1) : undefined;
   }
-  if (s instanceof z.ZodRecord) return {};
-  if (s instanceof z.ZodObject) {
+  if (typeName === 'ZodRecord') return {};
+  if (typeName === 'ZodObject') {
     const out: Record<string, unknown> = {};
     for (const [k, f] of Object.entries(s.shape as Shape)) {
       if (f.isOptional()) continue;

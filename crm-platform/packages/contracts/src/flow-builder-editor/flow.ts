@@ -18,8 +18,8 @@ export const flbMaxChars =
   (value: string, ctx: z.RefinementCtx): void => {
     if ([...value].length > max)
       ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        type: 'string',
+        code: 'too_big',
+        origin: 'string',
         maximum: max,
         inclusive: true,
         message: `String must contain at most ${max} character(s)`,
@@ -53,10 +53,10 @@ export function flowState(f: { isPublished: boolean; isActive: boolean }): FlowS
 
 export const flowGraphInputSchema = z.object({
   flowNodes: z
-    .array(z.record(z.unknown()))
+    .array(z.record(z.string(), z.unknown()))
     .max(FLB_MAX_FLOW_NODES, `A flow can hold at most ${FLB_MAX_FLOW_NODES} nodes.`),
-  flowEdges: z.array(z.record(z.unknown())).max(FLB_MAX_FLOW_EDGES).default([]),
-  vars: z.array(z.record(z.unknown())).default([]),
+  flowEdges: z.array(z.record(z.string(), z.unknown())).max(FLB_MAX_FLOW_EDGES).default([]),
+  vars: z.array(z.record(z.string(), z.unknown())).default([]),
 });
 export type FlowGraphInput = z.infer<typeof flowGraphInputSchema>;
 
@@ -65,7 +65,7 @@ const nodeSchema = z.object({
   type: z.string(),
   x: z.number(),
   y: z.number(),
-  data: z.record(z.unknown()),
+  data: z.record(z.string(), z.unknown()),
   isStart: z.boolean().optional(),
 });
 const edgeSchema = z.object({
@@ -85,9 +85,9 @@ export const flowGraphSchema = z.object({
 // --- list --------------------------------------------------------------------------------------------------------
 
 export const flowSubscriberCountsSchema = z.object({
-  active: z.number().int(),
-  completed: z.number().int(),
-  failed: z.number().int(),
+  active: z.int(),
+  completed: z.int(),
+  failed: z.int(),
 });
 
 export const flowSummarySchema = z.object({
@@ -100,13 +100,13 @@ export const flowSummarySchema = z.object({
   isPublished: z.boolean(),
   isActive: z.boolean(),
   triggerKind: z.string(),
-  nodeCount: z.number().int(),
-  edgeCount: z.number().int(),
+  nodeCount: z.int(),
+  edgeCount: z.int(),
   subscribers: flowSubscriberCountsSchema,
-  publishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  publishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type FlowSummary = z.infer<typeof flowSummarySchema>;
 
@@ -114,12 +114,12 @@ export const listFlowsQuerySchema = z.object({
   status: flowStatusFilterSchema.default('all'),
   category: z.string().max(FLOW_CATEGORY_MAX).default('all'),
   q: z.string().trim().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(FLOW_PAGE_SIZE),
+  limit: z.coerce.number().int().min(1).max(100).prefault(FLOW_PAGE_SIZE),
   cursor: z.string().min(1).max(512).optional(),
   includeTotal: z
     .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
     .transform((v) => v === true || v === 'true' || v === '1')
-    .default(false),
+    .prefault(false),
 });
 export type ListFlowsQuery = z.infer<typeof listFlowsQuerySchema>;
 
@@ -127,13 +127,13 @@ export const listFlowsResponseSchema = z.object({
   data: z.array(flowSummarySchema),
   page: pageInfoSchema,
   /** The filtered total, present when `includeTotal` was asked for. */
-  total: z.number().int().optional(),
+  total: z.int().optional(),
 });
 export type ListFlowsResponse = z.infer<typeof listFlowsResponseSchema>;
 
 export const flowFeaturedSchema = flowSummarySchema.extend({
-  steps: z.number().int(),
-  messages: z.number().int(),
+  steps: z.int(),
+  messages: z.int(),
   waitMinutes: z.number(),
   /** The first four nodes with a type, for the card's mini preview: the type styles the row, the label is Reference's text for it. */
   preview: z.array(z.object({ type: z.string(), label: z.string() })),
@@ -146,20 +146,20 @@ export const flowTemplateCardSchema = z.object({
   description: z.string().nullable(),
   flowType: flowTypeSchema,
   category: z.string().nullable(),
-  steps: z.number().int(),
+  steps: z.int(),
 });
 export type FlowTemplateCard = z.infer<typeof flowTemplateCardSchema>;
 
 /** KPI tiles, the library rail, the status rail, the featured card and the template gallery: everything filter-independent. */
 export const flowsOverviewSchema = z.object({
   statusCounts: z.object({
-    all: z.number().int(),
-    live: z.number().int(),
-    paused: z.number().int(),
-    draft: z.number().int(),
+    all: z.int(),
+    live: z.int(),
+    paused: z.int(),
+    draft: z.int(),
   }),
   /** Counts by `COALESCE(category, 'uncategorized')`, plus `all`. */
-  categoryCounts: z.record(z.number().int()),
+  categoryCounts: z.record(z.string(), z.int()),
   featured: flowFeaturedSchema.nullable(),
   templates: z.array(flowTemplateCardSchema),
   /** The builder this workspace uses: its own override, else the platform default (Admin > Platform settings > Flow builder). */
@@ -197,7 +197,7 @@ export const saveFlowRequestSchema = z.object({
 export type SaveFlowRequest = z.infer<typeof saveFlowRequestSchema>;
 
 export const updateFlowRequestSchema = saveFlowRequestSchema.extend({
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
 });
 export type UpdateFlowRequest = z.infer<typeof updateFlowRequestSchema>;
 
@@ -213,7 +213,7 @@ export type ToggleFlowResponse = z.infer<typeof toggleFlowResponseSchema>;
 
 export const importFlowRequestSchema = z.object({
   /** The parsed JSON of an export file, or a bare `{ flowNodes, flowEdges, vars }` graph. */
-  payload: z.record(z.unknown()),
+  payload: z.record(z.string(), z.unknown()),
 });
 export type ImportFlowRequest = z.infer<typeof importFlowRequestSchema>;
 
@@ -247,8 +247,8 @@ export const flowTemplateOptionSchema = z.object({
   footer: z.string().nullable(),
   attachmentType: z.string().nullable(),
   attachmentFile: z.string().nullable(),
-  buttons: z.array(z.record(z.unknown())),
-  carousel: z.array(z.record(z.unknown())),
+  buttons: z.array(z.record(z.string(), z.unknown())),
+  carousel: z.array(z.record(z.string(), z.unknown())),
   /** What fills each placeholder of the header and body when the template goes out: the contact detail (or flow variable) it reads. */
   variables: z
     .array(z.object({ section: z.enum(['header', 'body']), slot: z.string(), field: z.string() }))
@@ -316,7 +316,7 @@ export const flbBuilderContextSchema = z.object({
       status: z.string().nullable(),
       /** The agent's own model: an agent setup of the AI step answers with it. */
       model: z.string().nullable().optional(),
-      sources: z.number().int(),
+      sources: z.int(),
     }),
   ),
   callAssistants: z.array(z.object({ id: uuidSchema, name: z.string() })),
@@ -325,7 +325,7 @@ export const flbBuilderContextSchema = z.object({
     z.object({
       id: uuidSchema,
       name: z.string(),
-      duration: z.number().int().nullable(),
+      duration: z.int().nullable(),
       active: z.boolean(),
     }),
   ),
@@ -350,7 +350,7 @@ export const flbCommerceProductsQuerySchema = z.object({
   provider: z.enum(FLB_COMMERCE_PROVIDERS),
   storeId: uuidSchema.optional(),
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
 });
 export type FlbCommerceProductsQuery = z.infer<typeof flbCommerceProductsQuerySchema>;
 
@@ -362,7 +362,7 @@ export const flbCommerceProductSchema = z.object({
   name: z.string(),
   sku: z.string().nullable(),
   image: z.string().nullable(),
-  priceMinor: z.number().int().nullable(),
+  priceMinor: z.int().nullable(),
   currency: z.string().nullable(),
   /** The product page (the "View" link). */
   url: z.string().nullable(),
@@ -397,17 +397,17 @@ export const flbTestWebhookRequestSchema = z.object({
   headers: z
     .array(z.object({ key: z.string().optional(), value: z.string().optional() }))
     .nullish(),
-  vars: z.record(z.unknown()).nullish(),
+  vars: z.record(z.string(), z.unknown()).nullish(),
 });
 export type FlbTestWebhookRequest = z.infer<typeof flbTestWebhookRequestSchema>;
 
 export const flbTestWebhookResponseSchema = z.union([
   z.object({
     ok: z.literal(true),
-    status: z.number().int(),
+    status: z.int(),
     success: z.boolean(),
     response: z.string(),
-    json: z.record(z.unknown()).nullable().optional(),
+    json: z.record(z.string(), z.unknown()).nullable().optional(),
   }),
   z.object({ ok: z.literal(false), error: z.string() }),
 ]);
@@ -442,18 +442,18 @@ export const adminFlowTemplateSchema = z.object({
   description: z.string().nullable(),
   flowType: flowTypeSchema,
   category: z.string().nullable(),
-  steps: z.number().int(),
-  cloneCount: z.number().int(),
-  sortOrder: z.number().int(),
+  steps: z.int(),
+  cloneCount: z.int(),
+  sortOrder: z.int(),
   isActive: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type AdminFlowTemplate = z.infer<typeof adminFlowTemplateSchema>;
 
 export const listAdminFlowTemplatesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(FLB_TEMPLATE_PAGE_SIZE),
+  limit: z.coerce.number().int().min(1).max(100).prefault(FLB_TEMPLATE_PAGE_SIZE),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListAdminFlowTemplatesQuery = z.infer<typeof listAdminFlowTemplatesQuerySchema>;
@@ -461,7 +461,7 @@ export type ListAdminFlowTemplatesQuery = z.infer<typeof listAdminFlowTemplatesQ
 export const adminFlowTemplatesResponseSchema = z.object({
   data: z.array(adminFlowTemplateSchema),
   page: pageInfoSchema,
-  stats: z.object({ total: z.number().int(), visible: z.number().int(), cloned: z.number().int() }),
+  stats: z.object({ total: z.int(), visible: z.int(), cloned: z.int() }),
 });
 export type AdminFlowTemplatesResponse = z.infer<typeof adminFlowTemplatesResponseSchema>;
 
@@ -470,9 +470,9 @@ export type AdminFlowTemplatesResponse = z.infer<typeof adminFlowTemplatesRespon
  * without ids or positions included); it is normalised only when a tenant clones it. So the detail's graph is the loose shape.
  */
 export const adminFlowTemplateGraphSchema = z.object({
-  flowNodes: z.array(z.record(z.unknown())),
-  flowEdges: z.array(z.record(z.unknown())),
-  vars: z.array(z.record(z.unknown())),
+  flowNodes: z.array(z.record(z.string(), z.unknown())),
+  flowEdges: z.array(z.record(z.string(), z.unknown())),
+  vars: z.array(z.record(z.string(), z.unknown())),
 });
 export const adminFlowTemplateDetailSchema = adminFlowTemplateSchema.extend({
   graph: adminFlowTemplateGraphSchema,
@@ -485,18 +485,18 @@ export const adminFlowTemplateFieldsSchema = z.object({
   description: z.string().trim().superRefine(flbMaxChars(1000)).nullish(),
   flowType: z.enum(FLB_TEMPLATE_FLOW_TYPES),
   category: z.string().trim().superRefine(flbMaxChars(64)).nullish(),
-  sortOrder: z.coerce.number().int().min(0).max(9999).default(0),
+  sortOrder: z.coerce.number().int().min(0).max(9999).prefault(0),
   isActive: z.boolean().default(true),
 });
 export const createAdminFlowTemplateSchema = adminFlowTemplateFieldsSchema.extend({
   /** An export wrapper or a bare graph (the uploaded file or the pasted JSON, already parsed). */
-  payload: z.record(z.unknown()).optional(),
+  payload: z.record(z.string(), z.unknown()).optional(),
   /** Or the uuid of an existing flow to clone (any workspace, as Reference's clone-by-id). */
   sourceFlowId: uuidSchema.optional(),
 });
 export type CreateAdminFlowTemplateInput = z.infer<typeof createAdminFlowTemplateSchema>;
 export const updateAdminFlowTemplateSchema = createAdminFlowTemplateSchema.extend({
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
 });
 export type UpdateAdminFlowTemplateInput = z.infer<typeof updateAdminFlowTemplateSchema>;
 

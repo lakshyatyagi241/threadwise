@@ -22,39 +22,39 @@ export const DEPLOYMENT_LIST_MAX = 500;
 
 export const deploymentsQuerySchema = z.object({
   status: deploymentStatusSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(DEPLOYMENT_LIST_MAX).default(200),
+  limit: z.coerce.number().int().min(1).max(DEPLOYMENT_LIST_MAX).prefault(200),
 });
 export type DeploymentsQuery = z.infer<typeof deploymentsQuerySchema>;
 
 export const deploymentRowSchema = z.object({
   /** The publish-sync record's uuid. */
-  id: z.string().uuid(),
-  workspaceId: z.string().uuid(),
+  id: z.guid(),
+  workspaceId: z.guid(),
   workspaceName: z.string(),
-  flowId: z.string().uuid(),
+  flowId: z.guid(),
   flowName: z.string(),
-  publishVersion: z.number().int().nonnegative(),
+  publishVersion: z.int().nonnegative(),
   status: deploymentStatusSchema,
   step: getaPublishStepSchema.nullable(),
   failedStep: getaPublishStepSchema.nullable(),
   lastError: z.string().nullable(),
-  attemptedAt: z.string().datetime().nullable(),
-  updatedAt: z.string().datetime(),
+  attemptedAt: z.iso.datetime().nullable(),
+  updatedAt: z.iso.datetime(),
   stalled: z.boolean(),
 });
 export type DeploymentRow = z.infer<typeof deploymentRowSchema>;
 
 export const deploymentCountsSchema = z.object({
-  running: z.number().int().nonnegative(),
-  queued: z.number().int().nonnegative(),
-  failed: z.number().int().nonnegative(),
-  live: z.number().int().nonnegative(),
-  stalled: z.number().int().nonnegative(),
+  running: z.int().nonnegative(),
+  queued: z.int().nonnegative(),
+  failed: z.int().nonnegative(),
+  live: z.int().nonnegative(),
+  stalled: z.int().nonnegative(),
 });
 export type DeploymentCounts = z.infer<typeof deploymentCountsSchema>;
 
 export const deploymentsResponseSchema = z.object({
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   /** Totals over every deployment, whatever the status filter. */
   counts: deploymentCountsSchema,
   /** Running first, then queued, failed and live; newest change first inside a status. */
@@ -78,36 +78,36 @@ export const PUBLISH_DONE_WINDOW_DAYS = 30;
 
 export const publishesQuerySchema = z.object({
   status: publishStatusSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(DEPLOYMENT_LIST_MAX).default(200),
+  limit: z.coerce.number().int().min(1).max(DEPLOYMENT_LIST_MAX).prefault(200),
 });
 export type PublishesQuery = z.infer<typeof publishesQuerySchema>;
 
 export const publishRowSchema = z.object({
-  workspaceId: z.string().uuid(),
+  workspaceId: z.guid(),
   workspaceName: z.string(),
-  flowId: z.string().uuid(),
+  flowId: z.guid(),
   flowName: z.string(),
   status: publishStatusSchema,
   /** Delivery attempts the worker has made so far (0 while it has not started). */
-  attempts: z.number().int().nonnegative(),
+  attempts: z.int().nonnegative(),
   lastError: z.string().nullable(),
-  queuedAt: z.string().datetime(),
-  processedAt: z.string().datetime().nullable(),
+  queuedAt: z.iso.datetime(),
+  processedAt: z.iso.datetime().nullable(),
   stalled: z.boolean(),
 });
 export type PublishRow = z.infer<typeof publishRowSchema>;
 
 export const publishCountsSchema = z.object({
-  running: z.number().int().nonnegative(),
-  queued: z.number().int().nonnegative(),
-  failed: z.number().int().nonnegative(),
-  done: z.number().int().nonnegative(),
-  stalled: z.number().int().nonnegative(),
+  running: z.int().nonnegative(),
+  queued: z.int().nonnegative(),
+  failed: z.int().nonnegative(),
+  done: z.int().nonnegative(),
+  stalled: z.int().nonnegative(),
 });
 export type PublishCounts = z.infer<typeof publishCountsSchema>;
 
 export const publishesResponseSchema = z.object({
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   counts: publishCountsSchema,
   rows: z.array(publishRowSchema),
   truncated: z.boolean(),
@@ -138,28 +138,28 @@ export const RELEASE_CHANGE_BODY_MAX_CHARS = 800;
 
 /** One pull request a release carries, as the build server read it from the git history (`pr` is null for a commit not made from a PR). */
 export const releaseChangeSchema = z.object({
-  pr: z.number().int().positive().nullable(),
+  pr: z.int().positive().nullable(),
   title: z.string().max(200),
   author: z.string().max(100),
   /** What the PR changes, as its author wrote it (cut to `RELEASE_CHANGE_BODY_MAX_CHARS`); null when not known. */
   body: z.string().max(RELEASE_CHANGE_BODY_MAX_CHARS).nullable().default(null),
   /** When the PR was raised (UTC; the console shows it in Indian time). Null when the build server could not read it from GitHub. */
-  createdAt: z.string().datetime().nullable().default(null),
+  createdAt: z.iso.datetime().nullable().default(null),
 });
 export type ReleaseChange = z.infer<typeof releaseChangeSchema>;
 export const RELEASE_CHANGES_MAX = 20;
 
 export const releaseRowSchema = z.object({
   /** The attempt id (uuid), shared by the build's steps and the release's steps. */
-  id: z.string().uuid(),
+  id: z.guid(),
   tag: z.string(),
   state: releaseStateSchema,
   /** The step in progress or the one that ended the attempt (`build`, `ship`, `start`, `dump`, `schema`, `idle`, `switch`, `worker`, `commit`). */
   step: z.string().nullable(),
   error: z.string().nullable(),
-  startedAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  finishedAt: z.string().datetime().nullable(),
+  startedAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  finishedAt: z.iso.datetime().nullable(),
   stalled: z.boolean(),
   /** What the release carries: the pull requests merged since the previous release, newest first. Empty for releases recorded before this was kept. */
   changes: z.array(releaseChangeSchema).max(RELEASE_CHANGES_MAX),
@@ -167,9 +167,9 @@ export const releaseRowSchema = z.object({
 export type ReleaseRow = z.infer<typeof releaseRowSchema>;
 
 export const releasesResponseSchema = z.object({
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   /** The most recent release that is live (state `ok`), or null before the first one. */
-  live: z.object({ tag: z.string(), finishedAt: z.string().datetime() }).nullable(),
+  live: z.object({ tag: z.string(), finishedAt: z.iso.datetime() }).nullable(),
   /** Some attempt is building, shipping or releasing right now. */
   inProgress: z.boolean(),
   /** The newest attempts first, at most `RELEASE_LIST_MAX`. */

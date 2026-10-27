@@ -14,7 +14,7 @@ export const fbAudienceMemberSchema = z.object({
   psid: z.string(),
   title: z.string(),
   /** When they last wrote: the 24 hours run from here. */
-  lastInboundAt: z.string().datetime(),
+  lastInboundAt: z.iso.datetime(),
 });
 export type FbAudienceMember = z.infer<typeof fbAudienceMemberSchema>;
 
@@ -58,19 +58,19 @@ export const fbBroadcastSchema = z.object({
   pageName: z.string().nullable(),
   templateId: uuidSchema.nullable(),
   status: z.enum(FB_BROADCAST_STATUSES),
-  total: z.number().int(),
-  sent: z.number().int(),
-  failed: z.number().int(),
-  blocked: z.number().int(),
+  total: z.int(),
+  sent: z.int(),
+  failed: z.int(),
+  blocked: z.int(),
   /** Whole percent; blocked counts as done (nothing more can be done for them). */
-  progress: z.number().int(),
+  progress: z.int(),
   /** BL-191: people held for the workspace's quiet hours (still pending), and the first instant one of them may be messaged. */
-  held: z.number().int(),
-  heldUntil: z.string().datetime().nullable(),
+  held: z.int(),
+  heldUntil: z.iso.datetime().nullable(),
   lastError: z.string().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type FbBroadcast = z.infer<typeof fbBroadcastSchema>;
 
@@ -78,15 +78,15 @@ export const fbBroadcastListSchema = z.object({
   data: z.array(fbBroadcastSchema),
   /** Across every broadcast of the workspace, not only the 50 listed. */
   stats: z.object({
-    total: z.number().int(),
-    sent: z.number().int(),
-    failed: z.number().int(),
-    blocked: z.number().int(),
-    audience: z.number().int(),
-    sending: z.number().int(),
+    total: z.int(),
+    sent: z.int(),
+    failed: z.int(),
+    blocked: z.int(),
+    audience: z.int(),
+    sending: z.int(),
   }),
 });
 export type FbBroadcastList = z.infer<typeof fbBroadcastListSchema>;
 
-export const retryFbBroadcastResponseSchema = z.object({ retried: z.number().int() });
+export const retryFbBroadcastResponseSchema = z.object({ retried: z.int() });
 export type RetryFbBroadcastResponse = z.infer<typeof retryFbBroadcastResponseSchema>;

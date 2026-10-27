@@ -200,6 +200,7 @@ function Exports() {
           <thead className="border-b border-border bg-muted/50">
             <tr>
               <th className={TH}>{t('when')}</th>
+              <th className={TH}>{t('exports.source')}</th>
               <th className={TH}>{t('exports.by')}</th>
               <th className={cn(TH, 'text-end')}>{t('exports.rows')}</th>
               <th className={TH}>{t('exports.selection')}</th>
@@ -212,6 +213,7 @@ function Exports() {
                 <td className={cn(TD, 'whitespace-nowrap tabular-nums')}>
                   {formatDateTime(e.at, locale, timeZone)}
                 </td>
+                <td className={TD}>{t(`exports.sources.${e.source}`)}</td>
                 <td className={TD}>{e.by ?? t('exports.unknown')}</td>
                 <td className={cn(TD, 'text-end tabular-nums')}>{e.rows}</td>
                 <td className={TD}>{t(`exports.selections.${e.selection}`)}</td>

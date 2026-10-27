@@ -120,11 +120,10 @@ export function headerTemplateProblems(templates: Readonly<Record<string, unknow
 
 /** Zod form: the object, lower-casing the names, refusing anything `headerTemplateProblems` lists. */
 export const headerTemplatesSchema = z
-  .record(z.string())
+  .record(z.string(), z.string())
   .transform((v) => Object.fromEntries(Object.entries(v).map(([k, val]) => [k.toLowerCase(), val])))
   .superRefine((v, ctx) => {
-    for (const message of headerTemplateProblems(v))
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+    for (const message of headerTemplateProblems(v)) ctx.addIssue({ code: 'custom', message });
   });
 
 export type HeaderTemplates = Record<string, string>;

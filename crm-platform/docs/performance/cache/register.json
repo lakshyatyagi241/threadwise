@@ -3344,6 +3344,12 @@
     "modules/auth/security/account-attack.service.ts": "SADD followed by EXPIRE in the same try block; the set is trimmed by SPOP above MAX_KNOWN_NETWORKS."
   },
   "inProcessFields": {
+    "common/agent-status.ts#OFFSET_FORMATTERS": {
+      "allow": "Keyed by IANA time zone name. An unknown zone throws before it is cached, so the size is bounded by the valid zones (a fixed list of a few hundred), not by the keys seen over time."
+    },
+    "common/business-hours.ts#FORMATTERS": {
+      "allow": "Keyed by IANA time zone name. An unknown zone throws before it is cached, so the size is bounded by the valid zones (a fixed list of a few hundred), not by the keys seen over time."
+    },
     "common/cache/ttl-cache.ts#loading": {
       "allow": "In-flight loads only: an entry is added when a load starts and removed in finally() when it settles, so the size is the number of loads running at once, which follows the request concurrency, not the keys seen over time."
     },

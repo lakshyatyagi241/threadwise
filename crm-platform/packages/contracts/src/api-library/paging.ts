@@ -11,21 +11,21 @@ export const API_LIBRARY_PAGE_SIZES = [10, 25, 50, 100] as const;
  */
 export const numberedPageInfoSchema = pageInfoSchema.extend({
   /** Rows matching the filters (every page). */
-  total: z.number().int().min(0).optional(),
+  total: z.int().min(0).optional(),
   /** The page returned (1-based). */
-  page: z.number().int().min(1).optional(),
-  pageSize: z.number().int().min(1).optional(),
+  page: z.int().min(1).optional(),
+  pageSize: z.int().min(1).optional(),
   /** ceil(total / pageSize), at least 1. */
-  totalPages: z.number().int().min(1).optional(),
+  totalPages: z.int().min(1).optional(),
 });
 export type NumberedPageInfo = z.infer<typeof numberedPageInfoSchema>;
 
-export function numberedPageResponseSchema<T extends z.ZodTypeAny>(item: T) {
+export function numberedPageResponseSchema<T extends z.ZodType>(item: T) {
   return z.object({
     data: z.array(item),
     page: numberedPageInfoSchema,
-    total: z.number().int().min(0).optional(),
-    pageSize: z.number().int().min(1).optional(),
-    totalPages: z.number().int().min(1).optional(),
+    total: z.int().min(0).optional(),
+    pageSize: z.int().min(1).optional(),
+    totalPages: z.int().min(1).optional(),
   });
 }

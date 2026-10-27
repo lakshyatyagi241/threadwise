@@ -47,16 +47,16 @@ const createScheduleBase = z.object({
   /** An IANA zone such as `Asia/Kolkata`. */
   timezone: z.string().trim().min(1).max(64),
   repeatInterval: z.enum(REPEAT_INTERVALS).optional(),
-  repeatEvery: z.number().int().min(1).max(365).optional(),
+  repeatEvery: z.int().min(1).max(365).optional(),
   /** 0 Sunday to 6 Saturday. Required for a weekly schedule. */
-  daysOfWeek: z.array(z.number().int().min(0).max(6)).max(7).optional(),
+  daysOfWeek: z.array(z.int().min(0).max(6)).max(7).optional(),
   endDate: dateOnly.optional(),
   /** Sender keys `<engine>:<uuid>`. Two or more split the audience between them (TW-SCHED-005). */
   senders: z.array(z.string().trim().min(1).max(80)).min(1).max(20),
   messageType: z.enum(MESSAGE_TYPES),
   message: z.string().max(4096).optional(),
   templateId: uuidSchema.optional(),
-  templateOverrides: z.record(z.unknown()).optional(),
+  templateOverrides: z.record(z.string(), z.unknown()).optional(),
   /** A link (https://...) to the file to send. */
   media: z.string().trim().max(512).optional(),
   /** A file uploaded to this workspace (`POST /scheduled/media`); wins over `media`. */
@@ -99,15 +99,15 @@ export type CreateScheduleInput = z.infer<typeof createScheduleInputSchema>;
  * means that part (message, audience) is given whole. `rowVersion` is the version the person opened: a stale one is a 409.
  */
 export const updateScheduleInputSchema = z.object({
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
   name: z.string().trim().min(1).max(255).optional(),
   scheduleType: z.enum(SCHEDULE_TYPES).optional(),
   sendDate: dateOnly.optional(),
   sendTime: timeOfDay.optional(),
   timezone: z.string().trim().min(1).max(64).optional(),
   repeatInterval: z.enum(REPEAT_INTERVALS).nullable().optional(),
-  repeatEvery: z.number().int().min(1).max(365).optional(),
-  daysOfWeek: z.array(z.number().int().min(0).max(6)).max(7).optional(),
+  repeatEvery: z.int().min(1).max(365).optional(),
+  daysOfWeek: z.array(z.int().min(0).max(6)).max(7).optional(),
   /** `null` removes the end date. */
   endDate: dateOnly.nullable().optional(),
   /** The sender key `<engine>:<uuid>`; changing it moves the schedule to that number. */
@@ -115,7 +115,7 @@ export const updateScheduleInputSchema = z.object({
   messageType: z.enum(MESSAGE_TYPES).optional(),
   message: z.string().max(4096).optional(),
   templateId: uuidSchema.optional(),
-  templateOverrides: z.record(z.unknown()).optional(),
+  templateOverrides: z.record(z.string(), z.unknown()).optional(),
   media: z.string().trim().max(512).optional(),
   mediaId: uuidSchema.optional(),
   latitude: z.number().min(-90).max(90).optional(),
@@ -147,19 +147,19 @@ export const scheduleSummarySchema = z.object({
   messageType: z.string(),
   senderLabel: z.string().nullable(),
   provider: z.string().nullable(),
-  scheduledAt: z.string().datetime(),
-  nextRunAt: z.string().datetime().nullable(),
-  lastRunAt: z.string().datetime().nullable(),
+  scheduledAt: z.iso.datetime(),
+  nextRunAt: z.iso.datetime().nullable(),
+  lastRunAt: z.iso.datetime().nullable(),
   timezone: z.string(),
   repeatInterval: z.string().nullable(),
-  totalRecipients: z.number().int(),
-  totalSent: z.number().int(),
-  totalDelivered: z.number().int(),
-  totalFailed: z.number().int(),
+  totalRecipients: z.int(),
+  totalSent: z.int(),
+  totalDelivered: z.int(),
+  totalFailed: z.int(),
   lastError: z.string().nullable(),
   /** Where it came from: `manual` (the composer) or a producer such as `cart_recovery` or `appointment_reminder`. */
   source: z.string().optional(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type ScheduleSummary = z.infer<typeof scheduleSummarySchema>;
 
@@ -176,21 +176,21 @@ export type ScheduleTab = z.infer<typeof scheduleTabSchema>;
 export const listSchedulesQuerySchema = z.object({
   tab: scheduleTabSchema.default('all'),
   q: z.string().trim().max(100).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
-  offset: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
+  offset: z.coerce.number().int().min(0).prefault(0),
 });
 export type ListSchedulesQuery = z.infer<typeof listSchedulesQuerySchema>;
 
 export const scheduleListSchema = z.object({
   items: z.array(scheduleSummarySchema),
-  total: z.number().int(),
+  total: z.int(),
   stats: z.object({
-    all: z.number().int(),
-    upcoming: z.number().int(),
-    running: z.number().int(),
-    paused: z.number().int(),
-    completed: z.number().int(),
-    failed: z.number().int(),
+    all: z.int(),
+    upcoming: z.int(),
+    running: z.int(),
+    paused: z.int(),
+    completed: z.int(),
+    failed: z.int(),
   }),
   /** The next schedule to fire, for the "up next" strip. */
   upNext: scheduleSummarySchema.nullable(),
@@ -202,11 +202,11 @@ export const scheduleRecipientSchema = z.object({
   contactName: z.string().nullable(),
   status: z.enum(['pending', 'processing', 'sent', 'delivered', 'read', 'failed']),
   error: z.string().nullable(),
-  sentAt: z.string().datetime().nullable(),
-  deliveredAt: z.string().datetime().nullable(),
-  readAt: z.string().datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
+  deliveredAt: z.iso.datetime().nullable(),
+  readAt: z.iso.datetime().nullable(),
   /** While the recipient waits for the workspace's quiet hours to end (BL-177): when it may go and why. Null otherwise. */
-  heldUntil: z.string().datetime().nullable().optional(),
+  heldUntil: z.iso.datetime().nullable().optional(),
   heldReason: sendHoldReasonSchema.nullable().optional(),
 });
 
@@ -215,15 +215,15 @@ export const scheduleDetailSchema = scheduleSummarySchema.extend({
   media: z.string().nullable(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
-  repeatEvery: z.number().int(),
-  daysOfWeek: z.array(z.number().int()),
+  repeatEvery: z.int(),
+  daysOfWeek: z.array(z.int()),
   endDate: z.string().nullable(),
   sendDate: z.string(),
   sendTime: z.string(),
   failureReason: z.string().nullable(),
-  sendAttempts: z.number().int(),
+  sendAttempts: z.int(),
   /** Counts by recipient status, from the recipient rows. */
-  breakdown: z.record(z.number().int()),
+  breakdown: z.record(z.string(), z.int()),
   recipients: z.array(scheduleRecipientSchema),
   recipientsTruncated: z.boolean(),
   /** The template, when the message is one. */
@@ -257,19 +257,19 @@ export const scheduleOptionsSchema = z.object({
       warming: z.boolean(),
     }),
   ),
-  groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.number().int() })),
-  tags: z.array(z.object({ id: uuidSchema, name: z.string(), contacts: z.number().int() })),
+  groups: z.array(z.object({ id: uuidSchema, name: z.string(), members: z.int() })),
+  tags: z.array(z.object({ id: uuidSchema, name: z.string(), contacts: z.int() })),
   /** Earlier sends that can be the recipients: broadcasts and campaigns (a campaign's id is a campaign uuid). */
   queues: z.array(
     z.object({
       id: uuidSchema,
       name: z.string(),
-      recipients: z.number().int(),
+      recipients: z.int(),
       kind: z.enum(['broadcast', 'campaign']).default('broadcast'),
     }),
   ),
   templates: z.array(scheduleTemplateSchema),
-  minLeadMinutes: z.number().int(),
+  minLeadMinutes: z.int(),
 });
 export type ScheduleOptions = z.infer<typeof scheduleOptionsSchema>;
 
@@ -282,8 +282,8 @@ export const previewAudienceInputSchema = createScheduleBase.pick({
   numbers: true,
 });
 export const audiencePreviewSchema = z.object({
-  total: z.number().int(),
-  optedOut: z.number().int(),
+  total: z.int(),
+  optedOut: z.int(),
   sample: z.array(z.string()),
 });
 export type AudiencePreview = z.infer<typeof audiencePreviewSchema>;
@@ -291,8 +291,8 @@ export type AudiencePreview = z.infer<typeof audiencePreviewSchema>;
 export const createScheduleResultSchema = z.object({
   /** One id per sender when the audience was split. */
   ids: z.array(uuidSchema),
-  sendersCount: z.number().int(),
-  totalRecipients: z.number().int(),
+  sendersCount: z.int(),
+  totalRecipients: z.int(),
   message: z.string(),
   testSent: z.boolean().nullable(),
   testError: z.string().nullable(),
@@ -307,21 +307,21 @@ export type CreateScheduleResult = z.infer<typeof createScheduleResultSchema>;
  */
 export const scheduleDraftSchema = z.object({
   id: uuidSchema,
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   name: z.string(),
   scheduleType: z.enum(SCHEDULE_TYPES),
   sendDate: z.string(),
   sendTime: z.string(),
   timezone: z.string(),
   repeatInterval: z.enum(REPEAT_INTERVALS).nullable(),
-  repeatEvery: z.number().int(),
-  daysOfWeek: z.array(z.number().int()),
+  repeatEvery: z.int(),
+  daysOfWeek: z.array(z.int()),
   endDate: z.string().nullable(),
   sender: z.string().nullable(),
   messageType: z.enum(MESSAGE_TYPES),
   message: z.string(),
   templateId: uuidSchema.nullable(),
-  templateOverrides: z.record(z.unknown()).nullable(),
+  templateOverrides: z.record(z.string(), z.unknown()).nullable(),
   /** A pasted link; null when the file was uploaded. */
   media: z.string().nullable(),
   mediaFile: scheduleMediaSchema.nullable(),
@@ -332,7 +332,7 @@ export const scheduleDraftSchema = z.object({
   tagIds: z.array(uuidSchema),
   queueIds: z.array(uuidSchema),
   numbers: z.array(z.string()),
-  totalRecipients: z.number().int(),
+  totalRecipients: z.int(),
 });
 export type ScheduleDraft = z.infer<typeof scheduleDraftSchema>;
 
@@ -342,36 +342,36 @@ export const listScheduleRecipientsQuerySchema = z.object({
   /** `sent` is reached the provider and nothing more yet; `delivered` and `read` are their own steps. */
   status: z.enum(RECIPIENT_FILTERS).default('all'),
   q: z.string().trim().max(100).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
-  offset: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
+  offset: z.coerce.number().int().min(0).prefault(0),
 });
 export type ListScheduleRecipientsQuery = z.infer<typeof listScheduleRecipientsQuerySchema>;
 
 export const scheduleRecipientListSchema = z.object({
   items: z.array(scheduleRecipientSchema),
   /** Rows matching the filter and the search. */
-  total: z.number().int(),
+  total: z.int(),
   /**
    * Counts by status over the whole schedule, ignoring the search, for the filter chips. The key `held` counts the pending recipients
    * waiting for the end of the quiet hours (BL-177); it is not a status.
    */
-  counts: z.record(z.number().int()),
+  counts: z.record(z.string(), z.int()),
 });
 export type ScheduleRecipientList = z.infer<typeof scheduleRecipientListSchema>;
 
 /** One step of the delivery funnel over time. Every number is cumulative at `at` (the start of the bucket). */
 export const scheduleFunnelPointSchema = z.object({
-  at: z.string().datetime(),
-  queued: z.number().int(),
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  failed: z.number().int(),
+  at: z.iso.datetime(),
+  queued: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  failed: z.int(),
 });
 
 export const scheduleFunnelSchema = z.object({
   bucket: z.enum(['hour', 'day']),
-  total: z.number().int(),
+  total: z.int(),
   points: z.array(scheduleFunnelPointSchema),
 });
 export type ScheduleFunnel = z.infer<typeof scheduleFunnelSchema>;
@@ -395,19 +395,19 @@ export const WARMER_DEFAULTS = {
 export const warmerProfileInputSchema = z
   .object({
     enabled: z.boolean(),
-    dailyBase: z.number().int().min(1).max(5000),
-    stepPct: z.number().int().min(0).max(200),
-    stepDays: z.number().int().min(1).max(60),
-    maxDaily: z.number().int().min(1).max(100000),
-    gapMin: z.number().int().min(0).max(3600),
-    gapMax: z.number().int().min(0).max(3600),
-    activeStart: z.number().int().min(0).max(23),
-    activeEnd: z.number().int().min(0).max(24),
+    dailyBase: z.int().min(1).max(5000),
+    stepPct: z.int().min(0).max(200),
+    stepDays: z.int().min(1).max(60),
+    maxDaily: z.int().min(1).max(100000),
+    gapMin: z.int().min(0).max(3600),
+    gapMax: z.int().min(0).max(3600),
+    activeStart: z.int().min(0).max(23),
+    activeEnd: z.int().min(0).max(24),
     spintax: z.boolean(),
   })
   .refine((v) => v.maxDaily >= v.dailyBase, {
     path: ['maxDaily'],
-    message: 'The ceiling cannot be below the first day budget.',
+    error: 'The ceiling cannot be below the first day budget.',
   });
 export type WarmerProfileInput = z.infer<typeof warmerProfileInputSchema>;
 
@@ -420,10 +420,10 @@ export const warmerNumberSchema = z.object({
   profile: warmerProfileInputSchema,
   startedAt: z.string().nullable(),
   /** Today's ramped budget, what was sent or reserved today, and what is left. */
-  budget: z.number().int(),
-  sentToday: z.number().int(),
-  remaining: z.number().int(),
-  health: z.number().int().min(0).max(100),
+  budget: z.int(),
+  sentToday: z.int(),
+  remaining: z.int(),
+  health: z.int().min(0).max(100),
 });
 export type WarmerNumber = z.infer<typeof warmerNumberSchema>;
 

@@ -40,11 +40,10 @@ export type SegmentVisibility = z.infer<typeof segmentVisibilitySchema>;
 
 /** Who a `specific` segment is shared with, as ids. The owner never needs to be in it. */
 export const segmentSharedWithInputSchema = z
-  .object({
+  .strictObject({
     userIds: z.array(uuidSchema).max(SEGMENT_SHARE_MAX).default([]),
     teamIds: z.array(uuidSchema).max(SEGMENT_SHARE_MAX).default([]),
   })
-  .strict()
   .refine((v) => v.userIds.length + v.teamIds.length <= SEGMENT_SHARE_MAX, {
     message: `share with at most ${SEGMENT_SHARE_MAX} people and teams`,
     path: ['userIds'],
@@ -60,7 +59,7 @@ export const segmentSharedUserSchema = z.object({
 export const segmentSharedTeamSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  memberCount: z.number().int(),
+  memberCount: z.int(),
 });
 export const segmentSharedWithSchema = z.object({
   users: z.array(segmentSharedUserSchema),
@@ -80,56 +79,52 @@ export const segmentResponseSchema = z.object({
   ownerId: uuidSchema.nullable(),
   ownerName: z.string().nullable(),
   rules: segmentRulesSchema,
-  rulesVersion: z.number().int(),
+  rulesVersion: z.int(),
   /** Members right now, or the last count we have; null when none was computed yet. */
-  memberCount: z.number().int().nullable(),
+  memberCount: z.int().nullable(),
   /** true: the database could not count in time; `memberCount` is the last known or an estimate. */
   countApproximate: z.boolean(),
   /** When `memberCount` was computed. */
-  memberCountAt: z.string().datetime().nullable(),
+  memberCountAt: z.iso.datetime().nullable(),
   /** Conditions that point at something that was deleted: they match nothing until fixed. */
   invalidConditions: z.array(invalidConditionSchema),
   /** Whether the caller may edit or delete it. */
   canEdit: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
   /** The owner when it was made; null when that user was removed or the segment predates the column. */
   createdBy: personRefSchema.nullable(),
   /** Who made the last change; null until the first change after the column was added. */
   updatedBy: personRefSchema.nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type SegmentResponse = z.infer<typeof segmentResponseSchema>;
 
 const nameSchema = z.string().trim().min(1).max(SEGMENT_NAME_MAX);
 const descriptionSchema = z.string().trim().max(SEGMENT_DESCRIPTION_MAX);
 
-export const createSegmentSchema = z
-  .object({
-    name: nameSchema,
-    description: descriptionSchema.nullish(),
-    color: hexColorSchema.nullish(),
-    visibility: segmentVisibilitySchema.default('private'),
-    /** Required, and not empty, when `visibility` is `specific`. */
-    sharedWith: segmentSharedWithInputSchema.optional(),
-    rules: segmentRulesSchema,
-  })
-  .strict();
+export const createSegmentSchema = z.strictObject({
+  name: nameSchema,
+  description: descriptionSchema.nullish(),
+  color: hexColorSchema.nullish(),
+  visibility: segmentVisibilitySchema.default('private'),
+  /** Required, and not empty, when `visibility` is `specific`. */
+  sharedWith: segmentSharedWithInputSchema.optional(),
+  rules: segmentRulesSchema,
+});
 export type CreateSegmentInput = z.infer<typeof createSegmentSchema>;
 
 /** Absent keeps, null clears (description, colour). */
-export const updateSegmentSchema = z
-  .object({
-    name: nameSchema.optional(),
-    description: descriptionSchema.nullish(),
-    color: hexColorSchema.nullish(),
-    visibility: segmentVisibilitySchema.optional(),
-    /** Absent keeps the people as they are; sent, it replaces the whole list (needs `specific`). */
-    sharedWith: segmentSharedWithInputSchema.optional(),
-    rules: segmentRulesSchema.optional(),
-    rowVersion: z.number().int().positive(),
-  })
-  .strict();
+export const updateSegmentSchema = z.strictObject({
+  name: nameSchema.optional(),
+  description: descriptionSchema.nullish(),
+  color: hexColorSchema.nullish(),
+  visibility: segmentVisibilitySchema.optional(),
+  /** Absent keeps the people as they are; sent, it replaces the whole list (needs `specific`). */
+  sharedWith: segmentSharedWithInputSchema.optional(),
+  rules: segmentRulesSchema.optional(),
+  rowVersion: z.int().positive(),
+});
 export type UpdateSegmentInput = z.infer<typeof updateSegmentSchema>;
 
 export const listSegmentsQuerySchema = paginationQuerySchema.extend({
@@ -141,11 +136,11 @@ export const listSegmentsQuerySchema = paginationQuerySchema.extend({
 export type ListSegmentsQuery = z.infer<typeof listSegmentsQuerySchema>;
 
 /** Rules in, count and a first look out: nothing is saved. */
-export const previewSegmentSchema = z.object({ rules: segmentRulesSchema }).strict();
+export const previewSegmentSchema = z.strictObject({ rules: segmentRulesSchema });
 export type PreviewSegmentInput = z.infer<typeof previewSegmentSchema>;
 
 export const segmentPreviewResponseSchema = z.object({
-  count: z.number().int(),
+  count: z.int(),
   /** true: counting timed out; `count` is the planner's estimate. */
   countApproximate: z.boolean(),
   sample: z.array(contactResponseSchema).max(SEGMENT_PREVIEW_SAMPLE),
@@ -154,40 +149,39 @@ export const segmentPreviewResponseSchema = z.object({
 export type SegmentPreviewResponse = z.infer<typeof segmentPreviewResponseSchema>;
 
 export const segmentCountResponseSchema = z.object({
-  memberCount: z.number().int(),
+  memberCount: z.int(),
   countApproximate: z.boolean(),
-  memberCountAt: z.string().datetime(),
+  memberCountAt: z.iso.datetime(),
 });
 export type SegmentCountResponse = z.infer<typeof segmentCountResponseSchema>;
 
 // --- actions ----------------------------------------------------------------------------------
 
 /** `bom`: UTF-8 byte-order mark so spreadsheets decode non-ASCII names. */
-export const exportSegmentSchema = z.object({ bom: queryBoolean().default(true) }).strict();
+export const exportSegmentSchema = z.strictObject({ bom: queryBoolean().default(true) });
 export type ExportSegmentInput = z.infer<typeof exportSegmentSchema>;
 
 /** Tag every current member (a snapshot: contacts that join later are not tagged). By id or by name. */
 export const tagSegmentSchema = z
-  .object({
+  .strictObject({
     tagId: uuidSchema.optional(),
     name: z.string().trim().min(1).max(64).optional(),
   })
-  .strict()
   .refine((v) => Boolean(v.tagId) !== Boolean(v.name), {
-    message: 'send either tagId or name',
     path: ['tagId'],
+    error: 'send either tagId or name',
   });
 export type TagSegmentInput = z.infer<typeof tagSegmentSchema>;
 
 /** Copy the current members into a group (a snapshot). */
-export const addSegmentToGroupSchema = z.object({ groupId: uuidSchema }).strict();
+export const addSegmentToGroupSchema = z.strictObject({ groupId: uuidSchema });
 export type AddSegmentToGroupInput = z.infer<typeof addSegmentToGroupSchema>;
 
 export const segmentActionResponseSchema = z.object({
   /** Members the action applied to. */
-  matched: z.number().int(),
+  matched: z.int(),
   /** Changed so far: 0 when `queued`. */
-  changed: z.number().int(),
+  changed: z.int(),
   /** true: more than SEGMENT_INLINE_ACTION_MAX members, so a background job does it in chunks. */
   queued: z.boolean(),
 });
@@ -197,20 +191,17 @@ export type SegmentActionResponse = z.infer<typeof segmentActionResponseSchema>;
 
 /** The contacts list filter minus the pieces a segment cannot hold (`segmentId` itself, archived rows). */
 const segmentFilterSchema = z
-  .object(contactFilterShape)
-  .omit({ segmentId: true, includeArchived: true })
-  .strict();
+  .strictObject(contactFilterShape)
+  .omit({ segmentId: true, includeArchived: true });
 
-export const segmentFromFiltersSchema = z
-  .object({
-    name: nameSchema,
-    description: descriptionSchema.nullish(),
-    color: hexColorSchema.nullish(),
-    visibility: segmentVisibilitySchema.default('private'),
-    sharedWith: segmentSharedWithInputSchema.optional(),
-    filter: segmentFilterSchema,
-  })
-  .strict();
+export const segmentFromFiltersSchema = z.strictObject({
+  name: nameSchema,
+  description: descriptionSchema.nullish(),
+  color: hexColorSchema.nullish(),
+  visibility: segmentVisibilitySchema.default('private'),
+  sharedWith: segmentSharedWithInputSchema.optional(),
+  filter: segmentFilterSchema,
+});
 export type SegmentFromFiltersInput = z.infer<typeof segmentFromFiltersSchema>;
 
 export type SegmentFilterInput = SegmentFromFiltersInput['filter'];

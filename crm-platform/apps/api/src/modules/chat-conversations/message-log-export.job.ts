@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const MESSAGE_LOG_EXPORT_JOB = 'message-log.export';
 
 export const messageLogExportJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  exportUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  exportUuid: z.guid(),
 });
 export type MessageLogExportJob = z.infer<typeof messageLogExportJobSchema>;
 

@@ -47,18 +47,18 @@ export const wspTeamMemberSchema = z.object({
   role: wspTeamMemberRoleSchema,
   /** This is the person's main team (reporting only; routing, assignment and visibility use every team). */
   isPrimary: z.boolean(),
-  capacity: z.number().int(),
+  capacity: z.int(),
 });
 export type WspTeamMember = z.infer<typeof wspTeamMemberSchema>;
 
 /** Where a team is used: the numbers behind "used by" on the Teams screen and what deleting it would touch. */
 export const wspTeamUsageSchema = z.object({
-  routingRules: z.number().int(),
-  assignmentRules: z.number().int(),
-  segmentShares: z.number().int(),
-  childTeams: z.number().int(),
+  routingRules: z.int(),
+  assignmentRules: z.int(),
+  segmentShares: z.int(),
+  childTeams: z.int(),
   /** Conversations (open or not) currently assigned to the team. */
-  conversations: z.number().int(),
+  conversations: z.int(),
 });
 export type WspTeamUsage = z.infer<typeof wspTeamUsageSchema>;
 
@@ -66,16 +66,14 @@ export type WspTeamUsage = z.infer<typeof wspTeamUsageSchema>;
  * A team's own opening hours: the weekly schedule of the workspace's Working hours (same shape), read when a conversation is handed to
  * the team (BL-396). No schedule = always open.
  */
-export const wspTeamHoursSchema = z
-  .object({ days: businessHoursDaysSchema, holidays: businessHoursHolidaysSchema.optional() })
-  .strict();
+export const wspTeamHoursSchema = z.strictObject({
+  days: businessHoursDaysSchema,
+  holidays: businessHoursHolidaysSchema.optional(),
+});
 export type WspTeamHours = z.infer<typeof wspTeamHoursSchema>;
-export const wspTeamTimezoneSchema = z
-  .string()
-  .trim()
-  .min(1)
-  .max(64)
-  .refine(isIanaZone, { message: 'Not an IANA timezone.' });
+export const wspTeamTimezoneSchema = z.string().trim().min(1).max(64).refine(isIanaZone, {
+  error: 'Not an IANA timezone.',
+});
 
 /**
  * What the team keeps for handoff and assignment (BL-396): its opening hours (`businessHours`, null = always open), the time zone
@@ -96,13 +94,13 @@ export const wspTeamSchema = z.object({
   description: z.string().nullable(),
   assignmentStrategy: wspAssignmentStrategySchema,
   isDefault: z.boolean(),
-  sort: z.number().int(),
+  sort: z.int(),
   /** Device (channel line) uuids this team handles; empty = every device. Stored, not read by routing yet. */
   deviceIds: z.array(uuidSchema),
   /** The parent team, null for a top-level team. */
   parentId: uuidSchema.nullable(),
   /** 1 for a top-level team, 2 for its children, up to `WSP_TEAM_MAX_DEPTH`. */
-  depth: z.number().int(),
+  depth: z.int(),
   /** The team's manager; null when none is set or the manager is deactivated (the choice is kept for their return). */
   lead: z.object({ id: uuidSchema, fullName: z.string() }).nullable(),
   /** The team may be chosen as an inbox routing / assignment target. */
@@ -112,11 +110,11 @@ export const wspTeamSchema = z.object({
   /** Counts as a scope boundary for "my team and sub-teams" (applies from the next release; stored now). */
   isScopeBoundary: z.boolean(),
   members: z.array(wspTeamMemberSchema),
-  memberCount: z.number().int(),
+  memberCount: z.int(),
   usage: wspTeamUsageSchema,
   unusedSettings: wspTeamUnusedSettingsSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type WspTeam = z.infer<typeof wspTeamSchema>;
 
@@ -163,7 +161,7 @@ export const updateWspTeamSchema = z.object({
   leadId: uuidSchema.nullish(),
   receivesConversations: z.boolean().optional(),
   receivesRecords: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateWspTeamInput = z.infer<typeof updateWspTeamSchema>;
 
@@ -181,7 +179,7 @@ export const updateWspTeamMemberSchema = z
     isPrimary: z.boolean().optional(),
   })
   .refine((v) => v.role !== undefined || v.isPrimary !== undefined, {
-    message: 'Send a role, a primary mark or both',
+    error: 'Send a role, a primary mark or both',
   });
 export type UpdateWspTeamMemberInput = z.infer<typeof updateWspTeamMemberSchema>;
 
@@ -202,9 +200,9 @@ export type WspHandoverMode = z.infer<typeof wspHandoverModeSchema>;
 
 /** What a person holds, and who could take it over, for the deactivate dialog. */
 export const wspHandoverPreviewSchema = z.object({
-  contacts: z.number().int().nonnegative(),
-  openDeals: z.number().int().nonnegative(),
-  openConversations: z.number().int().nonnegative(),
+  contacts: z.int().nonnegative(),
+  openDeals: z.int().nonnegative(),
+  openConversations: z.int().nonnegative(),
   /** The active managers of the person's teams (the primary team first), never the person themself. */
   teamLeads: z.array(z.object({ id: uuidSchema, fullName: z.string(), teamName: z.string() })),
 });
@@ -217,18 +215,18 @@ export const wspHandoverSchema = z
     userId: uuidSchema.optional(),
   })
   .refine((v) => v.mode !== 'person' || v.userId !== undefined, {
-    message: 'Choose who takes over',
     path: ['userId'],
+    error: 'Choose who takes over',
   });
 export type WspHandoverInput = z.infer<typeof wspHandoverSchema>;
 
 export const wspHandoverResultSchema = z.object({
   mode: wspHandoverModeSchema,
-  movedContacts: z.number().int(),
-  movedDeals: z.number().int(),
-  movedConversations: z.number().int(),
+  movedContacts: z.int(),
+  movedDeals: z.int(),
+  movedConversations: z.int(),
   /** Still waiting because one run moves at most this many; run the handover again. */
-  remaining: z.number().int(),
+  remaining: z.int(),
   toUser: z.object({ id: uuidSchema, fullName: z.string() }).nullable(),
 });
 export type WspHandoverResult = z.infer<typeof wspHandoverResultSchema>;

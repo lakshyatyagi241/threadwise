@@ -46,13 +46,11 @@ export type GetaChatbotSummary = z.infer<typeof getaChatbotSummarySchema>;
  * The Geta chatbot record is owned by Geta: we keep what the user pasted and send it as it is. Only `id` (the path segment of call 1)
  * and `bot_id` (the `appid` header of call 2) are required; every other field passes through untouched.
  */
-export const getaChatbotRecordSchema = z
-  .object({
-    id: z.string().trim().min(1).max(128),
-    bot_id: z.string().trim().min(1).max(128),
-    name: z.unknown().optional(),
-  })
-  .passthrough();
+export const getaChatbotRecordSchema = z.looseObject({
+  id: z.string().trim().min(1).max(128),
+  bot_id: z.string().trim().min(1).max(128),
+  name: z.unknown().optional(),
+});
 export type GetaChatbotRecord = z.infer<typeof getaChatbotRecordSchema>;
 
 export type GetaChatbotParse =
@@ -98,8 +96,8 @@ const headerValue = z
 
 /** `null` clears the value, a missing key leaves it as it is. */
 export const updateGetaPublishSettingsRequestSchema = z.object({
-  baseUrl: z.string().trim().url().max(URL_MAX).nullable().optional(),
-  origin: z.string().trim().url().max(URL_MAX).nullable().optional(),
+  baseUrl: z.string().trim().pipe(z.url().max(URL_MAX)).nullable().optional(),
+  origin: z.string().trim().pipe(z.url().max(URL_MAX)).nullable().optional(),
   authorization: headerValue.nullable().optional(),
   getaHost: headerValue.nullable().optional(),
   chatbotRecord: z.string().max(GETA_CHATBOT_RECORD_MAX_CHARS).nullable().optional(),
@@ -118,7 +116,7 @@ export const getaPublishSettingsSchema = z.object({
   chatbot: getaChatbotSummarySchema.nullable(),
   /** All four required values are present. */
   configured: z.boolean(),
-  updatedAt: z.string().datetime().nullable(),
+  updatedAt: z.iso.datetime().nullable(),
 });
 export type GetaPublishSettings = z.infer<typeof getaPublishSettingsSchema>;
 
@@ -137,10 +135,10 @@ export const flowGetaSyncSchema = z.object({
   failedStep: getaPublishStepSchema.nullable(),
   /** Sanitised: no token, no header, a cut response body. */
   lastError: z.string().nullable(),
-  attemptedAt: z.string().datetime().nullable(),
+  attemptedAt: z.iso.datetime().nullable(),
   /** The bot id the push used (or will use). */
   botId: z.string().nullable(),
-  publishVersion: z.number().int().nullable(),
+  publishVersion: z.int().nullable(),
   /** The workspace has Geta credentials. */
   configured: z.boolean(),
   /** Summary of this flow's own record, when it has one. */

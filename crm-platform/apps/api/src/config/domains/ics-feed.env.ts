@@ -16,15 +16,15 @@ const schema = z.object({
   /** Ceiling for one fetch of a feed, connect to last byte, in ms. */
   ICS_FEED_HTTP_TIMEOUT_MS: z.preprocess(
     blank,
-    z.coerce.number().int().min(1_000).max(60_000).default(15_000),
+    z.coerce.number().int().min(1_000).max(60_000).prefault(15_000),
   ),
   /** A feed larger than this is refused (a calendar of a few thousand events is under a megabyte). */
   ICS_FEED_MAX_BYTES: z.preprocess(
     blank,
-    z.coerce.number().int().min(10_000).max(50_000_000).default(5_000_000),
+    z.coerce.number().int().min(10_000).max(50_000_000).prefault(5_000_000),
   ),
   /** Redirects followed by hand, each one checked as a fresh address (published calendars commonly redirect to another host). */
-  ICS_FEED_MAX_REDIRECTS: z.preprocess(blank, z.coerce.number().int().min(0).max(8).default(4)),
+  ICS_FEED_MAX_REDIRECTS: z.preprocess(blank, z.coerce.number().int().min(0).max(8).prefault(4)),
   /**
    * Whether a feed may point at a loopback or private-network address. OFF, and only a test (a local server standing in for a calendar)
    * turns it on: a workspace admin must never be able to make the server fetch from its own network.

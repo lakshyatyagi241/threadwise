@@ -14,6 +14,6 @@ export const paygwBuyerInvoiceSchema = invoiceViewSchema
       couponCode: z.string().nullable(),
     }),
     /** The footer line "for support or refunds within N days": `null` when the operator turned the refund promise off. */
-    refundDays: z.number().int().nullable(),
+    refundDays: z.int().nullable(),
   });
 export type PaygwBuyerInvoice = z.infer<typeof paygwBuyerInvoiceSchema>;

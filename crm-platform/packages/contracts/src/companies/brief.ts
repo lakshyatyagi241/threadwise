@@ -33,7 +33,9 @@ export const companyBriefContentSchema = z.object({
     .array(
       z.object({
         key: briefSectionKeySchema,
-        bullets: z.array(z.string().trim().min(1).max(BRIEF_BULLET_MAX)).max(BRIEF_BULLETS_PER_SECTION),
+        bullets: z
+          .array(z.string().trim().min(1).max(BRIEF_BULLET_MAX))
+          .max(BRIEF_BULLETS_PER_SECTION),
       }),
     )
     .max(BRIEF_SECTION_KEYS.length),
@@ -54,7 +56,7 @@ export const companyBriefSchema = z.object({
   id: uuidSchema,
   content: companyBriefContentSchema,
   sources: companyBriefSourcesSchema,
-  generatedAt: z.string().datetime(),
+  generatedAt: z.iso.datetime(),
   /** The model that wrote it: shown so a reader knows it is machine written. */
   model: z.string(),
   /** The CRM has changed since this brief was written (a deal moved, a task added...): regenerate for a current one. */

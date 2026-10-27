@@ -1424,10 +1424,15 @@
         "by": "Importiert von"
       },
       "exports": {
-        "title": "Exporte",
-        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
+        "title": "Exportverlauf",
+        "hint": "Exporte aus dem Hub, die neuesten zuerst, mit Angabe der Quelle. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
         "empty": "Noch keine Exporte.",
         "by": "Von",
+        "source": "Quelle",
+        "sources": {
+          "contacts": "Kontakte",
+          "campaigns": "Kampagnen"
+        },
         "rows": "Kontakte",
         "selection": "Umfang",
         "unknown": "Unbekannt",

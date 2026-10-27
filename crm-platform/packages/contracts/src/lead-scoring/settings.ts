@@ -13,7 +13,7 @@ export const updateLscSettingsSchema = z.object({
   /** With `stageSuggestions` on: move the contact by itself and tell the chat (with an Undo), instead of waiting for a person. Default on. */
   stageAutoApply: z.boolean().optional(),
   /** Absent on the first save (no row yet). */
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type UpdateLscSettingsInput = z.infer<typeof updateLscSettingsSchema>;
 
@@ -51,7 +51,7 @@ export interface LscStatus {
 
 export const lscBackfillSchema = z.object({
   /** Cap on how many contacts one backfill queues; the rest wait for the next one. */
-  limit: z.number().int().min(1).max(5000).default(500),
+  limit: z.int().min(1).max(5000).default(500),
 });
 export type LscBackfillInput = z.infer<typeof lscBackfillSchema>;
 

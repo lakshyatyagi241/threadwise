@@ -28,25 +28,25 @@ export const orgLifecycleResponseSchema = z.object({
   name: z.string(),
   slug: z.string(),
   status: lifecycleStatusSchema,
-  lastActivityAt: z.string().datetime(),
-  daysInactive: z.number().int(),
-  archivedAt: z.string().datetime().nullable(),
+  lastActivityAt: z.iso.datetime(),
+  daysInactive: z.int(),
+  archivedAt: z.iso.datetime().nullable(),
   /** Effective values after applying the per-org override. */
-  archiveAfterDays: z.number().int(),
-  deleteAfterDays: z.number().int(),
-  archiveOverride: z.number().int().nullable(),
-  deleteOverride: z.number().int().nullable(),
+  archiveAfterDays: z.int(),
+  deleteAfterDays: z.int(),
+  archiveOverride: z.int().nullable(),
+  deleteOverride: z.int().nullable(),
   /** When the next destructive step is due; null if exempt/held. */
-  scheduledArchiveAt: z.string().datetime().nullable(),
-  scheduledDeleteAt: z.string().datetime().nullable(),
+  scheduledArchiveAt: z.iso.datetime().nullable(),
+  scheduledDeleteAt: z.iso.datetime().nullable(),
   retentionExempt: z.boolean(),
   retentionExemptReason: z.string().nullable(),
-  retentionExemptUntil: z.string().datetime().nullable(),
+  retentionExemptUntil: z.iso.datetime().nullable(),
   retentionExemptBy: z.string().nullable(),
   legalHold: z.boolean(),
   /** On an active paid plan, a custom quote, or platform-owned: never idle-archived, whatever the timings say. */
   exemptByPlan: z.boolean(),
-  remindersSent: z.object({ archive: z.number().int(), delete: z.number().int() }),
+  remindersSent: z.object({ archive: z.int(), delete: z.int() }),
 });
 export type OrgLifecycleResponse = z.infer<typeof orgLifecycleResponseSchema>;
 
@@ -61,12 +61,12 @@ export type ListOrgLifecycleQuery = z.infer<typeof listOrgLifecycleQuerySchema>;
 /** Change timings. null clears an override back to the platform default. */
 export const updateOrgRetentionPolicySchema = z
   .object({
-    archiveAfterDays: z.number().int().min(60).max(3650).nullable().optional(),
-    deleteAfterDays: z.number().int().min(120).max(7300).nullable().optional(),
+    archiveAfterDays: z.int().min(60).max(3650).nullable().optional(),
+    deleteAfterDays: z.int().min(120).max(7300).nullable().optional(),
     reason: z.string().trim().min(5).max(500),
   })
   .refine((v) => v.archiveAfterDays !== undefined || v.deleteAfterDays !== undefined, {
-    message: 'provide archiveAfterDays and/or deleteAfterDays',
+    error: 'provide archiveAfterDays and/or deleteAfterDays',
   });
 export type UpdateOrgRetentionPolicyInput = z.infer<typeof updateOrgRetentionPolicySchema>;
 
@@ -76,7 +76,7 @@ export const setOrgRetentionExemptSchema = z.discriminatedUnion('exempt', [
     exempt: z.literal(true),
     reason: z.string().trim().min(5).max(500),
     /** Optional expiry so the exemption is re-reviewed. Omit for indefinite. */
-    until: z.string().datetime().optional(),
+    until: z.iso.datetime().optional(),
   }),
   z.object({
     exempt: z.literal(false),
@@ -97,11 +97,11 @@ export type RestoreOrgInput = z.infer<typeof restoreOrgSchema>;
 export const orgLifecycleLogEntrySchema = z.object({
   eventType: z.string(),
   stage: orgLifecycleStageSchema.nullable(),
-  reminderNo: z.number().int().nullable(),
-  daysInactive: z.number().int().nullable(),
+  reminderNo: z.int().nullable(),
+  daysInactive: z.int().nullable(),
   actorType: z.string(),
   actorRef: z.string().nullable(),
-  details: z.record(z.unknown()),
-  createdAt: z.string().datetime(),
+  details: z.record(z.string(), z.unknown()),
+  createdAt: z.iso.datetime(),
 });
 export type OrgLifecycleLogEntry = z.infer<typeof orgLifecycleLogEntrySchema>;

@@ -36,7 +36,7 @@ export const createBroadcastSchema = z
     /** Required: Reference's form requires it and a template-less broadcast only ever fails per recipient. */
     templateId: uuidSchema,
     /** Send-time variable overrides from the mapping panel; sanitised by the template domain before it is stored. */
-    templateOverrides: z.record(z.unknown()).nullish(),
+    templateOverrides: z.record(z.string(), z.unknown()).nullish(),
     contactIds: z.array(uuidSchema).max(100_000).default([]),
     groupIds: z.array(uuidSchema).max(1_000).default([]),
     tagIds: z.array(uuidSchema).max(1_000).default([]),
@@ -77,23 +77,23 @@ export const broadcastResponseSchema = z.object({
   senderKey: z.string().nullable(),
   templateId: uuidSchema.nullable(),
   timezone: z.string().nullable(),
-  scheduledAt: z.string().datetime().nullable(),
-  completedAt: z.string().datetime().nullable(),
-  totalRecipients: z.number().int(),
-  successCount: z.number().int(),
-  deliveredCount: z.number().int(),
-  readCount: z.number().int(),
-  clickedCount: z.number().int(),
-  failCount: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  scheduledAt: z.iso.datetime().nullable(),
+  completedAt: z.iso.datetime().nullable(),
+  totalRecipients: z.int(),
+  successCount: z.int(),
+  deliveredCount: z.int(),
+  readCount: z.int(),
+  clickedCount: z.int(),
+  failCount: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type BroadcastResponse = z.infer<typeof broadcastResponseSchema>;
 
 export const createBroadcastResponseSchema = z.object({
   /** One per sender slice, in the order the senders were picked. */
   broadcasts: z.array(broadcastResponseSchema).min(1),
-  devicesCount: z.number().int(),
+  devicesCount: z.int(),
 });
 export type CreateBroadcastResponse = z.infer<typeof createBroadcastResponseSchema>;

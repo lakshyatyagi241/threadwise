@@ -7,28 +7,33 @@ import { z } from 'zod';
  */
 const schema = z.object({
   /** How far back a `recent` import keeps messages. */
-  WA_HISTORY_IMPORT_RECENT_DAYS: z.coerce.number().int().min(1).max(3650).default(90),
+  WA_HISTORY_IMPORT_RECENT_DAYS: z.coerce.number().int().min(1).max(3650).prefault(90),
   /** How far back a `full` import keeps messages. */
-  WA_HISTORY_IMPORT_FULL_DAYS: z.coerce.number().int().min(1).max(3650).default(730),
+  WA_HISTORY_IMPORT_FULL_DAYS: z.coerce.number().int().min(1).max(3650).prefault(730),
   /** Most messages one import stores for one number. */
-  WA_HISTORY_IMPORT_MAX_MESSAGES: z.coerce.number().int().min(100).max(1_000_000).default(50_000),
+  WA_HISTORY_IMPORT_MAX_MESSAGES: z.coerce.number().int().min(100).max(1_000_000).prefault(50_000),
   /** Most messages one import stores for one chat (the newest of what WhatsApp sent are kept first). */
-  WA_HISTORY_IMPORT_MAX_MESSAGES_PER_CHAT: z.coerce.number().int().min(1).max(100_000).default(500),
+  WA_HISTORY_IMPORT_MAX_MESSAGES_PER_CHAT: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(100_000)
+    .prefault(500),
   /** Most chats (people and groups) one import brings in. */
-  WA_HISTORY_IMPORT_MAX_CHATS: z.coerce.number().int().min(1).max(100_000).default(5_000),
+  WA_HISTORY_IMPORT_MAX_CHATS: z.coerce.number().int().min(1).max(100_000).prefault(5_000),
   /** Messages per batch handed from the socket to the importer. */
-  WA_HISTORY_IMPORT_BATCH_SIZE: z.coerce.number().int().min(10).max(1_000).default(200),
+  WA_HISTORY_IMPORT_BATCH_SIZE: z.coerce.number().int().min(10).max(1_000).prefault(200),
   /** A running import that gets nothing for this long is finished. */
-  WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS: z.coerce.number().int().min(30).max(3_600).default(180),
+  WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS: z.coerce.number().int().min(30).max(3_600).prefault(180),
   /** The same for a `full` import: WhatsApp's older chunks can come minutes apart, so the window is longer. */
   WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS: z.coerce
     .number()
     .int()
     .min(30)
     .max(7_200)
-    .default(600),
+    .prefault(600),
   /** An import that was asked for but whose history never arrived (not linked, or WhatsApp sent none) is given up after this long. */
-  WA_HISTORY_IMPORT_AWAIT_MINUTES: z.coerce.number().int().min(5).max(1_440).default(30),
+  WA_HISTORY_IMPORT_AWAIT_MINUTES: z.coerce.number().int().min(5).max(1_440).prefault(30),
 });
 
 export interface HistoryImportConfig {

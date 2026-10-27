@@ -45,16 +45,15 @@ export const callRecordingSettingsSchema = z.object({
   enabled: z.boolean(),
   consentMode: z.enum(CALL_RECORDING_CONSENT_MODES),
   retentionDays: z
-    .number()
     .int()
     .min(CALL_RECORDING_RETENTION_MIN_DAYS)
     .max(CALL_RECORDING_RETENTION_MAX_DAYS),
   /** The notice the operator reads out; null until the workspace writes one. */
   noticeText: z.string().nullable(),
   /** The version of the notice text; every edit makes a new version, and a call stores the version it used. 0 = no notice yet. */
-  noticeVersion: z.number().int().nonnegative(),
+  noticeVersion: z.int().nonnegative(),
   /** null until the first save. */
-  rowVersion: z.number().int().positive().nullable(),
+  rowVersion: z.int().positive().nullable(),
   updatedAt: z.string().nullable(),
 });
 export type CallRecordingSettings = z.infer<typeof callRecordingSettingsSchema>;
@@ -64,13 +63,12 @@ export const updateCallRecordingSettingsInputSchema = z
     enabled: z.boolean(),
     consentMode: z.enum(CALL_RECORDING_CONSENT_MODES),
     retentionDays: z
-      .number()
       .int()
       .min(CALL_RECORDING_RETENTION_MIN_DAYS)
       .max(CALL_RECORDING_RETENTION_MAX_DAYS),
     noticeText: z.string().trim().max(CALL_RECORDING_NOTICE_MAX),
     /** Omitted on the first save; required on every later one (optimistic lock). */
-    rowVersion: z.number().int().positive().optional(),
+    rowVersion: z.int().positive().optional(),
   })
   .superRefine((v, ctx) => {
     if (v.enabled && v.noticeText.length < CALL_RECORDING_NOTICE_MIN) {
@@ -91,7 +89,7 @@ export const callRecordingConsentSchema = z.object({
   status: z.enum(['granted', 'declined']).nullable(),
   method: z.enum(CALL_RECORDING_CONSENT_METHODS).nullable(),
   at: z.string().nullable(),
-  noticeVersion: z.number().int().positive().nullable(),
+  noticeVersion: z.int().positive().nullable(),
   /** sha-256 of the notice text that was presented (voice-bot requirements, point 4). */
   noticeSha256: z.string().nullable(),
 });
@@ -113,7 +111,7 @@ export const callRecordingGateSchema = z.object({
   reason: z.enum(CONSENT_GATE_REASONS),
   consentMode: z.enum(CALL_RECORDING_CONSENT_MODES),
   noticeText: z.string().nullable(),
-  noticeVersion: z.number().int().nonnegative(),
+  noticeVersion: z.int().nonnegative(),
   consent: callRecordingConsentSchema,
 });
 export type CallRecordingGate = z.infer<typeof callRecordingGateSchema>;
