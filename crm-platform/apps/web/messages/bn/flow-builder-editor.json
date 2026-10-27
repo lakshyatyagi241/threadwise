@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "চ্যাটবট",
-          "description": "আরেকটি চ্যাটবট ট্রিগার করুন"
+          "description": "চ্যাট AI এজেন্টের কাছে হস্তান্তর করুন"
         },
         "whatsapp_shop": {
           "label": "WhatsApp শপ",

@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "צ׳אטבוט",
-          "description": "הפעלת צ׳אטבוט אחר"
+          "description": "העבר את השיחה לסוכן בינה מלאכותית"
         },
         "whatsapp_shop": {
           "label": "חנות WhatsApp",

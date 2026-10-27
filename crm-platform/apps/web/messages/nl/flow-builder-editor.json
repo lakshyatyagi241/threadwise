@@ -2112,7 +2112,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Een andere chatbot starten"
+          "description": "Draag de chat over aan een AI-agent"
         },
         "whatsapp_shop": {
           "label": "WhatsApp-winkel",

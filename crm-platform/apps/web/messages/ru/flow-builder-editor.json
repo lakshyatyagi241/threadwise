@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "Чат-бот",
-          "description": "Запустить другого чат-бота"
+          "description": "Передать чат ИИ-агенту"
         },
         "whatsapp_shop": {
           "label": "Магазин WhatsApp",

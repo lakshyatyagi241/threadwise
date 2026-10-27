@@ -2254,7 +2254,7 @@
         },
         "chatbot": {
           "label": "聊天机器人",
-          "description": "触发另一个聊天机器人"
+          "description": "将对话交给 AI 代理"
         },
         "whatsapp_shop": {
           "label": "WhatsApp 商店",
