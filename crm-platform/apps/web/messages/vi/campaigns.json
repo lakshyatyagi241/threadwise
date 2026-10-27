@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "draftChip": "Bản nháp / chưa lưu",
+      "draftSavedChip": "Bản nháp · đã lưu",
       "steps": {
         "label": "Các bước chiến dịch",
         "required": "bắt buộc",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Mẫu",
         "pickTemplate": "— Chọn một mẫu —",
+        "searchTemplates": "Tìm mẫu theo tên hoặc ngôn ngữ",
+        "noTemplateMatch": "Không có mẫu nào khớp với tìm kiếm của bạn.",
         "templateHint": "Chỉ gồm các mẫu đã được duyệt của số đã chọn. Các biến của mẫu được điền bên dưới.",
         "noTemplates": "Số này chưa có mẫu nào được duyệt. Hãy tạo một mẫu và chờ được duyệt.",
         "deliveryTitle": "Gửi",

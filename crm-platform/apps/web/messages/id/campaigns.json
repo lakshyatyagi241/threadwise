@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "draftChip": "Draf / belum disimpan",
+      "draftSavedChip": "Draf · tersimpan",
       "steps": {
         "label": "Langkah kampanye",
         "required": "wajib",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Templat",
         "pickTemplate": "— Pilih templat —",
+        "searchTemplates": "Cari templat berdasarkan nama atau bahasa",
+        "noTemplateMatch": "Tidak ada templat yang cocok dengan pencarian Anda.",
         "templateHint": "Hanya templat yang disetujui dari nomor yang dipilih. Variabelnya diisi di bawah.",
         "noTemplates": "Nomor ini belum memiliki templat yang disetujui. Buat satu dan tunggu persetujuannya.",
         "deliveryTitle": "Pengiriman",

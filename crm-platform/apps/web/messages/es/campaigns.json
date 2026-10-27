@@ -447,6 +447,7 @@
       },
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "draftChip": "Borrador / sin guardar",
+      "draftSavedChip": "Borrador · guardado",
       "steps": {
         "label": "Pasos de la campaña",
         "required": "obligatorio",
@@ -722,6 +723,8 @@
       "guided": {
         "template": "Plantilla",
         "pickTemplate": "— Selecciona una plantilla —",
+        "searchTemplates": "Buscar plantillas por nombre o idioma",
+        "noTemplateMatch": "Ninguna plantilla coincide con tu búsqueda.",
         "templateHint": "Solo plantillas aprobadas del número elegido. Sus variables se rellenan más abajo.",
         "noTemplates": "Este número aún no tiene plantillas aprobadas. Crea una y espera su aprobación.",
         "deliveryTitle": "Entrega",
