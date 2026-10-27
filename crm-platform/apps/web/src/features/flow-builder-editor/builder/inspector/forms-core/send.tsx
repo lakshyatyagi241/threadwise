@@ -1,11 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
+import { FLB_WA_LIMITS } from '@crm/contracts';
+import { FlowEditorContext } from '../../../lib/flow-editor-context';
 import { Check, Field, Notice, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { acceptFor, str, withCurrent } from './helpers';
 import { InfoBox, Link, UploadBox, UploadedFile, uploadFile, V } from './parts';
+import { RichTextField } from '../rich-text-field';
 import { MediaPreview, MessagePreview, TemplatePreview } from './previews';
 
 /** The media kinds the upload prompt names. */
@@ -13,16 +16,20 @@ const CHOOSE_KINDS = ['image', 'video', 'document', 'audio'];
 
 const v = (chunks: ReactNode) => <V>{chunks}</V>;
 
-export function MessageForm({ data: d, set }: FormProps) {
+export function MessageForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
+  const { whatsapp } = useContext(FlowEditorContext);
   return (
     <>
       <MessagePreview d={d} />
       <Field label={t('messageLabel')} hint={t.rich('messageHint', { v })}>
-        <TextArea
+        <RichTextField
           value={d.text}
+          label={t('messageLabel')}
           placeholder={t('messagePlaceholder')}
           rows={6}
+          max={whatsapp ? FLB_WA_LIMITS.text : undefined}
+          nodes={env.nodes}
           onChange={(v) => set('text', v)}
         />
       </Field>
@@ -123,10 +130,12 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
         />
       </Field>
       <Field label={t('caption')}>
-        <TextArea
+        <RichTextField
           value={d.caption}
+          label={t('caption')}
           placeholder={t('captionPlaceholder')}
           rows={3}
+          nodes={env.nodes}
           onChange={(v) => set('caption', v)}
         />
       </Field>

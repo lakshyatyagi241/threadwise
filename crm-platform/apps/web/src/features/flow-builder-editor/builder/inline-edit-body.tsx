@@ -8,6 +8,7 @@ import { FlowEditorContext } from '../lib/flow-editor-context';
 import { uploadFlowMedia } from '../lib/upload-media';
 import { acceptFor } from './inspector/forms-core/helpers';
 import { UploadBox } from './inspector/forms-core/parts';
+import { PromptBox } from './ask-media/prompt-box';
 
 /** The node types whose text is edited on the card: a message's text, a quick-reply list's labels, a media node's caption. */
 export const INLINE_EDIT_TYPES: ReadonlySet<string> = new Set(['message', 'buttons', 'media']);
@@ -29,7 +30,6 @@ export function InlineEditBody({
   node: FlowNode;
   onPatch: (nodeId: string, patch: Record<string, unknown>) => void;
 }) {
-  const ts = useTranslations('flb.builder.simple.editors');
   const tf = useTranslations('flb.builder.formsCore.options');
   const { whatsapp } = useContext(FlowEditorContext);
   const data = node.data as Record<string, unknown>;
@@ -37,13 +37,11 @@ export function InlineEditBody({
   if (node.type === 'message') {
     return (
       <div className="space-y-1 px-3 pb-3" onPointerDown={keepInField} onMouseDown={keepInField}>
-        <textarea
-          aria-label={ts('message.label')}
+        <PromptBox
           rows={3}
           maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
           value={typeof data.text === 'string' ? data.text : ''}
-          onChange={(e) => onPatch(node.id, { text: e.target.value })}
-          className={`${FIELD} resize-y`}
+          onChange={(text) => onPatch(node.id, { text })}
         />
       </div>
     );
@@ -140,12 +138,11 @@ function MediaInlineBody({
           {problem}
         </div>
       ) : null}
-      <input
-        type="text"
-        aria-label={ts('media.caption')}
+      <PromptBox
+        rows={2}
         value={typeof data.caption === 'string' ? data.caption : ''}
-        onChange={(e) => onPatch(node.id, { caption: e.target.value })}
-        className={FIELD}
+        placeholder={ts('media.caption')}
+        onChange={(caption) => onPatch(node.id, { caption })}
       />
     </div>
   );
