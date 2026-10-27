@@ -27,9 +27,14 @@ interface Setup {
 function build(s: Setup = {}) {
   const settled: Array<Record<string, unknown>> = [];
   const asked: Array<[number, string]> = [];
+  const held: number[] = [];
   const usage = {
     assertCanAfford: async (orgId: number, kind: string) => {
       asked.push([orgId, kind]);
+      if (s.walletEmpty) throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', 422);
+    },
+    holdAiCall: async (orgId: number) => {
+      held.push(orgId);
       if (s.walletEmpty) throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', 422);
     },
     settle: async (input: Record<string, unknown>) => {
@@ -75,7 +80,7 @@ function build(s: Setup = {}) {
     ai,
     redis as never,
   );
-  return { svc, settled, asked, calls, meterRecorded };
+  return { svc, settled, asked, calls, meterRecorded, held };
 }
 
 describe('KbEmbeddingService and the wallet', () => {
@@ -138,6 +143,15 @@ describe('KbEmbeddingService and the wallet', () => {
     expect(out.vectors).toHaveLength(1);
     expect(settled).toHaveLength(0);
     expect(asked).toHaveLength(0);
+  });
+
+  it('holds the price of a platform-key call before the vendor, and never holds for a workspace key', async () => {
+    const platform = build({ source: 'admin' });
+    await platform.svc.embedMany(5, ['a'], 'k');
+    expect(platform.held).toEqual([5]);
+    const workspace = build({ source: 'workspace' });
+    await workspace.svc.embedMany(5, ['a'], 'k');
+    expect(workspace.held).toEqual([]);
   });
 
   it('refuses before the vendor when the wallet is empty, as a customer-safe unavailable error', async () => {
