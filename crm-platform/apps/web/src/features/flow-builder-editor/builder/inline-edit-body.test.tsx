@@ -9,9 +9,7 @@ const node = (type: string, data: Record<string, unknown>): FlowNode =>
 
 const show = (n: FlowNode, whatsapp = false) =>
   renderIntl(
-    <FlowEditorContext.Provider
-      value={{ flowId: 'f1', web: false, whatsapp } as never}
-    >
+    <FlowEditorContext.Provider value={{ flowId: 'f1', web: false, whatsapp } as never}>
       <InlineEditBody node={n} onPatch={() => undefined} />
     </FlowEditorContext.Provider>,
   );
@@ -41,9 +39,21 @@ describe('inline edit on the card (row 288)', () => {
     expect(web).not.toContain('maxLength');
   });
 
-  it('shows a media caption as a single field', () => {
+  it('shows a media card with a file picker for its kind above the caption field', () => {
     const html = show(node('media', { kind: 'image', caption: 'Look' }));
-    expect(html.match(/<input/g)).toHaveLength(1);
+    expect(html).toContain('type="file"');
+    expect(html).toContain('accept="image/*"');
+    expect(html).toContain('Choose image');
     expect(html).toContain('value="Look"');
+    expect(html.indexOf('type="file"')).toBeLessThan(html.indexOf('value="Look"'));
+  });
+
+  it('offers Replace file once the card has a file, and names it', () => {
+    const html = show(
+      node('media', { kind: 'video', url: 'https://x.test/a.mp4', filename: 'a.mp4' }),
+    );
+    expect(html).toContain('accept="video/*"');
+    expect(html).toContain('Replace file');
+    expect(html).toContain('a.mp4');
   });
 });
