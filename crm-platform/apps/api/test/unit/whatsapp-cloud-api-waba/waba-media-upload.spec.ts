@@ -1,6 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import { retryOnRateLimit } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-media-upload';
+import { describe, expect, it, vi } from 'vitest';
+import {
+  retryOnRateLimit,
+  uploadMediaHandle,
+} from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-media-upload';
 import { WabaApiError } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import type { WabaHttp } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-http';
 
 /** Meta's code 4 as the Interakt media_handle call returns it (HTTP 403, transient). */
 const throttled = () =>
@@ -67,5 +71,42 @@ describe('retryOnRateLimit', () => {
       }, [0, 0]),
     ).rejects.toThrow('boom');
     expect(calls).toBe(1);
+  });
+});
+
+describe('the Meta header upload (uploadMediaHandle)', () => {
+  const env = { META_APP_ID: 'app-1' } as never;
+  const conn = { provider: 'waba', accessToken: 'tok' } as never;
+  const media = { bytes: Buffer.from('png'), fileName: 'a.png', mimeType: 'image/png' };
+
+  it('sends the upload again when Meta throttles its session call, and returns the handle', async () => {
+    let sessions = 0;
+    const graph = vi.fn(async (_conn: unknown, opts: { path: string }) => {
+      if (opts.path === '/app-1/uploads') {
+        sessions += 1;
+        if (sessions === 1) throw throttled();
+        return { id: 'upload:1' };
+      }
+      return { h: 'handle-1' };
+    });
+    const http = { graph } as unknown as WabaHttp;
+    await expect(
+      uploadMediaHandle(http, env, conn, media, 'a template header example'),
+    ).resolves.toBe('handle-1');
+    expect(sessions).toBe(2);
+  });
+
+  it('does not send a refused upload again', async () => {
+    const refusal = WabaApiError.fromResponse(400, {
+      error: { message: 'Invalid parameter', code: 100, fbtrace_id: 'CCC' },
+    });
+    const graph = vi.fn(async () => {
+      throw refusal;
+    });
+    const http = { graph } as unknown as WabaHttp;
+    await expect(
+      uploadMediaHandle(http, env, conn, media, 'a template header example'),
+    ).rejects.toBe(refusal);
+    expect(graph).toHaveBeenCalledTimes(1);
   });
 });
