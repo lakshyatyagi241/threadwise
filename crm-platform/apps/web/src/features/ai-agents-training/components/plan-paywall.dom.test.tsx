@@ -100,4 +100,27 @@ describe('the plan upgrade sheet takes focus and holds it (row 313)', () => {
     expect(document.activeElement).toBe(behind());
     expect(behind().hasAttribute('inert')).toBe(false);
   });
+
+  it('a fixed layer above the sheet (a toast or banner) stays usable', async () => {
+    const toast = document.createElement('div');
+    toast.style.position = 'fixed';
+    document.body.appendChild(toast);
+    try {
+      await act(async () => root.render(page(true)));
+      expect(toast.hasAttribute('inert')).toBe(false);
+    } finally {
+      toast.remove();
+    }
+  });
+
+  it('a node added to the page while the sheet is open is inert too', async () => {
+    await act(async () => root.render(page(true)));
+
+    const late = document.createElement('p');
+    late.textContent = 'Loaded later';
+    host.querySelector('main')!.appendChild(late);
+    await act(async () => undefined);
+
+    expect(late.hasAttribute('inert')).toBe(true);
+  });
 });
