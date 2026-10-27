@@ -157,6 +157,28 @@ export class WalletRepository {
     }
   }
 
+  /**
+   * Holds `amountMinor` of the wallet for a send that has not settled: the balance is untouched and the available part
+   * (balance - reserved) shrinks by it. One conditional UPDATE, so concurrent holds queue on the row and cannot both pass the same
+   * balance. False, nothing held, when the available balance does not cover it or the workspace has no wallet in `unit`.
+   */
+  async holdMinor(tx: Tx, orgId: number, unit: string, amountMinor: number): Promise<boolean> {
+    const amount = minorToDecimal(amountMinor);
+    const res = await tx.execute(sql`
+      UPDATE wallets SET reserved = reserved + ${amount}::numeric
+      WHERE org_id = ${orgId} AND unit = ${unit} AND balance - reserved >= ${amount}::numeric
+      RETURNING id`);
+    return res.rows.length > 0;
+  }
+
+  /** Gives back a hold that did not become a charge (the send failed or was never made). Never takes `reserved` below zero. */
+  async releaseMinor(tx: Tx, orgId: number, unit: string, amountMinor: number): Promise<void> {
+    const amount = minorToDecimal(amountMinor);
+    await tx.execute(sql`
+      UPDATE wallets SET reserved = GREATEST(reserved - ${amount}::numeric, 0)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+  }
+
   async markAlerted(tx: Tx, orgId: number, walletId: number, at: Date): Promise<void> {
     await tx.execute(sql`
       UPDATE wallets SET low_balance_alerted_at = ${at.toISOString()}::timestamptz
