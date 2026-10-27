@@ -1424,10 +1424,15 @@
         "by": "Diimpor oleh"
       },
       "exports": {
-        "title": "Ekspor",
-        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. Setiap file disimpan 30 hari agar Anda dan rekan yang boleh mengekspor dapat mengunduhnya lagi.",
+        "title": "Riwayat ekspor",
+        "hint": "Ekspor dari Hub, terbaru lebih dulu, beserta sumbernya. Setiap file disimpan 30 hari agar Anda dan rekan yang bisa mengekspor dapat mengunduhnya lagi.",
         "empty": "Belum ada ekspor.",
         "by": "Oleh",
+        "source": "Sumber",
+        "sources": {
+          "contacts": "Kontak",
+          "campaigns": "Kampanye"
+        },
         "rows": "Kontak",
         "selection": "Cakupan",
         "unknown": "Tidak diketahui",

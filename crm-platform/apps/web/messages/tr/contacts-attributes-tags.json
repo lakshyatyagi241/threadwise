@@ -1424,10 +1424,15 @@
         "by": "İçe aktaran"
       },
       "exports": {
-        "title": "Dışa aktarmalar",
-        "hint": "Hub'dan kişi dışa aktarımları, en yeniler önce. Her dosya 30 gün saklanır; siz ve dışa aktarma izni olan ekip arkadaşlarınız tekrar indirebilir.",
+        "title": "Dışa aktarma geçmişi",
+        "hint": "Hub'dan dışa aktarmalar, en yenisi önce, her birinin kaynağıyla birlikte. Her dosya 30 gün saklanır; dışa aktarma yetkisi olan siz ve ekip arkadaşlarınız yeniden indirebilir.",
         "empty": "Henüz dışa aktarma yok.",
         "by": "Yapan",
+        "source": "Kaynak",
+        "sources": {
+          "contacts": "Kişiler",
+          "campaigns": "Kampanyalar"
+        },
         "rows": "Kişiler",
         "selection": "Kapsam",
         "unknown": "Bilinmiyor",
