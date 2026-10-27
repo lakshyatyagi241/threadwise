@@ -1741,7 +1741,12 @@
           "igUsernameHint": "Senza la @. Il link diventa ig.me/m/yourbrand — toccandolo si apre un DM al tuo account.",
           "igMessage": "Messaggio WhatsApp",
           "igMessageHint": "Inviato al cliente su WhatsApp con il link Instagram. Supporta '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continua con noi su Instagram 👇"
+          "igMessagePlaceholder": "Continua con noi su Instagram 👇",
+          "templateFills": "Cosa riempie ogni numero",
+          "templateFillsHint": "Scrivi il testo per ogni numero del modello, oppure premi / per inserire un dato del contatto o una variabile del flusso. Lascia vuoto per usare il valore del modello.",
+          "templateHeaderMedia": "File dell'intestazione",
+          "templateHeaderMediaHint": "L'immagine, il video o il file nell'intestazione di questo modello. Serve quando il modello non ha un file proprio.",
+          "templateHeaderMediaMissing": "Aggiungi il file dell'intestazione: questo modello non ne ha uno e WhatsApp non lo invierà senza."
         },
         "sequence": {
           "info": "Ogni risposta viene inviata al cliente in ordine. Combina testo, immagini, video, audio e documenti in un solo nodo — perfetto per schede prodotto o kit di benvenuto.",

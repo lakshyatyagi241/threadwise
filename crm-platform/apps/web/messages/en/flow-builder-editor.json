@@ -1339,7 +1339,12 @@
           "igUsernameHint": "Without the @. The link becomes ig.me/m/yourbrand — tapping it opens a DM to your account.",
           "igMessage": "WhatsApp message",
           "igMessageHint": "Sent to the customer on WhatsApp with the Instagram link. Supports '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue with us on Instagram 👇"
+          "igMessagePlaceholder": "Continue with us on Instagram 👇",
+          "templateFills": "What fills each number",
+          "templateFillsHint": "Type the text for each number of the template, or press / to insert a contact detail or a flow variable. Leave one empty to use what the template says.",
+          "templateHeaderMedia": "Header file",
+          "templateHeaderMediaHint": "The picture, video or file in this template's header. Needed when the template has no file of its own.",
+          "templateHeaderMediaMissing": "Add the header file: this template has none, and WhatsApp will not send it without one."
         },
         "sequence": {
           "info": "Each reply is sent in order to the customer. Combine text, images, video, audio, and documents in one node — perfect for product cards or onboarding kits.",

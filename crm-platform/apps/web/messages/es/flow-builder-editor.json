@@ -1309,7 +1309,12 @@
           "igUsernameHint": "Sin la @. El enlace pasa a ser ig.me/m/tumarca: al tocarlo se abre un mensaje directo a tu cuenta.",
           "igMessage": "Mensaje de WhatsApp",
           "igMessageHint": "Se envía al cliente por WhatsApp con el enlace de Instagram. Admite '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continúa con nosotros en Instagram 👇"
+          "igMessagePlaceholder": "Continúa con nosotros en Instagram 👇",
+          "templateFills": "Qué rellena cada número",
+          "templateFillsHint": "Escribe el texto de cada número de la plantilla, o pulsa / para insertar un dato del contacto o una variable del flujo. Déjalo vacío para usar lo que dice la plantilla.",
+          "templateHeaderMedia": "Archivo del encabezado",
+          "templateHeaderMediaHint": "La imagen, el vídeo o el archivo del encabezado de esta plantilla. Hace falta cuando la plantilla no tiene archivo propio.",
+          "templateHeaderMediaMissing": "Añade el archivo del encabezado: esta plantilla no tiene ninguno y WhatsApp no la enviará sin él."
         },
         "sequence": {
           "info": "Cada respuesta se envía en orden al cliente. Combina texto, imágenes, vídeo, audio y documentos en un solo nodo: perfecto para fichas de producto o kits de bienvenida.",
