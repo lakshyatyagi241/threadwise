@@ -27,6 +27,10 @@ const FORWARD_RESPONSE = [
   'x-request-id',
   'etag',
   'retry-after',
+  // The request throttle's quota (TW-INFRA-010): the browser sees what is left of a limit, not only the wait after a refusal.
+  'x-ratelimit-limit',
+  'x-ratelimit-remaining',
+  'x-ratelimit-reset',
   'cache-control',
   'x-content-type-options',
   // Uploaded brand files (SVG) are served with a sandboxing policy that must reach the browser.
