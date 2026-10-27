@@ -36,7 +36,7 @@ All 49 features: 46 built backend + web (tracker `frontend-done`, with notes on 
 (042, 048, 049). The auth design (server-side sessions, TOTP MFA, platform operators) still needs the team's approval. API reference: [docs/api/auth-registration-security.md](../api/auth-registration-security.md).
 Evidence, intentional differences from Reference and what is not verified: [parity/auth-registration-security.md](parity/auth-registration-security.md).
 
-Run it: `pnpm --filter @crm/api seed:auth` (dev users, password `Passw0rd!`), `pnpm --filter @crm/api operator:create` (platform operator),
+Run it: `pnpm --filter @crm/api seed:auth` (dev users, password `$DEV_SEED_PASSWORD` (the value you set; the seed generates one if you set none)), `pnpm --filter @crm/api operator:create` (platform operator),
 then API on 3100, web on 3001, mail on Mailpit 58025. Tests: `pnpm --filter @crm/api test`, `test:integration`, `test:e2e`, `pnpm --filter @crm/web test`.
 
 AUTH built beyond its own screens, so other domains can rely on it: the WhatsApp provider enforces the emergency halt and the send

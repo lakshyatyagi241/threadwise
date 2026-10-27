@@ -112,7 +112,7 @@ export function makeProbes({ api, db, direct, redisPrefix, redisDb = '9' }) {
             body: { orgSlug: 'Admin', email: 'nachiket.challawar@geta.ai', password },
           });
         const home = ip4(100, 250, 0, 1);
-        const first = await login(home, 'Passw0rd!'); // a successful sign-in makes this a known network
+        const first = await login(home, process.env.DEV_SEED_PASSWORD); // a successful sign-in makes this a known network
         const signedIn = (r) => r.status < 300 && r.json?.status === 'authenticated';
         if (!signedIn(first))
           return {
@@ -126,8 +126,8 @@ export function makeProbes({ api, db, direct, redisPrefix, redisDb = '9' }) {
           seen[r.status] = (seen[r.status] ?? 0) + 1;
           if (r.status === 429) blockedAt = i + 1;
         }
-        const stranger = await login(ip4(101, 1, 1, 1), 'Passw0rd!');
-        const owner = await login(home, 'Passw0rd!');
+        const stranger = await login(ip4(101, 1, 1, 1), process.env.DEV_SEED_PASSWORD);
+        const owner = await login(home, process.env.DEV_SEED_PASSWORD);
         const ok =
           blockedAt !== null && blockedAt <= 60 && stranger.status === 429 && signedIn(owner);
         return {

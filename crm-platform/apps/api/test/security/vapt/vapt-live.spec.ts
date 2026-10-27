@@ -2,7 +2,7 @@
  * VAPT manual-check suite (Sheet3 #25). Attacks a LOCAL API that tools/security/vapt.sh boots with a throwaway database.
  * Skipped unless VAPT_BASE_URL is set, and refuses any host that is not localhost. Run it with
  *   VAPT_BASE_URL=http://localhost:3922 pnpm --filter @crm/api exec vitest run --dir test/security/vapt
- * Identities (all password Passw0rd!): tenant A admin + viewer, tenant B admin.
+ * Identities (all password DEV_SEED_PASSWORD): tenant A admin + viewer, tenant B admin.
  * Already covered elsewhere and NOT repeated here: SSRF (test/unit/security/ssrf-*.spec.ts, test/unit/ssrf), CSRF/CORS/headers
  * (test/unit/security/headers-cors.spec.ts), fuzzing (test/fuzz, test/unit/security/fuzz-*), tenancy/RLS (tools/tenancy-audit).
  */
@@ -12,7 +12,7 @@ import { describe, expect, it, beforeAll } from 'vitest';
 const BASE = process.env.VAPT_BASE_URL;
 const local = BASE && ['localhost', '127.0.0.1', '::1'].includes(new URL(BASE).hostname);
 if (BASE && !local) throw new Error(`VAPT refuses non-local target ${BASE}`);
-const PW = process.env.VAPT_PASSWORD ?? 'Passw0rd!';
+const PW = process.env.VAPT_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '';
 const WHO = {
   adminA: process.env.VAPT_ADMIN_A ?? 'nachiket.challawar@geta.ai',
   adminB: process.env.VAPT_ADMIN_B ?? 'nachiket.challawar+ten@geta.ai',
