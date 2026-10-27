@@ -11,6 +11,7 @@ import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useDealDetail, useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
 import type { ContactRef, Deal, Pipeline, UpdateDealInput } from '../api/schemas';
+import { isPastCloseDate, todayInput } from '../lib/close-date';
 import { errorKind, fieldErrors } from '../lib/errors';
 import { currencyChoices, formatMoney, minorExponent, toMajorInput, toMinor } from '../lib/money';
 import { DealActivity } from './deal-activity';
@@ -350,8 +351,17 @@ function DrawerBody({
                 id="drawer-close"
                 type="date"
                 readOnly={!canWrite}
+                min={deal.status === 'open' ? todayInput() : undefined}
                 value={deal.expectedCloseDate?.slice(0, 10) ?? ''}
-                onChange={(e) => void save({ expectedCloseDate: e.target.value || null })}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  // A date that has gone cannot be SET on an open deal; the date it already has (overdue) stays until it is moved forward.
+                  if (deal.status === 'open' && next !== '' && isPastCloseDate(next)) {
+                    toast(t('closePast'), 'danger');
+                    return;
+                  }
+                  void save({ expectedCloseDate: next || null });
+                }}
               />
             </Field>
           </div>
