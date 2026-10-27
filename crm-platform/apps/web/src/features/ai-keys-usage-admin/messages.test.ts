@@ -107,4 +107,10 @@ describe('ai-keys-usage-admin messages', () => {
     ];
     expect(dynamic.filter((k) => !(k in en))).toEqual([]);
   });
+
+  it('says the cap is reached when the usage page shows the reached alert', () => {
+    // The alert renders only when used >= limit, the point where AiTokenMeter.guard already refuses AI calls.
+    expect(en[`${ROOT_KEY}.usage.cap.reached`]).toMatch(/reached/i);
+    expect(en[`${ROOT_KEY}.usage.cap.reached`]).not.toMatch(/almost/i);
+  });
 });
