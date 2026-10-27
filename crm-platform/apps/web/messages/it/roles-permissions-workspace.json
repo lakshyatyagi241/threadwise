@@ -172,7 +172,8 @@
         "type": "Tipo",
         "members": "Membri",
         "permissions": "Permessi",
-        "lastEdited": "Ultima modifica",
+        "lastEdited": "Ultima modifica il",
+        "lastEditedBy": "da {name}",
         "actions": "Azioni"
       },
       "row": {

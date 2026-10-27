@@ -172,7 +172,8 @@
         "type": "種類",
         "members": "メンバー",
         "permissions": "権限",
-        "lastEdited": "最終更新",
+        "lastEdited": "最終編集日時",
+        "lastEditedBy": "編集者: {name}",
         "actions": "操作"
       },
       "row": {

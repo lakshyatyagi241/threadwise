@@ -172,7 +172,8 @@
         "type": "סוג",
         "members": "חברים",
         "permissions": "הרשאות",
-        "lastEdited": "נערך לאחרונה",
+        "lastEdited": "נערך לאחרונה ב",
+        "lastEditedBy": "על ידי {name}",
         "actions": "פעולות"
       },
       "row": {
