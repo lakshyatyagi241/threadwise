@@ -5,6 +5,7 @@ import {
   matchesStatus,
   providerPill,
   relativeShort,
+  stampShort,
   statCards,
 } from './list-model';
 
@@ -63,5 +64,16 @@ describe('row look', () => {
     expect(relativeShort('2026-10-07T11:59:58Z', now)).toBe('2s ago');
     expect(relativeShort('2026-10-07T09:00:00Z', now)).toBe('3h ago');
     expect(relativeShort('2026-09-30T12:00:00Z', now)).toBe('1w ago');
+  });
+
+  it('relative time and the date stamp follow the viewer language (row 312)', () => {
+    const now = Date.parse('2026-10-07T12:00:00Z');
+    const ar = relativeShort('2026-10-07T11:55:00Z', now, 'ar');
+    expect(ar).not.toContain('ago');
+    expect(ar).toMatch(/[؀-ۿ]/);
+    expect(stampShort('2026-10-15T12:00:00Z', 'en')).toMatch(/^Oct 1[56], \d{2}:\d{2}$/);
+    expect(stampShort('2026-10-15T12:00:00Z', 'ar')).toContain('أكتوبر');
+    expect(relativeShort('not a date', now, 'en')).toBe('—');
+    expect(stampShort('not a date', 'en')).toBe('—');
   });
 });

@@ -62,26 +62,60 @@ const ACCENTS = [
 export const accentFor = (uuid: string): string =>
   ACCENTS[Number.parseInt(uuid.charAt(0) || '0', 16) % 4] ?? ACCENTS[0];
 
-/** Short relative time, as the Updated column shows it ("2s ago", "5m ago", "3h ago", "2d ago", "1w ago", "4mo ago"). */
-export function relativeShort(iso: string, now: number = Date.now()): string {
-  const diff = Math.max(0, Math.floor((now - new Date(iso).getTime()) / 1000));
-  if (diff < 60) return `${diff}s ago`;
-  const m = Math.floor(diff / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.floor(h / 24);
-  if (d < 7) return `${d}d ago`;
-  if (d < 30) return `${Math.floor(d / 7)}w ago`;
-  if (d < 365) return `${Math.floor(d / 30)}mo ago`;
-  return `${Math.floor(d / 365)}y ago`;
+const relativeFormatters = new Map<string, Intl.RelativeTimeFormat>();
+
+/** One formatter per locale: Intl is slow to construct, and the list would build two for every row on every render. */
+function relativeFormatter(locale: string): Intl.RelativeTimeFormat {
+  let rtf = relativeFormatters.get(locale);
+  if (!rtf) {
+    rtf = new Intl.RelativeTimeFormat(locale, { style: 'narrow', numeric: 'always' });
+    relativeFormatters.set(locale, rtf);
+  }
+  return rtf;
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/**
+ * Short relative time in the viewer's language, as the Updated column shows it. Intl's narrow style gives the English forms
+ * ("2s ago", "5m ago", "3h ago", "2d ago", "1w ago", "4mo ago") and the Arabic ones for an Arabic viewer.
+ */
+export function relativeShort(iso: string, now: number = Date.now(), locale = 'en'): string {
+  const time = new Date(iso).getTime();
+  // An unreadable timestamp shows a dash: Intl would throw on it and the whole list would fail to render.
+  if (Number.isNaN(time)) return '—';
+  const diff = Math.max(0, Math.floor((now - time) / 1000));
+  const rtf = relativeFormatter(locale);
+  if (diff < 60) return rtf.format(-diff, 'second');
+  const m = Math.floor(diff / 60);
+  if (m < 60) return rtf.format(-m, 'minute');
+  const h = Math.floor(m / 60);
+  if (h < 24) return rtf.format(-h, 'hour');
+  const d = Math.floor(h / 24);
+  if (d < 7) return rtf.format(-d, 'day');
+  if (d < 30) return rtf.format(-Math.floor(d / 7), 'week');
+  if (d < 365) return rtf.format(-Math.floor(d / 30), 'month');
+  return rtf.format(-Math.floor(d / 365), 'year');
+}
 
-/** "Oct 02, 08:00" in the viewer's time zone. */
-export function stampShort(iso: string): string {
-  const d = new Date(iso);
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${MONTHS[d.getMonth()]} ${p(d.getDate())}, ${p(d.getHours())}:${p(d.getMinutes())}`;
+const dateFormatters = new Map<string, Intl.DateTimeFormat>();
+
+function dateFormatter(locale: string): Intl.DateTimeFormat {
+  let dtf = dateFormatters.get(locale);
+  if (!dtf) {
+    dtf = new Intl.DateTimeFormat(locale, {
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    });
+    dateFormatters.set(locale, dtf);
+  }
+  return dtf;
+}
+
+/** "Oct 02, 08:00" in the viewer's time zone, with the month name in the viewer's language. */
+export function stampShort(iso: string, locale = 'en'): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '—';
+  return dateFormatter(locale).format(date);
 }
