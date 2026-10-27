@@ -1868,50 +1868,6 @@
       }
     },
     {
-      "id": "M17",
-      "name": "Wallet \"send ok\" short-cut",
-      "layer": "process",
-      "priority": "P0",
-      "location": "apps/api/src/modules/wallet-message-billing/wallet-gate.service.ts",
-      "what": "This workspace could afford a send a moment ago.",
-      "key": "${orgId}:...",
-      "tenant": {
-        "mode": "org",
-        "org": true,
-        "user": false,
-        "anchor": "const key = `${req.orgId}|"
-      },
-      "ttl": "3 s (SEND_OK_TTL_MS)",
-      "bound": {
-        "kind": "size-cap",
-        "max": 500,
-        "evicts": "clear all"
-      },
-      "invalidation": {
-        "trigger": "None.",
-        "mechanism": "expiry"
-      },
-      "stampede": "none",
-      "backingStoreFailure": {
-        "mode": "n/a",
-        "behaviour": "Database error propagates."
-      },
-      "staleWindow": {
-        "worstCaseSeconds": 3,
-        "whoReadsStale": "A drained wallet can still send for 3 s.",
-        "documentedSeconds": 3,
-        "note": null
-      },
-      "hitMissPoint": "wallet-gate.service.ts sendOk.get().",
-      "status": "ok",
-      "tests": [],
-      "instrumentation": {
-        "instrumented": true,
-        "metrics": ["wallet_send_ok"],
-        "hitRatioAlert": false
-      }
-    },
-    {
       "id": "M18",
       "name": "Message price cards",
       "layer": "process",
@@ -3499,9 +3455,6 @@
     },
     "modules/persona/persona.service.ts#definitions": {
       "cache": "M12"
-    },
-    "modules/wallet-message-billing/wallet-gate.service.ts#sendOk": {
-      "cache": "M17"
     },
     "modules/wallet-message-billing/wallet-realtime.publisher.ts#last": {
       "cache": "M26"
