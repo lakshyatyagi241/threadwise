@@ -1309,7 +1309,12 @@
           "igUsernameHint": "Ohne das @. Der Link wird zu ig.me/m/yourbrand. Ein Tippen öffnet einen Direktchat mit Ihrem Konto.",
           "igMessage": "WhatsApp-Nachricht",
           "igMessageHint": "Wird dem Kunden auf WhatsApp mit dem Instagram-Link gesendet. Unterstützt '{{'Variablen'}}'.",
-          "igMessagePlaceholder": "Folgen Sie uns auf Instagram 👇"
+          "igMessagePlaceholder": "Folgen Sie uns auf Instagram 👇",
+          "templateFills": "Womit jede Nummer gefüllt wird",
+          "templateFillsHint": "Geben Sie den Text für jede Nummer der Vorlage ein oder drücken Sie /, um eine Kontaktangabe oder eine Flow-Variable einzufügen. Leer lassen, um den Wert der Vorlage zu verwenden.",
+          "templateHeaderMedia": "Kopfzeilendatei",
+          "templateHeaderMediaHint": "Das Bild, Video oder die Datei in der Kopfzeile dieser Vorlage. Nötig, wenn die Vorlage keine eigene Datei hat.",
+          "templateHeaderMediaMissing": "Fügen Sie die Kopfzeilendatei hinzu: Diese Vorlage hat keine, und WhatsApp sendet sie ohne nicht."
         },
         "sequence": {
           "info": "Jede Antwort wird dem Kunden der Reihe nach gesendet. Kombinieren Sie Text, Bilder, Videos, Audio und Dokumente in einem Knoten, ideal für Produktkarten oder Onboarding-Pakete.",

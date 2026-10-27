@@ -71,7 +71,9 @@
       },
       "notice": {
         "saved": "נשמר.",
-        "published": "פורסם ל-WhatsApp."
+        "published": "פורסם ל-WhatsApp.",
+        "connectHint": "טפסים מפורסמים רק דרך חיבור ישיר ל-WhatsApp Cloud API. בקשו ממנהל לחבר חיבור כזה תחת ערוצים ← WhatsApp.",
+        "connectLink": "פתיחת ערוצי WhatsApp"
       },
       "builder": {
         "back": "חזרה לטפסים",

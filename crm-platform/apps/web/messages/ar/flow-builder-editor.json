@@ -1039,7 +1039,12 @@
           "igUsernameHint": "بدون @. يصبح الرابط ig.me/m/yourbrand — النقر عليه يفتح رسالة مباشرة إلى حسابك.",
           "igMessage": "رسالة WhatsApp",
           "igMessageHint": "تُرسل إلى العميل على WhatsApp مع رابط Instagram. تدعم '{{'variables'}}'.",
-          "igMessagePlaceholder": "تابع معنا على Instagram 👇"
+          "igMessagePlaceholder": "تابع معنا على Instagram 👇",
+          "templateFills": "ما الذي يملأ كل رقم",
+          "templateFillsHint": "اكتب النص لكل رقم في القالب، أو اضغط / لإدراج بيان من جهة الاتصال أو متغير من التدفق. اتركه فارغاً لاستخدام ما يقوله القالب.",
+          "templateHeaderMedia": "ملف الترويسة",
+          "templateHeaderMediaHint": "الصورة أو الفيديو أو الملف في ترويسة هذا القالب. مطلوب عندما لا يكون للقالب ملف خاص به.",
+          "templateHeaderMediaMissing": "أضف ملف الترويسة: لا يحتوي هذا القالب على ملف، ولن يرسله WhatsApp بدونه."
         },
         "sequence": {
           "info": "يُرسل كل رد بالترتيب إلى العميل. اجمع النصوص والصور والفيديو والصوت والمستندات في عقدة واحدة — مثالي لبطاقات المنتجات أو حزم الانضمام.",

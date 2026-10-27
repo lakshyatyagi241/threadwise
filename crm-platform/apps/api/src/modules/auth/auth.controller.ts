@@ -35,11 +35,6 @@ const partnerLoginSchema = z.object({
   password: z.string().min(1),
 });
 
-const clerkSessionSchema = z.object({
-  orgSlug: z.string().min(1),
-  clerkToken: z.string().min(1),
-});
-
 @ApiTags('auth')
 @Controller({ path: 'auth', version: '2' })
 export class AuthController {
@@ -142,17 +137,6 @@ export class AuthController {
   })
   async partnerLogin(@Body(zodPipe(partnerLoginSchema)) body: z.infer<typeof partnerLoginSchema>) {
     return this.auth.loginPartnerAgent(body.orgSlug, body.email, body.password, clientMeta());
-  }
-
-  @Public()
-  @Post('clerk/session')
-  @ApiOperation({
-    summary: 'Exchange a verified Clerk session token for a session (existing users only)',
-  })
-  async clerkSession(@Body(zodPipe(clerkSessionSchema)) body: z.infer<typeof clerkSessionSchema>) {
-    // Not configured (placeholder key): this door does not exist.
-    if (!this.auth.clerkConfigured()) throw AppError.notFound('Route');
-    return this.auth.loginViaClerk(body.orgSlug, body.clerkToken, clientMeta());
   }
 
   @Public()

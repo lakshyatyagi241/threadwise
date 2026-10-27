@@ -341,13 +341,17 @@ export class WizardCsvService {
         ELSE 'new' END`;
     const preview = (
       await tx.execute(sql`
-        SELECT r.line, r.phone, r.name, ${status} AS status FROM camp_wizard_csv_rows r
+        SELECT r.line, r.phone, r.name, ${status} AS status,
+               (r.line IN (${owned})) AS is_contact, (r.line IN (${optedOut})) AS is_opted_out
+        FROM camp_wizard_csv_rows r
         WHERE r.org_id = ${orgId} AND r.upload_id = ${id} AND r.kind = 'valid' ORDER BY r.line LIMIT ${PREVIEW_ROWS}`)
     ).rows as Array<{
       line: number;
       phone: string;
       name: string | null;
       status: 'new' | 'existing' | 'optedOut';
+      is_contact: boolean;
+      is_opted_out: boolean;
     }>;
     const issues = (
       await tx.execute(sql`
@@ -374,6 +378,8 @@ export class WizardCsvService {
         phone: r.phone,
         name: r.name,
         status: r.status,
+        contact: r.is_contact ? 'existing' : 'new',
+        optedOut: r.is_opted_out,
       })),
       issues: issues.map((r) => ({
         line: Number(r.line),

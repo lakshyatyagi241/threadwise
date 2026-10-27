@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
+import { getRuntimeMonitor, type Counter } from '@crm/observability';
 import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
 import { BillingModeService } from '../bsp-billing-engine';
 import { AppError } from '../../common/errors/app-error';
@@ -61,14 +62,27 @@ const INSUFFICIENT_MESSAGE =
  * create a single row.
  *
  * Kept from Reference: platform-owned workspaces pass; a workspace still inside its plan's free monthly messages passes with an empty
- * wallet; a refusal is written to the workspace's wallet log; a failure to LOOK UP any of this lets the send through (fail open,
- * logged as a warning) because a billing read must never be the reason a legitimate send stops.
+ * wallet; a refusal is written to the workspace's wallet log. A failure to LOOK UP the wallet fails differently by kind: a single send
+ * lets through (fail open, logged) because a billing read must not stop a one-off message; a bulk launch is refused with a retryable
+ * 503, since it would otherwise run unchecked (#1067).
  * Changed: Reference computed an estimate and never compared it (a wallet of 1 credit launched 50,000 recipients). Here the balance
  * must cover `launchCoveragePercent` of the estimated cost (platform setting, default 100; 0 restores "block only when empty").
  */
 @Injectable()
 export class WalletGateService {
   private readonly logger = new Logger(WalletGateService.name);
+  private unchecked?: Counter;
+
+  /** Counts a bulk launch refused because the wallet balance could not be read. Nothing is counted before the monitor starts. */
+  private countUncheckedRefusal(source: string): void {
+    const monitor = getRuntimeMonitor();
+    if (!monitor) return;
+    this.unchecked ??= monitor.metrics.counter(
+      'crm_wallet_launch_unchecked_refusals_total',
+      'Bulk launches refused because the wallet balance could not be read, by source',
+    );
+    this.unchecked.inc(1, { source });
+  }
 
   constructor(
     private readonly db: DatabaseService,
@@ -153,11 +167,19 @@ export class WalletGateService {
       if (!judged) return;
       ({ verdict, balanceMinor, estimateMinor } = judged);
     } catch (err) {
+      // A bulk launch must not go ahead unchecked (owner decision, #1067): the caller gets a retryable 503 and tries again.
       this.logger.warn(
         { err, orgId: req.orgId },
-        '[WALLET] launch precheck failed, the send is allowed',
+        '[WALLET] launch precheck failed, the launch is refused',
       );
-      return;
+      this.countUncheckedRefusal(req.source);
+      throw new AppError(
+        ERROR_CODES.SERVICE_UNAVAILABLE,
+        'Your wallet could not be checked just now. Try again in a moment.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+        undefined,
+        true,
+      );
     }
     if (verdict.ok) return;
 

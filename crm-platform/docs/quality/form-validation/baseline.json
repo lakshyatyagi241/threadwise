@@ -308,7 +308,6 @@
     "failing": 0
   },
   "_unresolved": [
-    "auth/clerkSessionSchema",
     "auth/partnerLoginSchema",
     "bsp-billing-engine/revokeBodySchema",
     "marketing-site-cms/categoryBodySchema"

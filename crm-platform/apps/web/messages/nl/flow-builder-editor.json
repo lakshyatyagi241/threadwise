@@ -1741,7 +1741,12 @@
           "igUsernameHint": "Zonder de @. De link wordt ig.me/m/yourbrand — tikken erop opent een DM naar je account.",
           "igMessage": "WhatsApp-bericht",
           "igMessageHint": "Verzonden naar de klant via WhatsApp met de Instagram-link. Ondersteunt '{{'variabelen'}}'.",
-          "igMessagePlaceholder": "Ga verder met ons op Instagram 👇"
+          "igMessagePlaceholder": "Ga verder met ons op Instagram 👇",
+          "templateFills": "Waarmee elk nummer wordt gevuld",
+          "templateFillsHint": "Typ de tekst voor elk nummer van de sjabloon, of druk op / om een contactgegeven of een flowvariabele in te voegen. Laat leeg om de waarde van de sjabloon te gebruiken.",
+          "templateHeaderMedia": "Koptekstbestand",
+          "templateHeaderMediaHint": "De afbeelding, video of het bestand in de kop van deze sjabloon. Nodig als de sjabloon geen eigen bestand heeft.",
+          "templateHeaderMediaMissing": "Voeg het koptekstbestand toe: deze sjabloon heeft er geen en WhatsApp verstuurt hem niet zonder."
         },
         "sequence": {
           "info": "Elk antwoord wordt in volgorde naar de klant verzonden. Combineer tekst, afbeeldingen, video, audio en documenten in één node — ideaal voor productkaarten of onboardingkits.",

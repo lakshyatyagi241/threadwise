@@ -57,7 +57,6 @@ export async function startHarness(
     REDIS_URL: `redis://${redis.getHost()}:${redis.getMappedPort(6379)}`,
     JWT_ACCESS_SECRET: 'access-secret-for-tests-0123456789abcdef',
     JWT_REFRESH_SECRET: 'refresh-secret-for-tests-0123456789abcdef',
-    CLERK_SECRET_KEY: 'sk_test_unused',
     CREDENTIALS_ENCRYPTION_KEY: Buffer.alloc(32, 7).toString('base64'),
     SETUP_TOKEN,
     DEMO_MODE: 'false',

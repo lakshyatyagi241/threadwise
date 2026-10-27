@@ -315,7 +315,22 @@
         "previousTitle": "Envois précédents",
         "previousHint": "Ajoutez les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, répondu ou cliqué.",
         "previousEstimate": "{count, plural, one {Jusqu'à # personne issue des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} many {Jusqu'à # de personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} other {Jusqu'à # personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).}}",
-        "previousEditHint": "Votre choix précédent d'envois n'est pas affiché lors de la modification : cette campagne conserve déjà ses destinataires sous forme de contacts. Choisissez à nouveau pour ajouter d'autres personnes."
+        "previousEditHint": "Votre choix précédent d'envois n'est pas affiché lors de la modification : cette campagne conserve déjà ses destinataires sous forme de contacts. Choisissez à nouveau pour ajouter d'autres personnes.",
+        "emails": "E-mails saisis à la main",
+        "emailsHint": "Un par ligne, ou séparés par une virgule ou un point-virgule.",
+        "emailsPlaceholder": "Une adresse e-mail par ligne",
+        "emailsCount": "{count} adresses",
+        "emailCsvHint": "Colonnes : nom, e-mail. Toute autre colonne devient une variable utilisable dans le message.",
+        "emailModes": {
+          "csv": {
+            "title": "Importer un CSV",
+            "hint": "Importez les adresses e-mail de cette campagne."
+          },
+          "manual": {
+            "title": "E-mails saisis à la main",
+            "hint": "Collez une adresse e-mail par ligne."
+          }
+        }
       },
       "message": {
         "title": "Message",
@@ -1363,7 +1378,6 @@
         "csvPreviewCaption": "Aperçu des numéros valides du fichier",
         "csvLine": "Ligne",
         "csvName": "Nom",
-        "csvStatus": "Statut",
         "csvRow": {
           "new": "Nouveau contact",
           "existing": "Contact existant",
@@ -1383,7 +1397,14 @@
         "modePrevious": "Envoyer aux envois précédents",
         "previousHint": "Ciblez à nouveau les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, n'ont pas lu, ont répondu ou ont cliqué.",
         "chipPrevious": "{count, plural, one {# envoi antérieur} many {# d'envois antérieurs} other {# envois antérieurs}} ({outcome})",
-        "filterNoConditions": "Ajoutez une condition pour voir combien de contacts correspondent."
+        "filterNoConditions": "Ajoutez une condition pour voir combien de contacts correspondent.",
+        "csvConsentCol": "Consentement",
+        "csvContactCol": "Contact",
+        "csvConsent": {
+          "optedIn": "Inscrit",
+          "optedOut": "Désinscrit"
+        },
+        "clearAudience": "Vider l'audience"
       },
       "review": {
         "intro": "Vérifiez le coût, indiquez par quoi chaque variable du modèle est remplie et examinez la diffusion.",
