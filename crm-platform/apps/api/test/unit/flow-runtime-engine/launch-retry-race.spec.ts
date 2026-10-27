@@ -24,4 +24,8 @@ describe('retry relaunch only from a failed subscriber (#1175)', () => {
   it('does not relaunch a paused subscriber on a retry', async () => {
     expect(await check('paused')).toBe(false);
   });
+
+  it('does not relaunch a completed subscriber on a retry', async () => {
+    expect(await check('completed')).toBe(false);
+  });
 });
