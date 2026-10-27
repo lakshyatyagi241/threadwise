@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "승인된 템플릿은 Meta 기준 24시간에 한 번, 30일에 10번까지 편집할 수 있습니다. 나중에 다시 시도하세요.",
       "ROW_VERSION_CONFLICT": "편집하는 동안 다른 사용자가 이 템플릿을 변경했습니다. 새로고침해 최신 버전을 확인한 뒤 변경 사항을 다시 적용하세요.",
       "VALIDATION_FAILED": "일부 항목이 올바르지 않습니다. 아래 항목을 확인하세요.",
-      "INTERNAL": "서버가 이 요청을 처리하지 못했습니다. 잠시 후 다시 시도하세요."
+      "INTERNAL": "서버가 이 요청을 처리하지 못했습니다. 잠시 후 다시 시도하세요.",
+      "uploadTooLarge": "파일이 너무 큽니다. 이미지는 5MB, 동영상은 16MB, PDF는 10MB까지 가능합니다.",
+      "uploadRejected": "이 파일은 받아들여지지 않았습니다. 이름과 상관없이 내용이 JPG/PNG 이미지, MP4/3GP 동영상, PDF가 아닙니다.",
+      "uploadProviderBusy": "WhatsApp이 지금은 파일을 받을 수 없습니다. 1분 후에 다시 시도하세요.",
+      "uploadRefused": "파일을 업로드할 수 없습니다.",
+      "uploadNetwork": "업로드가 끝나지 않았습니다. 연결을 확인하고 다시 시도하세요."
     },
     "preview": {
       "title": "미리보기",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Flow ID를 입력하세요.",
           "flowIdInvalid": "Flow ID는 숫자입니다.",
           "screenRequired": "화면 ID를 입력하세요.",
-          "catalogAlone": "카탈로그 버튼은 다른 버튼과 함께 사용할 수 없습니다."
+          "catalogAlone": "카탈로그 버튼은 다른 버튼과 함께 사용할 수 없습니다.",
+          "flowIdNotMeta": "이 양식은 아직 Meta Flow가 아닙니다(Flow ID가 숫자가 아님). WhatsApp 양식에서 저장하고 게시한 뒤 여기서 선택하세요."
         },
         "catalogHint": "WhatsApp 카탈로그를 엽니다. 버튼에는 “카탈로그 보기”가 표시되며 유일한 버튼이어야 합니다.",
         "flowPick": "WhatsApp 양식",
@@ -384,7 +390,8 @@
         "flowLoading": "양식을 불러오는 중…",
         "flowNone": "게시된 WhatsApp 양식이 아직 없습니다.",
         "flowNoneLink": "양식 만들고 게시하기",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title}(먼저 Meta에 게시하세요)"
       },
       "result": {
         "metaRefused": "저장했지만 Meta가 템플릿을 거부했습니다.",

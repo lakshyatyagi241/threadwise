@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta cho phép một lần chỉnh sửa trong 24 giờ và mười lần trong 30 ngày đối với mẫu đã được duyệt. Hãy thử lại sau.",
       "ROW_VERSION_CONFLICT": "Người khác đã thay đổi mẫu này trong lúc bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất, rồi áp dụng lại thay đổi của bạn.",
       "VALIDATION_FAILED": "Một số trường không hợp lệ. Hãy kiểm tra các trường bên dưới.",
-      "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút."
+      "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút.",
+      "uploadTooLarge": "Tệp quá lớn. Ảnh tối đa 5 MB, video 16 MB và PDF 10 MB.",
+      "uploadRejected": "Tệp này không được chấp nhận: dù tên là gì, nội dung không phải ảnh JPG hoặc PNG, video MP4 hoặc 3GP, hay PDF.",
+      "uploadProviderBusy": "WhatsApp chưa thể nhận tệp lúc này. Hãy đợi một phút rồi thử lại.",
+      "uploadRefused": "Không thể tải tệp lên.",
+      "uploadNetwork": "Tải lên chưa hoàn tất. Kiểm tra kết nối rồi thử lại."
     },
     "preview": {
       "title": "Xem trước",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Nhập ID Flow.",
           "flowIdInvalid": "ID Flow là một số.",
           "screenRequired": "Nhập ID màn hình.",
-          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác."
+          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác.",
+          "flowIdNotMeta": "Biểu mẫu này chưa phải Flow của Meta (Flow ID không phải là số). Hãy mở Biểu mẫu WhatsApp, lưu và xuất bản, rồi chọn tại đây."
         },
         "catalogHint": "Mở danh mục WhatsApp của bạn. Nút hiển thị “Xem danh mục” và phải là nút duy nhất.",
         "flowPick": "Biểu mẫu WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Đang tải biểu mẫu…",
         "flowNone": "Bạn chưa có biểu mẫu WhatsApp nào đã xuất bản.",
         "flowNoneLink": "Tạo và xuất bản một biểu mẫu",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (hãy xuất bản lên Meta trước)"
       },
       "result": {
         "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",

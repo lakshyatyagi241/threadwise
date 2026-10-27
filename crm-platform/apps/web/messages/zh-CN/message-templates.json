@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta 对已批准的模板允许每 24 小时编辑一次、每 30 天编辑十次。请稍后再试。",
       "ROW_VERSION_CONFLICT": "你在编辑时此模板已被他人更改。请刷新以查看最新版本,然后重新应用你的更改。",
       "VALIDATION_FAILED": "部分字段无效。请检查下方字段。",
-      "INTERNAL": "服务器无法处理此请求。请稍后重试。"
+      "INTERNAL": "服务器无法处理此请求。请稍后重试。",
+      "uploadTooLarge": "文件太大。图片最大 5 MB，视频最大 16 MB，PDF 最大 10 MB。",
+      "uploadRejected": "此文件未被接受：无论文件名如何，其内容都不是 JPG 或 PNG 图片、MP4 或 3GP 视频，也不是 PDF。",
+      "uploadProviderBusy": "WhatsApp 目前无法接收该文件。请等待一分钟后重试。",
+      "uploadRefused": "无法上传文件。",
+      "uploadNetwork": "上传未完成。请检查网络连接后重试。"
     },
     "preview": {
       "title": "预览",
@@ -375,7 +380,8 @@
           "flowIdRequired": "请输入 Flow ID。",
           "flowIdInvalid": "Flow ID 必须是数字。",
           "screenRequired": "请输入页面 ID。",
-          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
+          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。",
+          "flowIdNotMeta": "此表单还不是 Meta Flow（其 Flow ID 不是数字）。请打开 WhatsApp 表单，保存并发布后，再在此选择。"
         },
         "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
         "flowPick": "WhatsApp 表单",
@@ -384,7 +390,8 @@
         "flowLoading": "正在加载表单…",
         "flowNone": "你还没有已发布的 WhatsApp 表单。",
         "flowNoneLink": "创建并发布一个",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title}（请先发布到 Meta）"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",

@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta, onaylı bir şablonda 24 saatte bir ve 30 günde on düzenlemeye izin verir. Daha sonra tekrar deneyin.",
       "ROW_VERSION_CONFLICT": "Düzenlerken bu şablonu biri değiştirdi. En son sürümü görmek için yenileyin, ardından değişikliğinizi yeniden uygulayın.",
       "VALIDATION_FAILED": "Bazı alanlar geçerli değil. Aşağıdaki alanları kontrol edin.",
-      "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin."
+      "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin.",
+      "uploadTooLarge": "Dosya çok büyük. Görseller 5 MB, videolar 16 MB, PDF'ler 10 MB'a kadar olabilir.",
+      "uploadRejected": "Bu dosya kabul edilmedi: adı ne olursa olsun içeriği bir JPG veya PNG görseli, MP4 veya 3GP videosu ya da PDF değil.",
+      "uploadProviderBusy": "WhatsApp şu anda dosyayı alamadı. Bir dakika bekleyip yeniden deneyin.",
+      "uploadRefused": "Dosya yüklenemedi.",
+      "uploadNetwork": "Yükleme tamamlanmadı. Bağlantınızı kontrol edip yeniden deneyin."
     },
     "preview": {
       "title": "Önizleme",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Flow kimliğini girin.",
           "flowIdInvalid": "Flow kimliği bir sayıdır.",
           "screenRequired": "Ekran kimliğini girin.",
-          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz."
+          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz.",
+          "flowIdNotMeta": "Bu form henüz bir Meta Flow değil (Flow ID'si bir sayı değil). WhatsApp Formları'nı açıp kaydedin ve yayınlayın, sonra burada seçin."
         },
         "catalogHint": "WhatsApp kataloğunuzu açar. Düğmede “Kataloğu görüntüle” yazar ve tek düğme olmalıdır.",
         "flowPick": "WhatsApp Formu",
@@ -384,7 +390,8 @@
         "flowLoading": "Formlar yükleniyor…",
         "flowNone": "Henüz yayımlanmış bir WhatsApp formunuz yok.",
         "flowNoneLink": "Bir tane oluşturun ve yayımlayın",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (önce Meta'da yayınlayın)"
       },
       "result": {
         "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",

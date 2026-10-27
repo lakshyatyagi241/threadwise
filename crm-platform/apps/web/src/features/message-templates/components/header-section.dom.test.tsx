@@ -71,6 +71,26 @@ afterEach(() => {
 });
 
 describe('header media pick', () => {
+  it('names the real problem of a refused upload, never the bare generic line', async () => {
+    upload.mockRejectedValueOnce(new ApiError(413, 'UNKNOWN', 'Request failed with status 413'));
+    renderSection();
+    await pick(jpeg(1024));
+    expect(text()).toContain('The file is too big');
+    expect(text()).not.toContain('Something went wrong');
+
+    upload.mockRejectedValueOnce(
+      new ApiError(
+        422,
+        'TPL_META_REJECTED',
+        'Meta did not accept the file: Invalid image dimensions',
+        'r2',
+      ),
+    );
+    await pick(jpeg(2048));
+    expect(text()).toContain('The file could not be uploaded');
+    expect(text()).toContain('Invalid image dimensions');
+  });
+
   it('a new pick clears the error the last upload left', async () => {
     upload.mockRejectedValueOnce(
       new ApiError(422, 'VALIDATION_FAILED', 'Request payload failed validation', 'r1', [
@@ -79,10 +99,10 @@ describe('header media pick', () => {
     );
     renderSection();
     await pick(jpeg(1024));
-    expect(text()).toContain('Some fields are not valid');
+    expect(text()).toContain('The file could not be uploaded');
 
     await pick(jpeg(Math.round(5.5 * MB)));
-    expect(text()).not.toContain('Some fields are not valid');
+    expect(text()).not.toContain('The file could not be uploaded');
     expect(text()).toContain('is 5.5 MB');
     expect(upload).toHaveBeenCalledTimes(1);
   });

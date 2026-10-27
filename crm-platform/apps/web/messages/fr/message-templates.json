@@ -39,7 +39,12 @@
       "TPL_EDIT_LIMIT": "Meta autorise une modification en 24 heures et dix en 30 jours pour un modèle approuvé. Réessayez plus tard.",
       "ROW_VERSION_CONFLICT": "Quelqu’un a modifié ce modèle pendant que vous le modifiiez. Rechargez la page pour voir la dernière version, puis appliquez à nouveau votre modification.",
       "VALIDATION_FAILED": "Certains champs sont invalides. Vérifiez les champs ci-dessous.",
-      "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant."
+      "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant.",
+      "uploadTooLarge": "Le fichier est trop volumineux. Les images vont jusqu'à 5 Mo, les vidéos 16 Mo et les PDF 10 Mo.",
+      "uploadRejected": "Ce fichier n'a pas été accepté : son contenu n'est ni une image JPG ou PNG, ni une vidéo MP4 ou 3GP, ni un PDF, quel que soit son nom.",
+      "uploadProviderBusy": "WhatsApp n'a pas pu recevoir le fichier pour le moment. Attendez une minute puis réessayez.",
+      "uploadRefused": "Le fichier n'a pas pu être téléversé.",
+      "uploadNetwork": "Le téléversement ne s'est pas terminé. Vérifiez votre connexion et réessayez."
     },
     "preview": {
       "title": "Aperçu",
@@ -375,7 +380,8 @@
           "flowIdRequired": "Saisissez l’ID du Flow.",
           "flowIdInvalid": "L’ID du Flow est un nombre.",
           "screenRequired": "Saisissez l’ID de l’écran.",
-          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons."
+          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons.",
+          "flowIdNotMeta": "Ce formulaire n'est pas encore un Flow Meta (son ID de Flow n'est pas un nombre). Ouvrez les formulaires WhatsApp, enregistrez-le et publiez-le, puis choisissez-le ici."
         },
         "catalogHint": "Ouvre votre catalogue WhatsApp. Le bouton affiche « Voir le catalogue » et doit être le seul bouton.",
         "flowPick": "Formulaire WhatsApp",
@@ -384,7 +390,8 @@
         "flowLoading": "Chargement des formulaires…",
         "flowNone": "Vous n’avez pas encore de formulaire WhatsApp publié.",
         "flowNoneLink": "En créer et en publier un",
-        "flowById": "Flow {id}"
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (à publier d'abord sur Meta)"
       },
       "result": {
         "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
