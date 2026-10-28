@@ -9,7 +9,7 @@ import { BaileysSocketFactory } from '../../../src/infra/providers/node-bridge-r
  * memory with its caches. The factory now hands the socket its own timerless caches; this pins that an ended socket leaves no repeating
  * timer behind. A local socket server stands in for WhatsApp (it accepts and never answers), so nothing leaves the machine.
  */
-const req = createRequire(import.meta.url);
+const req = createRequire(__filename);
 const { WebSocketServer } = createRequire(req.resolve('baileys'))('ws') as typeof import('ws');
 
 describe('BaileysSocketFactory frees an ended socket', () => {
