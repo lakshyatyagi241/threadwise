@@ -25,6 +25,7 @@ import {
   LeadScoringAiError,
   type LeadScoringAiPort,
 } from '../../infra/providers/lead-scoring/lead-scoring-ai.port';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
@@ -109,7 +110,8 @@ export class LeadScoringService {
    * is removed when it completes (a retained one would block the next score for the same contact).
    */
   async enqueue(job: LeadScoreJob, delayMs = 0): Promise<void> {
-    await this.queue.add('score', job, {
+    // A failed job under this id would make BullMQ ignore the add until it ages out, so it is revived first (#1263).
+    await addOrRevive(this.queue, 'score', job, {
       jobId: `lsc-${job.orgId}-${job.contactId}`,
       delay: delayMs,
       attempts: 3,
