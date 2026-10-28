@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { Button, Checkbox, Input, Popover, Select, Spinner, Textarea } from '@crm/ui';
 import { CONSENT_CHANNELS, type ConsentAction, type ConsentChannel } from '@crm/contracts';
 import { useGroups } from '../api/groups';
@@ -17,9 +17,9 @@ export interface TagChoice {
 /** Which bulk picker is open (they open from the "More actions" menu). */
 export type BulkPicker = 'groupAdd' | 'groupRemove' | 'tagAdd' | 'tagRemove' | 'consent' | null;
 
-/** One marketing consent change for the selection: a channel, subscribe or unsubscribe, and the note a subscription needs. */
+/** One marketing consent change for the selection: the channels, subscribe or unsubscribe, and the note a subscription needs. */
 export interface ConsentChoice {
-  channel: ConsentChannel;
+  channels: ConsentChannel[];
   action: ConsentAction;
   note?: string;
 }
@@ -55,7 +55,9 @@ export function BulkPickers({
           count={count ?? null}
           onClose={onClose}
           onApply={async (choice) => {
-            if (await onConsent(choice)) onClose();
+            const done = await onConsent(choice);
+            if (done) onClose();
+            return done;
           }}
         />
       )}
@@ -255,7 +257,7 @@ function TagPicker({
 }
 
 /**
- * Marketing consent for the selection, one channel at a time. Two steps: the form (channel, subscribe or unsubscribe, and for a
+ * Marketing consent for the selection, one or more channels at a time. Two steps: the form (channels, subscribe or unsubscribe, and for a
  * subscription the note of how the contacts agreed), then a confirmation that says what will be written, before anything is sent.
  */
 function ConsentPicker({
@@ -267,18 +269,27 @@ function ConsentPicker({
   open: boolean;
   count: number | null;
   onClose: () => void;
-  onApply: (choice: ConsentChoice) => Promise<void>;
+  onApply: (choice: ConsentChoice) => Promise<boolean>;
 }) {
   const t = useTranslations('contacts-attributes-tags.bulk');
   const tc = useTranslations('contact-consent.card.channel');
-  const [channel, setChannel] = useState<ConsentChannel>('whatsapp');
+  const locale = useLocale();
+  const [channels, setChannels] = useState<ConsentChannel[]>(['whatsapp']);
   const [action, setAction] = useState<ConsentAction>('granted');
   const [note, setNote] = useState('');
   const [step, setStep] = useState<'form' | 'confirm'>('form');
   const [problem, setProblem] = useState(false);
   const [pending, setPending] = useState(false);
   const needsNote = action === 'granted';
-  const choice: ConsentChoice = { channel, action, ...(needsNote ? { note: note.trim() } : {}) };
+  const choice: ConsentChoice = { channels, action, ...(needsNote ? { note: note.trim() } : {}) };
+  const channelList = useMemo(() => {
+    const names = CONSENT_CHANNELS.filter((c) => channels.includes(c)).map((c) => tc(c));
+    try {
+      return new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(names);
+    } catch {
+      return names.join(', ');
+    }
+  }, [channels, locale, tc]);
 
   function reset() {
     setStep('form');
@@ -304,17 +315,23 @@ function ConsentPicker({
       <div className="text-xs font-semibold">{t('consentTitle')}</div>
       {step === 'form' ? (
         <>
-          <Select
-            aria-label={t('consentChannel')}
-            value={channel}
-            onChange={(e) => setChannel(e.target.value as ConsentChannel)}
-          >
+          <fieldset className="flex max-h-48 flex-col gap-2 overflow-y-auto">
+            <legend className="sr-only">{t('consentChannel')}</legend>
             {CONSENT_CHANNELS.map((c) => (
-              <option key={c} value={c}>
-                {tc(c)}
-              </option>
+              <Checkbox
+                key={c}
+                checked={channels.includes(c)}
+                onChange={(e) =>
+                  setChannels(
+                    CONSENT_CHANNELS.filter((x) =>
+                      x === c ? e.target.checked : channels.includes(x),
+                    ),
+                  )
+                }
+                label={tc(c)}
+              />
             ))}
-          </Select>
+          </fieldset>
           <Select
             aria-label={t('consentAction')}
             value={action}
@@ -343,7 +360,7 @@ function ConsentPicker({
             <Button variant="secondary" size="sm" onClick={onClose}>
               {t('cancel')}
             </Button>
-            <Button size="sm" onClick={next}>
+            <Button size="sm" disabled={channels.length === 0} onClick={next}>
               {t('consentContinue')}
             </Button>
           </div>
@@ -352,7 +369,7 @@ function ConsentPicker({
         <>
           <p className="text-sm">
             {t('consentSummary', {
-              channel: tc(channel),
+              channel: channelList,
               change: t(action === 'granted' ? 'consentChangeGranted' : 'consentChangeWithdrawn'),
               count: count ?? 0,
             })}
@@ -370,8 +387,7 @@ function ConsentPicker({
               onClick={async () => {
                 setPending(true);
                 try {
-                  await onApply(choice);
-                  reset();
+                  if (await onApply(choice)) reset();
                 } finally {
                   setPending(false);
                 }

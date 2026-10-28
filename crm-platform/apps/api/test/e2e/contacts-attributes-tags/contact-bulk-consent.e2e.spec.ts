@@ -57,7 +57,12 @@ describe('bulk marketing consent for one channel', () => {
     const res = await api
       .as(writer.token)
       .post('/v2/contacts/bulk/consent')
-      .send({ ids: ids.slice(0, 2), channel: 'sms', action: 'granted', note: 'Ticked the form' });
+      .send({
+        ids: ids.slice(0, 2),
+        channels: ['sms'],
+        action: 'granted',
+        note: 'Ticked the form',
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body).toMatchObject({ matched: 2, changed: 2, failedCount: 0 });
     expect(res.body.succeeded).toEqual(ids.slice(0, 2));
@@ -83,7 +88,7 @@ describe('bulk marketing consent for one channel', () => {
     const res = await api
       .as(writer.token)
       .post('/v2/contacts/bulk/consent')
-      .send({ ids: [ids[0]], channel: 'sms', action: 'withdrawn' });
+      .send({ ids: [ids[0]], channels: ['sms'], action: 'withdrawn' });
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body).toMatchObject({ matched: 1, changed: 1 });
     expect(await state(ids[0]!, 'sms')).toBe('withdrawn');
@@ -93,7 +98,7 @@ describe('bulk marketing consent for one channel', () => {
     const res = await api
       .as(writer.token)
       .post('/v2/contacts/bulk/consent')
-      .send({ ids: [ids[2]], channel: 'sms', action: 'granted' });
+      .send({ ids: [ids[2]], channels: ['sms'], action: 'granted' });
     expect(res.status).toBe(422);
     expect(await state(ids[2]!, 'sms')).toBe('unknown');
   });
@@ -117,13 +122,13 @@ describe('bulk marketing consent for one channel', () => {
     const res = await api
       .as(reader.token)
       .post('/v2/contacts/bulk/consent')
-      .send({ ids: [ids[2]], channel: 'sms', action: 'withdrawn' });
+      .send({ ids: [ids[2]], channels: ['sms'], action: 'withdrawn' });
     expect(res.status).toBe(403);
     expect(await state(ids[2]!, 'sms')).toBe('unknown');
   });
 
   it('a repeat of the same request under one Idempotency-Key is replayed, not recorded again', async () => {
-    const body = { ids: [ids[1]], channel: 'telegram', action: 'withdrawn' };
+    const body = { ids: [ids[1]], channels: ['telegram'], action: 'withdrawn' };
     const key = `bulk-consent-${Date.now()}`;
     const first = await api
       .as(writer.token)
@@ -138,5 +143,22 @@ describe('bulk marketing consent for one channel', () => {
     expect(first.status).toBe(200);
     expect(again.body).toEqual(first.body);
     expect(first.body.changed).toBe(1);
+  });
+
+  it('several channels in one request record one event per channel and count each contact once', async () => {
+    const res = await api
+      .as(writer.token)
+      .post('/v2/contacts/bulk/consent')
+      .send({
+        ids: ids.slice(0, 2),
+        channels: ['whatsapp', 'email'],
+        action: 'granted',
+        note: 'Ticked the form',
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body).toMatchObject({ matched: 2, changed: 2, failedCount: 0 });
+    expect(await state(ids[0]!, 'whatsapp')).toBe('granted');
+    expect(await state(ids[0]!, 'email')).toBe('granted');
+    expect(await state(ids[1]!, 'email')).toBe('granted');
   });
 });
