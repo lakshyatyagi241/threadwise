@@ -10,7 +10,8 @@ import { FlowEngine } from '../runtime/engine.service';
 /**
  * A person took a conversation over (worker process): the customer's live flow run on that channel stops, so the flow does not talk
  * over the agent (#1174, TW-FLR-050). An unassignment (toUserId null) takes nothing away. A conversation that is not in this workspace
- * is skipped. Errors propagate so the outbox retries the event.
+ * is skipped. Errors propagate so the outbox retries the event. A redelivered event is harmless: the first delivery cancels the live
+ * run, and a second one finds no live run for the peer and stops nothing more.
  */
 @Injectable()
 export class FlowTakeoverConsumer implements OutboxSubscriber, OnModuleInit {

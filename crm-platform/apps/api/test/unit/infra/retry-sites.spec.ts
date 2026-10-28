@@ -42,8 +42,10 @@ function sites() {
 describe('transactions that opt in to a retry', () => {
   const all = sites();
 
-  it('are the 20 reviewed write paths (adding one is a deliberate change to this number)', () => {
-    expect(all.length).toBe(20);
+  // The 20 reviewed in 10d7dd54a, plus the send hold (wallet-gate.service) and the AI-call hold (usage-billing.service): each only takes
+  // a hold row (holdMinor), so a retry after a deadlock repeats nothing that was committed. Adding one is a deliberate change to this number.
+  it('are the 22 reviewed write paths (adding one is a deliberate change to this number)', () => {
+    expect(all.length).toBe(22);
   });
 
   it('never retry a dropped connection: none uses db.retryIdem (a repeat after a committed first run is unsafe at ingest and refund)', () => {
