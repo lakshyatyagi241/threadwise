@@ -107,7 +107,9 @@
         "rolled_back": "رول بیک ہو گئی"
       },
       "by": "از {author}",
-      "raisedIst": "بنایا گیا {time} IST"
+      "raisedIst": "بنایا گیا {time} IST",
+      "noProgress": "{minutes} منٹ سے کوئی پیش رفت نہیں ہوئی۔ ہو سکتا ہے بلڈ یا ریلیز رک گئی ہو۔",
+      "noChangesAlert": "تازہ ترین ریلیزز اپنی پل ریکویسٹس درج نہیں کرتیں۔ غالباً بلڈ سرور پر deploy-main.sh یا ہوسٹ پر ci-entry.sh پرانی ہے: موجودہ ورژن انسٹال کریں (deploy/build-server/README.md)۔"
     }
   }
 }
