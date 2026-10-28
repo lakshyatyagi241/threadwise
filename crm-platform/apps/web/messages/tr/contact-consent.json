@@ -250,7 +250,7 @@
       "hintColumn": "Pazarlama iznine eşlenen sütun kimin kaydedileceğini belirler: yalnızca evet diyen satırlar, dosya adı kanıt olarak kullanılarak izin alır. Hayır, boş hücre veya bilinmeyen bir kelime hiçbir şey kaydetmez. Abonelikten çıkmış kişiler çıkmış kalır.",
       "columnSummary": "{granted} satır evet diyor ve kaydedilecek. {notGranted} satır hayır diyor veya boş ve izin kaydı almayacak.",
       "unrecognised": "{count, plural, one {# satırda} other {# satırda}} evet veya hayır olmayan bir izin değeri var ({values}). Bunlar izin verilmemiş sayılır. Evet / hayır, true / false veya 1 / 0 kullanın.",
-      "columnIgnored": "Yukarıdaki kutuyu işaretleyene kadar izin sütunu etki etmez.",
+      "columnIgnored": "{count, plural, other {#}} satırda evet yazıyor, ancak yukarıdaki kutuyu işaretlemeden hiçbir onay kaydedilmez. Kayıtlı onay yoksa bu kişilere pazarlama şablonları gönderilemez.",
       "noticeText": "Bildirim veya hukuki dayanak (isteğe bağlı)",
       "noticeTextHint": "Bu kişilerin neyi ve nerede kabul ettiği, örneğin: ödeme sırasında gizlilik bildirimi v3 kapsamında abone oldu. Kaydedilen her onayla birlikte kanıt olarak saklanır.",
       "noticeVersion": "Bildirim sürümü (isteğe bağlı)",

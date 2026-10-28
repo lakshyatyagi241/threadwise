@@ -250,7 +250,7 @@
       "hintColumn": "A coluna mapeada para o consentimento de marketing define quem é registrado: somente as linhas que dizem sim recebem um consentimento, com o nome do arquivo como comprovação. Um não, uma célula vazia ou uma palavra desconhecida não registram nada. Contatos que cancelaram continuam cancelados.",
       "columnSummary": "{granted} linhas dizem sim e serão registradas. {notGranted} dizem não ou estão em branco e não recebem registro de consentimento.",
       "unrecognised": "{count, plural, one {# linha tem} other {# linhas têm}} um valor de consentimento que não é sim nem não ({values}). {count, plural, one {Ele é tratado} other {Eles são tratados}} como não concedido. Use yes / no, true / false ou 1 / 0.",
-      "columnIgnored": "A coluna de consentimento não faz nada até você marcar a caixa acima.",
+      "columnIgnored": "{count, plural, one {# linha diz} other {# linhas dizem}} sim, mas nenhum consentimento é registrado até você marcar a caixa acima. Sem consentimento registrado, os modelos de marketing para esses contatos são recusados.",
       "noticeText": "Aviso ou base legal (opcional)",
       "noticeTextHint": "A que estes contactos concordaram e onde, por exemplo: aderiram no checkout com o aviso de privacidade v3. É guardado como prova em cada consentimento registado.",
       "noticeVersion": "Versão do aviso (opcional)",

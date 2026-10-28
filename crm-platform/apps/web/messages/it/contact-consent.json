@@ -250,7 +250,7 @@
       "hintColumn": "La colonna associata al consenso marketing decide chi viene registrato: solo le righe che dicono sì ottengono un consenso, con il nome del file come prova. Un no, una cella vuota o una parola sconosciuta non registrano nulla. I contatti che hanno annullato l'iscrizione restano disiscritti.",
       "columnSummary": "{granted} righe dicono sì e verranno registrate. {notGranted} dicono no o sono vuote e non ricevono alcun registro di consenso.",
       "unrecognised": "{count, plural, one {# riga contiene} other {# righe contengono}} un valore di consenso che non è sì né no ({values}). {count, plural, one {Viene trattato} other {Vengono trattati}} come non concesso. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra.",
+      "columnIgnored": "{count, plural, one {# riga dice} other {# righe dicono}} sì, ma nessun consenso viene registrato finché non spunti la casella qui sopra. Senza un consenso registrato, i modelli di marketing verso questi contatti vengono rifiutati.",
       "noticeText": "Informativa o base giuridica (facoltativo)",
       "noticeTextHint": "A cosa hanno acconsentito questi contatti e dove, ad esempio: iscritti al checkout con l'informativa privacy v3. Viene conservato come prova con ogni consenso registrato.",
       "noticeVersion": "Versione dell'informativa (facoltativo)",
