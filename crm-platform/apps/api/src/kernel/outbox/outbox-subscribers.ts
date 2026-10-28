@@ -9,6 +9,11 @@ export interface OutboxEvent {
   aggregateId: string;
   eventType: string;
   payload: Record<string, unknown>;
+  /**
+   * When the change was written (the outbox row's created_at): the same on every redelivery, so a consumer can tell old from new. Set by
+   * the drain on every delivery; absent only on a hand-built event (a test fixture), where a consumer must not assume it.
+   */
+  createdAt?: Date;
 }
 
 /**
