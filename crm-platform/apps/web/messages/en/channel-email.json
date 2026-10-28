@@ -135,7 +135,11 @@
       "limit": "Your plan's mailbox limit is reached, so this mailbox was not connected.",
       "not_configured": "Sign-in for this provider is not set up for this platform yet. Ask your platform administrator.",
       "wrong_account": "You signed in with a different account than the mailbox being reconnected. Sign in with the same address.",
-      "failed": "Something went wrong while connecting the mailbox. Try again."
+      "failed": "Something went wrong while connecting the mailbox. Try again.",
+      "not_enabled": "Email is not included in your workspace's plan, so nothing was connected. Ask an administrator to turn it on.",
+      "not_allowed": "You are not allowed to connect this kind of mailbox. Ask an administrator for access, or use a shared mailbox.",
+      "no_address": "The provider did not share the mailbox's email address, so nothing was connected. Connect again and allow access to the email address.",
+      "no_refresh_token": "The provider did not allow this mailbox to stay signed in, so nothing was connected. Remove this app's access in your Google or Microsoft account settings, then connect again."
     },
     "errors": {
       "notConfigured": "Sign-in for this provider is not set up for this platform yet. Ask your platform administrator.",

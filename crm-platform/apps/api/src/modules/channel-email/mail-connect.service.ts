@@ -182,7 +182,7 @@ export class MailConnectService {
 
     try {
       // The workspace may have lost the add-on while the person was on the provider's screen.
-      if (!(await this.plan.isEnabled(state.orgId))) throw new Outcome('failed');
+      if (!(await this.plan.isEnabled(state.orgId))) throw new Outcome('not_enabled');
 
       const grant = await driver.exchange(query.code);
       accessToken = grant.accessToken;
@@ -190,13 +190,13 @@ export class MailConnectService {
       const granted = new Set(grant.scopes);
       if (driver.requiredScopes.some((s) => !granted.has(s))) throw new Outcome('missing_scope');
       const account = await driver.profile(grant.accessToken);
-      if (!account.address) throw new Outcome('failed');
+      if (!account.address) throw new Outcome('no_address');
       account.address = account.address.trim().toLowerCase();
 
       // The person may have lost the right (or the workspace switched personal mailboxes off) while on the provider's screens.
       if (state.scope === 'personal' && !state.mailboxId) {
         const refusal = await this.access.personalRefusalFor(state.orgId, state.userId);
-        if (refusal) throw new Outcome('failed');
+        if (refusal) throw new Outcome('not_allowed');
       }
       stored = await this.runAs(state.orgId, state.userId, `mail-connect-${state.nonce}`, () =>
         this.persist({
@@ -222,6 +222,11 @@ export class MailConnectService {
       );
     } catch (err) {
       if (err instanceof Outcome) {
+        // The screen says only the outcome; the log keeps the reason a support person needs when a connection is refused.
+        this.logger.warn(
+          { orgId: state.orgId, provider: state.provider, outcome: err.outcome },
+          'mail connect refused',
+        );
         // What was just granted is withdrawn rather than left dangling. A reconnect that failed keeps the old grant: only the NEW token goes.
         await driver.revoke(refreshToken ?? accessToken ?? '').catch(() => undefined);
         return done(err.outcome);
@@ -358,7 +363,7 @@ export class MailConnectService {
         }
         // Only the owner can renew the login of a personal mailbox.
         if (target.scope === 'personal' && target.ownerUserId !== input.userId) {
-          throw new Outcome('failed');
+          throw new Outcome('not_allowed');
         }
       }
       const existing = target ?? (await this.repo.byAddress(tx, input.orgId, address, true));
@@ -386,7 +391,7 @@ export class MailConnectService {
         c.refreshTokenEnc ??
         (existing && existing.status !== 'disconnected' ? existing.refreshTokenEnc : null);
       if (input.requires === 'refresh_token' ? !refreshTokenEnc : !c.connectionEnc) {
-        throw new Outcome('failed');
+        throw new Outcome(input.requires === 'refresh_token' ? 'no_refresh_token' : 'failed');
       }
 
       // A mailbox that counts against the plan already (connected, needs reauth, error) is not a new one.

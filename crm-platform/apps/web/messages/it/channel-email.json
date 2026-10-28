@@ -135,7 +135,11 @@
       "limit": "Hai raggiunto il limite di caselle del tuo piano, quindi questa casella non è stata collegata.",
       "not_configured": "L'accesso per questo provider non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma.",
       "wrong_account": "Hai effettuato l'accesso con un account diverso da quello della casella da ricollegare. Accedi con lo stesso indirizzo.",
-      "failed": "Si è verificato un problema durante il collegamento della casella. Riprova."
+      "failed": "Si è verificato un problema durante il collegamento della casella. Riprova.",
+      "not_enabled": "L'e-mail non è inclusa nel piano del tuo spazio di lavoro, quindi non è stato collegato nulla. Chiedi a un amministratore di attivarla.",
+      "not_allowed": "Non hai il permesso di collegare questo tipo di casella. Chiedi l'accesso a un amministratore o usa una casella condivisa.",
+      "no_address": "Il provider non ha condiviso l'indirizzo e-mail della casella, quindi non è stato collegato nulla. Collega di nuovo e consenti l'accesso all'indirizzo e-mail.",
+      "no_refresh_token": "Il provider non ha permesso a questa casella di restare connessa, quindi non è stato collegato nulla. Rimuovi l'accesso di questa app nelle impostazioni del tuo account Google o Microsoft, poi collega di nuovo."
     },
     "errors": {
       "notConfigured": "L'accesso per questo provider non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma.",
