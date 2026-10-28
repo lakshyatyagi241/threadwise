@@ -1,15 +1,15 @@
 {
   "generatedBy": "tools/pagination-audit/scan.mjs",
   "summary": {
-    "listRoutes": 145,
-    "cursor": 109,
-    "page": 12,
+    "listRoutes": 148,
+    "cursor": 111,
+    "page": 13,
     "offset": 2,
     "limitOnly": 22,
     "uncapped": 0,
-    "offsetSites": 18,
-    "offsetFiles": 15,
-    "countStarSites": 1052
+    "offsetSites": 19,
+    "offsetFiles": 16,
+    "countStarSites": 1072
   },
   "routes": [
     {
@@ -910,6 +910,15 @@
       "cap": "100"
     },
     {
+      "file": "apps/api/src/modules/products-services/products-services.controller.ts",
+      "route": "/",
+      "handler": "list",
+      "schema": "listSalesItemsQuerySchema",
+      "style": "page",
+      "cap": "200",
+      "maxPage": "100_000"
+    },
+    {
       "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled.controller.ts",
       "route": ":id/recipients",
       "handler": "recipients",
@@ -1072,6 +1081,22 @@
     },
     {
       "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
+      "route": "expenses",
+      "handler": "expenseLog",
+      "schema": "expenseListQuerySchema",
+      "style": "cursor",
+      "cap": "100"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
+      "route": "expenses/days",
+      "handler": "expenseDays",
+      "schema": "expenseDaysQuerySchema",
+      "style": "cursor",
+      "cap": "31"
+    },
+    {
+      "file": "apps/api/src/modules/wallet-message-billing/wallet.controller.ts",
       "route": "ledger",
       "handler": "ledger",
       "schema": "walletLedgerQuerySchema",
@@ -1187,12 +1212,12 @@
   "offsetSites": [
     {
       "file": "apps/api/src/modules/api-library/api-library-logs.repository.ts",
-      "line": 172,
+      "line": 181,
       "text": "LIMIT ${paged ? f.limit : f.limit + 1}${paged ? sql` OFFSET ${f.offset}` : sql``}`);"
     },
     {
       "file": "apps/api/src/modules/api-library/api-library.repository.ts",
-      "line": 135,
+      "line": 136,
       "text": "LIMIT ${paged ? f.limit : f.limit + 1}${paged ? sql` OFFSET ${f.offset}` : sql``}`);"
     },
     {
@@ -1202,12 +1227,12 @@
     },
     {
       "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
-      "line": 1370,
+      "line": 1406,
       "text": "SELECT r.id FROM wp_campaign_contacts r WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset})"
     },
     {
       "file": "apps/api/src/modules/campaigns/campaigns.repository.ts",
-      "line": 1373,
+      "line": 1409,
       "text": "${RECIPIENT_SELECT} WHERE ${where} ORDER BY r.id DESC LIMIT ${o.limit} OFFSET ${o.offset}`);"
     },
     {
@@ -1254,6 +1279,11 @@
       "file": "apps/api/src/modules/platform-payment-gateways/platform-subscriptions.service.ts",
       "line": 65,
       "text": "LIMIT ${PAGE_SIZE} OFFSET ${(q.page - 1) * PAGE_SIZE}`);"
+    },
+    {
+      "file": "apps/api/src/modules/products-services/products-services.repository.ts",
+      "line": 81,
+      "text": "ORDER BY lower(name), id LIMIT ${q.limit} OFFSET ${(q.page - 1) * q.limit}`);"
     },
     {
       "file": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts",
