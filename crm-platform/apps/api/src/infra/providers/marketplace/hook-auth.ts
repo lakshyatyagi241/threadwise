@@ -1,4 +1,4 @@
-import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 /**
  * Authentication of a delivery to a connection's public address. Two ways, both over a secret only the connection and its sender know:
@@ -8,10 +8,11 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
  */
 
 const equalText = (a: string, b: string): boolean => {
-  const x = Buffer.from(a, 'utf8');
-  const y = Buffer.from(b, 'utf8');
-  // timingSafeEqual needs equal lengths; comparing against a same-length buffer first keeps the work independent of where they differ.
-  return x.length === y.length && timingSafeEqual(x, y);
+  // Both sides are hashed first, so the comparison is over equal-length buffers whatever was presented. A length check before
+  // timingSafeEqual would reveal the length of the stored secret (the same rule as the lead hook's secretMatches).
+  const x = createHash('sha256').update(a, 'utf8').digest();
+  const y = createHash('sha256').update(b, 'utf8').digest();
+  return timingSafeEqual(x, y);
 };
 
 export function hmacHex(secret: string, body: Buffer): string {
