@@ -1,3 +1,5 @@
+import { readdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { CHANNELS, PRODUCTS } from './products';
 import { NICHES } from './niches';
@@ -31,6 +33,23 @@ function exists(path: string): boolean {
   return false;
 }
 
+/** URL paths of the pages the signed-in app, the admin console and the sign-in screens serve (route groups left out). */
+function appPaths(): Set<string> {
+  const root = join(process.cwd(), 'src', 'app');
+  const out = new Set<string>();
+  const walk = (dir: string, url: string) => {
+    if (existsSync(join(dir, 'page.tsx'))) out.add(url || '/');
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (!e.isDirectory()) continue;
+      const seg = /^\(.*\)$/.test(e.name) ? '' : `/${e.name}`;
+      walk(join(dir, e.name), url + seg);
+    }
+  };
+  for (const g of ['(app)', '(admin)', '(auth)'])
+    if (existsSync(join(root, g))) walk(join(root, g), '');
+  return out;
+}
+
 describe('legacy redirects', () => {
   it('only point at pages that exist', () => {
     const missing = LEGACY_REDIRECTS.filter((r) => !exists(r.destination)).map(
@@ -47,6 +66,11 @@ describe('legacy redirects', () => {
   it('never redirect a page the site still serves', () => {
     const live = LEGACY_REDIRECTS.filter((r) => exists(r.source));
     expect(live.map((r) => r.source)).toEqual([]);
+  });
+
+  it('never redirect a page of the signed-in app', () => {
+    const app = appPaths();
+    expect(LEGACY_REDIRECTS.filter((r) => app.has(r.source)).map((r) => r.source)).toEqual([]);
   });
 
   it('never send an address to itself', () => {
