@@ -72,7 +72,7 @@ const WRITERS: Record<string, Writer> = {
   'modules/platform-settings-branding-storage/storage-flow-media.store.ts': {
     role: 'delegates',
     reason:
-      'MediaStorageService.put with a flow-media/<org>/ key (flow-builder uploads). The local-disk fallback is only used without a bucket (local development), so it is not metered',
+      "MediaStorageService.put with a flow-media/<org uuid>/ key, metered as campaign_media for the request's workspace (flow-builder uploads). The local-disk fallback is only used without a bucket (local development), so it is not metered",
     via: MEDIA_DOOR,
   },
   'modules/message-templates/templates.service.ts': {
