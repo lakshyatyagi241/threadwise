@@ -129,7 +129,7 @@ export function MorePage() {
     <section className="space-y-6">
       <header className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="space-y-1">
-          <div className="font-serif text-xl italic leading-tight text-primary">{t('eyebrow')}</div>
+          <div className="font-serif text-xl leading-tight text-primary">{t('eyebrow')}</div>
           <h1 className="font-serif text-3xl leading-tight tracking-tight lg:text-4xl">
             {t('titleLead')} {t('titleTail')}
           </h1>

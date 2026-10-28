@@ -2,19 +2,32 @@ import { describe, expect, it } from 'vitest';
 import { CONSENT_CHANNELS, bulkConsentContactsSchema } from '@crm/contracts';
 
 const ID = '6f1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e10';
-const base = { ids: [ID], channel: 'sms', action: 'granted', note: 'Signed the form' };
+const base = { ids: [ID], channels: ['sms'], action: 'granted', note: 'Signed the form' };
 
-/** The bulk consent body: one channel, one change, the selection, and the note a grant needs. */
+/** The bulk consent body: the channels, one change, the selection, and the note a grant needs. */
 describe('bulkConsentContactsSchema', () => {
-  it('takes one channel of the consent vocabulary and a grant with its note', () => {
+  it('takes one channel of the consent vocabulary, or several, and a grant with its note', () => {
     expect(bulkConsentContactsSchema.safeParse(base).success).toBe(true);
     for (const channel of CONSENT_CHANNELS) {
-      expect(bulkConsentContactsSchema.safeParse({ ...base, channel }).success, channel).toBe(true);
+      expect(
+        bulkConsentContactsSchema.safeParse({ ...base, channels: [channel] }).success,
+        channel,
+      ).toBe(true);
     }
+    expect(
+      bulkConsentContactsSchema.safeParse({ ...base, channels: ['whatsapp', 'sms', 'email'] })
+        .success,
+    ).toBe(true);
   });
 
-  it('refuses a channel the consent ledger does not know', () => {
-    expect(bulkConsentContactsSchema.safeParse({ ...base, channel: 'pigeon' }).success).toBe(false);
+  it('refuses an empty channel list, a channel the consent ledger does not know, and a channel named twice', () => {
+    expect(bulkConsentContactsSchema.safeParse({ ...base, channels: [] }).success).toBe(false);
+    expect(bulkConsentContactsSchema.safeParse({ ...base, channels: ['pigeon'] }).success).toBe(
+      false,
+    );
+    expect(bulkConsentContactsSchema.safeParse({ ...base, channels: ['sms', 'sms'] }).success).toBe(
+      false,
+    );
   });
 
   it('needs a note for a grant, and a whitespace-only note is no note', () => {

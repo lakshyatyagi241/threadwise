@@ -107,7 +107,9 @@
         "rolled_back": "ロールバック済み"
       },
       "by": "{author} による",
-      "raisedIst": "作成 {time} IST"
+      "raisedIst": "作成 {time} IST",
+      "noProgress": "{minutes} 分間進行がありません。ビルドまたはリリースが停止している可能性があります。",
+      "noChangesAlert": "最新のリリースにプルリクエストが記録されていません。ビルドサーバーの deploy-main.sh またはホストの ci-entry.sh が古い可能性があります。最新版をインストールしてください（deploy/build-server/README.md）。"
     }
   }
 }

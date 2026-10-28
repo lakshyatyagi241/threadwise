@@ -10,8 +10,11 @@ import { FlowEngine } from '../runtime/engine.service';
 /**
  * A person took a conversation over (worker process): the customer's live flow run on that channel stops, so the flow does not talk
  * over the agent (#1174, TW-FLR-050). An unassignment (toUserId null) takes nothing away. A conversation that is not in this workspace
- * is skipped. Errors propagate so the outbox retries the event. A redelivered event is harmless: the first delivery cancels the live
- * run, and a second one finds no live run for the peer and stops nothing more.
+ * is skipped. Errors propagate so the outbox retries the event.
+ *
+ * Delivery is at-least-once, so a redelivered event is possible long after the takeover. The event's own creation time is passed on:
+ * only a run that started at or before the takeover is ended. A run the customer started after it (the conversation was handed back
+ * and a new flow began) is left alone, so a repeat delivery of an old takeover is harmless (#1299).
  */
 @Injectable()
 export class FlowTakeoverConsumer implements OutboxSubscriber, OnModuleInit {
@@ -33,6 +36,6 @@ export class FlowTakeoverConsumer implements OutboxSubscriber, OnModuleInit {
     if (typeof p.conversationId !== 'string' || typeof p.toUserId !== 'string') return;
     const peer = await this.conversations.peerOfConversation(event.orgId, p.conversationId);
     if (!peer) return;
-    await this.engine.endForPeer(event.orgId, peer.channelId, peer.peerKey);
+    await this.engine.endForPeer(event.orgId, peer.channelId, peer.peerKey, event.createdAt);
   }
 }

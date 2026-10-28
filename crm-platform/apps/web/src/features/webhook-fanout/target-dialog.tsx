@@ -210,6 +210,21 @@ export function TargetDialog({
           />
         </Field>
 
+        <Field
+          label={t('phoneFilter')}
+          htmlFor={`${id}-phones`}
+          hint={t('phoneFilterHint')}
+          error={problems.phoneNumberIds}
+        >
+          <TagInput
+            id={`${id}-phones`}
+            tags={draft.phoneNumberIdFilter}
+            onChange={(phoneNumberIdFilter) => set({ phoneNumberIdFilter })}
+            placeholder={t('phoneFilterPlaceholder')}
+            removeLabel={(phone) => t('phoneRemove', { phone })}
+          />
+        </Field>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label={t('timeout')}

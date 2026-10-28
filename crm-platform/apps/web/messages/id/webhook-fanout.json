@@ -38,11 +38,13 @@
         "target": "Target",
         "active": "Aktif",
         "fields": "Kolom",
+        "numbers": "Nomor telepon",
         "deliveries": "Pengiriman",
         "last": "Pengiriman terakhir",
         "actions": "Tindakan"
       },
       "allFields": "Semua kolom",
+      "allNumbers": "Semua nomor",
       "success": "{count, number} berhasil",
       "failure": "{count, number} gagal",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filter kolom",
       "fieldFilterHint": "Kosongkan untuk meneruskan semua kolom. Ketik nama kolom lalu tekan Enter, misalnya messages atau message_template_status_update.",
       "fieldFilterPlaceholder": "Tambah kolom",
+      "phoneFilter": "Filter nomor telepon",
+      "phoneFilterHint": "Kosongkan untuk meneruskan semua nomor. Ketik ID nomor telepon Meta (hanya angka, bukan nomor yang ditampilkan) lalu tekan Enter. Webhook yang menyebut beberapa nomor diteruskan utuh jika salah satunya ada dalam daftar.",
+      "phoneFilterPlaceholder": "Tambah ID nomor telepon",
       "fieldRemove": "Hapus {field}",
+      "phoneRemove": "Hapus {phone}",
       "timeout": "Batas waktu (detik)",
       "timeoutHint": "1 sampai 30",
       "maxAttempts": "Percobaan maksimal",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Header memerlukan nama dan nilai.",
         "headerNameRequired": "Masukkan juga nama header.",
         "timeout": "Masukkan bilangan bulat dari 1 sampai 30.",
-        "maxAttempts": "Masukkan bilangan bulat dari 1 sampai 10."
+        "maxAttempts": "Masukkan bilangan bulat dari 1 sampai 10.",
+        "phoneNumberIdInvalid": "ID nomor telepon hanya berisi angka."
       }
     },
     "failures": {

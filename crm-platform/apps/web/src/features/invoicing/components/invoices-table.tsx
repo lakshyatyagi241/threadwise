@@ -84,7 +84,7 @@ function Cell({
             title={inv.number ?? t('draft')}
             className={cn(
               'min-w-0 flex-1 truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary',
-              !inv.number && 'italic text-muted-foreground',
+              !inv.number && 'text-muted-foreground',
             )}
           >
             <span dir="ltr">{inv.number ?? t('draft')}</span>

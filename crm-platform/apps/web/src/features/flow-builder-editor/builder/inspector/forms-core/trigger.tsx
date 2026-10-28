@@ -17,6 +17,7 @@ import { Field, Notice, SelectInput, TextInput, type Opt } from '../kit';
 import type { FormProps } from '../types';
 import {
   asArray,
+  channelSwitchPatch,
   resolveTriggerChannel,
   senderHint,
   senderLabel,
@@ -108,8 +109,12 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
     .map((c) => ({ v: c, l: flowTypeLabel(tf, c) }));
 
   const selectedRules = asArray(d.keywordRuleIds).map(String);
+  // "On comment → DM" has no runtime yet (a flow on it never starts), so it is no longer offered; a flow that already has it keeps
+  // the option so it can be seen and changed.
   const kindOpts: Opt[] = (
-    isWeb ? ['keyword'] : [...(isIg ? ['comment_to_dm'] : []), ...KIND_OPTIONS]
+    isWeb
+      ? ['keyword']
+      : [...(isIg && kind === 'comment_to_dm' ? ['comment_to_dm'] : []), ...KIND_OPTIONS]
   ).map((id) => ({
     v: id,
     l: t(`kind.${id}`),
@@ -132,7 +137,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
           <SelectInput
             value={channel}
             options={channelOpts}
-            onChange={(v) => setMany({ channel: v, deviceId: '' })}
+            onChange={(v) => setMany(channelSwitchPatch(kind, v))}
           />
         </Field>
       ) : null}

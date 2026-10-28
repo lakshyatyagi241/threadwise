@@ -118,9 +118,9 @@ describe('MembersTable', () => {
     expect(out).toContain('Agent');
   });
 
-  it('writes "pending" in italics for a member who has not joined, and a date for one who has', () => {
+  it('writes "pending" muted for a member who has not joined, and a date for one who has', () => {
     const out = table({ meTier: 'admin', members: rows });
-    expect(out).toContain('<span class="italic text-muted-foreground">pending</span>');
+    expect(out).toContain('<span class="text-muted-foreground">pending</span>');
     expect(out).toContain('Oct 1, 2026');
   });
 

@@ -446,7 +446,7 @@ export function RequirementsScreen({
                         ))}
                     </>
                   ) : (
-                    <div className="text-[12px] italic text-muted-foreground">
+                    <div className="text-[12px] text-muted-foreground">
                       {t('noDatabase')}
                     </div>
                   )}
@@ -783,7 +783,7 @@ function TimezoneTypeahead({
             </div>
           ))}
           {matches.length === 0 && (
-            <div className="px-3 py-2 text-[12px] italic text-muted-foreground">
+            <div className="px-3 py-2 text-[12px] text-muted-foreground">
               {t('timezoneEmpty')}
             </div>
           )}

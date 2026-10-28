@@ -447,12 +447,20 @@ export class FlowEngine {
 
   /**
    * Ends whatever run a customer has on a channel because a person (or an AI agent) took the conversation over (TW-FLR-050): the flow
-   * stops cleanly and does not talk over them. Returns whether a run was ended.
+   * stops cleanly and does not talk over them. Only a run that started at or before the takeover (`takenOverAt`) is ended: a run the
+   * customer started after it belongs to a later conversation, and a redelivered takeover event must not stop it (#1299).
+   * Returns whether a run was ended.
    */
-  async endForPeer(orgId: number, channelId: number, peerKey: string): Promise<boolean> {
+  async endForPeer(
+    orgId: number,
+    channelId: number,
+    peerKey: string,
+    takenOverAt?: Date,
+  ): Promise<boolean> {
     return this.db.txAs({ orgId }, async (tx) => {
       const live = await this.runs.liveByPeer(tx, orgId, channelId, peerKey, true);
-      return live ? this.cancel(tx, orgId, live, 'takeover') : false;
+      if (!live || (takenOverAt && live.startedAt > takenOverAt)) return false;
+      return this.cancel(tx, orgId, live, 'takeover');
     });
   }
 

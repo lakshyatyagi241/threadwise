@@ -1,4 +1,5 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
   SETUP_RUN_STEPS,
@@ -14,6 +15,7 @@ import {
   type SetupStatusResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import type { Env } from '../../config/env.schema';
 import { AppError } from '../../common/errors/app-error';
 import { INST_ENV, type InstEnv } from '../../config/domains/install-update-licensing.env';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -92,6 +94,8 @@ export class SetupService {
     private readonly settings: PlatformSettingsService,
     private readonly general: SettingsService,
     @Inject(INST_ENV) private readonly env: InstEnv,
+    // WEB_APP_URL is not in the install domain's env (it is in the shared schema, with a default). Read the validated value.
+    private readonly config: ConfigService<Env, true>,
   ) {}
 
   /** Lock state plus, while open, what is still missing. Used by the status route and the operator System page. */
@@ -357,7 +361,7 @@ export class SetupService {
           await this.repo.linkProvisioned(tx, {
             operatorId: operator.id,
             orgId: r.org.id,
-            appUrl: input.app?.url ?? process.env.WEB_APP_URL ?? null,
+            appUrl: input.app?.url ?? this.config.get('WEB_APP_URL', { infer: true }),
           });
           await this.audit.record(tx, {
             event: 'platform.setup.provisioned',

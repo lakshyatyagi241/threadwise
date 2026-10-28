@@ -1,4 +1,5 @@
-import { brotliDecompressSync, gunzipSync, inflateSync } from 'node:zlib';
+import { promisify } from 'node:util';
+import { brotliDecompress, gunzip, inflate } from 'node:zlib';
 import {
   API_LIBRARY_SECRET_MASK,
   API_LIBRARY_TOKEN_RE,
@@ -497,11 +498,11 @@ export interface ReadAnswer {
  * whatever was asked) is unpacked first, with the output held to `maxBytes`; a file (image, PDF, archive) is named, not printed as
  * symbols; the size is the bytes, not the length of a text made from them.
  */
-export function readAnswer(
+export async function readAnswer(
   raw: Buffer,
   headers: Record<string, string | string[] | undefined>,
   maxBytes: number,
-): ReadAnswer {
+): Promise<ReadAnswer> {
   const type = typeof headers['content-type'] === 'string' ? headers['content-type'] : null;
   const encoding = String(headers['content-encoding'] ?? '')
     .trim()
@@ -509,10 +510,13 @@ export function readAnswer(
   let bytes = raw;
   let note = '';
   try {
+    // Async on purpose: a synchronous inflate blocks the event loop for the whole decode of up to maxBytes.
     if (encoding === 'gzip' || encoding === 'x-gzip')
-      bytes = gunzipSync(raw, { maxOutputLength: maxBytes });
-    else if (encoding === 'deflate') bytes = inflateSync(raw, { maxOutputLength: maxBytes });
-    else if (encoding === 'br') bytes = brotliDecompressSync(raw, { maxOutputLength: maxBytes });
+      bytes = await promisify(gunzip)(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'deflate')
+      bytes = await promisify(inflate)(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'br')
+      bytes = await promisify(brotliDecompress)(raw, { maxOutputLength: maxBytes });
   } catch {
     note = ' (it could not be unpacked)';
     bytes = raw;

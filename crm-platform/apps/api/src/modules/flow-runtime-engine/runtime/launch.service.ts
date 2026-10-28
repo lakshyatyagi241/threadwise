@@ -40,6 +40,8 @@ const REENTRY_AFTER_QUIET: ReadonlySet<FlowRunSource> = new Set(['away', 'out_of
 export const KINDS_OF_PROVIDER: Readonly<Record<string, readonly string[]>> = {
   baileys: ['whatsapp_qr'],
   waba: ['whatsapp_cloud'],
+  instagram: ['instagram'],
+  facebook: ['facebook'],
   telegram: ['telegram'],
   line: ['line'],
   viber: ['viber'],

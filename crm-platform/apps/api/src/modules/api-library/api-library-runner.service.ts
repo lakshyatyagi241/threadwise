@@ -229,7 +229,7 @@ export class ApiLibraryRunner {
       const contentType =
         typeof res.headers['content-type'] === 'string' ? res.headers['content-type'] : null;
       const truncated = res.truncated === true;
-      const answer = readAnswer(
+      const answer = await readAnswer(
         res.raw ?? Buffer.from(res.text, 'utf8'),
         res.headers,
         RUN_MAX_RESPONSE_BYTES,

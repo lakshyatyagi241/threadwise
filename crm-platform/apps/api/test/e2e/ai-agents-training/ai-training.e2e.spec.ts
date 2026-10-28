@@ -571,6 +571,21 @@ describe('knowledge entries: text, Q&A and URL (TW-AIAG-005..007)', () => {
     expect(queued.rows.length).toBeGreaterThanOrEqual(1);
   });
 
+  it('an entry that cuts into more passages than the index holds is a 422 that gives the count, and writes nothing', async () => {
+    const content = Array.from({ length: 600 }, (_, i) => `Q: question ${i}\nA: answer ${i}`).join(
+      '\n\n',
+    );
+    const res = await add({ kind: 'text', label: 'Huge FAQ', content });
+    expect(res.status).toBe(422);
+    expect(code(res)).toBe('VALIDATION_FAILED');
+    expect(JSON.stringify(res.body.errors)).toContain('600 passages');
+    expect(
+      await api.count(
+        `SELECT count(*)::int AS n FROM ai_training_sources WHERE label = 'Huge FAQ'`,
+      ),
+    ).toBe(0);
+  });
+
   it('an entry on an assistant of another workspace is 404 and writes nothing', async () => {
     const x = await api.signup('aisrcx');
     const res = await api

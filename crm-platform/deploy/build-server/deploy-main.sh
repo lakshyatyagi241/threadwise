@@ -54,9 +54,16 @@ report() {  # report <state> <step> [message]
 # author, a merge commit takes its title from the body and its author from the merged branch. Each also carries what the PR changes
 # (its description) and when it was raised: from the GitHub API when $CONF/github_token exists (read-only; the repo is private), else the
 # commit's own text and no raised time. Never stops the deploy.
+#   Said in the log (like `report` does) instead of swallowed: when this fails the console's Changes column is simply empty and nothing says
+#   why. The usual cause is a host whose /opt/desk/ci-entry.sh predates the `changes` action: that file is not synced by the pipeline (it is
+#   the forced command of the CI key), an administrator installs it with deploy/hostinger/ship.sh.
+changes_failed() {
+  echo "$(date -Is) could not record what ${TAG:-this release} carries on production; the console's Changes column stays empty (is /opt/desk/ci-entry.sh the current version? see deploy/build-server/README.md)" >> "$LOGS/webhook.log"
+}
+
 report_changes() {  # report_changes <last released commit or empty>
   [ -n "${ATTEMPT:-}" ] || return 0
-  GH_TOKEN_FILE="$CONF/github_token" GH_SLUG=$(printf '%s' "$REPO_URL" | sed 's#.*github\.com[:/]##; s#\.git$##') python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
+  GH_TOKEN_FILE="$CONF/github_token" GH_SLUG=$(printf '%s' "$REPO_URL" | sed 's#.*github\.com[:/]##; s#\.git$##') python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || changes_failed
 import json, os, re, subprocess, sys, urllib.request
 last = sys.argv[1]
 def git(*a):

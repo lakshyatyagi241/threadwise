@@ -319,9 +319,23 @@ describe('numbered pages', () => {
 });
 
 describe('readAnswer', () => {
-  it('unpacks a gzip answer and counts the real bytes', () => {
+  // Decompression runs on the libuv pool, not the event loop: the runner awaits it, so it must be async.
+  it('returns a promise, so decompression does not block the event loop', async () => {
+    const pending = readAnswer(gzipSync('hi'), { 'content-encoding': 'gzip' }, 1 << 20);
+    expect(pending).toBeInstanceOf(Promise);
+    expect((await pending).text).toContain('hi');
+  });
+
+  it('refuses a gzip bomb past the limit instead of inflating it', async () => {
+    const bomb = gzipSync(Buffer.alloc(4 << 20, 97));
+    const out = await readAnswer(bomb, { 'content-encoding': 'gzip' }, 1 << 20);
+    expect(out.isText).toBe(false);
+    expect(out.text).toContain('could not be unpacked');
+  });
+
+  it('unpacks a gzip answer and counts the real bytes', async () => {
     const text = JSON.stringify({ hello: 'world' });
-    const out = readAnswer(
+    const out = await readAnswer(
       gzipSync(text),
       { 'content-encoding': 'gzip', 'content-type': 'application/json' },
       1 << 20,
@@ -329,24 +343,24 @@ describe('readAnswer', () => {
     expect(out).toEqual({ text, isText: true, sizeBytes: text.length });
   });
 
-  it('names a file instead of printing it as symbols, with its byte size', () => {
+  it('names a file instead of printing it as symbols, with its byte size', async () => {
     const png = Buffer.alloc(102_400, 7);
-    const out = readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
+    const out = await readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
     expect(out.isText).toBe(false);
     expect(out.sizeBytes).toBe(102_400);
     expect(out.text).toContain('image/png');
     expect(out.text).toContain('102400 bytes');
   });
 
-  it('treats a NUL byte as binary even with a text type, and plain text as text', () => {
+  it('treats a NUL byte as binary even with a text type, and plain text as text', async () => {
     expect(looksBinary('text/plain', Buffer.from([65, 0, 66]))).toBe(true);
-    expect(readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100).isText).toBe(
-      true,
-    );
+    expect(
+      (await readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100)).isText,
+    ).toBe(true);
   });
 
-  it('does not throw on a broken compressed answer', () => {
-    const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
+  it('does not throw on a broken compressed answer', async () => {
+    const out = await readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
     expect(out.isText).toBe(false);
     expect(out.text).toContain('could not be unpacked');
   });

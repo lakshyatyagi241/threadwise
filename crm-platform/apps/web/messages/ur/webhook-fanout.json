@@ -38,11 +38,13 @@
         "target": "ہدف",
         "active": "فعال",
         "fields": "فیلڈز",
+        "numbers": "فون نمبرز",
         "deliveries": "ڈیلیوریز",
         "last": "آخری ڈیلیوری",
         "actions": "اعمال"
       },
       "allFields": "تمام فیلڈز",
+      "allNumbers": "تمام نمبر",
       "success": "{count, number} کامیاب",
       "failure": "{count, number} ناکام",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "فیلڈ فلٹر",
       "fieldFilterHint": "ہر فیلڈ فارورڈ کرنے کے لیے خالی چھوڑیں۔ ایک فیلڈ لکھیں اور Enter دبائیں، جیسے messages یا message_template_status_update۔",
       "fieldFilterPlaceholder": "فیلڈ شامل کریں",
+      "phoneFilter": "فون نمبر فلٹر",
+      "phoneFilterHint": "ہر نمبر فارورڈ کرنے کے لیے خالی چھوڑیں۔ Meta کی فون نمبر ID (صرف ہندسے، ظاہر ہونے والا نمبر نہیں) لکھ کر Enter دبائیں۔ کئی نمبروں والا webhook فہرست میں کوئی ایک نمبر ہونے پر پورا فارورڈ ہوتا ہے۔",
+      "phoneFilterPlaceholder": "فون نمبر ID شامل کریں",
       "fieldRemove": "{field} ہٹائیں",
+      "phoneRemove": "{phone} ہٹائیں",
       "timeout": "ٹائم آؤٹ (سیکنڈ)",
       "timeoutHint": "1 تا 30",
       "maxAttempts": "زیادہ سے زیادہ کوششیں",
@@ -110,7 +116,8 @@
         "headerValueRequired": "ہیڈر کے لیے نام اور قدر دونوں درکار ہیں۔",
         "headerNameRequired": "ہیڈر کا نام بھی درج کریں۔",
         "timeout": "1 سے 30 کے درمیان پورا عدد درج کریں۔",
-        "maxAttempts": "1 سے 10 کے درمیان پورا عدد درج کریں۔"
+        "maxAttempts": "1 سے 10 کے درمیان پورا عدد درج کریں۔",
+        "phoneNumberIdInvalid": "فون نمبر ID میں صرف ہندسے ہوتے ہیں۔"
       }
     },
     "failures": {

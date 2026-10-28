@@ -190,12 +190,12 @@ function MemberRow({
         className="hidden px-3 py-3 text-[11.5px] lg:table-cell"
         data-testid={`last-login-${member.email}`}
       >
-        {lastLogin ?? <span className="italic text-muted-foreground">{t('neverSignedIn')}</span>}
+        {lastLogin ?? <span className="text-muted-foreground">{t('neverSignedIn')}</span>}
       </td>
       <td className="hidden px-3 py-3 text-[11.5px] md:table-cell">
         {joined ??
           (member.status === 'pending' ? (
-            <span className="italic text-muted-foreground">{t('pending')}</span>
+            <span className="text-muted-foreground">{t('pending')}</span>
           ) : (
             <span className="text-muted-foreground">–</span>
           ))}

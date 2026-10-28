@@ -1,5 +1,6 @@
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { StorageCategory } from '@crm/contracts';
 import { canonicalStorageKey, storageKeyOrg } from '../../common/storage-key-owner';
 import { categoryForAreaKey } from '../../common/storage-meter/storage-key-category';
 import {
@@ -138,10 +139,16 @@ export class MediaStorageService {
    * A key of a workspace area written straight through here (`marketing/`, `template-media/`, `scheduled/`, `telegram/`, `ai-training/`) is metered by the
    * storage quota guard: reserve, write, commit once the bucket took it (observe mode; it never refuses and never fails the write).
    * `chat/` keys are metered by `ChatMediaStore`, which also covers local disk, so they are skipped here to count a file once.
+   * A caller whose key does not name its workspace and area (a flow's upload: `flow-media/<org uuid>/...`) passes `meterAs`.
    */
-  async put(key: string, body: Buffer, contentType: string): Promise<{ key: string } | null> {
-    const category = categoryForAreaKey(normaliseKey(key));
-    const orgId = storageKeyOrg(key);
+  async put(
+    key: string,
+    body: Buffer,
+    contentType: string,
+    meterAs?: { orgId: number; category: StorageCategory },
+  ): Promise<{ key: string } | null> {
+    const category = meterAs?.category ?? categoryForAreaKey(normaliseKey(key));
+    const orgId = meterAs?.orgId ?? storageKeyOrg(key);
     if (!this.meter || !category || orgId === null) return this.putObject(key, body, contentType);
     // Local media writes nothing here (the caller refuses or writes it itself): decide that before paying for a reservation.
     const destination = await this.destination();
