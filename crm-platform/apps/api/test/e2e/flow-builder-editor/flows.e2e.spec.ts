@@ -1971,6 +1971,55 @@ describe('acceptance: save, trigger columns, keyword matching, publish, gates, p
     expect(await col(two.id, 'trigger_kind')).toBe('opt_in');
   });
 
+  it.each([
+    {
+      engine: 'facebook',
+      // The Page's inbox channel is keyed by Meta's Page id, the sender key by the row's uuid.
+      account: (orgId: number) =>
+        sql(
+          `INSERT INTO facebook_pages (org_id, page_id) VALUES ($1,'1029384756') RETURNING uuid`,
+          [orgId],
+        ),
+      handle: '1029384756',
+    },
+    {
+      engine: 'instagram',
+      // The account's inbox channel is keyed by the engine's account id.
+      account: (orgId: number) =>
+        sql(
+          `INSERT INTO workspace_ig_accounts (org_id, instaflow_account_id, username, status) VALUES ($1,'17841400000001','shop','connected') RETURNING uuid`,
+          [orgId],
+        ),
+      handle: '17841400000001',
+    },
+  ])(
+    'an $engine flow is tied to its inbox channel and starts on a keyword sent there',
+    async ({ engine, account, handle }) => {
+      const o = await api.signup(`flb${engine}`);
+      const row = (await account(o.orgId)).rows[0] as { uuid: string };
+      const ch = Number(
+        (
+          await sql(
+            `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,$2,'Inbox','connected',$3) RETURNING id`,
+            [o.orgId, engine, handle],
+          )
+        ).rows[0].id,
+      );
+      const f = await create(o.admin, `${engine} flow`, {
+        flowNodes: [
+          trigger({ channel: engine, deviceId: `${engine}:${row.uuid}` }),
+          { id: 'n_msg', type: 'message', x: 300, y: 0, data: { text: 'hello' } },
+        ],
+        flowEdges: [{ id: 'e_1', source: 'n_trig', sourceHandle: 'out', target: 'n_msg' }],
+      });
+      expect(Number(await col(f.id, 'trigger_channel_id'))).toBe(ch);
+      expect(await col(f.id, 'provider')).toBe(engine);
+      expect((await api.as(o.admin).post(`/v2/flows/${f.id}/publish`)).status).toBe(200);
+      const hit = await triggers().keywordFlow(o.orgId, ch, engine, 'hi');
+      expect(hit?.channelId).toBe(ch);
+    },
+  );
+
   it("TW-FLB-020 rule 3 / port: an unofficial device resolves to its whatsapp_qr channel (trigger_channel_id), another workspace's never does, a blank sender stores null and the next save re-derives it", async () => {
     const o = await api.signup('flb20e');
     const other = await api.signup('flb20f');

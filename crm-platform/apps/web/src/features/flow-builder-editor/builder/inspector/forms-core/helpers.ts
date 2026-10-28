@@ -90,6 +90,20 @@ const SENDER_CHANNELS: readonly string[] = [
   'email',
 ];
 
+/**
+ * What changes on the Trigger when its channel is switched: the sender (it belongs to the old channel) and, when the kind exists on
+ * the old channel only ("On comment → DM" is Instagram's), the kind and its rules, which fall back to a keyword start.
+ */
+export function channelSwitchPatch(kind: string, next: string): Record<string, unknown> {
+  return {
+    channel: next,
+    deviceId: '',
+    ...(kind === 'comment_to_dm' && next !== 'instagram'
+      ? { kind: 'keyword', keywordRuleIds: [] }
+      : {}),
+  };
+}
+
 /** The channel a Trigger runs on: the saved one when the workspace offers it, else the flow's own channel. */
 export function resolveTriggerChannel(
   saved: unknown,
