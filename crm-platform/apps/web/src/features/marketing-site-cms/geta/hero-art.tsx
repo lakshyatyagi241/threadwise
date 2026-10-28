@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { NICHES } from './data/niches';
 import { NICHE_EVENT } from './hero-rotator';
 import { Icon } from './icons';
@@ -20,6 +20,11 @@ const SPOTS: Array<[number, number]> = [
 ];
 
 const REDUCED = '(prefers-reduced-motion: reduce)';
+const subscribeMotion = (cb: () => void) => {
+  const m = window.matchMedia(REDUCED);
+  m.addEventListener('change', cb);
+  return () => m.removeEventListener('change', cb);
+};
 const STEP_MS = 900;
 const HOLD_MS = 4200;
 const LAST = SPOTS.length + 1;
@@ -40,17 +45,18 @@ interface Link {
 export function HeroArt() {
   const [seq, setSeq] = useState({ i: 0, step: 0, run: 0 });
   const [manual, setManual] = useState(false);
-  const [reduced, setReduced] = useState(false);
+  const reduced = useSyncExternalStore(
+    subscribeMotion,
+    () => window.matchMedia(REDUCED).matches,
+    () => false,
+  );
   const [links, setLinks] = useState<Link[]>([]);
   const stage = useRef<HTMLDivElement>(null);
   const centre = useRef<HTMLDivElement>(null);
   const cards = useRef<Array<HTMLDivElement | null>>([]);
-  const { i, step, run } = seq;
+  const { i, run } = seq;
+  const step = reduced ? LAST : seq.step;
   const n = NICHES[i]!;
-
-  useEffect(() => {
-    setReduced(window.matchMedia(REDUCED).matches);
-  }, []);
 
   useEffect(() => {
     window.dispatchEvent(new CustomEvent(NICHE_EVENT, { detail: i }));
@@ -58,10 +64,7 @@ export function HeroArt() {
 
   // Plays the steps one by one, holds the finished picture, then moves to the next industry unless the visitor chose one.
   useEffect(() => {
-    if (reduced) {
-      setSeq((s) => ({ ...s, step: LAST }));
-      return;
-    }
+    if (reduced) return;
     let timer: ReturnType<typeof setTimeout>;
     let s = 0;
     const tick = () => {

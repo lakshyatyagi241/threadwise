@@ -203,9 +203,11 @@ export function Modules() {
   const root = useRef<HTMLDivElement>(null);
   const inView = useInView(root);
   // The tabs rotate only while the section is in view, and start from the first one each time it comes into view.
-  useEffect(() => {
+  const [seenView, setSeenView] = useState(false);
+  if (inView !== seenView) {
+    setSeenView(inView);
     if (inView && !manual) setI(0);
-  }, [inView, manual]);
+  }
   useEffect(() => {
     if (!inView || manual || window.matchMedia(REDUCED).matches) return;
     const t = setTimeout(() => setI((n) => (n + 1) % MODULES.length), 7500);

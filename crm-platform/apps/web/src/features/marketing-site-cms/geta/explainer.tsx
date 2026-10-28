@@ -125,9 +125,11 @@ export function Explainer() {
   const inView = useInView(root);
   // It plays only while it is in view, and every time it comes into view it starts again from the first step.
   const playing = (choice ?? !reduced) && inView;
-  useEffect(() => {
+  const [seenView, setSeenView] = useState(false);
+  if (inView !== seenView) {
+    setSeenView(inView);
     if (inView) setPos({ scene: 0, tick: 0 });
-  }, [inView]);
+  }
 
   const stage = useRef<HTMLDivElement>(null);
   const cursor = useRef<HTMLSpanElement>(null);
