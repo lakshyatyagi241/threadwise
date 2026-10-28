@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "« {node} » n’a aucune connexion entrante : rien ne mène vers lui.",
+        "buttonNoExit": "« {node} » : le bouton « {button} » ne mène à aucune étape.",
         "notConnected": "« {node} » n’est relié à rien.",
         "wrongChannel": "« {node} » ne fonctionne pas sur {channel} : supprimez-le ou réactivez le canal sur le nœud Déclencheur.",
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",

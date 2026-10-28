@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" không có kết nối đầu vào — không có gì dẫn đến nó.",
+        "buttonNoExit": "\"{node}\": nút \"{button}\" không dẫn đến bước nào.",
         "notConnected": "\"{node}\" chưa được kết nối với bất kỳ thứ gì.",
         "wrongChannel": "\"{node}\" không hoạt động trên {channel} — hãy xóa hoặc bật lại kênh ở nút Kích hoạt.",
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",

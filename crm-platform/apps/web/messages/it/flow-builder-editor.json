@@ -2441,6 +2441,7 @@
       },
       "validation": {
         "noIncoming": "«{node}» non ha connessioni in entrata — nulla vi conduce.",
+        "buttonNoExit": "«{node}»: il pulsante «{button}» non porta a nessun passaggio.",
         "notConnected": "«{node}» non è collegato a nulla.",
         "wrongChannel": "«{node}» non funziona su {channel} — eliminalo oppure riattiva il canale nel nodo Trigger.",
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",

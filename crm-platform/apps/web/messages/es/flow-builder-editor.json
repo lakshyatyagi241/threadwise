@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "«{node}» no tiene ninguna conexión de entrada: nada conduce a él.",
+        "buttonNoExit": "«{node}»: el botón «{button}» no lleva a ningún paso.",
         "notConnected": "«{node}» no está conectado a nada.",
         "wrongChannel": "«{node}» no funciona en {channel}: elimínalo o vuelve a activar el canal en el nodo Disparador.",
         "noSenderInstagram": "El nodo Disparador no tiene ninguna cuenta de Instagram seleccionada: elige una en el paso Disparador.",

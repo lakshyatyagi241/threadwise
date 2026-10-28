@@ -2441,6 +2441,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" में कोई इनकमिंग कनेक्शन नहीं है — इसमें कुछ भी नहीं जाता।",
+        "buttonNoExit": "\"{node}\": बटन \"{button}\" किसी भी चरण तक नहीं ले जाता।",
         "notConnected": "\"{node}\" किसी से भी कनेक्ट नहीं है।",
         "wrongChannel": "\"{node}\" {channel} पर काम नहीं करता — इसे हटाएँ या Trigger नोड पर चैनल वापस चालू करें।",
         "noSenderInstagram": "Trigger नोड पर कोई Instagram अकाउंट चुना नहीं गया है — Trigger स्टेप पर एक चुनें।",

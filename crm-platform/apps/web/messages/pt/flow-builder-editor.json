@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” não tem conexão de entrada — nada leva até ele.",
+        "buttonNoExit": "\"{node}\": o botão \"{button}\" não leva a nenhuma etapa.",
         "notConnected": "“{node}” não está conectado a nada.",
         "wrongChannel": "“{node}” não funciona em {channel} — exclua-o ou reative o canal no nó Gatilho.",
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",

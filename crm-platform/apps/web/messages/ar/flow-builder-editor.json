@@ -2582,6 +2582,7 @@
       },
       "validation": {
         "noIncoming": "لا يوجد اتصال وارد إلى «{node}» — لا شيء يؤدي إليه.",
+        "buttonNoExit": "«{node}»: الزر «{button}» لا يؤدي إلى أي خطوة.",
         "notConnected": "«{node}» غير متصل بأي شيء.",
         "wrongChannel": "«{node}» لا يعمل على {channel} — احذفه أو أعد القناة في عقدة المشغّل.",
         "noSenderInstagram": "لم يتم تحديد حساب Instagram في عقدة المشغّل — اختر واحدًا في خطوة المشغّل.",
