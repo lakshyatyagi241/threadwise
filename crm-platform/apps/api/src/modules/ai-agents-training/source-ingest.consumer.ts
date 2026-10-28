@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
-import { KbIndexService } from '../knowledge-base';
 import {
   TRAINING_URL_FETCHER,
   type TrainingUrlFetcher,
@@ -10,6 +9,7 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
+import { KbIndexService } from '../knowledge-base';
 import { SOURCE_REQUESTED } from './source-events';
 import { SourcesRepository } from './sources.repository';
 import { isBinaryText, pageText, tokensEstimate } from './training-rules';
@@ -78,6 +78,11 @@ export class SourceIngestConsumer implements OutboxSubscriber, OnModuleInit {
               error: null,
             };
     }
+    // A page that cuts into too many passages is refused here, not in the commit: the index refuses it and the entry must say why.
+    const refusal =
+      outcome.status === 'ready' ? this.kb.passageRefusal(outcome.content ?? '') : null;
+    if (refusal)
+      outcome = { status: 'failed', content: null, tokensEstimate: null, error: refusal };
     // The page's passages are queued in the commit that makes the entry ready.
     const settled = await this.db.txAs({ orgId }, async (tx) => {
       const done = await this.repo.finish(tx, orgId, sourceId, outcome);

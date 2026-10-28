@@ -38,10 +38,10 @@ describe('test panel', () => {
     expect(html).toContain('&lt;b&gt;x&lt;/b&gt;');
   });
 
-  it('bubbles: system italic, user right, bot media by kind', () => {
+  it('bubbles: system note, user right, bot media by kind', () => {
     const r = (e: Parameters<typeof LogBubble>[0]['entry']) =>
       renderToStaticMarkup(<LogBubble entry={e} />);
-    expect(r({ kind: 'system', text: 'note' })).toContain('italic');
+    expect(r({ kind: 'system', text: 'note' })).toContain('font-mono');
     expect(r({ kind: 'user', text: 'hi' })).toContain('self-end');
     expect(
       r({ kind: 'bot', text: 'c', media: { kind: 'image', url: '/a.png', filename: 'a' } }),

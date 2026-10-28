@@ -107,7 +107,10 @@
         "rolled_back": "롤백됨"
       },
       "by": "작성자 {author}",
-      "raisedIst": "생성 {time} IST"
+      "raisedIst": "생성 {time} IST",
+      "noProgress": "{minutes}분 동안 진행이 없습니다. 빌드 또는 릴리스가 중단되었을 수 있습니다.",
+      "noChangesAlert": "최근 릴리스에 풀 리퀘스트가 기록되지 않았습니다. 빌드 서버의 deploy-main.sh 또는 호스트의 ci-entry.sh가 오래되었을 가능성이 큽니다. 최신 버전을 설치하세요 (deploy/build-server/README.md).",
+      "moreChanges": "변경 {count}건 더 보기"
     }
   }
 }

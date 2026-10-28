@@ -305,7 +305,7 @@ function MessageBody({
     return (
       <div data-testid="inbox-unsupported" className="space-y-1">
         {referralCard}
-        <p dir="auto" className="flex items-start gap-1.5 text-sm italic text-muted-foreground">
+        <p dir="auto" className="flex items-start gap-1.5 text-sm text-muted-foreground">
           <AlertIcon width={14} height={14} className="mt-0.5 shrink-0" />
           <span className="break-words">{caption ?? t('unsupported')}</span>
         </p>
@@ -320,7 +320,7 @@ function MessageBody({
       {caption ? (
         <WhatsAppText text={caption} />
       ) : !visual ? (
-        <p className="text-xs italic text-muted-foreground">{t('unavailable')}</p>
+        <p className="text-xs text-muted-foreground">{t('unavailable')}</p>
       ) : null}
       {translated && m.body && (
         <div className="text-xs text-muted-foreground">
@@ -334,7 +334,7 @@ function MessageBody({
               ? t('sentIn', { lang: (m.detectedLanguage ?? '').toUpperCase() })
               : t('translatedFrom', { lang: (m.detectedLanguage ?? '').toUpperCase() })}
           </button>
-          {showOriginal && <WhatsAppText text={m.body} className="mt-0.5 italic" />}
+          {showOriginal && <WhatsAppText text={m.body} className="mt-0.5" />}
         </div>
       )}
       {m.direction === 'out' && m.translationStatus === 'skipped_failed' && (
@@ -520,7 +520,7 @@ export const MessageBubble = memo(function MessageBubble({
             {m.forwarded && (
               <p
                 data-testid="inbox-forwarded"
-                className="mb-0.5 text-[11px] italic text-muted-foreground"
+                className="mb-0.5 text-[11px] text-muted-foreground"
               >
                 {t('forwarded')}
               </p>
@@ -615,7 +615,7 @@ export const MessageBubble = memo(function MessageBubble({
           )}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
-          {m.editedAt && <span className="italic">{t('edited')}</span>}
+          {m.editedAt && <span>{t('edited')}</span>}
           <time dateTime={m.createdAt} title={fullStamp(m.createdAt, locale, timeZone)}>
             {clockTime(m.createdAt, locale, timeZone)}
           </time>

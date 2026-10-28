@@ -38,11 +38,13 @@
         "target": "目标",
         "active": "已启用",
         "fields": "字段",
+        "numbers": "电话号码",
         "deliveries": "投递",
         "last": "最近一次投递",
         "actions": "操作"
       },
       "allFields": "所有字段",
+      "allNumbers": "所有号码",
       "success": "{count, number} 成功",
       "failure": "{count, number} 失败",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "字段过滤",
       "fieldFilterHint": "留空则转发所有字段。输入字段名后按 Enter，例如 messages 或 message_template_status_update。",
       "fieldFilterPlaceholder": "添加字段",
+      "phoneFilter": "电话号码筛选",
+      "phoneFilterHint": "留空则转发所有号码。输入 Meta 电话号码 ID（仅数字，不是显示的号码）后按 Enter。包含多个号码的 webhook 只要其中一个在列表中，就会整体转发。",
+      "phoneFilterPlaceholder": "添加电话号码 ID",
       "fieldRemove": "移除 {field}",
+      "phoneRemove": "移除 {phone}",
       "timeout": "超时（秒）",
       "timeoutHint": "1 到 30",
       "maxAttempts": "最大尝试次数",
@@ -110,7 +116,8 @@
         "headerValueRequired": "标头需要同时填写名称和值。",
         "headerNameRequired": "请同时输入标头名称。",
         "timeout": "请输入 1 到 30 之间的整数。",
-        "maxAttempts": "请输入 1 到 10 之间的整数。"
+        "maxAttempts": "请输入 1 到 10 之间的整数。",
+        "phoneNumberIdInvalid": "电话号码 ID 只能是数字。"
       }
     },
     "failures": {

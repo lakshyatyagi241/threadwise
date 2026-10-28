@@ -107,7 +107,10 @@
         "rolled_back": "Geri alındı"
       },
       "by": "{author} tarafından",
-      "raisedIst": "Açılış {time} IST"
+      "raisedIst": "Açılış {time} IST",
+      "noProgress": "{minutes} dakikadır ilerleme yok. Derleme veya sürüm durmuş olabilir.",
+      "noChangesAlert": "En son sürümler pull request'lerini listelemiyor. Derleme sunucusundaki deploy-main.sh veya ana makinedeki ci-entry.sh büyük olasılıkla eski: güncel sürümleri kurun (deploy/build-server/README.md).",
+      "moreChanges": "{count} değişiklik daha"
     }
   }
 }

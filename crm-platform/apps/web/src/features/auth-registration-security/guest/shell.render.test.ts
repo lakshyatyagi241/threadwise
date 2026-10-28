@@ -141,6 +141,14 @@ describe('the six guest designs', () => {
     expect(html).not.toContain('lg:hidden');
   });
 
+  it('design 6 shows the Geta logo picture, named by the product, with no referrer sent', () => {
+    const html = shell(6);
+    expect(html).toContain('src="https://ci3.googleusercontent.com/mail-sig/');
+    expect(html).toMatch(
+      /<img[^>]*referrerPolicy="no-referrer"|<img[^>]*referrerpolicy="no-referrer"/i,
+    );
+  });
+
   it('design 6 shows the three stat rows on sign-in but not on forgot password', () => {
     const login = shell(6);
     expect(login).toContain('auth-geta-shape');
@@ -196,8 +204,8 @@ describe('the six guest designs', () => {
     expect(html).toContain('--auth-accent:#0f766e');
   });
 
-  it('renders right-to-left languages without italic accent words', () => {
-    const html = shell(1, {}, 'ar');
-    expect(html).toContain('rtl:not-italic');
+  it('draws no accent word in italics, in any direction', () => {
+    expect(shell(1, {}, 'ar')).not.toMatch(/\bitalic\b/);
+    expect(shell(1, {}, 'en')).not.toMatch(/\bitalic\b/);
   });
 });

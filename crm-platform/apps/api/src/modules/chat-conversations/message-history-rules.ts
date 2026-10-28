@@ -209,11 +209,12 @@ export function volumeSeriesFrom(
   now: Date,
   tz: string,
 ): Date {
+  // Reference's hourly view is the last 24 hours, whatever the range.
   if (bucket === 'hourly')
     return new Date(Math.max(window.from.getTime(), window.to.getTime() - DAY_MS));
-  const days =
-    f.from === undefined && f.to === undefined ? MESSAGE_HISTORY_RANGE_DAYS[f.range ?? '30d'] : 1;
-  return bucket === 'daily' && days > 1 ? localMidnightDaysBack(now, tz, days - 1) : window.from;
+  if (bucket !== 'daily' || f.from !== undefined || f.to !== undefined) return window.from;
+  const days = MESSAGE_HISTORY_RANGE_DAYS[f.range ?? '30d'];
+  return days > 1 ? localMidnightDaysBack(now, tz, days - 1) : window.from;
 }
 
 /** The wall clock of an instant in a zone, read as if it were UTC (ms). */

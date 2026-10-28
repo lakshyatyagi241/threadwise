@@ -356,7 +356,7 @@ export function VariantsSection({
               )}
             </div>
           ) : (
-            <p className="text-[11.5px] italic text-muted-foreground">{t('tableEmpty')}</p>
+            <p className="text-[11.5px] text-muted-foreground">{t('tableEmpty')}</p>
           )}
         </div>
       )}

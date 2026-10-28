@@ -1840,7 +1840,7 @@ function StepCard(p: {
                   >
                     <span className="min-w-0 flex-1 truncate">{e.title}</span>
                     {e.target ? (
-                      <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-mono text-[10.5px] font-normal italic">
+                      <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-mono text-[10.5px] font-normal">
                         {t('stage', { stage: e.target })}
                       </span>
                     ) : null}

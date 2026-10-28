@@ -24,7 +24,7 @@ export function DataTab() {
         <h2 className="font-serif text-xl">{t('exportTitle')}</h2>
         <p className="text-xs text-muted-foreground">{t('exportNote')}</p>
         {!c.isOwner && (
-          <p className="text-xs italic text-muted-foreground">{t('exportOwnerOnly')}</p>
+          <p className="text-xs text-muted-foreground">{t('exportOwnerOnly')}</p>
         )}
         <div className="grid gap-3 sm:grid-cols-3">
           {EXPORT_TYPES.map((type) => {
@@ -80,7 +80,7 @@ function DeleteCard() {
         {t('note')} <strong>{t('irreversible')}</strong>
       </p>
       {!ws.data.isOwner ? (
-        <p className="text-xs italic text-muted-foreground">{t('ownerOnly')}</p>
+        <p className="text-xs text-muted-foreground">{t('ownerOnly')}</p>
       ) : (
         <form
           className="space-y-3"
