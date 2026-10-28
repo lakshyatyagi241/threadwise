@@ -84,6 +84,7 @@ export {
   resolveWindow,
   chartZone,
   safeZone,
+  volumeSeriesFrom,
   type HistoryWindow,
   type HistoryWindowProblem,
   type VolumeBucket,

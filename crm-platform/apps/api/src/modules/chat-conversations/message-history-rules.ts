@@ -198,6 +198,64 @@ export const bucketUnit = (b: VolumeBucket): 'hour' | 'day' | 'week' =>
   b === 'hourly' ? 'hour' : b === 'weekly' ? 'week' : 'day';
 
 /**
+ * Where the volume series starts. A daily chart of a preset of N days (7d, 30d, 90d) starts at midnight of the Nth day in the viewer's
+ * zone, so every bar is a whole day: the preset itself is a rolling span, which would leave the first bar partial. The 24 hour preset,
+ * weekly bars and a picked pair (whole UTC days already) keep the window's start. Hourly bars are the last 24 hours of the window.
+ */
+export function volumeSeriesFrom(
+  f: Pick<MessageHistoryFilters, 'range' | 'from' | 'to'>,
+  bucket: VolumeBucket,
+  window: HistoryWindow,
+  now: Date,
+  tz: string,
+): Date {
+  if (bucket === 'hourly')
+    return new Date(Math.max(window.from.getTime(), window.to.getTime() - DAY_MS));
+  const days =
+    f.from === undefined && f.to === undefined ? MESSAGE_HISTORY_RANGE_DAYS[f.range ?? '30d'] : 1;
+  return bucket === 'daily' && days > 1 ? localMidnightDaysBack(now, tz, days - 1) : window.from;
+}
+
+/** The wall clock of an instant in a zone, read as if it were UTC (ms). */
+const wallClock = (instant: Date, tz: string): number => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }).formatToParts(instant);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    Number(parts.find((p) => p.type === type)?.value);
+  return Date.UTC(
+    part('year'),
+    part('month') - 1,
+    part('day'),
+    part('hour'),
+    part('minute'),
+    part('second'),
+  );
+};
+
+/** How far a zone is ahead of UTC at an instant, in ms. */
+const offsetAt = (instant: Date, tz: string): number =>
+  wallClock(instant, tz) - Math.floor(instant.getTime() / 1000) * 1000;
+
+/**
+ * The instant of local midnight, `back` calendar days before the day `now` falls on in `tz`. Subtracting 24 hour spans would be an hour
+ * off across a clock change, so the offset is read twice: once at the midnight read as UTC, then at the guess it gives.
+ */
+function localMidnightDaysBack(now: Date, tz: string, back: number): Date {
+  const day = addDays(dayOf(new Date(wallClock(now, tz))), -back);
+  const midnight = dayStart(day).getTime();
+  const guess = midnight - offsetAt(new Date(midnight), tz);
+  return new Date(midnight - offsetAt(new Date(guess), tz));
+}
+
+/**
  * The zone the volume chart buckets by. A chosen from/to pair is whole UTC days (see `resolveWindow`), so it is bucketed by UTC days too:
  * in the viewer's zone the last day of the pair spills into one more bucket (20 to 26 Oct drawn as 20 to 27 Oct).
  */
