@@ -503,7 +503,7 @@ function AwaitingPanel({
                 <span className="font-semibold text-primary">{t('awaiting.proofAttached')}</span>
               )}
               {r.proofNote && (
-                <span className="max-w-[220px] truncate italic" title={r.proofNote}>
+                <span className="max-w-[220px] truncate" title={r.proofNote}>
                   {r.proofNote}
                 </span>
               )}

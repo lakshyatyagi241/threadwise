@@ -102,7 +102,7 @@ function PickerBody({
       />
       <div className="max-h-[50vh] overflow-y-auto">
         {products.isPending ? (
-          <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">
+          <div className="py-12 text-center text-[12.5px] text-muted-foreground">
             {t('loadingProducts')}
           </div>
         ) : null}
@@ -112,7 +112,7 @@ function PickerBody({
           </div>
         ) : null}
         {products.isSuccess && filtered.length === 0 ? (
-          <div className="py-12 text-center text-[12.5px] italic text-muted-foreground">
+          <div className="py-12 text-center text-[12.5px] text-muted-foreground">
             {t('noProducts', { searching: q ? 'yes' : 'no' })}
           </div>
         ) : null}
@@ -280,7 +280,7 @@ function CommerceFormBody({ p, provider }: { p: FormProps; provider: Provider })
             </div>
           ))}
           {items.length === 0 ? (
-            <div className="text-[11.5px] italic text-muted-foreground">{t('noItems')}</div>
+            <div className="text-[11.5px] text-muted-foreground">{t('noItems')}</div>
           ) : null}
           <button
             type="button"

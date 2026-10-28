@@ -110,7 +110,7 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
         ))}
       </div>
       {replies.length === 0 ? (
-        <div className="mt-2 text-center text-[11.5px] italic text-muted-foreground">
+        <div className="mt-2 text-center text-[11.5px] text-muted-foreground">
           {t('empty')}
         </div>
       ) : null}

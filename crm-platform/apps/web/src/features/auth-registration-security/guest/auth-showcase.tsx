@@ -147,7 +147,7 @@ export function AccentHeading({
       {heading}
       {heading && accent ? ' ' : null}
       {accent ? (
-        <span style={style} className="italic rtl:not-italic">
+        <span style={style}>
           {accent}
         </span>
       ) : null}

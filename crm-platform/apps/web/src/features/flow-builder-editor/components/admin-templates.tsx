@@ -98,7 +98,7 @@ export function AdminTemplatesScreen() {
             {t('eyebrow')}
           </div>
           <h1 className="font-serif text-[28px] leading-none font-normal tracking-tight sm:text-[40px]">
-            {t('title')} <span className="text-brand italic">{t('titleAccent')}</span>.
+            {t('title')} <span className="text-brand">{t('titleAccent')}</span>.
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
         </div>

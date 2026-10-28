@@ -12,7 +12,7 @@ import { ErrorLine } from './error-line';
 function Change({ view }: { view: ChangeView }) {
   const t = useTranslations('companies.activity');
   const f = useTranslations('companies.activity.fields');
-  const empty = <span className="italic text-muted-foreground">{t('empty')}</span>;
+  const empty = <span className="text-muted-foreground">{t('empty')}</span>;
   switch (view.kind) {
     case 'field':
       return (
