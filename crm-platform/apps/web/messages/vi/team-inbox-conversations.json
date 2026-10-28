@@ -219,6 +219,7 @@
       "referral": "Đến từ quảng cáo hoặc liên kết",
       "sentIn": "Đã gửi bằng {lang}. Hiện nội dung bạn đã nhập",
       "translatedFrom": "Đã dịch từ {lang}. Hiện bản gốc",
+      "translationFailed": "Đã gửi không dịch. Bản dịch thất bại nên nội dung được gửi đúng như bạn đã nhập.",
       "bot": "Bot",
       "broadcast": "Gửi hàng loạt",
       "reacted": "Phản ứng {emoji}",

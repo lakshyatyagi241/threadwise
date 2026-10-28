@@ -337,6 +337,9 @@ function MessageBody({
           {showOriginal && <WhatsAppText text={m.body} className="mt-0.5 italic" />}
         </div>
       )}
+      {m.direction === 'out' && m.translationStatus === 'skipped_failed' && (
+        <p className="text-xs text-amber-700 dark:text-amber-400">{t('translationFailed')}</p>
+      )}
       {m.kind === 'document' && media?.sizeBytes != null && !visual && (
         <p className="text-xs text-muted-foreground">{humanSize(media.sizeBytes)}</p>
       )}

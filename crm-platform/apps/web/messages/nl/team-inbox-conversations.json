@@ -219,6 +219,7 @@
       "referral": "Afkomstig van een advertentie of link",
       "sentIn": "Verzonden in {lang}. Toon de tekst die je schreef",
       "translatedFrom": "Vertaald uit {lang}. Toon het origineel",
+      "translationFailed": "Verzonden zonder vertaling. De vertaling is mislukt, dus je tekst is verstuurd zoals je hem typte.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reactie {emoji}",

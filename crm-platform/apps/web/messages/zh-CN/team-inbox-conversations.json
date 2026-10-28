@@ -219,6 +219,7 @@
       "referral": "来自广告或链接",
       "sentIn": "以 {lang} 发送。显示您输入的文本",
       "translatedFrom": "已从 {lang} 翻译。显示原文",
+      "translationFailed": "未翻译即已发送。翻译失败，因此按您输入的原文发送。",
       "bot": "机器人",
       "broadcast": "群发",
       "reacted": "表情回应 {emoji}",
