@@ -107,7 +107,9 @@
         "rolled_back": "已回滚"
       },
       "by": "作者 {author}",
-      "raisedIst": "创建于 {time} IST"
+      "raisedIst": "创建于 {time} IST",
+      "noProgress": "已有 {minutes} 分钟没有进展。构建或发布可能已停止。",
+      "noChangesAlert": "最近的发布没有列出所包含的拉取请求。构建服务器上的 deploy-main.sh 或主机上的 ci-entry.sh 很可能已过期：请安装当前版本（deploy/build-server/README.md）。"
     }
   }
 }

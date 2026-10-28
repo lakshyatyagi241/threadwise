@@ -107,7 +107,9 @@
         "rolled_back": "वापस लौटाया गया"
       },
       "by": "{author} द्वारा",
-      "raisedIst": "बनाया गया {time} IST"
+      "raisedIst": "बनाया गया {time} IST",
+      "noProgress": "{minutes} मिनट से कोई प्रगति नहीं हुई। हो सकता है बिल्ड या रिलीज़ रुक गया हो।",
+      "noChangesAlert": "हाल के रिलीज़ अपने पुल रिक्वेस्ट सूचीबद्ध नहीं करते। संभवतः बिल्ड सर्वर की deploy-main.sh या होस्ट की ci-entry.sh पुरानी है: मौजूदा संस्करण इंस्टॉल करें (deploy/build-server/README.md)।"
     }
   }
 }
