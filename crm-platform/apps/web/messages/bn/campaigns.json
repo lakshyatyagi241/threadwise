@@ -1842,7 +1842,8 @@
         "add": "একটি টেমপ্লেট যোগ করুন",
         "count": "{max}টির মধ্যে {used}টি টেমপ্লেট",
         "limitReached": "সীমা পূর্ণ: {max}টি টেমপ্লেট।",
-        "variablesTitle": "টেমপ্লেট {position}-এর ভেরিয়েবল: {name}"
+        "variablesTitle": "টেমপ্লেট {position}-এর ভেরিয়েবল: {name}",
+        "variablesLater": "{count, plural, other {#টি ভেরিয়েবলের}} মান এই প্রিভিউ থেকে নয়, ম্যাপিং থেকে আসে।"
       }
     },
     "history": {

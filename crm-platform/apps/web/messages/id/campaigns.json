@@ -1842,7 +1842,8 @@
         "add": "Tambah templat",
         "count": "{used} dari {max} templat",
         "limitReached": "Batas tercapai: {max} templat.",
-        "variablesTitle": "Variabel templat {position}: {name}"
+        "variablesTitle": "Variabel templat {position}: {name}",
+        "variablesLater": "{count, plural, other {# variabel}} mengambil nilainya dari pemetaan, bukan dari pratinjau ini."
       }
     },
     "history": {

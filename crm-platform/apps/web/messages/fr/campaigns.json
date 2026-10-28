@@ -1842,7 +1842,8 @@
         "add": "Ajouter un modèle",
         "count": "{used} modèles sur {max}",
         "limitReached": "Limite atteinte : {max} modèles.",
-        "variablesTitle": "Variables du modèle {position} : {name}"
+        "variablesTitle": "Variables du modèle {position} : {name}",
+        "variablesLater": "{count, plural, one {# variable prend} other {# variables prennent}} sa valeur dans l'association, pas dans cet aperçu."
       }
     },
     "history": {

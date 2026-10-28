@@ -9,6 +9,8 @@ import {
   type WizardTemplate,
 } from '@crm/contracts';
 import { Alert, Button, Field, Select } from '@crm/ui';
+import { MessageBubble } from '@/features/message-templates/components/message-bubble';
+import { previewModelWithExamples } from '../lib/templates';
 import { issueFor, sequenceMappingIssues, type StepIssue } from '../lib/issues';
 import type { WizardAction } from '../lib/state';
 import { VariablesCard, type CustomProperty } from './variables-card';
@@ -48,6 +50,7 @@ function Entry({
   const gone =
     chosen !== null && templates !== undefined && !templates.some((x) => x.id === chosen);
   const off = disabled || locked;
+  const template = chosen !== null ? (templates?.find((x) => x.id === chosen) ?? null) : null;
   return (
     <li className="space-y-2 rounded-lg border border-border p-3" data-testid="sequence-row">
       <div className="flex flex-wrap items-end gap-2">
@@ -112,6 +115,21 @@ function Entry({
         <p role="alert" className="text-xs text-danger">
           {ti(issue.code)}
         </p>
+      )}
+      {template && (
+        <div className="space-y-1.5" data-testid="sequence-preview">
+          <div className="rounded-lg bg-[#ece5dd] p-3">
+            <MessageBubble
+              model={previewModelWithExamples(template)}
+              className="max-w-sm text-[13px]"
+            />
+          </div>
+          {template.slots.length > 0 && (
+            <p className="text-xs text-muted-foreground">
+              {t('variablesLater', { count: template.slots.length })}
+            </p>
+          )}
+        </div>
       )}
     </li>
   );

@@ -1842,7 +1842,8 @@
         "add": "टेम्प्लेट जोड़ें",
         "count": "{max} में से {used} टेम्प्लेट",
         "limitReached": "सीमा पूरी हुई: {max} टेम्प्लेट।",
-        "variablesTitle": "टेम्प्लेट {position} के वेरिएबल: {name}"
+        "variablesTitle": "टेम्प्लेट {position} के वेरिएबल: {name}",
+        "variablesLater": "{count, plural, one {# वेरिएबल} other {# वेरिएबल}} का मान इस पूर्वावलोकन से नहीं, मैपिंग से आता है।"
       }
     },
     "history": {

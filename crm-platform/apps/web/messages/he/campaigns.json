@@ -1842,7 +1842,8 @@
         "add": "הוספת תבנית",
         "count": "{used} מתוך {max} תבניות",
         "limitReached": "הגעתם למגבלה: {max} תבניות.",
-        "variablesTitle": "משתני תבנית {position}: {name}"
+        "variablesTitle": "משתני תבנית {position}: {name}",
+        "variablesLater": "{count, plural, one {משתנה אחד מקבל} other {# משתנים מקבלים}} את הערך מהמיפוי ולא מהתצוגה המקדימה הזו."
       }
     },
     "history": {

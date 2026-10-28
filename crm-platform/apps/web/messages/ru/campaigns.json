@@ -1842,7 +1842,8 @@
         "add": "Добавить шаблон",
         "count": "{used} из {max} шаблонов",
         "limitReached": "Достигнут предел: {max} шаблонов.",
-        "variablesTitle": "Переменные шаблона {position}: {name}"
+        "variablesTitle": "Переменные шаблона {position}: {name}",
+        "variablesLater": "{count, plural, one {# переменная берёт} few {# переменные берут} many {# переменных берут} other {# переменной берут}} значение из сопоставления, а не из этого предпросмотра."
       }
     },
     "history": {

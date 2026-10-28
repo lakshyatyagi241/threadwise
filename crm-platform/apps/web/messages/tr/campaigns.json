@@ -1842,7 +1842,8 @@
         "add": "Şablon ekle",
         "count": "{used} / {max} şablon",
         "limitReached": "Sınıra ulaşıldı: {max} şablon.",
-        "variablesTitle": "{position}. şablonun değişkenleri: {name}"
+        "variablesTitle": "{position}. şablonun değişkenleri: {name}",
+        "variablesLater": "{count, plural, one {# değişken} other {# değişken}} değerini bu önizlemeden değil, eşlemeden alır."
       }
     },
     "history": {

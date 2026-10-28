@@ -1842,7 +1842,8 @@
         "add": "Añadir una plantilla",
         "count": "{used} de {max} plantillas",
         "limitReached": "Límite alcanzado: {max} plantillas.",
-        "variablesTitle": "Variables de la plantilla {position}: {name}"
+        "variablesTitle": "Variables de la plantilla {position}: {name}",
+        "variablesLater": "{count, plural, one {# variable toma} other {# variables toman}} su valor de la asignación, no de esta vista previa."
       }
     },
     "history": {

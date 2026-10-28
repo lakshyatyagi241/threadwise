@@ -1842,7 +1842,8 @@
         "add": "เพิ่มเทมเพลต",
         "count": "{used} จาก {max} เทมเพลต",
         "limitReached": "ถึงขีดจำกัดแล้ว: {max} เทมเพลต",
-        "variablesTitle": "ตัวแปรของเทมเพลตที่ {position}: {name}"
+        "variablesTitle": "ตัวแปรของเทมเพลตที่ {position}: {name}",
+        "variablesLater": "{count, plural, other {ตัวแปร # ตัว}}ใช้ค่าจากการกำหนดค่า ไม่ใช่จากตัวอย่างนี้"
       }
     },
     "history": {

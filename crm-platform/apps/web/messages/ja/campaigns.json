@@ -1842,7 +1842,8 @@
         "add": "テンプレートを追加",
         "count": "{used} / {max} 件のテンプレート",
         "limitReached": "上限に達しました：テンプレートは{max}件までです。",
-        "variablesTitle": "テンプレート{position}の変数：{name}"
+        "variablesTitle": "テンプレート{position}の変数：{name}",
+        "variablesLater": "{count, plural, other {#個の変数}}の値は、このプレビューではなくマッピングから入ります。"
       }
     },
     "history": {
