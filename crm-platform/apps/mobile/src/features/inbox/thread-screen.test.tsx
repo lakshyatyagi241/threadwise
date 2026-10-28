@@ -21,6 +21,7 @@ import { renderApp } from '@/test/render';
 import { RealtimeProvider } from '@/lib/realtime';
 import { fakeSocketFactory } from '@/test/fake-socket';
 import { reachEnd } from '@/test/scroll';
+import * as aiApi from './ai-rewrite-api';
 import * as api from './api';
 import * as labels from './labels-api';
 import * as notesApi from './notes-api';
@@ -28,6 +29,7 @@ import * as pickers from './pick-attachment';
 import * as savedApi from './saved-replies-api';
 import { ThreadScreen } from './thread-screen';
 
+jest.mock('./ai-rewrite-api');
 jest.mock('./api');
 jest.mock('./labels-api');
 jest.mock('./notes-api');
@@ -62,6 +64,8 @@ const notesCall = jest.mocked(notesApi.fetchNotes);
 const addNoteCall = jest.mocked(notesApi.addNote);
 const repliesCall = jest.mocked(savedApi.fetchSavedReplies);
 const fillCall = jest.mocked(savedApi.fillSavedReply);
+const modelsCall = jest.mocked(aiApi.fetchAiModels);
+const rewriteCall = jest.mocked(aiApi.rewriteText);
 const libraryCall = jest.mocked(labels.fetchLabelLibrary);
 const applyCall = jest.mocked(labels.applyLabel);
 const withdrawCall = jest.mocked(labels.withdrawLabel);
@@ -119,6 +123,8 @@ beforeEach(() => {
     .mockReturnValue({ back, push, navigate } as unknown as ReturnType<typeof useRouter>);
   jest.mocked(useLocalSearchParams).mockReturnValue({ id: CONVERSATION_ID });
   sessionCall.mockResolvedValue(inboxSession);
+  // No AI model is enabled unless a test says so, so the sparkle button is not there.
+  modelsCall.mockResolvedValue({ data: [] });
 });
 afterEach(async () => {
   if (client) {
@@ -1452,29 +1458,33 @@ describe('ThreadScreen: private notes', () => {
     ]);
   });
 
-  const LOCK = { name: 'Write a private note' };
+  const NOTE_TAB = { name: 'Internal note' };
+  const REPLY_TAB = { name: 'Reply' };
 
-  it('puts a lock beside the box for a person who may write notes, and hides it while a reply is typed', async () => {
+  it('offers Reply and Internal note tabs to a person who may write notes, with Reply on, and keeps them while a reply is typed', async () => {
     as('inbox.conversation.note');
     arrange();
     await show();
     await loaded();
-    expect(await screen.findByRole('button', LOCK)).toBeTruthy();
+    const reply = await screen.findByRole('tab', REPLY_TAB);
+    expect(reply.props.accessibilityState).toMatchObject({ selected: true });
+    expect(screen.getByRole('tab', NOTE_TAB).props.accessibilityState).toMatchObject({
+      selected: false,
+    });
     await type('Hello');
-    expect(screen.queryByRole('button', LOCK)).toBeNull();
-    await type('');
-    expect(await screen.findByRole('button', LOCK)).toBeTruthy();
+    expect(screen.getByRole('tab', NOTE_TAB)).toBeTruthy();
+    expect(screen.getByRole('tab', REPLY_TAB)).toBeTruthy();
   });
 
-  it('has no lock, and no switch of any kind, for a person who may not write notes', async () => {
+  it('has no tabs for a person who may not write notes', async () => {
     arrange();
     await show();
     await loaded();
-    expect(screen.queryByRole('button', LOCK)).toBeNull();
-    expect(screen.queryByRole('radio', { name: 'Note' })).toBeNull();
+    expect(screen.queryByRole('tab', NOTE_TAB)).toBeNull();
+    expect(screen.queryByRole('tab', REPLY_TAB)).toBeNull();
   });
 
-  it('writes a note, not a message, once the lock is on; and the lock takes the person back to replying', async () => {
+  it('writes a note, not a message, on the Internal note tab; and the Reply tab takes the person back to replying', async () => {
     as('inbox.conversation.note');
     arrange();
     addNoteCall.mockResolvedValue(
@@ -1482,11 +1492,14 @@ describe('ThreadScreen: private notes', () => {
     );
     await show();
     await loaded();
-    await fireEvent.press(await screen.findByRole('button', LOCK));
-    expect(screen.getByLabelText('Private note')).toBeTruthy();
+    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    expect(screen.getByPlaceholderText('Write a note only your team sees')).toBeTruthy();
     expect(screen.queryByLabelText('Message')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
-    await fireEvent.changeText(screen.getByLabelText('Private note'), '  Call tomorrow ');
+    await fireEvent.changeText(
+      screen.getByPlaceholderText('Write a note only your team sees'),
+      '  Call tomorrow ',
+    );
     await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
     await waitFor(() =>
       expect(addNoteCall).toHaveBeenCalledWith(
@@ -1496,8 +1509,10 @@ describe('ThreadScreen: private notes', () => {
       ),
     );
     expect(sendCall).not.toHaveBeenCalled();
-    await waitFor(() => expect(screen.getByLabelText('Private note').props.value).toBe(''));
-    await fireEvent.press(screen.getByRole('button', { name: 'Back to a reply' }));
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText('Write a note only your team sees').props.value).toBe(''),
+    );
+    await fireEvent.press(screen.getByRole('tab', REPLY_TAB));
     expect(await screen.findByLabelText('Message')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Saved replies' })).toBeTruthy();
   });
@@ -1508,21 +1523,45 @@ describe('ThreadScreen: private notes', () => {
     addNoteCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     await show();
     await loaded();
-    await fireEvent.press(await screen.findByRole('button', { name: 'Write a private note' }));
-    await fireEvent.changeText(screen.getByLabelText('Private note'), 'Call tomorrow');
+    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    await fireEvent.changeText(
+      screen.getByPlaceholderText('Write a note only your team sees'),
+      'Call tomorrow',
+    );
     await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
     expect(await screen.findByText("Couldn't save the note. Try again.")).toBeTruthy();
-    expect(screen.getByLabelText('Private note').props.value).toBe('Call tomorrow');
+    expect(screen.getByPlaceholderText('Write a note only your team sees').props.value).toBe(
+      'Call tomorrow',
+    );
   });
 
-  it('shows nothing about notes where there is no box: a closed window has only the template button, as in the reference app', async () => {
+  it('lets a person write an internal note while the 24-hour window is closed, as on the web, and sends nothing to the customer', async () => {
     as('inbox.conversation.note');
     arrange({ detail: detail({ window: { open: false, expiresAt: null } }) });
+    addNoteCall.mockResolvedValue(
+      aNote('eeeeeeee-0000-4000-8000-000000000003', 'Customer called', '2026-10-11T10:00:00.000Z'),
+    );
     await show();
+    // The reply side still says only a template can be sent...
     await screen.findByText('Send Template');
-    expect(screen.queryByRole('button', { name: /private note/i })).toBeNull();
-    expect(screen.queryByRole('radio')).toBeNull();
-    expect(screen.queryByLabelText('Private note')).toBeNull();
+    expect(screen.queryByPlaceholderText('Write a note only your team sees')).toBeNull();
+    // ...and the note side is a box that works.
+    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    await fireEvent.changeText(
+      await screen.findByPlaceholderText('Write a note only your team sees'),
+      'Customer called',
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
+    await waitFor(() =>
+      expect(addNoteCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { body: 'Customer called', mentions: [] },
+        expect.any(String),
+      ),
+    );
+    expect(sendCall).not.toHaveBeenCalled();
+    await fireEvent.press(screen.getByRole('tab', REPLY_TAB));
+    expect(await screen.findByText('Send Template')).toBeTruthy();
   });
 
   it('gives a person who may write notes but not reply the note box alone', async () => {
@@ -1532,9 +1571,10 @@ describe('ThreadScreen: private notes', () => {
     arrange();
     await show();
     await loaded();
-    expect(await screen.findByLabelText('Private note')).toBeTruthy();
+    expect(await screen.findByPlaceholderText('Write a note only your team sees')).toBeTruthy();
     expect(screen.queryByLabelText('Message')).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Back to a reply' })).toBeNull();
+    expect(screen.queryByRole('tab', REPLY_TAB)).toBeNull();
+    expect(screen.queryByRole('tab', NOTE_TAB)).toBeNull();
   });
 });
 
@@ -1771,5 +1811,160 @@ describe('ThreadScreen: attachments', () => {
     await reachPreview();
     await fireEvent.press(screen.getAllByRole('button', { name: 'Close' })[0]!);
     await waitFor(() => expect(pickers.discardAttachment).toHaveBeenCalledWith(PHOTO));
+  });
+});
+
+// --- the message box: Smart AI Assistant ---------------------------------------------------------------------------------------
+
+describe('ThreadScreen: Smart AI Assistant', () => {
+  const MODEL = {
+    value: 'gpt-x',
+    provider: 'openai' as const,
+    providerName: 'OpenAI',
+    source: 'platform' as const,
+  };
+  const sparkle = async () => await screen.findByRole('button', { name: 'Smart AI Assistant' });
+  const choose = async (name: RegExp | string) =>
+    await fireEvent.press(await screen.findByRole('button', { name }));
+
+  beforeEach(() => {
+    modelsCall.mockResolvedValue({ data: [{ ...MODEL, provider: 'openai' }] });
+  });
+
+  it('has no sparkle button while the workspace has no AI model it can ask', async () => {
+    modelsCall.mockResolvedValue({
+      data: [{ value: 'x', provider: 'deepseek', providerName: 'DeepSeek', source: 'platform' }],
+    } as never);
+    arrange();
+    await show();
+    await loaded();
+    await waitFor(() => expect(modelsCall).toHaveBeenCalled());
+    expect(screen.queryByRole('button', { name: 'Smart AI Assistant' })).toBeNull();
+  });
+
+  it('has no sparkle button for a person who may not read the model list', async () => {
+    modelsCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'Forbidden'));
+    arrange();
+    await show();
+    await loaded();
+    await waitFor(() => expect(modelsCall).toHaveBeenCalled());
+    expect(screen.queryByRole('button', { name: 'Smart AI Assistant' })).toBeNull();
+  });
+
+  it('asks for a message first when the box is empty, and does not open the window', async () => {
+    arrange();
+    await show();
+    await loaded();
+    await fireEvent.press(await sparkle());
+    expect(await screen.findByText('Write a message first.')).toBeTruthy();
+    expect(screen.queryByText('Condense')).toBeNull();
+    expect(rewriteCall).not.toHaveBeenCalled();
+  });
+
+  it('lists the four actions as in the Geta app', async () => {
+    arrange();
+    await show();
+    await loaded();
+    await type('hello   there');
+    await fireEvent.press(await sparkle());
+    expect(await screen.findByRole('header', { name: 'Smart AI Assistant' })).toBeTruthy();
+    expect(screen.getByText('Make text shorter and more concise')).toBeTruthy();
+    expect(screen.getByText('Correct grammar and spelling errors')).toBeTruthy();
+    expect(screen.getByText('Make text more positive and upbeat')).toBeTruthy();
+    expect(screen.getByText('Translate to different languages')).toBeTruthy();
+  });
+
+  it('puts the rewritten text into the box without sending it', async () => {
+    arrange();
+    rewriteCall.mockResolvedValue({ text: 'Hello there.', model: 'gpt-x' });
+    await show();
+    await loaded();
+    await type('  hello   there  ');
+    await fireEvent.press(await sparkle());
+    await choose(/^Fix Grammar/);
+    await waitFor(() =>
+      expect(rewriteCall).toHaveBeenCalledWith({
+        provider: 'openai',
+        model: 'gpt-x',
+        action: 'fix',
+        text: 'hello   there',
+      }),
+    );
+    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Hello there.'));
+    expect(screen.queryByText('Condense')).toBeNull();
+    expect(sendCall).not.toHaveBeenCalled();
+  });
+
+  it('translates into the language picked on the second page, found by typing part of its name', async () => {
+    arrange();
+    rewriteCall.mockResolvedValue({ text: 'Bonjour', model: 'gpt-x' });
+    await show();
+    await loaded();
+    await type('Hello');
+    await fireEvent.press(await sparkle());
+    await choose(/^Translate/);
+    expect(await screen.findByRole('header', { name: 'Select Language' })).toBeTruthy();
+    await fireEvent.changeText(screen.getByLabelText('Search languages…'), 'fren');
+    expect(screen.queryByRole('button', { name: 'German' })).toBeNull();
+    await fireEvent.press(screen.getByRole('button', { name: 'French' }));
+    await waitFor(() =>
+      expect(rewriteCall).toHaveBeenCalledWith({
+        provider: 'openai',
+        model: 'gpt-x',
+        action: 'translate',
+        text: 'Hello',
+        language: 'French',
+      }),
+    );
+    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Bonjour'));
+  });
+
+  it('says so when no language matches', async () => {
+    arrange();
+    await show();
+    await loaded();
+    await type('Hello');
+    await fireEvent.press(await sparkle());
+    await choose(/^Translate/);
+    await fireEvent.changeText(await screen.findByLabelText('Search languages…'), 'zzzz');
+    expect(await screen.findByText('No language matches')).toBeTruthy();
+  });
+
+  it('goes back from the languages to the actions', async () => {
+    arrange();
+    await show();
+    await loaded();
+    await type('Hello');
+    await fireEvent.press(await sparkle());
+    await choose(/^Translate/);
+    await screen.findByRole('header', { name: 'Select Language' });
+    // The thread's own back button is behind the window; the window's is the last one.
+    await fireEvent.press(screen.getAllByRole('button', { name: 'Back' }).at(-1)!);
+    expect(await screen.findByRole('header', { name: 'Smart AI Assistant' })).toBeTruthy();
+  });
+
+  it('keeps the draft and says so when the AI fails, and the person can try again', async () => {
+    arrange();
+    rewriteCall.mockRejectedValueOnce(
+      new ApiError(502, 'CAMP_AI_PROVIDER_FAILED', 'Provider failed'),
+    );
+    rewriteCall.mockResolvedValueOnce({ text: 'Short', model: 'gpt-x' });
+    await show();
+    await loaded();
+    await type('A very long message');
+    await fireEvent.press(await sparkle());
+    await choose(/^Condense/);
+    expect(await screen.findByText('The AI could not change the text. Try again.')).toBeTruthy();
+    expect(screen.getByLabelText('Message').props.value).toBe('A very long message');
+    await choose(/^Condense/);
+    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Short'));
+    expect(rewriteCall).toHaveBeenCalledTimes(2);
+  });
+
+  it('is not offered in a private note or when the reply window is closed', async () => {
+    arrange({ detail: detail({ window: { open: false, expiresAt: null } }) });
+    await show();
+    await screen.findByText('Send Template');
+    expect(screen.queryByRole('button', { name: 'Smart AI Assistant' })).toBeNull();
   });
 });

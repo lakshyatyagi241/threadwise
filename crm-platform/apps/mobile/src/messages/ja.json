@@ -1188,11 +1188,35 @@
       "placeholder": "メッセージを入力",
       "send": "送信",
       "tooLong": "メッセージは{{max}}文字まで入力できます。",
-      "noteLabel": "非公開メモ",
+      "noteLabel": "内部メモ",
       "notePlaceholder": "チームだけに表示されるメモを入力",
       "addNote": "メモを追加",
-      "noteOn": "非公開メモを書く",
-      "noteOff": "返信に戻る"
+      "mode": {
+        "label": "メッセージの種類",
+        "reply": "返信",
+        "note": "内部メモ"
+      },
+      "format": {
+        "label": "メッセージの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "underline": "下線",
+        "strike": "取り消し線",
+        "bullets": "箇条書き",
+        "numbers": "番号付きリスト"
+      },
+      "emoji": {
+        "open": "絵文字を挿入",
+        "title": "絵文字",
+        "groups": "絵文字グループ",
+        "recent": "最近使用した絵文字",
+        "group": {
+          "smileys": "顔文字",
+          "gestures": "ジェスチャー",
+          "hearts": "ハートと記号",
+          "objects": "オブジェクト"
+        }
+      }
     },
     "template": {
       "closedNotice": "お客様から過去24時間以内にメッセージがありません。事前に承認されたテンプレートのみ送信できます。",
@@ -1407,6 +1431,24 @@
       "noMatch": "検索に一致する保存済みの返信はありません。",
       "failed": "この返信を使用できませんでした。もう一度お試しください。",
       "unfilled": "メッセージを確認してください: {{list}} を入力できませんでした。"
+    },
+    "ai": {
+      "open": "スマートAIアシスタント",
+      "title": "スマートAIアシスタント",
+      "condense": "要約",
+      "condenseHint": "文章を短く簡潔にします",
+      "fix": "文法を修正",
+      "fixHint": "文法とスペルの誤りを直します",
+      "positive": "前向きなトーン",
+      "positiveHint": "文章をより前向きで明るくします",
+      "translate": "翻訳",
+      "translateHint": "別の言語に翻訳します",
+      "selectLanguage": "言語を選択",
+      "searchLanguages": "言語を検索…",
+      "noLanguage": "一致する言語がありません",
+      "working": "処理中…",
+      "empty": "先にメッセージを入力してください。",
+      "failed": "AIが文章を変更できませんでした。もう一度お試しください。"
     },
     "note": {
       "title": "非公開メモ",

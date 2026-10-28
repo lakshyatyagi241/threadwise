@@ -210,6 +210,7 @@
     "inbox.channel.simulator",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.group.smileys",
     "inbox.details.bot",
     "inbox.details.contactStatus",
     "inbox.details.labels",
@@ -241,6 +242,7 @@
     "leads.kinds.webhook",
     "menu.dashboard",
     "menu.deals",
+    "menu.feedback",
     "menu.profileLabel",
     "menu.version",
     "menu.workspace",
@@ -274,8 +276,7 @@
     "tabs.dashboard",
     "tasks.details.status",
     "tasks.filter.group.status",
-    "tasks.form.minute",
-    "menu.feedback"
+    "tasks.form.minute"
   ],
   "es": [
     "auth.emailPlaceholder",
@@ -406,6 +407,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.group.smileys",
     "inbox.composer.label",
     "inbox.details.actions",
     "inbox.details.bot",
@@ -579,6 +581,7 @@
     "inbox.channel.telegram",
     "inbox.channel.webchat",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.contactStatus",
     "inbox.details.email",
@@ -694,6 +697,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.email",
     "inbox.details.team",
@@ -715,6 +719,7 @@
     "leads.kinds.webhook",
     "leads.sources.needsAttention_one",
     "menu.dashboard",
+    "menu.feedback",
     "menu.inbox",
     "menu.profile.email",
     "menu.profileLabel",
@@ -747,8 +752,7 @@
     "signUp.orgNamePlaceholder",
     "tabs.dashboard",
     "tabs.inbox",
-    "tabs.menu",
-    "menu.feedback"
+    "tabs.menu"
   ],
   "ja": [
     "auth.emailPlaceholder",
@@ -884,6 +888,7 @@
     "deals.stages.tab",
     "deals.status.open",
     "deals.title",
+    "help.title",
     "inbox.assign.agents",
     "inbox.assign.availability.offline",
     "inbox.assign.availability.online",
@@ -897,6 +902,8 @@
     "inbox.channel.simulator",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.group.smileys",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.contact",
     "inbox.details.contactStatus",
@@ -938,6 +945,7 @@
     "leads.title",
     "menu.dashboard",
     "menu.deals",
+    "menu.feedback",
     "menu.inbox",
     "menu.profileLabel",
     "menu.sectionAccount",
@@ -975,9 +983,7 @@
     "tasks.filter.group.status",
     "tasks.filter.status.open",
     "tasks.form.contact",
-    "tasks.status.open",
-    "help.title",
-    "menu.feedback"
+    "tasks.status.open"
   ],
   "pl": [
     "calls.summary.purposes.demo",
@@ -1018,6 +1024,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.contactStatus",
     "inbox.details.status",
@@ -1102,6 +1109,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.contactStatus",
     "inbox.details.labels",
@@ -1126,6 +1134,7 @@
     "leads.sources.needsAttention_many",
     "leads.sources.needsAttention_one",
     "leads.sources.needsAttention_other",
+    "menu.feedback",
     "menu.profileLabel",
     "notificationPrefs.channelNames.push",
     "notificationPrefs.channelNames.toast",
@@ -1151,8 +1160,7 @@
     "settings.teams.strategies.manual",
     "tabs.menu",
     "tasks.details.status",
-    "tasks.filter.group.status",
-    "menu.feedback"
+    "tasks.filter.group.status"
   ],
   "ru": [
     "auth.emailPlaceholder",
@@ -1273,6 +1281,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.kind.video",
     "inbox.priority.normal",
@@ -1368,6 +1377,7 @@
     "inbox.channel.instagram",
     "inbox.channel.telegram",
     "inbox.channel.whatsapp",
+    "inbox.composer.emoji.title",
     "inbox.details.bot",
     "inbox.details.email",
     "inbox.kind.video",

@@ -1188,11 +1188,35 @@
       "placeholder": "Ketik pesan",
       "send": "Kirim",
       "tooLong": "Pesan maksimal {{max}} karakter.",
-      "noteLabel": "Catatan pribadi",
+      "noteLabel": "Catatan internal",
       "notePlaceholder": "Tulis catatan yang hanya dilihat tim Anda",
       "addNote": "Tambah catatan",
-      "noteOn": "Tulis catatan pribadi",
-      "noteOff": "Kembali ke balasan"
+      "mode": {
+        "label": "Jenis pesan",
+        "reply": "Balas",
+        "note": "Catatan internal"
+      },
+      "format": {
+        "label": "Format pesan",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "underline": "Garis bawah",
+        "strike": "Coret",
+        "bullets": "Daftar berpoin",
+        "numbers": "Daftar bernomor"
+      },
+      "emoji": {
+        "open": "Sisipkan emoji",
+        "title": "Emoji",
+        "groups": "Grup emoji",
+        "recent": "Terakhir digunakan",
+        "group": {
+          "smileys": "Smiley",
+          "gestures": "Gestur",
+          "hearts": "Hati dan simbol",
+          "objects": "Objek"
+        }
+      }
     },
     "template": {
       "closedNotice": "Pelanggan belum menghubungi Anda dalam 24 jam terakhir. Anda hanya dapat mengirim template yang sudah disetujui.",
@@ -1407,6 +1431,24 @@
       "noMatch": "Tidak ada balasan tersimpan yang cocok dengan pencarian Anda.",
       "failed": "Balasan ini tidak dapat digunakan. Coba lagi.",
       "unfilled": "Periksa pesan: {{list}} tidak dapat diisi."
+    },
+    "ai": {
+      "open": "Asisten AI Cerdas",
+      "title": "Asisten AI Cerdas",
+      "condense": "Ringkas",
+      "condenseHint": "Buat teks lebih pendek dan padat",
+      "fix": "Perbaiki tata bahasa",
+      "fixHint": "Koreksi kesalahan tata bahasa dan ejaan",
+      "positive": "Nada positif",
+      "positiveHint": "Buat teks lebih positif dan ceria",
+      "translate": "Terjemahkan",
+      "translateHint": "Terjemahkan ke bahasa lain",
+      "selectLanguage": "Pilih bahasa",
+      "searchLanguages": "Cari bahasa…",
+      "noLanguage": "Tidak ada bahasa yang cocok",
+      "working": "Sedang diproses…",
+      "empty": "Tulis pesan terlebih dahulu.",
+      "failed": "AI tidak dapat mengubah teks. Coba lagi."
     },
     "note": {
       "title": "Catatan pribadi",

@@ -1210,11 +1210,35 @@
       "placeholder": "Typ een bericht",
       "send": "Verzenden",
       "tooLong": "Berichten mogen maximaal {{max}} tekens bevatten.",
-      "noteLabel": "Privénotitie",
+      "noteLabel": "Interne notitie",
       "notePlaceholder": "Schrijf een notitie die alleen je team ziet",
       "addNote": "Notitie toevoegen",
-      "noteOn": "Schrijf een privénotitie",
-      "noteOff": "Terug naar antwoord"
+      "mode": {
+        "label": "Berichttype",
+        "reply": "Antwoord",
+        "note": "Interne notitie"
+      },
+      "format": {
+        "label": "Berichtopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "underline": "Onderstrepen",
+        "strike": "Doorgestreept",
+        "bullets": "Lijst met opsommingstekens",
+        "numbers": "Genummerde lijst"
+      },
+      "emoji": {
+        "open": "Emoji invoegen",
+        "title": "Emoji",
+        "groups": "Emojigroepen",
+        "recent": "Recent gebruikt",
+        "group": {
+          "smileys": "Smileys",
+          "gestures": "Gebaren",
+          "hearts": "Harten en symbolen",
+          "objects": "Objecten"
+        }
+      }
     },
     "template": {
       "closedNotice": "De klant heeft de afgelopen 24 uur niet met je gesproken. Je kunt alleen vooraf goedgekeurde sjablonen versturen.",
@@ -1431,6 +1455,24 @@
       "noMatch": "Geen opgeslagen antwoorden gevonden voor je zoekopdracht.",
       "failed": "Dit antwoord kon niet worden gebruikt. Probeer het opnieuw.",
       "unfilled": "Controleer het bericht: {{list}} kon niet worden ingevuld."
+    },
+    "ai": {
+      "open": "Slimme AI-assistent",
+      "title": "Slimme AI-assistent",
+      "condense": "Inkorten",
+      "condenseHint": "Maak de tekst korter en bondiger",
+      "fix": "Grammatica corrigeren",
+      "fixHint": "Grammatica- en spelfouten verbeteren",
+      "positive": "Positieve toon",
+      "positiveHint": "Maak de tekst positiever en opgewekter",
+      "translate": "Vertalen",
+      "translateHint": "Vertalen naar andere talen",
+      "selectLanguage": "Taal kiezen",
+      "searchLanguages": "Talen zoeken…",
+      "noLanguage": "Geen taal gevonden",
+      "working": "Bezig…",
+      "empty": "Schrijf eerst een bericht.",
+      "failed": "De AI kon de tekst niet aanpassen. Probeer het opnieuw."
     },
     "note": {
       "title": "Privénotitie",

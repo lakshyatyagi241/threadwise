@@ -1254,11 +1254,35 @@
       "placeholder": "Wpisz wiadomość",
       "send": "Wyślij",
       "tooLong": "Wiadomości mogą mieć maksymalnie {{max}} znaków.",
-      "noteLabel": "Notatka prywatna",
+      "noteLabel": "Notatka wewnętrzna",
       "notePlaceholder": "Napisz notatkę widoczną tylko dla zespołu",
       "addNote": "Dodaj notatkę",
-      "noteOn": "Napisz notatkę prywatną",
-      "noteOff": "Wróć do odpowiedzi"
+      "mode": {
+        "label": "Typ wiadomości",
+        "reply": "Odpowiedź",
+        "note": "Notatka wewnętrzna"
+      },
+      "format": {
+        "label": "Formatowanie wiadomości",
+        "bold": "Pogrubienie",
+        "italic": "Kursywa",
+        "underline": "Podkreślenie",
+        "strike": "Przekreślenie",
+        "bullets": "Lista punktowana",
+        "numbers": "Lista numerowana"
+      },
+      "emoji": {
+        "open": "Wstaw emoji",
+        "title": "Emoji",
+        "groups": "Grupy emoji",
+        "recent": "Ostatnio używane",
+        "group": {
+          "smileys": "Buźki",
+          "gestures": "Gesty",
+          "hearts": "Serca i symbole",
+          "objects": "Obiekty"
+        }
+      }
     },
     "template": {
       "closedNotice": "Klient nie pisał do Ciebie w ciągu ostatnich 24 godzin. Możesz wysyłać tylko wcześniej zatwierdzone szablony.",
@@ -1479,6 +1503,24 @@
       "noMatch": "Żadna zapisana odpowiedź nie pasuje do wyszukiwania.",
       "failed": "Nie udało się użyć tej odpowiedzi. Spróbuj ponownie.",
       "unfilled": "Sprawdź wiadomość: nie udało się uzupełnić pól: {{list}}."
+    },
+    "ai": {
+      "open": "Inteligentny asystent AI",
+      "title": "Inteligentny asystent AI",
+      "condense": "Skróć",
+      "condenseHint": "Skróć tekst i uczyń go zwięzłym",
+      "fix": "Popraw gramatykę",
+      "fixHint": "Popraw błędy gramatyczne i ortograficzne",
+      "positive": "Pozytywny ton",
+      "positiveHint": "Nadaj tekstowi bardziej pozytywny i radosny ton",
+      "translate": "Przetłumacz",
+      "translateHint": "Przetłumacz na inne języki",
+      "selectLanguage": "Wybierz język",
+      "searchLanguages": "Szukaj języków…",
+      "noLanguage": "Brak pasującego języka",
+      "working": "Trwa przetwarzanie…",
+      "empty": "Najpierw napisz wiadomość.",
+      "failed": "AI nie mogło zmienić tekstu. Spróbuj ponownie."
     },
     "note": {
       "title": "Notatka prywatna",

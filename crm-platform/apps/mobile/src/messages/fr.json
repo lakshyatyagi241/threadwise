@@ -1232,11 +1232,35 @@
       "placeholder": "Saisissez un message",
       "send": "Envoyer",
       "tooLong": "Les messages peuvent contenir jusqu’à {{max}} caractères.",
-      "noteLabel": "Note privée",
+      "noteLabel": "Note interne",
       "notePlaceholder": "Rédigez une note visible uniquement par votre équipe",
       "addNote": "Ajouter la note",
-      "noteOn": "Rédiger une note privée",
-      "noteOff": "Revenir à une réponse"
+      "mode": {
+        "label": "Type de message",
+        "reply": "Réponse",
+        "note": "Note interne"
+      },
+      "format": {
+        "label": "Mise en forme du message",
+        "bold": "Gras",
+        "italic": "Italique",
+        "underline": "Souligné",
+        "strike": "Barré",
+        "bullets": "Liste à puces",
+        "numbers": "Liste numérotée"
+      },
+      "emoji": {
+        "open": "Insérer un emoji",
+        "title": "Emojis",
+        "groups": "Groupes d'emojis",
+        "recent": "Récemment utilisés",
+        "group": {
+          "smileys": "Smileys",
+          "gestures": "Gestes",
+          "hearts": "Cœurs et symboles",
+          "objects": "Objets"
+        }
+      }
     },
     "template": {
       "closedNotice": "Le client ne vous a pas écrit au cours des dernières 24 heures. Vous ne pouvez envoyer que des modèles préapprouvés.",
@@ -1455,6 +1479,24 @@
       "noMatch": "Aucune réponse enregistrée ne correspond à votre recherche.",
       "failed": "Impossible d’utiliser cette réponse. Réessayez.",
       "unfilled": "Vérifiez le message : {{list}} n’a pas pu être renseigné."
+    },
+    "ai": {
+      "open": "Assistant IA intelligent",
+      "title": "Assistant IA intelligent",
+      "condense": "Condenser",
+      "condenseHint": "Raccourcir et rendre le texte plus concis",
+      "fix": "Corriger la grammaire",
+      "fixHint": "Corriger les fautes de grammaire et d’orthographe",
+      "positive": "Ton positif",
+      "positiveHint": "Rendre le texte plus positif et dynamique",
+      "translate": "Traduire",
+      "translateHint": "Traduire dans d’autres langues",
+      "selectLanguage": "Choisir la langue",
+      "searchLanguages": "Rechercher une langue…",
+      "noLanguage": "Aucune langue ne correspond",
+      "working": "En cours…",
+      "empty": "Écrivez d’abord un message.",
+      "failed": "L’IA n’a pas pu modifier le texte. Réessayez."
     },
     "note": {
       "title": "Note privée",

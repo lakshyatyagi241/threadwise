@@ -1,12 +1,28 @@
 import { MESSAGE_BODY_MAX, NOTE_BODY_MAX } from '@crm/contracts';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
-import { TextField } from '@/components/ui/text-field';
+import { TextField, type TextFieldHandle } from '@/components/ui/text-field';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { EmojiSheet } from './emoji-sheet';
+import { FormatBar } from './format-bar';
+import {
+  activeFormats,
+  toggleList,
+  toggleMark,
+  toggleUnderline,
+  type Edit,
+  type Mark,
+} from './format-text';
+
+interface Selection {
+  start: number;
+  end: number;
+}
 
 interface Props {
   value: string;
@@ -22,13 +38,16 @@ interface Props {
   onOpenAttach?: () => void;
   /** Opens the template list (a template can be sent inside the 24-hour window too); the button shows only when this is given (replies only). */
   onOpenTemplates?: () => void;
-  /** Switches between a reply and a private note (the lock beside the box); the lock shows only when this is given. */
-  onToggleNote?: () => void;
+  /** Opens the Smart AI Assistant (condense, fix grammar, positive tone, translate); the sparkle shows only when this is given (replies only). */
+  onOpenAi?: () => void;
 }
 
 /**
  * The box at the bottom of a thread. Sending is possible only for a non-empty text within the length limit. In reply mode a
- * lightning-bolt button opens the saved replies, a paperclip the attach sheet (photo, camera, document) and a document button the template list; in note mode the box is tinted and the button says "Add note".
+ * lightning-bolt button opens the saved replies, a paperclip the attach sheet (photo, camera, document), a document button the template list, a
+ * smile the emoji sheet and a sparkle the Smart AI Assistant; a row of formatting buttons (bold, italic, underline, strikethrough, bullets,
+ * numbers) writes WhatsApp's marks into the text at the caret or round the selection. In note mode the box is tinted, has none of those
+ * and the button says "Add note".
  */
 export function Composer({
   value,
@@ -39,20 +58,43 @@ export function Composer({
   onOpenReplies,
   onOpenAttach,
   onOpenTemplates,
-  onToggleNote,
+  onOpenAi,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const note = mode === 'note';
+  const input = useRef<TextFieldHandle>(null);
+  // Where the caret or selection is; `pending` is set only to move it after a button changed the text, and cleared once the box has.
+  const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
+  const [pending, setPending] = useState<Selection | undefined>();
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const max = note ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = value.trim();
   const tooLong = trimmed.length > max;
   const canSend = trimmed.length > 0 && !tooLong;
-  // As in the reference app: the lock is for starting a note, so it steps aside while a reply is being typed.
-  const showLock = onToggleNote !== undefined && (note || trimmed.length === 0);
   // The tool buttons sit in their own row under the box: five controls in one row left the box about 60 dp wide on a phone.
-  const hasTools = showLock || (!note && Boolean(onOpenReplies ?? onOpenAttach ?? onOpenTemplates));
+  const at = {
+    start: Math.min(selection.start, value.length),
+    end: Math.min(selection.end, value.length),
+  };
+  const active = activeFormats(value, at.start, at.end);
+  // An edit that would push the text over the limit is dropped, as the web does.
+  const apply = (edit: Edit) => {
+    if (edit.text.length > max) return;
+    onChange(edit.text);
+    const next = { start: edit.start, end: edit.end };
+    setSelection(next);
+    setPending(next);
+    input.current?.focus();
+  };
+  const insertEmoji = (emoji: string) =>
+    apply({
+      text: value.slice(0, at.start) + emoji + value.slice(at.end),
+      start: at.start + emoji.length,
+      end: at.start + emoji.length,
+    });
+  const hasTools = !note;
   return (
     <View
       style={[
@@ -73,6 +115,12 @@ export function Composer({
             }
             value={value}
             onChangeText={onChange}
+            inputRef={input}
+            selection={pending}
+            onSelectionChange={(e) => {
+              setSelection(e.nativeEvent.selection);
+              setPending(undefined);
+            }}
             multiline
             error={
               tooLong
@@ -90,6 +138,14 @@ export function Composer({
           disabled={!canSend}
         />
       </View>
+      {!note ? (
+        <FormatBar
+          active={active}
+          onMark={(mark: Mark) => apply(toggleMark(value, at.start, at.end, mark))}
+          onUnderline={() => apply(toggleUnderline(value, at.start, at.end))}
+          onList={(kind) => apply(toggleList(value, at.start, at.end, kind))}
+        />
+      ) : null}
       {hasTools ? (
         <View style={styles.tools}>
           {!note && onOpenReplies ? (
@@ -122,22 +178,30 @@ export function Composer({
               <Icon name="document-text-outline" size={24} color="primary" />
             </Pressable>
           ) : null}
-          {showLock ? (
+          {!note ? (
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={note ? t('inbox.composer.noteOff') : t('inbox.composer.noteOn')}
-              accessibilityState={{ selected: note }}
-              onPress={onToggleNote}
-              style={[styles.tool, styles.lock]}
+              accessibilityLabel={t('inbox.composer.emoji.open')}
+              onPress={() => setEmojiOpen(true)}
+              style={styles.tool}
             >
-              <Icon
-                name={note ? 'lock-closed' : 'lock-closed-outline'}
-                size={22}
-                color={note ? 'warning' : 'textMuted'}
-              />
+              <Icon name="happy-outline" size={24} color="primary" />
+            </Pressable>
+          ) : null}
+          {!note && onOpenAi ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('inbox.ai.open')}
+              onPress={onOpenAi}
+              style={styles.tool}
+            >
+              <Icon name="sparkles-outline" size={24} color="primary" />
             </Pressable>
           ) : null}
         </View>
+      ) : null}
+      {!note ? (
+        <EmojiSheet visible={emojiOpen} onPick={insertEmoji} onClose={() => setEmojiOpen(false)} />
       ) : null}
     </View>
   );
@@ -153,7 +217,6 @@ const styles = StyleSheet.create({
   inputRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
   field: { flex: 1 },
   tools: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  lock: { marginStart: 'auto' },
   tool: {
     width: MIN_TOUCH_TARGET,
     height: MIN_TOUCH_TARGET,

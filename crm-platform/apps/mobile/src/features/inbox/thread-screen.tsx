@@ -1,7 +1,9 @@
 import {
   canMoveConversationStatus,
   channelKindSchema,
+  MESSAGE_BODY_MAX,
   type ConversationStatus,
+  type InboxRewriteAction,
   type SetConversationStatusInput,
 } from '@crm/contracts';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
@@ -26,6 +28,7 @@ import { isApiError } from '@/lib/api';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { AiAssistantSheet } from './ai-assistant-sheet';
 import { AssignmentStrip } from './assignment-strip';
 import { AssignSheet } from './assign-sheet';
 import { AttachMenu } from './attach-menu';
@@ -37,6 +40,7 @@ import { BotTab } from './bot-tab';
 import { ChoiceSheet } from './choice-sheet';
 import { Composer } from './composer';
 import { LabelsSheet } from './labels-sheet';
+import { ModeTabs, type ComposerMode } from './mode-tabs';
 import { TemplateBar } from './template-bar';
 import { Bubble, MessageBubble } from './message-bubble';
 import { NoteBubble } from './note-bubble';
@@ -57,6 +61,7 @@ import {
   type PendingMessage,
   type ThreadItem,
 } from './thread-model';
+import { useAiModel, useAiRewrite } from './use-ai-rewrite';
 import { useAttachFlow } from './use-attach-flow';
 import { useConversationActions } from './use-conversation-actions';
 import { useThreadLive } from './use-live';
@@ -122,9 +127,10 @@ export function ThreadScreen() {
 
   const [draft, setDraft] = useState('');
   // A message goes to the customer; a note stays in the team. Each keeps its own draft, so switching loses nothing.
-  const [mode, setMode] = useState<'reply' | 'note'>('reply');
+  const [mode, setMode] = useState<ComposerMode>('reply');
   const [noteDraft, setNoteDraft] = useState('');
   const [repliesOpen, setRepliesOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
   const [pending, setPending] = useState<PendingMessage[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
@@ -209,6 +215,37 @@ export function ThreadScreen() {
     );
     setWarning(
       unfilled.length > 0 ? t('inbox.replies.unfilled', { list: unfilled.join(', ') }) : null,
+    );
+  };
+
+  // The Smart AI Assistant rewrites the whole draft and puts the result back in the box (nothing is sent). No model, no button.
+  const aiModel = useAiModel(canReply);
+  const aiRewrite = useAiRewrite();
+  const openAi = () => {
+    if (draft.trim() === '') {
+      setWarning(t('inbox.ai.empty'));
+      return;
+    }
+    setWarning(null);
+    aiRewrite.reset();
+    setAiOpen(true);
+  };
+  const runAi = (action: InboxRewriteAction, language?: string) => {
+    if (!aiModel) return;
+    aiRewrite.mutate(
+      {
+        provider: aiModel.provider,
+        model: aiModel.value,
+        action,
+        text: draft.trim(),
+        ...(language ? { language } : {}),
+      },
+      {
+        onSuccess: (out) => {
+          setDraft(out.text.slice(0, MESSAGE_BODY_MAX));
+          setAiOpen(false);
+        },
+      },
     );
   };
 
@@ -512,6 +549,10 @@ export function ThreadScreen() {
           onAssignToMe={() => assignTo(meId)}
         />
       ) : null}
+      {canRead && conversation && canReply && canNote ? (
+        // Reply or internal note, always on offer as on the web: a note can be written when the 24-hour window is closed too.
+        <ModeTabs mode={mode} onChange={setMode} />
+      ) : null}
       {canRead && conversation ? (
         canNote && (mode === 'note' || !canReply) ? (
           <Composer
@@ -520,7 +561,6 @@ export function ThreadScreen() {
             onChange={setNoteDraft}
             onSend={onSendNote}
             busy={changeNotes.add.isPending}
-            onToggleNote={canReply ? () => setMode('reply') : undefined}
           />
         ) : isBotConversation(conversation.assignment) ? (
           <BotBar
@@ -539,7 +579,7 @@ export function ThreadScreen() {
               onOpenReplies={() => setRepliesOpen(true)}
               onOpenAttach={attach.open}
               onOpenTemplates={openTemplates}
-              onToggleNote={canNote ? () => setMode('note') : undefined}
+              onOpenAi={aiModel ? openAi : undefined}
             />
           )
         ) : null
@@ -552,6 +592,15 @@ export function ThreadScreen() {
           channelKind={channelKindSchema.safeParse(conversation.channel.kind).data}
           onInsert={insertReply}
           onClose={() => setRepliesOpen(false)}
+        />
+      ) : null}
+      {conversation && canReply && aiModel ? (
+        <AiAssistantSheet
+          visible={aiOpen}
+          busy={aiRewrite.isPending}
+          error={aiRewrite.isError ? t('inbox.ai.failed') : null}
+          onChoose={runAi}
+          onClose={() => setAiOpen(false)}
         />
       ) : null}
       {conversation && canReply ? (

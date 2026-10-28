@@ -1188,11 +1188,35 @@
       "placeholder": "메시지 입력",
       "send": "보내기",
       "tooLong": "메시지는 최대 {{max}}자까지 입력할 수 있습니다.",
-      "noteLabel": "비공개 메모",
+      "noteLabel": "내부 메모",
       "notePlaceholder": "팀원에게만 보이는 메모를 작성하세요",
       "addNote": "메모 추가",
-      "noteOn": "비공개 메모 작성",
-      "noteOff": "답장으로 돌아가기"
+      "mode": {
+        "label": "메시지 유형",
+        "reply": "답장",
+        "note": "내부 메모"
+      },
+      "format": {
+        "label": "메시지 서식",
+        "bold": "굵게",
+        "italic": "기울임",
+        "underline": "밑줄",
+        "strike": "취소선",
+        "bullets": "글머리 기호 목록",
+        "numbers": "번호 목록"
+      },
+      "emoji": {
+        "open": "이모지 삽입",
+        "title": "이모지",
+        "groups": "이모지 그룹",
+        "recent": "최근 사용",
+        "group": {
+          "smileys": "스마일리",
+          "gestures": "제스처",
+          "hearts": "하트 및 기호",
+          "objects": "사물"
+        }
+      }
     },
     "template": {
       "closedNotice": "고객이 최근 24시간 동안 메시지를 보내지 않았습니다. 사전 승인된 템플릿만 보낼 수 있습니다.",
@@ -1407,6 +1431,24 @@
       "noMatch": "검색과 일치하는 저장된 답변이 없습니다.",
       "failed": "이 답변을 사용하지 못했습니다. 다시 시도하세요.",
       "unfilled": "메시지를 확인하세요: {{list}} 항목을 채우지 못했습니다."
+    },
+    "ai": {
+      "open": "스마트 AI 어시스턴트",
+      "title": "스마트 AI 어시스턴트",
+      "condense": "간결하게",
+      "condenseHint": "글을 더 짧고 간결하게 만듭니다",
+      "fix": "문법 수정",
+      "fixHint": "문법과 맞춤법 오류를 고칩니다",
+      "positive": "긍정적인 어조",
+      "positiveHint": "글을 더 긍정적이고 밝게 만듭니다",
+      "translate": "번역",
+      "translateHint": "다른 언어로 번역합니다",
+      "selectLanguage": "언어 선택",
+      "searchLanguages": "언어 검색…",
+      "noLanguage": "일치하는 언어가 없습니다",
+      "working": "처리 중…",
+      "empty": "먼저 메시지를 작성하세요.",
+      "failed": "AI가 글을 바꾸지 못했습니다. 다시 시도해 주세요."
     },
     "note": {
       "title": "비공개 메모",

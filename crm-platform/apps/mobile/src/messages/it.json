@@ -1232,11 +1232,35 @@
       "placeholder": "Scrivi un messaggio",
       "send": "Invia",
       "tooLong": "I messaggi possono contenere al massimo {{max}} caratteri.",
-      "noteLabel": "Nota privata",
+      "noteLabel": "Nota interna",
       "notePlaceholder": "Scrivi una nota visibile solo al tuo team",
       "addNote": "Aggiungi nota",
-      "noteOn": "Scrivi una nota privata",
-      "noteOff": "Torna a una risposta"
+      "mode": {
+        "label": "Tipo di messaggio",
+        "reply": "Risposta",
+        "note": "Nota interna"
+      },
+      "format": {
+        "label": "Formattazione del messaggio",
+        "bold": "Grassetto",
+        "italic": "Corsivo",
+        "underline": "Sottolineato",
+        "strike": "Barrato",
+        "bullets": "Elenco puntato",
+        "numbers": "Elenco numerato"
+      },
+      "emoji": {
+        "open": "Inserisci un'emoji",
+        "title": "Emoji",
+        "groups": "Gruppi di emoji",
+        "recent": "Usate di recente",
+        "group": {
+          "smileys": "Faccine",
+          "gestures": "Gesti",
+          "hearts": "Cuori e simboli",
+          "objects": "Oggetti"
+        }
+      }
     },
     "template": {
       "closedNotice": "Il cliente non ti ha scritto nelle ultime 24 ore. Puoi inviare solo template pre-approvati.",
@@ -1455,6 +1479,24 @@
       "noMatch": "Nessuna risposta salvata corrisponde alla ricerca.",
       "failed": "Impossibile usare questa risposta. Riprova.",
       "unfilled": "Controlla il messaggio: non è stato possibile compilare {{list}}."
+    },
+    "ai": {
+      "open": "Assistente IA intelligente",
+      "title": "Assistente IA intelligente",
+      "condense": "Sintetizza",
+      "condenseHint": "Rendi il testo più breve e conciso",
+      "fix": "Correggi la grammatica",
+      "fixHint": "Correggi errori di grammatica e ortografia",
+      "positive": "Tono positivo",
+      "positiveHint": "Rendi il testo più positivo e vivace",
+      "translate": "Traduci",
+      "translateHint": "Traduci in altre lingue",
+      "selectLanguage": "Seleziona lingua",
+      "searchLanguages": "Cerca lingue…",
+      "noLanguage": "Nessuna lingua corrisponde",
+      "working": "Elaborazione…",
+      "empty": "Scrivi prima un messaggio.",
+      "failed": "L’IA non ha potuto modificare il testo. Riprova."
     },
     "note": {
       "title": "Nota privata",

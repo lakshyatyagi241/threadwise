@@ -1188,11 +1188,35 @@
       "placeholder": "输入消息",
       "send": "发送",
       "tooLong": "消息最多 {{max}} 个字符。",
-      "noteLabel": "私人备注",
+      "noteLabel": "内部备注",
       "notePlaceholder": "写一条仅团队可见的备注",
       "addNote": "添加备注",
-      "noteOn": "写私人备注",
-      "noteOff": "返回回复"
+      "mode": {
+        "label": "消息类型",
+        "reply": "回复",
+        "note": "内部备注"
+      },
+      "format": {
+        "label": "消息格式",
+        "bold": "加粗",
+        "italic": "斜体",
+        "underline": "下划线",
+        "strike": "删除线",
+        "bullets": "项目符号列表",
+        "numbers": "编号列表"
+      },
+      "emoji": {
+        "open": "插入表情",
+        "title": "表情",
+        "groups": "表情分组",
+        "recent": "最近使用",
+        "group": {
+          "smileys": "笑脸",
+          "gestures": "手势",
+          "hearts": "爱心和符号",
+          "objects": "物品"
+        }
+      }
     },
     "template": {
       "closedNotice": "客户在过去 24 小时内没有与您联系。您只能发送已获批准的模板。",
@@ -1407,6 +1431,24 @@
       "noMatch": "没有符合搜索条件的快捷回复。",
       "failed": "无法使用此回复，请重试。",
       "unfilled": "请检查消息：{{list}} 未能填入。"
+    },
+    "ai": {
+      "open": "智能 AI 助手",
+      "title": "智能 AI 助手",
+      "condense": "精简",
+      "condenseHint": "让文字更简短精炼",
+      "fix": "修正语法",
+      "fixHint": "纠正语法和拼写错误",
+      "positive": "积极语气",
+      "positiveHint": "让文字更积极、更有活力",
+      "translate": "翻译",
+      "translateHint": "翻译成其他语言",
+      "selectLanguage": "选择语言",
+      "searchLanguages": "搜索语言…",
+      "noLanguage": "没有匹配的语言",
+      "working": "处理中…",
+      "empty": "请先写一条消息。",
+      "failed": "AI 无法修改文本，请重试。"
     },
     "note": {
       "title": "私人备注",

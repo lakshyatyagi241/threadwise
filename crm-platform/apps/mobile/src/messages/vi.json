@@ -1188,11 +1188,35 @@
       "placeholder": "Nhập tin nhắn",
       "send": "Gửi",
       "tooLong": "Tin nhắn dài tối đa {{max}} ký tự.",
-      "noteLabel": "Ghi chú riêng tư",
+      "noteLabel": "Ghi chú nội bộ",
       "notePlaceholder": "Viết ghi chú chỉ nhóm của bạn nhìn thấy",
       "addNote": "Thêm ghi chú",
-      "noteOn": "Viết ghi chú riêng tư",
-      "noteOff": "Quay lại phản hồi"
+      "mode": {
+        "label": "Loại tin nhắn",
+        "reply": "Trả lời",
+        "note": "Ghi chú nội bộ"
+      },
+      "format": {
+        "label": "Định dạng tin nhắn",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "underline": "Gạch chân",
+        "strike": "Gạch ngang",
+        "bullets": "Danh sách gạch đầu dòng",
+        "numbers": "Danh sách đánh số"
+      },
+      "emoji": {
+        "open": "Chèn emoji",
+        "title": "Emoji",
+        "groups": "Nhóm emoji",
+        "recent": "Dùng gần đây",
+        "group": {
+          "smileys": "Mặt cười",
+          "gestures": "Cử chỉ",
+          "hearts": "Trái tim và biểu tượng",
+          "objects": "Đồ vật"
+        }
+      }
     },
     "template": {
       "closedNotice": "Khách hàng chưa nhắn tin cho bạn trong 24 giờ qua. Bạn chỉ có thể gửi các mẫu đã được duyệt trước.",
@@ -1407,6 +1431,24 @@
       "noMatch": "Không có trả lời nhanh nào phù hợp với tìm kiếm của bạn.",
       "failed": "Không thể dùng câu trả lời này. Hãy thử lại.",
       "unfilled": "Hãy kiểm tra tin nhắn: không thể điền {{list}}."
+    },
+    "ai": {
+      "open": "Trợ lý AI thông minh",
+      "title": "Trợ lý AI thông minh",
+      "condense": "Rút gọn",
+      "condenseHint": "Làm văn bản ngắn gọn, súc tích hơn",
+      "fix": "Sửa ngữ pháp",
+      "fixHint": "Sửa lỗi ngữ pháp và chính tả",
+      "positive": "Giọng tích cực",
+      "positiveHint": "Làm văn bản tích cực và vui vẻ hơn",
+      "translate": "Dịch",
+      "translateHint": "Dịch sang các ngôn ngữ khác",
+      "selectLanguage": "Chọn ngôn ngữ",
+      "searchLanguages": "Tìm ngôn ngữ…",
+      "noLanguage": "Không có ngôn ngữ phù hợp",
+      "working": "Đang xử lý…",
+      "empty": "Hãy viết tin nhắn trước.",
+      "failed": "AI không thể thay đổi văn bản. Hãy thử lại."
     },
     "note": {
       "title": "Ghi chú riêng tư",

@@ -2,7 +2,7 @@ import type { InboxConversationDetail } from '@crm/contracts';
 import { placeCall } from '@/lib/device/call';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { can, useSession } from '@/lib/session/use-session';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,7 @@ import { HeaderIconButton, ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { spacing } from '@/lib/theme/tokens';
 import { channelMark } from './channel-badge';
+import { HEADER_AVATAR_SIZE, headerShowsAvatar } from './header-fit';
 import { STATUS_TONE } from './status';
 import { ThreadMenu, type ThreadMenuItem } from './thread-menu';
 import { WindowTimer } from './window-timer';
@@ -55,6 +56,12 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
   const phone = conversation?.contactSummary?.phone ?? null;
   // Only people who may update contacts can log the call afterwards.
   const canLog = can(useSession().data, 'record.contacts.update');
+  // The buttons keep their size, so on a narrow phone the avatar steps aside and the name may use two lines.
+  const { width } = useWindowDimensions();
+  const showAvatar = headerShowsAvatar(width, {
+    timer: conversation?.window.expiresAt != null,
+    buttons: (phone ? 1 : 0) + (primary ? 1 : 0) + (menu.length > 0 ? 1 : 0),
+  });
 
   return (
     <ScreenHeader
@@ -108,9 +115,15 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
             onPress={onOpenDetails}
             style={styles.who}
           >
-            <Avatar name={conversation.title} seed={conversation.id} size={44} />
+            {showAvatar ? (
+              <Avatar name={conversation.title} seed={conversation.id} size={HEADER_AVATAR_SIZE} />
+            ) : null}
             <View style={styles.text}>
-              <Text variant="subheading" numberOfLines={1} accessibilityRole="header">
+              <Text
+                variant="subheading"
+                numberOfLines={showAvatar ? 1 : 2}
+                accessibilityRole="header"
+              >
                 {conversation.title}
               </Text>
               <View style={styles.channel}>
@@ -119,10 +132,13 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
                   {labelKey ? t(labelKey) : conversation.channel.name}
                 </Text>
                 {conversation.status !== 'open' ? (
-                  <Badge
-                    label={t(`inbox.status.${conversation.status}`)}
-                    tone={STATUS_TONE[conversation.status]}
-                  />
+                  // Never squeezed: the channel name gives way first, so the badge cannot run into the ring.
+                  <View style={styles.badge}>
+                    <Badge
+                      label={t(`inbox.status.${conversation.status}`)}
+                      tone={STATUS_TONE[conversation.status]}
+                    />
+                  </View>
                 ) : null}
               </View>
             </View>
@@ -137,7 +153,8 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   who: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  text: { flex: 1, gap: 2 },
+  text: { flex: 1, minWidth: 0, gap: 2 },
   channel: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  channelName: { flexShrink: 1 },
+  channelName: { flexShrink: 1, minWidth: 0 },
+  badge: { flexShrink: 0 },
 });

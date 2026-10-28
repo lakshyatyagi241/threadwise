@@ -1232,11 +1232,35 @@
       "placeholder": "Digite uma mensagem",
       "send": "Enviar",
       "tooLong": "As mensagens podem ter até {{max}} caracteres.",
-      "noteLabel": "Nota privada",
+      "noteLabel": "Nota interna",
       "notePlaceholder": "Escreva uma nota que só sua equipe vê",
       "addNote": "Adicionar nota",
-      "noteOn": "Escrever uma nota privada",
-      "noteOff": "Voltar para uma resposta"
+      "mode": {
+        "label": "Tipo de mensagem",
+        "reply": "Resposta",
+        "note": "Nota interna"
+      },
+      "format": {
+        "label": "Formatação da mensagem",
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "underline": "Sublinhado",
+        "strike": "Tachado",
+        "bullets": "Lista com marcadores",
+        "numbers": "Lista numerada"
+      },
+      "emoji": {
+        "open": "Inserir um emoji",
+        "title": "Emoji",
+        "groups": "Grupos de emojis",
+        "recent": "Usados recentemente",
+        "group": {
+          "smileys": "Carinhas",
+          "gestures": "Gestos",
+          "hearts": "Corações e símbolos",
+          "objects": "Objetos"
+        }
+      }
     },
     "template": {
       "closedNotice": "O cliente não fala com você há mais de 24 horas. Você só pode enviar modelos pré-aprovados.",
@@ -1455,6 +1479,24 @@
       "noMatch": "Nenhuma resposta salva corresponde à sua busca.",
       "failed": "Não foi possível usar esta resposta. Tente novamente.",
       "unfilled": "Confira a mensagem: não foi possível preencher {{list}}."
+    },
+    "ai": {
+      "open": "Assistente de IA inteligente",
+      "title": "Assistente de IA inteligente",
+      "condense": "Condensar",
+      "condenseHint": "Deixar o texto mais curto e conciso",
+      "fix": "Corrigir gramática",
+      "fixHint": "Corrigir erros de gramática e ortografia",
+      "positive": "Tom positivo",
+      "positiveHint": "Deixar o texto mais positivo e animado",
+      "translate": "Traduzir",
+      "translateHint": "Traduzir para outros idiomas",
+      "selectLanguage": "Selecionar idioma",
+      "searchLanguages": "Pesquisar idiomas…",
+      "noLanguage": "Nenhum idioma corresponde",
+      "working": "Trabalhando…",
+      "empty": "Escreva uma mensagem primeiro.",
+      "failed": "A IA não conseguiu alterar o texto. Tente novamente."
     },
     "note": {
       "title": "Nota privada",

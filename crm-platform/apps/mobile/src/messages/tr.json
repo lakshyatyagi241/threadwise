@@ -1210,11 +1210,35 @@
       "placeholder": "Bir mesaj yazın",
       "send": "Gönder",
       "tooLong": "Mesajlar en fazla {{max}} karakter olabilir.",
-      "noteLabel": "Özel not",
+      "noteLabel": "Dahili not",
       "notePlaceholder": "Yalnızca ekibinizin göreceği bir not yazın",
       "addNote": "Not ekle",
-      "noteOn": "Özel not yaz",
-      "noteOff": "Yanıta dön"
+      "mode": {
+        "label": "Mesaj türü",
+        "reply": "Yanıt",
+        "note": "Dahili not"
+      },
+      "format": {
+        "label": "Mesaj biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "underline": "Altı çizili",
+        "strike": "Üstü çizili",
+        "bullets": "Madde işaretli liste",
+        "numbers": "Numaralı liste"
+      },
+      "emoji": {
+        "open": "Emoji ekle",
+        "title": "Emoji",
+        "groups": "Emoji grupları",
+        "recent": "Son kullanılanlar",
+        "group": {
+          "smileys": "Yüz ifadeleri",
+          "gestures": "El hareketleri",
+          "hearts": "Kalpler ve semboller",
+          "objects": "Nesneler"
+        }
+      }
     },
     "template": {
       "closedNotice": "Müşteri son 24 saatte size yazmadı. Yalnızca önceden onaylı şablonlar gönderebilirsiniz.",
@@ -1431,6 +1455,24 @@
       "noMatch": "Aramanızla eşleşen hazır yanıt yok.",
       "failed": "Bu yanıt kullanılamadı. Yeniden deneyin.",
       "unfilled": "Mesajı kontrol edin: {{list}} doldurulamadı."
+    },
+    "ai": {
+      "open": "Akıllı Yapay Zekâ Asistanı",
+      "title": "Akıllı Yapay Zekâ Asistanı",
+      "condense": "Kısalt",
+      "condenseHint": "Metni daha kısa ve öz yap",
+      "fix": "Dilbilgisini düzelt",
+      "fixHint": "Dilbilgisi ve yazım hatalarını düzelt",
+      "positive": "Olumlu ton",
+      "positiveHint": "Metni daha olumlu ve neşeli yap",
+      "translate": "Çevir",
+      "translateHint": "Farklı dillere çevir",
+      "selectLanguage": "Dil seç",
+      "searchLanguages": "Dil ara…",
+      "noLanguage": "Eşleşen dil yok",
+      "working": "İşleniyor…",
+      "empty": "Önce bir mesaj yazın.",
+      "failed": "Yapay zekâ metni değiştiremedi. Tekrar deneyin."
     },
     "note": {
       "title": "Özel not",

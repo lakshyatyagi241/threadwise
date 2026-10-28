@@ -1210,11 +1210,35 @@
       "placeholder": "Nachricht eingeben",
       "send": "Senden",
       "tooLong": "Nachrichten dürfen bis zu {{max}} Zeichen lang sein.",
-      "noteLabel": "Private Notiz",
+      "noteLabel": "Interne Notiz",
       "notePlaceholder": "Notiz schreiben, die nur Ihr Team sieht",
       "addNote": "Notiz hinzufügen",
-      "noteOn": "Private Notiz schreiben",
-      "noteOff": "Zurück zur Antwort"
+      "mode": {
+        "label": "Nachrichtentyp",
+        "reply": "Antworten",
+        "note": "Interne Notiz"
+      },
+      "format": {
+        "label": "Nachrichtenformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "underline": "Unterstreichen",
+        "strike": "Durchgestrichen",
+        "bullets": "Aufzählung",
+        "numbers": "Nummerierte Liste"
+      },
+      "emoji": {
+        "open": "Emoji einfügen",
+        "title": "Emojis",
+        "groups": "Emoji-Gruppen",
+        "recent": "Zuletzt verwendet",
+        "group": {
+          "smileys": "Smileys",
+          "gestures": "Gesten",
+          "hearts": "Herzen und Symbole",
+          "objects": "Objekte"
+        }
+      }
     },
     "template": {
       "closedNotice": "Der Kunde hat in den letzten 24 Stunden nicht mit Ihnen geschrieben. Sie können nur vorab genehmigte Vorlagen senden.",
@@ -1431,6 +1455,24 @@
       "noMatch": "Keine gespeicherten Antworten passen zu Ihrer Suche.",
       "failed": "Diese Antwort konnte nicht verwendet werden. Versuchen Sie es erneut.",
       "unfilled": "Prüfen Sie die Nachricht: {{list}} konnte nicht ausgefüllt werden."
+    },
+    "ai": {
+      "open": "Intelligenter KI-Assistent",
+      "title": "Intelligenter KI-Assistent",
+      "condense": "Kürzen",
+      "condenseHint": "Text kürzer und prägnanter machen",
+      "fix": "Grammatik korrigieren",
+      "fixHint": "Grammatik- und Rechtschreibfehler korrigieren",
+      "positive": "Positiver Ton",
+      "positiveHint": "Text positiver und freundlicher machen",
+      "translate": "Übersetzen",
+      "translateHint": "In andere Sprachen übersetzen",
+      "selectLanguage": "Sprache auswählen",
+      "searchLanguages": "Sprachen suchen…",
+      "noLanguage": "Keine Sprache gefunden",
+      "working": "Wird bearbeitet…",
+      "empty": "Schreiben Sie zuerst eine Nachricht.",
+      "failed": "Die KI konnte den Text nicht ändern. Bitte erneut versuchen."
     },
     "note": {
       "title": "Private Notiz",

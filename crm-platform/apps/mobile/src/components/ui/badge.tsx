@@ -19,7 +19,7 @@ export function Badge({ label, tone = 'neutral' }: { label: string; tone?: Badge
   const pair = PAIRS[tone];
   return (
     <View style={[styles.pill, { backgroundColor: colors[pair.background] }]}>
-      <Text variant="caption" style={styles.text} color={pair.text}>
+      <Text variant="caption" numberOfLines={1} style={styles.text} color={pair.text}>
         {label}
       </Text>
     </View>
