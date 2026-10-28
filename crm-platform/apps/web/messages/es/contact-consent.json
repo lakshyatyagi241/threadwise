@@ -257,7 +257,7 @@
       "smsSummary": "Columna de consentimiento SMS: {granted} filas dicen sí y se registrarán como consentimiento SMS. {notGranted} dicen no o están en blanco.",
       "emailSummary": "Columna de consentimiento de correo: {granted} filas dicen sí y se registrarán como consentimiento de correo (la fila también necesita una dirección de correo). {notGranted} dicen no o están en blanco.",
       "labelNumbers": "Tengo consentimiento para escribir a estos números",
-      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja."
+      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja. Si el archivo tiene una columna de consentimiento de marketing, solo se registran las filas que dicen sí."
     },
     "systemLine": {
       "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",

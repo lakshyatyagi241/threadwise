@@ -257,7 +257,7 @@
       "smsSummary": "SMS consent column: {granted} rows say yes and will be recorded as SMS consent. {notGranted} say no or are blank.",
       "emailSummary": "Email consent column: {granted} rows say yes and will be recorded as email consent (a row also needs an email address). {notGranted} say no or are blank.",
       "labelNumbers": "I have consent to message these numbers",
-      "hintNumbers": "Ticked, every number in the file is recorded as having agreed to marketing when you launch the broadcast, with the file name as proof. Unticked, no consent is recorded. People who opted out stay opted out."
+      "hintNumbers": "Ticked, every number in the file is recorded as having agreed to marketing when you launch the broadcast, with the file name as proof. Unticked, no consent is recorded. People who opted out stay opted out. If the file has a marketing consent column, only the rows that say yes are recorded."
     },
     "systemLine": {
       "withdrawn": "Contact replied {keyword}: unsubscribed from marketing",

@@ -257,7 +257,7 @@
       "smsSummary": "Kolumna zgody na SMS: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na SMS. {notGranted} mówi nie lub jest puste.",
       "emailSummary": "Kolumna zgody na e-mail: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na e-mail (wiersz musi też mieć adres e-mail). {notGranted} mówi nie lub jest puste.",
       "labelNumbers": "Mam zgodę na wysyłanie wiadomości na te numery",
-      "hintNumbers": "Po zaznaczeniu każdy numer z pliku jest zapisywany jako zgadzający się na marketing przy uruchomieniu wysyłki, a dowodem jest nazwa pliku. Bez zaznaczenia zgoda nie jest zapisywana. Osoby, które zrezygnowały, pozostają wypisane."
+      "hintNumbers": "Po zaznaczeniu każdy numer z pliku jest zapisywany jako zgadzający się na marketing przy uruchomieniu wysyłki, a dowodem jest nazwa pliku. Bez zaznaczenia zgoda nie jest zapisywana. Osoby, które zrezygnowały, pozostają wypisane. Jeśli plik ma kolumnę zgody marketingowej, zapisywane są tylko wiersze z odpowiedzią tak."
     },
     "systemLine": {
       "withdrawn": "Kontakt odpowiedział {keyword}: wypisany z marketingu",

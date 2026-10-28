@@ -6,6 +6,7 @@ import {
   composeDisplayName,
   countryCodeDigits,
   detectImportColumns,
+  parseImportConsent,
   type WizardCsvRejectReason,
 } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
@@ -23,6 +24,8 @@ export interface CsvLine {
   digits: string | null;
   name: string | null;
   reason: WizardCsvRejectReason | null;
+  /** What the consent cell said (true = yes); null when the file has no consent column or the row is not valid. */
+  consentGranted: boolean | null;
 }
 
 export interface ParsedCsvUpload {
@@ -78,7 +81,14 @@ export function parseWizardCsv(text: string, defaultCountryCode: string | null):
   let invalid = 0;
   for (const rec of data) {
     const raw = cell(rec.cells, 'phone').slice(0, 200);
-    const base = { line: rec.line, raw, phone: null, digits: null, name: null };
+    const base = {
+      line: rec.line,
+      raw,
+      phone: null,
+      digits: null,
+      name: null,
+      consentGranted: null,
+    };
     if (!raw) {
       invalid += 1;
       lines.push({ ...base, kind: 'invalid', reason: 'missing_phone' });
@@ -118,6 +128,11 @@ export function parseWizardCsv(text: string, defaultCountryCode: string | null):
       phone: phone.e164,
       digits: phone.digits,
       name: name ? name.slice(0, 255) : null,
+      // Only a yes grants; a no, a blank or an unknown word does not (the contact importer's rule).
+      consentGranted:
+        columns.consent === undefined
+          ? null
+          : parseImportConsent(cell(rec.cells, 'consent')) === 'granted',
     });
   }
   return { lines, valid, duplicate, invalid };

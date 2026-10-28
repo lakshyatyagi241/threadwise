@@ -257,7 +257,7 @@
       "smsSummary": "Coluna de consentimento SMS: {granted} linhas dizem sim e serão registadas como consentimento SMS. {notGranted} dizem não ou estão em branco.",
       "emailSummary": "Coluna de consentimento de e-mail: {granted} linhas dizem sim e serão registadas como consentimento de e-mail (a linha também precisa de um endereço de e-mail). {notGranted} dizem não ou estão em branco.",
       "labelNumbers": "Tenho consentimento para enviar mensagens a estes números",
-      "hintNumbers": "Marcada, cada número do ficheiro é registado como tendo aceitado marketing ao lançar a difusão, com o nome do ficheiro como prova. Desmarcada, nenhum consentimento é registado. Quem cancelou continua cancelado."
+      "hintNumbers": "Marcada, cada número do ficheiro é registado como tendo aceitado marketing ao lançar a difusão, com o nome do ficheiro como prova. Desmarcada, nenhum consentimento é registado. Quem cancelou continua cancelado. Se o arquivo tiver uma coluna de consentimento de marketing, apenas as linhas que dizem sim são registradas."
     },
     "systemLine": {
       "withdrawn": "O contato respondeu {keyword}: cancelou a inscrição em marketing",

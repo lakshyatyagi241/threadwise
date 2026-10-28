@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import { rawIdentifier } from '../../common/sql/identifier';
+import { identifier } from '../../common/sql/identifier';
 import { minorRuleOf, type MinorRule } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentSettingsService } from './consent-settings.service';
@@ -73,7 +73,7 @@ export function grantedConsentOn(org: SQL, contactId: SQL, channel = 'whatsapp')
 
 /** The same predicate for a raw SQL alias such as `c` (validated: a plain identifier, never request text). */
 export function hasGrantedConsentSql(alias: string, channel = 'whatsapp'): SQL {
-  const a = rawIdentifier(alias);
+  const a = identifier(alias);
   return grantedConsentOn(sql.raw(`${a}.org_id`), sql.raw(`${a}.id`), channel);
 }
 

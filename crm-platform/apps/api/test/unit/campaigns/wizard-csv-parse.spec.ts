@@ -36,4 +36,19 @@ describe('parseWizardCsv', () => {
     expect(() => parseWizardCsv('name,email\nA,a@x.com', '+91')).toThrow(/phone/);
     expect(() => parseWizardCsv('phone\n', '+91')).toThrow(/no numbers/);
   });
+
+  it('reads a marketing consent column per row: only a yes grants, and a file without the column says nothing', () => {
+    const withColumn = parseWizardCsv(
+      [
+        'first name,country_code,phone,email,marketing consent',
+        'A,91,8875137569,a@x.com,yes',
+        'B,91,7798917132,b@x.com,no',
+        'C,91,9096960273,c@x.com,',
+      ].join('\n'),
+      null,
+    );
+    expect(withColumn.lines.map((l) => l.consentGranted)).toEqual([true, false, false]);
+    const without = parseWizardCsv('phone\n+919812345678', null);
+    expect(without.lines[0]!.consentGranted).toBeNull();
+  });
 });
