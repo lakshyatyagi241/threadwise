@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" tidak memiliki koneksi masuk — tidak ada yang mengarah ke sana.",
+        "buttonNoExit": "\"{node}\": tombol \"{button}\" tidak mengarah ke langkah mana pun.",
         "notConnected": "\"{node}\" tidak terhubung ke apa pun.",
         "wrongChannel": "\"{node}\" tidak berfungsi pada {channel} — hapus atau ubah kembali kanal di node Pemicu.",
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",

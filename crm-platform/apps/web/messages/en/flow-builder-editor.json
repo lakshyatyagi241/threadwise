@@ -2582,6 +2582,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" has no incoming connection — nothing leads into it.",
+        "buttonNoExit": "\"{node}\": the button \"{button}\" does not lead to any step.",
         "notConnected": "\"{node}\" is not connected to anything.",
         "wrongChannel": "\"{node}\" does not work on {channel} — delete it or switch the channel back on the Trigger node.",
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",

@@ -2441,6 +2441,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” heeft geen inkomende verbinding — er leidt niets naartoe.",
+        "buttonNoExit": "\"{node}\": de knop \"{button}\" leidt naar geen enkele stap.",
         "notConnected": "“{node}” is met niets verbonden.",
         "wrongChannel": "“{node}” werkt niet op {channel} — verwijder hem of zet het kanaal weer aan in de Trigger-node.",
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",

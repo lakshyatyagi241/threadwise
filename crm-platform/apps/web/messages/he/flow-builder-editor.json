@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "ל“{node}” אין חיבור נכנס — אף דבר לא מוביל אליו.",
+        "buttonNoExit": "\"{node}\": הכפתור \"{button}\" לא מוביל לשום שלב.",
         "notConnected": "“{node}” אינו מחובר לכלום.",
         "wrongChannel": "“{node}” לא פועל ב-{channel} — מחקו אותו, או הפעילו מחדש את הערוץ בצומת הטריגר.",
         "noSenderInstagram": "בצומת הטריגר לא נבחר חשבון Instagram — בחרו אחד בשלב הטריגר.",

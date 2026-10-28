@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\"-এ কোনো ইনকামিং সংযোগ নেই — এতে কিছুই যুক্ত হয় না।",
+        "buttonNoExit": "\"{node}\": \"{button}\" বোতামটি কোনো ধাপে যায় না।",
         "notConnected": "\"{node}\" কোনো কিছুর সাথে সংযুক্ত নয়।",
         "wrongChannel": "\"{node}\" {channel}-এ কাজ করে না — এটি মুছুন বা Trigger নোডে চ্যানেল আবার বদলান।",
         "noSenderInstagram": "Trigger নোডে কোনো Instagram অ্যাকাউন্ট নির্বাচন করা নেই — Trigger ধাপে একটি বেছে নিন।",

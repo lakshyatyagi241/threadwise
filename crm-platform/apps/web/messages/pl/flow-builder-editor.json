@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "„{node}” nie ma połączenia wejściowego — nic do niego nie prowadzi.",
+        "buttonNoExit": "„{node}”: przycisk „{button}” nie prowadzi do żadnego kroku.",
         "notConnected": "„{node}” nie jest z niczym połączony.",
         "wrongChannel": "„{node}” nie działa na {channel} — usuń go lub ponownie włącz kanał we węźle Wyzwalacz.",
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",

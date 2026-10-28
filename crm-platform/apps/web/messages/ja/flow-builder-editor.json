@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "「{node}」に入力の接続がありません。このノードには何も接続されていません。",
+        "buttonNoExit": "「{node}」: ボタン「{button}」はどのステップにもつながっていません。",
         "notConnected": "「{node}」はどこにも接続されていません。",
         "wrongChannel": "「{node}」は{channel}では動作しません。削除するか、トリガーノードでチャンネルを切り替えてください。",
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",

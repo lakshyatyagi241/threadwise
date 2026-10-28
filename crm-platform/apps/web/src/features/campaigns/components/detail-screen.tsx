@@ -20,6 +20,7 @@ import {
 import type { CampaignDetail } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
+import { WhatsAppText } from '@/components/whatsapp-text';
 import {
   KEYS,
   cancelCampaign,
@@ -312,15 +313,18 @@ export function DetailScreen({ id }: { id: string }) {
               {d.preview.templateName && (
                 <div className="mb-1 font-semibold">{d.preview.templateName}</div>
               )}
-              {d.preview.header && <div className="mb-1 font-semibold">{d.preview.header}</div>}
+              {d.preview.header && (
+                <WhatsAppText text={d.preview.header} className="mb-1 font-semibold" />
+              )}
               {d.preview.mediaUrl && (
                 <div className="mb-1 break-all font-mono text-[11px] opacity-70">
                   📎 {d.preview.mediaUrl.split('/').pop()}
                 </div>
               )}
-              <div className="whitespace-pre-wrap break-words leading-snug">
-                {d.preview.body || '—'}
-              </div>
+              <WhatsAppText
+                text={d.preview.body || '—'}
+                className="whitespace-pre-wrap leading-snug"
+              />
               {d.preview.footer && (
                 <div className="mt-1 text-[11px] opacity-60">{d.preview.footer}</div>
               )}

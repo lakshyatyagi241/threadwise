@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "“{node}”에 들어오는 연결이 없습니다 — 이 노드로 이어지는 것이 없습니다.",
+        "buttonNoExit": "\"{node}\": \"{button}\" 버튼이 어떤 단계로도 이어지지 않습니다.",
         "notConnected": "“{node}”이(가) 아무 것에도 연결되어 있지 않습니다.",
         "wrongChannel": "“{node}”은(는) {channel}에서 작동하지 않습니다 — 삭제하거나 트리거 노드에서 채널을 다시 설정하세요.",
         "noSenderInstagram": "트리거 노드에 Instagram 계정이 선택되어 있지 않습니다 — 트리거 단계에서 계정을 선택하세요.",

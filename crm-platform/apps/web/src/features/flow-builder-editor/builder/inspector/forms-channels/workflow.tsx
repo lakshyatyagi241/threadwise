@@ -1,12 +1,14 @@
 'use client';
 
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useTranslations } from 'next-intl';
 import { GoogleConnectionNotice } from './google-connection';
 import { FLB_FIELD_MATCH_OPERATORS } from '@crm/contracts';
-import { Field, type Opt } from '../kit';
+import { controlClass, Field, type Opt } from '../kit';
 import type { FormComponent } from '../types';
 import { GoogleFilePicker } from './google';
 import { withSavedOption, type HelperT } from './helpers';
+import { savePropertyOptions } from '../../../lib/property-options';
 import {
   AddLink,
   ExtLink,
@@ -46,6 +48,9 @@ const listOptions = (p: Parameters<FormComponent>[0], t: HelperT): Opt[] =>
 
 export const UpdateContactForm: FormComponent = (p) => {
   const t = useTranslations(NS);
+  const tc = useTranslations('flb.builder.choiceSave');
+  const feed = usePickerFeed();
+  const field = typeof p.data.field === 'string' ? p.data.field : '';
   return (
     <>
       <Intro
@@ -59,7 +64,19 @@ export const UpdateContactForm: FormComponent = (p) => {
         })}
       </Intro>
       <Field label={t('fieldLabel')} hint={t('fieldHint')}>
-        {Txt(p, 'field', 'city')}
+        <select
+          aria-label={t('fieldLabel')}
+          value={field}
+          onChange={(e) => p.set('field', e.target.value)}
+          className={controlClass}
+        >
+          <option value="">{tc('propertyChoose')}</option>
+          {savePropertyOptions(feed.data, field).map((o) => (
+            <option key={o.key} value={o.key}>
+              {o.name}
+            </option>
+          ))}
+        </select>
       </Field>
       <Field label={t('newValueLabel')} hint={t('newValueHint', { example: '{{variable}}' })}>
         {Txt(p, 'value', '{{user_message}}')}

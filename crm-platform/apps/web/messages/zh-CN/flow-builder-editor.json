@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" 没有传入连接 — 没有任何内容指向它。",
+        "buttonNoExit": "“{node}”：按钮“{button}”没有连接到任何步骤。",
         "notConnected": "\"{node}\" 未连接到任何内容。",
         "wrongChannel": "\"{node}\" 无法用于 {channel} — 请删除它，或在触发器节点中重新启用该渠道。",
         "noSenderInstagram": "触发器节点未选择 Instagram 账户 — 请在触发步骤中选择一个。",

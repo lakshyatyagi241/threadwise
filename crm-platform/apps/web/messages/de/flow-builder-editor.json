@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "„{node}“ hat keine eingehende Verbindung, es führt also nichts hierher.",
+        "buttonNoExit": "„{node}“: Die Schaltfläche „{button}“ führt zu keinem Schritt.",
         "notConnected": "„{node}“ ist mit nichts verbunden.",
         "wrongChannel": "„{node}“ funktioniert nicht auf {channel}. Löschen Sie es oder aktivieren Sie den Kanal im Auslöser-Knoten wieder.",
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",

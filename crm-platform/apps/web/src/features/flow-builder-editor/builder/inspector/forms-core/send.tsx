@@ -188,13 +188,6 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('url', v)}
         />
       </Field>
-      <Field label={t('filename')}>
-        <TextInput
-          value={d.filename}
-          placeholder="catalogue.pdf"
-          onChange={(v) => set('filename', v)}
-        />
-      </Field>
       <Field label={t('caption')}>
         <RichTextField
           value={d.caption}

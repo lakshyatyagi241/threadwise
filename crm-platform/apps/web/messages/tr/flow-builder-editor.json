@@ -2583,6 +2583,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" girişinde bağlantı yok — buraya hiçbir şey bağlı değil.",
+        "buttonNoExit": "\"{node}\": \"{button}\" düğmesi hiçbir adıma gitmiyor.",
         "notConnected": "\"{node}\" hiçbir şeye bağlı değil.",
         "wrongChannel": "\"{node}\" {channel} üzerinde çalışmaz — silin veya Tetikleyici düğümünde kanalı yeniden açın.",
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
