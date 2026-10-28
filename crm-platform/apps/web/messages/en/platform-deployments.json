@@ -109,7 +109,8 @@
       "by": "by {author}",
       "raisedIst": "Raised {time} IST",
       "noProgress": "No progress for {minutes} minutes. The build or the release may have stopped.",
-      "noChangesAlert": "The latest releases do not list their pull requests. The build server's deploy-main.sh or the host's ci-entry.sh is probably out of date: install the current versions (deploy/build-server/README.md)."
+      "noChangesAlert": "The latest releases do not list their pull requests. The build server's deploy-main.sh or the host's ci-entry.sh is probably out of date: install the current versions (deploy/build-server/README.md).",
+      "moreChanges": "{count} more changes"
     }
   }
 }

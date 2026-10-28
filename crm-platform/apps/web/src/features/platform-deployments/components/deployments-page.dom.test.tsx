@@ -297,6 +297,41 @@ describe('DeploymentsPage', () => {
       expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
     });
 
+    it('shows a long PR description as a short clamped summary, not the whole text', async () => {
+      const body = `## Summary\n\n- ${'The picker sent one request per ticked channel. '.repeat(14)}\n\n🤖 Generated with Claude Code`;
+      await show([
+        attempt({ changes: [{ pr: 901, title: 'Fix the picker', author: 'Lakshya', body }] }),
+      ]);
+      const el = host.querySelector('[data-testid="release-description"]') as HTMLElement;
+      expect(el.textContent).not.toContain('## Summary');
+      expect(el.textContent).not.toContain('Generated with');
+      expect(el.textContent!.length).toBeLessThanOrEqual(260);
+      expect(el.className).toContain('line-clamp-3'); // three lines at most, so the column stays small
+      expect(el.getAttribute('title')).toBe(body); // the full text stays one hover away
+    });
+
+    it('lists the first five PRs of a release and folds the rest into "N more"', async () => {
+      const many = Array.from({ length: 7 }, (_, i) => ({
+        pr: 800 + i,
+        title: `Change ${i}`,
+        author: 'Dev',
+      }));
+      await show([attempt({ changes: many })]);
+      const details = host.querySelector('details') as HTMLElement;
+      expect(details.querySelector('summary')!.textContent).toBe(
+        en('releases.moreChanges').replace('{count}', '2'),
+      );
+      expect(details.textContent).toContain('Change 5');
+      expect(details.textContent).toContain('Change 6');
+      expect(details.textContent).not.toContain('Change 4'); // the fifth is listed above the fold
+      expect(host.textContent).toContain('Change 4');
+    });
+
+    it('has no fold when a release carries five PRs or fewer', async () => {
+      await show([attempt()]);
+      expect(host.querySelector('details')).toBeNull();
+    });
+
     it('warns when the newest releases do not list their pull requests', async () => {
       const bare = (id: string) => attempt({ id, changes: [] });
       await show([bare('a'), bare('b'), bare('c')]);

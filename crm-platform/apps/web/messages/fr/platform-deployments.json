@@ -109,7 +109,8 @@
       "by": "par {author}",
       "raisedIst": "Créée {time} IST",
       "noProgress": "Aucune progression depuis {minutes} minutes. La compilation ou la mise en production s'est peut-être arrêtée.",
-      "noChangesAlert": "Les dernières versions n'indiquent pas leurs pull requests. Le deploy-main.sh du serveur de build ou le ci-entry.sh de l'hôte est probablement obsolète : installez les versions actuelles (deploy/build-server/README.md)."
+      "noChangesAlert": "Les dernières versions n'indiquent pas leurs pull requests. Le deploy-main.sh du serveur de build ou le ci-entry.sh de l'hôte est probablement obsolète : installez les versions actuelles (deploy/build-server/README.md).",
+      "moreChanges": "{count} autres modifications"
     }
   }
 }

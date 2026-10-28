@@ -109,7 +109,8 @@
       "by": "автор: {author}",
       "raisedIst": "Создан {time} IST",
       "noProgress": "Нет прогресса уже {minutes} мин. Сборка или релиз, возможно, остановились.",
-      "noChangesAlert": "Последние релизы не перечисляют свои pull request'ы. Вероятно, устарел deploy-main.sh на сервере сборки или ci-entry.sh на хосте: установите актуальные версии (deploy/build-server/README.md)."
+      "noChangesAlert": "Последние релизы не перечисляют свои pull request'ы. Вероятно, устарел deploy-main.sh на сервере сборки или ci-entry.sh на хосте: установите актуальные версии (deploy/build-server/README.md).",
+      "moreChanges": "ещё изменений: {count}"
     }
   }
 }

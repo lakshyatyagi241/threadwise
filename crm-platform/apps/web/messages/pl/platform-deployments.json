@@ -109,7 +109,8 @@
       "by": "autor: {author}",
       "raisedIst": "Utworzono {time} IST",
       "noProgress": "Brak postępu od {minutes} min. Kompilacja lub wydanie mogły się zatrzymać.",
-      "noChangesAlert": "Najnowsze wydania nie wymieniają swoich pull requestów. Prawdopodobnie przestarzały jest deploy-main.sh na serwerze budowania lub ci-entry.sh na hoście: zainstaluj aktualne wersje (deploy/build-server/README.md)."
+      "noChangesAlert": "Najnowsze wydania nie wymieniają swoich pull requestów. Prawdopodobnie przestarzały jest deploy-main.sh na serwerze budowania lub ci-entry.sh na hoście: zainstaluj aktualne wersje (deploy/build-server/README.md).",
+      "moreChanges": "jeszcze {count} zmian"
     }
   }
 }
