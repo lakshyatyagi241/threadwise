@@ -147,6 +147,12 @@ export class UsageBillingService {
     let txRowId: number | null = null;
     let balanceAfter = wallet.balanceMinor;
 
+    // The AI call held its price before the vendor was called (holdAiCall): the hold leaves `reserved` before any charge lowers the
+    // balance, so reserved never sits above balance (chk_wallet_invariant is checked on every statement).
+    if (input.kind === 'ai') {
+      await this.repo.settleHold(tx, orgId, currency);
+    }
+
     if (price.basis === 'none') {
       freeReason = coveredByAllowance ? 'within_plan_free_quota' : freeReasonOf(price);
     } else if (wallet.balanceMinor <= 0) {
@@ -154,6 +160,8 @@ export class UsageBillingService {
       shortfallMinor = priceMinor;
     } else {
       const wanted = Math.min(priceMinor, wallet.balanceMinor);
+      // A charge dearer than the hold it settles caps what is still reserved to the balance it leaves, before the post (see above).
+      await this.repo.fitReservedBefore(tx, orgId, currency, wanted);
       const posted = await this.ledger.post(tx, {
         orgId,
         unit: currency,
@@ -232,9 +240,8 @@ export class UsageBillingService {
     if (status === 'charged' || freeReason === 'wallet_empty') {
       await this.messages.alertIfLow(tx, orgId, wallet, balanceAfter, currency);
     }
-    // The AI call held its price before the vendor was called (holdAiCall): its hold is settled here, charged or not, under the same lock.
+    // The AI call's hold was settled before the charge (above), so the balance never falls below `reserved`; this caps what the charge left.
     if (input.kind === 'ai') {
-      await this.repo.settleHold(tx, orgId, currency);
       await this.repo.capReserved(tx, orgId, currency);
     }
 
