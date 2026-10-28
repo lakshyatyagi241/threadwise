@@ -38,11 +38,13 @@
         "target": "יעד",
         "active": "פעיל",
         "fields": "שדות",
+        "numbers": "מספרי טלפון",
         "deliveries": "מסירות",
         "last": "מסירה אחרונה",
         "actions": "פעולות"
       },
       "allFields": "כל השדות",
+      "allNumbers": "כל המספרים",
       "success": "{count, number} תקינות",
       "failure": "{count, number} נכשלו",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "מסנן שדות",
       "fieldFilterHint": "השאירו ריק כדי להעביר כל שדה. הקלידו שדה ולחצו Enter, למשל messages או message_template_status_update.",
       "fieldFilterPlaceholder": "הוספת שדה",
+      "phoneFilter": "מסנן מספרי טלפון",
+      "phoneFilterHint": "השאירו ריק כדי להעביר כל מספר. הקלידו מזהה מספר טלפון של Meta (ספרות בלבד, לא המספר המוצג) ולחצו Enter. webhook שמזכיר כמה מספרים מועבר במלואו אם אחד מהם ברשימה.",
+      "phoneFilterPlaceholder": "הוספת מזהה מספר",
       "fieldRemove": "הסרת {field}",
+      "phoneRemove": "הסרת {phone}",
       "timeout": "זמן המתנה (שניות)",
       "timeoutHint": "1 עד 30",
       "maxAttempts": "מספר ניסיונות מקסימלי",
@@ -110,7 +116,8 @@
         "headerValueRequired": "כותרת צריכה גם שם וגם ערך.",
         "headerNameRequired": "הזינו גם את שם הכותרת.",
         "timeout": "הזינו מספר שלם בין 1 ל-30.",
-        "maxAttempts": "הזינו מספר שלם בין 1 ל-10."
+        "maxAttempts": "הזינו מספר שלם בין 1 ל-10.",
+        "phoneNumberIdInvalid": "מזהה מספר טלפון כולל ספרות בלבד."
       }
     },
     "failures": {

@@ -38,11 +38,13 @@
         "target": "ปลายทาง",
         "active": "ใช้งาน",
         "fields": "ฟิลด์",
+        "numbers": "หมายเลขโทรศัพท์",
         "deliveries": "การส่ง",
         "last": "การส่งล่าสุด",
         "actions": "การดำเนินการ"
       },
       "allFields": "ทุกฟิลด์",
+      "allNumbers": "ทุกหมายเลข",
       "success": "{count, number} สำเร็จ",
       "failure": "{count, number} ล้มเหลว",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "ตัวกรองฟิลด์",
       "fieldFilterHint": "เว้นว่างเพื่อส่งต่อทุกฟิลด์ พิมพ์ชื่อฟิลด์แล้วกด Enter เช่น messages หรือ message_template_status_update",
       "fieldFilterPlaceholder": "เพิ่มฟิลด์",
+      "phoneFilter": "ตัวกรองหมายเลขโทรศัพท์",
+      "phoneFilterHint": "เว้นว่างไว้เพื่อส่งต่อทุกหมายเลข พิมพ์ ID หมายเลขโทรศัพท์ของ Meta (ตัวเลขเท่านั้น ไม่ใช่หมายเลขที่แสดง) แล้วกด Enter เว็บฮุกที่ระบุหลายหมายเลขจะถูกส่งต่อทั้งหมดเมื่อมีหมายเลขใดหมายเลขหนึ่งอยู่ในรายการ",
+      "phoneFilterPlaceholder": "เพิ่ม ID หมายเลขโทรศัพท์",
       "fieldRemove": "นำ {field} ออก",
+      "phoneRemove": "ลบ {phone}",
       "timeout": "หมดเวลา (วินาที)",
       "timeoutHint": "1 ถึง 30",
       "maxAttempts": "จำนวนครั้งสูงสุดในการลองใหม่",
@@ -110,7 +116,8 @@
         "headerValueRequired": "ส่วนหัวต้องมีทั้งชื่อและค่า",
         "headerNameRequired": "กรุณากรอกชื่อส่วนหัวด้วย",
         "timeout": "กรุณากรอกจำนวนเต็มตั้งแต่ 1 ถึง 30",
-        "maxAttempts": "กรุณากรอกจำนวนเต็มตั้งแต่ 1 ถึง 10"
+        "maxAttempts": "กรุณากรอกจำนวนเต็มตั้งแต่ 1 ถึง 10",
+        "phoneNumberIdInvalid": "ID หมายเลขโทรศัพท์ต้องเป็นตัวเลขเท่านั้น"
       }
     },
     "failures": {

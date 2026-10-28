@@ -61,12 +61,18 @@ function setValue(el: HTMLSelectElement | HTMLTextAreaElement, value: string) {
   });
 }
 
-const click = (el: Element | undefined) => {
+const click = (el: Element | null | undefined) => {
   expect(el, 'control to click').toBeTruthy();
   act(() => {
     (el as HTMLElement).click();
   });
 };
+
+/** The channel box whose label reads `name`. */
+const channelBox = (name: string) =>
+  [...doc().querySelectorAll('label')]
+    .find((l) => l.textContent?.trim() === name)
+    ?.querySelector<HTMLInputElement>('input');
 
 function openConsent(onConsent: (c: ConsentChoice) => Promise<boolean>, count: number | null = 3) {
   const onClose = vi.fn();
@@ -85,13 +91,20 @@ function openConsent(onConsent: (c: ConsentChoice) => Promise<boolean>, count: n
 }
 
 describe('bulk marketing consent picker', () => {
-  it('asks for the channel, the change and, for a subscription, how the contacts agreed', () => {
+  it('asks for the channels, the change and, for a subscription, how the contacts agreed', () => {
     openConsent(vi.fn(async () => true));
-    const channel = byLabel('Channel') as HTMLSelectElement;
-    expect([...channel.options].map((o) => o.textContent)).toEqual(
-      expect.arrayContaining(['WhatsApp', 'SMS', 'Email', 'Web chat', 'Voice call']),
-    );
+    expect(channelBox('WhatsApp')?.checked).toBe(true);
+    expect(channelBox('SMS')?.checked).toBe(false);
+    expect(channelBox('Email')).toBeTruthy();
+    expect(channelBox('Web chat')).toBeTruthy();
+    expect(channelBox('Voice call')).toBeTruthy();
     expect(byLabel('How the contacts agreed')).toBeTruthy();
+  });
+
+  it('will not go on until at least one channel is ticked', () => {
+    openConsent(vi.fn(async () => true));
+    click(channelBox('WhatsApp'));
+    expect((button('Continue') as HTMLButtonElement).disabled).toBe(true);
   });
 
   it('will not go on to the confirmation without the note of a subscription', () => {
@@ -103,18 +116,20 @@ describe('bulk marketing consent picker', () => {
     expect(onConsent).not.toHaveBeenCalled();
   });
 
-  it('confirms in words what will be written, then records one channel for the selection', async () => {
+  it('confirms in words what will be written, then records the ticked channels for the selection', async () => {
     const onConsent = vi.fn(async () => true);
     openConsent(onConsent, 3);
-    setValue(byLabel('Channel') as HTMLSelectElement, 'sms');
+    click(channelBox('WhatsApp'));
+    click(channelBox('SMS'));
+    click(channelBox('Email'));
     setValue(byLabel('How the contacts agreed') as HTMLTextAreaElement, 'Ticked the form');
     click(button('Continue'));
-    expect(doc().textContent).toContain('Mark 3 contacts as subscribed on SMS.');
+    expect(doc().textContent).toContain('Mark 3 contacts as subscribed on SMS and Email.');
     await act(async () => {
       button('Record consent')!.click();
     });
     expect(onConsent).toHaveBeenCalledWith({
-      channel: 'sms',
+      channels: ['sms', 'email'],
       action: 'granted',
       note: 'Ticked the form',
     });
@@ -131,6 +146,6 @@ describe('bulk marketing consent picker', () => {
     await act(async () => {
       button('Record consent')!.click();
     });
-    expect(onConsent).toHaveBeenCalledWith({ channel: 'whatsapp', action: 'withdrawn' });
+    expect(onConsent).toHaveBeenCalledWith({ channels: ['whatsapp'], action: 'withdrawn' });
   });
 });

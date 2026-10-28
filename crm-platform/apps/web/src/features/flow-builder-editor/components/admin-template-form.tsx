@@ -157,7 +157,7 @@ function TemplateForm({ template }: { template: AdminFlowTemplateDetail | null }
           </div>
           <h1 className="font-serif text-[28px] leading-none font-normal tracking-tight sm:text-[36px]">
             {editing ? t('edit') : t('new')}{' '}
-            <span className="text-brand italic">{t('titleAccent')}</span>
+            <span className="text-brand">{t('titleAccent')}</span>
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">{t('subtitle')}</p>
         </div>

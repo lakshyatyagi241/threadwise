@@ -38,11 +38,13 @@
         "target": "Doel",
         "active": "Actief",
         "fields": "Velden",
+        "numbers": "Telefoonnummers",
         "deliveries": "Leveringen",
         "last": "Laatste levering",
         "actions": "Acties"
       },
       "allFields": "Alle velden",
+      "allNumbers": "Alle nummers",
       "success": "{count, number} geslaagd",
       "failure": "{count, number} mislukt",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Veldfilter",
       "fieldFilterHint": "Laat leeg om elk veld door te sturen. Typ een veld en druk op Enter, bijvoorbeeld messages of message_template_status_update.",
       "fieldFilterPlaceholder": "Een veld toevoegen",
+      "phoneFilter": "Telefoonnummerfilter",
+      "phoneFilterHint": "Laat leeg om alle nummers door te sturen. Typ een Meta-telefoonnummer-ID (alleen cijfers, niet het weergegeven nummer) en druk op Enter. Een webhook met meerdere nummers wordt volledig doorgestuurd als een ervan in de lijst staat.",
+      "phoneFilterPlaceholder": "Telefoonnummer-ID toevoegen",
       "fieldRemove": "{field} verwijderen",
+      "phoneRemove": "{phone} verwijderen",
       "timeout": "Time-out (seconden)",
       "timeoutHint": "1 tot 30",
       "maxAttempts": "Max. pogingen",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Een header heeft zowel een naam als een waarde nodig.",
         "headerNameRequired": "Voer ook de headernaam in.",
         "timeout": "Voer een geheel getal van 1 tot 30 in.",
-        "maxAttempts": "Voer een geheel getal van 1 tot 10 in."
+        "maxAttempts": "Voer een geheel getal van 1 tot 10 in.",
+        "phoneNumberIdInvalid": "Telefoonnummer-ID's bestaan alleen uit cijfers."
       }
     },
     "failures": {

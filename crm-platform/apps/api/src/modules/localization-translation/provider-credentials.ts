@@ -17,8 +17,16 @@ export class ProviderCredentials {
 
   constructor(private readonly crypto: CryptoService) {}
 
-  /** An undecryptable value reads as empty and is logged; Reference wiped it silently on the next save. */
+  /** An undecryptable value reads as empty for display; writers must use `readStored` and refuse instead. */
   decrypt(slug: string, stored: string | null): Credentials {
+    return this.readStored(slug, stored) ?? {};
+  }
+
+  /**
+   * The stored map, or null when a value is present but cannot be decrypted. A caller that writes the map back must
+   * treat null as "do not overwrite": an empty read would erase the other secrets of this provider.
+   */
+  readStored(slug: string, stored: string | null): Credentials | null {
     if (!stored) return {};
     try {
       const parsed = JSON.parse(this.crypto.decrypt(stored)) as unknown;
@@ -30,9 +38,10 @@ export class ProviderCredentials {
         );
       }
     } catch {
-      this.logger.warn({ slug }, 'stored translation credentials could not be decrypted');
+      // fall through to the unreadable result below
     }
-    return {};
+    this.logger.warn({ slug }, 'stored translation credentials could not be decrypted');
+    return null;
   }
 
   encrypt(creds: Credentials): string | null {

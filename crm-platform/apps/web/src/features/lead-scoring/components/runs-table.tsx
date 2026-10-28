@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import type { LscRun, LscRunStatus } from '@crm/contracts';
-import { Badge, cn } from '@crm/ui';
+import { Badge } from '@crm/ui';
 import { formatCostUsd, formatCount } from '../lib/cost';
 import { hasSpend, isProblem, reasonOf, scoreChange } from '../lib/runs-model';
 import { useFormatDate } from './parts';
@@ -124,7 +124,6 @@ export function RunsTable({
                   {hasSpend(r) ? (
                     <span
                       title={t(`costSource.${r.costSource === 'vendor' ? 'vendor' : 'estimate'}`)}
-                      className={cn(r.costSource === 'estimate' && 'italic')}
                     >
                       {formatCostUsd(r.costUsd, locale)}
                       {r.costSource === 'estimate' && <span aria-hidden="true"> ~</span>}

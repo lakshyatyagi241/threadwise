@@ -209,7 +209,7 @@ function Detail({
             </span>
           </div>
           {data.timeline.length === 0 ? (
-            <p className="px-5 py-10 text-center text-sm italic text-muted-foreground">
+            <p className="px-5 py-10 text-center text-sm text-muted-foreground">
               {t('timeline.empty')}
             </p>
           ) : (
@@ -240,7 +240,7 @@ function Detail({
             ) : (
               <section className="rounded-xl border border-border bg-background p-5">
                 <h3 className="text-base font-medium">{t('noRecording.title')}</h3>
-                <p className="mt-2 text-xs italic text-muted-foreground">
+                <p className="mt-2 text-xs text-muted-foreground">
                   {t('noRecording.message')}
                 </p>
               </section>

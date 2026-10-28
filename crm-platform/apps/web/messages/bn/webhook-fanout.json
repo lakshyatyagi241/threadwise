@@ -38,11 +38,13 @@
         "target": "টার্গেট",
         "active": "সক্রিয়",
         "fields": "ফিল্ড",
+        "numbers": "ফোন নম্বর",
         "deliveries": "ডেলিভারি",
         "last": "শেষ ডেলিভারি",
         "actions": "অ্যাকশন"
       },
       "allFields": "সব ফিল্ড",
+      "allNumbers": "সব নম্বর",
       "success": "{count, number}টি সফল",
       "failure": "{count, number}টি ব্যর্থ",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "ফিল্ড ফিল্টার",
       "fieldFilterHint": "সব ফিল্ড ফরওয়ার্ড করতে ফাঁকা রাখুন। একটি ফিল্ড টাইপ করে Enter চাপুন, যেমন messages বা message_template_status_update।",
       "fieldFilterPlaceholder": "একটি ফিল্ড যোগ করুন",
+      "phoneFilter": "ফোন নম্বর ফিল্টার",
+      "phoneFilterHint": "সব নম্বর ফরোয়ার্ড করতে ফাঁকা রাখুন। Meta-র ফোন নম্বর ID (শুধু অঙ্ক, প্রদর্শিত নম্বর নয়) লিখে Enter চাপুন। একাধিক নম্বরযুক্ত webhook তালিকার কোনো একটি নম্বর মিললে পুরোটা ফরোয়ার্ড হয়।",
+      "phoneFilterPlaceholder": "ফোন নম্বর ID যোগ করুন",
       "fieldRemove": "{field} সরান",
+      "phoneRemove": "{phone} সরান",
       "timeout": "টাইমআউট (সেকেন্ড)",
       "timeoutHint": "১ থেকে ৩০",
       "maxAttempts": "সর্বোচ্চ চেষ্টা",
@@ -110,7 +116,8 @@
         "headerValueRequired": "একটি হেডারের নাম ও মান উভয়ই প্রয়োজন।",
         "headerNameRequired": "হেডারের নামও লিখুন।",
         "timeout": "১ থেকে ৩০-এর মধ্যে একটি পূর্ণ সংখ্যা লিখুন।",
-        "maxAttempts": "১ থেকে ১০-এর মধ্যে একটি পূর্ণ সংখ্যা লিখুন।"
+        "maxAttempts": "১ থেকে ১০-এর মধ্যে একটি পূর্ণ সংখ্যা লিখুন।",
+        "phoneNumberIdInvalid": "ফোন নম্বর ID-তে শুধু অঙ্ক থাকে।"
       }
     },
     "failures": {

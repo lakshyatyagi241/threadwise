@@ -18,6 +18,22 @@ export function isSubscribedStatus(value: string | null | undefined): boolean {
   return typeof value === 'string' && value.trim().toLowerCase() === SUBSCRIBED_STATUS;
 }
 
+/**
+ * The WhatsApp label a contact shows, matched to what the consent ledger and the send gate say. A recorded marketing grant always reads
+ * `subscribed`, even when the stored label is empty. Without a grant, with "Require recorded consent for marketing sends" off, the gate
+ * allows every contact that did not withdraw, so the stored label stays as it is. With it on, a legacy label with no grant (set before the
+ * consent ledger existed; the migration never invents consent) reads as no label. The SQL filter in contact-conditions.ts mirrors this rule.
+ */
+export function shownSubscriptionLabel(
+  label: string | null,
+  grantedOnLedger: boolean,
+  requireConsent: boolean,
+): string | null {
+  if (grantedOnLedger) return SUBSCRIBED_STATUS;
+  if (!requireConsent) return label;
+  return isSubscribedStatus(label) ? null : label;
+}
+
 export type StatusMap = Partial<Record<IntakeChannel, string | null | undefined>>;
 
 export interface IntakePlan {

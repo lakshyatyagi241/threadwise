@@ -42,7 +42,6 @@ export function LockPage({
           {lead}{' '}
           <span
             className={cn(
-              'italic rtl:not-italic',
               tone === 'danger' ? 'text-(--auth-coral)' : 'text-(--auth-link)',
             )}
           >

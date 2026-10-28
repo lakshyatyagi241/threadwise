@@ -248,11 +248,122 @@ describe('DeploymentsPage', () => {
     const all = (id: string) =>
       [...host.querySelectorAll(`[data-testid="${id}"]`)].map((e) => e.textContent ?? '');
     expect(host.textContent).toContain('#823');
-    expect(all('release-description')).toEqual(['Adds the description and raised time.']);
+    // The list stays short: number, title, author and time only; the PR description is not shown.
+    expect(all('release-description')).toEqual([]);
+    expect(host.textContent).not.toContain('Adds the description and raised time.');
     // 08:15 UTC is 13:45 in India, whatever zone the test machine is in; an entry without a time shows none.
     expect(all('release-raised')).toHaveLength(1);
     expect(all('release-raised')[0]).toMatch(/1:45:00/);
     expect(all('release-raised')[0]).toContain('IST');
+  });
+
+  describe('release times, unexplained blanks and missing descriptions', () => {
+    const attempt = (over: Record<string, unknown> = {}) => ({
+      id: '11111111-2222-4333-8444-555555555555',
+      tag: 'abc123def',
+      state: 'ok',
+      step: null,
+      error: null,
+      changes: [{ pr: 900, title: 'A change', author: 'Vedant' }],
+      startedAt: '2026-10-28T05:16:03.000Z',
+      updatedAt: '2026-10-28T05:20:00.000Z',
+      finishedAt: '2026-10-28T05:20:00.000Z',
+      stalled: false,
+      ...over,
+    });
+    const show = async (rows: unknown[]) => {
+      state.releases.mockResolvedValue({
+        generatedAt: '2026-10-28T05:30:00.000Z',
+        live: { tag: 'abc123def', finishedAt: '2026-10-28T05:20:00.000Z' },
+        inProgress: false,
+        rows,
+      });
+      state.fetch.mockResolvedValue(page([]));
+      await mount();
+    };
+
+    it('writes every time in Indian time with the zone, whatever the browser zone is', async () => {
+      await show([attempt()]);
+      // 05:16:03 UTC is 10:46:03 in India (the time on the operator's screen); 05:20 is 10:50; the page clock is 11:00.
+      expect(host.textContent).toMatch(/10:46:03\s?AM IST/);
+      expect(host.textContent).toMatch(/10:50:00\s?AM IST/);
+      expect(host.textContent).toMatch(/11:00:00\s?AM IST/);
+    });
+
+    it('says why a failed attempt with no stored error failed, and why a stalled one is quiet', async () => {
+      await show([
+        attempt({ id: 'a', state: 'failed', error: null }),
+        attempt({ id: 'b', state: 'building', stalled: true, finishedAt: null }),
+      ]);
+      expect(host.textContent).toContain(en('noDetail'));
+      expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
+    });
+
+    it('lists a PR as its number, title, author and time, and never its long description', async () => {
+      const body = `## Summary\n\n- ${'The picker sent one request per ticked channel. '.repeat(14)}`;
+      await show([
+        attempt({
+          changes: [
+            {
+              pr: 901,
+              title: 'Fix the picker',
+              author: 'Lakshya',
+              body,
+              createdAt: '2026-10-28T06:05:26Z',
+            },
+          ],
+        }),
+      ]);
+      const li = host.querySelector('li') as HTMLElement;
+      expect(li.textContent).toContain('#901');
+      expect(li.textContent).toContain('Fix the picker');
+      expect(li.textContent).toContain('Lakshya');
+      expect(li.textContent).toMatch(/11:35:26\s?AM/); // 06:05:26 UTC in India
+      expect(li.textContent).not.toContain('The picker sent one request');
+      expect(li.textContent!.length).toBeLessThan(160); // a short entry, so the column stays small
+    });
+
+    it('lists the first five PRs of a release and folds the rest into "N more"', async () => {
+      const many = Array.from({ length: 7 }, (_, i) => ({
+        pr: 800 + i,
+        title: `Change ${i}`,
+        author: 'Dev',
+      }));
+      await show([attempt({ changes: many })]);
+      const details = host.querySelector('details') as HTMLElement;
+      expect(details.querySelector('summary')!.textContent).toBe(
+        en('releases.moreChanges').replace('{count}', '2'),
+      );
+      expect(details.textContent).toContain('Change 5');
+      expect(details.textContent).toContain('Change 6');
+      expect(details.textContent).not.toContain('Change 4'); // the fifth is listed above the fold
+      expect(host.textContent).toContain('Change 4');
+    });
+
+    it('has no fold when a release carries five PRs or fewer', async () => {
+      await show([attempt()]);
+      expect(host.querySelector('details')).toBeNull();
+    });
+
+    it('warns when the newest releases do not list their pull requests', async () => {
+      const bare = (id: string) => attempt({ id, changes: [] });
+      await show([bare('a'), bare('b'), bare('c')]);
+      expect(host.textContent).toContain(en('releases.noChangesAlert'));
+    });
+
+    it('stays quiet when only some of the newest releases lack changes', async () => {
+      await show([
+        attempt({ id: 'a' }),
+        attempt({ id: 'b', changes: [] }),
+        attempt({ id: 'c', changes: [] }),
+      ]);
+      expect(host.textContent).not.toContain(en('releases.noChangesAlert'));
+    });
+
+    it('stays quiet when there are too few releases to judge', async () => {
+      await show([attempt({ id: 'a', changes: [] }), attempt({ id: 'b', changes: [] })]);
+      expect(host.textContent).not.toContain(en('releases.noChangesAlert'));
+    });
   });
 
   it('lists flow publishes with their state, attempts and error', async () => {
