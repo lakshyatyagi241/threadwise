@@ -60,11 +60,24 @@ export class ConsentPolicyService {
   }
 }
 
-/** SQL predicate on a `contacts` alias: has a recorded marketing grant on the channel. Used only when the switch is ON. */
-export function hasGrantedConsentSql(alias: string, channel = 'whatsapp'): SQL {
-  const a = rawIdentifier(alias);
+/**
+ * SQL predicate: the contact (given as SQL references to its org and id, so any alias or column reference works) has a recorded marketing
+ * grant on the channel. The caller decides whether the switch applies.
+ */
+export function grantedConsentOn(org: SQL, contactId: SQL, channel = 'whatsapp'): SQL {
   return sql`EXISTS (
     SELECT 1 FROM contact_consent_state cs
-    WHERE cs.org_id = ${a}.org_id AND cs.contact_id = ${a}.id AND cs.channel = ${channel}
+    WHERE cs.org_id = ${org} AND cs.contact_id = ${contactId} AND cs.channel = ${channel}
       AND cs.purpose = 'marketing' AND cs.state = 'granted')`;
+}
+
+/** The same predicate for a raw SQL alias such as `c` (validated: a plain identifier, never request text). */
+export function hasGrantedConsentSql(alias: string, channel = 'whatsapp'): SQL {
+  const a = rawIdentifier(alias);
+  return grantedConsentOn(sql.raw(`${a}.org_id`), sql.raw(`${a}.id`), channel);
+}
+
+/** The workspace switch "Require recorded consent for marketing sends" for the org a SQL reference names (off when no settings row). */
+export function requireConsentSql(org: SQL): SQL {
+  return sql`coalesce((SELECT s.require_consent_for_marketing FROM contact_consent_settings s WHERE s.org_id = ${org}), false)`;
 }
