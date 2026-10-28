@@ -220,7 +220,7 @@ export class WizardAudienceService {
     w: Pick<AudienceWhere, 'csvUploadId' | 'csvConsentConfirmed'>,
   ): SQL {
     return w.csvConsentConfirmed && w.csvUploadId !== null
-      ? sql`(${hasGrantedConsentSql('contacts')} OR ${csvContactsWhere(orgId, w.csvUploadId)})`
+      ? sql`(${hasGrantedConsentSql('contacts')} OR ${csvContactsWhere(orgId, w.csvUploadId, true)})`
       : hasGrantedConsentSql('contacts');
   }
 
@@ -232,7 +232,12 @@ export class WizardAudienceService {
     const requireConsent = await this.requiresConsent(orgId);
     const granted = this.grantedSql(orgId, aw);
     // The numbers of a CSV that is not a contact yet have no grant either, unless the uploader confirmed consent for the file.
-    const freshHasNoConsent = requireConsent && !aw.csvConsentConfirmed;
+    // A confirmed file with a consent column leaves out the numbers whose row does not say yes.
+    const freshNoConsent = !requireConsent
+      ? 0
+      : !aw.csvConsentConfirmed || csvUploadId === null
+        ? fresh.total
+        : Math.min(fresh.total, await this.newCsvWithoutConsent(tx, orgId, csvUploadId));
     // The count runs in a savepoint: a cancelled statement aborts only that, and the timeout is undone with it.
     const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
       .rows[0] as {
@@ -272,8 +277,8 @@ export class WizardAudienceService {
         matching: Number(out.totals.matching) + fresh.total,
         optedOut: Number(out.totals.opted_out),
         invalidNumber: Number(out.totals.invalid_number),
-        noConsent: Number(out.totals.no_consent) + (freshHasNoConsent ? fresh.total : 0),
-        recipients: Number(out.totals.recipients) + (freshHasNoConsent ? 0 : fresh.total),
+        noConsent: Number(out.totals.no_consent) + freshNoConsent,
+        recipients: Number(out.totals.recipients) + (fresh.total - freshNoConsent),
         newContacts: fresh.total,
         approximate: false,
         countries: this.countries([...out.byPrefix, ...fresh.byPrefix]),
@@ -294,6 +299,14 @@ export class WizardAudienceService {
         invalidConditions: invalid,
       };
     }
+  }
+
+  /** The upload's valid numbers that are not contacts yet and whose consent cell does not say yes (only a file with a consent column has any). */
+  private async newCsvWithoutConsent(tx: Tx, orgId: number, uploadId: number): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM camp_wizard_csv_rows r
+      WHERE ${csvNewRowsWhere(orgId, uploadId)} AND r.consent_granted = false`);
+    return Number((res.rows[0] as { n: number }).n);
   }
 
   /** The upload's valid numbers that are not contacts yet, with their country prefixes (all of them are deliverable: they passed the E.164 check). */
@@ -332,8 +345,9 @@ export class WizardAudienceService {
     if (!up) return [];
     // With the switch ON these numbers have no consent unless the uploader confirmed it for the file (granted at launch), so they are
     // not messaged and not charged for.
-    if ((await this.requiresConsent(orgId)) && !up.consentConfirmed) return [];
-    const rows = await this.csv.newNumbers(tx, orgId, up.id, 0, limit);
+    const requireConsent = await this.requiresConsent(orgId);
+    if (requireConsent && !up.consentConfirmed) return [];
+    const rows = await this.csv.newNumbers(tx, orgId, up.id, 0, limit, requireConsent);
     return rows.map((r) => r.phone);
   }
 

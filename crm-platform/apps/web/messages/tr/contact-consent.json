@@ -257,7 +257,7 @@
       "smsSummary": "SMS onay sütunu: {granted} satır evet diyor ve SMS onayı olarak kaydedilecek. {notGranted} satır hayır diyor veya boş.",
       "emailSummary": "E-posta onay sütunu: {granted} satır evet diyor ve e-posta onayı olarak kaydedilecek (satırda e-posta adresi de olmalı). {notGranted} satır hayır diyor veya boş.",
       "labelNumbers": "Bu numaralara mesaj göndermek için onayım var",
-      "hintNumbers": "İşaretlenirse, yayını başlattığınızda dosyadaki her numara pazarlamayı kabul etmiş olarak kaydedilir, kanıt olarak dosya adı tutulur. İşaretlenmezse onay kaydedilmez. Abonelikten çıkanlar çıkmış kalır."
+      "hintNumbers": "İşaretlenirse, yayını başlattığınızda dosyadaki her numara pazarlamayı kabul etmiş olarak kaydedilir, kanıt olarak dosya adı tutulur. İşaretlenmezse onay kaydedilmez. Abonelikten çıkanlar çıkmış kalır. Dosyada pazarlama onayı sütunu varsa yalnızca evet diyen satırlar kaydedilir."
     },
     "systemLine": {
       "withdrawn": "Kişi {keyword} yanıtı verdi: pazarlama aboneliğinden çıktı",

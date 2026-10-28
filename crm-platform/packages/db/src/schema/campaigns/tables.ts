@@ -142,6 +142,8 @@ export const campWizardCsvRows = pgTable(
     digits: text('digits'),
     name: text('name'),
     reason: text('reason'),
+    // What the row's marketing-consent cell said: true = yes, false = no / blank / unknown, NULL = the file has no consent column.
+    consentGranted: boolean('consent_granted'),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.uploadId, t.line] }),

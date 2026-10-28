@@ -257,7 +257,7 @@
       "smsSummary": "Colonna del consenso SMS: {granted} righe dicono sì e saranno registrate come consenso SMS. {notGranted} dicono no o sono vuote.",
       "emailSummary": "Colonna del consenso email: {granted} righe dicono sì e saranno registrate come consenso email (la riga deve avere anche un indirizzo email). {notGranted} dicono no o sono vuote.",
       "labelNumbers": "Ho il consenso per scrivere a questi numeri",
-      "hintNumbers": "Selezionata, ogni numero del file viene registrato come consenziente al marketing al lancio della trasmissione, con il nome del file come prova. Non selezionata, non viene registrato alcun consenso. Chi si è disiscritto resta disiscritto."
+      "hintNumbers": "Selezionata, ogni numero del file viene registrato come consenziente al marketing al lancio della trasmissione, con il nome del file come prova. Non selezionata, non viene registrato alcun consenso. Chi si è disiscritto resta disiscritto. Se il file ha una colonna di consenso al marketing, vengono registrate solo le righe che dicono sì."
     },
     "systemLine": {
       "withdrawn": "Il contatto ha risposto {keyword}: disiscritto dal marketing",

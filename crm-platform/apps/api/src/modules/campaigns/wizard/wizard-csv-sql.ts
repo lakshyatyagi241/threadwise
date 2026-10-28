@@ -12,15 +12,23 @@ const digitsOf = (alias: string) => {
   return sql.raw(`regexp_replace(coalesce(${a}.normalized_phone, ${a}.phone, ''), '\\D', '', 'g')`);
 };
 
-/** The valid numbers of one upload, as a `SELECT r.line, r.phone, r.digits, r.name ...` body. */
-const validRows = (orgId: number, uploadId: number): SQL =>
-  sql`FROM camp_wizard_csv_rows r WHERE r.org_id = ${orgId} AND r.upload_id = ${uploadId} AND r.kind = 'valid'`;
+/**
+ * The valid numbers of one upload, as a `SELECT r.line, r.phone, r.digits, r.name ...` body. `consented` keeps only the rows the file
+ * does not say no to: a file with a consent column grants the rows that say yes, a file without one grants every row.
+ */
+const validRows = (orgId: number, uploadId: number, consented = false): SQL =>
+  sql`FROM camp_wizard_csv_rows r WHERE r.org_id = ${orgId} AND r.upload_id = ${uploadId} AND r.kind = 'valid'${
+    consented ? sql` AND r.consent_granted IS NOT FALSE` : sql``
+  }`;
 
-/** A condition over `contacts` (the audience's table): the contact owns one of the upload's valid numbers. */
-export function csvContactsWhere(orgId: number, uploadId: number): SQL {
-  return sql`(${digitsOf('contacts')} IN (SELECT r.digits ${validRows(orgId, uploadId)})
+/**
+ * A condition over `contacts` (the audience's table): the contact owns one of the upload's valid numbers. With `consented`, only the
+ * numbers the file gives consent for (see `validRows`).
+ */
+export function csvContactsWhere(orgId: number, uploadId: number, consented = false): SQL {
+  return sql`(${digitsOf('contacts')} IN (SELECT r.digits ${validRows(orgId, uploadId, consented)})
     OR contacts.id IN (SELECT ci.contact_id FROM contact_identities ci
-        WHERE ci.org_id = ${orgId} AND ci.kind = 'phone' AND ci.value IN (SELECT r.phone ${validRows(orgId, uploadId)})))`;
+        WHERE ci.org_id = ${orgId} AND ci.kind = 'phone' AND ci.value IN (SELECT r.phone ${validRows(orgId, uploadId, consented)})))`;
 }
 
 /**
@@ -36,7 +44,9 @@ export function csvMatchedLines(orgId: number, uploadId: number, contactConditio
 }
 
 /** The valid numbers no contact owns (archived ones count as owned: they are neither messaged nor created again). */
-export function csvNewRowsWhere(orgId: number, uploadId: number): SQL {
-  return sql`r.org_id = ${orgId} AND r.upload_id = ${uploadId} AND r.kind = 'valid'
+export function csvNewRowsWhere(orgId: number, uploadId: number, consented = false): SQL {
+  return sql`r.org_id = ${orgId} AND r.upload_id = ${uploadId} AND r.kind = 'valid'${
+    consented ? sql` AND r.consent_granted IS NOT FALSE` : sql``
+  }
     AND r.line NOT IN (${csvMatchedLines(orgId, uploadId, sql`true`)})`;
 }

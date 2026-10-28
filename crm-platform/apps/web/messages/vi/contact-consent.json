@@ -257,7 +257,7 @@
       "smsSummary": "Cột đồng ý SMS: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý SMS. {notGranted} dòng ghi không hoặc để trống.",
       "emailSummary": "Cột đồng ý email: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý email (dòng cũng cần có địa chỉ email). {notGranted} dòng ghi không hoặc để trống.",
       "labelNumbers": "Tôi có sự đồng ý để nhắn tin cho các số này",
-      "hintNumbers": "Khi chọn, mỗi số trong tệp được ghi nhận là đã đồng ý nhận tiếp thị khi bạn khởi chạy chiến dịch, với tên tệp làm bằng chứng. Khi không chọn, không ghi nhận sự đồng ý nào. Người đã hủy đăng ký vẫn ở trạng thái hủy."
+      "hintNumbers": "Khi chọn, mỗi số trong tệp được ghi nhận là đã đồng ý nhận tiếp thị khi bạn khởi chạy chiến dịch, với tên tệp làm bằng chứng. Khi không chọn, không ghi nhận sự đồng ý nào. Người đã hủy đăng ký vẫn ở trạng thái hủy. Nếu tệp có cột đồng ý tiếp thị, chỉ những dòng ghi có mới được ghi nhận."
     },
     "systemLine": {
       "withdrawn": "Liên hệ đã trả lời {keyword}: đã hủy đăng ký tiếp thị",

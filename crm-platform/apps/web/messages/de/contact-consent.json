@@ -257,7 +257,7 @@
       "smsSummary": "SMS-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als SMS-Einwilligung erfasst. {notGranted} sagen Nein oder sind leer.",
       "emailSummary": "E-Mail-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als E-Mail-Einwilligung erfasst (die Zeile braucht auch eine E-Mail-Adresse). {notGranted} sagen Nein oder sind leer.",
       "labelNumbers": "Ich habe die Einwilligung, diese Nummern anzuschreiben",
-      "hintNumbers": "Angehakt wird beim Start des Versands jede Nummer der Datei als einverstanden mit Marketing erfasst, mit dem Dateinamen als Nachweis. Nicht angehakt wird keine Einwilligung erfasst. Wer sich abgemeldet hat, bleibt abgemeldet."
+      "hintNumbers": "Angehakt wird beim Start des Versands jede Nummer der Datei als einverstanden mit Marketing erfasst, mit dem Dateinamen als Nachweis. Nicht angehakt wird keine Einwilligung erfasst. Wer sich abgemeldet hat, bleibt abgemeldet. Hat die Datei eine Spalte für die Marketing-Einwilligung, werden nur die Zeilen mit Ja erfasst."
     },
     "systemLine": {
       "withdrawn": "Kontakt hat {keyword} geantwortet: Marketing abbestellt",

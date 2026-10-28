@@ -257,7 +257,7 @@
       "smsSummary": "Kolom persetujuan SMS: {granted} baris berisi ya dan akan dicatat sebagai persetujuan SMS. {notGranted} berisi tidak atau kosong.",
       "emailSummary": "Kolom persetujuan email: {granted} baris berisi ya dan akan dicatat sebagai persetujuan email (baris juga harus punya alamat email). {notGranted} berisi tidak atau kosong.",
       "labelNumbers": "Saya memiliki persetujuan untuk mengirim pesan ke nomor-nomor ini",
-      "hintNumbers": "Jika dicentang, setiap nomor dalam file dicatat telah menyetujui pemasaran saat siaran diluncurkan, dengan nama file sebagai bukti. Jika tidak, tidak ada persetujuan yang dicatat. Orang yang berhenti berlangganan tetap berhenti."
+      "hintNumbers": "Jika dicentang, setiap nomor dalam file dicatat telah menyetujui pemasaran saat siaran diluncurkan, dengan nama file sebagai bukti. Jika tidak, tidak ada persetujuan yang dicatat. Orang yang berhenti berlangganan tetap berhenti. Jika file memiliki kolom persetujuan pemasaran, hanya baris yang berisi ya yang dicatat."
     },
     "systemLine": {
       "withdrawn": "Kontak membalas {keyword}: berhenti berlangganan pemasaran",
