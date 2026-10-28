@@ -431,9 +431,12 @@ export class InstallationsService {
       const row = await this.lock(tx, ctx.orgId, uuid);
       if (row.status === 'killed') throw this.killed();
       const recipe = readRecipe(row.recipe);
-      const existing = this.relay.openCredentials(row.credentialsEnc);
       const touchesCredentials =
         input.credentials !== undefined || (input.clearCredentials?.length ?? 0) > 0;
+      // Only a write to the credentials merges against what is stored, so only it needs the stored blob to open (#1269).
+      const existing = touchesCredentials
+        ? this.relay.openStoredCredentials(row.credentialsEnc, row.uuid)
+        : {};
       const merged = touchesCredentials
         ? mergeCredentials(recipe, existing, input.credentials ?? {}, input.clearCredentials ?? [])
         : null;
@@ -658,7 +661,7 @@ export class InstallationsService {
     const started = Date.now();
     const result = await this.registry.get(recipe.connector.type).test({
       recipe,
-      credentials: this.relay.openCredentials(row.credentialsEnc),
+      credentials: this.relay.openStoredCredentials(row.credentialsEnc, row.uuid),
       config: row.config,
     });
     const checkedAt = new Date();

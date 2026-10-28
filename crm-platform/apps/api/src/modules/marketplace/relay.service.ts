@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -59,6 +59,8 @@ export interface HookCall {
  */
 @Injectable()
 export class RelayService {
+  private readonly logger = new Logger(RelayService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: InstallationsRepository,
@@ -261,6 +263,28 @@ export class RelayService {
       return JSON.parse(this.crypto.decrypt(enc)) as Record<string, string>;
     } catch {
       return {};
+    }
+  }
+
+  /**
+   * The opened credential fields, for a write or a test. A blob that is stored but cannot be opened is an error: an empty set would be
+   * merged with the admin's one field and the rest would be deleted without a word (#1269). Nothing is written in that case.
+   */
+  openStoredCredentials(enc: string | null, installationUuid: string): Record<string, string> {
+    if (!enc) return {};
+    try {
+      return JSON.parse(this.crypto.decrypt(enc)) as Record<string, string>;
+    } catch {
+      this.logger.warn(
+        { installation: installationUuid },
+        'stored credentials of an installation cannot be opened',
+      );
+      throw new AppError(
+        ERROR_CODES.CONFLICT,
+        'The saved credentials for this app cannot be read. Enter all of them again before changing any.',
+        HttpStatus.CONFLICT,
+        [{ path: 'credentials', message: 'unreadable' }],
+      );
     }
   }
 
