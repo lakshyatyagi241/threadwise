@@ -17,7 +17,6 @@ import {
   type SwitchWorkspaceRequest,
 } from '@crm/contracts';
 import { Public, ActorKinds } from '../../common/decorators';
-import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AccountService } from './account/account.service';
 import { SecurityPolicyService } from './platform/security-policy.service';

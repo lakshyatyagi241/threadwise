@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { verify } from '@node-rs/argon2';
 import { sql } from 'drizzle-orm';
-import type { LoginResponse, TokenPair } from '@crm/contracts';
+import type { TokenPair } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
 import { LoginService, type ClientMeta } from './flows/login.service';
