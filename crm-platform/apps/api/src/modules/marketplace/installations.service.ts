@@ -270,9 +270,16 @@ export class InstallationsService {
       });
     }
 
+    // The cap is counted again inside the insert transaction, under the workspace's limit lock: two installs of different apps at once
+    // both pass the early check above on the same count, and only a count taken after the lock is held sees the other one commit.
+    const cap = await this.entitlements.limit(ctx.orgId, INSTALLED_APPS_LIMIT);
+
     let id: number;
     try {
       id = await this.db.tx(async (tx) => {
+        await this.entitlements.lockLimit(tx, ctx.orgId, INSTALLED_APPS_LIMIT);
+        if (cap > 0 && (await this.browse.installedCount(tx, ctx.orgId)) >= cap)
+          throw this.locked('limit_reached', INSTALLED_APPS_LIMIT);
         const installationId = await this.repo.insert(tx, ctx.orgId, {
           uuid: installationUuid,
           appId: target.appId,

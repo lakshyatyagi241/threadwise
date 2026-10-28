@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { AddonGrants } from '@crm/contracts';
+import type { AddonGrants, PlanLimitKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   PlanEntitlementService,
@@ -96,5 +97,10 @@ export class AddonEntitlementService {
     const declared = (await this.registry.planLimits()).find((l) => l.key === key);
     const addons = plan.platformOwned ? [] : await this.activeGrants(orgId);
     return mergeLimit(plan, key, addons, declared?.default ?? null);
+  }
+
+  /** Serialises count-then-insert against a cap for the rest of `tx` (see PlanEntitlementService.lockLimit). */
+  lockLimit(tx: Tx, orgId: number, key: PlanLimitKey): Promise<void> {
+    return this.plans.lockLimit(tx, orgId, key);
   }
 }
