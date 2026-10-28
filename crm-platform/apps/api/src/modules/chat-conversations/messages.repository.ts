@@ -52,6 +52,7 @@ export interface MessageRow {
   isTranslated: boolean;
   translatedBody: string | null;
   detectedLanguage: string | null;
+  translationStatus: string | null;
   starred: boolean;
   pinned: boolean;
   editedAt: Date | null;
@@ -71,7 +72,7 @@ const SELECT = sql`
   m.direction, m.kind, m.sender_kind, m.sender_user_id, u.uuid AS sender_user_uuid, u.full_name AS sender_name, m.body,
   m.media_key, m.media_mime, m.media_size, m.media_name, m.media_sha256, m.latitude, m.longitude, m.status, m.failure_code, m.failure_reason,
   m.client_message_id, m.provider_message_id, m.reply_to_message_uuid, m.reaction, m.is_translated, m.translated_body,
-  m.detected_language, m.starred, m.pinned, m.edited_at, m.deleted_at, m.template_id, wt.uuid AS template_uuid, m.meta, m.provider_ts, m.sent_at,
+  m.detected_language, m.translation_status, m.starred, m.pinned, m.edited_at, m.deleted_at, m.template_id, wt.uuid AS template_uuid, m.meta, m.provider_ts, m.sent_at,
   m.delivered_at, m.read_at`;
 
 const FROM = sql`
@@ -112,6 +113,7 @@ const toRow = (r: Raw): MessageRow => ({
   isTranslated: r.is_translated === true,
   translatedBody: (r.translated_body as string | null) ?? null,
   detectedLanguage: (r.detected_language as string | null) ?? null,
+  translationStatus: (r.translation_status as string | null) ?? null,
   starred: r.starred === true,
   pinned: r.pinned === true,
   editedAt: date(r.edited_at),

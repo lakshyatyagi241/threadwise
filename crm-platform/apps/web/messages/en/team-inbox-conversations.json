@@ -219,6 +219,7 @@
       "referral": "Came from an ad or link",
       "sentIn": "Sent in {lang}. Show the text you wrote",
       "translatedFrom": "Translated from {lang}. Show the original",
+      "translationFailed": "Sent untranslated. The translation failed, so your text went out as you typed it.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaction {emoji}",

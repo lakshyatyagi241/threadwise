@@ -219,6 +219,7 @@
       "referral": "Berasal dari iklan atau tautan",
       "sentIn": "Dikirim dalam {lang}. Tampilkan teks yang Anda tulis",
       "translatedFrom": "Diterjemahkan dari {lang}. Tampilkan yang asli",
+      "translationFailed": "Dikirim tanpa terjemahan. Terjemahan gagal, jadi teks Anda dikirim sesuai yang Anda tulis.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaksi {emoji}",

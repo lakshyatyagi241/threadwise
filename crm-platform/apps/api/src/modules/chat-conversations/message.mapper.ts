@@ -394,6 +394,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     isTranslated: row.isTranslated,
     translatedBody: row.translatedBody,
     detectedLanguage: row.detectedLanguage,
+    translationStatus: row.translationStatus === 'skipped_failed' ? 'skipped_failed' : null,
     starred: row.starred,
     pinned: row.pinned,
     editedAt: iso(row.editedAt),

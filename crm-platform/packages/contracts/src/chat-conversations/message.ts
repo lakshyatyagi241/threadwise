@@ -335,6 +335,8 @@ export const messageResponseSchema = z.object({
   isTranslated: z.boolean(),
   translatedBody: z.string().nullable(),
   detectedLanguage: z.string().nullable(),
+  /** Set when translation was wanted but failed: the agent's text went out as typed, so the thread shows a notice (#1278). */
+  translationStatus: z.enum(['skipped_failed']).nullable().optional(),
   starred: z.boolean(),
   pinned: z.boolean(),
   editedAt: z.iso.datetime().nullable(),

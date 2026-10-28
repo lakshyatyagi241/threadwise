@@ -16,4 +16,6 @@ export interface OutboundOutcome {
   /** The language delivered, set only when translated. */
   language: string | null;
   isTranslated: boolean;
+  /** Translation was wanted and did not happen: the text is sent as typed and the thread says so (#1278). */
+  failed: boolean;
 }
