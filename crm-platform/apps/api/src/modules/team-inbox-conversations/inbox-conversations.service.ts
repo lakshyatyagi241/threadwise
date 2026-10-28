@@ -36,6 +36,7 @@ import {
   type ConversationsFacade,
 } from '../chat-conversations';
 import { ContactsRepository } from '../crm';
+import { shownSubscriptionLabel } from '../contact-consent/consent-intake.rules';
 import { ConversationEventsRepository } from './conversation-events.repository';
 import {
   toContactSummary,
@@ -490,7 +491,11 @@ export class InboxConversationsService {
         status: contact.status,
         source: contact.source,
         isUnsubscribed: contact.isUnsubscribed,
-        whatsappSubscriptionStatus: contact.whatsappSubscriptionStatus,
+        whatsappSubscriptionStatus: shownSubscriptionLabel(
+          contact.whatsappSubscriptionStatus,
+          contact.whatsappMarketingGranted,
+          contact.whatsappRequiresConsent,
+        ),
         leadScore: contact.leadScore,
         leadScoreSource:
           contact.leadScoreSource === 'ai' ? 'ai' : contact.leadScore === null ? null : 'manual',
