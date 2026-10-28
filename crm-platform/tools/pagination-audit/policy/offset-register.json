@@ -105,6 +105,13 @@
       "status": "accepted",
       "reason": "WhatsApp customer profiles: numbered pages, page capped at 10,000.",
       "owner": "platform-performance"
+    },
+    {
+      "file": "apps/api/src/modules/products-services/products-services.repository.ts",
+      "sites": 1,
+      "status": "accepted",
+      "reason": "Products and services list: numbered pages (the screen needs a page number). Page size is capped at 200 and page at 100,000 by the contract. ORDER BY lower(name), id is served by idx_sales_items_list (org_id, lower(name), id), so a deep page costs more with its depth, not with the table size. No catalogue-size cap exists in code, so the cost of a very deep page is not bounded by the table. Follow-up: keyset (cursor) paging behind the same screen, tracked separately; this entry is removed then.",
+      "owner": "platform-performance"
     }
   ]
 }
