@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { isLegalSlug, legalPagePublicSchema, publicSiteInfoSchema } from '@crm/contracts';
 import { cmsPublic } from '@/features/marketing-site-cms/public/api';
+import { STATIC_LEGAL, StaticLegal } from '@/features/marketing-site-cms/geta/legal';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -10,14 +11,22 @@ const load = async (slug: string) =>
   isLegalSlug(slug) ? cmsPublic(`/legal/${slug}`, legalPagePublicSchema) : null;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const page = await load((await params).slug);
-  return page ? { title: page.title, description: page.subtitle ?? undefined } : {};
+  const { slug } = await params;
+  const page = await load(slug);
+  if (page) return { title: page.title, description: page.subtitle ?? undefined };
+  const doc = STATIC_LEGAL[slug];
+  return doc ? { title: doc.title, description: doc.description } : {};
 }
 
 /** A legal document (TW-CMS-013): hero, contents sidebar and numbered sections whose anchor is `#sec-<n>`. */
 export default async function LegalPage({ params }: Props) {
-  const page = await load((await params).slug);
-  if (!page) notFound();
+  const { slug } = await params;
+  const page = await load(slug);
+  // A document written in the admin editor wins; otherwise the text carried over from geta.ai shows, so the footer links never 404.
+  if (!page) {
+    if (STATIC_LEGAL[slug]) return <StaticLegal slug={slug} />;
+    notFound();
+  }
   const t = await getTranslations('marketing-site-cms.site');
   const info = await cmsPublic('/site-info', publicSiteInfoSchema);
   const email = info?.emailSupport ?? '';

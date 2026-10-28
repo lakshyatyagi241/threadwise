@@ -215,6 +215,8 @@ export interface SitemapInput {
   posts: ReadonlyArray<{ slug: string; lastModified: string; featured?: boolean }>;
   categories: ReadonlyArray<{ slug: string }>;
   legal?: ReadonlyArray<{ slug: string }>;
+  /** Other public pages (the product and solution pages of the marketing site). */
+  pages?: ReadonlyArray<{ loc: string; priority?: string; freq?: string }>;
 }
 
 /** Static pages first, then categories, then live posts (newest first, caller-ordered): TW-SET-028 rules 1 to 3. */
@@ -224,6 +226,11 @@ export function buildSitemapXml(i: SitemapInput): string {
     { loc: '/', priority: '1.0', freq: 'daily' },
     { loc: '/blog', priority: '0.9', freq: 'daily' },
     { loc: '/contact', priority: '0.5', freq: 'monthly' },
+    ...(i.pages ?? []).map((p) => ({
+      loc: p.loc,
+      priority: p.priority ?? '0.7',
+      freq: p.freq ?? 'monthly',
+    })),
     ...(i.legal ?? []).map((l) => ({ loc: `/legal/${l.slug}`, priority: '0.4', freq: 'monthly' })),
     ...i.categories.map((c) => ({
       loc: `/blog?category=${encodeURIComponent(c.slug)}`,

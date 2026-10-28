@@ -1,0 +1,372 @@
+/*
+ * "Why one platform" product illustration (one-tool.tsx). Every size is in container units of the stage, so the picture
+ * scales as one piece from a phone to a wide screen and can never overflow its column.
+ */
+.ot-vis {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  border-radius: 28px;
+  border: 1px solid var(--gx-line);
+  background:
+    radial-gradient(46% 40% at 8% 94%, rgba(45, 212, 191, 0.12), transparent 70%),
+    radial-gradient(40% 34% at 94% 10%, rgba(245, 224, 138, 0.28), transparent 70%),
+    radial-gradient(50% 44% at 50% 50%, rgba(59, 47, 224, 0.05), transparent 72%), #f8fafc;
+  overflow: hidden;
+}
+.ov {
+  position: absolute;
+  inset: 0;
+  font-size: 2.7cqw;
+  line-height: 1.25;
+  color: var(--gx-ink);
+}
+.ov-a {
+  position: absolute;
+  animation: ov-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.ov-rec-a {
+  left: 5%;
+  top: 16%;
+  width: 60%;
+  height: 76%;
+}
+.ov-stat-a {
+  left: 49%;
+  top: 5%;
+  width: 46%;
+  height: 34%;
+  z-index: 2;
+  animation-delay: 0.25s;
+}
+.ov-gauge-a {
+  left: 62%;
+  top: 63%;
+  width: 34%;
+  height: 30%;
+  z-index: 2;
+  animation-delay: 0.45s;
+}
+.ov-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4.4cqw;
+  background: #fff;
+  box-shadow:
+    0 0.4cqw 1.2cqw rgba(15, 23, 42, 0.06),
+    0 2.4cqw 5cqw rgba(15, 23, 42, 0.1);
+}
+.ov-stat,
+.ov-gauge {
+  animation: ov-bob 7s ease-in-out infinite;
+}
+.ov-gauge {
+  animation-duration: 8.5s;
+  animation-delay: -3s;
+}
+
+/* record card */
+.ov-rec {
+  padding: 5.2cqw 5cqw 5cqw;
+  display: flex;
+  flex-direction: column;
+}
+.ov-title {
+  font-size: 3.5cqw;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.ov-who {
+  display: flex;
+  align-items: center;
+  gap: 2.6cqw;
+  margin-top: 3.2cqw;
+}
+.ov-face {
+  flex: none;
+  width: 9.4cqw;
+  height: 9.4cqw;
+}
+.ov-who b {
+  display: block;
+  font-size: 3.5cqw;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ov-who i {
+  display: block;
+  margin-top: 0.4cqw;
+  font-style: normal;
+  font-size: 2.5cqw;
+  color: var(--gx-mute);
+  white-space: nowrap;
+}
+.ov-rule {
+  height: 1px;
+  margin: 3.6cqw 0 3cqw;
+  background: var(--gx-line);
+}
+.ov-k {
+  font-size: 2.3cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gx-mute);
+}
+.ov-chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5cqw;
+  margin-top: 2cqw;
+}
+.ov-chip {
+  display: flex;
+  align-items: center;
+  gap: 1.1cqw;
+  min-width: 0;
+  padding: 1.5cqw 1.8cqw;
+  border-radius: 999px;
+  border: 1px solid var(--gx-line);
+  background: #f8fafc;
+  font-size: 2.45cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: ov-join 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.7s + var(--i) * 0.28s);
+}
+.ov-chip .gx-icon {
+  flex: none;
+  width: 2.9cqw;
+  height: 2.9cqw;
+  color: var(--gx-mute);
+}
+.ov-chip em {
+  display: grid;
+  place-items: center;
+  flex: none;
+  margin-left: auto;
+  width: 3.4cqw;
+  height: 3.4cqw;
+  border-radius: 50%;
+  background: var(--gx-blue);
+  color: #fff;
+  animation: ov-tick 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: calc(0.95s + var(--i) * 0.28s);
+}
+.ov-chip em .gx-icon {
+  width: 2.1cqw;
+  height: 2.1cqw;
+  color: #fff;
+  stroke-width: 2.6;
+}
+.ov-btn {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 1.4cqw;
+  margin-top: auto;
+  padding: 2.1cqw 3.4cqw;
+  border-radius: 999px;
+  background: var(--gx-blue);
+  color: #fff;
+  font-size: 2.7cqw;
+  font-weight: 600;
+}
+.ov-btn .gx-icon {
+  width: 3cqw;
+  height: 3cqw;
+}
+
+/* dark chart card */
+.ov-stat {
+  padding: 3.4cqw 3.6cqw;
+  background: var(--gx-navy);
+  color: #fff;
+  box-shadow: 0 2.4cqw 5cqw rgba(8, 13, 34, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+.ov-sk {
+  font-size: 2.4cqw;
+  color: #94a3b8;
+}
+.ov-sn {
+  margin-top: 0.6cqw;
+  font-size: 4.4cqw;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.ov-bars {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  margin-top: 1.6cqw;
+}
+.ov-bars span {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 3.3cqw;
+}
+.ov-bars u {
+  display: block;
+  width: 100%;
+  height: var(--h);
+  min-height: 1cqw;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2fe0c2 0%, rgba(47, 224, 194, 0.08) 100%);
+  transform-origin: bottom;
+  animation: ov-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(0.5s + var(--i) * 0.08s);
+}
+.ov-bars i {
+  margin-top: 1cqw;
+  font-style: normal;
+  font-size: 2.1cqw;
+  color: #cbd5e1;
+}
+.ov-tag {
+  position: absolute;
+  top: 2.4cqw;
+  right: -1.6cqw;
+  padding: 1.1cqw 2.2cqw;
+  border-radius: 1.2cqw;
+  background: #f5e08a;
+  color: #2b2410;
+  font-size: 2.9cqw;
+  font-weight: 700;
+  transform: rotate(8deg);
+  box-shadow: 0 1cqw 2cqw rgba(8, 13, 34, 0.25);
+  animation: ov-tag 5s ease-in-out infinite;
+}
+
+/* gauge card */
+.ov-gauge {
+  overflow: hidden;
+}
+.ov-arc {
+  position: absolute;
+  left: 50%;
+  top: 14%;
+  width: 62%;
+  transform: translateX(-50%);
+  overflow: visible;
+}
+.ov-arc path {
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+.ov-arc-t {
+  stroke: #e9ebf7;
+}
+.ov-arc-p {
+  stroke: url(#ov-g);
+  stroke-dasharray: 125.66;
+  stroke-dashoffset: 10;
+  animation: ov-arc 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+.ov-bolt {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  display: grid;
+  place-items: center;
+  width: 5.6cqw;
+  height: 5.6cqw;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--gx-blue);
+  color: #fff;
+}
+.ov-bolt .gx-icon {
+  width: 3cqw;
+  height: 3cqw;
+}
+.ov-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2cqw 3.2cqw;
+  background: #f5e08a;
+  color: #2b2410;
+  font-size: 2.4cqw;
+  font-weight: 500;
+}
+.ov-strip b {
+  font-size: 3.2cqw;
+  font-weight: 700;
+}
+
+@keyframes ov-in {
+  from {
+    opacity: 0;
+    transform: translateY(3cqw) scale(0.97);
+  }
+}
+@keyframes ov-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.3cqw);
+  }
+}
+@keyframes ov-tag {
+  0%,
+  100% {
+    transform: rotate(8deg);
+  }
+  50% {
+    transform: rotate(4deg) translateY(-0.4cqw);
+  }
+}
+@keyframes ov-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes ov-arc {
+  from {
+    stroke-dashoffset: 125.66;
+  }
+}
+@keyframes ov-join {
+  from {
+    opacity: 0.35;
+    transform: translateX(-2cqw);
+    background: #fff;
+  }
+}
+@keyframes ov-tick {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ov-a,
+  .ov-card,
+  .ov-chip,
+  .ov-chip em,
+  .ov-bars u,
+  .ov-arc-p,
+  .ov-tag {
+    animation: none;
+  }
+}

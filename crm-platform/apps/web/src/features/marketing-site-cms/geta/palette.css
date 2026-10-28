@@ -1,0 +1,690 @@
+/*
+ * The look of the public site, loaded last. It is deliberately plain, like the sites it is measured against (Chatbase,
+ * HubSpot, Intercom, Stripe): white and one cool grey for the page, near-black navy for type and the dark sections, and a
+ * single accent, the brand blue, for buttons, links and the active state. No tints per section, no rainbow icons. Green and
+ * amber appear only where they mean something (success, a warning) inside the drawn app screens.
+ */
+.gx-site {
+  --gx-ink: #0b1020;
+  --gx-text: #475569;
+  --gx-mute: #64748b;
+  --gx-line: #e2e8f0;
+  --gx-soft: #f8fafc;
+  --gx-soft2: #f1f5f9;
+  --gx-navy: linear-gradient(160deg, #080d22 0%, #0c1238 62%, #141a6b 135%);
+  --gx-radius: 14px;
+}
+
+/* ---------- type ---------- */
+.gx-site .gx-h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+.gx-site .gx-h2 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.gx-site .gx-eyebrow {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gx-blue);
+  gap: 0;
+}
+.gx-site .gx-eyebrow::before,
+.gx-site .gx-eyebrow::after {
+  display: none;
+}
+.gx-site .gx-lead {
+  color: var(--gx-text);
+}
+
+/* ---------- buttons: solid brand blue and a quiet outline, sentence case ---------- */
+.gx-site .gx-btn {
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.gx-site .gx-btn-sm {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+.gx-site .gx-btn-primary,
+.gx-site .gx-bar-end .gx-btn-primary {
+  background: var(--gx-blue);
+  color: #fff !important;
+  box-shadow: 0 1px 2px rgba(11, 16, 32, 0.12);
+}
+.gx-site .gx-btn-primary:hover {
+  background: #2610b4;
+  box-shadow: 0 6px 16px rgba(50, 20, 219, 0.25);
+  transform: none;
+}
+.gx-site .gx-btn-ghost {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  color: var(--gx-ink) !important;
+}
+.gx-site .gx-btn-ghost:hover {
+  background: var(--gx-soft);
+  border-color: #94a3b8;
+  color: var(--gx-ink) !important;
+}
+
+/* ---------- sections: white and one cool grey, nothing else ---------- */
+.gx-site .gx-sec {
+  padding: 88px 0;
+}
+.gx-site .gx-sec-soft,
+.gx-site .gx-sec-gray,
+.gx-site .gx-sec-sky,
+.gx-site .gx-sec-cream,
+.gx-site .gx-sec-blush,
+.gx-site .gx-sec-sun {
+  background: var(--gx-soft);
+}
+.gx-site .gx-sec-head {
+  margin-bottom: 44px;
+}
+
+/* ---------- hero: plain white ---------- */
+.gx-site .gx-hero {
+  background: #fff;
+}
+.gx-site .gx-hero::before {
+  display: none;
+}
+
+/* ---------- cards: white, one hairline, no lift ---------- */
+.gx-site .gx-card {
+  background: #fff;
+  border: 1px solid var(--gx-line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(11, 16, 32, 0.04);
+}
+.gx-site .gx-sec-soft .gx-card,
+.gx-site .gx-sec-gray .gx-card {
+  border-color: var(--gx-line);
+  box-shadow: 0 1px 2px rgba(11, 16, 32, 0.04);
+}
+.gx-site a.gx-card:hover,
+.gx-site .gx-card:hover {
+  transform: none;
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(11, 16, 32, 0.07);
+}
+.gx-site .gx-ic,
+.gx-site .gx-ic.gx-ic-green {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--gx-soft2);
+  color: var(--gx-blue);
+  border: 1px solid var(--gx-line);
+  margin-bottom: 16px;
+}
+.gx-site .gx-ic .gx-icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ---------- hero artwork: one hue ---------- */
+.gx-site .ha {
+  border-radius: 20px;
+  border: 1px solid var(--gx-line);
+  background: linear-gradient(180deg, #fff 0%, var(--gx-soft) 100%);
+  box-shadow: 0 24px 60px rgba(11, 16, 32, 0.08);
+}
+.gx-site .ha::before {
+  background-image: radial-gradient(rgba(11, 16, 32, 0.1) 1px, transparent 1px);
+}
+.gx-site .ha-rail {
+  stroke: #e2e8f0;
+}
+.gx-site .ha-port {
+  stroke: #cbd5e1;
+}
+.gx-site .ha-c {
+  border: 1px solid var(--gx-line);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(11, 16, 32, 0.1);
+}
+.gx-site .ha-av,
+.gx-site .ha-role {
+  background: var(--gx-soft2);
+  color: var(--gx-ink);
+}
+.gx-site .ha-s > div {
+  border: 1px solid var(--gx-line);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(11, 16, 32, 0.05);
+}
+.gx-site .ha-s .ic,
+.gx-site .ha-s:nth-child(n) .ic {
+  background: var(--gx-soft2);
+  color: var(--gx-blue);
+  border-radius: 8px;
+}
+.gx-site .ha-n {
+  background: var(--gx-ink);
+  color: #fff;
+  border-color: #fff;
+}
+.gx-site .ha-s.now > div {
+  border-color: var(--gx-blue);
+  box-shadow:
+    0 0 0 3px rgba(50, 20, 219, 0.12),
+    0 6px 18px rgba(11, 16, 32, 0.08);
+}
+.gx-site .ha-s.now .ha-n {
+  background: var(--gx-blue);
+}
+.gx-site .ha-live {
+  background: var(--gx-soft2);
+  color: var(--gx-ink);
+}
+.gx-site .ha-live.done {
+  background: #ecfdf3;
+  color: #067647;
+}
+.gx-site .ha-tabs button {
+  border-radius: 8px;
+  font-weight: 600;
+  background: #fff;
+  border-color: var(--gx-line);
+}
+.gx-site .ha-tabs button:hover {
+  border-color: #94a3b8;
+}
+
+/* ---------- the feature grid and module windows ---------- */
+.gx-site .bt-c {
+  border-radius: 24px;
+  background: #fafbfd;
+}
+.gx-site .md-tabs button {
+  border-radius: 8px;
+  font-weight: 600;
+}
+.gx-site .md-win {
+  border-radius: 14px;
+}
+
+/* ---------- testimonials: white, with one dark feature card ---------- */
+.gx-site .tr-card {
+  background: #fff;
+  border: 1px solid var(--gx-line);
+  border-radius: 16px;
+}
+.gx-site .tr-card.feat {
+  background: var(--gx-navy);
+  border-color: transparent;
+}
+.gx-site .tr-tag {
+  background: var(--gx-soft2);
+  color: var(--gx-ink);
+  border-radius: 6px;
+  letter-spacing: 0.06em;
+}
+.gx-site .tr-card.feat .tr-tag {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+}
+
+/* ---------- the dark pieces: one navy, one soft blue glow ---------- */
+.gx-site .gx-band {
+  border-radius: 24px;
+  background:
+    radial-gradient(50% 90% at 88% 0%, rgba(80, 90, 255, 0.4) 0%, rgba(80, 90, 255, 0) 70%),
+    linear-gradient(160deg, #080d22 0%, #0c1238 62%, #141a6b 135%);
+}
+.gx-site .gx-band .gx-btn-white {
+  background: #fff;
+  color: var(--gx-ink) !important;
+}
+.gx-site .gx-band .gx-btn-white:hover {
+  background: #e2e8f0;
+  color: var(--gx-ink) !important;
+}
+.gx-site .gx-band .gx-btn-line {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff !important;
+}
+.gx-site .gx-band .gx-btn-line:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+}
+.gx-site .gx-statcard {
+  border-radius: 20px;
+  background:
+    radial-gradient(60% 45% at 100% 0%, rgba(80, 90, 255, 0.35) 0%, rgba(80, 90, 255, 0) 70%),
+    linear-gradient(160deg, #080d22 0%, #0c1238 62%, #141a6b 135%);
+  justify-content: flex-start;
+}
+.gx-site .gx-footer {
+  background:
+    radial-gradient(55% 60% at 90% 0%, rgba(80, 90, 255, 0.25) 0%, rgba(80, 90, 255, 0) 70%),
+    linear-gradient(180deg, #080d22 0%, #0c1238 100%);
+}
+
+/* plan cards: names and what is included, no amounts, one button */
+.pc-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+@media (min-width: 900px) {
+  .pc-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.pc {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  border: 1px solid var(--gx-line);
+  border-radius: 16px;
+  background: #fff;
+  text-align: left;
+}
+.pc.hl {
+  background: var(--gx-navy);
+  border-color: transparent;
+  color: #cbd5e1;
+  box-shadow: 0 24px 60px rgba(11, 16, 32, 0.25);
+}
+.pc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pc h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: -0.02em;
+  color: var(--gx-ink);
+}
+.pc.hl h3 {
+  color: #fff;
+}
+.pc-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.pc-sub {
+  margin: 0;
+  min-height: 3em;
+  color: var(--gx-text);
+}
+.pc.hl .pc-sub {
+  color: #cbd5e1;
+}
+.pc-cta {
+  width: 100%;
+  justify-content: center;
+}
+.pc-group {
+  border-top: 1px solid var(--gx-line);
+  padding-top: 16px;
+}
+.pc.hl .pc-group {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.pc-h {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gx-mute);
+}
+.pc.hl .pc-h {
+  color: #94a3b8;
+}
+.pc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.pc li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14.5px;
+  color: var(--gx-text);
+}
+.pc.hl li {
+  color: #e2e8f0;
+}
+.pc li .gx-icon {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  flex: none;
+  color: var(--gx-blue);
+}
+.pc.hl li .gx-icon {
+  color: #a5b4fc;
+}
+.pc li.off {
+  opacity: 0.45;
+}
+.pc-note {
+  margin: 28px 0 0;
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--gx-mute);
+}
+.pc-note a {
+  color: var(--gx-blue);
+  font-weight: 600;
+}
+
+/* ---------- motion and depth ---------- */
+
+/* the hero has a slow, soft light behind it: brand blue, a sky blue and a trace of the logo's green */
+.gx-site .gx-hero::before {
+  display: block;
+  content: '';
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: -25%;
+  bottom: auto;
+  width: auto;
+  height: 95%;
+  transform: none;
+  border-radius: 0;
+  box-shadow: none;
+  background:
+    radial-gradient(38% 52% at 18% 38%, rgba(50, 20, 219, 0.1) 0%, rgba(50, 20, 219, 0) 70%),
+    radial-gradient(34% 46% at 82% 28%, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 70%),
+    radial-gradient(36% 40% at 52% 92%, rgba(16, 185, 129, 0.07) 0%, rgba(16, 185, 129, 0) 70%);
+  pointer-events: none;
+  animation: gx-aurora 20s ease-in-out infinite alternate;
+}
+.gx-site .gx-hero > .gx-wrap {
+  position: relative;
+  z-index: 1;
+}
+@keyframes gx-aurora {
+  from {
+    transform: translate3d(-2%, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 4%, 0) scale(1.08);
+  }
+}
+
+/* the end of the headline is set in an italic serif, the way editorial and product sites mark one word */
+.gx-site .gx-rotator-phrase {
+  font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.16em;
+  letter-spacing: -0.01em;
+  color: var(--gx-blue);
+}
+
+/* the header lifts off the page once it has moved */
+.gx-site .gx-header {
+  transition:
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+.gx-site .gx-header.is-scrolled {
+  box-shadow: 0 8px 28px rgba(11, 16, 32, 0.07);
+}
+
+/* sections bring their content in as they are reached (ScrollPlay marks the pieces) */
+.gx-site.gx-sp [data-rv] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--rv, 0) * 80ms);
+}
+.gx-site.gx-sp section.in-view [data-rv] {
+  opacity: 1;
+  transform: none;
+}
+
+/* small touches */
+.gx-site .gx-btn .gx-icon {
+  transition: transform 0.2s ease;
+}
+.gx-site .gx-btn:hover .gx-icon {
+  transform: translateX(3px);
+}
+.gx-site .tr-logo {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.gx-site .tr-logo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(11, 16, 32, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gx-site .gx-hero::before {
+    animation: none;
+  }
+}
+
+.pc .gx-btn-white {
+  background: #fff;
+  color: var(--gx-ink) !important;
+}
+.pc .gx-btn-white:hover {
+  background: #e2e8f0;
+}
+
+/* ---------- photographs: shown as shot ---------- */
+.tm {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 960px) {
+  .tm {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 72px;
+  }
+}
+.tm-copy .gx-h2 {
+  margin-top: 12px;
+}
+.tm-photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.tm-ph {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #0b1020;
+  aspect-ratio: 4 / 5;
+  box-shadow: 0 20px 50px rgba(11, 16, 32, 0.18);
+}
+.tm-b {
+  margin-top: 56px;
+  aspect-ratio: 1 / 1.1;
+}
+.tm-ph img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tm-chip {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(11, 16, 32, 0.22);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: tm-chip 9s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+.tm-chip b {
+  display: block;
+  font-size: 13px;
+  color: var(--gx-ink);
+  line-height: 1.2;
+}
+.tm-chip i {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--gx-mute);
+  line-height: 1.3;
+}
+.tm-chip .gx-icon {
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border-radius: 8px;
+  background: var(--gx-soft2);
+  color: var(--gx-blue);
+  flex: none;
+}
+.tm-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #12b76a;
+  box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.2);
+  flex: none;
+}
+.tm-c1 {
+  left: 12px;
+  bottom: 18px;
+  --d: 0s;
+}
+.tm-c2 {
+  right: 10px;
+  top: 22px;
+  --d: 2.2s;
+}
+.tm-c3 {
+  left: 12px;
+  top: 20px;
+  --d: 4.4s;
+}
+.tm-c4 {
+  right: 10px;
+  bottom: 18px;
+  --d: 6.6s;
+}
+@keyframes tm-chip {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  6%,
+  26% {
+    opacity: 1;
+    transform: none;
+  }
+  34%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (max-width: 560px) {
+  .tm-photos {
+    gap: 10px;
+  }
+  .tm-b {
+    margin-top: 32px;
+  }
+  .tm-chip {
+    padding: 7px 10px 7px 9px;
+    gap: 7px;
+  }
+  .tm-chip b {
+    font-size: 11.5px;
+  }
+  .tm-chip i {
+    display: none;
+  }
+  .tm-chip .gx-icon {
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tm-chip {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .tm-c2,
+  .tm-c4 {
+    display: none;
+  }
+}
+
+/* the closing band carries a faint photograph on its right side */
+.gx-site .gx-band::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 auto;
+  left: auto;
+  top: 0;
+  bottom: 0;
+  width: 58%;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: url('/geta/photos/team-keys.webp') 65% center / cover no-repeat;
+  opacity: 0.4;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 75%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 75%);
+  pointer-events: none;
+}
+
+/* the page never pans sideways: no horizontal scroll, no elastic bounce, no swipe-back, however the trackpad is moved */
+html:has(.gx-site) {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+body:has(.gx-site) {
+  overflow-x: clip;
+  overscroll-behavior: none;
+}
+
+/* a page that opens with a plain hero goes straight into its first section */
+.gx-site .gx-hero-plain + .gx-sec {
+  padding-top: clamp(28px, 4vw, 48px);
+}

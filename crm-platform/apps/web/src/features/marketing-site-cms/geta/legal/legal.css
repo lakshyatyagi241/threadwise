@@ -1,0 +1,66 @@
+/* Static legal documents (legal/index.tsx). */
+.lg-hero {
+  background: linear-gradient(180deg, #f3f1ff 0%, #fff 100%);
+  padding: 72px 0 40px;
+}
+.lg-narrow {
+  max-width: 800px;
+}
+.lg-meta {
+  margin: 14px 0 0;
+  font-size: 14.5px;
+  color: var(--gx-mute);
+}
+.lg-body {
+  padding: 24px 0 96px;
+  background: #fff;
+}
+.lg-prose {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--gx-text);
+}
+.lg-prose h2 {
+  font-weight: 700;
+  margin: 2.4em 0 0.6em;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--gx-ink);
+}
+.lg-prose h3 {
+  font-weight: 700;
+  margin: 1.6em 0 0.4em;
+  font-size: 1.05rem;
+  color: var(--gx-ink);
+}
+.lg-prose p {
+  margin: 0 0 1em;
+}
+.lg-prose ul {
+  margin: 0.4em 0 1.2em;
+  padding-left: 1.4em;
+  list-style: disc;
+  display: grid;
+  gap: 0.45em;
+}
+.lg-prose a {
+  color: var(--gx-blue);
+  font-weight: 600;
+}
+.lg-prose a:hover {
+  text-decoration: underline;
+}
+.lg-prose strong {
+  color: var(--gx-ink);
+}
+.lg-sec {
+  padding-bottom: 2.2em;
+  margin-bottom: 2em;
+  border-bottom: 1px solid var(--gx-line);
+}
+.lg-sec:last-child {
+  border-bottom: 0;
+}
+.lg-sec h2 {
+  margin-top: 0;
+}
