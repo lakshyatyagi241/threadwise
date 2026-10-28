@@ -411,8 +411,8 @@ export class FlowsRepository {
    * The inbox channel (`channels.id`) a sender key points at, or null when that sender has no channel row (yet). A sender is
    * named `<engine>:<uuid>` after its engine's own table (devices, wa_provider_configs, ...); the runtime matches on
    * `channels`, so the save translates once: an unofficial device is the `whatsapp_qr` channel whose handle is its uuid, a
-   * WABA / Twilio number is the channel linked to its connection, any other engine a channel of that kind with the uuid as
-   * handle. The lookup is scoped by org, so another workspace's sender never resolves.
+   * WABA / Twilio number is the channel linked to its connection, an Instagram account or a Facebook Page the channel keyed by its engine / Meta id, any other engine a channel of that kind
+   * with the uuid as handle. The lookup is scoped by org, so another workspace's sender never resolves.
    */
   async resolveChannel(
     tx: Tx,
@@ -431,9 +431,21 @@ export class FlowsRepository {
               SELECT c.id FROM channels c
               JOIN wa_provider_configs w ON w.org_id = c.org_id AND w.id = c.waba_config_id
               WHERE c.org_id = ${orgId} AND w.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
-          : await tx.execute(
-              sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = ${engine} AND external_id = ${uuid} ORDER BY id LIMIT 1`,
-            );
+          : engine === 'instagram'
+            ? // The inbox channel of an Instagram account is keyed by the account's engine id, not by the row's uuid.
+              await tx.execute(sql`
+                SELECT c.id FROM channels c
+                JOIN workspace_ig_accounts a ON a.org_id = c.org_id AND a.instaflow_account_id = c.external_id
+                WHERE c.org_id = ${orgId} AND c.kind = 'instagram' AND a.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
+            : engine === 'facebook'
+              ? // The inbox channel of a Facebook Page is keyed by Meta's Page id, not by the row's uuid.
+                await tx.execute(sql`
+                  SELECT c.id FROM channels c
+                  JOIN facebook_pages p ON p.org_id = c.org_id AND p.page_id = c.external_id
+                  WHERE c.org_id = ${orgId} AND c.kind = 'facebook' AND p.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
+              : await tx.execute(
+                  sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = ${engine} AND external_id = ${uuid} ORDER BY id LIMIT 1`,
+                );
     const r = res.rows[0] as Raw | undefined;
     return r ? Number(r.id) : null;
   }
