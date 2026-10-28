@@ -43,6 +43,31 @@ describe('an AI call on the platform key holds its price before the vendor (#116
     expect((err as AppError).code).toBe(ERROR_CODES.WALLET_EMPTY);
   });
 
+  it('refuses the call when the wallet cannot be read: a retryable 503, nothing held, no vendor call', async () => {
+    const holdMinor = vi.fn(async () => 1);
+    const svc = Object.assign(Object.create(UsageBillingService.prototype), {
+      db: { retry: { txAs: async (_c: unknown, fn: (tx: unknown) => unknown) => fn({}) } },
+      repo: { holdMinor },
+      billing: { forOrg: async () => 'USD' },
+      logger: { error: vi.fn() },
+      balanceAndPrice: async () => {
+        throw new Error('connection reset');
+      },
+    }) as unknown as { holdAiCall: (orgId: number) => Promise<void> };
+    const vendor = vi.fn(async () => 'answer');
+    const ai = new AiChargeService({ holdAiCall: (id: number) => svc.holdAiCall(id) } as never);
+    const err = await ai.guardCall(7, 'admin').then(
+      () => null,
+      (e: unknown) => e,
+    );
+    expect(err).toBeInstanceOf(AppError);
+    expect((err as AppError).code).toBe(ERROR_CODES.SERVICE_UNAVAILABLE);
+    expect((err as AppError).getStatus()).toBe(503);
+    expect(holdMinor).not.toHaveBeenCalled();
+    if (!err) await vendor();
+    expect(vendor).not.toHaveBeenCalled();
+  });
+
   it('holds nothing for a platform-owned workspace (no need to check)', async () => {
     const h = build(null, 1);
     await h.svc.holdAiCall(7);
