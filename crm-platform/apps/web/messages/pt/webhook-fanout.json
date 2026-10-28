@@ -38,11 +38,13 @@
         "target": "Destino",
         "active": "Ativo",
         "fields": "Campos",
+        "numbers": "Números de telefone",
         "deliveries": "Entregas",
         "last": "Última entrega",
         "actions": "Ações"
       },
       "allFields": "Todos os campos",
+      "allNumbers": "Todos os números",
       "success": "{count, number} com sucesso",
       "failure": "{count, number} com falha",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filtro de campos",
       "fieldFilterHint": "Deixe vazio para encaminhar todos os campos. Digite um campo e pressione Enter, por exemplo messages ou message_template_status_update.",
       "fieldFilterPlaceholder": "Adicionar um campo",
+      "phoneFilter": "Filtro de números de telefone",
+      "phoneFilterHint": "Deixe vazio para encaminhar todos os números. Digite um ID de número de telefone da Meta (apenas dígitos, não o número exibido) e pressione Enter. Um webhook que cita vários números é encaminhado inteiro quando um deles está na lista.",
+      "phoneFilterPlaceholder": "Adicionar um ID de número",
       "fieldRemove": "Remover {field}",
+      "phoneRemove": "Remover {phone}",
       "timeout": "Tempo limite (segundos)",
       "timeoutHint": "De 1 a 30",
       "maxAttempts": "Máximo de tentativas",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Um cabeçalho precisa de nome e valor.",
         "headerNameRequired": "Informe também o nome do cabeçalho.",
         "timeout": "Informe um número inteiro de 1 a 30.",
-        "maxAttempts": "Informe um número inteiro de 1 a 10."
+        "maxAttempts": "Informe um número inteiro de 1 a 10.",
+        "phoneNumberIdInvalid": "IDs de número de telefone têm apenas dígitos."
       }
     },
     "failures": {

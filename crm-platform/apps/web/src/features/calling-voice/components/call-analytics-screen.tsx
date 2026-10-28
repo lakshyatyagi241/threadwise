@@ -299,7 +299,7 @@ function ByAgent({ data }: { data: CallAnalytics }) {
                   {...AGENT_IGNORE}
                 >
                   {a.name ?? (
-                    <span className="italic text-muted-foreground">{t('unassigned')}</span>
+                    <span className="text-muted-foreground">{t('unassigned')}</span>
                   )}
                 </th>
                 <td className="py-2 text-end tabular-nums">{a.calls}</td>

@@ -54,6 +54,7 @@ import {
   MinorDetectionService,
   hasProof,
   intakeEvidence,
+  isSubscribedStatus,
   planIntakeGrants,
   type IntakePlan,
 } from '../../contact-consent';
@@ -1369,7 +1370,15 @@ export class ContactsService {
       });
       this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
       for (const ch of plan.fillStatus) values[STATUS_COLUMN[ch]] = 'subscribed';
-      if (input.whatsappSubscriptionStatus !== undefined) {
+      // A read shows null for a legacy `subscribed` label with no grant (shownSubscriptionLabel). Sending that null back must not wipe the
+      // stored label, so a null never clears a stored `subscribed`.
+      if (
+        input.whatsappSubscriptionStatus !== undefined &&
+        !(
+          input.whatsappSubscriptionStatus === null &&
+          isSubscribedStatus(existing.whatsappSubscriptionStatus)
+        )
+      ) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }
       if (input.smsSubscriptionStatus !== undefined) {

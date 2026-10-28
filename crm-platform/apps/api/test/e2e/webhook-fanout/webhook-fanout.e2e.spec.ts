@@ -152,4 +152,37 @@ describe('webhook forward targets', () => {
     await fanout.forward({ rawBody: body, fields: ['messages'] });
     expect((await pending()).length).toBe(2);
   });
+
+  it('forwards only the events of the phone numbers a target lists', async () => {
+    const mk = async (name: string, extra: Record<string, unknown> = {}) =>
+      webhookTargetItemSchema.parse(
+        (await ops('post', '').send({ name, url: 'https://8.8.8.8/h', ...extra })).body,
+      );
+    const one = await mk('only-111', { phoneNumberIdFilter: ['111'] });
+    expect(one.phoneNumberIdFilter).toEqual(['111']);
+    const bad = await ops('post', '').send({
+      name: 'bad-phone',
+      url: 'https://8.8.8.8/h',
+      phoneNumberIdFilter: ['+91 98765'],
+    });
+    expect(bad.status).toBe(422);
+
+    const fanout = h.app.get(WebhookFanoutService);
+    fanout.invalidate();
+    const send = (phoneNumberIds: string[]) =>
+      fanout.forward({
+        rawBody: Buffer.from(JSON.stringify({ n: randomUUID() })),
+        fields: ['messages'],
+        phoneNumberIds,
+      });
+    const withBoth = await send(['111']);
+    const other = await send(['222']);
+    expect(withBoth).toBe(other + 1);
+
+    const cleared = await ops('patch', `/${one.id}`).send({
+      rowVersion: one.rowVersion,
+      phoneNumberIdFilter: [],
+    });
+    expect(cleared.body.phoneNumberIdFilter).toEqual([]);
+  });
 });

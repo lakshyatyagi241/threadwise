@@ -38,11 +38,13 @@
         "target": "Ziel",
         "active": "Aktiv",
         "fields": "Felder",
+        "numbers": "Telefonnummern",
         "deliveries": "Zustellungen",
         "last": "Letzte Zustellung",
         "actions": "Aktionen"
       },
       "allFields": "Alle Felder",
+      "allNumbers": "Alle Nummern",
       "success": "{count, number} erfolgreich",
       "failure": "{count, number} fehlgeschlagen",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Feldfilter",
       "fieldFilterHint": "Leer lassen, um alle Felder weiterzuleiten. Geben Sie ein Feld ein und drücken Sie die Eingabetaste, zum Beispiel messages oder message_template_status_update.",
       "fieldFilterPlaceholder": "Feld hinzufügen",
+      "phoneFilter": "Telefonnummern-Filter",
+      "phoneFilterHint": "Leer lassen, um jede Nummer weiterzuleiten. Gib eine Meta-Telefonnummern-ID ein (nur Ziffern, nicht die angezeigte Nummer) und drücke Enter. Ein Webhook mit mehreren Nummern wird vollständig weitergeleitet, wenn eine davon in der Liste steht.",
+      "phoneFilterPlaceholder": "Telefonnummern-ID hinzufügen",
       "fieldRemove": "{field} entfernen",
+      "phoneRemove": "{phone} entfernen",
       "timeout": "Zeitlimit (Sekunden)",
       "timeoutHint": "1 bis 30",
       "maxAttempts": "Maximale Versuche",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Ein Header benötigt sowohl einen Namen als auch einen Wert.",
         "headerNameRequired": "Geben Sie auch den Headernamen ein.",
         "timeout": "Geben Sie eine ganze Zahl von 1 bis 30 ein.",
-        "maxAttempts": "Geben Sie eine ganze Zahl von 1 bis 10 ein."
+        "maxAttempts": "Geben Sie eine ganze Zahl von 1 bis 10 ein.",
+        "phoneNumberIdInvalid": "Telefonnummern-IDs bestehen nur aus Ziffern."
       }
     },
     "failures": {

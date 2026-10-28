@@ -38,11 +38,13 @@
         "target": "लक्ष्य",
         "active": "सक्रिय",
         "fields": "फ़ील्ड",
+        "numbers": "फ़ोन नंबर",
         "deliveries": "डिलीवरी",
         "last": "अंतिम डिलीवरी",
         "actions": "कार्रवाइयाँ"
       },
       "allFields": "सभी फ़ील्ड",
+      "allNumbers": "सभी नंबर",
       "success": "{count, number} ठीक",
       "failure": "{count, number} विफल",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "फ़ील्ड फ़िल्टर",
       "fieldFilterHint": "हर फ़ील्ड फ़ॉरवर्ड करने के लिए खाली छोड़ें। कोई फ़ील्ड टाइप करें और Enter दबाएँ, जैसे messages या message_template_status_update।",
       "fieldFilterPlaceholder": "फ़ील्ड जोड़ें",
+      "phoneFilter": "फ़ोन नंबर फ़िल्टर",
+      "phoneFilterHint": "हर नंबर फ़ॉरवर्ड करने के लिए खाली छोड़ें। Meta का फ़ोन नंबर ID (केवल अंक, दिखने वाला नंबर नहीं) लिखकर Enter दबाएँ। कई नंबरों वाला webhook सूची के किसी एक नंबर से मेल खाने पर पूरा फ़ॉरवर्ड होता है।",
+      "phoneFilterPlaceholder": "फ़ोन नंबर ID जोड़ें",
       "fieldRemove": "{field} हटाएँ",
+      "phoneRemove": "{phone} हटाएँ",
       "timeout": "टाइमआउट (सेकंड)",
       "timeoutHint": "1 से 30",
       "maxAttempts": "अधिकतम प्रयास",
@@ -110,7 +116,8 @@
         "headerValueRequired": "हेडर को नाम और मान दोनों चाहिए।",
         "headerNameRequired": "हेडर का नाम भी दर्ज करें।",
         "timeout": "1 से 30 के बीच पूरी संख्या दर्ज करें।",
-        "maxAttempts": "1 से 10 के बीच पूरी संख्या दर्ज करें।"
+        "maxAttempts": "1 से 10 के बीच पूरी संख्या दर्ज करें।",
+        "phoneNumberIdInvalid": "फ़ोन नंबर ID में केवल अंक होते हैं।"
       }
     },
     "failures": {

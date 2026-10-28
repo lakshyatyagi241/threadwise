@@ -155,7 +155,7 @@ function EditableText({
           'inline-flex shrink-0 items-center gap-1 rounded text-xs text-muted-foreground outline-none transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary',
           shown
             ? 'size-5 justify-center opacity-0 group-hover/edit:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100'
-            : 'italic',
+            : undefined,
         )}
       >
         {shown ? <PencilIcon className="size-3" /> : t('add', { field: label.toLowerCase() })}
@@ -311,7 +311,7 @@ export function KeyDetails({
                 <button
                   type="button"
                   onClick={onEditCompany}
-                  className="rounded text-xs italic text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+                  className="rounded text-xs text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   {t('add', { field: ti('company').toLowerCase() })}
                 </button>

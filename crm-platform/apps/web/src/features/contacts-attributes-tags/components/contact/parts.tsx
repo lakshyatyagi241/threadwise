@@ -146,7 +146,7 @@ export function JobTitle({ contact }: { contact: ContactRow }) {
         dir="auto"
         className={cn(
           'truncate',
-          current ? 'text-muted-foreground' : 'italic text-muted-foreground/70',
+          current ? 'text-muted-foreground' : 'text-muted-foreground/70',
         )}
       >
         {current || t('jobTitlePlaceholder')}

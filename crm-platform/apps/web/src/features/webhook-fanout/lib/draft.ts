@@ -11,13 +11,20 @@ export interface TargetDraft {
   headerValue: string;
   removeHeader: boolean;
   fieldFilter: string[];
+  phoneNumberIdFilter: string[];
   timeoutSeconds: string;
   maxAttempts: string;
   isActive: boolean;
 }
 
 export type DraftField =
-  'name' | 'url' | 'headerName' | 'headerValue' | 'timeoutSeconds' | 'maxAttempts';
+  | 'name'
+  | 'url'
+  | 'headerName'
+  | 'headerValue'
+  | 'phoneNumberIds'
+  | 'timeoutSeconds'
+  | 'maxAttempts';
 
 /** Message-key suffix under `dialog.errors` for each problem the form can find before calling the API. */
 export type DraftErrorKey =
@@ -27,6 +34,7 @@ export type DraftErrorKey =
   | 'headerNameInvalid'
   | 'headerValueRequired'
   | 'headerNameRequired'
+  | 'phoneNumberIdInvalid'
   | 'timeout'
   | 'maxAttempts';
 
@@ -39,6 +47,7 @@ export const EMPTY_DRAFT: TargetDraft = {
   headerValue: '',
   removeHeader: false,
   fieldFilter: [],
+  phoneNumberIdFilter: [],
   timeoutSeconds: '10',
   maxAttempts: '5',
   isActive: true,
@@ -52,6 +61,7 @@ export function draftFromTarget(item: WebhookTargetItem): TargetDraft {
     headerValue: '',
     removeHeader: false,
     fieldFilter: [...item.fieldFilter],
+    phoneNumberIdFilter: [...item.phoneNumberIdFilter],
     timeoutSeconds: String(Math.round(item.timeoutMs / 1000)),
     maxAttempts: String(item.maxAttempts),
     isActive: item.isActive,
@@ -91,6 +101,9 @@ function check(
     if (headerName === '' && hasValue) problems.headerName = 'headerNameRequired';
   }
 
+  if (draft.phoneNumberIdFilter.some((p) => !/^\d+$/.test(p) || p.length > 40))
+    problems.phoneNumberIds = 'phoneNumberIdInvalid';
+
   const seconds = whole(draft.timeoutSeconds, 1, 30);
   if (seconds === null) problems.timeoutSeconds = 'timeout';
   const attempts = whole(draft.maxAttempts, 1, 10);
@@ -113,6 +126,7 @@ export function toCreateBody(
         ? { authHeaderName: headerName, authHeaderValue: draft.headerValue }
         : {}),
       fieldFilter: draft.fieldFilter,
+      phoneNumberIdFilter: draft.phoneNumberIdFilter,
       timeoutMs: seconds * 1000,
       maxAttempts: attempts,
     },
@@ -132,6 +146,9 @@ export function toUpdateBody(
   if (draft.isActive !== saved.isActive) body.isActive = draft.isActive;
   if (draft.fieldFilter.join('\n') !== saved.fieldFilter.join('\n')) {
     body.fieldFilter = draft.fieldFilter;
+  }
+  if (draft.phoneNumberIdFilter.join('\n') !== saved.phoneNumberIdFilter.join('\n')) {
+    body.phoneNumberIdFilter = draft.phoneNumberIdFilter;
   }
   if (seconds * 1000 !== saved.timeoutMs) body.timeoutMs = seconds * 1000;
   if (attempts !== saved.maxAttempts) body.maxAttempts = attempts;
@@ -157,6 +174,8 @@ export function fieldForPath(path: string): DraftField | null {
       return 'headerName';
     case 'authHeaderValue':
       return 'headerValue';
+    case 'phoneNumberIdFilter':
+      return 'phoneNumberIds';
     case 'timeoutMs':
       return 'timeoutSeconds';
     case 'maxAttempts':

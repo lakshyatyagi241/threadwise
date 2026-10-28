@@ -107,7 +107,9 @@
         "rolled_back": "Dikembalikan"
       },
       "by": "oleh {author}",
-      "raisedIst": "Dibuat {time} IST"
+      "raisedIst": "Dibuat {time} IST",
+      "noProgress": "Tidak ada kemajuan selama {minutes} menit. Build atau rilis mungkin berhenti.",
+      "noChangesAlert": "Rilis terbaru tidak mencantumkan pull request-nya. deploy-main.sh di server build atau ci-entry.sh di host kemungkinan sudah usang: pasang versi terbaru (deploy/build-server/README.md)."
     }
   }
 }

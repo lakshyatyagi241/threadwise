@@ -37,7 +37,7 @@ export const BookAppointmentForm: FormComponent = (p) => {
       >
         {t.rich('bookingIntro', {
           b: (c) => <b>{c}</b>,
-          i: (c) => <i>{c}</i>,
+          i: (c) => <span>{c}</span>,
           mono: (c) => <Mono>{c}</Mono>,
         })}
       </Intro>

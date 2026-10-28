@@ -38,11 +38,13 @@
         "target": "Mục tiêu",
         "active": "Đang bật",
         "fields": "Trường",
+        "numbers": "Số điện thoại",
         "deliveries": "Lần gửi",
         "last": "Lần gửi gần nhất",
         "actions": "Hành động"
       },
       "allFields": "Tất cả trường",
+      "allNumbers": "Tất cả số",
       "success": "{count, number} thành công",
       "failure": "{count, number} thất bại",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Bộ lọc trường",
       "fieldFilterHint": "Để trống để chuyển tiếp mọi trường. Nhập tên trường rồi nhấn Enter, ví dụ messages hoặc message_template_status_update.",
       "fieldFilterPlaceholder": "Thêm trường",
+      "phoneFilter": "Bộ lọc số điện thoại",
+      "phoneFilterHint": "Để trống để chuyển tiếp mọi số. Nhập ID số điện thoại của Meta (chỉ chữ số, không phải số hiển thị) rồi nhấn Enter. Webhook nêu nhiều số sẽ được chuyển tiếp nguyên vẹn nếu một trong các số có trong danh sách.",
+      "phoneFilterPlaceholder": "Thêm ID số điện thoại",
       "fieldRemove": "Xóa {field}",
+      "phoneRemove": "Xóa {phone}",
       "timeout": "Thời gian chờ (giây)",
       "timeoutHint": "1 đến 30",
       "maxAttempts": "Số lần thử tối đa",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Tiêu đề cần cả tên và giá trị.",
         "headerNameRequired": "Cũng nhập tên tiêu đề.",
         "timeout": "Nhập một số nguyên từ 1 đến 30.",
-        "maxAttempts": "Nhập một số nguyên từ 1 đến 10."
+        "maxAttempts": "Nhập một số nguyên từ 1 đến 10.",
+        "phoneNumberIdInvalid": "ID số điện thoại chỉ gồm chữ số."
       }
     },
     "failures": {

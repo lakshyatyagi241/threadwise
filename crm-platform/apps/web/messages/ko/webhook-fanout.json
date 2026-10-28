@@ -38,11 +38,13 @@
         "target": "대상",
         "active": "활성",
         "fields": "필드",
+        "numbers": "전화번호",
         "deliveries": "전달",
         "last": "마지막 전달",
         "actions": "작업"
       },
       "allFields": "모든 필드",
+      "allNumbers": "모든 번호",
       "success": "{count, number}건 성공",
       "failure": "{count, number}건 실패",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "필드 필터",
       "fieldFilterHint": "모든 필드를 전달하려면 비워 두세요. 필드 이름을 입력하고 Enter를 누르세요. 예: messages, message_template_status_update",
       "fieldFilterPlaceholder": "필드 추가",
+      "phoneFilter": "전화번호 필터",
+      "phoneFilterHint": "비워 두면 모든 번호를 전달합니다. Meta 전화번호 ID(표시 번호가 아닌 숫자만)를 입력하고 Enter를 누르세요. 여러 번호가 담긴 웹훅은 그중 하나라도 목록에 있으면 전체를 전달합니다.",
+      "phoneFilterPlaceholder": "전화번호 ID 추가",
       "fieldRemove": "{field} 삭제",
+      "phoneRemove": "{phone} 제거",
       "timeout": "제한 시간(초)",
       "timeoutHint": "1~30",
       "maxAttempts": "최대 시도 횟수",
@@ -110,7 +116,8 @@
         "headerValueRequired": "헤더에는 이름과 값이 모두 필요합니다.",
         "headerNameRequired": "헤더 이름도 입력하세요.",
         "timeout": "1~30 사이의 정수를 입력하세요.",
-        "maxAttempts": "1~10 사이의 정수를 입력하세요."
+        "maxAttempts": "1~10 사이의 정수를 입력하세요.",
+        "phoneNumberIdInvalid": "전화번호 ID는 숫자만 사용할 수 있습니다."
       }
     },
     "failures": {

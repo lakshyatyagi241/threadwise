@@ -6,6 +6,7 @@ import { ERROR_CODES, type ContactSort, type RecordScope } from '@crm/contracts'
 import { AppError } from '../../../common/errors/app-error';
 import { isTeamPeer, teamPeersSql } from '../../../kernel/rbac/scope';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { grantedConsentOn, requireConsentSql } from '../../contact-consent/consent-policy.service';
 import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
 import type { StatusScopeOption } from './contact-status-stage';
 import type { PropertyDef } from './contact-property-values';
@@ -57,6 +58,10 @@ export interface ContactRow {
   leadScoredAt: Date | null;
   leadScoreModel: string | null;
   whatsappSubscriptionStatus: string | null;
+  /** A recorded WhatsApp marketing grant in the consent ledger, read in the same statement. Decides the shown label (see shownSubscriptionLabel). */
+  whatsappMarketingGranted: boolean;
+  /** The workspace switch "Require recorded consent for marketing sends", read in the same statement. */
+  whatsappRequiresConsent: boolean;
   smsSubscriptionStatus: string | null;
   emailSubscriptionStatus: string | null;
   emailConfirmed: boolean;
@@ -187,6 +192,8 @@ export class ContactsRepository {
       leadScoredAt: contacts.leadScoredAt,
       leadScoreModel: contacts.leadScoreModel,
       whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
+      whatsappMarketingGranted: sql<boolean>`${grantedConsentOn(sql`${contacts.orgId}`, sql`${contacts.id}`)}`,
+      whatsappRequiresConsent: sql<boolean>`${requireConsentSql(sql`${contacts.orgId}`)}`,
       smsSubscriptionStatus: contacts.smsSubscriptionStatus,
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
       emailConfirmed: contacts.emailConfirmed,

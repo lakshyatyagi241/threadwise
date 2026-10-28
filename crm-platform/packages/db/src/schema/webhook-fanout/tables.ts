@@ -32,6 +32,8 @@ export const webhookForwardTargets = pgTable(
     authHeaderLast4: text('auth_header_last4'),
     isActive: boolean('is_active').notNull().default(true),
     fieldFilter: text('field_filter').array(),
+    /** NULL = every phone number. Otherwise forward only payloads that name at least one of these Meta phone number ids. */
+    phoneNumberIdFilter: text('phone_number_id_filter').array(),
     timeoutMs: integer('timeout_ms').notNull().default(10000),
     maxAttempts: integer('max_attempts').notNull().default(5),
     successCount: bigint('success_count', { mode: 'number' }).notNull().default(0),

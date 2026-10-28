@@ -107,7 +107,9 @@
         "rolled_back": "ফিরিয়ে নেওয়া হয়েছে"
       },
       "by": "{author} কর্তৃক",
-      "raisedIst": "তৈরি {time} IST"
+      "raisedIst": "তৈরি {time} IST",
+      "noProgress": "{minutes} মিনিট ধরে কোনো অগ্রগতি নেই। বিল্ড বা রিলিজ থেমে যেতে পারে।",
+      "noChangesAlert": "সাম্প্রতিক রিলিজগুলো তাদের পুল রিকোয়েস্ট তালিকাভুক্ত করছে না। সম্ভবত বিল্ড সার্ভারের deploy-main.sh বা হোস্টের ci-entry.sh পুরোনো: বর্তমান সংস্করণ ইনস্টল করুন (deploy/build-server/README.md)।"
     }
   }
 }
