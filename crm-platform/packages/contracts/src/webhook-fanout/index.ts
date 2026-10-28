@@ -16,6 +16,13 @@ const headerNameSchema = z
   .max(80)
   .regex(/^[A-Za-z0-9-]+$/, 'Header names use letters, digits and dashes');
 const fieldSchema = z.string().trim().min(1).max(80);
+/** A Meta phone number id: digits only (not the display number). */
+const phoneNumberIdSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(40)
+  .regex(/^\d+$/, 'A phone number id is digits only');
 
 export const webhookTargetItemSchema = z.object({
   id: uuidSchema,
@@ -28,6 +35,8 @@ export const webhookTargetItemSchema = z.object({
   authHeaderLast4: z.string().nullable(),
   /** Empty = every field. */
   fieldFilter: z.array(z.string()),
+  /** Empty = every phone number. */
+  phoneNumberIdFilter: z.array(z.string()),
   timeoutMs: z.int(),
   maxAttempts: z.int(),
   successCount: z.int(),
@@ -54,6 +63,7 @@ export const createWebhookTargetSchema = z
     authHeaderName: headerNameSchema.optional(),
     authHeaderValue: z.string().min(1).max(500).optional(),
     fieldFilter: z.array(fieldSchema).max(50).default([]),
+    phoneNumberIdFilter: z.array(phoneNumberIdSchema).max(100).default([]),
     timeoutMs: z.int().min(1000).max(30000).default(10000),
     maxAttempts: z.int().min(1).max(10).default(5),
   })
@@ -73,6 +83,7 @@ export const updateWebhookTargetSchema = z.object({
   authHeaderValue: z.string().min(1).max(500).optional(),
   removeAuthHeader: z.boolean().optional(),
   fieldFilter: z.array(fieldSchema).max(50).optional(),
+  phoneNumberIdFilter: z.array(phoneNumberIdSchema).max(100).optional(),
   timeoutMs: z.int().min(1000).max(30000).optional(),
   maxAttempts: z.int().min(1).max(10).optional(),
 });

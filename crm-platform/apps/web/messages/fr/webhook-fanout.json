@@ -38,11 +38,13 @@
         "target": "Cible",
         "active": "Active",
         "fields": "Champs",
+        "numbers": "Numéros de téléphone",
         "deliveries": "Envois",
         "last": "Dernier envoi",
         "actions": "Actions"
       },
       "allFields": "Tous les champs",
+      "allNumbers": "Tous les numéros",
       "success": "{count, number} OK",
       "failure": "{count, number} en échec",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filtre de champs",
       "fieldFilterHint": "Laissez vide pour transférer tous les champs. Saisissez un champ puis appuyez sur Entrée, par exemple messages ou message_template_status_update.",
       "fieldFilterPlaceholder": "Ajouter un champ",
+      "phoneFilter": "Filtre de numéros de téléphone",
+      "phoneFilterHint": "Laissez vide pour transférer tous les numéros. Saisissez un ID de numéro de téléphone Meta (chiffres uniquement, pas le numéro affiché) puis appuyez sur Entrée. Un webhook citant plusieurs numéros est transféré en entier si l'un d'eux figure dans la liste.",
+      "phoneFilterPlaceholder": "Ajouter un ID de numéro",
       "fieldRemove": "Retirer {field}",
+      "phoneRemove": "Retirer {phone}",
       "timeout": "Délai d’expiration (secondes)",
       "timeoutHint": "De 1 à 30",
       "maxAttempts": "Nombre maximal de tentatives",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Un en-tête nécessite à la fois un nom et une valeur.",
         "headerNameRequired": "Saisissez aussi le nom de l’en-tête.",
         "timeout": "Saisissez un nombre entier de 1 à 30.",
-        "maxAttempts": "Saisissez un nombre entier de 1 à 10."
+        "maxAttempts": "Saisissez un nombre entier de 1 à 10.",
+        "phoneNumberIdInvalid": "Les ID de numéro de téléphone ne contiennent que des chiffres."
       }
     },
     "failures": {
