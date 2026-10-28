@@ -109,6 +109,24 @@ export class ProvidersAdminService {
     return row;
   }
 
+  /** Refuses a partial write over stored secrets that cannot be read; a full re-entry replaces them all. */
+  private requireFullReEntry(
+    slug: TranslationProviderSlug,
+    name: string,
+    supplied: Record<string, string> | undefined,
+  ): void {
+    const missing = DRIVERS[slug].credentialFields
+      .map((f) => f.key)
+      .filter((key) => !(supplied?.[key] ?? '').trim());
+    if (missing.length === 0) return;
+    throw new AppError(
+      ERROR_CODES.I18N_PROVIDER_CREDENTIALS_MISSING,
+      `The stored credentials for ${name} cannot be read. Enter every credential again.`,
+      HttpStatus.CONFLICT,
+      missing.map((m) => ({ path: `credentials.${m}`, message: 'required' })),
+    );
+  }
+
   /** TW-I18N-015. */
   async update(
     uuid: string,
@@ -119,7 +137,10 @@ export class ProvidersAdminService {
     const item = await this.store.tx(async (tx) => {
       const row = await this.lock(tx, uuid, body.rowVersion);
       const slug = asSlug(row.slug);
-      const existing = this.credentials.decrypt(slug, row.credentials);
+      const stored = this.credentials.readStored(slug, row.credentials);
+      // Unreadable stored secrets are never merged over: the operator must re-enter every credential, or nothing is written.
+      if (stored === null) this.requireFullReEntry(slug, row.name, body.credentials);
+      const existing = stored ?? {};
       const { credentials, problems } = this.credentials.merge(
         slug,
         existing,
