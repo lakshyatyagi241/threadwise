@@ -250,7 +250,7 @@
       "hintColumn": "Cột được ánh xạ tới sự đồng ý tiếp thị sẽ quyết định ai được ghi nhận: chỉ những hàng ghi có mới được ghi nhận sự đồng ý, với tên tệp làm bằng chứng. Không, ô trống hoặc từ không xác định sẽ không ghi nhận gì. Các liên hệ đã hủy đăng ký vẫn ở trạng thái đã hủy.",
       "columnSummary": "{granted} hàng ghi có và sẽ được ghi nhận. {notGranted} ghi không hoặc để trống và không có bản ghi đồng ý nào.",
       "unrecognised": "{count, plural, one {# hàng có} other {# hàng có}} giá trị đồng ý không phải có hoặc không ({values}). {count, plural, one {Giá trị này} other {Các giá trị này}} được coi là không được đồng ý. Hãy dùng yes / no, true / false hoặc 1 / 0.",
-      "columnIgnored": "Cột đồng ý sẽ không có tác dụng cho đến khi bạn chọn ô ở trên.",
+      "columnIgnored": "{count, plural, other {#}} dòng ghi có, nhưng sẽ không ghi nhận đồng ý nào cho đến khi bạn đánh dấu ô ở trên. Nếu không có đồng ý được ghi nhận, mẫu tiếp thị gửi tới các liên hệ này sẽ bị từ chối.",
       "noticeText": "Thông báo hoặc cơ sở pháp lý (tùy chọn)",
       "noticeTextHint": "Những liên hệ này đã đồng ý điều gì và ở đâu, ví dụ: đăng ký khi thanh toán theo thông báo quyền riêng tư v3. Được lưu làm bằng chứng cho mỗi sự đồng ý đã ghi.",
       "noticeVersion": "Phiên bản thông báo (tùy chọn)",

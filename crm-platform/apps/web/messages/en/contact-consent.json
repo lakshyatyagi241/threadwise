@@ -250,7 +250,7 @@
       "hintColumn": "The column mapped to marketing consent decides who is recorded: only the rows that say yes get a consent, with the file name as proof. A no, a blank cell or an unknown word records nothing. Contacts who opted out stay opted out.",
       "columnSummary": "{granted} rows say yes and will be recorded. {notGranted} say no or are blank and get no consent record.",
       "unrecognised": "{count, plural, one {# row has} other {# rows have}} a consent value that is not a yes or a no ({values}). {count, plural, one {It is} other {They are}} treated as not granted. Use yes / no, true / false or 1 / 0.",
-      "columnIgnored": "The consent column does nothing until you tick the box above.",
+      "columnIgnored": "{count, plural, one {# row says} other {# rows say}} yes, but no consent is recorded until you tick the box above. Without a recorded consent, marketing templates to these contacts are refused.",
       "noticeText": "Notice or lawful basis (optional)",
       "noticeTextHint": "What these contacts agreed to and where, for example: opted in at checkout under privacy notice v3. It is kept as proof with each recorded consent.",
       "noticeVersion": "Notice version (optional)",

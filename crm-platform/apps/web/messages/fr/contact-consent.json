@@ -250,7 +250,7 @@
       "hintColumn": "La colonne associée au consentement marketing détermine qui est enregistré : seules les lignes qui disent oui obtiennent un consentement, avec le nom du fichier comme preuve. Un non, une cellule vide ou un mot inconnu n'enregistre rien. Les contacts désabonnés restent désabonnés.",
       "columnSummary": "{granted} lignes disent oui et seront enregistrées. {notGranted} disent non ou sont vides et ne reçoivent aucun enregistrement de consentement.",
       "unrecognised": "{count, plural, one {# ligne contient} other {# lignes contiennent}} une valeur de consentement qui n'est ni oui ni non ({values}). {count, plural, one {Elle est considérée} other {Elles sont considérées}} comme non accordée. Utilisez yes / no, true / false ou 1 / 0.",
-      "columnIgnored": "La colonne de consentement n'a aucun effet tant que vous ne cochez pas la case ci-dessus.",
+      "columnIgnored": "{count, plural, one {# ligne indique} other {# lignes indiquent}} oui, mais aucun consentement n'est enregistré tant que vous n'avez pas coché la case ci-dessus. Sans consentement enregistré, les modèles marketing vers ces contacts sont refusés.",
       "noticeText": "Mention ou base légale (facultatif)",
       "noticeTextHint": "Ce à quoi ces contacts ont consenti et où, par exemple : inscrits à la caisse selon la politique de confidentialité v3. Conservé comme preuve avec chaque consentement enregistré.",
       "noticeVersion": "Version de la mention (facultatif)",

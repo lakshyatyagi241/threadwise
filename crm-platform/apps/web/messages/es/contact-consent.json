@@ -250,7 +250,7 @@
       "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
       "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
       "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba.",
+      "columnIgnored": "{count, plural, one {# fila dice} other {# filas dicen}} sí, pero no se registra ningún consentimiento hasta que marques la casilla de arriba. Sin consentimiento registrado, las plantillas de marketing a estos contactos se rechazan.",
       "noticeText": "Aviso o base legal (opcional)",
       "noticeTextHint": "A qué accedieron estos contactos y dónde, por ejemplo: se suscribieron en el pago con el aviso de privacidad v3. Se guarda como prueba con cada consentimiento registrado.",
       "noticeVersion": "Versión del aviso (opcional)",

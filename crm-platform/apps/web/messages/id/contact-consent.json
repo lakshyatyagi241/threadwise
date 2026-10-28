@@ -250,7 +250,7 @@
       "hintColumn": "Kolom yang dipetakan ke persetujuan pemasaran menentukan siapa yang dicatat: hanya baris yang berisi ya yang mendapat persetujuan, dengan nama file sebagai bukti. Tidak, sel kosong, atau kata yang tidak dikenal tidak mencatat apa pun. Kontak yang sudah berhenti berlangganan tetap berhenti.",
       "columnSummary": "{granted} baris berisi ya dan akan dicatat. {notGranted} berisi tidak atau kosong dan tidak mendapat catatan persetujuan.",
       "unrecognised": "{count, plural, one {# baris memiliki} other {# baris memiliki}} nilai persetujuan yang bukan ya atau tidak ({values}). Nilai itu dianggap tidak disetujui. Gunakan ya / tidak, true / false, atau 1 / 0.",
-      "columnIgnored": "Kolom persetujuan tidak berpengaruh sampai Anda mencentang kotak di atas.",
+      "columnIgnored": "{count, plural, other {#}} baris berisi ya, tetapi tidak ada persetujuan yang dicatat sampai Anda mencentang kotak di atas. Tanpa persetujuan tercatat, templat pemasaran ke kontak ini ditolak.",
       "noticeText": "Pemberitahuan atau dasar hukum (opsional)",
       "noticeTextHint": "Apa yang disetujui kontak ini dan di mana, misalnya: mendaftar saat checkout dengan pemberitahuan privasi v3. Disimpan sebagai bukti pada setiap persetujuan yang dicatat.",
       "noticeVersion": "Versi pemberitahuan (opsional)",

@@ -250,7 +250,7 @@
       "hintColumn": "Die Spalte, die dem Marketing-Einverständnis zugeordnet ist, bestimmt, wer erfasst wird: Nur Zeilen mit ja erhalten eine Einwilligung, mit dem Dateinamen als Nachweis. Nein, eine leere Zelle oder ein unbekanntes Wort erfasst nichts. Kontakte, die sich abgemeldet haben, bleiben abgemeldet.",
       "columnSummary": "{granted} Zeilen sagen ja und werden erfasst. {notGranted} sagen nein oder sind leer und erhalten keinen Einwilligungseintrag.",
       "unrecognised": "{count, plural, one {# Zeile hat} other {# Zeilen haben}} einen Einwilligungswert, der weder ja noch nein ist ({values}). {count, plural, one {Er wird} other {Sie werden}} als nicht erteilt behandelt. Verwende ja / nein, true / false oder 1 / 0.",
-      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst.",
+      "columnIgnored": "{count, plural, one {# Zeile sagt} other {# Zeilen sagen}} Ja, aber es wird keine Einwilligung erfasst, bis Sie das Kästchen oben anhaken. Ohne erfasste Einwilligung werden Marketing-Vorlagen an diese Kontakte abgelehnt.",
       "noticeText": "Hinweis oder Rechtsgrundlage (optional)",
       "noticeTextHint": "Wozu diese Kontakte wo zugestimmt haben, z. B.: an der Kasse gemäß Datenschutzhinweis v3 angemeldet. Wird als Nachweis bei jeder erfassten Einwilligung gespeichert.",
       "noticeVersion": "Version des Hinweises (optional)",

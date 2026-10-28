@@ -250,7 +250,7 @@
       "hintColumn": "De kolom die is gekoppeld aan marketingtoestemming bepaalt wie wordt vastgelegd: alleen rijen met ja krijgen een toestemming, met de bestandsnaam als bewijs. Nee, een lege cel of een onbekend woord legt niets vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
       "columnSummary": "{granted} rijen zeggen ja en worden vastgelegd. {notGranted} zeggen nee of zijn leeg en krijgen geen toestemmingsrecord.",
       "unrecognised": "{count, plural, one {# rij heeft} other {# rijen hebben}} een toestemmingswaarde die geen ja of nee is ({values}). {count, plural, one {Die wordt} other {Ze worden}} behandeld als niet verleend. Gebruik ja / nee, true / false of 1 / 0.",
-      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt.",
+      "columnIgnored": "{count, plural, one {# rij zegt} other {# rijen zeggen}} ja, maar er wordt geen toestemming vastgelegd totdat u het vakje hierboven aanvinkt. Zonder vastgelegde toestemming worden marketingsjablonen naar deze contacten geweigerd.",
       "noticeText": "Mededeling of rechtsgrond (optioneel)",
       "noticeTextHint": "Waarmee deze contacten akkoord gingen en waar, bijvoorbeeld: aangemeld bij het afrekenen onder privacyverklaring v3. Wordt als bewijs bewaard bij elke vastgelegde toestemming.",
       "noticeVersion": "Versie van de mededeling (optioneel)",
