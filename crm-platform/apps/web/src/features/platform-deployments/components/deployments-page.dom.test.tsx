@@ -248,8 +248,9 @@ describe('DeploymentsPage', () => {
     const all = (id: string) =>
       [...host.querySelectorAll(`[data-testid="${id}"]`)].map((e) => e.textContent ?? '');
     expect(host.textContent).toContain('#823');
-    // A short description of what changed sits under the title; an entry with no description shows none.
-    expect(all('release-description')).toEqual(['Adds the description and raised time.']);
+    // Two lines per change: the PR description is never shown, even when the API sends one.
+    expect(host.textContent).not.toContain('Adds the description and raised time.');
+    expect(all('release-description')).toHaveLength(0);
     // 08:15 UTC is 13:45 in India, whatever zone the test machine is in; an entry without a time shows none.
     expect(all('release-raised')).toHaveLength(1);
     expect(all('release-raised')[0]).toMatch(/1:45:00/);
@@ -298,8 +299,8 @@ describe('DeploymentsPage', () => {
       expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
     });
 
-    it('shows a long PR description as a short two-to-three line summary, never the whole text', async () => {
-      const body = `## Summary\n\n- ${'The picker sent one request per ticked channel. '.repeat(14)}`;
+    it('shows each change in exactly two lines, the number and title then who and when in IST, and never the description', async () => {
+      const body = 'The picker sent one request per ticked channel. '.repeat(14);
       await show([
         attempt({
           changes: [
@@ -314,16 +315,14 @@ describe('DeploymentsPage', () => {
         }),
       ]);
       const li = host.querySelector('li') as HTMLElement;
-      expect(li.textContent).toContain('#901');
-      expect(li.textContent).toContain('Fix the picker');
-      expect(li.textContent).toContain('Lakshya');
-      expect(li.textContent).toMatch(/11:35:26\s?AM/); // 06:05:26 UTC in India
-      const text = li.querySelector('[data-testid="release-description"]') as HTMLElement;
-      expect(text.textContent).toContain('The picker sent one request per ticked channel.'); // what changed
-      expect(text.textContent).not.toContain('## Summary');
-      expect(text.textContent!.length).toBeLessThanOrEqual(200); // two to three lines, so the column stays small
-      expect(text.className).toContain('line-clamp-3');
-      expect(text.getAttribute('title')).toBe(body); // the full text is one hover away
+      const lines = [...li.children].map((e) => e.textContent ?? '');
+      expect(lines).toHaveLength(2);
+      expect(lines[0]).toContain('#901');
+      expect(lines[0]).toContain('Fix the picker');
+      expect(lines[1]).toContain('Lakshya');
+      expect(lines[1]).toMatch(/11:35:26\s?AM/); // 06:05:26 UTC in India
+      expect(lines[1]).toContain('IST');
+      expect(li.textContent).not.toContain('The picker sent one request');
     });
 
     it('lists the first five PRs of a release and folds the rest into "N more"', async () => {

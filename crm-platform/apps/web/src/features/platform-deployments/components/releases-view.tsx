@@ -11,7 +11,6 @@ import {
 import { Alert, Badge, Card, EmptyState } from '@crm/ui';
 import { ErrorBlock, LoadingBlock } from '@/features/auth-registration-security/platform/ui/state';
 import { DEPLOYMENTS_POLL_MS, fetchReleases, releasesKeys } from '../api';
-import { summarize } from './release-summary';
 
 const NS = 'platform-deployments';
 
@@ -117,11 +116,10 @@ export function ReleasesView() {
   );
 }
 
-/** One pull request of a release: its number and title, who raised it and when, and what it changes in two or three lines at most. */
+/** One pull request of a release, in exactly two lines: its number and title, then who raised it and when (Indian time). */
 function ChangeItem({ change: c }: { change: ReleaseChange }) {
   const t = useTranslations(NS);
   const f = useFormatter();
-  const summary = c.body ? summarize(c.body) : '';
   return (
     <li className="break-words">
       <div className="text-sm font-medium leading-snug">
@@ -137,15 +135,6 @@ function ChangeItem({ change: c }: { change: ReleaseChange }) {
           </span>
         )}
       </div>
-      {summary && (
-        <p
-          className="mt-1 line-clamp-3 text-xs leading-relaxed text-muted-foreground"
-          data-testid="release-description"
-          title={c.body ?? undefined}
-        >
-          {summary}
-        </p>
-      )}
     </li>
   );
 }
