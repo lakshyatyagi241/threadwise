@@ -1628,7 +1628,7 @@
         "retries": "Novas tentativas",
         "retriesOn": "Ativadas, até {date}",
         "retriesOff": "Desativadas",
-        "recurringNote": "Cada execução vai para o público como ele estiver naquele momento, então o número de destinatários pode mudar."
+        "recurringNote": "Nada é enviado agora. A primeira execução começa no horário acima e cada execução aparece depois no Histórico como uma linha própria. Até lá, encontre esta campanha em Recorrentes. Cada execução vai para o público como ele estiver naquele momento, então o número de destinatários pode mudar."
       },
       "status": {
         "back": "Voltar para campanhas",

@@ -1628,7 +1628,7 @@
         "retries": "Nuovi tentativi",
         "retriesOn": "Attivi, fino al {date}",
         "retriesOff": "Disattivati",
-        "recurringNote": "Ogni esecuzione va al pubblico così com'è in quel momento, quindi il numero di destinatari può cambiare."
+        "recurringNote": "Ora non viene inviato nulla. La prima esecuzione parte all'ora indicata sopra e ogni esecuzione compare poi nella Cronologia come riga a sé. Fino ad allora, trova questa campagna in Ricorrenti. Ogni esecuzione va al pubblico com'è in quel momento, quindi il numero di destinatari può cambiare."
       },
       "status": {
         "back": "Torna alle campagne",

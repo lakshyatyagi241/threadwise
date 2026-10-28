@@ -1628,7 +1628,7 @@
         "retries": "Wiederholungen",
         "retriesOn": "Ein, bis {date}",
         "retriesOff": "Aus",
-        "recurringNote": "Jeder Durchlauf geht an die Zielgruppe in ihrem jeweiligen Zustand, daher kann sich die Zahl der Empfänger ändern."
+        "recurringNote": "Jetzt wird nichts gesendet. Der erste Lauf beginnt zur oben genannten Zeit, danach erscheint jeder Lauf im Verlauf als eigene Zeile. Bis dahin finden Sie diese Kampagne unter Wiederkehrend. Jeder Lauf geht an die Zielgruppe, wie sie zu dieser Zeit ist, daher kann sich die Zahl der Empfänger ändern."
       },
       "status": {
         "back": "Zurück zu Kampagnen",

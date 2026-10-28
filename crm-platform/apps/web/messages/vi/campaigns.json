@@ -1628,7 +1628,7 @@
         "retries": "Thử lại",
         "retriesOn": "Bật, đến {date}",
         "retriesOff": "Tắt",
-        "recurringNote": "Mỗi lần chạy gửi tới đối tượng tại thời điểm đó, nên số người nhận có thể thay đổi."
+        "recurringNote": "Bây giờ chưa gửi gì. Lần chạy đầu tiên bắt đầu vào thời điểm ở trên, sau đó mỗi lần chạy sẽ xuất hiện trong Lịch sử thành một dòng riêng. Cho đến lúc đó, bạn có thể tìm chiến dịch này trong Lặp lại. Mỗi lần chạy gửi đến đối tượng ở thời điểm đó, nên số người nhận có thể thay đổi."
       },
       "status": {
         "back": "Quay lại chiến dịch",
