@@ -1,5 +1,6 @@
 import { buildSitemapXml, sitemapResponseSchema } from '@crm/contracts';
 import { apiBase } from '@/lib/auth/server';
+import { SITEMAP_PAGES } from '@/features/marketing-site-cms/geta/data/site';
 import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
 
 /**
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
   } catch {
     /* the static pages are still worth listing */
   }
-  return new Response(buildSitemapXml({ baseUrl: base, ...data }), {
+  return new Response(buildSitemapXml({ baseUrl: base, pages: SITEMAP_PAGES, ...data }), {
     headers: {
       'content-type': 'application/xml; charset=utf-8',
       'cache-control': 'public, max-age=300',

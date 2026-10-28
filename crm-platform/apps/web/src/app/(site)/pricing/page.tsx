@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
-import { loadSiteContent } from '@/features/marketing-site-cms/public/load';
-import { pageMetadata } from '@/features/marketing-site-cms/site/page-meta';
-import { SitePage } from '@/features/marketing-site-cms/site/site-page';
+import { pageMeta } from '@/features/marketing-site-cms/geta/seo';
+import { PricingPage } from '@/features/marketing-site-cms/geta/pages/pricing';
 
-export const generateMetadata = (): Promise<Metadata> => pageMetadata('pricing');
+export const generateMetadata = (): Promise<Metadata> =>
+  pageMeta({
+    path: '/pricing',
+    title: 'Plans: built around what you turn on',
+    description:
+      'Start with the Geta.ai modules you need and add more as you grow: shared inbox, WhatsApp, AI agents, campaigns and CRM. Contact us for a quote.',
+  });
 
-/** Composed from the editable sections; the plan cards inside come from the plan catalogue. */
-export default async function Page() {
-  return <SitePage page="pricing" content={await loadSiteContent()} />;
-}
+export default PricingPage;
