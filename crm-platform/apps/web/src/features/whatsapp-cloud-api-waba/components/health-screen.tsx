@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { WabaHealth } from '@crm/contracts';
-import { Alert, Badge, Button, Card, Field, PasswordInput, Spinner, StatTile } from '@crm/ui';
+import { Alert, Badge, Button, Card, Field, PasswordInput, StatTile } from '@crm/ui';
 import { CallingToggleCard } from '@/features/calling-voice';
 import { useHealth, useRenewToken, useResubscribe, useSetToken } from '../api/hooks';
 import { metaManagerUrl, qualityTone, tierLabel } from '../lib/display';
@@ -20,6 +20,7 @@ import {
 } from './extras-cards';
 import { InboundBadge } from './inbound-badge';
 import { useErrorText } from './use-error-text';
+import { PageLoader } from '@/components/page-loader';
 
 const OVERALL = {
   ok: { tone: 'success', title: 'overallOk', hint: 'overallOkHint' },
@@ -50,12 +51,7 @@ export function HealthScreen({ id }: { id: string }) {
   const [token, setTokenValue] = useState('');
   const [msg, setMsg] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
 
-  if (q.isPending)
-    return (
-      <div className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
-        <Spinner /> {t('loading')}
-      </div>
-    );
+  if (q.isPending) return <PageLoader label={t('loading')} />;
   if (q.isError)
     return (
       <div className="mx-auto max-w-3xl space-y-3 p-6">

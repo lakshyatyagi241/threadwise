@@ -10,6 +10,7 @@ import {
   useSetAiCrmSettings,
 } from './api/ai-crm-hooks';
 import { useErrorText } from './components/use-error-text';
+import { PageLoader } from '@/components/page-loader';
 
 interface ChatTurn {
   role: 'user' | 'assistant';
@@ -61,11 +62,7 @@ export function AiCrmScreen() {
   };
 
   if (index.isPending) {
-    return (
-      <div className="mx-auto max-w-5xl p-6 text-sm text-muted-foreground">
-        <Spinner /> {t('loading')}
-      </div>
-    );
+    return <PageLoader label={t('loading')} />;
   }
   if (index.isError) {
     return (
@@ -97,7 +94,9 @@ export function AiCrmScreen() {
               <div
                 key={i}
                 className={`rounded-lg px-3 py-2 text-sm ${
-                  turn.role === 'user' ? 'ms-auto max-w-[80%] bg-primary text-primary-foreground' : 'max-w-[80%] bg-muted'
+                  turn.role === 'user'
+                    ? 'ms-auto max-w-[80%] bg-primary text-primary-foreground'
+                    : 'max-w-[80%] bg-muted'
                 }`}
               >
                 {turn.text}

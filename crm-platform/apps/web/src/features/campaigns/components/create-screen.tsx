@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { SenderHidden, WizardSender } from '@crm/contracts';
 import { EmptyState } from '@crm/ui';
+import { PageLoader } from '@/components/page-loader';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { offerSendersFor } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsappState } from '@/lib/use-unofficial-whatsapp';
@@ -11,11 +12,10 @@ import { createPath, flowFor } from '../lib/create-flow';
 import { withClientHidden } from '../lib/sender-empty';
 import { engineOf } from '../lib/engine-gate';
 import { useWizardDraft, useWizardSenders } from '../wizard/api/wizard';
-import { ErrorBlock, Skeleton } from '../wizard/components/parts';
+import { ErrorBlock } from '../wizard/components/parts';
 import { LaunchedNotice } from '../wizard/components/wizard-screen';
 import { BuilderScreen } from './builder-screen';
 import { GuidedCampaign } from './guided-campaign';
-
 const Frame = ({ children }: { children: React.ReactNode }) => (
   <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">{children}</main>
 );
@@ -66,7 +66,7 @@ export function CreateScreen({
   if (query.isPending || unofficialState === 'pending') {
     return (
       <Frame>
-        <Skeleton label={t('loading')} lines={4} />
+        <PageLoader label={t('loading')} />
       </Frame>
     );
   }
@@ -134,7 +134,7 @@ function Resume({
   if (draft.isPending)
     return (
       <Frame>
-        <Skeleton label={tw('loading')} lines={6} />
+        <PageLoader label={tw('loading')} />
       </Frame>
     );
   if (draft.isError || !draft.data)

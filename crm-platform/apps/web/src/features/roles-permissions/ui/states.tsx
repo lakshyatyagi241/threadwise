@@ -2,23 +2,17 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { Alert, Button } from '@crm/ui';
 import { isNoAccess, rbacError } from '../lib/errors';
 import { LockIcon } from './icons';
+import { PageLoader } from '@/components/page-loader';
 
 const NS = 'roles-permissions.common';
 
 export function LoadingBlock({ className }: { className?: string }) {
   const t = useTranslations(NS);
   return (
-    <div
-      className={
-        className ?? 'flex min-h-64 items-center justify-center gap-2 text-muted-foreground'
-      }
-    >
-      <Spinner label={t('loading')} />
-      <span className="text-sm">{t('loading')}</span>
-    </div>
+    <PageLoader label={t('loading')} className={className ?? 'grid min-h-64 place-items-center'} />
   );
 }
 

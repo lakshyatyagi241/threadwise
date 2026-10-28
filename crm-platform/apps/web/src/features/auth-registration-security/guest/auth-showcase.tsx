@@ -182,7 +182,11 @@ export function GetaMark({ name, className }: { name: string; className?: string
       // The picture lives on another site: send it no referrer, so a visitor's page address is not passed along.
       referrerPolicy="no-referrer"
       decoding="async"
-      className={cn('h-9 w-auto max-w-full', className)}
+      // The picture has dark lettering: in dark mode it sits on a white rounded chip so it stays readable.
+      className={cn(
+        'h-9 w-auto max-w-full dark:box-content dark:rounded-lg dark:bg-white dark:px-2 dark:py-1',
+        className,
+      )}
     />
   );
 }
