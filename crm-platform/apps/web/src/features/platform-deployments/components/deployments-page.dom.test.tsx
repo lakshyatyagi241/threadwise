@@ -248,7 +248,9 @@ describe('DeploymentsPage', () => {
     const all = (id: string) =>
       [...host.querySelectorAll(`[data-testid="${id}"]`)].map((e) => e.textContent ?? '');
     expect(host.textContent).toContain('#823');
-    expect(all('release-description')).toEqual(['Adds the description and raised time.']);
+    // The list stays short: number, title, author and time only; the PR description is not shown.
+    expect(all('release-description')).toEqual([]);
+    expect(host.textContent).not.toContain('Adds the description and raised time.');
     // 08:15 UTC is 13:45 in India, whatever zone the test machine is in; an entry without a time shows none.
     expect(all('release-raised')).toHaveLength(1);
     expect(all('release-raised')[0]).toMatch(/1:45:00/);
@@ -295,6 +297,52 @@ describe('DeploymentsPage', () => {
       ]);
       expect(host.textContent).toContain(en('noDetail'));
       expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
+    });
+
+    it('lists a PR as its number, title, author and time, and never its long description', async () => {
+      const body = `## Summary\n\n- ${'The picker sent one request per ticked channel. '.repeat(14)}`;
+      await show([
+        attempt({
+          changes: [
+            {
+              pr: 901,
+              title: 'Fix the picker',
+              author: 'Lakshya',
+              body,
+              createdAt: '2026-10-28T06:05:26Z',
+            },
+          ],
+        }),
+      ]);
+      const li = host.querySelector('li') as HTMLElement;
+      expect(li.textContent).toContain('#901');
+      expect(li.textContent).toContain('Fix the picker');
+      expect(li.textContent).toContain('Lakshya');
+      expect(li.textContent).toMatch(/11:35:26\s?AM/); // 06:05:26 UTC in India
+      expect(li.textContent).not.toContain('The picker sent one request');
+      expect(li.textContent!.length).toBeLessThan(160); // a short entry, so the column stays small
+    });
+
+    it('lists the first five PRs of a release and folds the rest into "N more"', async () => {
+      const many = Array.from({ length: 7 }, (_, i) => ({
+        pr: 800 + i,
+        title: `Change ${i}`,
+        author: 'Dev',
+      }));
+      await show([attempt({ changes: many })]);
+      const details = host.querySelector('details') as HTMLElement;
+      expect(details.querySelector('summary')!.textContent).toBe(
+        en('releases.moreChanges').replace('{count}', '2'),
+      );
+      expect(details.textContent).toContain('Change 5');
+      expect(details.textContent).toContain('Change 6');
+      expect(details.textContent).not.toContain('Change 4'); // the fifth is listed above the fold
+      expect(host.textContent).toContain('Change 4');
+    });
+
+    it('has no fold when a release carries five PRs or fewer', async () => {
+      await show([attempt()]);
+      expect(host.querySelector('details')).toBeNull();
     });
 
     it('warns when the newest releases do not list their pull requests', async () => {

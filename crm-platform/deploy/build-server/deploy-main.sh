@@ -167,27 +167,27 @@ run_once() {
   return 1
 }
 
-while true; do
-  rm -f "$STATE/pending"
-  # One id per run; production records the release history under it (the build's steps and the release's steps share it).
-  ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
-  ( run_once ); rc=$?
-  TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
-  if [ "$rc" = 0 ]; then status ok; else
-    status failed; notify failed "$TAG" "$(elapsed)" "see $LOG on the build server"; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
-    # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
-    cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
-    case "$cur" in building|shipping)
-      [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
-        | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
-    esac
-  fi
-  # keep the last two local builds and trim the build cache so the disk does not fill
-  docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
-  docker builder prune -f --filter until=96h >/dev/null 2>&1 || true
-  [ -e "$STATE/pending" ] || break
-  FORCE=0
-done
+# One release per process. This used to be a loop that ran every queued push inside the same bash process; bash keeps the functions it read
+# at start-up, so a script installed while a deploy was running was ignored for as long as pushes kept arriving (each deploy lands a push
+# during the next build): the Changes column of the console stayed empty for weeks because the running loop predated `report_changes`.
+# Now the tail below re-executes the file when a push is waiting, so every release runs the script as it is on disk.
+rm -f "$STATE/pending"
+# One id per run; production records the release history under it (the build's steps and the release's steps share it).
+ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
+( run_once ); rc=$?
+TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
+if [ "$rc" = 0 ]; then status ok; else
+  status failed; notify failed "$TAG" "$(elapsed)" "see $LOG on the build server"; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
+  # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
+  cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
+  case "$cur" in building|shipping)
+    [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
+      | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
+  esac
+fi
+# keep the last two local builds and trim the build cache so the disk does not fill
+docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
+docker builder prune -f --filter until=96h >/dev/null 2>&1 || true
 # Release the lock, then look once more: a push that failed to get the lock has already set the flag (see above).
 exec 9>&-
 if [ -e "$STATE/pending" ]; then exec "$0"; fi

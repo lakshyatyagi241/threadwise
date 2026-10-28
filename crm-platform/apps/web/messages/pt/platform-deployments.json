@@ -109,7 +109,8 @@
       "by": "por {author}",
       "raisedIst": "Aberto {time} IST",
       "noProgress": "Sem progresso há {minutes} minutos. A compilação ou a versão pode ter parado.",
-      "noChangesAlert": "As versões mais recentes não listam os seus pull requests. Provavelmente o deploy-main.sh do servidor de build ou o ci-entry.sh do host está desatualizado: instale as versões atuais (deploy/build-server/README.md)."
+      "noChangesAlert": "As versões mais recentes não listam os seus pull requests. Provavelmente o deploy-main.sh do servidor de build ou o ci-entry.sh do host está desatualizado: instale as versões atuais (deploy/build-server/README.md).",
+      "moreChanges": "mais {count} alterações"
     }
   }
 }
