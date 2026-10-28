@@ -1256,8 +1256,10 @@
       "open": "添加附件",
       "title": "添加附件",
       "close": "关闭",
-      "library": "照片或视频",
       "camera": "相机",
+      "photo": "照片",
+      "video": "视频",
+      "audio": "音频",
       "document": "文档",
       "previewTitle": "发送附件",
       "caption": "说明文字（可选）",
@@ -1449,6 +1451,35 @@
       "working": "处理中…",
       "empty": "请先写一条消息。",
       "failed": "AI 无法修改文本，请重试。"
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "机器人继续运行流程。",
+        "doneNextLive": "机器人将回复客户的下一条消息。",
+        "doneNextDefault": "机器人已恢复。只有设置了默认流程,它才会回复下一条消息。",
+        "already": "机器人已经在处理这个对话。"
+      },
+      "botLine": {
+        "system": "系统",
+        "pressed": {
+          "flow": "机器人回来了,由 {{name}} 交还。流程继续。",
+          "nextLive": "机器人回来了,由 {{name}} 交还。它将回复客户的下一条消息。",
+          "nextDefault": "机器人回来了,由 {{name}} 交还。只有设置了默认流程,它才会回复下一条消息。"
+        },
+        "result": {
+          "continued": "流程已从“已交还”出口继续。",
+          "claimed_again": "流程未恢复:有人再次接手了聊天。",
+          "flow_not_live": "流程未恢复:该流程已不再启用。",
+          "start_failed": "无法恢复流程。"
+        },
+        "customer": {
+          "sent": "已向客户发送消息。",
+          "window_closed": "已跳过向客户发送的消息:24 小时窗口已关闭。",
+          "no_consent": "已跳过向客户发送的消息:没有同意。",
+          "failed": "无法向客户发送消息。",
+          "channel_unavailable": "已跳过向客户发送的消息:渠道不可用。"
+        }
+      }
     },
     "note": {
       "title": "私人备注",

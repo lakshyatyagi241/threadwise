@@ -7,6 +7,7 @@ import {
   discardAttachment,
   pickDocument,
   pickFromCamera,
+  pickAudio,
   pickFromLibrary,
   type PickResult,
 } from './pick-attachment';
@@ -19,7 +20,9 @@ export type AttachNotice =
   | { kind: 'pickFailed' };
 
 const PICKERS: Record<AttachSource, () => Promise<PickResult>> = {
-  library: pickFromLibrary,
+  photo: () => pickFromLibrary('photo'),
+  video: () => pickFromLibrary('video'),
+  audio: pickAudio,
   camera: pickFromCamera,
   document: pickDocument,
 };

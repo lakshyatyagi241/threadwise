@@ -1278,8 +1278,10 @@
       "open": "Attach a file",
       "title": "Attach a file",
       "close": "Close",
-      "library": "Photo or video",
       "camera": "Camera",
+      "photo": "Photo",
+      "video": "Video",
+      "audio": "Audio",
       "document": "Document",
       "previewTitle": "Send attachment",
       "caption": "Caption (optional)",
@@ -1473,6 +1475,35 @@
       "working": "Working on it…",
       "empty": "Write a message first.",
       "failed": "The AI could not change the text. Try again."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "The bot continues the flow.",
+        "doneNextLive": "The bot will answer the customer's next message.",
+        "doneNextDefault": "The bot is back on. It answers the next message only if a default flow is set.",
+        "already": "The bot already has this conversation."
+      },
+      "botLine": {
+        "system": "the system",
+        "pressed": {
+          "flow": "Bot is back, returned by {{name}}. The flow continues.",
+          "nextLive": "Bot is back, returned by {{name}}. It will answer the customer's next message.",
+          "nextDefault": "Bot is back, returned by {{name}}. It answers the next message only if a default flow is set."
+        },
+        "result": {
+          "continued": "The flow continued from the \"returned\" exit.",
+          "claimed_again": "The flow was not resumed: a person took the chat again.",
+          "flow_not_live": "The flow was not resumed: it is no longer live.",
+          "start_failed": "The flow could not be resumed."
+        },
+        "customer": {
+          "sent": "The message to the customer was sent.",
+          "window_closed": "The message to the customer was skipped: the 24 hour window is closed.",
+          "no_consent": "The message to the customer was skipped: no consent.",
+          "failed": "The message to the customer could not be sent.",
+          "channel_unavailable": "The message to the customer was skipped: the channel is unavailable."
+        }
+      }
     },
     "note": {
       "title": "Private note",

@@ -1300,8 +1300,10 @@
       "open": "Allega un file",
       "title": "Allega un file",
       "close": "Chiudi",
-      "library": "Foto o video",
       "camera": "Fotocamera",
+      "photo": "Foto",
+      "video": "Video",
+      "audio": "Audio",
       "document": "Documento",
       "previewTitle": "Invia allegato",
       "caption": "Didascalia (facoltativa)",
@@ -1497,6 +1499,35 @@
       "working": "Elaborazione…",
       "empty": "Scrivi prima un messaggio.",
       "failed": "L’IA non ha potuto modificare il testo. Riprova."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "Il bot continua il flusso.",
+        "doneNextLive": "Il bot risponderà al prossimo messaggio del cliente.",
+        "doneNextDefault": "Il bot è di nuovo attivo. Risponderà al prossimo messaggio solo se è impostato un flusso predefinito.",
+        "already": "Il bot ha già questa conversazione."
+      },
+      "botLine": {
+        "system": "il sistema",
+        "pressed": {
+          "flow": "Il bot è tornato, restituito da {{name}}. Il flusso prosegue.",
+          "nextLive": "Il bot è tornato, restituito da {{name}}. Risponderà al prossimo messaggio del cliente.",
+          "nextDefault": "Il bot è tornato, restituito da {{name}}. Risponderà al prossimo messaggio solo se è impostato un flusso predefinito."
+        },
+        "result": {
+          "continued": "Il flusso è proseguito dall’uscita «restituita».",
+          "claimed_again": "Il flusso non è ripreso: una persona ha preso di nuovo la chat.",
+          "flow_not_live": "Il flusso non è ripreso: non è più attivo.",
+          "start_failed": "Non è stato possibile riprendere il flusso."
+        },
+        "customer": {
+          "sent": "Il messaggio al cliente è stato inviato.",
+          "window_closed": "Il messaggio al cliente è stato saltato: la finestra di 24 ore è chiusa.",
+          "no_consent": "Il messaggio al cliente è stato saltato: nessun consenso.",
+          "failed": "Non è stato possibile inviare il messaggio al cliente.",
+          "channel_unavailable": "Il messaggio al cliente è stato saltato: il canale non è disponibile."
+        }
+      }
     },
     "note": {
       "title": "Nota privata",

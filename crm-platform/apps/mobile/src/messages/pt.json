@@ -1300,8 +1300,10 @@
       "open": "Anexar um arquivo",
       "title": "Anexar um arquivo",
       "close": "Fechar",
-      "library": "Foto ou vídeo",
       "camera": "Câmera",
+      "photo": "Foto",
+      "video": "Vídeo",
+      "audio": "Áudio",
       "document": "Documento",
       "previewTitle": "Enviar anexo",
       "caption": "Legenda (opcional)",
@@ -1497,6 +1499,35 @@
       "working": "Trabalhando…",
       "empty": "Escreva uma mensagem primeiro.",
       "failed": "A IA não conseguiu alterar o texto. Tente novamente."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "O bot continua o fluxo.",
+        "doneNextLive": "O bot responderá à próxima mensagem do cliente.",
+        "doneNextDefault": "O bot voltou a atender. Ele só responde à próxima mensagem se houver um fluxo padrão definido.",
+        "already": "O bot já está com esta conversa."
+      },
+      "botLine": {
+        "system": "o sistema",
+        "pressed": {
+          "flow": "O bot voltou, devolvido por {{name}}. O fluxo continua.",
+          "nextLive": "O bot voltou, devolvido por {{name}}. Ele responderá à próxima mensagem do cliente.",
+          "nextDefault": "O bot voltou, devolvido por {{name}}. Ele só responde à próxima mensagem se houver um fluxo padrão definido."
+        },
+        "result": {
+          "continued": "O fluxo continuou pela saída «devolvida».",
+          "claimed_again": "O fluxo não foi retomado: uma pessoa assumiu a conversa novamente.",
+          "flow_not_live": "O fluxo não foi retomado: ele não está mais ativo.",
+          "start_failed": "Não foi possível retomar o fluxo."
+        },
+        "customer": {
+          "sent": "A mensagem ao cliente foi enviada.",
+          "window_closed": "A mensagem ao cliente foi ignorada: a janela de 24 horas está fechada.",
+          "no_consent": "A mensagem ao cliente foi ignorada: sem consentimento.",
+          "failed": "Não foi possível enviar a mensagem ao cliente.",
+          "channel_unavailable": "A mensagem ao cliente foi ignorada: o canal está indisponível."
+        }
+      }
     },
     "note": {
       "title": "Nota privada",

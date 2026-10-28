@@ -1,6 +1,7 @@
 import type { InfiniteData } from '@tanstack/react-query';
 import {
   ERROR_CODES,
+  type ConversationEvent,
   type ConversationNote,
   type MessageListResponse,
   type MessageResponse,
@@ -46,31 +47,49 @@ export const REFUSED_SEND_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
 ]);
 
-/** One thing in the thread: a message, or a private note written between messages. */
+/** The conversation events the thread shows between the messages, as the Geta app does: who has the conversation now. */
+export const THREAD_EVENT_TYPES: readonly string[] = ['assigned', 'reassigned', 'unassigned'];
+
+/** One thing in the thread: a message, a private note written between messages, or an assignment event. */
 export type ThreadItem =
-  { kind: 'message'; message: MessageResponse } | { kind: 'note'; note: ConversationNote };
+  | { kind: 'message'; message: MessageResponse }
+  | { kind: 'note'; note: ConversationNote }
+  | { kind: 'event'; event: ConversationEvent };
 
 /**
- * The messages (oldest first) and the notes in one thread, oldest first: a note stands after the last message written before it.
- * A note and a message from the same instant keep the message first.
+ * The messages (oldest first), the notes and the assignment events in one thread, oldest first: a note or an event stands after the last
+ * message written before it, and several of them keep their own time order. A note or event and a message from the same instant keep
+ * the message first. Events of any other type (status changes, tags, SLA...) are not drawn here: they are in the chat details timeline.
  */
 export function mergeThread(
   messages: readonly MessageResponse[],
   notes: readonly ConversationNote[],
+  events: readonly ConversationEvent[] = [],
 ): ThreadItem[] {
-  const pending = [...notes].sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
+  const between: { at: number; item: ThreadItem }[] = [
+    ...notes.map((note) => ({
+      at: Date.parse(note.createdAt),
+      item: { kind: 'note', note } as const,
+    })),
+    ...events
+      .filter((event) => THREAD_EVENT_TYPES.includes(event.type))
+      .map((event) => ({
+        at: Date.parse(event.createdAt),
+        item: { kind: 'event', event } as const,
+      })),
+  ].sort((a, b) => a.at - b.at);
   const merged: ThreadItem[] = [];
   let next = 0;
   for (const message of messages) {
     const at = Date.parse(message.createdAt);
-    while (next < pending.length && Date.parse(pending[next]!.createdAt) < at) {
-      merged.push({ kind: 'note', note: pending[next]! });
+    while (next < between.length && between[next]!.at < at) {
+      merged.push(between[next]!.item);
       next += 1;
     }
     merged.push({ kind: 'message', message });
   }
-  while (next < pending.length) {
-    merged.push({ kind: 'note', note: pending[next]! });
+  while (next < between.length) {
+    merged.push(between[next]!.item);
     next += 1;
   }
   return merged;

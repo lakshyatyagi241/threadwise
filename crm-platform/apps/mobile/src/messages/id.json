@@ -1256,8 +1256,10 @@
       "open": "Lampirkan file",
       "title": "Lampirkan file",
       "close": "Tutup",
-      "library": "Foto atau video",
       "camera": "Kamera",
+      "photo": "Foto",
+      "video": "Video",
+      "audio": "Audio",
       "document": "Dokumen",
       "previewTitle": "Kirim lampiran",
       "caption": "Keterangan (opsional)",
@@ -1449,6 +1451,35 @@
       "working": "Sedang diproses…",
       "empty": "Tulis pesan terlebih dahulu.",
       "failed": "AI tidak dapat mengubah teks. Coba lagi."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "Bot melanjutkan alur.",
+        "doneNextLive": "Bot akan menjawab pesan berikutnya dari pelanggan.",
+        "doneNextDefault": "Bot aktif kembali. Bot hanya menjawab pesan berikutnya jika ada alur default.",
+        "already": "Bot sudah menangani percakapan ini."
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot kembali, dikembalikan oleh {{name}}. Alur dilanjutkan.",
+          "nextLive": "Bot kembali, dikembalikan oleh {{name}}. Bot akan menjawab pesan berikutnya dari pelanggan.",
+          "nextDefault": "Bot kembali, dikembalikan oleh {{name}}. Bot hanya menjawab pesan berikutnya jika ada alur default."
+        },
+        "result": {
+          "continued": "Alur dilanjutkan dari jalur keluar “dikembalikan”.",
+          "claimed_again": "Alur tidak dilanjutkan: seseorang mengambil chat lagi.",
+          "flow_not_live": "Alur tidak dilanjutkan: alur sudah tidak aktif.",
+          "start_failed": "Alur tidak dapat dilanjutkan."
+        },
+        "customer": {
+          "sent": "Pesan ke pelanggan terkirim.",
+          "window_closed": "Pesan ke pelanggan dilewati: jendela 24 jam tertutup.",
+          "no_consent": "Pesan ke pelanggan dilewati: tidak ada persetujuan.",
+          "failed": "Pesan ke pelanggan tidak dapat dikirim.",
+          "channel_unavailable": "Pesan ke pelanggan dilewati: kanal tidak tersedia."
+        }
+      }
     },
     "note": {
       "title": "Catatan pribadi",

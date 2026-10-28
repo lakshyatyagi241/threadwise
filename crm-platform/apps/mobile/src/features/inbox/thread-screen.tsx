@@ -38,11 +38,12 @@ import { ATTACHMENT_MAX_BYTES } from './attachment';
 import { BotBar } from './bot-bar';
 import { BotTab } from './bot-tab';
 import { ChoiceSheet } from './choice-sheet';
-import { Composer } from './composer';
+import { Composer, type ComposerHandle } from './composer';
 import { LabelsSheet } from './labels-sheet';
-import { ModeTabs, type ComposerMode } from './mode-tabs';
+import type { ComposerMode } from './note-toggle';
 import { TemplateBar } from './template-bar';
 import { Bubble, MessageBubble } from './message-bubble';
+import { EventLine, type PeopleNames } from './event-line';
 import { NoteBubble } from './note-bubble';
 import { SavedRepliesSheet } from './saved-replies-sheet';
 import {
@@ -65,7 +66,7 @@ import { useAiModel, useAiRewrite } from './use-ai-rewrite';
 import { useAttachFlow } from './use-attach-flow';
 import { useConversationActions } from './use-conversation-actions';
 import { useThreadLive } from './use-live';
-import { useNotes, useChangeNotes } from './use-notes';
+import { useChangeNotes, useEvents, useNotes } from './use-notes';
 import { useNow } from './use-now';
 import {
   useConversationDetail,
@@ -123,11 +124,14 @@ export function ThreadScreen() {
   const retry = useRetryMessage(id);
   const markRead = useMarkRead(id);
   const notes = useNotes(id, canRead, polling);
+  // Assignment events are drawn between the messages ("Assigned to Asha"); the rest of the timeline is in the chat details.
+  const events = useEvents(id, canRead);
   const changeNotes = useChangeNotes(id);
 
   const [draft, setDraft] = useState('');
   // A message goes to the customer; a note stays in the team. Each keeps its own draft, so switching loses nothing.
   const [mode, setMode] = useState<ComposerMode>('reply');
+  const composerRef = useRef<ComposerHandle | null>(null);
   const [noteDraft, setNoteDraft] = useState('');
   const [repliesOpen, setRepliesOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
@@ -143,6 +147,25 @@ export function ThreadScreen() {
   const messages = useMemo(() => flattenMessages(thread.data), [thread.data]);
   const lastSeq = messages.at(-1)?.seq ?? 0;
   const conversation = detail.data;
+  // Names for the ids in assignment events: the current assignee and the people who did the events.
+  const assigneeId = conversation?.assignment.user?.id ?? null;
+  const assigneeName = conversation?.assignment.user?.name ?? null;
+  const people = useMemo<PeopleNames>(() => {
+    const names = new Map<string, string>();
+    for (const event of events.data?.data ?? []) {
+      if (event.actor.userId && event.actor.name) names.set(event.actor.userId, event.actor.name);
+    }
+    if (assigneeId && assigneeName) names.set(assigneeId, assigneeName);
+    return { meId, names };
+  }, [events.data, assigneeId, assigneeName, meId]);
+  // A new assignee means a new event: read the timeline again.
+  const { refetch: refetchEvents } = events;
+  const seenAssignee = useRef(assigneeId);
+  useEffect(() => {
+    if (seenAssignee.current === assigneeId) return;
+    seenAssignee.current = assigneeId;
+    void refetchEvents();
+  }, [assigneeId, refetchEvents]);
   const actions = useConversationActions(id, conversation);
   const labelNames = (conversation?.labels ?? []).map((label) => label.name).join(', ');
 
@@ -152,9 +175,9 @@ export function ThreadScreen() {
     const waiting = pending.filter((p) => !stored.has(p.clientMessageId));
     return [
       ...waiting.map((p): Row => ({ kind: 'pending', pending: p })).reverse(),
-      ...mergeThread(messages, notes.data?.data ?? []).reverse(),
+      ...mergeThread(messages, notes.data?.data ?? [], events.data?.data ?? []).reverse(),
     ];
-  }, [messages, notes.data, pending]);
+  }, [messages, notes.data, events.data, pending]);
 
   // Mark read once per newest message, only when the API says something is unread.
   const markedSeq = useRef(0);
@@ -264,6 +287,15 @@ export function ThreadScreen() {
     setNotice(null);
     void change.then((failed) => setNotice(failed));
   };
+  // Return to bot says what happens next (the flow continues, or the bot answers the next message), as the web does; a failure says why.
+  const [botInfo, setBotInfo] = useState<string | null>(null);
+  const giveBack = async () => {
+    setNotice(null);
+    setBotInfo(null);
+    const out = await actions.giveToBot();
+    setNotice(out.failed);
+    if (out.done) setBotInfo(t(`inbox.handoff.giveBack.${out.done}`));
+  };
   const moveTo = (status: SetConversationStatusInput['status']) => report(actions.moveTo(status));
   const assignTo = (userId: string | null) => report(actions.assignTo({ userId }));
   /** A change from a sheet: the sheet closes when it worked, and stays open with the sentence when it did not. */
@@ -277,16 +309,29 @@ export function ThreadScreen() {
     setSheet(which);
   };
 
-  // The Bot cell under the header: the bot is answering, or a person holds the conversation and may give it back (as on the web).
-  const botTab: 'answering' | 'return' | null =
+  // The cell under the header names who answers: the bot, or the agent who holds the conversation (or the team, or "Not assigned" while it
+  // waits). Pressing it opens Change agent, as in the Geta app; the way back to the bot is a line of the three dots.
+  // As in the Geta app, every chat says who has it: "Bot", or the agent. A chat nobody holds says "Not assigned" to a person who may give it
+  // to someone (and has no cell for one who may not: there is nothing to show or do).
+  const heldByPerson =
+    conversation !== undefined &&
+    (conversation.handling === 'waiting' ||
+      conversation.handling === 'with_person' ||
+      conversation.assignment.user !== null ||
+      conversation.assignment.team !== null);
+  const botTab: 'answering' | 'person' | null =
     conversation === undefined
       ? null
       : conversation.handling === 'with_bot' || isBotConversation(conversation.assignment)
         ? 'answering'
-        : canReply &&
-            (conversation.handling === 'waiting' || conversation.handling === 'with_person')
-          ? 'return'
+        : heldByPerson || canAssign
+          ? 'person'
           : null;
+  // The way back to the bot needs a conversation a person holds, or one waiting for a person, and the right to reply.
+  const canReturnToBot =
+    canReply &&
+    conversation !== undefined &&
+    (conversation.handling === 'waiting' || conversation.handling === 'with_person');
 
   const target = conversation ? nextStatus(conversation.status) : null;
   const showStatusAction =
@@ -323,18 +368,29 @@ export function ThreadScreen() {
       icon: 'people-outline',
       onPress: () => openSheet('agent'),
     },
+    bot: {
+      label: t('inbox.thread.bot.returnToBot'),
+      icon: 'hardware-chip-outline',
+      onPress: () => void giveBack(),
+    },
     spam: {
       label: t('inbox.thread.menu.spam'),
       icon: 'ban-outline',
       onPress: () => report(actions.markSpam()),
     },
   };
+  const holder = conversation?.assignment;
+  const holderName =
+    holder?.user?.name ??
+    (holder?.team ? t('inbox.thread.assignment.team', { name: holder.team.name }) : null) ??
+    t('inbox.thread.assignment.none');
   const menuItems: ThreadMenuItem[] = conversation
     ? menuActionsFor({
         status: conversation.status,
         canResolve,
         canLabel,
         canAssign,
+        canReturnToBot,
       }).map((action): ThreadMenuItem => ({ key: action, ...MENU_ITEM[action] }))
     : [];
 
@@ -425,11 +481,15 @@ export function ThreadScreen() {
             ? row.pending.clientMessageId
             : row.kind === 'note'
               ? `note-${row.note.id}`
-              : row.message.id
+              : row.kind === 'event'
+                ? `event-${row.event.id}`
+                : row.message.id
         }
         renderItem={({ item }) =>
           item.kind === 'note' ? (
             <NoteBubble note={item.note} />
+          ) : item.kind === 'event' ? (
+            <EventLine event={item.event} people={people} />
           ) : item.kind === 'pending' ? (
             <Bubble
               testID={`pending-${item.pending.clientMessageId}`}
@@ -477,6 +537,17 @@ export function ThreadScreen() {
       {notice && !(windowClosed && notice === t('inbox.thread.windowClosed')) ? (
         <View style={styles.pad}>
           <Banner tone="danger" message={notice} />
+        </View>
+      ) : null}
+      {botInfo ? (
+        <View style={styles.pad}>
+          <Banner tone="info" message={botInfo} />
+          <Button
+            variant="link"
+            align="start"
+            label={t('inbox.bulk.resultDismiss')}
+            onPress={() => setBotInfo(null)}
+          />
         </View>
       ) : null}
       {attach.notice ? (
@@ -530,11 +601,15 @@ export function ThreadScreen() {
               ) : null}
             </Pressable>
           ) : null}
-          {botTab !== null ? (
+          {botTab === 'answering' ? (
+            <BotTab mode="answering" onOpen={canAssign ? () => openSheet('agent') : undefined} />
+          ) : null}
+          {botTab === 'person' ? (
             <BotTab
-              mode={botTab}
+              mode="person"
+              name={holderName}
               busy={actions.givingToBot}
-              onReturn={() => report(actions.giveToBot())}
+              onOpen={canAssign ? () => openSheet('agent') : undefined}
             />
           ) : null}
         </View>
@@ -549,10 +624,6 @@ export function ThreadScreen() {
           onAssignToMe={() => assignTo(meId)}
         />
       ) : null}
-      {canRead && conversation && canReply && canNote ? (
-        // Reply or internal note, always on offer as on the web: a note can be written when the 24-hour window is closed too.
-        <ModeTabs mode={mode} onChange={setMode} />
-      ) : null}
       {canRead && conversation ? (
         canNote && (mode === 'note' || !canReply) ? (
           <Composer
@@ -561,25 +632,30 @@ export function ThreadScreen() {
             onChange={setNoteDraft}
             onSend={onSendNote}
             busy={changeNotes.add.isPending}
+            onToggleNote={canReply ? () => setMode('reply') : undefined}
           />
         ) : isBotConversation(conversation.assignment) ? (
           <BotBar
             canAssign={canAssign || canAssignSelf}
             assigning={actions.assigning}
             onAssign={() => assignTo(meId)}
+            onToggleNote={canNote ? () => setMode('note') : undefined}
           />
         ) : canReply ? (
           windowClosed ? (
-            <TemplateBar onOpen={openTemplates} />
+            <TemplateBar
+              onOpen={openTemplates}
+              onToggleNote={canNote ? () => setMode('note') : undefined}
+            />
           ) : (
             <Composer
               value={draft}
               onChange={setDraft}
               onSend={onSend}
-              onOpenReplies={() => setRepliesOpen(true)}
-              onOpenAttach={attach.open}
-              onOpenTemplates={openTemplates}
+              handleRef={composerRef}
+              onOpenPlus={attach.open}
               onOpenAi={aiModel ? openAi : undefined}
+              onToggleNote={canNote ? () => setMode('note') : undefined}
             />
           )
         ) : null
@@ -608,6 +684,26 @@ export function ThreadScreen() {
           visible={attach.menuOpen}
           onChoose={attach.choose}
           onClose={attach.closeMenu}
+          extras={[
+            {
+              key: 'replies',
+              label: t('inbox.replies.open'),
+              icon: 'flash',
+              onPress: () => setRepliesOpen(true),
+            },
+            {
+              key: 'template',
+              label: t('inbox.template.send'),
+              icon: 'reader',
+              onPress: openTemplates,
+            },
+            {
+              key: 'emoji',
+              label: t('inbox.composer.emoji.open'),
+              icon: 'happy',
+              onPress: () => composerRef.current?.openEmoji(),
+            },
+          ]}
           onDismiss={attach.onMenuDismissed}
         />
       ) : null}

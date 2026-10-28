@@ -276,3 +276,100 @@ describe('MessageBubble: templates and buttons', () => {
     expect(screen.getByText('Order shipped')).toBeTruthy();
   });
 });
+
+describe('MessageBubble: system lines', () => {
+  const system = (over: Record<string, unknown> = {}) =>
+    message(7, {
+      kind: 'system',
+      direction: 'in',
+      sender: { kind: 'system', userId: null, name: null },
+      body: 'Bot is back, returned by Asha.',
+      ...over,
+    });
+
+  it('draws a system message as a centred line, not as a bubble on the customer’s side', async () => {
+    await renderApp(<MessageBubble message={system()} />);
+    expect(await screen.findByText('Bot is back, returned by Asha.')).toBeTruthy();
+    // No kind word ("System message") and no time: it is not something the customer sent.
+    expect(screen.queryByText('System message')).toBeNull();
+    expect(screen.queryByLabelText(/^Received:/)).toBeNull();
+  });
+
+  it('words the "Bot is back" line from what happened, in the reader’s language', async () => {
+    await renderApp(
+      <MessageBubble
+        message={system({
+          body: 'raw server text',
+          systemEvent: {
+            event: 'bot_returned',
+            stage: 'pressed',
+            by: 'Asha Verma',
+            resumed: 'next_message',
+            nextMessageBy: 'live_flow',
+          },
+        })}
+      />,
+    );
+    expect(
+      await screen.findByText(
+        "Bot is back, returned by Asha Verma. It will answer the customer's next message.",
+      ),
+    ).toBeTruthy();
+    expect(screen.queryByText('raw server text')).toBeNull();
+  });
+
+  it('adds what happened to the flow and to the customer on the second line', async () => {
+    await renderApp(
+      <MessageBubble
+        message={system({
+          systemEvent: {
+            event: 'bot_returned',
+            stage: 'result',
+            result: 'continued',
+            customer: 'window_closed',
+          },
+        })}
+      />,
+    );
+    expect(
+      await screen.findByText(
+        'The flow continued from the "returned" exit. The message to the customer was skipped: the 24 hour window is closed.',
+      ),
+    ).toBeTruthy();
+  });
+
+  it('names the system when the person who gave it back is not known', async () => {
+    await renderApp(
+      <MessageBubble
+        message={system({
+          systemEvent: {
+            event: 'bot_returned',
+            stage: 'pressed',
+            by: null,
+            resumed: 'flow',
+          },
+        })}
+      />,
+    );
+    expect(
+      await screen.findByText('Bot is back, returned by the system. The flow continues.'),
+    ).toBeTruthy();
+  });
+
+  it('falls back to the server’s own words for another system line (a consent change)', async () => {
+    await renderApp(
+      <MessageBubble
+        message={system({
+          body: 'Subscribed to marketing messages',
+          systemEvent: { event: 'consent', action: 'granted', keyword: null },
+        })}
+      />,
+    );
+    expect(await screen.findByText('Subscribed to marketing messages')).toBeTruthy();
+  });
+
+  it('draws nothing for an empty system line', async () => {
+    await renderApp(<MessageBubble message={system({ body: null })} />);
+    expect(screen.queryByTestId('message-7')).toBeNull();
+  });
+});

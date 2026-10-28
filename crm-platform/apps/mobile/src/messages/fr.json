@@ -1300,8 +1300,10 @@
       "open": "Joindre un fichier",
       "title": "Joindre un fichier",
       "close": "Fermer",
-      "library": "Photo ou vidéo",
       "camera": "Appareil photo",
+      "photo": "Photo",
+      "video": "Vidéo",
+      "audio": "Audio",
       "document": "Document",
       "previewTitle": "Envoyer la pièce jointe",
       "caption": "Légende (facultative)",
@@ -1497,6 +1499,35 @@
       "working": "En cours…",
       "empty": "Écrivez d’abord un message.",
       "failed": "L’IA n’a pas pu modifier le texte. Réessayez."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "Le bot poursuit le flux.",
+        "doneNextLive": "Le bot répondra au prochain message du client.",
+        "doneNextDefault": "Le bot est de nouveau actif. Il ne répondra au prochain message que si un flux par défaut est défini.",
+        "already": "Le bot a déjà cette conversation."
+      },
+      "botLine": {
+        "system": "le système",
+        "pressed": {
+          "flow": "Le bot est de retour, rendu par {{name}}. Le flux continue.",
+          "nextLive": "Le bot est de retour, rendu par {{name}}. Il répondra au prochain message du client.",
+          "nextDefault": "Le bot est de retour, rendu par {{name}}. Il ne répondra au prochain message que si un flux par défaut est défini."
+        },
+        "result": {
+          "continued": "Le flux a continué par la sortie « rendue ».",
+          "claimed_again": "Le flux n’a pas repris : une personne a de nouveau pris la conversation.",
+          "flow_not_live": "Le flux n’a pas repris : il n’est plus actif.",
+          "start_failed": "Le flux n’a pas pu reprendre."
+        },
+        "customer": {
+          "sent": "Le message au client a été envoyé.",
+          "window_closed": "Le message au client a été ignoré : la fenêtre de 24 heures est fermée.",
+          "no_consent": "Le message au client a été ignoré : pas de consentement.",
+          "failed": "Le message au client n’a pas pu être envoyé.",
+          "channel_unavailable": "Le message au client a été ignoré : le canal est indisponible."
+        }
+      }
     },
     "note": {
       "title": "Note privée",

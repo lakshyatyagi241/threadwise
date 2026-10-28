@@ -10,13 +10,13 @@ import {
   markConversationReadResponseSchema,
   messageListResponseSchema,
   messageResponseSchema,
+  returnToBotResponseSchema,
   type MarkSpamConversationInput,
   type SetConversationPriorityInput,
   type SetConversationStatusInput,
   type SnoozeConversationInput,
 } from '@crm/contracts';
 import { File } from 'expo-file-system';
-import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
 import type { PickedAttachment } from './attachment';
 import type { InboxFilters } from './filters';
@@ -206,7 +206,7 @@ export const returnConversationToBot = (id: string, idempotencyKey?: string) =>
   apiFetch(`/v2/inbox/conversations/${id}/return-to-bot`, {
     method: 'POST',
     body: {},
-    schema: z.object({ conversation: conversationSummarySchema }),
+    schema: returnToBotResponseSchema,
     idempotencyKey,
   });
 

@@ -62,6 +62,7 @@ const toBotCall = jest.mocked(api.returnConversationToBot);
 const assigneesCall = jest.mocked(api.fetchAssignees);
 const notesCall = jest.mocked(notesApi.fetchNotes);
 const addNoteCall = jest.mocked(notesApi.addNote);
+const eventsCall = jest.mocked(notesApi.fetchEvents);
 const repliesCall = jest.mocked(savedApi.fetchSavedReplies);
 const fillCall = jest.mocked(savedApi.fillSavedReply);
 const modelsCall = jest.mocked(aiApi.fetchAiModels);
@@ -363,11 +364,18 @@ describe('ThreadScreen', () => {
       await show();
       await loaded();
       expect(templatesCall).not.toHaveBeenCalled();
-      await fireEvent.press(screen.getByRole('button', { name: 'Send Template' }));
-      expect(navigate).toHaveBeenCalledWith({
-        pathname: '/template-picker',
-        params: { id: CONVERSATION_ID },
-      });
+      const platform = jest.replaceProperty(Platform, 'OS', 'android');
+      try {
+        // It is a row of the "+" sheet, under the three ways to attach a file.
+        await fireEvent.press(await screen.findByRole('button', { name: 'Attach a file' }));
+        await fireEvent.press(await screen.findByRole('button', { name: 'Send Template' }));
+        expect(navigate).toHaveBeenCalledWith({
+          pathname: '/template-picker',
+          params: { id: CONVERSATION_ID },
+        });
+      } finally {
+        platform.restore();
+      }
     });
   });
 
@@ -785,8 +793,87 @@ describe('ThreadScreen: a conversation an AI agent has', () => {
   });
 });
 
-describe('ThreadScreen: the Bot cell under the header', () => {
+/** What the server answers to Return to bot (the contract's whole answer, not just the conversation). */
+const backToBot = (over: Record<string, unknown> = {}) =>
+  ({
+    conversation: summary({ rowVersion: 5 }),
+    resumed: 'next_message',
+    nextMessageBy: 'live_flow',
+    why: null,
+    alreadyWithBot: false,
+    ...over,
+  }) as Awaited<ReturnType<typeof api.returnConversationToBot>>;
+
+describe('ThreadScreen: Return to bot says what happens next', () => {
   const held = { user: { id: ME, name: 'Asha Verma' }, team: null, aiAgent: null };
+  const press = async () => {
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Return to bot' }));
+  };
+  const run = async (answer: ReturnType<typeof backToBot>) => {
+    as('inbox.conversation.reply');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    toBotCall.mockResolvedValue(answer);
+    await show();
+    await loaded();
+    await press();
+  };
+
+  it.each([
+    [backToBot({ resumed: 'flow', nextMessageBy: null }), 'The bot continues the flow.'],
+    [backToBot(), "The bot will answer the customer's next message."],
+    [
+      backToBot({ nextMessageBy: 'default_flow' }),
+      'The bot is back on. It answers the next message only if a default flow is set.',
+    ],
+    [backToBot({ alreadyWithBot: true }), 'The bot already has this conversation.'],
+  ])('tells the person which of the four it was', async (answer, sentence) => {
+    await run(answer);
+    expect(await screen.findByText(sentence)).toBeTruthy();
+    expect(screen.queryByText(/Can't reach the server/)).toBeNull();
+  });
+
+  it('lets the message be dismissed, and a new press starts without the old one', async () => {
+    await run(backToBot());
+    await screen.findByText("The bot will answer the customer's next message.");
+    await fireEvent.press(screen.getByRole('button', { name: 'Dismiss' }));
+    expect(screen.queryByText("The bot will answer the customer's next message.")).toBeNull();
+  });
+
+  it('says nothing of that kind when it failed, only the reason', async () => {
+    as('inbox.conversation.reply');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    toBotCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await press();
+    expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    expect(screen.queryByText(/The bot/)).toBeNull();
+  });
+});
+
+describe('ThreadScreen: the agent cell under the header', () => {
+  const held = { user: { id: ME, name: 'Asha Verma' }, team: null, aiAgent: null };
+  const staffOne = () =>
+    assigneesCall.mockResolvedValue({
+      users: [
+        {
+          id: ME,
+          name: 'Asha Verma',
+          email: 'asha@example.test',
+          availability: 'online',
+          openConversations: 3,
+          isMe: true,
+          onLeave: null,
+        },
+      ],
+      teams: [],
+    });
+  /** The three dots: "Return to bot" is one of its lines. */
+  const returnToBot = async () => {
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    await fireEvent.press(await screen.findByRole('menuitem', { name: 'Return to bot' }));
+  };
 
   it('says the bot is answering, with nothing to press, when the bot has the conversation', async () => {
     as('inbox.conversation.reply', 'inbox.conversation.tag');
@@ -795,40 +882,102 @@ describe('ThreadScreen: the Bot cell under the header', () => {
     await loaded();
     expect(await screen.findByLabelText('The bot is answering')).toBeTruthy();
     expect(screen.getByText('Bot')).toBeTruthy();
+  });
+
+  it('names the agent who holds the conversation, as the Geta app does', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.tag');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    await show();
+    await loaded();
+    expect(await screen.findByLabelText('Asha Verma')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
   });
 
-  it('gives the conversation back to the bot from a person, and the cell turns into the bot’s', async () => {
+  it('opens Change agent straight away when it is pressed, with no list of options in between', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.assign');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    staffOne();
+    await show();
+    await loaded();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Asha Verma' }));
+    expect(await screen.findByRole('header', { name: 'Change agent' })).toBeTruthy();
+    expect(await screen.findByRole('radio', { name: /Asha Verma/ })).toBeTruthy();
+    expect(screen.queryByRole('menuitem')).toBeNull();
+    expect(toBotCall).not.toHaveBeenCalled();
+  });
+
+  it('only names the agent, with nothing to press, for a person who may not assign', async () => {
+    as('inbox.conversation.reply');
+    arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
+    await show();
+    await loaded();
+    expect(await screen.findByLabelText('Asha Verma')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Asha Verma' })).toBeNull();
+  });
+
+  it('gives the conversation back to the bot from the three dots, and the cell turns into the bot’s', async () => {
     as('inbox.conversation.reply', 'inbox.conversation.tag');
     arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
-    toBotCall.mockResolvedValue({ conversation: summary({ rowVersion: 5 }) });
+    toBotCall.mockResolvedValue(backToBot());
     await show();
     await loaded();
     detailCall.mockResolvedValue(detail({ handling: 'with_bot', rowVersion: 5 }));
-    await fireEvent.press(await screen.findByRole('button', { name: 'Return to bot' }));
+    await returnToBot();
     await waitFor(() =>
       expect(toBotCall).toHaveBeenCalledWith(CONVERSATION_ID, expect.any(String)),
     );
     expect(await screen.findByLabelText('The bot is answering')).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+    expect(screen.queryByLabelText('Asha Verma')).toBeNull();
   });
 
-  it('offers the return for a conversation waiting in the queue too', async () => {
+  it('offers Return to bot in the three dots for a conversation waiting in the queue too', async () => {
     as('inbox.conversation.reply');
     arrange({ detail: detail({ handling: 'waiting' }) });
     await show();
     await loaded();
-    expect(await screen.findByRole('button', { name: 'Return to bot' })).toBeTruthy();
+    expect(await screen.findByLabelText('Not assigned')).toBeTruthy();
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    expect(await screen.findByRole('menuitem', { name: 'Return to bot' })).toBeTruthy();
   });
 
-  it('shows no return to a person who may not reply', async () => {
+  it('still names the agent to a person who may not reply, but offers no Return to bot', async () => {
     sessionCall.mockResolvedValue(
       withPermissions(BASE.filter((permission) => permission !== 'inbox.conversation.reply')),
     );
     arrange({ detail: detail({ handling: 'with_person', assignment: held }) });
     await show();
     await loaded();
-    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+    expect(await screen.findByLabelText('Asha Verma')).toBeTruthy();
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    await screen.findByRole('menuitem', { name: 'View details' });
+    expect(screen.queryByRole('menuitem', { name: 'Return to bot' })).toBeNull();
+  });
+
+  it('opens Change agent from the Bot cell too, to give a bot conversation to a person', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.assign');
+    arrange({ detail: detail({ handling: 'with_bot' }) });
+    staffOne();
+    await show();
+    await loaded();
+    await fireEvent.press(await screen.findByRole('button', { name: 'The bot is answering' }));
+    expect(await screen.findByRole('header', { name: 'Change agent' })).toBeTruthy();
+    expect(await screen.findByRole('radio', { name: /Asha Verma/ })).toBeTruthy();
+    expect(toBotCall).not.toHaveBeenCalled();
+  });
+
+  it('shows Not assigned, opening Change agent, for a chat nobody holds, when the person may assign', async () => {
+    as('inbox.conversation.reply', 'inbox.conversation.assign');
+    arrange();
+    staffOne();
+    await show();
+    await loaded();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Not assigned' }));
+    expect(await screen.findByRole('header', { name: 'Change agent' })).toBeTruthy();
+    // There is nothing to give back to a bot.
+    await fireEvent.press(await screen.findByRole('button', { name: 'Close' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    await screen.findByRole('menuitem', { name: 'View details' });
+    expect(screen.queryByRole('menuitem', { name: 'Return to bot' })).toBeNull();
   });
 
   it('draws nothing for a conversation no bot ever handled', async () => {
@@ -836,8 +985,11 @@ describe('ThreadScreen: the Bot cell under the header', () => {
     arrange();
     await show();
     await loaded();
-    expect(screen.queryByRole('button', { name: 'Return to bot' })).toBeNull();
+    expect(screen.queryByLabelText('Not assigned')).toBeNull();
     expect(screen.queryByText('Bot')).toBeNull();
+    await fireEvent.press(await screen.findByRole('button', { name: 'More actions' }));
+    await screen.findByRole('menuitem', { name: 'View details' });
+    expect(screen.queryByRole('menuitem', { name: 'Return to bot' })).toBeNull();
   });
 
   it('says why the return failed', async () => {
@@ -846,7 +998,7 @@ describe('ThreadScreen: the Bot cell under the header', () => {
     toBotCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     await show();
     await loaded();
-    await fireEvent.press(await screen.findByRole('button', { name: 'Return to bot' }));
+    await returnToBot();
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
   });
 });
@@ -1076,7 +1228,8 @@ describe('ThreadScreen: who has the conversation', () => {
       });
       await show();
       await loaded();
-      expect(await screen.findByText('Team: Support')).toBeTruthy();
+      // The line above the message box and the cell under the header both say it.
+      expect(await screen.findAllByText('Team: Support')).toHaveLength(2);
     });
 
     it('offers no claim to a person without the right', async () => {
@@ -1292,12 +1445,18 @@ const aNote = (id: string, body: string, createdAt: string) => ({
 });
 
 describe('ThreadScreen: saved replies', () => {
-  const open = async () =>
+  // The "+" sheet hands over to the replies at once on Android (iOS waits for the sheet's dismiss event).
+  let platform: { restore: () => void };
+  const open = async () => {
+    await fireEvent.press(await screen.findByRole('button', { name: 'Attach a file' }));
     await fireEvent.press(await screen.findByRole('button', { name: 'Saved replies' }));
+  };
 
   beforeEach(() => {
+    platform = jest.replaceProperty(Platform, 'OS', 'android');
     repliesCall.mockResolvedValue(repliesPage([THANKS, HOURS]));
   });
+  afterEach(() => platform.restore());
 
   it('opens a list of the replies, asking only for the ones this channel may use', async () => {
     arrange();
@@ -1423,6 +1582,58 @@ describe('ThreadScreen: saved replies', () => {
   });
 });
 
+describe('ThreadScreen: assignment lines', () => {
+  const anEvent = (
+    n: number,
+    type: string,
+    payload: Record<string, unknown>,
+    createdAt: string,
+  ) => ({
+    id: `eeeeeeee-0000-4000-8000-${String(n).padStart(12, '0')}`,
+    conversationId: CONVERSATION_ID,
+    type,
+    actor: { kind: 'user' as const, userId: OTHER_USER, name: 'Kabir Rao' },
+    payload,
+    createdAt,
+  });
+  const eventsPage = (data: ReturnType<typeof anEvent>[]) => ({
+    data,
+    page: { nextCursor: null, hasMore: false, limit: 50 },
+  });
+
+  it('draws who the conversation went to between the messages, and leaves other events to the details', async () => {
+    arrange({
+      messages: [
+        message(1, { createdAt: '2026-10-11T09:00:00.000Z' }),
+        outgoing(2, { body: 'Hi Rohan', createdAt: '2026-10-11T09:30:00.000Z' }),
+      ],
+    });
+    eventsCall.mockResolvedValue(
+      eventsPage([
+        anEvent(1, 'assigned', { toUserId: OTHER_USER }, '2026-10-11T09:10:00.000Z'),
+        anEvent(2, 'tag_added', {}, '2026-10-11T09:20:00.000Z'),
+        anEvent(3, 'unassigned', { toUserId: null }, '2026-10-11T09:40:00.000Z'),
+      ]),
+    );
+    await show();
+    await screen.findByText('Hi Rohan');
+    // The person who did the event is the only name the thread has for that id.
+    expect(await screen.findByText('Assigned to Kabir Rao')).toBeTruthy();
+    expect(screen.getByText('Unassigned')).toBeTruthy();
+    expect(screen.queryByText(/Tag/i)).toBeNull();
+    // Newest first in an inverted list: unassigned, Hi Rohan, tag (not drawn), assigned, message 1.
+    const order = screen
+      .getAllByTestId(/^(message-|thread-event-)/)
+      .map((n) => n.props.testID as string);
+    expect(order).toEqual([
+      'thread-event-eeeeeeee-0000-4000-8000-000000000003',
+      'message-2',
+      'thread-event-eeeeeeee-0000-4000-8000-000000000001',
+      'message-1',
+    ]);
+  });
+});
+
 describe('ThreadScreen: private notes', () => {
   it('shows the notes between the messages where they were written', async () => {
     arrange({
@@ -1461,30 +1672,28 @@ describe('ThreadScreen: private notes', () => {
   const NOTE_TAB = { name: 'Internal note' };
   const REPLY_TAB = { name: 'Reply' };
 
-  it('offers Reply and Internal note tabs to a person who may write notes, with Reply on, and keeps them while a reply is typed', async () => {
+  it('puts the bubble with a lock in the bar for a person who may write notes, and keeps it while a reply is typed', async () => {
     as('inbox.conversation.note');
     arrange();
     await show();
     await loaded();
-    const reply = await screen.findByRole('tab', REPLY_TAB);
-    expect(reply.props.accessibilityState).toMatchObject({ selected: true });
-    expect(screen.getByRole('tab', NOTE_TAB).props.accessibilityState).toMatchObject({
-      selected: false,
-    });
+    // In a reply the button leads to the note.
+    const toNote = await screen.findByRole('button', NOTE_TAB);
+    expect(toNote.props.accessibilityState).toMatchObject({ selected: false });
+    expect(screen.queryByRole('button', REPLY_TAB)).toBeNull();
     await type('Hello');
-    expect(screen.getByRole('tab', NOTE_TAB)).toBeTruthy();
-    expect(screen.getByRole('tab', REPLY_TAB)).toBeTruthy();
+    expect(screen.getByRole('button', NOTE_TAB)).toBeTruthy();
   });
 
-  it('has no tabs for a person who may not write notes', async () => {
+  it('has no such button for a person who may not write notes', async () => {
     arrange();
     await show();
     await loaded();
-    expect(screen.queryByRole('tab', NOTE_TAB)).toBeNull();
-    expect(screen.queryByRole('tab', REPLY_TAB)).toBeNull();
+    expect(screen.queryByRole('button', NOTE_TAB)).toBeNull();
+    expect(screen.queryByRole('button', REPLY_TAB)).toBeNull();
   });
 
-  it('writes a note, not a message, on the Internal note tab; and the Reply tab takes the person back to replying', async () => {
+  it('writes a note, not a message, once the bubble is pressed; and the same button takes the person back to replying', async () => {
     as('inbox.conversation.note');
     arrange();
     addNoteCall.mockResolvedValue(
@@ -1492,7 +1701,7 @@ describe('ThreadScreen: private notes', () => {
     );
     await show();
     await loaded();
-    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    await fireEvent.press(await screen.findByRole('button', NOTE_TAB));
     expect(screen.getByPlaceholderText('Write a note only your team sees')).toBeTruthy();
     expect(screen.queryByLabelText('Message')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
@@ -1512,9 +1721,10 @@ describe('ThreadScreen: private notes', () => {
     await waitFor(() =>
       expect(screen.getByPlaceholderText('Write a note only your team sees').props.value).toBe(''),
     );
-    await fireEvent.press(screen.getByRole('tab', REPLY_TAB));
+    await fireEvent.press(screen.getByRole('button', REPLY_TAB));
     expect(await screen.findByLabelText('Message')).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Saved replies' })).toBeTruthy();
+    // The "+" (saved replies, attach, template, emoji) is back too.
+    expect(screen.getByRole('button', { name: 'Attach a file' })).toBeTruthy();
   });
 
   it('says so when the note could not be saved, and keeps what was typed', async () => {
@@ -1523,7 +1733,7 @@ describe('ThreadScreen: private notes', () => {
     addNoteCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
     await show();
     await loaded();
-    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    await fireEvent.press(await screen.findByRole('button', NOTE_TAB));
     await fireEvent.changeText(
       screen.getByPlaceholderText('Write a note only your team sees'),
       'Call tomorrow',
@@ -1546,7 +1756,7 @@ describe('ThreadScreen: private notes', () => {
     await screen.findByText('Send Template');
     expect(screen.queryByPlaceholderText('Write a note only your team sees')).toBeNull();
     // ...and the note side is a box that works.
-    await fireEvent.press(await screen.findByRole('tab', NOTE_TAB));
+    await fireEvent.press(await screen.findByRole('button', NOTE_TAB));
     await fireEvent.changeText(
       await screen.findByPlaceholderText('Write a note only your team sees'),
       'Customer called',
@@ -1560,7 +1770,7 @@ describe('ThreadScreen: private notes', () => {
       ),
     );
     expect(sendCall).not.toHaveBeenCalled();
-    await fireEvent.press(screen.getByRole('tab', REPLY_TAB));
+    await fireEvent.press(screen.getByRole('button', REPLY_TAB));
     expect(await screen.findByText('Send Template')).toBeTruthy();
   });
 
@@ -1573,8 +1783,8 @@ describe('ThreadScreen: private notes', () => {
     await loaded();
     expect(await screen.findByPlaceholderText('Write a note only your team sees')).toBeTruthy();
     expect(screen.queryByLabelText('Message')).toBeNull();
-    expect(screen.queryByRole('tab', REPLY_TAB)).toBeNull();
-    expect(screen.queryByRole('tab', NOTE_TAB)).toBeNull();
+    expect(screen.queryByRole('button', REPLY_TAB)).toBeNull();
+    expect(screen.queryByRole('button', NOTE_TAB)).toBeNull();
   });
 });
 
@@ -1631,16 +1841,47 @@ describe('ThreadScreen: attachments', () => {
     else documentPick.mockResolvedValue({ status: 'picked', attachment: REPORT });
     await openMenu();
     await fireEvent.press(
-      await screen.findByRole('button', { name: file === PHOTO ? 'Photo or video' : 'Document' }),
+      await screen.findByRole('button', { name: file === PHOTO ? 'Photo' : 'Document' }),
     );
     await screen.findByText('Send attachment');
   };
 
-  it('puts a paperclip beside the message box and opens the three choices', async () => {
+  it('puts a plus beside the message box and opens a grid of the ways to attach a file, then saved replies, template and emoji', async () => {
     await openMenu();
-    expect(await screen.findByRole('button', { name: 'Photo or video' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Camera' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Document' })).toBeTruthy();
+    // The same tiles, in the same order, as the Geta app's sheet, then this app's own.
+    await screen.findByRole('button', { name: 'Photo' });
+    const names = screen
+      .getAllByRole('button')
+      .map((b) => b.props.accessibilityLabel as string)
+      .filter((n) =>
+        [
+          'Camera',
+          'Photo',
+          'Video',
+          'Audio',
+          'Document',
+          'Saved replies',
+          'Send Template',
+          'Insert an emoji',
+        ].includes(n),
+      );
+    expect(names).toEqual([
+      'Camera',
+      'Photo',
+      'Video',
+      'Audio',
+      'Document',
+      'Saved replies',
+      'Send Template',
+      'Insert an emoji',
+    ]);
+  });
+
+  it('opens the library for videos from the Video tile', async () => {
+    library.mockResolvedValue({ status: 'canceled' });
+    await openMenu();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Video' }));
+    await waitFor(() => expect(library).toHaveBeenCalledWith('video'));
   });
 
   it('has no paperclip for a person who may not reply, nor on a closed reply window', async () => {
@@ -1679,7 +1920,7 @@ describe('ThreadScreen: attachments', () => {
   it('does nothing when the person goes back from the picker', async () => {
     library.mockResolvedValue({ status: 'canceled' });
     await openMenu();
-    await fireEvent.press(await screen.findByRole('button', { name: 'Photo or video' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Photo' }));
     await waitFor(() => expect(library).toHaveBeenCalled());
     expect(screen.queryByText('Send attachment')).toBeNull();
     expect(uploadCall).not.toHaveBeenCalled();

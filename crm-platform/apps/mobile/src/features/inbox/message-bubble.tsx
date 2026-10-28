@@ -22,6 +22,7 @@ import {
 import { OpenFileTile } from './file-open-tile';
 import { formatClock } from './time';
 import { templateButtonHref } from './template-button';
+import { SystemLine } from './system-line';
 
 const STATUS_ICON: Record<MessageStatus, IconName | null> = {
   received: null,
@@ -124,7 +125,16 @@ export function Bubble({
 }
 
 /** A message from the API, drawn as the customer sees it: its picture or file, a template's header, footer and buttons. */
-export function MessageBubble({
+export function MessageBubble(props: {
+  message: MessageResponse;
+  onRetry?: (message: MessageResponse) => void;
+}) {
+  // A system line (the bot is back, a consent change) is for the team: a centred line, not a bubble on the customer's side.
+  if (props.message.kind === 'system') return <SystemLine message={props.message} />;
+  return <StoredMessage {...props} />;
+}
+
+function StoredMessage({
   message,
   onRetry,
 }: {

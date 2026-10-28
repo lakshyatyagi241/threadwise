@@ -3,6 +3,7 @@ import { File } from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import {
   discardAttachment,
+  pickAudio,
   pickDocument,
   pickFromCamera,
   pickFromLibrary,
@@ -21,7 +22,7 @@ beforeEach(() => {
 });
 
 describe('pickFromLibrary', () => {
-  it('asks for one picture or video and returns it as an attachment', async () => {
+  it('asks for one picture and returns it as an attachment', async () => {
     library.mockResolvedValue({
       canceled: false,
       assets: [
@@ -46,7 +47,30 @@ describe('pickFromLibrary', () => {
       },
     });
     expect(library).toHaveBeenCalledWith(
-      expect.objectContaining({ mediaTypes: ['images', 'videos'], allowsMultipleSelection: false }),
+      expect.objectContaining({ mediaTypes: ['images'], allowsMultipleSelection: false }),
+    );
+  });
+
+  it('asks for videos only when the Video tile is chosen', async () => {
+    library.mockResolvedValue({
+      canceled: false,
+      assets: [
+        {
+          uri: 'file:///v.mp4',
+          width: 1,
+          height: 1,
+          fileName: 'v.mp4',
+          mimeType: 'video/mp4',
+          fileSize: 5000,
+        },
+      ],
+    });
+    await expect(pickFromLibrary('video')).resolves.toMatchObject({
+      status: 'picked',
+      attachment: { name: 'v.mp4', kind: 'video' },
+    });
+    expect(library).toHaveBeenCalledWith(
+      expect.objectContaining({ mediaTypes: ['videos'], allowsMultipleSelection: false }),
     );
   });
 
@@ -152,5 +176,34 @@ describe('discardAttachment', () => {
       throw new Error('missing');
     });
     expect(() => discardAttachment(file('file:///cache/r.pdf'))).not.toThrow();
+  });
+});
+
+describe('pickAudio', () => {
+  it('opens the file browser for sounds only and returns the file as an audio attachment', async () => {
+    documents.mockResolvedValue({
+      canceled: false,
+      assets: [{ uri: 'file:///cache/a.mp3', name: 'a.mp3', mimeType: 'audio/mpeg', size: 900 }],
+    } as never);
+    await expect(pickAudio()).resolves.toEqual({
+      status: 'picked',
+      attachment: {
+        uri: 'file:///cache/a.mp3',
+        name: 'a.mp3',
+        mime: 'audio/mpeg',
+        sizeBytes: 900,
+        kind: 'audio',
+      },
+    });
+    expect(documents).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'audio/*', copyToCacheDirectory: true }),
+    );
+  });
+
+  it('answers canceled when the person goes back, and failed when the browser throws', async () => {
+    documents.mockResolvedValueOnce({ canceled: true, assets: null });
+    await expect(pickAudio()).resolves.toEqual({ status: 'canceled' });
+    documents.mockRejectedValueOnce(new Error('boom'));
+    await expect(pickAudio()).resolves.toEqual({ status: 'failed' });
   });
 });

@@ -3,7 +3,8 @@ import { isBotConversation, menuActionsFor, snoozeUntil, STATUS_TARGETS } from '
 
 const ME = '11111111-1111-4111-8111-111111111111';
 const nobody: ConversationAssignment = { user: null, team: null, aiAgent: null };
-const everything = { canResolve: true, canLabel: true, canAssign: true };
+/** Everything but the way back to the bot, which only a conversation held by a person has. */
+const everything = { canResolve: true, canLabel: true, canAssign: true, canReturnToBot: false };
 
 describe('menuActionsFor', () => {
   it('lists the four lines of the reference app, in its order, then Mark as spam, for a person who may do everything', () => {
@@ -14,6 +15,27 @@ describe('menuActionsFor', () => {
       'agent',
       'spam',
     ]);
+  });
+
+  it('offers Return to bot after Assign agent when a person holds the conversation, and nothing else changes', () => {
+    expect(menuActionsFor({ ...everything, canReturnToBot: true, status: 'open' })).toEqual([
+      'details',
+      'status',
+      'labels',
+      'agent',
+      'bot',
+      'spam',
+    ]);
+    // It does not depend on the right to assign: a person who may only reply can still give the chat back.
+    expect(
+      menuActionsFor({
+        canResolve: false,
+        canLabel: false,
+        canAssign: false,
+        canReturnToBot: true,
+        status: 'open',
+      }),
+    ).toEqual(['details', 'bot']);
   });
 
   it('offers Mark as spam from every status but spam itself, and only with the resolve right', () => {
@@ -28,7 +50,13 @@ describe('menuActionsFor', () => {
 
   it('always offers the details, and nothing else to a person with no other right', () => {
     expect(
-      menuActionsFor({ canResolve: false, canLabel: false, canAssign: false, status: 'open' }),
+      menuActionsFor({
+        canResolve: false,
+        canLabel: false,
+        canAssign: false,
+        canReturnToBot: false,
+        status: 'open',
+      }),
     ).toEqual(['details']);
   });
 

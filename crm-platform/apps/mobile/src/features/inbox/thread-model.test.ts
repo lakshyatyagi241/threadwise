@@ -63,8 +63,22 @@ describe('mergeThread', () => {
     createdAt,
     rowVersion: 1,
   });
+  const event = (id: string, type: string, createdAt: string) => ({
+    id: `eeeeeeee-0000-4000-8000-${id.padStart(12, '0')}`,
+    conversationId: '11111111-1111-4111-8111-111111111111',
+    type,
+    actor: { kind: 'user' as const, userId: null, name: 'Kabir Rao' },
+    payload: {},
+    createdAt,
+  });
   const kinds = (items: ReturnType<typeof mergeThread>) =>
-    items.map((i) => (i.kind === 'note' ? `note:${i.note.id}` : `msg:${i.message.seq}`));
+    items.map((i) =>
+      i.kind === 'note'
+        ? `note:${i.note.id}`
+        : i.kind === 'event'
+          ? `event:${i.event.type}`
+          : `msg:${i.message.seq}`,
+    );
 
   it('puts a note after the last message written before it', () => {
     const merged = mergeThread(
@@ -99,5 +113,40 @@ describe('mergeThread', () => {
       'note:a',
       'note:b',
     ]);
+  });
+
+  it('puts assignment events between the messages, with the notes in time order', () => {
+    const merged = mergeThread(
+      [message(1, { createdAt: at(0) }), message(2, { createdAt: at(30) })],
+      [note('a', at(20))],
+      [event('1', 'assigned', at(10)), event('2', 'unassigned', at(25))],
+    );
+    expect(kinds(merged)).toEqual([
+      'msg:1',
+      'event:assigned',
+      'note:a',
+      'event:unassigned',
+      'msg:2',
+    ]);
+  });
+
+  it('leaves out events that are not about who has the conversation', () => {
+    const merged = mergeThread(
+      [message(1, { createdAt: at(0) })],
+      [],
+      [
+        event('1', 'status_changed', at(5)),
+        event('2', 'tag_added', at(6)),
+        event('3', 'reassigned', at(7)),
+        event('4', 'sla_breach', at(8)),
+      ],
+    );
+    expect(kinds(merged)).toEqual(['msg:1', 'event:reassigned']);
+  });
+
+  it('keeps the message first when an event is from the same instant', () => {
+    expect(
+      kinds(mergeThread([message(1, { createdAt: at(5) })], [], [event('1', 'assigned', at(5))])),
+    ).toEqual(['msg:1', 'event:assigned']);
   });
 });

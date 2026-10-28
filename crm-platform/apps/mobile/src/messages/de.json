@@ -1278,8 +1278,10 @@
       "open": "Datei anhängen",
       "title": "Datei anhängen",
       "close": "Schließen",
-      "library": "Foto oder Video",
       "camera": "Kamera",
+      "photo": "Foto",
+      "video": "Video",
+      "audio": "Audio",
       "document": "Dokument",
       "previewTitle": "Anhang senden",
       "caption": "Bildunterschrift (optional)",
@@ -1473,6 +1475,35 @@
       "working": "Wird bearbeitet…",
       "empty": "Schreiben Sie zuerst eine Nachricht.",
       "failed": "Die KI konnte den Text nicht ändern. Bitte erneut versuchen."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "Der Bot führt den Flow fort.",
+        "doneNextLive": "Der Bot antwortet auf die nächste Nachricht des Kunden.",
+        "doneNextDefault": "Der Bot ist wieder aktiv. Er antwortet auf die nächste Nachricht nur, wenn ein Standard-Flow festgelegt ist.",
+        "already": "Der Bot hat diese Unterhaltung bereits."
+      },
+      "botLine": {
+        "system": "das System",
+        "pressed": {
+          "flow": "Der Bot ist wieder da, zurückgegeben von {{name}}. Der Flow läuft weiter.",
+          "nextLive": "Der Bot ist wieder da, zurückgegeben von {{name}}. Er antwortet auf die nächste Nachricht des Kunden.",
+          "nextDefault": "Der Bot ist wieder da, zurückgegeben von {{name}}. Er antwortet auf die nächste Nachricht nur, wenn ein Standard-Flow festgelegt ist."
+        },
+        "result": {
+          "continued": "Der Flow lief am Ausgang „zurückgegeben“ weiter.",
+          "claimed_again": "Der Flow wurde nicht fortgesetzt: Eine Person hat den Chat erneut übernommen.",
+          "flow_not_live": "Der Flow wurde nicht fortgesetzt: Er ist nicht mehr aktiv.",
+          "start_failed": "Der Flow konnte nicht fortgesetzt werden."
+        },
+        "customer": {
+          "sent": "Die Nachricht an den Kunden wurde gesendet.",
+          "window_closed": "Die Nachricht an den Kunden wurde übersprungen: Das 24-Stunden-Fenster ist geschlossen.",
+          "no_consent": "Die Nachricht an den Kunden wurde übersprungen: keine Einwilligung.",
+          "failed": "Die Nachricht an den Kunden konnte nicht gesendet werden.",
+          "channel_unavailable": "Die Nachricht an den Kunden wurde übersprungen: Der Kanal ist nicht verfügbar."
+        }
+      }
     },
     "note": {
       "title": "Private Notiz",

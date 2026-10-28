@@ -23,6 +23,23 @@ interface Props {
   onClose: () => void;
 }
 
+/** The order the web inbox lists people in: those who are online first, then away, busy and offline. */
+const AVAILABILITY_RANK = { online: 0, away: 1, busy: 2, offline: 3 } as const;
+
+/**
+ * The agents of the picker, you first, then everyone else by how available they are right now (the web inbox's order), and by name
+ * within the same availability (the API already sends them by name, and a stable sort keeps that).
+ */
+export function sortAssignees<
+  T extends { isMe: boolean; availability: keyof typeof AVAILABILITY_RANK },
+>(users: readonly T[]): T[] {
+  return [...users].sort(
+    (a, b) =>
+      Number(b.isMe) - Number(a.isMe) ||
+      AVAILABILITY_RANK[a.availability] - AVAILABILITY_RANK[b.availability],
+  );
+}
+
 /**
  * "Change agent": every active member who may open the inbox (with whether they are online and how many open conversations they
  * have right now) and, when the workspace has teams, the teams. One choice in each, "Unassigned" and "No team" included, then Save.
@@ -40,16 +57,14 @@ export function AssignSheet({ visible, assignment, bulk, saving, error, onSave, 
       title: t('inbox.assign.agents'),
       options: [
         { value: '', label: t('inbox.assign.unassigned') },
-        ...[...users]
-          .sort((a, b) => Number(b.isMe) - Number(a.isMe))
-          .map((u) => {
-            const name = u.name ?? u.email;
-            return {
-              value: u.id,
-              label: u.isMe ? t('inbox.assign.you', { name }) : name,
-              hint: `${t(`inbox.assign.availability.${u.availability}`)} · ${t('inbox.assign.open', { count: u.openConversations })}`,
-            };
-          }),
+        ...sortAssignees(users).map((u) => {
+          const name = u.name ?? u.email;
+          return {
+            value: u.id,
+            label: u.isMe ? t('inbox.assign.you', { name }) : name,
+            hint: `${t(`inbox.assign.availability.${u.availability}`)} · ${t('inbox.assign.open', { count: u.openConversations })}`,
+          };
+        }),
       ],
     },
     ...(teams.length > 0

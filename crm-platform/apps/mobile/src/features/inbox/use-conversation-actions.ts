@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { isApiError } from '@/lib/api';
 import type { AssignmentChange } from './assign-sheet';
 import { snoozeUntil, type SnoozeChoice } from './thread-actions';
+import { giveBackKey, type GiveBackKey } from './handoff-lines';
 import { sendErrorMessage } from './thread-errors';
 import {
   useAssign,
@@ -35,14 +36,16 @@ export function useConversationActions(
   const spam = useMarkSpam(id);
   const toBot = useReturnToBot(id);
 
+  const failure = (error: unknown): string =>
+    isApiError(error) && error.code === ERROR_CODES.ROW_VERSION_CONFLICT
+      ? t('inbox.thread.conflict')
+      : sendErrorMessage(error, t);
   const run = async (action: () => Promise<unknown>): Promise<string | null> => {
     try {
       await action();
       return null;
     } catch (error) {
-      return isApiError(error) && error.code === ERROR_CODES.ROW_VERSION_CONFLICT
-        ? t('inbox.thread.conflict')
-        : sendErrorMessage(error, t);
+      return failure(error);
     }
   };
 
@@ -57,8 +60,17 @@ export function useConversationActions(
       toBot.isPending,
     assigning: assign.isPending,
     givingToBot: toBot.isPending,
-    /** Hands the conversation back to the bot; it needs no row version. */
-    giveToBot: async () => run(() => toBot.mutateAsync()),
+    /**
+     * Hands the conversation back to the bot; it needs no row version. The server says what happens next (the flow continues, or the bot
+     * answers the customer's next message), so a success carries the sentence to show; a failure carries the reason.
+     */
+    giveToBot: async (): Promise<{ failed: string | null; done: GiveBackKey | null }> => {
+      try {
+        return { failed: null, done: giveBackKey(await toBot.mutateAsync()) };
+      } catch (error) {
+        return { failed: failure(error), done: null };
+      }
+    },
     moveTo: async (status: SetConversationStatusInput['status']) =>
       conversation
         ? run(() => setStatus.mutateAsync({ rowVersion: conversation.rowVersion, status }))

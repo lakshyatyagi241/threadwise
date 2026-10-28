@@ -7,6 +7,7 @@ jest.mock('./pick-attachment');
 jest.mock('@/lib/device/open-settings', () => ({ openPermissionSettings: jest.fn() }));
 
 const library = jest.mocked(pickers.pickFromLibrary);
+const audio = jest.mocked(pickers.pickAudio);
 const PHOTO = {
   uri: 'file:///p.jpg',
   name: 'p.jpg',
@@ -26,7 +27,7 @@ describe('useAttachFlow', () => {
     const { result } = await renderHook(() => useAttachFlow());
     await act(async () => result.current.open());
     expect(result.current.menuOpen).toBe(true);
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(result.current.menuOpen).toBe(false);
     expect(library).toHaveBeenCalledTimes(1);
     expect(result.current.file).toEqual(PHOTO);
@@ -37,7 +38,7 @@ describe('useAttachFlow', () => {
     const platform = jest.replaceProperty(Platform, 'OS', 'ios');
     const { result } = await renderHook(() => useAttachFlow());
     await act(async () => result.current.open());
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(library).not.toHaveBeenCalled();
     await act(async () => result.current.onMenuDismissed());
     expect(library).toHaveBeenCalledTimes(1);
@@ -62,7 +63,7 @@ describe('useAttachFlow', () => {
     const platform = jest.replaceProperty(Platform, 'OS', 'android');
     library.mockResolvedValue({ status: 'picked', attachment: { ...PHOTO, sizeBytes: 0 } });
     const { result } = await renderHook(() => useAttachFlow());
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(result.current.file).toBeNull();
     expect(result.current.notice).toEqual({ kind: 'empty' });
     platform.restore();
@@ -72,7 +73,7 @@ describe('useAttachFlow', () => {
     const platform = jest.replaceProperty(Platform, 'OS', 'android');
     library.mockResolvedValue({ status: 'failed' });
     const { result } = await renderHook(() => useAttachFlow());
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(result.current.notice).toEqual({ kind: 'pickFailed' });
     await act(async () => result.current.open());
     expect(result.current.notice).toBeNull();
@@ -92,8 +93,8 @@ describe('useAttachFlow: guards', () => {
     );
     const { result } = await renderHook(() => useAttachFlow());
     await act(async () => {
-      result.current.choose('library');
-      result.current.choose('library');
+      result.current.choose('photo');
+      result.current.choose('photo');
     });
     expect(library).toHaveBeenCalledTimes(1);
     await act(async () => finish?.());
@@ -104,7 +105,7 @@ describe('useAttachFlow: guards', () => {
   it('forgets a choice that never got its "dismissed" event when the sheet is opened again', async () => {
     const platform = jest.replaceProperty(Platform, 'OS', 'ios');
     const { result } = await renderHook(() => useAttachFlow());
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     await act(async () => result.current.open());
     await act(async () => result.current.onMenuDismissed());
     expect(library).not.toHaveBeenCalled();
@@ -116,15 +117,28 @@ describe('useAttachFlow: guards', () => {
     const big = { ...PHOTO, sizeBytes: 6 * 1024 * 1024 };
     library.mockResolvedValueOnce({ status: 'picked', attachment: big });
     const { result } = await renderHook(() => useAttachFlow());
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(pickers.discardAttachment).toHaveBeenCalledWith(big);
     expect(result.current.file).toBeNull();
 
-    await act(async () => result.current.choose('library'));
+    await act(async () => result.current.choose('photo'));
     expect(result.current.file).toEqual(PHOTO);
     await act(async () => result.current.closeFile());
     expect(pickers.discardAttachment).toHaveBeenCalledWith(PHOTO);
     expect(result.current.file).toBeNull();
+    platform.restore();
+  });
+
+  it('asks the library for a video, and the file browser for audio, by the tile chosen', async () => {
+    const platform = jest.replaceProperty(Platform, 'OS', 'android');
+    audio.mockResolvedValue({ status: 'canceled' });
+    const { result } = await renderHook(() => useAttachFlow());
+    await act(async () => result.current.choose('video'));
+    expect(library).toHaveBeenLastCalledWith('video');
+    await act(async () => result.current.choose('photo'));
+    expect(library).toHaveBeenLastCalledWith('photo');
+    await act(async () => result.current.choose('audio'));
+    expect(audio).toHaveBeenCalledTimes(1);
     platform.restore();
   });
 });

@@ -1,12 +1,12 @@
 import { MESSAGE_BODY_MAX, NOTE_BODY_MAX } from '@crm/contracts';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Button } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
+import { Text } from '@/components/ui/text';
 import { TextField, type TextFieldHandle } from '@/components/ui/text-field';
-import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
+import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { EmojiSheet } from './emoji-sheet';
 import { FormatBar } from './format-bar';
@@ -18,36 +18,44 @@ import {
   type Edit,
   type Mark,
 } from './format-text';
+import { NoteToggle, type ComposerMode } from './note-toggle';
 
 interface Selection {
   start: number;
   end: number;
 }
 
+/** What the thread screen can ask of the box: the "+" sheet has an Emoji row, and an emoji goes in at the caret. */
+export interface ComposerHandle {
+  openEmoji: () => void;
+}
+
+/** The send button: a filled circle, as in the Geta app. */
+const SEND_SIZE = MIN_TOUCH_TARGET;
+
 interface Props {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
-  /** A reply goes to the customer; a note stays inside the team (a warm box, "Add note"). */
-  mode?: 'reply' | 'note';
+  /** A reply goes to the customer; a note stays inside the team (a warm bar, "Add note"). */
+  mode?: ComposerMode;
   /** The note is on its way: the button waits. */
   busy?: boolean;
-  /** Opens the saved replies; the button shows only when this is given (replies only). */
-  onOpenReplies?: () => void;
-  /** Opens the attach sheet (photo, camera, document); the paperclip shows only when this is given (replies only). */
-  onOpenAttach?: () => void;
-  /** Opens the template list (a template can be sent inside the 24-hour window too); the button shows only when this is given (replies only). */
-  onOpenTemplates?: () => void;
+  /** Opens the "+" sheet (attach a file, saved replies, template, emoji); the plus shows only when this is given (replies only). */
+  onOpenPlus?: () => void;
   /** Opens the Smart AI Assistant (condense, fix grammar, positive tone, translate); the sparkle shows only when this is given (replies only). */
   onOpenAi?: () => void;
+  /** Switches between a reply and an internal note (the bubble with a lock); the button shows only when this is given. */
+  onToggleNote?: () => void;
+  handleRef?: RefObject<ComposerHandle | null>;
 }
 
 /**
- * The box at the bottom of a thread. Sending is possible only for a non-empty text within the length limit. In reply mode a
- * lightning-bolt button opens the saved replies, a paperclip the attach sheet (photo, camera, document), a document button the template list, a
- * smile the emoji sheet and a sparkle the Smart AI Assistant; a row of formatting buttons (bold, italic, underline, strikethrough, bullets,
- * numbers) writes WhatsApp's marks into the text at the caret or round the selection. In note mode the box is tinted, has none of those
- * and the button says "Add note".
+ * The bar at the bottom of a thread, laid out like the Geta app's: one rounded bar holding the "+" (attach a file, saved replies, a
+ * template, an emoji), the text box, the sparkle (Smart AI Assistant) and the bubble with a lock (internal note), then the round send
+ * button. Sending is possible only for a non-empty text within the length limit. While the box has focus a row of formatting buttons
+ * (bold, italic, underline, strikethrough, bullets, numbers) shows above it and writes WhatsApp's marks into the text. In note mode
+ * the bar is tinted warm, the box is for the team only, and the button says "Add note".
  */
 export function Composer({
   value,
@@ -55,10 +63,10 @@ export function Composer({
   onSend,
   mode = 'reply',
   busy,
-  onOpenReplies,
-  onOpenAttach,
-  onOpenTemplates,
+  onOpenPlus,
   onOpenAi,
+  onToggleNote,
+  handleRef,
 }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -68,12 +76,12 @@ export function Composer({
   // Where the caret or selection is; `pending` is set only to move it after a button changed the text, and cleared once the box has.
   const [selection, setSelection] = useState<Selection>({ start: 0, end: 0 });
   const [pending, setPending] = useState<Selection | undefined>();
+  const [focused, setFocused] = useState(false);
   const [emojiOpen, setEmojiOpen] = useState(false);
   const max = note ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = value.trim();
   const tooLong = trimmed.length > max;
-  const canSend = trimmed.length > 0 && !tooLong;
-  // The tool buttons sit in their own row under the box: five controls in one row left the box about 60 dp wide on a phone.
+  const canSend = trimmed.length > 0 && !tooLong && !busy;
   const at = {
     start: Math.min(selection.start, value.length),
     end: Math.min(selection.end, value.length),
@@ -94,51 +102,27 @@ export function Composer({
       start: at.start + emoji.length,
       end: at.start + emoji.length,
     });
-  const hasTools = !note;
+  // The "+" sheet's Emoji row asks for the emoji sheet through this handle.
+  useEffect(() => {
+    if (!handleRef) return;
+    handleRef.current = { openEmoji: () => setEmojiOpen(true) };
+    return () => {
+      handleRef.current = null;
+    };
+  }, [handleRef]);
+
   return (
     <View
       style={[
         styles.bar,
         {
-          backgroundColor: note ? colors.warningSoft : colors.surface,
+          backgroundColor: colors.surface,
           borderTopColor: colors.border,
           paddingBottom: insets.bottom + spacing.sm,
         },
       ]}
     >
-      <View style={styles.inputRow}>
-        <View style={styles.field}>
-          <TextField
-            label={note ? t('inbox.composer.noteLabel') : t('inbox.composer.label')}
-            placeholder={
-              note ? t('inbox.composer.notePlaceholder') : t('inbox.composer.placeholder')
-            }
-            value={value}
-            onChangeText={onChange}
-            inputRef={input}
-            selection={pending}
-            onSelectionChange={(e) => {
-              setSelection(e.nativeEvent.selection);
-              setPending(undefined);
-            }}
-            multiline
-            error={
-              tooLong
-                ? note
-                  ? t('inbox.details.notes.tooLong', { max })
-                  : t('inbox.composer.tooLong', { max })
-                : null
-            }
-          />
-        </View>
-        <Button
-          label={note ? t('inbox.composer.addNote') : t('inbox.composer.send')}
-          loading={busy}
-          onPress={onSend}
-          disabled={!canSend}
-        />
-      </View>
-      {!note ? (
+      {!note && focused ? (
         <FormatBar
           active={active}
           onMark={(mark: Mark) => apply(toggleMark(value, at.start, at.end, mark))}
@@ -146,48 +130,48 @@ export function Composer({
           onList={(kind) => apply(toggleList(value, at.start, at.end, kind))}
         />
       ) : null}
-      {hasTools ? (
-        <View style={styles.tools}>
-          {!note && onOpenReplies ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('inbox.replies.open')}
-              onPress={onOpenReplies}
-              style={styles.tool}
-            >
-              <Icon name="flash-outline" size={24} color="primary" />
-            </Pressable>
-          ) : null}
-          {!note && onOpenAttach ? (
+      {tooLong ? (
+        <Text variant="caption" danger accessibilityRole="alert">
+          {note ? t('inbox.details.notes.tooLong', { max }) : t('inbox.composer.tooLong', { max })}
+        </Text>
+      ) : null}
+      <View style={styles.row}>
+        <View
+          style={[
+            styles.pill,
+            { backgroundColor: note ? colors.warningSoft : colors.surfaceMuted },
+          ]}
+        >
+          {!note && onOpenPlus ? (
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t('inbox.attach.open')}
-              onPress={onOpenAttach}
+              onPress={onOpenPlus}
               style={styles.tool}
             >
-              <Icon name="attach" size={24} color="primary" />
+              <Icon name="add-circle-outline" size={28} color="primary" />
             </Pressable>
           ) : null}
-          {!note && onOpenTemplates ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('inbox.template.send')}
-              onPress={onOpenTemplates}
-              style={styles.tool}
-            >
-              <Icon name="document-text-outline" size={24} color="primary" />
-            </Pressable>
-          ) : null}
-          {!note ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('inbox.composer.emoji.open')}
-              onPress={() => setEmojiOpen(true)}
-              style={styles.tool}
-            >
-              <Icon name="happy-outline" size={24} color="primary" />
-            </Pressable>
-          ) : null}
+          <View style={[styles.field, (note || !onOpenPlus) && styles.fieldFirst]}>
+            <TextField
+              bare
+              label={note ? t('inbox.composer.noteLabel') : t('inbox.composer.label')}
+              placeholder={
+                note ? t('inbox.composer.notePlaceholder') : t('inbox.composer.placeholder')
+              }
+              value={value}
+              onChangeText={onChange}
+              inputRef={input}
+              selection={pending}
+              onSelectionChange={(e) => {
+                setSelection(e.nativeEvent.selection);
+                setPending(undefined);
+              }}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              multiline
+            />
+          </View>
           {!note && onOpenAi ? (
             <Pressable
               accessibilityRole="button"
@@ -195,11 +179,30 @@ export function Composer({
               onPress={onOpenAi}
               style={styles.tool}
             >
-              <Icon name="sparkles-outline" size={24} color="primary" />
+              <Icon name="sparkles" size={24} color="primary" />
             </Pressable>
           ) : null}
+          {onToggleNote ? <NoteToggle mode={mode} onToggle={onToggleNote} /> : null}
         </View>
-      ) : null}
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={note ? t('inbox.composer.addNote') : t('inbox.composer.send')}
+          accessibilityState={{ disabled: !canSend, busy: Boolean(busy) }}
+          disabled={!canSend}
+          onPress={onSend}
+          style={[
+            styles.send,
+            { backgroundColor: colors.action },
+            !canSend && !busy && styles.sendOff,
+          ]}
+        >
+          {busy ? (
+            <ActivityIndicator color={colors.onAction} />
+          ) : (
+            <Icon name="send" size={22} color="onAction" />
+          )}
+        </Pressable>
+      </View>
       {!note ? (
         <EmojiSheet visible={emojiOpen} onPick={insertEmoji} onClose={() => setEmojiOpen(false)} />
       ) : null}
@@ -214,13 +217,28 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
-  inputRow: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
-  field: { flex: 1 },
-  tools: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  row: { flexDirection: 'row', alignItems: 'flex-end', gap: spacing.sm },
+  pill: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    borderRadius: radius.xl,
+    paddingHorizontal: spacing.xs,
+  },
+  field: { flex: 1, maxHeight: 132, justifyContent: 'center' },
+  fieldFirst: { paddingStart: spacing.md },
   tool: {
     width: MIN_TOUCH_TARGET,
     height: MIN_TOUCH_TARGET,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  send: {
+    width: SEND_SIZE,
+    height: SEND_SIZE,
+    borderRadius: SEND_SIZE / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sendOff: { opacity: 0.4 },
 });

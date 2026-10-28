@@ -4,9 +4,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { NoteToggle } from './note-toggle';
 
 interface Props {
   onOpen: () => void;
+  /** Opens the internal note box (a note can be written with the window closed); the bubble with a lock shows only when this is given. */
+  onToggleNote?: () => void;
 }
 
 /**
@@ -15,7 +18,7 @@ interface Props {
  * button is a quiet filled bar (muted fill, blue label, no border) like the reference app's, not a big outlined one, so it does not
  * take the place of the thread.
  */
-export function TemplateBar({ onOpen }: Props) {
+export function TemplateBar({ onOpen, onToggleNote }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -33,19 +36,22 @@ export function TemplateBar({ onOpen }: Props) {
       <Text muted style={styles.notice}>
         {t('inbox.template.closedNotice')}
       </Text>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('inbox.template.send')}
-        onPress={onOpen}
-        style={({ pressed }) => [
-          styles.button,
-          { backgroundColor: colors.surfaceMuted, opacity: pressed ? 0.85 : 1 },
-        ]}
-      >
-        <Text variant="label" style={[styles.label, { color: colors.primary }]}>
-          {t('inbox.template.send')}
-        </Text>
-      </Pressable>
+      <View style={styles.actions}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('inbox.template.send')}
+          onPress={onOpen}
+          style={({ pressed }) => [
+            styles.button,
+            { backgroundColor: colors.surfaceMuted, opacity: pressed ? 0.85 : 1 },
+          ]}
+        >
+          <Text variant="label" style={[styles.label, { color: colors.primary }]}>
+            {t('inbox.template.send')}
+          </Text>
+        </Pressable>
+        {onToggleNote ? <NoteToggle mode="reply" onToggle={onToggleNote} /> : null}
+      </View>
     </View>
   );
 }
@@ -58,7 +64,9 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
   },
   notice: { textAlign: 'center' },
+  actions: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   button: {
+    flex: 1,
     minHeight: MIN_TOUCH_TARGET,
     borderRadius: radius.md,
     alignItems: 'center',

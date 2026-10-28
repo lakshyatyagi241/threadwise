@@ -1278,8 +1278,10 @@
       "open": "Dosya ekle",
       "title": "Dosya ekle",
       "close": "Kapat",
-      "library": "Fotoğraf veya video",
       "camera": "Kamera",
+      "photo": "Fotoğraf",
+      "video": "Video",
+      "audio": "Ses",
       "document": "Belge",
       "previewTitle": "Eki gönder",
       "caption": "Başlık (isteğe bağlı)",
@@ -1473,6 +1475,35 @@
       "working": "İşleniyor…",
       "empty": "Önce bir mesaj yazın.",
       "failed": "Yapay zekâ metni değiştiremedi. Tekrar deneyin."
+    },
+    "handoff": {
+      "giveBack": {
+        "doneFlow": "Bot akışı sürdürüyor.",
+        "doneNextLive": "Bot, müşterinin bir sonraki mesajını yanıtlayacak.",
+        "doneNextDefault": "Bot yeniden devrede. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar.",
+        "already": "Bu görüşme zaten botta."
+      },
+      "botLine": {
+        "system": "sistem",
+        "pressed": {
+          "flow": "Bot geri döndü, geri veren: {{name}}. Akış devam ediyor.",
+          "nextLive": "Bot geri döndü, geri veren: {{name}}. Müşterinin bir sonraki mesajını yanıtlayacak.",
+          "nextDefault": "Bot geri döndü, geri veren: {{name}}. Bir sonraki mesajı yalnızca varsayılan bir akış ayarlıysa yanıtlar."
+        },
+        "result": {
+          "continued": "Akış “geri verildi” çıkışından devam etti.",
+          "claimed_again": "Akış yeniden başlatılmadı: bir kişi sohbeti tekrar devraldı.",
+          "flow_not_live": "Akış yeniden başlatılmadı: artık etkin değil.",
+          "start_failed": "Akış yeniden başlatılamadı."
+        },
+        "customer": {
+          "sent": "Müşteriye mesaj gönderildi.",
+          "window_closed": "Müşteriye mesaj atlandı: 24 saatlik pencere kapalı.",
+          "no_consent": "Müşteriye mesaj atlandı: izin yok.",
+          "failed": "Müşteriye mesaj gönderilemedi.",
+          "channel_unavailable": "Müşteriye mesaj atlandı: kanal kullanılamıyor."
+        }
+      }
     },
     "note": {
       "title": "Özel not",

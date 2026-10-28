@@ -22,6 +22,7 @@ import {
   markConversationRead,
   markConversationSpam,
   retryMessage,
+  returnConversationToBot,
   sendMediaMessage,
   sendTextMessage,
   setConversationPriority,
@@ -209,6 +210,30 @@ describe('inbox api', () => {
       ],
     ]);
     expect(http.calls[0]?.headers['Idempotency-Key']).toBe('key-1');
+  });
+
+  it('gives a conversation back to the bot and reads what the server says happens next', async () => {
+    const http = mockFetch(
+      jsonResponse(200, {
+        conversation: summary(),
+        resumed: 'next_message',
+        nextMessageBy: 'live_flow',
+        why: null,
+        alreadyWithBot: false,
+      }),
+    );
+    const out = await returnConversationToBot(CONVERSATION_ID, 'key-bot');
+    expect(http.calls[0]?.init.method).toBe('POST');
+    expect(http.calls[0]?.url).toContain(
+      `/v2/inbox/conversations/${CONVERSATION_ID}/return-to-bot`,
+    );
+    expect(http.calls[0]?.body).toEqual({});
+    expect(http.calls[0]?.headers['Idempotency-Key']).toBe('key-bot');
+    expect(out).toMatchObject({
+      resumed: 'next_message',
+      nextMessageBy: 'live_flow',
+      alreadyWithBot: false,
+    });
   });
 
   it('narrows the list by channel, labels and the archive view, and leaves them out when they are not set', async () => {

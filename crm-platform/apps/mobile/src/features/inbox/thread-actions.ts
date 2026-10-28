@@ -4,8 +4,8 @@ import {
   type ConversationStatus,
 } from '@crm/contracts';
 
-/** What the three dots of a thread offer, as in the reference app: the details, and the three sheets (status, labels, agent) and Mark as spam. */
-export type MenuAction = 'details' | 'status' | 'labels' | 'agent' | 'spam';
+/** What the three dots of a thread offer, as in the reference app: the details, and the three sheets (status, labels, agent), Return to bot and Mark as spam. */
+export type MenuAction = 'details' | 'status' | 'labels' | 'agent' | 'bot' | 'spam';
 
 /** The statuses a person can move a conversation to by hand (`snoozed` and `spam` have their own routes). */
 export const STATUS_TARGETS = ['open', 'resolved', 'closed'] as const;
@@ -22,21 +22,25 @@ interface Input {
   canLabel: boolean;
   /** `inbox.conversation.assign`: may hand the conversation to anyone, or take it from them. */
   canAssign: boolean;
+  /** A person holds the conversation (or it waits for one) and may give it back to the bot (`inbox.conversation.reply`). */
+  canReturnToBot: boolean;
 }
 
 /**
  * The lines of the three dots for this conversation and this person, in the order the reference app lists them: View details
- * (always), Change status (when another status is reachable), Assign tags, Assign agent, Mark as spam (not on one that is already spam: its way back is the header's Not spam). Priority, snooze and waking a snoozed
+ * (always), Change status (when another status is reachable), Assign tags, Assign agent, Return to bot (when a person holds the chat), Mark as spam (not on one that is already spam: its way back is the header's Not spam). Priority, snooze and waking a snoozed
  * conversation are on the details screen.
  */
 export function menuActionsFor(input: Input): MenuAction[] {
-  const { status, canResolve, canLabel, canAssign } = input;
+  const { status, canResolve, canLabel, canAssign, canReturnToBot } = input;
   const actions: MenuAction[] = ['details'];
   // The contract counts "to the status it already has" as a legal move; a menu line that changes nothing is not offered.
   const moves = STATUS_TARGETS.some((to) => to !== status && canMoveConversationStatus(status, to));
   if (canResolve && moves) actions.push('status');
   if (canLabel) actions.push('labels');
   if (canAssign) actions.push('agent');
+  // The agent cell under the header opens Change agent, as in the Geta app, so the way back to the bot is a line here.
+  if (canReturnToBot) actions.push('bot');
   // Marking and un-marking spam take the same right (`inbox.conversation.resolve`), as on the web.
   if (canResolve && status !== 'spam') actions.push('spam');
   return actions;

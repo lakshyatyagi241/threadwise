@@ -25,13 +25,13 @@ const fromImageAsset = (asset: ImagePicker.ImagePickerAsset): PickResult => ({
 });
 
 /**
- * A picture or video from the phone's library. The system picker shows only what the person chooses, so no permission is
- * asked for. One file at a time: a caption belongs to one message.
+ * A picture or a video from the phone's library (the sheet has a tile for each, as the Geta app does). The system picker shows only what
+ * the person chooses, so no permission is asked for. One file at a time: a caption belongs to one message.
  */
-export async function pickFromLibrary(): Promise<PickResult> {
+export async function pickFromLibrary(media: 'photo' | 'video' = 'photo'): Promise<PickResult> {
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
+      mediaTypes: media === 'video' ? ['videos'] : ['images'],
       allowsMultipleSelection: false,
       quality: 0.8,
     });
@@ -57,11 +57,14 @@ export async function pickFromCamera(): Promise<PickResult> {
   }
 }
 
-/** A file from the phone's storage or cloud drives (the system file browser, no permission). It is copied to the app's cache so it can be read for the upload. */
-export async function pickDocument(): Promise<PickResult> {
+/**
+ * A file from the phone's storage or cloud drives (the system file browser, no permission), of the given type: any file for a document,
+ * `audio/*` for a sound. It is copied to the app's cache so it can be read for the upload.
+ */
+async function pickFile(type: string, failure: string): Promise<PickResult> {
   try {
     const result = await DocumentPicker.getDocumentAsync({
-      type: '*/*',
+      type,
       multiple: false,
       copyToCacheDirectory: true,
     });
@@ -77,10 +80,15 @@ export async function pickDocument(): Promise<PickResult> {
       }),
     };
   } catch (error) {
-    log.warn('inbox.attach_document_failed', { error: errorName(error) });
+    log.warn(failure, { error: errorName(error) });
     return { status: 'failed' };
   }
 }
+
+export const pickDocument = () => pickFile('*/*', 'inbox.attach_document_failed');
+
+/** A sound or voice recording from the phone's storage. */
+export const pickAudio = () => pickFile('audio/*', 'inbox.attach_audio_failed');
 
 /**
  * Deletes the app's own copy of a chosen file (the picker, the camera and the document browser all leave one in the cache). A
