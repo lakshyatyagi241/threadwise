@@ -17,18 +17,19 @@
       "refresh": "Yenile",
       "newCampaign": "Yeni kampanya",
       "tile": {
-        "sent": "Gönderildi",
+        "sent": "Gönderilen mesajlar",
         "delivered": "İletildi",
         "read": "Okundu",
-        "failed": "Başarısız",
-        "processing": "İşleniyor",
-        "campaigns": "{count} kampanya",
+        "failed": "Başarısız mesajlar",
+        "processing": "Gönderimdeki kampanyalar",
+        "campaigns": "{count, plural, one {# kampanyadan} other {# kampanyadan}}",
         "inFlight": "yolda",
         "awaiting": "bekliyor",
-        "queued": "{count} kuyrukta",
+        "queued": "{count} başlamak üzere planlandı",
         "deliveredRate": "{rate}% iletim",
         "readRate": "{rate}% okunma oranı",
-        "failedCampaigns": "{count} başarısız kampanya"
+        "failedCampaigns": "{count, plural, one {# kampanya} other {# kampanya}} başarısız işaretlendi",
+        "note": "Gönderilen, Teslim edilen, Okunan ve Başarısız mesajları sayar; başarısız bir mesaj Gönderilen'e dahil edilmez. Her sayının altındaki küçük satır kampanyaları sayar. Hepsi aşağıda seçilen tarih aralığına uyar: {range}."
       },
       "range": {
         "all": "Tüm zamanlar",

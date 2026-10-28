@@ -17,18 +17,19 @@
       "refresh": "Actualiser",
       "newCampaign": "Nouvelle campagne",
       "tile": {
-        "sent": "Envoyés",
+        "sent": "Messages envoyés",
         "delivered": "Distribués",
         "read": "Lus",
-        "failed": "Échoués",
-        "processing": "En cours de traitement",
-        "campaigns": "{count} campagnes",
+        "failed": "Messages en échec",
+        "processing": "Campagnes en cours d'envoi",
+        "campaigns": "sur {count, plural, one {# campagne} other {# campagnes}}",
         "inFlight": "en transit",
         "awaiting": "en attente",
-        "queued": "{count} en file d'attente",
+        "queued": "{count} programmées pour démarrer",
         "deliveredRate": "{rate} % de livraison",
         "readRate": "{rate} % de lecture",
-        "failedCampaigns": "{count} campagnes en échec"
+        "failedCampaigns": "{count, plural, one {# campagne marquée} other {# campagnes marquées}} en échec",
+        "note": "Envoyés, Distribués, Lus et En échec comptent des messages, et un message en échec n'est pas compté dans Envoyés. La petite ligne sous chaque nombre compte des campagnes. Tout suit la période choisie ci-dessous : {range}."
       },
       "range": {
         "all": "Toute la période",

@@ -17,18 +17,19 @@
       "refresh": "Aggiorna",
       "newCampaign": "Nuova campagna",
       "tile": {
-        "sent": "Inviati",
+        "sent": "Messaggi inviati",
         "delivered": "Consegnati",
         "read": "Letti",
-        "failed": "Non riusciti",
-        "processing": "In elaborazione",
-        "campaigns": "{count} campagne",
+        "failed": "Messaggi falliti",
+        "processing": "Campagne in invio",
+        "campaigns": "da {count, plural, one {# campagna} other {# campagne}}",
         "inFlight": "in corso",
         "awaiting": "in attesa",
-        "queued": "{count} in coda",
+        "queued": "{count} programmate per iniziare",
         "deliveredRate": "{rate}% consegnati",
         "readRate": "{rate}% letti",
-        "failedCampaigns": "{count} campagne non riuscite"
+        "failedCampaigns": "{count, plural, one {# campagna segnata} other {# campagne segnate}} come fallita",
+        "note": "Inviati, Consegnati, Letti e Falliti contano messaggi, e un messaggio fallito non è contato in Inviati. La riga più piccola sotto ogni numero conta campagne. Tutto segue l'intervallo di date scelto sotto: {range}."
       },
       "range": {
         "all": "Sempre",

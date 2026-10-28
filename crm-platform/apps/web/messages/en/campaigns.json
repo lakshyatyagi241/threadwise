@@ -69,18 +69,19 @@
       "refresh": "Refresh",
       "newCampaign": "New WA campaign",
       "tile": {
-        "sent": "Sent",
+        "sent": "Messages sent",
         "delivered": "Delivered",
         "read": "Read",
-        "failed": "Failed",
-        "processing": "Processing",
-        "queued": "{count} queued",
-        "campaigns": "{count} campaigns",
+        "failed": "Failed messages",
+        "processing": "Campaigns sending",
+        "queued": "{count} scheduled to start",
+        "campaigns": "from {count, plural, one {# campaign} other {# campaigns}}",
         "inFlight": "in flight",
         "awaiting": "awaiting",
         "deliveredRate": "{rate}% delivery",
         "readRate": "{rate}% read rate",
-        "failedCampaigns": "{count} failed campaigns"
+        "failedCampaigns": "{count, plural, one {# campaign} other {# campaigns}} marked failed",
+        "note": "Sent, Delivered, Read and Failed count messages, and a failed message is not counted in Sent. The smaller line under each number counts campaigns. All of it follows the date range chosen below: {range}."
       },
       "range": {
         "all": "All time",

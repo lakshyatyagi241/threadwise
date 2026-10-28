@@ -17,18 +17,19 @@
       "refresh": "更新",
       "newCampaign": "新規キャンペーン",
       "tile": {
-        "sent": "送信済み",
+        "sent": "送信メッセージ",
         "delivered": "配信済み",
         "read": "既読",
-        "failed": "失敗",
-        "processing": "処理中",
-        "campaigns": "{count}件のキャンペーン",
+        "failed": "失敗メッセージ",
+        "processing": "送信中のキャンペーン",
+        "campaigns": "{count, plural, other {#件のキャンペーン}}から",
         "inFlight": "送信中",
         "awaiting": "待機中",
-        "queued": "{count}件待機中",
+        "queued": "開始予定 {count}件",
         "deliveredRate": "配信率 {rate}%",
         "readRate": "既読率 {rate}%",
-        "failedCampaigns": "失敗したキャンペーン {count}件"
+        "failedCampaigns": "{count, plural, other {#件のキャンペーン}}が失敗",
+        "note": "送信・配信・既読・失敗はメッセージ数で、失敗したメッセージは送信に含まれません。各数字の下の小さい行はキャンペーン数です。すべて下で選んだ期間（{range}）に従います。"
       },
       "range": {
         "all": "全期間",

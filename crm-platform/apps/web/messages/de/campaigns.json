@@ -17,18 +17,19 @@
       "refresh": "Aktualisieren",
       "newCampaign": "Neue Kampagne",
       "tile": {
-        "sent": "Gesendet",
+        "sent": "Gesendete Nachrichten",
         "delivered": "Zugestellt",
         "read": "Gelesen",
-        "failed": "Fehlgeschlagen",
-        "processing": "In Bearbeitung",
-        "campaigns": "{count} Kampagnen",
+        "failed": "Fehlgeschlagene Nachrichten",
+        "processing": "Kampagnen im Versand",
+        "campaigns": "aus {count, plural, one {# Kampagne} other {# Kampagnen}}",
         "inFlight": "unterwegs",
         "awaiting": "wartet",
-        "queued": "{count} in Warteschlange",
+        "queued": "{count} zum Start geplant",
         "deliveredRate": "{rate} % Zustellung",
         "readRate": "{rate} % Lesequote",
-        "failedCampaigns": "{count} fehlgeschlagene Kampagnen"
+        "failedCampaigns": "{count, plural, one {# Kampagne} other {# Kampagnen}} als fehlgeschlagen markiert",
+        "note": "Gesendet, Zugestellt, Gelesen und Fehlgeschlagen zählen Nachrichten, und eine fehlgeschlagene Nachricht zählt nicht zu Gesendet. Die kleinere Zeile unter jeder Zahl zählt Kampagnen. Alles folgt dem unten gewählten Zeitraum: {range}."
       },
       "range": {
         "all": "Gesamte Zeit",
