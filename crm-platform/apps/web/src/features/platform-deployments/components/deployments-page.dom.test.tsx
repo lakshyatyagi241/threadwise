@@ -248,9 +248,8 @@ describe('DeploymentsPage', () => {
     const all = (id: string) =>
       [...host.querySelectorAll(`[data-testid="${id}"]`)].map((e) => e.textContent ?? '');
     expect(host.textContent).toContain('#823');
-    // The list stays short: number, title, author and time only; the PR description is not shown.
-    expect(all('release-description')).toEqual([]);
-    expect(host.textContent).not.toContain('Adds the description and raised time.');
+    // A short description of what changed sits under the title; an entry with no description shows none.
+    expect(all('release-description')).toEqual(['Adds the description and raised time.']);
     // 08:15 UTC is 13:45 in India, whatever zone the test machine is in; an entry without a time shows none.
     expect(all('release-raised')).toHaveLength(1);
     expect(all('release-raised')[0]).toMatch(/1:45:00/);
@@ -299,7 +298,7 @@ describe('DeploymentsPage', () => {
       expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
     });
 
-    it('lists a PR as its number, title, author and time, and never its long description', async () => {
+    it('shows a long PR description as a short two-to-three line summary, never the whole text', async () => {
       const body = `## Summary\n\n- ${'The picker sent one request per ticked channel. '.repeat(14)}`;
       await show([
         attempt({
@@ -319,8 +318,12 @@ describe('DeploymentsPage', () => {
       expect(li.textContent).toContain('Fix the picker');
       expect(li.textContent).toContain('Lakshya');
       expect(li.textContent).toMatch(/11:35:26\s?AM/); // 06:05:26 UTC in India
-      expect(li.textContent).not.toContain('The picker sent one request');
-      expect(li.textContent!.length).toBeLessThan(160); // a short entry, so the column stays small
+      const text = li.querySelector('[data-testid="release-description"]') as HTMLElement;
+      expect(text.textContent).toContain('The picker sent one request per ticked channel.'); // what changed
+      expect(text.textContent).not.toContain('## Summary');
+      expect(text.textContent!.length).toBeLessThanOrEqual(200); // two to three lines, so the column stays small
+      expect(text.className).toContain('line-clamp-3');
+      expect(text.getAttribute('title')).toBe(body); // the full text is one hover away
     });
 
     it('lists the first five PRs of a release and folds the rest into "N more"', async () => {
