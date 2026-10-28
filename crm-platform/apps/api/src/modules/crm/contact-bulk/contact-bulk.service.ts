@@ -280,10 +280,12 @@ export class ContactBulkService {
   // --- marketing consent -------------------------------------------------------------------
 
   /**
-   * Records marketing consent for one channel on a selection (ids, or everything a filter matches inside the caller's update scope).
-   * Each contact gets the same ledger event, state, marketing flag, audit row and outbox event as the single consent edit, in its own
-   * transaction, so one refused contact never sinks the rest. `changed` counts the events recorded; a contact that already has the same
-   * event under the request's Idempotency-Key records nothing. The caller holds `contacts.consent.manage` (checked by the route).
+   * Records marketing consent for one or more channels on a selection (ids, or everything a filter matches inside the caller's update
+   * scope). The selection resolves once, so every channel lands on the same contacts. Each contact gets, per channel, the same ledger
+   * event, state, marketing flag, audit row and outbox event as the single consent edit, in its own transaction, so one refused contact
+   * never sinks the rest: it is listed in `failed` and its remaining channels are skipped. `changed` counts the contacts that got at least
+   * one event recorded; a contact that already has the same event under the request's Idempotency-Key records nothing. The caller holds
+   * `contacts.consent.manage` (checked by the route).
    */
   async consent(
     input: BulkConsentContactsInput,
@@ -300,26 +302,29 @@ export class ContactBulkService {
       return { r, uuids };
     });
 
-    const event = {
-      channel: input.channel,
+    const events = input.channels.map((channel) => ({
+      channel,
       purpose: 'marketing' as const,
       action: input.action,
       source: 'manual' as const,
       note: input.note,
       evidence: {},
-    };
+    }));
     const succeeded: string[] = [];
     const failed: BulkSelectionResult['failed'] = [];
     let changed = 0;
     for (const uuid of uuids) {
+      let recorded = false;
       try {
-        const recorded = await this.consentLedger.recordOne(
-          uuid,
-          event,
-          idempotencyKey ? `${idempotencyKey}:${uuid}` : undefined,
-        );
+        for (const event of events) {
+          const wrote = await this.consentLedger.recordOne(
+            uuid,
+            event,
+            idempotencyKey ? `${idempotencyKey}:${uuid}:${event.channel}` : undefined,
+          );
+          if (wrote) recorded = true;
+        }
         succeeded.push(uuid);
-        if (recorded) changed += 1;
       } catch (err) {
         if (!(err instanceof AppError)) {
           this.logger.error({ err, uuid }, 'bulk consent failed on a contact');
@@ -330,6 +335,7 @@ export class ContactBulkService {
           message: err instanceof AppError ? err.message : 'Consent could not be recorded',
         });
       }
+      if (recorded) changed += 1;
     }
 
     const base = this.result(r, changed);
