@@ -138,7 +138,7 @@ function Cell({ id, note, locale }: { id: Column; note: CreditNoteSummary; local
           title={note.number ?? t('draft')}
           className={cn(
             'block truncate font-medium outline-none hover:text-primary hover:underline focus-visible:underline focus-visible:ring-2 focus-visible:ring-primary',
-            !note.number && 'italic text-muted-foreground',
+            !note.number && 'text-muted-foreground',
           )}
         >
           <span dir="ltr">{note.number ?? t('draft')}</span>

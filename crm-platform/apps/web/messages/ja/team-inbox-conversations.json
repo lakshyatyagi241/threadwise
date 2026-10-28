@@ -219,6 +219,7 @@
       "referral": "広告またはリンクから流入",
       "sentIn": "{lang} で送信されました。入力したテキストを表示",
       "translatedFrom": "{lang} から翻訳されました。原文を表示",
+      "translationFailed": "翻訳なしで送信されました。翻訳に失敗したため、入力したとおりの文面で送信されました。",
       "bot": "ボット",
       "broadcast": "一斉配信",
       "reacted": "リアクション {emoji}",

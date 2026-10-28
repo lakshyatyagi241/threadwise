@@ -202,7 +202,7 @@ function IgProductPicker({
         className={cn(controlClass, 'mb-2 px-2.5 py-1.5 text-[12px]')}
       />
       {products.isPending ? (
-        <div className="py-3 text-center text-[12px] italic text-muted-foreground">
+        <div className="py-3 text-center text-[12px] text-muted-foreground">
           {t('loadingSynced')}
         </div>
       ) : null}
@@ -212,7 +212,7 @@ function IgProductPicker({
         </div>
       ) : null}
       {products.isSuccess && list.length === 0 ? (
-        <div className="py-3 text-center text-[12px] italic leading-snug text-muted-foreground">
+        <div className="py-3 text-center text-[12px] leading-snug text-muted-foreground">
           {t('noSyncedTitle')}
           <br />
           {t('noSyncedHint')}

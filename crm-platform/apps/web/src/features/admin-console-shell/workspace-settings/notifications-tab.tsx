@@ -87,7 +87,7 @@ function MatrixForm({ data }: { data: NotificationPrefsResponse }) {
         <div className="max-w-xl space-y-1">
           <h2 className="font-serif text-xl">{t('title')}</h2>
           <p className="text-xs text-muted-foreground">{t('note')}</p>
-          {locked && <p className="text-xs italic text-muted-foreground">{t('readOnly')}</p>}
+          {locked && <p className="text-xs text-muted-foreground">{t('readOnly')}</p>}
         </div>
         <Button type="submit" disabled={locked || save.isPending}>
           {t('save')}

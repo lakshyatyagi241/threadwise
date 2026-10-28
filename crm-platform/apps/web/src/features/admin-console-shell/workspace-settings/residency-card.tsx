@@ -33,7 +33,7 @@ function ResidencyForm({ current, isOwner }: { current: DataResidency; isOwner: 
       {saved && <Alert tone="success">{t('saved')}</Alert>}
       {save.isError && <Alert tone="danger">{t('saveFailed')}</Alert>}
       {!isOwner ? (
-        <p className="text-xs italic text-muted-foreground">{t('ownerOnly')}</p>
+        <p className="text-xs text-muted-foreground">{t('ownerOnly')}</p>
       ) : (
         <form
           className="space-y-3"

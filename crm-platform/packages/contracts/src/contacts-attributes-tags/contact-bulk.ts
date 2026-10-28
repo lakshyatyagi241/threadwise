@@ -1,6 +1,10 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
-import { consentActionSchema, consentChannelSchema } from '../contact-consent/vocabulary';
+import {
+  CONSENT_CHANNELS,
+  consentActionSchema,
+  consentChannelSchema,
+} from '../contact-consent/vocabulary';
 import { queryBoolean } from './query-helpers';
 import {
   contactSelectionShape,
@@ -74,12 +78,16 @@ export const bulkTagContactsSchema = withSelection({
 export type BulkTagContactsInput = z.infer<typeof bulkTagContactsSchema>;
 
 /**
- * Marketing consent for one channel on the selection (`POST /contacts/bulk/consent`). It writes what the single contact edit writes, one
- * ledger event per contact, through the same path. A grant needs the note of how the contact agreed, as the single edit does (422
- * CONSENT_NOTE_REQUIRED there); a withdrawal needs none.
+ * Marketing consent for one or more channels on the selection (`POST /contacts/bulk/consent`). The selection resolves once, and each
+ * contact gets what the single contact edit writes, one ledger event per channel, through the same path. A grant needs the note of how
+ * the contact agreed, as the single edit does (422 CONSENT_NOTE_REQUIRED there); a withdrawal needs none.
  */
 export const bulkConsentContactsSchema = withSelection({
-  channel: consentChannelSchema,
+  channels: z
+    .array(consentChannelSchema)
+    .min(1)
+    .max(CONSENT_CHANNELS.length)
+    .refine((v) => new Set(v).size === v.length, { error: 'Each channel once' }),
   action: consentActionSchema,
   note: z.string().trim().max(500).optional(),
 }).refine((v) => v.action !== 'granted' || (v.note ?? '').length > 0, {

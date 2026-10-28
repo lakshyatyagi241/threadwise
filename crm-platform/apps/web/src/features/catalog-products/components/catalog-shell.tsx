@@ -43,7 +43,7 @@ export function CatalogShell({ children }: { children: ReactNode }) {
               </div>
               <h1 className="truncate font-serif text-[20px] font-normal leading-tight">
                 {t('titleLead')}{' '}
-                <span className="italic text-brand dark:text-primary">{t('titleAccent')}</span>
+                <span className="text-brand dark:text-primary">{t('titleAccent')}</span>
               </h1>
             </div>
           </div>

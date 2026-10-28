@@ -219,6 +219,7 @@
       "referral": "Kam über eine Anzeige oder einen Link",
       "sentIn": "In {lang} gesendet. Originaltext anzeigen",
       "translatedFrom": "Aus {lang} übersetzt. Original anzeigen",
+      "translationFailed": "Ohne Übersetzung gesendet. Die Übersetzung ist fehlgeschlagen, daher wurde Ihr Text so gesendet, wie Sie ihn geschrieben haben.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaktion {emoji}",

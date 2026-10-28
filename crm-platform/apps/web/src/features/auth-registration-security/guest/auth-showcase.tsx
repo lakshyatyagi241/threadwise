@@ -146,11 +146,7 @@ export function AccentHeading({
     <>
       {heading}
       {heading && accent ? ' ' : null}
-      {accent ? (
-        <span style={style} className="italic rtl:not-italic">
-          {accent}
-        </span>
-      ) : null}
+      {accent ? <span style={style}>{accent}</span> : null}
       {heading || accent ? '.' : null}
     </>
   );
@@ -173,43 +169,21 @@ export function BrandMark({ name, className }: { name: string; className?: strin
   );
 }
 
-/** Design 6's wordmark: a round indigo "G" mark with a small tail dot, Geta's own brand, not the shared one. */
-export function GetaMark({
-  name,
-  tone = 'light',
-  className,
-}: {
-  name: string;
-  tone?: 'light' | 'dark';
-  className?: string;
-}) {
+/** Geta's logo for design 6, a picture hosted outside this app (swap the address here to change it). */
+export const GETA_LOGO_URL =
+  'https://ci3.googleusercontent.com/mail-sig/AIorK4wAnlEhcIIYJ558cB7za1t6U844T7z0JH3CJfssd5vNBbjbURNBlLXD4cV_v060A86DcgjDG84';
+
+/** Design 6's mark: Geta's own logo picture (the product name is its alt text), not the shared brand mark. */
+export function GetaMark({ name, className }: { name: string; className?: string }) {
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <span
-        aria-hidden="true"
-        className="relative grid size-9 shrink-0 place-items-center rounded-full bg-(--auth-geta-primary)"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          className="size-[18px]"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2.6"
-          strokeLinecap="round"
-        >
-          <path d="M17.6 8.3A6.6 6.6 0 1 0 18.6 13h-6.1" />
-        </svg>
-        <span className="absolute -bottom-px -end-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
-      </span>
-      <span
-        className={cn(
-          'text-[21px] font-extrabold tracking-[-0.01em]',
-          tone === 'dark' ? 'text-white' : 'text-foreground',
-        )}
-      >
-        {name}
-      </span>
-    </span>
+    <img
+      src={GETA_LOGO_URL}
+      alt={name}
+      // The picture lives on another site: send it no referrer, so a visitor's page address is not passed along.
+      referrerPolicy="no-referrer"
+      decoding="async"
+      className={cn('h-9 w-auto max-w-full', className)}
+    />
   );
 }
 

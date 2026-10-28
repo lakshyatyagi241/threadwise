@@ -38,11 +38,13 @@
         "target": "Hedef",
         "active": "Etkin",
         "fields": "Alanlar",
+        "numbers": "Telefon numaraları",
         "deliveries": "İletimler",
         "last": "Son iletim",
         "actions": "İşlemler"
       },
       "allFields": "Tüm alanlar",
+      "allNumbers": "Tüm numaralar",
       "success": "{count, number} başarılı",
       "failure": "{count, number} başarısız",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Alan filtresi",
       "fieldFilterHint": "Tüm alanları iletmek için boş bırakın. Bir alan yazıp Enter'a basın, örneğin messages veya message_template_status_update.",
       "fieldFilterPlaceholder": "Alan ekle",
+      "phoneFilter": "Telefon numarası filtresi",
+      "phoneFilterHint": "Her numarayı iletmek için boş bırakın. Bir Meta telefon numarası kimliği girin (yalnızca rakam, görünen numara değil) ve Enter'a basın. Birden fazla numara içeren bir webhook, biri listedeyse bütünüyle iletilir.",
+      "phoneFilterPlaceholder": "Telefon numarası kimliği ekle",
       "fieldRemove": "{field} alanını kaldır",
+      "phoneRemove": "{phone} kaldır",
       "timeout": "Zaman aşımı (saniye)",
       "timeoutHint": "1 ile 30 arası",
       "maxAttempts": "En fazla deneme",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Bir başlık için hem ad hem de değer gerekir.",
         "headerNameRequired": "Başlık adını da girin.",
         "timeout": "1 ile 30 arasında bir tam sayı girin.",
-        "maxAttempts": "1 ile 10 arasında bir tam sayı girin."
+        "maxAttempts": "1 ile 10 arasında bir tam sayı girin.",
+        "phoneNumberIdInvalid": "Telefon numarası kimlikleri yalnızca rakamdan oluşur."
       }
     },
     "failures": {

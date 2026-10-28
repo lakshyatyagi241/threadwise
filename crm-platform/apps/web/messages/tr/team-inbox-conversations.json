@@ -219,6 +219,7 @@
       "referral": "Bir reklamdan veya bağlantıdan geldi",
       "sentIn": "{lang} dilinde gönderildi. Yazdığınız metni göster",
       "translatedFrom": "{lang} dilinden çevrildi. Orijinali göster",
+      "translationFailed": "Çevrilmeden gönderildi. Çeviri başarısız oldu, bu yüzden metniniz yazdığınız haliyle gönderildi.",
       "bot": "Bot",
       "broadcast": "Toplu gönderim",
       "reacted": "Tepki {emoji}",

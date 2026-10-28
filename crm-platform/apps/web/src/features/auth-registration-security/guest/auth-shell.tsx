@@ -325,7 +325,7 @@ function FixedSplit({
           </Eyebrow>
           <h1 className="font-serif text-[42px] leading-[1.05] tracking-[-0.01em]">
             {panel.heading}{' '}
-            <span className="italic rtl:not-italic text-(--auth-green)">{panel.accent}</span>.
+            <span className="text-(--auth-green)">{panel.accent}</span>.
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-(--auth-light)/85">
             {panel.subheading}
