@@ -141,6 +141,14 @@ describe('the six guest designs', () => {
     expect(html).not.toContain('lg:hidden');
   });
 
+  it('design 6 shows the Geta logo picture, named by the product, with no referrer sent', () => {
+    const html = shell(6);
+    expect(html).toContain('src="https://ci3.googleusercontent.com/mail-sig/');
+    expect(html).toMatch(
+      /<img[^>]*referrerPolicy="no-referrer"|<img[^>]*referrerpolicy="no-referrer"/i,
+    );
+  });
+
   it('design 6 shows the three stat rows on sign-in but not on forgot password', () => {
     const login = shell(6);
     expect(login).toContain('auth-geta-shape');
