@@ -224,8 +224,9 @@ SQL
     # Shared services are only started if missing: a release never recreates Postgres or Redis.
     compose up -d --no-recreate postgres redis
     # The backup service runs its own nightly schedule; failing to start it must not block a release.
-    compose up -d backup || echo "warning: the backup service did not start" >&2
-    compose up -d offsite || echo "warning: the offsite copier did not start" >&2
+    # --no-deps: without it compose converges the service's dependencies too, and recreates Postgres whenever its definition differs.
+    compose up -d --no-deps backup || echo "warning: the backup service did not start" >&2
+    compose up -d --no-deps offsite || echo "warning: the offsite copier did not start" >&2
     # Migrations only go forward, so a dump taken now is the way back from a bad one. The service writes its script out at start-up:
     # give it a few seconds, and only on the very first release after it was added can it be missing, in which case say so and go on.
     step=dump

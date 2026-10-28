@@ -61,6 +61,7 @@ tag() { grep '^IMAGE_TAG=' "$WORK/.env" | cut -d= -f2; }
 slot() { cat "$WORK/.slot" 2>/dev/null || echo none; }
 route() { grep -oE 'desk-api-(blue|green):3000' "$TRAEFIK_DYN" 2>/dev/null | head -1 || true; }
 has() { grep -q -- "$1" "$STUB_LOG"; }
+not() { ! "$@"; }
 hasnt() { ! grep -q -- "$1" "$STUB_LOG"; }
 line_of() { grep -n -- "$1" "$STUB_LOG" | head -1 | cut -d: -f1; }
 check() { # check "name" cmd...
@@ -87,6 +88,10 @@ check "the blue slot starts before the worker is restarted" test "$(line_of 'up 
 check "the public check runs" has "curl -fsSk"
 check "the legacy containers are stopped after the switch" has "stop -t 30 desk-api-1 desk-web-1"
 check "shared services are only started, never recreated" has "up -d --no-recreate postgres redis"
+# Starting backup/offsite WITH their dependencies converges Postgres too, and recreates it whenever its definition differs: a database restart on a release.
+check "backup is started without its dependencies, so Postgres is not recreated" has "up -d --no-deps backup"
+check "offsite is started without its dependencies" has "up -d --no-deps offsite"
+check "no compose up names backup or offsite with dependencies" not has "up -d backup"
 
 echo "release: second release, blue is live, so green becomes live"
 unset_stubs; new_dir blue bbbbbbb; release ccccccc
