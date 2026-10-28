@@ -1628,7 +1628,7 @@
         "retries": "Yeniden denemeler",
         "retriesOn": "Açık, {date} tarihine kadar",
         "retriesOff": "Kapalı",
-        "recurringNote": "Her çalıştırma o andaki kitleye gider, bu yüzden alıcı sayısı değişebilir."
+        "recurringNote": "Şimdi hiçbir şey gönderilmez. İlk çalıştırma yukarıdaki saatte başlar ve ardından her çalıştırma Geçmiş'te kendi satırı olarak görünür. O zamana kadar bu kampanyayı Yinelenenler'de bulabilirsiniz. Her çalıştırma, o andaki hedef kitleye gider; bu yüzden alıcı sayısı değişebilir."
       },
       "status": {
         "back": "Kampanyalara dön",

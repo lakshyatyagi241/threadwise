@@ -1628,7 +1628,7 @@
         "retries": "Percobaan ulang",
         "retriesOn": "Aktif, hingga {date}",
         "retriesOff": "Nonaktif",
-        "recurringNote": "Setiap putaran dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
+        "recurringNote": "Tidak ada yang dikirim sekarang. Eksekusi pertama dimulai pada waktu di atas, lalu setiap eksekusi muncul di Riwayat sebagai baris tersendiri. Sampai saat itu, temukan kampanye ini di Berulang. Setiap eksekusi dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
       },
       "status": {
         "back": "Kembali ke kampanye",

@@ -1628,7 +1628,7 @@
         "retries": "Nieuwe pogingen",
         "retriesOn": "Aan, tot {date}",
         "retriesOff": "Uit",
-        "recurringNote": "Elke uitvoering gaat naar de doelgroep zoals die op dat moment is, dus het aantal ontvangers kan veranderen."
+        "recurringNote": "Er wordt nu niets verzonden. De eerste run begint op het hierboven genoemde tijdstip en elke run verschijnt daarna in de Geschiedenis als een eigen rij. Tot die tijd vindt u deze campagne onder Terugkerend. Elke run gaat naar het publiek zoals het dan is, dus het aantal ontvangers kan veranderen."
       },
       "status": {
         "back": "Terug naar campagnes",

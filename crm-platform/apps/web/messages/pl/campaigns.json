@@ -1628,7 +1628,7 @@
         "retries": "Ponawianie",
         "retriesOn": "Włączone, do {date}",
         "retriesOff": "Wyłączone",
-        "recurringNote": "Każde uruchomienie trafia do odbiorców w stanie z danego momentu, więc liczba odbiorców może się zmieniać."
+        "recurringNote": "Teraz nic nie jest wysyłane. Pierwsze uruchomienie zacznie się o podanej wyżej godzinie, a potem każde uruchomienie pojawi się w Historii jako osobny wiersz. Do tego czasu znajdziesz tę kampanię w sekcji Cykliczne. Każde uruchomienie trafia do odbiorców w stanie z tamtej chwili, więc liczba odbiorców może się zmienić."
       },
       "status": {
         "back": "Wróć do kampanii",

@@ -1670,7 +1670,7 @@
         "retries": "Retries",
         "retriesOn": "On, until {date}",
         "retriesOff": "Off",
-        "recurringNote": "Each run goes to the audience as it is at that time, so the number of recipients can change."
+        "recurringNote": "Nothing is sent now. The first run starts at the time above, and every run then appears in History as its own row. Until then, find this campaign under Recurring. Each run goes to the audience as it is at that time, so the number of recipients can change."
       },
       "status": {
         "back": "Back to campaigns",

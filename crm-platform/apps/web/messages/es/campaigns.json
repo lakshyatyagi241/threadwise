@@ -1628,7 +1628,7 @@
         "retries": "Reintentos",
         "retriesOn": "Activados, hasta el {date}",
         "retriesOff": "Desactivados",
-        "recurringNote": "Cada ejecución llega a la audiencia tal como esté en ese momento, así que el número de destinatarios puede cambiar."
+        "recurringNote": "Ahora no se envía nada. La primera ejecución empieza a la hora indicada arriba y cada ejecución aparece después en el Historial como una fila propia. Hasta entonces, encuentra esta campaña en Recurrentes. Cada ejecución va a la audiencia tal como es en ese momento, así que el número de destinatarios puede cambiar."
       },
       "status": {
         "back": "Volver a campañas",
