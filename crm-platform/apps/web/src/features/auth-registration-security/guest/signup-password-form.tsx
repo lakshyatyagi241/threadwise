@@ -35,6 +35,7 @@ import {
   readSignupStageRaw,
   type StoredSignupStage,
 } from './signup-challenge';
+import { clearDraft } from './signup-draft';
 import { Button, ArrowIcon, Checkbox, Input, PasswordInput, Spinner, cn } from './ui';
 import { failedFields } from './zod-fields';
 
@@ -182,6 +183,7 @@ export function PasswordEntry({
     try {
       const res = await postBff('signup-set-password', parsed.data, bffSignupResponseSchema);
       clearSignupStage();
+      clearDraft();
       if (res.status === 'otp_required') {
         saveChallenge(toStoredChallenge(res, Date.now()));
         router.push('/verify-otp');

@@ -8,7 +8,14 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import {
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type FormEvent,
+  type ReactNode,
+} from 'react';
 import type { CountryCode } from 'libphonenumber-js';
 import { callApi } from './bff';
 import { useCaptcha } from './captcha';
@@ -16,14 +23,19 @@ import { captchaMissing, mapAuthError, type MappedError } from './errors';
 import { dropKey, focusFirstInvalid } from './focus';
 import { FormError } from './form-error';
 import { FormField } from './form-field';
+import { defaultStore } from './otp-challenge';
 import { PhoneInput, type PhoneValue } from './phone-input';
 import { evaluatePhone, pickDefaultCountry } from './phone';
 import { saveSignupStage, toStoredSignupStage } from './signup-challenge';
+import { parseDraft, readDraftRaw, saveDraft, type SignupDraft } from './signup-draft';
 import { SocialButtons } from './social-buttons';
 import { Alert, ArrowIcon, Button, Input, LINK, Spinner } from './ui';
 import { failedFields } from './zod-fields';
 
 const FIELD_ORDER = ['fullName', 'email', 'phone'] as const;
+
+const noopSubscribe = () => () => undefined;
+const UNREAD = Symbol('unread');
 
 /**
  * Sign-up step 1 of the three-step email-verification flow: collects name, email and (optionally
@@ -31,6 +43,26 @@ const FIELD_ORDER = ['fullName', 'email', 'phone'] as const;
  * against. No workspace, password or terms here — those belong to the later steps.
  */
 export function SignupStartForm({ config }: { config: RegistrationConfigResponse }) {
+  // sessionStorage only exists in the browser: the server render sees `UNREAD`. The form is keyed on it so
+  // the fields start from the saved answers (a visitor who went back from the code step) once they are read.
+  const raw = useSyncExternalStore<string | null | typeof UNREAD>(
+    noopSubscribe,
+    () => readDraftRaw(defaultStore()),
+    () => UNREAD,
+  );
+  const initial = useMemo(() => (raw === UNREAD ? null : parseDraft(raw)), [raw]);
+  return (
+    <StartForm key={raw === UNREAD ? 'server' : 'browser'} config={config} initial={initial} />
+  );
+}
+
+function StartForm({
+  config,
+  initial,
+}: {
+  config: RegistrationConfigResponse;
+  initial: SignupDraft | null;
+}) {
   const t = useTranslations('auth-registration-security.guest.signup');
   const tv = useTranslations('auth-registration-security.guest.validation');
   const tl = useTranslations('auth-registration-security.guest.login');
@@ -53,7 +85,9 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
 
   // Phone: opens on the platform's default country; the same on the server and in the browser.
   const defaultIso = pickDefaultCountry(config.defaultCountryIso);
-  const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(null);
+  const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(
+    initial?.phoneRaw ? { raw: initial.phoneRaw, iso: initial.phoneIso as CountryCode } : null,
+  );
   const phone = useMemo<PhoneValue>(() => {
     const raw = phoneEdit?.raw ?? '';
     const iso = phoneEdit?.iso ?? defaultIso;
@@ -98,6 +132,18 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
       return;
     }
     setFieldErrors({});
+
+    // Kept for this tab so that coming back from the code step (wrong email) does not mean typing it all again.
+    saveDraft({
+      fullName: body.fullName,
+      email: body.email,
+      orgName: '',
+      orgSlug: '',
+      customSlug: false,
+      phoneRaw: phone.raw,
+      phoneIso: phone.iso,
+      referral: '',
+    });
 
     setPending(true);
     try {
@@ -177,6 +223,7 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
             <Input
               {...p}
               name="fullName"
+              defaultValue={initial?.fullName}
               autoComplete="name"
               placeholder={t('fullNamePlaceholder')}
               autoFocus
@@ -190,6 +237,7 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
             <Input
               {...p}
               name="email"
+              defaultValue={initial?.email}
               type="email"
               inputMode="email"
               autoComplete="email"
