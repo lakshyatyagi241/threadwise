@@ -415,7 +415,13 @@ export class AssignmentService {
       aggregateId: locked.id,
       eventType: 'conversation.assigned',
       // `toUserId: null` is an unassignment: one event type, so a consumer sees every change of who holds the thread.
-      payload: { conversationId: locked.uuid, ...payload, byUserId: byUuid },
+      // `assignedAt` lets a redelivered copy of this event tell the runs started before the takeover from later ones (#1299).
+      payload: {
+        conversationId: locked.uuid,
+        ...payload,
+        byUserId: byUuid,
+        assignedAt: new Date().toISOString(),
+      },
     });
     await this.audit.record(tx, {
       module: MODULE_KEY,

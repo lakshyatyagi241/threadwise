@@ -168,9 +168,11 @@ export class RunRepository {
     channelId: number,
     peerKey: string,
     forUpdate = false,
+    startedBy: Date | null = null,
   ): Promise<RunState | null> {
+    const since = startedBy ? sql`AND r.started_at <= ${startedBy}` : sql``;
     const base = sql`SELECT ${SELECT} WHERE r.org_id = ${orgId} AND r.channel_id = ${channelId} AND r.peer_key = ${peerKey}
-      AND r.status IN ('running', 'waiting', 'sleeping', 'halted')`;
+      AND r.status IN ('running', 'waiting', 'sleeping', 'halted') ${since}`;
     const res = await tx.execute(forUpdate ? sql`${base} FOR UPDATE OF r` : base);
     const r = rowsOf(res)[0];
     return r ? toState(r) : null;

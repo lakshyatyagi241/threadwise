@@ -24,7 +24,32 @@ describe('a person taking a conversation ends the live flow run (#1174)', () => 
     const h = build({ channelId: 3, peerKey: '919876543210' });
     await h.consumer.handle(event({ conversationId: 'conv-uuid', toUserId: 'user-uuid' }));
     expect(h.conversations.peerOfConversation).toHaveBeenCalledWith(7, 'conv-uuid');
-    expect(h.endForPeer).toHaveBeenCalledWith(7, 3, '919876543210');
+    expect(h.endForPeer).toHaveBeenCalledWith(7, 3, '919876543210', null);
+  });
+
+  it('ends only the runs that started before the takeover, so a redelivered event cannot stop a later flow (#1299)', async () => {
+    const h = build({ channelId: 3, peerKey: '919876543210' });
+    await h.consumer.handle(
+      event({
+        conversationId: 'conv-uuid',
+        toUserId: 'user-uuid',
+        assignedAt: '2026-10-27T10:00:00.000Z',
+      }),
+    );
+    expect(h.endForPeer).toHaveBeenCalledWith(
+      7,
+      3,
+      '919876543210',
+      new Date('2026-10-27T10:00:00.000Z'),
+    );
+  });
+
+  it('keeps the old behaviour for an event written before assignedAt existed', async () => {
+    const h = build({ channelId: 3, peerKey: '919876543210' });
+    await h.consumer.handle(
+      event({ conversationId: 'conv-uuid', toUserId: 'user-uuid', assignedAt: 'not a date' }),
+    );
+    expect(h.endForPeer).toHaveBeenCalledWith(7, 3, '919876543210', null);
   });
 
   it('does nothing on an unassignment (no person holds the thread)', async () => {
