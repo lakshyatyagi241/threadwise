@@ -562,7 +562,7 @@ export function ContactsScreen() {
     return true;
   }
 
-  /** Marketing consent for one channel on the selection (the bulk consent action): a grant or a withdrawal, reported per contact. */
+  /** Marketing consent for the ticked channels on the selection (the bulk consent action): one request, reported per contact. */
   async function onBulkConsent(choice: ConsentChoice): Promise<boolean> {
     const out = await guarded(() => bulkConsent(target(), choice));
     if (!out) return false;

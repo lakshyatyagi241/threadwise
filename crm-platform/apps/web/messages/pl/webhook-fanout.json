@@ -38,11 +38,13 @@
         "target": "Cel",
         "active": "Aktywny",
         "fields": "Pola",
+        "numbers": "Numery telefonów",
         "deliveries": "Dostarczenia",
         "last": "Ostatnie dostarczenie",
         "actions": "Działania"
       },
       "allFields": "Wszystkie pola",
+      "allNumbers": "Wszystkie numery",
       "success": "{count, number} OK",
       "failure": "{count, number} nieudanych",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filtr pól",
       "fieldFilterHint": "Zostaw puste, aby przekazywać wszystkie pola. Wpisz pole i naciśnij Enter, np. messages lub message_template_status_update.",
       "fieldFilterPlaceholder": "Dodaj pole",
+      "phoneFilter": "Filtr numerów telefonów",
+      "phoneFilterHint": "Zostaw puste, aby przekazywać wszystkie numery. Wpisz identyfikator numeru telefonu Meta (tylko cyfry, nie numer wyświetlany) i naciśnij Enter. Webhook z kilkoma numerami jest przekazywany w całości, gdy jeden z nich jest na liście.",
+      "phoneFilterPlaceholder": "Dodaj identyfikator numeru",
       "fieldRemove": "Usuń {field}",
+      "phoneRemove": "Usuń {phone}",
       "timeout": "Limit czasu (sekundy)",
       "timeoutHint": "Od 1 do 30",
       "maxAttempts": "Maks. liczba prób",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Nagłówek wymaga nazwy i wartości.",
         "headerNameRequired": "Wpisz też nazwę nagłówka.",
         "timeout": "Wpisz liczbę całkowitą od 1 do 30.",
-        "maxAttempts": "Wpisz liczbę całkowitą od 1 do 10."
+        "maxAttempts": "Wpisz liczbę całkowitą od 1 do 10.",
+        "phoneNumberIdInvalid": "Identyfikator numeru telefonu zawiera tylko cyfry."
       }
     },
     "failures": {

@@ -229,6 +229,7 @@ export class WabaWebhookService {
       signatureHeader: input.signatureHeader,
       contentType: input.contentType,
       fields: [...new Set(changes.map((c) => c.field))],
+      phoneNumberIds: phoneIds,
     });
 
     // A change for a number no connection owns would be dropped by the worker after a database lookup (waba-ingest.service.ts): it is

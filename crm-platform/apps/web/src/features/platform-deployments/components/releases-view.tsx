@@ -23,6 +23,16 @@ const IST = 'Asia/Kolkata';
 
 const COLUMNS = ['tag', 'changes', 'state', 'step', 'started', 'finished', 'error'] as const;
 
+/** A time as Indian time, with the zone written out (the browser's own zone would read as a different hour to the person next to you). */
+const istStamp = (f: ReturnType<typeof useFormatter>, iso: string) =>
+  `${f.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'medium', timeZone: IST })} IST`;
+
+/**
+ * How many of the newest attempts must all lack their pull requests before the page says so. A release always carries at least its
+ * commit, so several empty ones in a row mean the build server or the host script that records them is not doing it.
+ */
+const SILENT_RELEASES = 3;
+
 /**
  * The Product releases tab: what is live on desk.wabo.ai, whether a release is running, and every attempt with its steps and error.
  * Read-only; polls, so a release that moves shows up without a reload.
@@ -40,16 +50,15 @@ export function ReleasesView() {
   if (q.isError && !q.data) return <ErrorBlock error={q.error} onRetry={() => void q.refetch()} />;
 
   const data = q.data;
-  const stamp = (iso: string) =>
-    f.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'medium' });
+  const stamp = (iso: string) => istStamp(f, iso);
   const stalled = data.rows.filter((r) => r.stalled).length;
+  const newest = data.rows.slice(0, SILENT_RELEASES);
+  const silent = newest.length === SILENT_RELEASES && newest.every((r) => r.changes.length === 0);
 
   return (
     <div className="space-y-6">
       <p className="text-xs text-muted-foreground">
-        {q.isError
-          ? t('stale')
-          : t('updated', { time: f.dateTime(new Date(data.generatedAt), { timeStyle: 'medium' }) })}
+        {q.isError ? t('stale') : t('updated', { time: stamp(data.generatedAt) })}
       </p>
 
       <Card className="space-y-2">
@@ -69,6 +78,8 @@ export function ReleasesView() {
           {t('releases.stalledAlert', { count: stalled, minutes: RELEASE_STALL_MINUTES })}
         </Alert>
       )}
+
+      {silent && <Alert tone="warning">{t('releases.noChangesAlert')}</Alert>}
 
       {data.rows.length === 0 ? (
         <EmptyState title={t('empty.title')} message={t('releases.empty')} />
@@ -99,8 +110,16 @@ export function ReleasesView() {
 function ReleaseRowView({ row }: { row: ReleaseRow }) {
   const t = useTranslations(NS);
   const f = useFormatter();
-  const stamp = (iso: string) =>
-    f.dateTime(new Date(iso), { dateStyle: 'medium', timeStyle: 'medium' });
+  const stamp = (iso: string) => istStamp(f, iso);
+  // A failed attempt always says why; one that stopped moving says so, so the cell is never an unexplained blank.
+  const failed = row.state === 'failed' || row.state === 'rolled_back';
+  const why =
+    row.error ??
+    (failed
+      ? t('noDetail')
+      : row.stalled
+        ? t('releases.noProgress', { minutes: RELEASE_STALL_MINUTES })
+        : null);
   return (
     <tr className="align-top">
       <td className="px-3 py-2 font-mono text-xs">{row.tag}</td>
@@ -151,7 +170,13 @@ function ReleaseRowView({ row }: { row: ReleaseRow }) {
         {row.finishedAt ? stamp(row.finishedAt) : t('notStarted')}
       </td>
       <td className="max-w-xs px-3 py-2">
-        {row.error ? <div className="break-words text-danger">{row.error}</div> : null}
+        {why ? (
+          <div
+            className={row.error ? 'break-words text-danger' : 'break-words text-muted-foreground'}
+          >
+            {why}
+          </div>
+        ) : null}
       </td>
     </tr>
   );

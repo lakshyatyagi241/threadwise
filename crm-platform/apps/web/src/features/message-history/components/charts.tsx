@@ -296,7 +296,7 @@ export function TopConversations({
         </Link>
       </div>
       {top.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border p-6 text-center text-xs italic text-muted-foreground">
+        <div className="rounded-md border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
           {t('topEmpty')}
         </div>
       ) : (

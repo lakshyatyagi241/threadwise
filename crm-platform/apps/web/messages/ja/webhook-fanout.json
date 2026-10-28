@@ -38,11 +38,13 @@
         "target": "転送先",
         "active": "有効",
         "fields": "項目",
+        "numbers": "電話番号",
         "deliveries": "配信",
         "last": "最終配信",
         "actions": "操作"
       },
       "allFields": "すべての項目",
+      "allNumbers": "すべての番号",
       "success": "{count, number} 件成功",
       "failure": "{count, number} 件失敗",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "項目フィルター",
       "fieldFilterHint": "空欄にすると、すべての項目を転送します。項目名を入力して Enter を押してください。例: messages、message_template_status_update",
       "fieldFilterPlaceholder": "項目を追加",
+      "phoneFilter": "電話番号フィルター",
+      "phoneFilterHint": "空のままにするとすべての番号を転送します。Metaの電話番号ID（表示番号ではなく数字のみ）を入力してEnterを押します。複数の番号を含むWebhookは、1つでも一覧にあれば全体を転送します。",
+      "phoneFilterPlaceholder": "電話番号IDを追加",
       "fieldRemove": "{field} を削除",
+      "phoneRemove": "{phone} を削除",
       "timeout": "タイムアウト（秒）",
       "timeoutHint": "1〜30",
       "maxAttempts": "最大試行回数",
@@ -110,7 +116,8 @@
         "headerValueRequired": "ヘッダーには名前と値の両方が必要です。",
         "headerNameRequired": "ヘッダー名も入力してください。",
         "timeout": "1〜30 の整数を入力してください。",
-        "maxAttempts": "1〜10 の整数を入力してください。"
+        "maxAttempts": "1〜10 の整数を入力してください。",
+        "phoneNumberIdInvalid": "電話番号IDは数字のみです。"
       }
     },
     "failures": {

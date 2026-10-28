@@ -424,7 +424,7 @@ export function ComposePostScreen() {
                       {s.message}
                     </div>
                   ) : (
-                    <div className="px-3 pb-2 text-[12.5px] italic text-muted-foreground">
+                    <div className="px-3 pb-2 text-[12.5px] text-muted-foreground">
                       {t('preview.empty')}
                     </div>
                   )}

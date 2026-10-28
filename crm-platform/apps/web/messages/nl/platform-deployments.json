@@ -107,7 +107,9 @@
         "rolled_back": "Teruggedraaid"
       },
       "by": "door {author}",
-      "raisedIst": "Aangemaakt {time} IST"
+      "raisedIst": "Aangemaakt {time} IST",
+      "noProgress": "Al {minutes} minuten geen voortgang. De build of de release is mogelijk gestopt.",
+      "noChangesAlert": "De nieuwste releases vermelden hun pull requests niet. Waarschijnlijk is deploy-main.sh op de buildserver of ci-entry.sh op de host verouderd: installeer de huidige versies (deploy/build-server/README.md)."
     }
   }
 }

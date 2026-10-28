@@ -9,12 +9,14 @@ import {
   MAX_FORWARD_BYTES,
   forwardJobId,
   matchesFilter,
+  matchesPhoneNumberFilter,
   type ForwardJob,
 } from './webhook-fanout.rules';
 
 interface ActiveTarget {
   id: number;
   fieldFilter: string[] | null;
+  phoneNumberIdFilter: string[] | null;
   maxAttempts: number;
 }
 
@@ -47,14 +49,19 @@ export class WebhookFanoutService {
     signatureHeader?: string;
     contentType?: string;
     fields: string[];
+    /** Meta phone number ids named by the body. */
+    phoneNumberIds?: string[];
   }): Promise<number> {
     try {
       if (input.rawBody.length > MAX_FORWARD_BYTES) {
         this.logger.warn({ bytes: input.rawBody.length }, 'webhook body too large to forward');
         return 0;
       }
-      const targets = (await this.activeTargets()).filter((t) =>
-        matchesFilter(t.fieldFilter, input.fields),
+      const phoneNumberIds = input.phoneNumberIds ?? [];
+      const targets = (await this.activeTargets()).filter(
+        (t) =>
+          matchesFilter(t.fieldFilter, input.fields) &&
+          matchesPhoneNumberFilter(t.phoneNumberIdFilter, phoneNumberIds),
       );
       if (targets.length === 0) return 0;
       const body = input.rawBody.toString('base64');
@@ -89,17 +96,19 @@ export class WebhookFanoutService {
     if (this.cache && now - this.cache.at < CACHE_MS) return this.cache.targets;
     const rows = await this.store.tx(async (tx) => {
       const res = await tx.execute(
-        sql`SELECT id, field_filter, max_attempts FROM webhook_forward_targets WHERE is_active ORDER BY id`,
+        sql`SELECT id, field_filter, phone_number_id_filter, max_attempts FROM webhook_forward_targets WHERE is_active ORDER BY id`,
       );
       return res.rows as unknown as Array<{
         id: number | string;
         field_filter: string[] | null;
+        phone_number_id_filter: string[] | null;
         max_attempts: number;
       }>;
     });
     const targets = rows.map((r) => ({
       id: Number(r.id),
       fieldFilter: r.field_filter,
+      phoneNumberIdFilter: r.phone_number_id_filter,
       maxAttempts: r.max_attempts,
     }));
     this.cache = { at: now, targets };

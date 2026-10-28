@@ -38,11 +38,13 @@
         "target": "Destino",
         "active": "Activo",
         "fields": "Campos",
+        "numbers": "Números de teléfono",
         "deliveries": "Entregas",
         "last": "Última entrega",
         "actions": "Acciones"
       },
       "allFields": "Todos los campos",
+      "allNumbers": "Todos los números",
       "success": "{count, number} correctas",
       "failure": "{count, number} fallidas",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filtro de campos",
       "fieldFilterHint": "Déjalo vacío para reenviar todos los campos. Escribe un campo y pulsa Intro, por ejemplo messages o message_template_status_update.",
       "fieldFilterPlaceholder": "Añadir un campo",
+      "phoneFilter": "Filtro de números de teléfono",
+      "phoneFilterHint": "Déjalo vacío para reenviar todos los números. Escribe un ID de número de teléfono de Meta (solo dígitos, no el número visible) y pulsa Enter. Un webhook que nombra varios números se reenvía completo si uno de ellos está en la lista.",
+      "phoneFilterPlaceholder": "Añadir un ID de número",
       "fieldRemove": "Quitar {field}",
+      "phoneRemove": "Quitar {phone}",
       "timeout": "Tiempo de espera (segundos)",
       "timeoutHint": "De 1 a 30",
       "maxAttempts": "Intentos máximos",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Una cabecera necesita nombre y valor.",
         "headerNameRequired": "Introduce también el nombre de la cabecera.",
         "timeout": "Introduce un número entero de 1 a 30.",
-        "maxAttempts": "Introduce un número entero de 1 a 10."
+        "maxAttempts": "Introduce un número entero de 1 a 10.",
+        "phoneNumberIdInvalid": "Los ID de número de teléfono solo llevan dígitos."
       }
     },
     "failures": {

@@ -18,6 +18,7 @@ export interface TargetRow {
   auth_header_last4: string | null;
   is_active: boolean;
   field_filter: string[] | null;
+  phone_number_id_filter: string[] | null;
   timeout_ms: number;
   max_attempts: number;
   success_count: number | string;
@@ -31,7 +32,7 @@ export interface TargetRow {
 }
 
 export const TARGET_COLUMNS = sql.raw(
-  'id, uuid, name, url, auth_header_name, auth_header_value, auth_header_last4, is_active, field_filter, timeout_ms, ' +
+  'id, uuid, name, url, auth_header_name, auth_header_value, auth_header_last4, is_active, field_filter, phone_number_id_filter, timeout_ms, ' +
     'max_attempts, success_count, failure_count, last_status, last_error, last_success_at, last_failure_at, row_version, updated_at',
 );
 
