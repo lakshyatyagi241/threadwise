@@ -207,6 +207,7 @@ export class OutboxDrainService {
       aggregateId: String(row.aggregate_id),
       eventType: row.event_type,
       payload: row.payload,
+      createdAt: new Date(row.created_at),
     });
   }
 }

@@ -17,14 +17,21 @@ describe('a person taking a conversation ends the live flow run (#1174)', () => 
     );
     return { consumer, endForPeer, conversations };
   };
+  const takenOverAt = new Date('2026-10-28T10:05:00.000Z');
   const event = (payload: Record<string, unknown>) =>
-    ({ id: 'e1', orgId: 7, eventType: 'conversation.assigned', payload }) as never;
+    ({
+      id: 'e1',
+      orgId: 7,
+      eventType: 'conversation.assigned',
+      createdAt: takenOverAt,
+      payload,
+    }) as never;
 
   it('ends the run on the channel and peer of the conversation when a person takes it', async () => {
     const h = build({ channelId: 3, peerKey: '919876543210' });
     await h.consumer.handle(event({ conversationId: 'conv-uuid', toUserId: 'user-uuid' }));
     expect(h.conversations.peerOfConversation).toHaveBeenCalledWith(7, 'conv-uuid');
-    expect(h.endForPeer).toHaveBeenCalledWith(7, 3, '919876543210');
+    expect(h.endForPeer).toHaveBeenCalledWith(7, 3, '919876543210', takenOverAt);
   });
 
   it('does nothing on an unassignment (no person holds the thread)', async () => {
