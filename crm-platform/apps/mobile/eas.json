@@ -29,6 +29,10 @@
       "env": { "APP_VARIANT": "preview" },
       "android": { "buildType": "apk" }
     },
+    "production-apk": {
+      "extends": "production",
+      "android": { "buildType": "apk" }
+    },
     "production": {
       "extends": "base",
       "channel": "production",
