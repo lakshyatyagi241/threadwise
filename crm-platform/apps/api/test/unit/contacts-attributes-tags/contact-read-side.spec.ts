@@ -55,7 +55,8 @@ describe('subscribed, as the list column says it', () => {
 
   it('subscribed=true keeps only those, subscribed=false everyone else', () => {
     expect(where({ subscribed: true }).sql).toContain("= 'subscribed'");
-    expect(where({ subscribed: false }).sql).toMatch(/NOT \(lower\(btrim/);
+    expect(where({ subscribed: true }).sql).toContain('contact_consent_state');
+    expect(where({ subscribed: false }).sql).toMatch(/NOT \(NOT "contacts"\."is_unsubscribed"/);
   });
 
   it('is not added when the filter does not ask for it', () => {

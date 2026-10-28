@@ -270,9 +270,16 @@ export class InstallationsService {
       });
     }
 
+    // The cap is counted again inside the insert transaction, under the workspace's limit lock: two installs of different apps at once
+    // both pass the early check above on the same count, and only a count taken after the lock is held sees the other one commit.
+    const cap = await this.entitlements.limit(ctx.orgId, INSTALLED_APPS_LIMIT);
+
     let id: number;
     try {
       id = await this.db.tx(async (tx) => {
+        await this.entitlements.lockLimit(tx, ctx.orgId, INSTALLED_APPS_LIMIT);
+        if (cap > 0 && (await this.browse.installedCount(tx, ctx.orgId)) >= cap)
+          throw this.locked('limit_reached', INSTALLED_APPS_LIMIT);
         const installationId = await this.repo.insert(tx, ctx.orgId, {
           uuid: installationUuid,
           appId: target.appId,
@@ -424,9 +431,12 @@ export class InstallationsService {
       const row = await this.lock(tx, ctx.orgId, uuid);
       if (row.status === 'killed') throw this.killed();
       const recipe = readRecipe(row.recipe);
-      const existing = this.relay.openCredentials(row.credentialsEnc);
       const touchesCredentials =
         input.credentials !== undefined || (input.clearCredentials?.length ?? 0) > 0;
+      // Only a write to the credentials merges against what is stored, so only it needs the stored blob to open (#1269).
+      const existing = touchesCredentials
+        ? this.relay.openStoredCredentials(row.credentialsEnc, row.uuid)
+        : {};
       const merged = touchesCredentials
         ? mergeCredentials(recipe, existing, input.credentials ?? {}, input.clearCredentials ?? [])
         : null;
@@ -651,7 +661,7 @@ export class InstallationsService {
     const started = Date.now();
     const result = await this.registry.get(recipe.connector.type).test({
       recipe,
-      credentials: this.relay.openCredentials(row.credentialsEnc),
+      credentials: this.relay.openStoredCredentials(row.credentialsEnc, row.uuid),
       config: row.config,
     });
     const checkedAt = new Date();

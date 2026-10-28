@@ -131,7 +131,7 @@ function FooterForm({ saved }: { saved: { footer: string; isDefault: boolean } }
           <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             {t('preview')}
           </p>
-          <p className="whitespace-pre-wrap break-words italic text-muted-foreground">
+          <p className="whitespace-pre-wrap break-words text-muted-foreground">
             {footerPreview(value, t('noFooter'))}
           </p>
         </div>

@@ -400,7 +400,7 @@ export function AskForm({ node, data: d, set, env, addOption, removeOption }: Fo
         {options.length < 3 ? (
           <AddLink onClick={addOption}>{t('addAnswer')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">
+          <div className="mt-1 text-[11px] text-muted-foreground">
             {t('maxReached', { max: 3 })}
           </div>
         )}
@@ -436,7 +436,7 @@ export function PollForm({ node, data: d, set, addOption, removeOption }: FormPr
         {options.length < 3 ? (
           <AddLink onClick={addOption}>{t('addOption')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">
+          <div className="mt-1 text-[11px] text-muted-foreground">
             {t('maxReached', { max: 3 })}
           </div>
         )}

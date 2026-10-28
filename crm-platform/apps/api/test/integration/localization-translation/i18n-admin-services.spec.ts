@@ -280,6 +280,35 @@ describe('i18n operator services (language registry and provider catalogue)', ()
           ),
         ).toBe(ERROR_CODES.I18N_PROVIDER_CREDENTIALS_MISSING);
       }));
+
+    it('refuses a partial write over stored credentials it cannot read, and keeps them until a full re-entry (TW-I18N-015)', () =>
+      asOperator(async () => {
+        const lt = await provider('libretranslate');
+        await owner.query(
+          `UPDATE translation_providers SET credentials = 'not-a-valid-envelope' WHERE slug = 'libretranslate'`,
+        );
+        const current = await provider('libretranslate');
+        expect(
+          await rejects(
+            providers.update(lt.id, {
+              rowVersion: current.rowVersion,
+              credentials: { api_key: 'partial-key' },
+            }),
+          ),
+        ).toBe(ERROR_CODES.I18N_PROVIDER_CREDENTIALS_MISSING);
+        const kept = await owner.query(
+          `SELECT credentials FROM translation_providers WHERE slug = 'libretranslate'`,
+        );
+        expect(kept.rows[0].credentials).toBe('not-a-valid-envelope');
+
+        const restored = await providers.update(lt.id, {
+          rowVersion: current.rowVersion,
+          credentials: { endpoint: 'https://translate.example.com', api_key: 'full-key' },
+        });
+        expect(restored.credentialFields.find((f) => f.key === 'endpoint')!.value).toBe(
+          'https://translate.example.com',
+        );
+      }));
   });
 
   describe('workspace translation settings (TW-I18N-035)', () => {

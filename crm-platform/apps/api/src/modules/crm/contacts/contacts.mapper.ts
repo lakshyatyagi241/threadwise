@@ -1,4 +1,5 @@
 import type { ContactResponse } from '@crm/contracts';
+import { shownSubscriptionLabel } from '../../contact-consent/consent-intake.rules';
 import type { ContactChip, ContactRow } from './contacts.repository';
 import { maskPhone } from './phone-mask';
 
@@ -23,6 +24,10 @@ export function toContactResponse(
   opts?: { groups?: ContactChip[]; tags?: ContactChip[]; canRevealPhone?: boolean },
 ): ContactResponse {
   const chip = (c: ContactChip) => ({ id: c.uuid, name: c.name, color: c.color });
+  // The WhatsApp label needs both consent booleans. A projection that omits them fails here instead of showing a wrong label.
+  if (row.whatsappMarketingGranted === undefined || row.whatsappRequiresConsent === undefined) {
+    throw new Error('ContactRow is missing the WhatsApp consent fields');
+  }
   return {
     id: row.uuid,
     displayId: row.displayId,
@@ -48,7 +53,11 @@ export function toContactResponse(
     leadScoreReasons: row.leadScoreSource === 'ai' ? (row.leadScoreReasons ?? []) : null,
     leadScoredAt: row.leadScoredAt?.toISOString() ?? null,
     leadScoreModel: row.leadScoreModel,
-    whatsappSubscriptionStatus: row.whatsappSubscriptionStatus,
+    whatsappSubscriptionStatus: shownSubscriptionLabel(
+      row.whatsappSubscriptionStatus,
+      row.whatsappMarketingGranted,
+      row.whatsappRequiresConsent,
+    ),
     smsSubscriptionStatus: row.smsSubscriptionStatus,
     emailSubscriptionStatus: row.emailSubscriptionStatus,
     emailConfirmed: row.emailConfirmed,

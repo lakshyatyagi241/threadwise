@@ -219,6 +219,7 @@
       "referral": "Provient d’une publicité ou d’un lien",
       "sentIn": "Envoyé en {lang}. Afficher le texte que vous avez rédigé",
       "translatedFrom": "Traduit depuis {lang}. Afficher l’original",
+      "translationFailed": "Envoyé sans traduction. La traduction a échoué, votre texte a donc été envoyé tel que vous l'avez écrit.",
       "bot": "Bot",
       "broadcast": "Diffusion",
       "reacted": "Réaction {emoji}",

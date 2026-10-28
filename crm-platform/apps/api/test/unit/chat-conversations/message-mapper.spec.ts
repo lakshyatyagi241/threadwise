@@ -55,6 +55,16 @@ const row = (over: Partial<MessageRow> = {}): MessageRow =>
   }) as MessageRow;
 
 describe('toMessageResponse: the wire shape, ids and keys never leak', () => {
+  it('shows the translation-failed marker on an outbound reply and nothing otherwise (#1278)', () => {
+    const failed = toMessageResponse(
+      row({ direction: 'out', translationStatus: 'skipped_failed' } as Partial<MessageRow>),
+      () => null,
+    );
+    expect(failed.translationStatus).toBe('skipped_failed');
+    expect(messageResponseSchema.parse(failed).translationStatus).toBe('skipped_failed');
+    expect(toMessageResponse(row({ direction: 'out' }), () => null).translationStatus).toBeNull();
+  });
+
   it('an inbound text message matches the contract and carries only uuids', () => {
     const wire = toMessageResponse(row(), () => null);
     expect(messageResponseSchema.parse(wire)).toEqual(wire);

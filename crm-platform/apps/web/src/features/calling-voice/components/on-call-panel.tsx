@@ -110,7 +110,7 @@ export function OnCallPanel() {
               ? tc('askConfirmed')
               : tc('askAnnouncement')}
           </p>
-          <blockquote className="mt-2 border-s-2 border-primary ps-2 italic">
+          <blockquote className="mt-2 border-s-2 border-primary ps-2">
             {recordingRules.noticeText}
           </blockquote>
           <div className="mt-3 flex flex-col gap-2">

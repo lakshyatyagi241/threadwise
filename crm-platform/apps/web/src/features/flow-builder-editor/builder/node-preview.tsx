@@ -199,7 +199,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const replies = asArr(d.replies);
       if (replies.length === 0) {
         return (
-          <div className="px-3 pt-2 pb-2 text-[11.5px] italic text-muted-foreground">
+          <div className="px-3 pt-2 pb-2 text-[11.5px] text-muted-foreground">
             {tp('noReplies')}
           </div>
         );
@@ -224,7 +224,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             );
           })}
           {replies.length > 5 ? (
-            <div className="px-2 text-[10.5px] italic text-muted-foreground">
+            <div className="px-2 text-[10.5px] text-muted-foreground">
               {tp('moreReplies', { count: replies.length - 5 })}
             </div>
           ) : null}
@@ -292,7 +292,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const ops = Array.isArray(d.operators) ? (d.operators as string[]) : [];
       if (conds.length === 0)
         return (
-          <div className="px-3 pt-2 pb-1.5 text-[11.5px] italic text-muted-foreground">
+          <div className="px-3 pt-2 pb-1.5 text-[11.5px] text-muted-foreground">
             {tp('noConditions')}
           </div>
         );
@@ -387,7 +387,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             {name}
           </span>
           {!cached && d.tag ? (
-            <span className="text-[10px] italic text-muted-foreground">{tp('tagNew')}</span>
+            <span className="text-[10px] text-muted-foreground">{tp('tagNew')}</span>
           ) : null}
         </div>
       );
@@ -421,7 +421,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
               </Mono>
             </div>
             {d.message ? (
-              <div className="mt-1 truncate text-[10.5px] italic text-muted-foreground">
+              <div className="mt-1 truncate text-[10.5px] text-muted-foreground">
                 &quot;{cut(d.message, 40)}&quot;
               </div>
             ) : null}
@@ -446,7 +446,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
             </div>
           ) : null}
           {d.message ? (
-            <div className="mt-1 truncate text-[10.5px] italic text-muted-foreground">
+            <div className="mt-1 truncate text-[10.5px] text-muted-foreground">
               &quot;{cut(d.message, 40)}&quot;
             </div>
           ) : null}
@@ -607,7 +607,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       const items = asArr(d.productItems);
       if (items.length === 0)
         return (
-          <div className="px-3 pt-2 pb-2 text-[11.5px] italic text-muted-foreground">
+          <div className="px-3 pt-2 pb-2 text-[11.5px] text-muted-foreground">
             {tp('noProducts')}
           </div>
         );
@@ -823,7 +823,7 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
       );
     case 'cf_hangup':
       return (
-        <div className="px-3 pt-2 pb-1.5 text-[11.5px] italic text-muted-foreground">
+        <div className="px-3 pt-2 pb-1.5 text-[11.5px] text-muted-foreground">
           {cut(str(d.goodbye) || tp('endCall'), 40)}
         </div>
       );
