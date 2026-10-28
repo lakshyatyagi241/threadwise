@@ -196,8 +196,8 @@ describe('the six guest designs', () => {
     expect(html).toContain('--auth-accent:#0f766e');
   });
 
-  it('renders right-to-left languages without italic accent words', () => {
-    const html = shell(1, {}, 'ar');
-    expect(html).toContain('rtl:not-italic');
+  it('draws no accent word in italics, in any direction', () => {
+    expect(shell(1, {}, 'ar')).not.toMatch(/\bitalic\b/);
+    expect(shell(1, {}, 'en')).not.toMatch(/\bitalic\b/);
   });
 });

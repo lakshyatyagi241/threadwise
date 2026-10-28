@@ -150,6 +150,7 @@ export const aiTrainingChunks = pgTable(
     embeddedAt: timestamp('embedded_at', { withTimezone: true }),
     embedAttempts: smallint('embed_attempts').notNull().default(0),
     embedError: text('embed_error'),
+    embedHealCount: smallint('embed_heal_count').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

@@ -107,7 +107,9 @@
         "rolled_back": "ย้อนกลับแล้ว"
       },
       "by": "โดย {author}",
-      "raisedIst": "สร้างเมื่อ {time} IST"
+      "raisedIst": "สร้างเมื่อ {time} IST",
+      "noProgress": "ไม่มีความคืบหน้ามา {minutes} นาที การสร้างหรือการปล่อยเวอร์ชันอาจหยุดไปแล้ว",
+      "noChangesAlert": "รุ่นล่าสุดไม่แสดงรายการ pull request ที่รวมอยู่ น่าจะเป็นเพราะ deploy-main.sh บนเซิร์ฟเวอร์บิลด์หรือ ci-entry.sh บนโฮสต์เป็นเวอร์ชันเก่า: โปรดติดตั้งเวอร์ชันปัจจุบัน (deploy/build-server/README.md)"
     }
   }
 }

@@ -255,6 +255,69 @@ describe('DeploymentsPage', () => {
     expect(all('release-raised')[0]).toContain('IST');
   });
 
+  describe('release times, unexplained blanks and missing descriptions', () => {
+    const attempt = (over: Record<string, unknown> = {}) => ({
+      id: '11111111-2222-4333-8444-555555555555',
+      tag: 'abc123def',
+      state: 'ok',
+      step: null,
+      error: null,
+      changes: [{ pr: 900, title: 'A change', author: 'Vedant' }],
+      startedAt: '2026-10-28T05:16:03.000Z',
+      updatedAt: '2026-10-28T05:20:00.000Z',
+      finishedAt: '2026-10-28T05:20:00.000Z',
+      stalled: false,
+      ...over,
+    });
+    const show = async (rows: unknown[]) => {
+      state.releases.mockResolvedValue({
+        generatedAt: '2026-10-28T05:30:00.000Z',
+        live: { tag: 'abc123def', finishedAt: '2026-10-28T05:20:00.000Z' },
+        inProgress: false,
+        rows,
+      });
+      state.fetch.mockResolvedValue(page([]));
+      await mount();
+    };
+
+    it('writes every time in Indian time with the zone, whatever the browser zone is', async () => {
+      await show([attempt()]);
+      // 05:16:03 UTC is 10:46:03 in India (the time on the operator's screen); 05:20 is 10:50; the page clock is 11:00.
+      expect(host.textContent).toMatch(/10:46:03\s?AM IST/);
+      expect(host.textContent).toMatch(/10:50:00\s?AM IST/);
+      expect(host.textContent).toMatch(/11:00:00\s?AM IST/);
+    });
+
+    it('says why a failed attempt with no stored error failed, and why a stalled one is quiet', async () => {
+      await show([
+        attempt({ id: 'a', state: 'failed', error: null }),
+        attempt({ id: 'b', state: 'building', stalled: true, finishedAt: null }),
+      ]);
+      expect(host.textContent).toContain(en('noDetail'));
+      expect(host.textContent).toContain(en('releases.noProgress').replace('{minutes}', '45'));
+    });
+
+    it('warns when the newest releases do not list their pull requests', async () => {
+      const bare = (id: string) => attempt({ id, changes: [] });
+      await show([bare('a'), bare('b'), bare('c')]);
+      expect(host.textContent).toContain(en('releases.noChangesAlert'));
+    });
+
+    it('stays quiet when only some of the newest releases lack changes', async () => {
+      await show([
+        attempt({ id: 'a' }),
+        attempt({ id: 'b', changes: [] }),
+        attempt({ id: 'c', changes: [] }),
+      ]);
+      expect(host.textContent).not.toContain(en('releases.noChangesAlert'));
+    });
+
+    it('stays quiet when there are too few releases to judge', async () => {
+      await show([attempt({ id: 'a', changes: [] }), attempt({ id: 'b', changes: [] })]);
+      expect(host.textContent).not.toContain(en('releases.noChangesAlert'));
+    });
+  });
+
   it('lists flow publishes with their state, attempts and error', async () => {
     state.publishes.mockResolvedValue({
       generatedAt: '2026-10-19T10:00:05.000Z',

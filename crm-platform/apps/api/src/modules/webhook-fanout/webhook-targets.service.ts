@@ -49,7 +49,7 @@ const TEST_BODY = Buffer.from(
 );
 
 const REPLAY_COLUMNS = sql.raw(
-  't.id, t.uuid, t.name, t.url, t.auth_header_name, t.auth_header_value, t.auth_header_last4, t.is_active, t.field_filter, ' +
+  't.id, t.uuid, t.name, t.url, t.auth_header_name, t.auth_header_value, t.auth_header_last4, t.is_active, t.field_filter, t.phone_number_id_filter, ' +
     't.timeout_ms, t.max_attempts, t.success_count, t.failure_count, t.last_status, t.last_error, t.last_success_at, ' +
     't.last_failure_at, t.row_version, t.updated_at',
 );
@@ -116,10 +116,11 @@ export class WebhookTargetsService {
       try {
         const res = await tx.execute(sql`
           INSERT INTO webhook_forward_targets
-            (name, url, auth_header_name, auth_header_value, auth_header_last4, is_active, field_filter, timeout_ms, max_attempts)
+            (name, url, auth_header_name, auth_header_value, auth_header_last4, is_active, field_filter, phone_number_id_filter, timeout_ms, max_attempts)
           VALUES (${input.name}, ${input.url}, ${input.authHeaderName ?? null}, ${sealed},
             ${input.authHeaderValue ? last4(input.authHeaderValue) : null}, ${input.isActive},
-            ${input.fieldFilter.length ? sql`${pgTextArray(input.fieldFilter)}::text[]` : null}, ${input.timeoutMs}, ${input.maxAttempts})
+            ${input.fieldFilter.length ? sql`${pgTextArray(input.fieldFilter)}::text[]` : null},
+            ${input.phoneNumberIdFilter.length ? sql`${pgTextArray(input.phoneNumberIdFilter)}::text[]` : null}, ${input.timeoutMs}, ${input.maxAttempts})
           RETURNING ${TARGET_COLUMNS}
         `);
         row = res.rows[0] as unknown as TargetRow | undefined;
@@ -168,6 +169,7 @@ export class WebhookTargetsService {
         url: input.url ?? row.url,
         isActive: input.isActive ?? row.is_active,
         filter: input.fieldFilter ?? row.field_filter ?? [],
+        phoneFilter: input.phoneNumberIdFilter ?? row.phone_number_id_filter ?? [],
         timeoutMs: input.timeoutMs ?? row.timeout_ms,
         maxAttempts: input.maxAttempts ?? row.max_attempts,
       };
@@ -178,6 +180,7 @@ export class WebhookTargetsService {
             name = ${next.name}, url = ${next.url}, is_active = ${next.isActive},
             auth_header_name = ${headerName}, auth_header_value = ${headerCipher}, auth_header_last4 = ${headerLast4},
             field_filter = ${next.filter.length ? sql`${pgTextArray(next.filter)}::text[]` : null},
+            phone_number_id_filter = ${next.phoneFilter.length ? sql`${pgTextArray(next.phoneFilter)}::text[]` : null},
             timeout_ms = ${next.timeoutMs}, max_attempts = ${next.maxAttempts}
           WHERE id = ${row.id} AND row_version = ${input.rowVersion}
           RETURNING ${TARGET_COLUMNS}
@@ -195,6 +198,11 @@ export class WebhookTargetsService {
         changes.isActive = { from: row.is_active, to: next.isActive };
       if (JSON.stringify(next.filter) !== JSON.stringify(row.field_filter ?? []))
         changes.fieldFilter = { from: row.field_filter ?? [], to: next.filter };
+      if (JSON.stringify(next.phoneFilter) !== JSON.stringify(row.phone_number_id_filter ?? []))
+        changes.phoneNumberIdFilter = {
+          from: row.phone_number_id_filter ?? [],
+          to: next.phoneFilter,
+        };
       if (headerCipher !== row.auth_header_value)
         changes.authHeader = headerCipher ? 'replaced' : 'removed';
       if (Object.keys(changes).length > 0) {
@@ -343,6 +351,7 @@ export class WebhookTargetsService {
       hasAuthHeader: Boolean(row.auth_header_value),
       authHeaderLast4: row.auth_header_last4,
       fieldFilter: row.field_filter ?? [],
+      phoneNumberIdFilter: row.phone_number_id_filter ?? [],
       timeoutMs: row.timeout_ms,
       maxAttempts: row.max_attempts,
       successCount: Number(row.success_count),

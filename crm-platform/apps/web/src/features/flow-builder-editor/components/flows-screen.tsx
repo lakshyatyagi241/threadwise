@@ -803,7 +803,7 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
       onClose={onClose}
       title={
         <>
-          {t('title')} <span className="text-brand italic">{t('titleAccent')}</span>?
+          {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>?
         </>
       }
       eyebrow={t('eyebrow')}

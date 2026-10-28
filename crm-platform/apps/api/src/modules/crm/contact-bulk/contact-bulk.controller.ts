@@ -148,9 +148,9 @@ export class ContactBulkController {
   @RequirePermission('contacts.consent.manage')
   @ApiOperation({
     summary:
-      'Record marketing consent for one channel on contacts (ids, or everything matching a filter)',
+      'Record marketing consent for one or more channels on contacts (ids, or everything matching a filter)',
     description:
-      "Each contact gets the single edit's consent event (manual source, the note of how they agreed). A grant needs a note (422 at the body). Contacts outside the caller update scope or not found are listed in `failed`; the rest still run. `changed` counts the events recorded.",
+      "Each contact gets the single edit's consent event for every channel in `channels` (manual source, the note of how they agreed). A grant needs a note (422 at the body). Contacts outside the caller update scope or not found are listed in `failed`; the rest still run. `changed` counts the contacts that got at least one event recorded.",
   })
   async consent(
     @Body(zodPipe(bulkConsentContactsSchema)) body: BulkConsentContactsInput,

@@ -63,7 +63,7 @@ function FooterPreview({ footer }: { footer: string }) {
       </p>
       <p>{t('sampleMessage')}</p>
       <p
-        className="mt-1 whitespace-pre-wrap break-words italic text-muted-foreground"
+        className="mt-1 whitespace-pre-wrap break-words text-muted-foreground"
         data-testid="footer-preview"
       >
         {footerPreview(footer, t('noFooter'))}
@@ -160,7 +160,7 @@ function BrandingPane({
             {!data.canEdit ? t('currentDefault') : t('current')}
           </p>
           <p
-            className="rounded-md border border-border bg-muted px-3 py-2 text-sm italic"
+            className="rounded-md border border-border bg-muted px-3 py-2 text-sm"
             data-testid="current-footer"
           >
             {footerPreview(data.effective, t('noFooter'))}

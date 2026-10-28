@@ -38,11 +38,13 @@
         "target": "Destinazione",
         "active": "Attiva",
         "fields": "Campi",
+        "numbers": "Numeri di telefono",
         "deliveries": "Consegne",
         "last": "Ultima consegna",
         "actions": "Azioni"
       },
       "allFields": "Tutti i campi",
+      "allNumbers": "Tutti i numeri",
       "success": "{count, number} ok",
       "failure": "{count, number} non riuscite",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Filtro dei campi",
       "fieldFilterHint": "Lascia vuoto per inoltrare tutti i campi. Digita un campo e premi Invio, ad esempio messages o message_template_status_update.",
       "fieldFilterPlaceholder": "Aggiungi un campo",
+      "phoneFilter": "Filtro numeri di telefono",
+      "phoneFilterHint": "Lascia vuoto per inoltrare tutti i numeri. Digita un ID numero di telefono Meta (solo cifre, non il numero visualizzato) e premi Invio. Un webhook che cita più numeri viene inoltrato per intero se uno di essi è nell'elenco.",
+      "phoneFilterPlaceholder": "Aggiungi un ID numero",
       "fieldRemove": "Rimuovi {field}",
+      "phoneRemove": "Rimuovi {phone}",
       "timeout": "Timeout (secondi)",
       "timeoutHint": "Da 1 a 30",
       "maxAttempts": "Tentativi massimi",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Un’intestazione richiede sia un nome sia un valore.",
         "headerNameRequired": "Inserisci anche il nome dell’intestazione.",
         "timeout": "Inserisci un numero intero da 1 a 30.",
-        "maxAttempts": "Inserisci un numero intero da 1 a 10."
+        "maxAttempts": "Inserisci un numero intero da 1 a 10.",
+        "phoneNumberIdInvalid": "Gli ID numero di telefono contengono solo cifre."
       }
     },
     "failures": {

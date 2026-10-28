@@ -122,16 +122,24 @@ export function TargetsTable({
         />
       ) : (
         <div className="overflow-x-auto rounded-md border border-border">
-          <table className="w-full min-w-[56rem] text-start text-sm">
+          <table className="w-full min-w-[64rem] text-start text-sm">
             <thead className="bg-muted text-xs uppercase tracking-wide text-muted-foreground">
               <tr>
-                {(['target', 'active', 'fields', 'deliveries', 'last', 'actions'] as const).map(
-                  (c) => (
-                    <th key={c} scope="col" className="px-3 py-2 text-start font-medium">
-                      {t(`columns.${c}`)}
-                    </th>
-                  ),
-                )}
+                {(
+                  [
+                    'target',
+                    'active',
+                    'fields',
+                    'numbers',
+                    'deliveries',
+                    'last',
+                    'actions',
+                  ] as const
+                ).map((c) => (
+                  <th key={c} scope="col" className="px-3 py-2 text-start font-medium">
+                    {t(`columns.${c}`)}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -230,6 +238,19 @@ function TargetRow({
             {item.fieldFilter.map((f) => (
               <li key={f} className="rounded-full bg-muted px-2 py-0.5 font-mono text-xs" dir="ltr">
                 {f}
+              </li>
+            ))}
+          </ul>
+        )}
+      </td>
+      <td className="px-3 py-3">
+        {item.phoneNumberIdFilter.length === 0 ? (
+          <span className="text-muted-foreground">{t('allNumbers')}</span>
+        ) : (
+          <ul className="flex max-w-[14rem] flex-wrap gap-1">
+            {item.phoneNumberIdFilter.map((p) => (
+              <li key={p} className="rounded-full bg-muted px-2 py-0.5 font-mono text-xs" dir="ltr">
+                {p}
               </li>
             ))}
           </ul>

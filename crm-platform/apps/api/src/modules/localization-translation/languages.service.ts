@@ -165,6 +165,21 @@ export class LanguagesService {
     return row;
   }
 
+  /**
+   * The default language, read inside the caller's transaction after an advisory lock that serialises every change to
+   * it. Reading it outside the transaction (as before) let a guard see a default that a concurrent set-default was
+   * about to replace (#1292). The lock also covers the first-ever choice, when the settings row does not exist yet.
+   */
+  private async lockedDefault(tx: Tx): Promise<string> {
+    await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtext(${DEFAULT_LANGUAGE_KEY}))`);
+    const row = rowsOf<{ value: unknown }>(
+      await tx.execute(
+        sql`SELECT value FROM platform_settings WHERE key = ${DEFAULT_LANGUAGE_KEY}`,
+      ),
+    )[0];
+    return (row?.value as string | null | undefined) ?? 'en';
+  }
+
   private defaultRefused(row: LanguageRow): AppError {
     return new AppError(
       ERROR_CODES.I18N_LANGUAGE_IS_DEFAULT,
@@ -176,8 +191,8 @@ export class LanguagesService {
   /** TW-I18N-003. Unlike Reference, the default language cannot be switched off (it would be the fallback for everyone). */
   async toggle(uuid: string, rowVersion: number): Promise<LanguageItem> {
     const operatorId = this.operatorId();
-    const defaultCode = await this.defaultCode();
     const item = await this.store.tx(async (tx) => {
+      const defaultCode = await this.lockedDefault(tx);
       const row = await this.lock(tx, uuid, rowVersion);
       if (row.is_active && row.code === defaultCode) throw this.defaultRefused(row);
       const next = !row.is_active;
@@ -202,8 +217,8 @@ export class LanguagesService {
   /** TW-I18N-004. The target must be active. */
   async setDefault(uuid: string, rowVersion: number): Promise<LanguageItem> {
     const operatorId = this.operatorId();
-    const previous = await this.defaultCode();
     const item = await this.store.tx(async (tx) => {
+      const previous = await this.lockedDefault(tx);
       const row = await this.lock(tx, uuid, rowVersion);
       if (!row.is_active) {
         throw new AppError(
@@ -235,8 +250,8 @@ export class LanguagesService {
   /** TW-I18N-002. */
   async update(uuid: string, body: UpdateLanguageRequest): Promise<LanguageItem> {
     const operatorId = this.operatorId();
-    const defaultCode = await this.defaultCode();
     const item = await this.store.tx(async (tx) => {
+      const defaultCode = await this.lockedDefault(tx);
       const row = await this.lock(tx, uuid, body.rowVersion);
       if (!body.isActive && row.code === defaultCode) throw this.defaultRefused(row);
       const updated = rowsOf<LanguageRow>(
@@ -267,8 +282,8 @@ export class LanguagesService {
    */
   async remove(uuid: string, rowVersion: number): Promise<void> {
     const operatorId = this.operatorId();
-    const defaultCode = await this.defaultCode();
     await this.store.tx(async (tx) => {
+      const defaultCode = await this.lockedDefault(tx);
       const row = await this.lock(tx, uuid, rowVersion);
       if (row.code === defaultCode) throw this.defaultRefused(row);
       await tx.execute(sql`DELETE FROM languages WHERE uuid = ${uuid}`);

@@ -238,7 +238,7 @@ export function LogBubble({
 }): ReactElement {
   if (entry.kind === 'system')
     return (
-      <div className="py-1 text-center font-mono text-[10.5px] italic text-muted-foreground">
+      <div className="py-1 text-center font-mono text-[10.5px] text-muted-foreground">
         {entry.text}
       </div>
     );

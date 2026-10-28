@@ -179,7 +179,7 @@ export const NodeCard = memo(function NodeCard({
       </div>
 
       {node.type === 'end' ? (
-        <div className="px-3 py-4 text-center text-[11.5px] italic text-muted-foreground">
+        <div className="px-3 py-4 text-center text-[11.5px] text-muted-foreground">
           {tn('flowEnds')}
         </div>
       ) : null}

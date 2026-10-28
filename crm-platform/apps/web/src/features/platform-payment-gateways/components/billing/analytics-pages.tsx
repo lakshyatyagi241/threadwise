@@ -404,7 +404,7 @@ export function OrderAnalyticsPage() {
       <section className="grid grid-cols-1 gap-5 lg:grid-cols-12">
         <Section className="lg:col-span-5" kicker={t('addons.kicker')} title={t('addons.title')}>
           {d.addons.length === 0 ? (
-            <p className="text-sm italic text-muted-foreground">{t('addons.empty')}</p>
+            <p className="text-sm text-muted-foreground">{t('addons.empty')}</p>
           ) : (
             <ul className="space-y-3 text-sm">
               {d.addons.map((a) => (
@@ -455,7 +455,7 @@ export function OrderAnalyticsPage() {
           title={t('countries.title')}
         >
           {d.byCountry.length === 0 ? (
-            <p className="text-sm italic text-muted-foreground">{t('countries.empty')}</p>
+            <p className="text-sm text-muted-foreground">{t('countries.empty')}</p>
           ) : (
             <ul className="space-y-2.5 text-sm">
               {d.byCountry.map((c) => (

@@ -38,11 +38,13 @@
         "target": "Получатель",
         "active": "Активен",
         "fields": "Поля",
+        "numbers": "Номера телефонов",
         "deliveries": "Доставки",
         "last": "Последняя доставка",
         "actions": "Действия"
       },
       "allFields": "Все поля",
+      "allNumbers": "Все номера",
       "success": "{count, number} успешно",
       "failure": "{count, number} с ошибкой",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Фильтр полей",
       "fieldFilterHint": "Оставьте пустым, чтобы пересылать все поля. Введите поле и нажмите Enter, например messages или message_template_status_update.",
       "fieldFilterPlaceholder": "Добавить поле",
+      "phoneFilter": "Фильтр номеров телефонов",
+      "phoneFilterHint": "Оставьте пустым, чтобы пересылать все номера. Введите ID номера телефона Meta (только цифры, не отображаемый номер) и нажмите Enter. Вебхук с несколькими номерами пересылается целиком, если один из них в списке.",
+      "phoneFilterPlaceholder": "Добавить ID номера",
       "fieldRemove": "Удалить {field}",
+      "phoneRemove": "Удалить {phone}",
       "timeout": "Таймаут (секунды)",
       "timeoutHint": "От 1 до 30",
       "maxAttempts": "Макс. попыток",
@@ -110,7 +116,8 @@
         "headerValueRequired": "Для заголовка нужны и имя, и значение.",
         "headerNameRequired": "Введите также имя заголовка.",
         "timeout": "Введите целое число от 1 до 30.",
-        "maxAttempts": "Введите целое число от 1 до 10."
+        "maxAttempts": "Введите целое число от 1 до 10.",
+        "phoneNumberIdInvalid": "ID номера телефона состоит только из цифр."
       }
     },
     "failures": {
