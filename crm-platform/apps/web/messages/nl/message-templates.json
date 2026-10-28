@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Marketingtaal is niet toegestaan in deze categorie.",
         "TAG_CONTENT_MISMATCH": "Categorie komt niet overeen met de inhoud (bijv. promotionele tekst in een UTILITY-sjabloon).",
         "SCAM": "Meta heeft het sjabloon gemarkeerd als mogelijke oplichting. Controleer beweringen en taalgebruik."
+      },
+      "stats": {
+        "title": "Resultaten van deze sjabloon",
+        "hint": "Geteld uit de berichten die ermee zijn verzonden",
+        "loading": "Cijfers laden",
+        "error": "De cijfers konden niet worden geladen.",
+        "none": "Met deze sjabloon is nog niets verzonden.",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "replied": "Beantwoord",
+        "failed": "Mislukt",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# bericht} other {# berichten}} verzonden met deze sjabloon, {queued} wachten nog",
+        "lastSent": "laatst verzonden {when}"
       }
     },
     "ai": {

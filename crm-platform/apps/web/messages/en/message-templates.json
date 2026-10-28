@@ -537,6 +537,21 @@
         "noKey": "This workspace has no API key yet. Create an API key first, then use this cURL.",
         "keysUnknown": "Could not check your API keys. Open the Developers page to create or review a key, then use this cURL.",
         "createKey": "Create an API key"
+      },
+      "stats": {
+        "title": "How this template did",
+        "hint": "Counted from the messages sent with it",
+        "loading": "Loading numbers",
+        "error": "The numbers could not be loaded.",
+        "none": "Nothing has been sent with this template yet.",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "replied": "Replied",
+        "failed": "Failed",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# message} other {# messages}} sent with this template, {queued} still waiting",
+        "lastSent": "last sent {when}"
       }
     },
     "ai": {

@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Bahasa pemasaran tidak diizinkan dalam kategori ini.",
         "TAG_CONTENT_MISMATCH": "Kategori tidak sesuai dengan konten (mis. teks promosi dalam template UTILITY).",
         "SCAM": "Meta menandai template ini sebagai potensi penipuan. Tinjau klaim dan bahasanya."
+      },
+      "stats": {
+        "title": "Kinerja templat ini",
+        "hint": "Dihitung dari pesan yang dikirim dengannya",
+        "loading": "Memuat angka",
+        "error": "Angka tidak dapat dimuat.",
+        "none": "Belum ada yang dikirim dengan templat ini.",
+        "sent": "Terkirim",
+        "delivered": "Diterima",
+        "read": "Dibaca",
+        "replied": "Dibalas",
+        "failed": "Gagal",
+        "percent": "{value}%",
+        "footer": "{total} pesan dikirim dengan templat ini, {queued} masih menunggu",
+        "lastSent": "terakhir dikirim {when}"
       }
     },
     "ai": {

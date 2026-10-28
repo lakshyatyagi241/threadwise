@@ -121,6 +121,17 @@ export function useTemplate(id: string, opts: { poll?: boolean } = {}) {
   });
 }
 
+/** How one template did (sent, delivered, read, failed, replied); read when its detail page opens. */
+export function useTemplateStats(id: string, enabled = true) {
+  return useQuery({
+    queryKey: [...KEYS.detail(id), 'stats'],
+    queryFn: ({ signal }) => templatesApi.stats(id, signal),
+    enabled,
+    retry: false,
+    staleTime: 30_000,
+  });
+}
+
 /** Debounces a value so the linter is not called on every keystroke. */
 export function useDebounced<T>(value: T, ms = 500): T {
   const [v, setV] = useState(value);
