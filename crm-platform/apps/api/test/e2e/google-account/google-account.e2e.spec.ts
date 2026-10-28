@@ -246,6 +246,17 @@ describe('the Google account page API', () => {
     expect(fake.revoked.length).toBeGreaterThan(before);
   });
 
+  it('keeps what a first consent did grant when another permission was unticked', async () => {
+    const t = await p.api.signup('gacc-partial');
+    const { landing } = await connect(t, ['sheets', 'forms'], {
+      untick: [`${A}/forms.body.readonly`],
+    });
+    expect(landing).toMatch(/calendar=missing_scope$/);
+    const a = await account(t);
+    expect(a.status).toBe('connected');
+    expect(granted(a)).toEqual(['sheets']);
+  });
+
   it('is invisible to another workspace', async () => {
     const a = await p.api.signup('gacc-iso-a');
     const b = await p.api.signup('gacc-iso-b');
