@@ -61,7 +61,9 @@ export function undeclaredFields(schema: ZodTypeAny, body: unknown, path = ''): 
     return out;
   }
   if (s instanceof z.ZodArray && Array.isArray(body)) {
-    return body.slice(0, 5).flatMap((row) => undeclaredFields(s.element, row, `${path}[]`));
+    return body
+      .slice(0, 5)
+      .flatMap((row) => undeclaredFields((s as z.ZodArray<ZodTypeAny>).element, row, `${path}[]`));
   }
   return [];
 }
