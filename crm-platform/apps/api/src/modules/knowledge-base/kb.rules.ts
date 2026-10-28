@@ -5,6 +5,11 @@ import { fingerprint } from '../../common/stable-usage-id';
 
 /** How many times a passage's embedding is tried before it is marked failed (the search then reads its text directly). */
 export const MAX_EMBED_ATTEMPTS = 5;
+/**
+ * How many times the housekeeping re-queues a passage that gave up (`failed`). Each re-queue is a fresh round of vendor calls, so a
+ * passage the vendor always refuses stops after this many; an edit of its entry re-queues it again (replaceForSource writes new rows).
+ */
+export const MAX_FAILED_HEALS = 3;
 /** A single entry never makes more passages than this (200 000 characters of text is about 250). */
 export const MAX_CHUNKS_PER_SOURCE = 500;
 /** The customer message sent to the vendor is cut here. */
