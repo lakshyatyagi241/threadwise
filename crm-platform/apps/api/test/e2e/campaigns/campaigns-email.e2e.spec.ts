@@ -764,7 +764,10 @@ describe('limits, the plan and what stops a run', () => {
   it('an email run is checked at the email price at launch, never at the WhatsApp card, and no mail is charged per send here', async () => {
     const w = await workspace('wallet');
     const get = <T>(token: unknown) => rig.p.h.app.get<T>(token as never, { strict: false });
-    const wallet = get<{ precheck: (...a: unknown[]) => Promise<void> }>(WALLET_GATE);
+    const wallet = get<{
+      precheck: (...a: unknown[]) => Promise<void>;
+      precheckUsage: (...a: unknown[]) => Promise<void>;
+    }>(WALLET_GATE);
     const billing = get<{ consume: (...a: unknown[]) => Promise<boolean> }>(CAMPAIGN_BILLING);
     const precheck = vi.spyOn(wallet, 'precheck');
     const precheckUsage = vi.spyOn(wallet, 'precheckUsage');
