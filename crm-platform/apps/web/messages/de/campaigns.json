@@ -1842,7 +1842,8 @@
         "add": "Vorlage hinzufügen",
         "count": "{used} von {max} Vorlagen",
         "limitReached": "Limit erreicht: {max} Vorlagen.",
-        "variablesTitle": "Variablen der Vorlage {position}: {name}"
+        "variablesTitle": "Variablen der Vorlage {position}: {name}",
+        "variablesLater": "{count, plural, one {# Variable erhält} other {# Variablen erhalten}} den Wert aus der Zuordnung, nicht aus dieser Vorschau."
       }
     },
     "history": {

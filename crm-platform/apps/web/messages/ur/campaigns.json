@@ -1842,7 +1842,8 @@
         "add": "ٹیمپلیٹ شامل کریں",
         "count": "{max} میں سے {used} ٹیمپلیٹس",
         "limitReached": "حد پوری ہو گئی: {max} ٹیمپلیٹس۔",
-        "variablesTitle": "ٹیمپلیٹ {position} کے ویری ایبلز: {name}"
+        "variablesTitle": "ٹیمپلیٹ {position} کے ویری ایبلز: {name}",
+        "variablesLater": "{count, plural, other {# متغیر}} کی قدر اس پیش منظر سے نہیں بلکہ میپنگ سے آتی ہے۔"
       }
     },
     "history": {

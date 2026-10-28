@@ -1842,7 +1842,8 @@
         "add": "Thêm một mẫu",
         "count": "{used}/{max} mẫu",
         "limitReached": "Đã đạt giới hạn: {max} mẫu.",
-        "variablesTitle": "Biến của mẫu {position}: {name}"
+        "variablesTitle": "Biến của mẫu {position}: {name}",
+        "variablesLater": "{count, plural, other {# biến}} lấy giá trị từ phần gán, không phải từ bản xem trước này."
       }
     },
     "history": {

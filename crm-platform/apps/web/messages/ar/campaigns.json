@@ -908,7 +908,8 @@
         "add": "إضافة قالب",
         "count": "{used} من {max} قالبًا",
         "limitReached": "تم بلوغ الحد: {max} قالبًا.",
-        "variablesTitle": "متغيرات القالب {position}: {name}"
+        "variablesTitle": "متغيرات القالب {position}: {name}",
+        "variablesLater": "{count, plural, one {يأخذ متغير واحد قيمته} other {تأخذ # متغيرات قيمها}} من الربط وليس من هذه المعاينة."
       }
     },
     "builder": {

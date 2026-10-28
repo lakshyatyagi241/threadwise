@@ -1842,7 +1842,8 @@
         "add": "Adicionar um modelo",
         "count": "{used} de {max} modelos",
         "limitReached": "Limite atingido: {max} modelos.",
-        "variablesTitle": "Variáveis do modelo {position}: {name}"
+        "variablesTitle": "Variáveis do modelo {position}: {name}",
+        "variablesLater": "{count, plural, one {# variável recebe} other {# variáveis recebem}} o valor do mapeamento, não desta pré-visualização."
       }
     },
     "history": {

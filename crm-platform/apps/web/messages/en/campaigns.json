@@ -1884,7 +1884,8 @@
         "add": "Add a template",
         "count": "{used} of {max} templates",
         "limitReached": "Limit reached: {max} templates.",
-        "variablesTitle": "Variables of template {position}: {name}"
+        "variablesTitle": "Variables of template {position}: {name}",
+        "variablesLater": "{count, plural, one {# variable gets} other {# variables get}} its value from the mapping, not from this preview."
       }
     },
     "history": {

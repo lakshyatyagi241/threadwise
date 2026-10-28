@@ -1842,7 +1842,8 @@
         "add": "添加模板",
         "count": "第 {used} 个，共 {max} 个模板",
         "limitReached": "已达上限：最多 {max} 个模板。",
-        "variablesTitle": "模板 {position} 的变量：{name}"
+        "variablesTitle": "模板 {position} 的变量：{name}",
+        "variablesLater": "{count, plural, other {#个变量}}的值来自映射，而不是此预览。"
       }
     },
     "history": {

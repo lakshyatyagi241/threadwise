@@ -1842,7 +1842,8 @@
         "add": "Een sjabloon toevoegen",
         "count": "{used} van {max} sjablonen",
         "limitReached": "Limiet bereikt: {max} sjablonen.",
-        "variablesTitle": "Variabelen van sjabloon {position}: {name}"
+        "variablesTitle": "Variabelen van sjabloon {position}: {name}",
+        "variablesLater": "{count, plural, one {# variabele krijgt} other {# variabelen krijgen}} de waarde uit de koppeling, niet uit deze voorbeeldweergave."
       }
     },
     "history": {

@@ -1842,7 +1842,8 @@
         "add": "템플릿 추가",
         "count": "템플릿 {used}/{max}개",
         "limitReached": "한도 도달: 템플릿 {max}개.",
-        "variablesTitle": "템플릿 {position}의 변수: {name}"
+        "variablesTitle": "템플릿 {position}의 변수: {name}",
+        "variablesLater": "{count, plural, other {변수 #개}}의 값은 이 미리보기가 아니라 매핑에서 채워집니다."
       }
     },
     "history": {

@@ -1842,7 +1842,8 @@
         "add": "Dodaj szablon",
         "count": "{used} z {max} szablonów",
         "limitReached": "Osiągnięto limit: {max} szablonów.",
-        "variablesTitle": "Zmienne szablonu {position}: {name}"
+        "variablesTitle": "Zmienne szablonu {position}: {name}",
+        "variablesLater": "{count, plural, one {# zmienna pobiera} few {# zmienne pobierają} many {# zmiennych pobiera} other {# zmiennej pobiera}} wartość z przypisania, a nie z tego podglądu."
       }
     },
     "history": {
