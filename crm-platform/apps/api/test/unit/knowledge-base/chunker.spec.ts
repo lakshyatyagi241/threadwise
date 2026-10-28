@@ -38,12 +38,12 @@ describe('chunkText', () => {
     expect(chunkText('x'.repeat(2500), 900, 0).map((c) => c.length)).toEqual([900, 900, 700]);
   });
 
-  it('never makes more passages than the cap', () => {
+  it('returns every passage, so the caller can refuse an entry over the cap instead of cutting it', () => {
     const lots = Array.from(
       { length: MAX_CHUNKS_PER_SOURCE + 50 },
       (_, i) => `Q: q${i}\nA: a${i}`,
     ).join('\n\n');
-    expect(chunkText(lots)).toHaveLength(MAX_CHUNKS_PER_SOURCE);
+    expect(chunkText(lots)).toHaveLength(MAX_CHUNKS_PER_SOURCE + 50);
   });
 
   it('drops NUL and normalises line endings', () => {

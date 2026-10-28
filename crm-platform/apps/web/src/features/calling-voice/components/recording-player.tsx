@@ -76,7 +76,7 @@ export function RecordingPlayer({ callId, canPlay }: { callId: string; canPlay: 
       </p>
       <p className="mt-1 text-xs text-muted-foreground">{t('privacy')}</p>
 
-      {!canPlay && <p className="mt-3 text-xs italic text-muted-foreground">{t('noAccess')}</p>}
+      {!canPlay && <p className="mt-3 text-xs text-muted-foreground">{t('noAccess')}</p>}
       {canPlay && !src && (
         <Button
           className="mt-3 rounded-full"

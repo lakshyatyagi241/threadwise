@@ -219,6 +219,7 @@
       "referral": "광고 또는 링크에서 유입됨",
       "sentIn": "{lang}(으)로 발송됨. 작성한 텍스트 보기",
       "translatedFrom": "{lang}에서 번역됨. 원문 보기",
+      "translationFailed": "번역 없이 전송됨. 번역에 실패하여 입력하신 대로 전송되었습니다.",
       "bot": "봇",
       "broadcast": "대량 발송",
       "reacted": "반응 {emoji}",

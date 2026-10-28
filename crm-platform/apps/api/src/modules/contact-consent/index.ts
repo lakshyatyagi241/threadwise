@@ -45,6 +45,7 @@ export {
   intakeEvidence,
   isSubscribedStatus,
   planIntakeGrants,
+  shownSubscriptionLabel,
   type IntakePlan,
   type StatusMap,
 } from './consent-intake.rules';

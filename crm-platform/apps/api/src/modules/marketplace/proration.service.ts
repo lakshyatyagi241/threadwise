@@ -31,6 +31,17 @@ type Payment =
       currency: string;
     };
 
+type Charge = Awaited<ReturnType<RefundService['chargesFor']>>[number];
+
+/** A subscription with its organization, app and pack: the columns every read of a target takes. */
+const SUB_SELECT = sql`
+  SELECT s.org_id, s.id, s.uuid, s.source, s.billing_period, s.current_period_end, a.slug AS app_slug, a.name AS app_name,
+         o.uuid AS org_uuid, o.name AS org_name, p.slug AS pack_slug, p.id AS pack_id
+  FROM marketplace_subscriptions s
+  JOIN marketplace_apps a ON a.id = s.app_id
+  JOIN organizations o ON o.id = s.org_id
+  JOIN plans p ON p.id = s.pack_id`;
+
 interface Target {
   orgId: number;
   orgUuid: string;
@@ -46,11 +57,14 @@ interface Target {
   alreadyMinor: bigint;
 }
 
-/** The most subscriptions one bulk run looks at; the answer says when there are more, and the next run continues after the last one. */
-const BULK_LIMIT = 200;
+/** One subscription of a page, its target read, or the reason its read failed (that one is counted as failed; the rest go on). */
+type Built = { ok: true; target: Target } | { ok: false; uuid: string; error: unknown };
 
 const state = (message: string): AppError =>
   new AppError(ERROR_CODES.MKT_SUBSCRIPTION_STATE, message, HttpStatus.CONFLICT);
+
+/** The most subscriptions one bulk run looks at; the answer says when there are more, and the next run continues after the last one. */
+const BULK_LIMIT = 200;
 
 /**
  * Returns the unused part of what a workspace paid for an app, through the existing refund service (BL-077). Two doors:
@@ -108,15 +122,16 @@ export class ProrationService {
     const killedAt = app.killedAt;
     const after = input.after ? Number(input.after) : 0;
     const rows = await this.store.tx(async (tx) => {
-      const res = await tx.execute(sql`
-        SELECT s.uuid, s.id FROM marketplace_subscriptions s
+      const res = await tx.execute(sql`${SUB_SELECT}
         WHERE s.app_id = ${app.id} AND s.source = 'purchase' AND s.id > ${after}
           AND s.current_period_end IS NOT NULL AND s.current_period_end > ${killedAt.toISOString()}::timestamptz
         ORDER BY s.id LIMIT ${BULK_LIMIT + 1}`);
-      return res.rows as Array<{ uuid: string; id: string }>;
+      return res.rows as Raw[];
     });
     const hasMore = rows.length > BULK_LIMIT;
     const batch = hasMore ? rows.slice(0, BULK_LIMIT) : rows;
+    // The page is read together: a constant number of reads for the page, not several per subscription.
+    const built = await this.targetsFor(batch);
 
     const totals = new Map<string, bigint>();
     const sample: MarketWithdrawnRefund['sample'] = [];
@@ -124,9 +139,19 @@ export class ProrationService {
     let refunded = 0;
     let failed = 0;
     let skipped = 0;
-    for (const r of batch) {
+    for (const b of built) {
+      if (!b.ok) {
+        failed += 1;
+        this.logger.warn(
+          { err: b.error, subscription: b.uuid },
+          'refunding the unused time of a withdrawn app failed',
+        );
+        if (sample.length < 25)
+          sample.push({ workspace: '', amountMinor: '0', currency: '', outcome: 'failed' });
+        continue;
+      }
+      const t = b.target;
       try {
-        const t = await this.target(r.uuid);
         const out = await this.settle(t, killedAt, input.reason, input.dryRun, operatorId);
         const owed = BigInt(out.refundableMinor);
         if (owed <= 0n) {
@@ -153,7 +178,7 @@ export class ProrationService {
       } catch (err) {
         failed += 1;
         this.logger.warn(
-          { err, subscription: r.uuid },
+          { err, subscription: t.uuid },
           'refunding the unused time of a withdrawn app failed',
         );
         if (sample.length < 25)
@@ -275,98 +300,184 @@ export class ProrationService {
 
   /** The subscription, the payment its current period came from, and what was already returned on that payment. */
   private async target(uuid: string): Promise<Target> {
-    const sub = await this.store.tx(async (tx) => {
-      const res = await tx.execute(sql`
-        SELECT s.org_id, s.id, s.uuid, s.source, s.billing_period, s.current_period_end, a.slug AS app_slug, a.name AS app_name,
-               o.uuid AS org_uuid, o.name AS org_name, p.slug AS pack_slug, p.id AS pack_id
-        FROM marketplace_subscriptions s
-        JOIN marketplace_apps a ON a.id = s.app_id
-        JOIN organizations o ON o.id = s.org_id
-        JOIN plans p ON p.id = s.pack_id
-        WHERE s.uuid = ${uuid}::uuid`);
+    const row = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`${SUB_SELECT} WHERE s.uuid = ${uuid}::uuid`);
       return res.rows[0] as Raw | undefined;
     });
-    if (!sub)
+    if (!row)
       throw new AppError(
         ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND,
         'Subscription not found',
         HttpStatus.NOT_FOUND,
       );
-    const orgId = Number(sub.org_id);
-    const payment = sub.source === 'purchase' ? await this.lastPayment(orgId, sub) : null;
-    const already =
-      payment === null
-        ? 0n
-        : await this.store.tx(async (tx) => {
-            const res = await tx.execute(sql`
-              SELECT COALESCE(SUM(amount_minor), 0)::text AS total FROM order_refunds
-              WHERE org_id = ${orgId} AND gateway_payment_id = ${payment.paymentId} AND status <> 'failed'`);
-            return BigInt(String((res.rows[0] as Raw).total));
-          });
-    return {
-      orgId,
-      orgUuid: String(sub.org_uuid),
-      orgName: String(sub.org_name),
-      id: Number(sub.id),
-      uuid: String(sub.uuid),
-      appSlug: String(sub.app_slug),
-      appName: String(sub.app_name),
-      periodEnd: sub.current_period_end ? new Date(String(sub.current_period_end)) : null,
-      billingPeriod: sub.billing_period === 'yearly' ? 'yearly' : 'monthly',
-      source: String(sub.source),
-      payment,
-      alreadyMinor: already,
-    };
+    const [built] = await this.targetsFor([row]);
+    if (!built!.ok) throw built!.error;
+    return built!.target;
   }
 
   /**
-   * The latest payment of the subscription: the newest paid charge of its provider subscription when it has one (a renewal has no order),
-   * else the newest paid order for the app's add-on. The provider is asked for the charges, so a provider that is down is an error here,
-   * never a guess.
+   * The targets of a page of subscriptions, read together: the latest payment of each (set-based reads; one provider call per provider
+   * subscription, not one per subscription) and what was already returned on each payment (one read for the page).
    */
-  private async lastPayment(orgId: number, sub: Raw): Promise<Payment | null> {
-    const provider = await this.store.tx(async (tx) => {
-      const res = await tx.execute(sql`
-        SELECT sb.uuid FROM subscriptions sb
-        JOIN workspace_addons wa ON wa.org_id = sb.org_id AND wa.id = sb.workspace_addon_id
-        WHERE sb.org_id = ${orgId} AND sb.kind = 'addon' AND sb.gateway_subscription_id IS NOT NULL
-          AND wa.package_id = ${Number(sub.pack_id)}
-        ORDER BY sb.id DESC LIMIT 1`);
-      return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
+  private async targetsFor(rows: Raw[]): Promise<Built[]> {
+    if (rows.length === 0) return [];
+    const payments = await this.lastPayments(rows);
+    const pairs = new Map<string, { orgId: number; paymentId: string }>();
+    for (const r of rows) {
+      const p = payments.get(Number(r.id));
+      if (p && !(p instanceof Error))
+        pairs.set(`${Number(r.org_id)}:${p.paymentId}`, {
+          orgId: Number(r.org_id),
+          paymentId: p.paymentId,
+        });
+    }
+    const refunded = await this.alreadyRefunded([...pairs.values()]);
+    return rows.map((r): Built => {
+      const p = payments.get(Number(r.id)) ?? null;
+      if (p instanceof Error) return { ok: false, uuid: String(r.uuid), error: p };
+      const orgId = Number(r.org_id);
+      return {
+        ok: true,
+        target: {
+          orgId,
+          orgUuid: String(r.org_uuid),
+          orgName: String(r.org_name),
+          id: Number(r.id),
+          uuid: String(r.uuid),
+          appSlug: String(r.app_slug),
+          appName: String(r.app_name),
+          periodEnd: r.current_period_end ? new Date(String(r.current_period_end)) : null,
+          billingPeriod: r.billing_period === 'yearly' ? 'yearly' : 'monthly',
+          source: String(r.source),
+          payment: p,
+          alreadyMinor: p === null ? 0n : (refunded.get(`${orgId}:${p.paymentId}`) ?? 0n),
+        },
+      };
     });
-    if (provider !== null) {
-      const charges = (await this.refunds.chargesFor(provider))
+  }
+
+  /**
+   * The latest payment of each purchased subscription in `rows`: the newest paid charge of its provider subscription when it has one (a
+   * renewal has no order), else the newest paid order for the app's add-on. The provider is asked for the charges, so a provider that is
+   * down is an error for that subscription, never a guess. Subscriptions that share a provider subscription share one provider call.
+   */
+  private async lastPayments(rows: Raw[]): Promise<Map<number, Payment | null | Error>> {
+    const out = new Map<number, Payment | null | Error>();
+    const purchased = rows.filter((r) => r.source === 'purchase').map((r) => Number(r.id));
+    if (purchased.length === 0) return out;
+    const inList = (ids: number[]) =>
+      sql.join(
+        ids.map((id) => sql`${id}`),
+        sql`, `,
+      );
+
+    const providerRows = await this.store.tx(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT s.id, (
+          SELECT sb.uuid FROM subscriptions sb
+          JOIN workspace_addons wa ON wa.org_id = sb.org_id AND wa.id = sb.workspace_addon_id
+          WHERE sb.org_id = s.org_id AND sb.kind = 'addon' AND sb.gateway_subscription_id IS NOT NULL
+            AND wa.package_id = s.pack_id
+          ORDER BY sb.id DESC LIMIT 1) AS provider
+        FROM marketplace_subscriptions s WHERE s.id IN (${inList(purchased)})`);
+      return res.rows as Raw[];
+    });
+    const providers = new Map<number, string | null>();
+    for (const r of providerRows)
+      providers.set(Number(r.id), r.provider ? String(r.provider) : null);
+
+    const charges = new Map<string, Charge[] | Error>();
+    const pending: number[] = [];
+    for (const id of purchased) {
+      const provider = providers.get(id) ?? null;
+      if (provider === null) {
+        pending.push(id);
+        continue;
+      }
+      if (!charges.has(provider)) {
+        try {
+          charges.set(provider, await this.refunds.chargesFor(provider));
+        } catch (err) {
+          charges.set(provider, err instanceof Error ? err : new Error(String(err)));
+        }
+      }
+      const got = charges.get(provider)!;
+      if (got instanceof Error) {
+        out.set(id, got);
+        continue;
+      }
+      const c = got
         .filter(
-          (c): c is typeof c & { paymentId: string } =>
-            c.status === 'paid' && typeof c.paymentId === 'string',
+          (x): x is Charge & { paymentId: string } =>
+            x.status === 'paid' && typeof x.paymentId === 'string',
         )
-        .sort((a, b) => String(b.paidAt ?? '').localeCompare(String(a.paidAt ?? '')));
-      const c = charges[0];
-      if (c)
-        return {
+        .sort((a, b) => String(b.paidAt ?? '').localeCompare(String(a.paidAt ?? '')))[0];
+      if (c) {
+        out.set(id, {
           kind: 'charge',
           providerSubscriptionUuid: provider,
           paymentId: c.paymentId,
           paidMinor: BigInt(c.amountMinor),
           currency: c.currency,
-        };
+        });
+      } else {
+        pending.push(id);
+      }
     }
-    const order = await this.store.tx(async (tx) => {
-      const res = await tx.execute(sql`
-        SELECT uuid, gateway_payment_id, currency, total_amount::text AS total_amount FROM orders
-        WHERE org_id = ${orgId} AND kind = 'addon' AND plan_slug = ${String(sub.pack_slug)} AND status = 'paid'
-          AND gateway_payment_id IS NOT NULL AND gateway_payment_id !~ '^sub_'
-        ORDER BY paid_at DESC NULLS LAST, id DESC LIMIT 1`);
-      return res.rows[0] as Raw | undefined;
-    });
-    if (!order) return null;
-    return {
-      kind: 'order',
-      orderUuid: String(order.uuid),
-      paymentId: String(order.gateway_payment_id),
-      paidMinor: toMinor(String(order.total_amount), String(order.currency)),
-      currency: String(order.currency),
-    };
+
+    if (pending.length > 0) {
+      const orderRows = await this.store.tx(async (tx) => {
+        const res = await tx.execute(sql`
+          SELECT s.id, o.uuid, o.gateway_payment_id, o.currency, o.total_amount::text AS total_amount
+          FROM marketplace_subscriptions s
+          JOIN plans p ON p.id = s.pack_id
+          LEFT JOIN LATERAL (
+            SELECT uuid, gateway_payment_id, currency, total_amount FROM orders
+            WHERE org_id = s.org_id AND kind = 'addon' AND plan_slug = p.slug AND status = 'paid'
+              AND gateway_payment_id IS NOT NULL AND gateway_payment_id !~ '^sub_'
+            ORDER BY paid_at DESC NULLS LAST, id DESC LIMIT 1
+          ) o ON true
+          WHERE s.id IN (${inList(pending)})`);
+        return res.rows as Raw[];
+      });
+      for (const r of orderRows) {
+        const id = Number(r.id);
+        out.set(
+          id,
+          r.gateway_payment_id === null || r.gateway_payment_id === undefined
+            ? null
+            : {
+                kind: 'order',
+                orderUuid: String(r.uuid),
+                paymentId: String(r.gateway_payment_id),
+                paidMinor: toMinor(String(r.total_amount), String(r.currency)),
+                currency: String(r.currency),
+              },
+        );
+      }
+    }
+    return out;
+  }
+
+  /** What was already returned on each (organization, payment) pair, in one read. */
+  private async alreadyRefunded(
+    pairs: Array<{ orgId: number; paymentId: string }>,
+  ): Promise<Map<string, bigint>> {
+    const out = new Map<string, bigint>();
+    if (pairs.length === 0) return out;
+    const res = await this.store.tx((tx) =>
+      tx.execute(sql`
+        SELECT org_id, gateway_payment_id, COALESCE(SUM(amount_minor), 0)::text AS total FROM order_refunds
+        WHERE status <> 'failed'
+          AND (org_id, gateway_payment_id) IN (${sql.join(
+            pairs.map((p) => sql`(${p.orgId}, ${p.paymentId})`),
+            sql`, `,
+          )})
+        GROUP BY org_id, gateway_payment_id`),
+    );
+    for (const r of res.rows as Raw[])
+      out.set(`${Number(r.org_id)}:${String(r.gateway_payment_id)}`, BigInt(String(r.total)));
+    return out;
   }
 }
 

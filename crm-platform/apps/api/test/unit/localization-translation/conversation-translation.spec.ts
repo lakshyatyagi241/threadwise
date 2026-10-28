@@ -141,6 +141,7 @@ describe('translateOutbound', () => {
       original: typed,
       language: 'es',
       isTranslated: true,
+      failed: false,
     });
   });
 
@@ -153,6 +154,7 @@ describe('translateOutbound', () => {
       original: null,
       language: null,
       isTranslated: false,
+      failed: false,
     });
   });
 
@@ -192,7 +194,7 @@ describe('translateOutbound', () => {
     expect(same.calls).toHaveLength(0);
   });
 
-  it('sends the original when providers fail or throw', async () => {
+  it('sends the original when providers fail or throw, and flags the failure (#1278)', async () => {
     for (const result of [{ language: null, text: null }, 'throw'] as const) {
       const { svc } = build({ result });
       expect(
@@ -202,8 +204,16 @@ describe('translateOutbound', () => {
         original: null,
         language: null,
         isTranslated: false,
+        failed: true,
       });
     }
+  });
+
+  it('does not flag a failure when translation was not wanted', async () => {
+    const { svc } = build({ enabled: false, result: { language: 'en', text: 'x' } });
+    expect(
+      (await svc.translateOutbound({ orgId: 5, body: typed, customerLanguage: 'es' })).failed,
+    ).toBe(false);
   });
 });
 

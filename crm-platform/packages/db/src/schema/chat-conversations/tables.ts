@@ -490,6 +490,7 @@ export const messages = pgTable(
     isTranslated: boolean('is_translated').notNull().default(false),
     translatedBody: text('translated_body'),
     detectedLanguage: text('detected_language'),
+    translationStatus: text('translation_status'),
     templateId: idColumn('template_id'),
     meta: jsonb('meta').$type<Record<string, unknown>>().notNull().default({}),
     providerTs: timestamp('provider_ts', { withTimezone: true }),

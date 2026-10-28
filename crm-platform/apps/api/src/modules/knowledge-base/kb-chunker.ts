@@ -1,5 +1,4 @@
 import { KB_RETRIEVAL } from '@crm/contracts';
-import { MAX_CHUNKS_PER_SOURCE } from './kb.rules';
 
 /**
  * Cuts an entry's text into passages for the search index. Pure.
@@ -10,6 +9,7 @@ import { MAX_CHUNKS_PER_SOURCE } from './kb.rules';
  * - A paragraph longer than `chars` is split on sentence ends, and a sentence longer than that on spaces, then on characters.
  * - A passage that continues the one before it (not a question start) begins with the tail of that one, `overlap` characters, so an
  *   answer that sits on the cut is whole in at least one passage.
+ * - Every passage is returned. The per-entry cap is enforced by the caller, which refuses the entry, so a cut is never silent.
  */
 export function chunkText(
   raw: string,
@@ -48,7 +48,7 @@ export function chunkText(
     const tail = c.continues && overlap > 0 && prev ? tailOf(prev, overlap) : '';
     result.push(tail ? `${tail}\n${c.text}` : c.text);
   });
-  return result.slice(0, MAX_CHUNKS_PER_SOURCE);
+  return result;
 }
 
 /** The last `n` characters of `s`, starting at a word edge. */

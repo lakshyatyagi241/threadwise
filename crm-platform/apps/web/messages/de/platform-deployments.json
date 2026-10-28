@@ -107,7 +107,10 @@
         "rolled_back": "Zurückgerollt"
       },
       "by": "von {author}",
-      "raisedIst": "Erstellt {time} IST"
+      "raisedIst": "Erstellt {time} IST",
+      "noProgress": "Seit {minutes} Minuten kein Fortschritt. Der Build oder das Release wurde möglicherweise angehalten.",
+      "noChangesAlert": "Die neuesten Releases führen ihre Pull Requests nicht auf. Wahrscheinlich ist deploy-main.sh auf dem Build-Server oder ci-entry.sh auf dem Host veraltet: Installieren Sie die aktuellen Versionen (deploy/build-server/README.md).",
+      "moreChanges": "{count} weitere Änderungen"
     }
   }
 }

@@ -6,6 +6,11 @@ python3 migration-lint.py --selftest
 bash -n deploy-main.sh install.sh notify-chat.sh
 bash ../hostinger/tests/ci-entry.test.sh >/dev/null
 
+# One release per process: bash keeps the functions it read at start-up, so a loop over queued pushes ran an old copy of the script for as long
+# as pushes kept arriving (the console's Changes column stayed empty because of it). The file must be re-executed, never looped.
+if grep -q '^while true' deploy-main.sh; then echo "deploy-main.sh loops over queued pushes in one process; re-exec the file instead"; exit 1; fi
+grep -q 'exec "\$0"' deploy-main.sh || { echo "deploy-main.sh does not re-execute itself when a push is waiting"; exit 1; }
+
 # notify-chat.sh: fake receiver, hanging receiver, missing file, 500. It must always exit 0 and never leak the URL.
 T=$(mktemp -d); trap 'kill $(jobs -p) 2>/dev/null; rm -r "$T"' EXIT
 export DESK_CI_LOGS="$T" DESK_CI_DIR="$T/none"

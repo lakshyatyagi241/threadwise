@@ -10,6 +10,7 @@ import {
   tagsPredicate,
 } from './contact-predicates';
 import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
+import { grantedConsentOn, requireConsentSql } from '../../contact-consent/consent-policy.service';
 
 export { escapeLike };
 
@@ -60,10 +61,11 @@ export const contactLastActivity: SQL = sql`GREATEST(${contacts.lastActivityAt},
 ))`;
 
 /**
- * "Subscribed" the way the list's WhatsApp opt-in column says it: the WhatsApp subscription label is "subscribed" and the contact has
- * not opted out of marketing. A contact with no label recorded is not subscribed (the column shows No for it).
+ * "Subscribed" the way the list's WhatsApp opt-in column shows it (shownSubscriptionLabel): not opted out of marketing, and either a
+ * recorded marketing grant, or the label reads "subscribed" while the "Require recorded consent" switch is off. A legacy label with no
+ * grant is not subscribed when the switch is on.
  */
-export const whatsappSubscribedSql: SQL = sql`(lower(btrim(coalesce(${contacts.whatsappSubscriptionStatus}, ''))) = 'subscribed' AND NOT ${contacts.isUnsubscribed})`;
+export const whatsappSubscribedSql: SQL = sql`(NOT ${contacts.isUnsubscribed} AND (${grantedConsentOn(sql`${contacts.orgId}`, sql`${contacts.id}`)} OR (lower(btrim(coalesce(${contacts.whatsappSubscriptionStatus}, ''))) = 'subscribed' AND NOT ${requireConsentSql(sql`${contacts.orgId}`)})))`;
 
 /**
  * A contact filter with every uuid already turned into the internal id the SQL needs. Producing one

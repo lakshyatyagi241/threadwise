@@ -44,6 +44,7 @@ const asTyped = (body: string): OutboundOutcome => ({
   original: null,
   language: null,
   isTranslated: false,
+  failed: false,
 });
 
 /** One message as the thread payload carries it (TW-I18N-038). */
@@ -146,12 +147,20 @@ export class ConversationTranslationService {
       if (!config.enabled || target === config.teamLanguage) return asTyped(input.body);
 
       const r = await this.translation.detectAndTranslate(body, target, { orgId: input.orgId });
-      // Already in the customer's language (an AI or keyword reply), or nothing came back: send as typed.
-      if (!r.text || r.language?.toLowerCase() === target) return asTyped(input.body);
-      return { body: r.text, original: input.body, language: target, isTranslated: true };
+      // Already in the customer's language (an AI or keyword reply): send as typed, nothing went wrong.
+      if (r.language?.toLowerCase() === target) return asTyped(input.body);
+      // The vendor answered with nothing: translation was wanted and did not happen.
+      if (!r.text) return { ...asTyped(input.body), failed: true };
+      return {
+        body: r.text,
+        original: input.body,
+        language: target,
+        isTranslated: true,
+        failed: false,
+      };
     } catch (err) {
       this.logger.warn({ err }, 'outbound translation failed; the original text is sent');
-      return asTyped(input.body);
+      return { ...asTyped(input.body), failed: true };
     }
   }
 
@@ -244,6 +253,7 @@ export class ConversationTranslationService {
         alreadyTranslated: options.retry ? false : m.isTranslated,
       });
       if (outcome.isTranslated) await this.messages.saveOutbound(orgId, m, outcome);
+      else if (outcome.failed) await this.messages.markOutboundFailed(orgId, m);
       return outcome;
     } catch (err) {
       this.logger.warn({ err, messageId }, 'outbound translation could not be stored');

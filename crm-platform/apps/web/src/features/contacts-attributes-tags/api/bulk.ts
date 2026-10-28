@@ -103,12 +103,12 @@ export const bulkTag = (
 ) => run('/contacts/bulk/tag', target, { action, ...tag });
 
 /**
- * Records marketing consent for one channel on the target (`POST /contacts/bulk/consent`): a grant with the note of how the contacts
- * agreed, or a withdrawal. The same write as the single contact edit, one event per contact.
+ * Records marketing consent for the ticked channels on the target (`POST /contacts/bulk/consent`), in one request: a grant with the note
+ * of how the contacts agreed, or a withdrawal. The same write as the single contact edit, one event per contact and channel.
  */
 export const bulkConsent = (
   target: BulkTarget,
-  body: { channel: ConsentChannel; action: ConsentAction; note?: string },
+  body: { channels: ConsentChannel[]; action: ConsentAction; note?: string },
 ) => run('/contacts/bulk/consent', target, body, BULK_CONSENT_MAX);
 
 /**

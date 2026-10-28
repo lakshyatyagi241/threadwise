@@ -63,7 +63,7 @@ function BrandingForm({ data }: { data: WorkspaceBrandingResponse }) {
         if (!bad) submit();
       }}
     >
-      {locked && <p className="text-xs italic text-muted-foreground">{t('ownerOnly')}</p>}
+      {locked && <p className="text-xs text-muted-foreground">{t('ownerOnly')}</p>}
       {saved && <Alert tone="success">{t('saved')}</Alert>}
       {save.isError && <Alert tone="danger">{t('saveFailed')}</Alert>}
       <Card className="space-y-1 p-6">

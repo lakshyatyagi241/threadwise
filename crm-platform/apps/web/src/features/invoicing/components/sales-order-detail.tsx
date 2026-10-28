@@ -507,7 +507,7 @@ function InvoicesCard({ order }: { order: SalesOrderResponse }) {
                 <span
                   className={cn(
                     'min-w-0 flex-1 basis-32 truncate font-medium',
-                    !inv.number && 'italic text-muted-foreground',
+                    !inv.number && 'text-muted-foreground',
                   )}
                   dir="ltr"
                 >

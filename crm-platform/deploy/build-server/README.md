@@ -113,6 +113,36 @@ ssh root@187.127.155.227 'SSH_ORIGINAL_COMMAND="release <previous tag>" bash /op
 
 Rolling back the code does not undo migrations; restore a dump (`docs/runbooks/backup-restore.md`) only if a migration itself was the problem.
 
+## The console's Changes column is empty (what each release carries)
+
+The console (System, Deployments, Product releases) lists the pull requests of every release: `#number`, title, author, when it was raised (IST) and its
+description, and the error of a failed attempt. The page and the API ship with every release; **three things outside the release feed them**, and none of
+them is updated by the pipeline:
+
+| Where | What | How it gets there |
+| --- | --- | --- |
+| production `/opt/desk/ci-entry.sh` | the `changes` action that stores the list on the attempt | **not synced** (it is the forced command of the CI key): an administrator copies it, `scp deploy/hostinger/ci-entry.sh root@<prod>:/opt/desk/ci-entry.sh` then `chmod 755` on it |
+| build server `/opt/desk-ci/deploy-main.sh` | `report_changes`, which collects the PRs and sends them | `install -m 755 -o root -g root deploy/build-server/deploy-main.sh /opt/desk-ci/` (or re-run `install.sh`) |
+| build server `/etc/desk-ci/github_token` | a read-only GitHub token: **without it the description and the raised time are missing** (the commit text is used instead) | create it by hand: one line, `install -m 640 -o root -g deskci`, repository read plus pull requests read |
+
+Check, in this order:
+
+1. Production: `grep -c 'changes)' /opt/desk/ci-entry.sh` must print 1 or more. If it prints 0 the file predates the action: install the current one.
+2. Build server: `grep -c report_changes /opt/desk-ci/deploy-main.sh` must print 2 (0 means it predates the feature), `grep -c changes_failed` prints 2 on the
+   version that also logs a failed call, and `ls -l /etc/desk-ci/github_token` must exist.
+3. Build server, after a release: `tail /var/log/desk-ci/webhook.log`. A line "could not record what <tag> carries on production" means the host refused the
+   `changes` call (almost always step 1). This line was silent before.
+4. Production database, read-only: `select tag, jsonb_array_length(changes) from platform_releases order by updated_at desc limit 5;` (empty means nothing arrived).
+
+**Installing a new `deploy-main.sh` while deploys keep arriving used to change nothing.** The script was one long bash process that looped over queued
+pushes and kept the functions it had read at start-up, so every release in that loop ran the old copy (`ps -eo pid,lstart,args | grep deploy-main`
+showed a parent started hours before the file's date). It now runs one release per process and re-executes itself when a push is waiting, so the
+file on disk is used for the next release. If the build server still runs an old loop process, let it finish its last release (or start the script by hand
+once it is idle: `sudo -u deskci -H /opt/desk-ci/deploy-main.sh`).
+
+The console itself warns (a yellow bar above the table) when the three newest releases carry no pull requests at all, so this does not need to be found by
+looking at the log. A stalled or failed attempt shows its reason in the Error column (the stored error, "No error text was stored", or "No progress for N minutes").
+
 ## Install or rebuild the build server
 
 Needs Docker (with the Dokploy Traefik running), Python 3, git, and root. From this folder on the build server:
