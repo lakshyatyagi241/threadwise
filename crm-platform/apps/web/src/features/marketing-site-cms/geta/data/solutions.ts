@@ -193,6 +193,207 @@ export const INDUSTRIES: Solution[] = [
     ],
   },
   {
+    slug: 'universities',
+    kind: 'industry',
+    name: 'Universities',
+    short: 'Admission enquiries, counsellor hand-over and batch updates.',
+    icon: 'book',
+    headline: 'Answer every admission question, at any hour.',
+    sub: 'Universities and colleges use the platform to reply to prospective students instantly, route serious applicants to the right counsellor and keep current batches informed.',
+    pains: [
+      {
+        title: 'Admission season floods the desk',
+        text: 'Thousands of questions on courses, fees and deadlines arrive in the same few weeks.',
+      },
+      {
+        title: 'Warm applicants go cold',
+        text: 'A slow reply sends a student to the next college on their list.',
+      },
+      {
+        title: 'Notices do not reach everyone',
+        text: 'Exam dates, fee deadlines and open days must reach each batch, not just those who check the website.',
+      },
+    ],
+    steps: [
+      {
+        title: 'Answer from your prospectus',
+        text: 'An agent trained on your own documents replies to course, fee and eligibility questions day and night.',
+      },
+      {
+        title: 'Collect the application details',
+        text: 'Ask for programme, city and qualification, and send the application link in the chat.',
+      },
+      {
+        title: 'Assign a counsellor',
+        text: 'Route each applicant by programme or round-robin, with the full conversation attached.',
+      },
+      {
+        title: 'Keep every batch informed',
+        text: 'Send deadlines, open-day invitations and results to the right segment.',
+      },
+    ],
+    products: ['ai-agents', 'forms-lead-capture', 'broadcasts-campaigns', 'team-inbox'],
+    scenario: {
+      title: 'An MBA enquiry after midnight',
+      lines: [
+        { from: 'customer', text: 'Is the MBA still open for this year?' },
+        { from: 'business', text: 'Yes. Which specialisation interests you?' },
+        { from: 'customer', text: 'Marketing.' },
+        {
+          from: 'business',
+          text: 'Here is the application link. A counsellor, Meera, will call you tomorrow at 10 am.',
+        },
+      ],
+    },
+    faq: [
+      {
+        q: 'Can the agent answer from our prospectus and fee sheets?',
+        a: 'Yes. Upload the documents and the agent answers from them. Anything it cannot answer goes to a counsellor.',
+      },
+      {
+        q: 'Can we message each batch or programme separately?',
+        a: 'Yes. Tags and contact attributes build segments, so a notice reaches only the students it concerns.',
+      },
+      {
+        q: 'How is this different from the education page?',
+        a: 'Universities usually handle many programmes and a counsellor team, so the setup centres on qualifying applicants and assigning them. Schools and kindergartens centre on parents and notices.',
+      },
+    ],
+  },
+  {
+    slug: 'travel-hospitality',
+    kind: 'industry',
+    name: 'Travel and hospitality',
+    short: 'Enquiries, quotes, bookings and review requests.',
+    icon: 'globe',
+    headline: 'Reply to every travel enquiry before the guest looks elsewhere.',
+    sub: 'Travel agencies, hotels and tour operators use the platform to answer enquiries at once, send quotes, confirm bookings and ask for a review after the stay.',
+    pains: [
+      {
+        title: 'Enquiries arrive everywhere',
+        text: 'WhatsApp, Instagram, email and the website all bring the same questions, and each one goes cold quickly.',
+      },
+      {
+        title: 'Quotes take too long',
+        text: 'Building and sending a package by hand means the guest has often booked elsewhere by the time it arrives.',
+      },
+      {
+        title: 'Payments and reviews slip',
+        text: 'Advance reminders and post-stay review requests depend on someone remembering.',
+      },
+    ],
+    steps: [
+      {
+        title: 'Capture the enquiry',
+        text: 'Every channel lands in one inbox with the guest already on file.',
+      },
+      {
+        title: 'Send the quote',
+        text: 'Share a quote or itinerary in the chat and track it as a deal.',
+      },
+      {
+        title: 'Confirm and remind',
+        text: 'Send booking confirmations and advance-payment reminders on time.',
+      },
+      {
+        title: 'Ask for a review',
+        text: 'Message the guest after check-out and bring them back for the next trip.',
+      },
+    ],
+    products: ['team-inbox', 'crm', 'chatbots-flows', 'broadcasts-campaigns'],
+    scenario: {
+      title: 'A weekend package enquiry',
+      lines: [
+        { from: 'customer', text: 'Do you have a 3-night Goa package for 4?' },
+        { from: 'business', text: 'Yes. I have sent a quote with two hotel options.' },
+        { from: 'customer', text: 'The second one, please.' },
+        {
+          from: 'business',
+          text: 'Done. An advance is due on Friday and I will remind you the day before.',
+        },
+      ],
+    },
+    faq: [
+      {
+        q: 'Can we send quotes and itineraries in the chat?',
+        a: 'Yes. Share documents and images in the conversation, and keep the deal and its stage on the guest record.',
+      },
+      {
+        q: 'Can reminders go out automatically?',
+        a: 'Yes. Flows and scheduled messages send confirmations, payment reminders and pre-trip tips at the times you set.',
+      },
+      {
+        q: 'Do guests need to install anything?',
+        a: 'No. They message you on the apps they already use.',
+      },
+    ],
+  },
+  {
+    slug: 'manufacturing',
+    kind: 'industry',
+    name: 'Manufacturing and B2B',
+    short: 'Bulk enquiries, quotes, follow-ups and dealer updates.',
+    icon: 'cog',
+    headline: 'Turn every bulk enquiry into a quote, then an order.',
+    sub: 'Manufacturers and B2B sellers use the platform to capture enquiries, send quotes, follow up until the order lands and keep dealers and distributors informed.',
+    pains: [
+      {
+        title: 'Enquiries sit in personal inboxes',
+        text: 'Requests for quotes reach whoever happened to be messaged, and nobody else can see them.',
+      },
+      {
+        title: 'Follow-up depends on memory',
+        text: 'Long buying cycles mean a quote is easy to forget between the first call and the purchase order.',
+      },
+      {
+        title: 'Price changes reach dealers late',
+        text: 'A new price list or scheme is sent by hand, one dealer at a time.',
+      },
+    ],
+    steps: [
+      {
+        title: 'Capture the enquiry',
+        text: 'Forms on your website and messages on WhatsApp create a contact and a deal.',
+      },
+      {
+        title: 'Send the quote',
+        text: 'Reply with a quote in the chat and move the deal to Quoted.',
+      },
+      {
+        title: 'Follow up',
+        text: 'Create a task for the owner and a reminder for the buyer, so the deal keeps moving.',
+      },
+      {
+        title: 'Update your dealers',
+        text: 'Broadcast price lists and schemes to every dealer or distributor in one send.',
+      },
+    ],
+    products: ['crm', 'forms-lead-capture', 'broadcasts-campaigns', 'team-inbox'],
+    scenario: {
+      title: 'A bulk quote request',
+      lines: [
+        { from: 'customer', text: 'Need a quote for 500 units of the 12 mm bolt.' },
+        { from: 'business', text: 'Sent. Delivery in 10 days. Shall I hold the price?' },
+        { from: 'customer', text: 'Yes, until Friday.' },
+        { from: 'business', text: 'Held until Friday. I will check in on Thursday.' },
+      ],
+    },
+    faq: [
+      {
+        q: 'Can we track each quote as a deal?',
+        a: 'Yes. The CRM keeps a pipeline with stages such as Enquiry, Quoted and Won, with an owner and a next task on each deal.',
+      },
+      {
+        q: 'Can we message our dealers in bulk?',
+        a: 'Yes. Group dealers by region or tier and broadcast a price list or scheme to the segment.',
+      },
+      {
+        q: 'Does it replace our ERP?',
+        a: 'No. It handles the conversations and the sales pipeline. You can connect other systems through the API and webhooks.',
+      },
+    ],
+  },
+  {
     slug: 'ecommerce',
     kind: 'industry',
     name: 'E-commerce',
