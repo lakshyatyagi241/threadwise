@@ -536,7 +536,7 @@ describe('resuming a remote run after a worker restart', () => {
   const savedSteps: WabooMigrationStep[] = [
     {
       name: 'export',
-      status: 'ok',
+      status: 'done',
       startedAt: T0.toISOString(),
       finishedAt: T1.toISOString(),
       counts: { documents: 40 },
@@ -610,9 +610,9 @@ describe('resuming a remote run after a worker restart', () => {
   it('follows the run again: the replayed steps the store already has keep their first times, and the run completes', async () => {
     const w = resumeWorld(
       [
-        step('export', 'ok', { documents: 40 }), // replayed: the store already has it
+        step('export', 'done', { documents: 40 }), // replayed: the store already has it
         step('preflight', 'running'), // replayed: the store already has it
-        step('preflight', 'ok'), // new: applied at the resume time
+        step('preflight', 'done'), // new: applied at the resume time
       ],
       savedSteps,
     );
@@ -626,7 +626,7 @@ describe('resuming a remote run after a worker restart', () => {
     expect(last).toHaveLength(2);
     expect(last.find((s) => s.name === 'export')).toEqual(savedSteps[0]);
     expect(last.find((s) => s.name === 'preflight')).toMatchObject({
-      status: 'ok',
+      status: 'done',
       startedAt: T1.toISOString(),
       finishedAt: NOW.toISOString(),
     });
@@ -641,7 +641,7 @@ describe('resuming a remote run after a worker restart', () => {
   });
 
   it('the local runner never resumes a running run (its pipeline died with the worker)', async () => {
-    const w = resumeWorld([step('export', 'ok', { documents: 40 })], savedSteps);
+    const w = resumeWorld([step('export', 'done', { documents: 40 })], savedSteps);
     expect(
       await executeRun({ store: w.store, runner: w.runner, timeoutMin: 90, now: () => NOW }, 'r1'),
     ).toBe('skipped');
