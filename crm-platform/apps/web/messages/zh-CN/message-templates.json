@@ -562,6 +562,21 @@
         "PROMOTIONAL": "此类别不允许使用营销用语。",
         "TAG_CONTENT_MISMATCH": "类别与内容不符（例如在 UTILITY 模板中使用促销文案）。",
         "SCAM": "Meta 将此模板标记为潜在诈骗。请检查声明和措辞。"
+      },
+      "stats": {
+        "title": "此模板的效果",
+        "hint": "根据用此模板发送的消息统计",
+        "loading": "正在加载数据",
+        "error": "无法加载数据。",
+        "none": "此模板还没有发送过任何消息。",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "read": "已读",
+        "replied": "已回复",
+        "failed": "失败",
+        "percent": "{value}%",
+        "footer": "此模板已发送 {total} 条消息，{queued} 条仍在等待",
+        "lastSent": "最近发送 {when}"
       }
     },
     "ai": {

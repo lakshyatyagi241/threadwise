@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Język marketingowy jest niedozwolony w tej kategorii.",
         "TAG_CONTENT_MISMATCH": "Kategoria nie pasuje do treści (np. treść promocyjna w szablonie UTILITY).",
         "SCAM": "Meta oznaczyła szablon jako potencjalne oszustwo. Sprawdź twierdzenia i język."
+      },
+      "stats": {
+        "title": "Wyniki tego szablonu",
+        "hint": "Liczone z wiadomości wysłanych za jego pomocą",
+        "loading": "Wczytywanie liczb",
+        "error": "Nie udało się wczytać liczb.",
+        "none": "Za pomocą tego szablonu nic jeszcze nie wysłano.",
+        "sent": "Wysłane",
+        "delivered": "Dostarczone",
+        "read": "Przeczytane",
+        "replied": "Z odpowiedzią",
+        "failed": "Nieudane",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}} wysłano tym szablonem, {queued} czeka",
+        "lastSent": "ostatnio wysłano {when}"
       }
     },
     "ai": {

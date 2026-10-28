@@ -562,6 +562,21 @@
         "PROMOTIONAL": "이 카테고리에서는 마케팅 표현이 허용되지 않습니다.",
         "TAG_CONTENT_MISMATCH": "카테고리가 콘텐츠와 일치하지 않습니다(예: UTILITY 템플릿에 홍보성 문구).",
         "SCAM": "Meta가 이 템플릿을 사기 가능성이 있는 것으로 신고했습니다. 주장과 표현을 검토하세요."
+      },
+      "stats": {
+        "title": "이 템플릿의 성과",
+        "hint": "이 템플릿으로 보낸 메시지를 기준으로 집계",
+        "loading": "수치를 불러오는 중",
+        "error": "수치를 불러오지 못했습니다.",
+        "none": "이 템플릿으로 보낸 메시지가 아직 없습니다.",
+        "sent": "발송",
+        "delivered": "전달",
+        "read": "읽음",
+        "replied": "답장",
+        "failed": "실패",
+        "percent": "{value}%",
+        "footer": "이 템플릿으로 보낸 메시지 {total}건, 대기 중 {queued}건",
+        "lastSent": "마지막 발송 {when}"
       }
     },
     "ai": {

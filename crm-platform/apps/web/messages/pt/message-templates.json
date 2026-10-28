@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Linguagem de marketing não permitida nesta categoria.",
         "TAG_CONTENT_MISMATCH": "A categoria não corresponde ao conteúdo (ex.: texto promocional em um modelo UTILITY).",
         "SCAM": "A Meta sinalizou o modelo como possível golpe. Revise as alegações e a linguagem."
+      },
+      "stats": {
+        "title": "Desempenho deste modelo",
+        "hint": "Contado a partir das mensagens enviadas com ele",
+        "loading": "Carregando números",
+        "error": "Não foi possível carregar os números.",
+        "none": "Nada foi enviado com este modelo ainda.",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "replied": "Respondidas",
+        "failed": "Falhas",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# mensagem enviada} other {# mensagens enviadas}} com este modelo, {queued} aguardando",
+        "lastSent": "último envio {when}"
       }
     },
     "ai": {
