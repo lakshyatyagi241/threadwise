@@ -58,9 +58,9 @@ test('a release shows each PR number, what it changes and when it was raised in 
   await expect(row).toContainText('#823');
   await expect(row).toContainText('Show PR details on releases');
   await expect(row).toContainText('#824');
-  await expect(row.getByTestId('release-description')).toHaveCount(1);
-  await expect(row.getByTestId('release-description')).toContainText('Adds the PR description.');
-  await expect(row.getByTestId('release-description')).toContainText('Shows when it was raised.');
+  // Two lines per change: the description the API sends is not shown.
+  await expect(row.getByTestId('release-description')).toHaveCount(0);
+  await expect(row).not.toContainText('Adds the PR description.');
   // 08:15 UTC is 13:45 in India (UTC+5:30) while the browser is in Los Angeles.
   await expect(row.getByTestId('release-raised')).toHaveCount(1);
   await expect(row.getByTestId('release-raised')).toContainText('Oct 26, 2026');
