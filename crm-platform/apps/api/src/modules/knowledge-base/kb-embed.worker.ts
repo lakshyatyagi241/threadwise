@@ -25,7 +25,7 @@ const INDEX_PER_PASS = 50;
  * - A Redis lock per workspace keeps two worker pods from embedding the same workspace at once.
  * - The vector is stored only if the text is still what was embedded.
  * - About once a minute: entries that have no passages yet are cut (entries from before the index, the FAQ merge), vectors made with
- *   a model that is no longer the current one are re-queued, and rows that gave up get a fresh start. Nothing to press.
+ *   a model that is no longer the current one are re-queued, and rows that gave up are re-queued up to MAX_FAILED_HEALS times. Nothing to press.
  */
 @Injectable()
 export class KbEmbedWorker {

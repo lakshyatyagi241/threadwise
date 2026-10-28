@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { MAX_EMBED_ATTEMPTS, type ScoredPassage } from './kb.rules';
+import { MAX_EMBED_ATTEMPTS, MAX_FAILED_HEALS, type ScoredPassage } from './kb.rules';
 
 type Raw = Record<string, unknown>;
 const num = (v: unknown): number => Number(v);
@@ -108,7 +108,7 @@ export class KbChunkRepository {
     const res = await tx.execute(sql`
       UPDATE ai_training_chunks
       SET embed_state = 'ready', embedding = ${literal}::halfvec, embedding_model = ${model}, embedded_at = now(),
-          embed_attempts = 0, embed_error = NULL
+          embed_attempts = 0, embed_error = NULL, embed_heal_count = 0
       WHERE org_id = ${orgId} AND id = ${id} AND text = ${atText} AND embed_state = 'pending'
       RETURNING id`);
     return res.rows.length > 0;
@@ -132,13 +132,18 @@ export class KbChunkRepository {
   }
 
   /**
-   * Puts back in the queue every vector that belongs to another model than the current one, and every row that gave up, so indexing
-   * passes by default without anyone pressing Retry. Privileged. Returns how many.
+   * Puts back in the queue every vector that belongs to another model than the current one, so indexing passes by default without
+   * anyone pressing Retry. A row that gave up is re-queued too, but only `MAX_FAILED_HEALS` times (embed_heal_count): a passage the
+   * vendor always refuses must not cost vendor calls every minute forever. An edit of its entry re-queues it (new rows). Privileged.
+   * Returns how many.
    */
   async markStale(tx: Tx, currentModel: string): Promise<number> {
     const res = await tx.execute(sql`
-      UPDATE ai_training_chunks SET embed_state = 'pending', embed_attempts = 0, embed_error = NULL
-      WHERE (embed_state = 'ready' AND embedding_model IS DISTINCT FROM ${currentModel}) OR embed_state = 'failed'
+      UPDATE ai_training_chunks
+      SET embed_state = 'pending', embed_attempts = 0, embed_error = NULL,
+          embed_heal_count = CASE WHEN embed_state = 'failed' THEN embed_heal_count + 1 ELSE embed_heal_count END
+      WHERE (embed_state = 'ready' AND embedding_model IS DISTINCT FROM ${currentModel})
+         OR (embed_state = 'failed' AND embed_heal_count < ${MAX_FAILED_HEALS})
       RETURNING id`);
     return res.rows.length;
   }
