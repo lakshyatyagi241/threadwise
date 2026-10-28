@@ -120,10 +120,10 @@ describe('permissions catalogue states', () => {
     expect(h.textContent).not.toContain('No permissions defined yet.');
   });
 
-  it('shows a spinner while loading, not the empty state', async () => {
+  it('shows the loader while loading, not the empty state', async () => {
     api.fetchPermissions.mockReturnValue(new Promise(() => undefined));
     const h = await mount(<PermissionsPage />);
-    expect(h.textContent).toContain(t.common.loading);
+    expect(h.querySelector('[role=status]')?.getAttribute('aria-label')).toBe(t.common.loading);
     expect(h.textContent).not.toContain('No permissions defined yet.');
   });
 });

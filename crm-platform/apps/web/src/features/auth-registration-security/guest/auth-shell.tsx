@@ -324,8 +324,7 @@ function FixedSplit({
             {panel.eyebrow}
           </Eyebrow>
           <h1 className="font-serif text-[42px] leading-[1.05] tracking-[-0.01em]">
-            {panel.heading}{' '}
-            <span className="text-(--auth-green)">{panel.accent}</span>.
+            {panel.heading} <span className="text-(--auth-green)">{panel.accent}</span>.
           </h1>
           <p className="mt-3 text-[13px] leading-relaxed text-(--auth-light)/85">
             {panel.subheading}
@@ -554,7 +553,7 @@ function GetaSplit({
         aria-hidden="true"
         className="auth-geta-blob -bottom-40 -end-40 size-[500px] bg-indigo-300/30 blur-[120px]"
       />
-      <div className="auth-geta-card relative flex w-full max-w-7xl overflow-hidden rounded-3xl shadow-2xl lg:max-h-[calc(100dvh-1.5rem)] lg:min-h-[min(770px,calc(100dvh-1.5rem))]">
+      <div className="auth-geta-card relative flex w-full max-w-7xl overflow-hidden rounded-3xl shadow-2xl lg:max-h-[calc(100dvh-1.5rem)] lg:min-h-[min(720px,calc(100dvh-1.5rem))]">
         <main
           className={cn(
             'relative flex w-full flex-col bg-background px-6 py-4 sm:w-1/2 sm:px-10 lg:overflow-hidden lg:px-12 lg:py-5',
@@ -565,7 +564,7 @@ function GetaSplit({
             className={cn(
               '@container mx-auto my-auto w-full',
               // Sign-up has the most fields: wide enough for two columns. The other pages stay narrow so the form can grow to fill the card.
-              page === 'register' ? 'max-w-[380px] xl:max-w-[560px]' : 'max-w-[420px]',
+              page === 'register' ? 'max-w-[380px] xl:max-w-[548px]' : 'max-w-[420px]',
             )}
           >
             <div className="relative z-30 mb-4 flex items-center justify-between gap-3">
