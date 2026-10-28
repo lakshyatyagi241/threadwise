@@ -17,6 +17,7 @@ export { Slider, type SliderProps } from './components/slider';
 export { Alert } from './components/alert';
 export { Spinner } from './components/spinner';
 export { GetaLoader, type GetaLoaderProps } from './components/geta-loader';
+export { startGetaLoaderAnimation } from './components/geta-loader-canvas';
 export { Tabs, type TabItem, type TabsProps } from './components/tabs';
 export { Modal, type ModalProps } from './components/modal';
 export { Drawer, type DrawerProps } from './components/drawer';

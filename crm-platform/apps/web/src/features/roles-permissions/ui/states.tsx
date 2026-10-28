@@ -12,7 +12,11 @@ const NS = 'roles-permissions.common';
 export function LoadingBlock({ className }: { className?: string }) {
   const t = useTranslations(NS);
   return (
-    <PageLoader label={t('loading')} className={className ?? 'grid min-h-64 place-items-center'} />
+    <PageLoader
+      label={t('loading')}
+      size={110}
+      className={className ?? 'grid min-h-64 place-items-center'}
+    />
   );
 }
 

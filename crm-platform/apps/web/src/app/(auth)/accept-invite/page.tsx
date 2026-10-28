@@ -46,7 +46,7 @@ export default async function AcceptInvitePage({ searchParams }: { searchParams:
       };
 
   return (
-    <GuestFrame page="forgot" variant={3} config={config} header={header}>
+    <GuestFrame page="forgot" config={config} header={header}>
       {preview ? <AcceptInviteForm org={org} token={token} preview={preview} /> : <InviteInvalid />}
     </GuestFrame>
   );
