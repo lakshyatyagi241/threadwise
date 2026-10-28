@@ -103,7 +103,7 @@ export function CtaForm({ data: d, set, env }: FormProps) {
       {actions.length < CTA_MAX_ACTIONS ? (
         <AddLink onClick={add}>{t('addButton')}</AddLink>
       ) : (
-        <div className="mt-1 text-[11px] italic text-muted-foreground">
+        <div className="mt-1 text-[11px] text-muted-foreground">
           {t('maxReached', { max: CTA_MAX_ACTIONS })}
         </div>
       )}

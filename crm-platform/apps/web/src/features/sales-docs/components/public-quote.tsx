@@ -382,7 +382,7 @@ function DecisionCard({
           {typed ? (
             <div
               aria-describedby={`${base}-sig`}
-              className="flex h-32 items-center justify-center rounded-md border border-dashed border-[#94a3b8] bg-white px-4 text-3xl italic text-[#0f172a]"
+              className="flex h-32 items-center justify-center rounded-md border border-dashed border-[#94a3b8] bg-white px-4 text-3xl text-[#0f172a]"
               style={{ fontFamily: 'Georgia, "Times New Roman", serif' }}
               dir="auto"
             >

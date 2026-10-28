@@ -109,7 +109,7 @@ export function CreditNoteDetail({ id }: { id: string }) {
               <h1
                 className={cn(
                   'text-xl font-bold tracking-tight',
-                  !n.number && 'italic text-muted-foreground',
+                  !n.number && 'text-muted-foreground',
                 )}
                 dir="ltr"
               >
