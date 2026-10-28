@@ -17,6 +17,8 @@ const THOUSANDS = /^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/;
  * and the write rules refuse it instead of storing 125.
  */
 export function readNumberCell(text: string): number | string {
+  // Number('') is 0, so a blank cell is refused here rather than stored as a number.
+  if (text.trim() === '') return text;
   const n = Number(THOUSANDS.test(text) ? text.replace(/,/g, '') : text);
   return Number.isFinite(n) ? n : text;
 }

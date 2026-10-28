@@ -9,14 +9,21 @@ describe('readNumberCell', () => {
     ['1,250.5', 1250.5],
   ])('reads %s as a number', (text, n) => expect(readNumberCell(text)).toBe(n));
 
-  it.each(['12,5', '1,2345', 'abc', '1,25', ''])('keeps %j as text so the write rules can refuse it', (text) => {
-    // '' is Number('') === 0 in JS; the cell must not silently become 0.
-    expect(readNumberCell(text)).toBe(text === '' ? 0 : text);
-  });
+  it.each(['12,5', '1,2345', 'abc', '1,25', '', '   '])(
+    'keeps %j as text so the write rules can refuse it',
+    (text) => {
+      // Number('') and Number('   ') are 0 in JS; a blank cell must not silently become 0.
+      expect(readNumberCell(text)).toBe(text);
+    },
+  );
 });
 
 describe('readBooleanCell', () => {
-  it.each(['true', 'YES', 'y', '1', 'x', 'On'])('%s is true', (t) => expect(readBooleanCell(t)).toBe(true));
-  it.each(['false', 'No', 'n', '0', 'off'])('%s is false', (t) => expect(readBooleanCell(t)).toBe(false));
+  it.each(['true', 'YES', 'y', '1', 'x', 'On'])('%s is true', (t) =>
+    expect(readBooleanCell(t)).toBe(true),
+  );
+  it.each(['false', 'No', 'n', '0', 'off'])('%s is false', (t) =>
+    expect(readBooleanCell(t)).toBe(false),
+  );
   it('leaves anything else as text', () => expect(readBooleanCell('maybe')).toBe('maybe'));
 });
