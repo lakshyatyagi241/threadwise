@@ -8,6 +8,8 @@ const login = async () => {
 };
 await login();
 let n = 0;
+let cur = '';
+const raw = [];
 const uniq = () => `${Date.now() % 1e6}-${n++}`;
 async function req(method, path, body, extra = {}) {
   const headers = { authorization: `Bearer ${token}`, ...extra };
@@ -20,6 +22,7 @@ async function req(method, path, body, extra = {}) {
   const buf = Buffer.from(await r.arrayBuffer());
   const ms = performance.now() - t0;
   let json; try { json = JSON.parse(buf.toString()); } catch {}
+  raw.push({ at: new Date().toISOString(), phase: cur, method, route: path, status: r.status, ttfbMs: +ttfb.toFixed(3), totalMs: +ms.toFixed(3), reqBytes: payload ? Buffer.byteLength(payload) : 0, respBytes: buf.length });
   return { status: r.status, ms, ttfb, bytes: buf.length, reqBytes: payload ? Buffer.byteLength(payload) : 0, json };
 }
 const pct = (a, p) => { const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.ceil((p / 100) * s.length) - 1)]; };
@@ -28,6 +31,7 @@ const out = { crud: {}, listScaling: [], reqSizeScaling: [], concurrency: [] };
 
 // ---- CRUD with valid bodies, N sequential each (first 20 discarded as warm-up)
 async function bench(name, N, fn, keep = (r) => r.status < 300) {
+  cur = 'flow: ' + name;
   const ms = [], tt = [], statuses = {}; let bytes = 0, reqBytes = 0;
   for (let i = 0; i < N + 20; i++) {
     const r = await fn(i);
@@ -60,6 +64,7 @@ await bench('DELETE /v2/tags/:id', 50, async () => { const c = await req('POST',
 
 // ---- response size scaling: list endpoint with growing page size (data now holds 500+ contacts)
 for (const limit of [1, 10, 20, 50, 100]) {
+  cur = 'payload: list limit ' + limit;
   const ms = [], tt = []; let bytes = 0, status;
   for (let i = 0; i < 40; i++) { const r = await req('GET', `/v2/contacts?limit=${limit}`); status = r.status; if (i >= 5) { ms.push(r.ms); tt.push(r.ttfb); bytes = r.bytes; } }
   out.listScaling.push({ limit, status, respBytes: bytes, ...stat(ms), ttfbP50: +pct(tt, 50).toFixed(2) });
@@ -67,6 +72,7 @@ for (const limit of [1, 10, 20, 50, 100]) {
 }
 // ---- request size scaling: oversize JSON on a validated endpoint (measures body parse + validation + reject)
 for (const kb of [1, 10, 100, 500, 1024, 5120]) {
+  cur = 'payload: request ' + kb + ' KB';
   const ms = []; let status, rb = 0;
   for (let i = 0; i < 15; i++) { const r = await req('POST', '/v2/tags', { name: 'p'.repeat(kb * 1024), color: '#3366ff' }); status = r.status; rb = r.reqBytes; if (i >= 3) ms.push(r.ms); }
   out.reqSizeScaling.push({ kb, status, reqBytes: rb, ...stat(ms) });
@@ -74,6 +80,7 @@ for (const kb of [1, 10, 100, 500, 1024, 5120]) {
 }
 // ---- concurrency: N workers in a closed loop for 8 s
 async function conc(name, path, c, secs = 8) {
+  cur = `load: ${name} x${c} clients`;
   const ms = []; let errs = 0; const end = performance.now() + secs * 1000; const t0 = performance.now();
   await Promise.all(Array.from({ length: c }, async () => { while (performance.now() < end) { const r = await req('GET', path); if (r.status !== 200) errs++; else ms.push(r.ms); } }));
   const dur = (performance.now() - t0) / 1000;
@@ -84,5 +91,6 @@ for (const c of [1, 10, 50, 100]) { await conc('GET /v2/auth/session', '/v2/auth
 for (const c of [1, 10, 50]) { await conc('GET /v2/contacts?limit=20', '/v2/contacts?limit=20', c); }
 for (const c of [1, 10, 50]) { await conc('GET /v2/crm/dashboard', '/v2/crm/dashboard', c); }
 await bench('POST /v2/auth/staff/login', 60, async () => { const t0 = performance.now(); const r = await fetch(`${BASE}/v2/auth/staff/login`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ orgSlug: 'Admin', email: 'nachiket.challawar@geta.ai', password: process.env.SEED_PW }) }); await r.arrayBuffer(); const ms = performance.now() - t0; return { status: r.status, ms, ttfb: ms, bytes: 0, reqBytes: 0 }; });
+fs.writeFileSync(new URL('./flows-raw.json', import.meta.url), JSON.stringify(raw));
 fs.writeFileSync(new URL('./flows.json', import.meta.url), JSON.stringify(out, null, 1));
 console.log('done');

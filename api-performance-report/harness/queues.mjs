@@ -4,10 +4,10 @@ import fs from 'node:fs';
 import { performance } from 'node:perf_hooks';
 const pct=(a,p)=>{const s=[...a].sort((x,y)=>x-y);return s[Math.min(s.length-1,Math.ceil(p/100*s.length)-1)]};
 const st=(a)=>({n:a.length,min:+Math.min(...a).toFixed(3),p50:+pct(a,50).toFixed(3),p95:+pct(a,95).toFixed(3),p99:+pct(a,99).toFixed(3),max:+Math.max(...a).toFixed(3),mean:+(a.reduce((x,y)=>x+y,0)/a.length).toFixed(3)});
-const out={};
+const out={};const rawRedis=[],rawJobs=[];
 const c=new IORedis('redis://localhost:6379',{maxRetriesPerRequest:null});
 // 1. raw redis round trips (ms)
-async function rt(name,fn,N=2000){const a=[];for(let i=0;i<300;i++)await fn(i);for(let i=0;i<N;i++){const t=performance.now();await fn(i);a.push(performance.now()-t)}out['redis '+name]=st(a)}
+async function rt(name,fn,N=2000){const a=[];for(let i=0;i<300;i++)await fn(i);for(let i=0;i<N;i++){const t=performance.now();await fn(i);a.push(performance.now()-t)}a.forEach((v,i)=>rawRedis.push({op:name,sample:i+1,ms:+v.toFixed(4)}));out['redis '+name]=st(a)}
 await rt('PING',()=>c.ping());
 await rt('SET 100B',(i)=>c.set('perf:k'+(i%100),'x'.repeat(100)));
 await rt('GET 100B',(i)=>c.get('perf:k'+(i%100)));
@@ -28,6 +28,7 @@ async function probe(label,work,N,conc){
   for(let i=0;i<N;i++){const t=performance.now();await q.add('j',{i},{removeOnComplete:false});addMs.push(performance.now()-t)}
   await all;const total=performance.now()-t0;
   const jobs=[...done.values()];
+  jobs.forEach((j,i)=>rawJobs.push({probe:label,job:j.id,enqueueMs:+addMs[i]?.toFixed(4),queueWaitMs:j.processedOn-j.timestamp,processingMs:j.finishedOn-j.processedOn,endToEndMs:j.finishedOn-j.timestamp}));
   const wait=jobs.map(j=>j.processedOn-j.timestamp),proc=jobs.map(j=>j.finishedOn-j.processedOn),e2e=jobs.map(j=>j.finishedOn-j.timestamp);
   out['bullmq '+label]={jobs:N,concurrency:conc,simulatedWorkMs:work,enqueueMs:st(addMs),queueWaitMs:st(wait),processingMs:st(proc),endToEndMs:st(e2e),totalSec:+(total/1000).toFixed(2),jobsPerSec:+(N/(total/1000)).toFixed(1)};
   // bulk
@@ -47,7 +48,7 @@ for(const k of keys){const name=k.split(':')[1];if(name.startsWith('perf-probe')
   const rep=(await q.getRepeatableJobs?.().catch(()=>[]))||[];
   real.push({name,counts:cn,sampled:wait.length,waitMs:wait.length?st(wait):null,procMs:proc.length?st(proc):null,repeatables:rep.length});await q.close()}
 out.realQueues=real;
-fs.writeFileSync('../../../queues.json',JSON.stringify(out,null,1));
+fs.writeFileSync('../../../queues.json',JSON.stringify(out,null,1));fs.writeFileSync('../../../redis-raw.json',JSON.stringify(rawRedis));fs.writeFileSync('../../../bullmq-raw.json',JSON.stringify(rawJobs));
 console.log(JSON.stringify(Object.fromEntries(Object.entries(out).filter(([k])=>k.startsWith('redis ')||k.startsWith('bullmq'))),null,0).slice(0,3500));
 console.log('real queues',real.length, JSON.stringify(real.filter(r=>r.sampled).map(r=>[r.name,r.sampled,r.waitMs.p50,r.procMs.p50])));
 process.exit(0);

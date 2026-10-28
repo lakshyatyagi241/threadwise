@@ -11,6 +11,10 @@ const TIMEOUT_MS = 8000;
 const SKIP = /logout|sign-?out|revoke|password|\/sessions|delete-account|close-account|\/impersonat|terminate/i;
 
 let token = '';
+const RAW = process.argv[3] || 'sweep-raw.jsonl';
+const rawOut = fs.createWriteStream(RAW);
+let seq = 0;
+const logRaw = (o, url, k, r, note = '') => rawOut.write(JSON.stringify({ seq: ++seq, at: new Date().toISOString(), phase: 'sweep', method: o.method, route: o.path, url, attempt: k + 1, note, status: r.status, ttfbMs: r.ttfb == null ? null : +r.ttfb.toFixed(3), totalMs: +r.total.toFixed(3), reqBytes: r.reqBytes, respBytes: r.bytes }) + '\n');
 async function login() {
   const r = await fetch(`${BASE}/v2/auth/staff/login`, {
     method: 'POST',
@@ -156,9 +160,11 @@ for (const o of order) {
   let first = null;
   for (let k = 0; k < N; k++) {
     let r = await hit(o, url, body);
-    if (r.status === 401 && !rec.public) {
+    logRaw(o, url, k, r);
+    if (r.status === 401 && !rec.public && /^\/v2\/(?!platform|partner)/.test(o.path)) {
       await login();
       r = await hit(o, url, body);
+      logRaw(o, url, k, r, 'retry-after-relogin');
     }
     if (k === 0) {
       first = r;
@@ -193,4 +199,5 @@ for (const o of order) {
   }
 }
 fs.writeFileSync(OUT, JSON.stringify(results));
+rawOut.end();
 console.log('done', results.length);

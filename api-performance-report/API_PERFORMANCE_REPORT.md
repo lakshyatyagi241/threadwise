@@ -2,7 +2,7 @@
 
 Measured live on 2026-10-28 against this repo's `apps/api` (NestJS, Postgres 16 + RLS, Redis 7, BullMQ), booted from a scratch copy of the repo. Nothing in the repo was changed or committed.
 
-Companion file: [`per-operation-latency.csv`](per-operation-latency.csv): one row for **every one of the 2,045 operations** (method, path, module, outcome, status, cold/min/p50/p95/p99/max/mean ms, TTFB, request and response bytes).
+Companion files: the [`csv/`](csv/README.md) folder lists everything: [`01-all-operations.csv`](csv/01-all-operations.csv) has every operation with its full details and measured timings, [`02-every-request.csv`](csv/02-every-request.csv) has every one of the 32,777 requests sent, plus queue, Redis, outbox and Postgres tables.
 
 ## 1. Read this first: what these numbers are and are not
 
