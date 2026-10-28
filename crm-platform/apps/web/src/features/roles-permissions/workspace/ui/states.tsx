@@ -13,7 +13,9 @@ const NS = 'roles-permissions-workspace.common';
 
 export function LoadingBlock() {
   const t = useTranslations(NS);
-  return <PageLoader label={t('loading')} className="grid min-h-64 place-items-center" />;
+  return (
+    <PageLoader label={t('loading')} size={110} className="grid min-h-64 place-items-center" />
+  );
 }
 
 /** The person may not use this screen: a clear page, not a crash and not a bare 403. */

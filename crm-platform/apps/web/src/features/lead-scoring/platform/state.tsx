@@ -9,7 +9,7 @@ const NS = 'lead-scoring-admin.common';
 
 export function LoadingBlock() {
   const t = useTranslations(NS);
-  return <PageLoader label={t('loading')} className="grid min-h-32 place-items-center" />;
+  return <PageLoader label={t('loading')} size={96} className="grid min-h-32 place-items-center" />;
 }
 
 /** A failed call: a sentence for the kind of failure, the request id for support, and a retry. */

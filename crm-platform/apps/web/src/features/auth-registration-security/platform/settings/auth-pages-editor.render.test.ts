@@ -63,11 +63,11 @@ describe('AuthPagesEditorPage', () => {
     expect(html).toContain('maxLength="9"');
   });
 
-  it('offers the three page tabs and the five designs', () => {
+  it('offers the three page tabs and no choice of design', () => {
     const html = render();
     for (const tab of ['Login', 'Register', 'Forgot password']) expect(html).toContain(`>${tab}<`);
-    expect(html).toContain('Split showcase');
-    expect(html).toContain('Aurora');
+    expect(html).not.toContain('Design template');
+    expect(html).not.toContain('Aurora');
   });
 
   it('lets support edit and tells an auditor it is read-only', () => {

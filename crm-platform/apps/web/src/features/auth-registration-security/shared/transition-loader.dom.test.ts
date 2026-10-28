@@ -9,12 +9,12 @@ afterEach(() => {
 });
 
 describe('transition loader', () => {
-  it('covers the page with the ring and the logo, once however often it is asked', () => {
+  it('covers the page with the arcs and the logo, once however often it is asked', () => {
     showTransitionLoader();
     showTransitionLoader();
     const all = document.querySelectorAll('#geta-transition-loader');
     expect(all).toHaveLength(1);
-    expect(all[0]!.querySelector('.geta-loader-ring')).not.toBeNull();
+    expect(all[0]!.querySelector('canvas')).not.toBeNull();
     expect(all[0]!.querySelector('img')?.getAttribute('src')).toBe('/images/geta-logo.png');
     expect(all[0]!.getAttribute('role')).toBe('status');
   });

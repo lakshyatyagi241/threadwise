@@ -6,14 +6,9 @@ import type { AuthPageName, RegistrationConfigResponse } from '@crm/contracts';
  * checklist) of THAT page. The forgot-password page has its own extras (`authPages.extra.forgot`), exactly like the
  * other two, so a footer or hero the admin saved on the Forgot tab reaches the page visitors see.
  */
-export function frameProps(
-  config: RegistrationConfigResponse,
-  page: AuthPageName,
-  variant?: number,
-) {
+export function frameProps(config: RegistrationConfigResponse, page: AuthPageName) {
   const pages = config.authPages;
   return {
-    variant: variant ?? pages.variant,
     content: pages[page],
     defaulted: pages.defaulted[page],
     extra: pages.extra[page],

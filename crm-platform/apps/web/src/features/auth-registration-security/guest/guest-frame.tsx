@@ -5,27 +5,24 @@ import { AuthShell, type FixedPanel, type ShellHeader } from './auth-shell';
 import { frameProps } from './frame-props';
 import { GuestToolbar } from './guest-toolbar';
 
-/** A guest page wrapped in the design the admin picked: config in, `AuthShell` out. */
+/** A guest page wrapped in the guest design: config in, `AuthShell` out. */
 export function GuestFrame({
   page,
   config,
   header,
-  variant,
   fixedPanel,
   children,
 }: {
   page: AuthPageName;
   config: RegistrationConfigResponse;
   header?: ShellHeader | null;
-  /** Overrides the admin's design for one page (the OTP and social-callback pages follow the sign-in look). */
-  variant?: number;
-  /** Pages with a fixed design (reset password, link landings) ignore the admin's choice and bring their own panel. */
+  /** Pages with a fixed panel (reset password, link landings) bring their own words for the dark side. */
   fixedPanel?: FixedPanel;
   children: ReactNode;
 }) {
   return (
     <AuthShell
-      {...frameProps(config, page, variant)}
+      {...frameProps(config, page)}
       page={page}
       header={header}
       fixedPanel={fixedPanel}

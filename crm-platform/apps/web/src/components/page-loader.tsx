@@ -7,10 +7,19 @@ import { GetaLoader } from '@crm/ui';
  * The loader of a page (or a block of a page) that is waiting for its first answer: Geta's branded loader, centred. Buttons and
  * other small spots keep the small `Spinner`; this one is for loading a page.
  */
-export function PageLoader({ label, className }: { label: string; className?: string }) {
+export function PageLoader({
+  label,
+  className,
+  size,
+}: {
+  label: string;
+  className?: string;
+  /** Pixel size of the loader; a small block of a page passes less than the default. */
+  size?: number;
+}) {
   return (
     <div className={className ?? 'grid min-h-[50vh] place-items-center'}>
-      <GetaLoader logoSrc="/images/geta-logo.png" label={label} />
+      <GetaLoader logoSrc="/images/geta-logo.png" label={label} {...(size ? { size } : {})} />
     </div>
   );
 }
