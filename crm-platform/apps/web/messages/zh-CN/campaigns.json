@@ -17,18 +17,19 @@
       "refresh": "刷新",
       "newCampaign": "新建营销活动",
       "tile": {
-        "sent": "已发送",
+        "sent": "已发送消息",
         "delivered": "已送达",
         "read": "已读",
-        "failed": "失败",
-        "processing": "处理中",
-        "campaigns": "{count} 个营销活动",
+        "failed": "失败消息",
+        "processing": "发送中的活动",
+        "campaigns": "来自 {count, plural, other {#个活动}}",
         "inFlight": "发送中",
         "awaiting": "等待中",
-        "queued": "{count} 条排队中",
+        "queued": "{count} 个已排期待开始",
         "deliveredRate": "送达率 {rate}%",
         "readRate": "已读率 {rate}%",
-        "failedCampaigns": "{count} 个营销活动失败"
+        "failedCampaigns": "{count, plural, other {#个活动}}被标记为失败",
+        "note": "已发送、已送达、已读和失败统计的是消息，失败的消息不计入已发送。每个数字下方的小字统计的是活动。全部数据都遵循下方选择的日期范围：{range}。"
       },
       "range": {
         "all": "全部时间",

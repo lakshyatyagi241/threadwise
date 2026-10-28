@@ -17,18 +17,19 @@
       "refresh": "रीफ़्रेश करें",
       "newCampaign": "नया कैंपेन",
       "tile": {
-        "sent": "भेजे गए",
+        "sent": "भेजे गए संदेश",
         "delivered": "डिलीवर हुए",
         "read": "पढ़े गए",
-        "failed": "विफल",
-        "processing": "प्रोसेस हो रहे हैं",
-        "campaigns": "{count} कैंपेन",
+        "failed": "विफल संदेश",
+        "processing": "भेज रहे कैंपेन",
+        "campaigns": "{count, plural, one {# कैंपेन} other {# कैंपेन}} से",
         "inFlight": "भेजे जा रहे हैं",
         "awaiting": "प्रतीक्षा में",
-        "queued": "{count} कतार में",
+        "queued": "{count} शुरू होने के लिए निर्धारित",
         "deliveredRate": "{rate}% डिलीवरी",
         "readRate": "{rate}% पढ़ने की दर",
-        "failedCampaigns": "{count} विफल कैंपेन"
+        "failedCampaigns": "{count, plural, one {# कैंपेन} other {# कैंपेन}} विफल चिह्नित",
+        "note": "भेजे गए, डिलीवर, पढ़े गए और विफल संदेशों की गिनती दिखाते हैं, और विफल संदेश भेजे गए में नहीं गिना जाता। हर संख्या के नीचे की छोटी पंक्ति कैंपेन गिनती है। सब कुछ नीचे चुनी गई तिथि सीमा के अनुसार है: {range}।"
       },
       "range": {
         "all": "पूरा समय",

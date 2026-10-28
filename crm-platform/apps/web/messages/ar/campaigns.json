@@ -9,18 +9,19 @@
       "refresh": "تحديث",
       "newCampaign": "حملة جديدة",
       "tile": {
-        "sent": "مُرسلة",
+        "sent": "الرسائل المرسلة",
         "delivered": "مُسلَّمة",
         "read": "مقروءة",
-        "failed": "فاشلة",
-        "processing": "قيد المعالجة",
-        "campaigns": "{count} حملة",
+        "failed": "الرسائل الفاشلة",
+        "processing": "حملات قيد الإرسال",
+        "campaigns": "من {count, plural, one {حملة واحدة} other {# حملات}}",
         "inFlight": "قيد الإرسال",
         "awaiting": "بانتظار الإرسال",
-        "queued": "{count} في الانتظار",
+        "queued": "{count} مجدولة للبدء",
         "deliveredRate": "{rate}% تسليم",
         "readRate": "{rate}% معدل القراءة",
-        "failedCampaigns": "{count} حملات فاشلة"
+        "failedCampaigns": "{count, plural, one {حملة واحدة معلّمة} other {# حملات معلّمة}} كفاشلة",
+        "note": "المرسلة والمُسلَّمة والمقروءة والفاشلة تحسب الرسائل، والرسالة الفاشلة لا تُحتسب ضمن المرسلة. السطر الأصغر تحت كل رقم يحسب الحملات. كل ذلك يتبع النطاق الزمني المختار أدناه: {range}."
       },
       "range": {
         "all": "كل الوقت",

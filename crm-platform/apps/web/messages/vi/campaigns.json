@@ -17,18 +17,19 @@
       "refresh": "Làm mới",
       "newCampaign": "Chiến dịch mới",
       "tile": {
-        "sent": "Đã gửi",
+        "sent": "Tin nhắn đã gửi",
         "delivered": "Đã nhận",
         "read": "Đã đọc",
-        "failed": "Thất bại",
-        "processing": "Đang xử lý",
-        "campaigns": "{count} chiến dịch",
+        "failed": "Tin nhắn thất bại",
+        "processing": "Chiến dịch đang gửi",
+        "campaigns": "từ {count, plural, other {# chiến dịch}}",
         "inFlight": "đang gửi",
         "awaiting": "đang chờ",
-        "queued": "{count} đang chờ",
+        "queued": "{count} đã lên lịch bắt đầu",
         "deliveredRate": "{rate}% giao thành công",
         "readRate": "tỷ lệ đọc {rate}%",
-        "failedCampaigns": "{count} chiến dịch thất bại"
+        "failedCampaigns": "{count, plural, other {# chiến dịch}} bị đánh dấu thất bại",
+        "note": "Đã gửi, Đã nhận, Đã đọc và Thất bại đếm tin nhắn, và tin nhắn thất bại không tính vào Đã gửi. Dòng nhỏ dưới mỗi số đếm chiến dịch. Tất cả theo khoảng ngày chọn bên dưới: {range}."
       },
       "range": {
         "all": "Mọi lúc",

@@ -17,18 +17,19 @@
       "refresh": "Vernieuwen",
       "newCampaign": "Nieuwe campagne",
       "tile": {
-        "sent": "Verzonden",
+        "sent": "Verzonden berichten",
         "delivered": "Afgeleverd",
         "read": "Gelezen",
-        "failed": "Mislukt",
-        "processing": "Wordt verwerkt",
-        "campaigns": "{count} campagnes",
+        "failed": "Mislukte berichten",
+        "processing": "Campagnes in verzending",
+        "campaigns": "uit {count, plural, one {# campagne} other {# campagnes}}",
         "inFlight": "onderweg",
         "awaiting": "wachtend",
-        "queued": "{count} in wachtrij",
+        "queued": "{count} gepland om te starten",
         "deliveredRate": "{rate}% bezorgd",
         "readRate": "{rate}% leespercentage",
-        "failedCampaigns": "{count} mislukte campagnes"
+        "failedCampaigns": "{count, plural, one {# campagne} other {# campagnes}} als mislukt gemarkeerd",
+        "note": "Verzonden, Afgeleverd, Gelezen en Mislukt tellen berichten, en een mislukt bericht telt niet mee bij Verzonden. De kleinere regel onder elk getal telt campagnes. Alles volgt het hieronder gekozen datumbereik: {range}."
       },
       "range": {
         "all": "Alle tijd",

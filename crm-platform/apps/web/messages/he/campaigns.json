@@ -17,18 +17,19 @@
       "refresh": "רענן",
       "newCampaign": "קמפיין חדש",
       "tile": {
-        "sent": "נשלחו",
+        "sent": "הודעות שנשלחו",
         "delivered": "נמסרו",
         "read": "נקראו",
-        "failed": "נכשלו",
-        "processing": "בעיבוד",
-        "campaigns": "{count} קמפיינים",
+        "failed": "הודעות שנכשלו",
+        "processing": "קמפיינים בשליחה",
+        "campaigns": "מתוך {count, plural, one {קמפיין אחד} other {# קמפיינים}}",
         "inFlight": "בתהליך שליחה",
         "awaiting": "ממתינים",
-        "queued": "{count} בתור",
+        "queued": "{count} מתוזמנים להתחיל",
         "deliveredRate": "{rate}% מסירה",
         "readRate": "{rate}% שיעור קריאה",
-        "failedCampaigns": "{count} קמפיינים שנכשלו"
+        "failedCampaigns": "{count, plural, one {קמפיין אחד סומן} other {# קמפיינים סומנו}} ככושלים",
+        "note": "נשלחו, נמסרו, נקראו ונכשלו סופרים הודעות, והודעה שנכשלה לא נספרת ב'נשלחו'. השורה הקטנה מתחת לכל מספר סופרת קמפיינים. הכול עוקב אחרי טווח התאריכים שנבחר למטה: {range}."
       },
       "range": {
         "all": "כל הזמנים",

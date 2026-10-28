@@ -17,18 +17,19 @@
       "refresh": "Segarkan",
       "newCampaign": "Kampanye baru",
       "tile": {
-        "sent": "Terkirim",
+        "sent": "Pesan terkirim",
         "delivered": "Tersampaikan",
         "read": "Terbaca",
-        "failed": "Gagal",
-        "processing": "Diproses",
-        "campaigns": "{count} kampanye",
+        "failed": "Pesan gagal",
+        "processing": "Kampanye sedang mengirim",
+        "campaigns": "dari {count, plural, other {# kampanye}}",
         "inFlight": "sedang berjalan",
         "awaiting": "menunggu",
-        "queued": "{count} antre",
+        "queued": "{count} dijadwalkan mulai",
         "deliveredRate": "{rate}% pengiriman",
         "readRate": "{rate}% tingkat baca",
-        "failedCampaigns": "{count} kampanye gagal"
+        "failedCampaigns": "{count, plural, other {# kampanye}} ditandai gagal",
+        "note": "Terkirim, Diterima, Dibaca, dan Gagal menghitung pesan, dan pesan gagal tidak dihitung dalam Terkirim. Baris kecil di bawah setiap angka menghitung kampanye. Semuanya mengikuti rentang tanggal yang dipilih di bawah: {range}."
       },
       "range": {
         "all": "Sepanjang waktu",
