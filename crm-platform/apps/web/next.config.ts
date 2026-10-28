@@ -2,6 +2,7 @@ import { withSentryConfig } from '@sentry/nextjs/config';
 import createNextIntlPlugin from 'next-intl/plugin';
 import { resolve } from 'node:path';
 import type { NextConfig } from 'next';
+import { LEGACY_REDIRECTS } from './src/features/marketing-site-cms/geta/data/redirects';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
@@ -127,6 +128,8 @@ const nextConfig: NextConfig = {
   // Addresses Reference bookmarks and old emails may still carry. Query strings travel along with each redirect.
   async redirects() {
     return [
+      // The previous geta.ai site and the WordPress site before it (data/redirects.ts).
+      ...LEGACY_REDIRECTS,
       { source: '/home', destination: '/', permanent: false },
       // The guidebook was folded into the help center (guides written in the repo, gated by plan and role).
       { source: '/guidebook', destination: '/help', permanent: false },
