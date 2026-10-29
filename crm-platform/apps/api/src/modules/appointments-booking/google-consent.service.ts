@@ -196,12 +196,13 @@ export class GoogleConsentService {
       }
       const missing = googleMissingScopes(grant.scope, req.capabilities as GoogleCapability[]);
       if (missing.length > 0) {
-        // A short grant is kept for confirmation when it is the stored account's (a working superset) or when it still covers at least one
-        // capability: Google lets the person untick scopes and withholds restricted ones from an unverified app, and capabilities are only
-        // ever granted whole, so the rest works and the confirm page says what is missing. Only a grant that covers nothing is withdrawn.
+        // A short grant is kept for confirmation when it is the stored account's (a working superset), or when nothing is stored yet and it
+        // still covers at least one capability (Google lets the person untick scopes and withholds restricted ones from an unverified app;
+        // capabilities are only ever granted whole, so the confirm page says what is missing). A different account never replaces a stored
+        // one with less, and a grant that covers nothing is withdrawn.
         const sameAccount = prior !== null && prior.accountSub === account.sub;
         const usable = googleCapabilitiesOf(grant.scope).length > 0;
-        if (!sameAccount && !usable) {
+        if (!sameAccount && (prior !== null || !usable)) {
           if (prior === null || prior.accountSub !== null) await withdraw();
           await reject();
           return done('missing_scope');
