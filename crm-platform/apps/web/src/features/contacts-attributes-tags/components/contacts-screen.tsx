@@ -69,7 +69,14 @@ import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
 import { presetFilters, type PresetView } from '../lib/preset-views';
-import { defaultFiltersOf, filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
+import {
+  defaultFiltersOf,
+  filtersOfView,
+  leavesViewWhen,
+  viewColumnsOf,
+  viewIdOf,
+  withView,
+} from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
@@ -719,7 +726,17 @@ export function ContactsScreen() {
         : null,
     meId: session.user.id,
   });
-  const removeChip = (chip: FilterChip) => setFilters(chip.clear);
+  /** Back to All contacts (no saved view open), keeping the search text. */
+  const leaveView = () =>
+    router.replace(
+      `${pathname}${withView(filtersToSearch({ ...defaultFiltersOf(sizeDefault), q: filters.q }, sizeDefault), '')}`,
+      { scroll: false },
+    );
+  const removeChip = (chip: FilterChip) => {
+    // A saved view is a set of filters: taking off the last one leaves the view, back to All contacts.
+    if (viewId && leavesViewWhen({ ...filters, ...chip.clear })) return leaveView();
+    setFilters(chip.clear);
+  };
 
   const handlers = {
     selected: sel.ids,
@@ -881,10 +898,7 @@ export function ContactsScreen() {
             onClearAll={() => {
               // A saved view is a set of filters: clearing them all leaves the view, back to All contacts (the search text stays).
               if (!viewId) return setFilters(clearAllPatch());
-              router.replace(
-                `${pathname}${withView(filtersToSearch({ ...defaultFiltersOf(sizeDefault), q: filters.q }, sizeDefault), '')}`,
-                { scroll: false },
-              );
+              leaveView();
             }}
             onSaveAsSegment={
               canCreateSegments && filtered && !filters.segment && !filters.rules
