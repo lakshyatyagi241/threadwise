@@ -259,7 +259,8 @@
         "name": "Template name",
         "nameHint": "a-z, 0-9 and _ only, up to 60 characters.",
         "nameTaken": "This name is already used for this language on this number.",
-        "language": "Language"
+        "language": "Language",
+        "categoryLocked": "Meta does not allow changing the category of an approved template."
       },
       "auth": {
         "title": "One-time passcode",

@@ -519,6 +519,39 @@ describe('edit (TW-TPL-018, 019)', () => {
     expect(sent.components.find((c) => c.type === 'BODY')?.text).toContain('has shipped');
   });
 
+  it('refuses to change the category of an approved template, and allows it on a rejected one', async () => {
+    const t = await api.signup('tcat');
+    const conn = await seedConnection(t);
+    const approved = await seedTemplate(t, conn, {
+      meta_template_id: 'MC1',
+      template_name: 'cat_approved',
+    });
+    const detail = await api.as(t.admin).get(`/v2/templates/${approved.uuid}`);
+    meta = () => ({ status: 200, body: { success: true } });
+    const refused = await send(t.admin, 'put', `/v2/templates/${approved.uuid}`, {
+      ...form(conn.uuid, { name: 'cat_approved', metaCategory: 'MARKETING' }),
+      connectionId: undefined,
+      rowVersion: detail.body.rowVersion,
+    });
+    expect(refused.status, JSON.stringify(refused.body)).toBe(422);
+    expect(JSON.stringify(refused.body)).toContain('metaCategory');
+    expect(calls).toHaveLength(0);
+
+    const rejected = await seedTemplate(t, conn, {
+      status: 'rejected',
+      meta_status: 'REJECTED',
+      meta_template_id: 'MC2',
+      template_name: 'cat_rejected',
+    });
+    const rdetail = await api.as(t.admin).get(`/v2/templates/${rejected.uuid}`);
+    const ok = await send(t.admin, 'put', `/v2/templates/${rejected.uuid}`, {
+      ...form(conn.uuid, { name: 'cat_rejected', metaCategory: 'MARKETING' }),
+      connectionId: undefined,
+      rowVersion: rdetail.body.rowVersion,
+    });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+  });
+
   it('keeps an approved template live and says why when Meta refuses its edit', async () => {
     const t = await api.signup('tir');
     const conn = await seedConnection(t);

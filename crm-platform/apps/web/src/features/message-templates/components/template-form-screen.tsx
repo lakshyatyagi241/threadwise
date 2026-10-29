@@ -70,7 +70,7 @@ import {
   copyState,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
-import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
+import { CATEGORIES, canEdit, categoryLocked, isLive } from '../lib/status-model';
 import { connectionLabel, usableConnections } from '../lib/sync';
 import { tokensOf } from '../lib/variables';
 import { ButtonsEditor } from './buttons-editor';
@@ -332,6 +332,7 @@ function TemplateForm({
 
   // A template live on Meta is edited in place there: Meta keeps its name and language.
   const live = detail ? isLive(detail.status, detail.metaTemplateId) : false;
+  const catLocked = detail ? categoryLocked(detail.status, detail.metaTemplateId) : false;
   const auth = isAuth(current);
   const carousel = isCarousel(current);
   const offer = isOffer(current);
@@ -531,11 +532,12 @@ function TemplateForm({
               <Field
                 label={t('identity.category')}
                 htmlFor={`${base}-cat`}
-                hint={t('identity.categoryHint')}
+                hint={catLocked ? t('identity.categoryLocked') : t('identity.categoryHint')}
               >
                 <Select
                   id={`${base}-cat`}
                   value={current.metaCategory}
+                  disabled={catLocked}
                   onChange={(e) => set({ metaCategory: e.target.value as TplMetaCategory })}
                 >
                   {CATEGORIES.map((c) => (

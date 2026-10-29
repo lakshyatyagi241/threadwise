@@ -266,7 +266,8 @@
         "name": "Şablon adı",
         "nameHint": "Yalnızca a-z, 0-9 ve _; en fazla 60 karakter.",
         "nameTaken": "Bu ad, bu numarada bu dil için zaten kullanılıyor.",
-        "language": "Dil"
+        "language": "Dil",
+        "categoryLocked": "Meta, onaylanmış bir şablonun kategorisinin değiştirilmesine izin vermez."
       },
       "auth": {
         "title": "Tek kullanımlık şifre",

@@ -62,6 +62,10 @@ export const canEdit = (s: TplStatus, templateType: string = 'standard'): boolea
 export const isLive = (s: TplStatus, metaTemplateId: string | null): boolean =>
   (s === 'approved' || s === 'paused' || s === 'rejected') && metaTemplateId !== null;
 
+/** Meta does not let the category of an APPROVED template change (a paused or rejected one may); the form shows it fixed. */
+export const categoryLocked = (s: TplStatus, metaTemplateId: string | null): boolean =>
+  s === 'approved' && metaTemplateId !== null;
+
 /**
  * Meta keeps the name of every template it holds, so a copy is how that name changes: Duplicate opens a new template filled in from
  * it, named `<name>_copy`, which is saved and submitted as a template of its own.

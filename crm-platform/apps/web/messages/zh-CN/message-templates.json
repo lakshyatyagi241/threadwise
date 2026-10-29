@@ -266,7 +266,8 @@
         "name": "模板名称",
         "nameHint": "仅限 a-z、0-9 和下划线,最多 60 个字符。",
         "nameTaken": "此号码上该语言已使用此名称。",
-        "language": "语言"
+        "language": "语言",
+        "categoryLocked": "Meta 不允许更改已通过审核模板的类别。"
       },
       "auth": {
         "title": "一次性验证码",
