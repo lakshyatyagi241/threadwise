@@ -38,6 +38,8 @@
       "failed": "失敗"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "シートの行",
       "keyword": "キーワード",
       "any_message": "任意のメッセージ",
       "tag_added": "タグ追加",

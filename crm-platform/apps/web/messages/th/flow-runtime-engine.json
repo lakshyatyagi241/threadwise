@@ -38,6 +38,8 @@
       "failed": "ล้มเหลว"
     },
     "source": {
+      "flow_webhook": "เว็บฮุก",
+      "sheet_row": "แถวในชีต",
       "keyword": "คีย์เวิร์ด",
       "any_message": "ข้อความใดก็ได้",
       "tag_added": "เพิ่มแท็ก",

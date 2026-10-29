@@ -38,6 +38,8 @@
       "failed": "Başarısız"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Tablo satırı",
       "keyword": "Anahtar kelime",
       "any_message": "Herhangi bir mesaj",
       "tag_added": "Etiket eklendi",

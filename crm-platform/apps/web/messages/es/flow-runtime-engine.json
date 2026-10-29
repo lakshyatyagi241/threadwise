@@ -38,6 +38,8 @@
       "failed": "Fallido"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Fila de hoja de cálculo",
       "keyword": "Palabra clave",
       "any_message": "Cualquier mensaje",
       "tag_added": "Etiqueta añadida",

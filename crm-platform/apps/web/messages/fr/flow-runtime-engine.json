@@ -38,6 +38,8 @@
       "failed": "Échoué"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Ligne de feuille",
       "keyword": "Mot-clé",
       "any_message": "Tout message",
       "tag_added": "Étiquette ajoutée",

@@ -38,6 +38,8 @@
       "failed": "Fehlgeschlagen"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Tabellenzeile",
       "keyword": "Schlüsselwort",
       "any_message": "Beliebige Nachricht",
       "tag_added": "Tag hinzugefügt",

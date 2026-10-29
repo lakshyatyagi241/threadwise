@@ -38,6 +38,8 @@
       "failed": "Gagal"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Baris lembar kerja",
       "keyword": "Kata kunci",
       "any_message": "Pesan apa pun",
       "tag_added": "Tag ditambahkan",

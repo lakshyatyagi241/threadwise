@@ -38,6 +38,8 @@
       "failed": "Nieudany"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Wiersz arkusza",
       "keyword": "Słowo kluczowe",
       "any_message": "Dowolna wiadomość",
       "tag_added": "Dodano tag",
