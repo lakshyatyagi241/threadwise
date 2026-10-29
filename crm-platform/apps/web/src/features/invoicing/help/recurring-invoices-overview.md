@@ -5,6 +5,7 @@ summary: Set up schedules that make invoices by themselves every day, week, mont
 area: sales
 order: 32
 documents: [nav:recurring-invoices]
+features: [recurring_invoices]
 keywords:
   [subscription, retainer, repeat, schedule, automatic invoice, monthly, billing cycle, template]
 ---
@@ -15,7 +16,7 @@ A recurring invoice is a schedule that makes a new invoice from a template on da
 
 ## How to use it
 
-1. Select **New schedule**. You can also open an invoice and choose **Make recurring** to start from a copy of it.
+1. Select **New schedule**. You can also choose **Create**, then **Create recurring invoices**, on the Invoices page, or open an invoice and choose **Make recurring** to start from a copy of it.
 2. Under **Schedule**, name it (only you see the name), set **Repeat every** with a unit of days, weeks, months or years, and pick the **First invoice on** date. Optionally set **Stop after** a date, or a **Number of invoices**.
 3. Under **What happens to each invoice**, choose **Leave as a draft**, **Issue it** or **Issue and send**. For sending, pick **Send by**: Link, Email or WhatsApp.
 4. Under **Invoice template**, copy an existing invoice or build the buyer, lines, tax, discount and notes right there.
@@ -32,7 +33,9 @@ A recurring invoice is a schedule that makes a new invoice from a template on da
 
 ## Plan and access
 
-The menu entry is not tied to a plan feature. Viewing, creating, editing and deleting schedules are separate permissions, and buttons you may not use are hidden.
+Recurring invoices are a plan feature. The menu entry stays visible on every plan, but when your plan does not include them, **New schedule** becomes **Recurring: not in your plan** and leads to the plans page. In the **Create** menu on the Invoices page the item shows **Not in your plan** with a **See plans to unlock recurring invoices** link, and **Make recurring** on an invoice is switched off. Schedules you already have stay in the list. Recurring invoices also need invoicing in the plan.
+
+Viewing, creating, editing and deleting schedules are separate permissions, and buttons you may not use are hidden.
 
 ## If something looks wrong
 
