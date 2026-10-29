@@ -24,7 +24,7 @@ export class BroadcastsReadController {
   ) {}
 
   @Get()
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({ summary: 'List broadcasts, newest first, filtered by status, range and name' })
   list(@Query(zodPipe(listBroadcastsQuerySchema)) query: ListBroadcastsQuery) {
     return this.read.list(query);
@@ -32,7 +32,7 @@ export class BroadcastsReadController {
 
   // Declared before `:id` so "compose" and "summary" are never read as an id.
   @Get('compose')
-  @RequirePermission('bcast.broadcasts.create')
+  @RequirePermission('camp.campaigns.create')
   @ApiOperation({
     summary:
       'What the compose page opens with: approved templates and connected sending numbers (`?channel=sms` for the SMS card)',
@@ -42,7 +42,7 @@ export class BroadcastsReadController {
   }
 
   @Get('summary')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({
     summary:
       'The tiles and status counts above the list (whole workspace, ignores the list filter)',
@@ -52,7 +52,7 @@ export class BroadcastsReadController {
   }
 
   @Get(':id')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({
     summary: 'One broadcast: header numbers, template, sender, charts data and events',
   })
@@ -61,7 +61,7 @@ export class BroadcastsReadController {
   }
 
   @Get(':id/recipients')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({
     summary: 'Recipients of a broadcast, newest first, filtered by status and name or phone',
   })
@@ -73,7 +73,7 @@ export class BroadcastsReadController {
   }
 
   @Get(':id/live')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({
     summary: 'Live counters for polling; `inFlight` turns false when the broadcast is over',
   })
@@ -82,7 +82,7 @@ export class BroadcastsReadController {
   }
 
   @Get(':id/statistics')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({ summary: 'Sent, delivered, read, failed, processing and queued counts' })
   statistics(@Param('id', ParseUUIDPipe) id: string) {
     return this.read.statistics(id);

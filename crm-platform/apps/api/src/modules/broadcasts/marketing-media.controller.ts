@@ -22,7 +22,6 @@ export class MarketingMediaController {
   @Post('marketing')
   @HttpCode(HttpStatus.OK)
   @RequirePermission(
-    'bcast.broadcasts.create',
     'camp.campaigns.create',
     'camp.campaigns.update',
     'tg.broadcasts.manage',

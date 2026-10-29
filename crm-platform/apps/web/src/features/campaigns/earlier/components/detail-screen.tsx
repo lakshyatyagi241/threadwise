@@ -93,10 +93,10 @@ export function EarlierDetailScreen({ id }: { id: string }) {
   const search = useSearchParams();
   const qc = useQueryClient();
   const { toast } = useToast();
-  const canRetry = useCan('bcast.broadcasts.retry');
-  const canResume = useCan('bcast.broadcasts.resume');
-  const canDeleteIt = useCan('bcast.broadcasts.delete');
-  const canExport = useCan('bcast.broadcasts.export');
+  const canRetry = useCan('camp.campaigns.control');
+  const canResume = useCan('camp.campaigns.control');
+  const canDeleteIt = useCan('camp.campaigns.delete');
+  const canExport = useCan('camp.campaigns.export');
 
   const tab = parseTab(search.get('tab'));
   const setTab = (next: Tab) => {

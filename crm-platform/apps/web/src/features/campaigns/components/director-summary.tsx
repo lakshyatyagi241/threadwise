@@ -644,10 +644,8 @@ export function DirectorSummary({
   const { toast } = useToast();
   const [days, setDays] = useSummaryWindow();
   const { formIds, setFormIds, ready } = useRememberedForms();
-  const canSeeNames = useCan(kind === 'campaign' ? 'camp.campaigns.read' : 'bcast.broadcasts.read');
-  const canDownload =
-    useCan(kind === 'campaign' ? 'camp.campaigns.export' : 'bcast.broadcasts.export') &&
-    canSeeNames;
+  const canSeeNames = useCan('camp.campaigns.read');
+  const canDownload = useCan('camp.campaigns.export') && canSeeNames;
   const [downloading, setDownloading] = useState(false);
   const [printedAt, setPrintedAt] = useState<Date | null>(null);
 

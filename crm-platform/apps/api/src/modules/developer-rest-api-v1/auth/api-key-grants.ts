@@ -36,13 +36,13 @@ export const SCOPE_PERMISSIONS: Record<ApiScope, readonly string[]> = {
   'templates:write': ['tpl.templates.create', 'tpl.templates.delete', 'tpl.templates.sync'],
   'auto-replies:read': [],
   'auto-replies:write': [],
-  'broadcasts:read': ['bcast.broadcasts.read'],
+  // Broadcasts are campaigns now: the old scope names stay for keys already issued, and grant the campaign rights.
+  'broadcasts:read': ['camp.campaigns.read'],
   'broadcasts:write': [
-    'bcast.broadcasts.create',
-    'bcast.broadcasts.delete',
-    'bcast.broadcasts.retry',
-    'bcast.broadcasts.resume',
-    'bcast.broadcasts.export',
+    'camp.campaigns.create',
+    'camp.campaigns.delete',
+    'camp.campaigns.control',
+    'camp.campaigns.export',
   ],
   'campaigns:read': ['camp.campaigns.read'],
   'campaigns:write': [

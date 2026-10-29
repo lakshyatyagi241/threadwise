@@ -24,7 +24,7 @@ export class BroadcastsActionsController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @RequirePermission('bcast.broadcasts.delete')
+  @RequirePermission('camp.campaigns.delete')
   @ApiOperation({
     summary: 'Delete a scheduled or failed broadcast and its recipients',
     description: '422 BCAST_NOT_DELETABLE for any other status; a queued job for it is withdrawn.',
@@ -36,7 +36,7 @@ export class BroadcastsActionsController {
   @Post(':id/retry-failed')
   @Idempotent()
   @HttpCode(HttpStatus.OK)
-  @RequirePermission('bcast.broadcasts.retry')
+  @RequirePermission('camp.campaigns.control')
   @ApiOperation({
     summary: 'Put the failed recipients back to pending and send them again',
     description:
@@ -50,7 +50,7 @@ export class BroadcastsActionsController {
   @Post(':id/resume')
   @Idempotent()
   @HttpCode(HttpStatus.OK)
-  @RequirePermission('bcast.broadcasts.resume')
+  @RequirePermission('camp.campaigns.control')
   @ApiOperation({
     summary: 'Resume a paused broadcast where it stopped',
     description:
@@ -61,7 +61,7 @@ export class BroadcastsActionsController {
   }
 
   @Get(':id/export')
-  @RequirePermission('bcast.broadcasts.export')
+  @RequirePermission('camp.campaigns.export')
   @ApiOperation({ summary: 'Download the recipients as CSV (streamed)' })
   async export(
     @Param('id', ParseUUIDPipe) id: string,

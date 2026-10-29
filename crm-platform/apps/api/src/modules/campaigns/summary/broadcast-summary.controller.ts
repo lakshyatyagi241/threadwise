@@ -21,7 +21,7 @@ export class BroadcastSummaryController {
   constructor(private readonly summary: CampaignSummaryService) {}
 
   @Get(':id/summary')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({
     summary:
       'Director summary of a broadcast: people messaged, delivered, read, wrote back, filled a form',
@@ -34,7 +34,7 @@ export class BroadcastSummaryController {
   }
 
   @Get(':id/summary/people')
-  @RequirePermission('bcast.broadcasts.read')
+  @RequirePermission('camp.campaigns.read')
   @ApiOperation({ summary: 'The people behind a broadcast summary figure' })
   people(
     @Param('id', ParseUUIDPipe) id: string,

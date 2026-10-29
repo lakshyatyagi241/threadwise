@@ -22,7 +22,7 @@ Dotted, resource-first, action-last:
 
 ```
 record.contacts.read        record.contacts.update
-inbox.conversation.assign   broadcast.campaign.start
+inbox.conversation.assign   camp.campaigns.control
 billing.wallet.topup        admin.role.manage
 partner.agent.manage
 ```
