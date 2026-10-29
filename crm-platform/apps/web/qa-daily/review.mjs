@@ -71,12 +71,19 @@ const run = (cwd, args) =>
 /** The plugin reports severities as 🔴 Blocker, 🟡 Major, 🟢 Nit. */
 function findingsOf(report) {
   const found = [];
+  let severity = null;
   for (const line of report.split('\n')) {
-    const m = line.match(/(🔴|🟡|🟢)\s*\**\s*(Blocker|Major|Nit)?\**[:\s-]*(.*)/);
-    if (m && m[3])
+    const h = line.match(/^#+\s*(🔴|🟡|🟢)/);
+    if (h) severity = h[1] === '🔴' ? 'blocker' : h[1] === '🟡' ? 'major' : 'nit';
+    else if (severity && /^\|\s*[A-Z]+\d+\s*\|/.test(line))
       found.push({
-        severity: m[1] === '🔴' ? 'blocker' : m[1] === '🟡' ? 'major' : 'nit',
-        issue: m[3].trim().slice(0, 300),
+        severity,
+        issue: line
+          .split('|')
+          .slice(2)
+          .map((c) => c.trim())
+          .sort((a, b) => b.length - a.length)[0]
+          .slice(0, 300),
       });
   }
   return found;
@@ -96,21 +103,17 @@ export async function goldfishReview({ cwd, task, notes = '', kind = 'fix' }) {
   writeFileSync(doc, changeRecord({ cwd, task, notes, kind }));
 
   // cwd is the artifact folder, so the plugin's drafts and reports land there and the code under review is never edited
-  await run(dir, [
+  const out = await run(dir, [
     '-p',
     `/egm:egm-review TargetFile=${doc} Step=uninterrupted. EGM artifact directory: ${dir}\n` +
       `This is an unattended run: do not ask questions, do not pause at checkpoints, do not edit any file other than reports in the artifact directory. ` +
       `The changed code is in ${cwd} (read-only for you); the diff is in the document. Write ${REPORT} and end with one line: VERDICT: approve or VERDICT: changes.`,
     '--permission-mode',
-    'default',
+    'acceptEdits', // cwd is the artifact folder: the only place the plugin can write
     '--max-turns',
     '150',
-    '--add-dir',
-    cwd,
-    '--add-dir',
-    PLUGIN,
     '--allowedTools',
-    `Read Grep Glob Agent Write(${dir}/**) Edit(${dir}/**) Bash(git diff:*) Bash(git status:*) Bash(git show:*) Bash(git log:*)`,
+    `Read Grep Glob Agent Bash(git diff:*) Bash(git status:*) Bash(git show:*) Bash(git log:*)`,
   ]);
 
   const file = [
@@ -129,6 +132,14 @@ export async function goldfishReview({ cwd, task, notes = '', kind = 'fix' }) {
   const report = readFileSync(file, 'utf8');
   const findings = findingsOf(report);
   const blockers = findings.filter((f) => f.severity !== 'nit');
+  // no explicit verdict = no approval: a report we could not read must never pass a change
+  const verdict = [...out.matchAll(/^VERDICT:\s*(approve|changes)\s*$/gim)]
+    .pop()?.[1]
+    ?.toLowerCase();
+  if (!verdict)
+    blockers.push({ severity: 'blocker', issue: 'the egm review gave no VERDICT line' });
+  else if (verdict === 'changes' && !blockers.length)
+    blockers.push({ severity: 'blocker', issue: 'the egm review asked for changes' });
   log(`goldfish (egm): ${findings.length} findings, ${blockers.length} blocking, report ${file}`);
   return { approved: blockers.length === 0, blockers, findings, report: file };
 }
