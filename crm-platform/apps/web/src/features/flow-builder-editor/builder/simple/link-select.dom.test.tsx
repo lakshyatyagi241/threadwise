@@ -31,7 +31,7 @@ function options(props: { noSelf?: boolean; value?: string | null }) {
           doc={doc}
           stepId={b.id}
           value={props.value ?? null}
-          onChange={() => {}}
+          onChange={vi.fn()}
           {...props}
         />
       </NextIntlClientProvider>,
