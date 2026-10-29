@@ -29,6 +29,7 @@ export interface TemplateListRow {
   parameterFormat: string | null;
   attachmentType: string | null;
   attachmentFile: string | null;
+  headerMediaKey: string | null;
   metaTemplateId: string | null;
   metaStatus: string | null;
   pausedUntil: Date | null;
@@ -241,7 +242,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       ${this.approvedFrom(orgId, defaultEngine)}
@@ -290,7 +291,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       FROM wa_templates t
@@ -317,6 +318,7 @@ export class WizardRepository {
       parameterFormat: str(r.parameter_format),
       attachmentType: str(r.attachment_type),
       attachmentFile: str(r.attachment_file),
+      headerMediaKey: str(r.header_media_key),
       metaTemplateId: str(r.meta_template_id),
       metaStatus: str(r.meta_status),
       pausedUntil: when(r.paused_until),

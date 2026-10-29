@@ -25,6 +25,24 @@ const isDict = (x: unknown): x is Dict => typeof x === 'object' && x !== null &&
 const list = (x: unknown): unknown[] => (Array.isArray(x) ? x : isDict(x) ? Object.values(x) : []);
 
 /**
+ * The stored files a template message carries: the header file the user uploaded (its storage key, not Meta's handle in
+ * `attachment_file`) and the carousel card images.
+ */
+export function templateMediaPaths(t: {
+  headerMediaKey?: string | null;
+  carouselData?: unknown;
+}): string[] {
+  const paths = t.headerMediaKey ? [t.headerMediaKey] : [];
+  if (Array.isArray(t.carouselData)) {
+    for (const card of t.carouselData) {
+      const image = isDict(card) && typeof card.image === 'string' ? card.image : '';
+      if (image) paths.push(image);
+    }
+  }
+  return paths;
+}
+
+/**
  * `{slot: attribute key}` from either stored shape of a variable map (Reference's `flattenMap`):
  *   nested (templates)  `{ header: [{num, key}], body: [{num, key}] }`
  *   flat   (composer)   `{ "1": "first_name", "2": "email" }`
@@ -99,7 +117,7 @@ function buttonVars(
  * Authentication templates are not handled: they cannot be broadcast (TW-BCAST-012).
  */
 export function buildRecipientVars(
-  t: TemplateShape & { headerLocation?: unknown },
+  t: TemplateShape & { headerLocation?: unknown; headerMediaKey?: string | null },
   ctx: VarsContext,
 ): SendVars {
   const vmap = isDict(t.variableMap) ? t.variableMap : {};
@@ -116,10 +134,12 @@ export function buildRecipientVars(
   const buttons = buttonVars(list(t.buttons), flattenMap(vmap, ['body']), ctx.pull);
   if (buttons.length) vars.buttons = buttons;
 
-  // Header media: the template's own stored file, passed as a link (nothing is pre-uploaded to Meta).
+  // Header media: the template's own stored file, passed as a link (nothing is pre-uploaded to Meta). The file is the storage key the
+  // user's upload was kept under; `attachmentFile` is Meta's handle for the example, so it only counts when it is itself a web address.
   const att = (t.attachmentType ?? '').toLowerCase();
-  if (t.attachmentFile && att !== '' && att !== 'none' && att !== 'text') {
-    const url = ctx.mediaUrl(t.attachmentFile);
+  const headerFile = t.headerMediaKey || t.attachmentFile;
+  if (headerFile && att !== '' && att !== 'none' && att !== 'text') {
+    const url = ctx.mediaUrl(headerFile);
     if (url) vars.headerMediaUrl = url;
   }
   // Reference read a location header's coordinates nowhere on this path, so a location template lost its header and Meta
