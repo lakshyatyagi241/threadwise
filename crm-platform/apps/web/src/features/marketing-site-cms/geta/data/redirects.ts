@@ -1,17 +1,18 @@
 /**
  * Addresses from the previous geta.ai site (and the WordPress site before it) that still sit in search results, backlinks and
  * old emails. Each one goes to the page that now does the same job; where no page does, to the nearest hub rather than a
- * made-up match. Permanent, so search engines move their ranking across. `redirects.test.ts` checks that every destination
+ * made-up match. Temporary (next-config.test.ts requires it): a permanent redirect is cached by browsers and would
+ * shadow a later real page. `redirects.test.ts` checks that every destination
  * is a page that exists.
  */
 export interface LegacyRedirect {
   source: string;
   destination: string;
-  permanent: true;
+  permanent: false;
 }
 
 const to = (destination: string, ...sources: string[]): LegacyRedirect[] =>
-  sources.map((source) => ({ source, destination, permanent: true as const }));
+  sources.map((source) => ({ source, destination, permanent: false as const }));
 
 export const LEGACY_REDIRECTS: LegacyRedirect[] = [
   // Product pages
