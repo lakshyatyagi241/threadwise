@@ -27,6 +27,7 @@ import {
   withKind,
   type FormState,
   buttonTypeOf,
+  buttonTypeOptions,
   toFields,
   withButtonType,
 } from './form-model';
@@ -430,5 +431,15 @@ describe('duplicating a saved template keeps its header file (row 316)', () => {
     expect(copy.headerSampleUrl).toBe('https://cdn.test/a.png');
     expect(copy.headerPreviewUrl).toBe('https://signed.test/a.png');
     expect(hasHeaderFile(copy)).toBe(true);
+  });
+});
+
+describe('the button types the dropdown offers', () => {
+  it('leaves Catalogue out for a new template', () => {
+    expect(buttonTypeOptions('none')).toEqual(['none', 'buttons', 'lto', 'carousel', 'flow']);
+    expect(buttonTypeOptions('buttons')).not.toContain('catalogue');
+  });
+  it('still shows Catalogue on a template that already has a catalog button', () => {
+    expect(buttonTypeOptions('catalogue')).toContain('catalogue');
   });
 });

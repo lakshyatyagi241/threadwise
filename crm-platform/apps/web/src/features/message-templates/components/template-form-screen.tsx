@@ -63,7 +63,7 @@ import {
   type FormState,
   type ButtonType,
   type HeaderKind,
-  BUTTON_TYPES,
+  buttonTypeOptions,
   KINDS_OF_BUTTON_TYPE,
   OFFER_TEXT_MAX,
   isOffer,
@@ -597,7 +597,7 @@ function TemplateForm({
                       setState((s) => withButtonType(s, e.target.value as ButtonType))
                     }
                   >
-                    {BUTTON_TYPES.map((b) => (
+                    {buttonTypeOptions(current.buttonType).map((b) => (
                       <option key={b} value={b}>
                         {t(`type.${b}`)}
                       </option>
