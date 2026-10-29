@@ -111,6 +111,13 @@ export interface OrgEnv {
 export const ORG_COLLECTION = '_org';
 
 /**
+ * How many personal WhatsApp numbers (the `devices` plan limit) a migrated workspace may connect: one, as the plan it had in the old
+ * product allowed. It is a per-workspace override on `org_plan_state`, so it does not depend on the plan the workspace is put on.
+ * Set once: a workspace that already has its own `devices` override (an operator raised it, or set 0 for no limit) keeps it.
+ */
+export const MIGRATED_DEVICE_LIMIT = 1;
+
+/**
  * Mirrors provisionOrganization: organizations row, org_plan_state, `provision_workspace_presets()` (the five preset roles), then the
  * owner. The organizations insert trigger seeds the sales pipeline. Idempotent: the organization has a deterministic uuid, so even a
  * lost id_map finds it again. Creation is serialised by an advisory lock so two runs picking the same slug cannot collide.
@@ -197,6 +204,18 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
       tzDefaultedNow = tzPick.defaulted;
       env.log(`  org                created organization ${id} (${slugUsed})`);
     }
+
+    // the old plan allowed one connected number: give the workspace that limit (created now or by an earlier run), unless it has its own
+    const limited = await tx.execute(sql`
+      UPDATE org_plan_state
+         SET overrides = jsonb_set(
+               coalesce(overrides, '{}'::jsonb),
+               '{limits}',
+               jsonb_build_object('devices', ${MIGRATED_DEVICE_LIMIT}::int) || coalesce(overrides -> 'limits', '{}'::jsonb))
+       WHERE org_id = ${id} AND NOT jsonb_exists(coalesce(overrides -> 'limits', '{}'::jsonb), 'devices')
+       RETURNING org_id`);
+    const limitSet = limited.rows.length > 0;
+    if (limitSet) env.log(`  org                device limit ${MIGRATED_DEVICE_LIMIT} (connected personal numbers)`);
 
     if (o.ownerEmail) {
       const email = o.ownerEmail.trim().toLowerCase();
@@ -345,8 +364,14 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
     );
     const had = ((old.rows[0] as { counts?: Baseline } | undefined)?.counts ??
       null) as Baseline | null;
-    if (!had || ownerMade || extraMade) {
-      const touched = ['users', 'user_roles', 'user_security', 'user_profiles'];
+    if (!had || ownerMade || extraMade || limitSet) {
+      const touched = [
+        'users',
+        'user_roles',
+        'user_security',
+        'user_profiles',
+        ...(limitSet ? ['org_plan_state'] : []),
+      ];
       const names = had ? touched : await orgTables(tx);
       const fresh = await digest(tx, id, names);
       const baseline: Baseline = had ? { ...had, ...fresh } : fresh;

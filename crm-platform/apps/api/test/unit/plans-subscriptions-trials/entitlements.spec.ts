@@ -103,6 +103,14 @@ describe('registry', () => {
     expect(PLAN_CHIP_MAX).toBe(3);
   });
 
+  it('a per-workspace devices override of 1 (a migrated workspace) caps connected numbers whatever the plan says', () => {
+    const base = ent({ planLimits: { devices: 5 } });
+    expect(resolveLimit(base, 'devices')).toBe(5);
+    expect(resolveLimit({ ...base, overrides: { limits: { devices: 1 } } }, 'devices')).toBe(1);
+    // an operator who sets 0 gives the workspace no cap
+    expect(resolveLimit({ ...base, overrides: { limits: { devices: 0 } } }, 'devices')).toBe(0);
+  });
+
   it('registers the deals gate and the pipelines cap, which the deals area reads from the plan JSON', () => {
     expect(PLAN_FEATURE_KEYS).toContain('sales_pipeline');
     expect(PLAN_LIMIT_KEYS).toContain('pipelines');
