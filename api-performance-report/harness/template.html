@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threadwise API Performance Report</title>
+<style>
+/* Layout: one reading column on a cool graphite ground; summary first, evidence below, explorer last. */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#14181f; --mute:#8a93a3; --soft:#59627a; --line:#e0e4eb;
+  --a:#2457d6; --b:#0f8f80; --warn:#c2570c; --good:#16805a; --bad:#b4281f; --chip:#eef1f6;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1118; --panel:#151b25; --fg:#e8ecf3; --mute:#6f7a8e; --soft:#9aa5ba; --line:#262e3c;
+  --a:#6f9bff; --b:#3fc4b2; --warn:#f0894a; --good:#3fbf8c; --bad:#ff7b72; --chip:#1d2533; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1118; --panel:#151b25; --fg:#e8ecf3; --mute:#6f7a8e; --soft:#9aa5ba; --line:#262e3c;
+  --a:#6f9bff; --b:#3fc4b2; --warn:#f0894a; --good:#3fbf8c; --bad:#ff7b72; --chip:#1d2533; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--sans);
+  padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;padding-block:40px 80px}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.12;margin:0 0 8px;letter-spacing:-.02em;text-wrap:balance}
+h2{font-size:21px;margin:56px 0 6px;letter-spacing:-.01em;text-wrap:balance}
+h3{font-size:15px;margin:28px 0 8px}
+p{max-width:68ch;margin:8px 0}
+.lede{color:var(--soft);max-width:68ch;font-size:16px}
+.meta{color:var(--mute);font-size:13px;margin-top:6px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:28px 0 8px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.kpi b{display:block;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--soft);font-size:13px}
+.caveat{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:20px 0}
+.caveat p{margin:4px 0}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--soft);font-weight:600;white-space:nowrap;background:var(--panel);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono,.mono{font-family:var(--mono);font-size:12.5px}
+td.note{color:var(--soft);min-width:240px}
+.bar{display:block;height:8px;border-radius:4px;background:var(--chip);min-width:80px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+.hrow{display:grid;grid-template-columns:80px 1fr 44px;gap:12px;align-items:center;margin:6px 0}
+.hl{color:var(--soft);font-size:13px}.hv{font-variant-numeric:tabular-nums;text-align:right}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.cols>*{min-width:0}
+svg{width:100%;height:auto;display:block}
+svg .grid{stroke:var(--line);stroke-width:1}
+svg .ax{fill:var(--soft);font-size:11px}
+svg .lab{font-size:11.5px;font-weight:600}
+ul.find{padding-left:20px;max-width:74ch}ul.find li{margin:10px 0}
+.tag{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:10px;background:var(--chip);color:var(--soft)}
+.s-success{color:var(--good)}.s-rejected,.s-not-found,.s-forbidden{color:var(--warn)}.s-unauthorized,.s-rate-limited,.s-other{color:var(--bad)}.s-skipped{color:var(--mute)}
+.ctl{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+input,select,button{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
+input[type=search]{flex:1 1 260px;min-width:0}
+button{cursor:pointer}button:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+th[data-k]{cursor:pointer}
+.pager{display:flex;gap:10px;align-items:center;margin-top:10px;color:var(--soft);font-size:13px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+nav.toc a{font-size:13px;color:var(--soft);text-decoration:none;background:var(--chip);padding:3px 11px;border-radius:12px}
+nav.toc a:hover{color:var(--fg)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Threadwise API Performance Report</h1>
+  <p class="lede">Every route of the Threadwise API, measured live: response times, payload sizes, behaviour under load, Redis, job queues and the event outbox.</p>
+  <div class="meta">Measured 28 Oct 2026 on a copy of <span class="mono">crm-platform/apps/api</span> (NestJS, Postgres 16 with row-level security, Redis 7, BullMQ). Nothing in the repository was changed.</div>
+  <nav class="toc" aria-label="Sections">
+    <a href="#caveats">Read first</a><a href="#coverage">Coverage</a><a href="#latency">Latency</a><a href="#writes">Writes</a><a href="#payload">Payloads</a>
+    <a href="#load">Load</a><a href="#redis">Redis</a><a href="#queues">Queues</a><a href="#db">Database</a><a href="#findings">Findings</a><a href="#explorer">All 2,045 operations</a>
+  </nav>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><b>2,045</b><span>operations on 1,619 paths, 307 controllers</span></div>
+  <div class="kpi"><b>{{MEDIAN}} ms</b><span>median p50 across 399 successful operations</span></div>
+  <div class="kpi"><b>44 ms</b><span>worst p95 of any successful operation</span></div>
+  <div class="kpi"><b>0</b><span>5xx responses in every test</span></div>
+  <div class="kpi"><b>250–300/s</b><span>requests per second, one API process, shared 4-core box</span></div>
+  <div class="kpi"><b>0.05 ms</b><span>Redis round trip (p50)</span></div>
+  <div class="kpi"><b>1.0 s</b><span>average outbox delay (2 s polling timer)</span></div>
+</div>
+
+<h2 id="caveats">Read this first</h2>
+<div class="caveat">
+  <p><b>Server time on one shared machine.</b> API, worker, Postgres, Redis and the load generator all ran on one 4-vCPU sandbox over loopback, using a development-mode build with debug logging. Compare endpoints with each other; do not read the values as production latency.</p>
+  <p><b>Small data.</b> Two organisations and about 520 contacts. Large-tenant behaviour is not measured.</p>
+  <p><b>No external providers.</b> WhatsApp, Telegram, payment gateways and calendar providers were unreachable, so their latency is not included.</p>
+  <p><b>Only 399 of 2,045 operations returned a real success</b> with the generic harness. The others were measured on their reject path (authentication, routing, validation), which is much cheaper than real work. Treat those timings as a lower bound.</p>
+</div>
+
+<h2 id="coverage">What was reached</h2>
+<p>The harness sent each operation in turn with a valid-looking body and real ids harvested from list endpoints. Outcome of the 2,045 operations:</p>
+<div class="scroll"><table>
+  <thead><tr><th>Outcome</th><th class="n">Operations</th><th></th><th>Meaning</th></tr></thead>
+  <tbody>{{COV}}</tbody></table></div>
+<p><b>Not covered:</b> all 420 platform-operator routes, the partner portal, the <span class="mono">/api/v1</span> API-key API, signed provider webhooks, file uploads and the realtime socket. They need an operator account, a partner account and an API key.</p>
+<div class="cols" style="margin-top:14px">
+  <div class="panel"><b>By method</b><br>GET 840 · POST 775 · DELETE 181 · PATCH 128 · PUT 121</div>
+  <div class="panel"><b>By surface</b><br>Staff API <span class="mono">/v2/*</span> 1,512 · Platform operator 420 · Public API key <span class="mono">/api/v1</span> 61 · Public <span class="mono">/v2/public</span> 49 · Partner 3</div>
+</div>
+
+<h2 id="latency">Latency of successful operations</h2>
+<p>Ten sequential requests per read, five per write, first request reported separately as cold. Distribution of each endpoint's median (p50), 399 operations:</p>
+<div class="panel">{{HIST}}</div>
+<p>Median of p50: GET 5.6 ms, POST 4.9 ms, PUT 6.8 ms, PATCH 9.0 ms, DELETE 3.5 ms. 282 of 399 have a p95 at or under 10 ms, 380 at or under 20 ms, all at or under 44 ms. The 1,557 reject-path operations take 2.5 ms median.</p>
+<h3>Slowest 15 by p95</h3>
+<div class="scroll"><table>
+  <thead><tr><th>Operation</th><th class="n">p50 ms</th><th class="n">p95 ms</th><th class="n">Bytes</th><th></th></tr></thead>
+  <tbody>{{SLOW}}</tbody></table></div>
+
+<h2 id="writes">Core flows with valid bodies</h2>
+<p>Sequential, first 20 requests discarded as warm-up. Times include reading the full response. The repository's own budgets (<span class="mono">perf/budgets.json</span>) are p95 under 50 ms for simple reads, 150 ms for writes and 300 ms for heavy reads; every path is inside its budget for a single client.</p>
+<div class="scroll"><table>
+  <thead><tr><th>Operation</th><th class="n">n</th><th class="n">p50</th><th class="n">p95</th><th class="n">p99</th><th class="n">max</th><th class="n">req B</th><th class="n">resp B</th><th>p95</th></tr></thead>
+  <tbody>{{CRUD}}</tbody></table></div>
+
+<h2 id="payload">Payload size</h2>
+<div class="cols">
+  <div>
+    <h3>Response size: <span class="mono">GET /v2/contacts?limit=N</span></h3>
+    <div class="scroll"><table><thead><tr><th class="n">Rows</th><th class="n">Bytes</th><th class="n">p50 ms</th><th class="n">p95 ms</th><th class="n">p99 ms</th></tr></thead><tbody>{{LS}}</tbody></table></div>
+    <p>About 1.05 KB per contact. 100 rows (105 KB) cost about 1.4 times a single row.</p>
+  </div>
+  <div>
+    <h3>Request size: padded <span class="mono">POST /v2/tags</span></h3>
+    <div class="scroll"><table><thead><tr><th class="n">Body</th><th class="n">Status</th><th class="n">p50 ms</th><th class="n">p95 ms</th></tr></thead><tbody>{{RS}}</tbody></table></div>
+    <p>Bodies up to about 10 KB reach validation (422). From 100 KB the server answers 413 before validating. Rejecting 5 MB costs about 11 ms.</p>
+  </div>
+</div>
+
+<h2 id="load">Concurrency</h2>
+<p>Closed loop, 8 seconds per level, every request must return 200. Median latency by number of simultaneous clients:</p>
+<div class="panel">{{CCSVG}}</div>
+<div class="scroll" style="margin-top:14px"><table>
+  <thead><tr><th>Endpoint</th><th class="n">Clients</th><th class="n">Req/s</th><th class="n">p50</th><th class="n">p95</th><th class="n">p99</th><th class="n">max</th><th class="n">Errors</th></tr></thead>
+  <tbody>{{CC}}</tbody></table></div>
+<p>One Node process saturates at about 250 to 300 requests per second on this machine. Past about 10 clients extra concurrency only adds queueing: latency grows in line with client count while throughput stays flat. The dashboard endpoint is the heaviest and the API logged slow-request warnings for it at 50 clients. The load generator shares the CPU, so real capacity is somewhat higher.</p>
+
+<h2 id="redis">Redis</h2>
+<p>Redis 7.0.15 with the noeviction policy, 6.8 MB in use after the run. Round trip from a Node client over loopback, in milliseconds:</p>
+<div class="scroll"><table><thead><tr><th>Operation</th><th class="n">n</th><th class="n">p50</th><th class="n">p95</th><th class="n">p99</th><th class="n">max</th></tr></thead><tbody>{{REDIS}}</tbody></table></div>
+<p>Server-side cost per command during the API tests: GET 1.5 µs, SET 1.9 µs, MGET 1.7 µs, DEL 1.3 µs, HMGET 0.7 µs, EVAL 47.6 µs (BullMQ Lua scripts, 55,000 calls). The slow log (threshold 1 ms) held only two entries, both from the test's own queue cleanup. Redis was never a bottleneck.</p>
+
+<h2 id="queues">Queues and the outbox</h2>
+<p>The system defines <b>52 BullMQ queues</b> (<span class="mono">apps/api/src/infra/queue/queues.ts</span>). Default: 5 attempts with exponential backoff from 2 s; inbound-ingest queues: 10 attempts from 5 s, about 40 minutes. Processor concurrency ranges from 1 to 16.</p>
+<h3>Synthetic probe (separate queues on the same Redis, times in ms)</h3>
+<div class="scroll"><table>
+  <thead><tr><th>Probe</th><th class="n">Concurrency</th><th class="n">Work ms</th><th class="n">Enqueue p50 / p99</th><th class="n">Queue wait p50 / p99</th><th class="n">Processing p50 / p99</th><th class="n">End to end p50 / p99</th><th class="n">Jobs/s</th></tr></thead>
+  <tbody>{{BULL}}</tbody></table></div>
+<p>Adding a job costs about 0.1 ms; adding 500 at once takes 15 to 22 ms. With an empty handler BullMQ adds 0 to 1 ms and handles about 4,500 jobs per second at concurrency 8. The long waits in the 20 ms probes are backlog from queueing 1,000 jobs at once, not overhead: throughput matches concurrency divided by handler time (8 / 20 ms = 400 per second, measured 380; 1 / 20 ms = 50, measured 48).</p>
+<h3>The application's own queues</h3>
+<p>Nearly idle during the run, because external providers were unreachable. Only these held completed jobs; all 52 queues ended with nothing waiting, active or failed. Tiny samples: order of magnitude only.</p>
+<div class="scroll"><table><thead><tr><th>Queue</th><th class="n">Jobs</th><th class="n">Wait p50 ms</th><th class="n">Processing p50 ms</th><th class="n">Processing max ms</th></tr></thead><tbody>{{RQ}}</tbody></table></div>
+<h3>Transactional outbox</h3>
+<div class="cols">
+  <div class="panel"><b>6,157 events</b> processed, none dead, none pending.<br>Created to processed: average 1,002 ms · p50 1,009 · p95 1,894 · p99 1,981 · max 2,007.</div>
+  <div class="panel">This is a polling floor, not a slowdown. <span class="mono">OutboxDrainService</span> runs on a 2-second timer (<span class="mono">workers/outbox-drain.service.ts:67</span>), so every event waits 0 to 2 seconds, 1 second on average, before it reaches a queue.</div>
+</div>
+
+<h2 id="db">Database</h2>
+<p><span class="mono">pg_stat_statements</span> across all tests: every frequent statement averages under 0.1 ms and the worst among the top twelve by total time is 1.5 ms. The only slow statement was a one-off timezone-name lookup (59 ms, first call). Time goes into request handling, guards, per-request transaction setup (<span class="mono">set_config</span> ran 30,794 times) and serialisation, not into Postgres.</p>
+<p>A write performs: session lookup, plan lookup, tenant setting, the business write, an audit-log insert, a security-event insert and an outbox insert, all in one transaction at roughly 0.04 to 0.06 ms each.</p>
+
+<h2 id="findings">Findings worth acting on</h2>
+<ul class="find">
+  <li><b>Outbox delay of 1 s average, 2 s worst.</b> Notifications, automations and webhooks that go through the outbox wait for the next 2-second tick. Shorten the timer or wake the drain after commit if you need near-real-time effects.</li>
+  <li><b>Heaviest endpoints:</b> <span class="mono">/v2/crm/dashboard</span> (24 ms alone, 544 ms median at 50 clients), <span class="mono">/v2/shell/overview-stats</span> (31 ms), marketplace app listings (20 ms, 7.6 KB) and <span class="mono">/v2/billing/usage</span> (19 ms). Good caching candidates.</li>
+  <li><b>Every staff login revokes the user's previous session.</b> One person cannot be signed in on two devices, and any script that logs in repeatedly signs the human out. The benchmark hit this itself.</li>
+  <li><b>Staff login costs about 23 ms</b> (password hashing plus session and audit writes), the most expensive common call and the one to rate-limit.</li>
+  <li><b>Contact lists return about 1 KB per row.</b> A slimmer list projection would cut the 105 KB page of 100 rows.</li>
+  <li><b>No failures.</b> Zero 5xx responses across the sweep and all follow-up tests, and zero errors at every concurrency level up to 100 clients.</li>
+  <li>The repository already has a k6 suite (<span class="mono">perf/latency.js</span>, <span class="mono">load.js</span>, <span class="mono">spike.js</span>). k6 could not be installed here, so an equivalent Node harness was used. Run the k6 suite on production-like hardware for CI-grade numbers.</li>
+</ul>
+
+<h2 id="explorer">All 2,045 operations</h2>
+<p>Filter and sort every route. Times are milliseconds over the sequential sweep; operations that did not succeed show their reject-path timing.</p>
+<div class="ctl">
+  <input id="q" type="search" placeholder="Filter by path or module, e.g. contacts" aria-label="Filter by path or module">
+  <select id="m" aria-label="Method"><option value="">All methods</option><option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option></select>
+  <select id="o" aria-label="Outcome"><option value="">All outcomes</option><option value="success">Success</option><option value="rejected">Rejected</option><option value="not-found">Not found</option><option value="unauthorized">Unauthorized</option><option value="rate-limited">Rate limited</option><option value="forbidden">Forbidden</option><option value="other">Fetch error</option><option value="skipped">Skipped</option></select>
+</div>
+<div class="scroll" style="max-height:640px"><table id="t">
+  <thead><tr><th data-k="0">Method</th><th data-k="1">Path</th><th data-k="2">Module</th><th data-k="3">Outcome</th><th class="n" data-k="4">Status</th><th class="n" data-k="5">Cold</th><th class="n" data-k="6">p50</th><th class="n" data-k="7">p95</th><th class="n" data-k="8">p99</th><th class="n" data-k="9">Max</th><th class="n" data-k="10">Bytes</th></tr></thead>
+  <tbody></tbody></table></div>
+<div class="pager"><button id="prev">Previous</button><button id="next">Next</button><span id="info"></span></div>
+
+<h2>Modules</h2>
+<p>{{NMODS}} OpenAPI modules. “Measured” counts operations that returned a success; the last column is the median of their p50.</p>
+<div class="scroll" style="max-height:480px"><table><thead><tr><th>Module</th><th class="n">Operations</th><th class="n">Measured</th><th class="n">Median p50 ms</th></tr></thead><tbody>{{MODS}}</tbody></table></div>
+</div>
+<script>
+const ROWS={{DATA}};
+const LABEL={success:'Success','not-found':'Not found',rejected:'Rejected',unauthorized:'Unauthorized','rate-limited':'Rate limited',forbidden:'Forbidden',other:'Fetch error',skipped:'Skipped'};
+const PAGE=100;let page=0,sortK=null,asc=true;
+const tb=document.querySelector('#t tbody'),info=document.getElementById('info');
+const qi=document.getElementById('q'),mi=document.getElementById('m'),oi=document.getElementById('o');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num=v=>v==null?'–':v;
+function view(){
+  const f=qi.value.trim().toLowerCase();
+  let r=ROWS.filter(x=>(!f||x[1].toLowerCase().includes(f)||x[2].toLowerCase().includes(f))&&(!mi.value||x[0]===mi.value)&&(!oi.value||x[3]===oi.value));
+  if(sortK!==null)r=[...r].sort((a,b)=>{const x=a[sortK],y=b[sortK];if(x==null)return 1;if(y==null)return -1;return (x<y?-1:x>y?1:0)*(asc?1:-1)});
+  return r;
+}
+function render(){
+  const r=view(),pages=Math.max(1,Math.ceil(r.length/PAGE));
+  page=Math.min(page,pages-1);
+  tb.innerHTML=r.slice(page*PAGE,page*PAGE+PAGE).map(x=>`<tr><td class="mono">${x[0]}</td><td class="mono">${esc(x[1])}</td><td>${esc(x[2])}</td><td class="s-${x[3]}">${LABEL[x[3]]}</td><td class="n">${num(x[4])}</td><td class="n">${num(x[5])}</td><td class="n">${num(x[6])}</td><td class="n">${num(x[7])}</td><td class="n">${num(x[8])}</td><td class="n">${num(x[9])}</td><td class="n">${num(x[10])}</td></tr>`).join('');
+  info.textContent=`${r.length.toLocaleString()} operations · page ${page+1} of ${pages}`;
+  document.getElementById('prev').disabled=page===0;document.getElementById('next').disabled=page>=pages-1;
+}
+[qi,mi,oi].forEach(el=>el.addEventListener('input',()=>{page=0;render()}));
+document.getElementById('prev').onclick=()=>{page--;render()};
+document.getElementById('next').onclick=()=>{page++;render()};
+document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{const k=+th.dataset.k;asc=sortK===k?!asc:true;sortK=k;render()}));
+render();
+</script>
+</body>
+</html>
