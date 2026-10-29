@@ -7,6 +7,7 @@ import {
   classifyRecipient,
   errorParts,
   intOf,
+  minorOf,
   moneyString,
   nameOf,
   utcDate,
@@ -70,8 +71,10 @@ export const CAMPAIGN_FIELDS: FieldMap = {
   broadcast_template_type: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   broadcast_template_category: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   sender_number: `drop:${NOT_PRESENT} (device_id points into wa_provider_configs); kept in quarantine SENDER_NUMBER (proposal P1)`,
-  billable_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
-  refunded_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
+  billable_amount:
+    'col:legacy_billed_minor (hundredths, rounded half up: what the campaign shows as its cost, less the refund, when it has no usage charges); also kept as a string in quarantine COST_FIELDS',
+  refunded_amount:
+    'col:legacy_refunded_minor (hundredths, rounded half up); also kept as a string in quarantine COST_FIELDS',
   reseller_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
   filter_query: `drop:${NOT_PRESENT}; Waboo filter DSL (wpcampaigns.wizard is the wizard's own contract and must not hold it; proposal P1)`,
   mongodb_query: `drop:${NOT_PRESENT}; raw Mongo query (proposal P1)`,
@@ -239,6 +242,8 @@ export const campaigns: HandlerSpec = {
         c('read_count', 'integer'),
         c('responded_count', 'integer'),
         c('retry_enabled', 'boolean'),
+        c('legacy_billed_minor', 'bigint'),
+        c('legacy_refunded_minor', 'bigint'),
         c('created_at', 'timestamptz'),
         c('updated_at', 'timestamptz'),
       ],
@@ -394,6 +399,8 @@ export const campaigns: HandlerSpec = {
       read_count: agg.read,
       responded_count: agg.responded,
       retry_enabled: false,
+      legacy_billed_minor: minorOf(money.billable_amount),
+      legacy_refunded_minor: minorOf(money.refunded_amount),
       created_at: t.created,
       updated_at: t.updated,
     };
