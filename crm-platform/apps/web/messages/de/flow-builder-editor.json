@@ -1471,7 +1471,10 @@
             "productIdHint": "Leer = jedes Produkt in der Bestellung.",
             "storeNote": "Der Kunde wird anhand der Telefonnummer einem gespeicherten Kontakt zugeordnet; für eine Bestellung wird niemand angelegt. „In den Warenkorb gelegt“ und „Produkt angesehen“ werden nicht angeboten, da der Shop diese nicht meldet.",
             "updatedNote": "Wird bei jeder Änderung eines Kontakts durch eine Person oder einen Import ausgelöst. Eine Änderung durch einen anderen Flow startet ihn nicht.",
-            "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat."
+            "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat.",
+            "updatedField": "Nur wenn sich diese Eigenschaft ändert",
+            "updatedFieldHint": "Bei „Beliebige Eigenschaft“ startet der Flow bei jeder Änderung. Änderungen, die nicht angeben, welche Eigenschaft sich geändert hat (einige Importe und Massenaktionen), starten keinen Flow, der eine Eigenschaft beobachtet.",
+            "updatedAny": "Beliebige Eigenschaft"
           }
         }
       },

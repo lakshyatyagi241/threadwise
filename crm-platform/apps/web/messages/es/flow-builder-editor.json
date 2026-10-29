@@ -1471,7 +1471,10 @@
             "productIdHint": "Vacío = cualquier producto del pedido.",
             "storeNote": "El cliente se asocia a un contacto guardado por su número de teléfono; no se crea nadie por un pedido. “Añadido al carrito” y “producto visto” no se ofrecen porque la tienda no los informa.",
             "updatedNote": "Se activa cada vez que una persona o una importación cambia un contacto. Un cambio hecho por otro flujo no lo inicia.",
-            "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero."
+            "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero.",
+            "updatedField": "Solo cuando cambie esta propiedad",
+            "updatedFieldHint": "Déjalo en «Cualquier propiedad» para iniciar en cada cambio. Las ediciones que no indican qué propiedad cambió (algunas importaciones y acciones masivas) no inician un flujo que vigila una propiedad.",
+            "updatedAny": "Cualquier propiedad"
           }
         }
       },

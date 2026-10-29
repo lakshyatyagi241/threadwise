@@ -36,6 +36,9 @@ export interface OrderPlaced {
  * "Live" is published AND active; the lookup is by the workspace of the event, never across workspaces (Reference matched flows in any
  * workspace the contact's owner belonged to).
  */
+/** A property key as a flow names it or as it is stored: "Order Id" and order_id are the same property. */
+export const normaliseFieldKey = (k: string): string => k.trim().toLowerCase().replace(/\s+/g, '_');
+
 @Injectable()
 export class FlowTriggerService {
   private readonly logger = new Logger(FlowTriggerService.name);
@@ -197,15 +200,29 @@ export class FlowTriggerService {
   async onContactChanged(
     orgId: number,
     contactId: number,
-    ev: { eventId: string; updated: boolean; viaFlow: boolean; hops?: number },
+    ev: {
+      eventId: string;
+      updated: boolean;
+      viaFlow: boolean;
+      /** The properties the write changed, as a flow's Trigger names them; empty when the writer did not say. */
+      fieldKeys?: readonly string[];
+      hops?: number;
+    },
   ): Promise<number> {
     const hops = ev.hops ?? 0;
     let started = 0;
     if (ev.updated && !ev.viaFlow) {
-      started += await this.enrolLive(
+      // A flow may watch one property: it starts only when that one is among the changed ones (a write that did not say which
+      // changed starts it not). A flow that watches none starts on any change, as it always did.
+      const changed = new Set((ev.fieldKeys ?? []).map(normaliseFieldKey));
+      const flowIds: number[] = [];
+      for (const f of await this.liveConfigured(orgId, 'contact_updated')) {
+        const watched = typeof f.config.updatedField === 'string' ? f.config.updatedField : '';
+        if (watched === '' || changed.has(normaliseFieldKey(watched))) flowIds.push(f.id);
+      }
+      started += await this.startFlows(
         orgId,
-        'contact_updated',
-        0,
+        flowIds,
         contactId,
         'contact_updated',
         `update:${ev.eventId}`,

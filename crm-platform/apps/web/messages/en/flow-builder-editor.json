@@ -1501,7 +1501,10 @@
             "productId": "Product id (optional)",
             "productIdHint": "Blank = any product in the order.",
             "storeNote": "The customer is matched to a saved contact by phone number; nobody is created for an order. “Added to cart” and “product viewed” are not offered: the store does not report them.",
-            "updatedNote": "Fires when a person or an import changes a contact, each time. A change made by another flow does not start it."
+            "updatedNote": "Fires when a person or an import changes a contact, each time. A change made by another flow does not start it.",
+            "updatedField": "Only when this property changes",
+            "updatedFieldHint": "Leave on “Any property” to start on every change. Edits that do not say which property changed (some imports and bulk actions) do not start a flow that watches one property.",
+            "updatedAny": "Any property"
           }
         }
       },

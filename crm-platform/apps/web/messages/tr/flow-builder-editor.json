@@ -1471,7 +1471,10 @@
             "productIdHint": "Boş = siparişteki herhangi bir ürün.",
             "storeNote": "Müşteri, telefon numarasına göre kayıtlı bir kişiyle eşleştirilir; sipariş için kimse oluşturulmaz. “Sepete eklendi” ve “ürün görüntülendi” sunulmaz: mağaza bunları bildirmez.",
             "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz.",
-            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir."
+            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir.",
+            "updatedField": "Yalnızca bu özellik değiştiğinde",
+            "updatedFieldHint": "Her değişiklikte başlatmak için “Herhangi bir özellik” seçili kalsın. Hangi özelliğin değiştiğini belirtmeyen düzenlemeler (bazı içe aktarmalar ve toplu işlemler), tek bir özelliği izleyen akışı başlatmaz.",
+            "updatedAny": "Herhangi bir özellik"
           }
         }
       },

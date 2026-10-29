@@ -1471,7 +1471,10 @@
             "productIdHint": "Kosong = produk apa pun dalam pesanan.",
             "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
             "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya.",
-            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen."
+            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen.",
+            "updatedField": "Hanya saat properti ini berubah",
+            "updatedFieldHint": "Biarkan “Properti apa saja” agar dimulai pada setiap perubahan. Pengeditan yang tidak menyebut properti mana yang berubah (beberapa impor dan aksi massal) tidak memulai alur yang memantau satu properti.",
+            "updatedAny": "Properti apa saja"
           }
         }
       },

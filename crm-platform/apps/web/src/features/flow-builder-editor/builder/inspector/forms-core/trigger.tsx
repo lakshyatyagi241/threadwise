@@ -376,7 +376,24 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         </>
       ) : null}
 
-      {kind === 'contact_updated' ? <Notice>{t('ext.updatedNote')}</Notice> : null}
+      {kind === 'contact_updated' ? (
+        <>
+          <Field label={t('ext.updatedField')} hint={t('ext.updatedFieldHint')}>
+            <SelectInput
+              value={str(d.updatedField)}
+              options={[
+                { v: '', l: t('ext.updatedAny') },
+                ...savePropertyOptions(feed.data, str(d.updatedField)).map((x) => ({
+                  v: x.key,
+                  l: x.name,
+                })),
+              ]}
+              onChange={(v) => set('updatedField', v)}
+            />
+          </Field>
+          <Notice>{t('ext.updatedNote')}</Notice>
+        </>
+      ) : null}
 
       {kind === 'comment_to_dm' ? (
         <Field label={t('rulesLabel')} hint={t('rulesHint')}>
