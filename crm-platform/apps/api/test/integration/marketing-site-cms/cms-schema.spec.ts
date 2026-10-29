@@ -212,6 +212,16 @@ describe('marketing-site tables: RLS, constraints, view counter', () => {
     });
   });
 
+  describe('contact_messages: the operator search has trigram indexes on every column it matches', () => {
+    it.each(['name', 'email', 'company', 'message'])('%s', async (column) => {
+      const res = await owner.query(
+        `SELECT indexdef FROM pg_indexes WHERE schemaname = 'public' AND tablename = 'contact_messages' AND indexdef LIKE $1`,
+        [`%USING gin (${column} gin_trgm_ops)%`],
+      );
+      expect(res.rowCount).toBe(1);
+    });
+  });
+
   describe('constraints hold even for the owner', () => {
     it('a blog slug, a category slug, a content key and a legal slug are unique', async () => {
       await expect(
