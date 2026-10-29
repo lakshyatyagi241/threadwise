@@ -80,15 +80,8 @@ export const LEGACY_REDIRECTS: LegacyRedirect[] = [
   ...to('/products/channels/voice', '/use-cases/voice-automation'),
 
   // Company pages
-  ...to(
-    '/about',
-    '/company/about',
-    '/about-us',
-    '/company/team',
-    '/company/careers',
-    '/career',
-    '/careers',
-  ),
+  ...to('/about', '/company/about', '/about-us', '/company/team'),
+  ...to('/careers', '/company/careers', '/career'),
   ...to('/contact', '/company/contact', '/contact-us'),
   ...to('/register', '/company/book-demo'),
   ...to('/legal/cookies', '/company/cookie-policy', '/cookie-policy'),

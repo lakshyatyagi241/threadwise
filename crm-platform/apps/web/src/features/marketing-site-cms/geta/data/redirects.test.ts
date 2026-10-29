@@ -11,6 +11,7 @@ const STATIC = new Set([
   '/',
   '/platform',
   '/about',
+  '/careers',
   '/contact',
   '/security',
   '/get-started',
