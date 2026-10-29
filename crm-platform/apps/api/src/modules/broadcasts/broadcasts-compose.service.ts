@@ -16,7 +16,11 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { TEMPLATE_DIRECTORY, type TemplateDirectory } from './_shims/tokens';
+import {
+  PREVIEW_MEDIA_LINK_TTL_S,
+  TEMPLATE_DIRECTORY,
+  type TemplateDirectory,
+} from './_shims/tokens';
 import { templateMediaPaths } from './payload/template-vars';
 import { assemblePhone } from './recipient-phone';
 
@@ -151,6 +155,7 @@ export class BroadcastsComposeService {
         (tpl.rows as unknown as TemplateRaw[]).flatMap((r) =>
           templateMediaPaths({ headerMediaKey: r.header_media_key }),
         ),
+        PREVIEW_MEDIA_LINK_TTL_S,
       );
 
       return {

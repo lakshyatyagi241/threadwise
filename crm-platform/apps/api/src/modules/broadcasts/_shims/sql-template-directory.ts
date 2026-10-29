@@ -35,7 +35,7 @@ const MEDIA_LINK_REUSE_MS = 60_000;
 @Injectable()
 export class SqlTemplateDirectory implements TemplateDirectory {
   /** A link is good for a day; one is reused for a minute so a run does not ask storage once per recipient. */
-  private readonly linked = new Map<string, { url: string; until: number }>();
+  private readonly linked = new Map<string, { url: string | null; until: number }>();
 
   constructor(private readonly storage: MediaStorageService) {}
 
@@ -88,7 +88,10 @@ export class SqlTemplateDirectory implements TemplateDirectory {
     return /^https?:\/\//i.test(path) ? path : null;
   }
 
-  async mediaUrls(paths: readonly string[]): Promise<Map<string, string>> {
+  async mediaUrls(
+    paths: readonly string[],
+    ttlSeconds: number = MEDIA_LINK_TTL_S,
+  ): Promise<Map<string, string>> {
     const out = new Map<string, string>();
     const stored = [...new Set(paths.filter((p) => p.trim() !== ''))].filter((p) => {
       const direct = this.mediaUrl(p);
@@ -97,17 +100,19 @@ export class SqlTemplateDirectory implements TemplateDirectory {
     });
     const now = Date.now();
     const missing = stored.filter((path) => {
-      const hit = this.linked.get(path);
-      if (hit && hit.until > now) out.set(path, hit.url);
-      return !(hit && hit.until > now);
+      const hit = this.linked.get(`${ttlSeconds}:${path}`);
+      if (!hit || hit.until <= now) return true;
+      if (hit.url) out.set(path, hit.url);
+      return false;
     });
     if (missing.length === 0) return out;
-    const link = await this.storage.linker(MEDIA_LINK_TTL_S);
+    for (const [k, v] of this.linked) if (v.until <= now) this.linked.delete(k);
+    const link = await this.storage.linker(ttlSeconds);
     for (const path of missing) {
       const url = await link(path);
-      if (!url) continue;
-      out.set(path, url);
-      this.linked.set(path, { url, until: now + MEDIA_LINK_REUSE_MS });
+      if (url) out.set(path, url);
+      // A key with no link (local disk) is remembered too, so a run does not ask storage again for every recipient.
+      this.linked.set(`${ttlSeconds}:${path}`, { url, until: now + MEDIA_LINK_REUSE_MS });
     }
     return out;
   }

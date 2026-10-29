@@ -61,6 +61,9 @@ export interface TemplateRecord {
   qualityScore: string | null;
 }
 
+/** How long a preview link a browser receives stays valid (the templates library uses the same hour). */
+export const PREVIEW_MEDIA_LINK_TTL_S = 3600;
+
 export interface TemplateDirectory {
   /** Scoped to the organization: another tenant's template is simply not found. */
   find(tx: Tx, orgId: number, uuid: string): Promise<TemplateRecord | undefined>;
@@ -71,7 +74,7 @@ export interface TemplateDirectory {
    * Links the template media a message carries: an absolute URL stays as it is, a stored key becomes a link Meta can fetch (cloud
    * object storage). A key with no public link (local disk) is left out of the map. Read once per send, then hand it to `mediaUrl`.
    */
-  mediaUrls(paths: readonly string[]): Promise<Map<string, string>>;
+  mediaUrls(paths: readonly string[], ttlSeconds?: number): Promise<Map<string, string>>;
   /** The platform switch `waba_templates_v2_enabled`. */
   wabaTemplatesV2Enabled(tx: Tx): Promise<boolean>;
 }
