@@ -1,13 +1,15 @@
 # Public routing for the desk host, written by ci-entry.sh on every release (route_to). The API paths go to the live API slot and
 # everything else to the live web slot. Traefik watches its dynamic directory, so rewriting this file moves traffic with no restart.
 # ci-entry.sh fills in __DOMAIN__ and __SLOT__ (blue or green).
+# `/form-embed` is the web-form embed loader (`<api origin>/form-embed/<key>/embed.js`): the API serves it, and with the API on the web host's
+# own address it has to be routed here, or the web app answers it with the login page and the script embed never loads.
 # The public webhook receiver has its own container (desk-api-hooks, not in a slot). Its service is a failover: while that container
 # answers /health it takes the traffic, and while it does not (a restart, a failed start) the live slot's API takes it, so a webhook is
 # never refused for want of it. /health is the liveness probe, not /ready: a database blip must not move the webhooks onto the slot.
 http:
   routers:
     desk-api:
-      rule: Host(`__DOMAIN__`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/api/v1`) || PathPrefix(`/public/v1`) || Path(`/docs/api.json`))
+      rule: Host(`__DOMAIN__`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/api/v1`) || PathPrefix(`/public/v1`) || PathPrefix(`/form-embed`) || Path(`/docs/api.json`))
       entryPoints: [websecure]
       service: desk-api
       priority: 100

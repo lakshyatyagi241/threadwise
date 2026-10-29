@@ -107,6 +107,7 @@ check "exits 0" test "$(code)" = 0
 check "api-hooks is started on the new tag" grep -q '^HOOKS_TAG=ccccccc' "$WORK/.env"
 check "api-hooks starts after the idle slot and before the traffic switch" test "$(line_of 'up -d --no-deps api-green')" -lt "$(line_of 'up -d --no-deps api-hooks')" -a "$(line_of 'up -d --no-deps api-hooks')" -lt "$(line_of 'curl -fsSk')"
 check "the routing sends /v2/public/webhooks to api-hooks" grep -q 'desk-api-hooks:3000' "$TRAEFIK_DYN"
+check "the routing sends the web-form embed loader to the API, not the web app" grep -q 'PathPrefix(`/form-embed`)' "$TRAEFIK_DYN"
 check "the slot API is the fallback while api-hooks is unhealthy" grep -q 'fallback: desk-api$' "$TRAEFIK_DYN"
 check "the live slot is still found when the hooks service is in the routing file" test "$(route)" = "desk-api-green:3000"
 
