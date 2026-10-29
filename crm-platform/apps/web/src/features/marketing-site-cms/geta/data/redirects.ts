@@ -28,6 +28,7 @@ export const LEGACY_REDIRECTS: LegacyRedirect[] = [
     '/product/engagement-crm/lead-stage-automation',
     '/customer-data-platform',
   ),
+  // Not `/inbox`: that address is the signed-in team inbox in the app, and a permanent redirect is cached by browsers.
   ...to('/products/team-inbox', '/product/inbox', '/product/engagement-crm/unified-inbox'),
   ...to('/products/forms-lead-capture', '/product/forms'),
   ...to('/products/integrations-api', '/product/integrations'),
