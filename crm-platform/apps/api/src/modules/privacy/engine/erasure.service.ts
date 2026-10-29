@@ -51,6 +51,7 @@ export class PersonalDataErasureService {
       tiers: readonly Tier[];
       mode: PrivacyHistoryMode;
       dryRun: boolean;
+      keepMessageText?: boolean;
       now?: Date;
       /** Run only the tables this accepts (the staff entry point runs the tables linked to a staff member and nothing else). */
       only?: (spec: TableSpec) => boolean;
@@ -64,6 +65,7 @@ export class PersonalDataErasureService {
       tiers: params.tiers,
       dryRun: params.dryRun,
       now,
+      keepMessageText: params.keepMessageText,
     };
     const lines: PrivacyErasureLine[] = [];
     let files = 0;
@@ -179,6 +181,7 @@ export class PersonalDataErasureService {
       tiers: CONTACT_DELETE_TIERS,
       mode,
       dryRun: false,
+      keepMessageText: true,
     });
     // The AI scoring log is a records-tier table (kept when a contact is deleted, erased by a data request). Here the person's id,
     // name and the reasons written about them go; the cost row stays for billing and the cost report.

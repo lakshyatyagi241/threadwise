@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "{time} için yeniden açılır",
       "erased": "Silinen kişiler",
-      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri ve mesaj metni olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
+      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
       "erasedTitle": "Silinen kişi"
     },
     "status": {

@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Reabre em {time}",
       "erased": "Contatos apagados",
-      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa nem o texto das mensagens. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
+      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
       "erasedTitle": "Contato apagado"
     },
     "status": {

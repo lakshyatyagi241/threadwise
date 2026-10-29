@@ -59,6 +59,8 @@ export const inboxMessages = defineHolder({
         failure_reason: 'null',
         meta: 'empty_object',
       },
+      // A contact deleted from the CRM with "keep conversation history": the messages stay readable, only the person goes.
+      whenKeepingText: { failure_reason: 'null' },
       tier: 'history',
       order: 20,
       categories: ['communications', 'content', 'location', 'special_risk'],
@@ -260,6 +262,12 @@ export const inboxMessages = defineHolder({
         peer_name: 'null',
         title: 'tombstone',
         preview: 'null',
+      },
+      whenKeepingText: {
+        contact_id: 'null',
+        peer_key: 'erased_uuid',
+        peer_name: 'null',
+        title: 'tombstone',
       },
       tier: 'history',
       order: 40,

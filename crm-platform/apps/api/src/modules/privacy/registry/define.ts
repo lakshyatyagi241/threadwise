@@ -170,7 +170,12 @@ export async function eraseSpec(
 
   switch (spec.disposition) {
     case 'delete': {
-      const keep = mode === 'anonymise' ? spec.whenAnonymising : undefined;
+      const keep =
+        mode !== 'anonymise'
+          ? undefined
+          : ctx.keepMessageText && spec.whenKeepingText
+            ? spec.whenKeepingText
+            : spec.whenAnonymising;
       if (keep === 'keep') {
         return {
           files,
