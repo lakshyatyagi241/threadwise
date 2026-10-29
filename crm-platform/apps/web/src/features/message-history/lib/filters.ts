@@ -33,6 +33,21 @@ export function typeOptions(current: HistoryState['type']): readonly MessageHist
     : OFFERED_TYPES;
 }
 
+/**
+ * The "Sent by" sources offered. A broadcast and a broadcast test send are a campaign to the person, and scheduled messages are not
+ * kept, so only Campaign is offered; an older link naming one still filters (a broadcast reads as Campaign, see `parseState`).
+ */
+export const OFFERED_SOURCES: readonly MessageHistorySource[] = MESSAGE_HISTORY_SOURCES.filter(
+  (x) => x !== 'broadcast' && x !== 'broadcast_test' && x !== 'scheduled',
+);
+
+/** The offered sources, plus any an older link brought, so the list still shows what it filters by. */
+export function sourceOptions(
+  current: readonly MessageHistorySource[],
+): readonly MessageHistorySource[] {
+  return [...OFFERED_SOURCES, ...current.filter((x) => !OFFERED_SOURCES.includes(x))];
+}
+
 export const DEFAULT_RANGE: MessageHistoryRange = '30d';
 export type Bucket = 'hourly' | 'daily' | 'weekly';
 export const BUCKETS: readonly Bucket[] = ['daily', 'hourly', 'weekly'];
@@ -88,7 +103,9 @@ export function parseState(sp: URLSearchParams): HistoryState {
   const source = (sp.get('source') ?? '')
     .split(',')
     .map((s) => oneOf(MESSAGE_HISTORY_SOURCES, s))
-    .filter((s): s is MessageHistorySource => s !== undefined);
+    .filter((s): s is MessageHistorySource => s !== undefined)
+    // A broadcast, or a broadcast test send, is a campaign to the person (and to the filter).
+    .map((s) => (s === 'broadcast' || s === 'broadcast_test' ? 'campaign' : s));
   const id = (k: string): string => {
     const v = sp.get(k);
     return v !== null && UUID.test(v) ? v : '';

@@ -600,6 +600,13 @@ describe('the filters', () => {
     expect((await list(S.t.admin, '?type=broadcast&limit=100')).data).toHaveLength(5);
     expect((await list(S.t.admin, '?type=campaign&limit=100')).data).toHaveLength(5);
     expect((await list(S.t.admin, '?type=scheduled&limit=100')).data).toHaveLength(2);
+    // Sent by Campaign, Broadcast and Broadcast Test Send are one source: the same rows whichever is named.
+    const bySource = async (x: string) =>
+      rowIds(await list(S.t.admin, `?source=${x}&limit=100`)).sort();
+    const campaigns = await bySource('campaign');
+    expect(campaigns.length).toBeGreaterThan(0);
+    expect(await bySource('broadcast')).toEqual(campaigns);
+    expect(await bySource('broadcast_test')).toEqual(campaigns);
     expect(rowIds(await list(S.t.admin, '?type=template&limit=100'))).toEqual([S.ids.m3]);
     expect(rowIds(await list(S.t.admin, '?type=image&limit=100'))).toEqual([S.ids.m5]);
     expect((await list(S.t.admin, '?type=location&limit=100')).data).toHaveLength(0);
@@ -1210,7 +1217,9 @@ describe('the source column', () => {
   });
 
   it('the Source filter and the campaign filter pick them up; the cards count both as sent', async () => {
-    expect(rowIds(await list(S.t.admin, '?source=broadcast_test&limit=100'))).toEqual([testRow]);
+    // Campaign, Broadcast and Broadcast Test Send are one source in the filter, so the test send is among the campaign rows.
+    expect(rowIds(await list(S.t.admin, '?source=broadcast_test&limit=100'))).toContain(testRow);
+    expect(rowIds(await list(S.t.admin, '?source=campaign&limit=100'))).toContain(testRow);
     expect(rowIds(await list(S.t.admin, '?source=contact&limit=100'))).toEqual([contactMsg]);
     expect(rowIds(await list(S.t.admin, `?campaignId=${S.campaignUuid}&limit=100`))).toContain(
       testRow,
