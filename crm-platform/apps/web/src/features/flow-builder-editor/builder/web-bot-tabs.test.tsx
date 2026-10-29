@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 import { renderIntl } from '../test-utils/intl';
-import { BuilderTabs, tabFromParam, tabsOf, whatsappDefaultsFrom } from './web-bot-tabs';
+import {
+  BuilderTabs,
+  tabFromParam,
+  tabsOf,
+  whatsappDefaultsFrom,
+  widgetChannelOf,
+} from './web-bot-tabs';
 
 // The panels pull in the widget screens; the tab bar alone is under test.
 vi.mock('@/features/chatbot-widget/components/flow-widget-customize', () => ({
@@ -129,5 +135,23 @@ describe("what a WhatsApp bot's button is made from, read off the Trigger", () =
       { key: 'waba:b', label: 'B', phone: '912' },
     ];
     expect(whatsappDefaultsFrom({ data: {} }, two).phone).toBeNull();
+  });
+});
+
+describe('which Advanced flows have Customize and Deploy', () => {
+  it('gives a website chat bot a widget whatever its trigger', () => {
+    expect(widgetChannelOf('web', undefined)).toBe('web');
+    expect(widgetChannelOf('web', { data: { kind: 'tag_added' } })).toBe('web');
+  });
+  it('gives a WhatsApp flow one only while it starts from a keyword', () => {
+    expect(widgetChannelOf('chat', undefined)).toBe('chat');
+    expect(widgetChannelOf('chat', { data: {} })).toBe('chat');
+    expect(widgetChannelOf('chat', { data: { kind: 'keyword' } })).toBe('chat');
+    expect(widgetChannelOf('chat', { data: { kind: 'tag_added' } })).toBeNull();
+    expect(widgetChannelOf('chat', { data: { kind: 'webhook' } })).toBeNull();
+  });
+  it('gives the other channels none', () => {
+    for (const mode of ['instagram', 'facebook', 'call', 'email', 'telegram'])
+      expect(widgetChannelOf(mode, undefined)).toBeNull();
   });
 });
