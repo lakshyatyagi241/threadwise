@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { MediaStorageService } from '../../platform-settings-branding-storage';
 import type { TemplateDirectory, TemplateRecord } from './tokens';
 
 interface Raw {
@@ -19,15 +20,25 @@ interface Raw {
   template_type: string;
   attachment_type: string | null;
   attachment_file: string | null;
+  header_media_key: string | null;
   meta_template_id: string | null;
   meta_status: string | null;
   paused_until: Date | string | null;
   quality_score: string | null;
 }
 
+/** Long enough for Meta to fetch the file at send time, also for a slow run. */
+const MEDIA_LINK_TTL_S = 24 * 3600;
+const MEDIA_LINK_REUSE_MS = 60_000;
+
 /** Reads `wa_templates` directly until the templates domain exports its own lookup. */
 @Injectable()
 export class SqlTemplateDirectory implements TemplateDirectory {
+  /** A link is good for a day; one is reused for a minute so a run does not ask storage once per recipient. */
+  private readonly linked = new Map<string, { url: string; until: number }>();
+
+  constructor(private readonly storage: MediaStorageService) {}
+
   async find(tx: Tx, orgId: number, uuid: string): Promise<TemplateRecord | undefined> {
     return this.one(tx, sql`uuid = ${uuid}::uuid`, orgId);
   }
@@ -43,7 +54,7 @@ export class SqlTemplateDirectory implements TemplateDirectory {
   ): Promise<TemplateRecord | undefined> {
     const res = await tx.execute(sql`
       SELECT id, uuid, template_name, language, template_body, header, footer, header_location, parameter_format,
-             variable_map, buttons, carousel_data, template_type, attachment_type, attachment_file, meta_template_id,
+             variable_map, buttons, carousel_data, template_type, attachment_type, attachment_file, header_media_key, meta_template_id,
              meta_status, paused_until, quality_score
       FROM wa_templates WHERE org_id = ${orgId} AND ${where}`);
     const r = res.rows[0] as unknown as Raw | undefined;
@@ -64,6 +75,7 @@ export class SqlTemplateDirectory implements TemplateDirectory {
       templateType: r.template_type,
       attachmentType: r.attachment_type,
       attachmentFile: r.attachment_file,
+      headerMediaKey: r.header_media_key,
       metaTemplateId: r.meta_template_id,
       metaStatus: r.meta_status,
       pausedUntil: r.paused_until ? new Date(r.paused_until) : null,
@@ -74,6 +86,30 @@ export class SqlTemplateDirectory implements TemplateDirectory {
   /** Only an absolute URL can be checked; a stored path needs the storage domain, so its check is skipped for now. */
   mediaUrl(path: string): string | null {
     return /^https?:\/\//i.test(path) ? path : null;
+  }
+
+  async mediaUrls(paths: readonly string[]): Promise<Map<string, string>> {
+    const out = new Map<string, string>();
+    const stored = [...new Set(paths.filter((p) => p.trim() !== ''))].filter((p) => {
+      const direct = this.mediaUrl(p);
+      if (direct) out.set(p, direct);
+      return !direct;
+    });
+    const now = Date.now();
+    const missing = stored.filter((path) => {
+      const hit = this.linked.get(path);
+      if (hit && hit.until > now) out.set(path, hit.url);
+      return !(hit && hit.until > now);
+    });
+    if (missing.length === 0) return out;
+    const link = await this.storage.linker(MEDIA_LINK_TTL_S);
+    for (const path of missing) {
+      const url = await link(path);
+      if (!url) continue;
+      out.set(path, url);
+      this.linked.set(path, { url, until: now + MEDIA_LINK_REUSE_MS });
+    }
+    return out;
   }
 
   /** The platform setting lives in the settings domain; off until that domain exposes it (the guard then does not run). */

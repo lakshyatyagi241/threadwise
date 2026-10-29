@@ -75,7 +75,7 @@ export {
   type WarmerGate,
 } from './_shims/tokens';
 export { readableTemplateBody, resolveBodyTokens } from './inbox-mirror-rules';
-export { buildRecipientVars } from './payload/template-vars';
+export { buildRecipientVars, templateMediaPaths } from './payload/template-vars';
 export {
   applyOverrides,
   sanitizeOverrides,

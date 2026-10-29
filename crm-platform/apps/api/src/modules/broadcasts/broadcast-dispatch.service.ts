@@ -29,7 +29,7 @@ import {
   sanitizeOverrides,
   type TemplateOverrides,
 } from './payload/template-overrides';
-import { buildRecipientVars } from './payload/template-vars';
+import { buildRecipientVars, templateMediaPaths } from './payload/template-vars';
 import { LinkTracker } from './tracking/link-tracker';
 import {
   batchCooldownMs,
@@ -176,7 +176,7 @@ export class BroadcastDispatchService {
 
       // Cloud API components are built per recipient for the waba engine (TW-BCAST-017). Other engines send from their own
       // template rendering, which does not read the overrides yet (see parity/broadcasts.md).
-      const shape: TemplateShape & { headerLocation: unknown } = {
+      const shape: TemplateShape & { headerLocation: unknown; headerMediaKey: string | null } = {
         templateName: template.templateName,
         language: template.language,
         templateType: template.templateType,
@@ -189,6 +189,7 @@ export class BroadcastDispatchService {
         buttons: template.buttons,
         carouselData: template.carouselData,
         headerLocation: template.headerLocation,
+        headerMediaKey: template.headerMediaKey,
       };
       const overrides = sanitizeOverrides(b.template_overrides);
       // A MARKETING template is held for the quiet hours; a utility or authentication one is a notice the person needs (BL-177).
@@ -640,16 +641,17 @@ export class BroadcastDispatchService {
     contactId: number,
     to: string,
     template: TemplateRecord,
-    shape: TemplateShape & { headerLocation: unknown },
+    shape: TemplateShape & { headerLocation: unknown; headerMediaKey: string | null },
     base: Omit<MergeContext, 'contact'>,
     clientReference: string,
     engine: string,
   ): Promise<OutgoingText> {
     const contact = await this.db.tx((tx) => this.merge.contactFor(tx, orgId, contactId));
     const ctx: MergeContext = { ...base, contact };
+    const links = await this.templates.mediaUrls(templateMediaPaths(shape));
     const vars = buildRecipientVars(shape, {
       pull: (key) => resolveToken(key, ctx).value,
-      mediaUrl: (path) => this.templates.mediaUrl(path),
+      mediaUrl: (path) => links.get(path) ?? this.templates.mediaUrl(path),
     });
     const kind = (template.attachmentType ?? '').toLowerCase();
     const media =
@@ -681,15 +683,16 @@ export class BroadcastDispatchService {
     contactId: number,
     templateId: number,
     phone: string,
-    shape: TemplateShape & { headerLocation: unknown },
+    shape: TemplateShape & { headerLocation: unknown; headerMediaKey: string | null },
     overrides: TemplateOverrides | null,
     base: Omit<MergeContext, 'contact'>,
   ): Promise<{ name: string; components: unknown[] }> {
     const contact = await this.db.tx((tx) => this.merge.contactFor(tx, orgId, contactId));
     const ctx: MergeContext = { ...base, contact };
+    const links = await this.templates.mediaUrls(templateMediaPaths(shape));
     const vars = buildRecipientVars(shape, {
       pull: (key) => resolveToken(key, ctx).value,
-      mediaUrl: (path) => this.templates.mediaUrl(path),
+      mediaUrl: (path) => links.get(path) ?? this.templates.mediaUrl(path),
     });
     const applied = applyOverrides(vars, overrides, (text) => renderMergeTags(text, ctx).rendered);
     if (applied.ignoredButtons.length) {

@@ -5,6 +5,7 @@ import {
   LinkTracker,
   applyOverrides,
   buildRecipientVars,
+  templateMediaPaths,
   type TemplateDirectory,
   type TemplateOverrides,
   type TemplateRecord,
@@ -53,7 +54,7 @@ export async function buildTemplatePayload(
   },
 ): Promise<{ name: string; components: unknown[]; values: Record<string, string> }> {
   const { tpl } = o;
-  const shape: TemplateShape & { headerLocation: unknown } = {
+  const shape: TemplateShape & { headerLocation: unknown; headerMediaKey: string | null } = {
     templateName: tpl.templateName,
     language: tpl.language,
     templateType: tpl.templateType,
@@ -66,10 +67,13 @@ export async function buildTemplatePayload(
     buttons: tpl.buttons,
     carouselData: tpl.carouselData,
     headerLocation: tpl.headerLocation,
+    headerMediaKey: tpl.headerMediaKey,
   };
+  // A stored header file is linked through storage: Meta fetches it by URL, and without one the header is dropped (#132012).
+  const links = await deps.templates.mediaUrls(templateMediaPaths(shape));
   const vars = buildRecipientVars(shape, {
     pull: (key) => resolveToken(key, o.ctx).value,
-    mediaUrl: (path) => deps.templates.mediaUrl(path),
+    mediaUrl: (path) => links.get(path) ?? deps.templates.mediaUrl(path),
   });
   const applied = applyOverrides(
     vars,
