@@ -36,6 +36,7 @@ import {
   deleteNode,
   duplicateNode,
   NODE_W,
+  newCanvasNodes,
   pinStart,
   pushHistory,
   redo,
@@ -179,7 +180,8 @@ function BuilderInner({
   const tf = useFlb();
   const seed = useMemo<CanvasState>(
     () => ({
-      nodes: initial?.graph.flowNodes ?? [],
+      // A new flow starts with its Trigger node on the canvas (it is the START, and where the channel is chosen), not an empty canvas.
+      nodes: initial?.graph.flowNodes ?? newCanvasNodes(),
       edges: (initial?.graph.flowEdges ?? []).map((e) => ({
         ...e,
         kind: e.sourceHandle === 'no' ? ('no' as const) : null,
