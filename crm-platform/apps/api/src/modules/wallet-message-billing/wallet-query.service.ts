@@ -74,6 +74,7 @@ export function toTransaction(r: LedgerRow): WalletTransaction {
     source: r.source,
     description: r.description,
     note: r.note,
+    invoiceOrderId: r.invoiceOrderId ?? null,
     createdAt: r.createdAt.toISOString(),
   };
 }

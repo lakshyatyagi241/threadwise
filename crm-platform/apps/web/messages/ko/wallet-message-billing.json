@@ -109,7 +109,8 @@
       "amount": "금액",
       "balance": "잔액",
       "noDescription": "지갑 거래 내역",
-      "reason": "사유"
+      "reason": "사유",
+      "invoice": "인보이스 다운로드"
     },
     "pricingPanel": {
       "title": "메시지 요금",

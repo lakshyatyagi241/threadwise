@@ -109,7 +109,8 @@
       "amount": "Сумма",
       "balance": "Баланс",
       "noDescription": "Движение по кошельку",
-      "reason": "Причина"
+      "reason": "Причина",
+      "invoice": "Скачать счёт"
     },
     "pricingPanel": {
       "title": "Стоимость сообщений",

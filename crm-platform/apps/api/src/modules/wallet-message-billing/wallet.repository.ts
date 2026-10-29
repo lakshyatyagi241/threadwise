@@ -28,6 +28,8 @@ export interface LedgerRow {
   actorType: string;
   actorLabel: string | null;
   createdAt: Date;
+  /** The purchase (order) this entry came from, when it has an invoice to download; null for every other entry. */
+  invoiceOrderId?: string | null;
 }
 
 /**
@@ -290,10 +292,14 @@ interface RawLedger {
   actor_type: string;
   actor_label: string | null;
   created_at: Date;
+  invoice_order_id?: string | null;
 }
 
+/** `invoice_order_id`: the order a top-up was paid through (its invoice is the order's), else null. */
 export const LEDGER_COLUMNS = sql`id, uuid, type, direction, amount::text AS amount, balance_after::text AS balance_after, source,
-  description, note, actor_type, actor_label, created_at`;
+  description, note, actor_type, actor_label, created_at,
+  (SELECT o.uuid::text FROM orders o WHERE o.org_id = wallet_transactions.org_id AND wallet_transactions.subject_type = 'order'
+     AND o.id = wallet_transactions.subject_id) AS invoice_order_id`;
 
 export function toLedger(r: RawLedger): LedgerRow {
   return {
@@ -311,5 +317,6 @@ export function toLedger(r: RawLedger): LedgerRow {
     actorType: r.actor_type,
     actorLabel: r.actor_label,
     createdAt: new Date(r.created_at),
+    invoiceOrderId: r.invoice_order_id ?? null,
   };
 }

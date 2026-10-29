@@ -109,7 +109,8 @@
       "amount": "Số tiền",
       "balance": "Số dư",
       "noDescription": "Biến động ví",
-      "reason": "Lý do"
+      "reason": "Lý do",
+      "invoice": "Tải hóa đơn"
     },
     "pricingPanel": {
       "title": "Giá tin nhắn",

@@ -109,7 +109,8 @@
       "amount": "金额",
       "balance": "余额",
       "noDescription": "钱包变动",
-      "reason": "原因"
+      "reason": "原因",
+      "invoice": "下载发票"
     },
     "pricingPanel": {
       "title": "消息定价",

@@ -109,7 +109,8 @@
       "amount": "Importo",
       "balance": "Saldo",
       "noDescription": "Movimento del wallet",
-      "reason": "Motivo"
+      "reason": "Motivo",
+      "invoice": "Scarica fattura"
     },
     "pricingPanel": {
       "title": "Prezzi dei messaggi",

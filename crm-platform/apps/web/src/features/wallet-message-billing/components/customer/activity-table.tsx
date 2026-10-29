@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { WalletTransaction } from '@crm/contracts';
 import { cn } from '@crm/ui';
@@ -7,6 +8,21 @@ import { formatDateTime } from '@/lib/format-datetime';
 import { humanizeSource } from '../../lib/billing-variant';
 import { TONE_CLASS, directionTone, formatAmount, formatMovement } from '../../lib/money';
 import { TypePill } from './type-pill';
+
+/** "Download invoice" for an entry paid through an order (a top-up): the order's invoice page, ready to print or save. */
+export function InvoiceLink({ orderId }: { orderId: string | null | undefined }) {
+  const t = useTranslations('wallet-message-billing.activity');
+  if (!orderId) return null;
+  return (
+    <Link
+      className="mt-0.5 inline-block text-xs underline"
+      href={`/billing/orders/${orderId}/invoice`}
+      data-testid="wallet-invoice-link"
+    >
+      {t('invoice')}
+    </Link>
+  );
+}
 
 export const formatWhen = (iso: string, locale: string, timeZone?: string): string =>
   formatDateTime(iso, locale, timeZone);
@@ -56,6 +72,7 @@ export function ActivityTable({
                     {t('reason')}: {r.note}
                   </div>
                 )}
+                <InvoiceLink orderId={r.invoiceOrderId} />
               </td>
               <td className="px-2 py-2">
                 <TypePill type={r.type} />

@@ -109,7 +109,8 @@
       "amount": "Betrag",
       "balance": "Saldo",
       "noDescription": "Guthabenbewegung",
-      "reason": "Grund"
+      "reason": "Grund",
+      "invoice": "Rechnung herunterladen"
     },
     "pricingPanel": {
       "title": "Nachrichtenpreise",

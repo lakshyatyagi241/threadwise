@@ -109,7 +109,8 @@
       "amount": "राशि",
       "balance": "बैलेंस",
       "noDescription": "वॉलेट गतिविधि",
-      "reason": "कारण"
+      "reason": "कारण",
+      "invoice": "इनवॉइस डाउनलोड करें"
     },
     "pricingPanel": {
       "title": "संदेश मूल्य निर्धारण",

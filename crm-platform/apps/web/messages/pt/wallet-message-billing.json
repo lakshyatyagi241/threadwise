@@ -109,7 +109,8 @@
       "amount": "Valor",
       "balance": "Saldo",
       "noDescription": "Movimentação da carteira",
-      "reason": "Motivo"
+      "reason": "Motivo",
+      "invoice": "Baixar fatura"
     },
     "pricingPanel": {
       "title": "Preços de mensagens",

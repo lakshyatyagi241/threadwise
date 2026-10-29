@@ -109,7 +109,8 @@
       "amount": "رقم",
       "balance": "بیلنس",
       "noDescription": "والٹ حرکت",
-      "reason": "وجہ"
+      "reason": "وجہ",
+      "invoice": "انوائس ڈاؤن لوڈ کریں"
     },
     "pricingPanel": {
       "title": "پیغام کی قیمتیں",
