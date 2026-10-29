@@ -33,7 +33,7 @@ import { ExportPanel } from './export-panel';
 import { FilterBar } from './filter-bar';
 import { HistoryTable } from './history-table';
 import { KpiStrip } from './kpi-strip';
-import { DownloadIcon, useErrorText } from './parts';
+import { useErrorText } from './parts';
 
 /** The zone the times are shown in: the person's own, else the workspace's (the session's effective zone), else UTC. */
 function useDisplayZone(): string {
