@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 /** What fades and rises into place when its section comes into view. Siblings follow one another a beat apart. */
 const REVEAL =
-  '.gx-sec-head, .gx-grid > *, .gx-split > *, .gx-layers > *, .gx-layerlist li, .bt-c, .tr-card, .pc, .gx-faq details, .np, .ot-vis, .ot-copy, .vx, .md, .cp, .gx-band, .gx-statcard, .ls, .tr-logos, .tr-badges';
+  '.gx-sec-head, .gx-grid > *, .gx-split > *, .gx-layers > *, .gx-layerlist li, .bt-c, .tr-card, .pc, .gx-faq details, .np, .ot-vis, .ot-copy, .vx, .md, .cp, .gx-band, .gx-statcard, .ls, .tr-logos, .tr-badges, .cc-t, .cf-c, .pr';
 
 /**
  * Brings the page to life as it is scrolled:
