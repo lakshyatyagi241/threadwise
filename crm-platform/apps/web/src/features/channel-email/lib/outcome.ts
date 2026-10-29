@@ -21,6 +21,8 @@ export function outcomeView(outcome: MailConnectOutcome): OutcomeView {
     case 'denied':
     case 'limit':
     case 'not_configured':
+    case 'not_enabled':
+    case 'not_allowed':
       return { tone: 'warning', key: outcome };
     default:
       return { tone: 'danger', key: outcome };

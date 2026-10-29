@@ -61,9 +61,26 @@ export const walletTransactionSchema = z.object({
   description: z.string().nullable(),
   /** The reason an operator gave for a manual adjustment. */
   note: z.string().nullable(),
+  /** The order this entry was paid through: the entry has an invoice at `/billing/orders/{id}/invoice`. Null when it has none. */
+  invoiceOrderId: z.guid().nullable().optional(),
+  /** The invoice the old system issued for a migrated top-up: the id to open at `/wallet/legacy-invoices/{id}`. Null when it has none. */
+  legacyInvoiceId: z.guid().nullable().optional(),
   createdAt: z.string(),
 });
 export type WalletTransaction = z.infer<typeof walletTransactionSchema>;
+
+/** An invoice of the old billing system, kept as it was issued. `html` is a whole page and is never to be run: show it in a sandboxed frame. */
+export const walletLegacyInvoiceSchema = z.object({
+  id: z.guid(),
+  number: z.string().nullable(),
+  /** YYYY-MM-DD */
+  date: z.string().nullable(),
+  currency: z.string().nullable(),
+  total: z.string().nullable(),
+  status: z.string().nullable(),
+  html: z.string(),
+});
+export type WalletLegacyInvoice = z.infer<typeof walletLegacyInvoiceSchema>;
 
 export const walletLedgerQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).prefault(10),

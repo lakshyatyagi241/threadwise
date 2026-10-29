@@ -15,6 +15,7 @@ import type {
   StatementRow,
   WalletLedgerQuery,
   WalletLedgerResponse,
+  WalletLegacyInvoice,
   WalletSnapshot,
   WalletSummary,
   WalletTransaction,
@@ -22,6 +23,7 @@ import type {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { BillingModeService } from '../bsp-billing-engine';
 import {
@@ -74,6 +76,8 @@ export function toTransaction(r: LedgerRow): WalletTransaction {
     source: r.source,
     description: r.description,
     note: r.note,
+    invoiceOrderId: r.invoiceOrderId ?? null,
+    legacyInvoiceId: r.legacyInvoiceId ?? null,
     createdAt: r.createdAt.toISOString(),
   };
 }
@@ -198,6 +202,38 @@ export class WalletQueryService {
   async billingCurrency(): Promise<string> {
     const orgId = RequestContextStore.require().orgId;
     return this.db.tx((tx) => this.billing.forOrg(tx, orgId));
+  }
+
+  /** One stored invoice of a migrated top-up, in the caller's workspace (row-level security hides another workspace's as not found). */
+  async legacyInvoice(id: string): Promise<WalletLegacyInvoice> {
+    const orgId = RequestContextStore.require().orgId;
+    const row = (
+      await this.db.tx((tx) =>
+        tx.execute(sql`
+          SELECT uuid::text AS id, invoice_number, invoice_date::text AS invoice_date, currency, total::text AS total, status, html
+          FROM wallet_legacy_invoices WHERE org_id = ${orgId} AND uuid = ${id}::uuid`),
+      )
+    ).rows[0] as
+      | {
+          id: string;
+          invoice_number: string | null;
+          invoice_date: string | null;
+          currency: string | null;
+          total: string | null;
+          status: string | null;
+          html: string;
+        }
+      | undefined;
+    if (!row) throw AppError.notFound('Invoice', id);
+    return {
+      id: row.id,
+      number: row.invoice_number,
+      date: row.invoice_date,
+      currency: row.currency,
+      total: row.total,
+      status: row.status,
+      html: row.html,
+    };
   }
 
   async ledger(query: WalletLedgerQuery): Promise<WalletLedgerResponse> {

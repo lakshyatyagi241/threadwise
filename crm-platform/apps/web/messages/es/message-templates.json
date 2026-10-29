@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Lenguaje de marketing no permitido en esta categoría.",
         "TAG_CONTENT_MISMATCH": "La categoría no coincide con el contenido (p. ej., texto promocional en una plantilla UTILITY).",
         "SCAM": "Meta marcó la plantilla como posible estafa. Revisa las afirmaciones y el lenguaje."
+      },
+      "stats": {
+        "title": "Rendimiento de esta plantilla",
+        "hint": "Contado a partir de los mensajes enviados con ella",
+        "loading": "Cargando cifras",
+        "error": "No se pudieron cargar las cifras.",
+        "none": "Todavía no se ha enviado nada con esta plantilla.",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "read": "Leídos",
+        "replied": "Respondidos",
+        "failed": "Fallidos",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# mensaje enviado} other {# mensajes enviados}} con esta plantilla, {queued} en espera",
+        "lastSent": "último envío {when}"
       }
     },
     "ai": {
@@ -591,7 +606,7 @@
       "tone": "Tono",
       "pickTone": "Selecciona un tono",
       "language": "Idioma",
-      "languageHint": "El borrador se redacta en el idioma del formulario.",
+      "languageHint": "Elige cualquier idioma que acepte Meta. El borrador se escribe en él y la plantilla lo adopta.",
       "notes": "Instrucciones personalizadas",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Cualquier detalle que quieras incluir: variables, enlaces, frases obligatorias, qué evitar…",

@@ -17,6 +17,7 @@ import {
   recipientTimeline,
   resolveWindow,
   safeZone,
+  sourceFilterValues,
   typeFilterParts,
   chartZone,
   volumeSeriesFrom,
@@ -208,7 +209,16 @@ describe('the KPI cards', () => {
 
 describe('the type filter', () => {
   it('maps the automated sources to themselves and the rest to message kinds', () => {
-    expect(typeFilterParts('broadcast')).toEqual({ entity: 'broadcast', source: 'broadcast' });
+    // A campaign and a broadcast are one thing to the person: either one matches the rows of both.
+    expect(typeFilterParts('campaign')).toEqual({
+      entities: ['campaign', 'broadcast'],
+      sources: ['campaign', 'broadcast'],
+    });
+    expect(typeFilterParts('broadcast')).toEqual(typeFilterParts('campaign'));
+    expect(typeFilterParts('scheduled')).toEqual({
+      entities: ['scheduled'],
+      sources: ['scheduled'],
+    });
     expect(typeFilterParts('auto_reply')).toEqual({ source: 'auto_reply' });
     expect(typeFilterParts('audio').kinds).toEqual(['audio', 'voice']);
     expect(typeFilterParts('document').kinds).toEqual(['document', 'sticker']);
@@ -422,5 +432,25 @@ describe('chartZone', () => {
   it('keeps the viewer zone for a preset range, and falls back to UTC for an unknown one', () => {
     expect(chartZone({ tz: 'Asia/Kolkata' })).toBe('Asia/Kolkata');
     expect(chartZone({ tz: 'Not/AZone' })).toBe('UTC');
+  });
+});
+
+describe('the Sent by filter', () => {
+  it('treats a campaign, a broadcast and a broadcast test send as one source', () => {
+    for (const one of ['campaign', 'broadcast', 'broadcast_test']) {
+      expect(sourceFilterValues([one]).sort()).toEqual(['broadcast', 'broadcast_test', 'campaign']);
+    }
+    expect(sourceFilterValues(['flow', 'campaign']).sort()).toEqual([
+      'broadcast',
+      'broadcast_test',
+      'campaign',
+      'flow',
+    ]);
+  });
+
+  it('leaves every other source as it is', () => {
+    expect(sourceFilterValues(['flow', 'api'])).toEqual(['flow', 'api']);
+    expect(sourceFilterValues([])).toEqual([]);
+    expect(sourceFilterValues(['scheduled'])).toEqual(['scheduled']);
   });
 });

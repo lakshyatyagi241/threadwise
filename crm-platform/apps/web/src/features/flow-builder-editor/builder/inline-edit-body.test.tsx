@@ -56,4 +56,35 @@ describe('inline edit on the card (row 288)', () => {
     expect(html).toContain('Replace file');
     expect(html).toContain('a.mp4');
   });
+
+  it('shows the file itself on the card, so the flow reads without opening the node (row 392)', () => {
+    const img = show(
+      node('media', { kind: 'image', url: 'https://x.test/a.png', filename: 'a.png' }),
+    );
+    expect(img).toContain('data-testid="media-card-preview"');
+    expect(img).toContain('<img');
+    expect(img).toContain('src="https://x.test/a.png"');
+
+    const video = show(
+      node('media', { kind: 'video', url: 'https://x.test/a.mp4', filename: 'a.mp4' }),
+    );
+    expect(video).toContain('<video');
+    expect(video).toContain('src="https://x.test/a.mp4"');
+
+    const audio = show(
+      node('media', { kind: 'audio', url: 'https://x.test/a.mp3', filename: 'a.mp3' }),
+    );
+    expect(audio).toContain('<audio');
+
+    const doc = show(
+      node('media', { kind: 'document', url: 'https://x.test/r.pdf', filename: 'report.pdf' }),
+    );
+    expect(doc).toContain('data-kind="document"');
+    expect(doc).toContain('PDF');
+    expect(doc).toContain('report.pdf');
+  });
+
+  it('shows no preview before a file is chosen', () => {
+    expect(show(node('media', { kind: 'image' }))).not.toContain('media-card-preview');
+  });
 });

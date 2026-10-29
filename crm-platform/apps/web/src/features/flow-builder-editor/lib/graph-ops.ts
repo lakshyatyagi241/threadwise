@@ -51,6 +51,15 @@ export function addNode(s: CanvasState, type: string, x: number, y: number): OpR
   return { ok: true, state: { ...s, nodes: [...s.nodes, node] }, id };
 }
 
+/**
+ * The nodes of a brand-new flow: just its Trigger, as START, top left of the canvas. The Trigger is where the channel (WhatsApp,
+ * Instagram, Facebook) and the number are chosen, so it is there from the start instead of waiting to be found in the palette.
+ */
+export function newCanvasNodes(): FlowNode[] {
+  const r = addNode({ nodes: [], edges: [] }, 'trigger', 80, 60);
+  return r.ok ? r.state.nodes : [];
+}
+
 /** Pins a node as START (only one; pinning the current start unpins it). */
 export function pinStart(s: CanvasState, id: string): CanvasState {
   return { ...s, nodes: s.nodes.map((n) => ({ ...n, isStart: n.id === id ? !n.isStart : false })) };

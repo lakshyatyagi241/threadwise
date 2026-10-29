@@ -17,18 +17,19 @@
       "refresh": "Vernieuwen",
       "newCampaign": "Nieuwe campagne",
       "tile": {
-        "sent": "Verzonden",
+        "sent": "Verzonden berichten",
         "delivered": "Afgeleverd",
         "read": "Gelezen",
-        "failed": "Mislukt",
-        "processing": "Wordt verwerkt",
-        "campaigns": "{count} campagnes",
+        "failed": "Mislukte berichten",
+        "processing": "Campagnes in verzending",
+        "campaigns": "uit {count, plural, one {# campagne} other {# campagnes}}",
         "inFlight": "onderweg",
         "awaiting": "wachtend",
-        "queued": "{count} in wachtrij",
+        "queued": "{count} gepland om te starten",
         "deliveredRate": "{rate}% bezorgd",
         "readRate": "{rate}% leespercentage",
-        "failedCampaigns": "{count} mislukte campagnes"
+        "failedCampaigns": "{count, plural, one {# campagne} other {# campagnes}} als mislukt gemarkeerd",
+        "note": "Verzonden, Afgeleverd, Gelezen en Mislukt tellen berichten, en een mislukt bericht telt niet mee bij Verzonden. De kleinere regel onder elk getal telt campagnes. Alles volgt het hieronder gekozen datumbereik: {range}."
       },
       "range": {
         "all": "Alle tijd",
@@ -1628,7 +1629,7 @@
         "retries": "Nieuwe pogingen",
         "retriesOn": "Aan, tot {date}",
         "retriesOff": "Uit",
-        "recurringNote": "Elke uitvoering gaat naar de doelgroep zoals die op dat moment is, dus het aantal ontvangers kan veranderen."
+        "recurringNote": "Er wordt nu niets verzonden. De eerste run begint op het hierboven genoemde tijdstip en elke run verschijnt daarna in de Geschiedenis als een eigen rij. Tot die tijd vindt u deze campagne onder Terugkerend. Elke run gaat naar het publiek zoals het dan is, dus het aantal ontvangers kan veranderen."
       },
       "status": {
         "back": "Terug naar campagnes",
@@ -1842,7 +1843,8 @@
         "add": "Een sjabloon toevoegen",
         "count": "{used} van {max} sjablonen",
         "limitReached": "Limiet bereikt: {max} sjablonen.",
-        "variablesTitle": "Variabelen van sjabloon {position}: {name}"
+        "variablesTitle": "Variabelen van sjabloon {position}: {name}",
+        "variablesLater": "{count, plural, one {# variabele krijgt} other {# variabelen krijgen}} de waarde uit de koppeling, niet uit deze voorbeeldweergave."
       }
     },
     "history": {

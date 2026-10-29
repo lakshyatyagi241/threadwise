@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Una chiave ha almeno 8 caratteri."
-      }
+      },
+      "readOnly": "Puoi vedere le chiavi IA dello spazio di lavoro, ma non puoi aggiungerle, attivarle né rimuoverle. Chiedi a un amministratore il permesso di gestire le chiavi IA."
     }
   }
 }

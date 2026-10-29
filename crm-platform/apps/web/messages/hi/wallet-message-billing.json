@@ -109,7 +109,8 @@
       "amount": "राशि",
       "balance": "बैलेंस",
       "noDescription": "वॉलेट गतिविधि",
-      "reason": "कारण"
+      "reason": "कारण",
+      "invoice": "इनवॉइस डाउनलोड करें"
     },
     "pricingPanel": {
       "title": "संदेश मूल्य निर्धारण",
@@ -1038,6 +1039,11 @@
       "enrichment": "संपर्क खोज",
       "chat_message": "चैट संदेश",
       "webbot_message": "वेबसाइट चैटबॉट संदेश"
+    },
+    "legacyInvoice": {
+      "title": "इनवॉइस",
+      "back": "स्टेटमेंट पर वापस जाएँ",
+      "print": "प्रिंट करें या PDF के रूप में सहेजें"
     }
   }
 }

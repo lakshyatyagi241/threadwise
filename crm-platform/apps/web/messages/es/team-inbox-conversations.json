@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Se reactiva el {time}",
       "erased": "Contactos borrados",
-      "erasedHint": "Estos contactos se borraron y sus conversaciones se conservaron sin sus datos ni el texto de los mensajes. Las horas muestran el último mensaje, porque no se registra la fecha de borrado.",
+      "erasedHint": "Estos contactos se borraron y sus conversaciones se conservaron sin sus datos. Las horas muestran el último mensaje, porque no se registra la fecha de borrado.",
       "erasedTitle": "Contacto borrado"
     },
     "status": {

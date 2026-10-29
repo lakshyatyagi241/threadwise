@@ -156,16 +156,6 @@ export function MessageHistoryScreen() {
             ))}
             <option value="custom">{t('range.custom')}</option>
           </Select>
-          {canExport && (
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={exporter.isPending}
-              onClick={() => void requestExport()}
-            >
-              {exporter.isPending ? <Spinner /> : <DownloadIcon />} {t('exports.request')}
-            </Button>
-          )}
         </div>
       </header>
 
@@ -208,7 +198,14 @@ export function MessageHistoryScreen() {
         {t('retention', { hot: MESSAGE_LOG_HOT_DAYS, days: MESSAGE_LOG_RETENTION_DAYS })}
       </p>
 
-      {canExport && <ExportPanel highlight={fromEmail} tz={tz} />}
+      {canExport && (
+        <ExportPanel
+          highlight={fromEmail}
+          tz={tz}
+          requesting={exporter.isPending}
+          onRequest={() => void requestExport()}
+        />
+      )}
 
       {(summary.isError || insights.isError) && (
         <Alert tone="danger">

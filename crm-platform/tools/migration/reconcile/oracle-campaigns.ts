@@ -16,6 +16,19 @@ const isObj = (v: unknown): v is Doc =>
   v !== null && typeof v === 'object' && !Array.isArray(v) && !(v instanceof Date);
 const filled = (v: unknown): boolean => v !== null && v !== undefined && text(v) !== '';
 
+/**
+ * A Waboo amount (a number, or a numeric string) in hundredths, rounded half up, written independently of the migration's own helper:
+ * the number is spelled to 8 decimals and cut by digits, so no float arithmetic decides a rounding. Null for anything else or a negative.
+ */
+function hundredths(v: unknown): number | null {
+  const n = typeof v === 'number' ? v : typeof v === 'string' && v.trim() !== '' ? Number(v) : NaN;
+  if (!Number.isFinite(n) || n < 0) return null;
+  const [whole = '0', frac = ''] = n.toFixed(8).split('.');
+  const base = BigInt(whole) * 100n + BigInt(frac.slice(0, 2));
+  const out = base + (Number(frac[2]) >= 5 ? 1n : 0n);
+  return out <= BigInt(Number.MAX_SAFE_INTEGER) ? Number(out) : null;
+}
+
 export interface BOptions {
   client: string;
   keepTest: boolean;
@@ -216,7 +229,8 @@ function oracleTemplate(
   const ref = text(d.broadcast_template_id);
   const nm = text(d.broadcast_template_name);
   const lang = text(d.language) || text(d.broadcast_template_language);
-  const meta = text(d.meta_template_id) || (seenMeta && seenMeta.size === 1 ? [...seenMeta][0]! : '');
+  const meta =
+    text(d.meta_template_id) || (seenMeta && seenMeta.size === 1 ? [...seenMeta][0]! : '');
   const r = ref === '' ? undefined : tpls.find((t) => t.keys.includes(ref));
   const ms = meta === '' ? [] : tpls.filter((t) => t.meta === meta);
   if (r && nm !== '' && r.name !== nm) return none;
@@ -488,6 +502,8 @@ export async function oracleBroadcast(
       read_count: g.read,
       responded_count: g.responded,
       retry_enabled: false,
+      legacy_billed_minor: hundredths(d.billable_amount),
+      legacy_refunded_minor: hundredths(d.refunded_amount),
       created_at: createdD.toISOString(),
       updated_at: updatedD.toISOString(),
     };
@@ -497,7 +513,9 @@ export async function oracleBroadcast(
       'broadcast_template_category',
     ])
       if (filled(d[f]))
-        nc(`wpcampaigns: ${f} (no column; only the template link is stored, the name is a cross-check)`);
+        nc(
+          `wpcampaigns: ${f} (no column; only the template link is stored, the name is a cross-check)`,
+        );
     for (const f of [
       'sender_number',
       'filter_query',
@@ -505,8 +523,6 @@ export async function oracleBroadcast(
       'search',
       'marketing_list_id',
       'components',
-      'billable_amount',
-      'refunded_amount',
       'reseller_amount',
       'updated_by',
     ])

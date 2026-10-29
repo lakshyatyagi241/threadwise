@@ -47,7 +47,10 @@
       "download": "Pobierz",
       "rows": "Wiadomości: {n}",
       "keptUntil": "przechowywany do {when} ({days} dni)",
-      "fromEmail": "Z Twojego e-maila"
+      "fromEmail": "Z Twojego e-maila",
+      "hint": "Eksport CSV używa filtrów i dat wybranych na tej stronie. Plik powstaje w tle, a my wyślemy e-mail, gdy będzie gotowy.",
+      "empty": "Brak eksportów. Kliknij Eksportuj CSV, aby otrzymać widoczne tu wiadomości jako plik.",
+      "loading": "Wczytywanie eksportów"
     },
     "kpi": {
       "label": "Kluczowe wskaźniki",

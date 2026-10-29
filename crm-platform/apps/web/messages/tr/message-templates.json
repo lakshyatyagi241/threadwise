@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Bu kategoride pazarlama dili kullanılamaz.",
         "TAG_CONTENT_MISMATCH": "Kategori içerikle uyuşmuyor (ör. UTILITY şablonunda promosyon metni).",
         "SCAM": "Meta şablonu olası dolandırıcılık olarak işaretledi. İddiaları ve dili gözden geçirin."
+      },
+      "stats": {
+        "title": "Bu şablonun performansı",
+        "hint": "Şablonla gönderilen mesajlardan sayılır",
+        "loading": "Rakamlar yükleniyor",
+        "error": "Rakamlar yüklenemedi.",
+        "none": "Bu şablonla henüz bir şey gönderilmedi.",
+        "sent": "Gönderilen",
+        "delivered": "Teslim edilen",
+        "read": "Okunan",
+        "replied": "Yanıtlanan",
+        "failed": "Başarısız",
+        "percent": "%{value}",
+        "footer": "Bu şablonla {total} mesaj gönderildi, {queued} beklemede",
+        "lastSent": "son gönderim {when}"
       }
     },
     "ai": {
@@ -591,7 +606,7 @@
       "tone": "Ton",
       "pickTone": "Ton seçin",
       "language": "Dil",
-      "languageHint": "Taslak, formun dilinde yazılır.",
+      "languageHint": "Meta'nın kabul ettiği herhangi bir dili seçin. Taslak bu dilde yazılır ve şablon bu dili alır.",
       "notes": "Özel istem",
       "notesNote": "isteğe bağlı / en fazla 2000",
       "notesPlaceholder": "Eklenmesini istediğiniz her şey: değişkenler, bağlantılar, mutlaka geçmesi gereken ifadeler, kaçınılacaklar…",

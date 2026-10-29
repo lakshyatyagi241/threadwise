@@ -135,7 +135,11 @@
       "limit": "La limite de boîtes e-mail de votre offre est atteinte, cette boîte e-mail n’a donc pas été connectée.",
       "not_configured": "La connexion pour ce fournisseur n'est pas encore configurée sur cette plateforme. Demandez à l'administrateur de la plateforme.",
       "wrong_account": "Vous vous êtes connecté avec un autre compte que celui de la boîte à reconnecter. Connectez-vous avec la même adresse.",
-      "failed": "Un problème est survenu lors de la connexion de la boîte e-mail. Réessayez."
+      "failed": "Un problème est survenu lors de la connexion de la boîte e-mail. Réessayez.",
+      "not_enabled": "L'e-mail n'est pas inclus dans l'offre de votre espace de travail, donc rien n'a été connecté. Demandez à un administrateur de l'activer.",
+      "not_allowed": "Vous n'êtes pas autorisé à connecter ce type de boîte mail. Demandez l'accès à un administrateur ou utilisez une boîte partagée.",
+      "no_address": "Le fournisseur n'a pas partagé l'adresse e-mail de la boîte, donc rien n'a été connecté. Reconnectez-vous et autorisez l'accès à l'adresse e-mail.",
+      "no_refresh_token": "Le fournisseur n'a pas permis à cette boîte de rester connectée, donc rien n'a été connecté. Retirez l'accès de cette application dans les paramètres de votre compte Google ou Microsoft, puis reconnectez-vous."
     },
     "errors": {
       "notConfigured": "La connexion pour ce fournisseur n'est pas encore configurée sur cette plateforme. Demandez à l'administrateur de la plateforme.",

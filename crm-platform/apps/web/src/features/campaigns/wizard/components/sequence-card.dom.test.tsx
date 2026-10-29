@@ -171,4 +171,15 @@ describe('sequence card', () => {
     );
     act(() => root.unmount());
   });
+
+  it('shows the chosen template as it will arrive, and says where its variables are mapped', () => {
+    const root = mount({ start: [entry(2), entry(3), { templateId: null, variables: {} }] });
+    const previews = document.querySelectorAll('[data-testid="sequence-preview"]');
+    // A template with no variables shows its message only; one with variables says the Review step maps them; none chosen shows nothing.
+    expect(previews).toHaveLength(2);
+    expect(previews[0]!.textContent).toContain('Big summer sale');
+    expect(previews[0]!.textContent).not.toContain('mapping');
+    expect(previews[1]!.textContent).toContain('1 variable gets its value from the mapping');
+    act(() => root.unmount());
+  });
 });

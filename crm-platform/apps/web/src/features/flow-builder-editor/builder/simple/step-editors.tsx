@@ -93,6 +93,7 @@ export function LinkSelect({
   stepId,
   value,
   decide = false,
+  noSelf = false,
   onChange,
 }: {
   doc: SimpleDoc;
@@ -101,6 +102,11 @@ export function LinkSelect({
   value: string | null;
   /** A button or row the customer sees: it has to lead somewhere, so "ends here" is a choice and "not chosen yet" is shown as such. */
   decide?: boolean;
+  /**
+   * The step's own "Then go to": a step that carries on to itself would repeat forever, so it is not offered (unless it is already
+   * the saved choice, so an older flow still shows what it holds). A button may lead back to its own step, so it leaves this off.
+   */
+  noSelf?: boolean;
   onChange: (target: string | null | typeof NEW_JOURNEY) => void;
 }) {
   const t = useTranslations('flb.builder.simple.editors');
@@ -133,17 +139,19 @@ export function LinkSelect({
       {groupsOf(doc).map((g) => (
         <optgroup key={g.key} label={groupText(g, tf)}>
           {g.chains.flatMap((ci) =>
-            doc.journeys[ci]!.steps.map((s, si) => (
-              <option key={s.id} value={s.id}>
-                {t('linkOption', {
-                  stage: stageIn(doc, ci, si),
-                  label: renderMsg(tf, stepLabel(s)),
-                  self: s.id === stepId ? 'true' : 'false',
-                  hasSummary: stepSummary(s, tf) ? 'true' : 'false',
-                  summary: stepSummary(s, tf),
-                })}
-              </option>
-            )),
+            doc.journeys[ci]!.steps.map((s, si) => ({ s, si }))
+              .filter(({ s }) => !(noSelf && s.id === stepId && value !== s.id))
+              .map(({ s, si }) => (
+                <option key={s.id} value={s.id}>
+                  {t('linkOption', {
+                    stage: stageIn(doc, ci, si),
+                    label: renderMsg(tf, stepLabel(s)),
+                    self: s.id === stepId ? 'true' : 'false',
+                    hasSummary: stepSummary(s, tf) ? 'true' : 'false',
+                    summary: stepSummary(s, tf),
+                  })}
+                </option>
+              )),
           )}
         </optgroup>
       ))}
@@ -276,7 +284,7 @@ function MessageEditor({ step, doc, set }: EditorProps) {
 
 const MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 
-function MediaEditor({ step, set }: EditorProps) {
+function MediaEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const kind = str(step.data.kind) || 'image';
   return (
@@ -313,10 +321,14 @@ function MediaEditor({ step, set }: EditorProps) {
       ) : null}
       {kind !== 'audio' ? (
         <Field label={t('media.caption')}>
-          <Textarea
+          {/* The same box as the message step: formatting, emoji and the variable menu (a caption may be 1024 characters on WhatsApp). */}
+          <MessageField
             rows={3}
+            label={t('media.caption')}
             value={str(step.data.caption)}
-            onChange={(e) => set({ caption: e.target.value })}
+            max={LIMITS.body}
+            variables={flowVariables(doc)}
+            onChange={(caption) => set({ caption })}
           />
         </Field>
       ) : null}

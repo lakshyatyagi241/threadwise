@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Linguagem de marketing não permitida nesta categoria.",
         "TAG_CONTENT_MISMATCH": "A categoria não corresponde ao conteúdo (ex.: texto promocional em um modelo UTILITY).",
         "SCAM": "A Meta sinalizou o modelo como possível golpe. Revise as alegações e a linguagem."
+      },
+      "stats": {
+        "title": "Desempenho deste modelo",
+        "hint": "Contado a partir das mensagens enviadas com ele",
+        "loading": "Carregando números",
+        "error": "Não foi possível carregar os números.",
+        "none": "Nada foi enviado com este modelo ainda.",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "replied": "Respondidas",
+        "failed": "Falhas",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# mensagem enviada} other {# mensagens enviadas}} com este modelo, {queued} aguardando",
+        "lastSent": "último envio {when}"
       }
     },
     "ai": {
@@ -591,7 +606,7 @@
       "tone": "Tom",
       "pickTone": "Selecione o tom",
       "language": "Idioma",
-      "languageHint": "O rascunho é escrito no idioma do formulário.",
+      "languageHint": "Escolha qualquer idioma que a Meta aceite. O rascunho é escrito nele e o modelo o adota.",
       "notes": "Prompt personalizado",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Algo específico que você queira incluir: variáveis, links, frases obrigatórias, o que evitar…",

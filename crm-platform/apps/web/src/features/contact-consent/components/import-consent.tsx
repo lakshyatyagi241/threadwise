@@ -85,12 +85,15 @@ export function ImportConsent({
       )}
       {summary && (
         <div className="mt-2 space-y-2 ps-6" data-testid="import-consent-summary">
-          <p className="text-xs">
-            {t('columnSummary', {
-              granted: summary.granted.toLocaleString(),
-              notGranted: summary.notGranted.toLocaleString(),
-            })}
-          </p>
+          {/* "Will be recorded" is only true once the box is ticked; until then the warning below says what happens instead. */}
+          {(checked || summary.granted === 0) && (
+            <p className="text-xs">
+              {t('columnSummary', {
+                granted: summary.granted.toLocaleString(),
+                notGranted: summary.notGranted.toLocaleString(),
+              })}
+            </p>
+          )}
           {summary.unrecognised > 0 && (
             <Alert tone="warning">
               {t('unrecognised', {
@@ -99,7 +102,9 @@ export function ImportConsent({
               })}
             </Alert>
           )}
-          {!checked && summary.granted > 0 && <Alert tone="info">{t('columnIgnored')}</Alert>}
+          {!checked && summary.granted > 0 && (
+            <Alert tone="warning">{t('columnIgnored', { count: summary.granted })}</Alert>
+          )}
         </div>
       )}
       {smsSummary && (

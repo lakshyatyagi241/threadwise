@@ -295,6 +295,25 @@ export const templateCountsSchema = z.object({
 });
 export type TemplateCounts = z.infer<typeof templateCountsSchema>;
 
+/**
+ * `GET /v2/templates/:id/stats`: how one template did, from the messages sent with it (broadcasts, campaigns, flows and agents alike).
+ * Each step is cumulative: a read message was also delivered and sent. `failed` and `queued` are apart from them.
+ */
+export const templateStatsSchema = z.object({
+  /** Every message sent with the template (all the numbers below are out of this). */
+  total: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  failed: z.int(),
+  queued: z.int(),
+  /** Customers who wrote back in the conversation within 7 days after receiving it. */
+  replied: z.int(),
+  /** When the template was last sent (ISO), or null when it never was. */
+  lastSentAt: z.iso.datetime().nullable(),
+});
+export type TemplateStats = z.infer<typeof templateStatsSchema>;
+
 /** `POST /v2/templates/:id/submit`: send (or send again) on another number when the account has several. */
 export const submitTemplateInputSchema = z.object({ connectionId: uuidSchema.optional() });
 export type SubmitTemplateInput = z.infer<typeof submitTemplateInputSchema>;

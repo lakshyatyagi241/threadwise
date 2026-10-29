@@ -17,18 +17,19 @@
       "refresh": "Atualizar",
       "newCampaign": "Nova campanha",
       "tile": {
-        "sent": "Enviadas",
+        "sent": "Mensagens enviadas",
         "delivered": "Entregues",
         "read": "Lidas",
-        "failed": "Com falha",
-        "processing": "Em processamento",
-        "campaigns": "{count} campanhas",
+        "failed": "Mensagens com falha",
+        "processing": "Campanhas enviando",
+        "campaigns": "de {count, plural, one {# campanha} other {# campanhas}}",
         "inFlight": "em andamento",
         "awaiting": "aguardando",
-        "queued": "{count} na fila",
+        "queued": "{count} agendadas para começar",
         "deliveredRate": "{rate}% de entrega",
         "readRate": "{rate}% de taxa de leitura",
-        "failedCampaigns": "{count} campanhas com falha"
+        "failedCampaigns": "{count, plural, one {# campanha marcada} other {# campanhas marcadas}} como falha",
+        "note": "Enviadas, Entregues, Lidas e Com falha contam mensagens, e uma mensagem com falha não entra em Enviadas. A linha menor sob cada número conta campanhas. Tudo segue o intervalo de datas escolhido abaixo: {range}."
       },
       "range": {
         "all": "Todo o período",
@@ -1628,7 +1629,7 @@
         "retries": "Novas tentativas",
         "retriesOn": "Ativadas, até {date}",
         "retriesOff": "Desativadas",
-        "recurringNote": "Cada execução vai para o público como ele estiver naquele momento, então o número de destinatários pode mudar."
+        "recurringNote": "Nada é enviado agora. A primeira execução começa no horário acima e cada execução aparece depois no Histórico como uma linha própria. Até lá, encontre esta campanha em Recorrentes. Cada execução vai para o público como ele estiver naquele momento, então o número de destinatários pode mudar."
       },
       "status": {
         "back": "Voltar para campanhas",
@@ -1842,7 +1843,8 @@
         "add": "Adicionar um modelo",
         "count": "{used} de {max} modelos",
         "limitReached": "Limite atingido: {max} modelos.",
-        "variablesTitle": "Variáveis do modelo {position}: {name}"
+        "variablesTitle": "Variáveis do modelo {position}: {name}",
+        "variablesLater": "{count, plural, one {# variável recebe} other {# variáveis recebem}} o valor do mapeamento, não desta pré-visualização."
       }
     },
     "history": {

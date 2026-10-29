@@ -135,7 +135,11 @@
       "limit": "O limite de caixas de e-mail do seu plano foi atingido, então esta caixa de e-mail não foi conectada.",
       "not_configured": "O login deste provedor ainda não está configurado nesta plataforma. Fale com o administrador da plataforma.",
       "wrong_account": "Você entrou com uma conta diferente da caixa que está sendo reconectada. Entre com o mesmo endereço.",
-      "failed": "Algo deu errado ao conectar a caixa de e-mail. Tente novamente."
+      "failed": "Algo deu errado ao conectar a caixa de e-mail. Tente novamente.",
+      "not_enabled": "O e-mail não está incluído no plano do seu espaço de trabalho, então nada foi conectado. Peça a um administrador para ativá-lo.",
+      "not_allowed": "Você não tem permissão para conectar este tipo de caixa de correio. Peça acesso a um administrador ou use uma caixa compartilhada.",
+      "no_address": "O provedor não compartilhou o endereço de e-mail da caixa, então nada foi conectado. Conecte novamente e permita o acesso ao endereço de e-mail.",
+      "no_refresh_token": "O provedor não permitiu que esta caixa continuasse conectada, então nada foi conectado. Remova o acesso deste aplicativo nas configurações da sua conta Google ou Microsoft e conecte novamente."
     },
     "errors": {
       "notConfigured": "O login deste provedor ainda não está configurado nesta plataforma. Fale com o administrador da plataforma.",

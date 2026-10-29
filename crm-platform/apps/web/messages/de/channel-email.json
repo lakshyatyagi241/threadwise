@@ -135,7 +135,11 @@
       "limit": "Das Postfachlimit Ihres Tarifs ist erreicht, daher wurde dieses Postfach nicht verbunden.",
       "not_configured": "Die Anmeldung für diesen Anbieter ist für diese Plattform noch nicht eingerichtet. Fragen Sie den Plattformadministrator.",
       "wrong_account": "Sie haben sich mit einem anderen Konto angemeldet als dem des Postfachs, das erneut verbunden wird. Melden Sie sich mit derselben Adresse an.",
-      "failed": "Beim Verbinden des Postfachs ist etwas schiefgelaufen. Versuchen Sie es erneut."
+      "failed": "Beim Verbinden des Postfachs ist etwas schiefgelaufen. Versuchen Sie es erneut.",
+      "not_enabled": "E-Mail ist im Tarif Ihres Arbeitsbereichs nicht enthalten, daher wurde nichts verbunden. Bitten Sie einen Administrator, es einzuschalten.",
+      "not_allowed": "Sie dürfen diese Art von Postfach nicht verbinden. Bitten Sie einen Administrator um Zugriff oder nutzen Sie ein gemeinsames Postfach.",
+      "no_address": "Der Anbieter hat die E-Mail-Adresse des Postfachs nicht weitergegeben, daher wurde nichts verbunden. Verbinden Sie erneut und erlauben Sie den Zugriff auf die E-Mail-Adresse.",
+      "no_refresh_token": "Der Anbieter hat nicht erlaubt, dass dieses Postfach angemeldet bleibt, daher wurde nichts verbunden. Entfernen Sie den Zugriff dieser App in den Einstellungen Ihres Google- oder Microsoft-Kontos und verbinden Sie erneut."
     },
     "errors": {
       "notConfigured": "Die Anmeldung für diesen Anbieter ist für diese Plattform noch nicht eingerichtet. Fragen Sie den Plattformadministrator.",

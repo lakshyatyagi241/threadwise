@@ -135,7 +135,11 @@
       "limit": "Đã đạt giới hạn số hộp thư của gói, nên hộp thư này chưa được kết nối.",
       "not_configured": "Đăng nhập cho nhà cung cấp này chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
       "wrong_account": "Bạn đã đăng nhập bằng tài khoản khác với hộp thư đang kết nối lại. Hãy đăng nhập bằng cùng địa chỉ.",
-      "failed": "Đã xảy ra lỗi khi kết nối hộp thư. Hãy thử lại."
+      "failed": "Đã xảy ra lỗi khi kết nối hộp thư. Hãy thử lại.",
+      "not_enabled": "Email không nằm trong gói của không gian làm việc, nên chưa kết nối được gì. Hãy nhờ quản trị viên bật tính năng này.",
+      "not_allowed": "Bạn không được phép kết nối loại hộp thư này. Hãy xin quản trị viên cấp quyền hoặc dùng hộp thư dùng chung.",
+      "no_address": "Nhà cung cấp không chia sẻ địa chỉ email của hộp thư, nên chưa kết nối được gì. Hãy kết nối lại và cho phép truy cập địa chỉ email.",
+      "no_refresh_token": "Nhà cung cấp không cho phép hộp thư này giữ đăng nhập, nên chưa kết nối được gì. Hãy gỡ quyền truy cập của ứng dụng này trong cài đặt tài khoản Google hoặc Microsoft rồi kết nối lại."
     },
     "errors": {
       "notConfigured": "Đăng nhập cho nhà cung cấp này chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",

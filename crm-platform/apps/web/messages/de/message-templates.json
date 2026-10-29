@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Werbesprache ist in dieser Kategorie nicht erlaubt.",
         "TAG_CONTENT_MISMATCH": "Kategorie passt nicht zum Inhalt (z. B. Werbetext in einer UTILITY-Vorlage).",
         "SCAM": "Meta hat die Vorlage als möglichen Betrug markiert. Prüfen Sie Aussagen und Sprache."
+      },
+      "stats": {
+        "title": "So lief diese Vorlage",
+        "hint": "Gezählt aus den damit gesendeten Nachrichten",
+        "loading": "Zahlen werden geladen",
+        "error": "Die Zahlen konnten nicht geladen werden.",
+        "none": "Mit dieser Vorlage wurde noch nichts gesendet.",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "read": "Gelesen",
+        "replied": "Beantwortet",
+        "failed": "Fehlgeschlagen",
+        "percent": "{value} %",
+        "footer": "{total, plural, one {# Nachricht} other {# Nachrichten}} mit dieser Vorlage gesendet, {queued} warten noch",
+        "lastSent": "zuletzt gesendet {when}"
       }
     },
     "ai": {
@@ -591,7 +606,7 @@
       "tone": "Tonalität",
       "pickTone": "Tonalität auswählen",
       "language": "Sprache",
-      "languageHint": "Der Entwurf wird in der Sprache des Formulars verfasst.",
+      "languageHint": "Wählen Sie eine beliebige Sprache, die Meta akzeptiert. Der Entwurf wird darin geschrieben, und die Vorlage übernimmt sie.",
       "notes": "Eigener Prompt",
       "notesNote": "optional / max. 2000",
       "notesPlaceholder": "Alles, was enthalten sein soll: Variablen, Links, zwingende Formulierungen, was vermieden werden soll…",

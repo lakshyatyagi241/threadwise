@@ -17,18 +17,19 @@
       "refresh": "Segarkan",
       "newCampaign": "Kampanye baru",
       "tile": {
-        "sent": "Terkirim",
+        "sent": "Pesan terkirim",
         "delivered": "Tersampaikan",
         "read": "Terbaca",
-        "failed": "Gagal",
-        "processing": "Diproses",
-        "campaigns": "{count} kampanye",
+        "failed": "Pesan gagal",
+        "processing": "Kampanye sedang mengirim",
+        "campaigns": "dari {count, plural, other {# kampanye}}",
         "inFlight": "sedang berjalan",
         "awaiting": "menunggu",
-        "queued": "{count} antre",
+        "queued": "{count} dijadwalkan mulai",
         "deliveredRate": "{rate}% pengiriman",
         "readRate": "{rate}% tingkat baca",
-        "failedCampaigns": "{count} kampanye gagal"
+        "failedCampaigns": "{count, plural, other {# kampanye}} ditandai gagal",
+        "note": "Terkirim, Diterima, Dibaca, dan Gagal menghitung pesan, dan pesan gagal tidak dihitung dalam Terkirim. Baris kecil di bawah setiap angka menghitung kampanye. Semuanya mengikuti rentang tanggal yang dipilih di bawah: {range}."
       },
       "range": {
         "all": "Sepanjang waktu",
@@ -1628,7 +1629,7 @@
         "retries": "Percobaan ulang",
         "retriesOn": "Aktif, hingga {date}",
         "retriesOff": "Nonaktif",
-        "recurringNote": "Setiap putaran dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
+        "recurringNote": "Tidak ada yang dikirim sekarang. Eksekusi pertama dimulai pada waktu di atas, lalu setiap eksekusi muncul di Riwayat sebagai baris tersendiri. Sampai saat itu, temukan kampanye ini di Berulang. Setiap eksekusi dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
       },
       "status": {
         "back": "Kembali ke kampanye",
@@ -1842,7 +1843,8 @@
         "add": "Tambah templat",
         "count": "{used} dari {max} templat",
         "limitReached": "Batas tercapai: {max} templat.",
-        "variablesTitle": "Variabel templat {position}: {name}"
+        "variablesTitle": "Variabel templat {position}: {name}",
+        "variablesLater": "{count, plural, other {# variabel}} mengambil nilainya dari pemetaan, bukan dari pratinjau ini."
       }
     },
     "history": {

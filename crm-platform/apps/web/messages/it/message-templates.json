@@ -562,6 +562,21 @@
         "PROMOTIONAL": "Linguaggio di marketing non consentito in questa categoria.",
         "TAG_CONTENT_MISMATCH": "La categoria non corrisponde al contenuto (es. testo promozionale in un template UTILITY).",
         "SCAM": "Meta ha segnalato il template come potenziale truffa. Controlla affermazioni e linguaggio."
+      },
+      "stats": {
+        "title": "Risultati di questo modello",
+        "hint": "Conteggiato dai messaggi inviati con esso",
+        "loading": "Caricamento dei numeri",
+        "error": "Impossibile caricare i numeri.",
+        "none": "Con questo modello non è ancora stato inviato nulla.",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "read": "Letti",
+        "replied": "Risposte",
+        "failed": "Falliti",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# messaggio inviato} other {# messaggi inviati}} con questo modello, {queued} in attesa",
+        "lastSent": "ultimo invio {when}"
       }
     },
     "ai": {
@@ -591,7 +606,7 @@
       "tone": "Tono",
       "pickTone": "Seleziona il tono",
       "language": "Lingua",
-      "languageHint": "La bozza viene scritta nella lingua del modulo.",
+      "languageHint": "Scegli qualsiasi lingua accettata da Meta. La bozza è scritta in essa e il modello la adotta.",
       "notes": "Prompt personalizzato",
       "notesNote": "facoltativo / max 2000",
       "notesPlaceholder": "Tutto ciò che vuoi includere: variabili, link, formulazioni obbligatorie, cosa evitare…",

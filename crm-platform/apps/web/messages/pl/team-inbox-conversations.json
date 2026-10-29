@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wróci {time}",
       "erased": "Usunięte kontakty",
-      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby i treści wiadomości. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
+      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
       "erasedTitle": "Usunięty kontakt"
     },
     "status": {

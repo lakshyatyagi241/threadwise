@@ -127,6 +127,8 @@ interface TableSpecBase {
 export interface DeleteSpec extends TableSpecBase {
   disposition: 'delete';
   whenAnonymising?: AnonymiseSet | 'keep';
+  /** Used instead of `whenAnonymising` when a CRM contact delete keeps the history: the conversation stays readable. */
+  whenKeepingText?: AnonymiseSet | 'keep';
 }
 
 /** The rows are kept and the person's values are replaced. `legalHold` says why the row stays at all. */
@@ -209,6 +211,8 @@ export interface PrivacyCtx {
   /** True: count only, change nothing. */
   dryRun: boolean;
   now: Date;
+  /** A contact deleted from the CRM with its history kept: the conversation text stays (`whenKeepingText`), only the identity goes. */
+  keepMessageText?: boolean;
 }
 
 export interface ExportedTable {

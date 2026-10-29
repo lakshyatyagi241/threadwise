@@ -10,6 +10,7 @@ import {
   canRedo,
   canUndo,
   clampZoom,
+  newCanvasNodes,
   connect,
   connectionFocus,
   edgeFocus,
@@ -363,5 +364,18 @@ describe('connection focus', () => {
   it('a wire that no longer exists has no focus', () => {
     expect(edgeFocus(edges, 'gone')).toBeNull();
     expect(edgeFocus(edges, null)).toBeNull();
+  });
+});
+
+describe('a new flow', () => {
+  it('starts with its Trigger on the canvas, as START, and a second Trigger is refused', () => {
+    const nodes = newCanvasNodes();
+    expect(nodes).toHaveLength(1);
+    expect(nodes[0]).toMatchObject({ type: 'trigger', isStart: true });
+    // The Trigger exists once, so the palette's Trigger cannot add another.
+    expect(addNode({ nodes, edges: [] }, 'trigger', 0, 0).ok).toBe(false);
+    // The next node added is an ordinary node, not START.
+    const next = addNode({ nodes, edges: [] }, 'message', 400, 60);
+    expect(next.ok && next.state.nodes.filter((n) => n.isStart)).toHaveLength(1);
   });
 });

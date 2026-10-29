@@ -40,7 +40,7 @@ import {
   type StatementFilters,
 } from '../../lib/statement-filters';
 import { ErrorState, LoadingBlock, PermissionDenied } from '../state';
-import { formatWhen } from './activity-table';
+import { InvoiceLink, formatWhen } from './activity-table';
 import { PagerBar } from './pager-bar';
 import { TypePill } from './type-pill';
 import { usePager } from './use-pager';
@@ -368,6 +368,7 @@ export function StatementTable({
                     {tctx('reason')}: {r.note}
                   </div>
                 )}
+                <InvoiceLink orderId={r.invoiceOrderId} legacyId={r.legacyInvoiceId} />
               </td>
               {detailColumns.map((c) => (
                 <td key={c} className="px-2 py-2">

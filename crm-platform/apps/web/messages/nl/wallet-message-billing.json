@@ -109,7 +109,8 @@
       "amount": "Bedrag",
       "balance": "Saldo",
       "noDescription": "Portemonneemutatie",
-      "reason": "Reden"
+      "reason": "Reden",
+      "invoice": "Factuur downloaden"
     },
     "pricingPanel": {
       "title": "Berichtprijzen",
@@ -1038,6 +1039,11 @@
       "enrichment": "Contactopzoeking",
       "chat_message": "Chatbericht",
       "webbot_message": "Websitechatbot-bericht"
+    },
+    "legacyInvoice": {
+      "title": "Factuur",
+      "back": "Terug naar het overzicht",
+      "print": "Afdrukken of opslaan als PDF"
     }
   }
 }

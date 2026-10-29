@@ -21,6 +21,21 @@ const COST_JOIN = `
     ) cost ON true
    WHERE c.org_id = 1`;
 
+/** What the campaign shows as its cost: its own charges, else what the old system billed less what it refunded (migrated campaigns). */
+const COST_SHOWN = `
+  SELECT c.id,
+         CASE WHEN cost.cost_minor = 0 AND c.legacy_billed_minor IS NOT NULL
+              THEN greatest(c.legacy_billed_minor - coalesce(c.legacy_refunded_minor, 0), 0)
+              ELSE cost.cost_minor END AS cost_minor
+    FROM wpcampaigns c
+    LEFT JOIN LATERAL (
+      SELECT coalesce(sum(u.credits) FILTER (WHERE u.status = 'charged'), 0)::bigint AS cost_minor
+        FROM wp_campaign_contacts r
+        JOIN usage_charges u ON u.org_id = r.org_id AND u.wamid = r.whatsapp_message_id AND u.created_at >= c.created_at
+       WHERE r.org_id = c.org_id AND r.campaign_id = c.id AND r.whatsapp_message_id IS NOT NULL
+    ) cost ON true
+   WHERE c.org_id = 1 ORDER BY c.id`;
+
 describe('campaign list cost join', () => {
   let container: StartedPostgreSqlContainer;
   let db: Client;
@@ -76,11 +91,45 @@ describe('campaign list cost join', () => {
     );
   });
 
+  it('shows what the old system billed less the refund when a migrated campaign has no charges of its own', async () => {
+    await db.query(
+      `INSERT INTO wpcampaigns (org_id, id, campaign_name, created_at, legacy_billed_minor, legacy_refunded_minor) VALUES
+         (1, 2, 'migrated', now() - interval '1 hour', 97958, 50720),
+         (1, 3, 'migrated refunded more', now() - interval '1 hour', 100, 250),
+         (1, 4, 'migrated no refund', now() - interval '1 hour', 170, NULL)`,
+    );
+    const res = await db.query(COST_SHOWN);
+    expect(res.rows).toEqual([
+      { id: 1, cost_minor: 150 },
+      { id: 2, cost_minor: 47238 },
+      { id: 3, cost_minor: 0 },
+      { id: 4, cost_minor: 170 },
+    ]);
+  });
+
+  it('keeps its own charges when there are some, whatever the old system billed', async () => {
+    await db.query(
+      `UPDATE wpcampaigns SET legacy_billed_minor = 999999, legacy_refunded_minor = 0 WHERE org_id = 1 AND id = 1`,
+    );
+    const res = await db.query(COST_SHOWN);
+    expect(res.rows[0]).toEqual({ id: 1, cost_minor: 150 });
+  });
+
+  it('refuses a negative legacy amount', async () => {
+    await expect(
+      db.query(`UPDATE wpcampaigns SET legacy_billed_minor = -1 WHERE org_id = 1 AND id = 2`),
+    ).rejects.toThrow(/ck_wpcampaigns_legacy_cost/);
+  });
+
   it('keeps that bound in the repository query', () => {
     const src = readFileSync(
       resolve(__dirname, '../../../src/modules/campaigns/campaigns.repository.ts'),
       'utf8',
     );
     expect(src).toContain('u.wamid = r.whatsapp_message_id AND u.created_at >= c.created_at');
+    // and the fallback to the old system's billed and refunded amounts
+    expect(src).toContain(
+      'greatest(c.legacy_billed_minor - coalesce(c.legacy_refunded_minor, 0), 0)',
+    );
   });
 });

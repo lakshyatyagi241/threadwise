@@ -228,6 +228,14 @@ export const MAIL_CONNECT_OUTCOMES = [
   'limit',
   'not_configured',
   'wrong_account',
+  /** The workspace's plan does not include email (or it was switched off while the person was signing in). */
+  'not_enabled',
+  /** The person may not connect this kind of mailbox (personal mailboxes are off, or the right was lost). */
+  'not_allowed',
+  /** The provider did not give the mailbox's email address. */
+  'no_address',
+  /** The provider gave no refresh token, so the mailbox could not stay signed in. */
+  'no_refresh_token',
   'failed',
 ] as const;
 export type MailConnectOutcome = (typeof MAIL_CONNECT_OUTCOMES)[number];
