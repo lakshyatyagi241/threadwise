@@ -491,6 +491,43 @@ describe('CTA and Location', () => {
     expect((h.sent[0] as { body: string }).body).toContain('☏ Call: +911234');
   });
 
+  it('a link typed without https, or with a space before it, is still a button on WhatsApp (it used to go out as plain text)', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Our site',
+          ctaActions: [
+            { type: 'url', label: 'Visit', value: ' www.x.test ' },
+            { type: 'url', label: 'Offers', value: 'shop.in/offers' },
+          ],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    const buttons = h.sent.filter((m) => m.kind === 'cta_url');
+    expect(buttons.map((m) => (m as { url: string }).url)).toEqual([
+      'https://www.x.test',
+      'https://shop.in/offers',
+    ]);
+  });
+
+  it('text that is not an address stays text lines, never a broken button', async () => {
+    const run = newRun({
+      nodes: [
+        n('c', 'cta', {
+          valueText: 'Our site',
+          ctaActions: [{ type: 'url', label: 'Visit', value: 'ask at the desk' }],
+        }),
+      ],
+      edges: [],
+    });
+    const h = harness(run);
+    await h.start();
+    expect(h.sent[0]!.kind).toBe('text');
+  });
+
   it('three web links are three buttons on WhatsApp, in three messages', async () => {
     const run = newRun({
       nodes: [
