@@ -30,6 +30,15 @@ partner.agent.manage
 Custom modules auto-register `record.<module>.<action>` at creation, which is
 why the registry is global rather than per-tenant.
 
+## Campaign record scope
+
+`camp.campaigns.{read,update,delete,control,export,test}` carry a record scope that campaigns read as **Global** (`all`: every
+campaign of the workspace) or **Restricted** (`own`: only the campaigns the user created, `wpcampaigns.created_by`; the legacy
+`broadcasts.user_id`). A campaign has no owner or team, so a stored team scope reads as Restricted. The check is SQL, in
+`modules/campaigns/campaign-scope.ts`, added to every user-facing lookup (list and tab counts, detail, edit, delete, control,
+export, summary, wizard drafts and history, previous-sends); a campaign outside the scope is `404`, never `403`. Workers and
+webhooks run without grants and are not narrowed.
+
 ## Merge rules
 
 When a user has several roles, grants merge:

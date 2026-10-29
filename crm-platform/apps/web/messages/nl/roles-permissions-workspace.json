@@ -256,6 +256,10 @@
         "team": "Records van mijn team",
         "team_and_below": "Mijn team en subteams"
       },
+      "creatorScope": {
+        "all": "Globale records",
+        "own": "Beperkte toegang (alleen eigen records)"
+      },
       "scopeLegend": "Wat elk recordbereik omvat",
       "scopeHelp": {
         "all": "Alle records in de werkruimte.",

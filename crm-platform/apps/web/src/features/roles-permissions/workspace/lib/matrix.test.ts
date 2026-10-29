@@ -114,12 +114,24 @@ describe('scopeOptions', () => {
   it('keeps a team_and_below value the plan no longer offers', () => {
     expect(scopeOptions(false, 'team_and_below')).toEqual(['all', 'team_and_below', 'team', 'own']);
   });
+  it('offers campaign keys only global and own, keeping a stored team scope visible', () => {
+    expect(scopeOptions(true, 'all', 'camp.campaigns.read')).toEqual(['all', 'own']);
+    expect(scopeOptions(true, 'team', 'camp.campaigns.read')).toEqual(['all', 'team', 'own']);
+    expect(scopeOptions(true, 'all', 'record.contacts.read')).toEqual([
+      'all',
+      'team_and_below',
+      'team',
+      'own',
+    ]);
+  });
 });
 
 describe('needsTeamWarning', () => {
   const scoped = [{ key: 'contact.read', supportsScope: true }];
-  const draftOf = (effect: 'allow' | 'deny', recordScope: 'all' | 'team' | 'team_and_below' | 'own') =>
-    new Map([['contact.read', { effect, recordScope }]]);
+  const draftOf = (
+    effect: 'allow' | 'deny',
+    recordScope: 'all' | 'team' | 'team_and_below' | 'own',
+  ) => new Map([['contact.read', { effect, recordScope }]]);
 
   it('warns for an allow at team or team_and_below when members have no team', () => {
     expect(needsTeamWarning(draftOf('allow', 'team'), 2, scoped)).toBe(true);
@@ -131,6 +143,10 @@ describe('needsTeamWarning', () => {
     expect(needsTeamWarning(draftOf('deny', 'team'), 2, scoped)).toBe(false);
     expect(needsTeamWarning(draftOf('allow', 'team'), 0, scoped)).toBe(false);
     expect(needsTeamWarning(draftOf('allow', 'team'), undefined, scoped)).toBe(false);
-    expect(needsTeamWarning(draftOf('allow', 'team'), 2, [{ key: 'contact.read', supportsScope: false }])).toBe(false);
+    expect(
+      needsTeamWarning(draftOf('allow', 'team'), 2, [
+        { key: 'contact.read', supportsScope: false },
+      ]),
+    ).toBe(false);
   });
 });

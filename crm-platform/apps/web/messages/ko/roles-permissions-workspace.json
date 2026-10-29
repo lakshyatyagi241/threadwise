@@ -256,6 +256,10 @@
         "team": "내 팀의 레코드",
         "team_and_below": "내 팀 및 하위 팀"
       },
+      "creatorScope": {
+        "all": "전체 레코드",
+        "own": "제한된 접근(본인 레코드만)"
+      },
       "scopeLegend": "각 레코드 범위가 포함하는 내용",
       "scopeHelp": {
         "all": "워크스페이스의 모든 레코드입니다.",

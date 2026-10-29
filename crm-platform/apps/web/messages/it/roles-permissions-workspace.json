@@ -256,6 +256,10 @@
         "team": "Record del mio team",
         "team_and_below": "Il mio team e i sottoteam"
       },
+      "creatorScope": {
+        "all": "Record globali",
+        "own": "Accesso limitato (solo i propri)"
+      },
       "scopeLegend": "Cosa copre ogni ambito dei record",
       "scopeHelp": {
         "all": "Tutti i record dello spazio di lavoro.",

@@ -256,6 +256,10 @@
         "team": "Catatan tim saya",
         "team_and_below": "Tim saya dan sub-tim"
       },
+      "creatorScope": {
+        "all": "Rekaman global",
+        "own": "Akses terbatas (hanya milik sendiri)"
+      },
       "scopeLegend": "Apa yang dicakup setiap lingkup data",
       "scopeHelp": {
         "all": "Semua data di ruang kerja.",

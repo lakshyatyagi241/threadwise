@@ -256,6 +256,10 @@
         "team": "My team's records",
         "own": "My records"
       },
+      "creatorScope": {
+        "all": "Global records",
+        "own": "Restricted access (own records)"
+      },
       "scopeLegend": "What each record scope covers",
       "scopeHelp": {
         "all": "Every record in the workspace.",

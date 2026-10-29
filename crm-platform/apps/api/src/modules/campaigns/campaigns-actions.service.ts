@@ -124,9 +124,9 @@ export class CampaignsActionsService {
   async cancel(uuid: string): Promise<CampaignActionResponse> {
     const { orgId } = await this.found(uuid);
     return this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c) throw AppError.notFound('Campaign', uuid);
-      await this.repo.lock(tx, orgId, uuid);
+      await this.repo.lock(tx, orgId, uuid, 'camp.campaigns.control');
       if (c.status !== 'cancelled') await this.move(tx, orgId, c, 'cancelled');
       return { id: uuid, status: 'cancelled', message: 'Campaign cancelled.' };
     });
@@ -136,9 +136,9 @@ export class CampaignsActionsService {
   async resume(uuid: string): Promise<CampaignActionResponse> {
     const { orgId } = await this.found(uuid);
     const row = await this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c) throw AppError.notFound('Campaign', uuid);
-      await this.repo.lock(tx, orgId, uuid);
+      await this.repo.lock(tx, orgId, uuid, 'camp.campaigns.control');
       if (c.status !== 'running') {
         await this.assertFunded(orgId, c);
         await this.move(tx, orgId, c, 'running', { reopen: true });
@@ -153,9 +153,9 @@ export class CampaignsActionsService {
   async sendNow(uuid: string): Promise<CampaignActionResponse> {
     const { orgId } = await this.found(uuid);
     const row = await this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c) throw AppError.notFound('Campaign', uuid);
-      await this.repo.lock(tx, orgId, uuid);
+      await this.repo.lock(tx, orgId, uuid, 'camp.campaigns.control');
       const zone = c.timezone ?? 'UTC';
       const parts = new Intl.DateTimeFormat('en-CA', {
         timeZone: zone,
@@ -188,9 +188,9 @@ export class CampaignsActionsService {
   async resend(uuid: string, input: ResendCampaignInput): Promise<ResendCampaignResponse> {
     const { orgId } = await this.found(uuid);
     const { row, targets, status } = await this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c) throw AppError.notFound('Campaign', uuid);
-      await this.repo.lock(tx, orgId, uuid);
+      await this.repo.lock(tx, orgId, uuid, 'camp.campaigns.control');
       if (!(RESENDABLE_STATUSES as readonly string[]).includes(c.status)) {
         throw refuse(
           'CAMP_NOT_RESENDABLE',
@@ -245,7 +245,7 @@ export class CampaignsActionsService {
   private async removeMany(uuids: readonly string[]): Promise<string[]> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const owned = await this.repo.idsByUuid(tx, orgId, uuids);
+      const owned = await this.repo.idsByUuid(tx, orgId, uuids, 'camp.campaigns.delete');
       if (uuids.length === 1 && owned.size === 0) throw AppError.notFound('Campaign', uuids[0]!);
       for (const [uuid, id] of owned) {
         await this.audit.record(tx, { module: MODULE_KEY, recordId: id, action: 'delete' });
@@ -265,7 +265,7 @@ export class CampaignsActionsService {
   async export(uuid: string): Promise<{ stream: Readable; fileName: string }> {
     const { orgId } = RequestContextStore.require();
     const { c, zone } = await this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.export');
       // a campaign with no zone of its own (a migrated one) is written in the workspace's zone, the one the platform shows it in
       return { c, zone: c?.timezone ?? (await loadWorkspaceCalendar(tx, orgId)).timezone };
     });
