@@ -255,7 +255,6 @@ export function RuleFormBody({
       const next = { ...f, added: f.added.filter((k) => k !== key) };
       if (key === 'contactKind') next.contactKind = 'any';
       if (key === 'contact') next.contact = emptyForm().contact;
-      if (key === 'channel') next.channelKinds = [];
       if (key === 'keywords') next.keywords = '';
       if (key === 'language') next.languages = '';
       if (key === 'hours') next.businessHours = 'any';
@@ -289,23 +288,6 @@ export function RuleFormBody({
             ready={lookups.ready}
             failed={lookups.failed}
           />
-        </div>
-      );
-    if (key === 'channel')
-      return (
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">{t('channel.hint')}</p>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {CHANNEL_KINDS.map((k) => (
-              <Checkbox
-                key={k}
-                id={`${uid}-ch-${k}`}
-                label={tc(k)}
-                checked={form.channelKinds.includes(k)}
-                onChange={() => set('channelKinds', toggleId(form.channelKinds, k))}
-              />
-            ))}
-          </div>
         </div>
       );
     if (key === 'keywords')
@@ -417,11 +399,38 @@ export function RuleFormBody({
         </Field>
       </Card>
 
+      {!form.isFallback && (
+        <Card title={tf('name.channel')} hint={t('channel.hint')}>
+          <div className="grid gap-2 sm:grid-cols-2" data-testid="channel-first">
+            {CHANNEL_KINDS.map((k) => (
+              <Checkbox
+                key={k}
+                id={`${uid}-ch-${k}`}
+                label={tc(k)}
+                checked={form.channelKinds.includes(k)}
+                onChange={() =>
+                  setForm((f) => {
+                    const channelKinds = toggleId(f.channelKinds, k);
+                    // A rule for chosen channels only applies to conversations that match, so the conditions switch goes on with it.
+                    return {
+                      ...f,
+                      channelKinds,
+                      onlyWhen: channelKinds.length > 0 ? true : f.onlyWhen,
+                    };
+                  })
+                }
+              />
+            ))}
+          </div>
+        </Card>
+      )}
+
       {(!form.isFallback || form.added.length > 0) && (
         <Card title={t('whenTitle')} hint={tf('whenSwitchHint')}>
           <div className="flex items-start gap-3">
             <Switch
               checked={form.onlyWhen}
+              disabled={form.channelKinds.length > 0}
               onCheckedChange={(v) => set('onlyWhen', v)}
               label={tf('whenSwitch')}
             />

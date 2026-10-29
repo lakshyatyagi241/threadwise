@@ -171,8 +171,17 @@ describe('the rule form', () => {
     expect(out).toContain('data-testid="add-condition"');
     expect(out).not.toContain('Customer language');
     expect(out).not.toContain('New or returning contact');
-    // the channel checkboxes are inside the Channel card only when it was added
-    expect(html(<RuleFormBody />)).not.toContain('Telegram');
+  });
+
+  it('asks for the channel first, before the conditions, on a new rule too', () => {
+    const out = html(<RuleFormBody />);
+    expect(out).toContain('data-testid="channel-first"');
+    expect(out).toContain('Telegram');
+    expect(out.indexOf('data-testid="channel-first"')).toBeLessThan(
+      out.indexOf('When a new conversation arrives'),
+    );
+    // Channel is no longer one of the conditions in the add menu.
+    expect(out).not.toContain('data-testid="add-channel"');
   });
 
   it('a rule that applies to every conversation keeps its conditions but says they are ignored', () => {
