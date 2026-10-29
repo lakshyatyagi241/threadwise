@@ -491,7 +491,7 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
         const sheet = obj(n.data.googleSheet);
         const config = flbTriggerConfig('google_sheet', {
           sheetId: s(sheet.id),
-          tabName: s(n.data.googleSheetName),
+          tabName: s(n.data.googleSheetName) || s(obj(n.data.localValues).googleSheetName),
           phoneColumn: s(n.data.mobile_contact_number),
         }) as FlbGoogleSheetConfig;
         bump('sheetTriggerApproximated');

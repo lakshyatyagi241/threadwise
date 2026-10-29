@@ -221,6 +221,29 @@ describe('the converter', () => {
     expect(out.soft.find((x) => x.code === 'SHEET_TRIGGER_INCOMPLETE')?.detail).toBe(1);
   });
 
+  it('A3d: the tab falls back to localValues.googleSheetName, as the sheet step reads it', () => {
+    const out = convertAutomation({
+      nodes: {
+        t1: wnode({
+          type: 'trigger',
+          cls: 'google',
+          fn: 'google_sheet_events',
+          data: {
+            googleSheet: { id: 'sheet-1' },
+            localValues: { googleSheetName: 'Leads tab' },
+            mobile_contact_number: 'Phone',
+          },
+        }),
+      },
+      triggerIds: ['t1'],
+      cells: new Map(),
+      templates: new Map(),
+      list: () => undefined,
+    });
+    if (!out.ok) throw new Error(out.reason);
+    expect(out.trigger.config).toMatchObject({ tabName: 'Leads tab' });
+  });
+
   it('A3c: a sheet link is cut down to its id, the same way the app stores it', () => {
     const out = convertAutomation({
       nodes: {
