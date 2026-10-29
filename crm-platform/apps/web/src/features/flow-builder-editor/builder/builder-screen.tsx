@@ -15,6 +15,8 @@ import {
 } from '@crm/contracts';
 import { ConfirmDialog } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
 import { useFlb, useMsg, type Msg } from '../lib/msg';
 import { nodeLabel } from '../lib/contract-text';
@@ -60,6 +62,13 @@ import { QuickAddMenu } from './quick-add';
 import { uploadFlowMedia } from '../lib/upload-media';
 import { TestPanel } from './simulator/test-panel';
 import { Toolbar } from './toolbar';
+import {
+  BuilderTabs,
+  WebBotPanels,
+  useBuilderTab,
+  whatsappDefaultsFrom,
+  widgetChannelOf,
+} from './web-bot-tabs';
 
 const NO_IDS: ReadonlySet<string> = new Set();
 const DEFAULT_VARS = [
@@ -479,7 +488,22 @@ function BuilderInner({
     }
   };
 
+  // A website chat or WhatsApp bot also has Customize and Deploy beside Build, as in the Simple builder; the other channels have no widget.
+  const triggerNode = state.nodes.find((n) => n.type === 'trigger');
+  const widgetChannel = widgetChannelOf(mode, triggerNode);
+  const canEditFlow = useCan('flb.flows.update');
+  const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
+  const needsCustomizing = !!flowId && widgetChannel !== null && widgetQuery.data?.widget === null;
+  const [tab, setTab] = useBuilderTab(!!flowId, { faqs: false, web: widgetChannel !== null });
+  const shownTab = widgetChannel ? tab : 'build';
+  // The Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  const customizeSave = useRef<(() => void) | null>(null);
+  const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
+    customizeSave.current = fn;
+  }, []);
+
   const onSave = () => {
+    if (shownTab === 'customize' && customizeSave.current) return customizeSave.current();
     if (!runValidation()) return;
     if (flowId && name.trim()) void saveFlow(name.trim());
     else setSaveOpen(true);
@@ -614,7 +638,18 @@ function BuilderInner({
           }
         />
 
-        <div className="relative flex min-h-0 flex-1">
+        {widgetChannel ? (
+          <BuilderTabs
+            tab={shownTab}
+            onTab={setTab}
+            saved={!!flowId}
+            needsCustomizing={needsCustomizing}
+            faqs={false}
+            web
+          />
+        ) : null}
+
+        <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
           {sidebarOpen ? (
             <>
               <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
@@ -790,6 +825,19 @@ function BuilderInner({
             onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
           />
         </div>
+
+        {flowId && widgetChannel ? (
+          <WebBotPanels
+            tab={shownTab}
+            channel={widgetChannel}
+            whatsapp={whatsappDefaultsFrom(triggerNode, ctx.senders.chat)}
+            flowId={flowId}
+            flowName={name}
+            published={published}
+            canEdit={canEditFlow}
+            registerCustomizeSave={registerCustomizeSave}
+          />
+        ) : null}
 
         <ConfirmDialog
           open={confirmDeleteId !== null}
