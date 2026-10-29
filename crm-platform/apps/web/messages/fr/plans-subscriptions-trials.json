@@ -94,7 +94,9 @@
       "custom_roles": "Rôles personnalisés et périmètres",
       "inbox_assignment_sticky": "Routage intelligent: propriétaire du contact et agent attitré",
       "agent_status_bar": "Barre de statut : contrôle Disponible / Absent dans la barre du haut et la Boîte de réception",
-      "agent_status_automation": "Automatiser le statut : heures de travail personnelles et Absent automatique"
+      "agent_status_automation": "Automatiser le statut : heures de travail personnelles et Absent automatique",
+      "products_services": "Produits et services",
+      "recurring_invoices": "Factures récurrentes"
     },
     "limitGroups": {
       "messaging": "Messagerie",

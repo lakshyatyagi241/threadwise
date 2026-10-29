@@ -94,7 +94,9 @@
       "custom_roles": "कस्टम भूमिकाएँ और दायरे",
       "inbox_assignment_sticky": "स्मार्ट रूटिंग: संपर्क का मालिक और स्थायी एजेंट",
       "agent_status_bar": "स्थिति बार: ऊपरी बार और इनबॉक्स में उपलब्ध / अनुपलब्ध नियंत्रण",
-      "agent_status_automation": "स्थिति स्वचालित करें: निजी कार्य समय और स्वचालित अनुपलब्ध"
+      "agent_status_automation": "स्थिति स्वचालित करें: निजी कार्य समय और स्वचालित अनुपलब्ध",
+      "products_services": "उत्पाद और सेवाएँ",
+      "recurring_invoices": "आवर्ती इनवॉइस"
     },
     "limitGroups": {
       "messaging": "मैसेजिंग",
