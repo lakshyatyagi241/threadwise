@@ -361,10 +361,11 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
   }
   let extra = 0;
   if (cfg) {
-    // which hosts the client's media may come from (an allow-list: the copy refuses any other host); Waboo's own asset host by default
+    // which hosts the client's media may come from (an allow-list: the copy refuses any other host); Waboo's own asset host by default,
+    // plus Meta's CDN always: a template header file exists only as Meta's signed scontent.whatsapp.net link (README, template headers)
     const conf = Buffer.from(
       JSON.stringify({
-        allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'],
+        allowedHosts: [...new Set([...(cfg.mediaHosts || ['assets.getalabs.com']), 'scontent.whatsapp.net'])],
         // the largest media file the copy downloads: the client config may raise it (maxFileMB, a positive number of MB); 50 by default
         maxFileMB: Number(cfg.maxFileMB) > 0 ? Number(cfg.maxFileMB) : 50,
         // the public https origin of the media bucket: converted flows and widgets show their images by link (copy-files.cjs refuses without it)
