@@ -1,0 +1,19 @@
+[
+  "[billing] wallet shows the balance and the add-money form validates without charging",
+  "[contacts] create a contact, find it by search, open it and see it again after a reload",
+  "[developer-api] create an API key in the UI, call the public API with it, then revoke it",
+  "[flows] build a two-step flow, save it, reopen it and find it unchanged",
+  "[flows] the flows list opens and a new flow starts empty as a draft",
+  "[help] an unknown guide shows the not-found page",
+  "[i18n] switching the language changes visible text and persists after reload",
+  "[public] an unknown address shows a friendly 404, not a stack trace",
+  "[public] forgot-password page accepts an email and does not reveal whether it exists",
+  "[templates] a draft template can be saved, reopened, edited and deleted",
+  "[templates] library opens and the new-template form explains what is missing",
+  "[wa-forms] create a form, rename it, add a field, save the draft and find it after reload",
+  "[wa-forms] testing a form without usable WhatsApp credentials explains what to do, never publishes",
+  "[wa-links] mint a link, see it in the list, then delete it",
+  "[wa-links] minting without a name or phone number is refused with a plain message",
+  "[web-forms] creating a form without a name asks for one",
+  "[widget] create a WhatsApp widget, find it in the list, edit its greeting and delete it"
+]

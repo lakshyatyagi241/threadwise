@@ -69,7 +69,35 @@ async function signedIn(browser: import('@playwright/test').Browser, path: strin
   return ctx;
 }
 
+/** Requests made through the built-in `request` fixture, per test: the picture of an API-only journey. */
+const apiCalls = new Map<string, string[]>();
+const esc = (t: string) => t.replace(/[&<>]/g, (c) => `&#${c.charCodeAt(0)};`);
+/** A journey that never opens a page would otherwise give a blank screenshot: draw what it checked instead. */
+const proofCard = (title: string, status: string, lines: string[]) =>
+  `<body style="font:16px system-ui;margin:48px;max-width:1100px"><div style="font-size:14px;color:#555">Threadwise daily QA, ${esc(
+    new Date().toISOString(),
+  )}</div><h1 style="font-size:26px">${esc(title)}</h1><div style="display:inline-block;padding:6px 14px;border-radius:6px;color:#fff;background:${
+    status === 'passed' ? '#15803d' : '#b91c1c'
+  };font-weight:600">${status === 'passed' ? 'PASSED' : 'FAILED'}</div><pre style="margin-top:24px;font:15px ui-monospace,monospace;line-height:1.7">${esc(
+    lines.join('\n'),
+  )}</pre></body>`;
+
 export const test = base.extend<Fixtures>({
+  request: async ({ playwright, baseURL }, use, info) => {
+    const ctx = await playwright.request.newContext({ baseURL });
+    const calls: string[] = [];
+    apiCalls.set(info.testId, calls);
+    for (const m of ['get', 'post', 'put', 'patch', 'delete', 'head', 'fetch'] as const) {
+      const orig = ctx[m].bind(ctx) as (u: string, o?: object) => ReturnType<typeof ctx.get>;
+      (ctx as unknown as Record<string, unknown>)[m] = async (u: string, o?: object) => {
+        const r = await orig(u, o);
+        calls.push(`${m.toUpperCase()} ${u}  ->  HTTP ${r.status()}`);
+        return r;
+      };
+    }
+    await use(ctx);
+    await ctx.dispose();
+  },
   watch: [
     async ({ app, operator }, use, info) => {
       const seen: string[] = [];
@@ -81,6 +109,15 @@ export const test = base.extend<Fixtures>({
         });
       }
       await use();
+      const calls = apiCalls.get(info.testId) ?? [];
+      if (calls.length && app.url() === 'about:blank') {
+        await app.setContent(proofCard(info.title, info.status ?? 'failed', calls));
+        if (info.status !== 'passed')
+          await info.attach('screenshot', {
+            body: await app.screenshot(),
+            contentType: 'image/png',
+          });
+      }
       // QA_PROOF=1 (the re-check of a fixed bug): keep a picture of the final state as the "after" screenshot for the sheet
       if (process.env.QA_PROOF === '1' && info.status === 'passed')
         await info.attach('proof', {
