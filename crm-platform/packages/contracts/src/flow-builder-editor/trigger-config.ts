@@ -90,8 +90,29 @@ export interface FlbContactUpdatedConfig {
   updatedField: string;
 }
 
+/** The Webhook trigger keeps no settings: its address and token come from the flow's id and the server's secret. */
+export type FlbWebhookConfig = Record<string, never>;
+
+/** Minutes between looks at the sheet (the Google Sheet trigger polls; Google has no push for a cell change). */
+export const FLB_SHEET_POLL_MINUTES = [1, 2, 3, 4, 5] as const;
+export interface FlbGoogleSheetConfig {
+  /** The spreadsheet's id (a pasted link is cut down to it). */
+  sheetId: string;
+  /** The tab to watch; empty means the first one. */
+  tabName: string;
+  /** Header of the column holding the contact's phone; empty with no email column means nobody is found and no row starts. */
+  phoneColumn: string;
+  /** Header of the column holding the contact's email, used when the phone cell is empty. */
+  emailColumn: string;
+  /** Header of the column holding the contact's name, kept only on a contact this creates. */
+  nameColumn: string;
+  intervalMinutes: number;
+}
+
 export type FlbTriggerConfig =
   | FlbContactUpdatedConfig
+  | FlbWebhookConfig
+  | FlbGoogleSheetConfig
   | FlbSegmentJoinConfig
   | FlbFieldMatchConfig
   | FlbDateFieldMatchConfig
@@ -112,6 +133,12 @@ const time = (v: unknown, fallback: string): string => {
   const h = Number(m[1]);
   const min = Number(m[2]);
   return h <= 23 && min <= 59 ? `${String(h).padStart(2, '0')}:${m[2]}` : fallback;
+};
+/** The id out of a Google Sheets link (`.../spreadsheets/d/<id>/edit`), or the text itself when it is already an id. */
+export const sheetIdOf = (v: unknown): string => {
+  const raw = text(v);
+  const m = /\/spreadsheets\/d\/([A-Za-z0-9_-]+)/.exec(raw);
+  return m ? m[1]! : raw;
 };
 const int = (v: unknown, lo: number, hi: number, fallback: number): number => {
   const n = Math.trunc(Number(v));
@@ -183,6 +210,17 @@ export function flbTriggerConfig(
       return {
         event: oneOf(FLB_STORE_EVENTS, d.event, 'checkout_started'),
         productId: text(d.productId),
+      };
+    case 'webhook':
+      return {};
+    case 'google_sheet':
+      return {
+        sheetId: sheetIdOf(d.sheetId),
+        tabName: text(d.tabName),
+        phoneColumn: text(d.phoneColumn),
+        emailColumn: text(d.emailColumn),
+        nameColumn: text(d.nameColumn),
+        intervalMinutes: int(d.intervalMinutes, 1, 5, 5),
       };
     default:
       return null;

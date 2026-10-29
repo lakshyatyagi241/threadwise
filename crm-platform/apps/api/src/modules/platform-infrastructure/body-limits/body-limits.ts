@@ -10,6 +10,7 @@ import {
 import {
   FORM_SUBMIT_MAX_BODY_BYTES,
   HELP_AGENT_MAX_BODY_BYTES,
+  FLOW_HOOK_MAX_BODY_BYTES,
   LEAD_HOOK_MAX_BODY_BYTES,
   MARKET_HOOK_MAX_BYTES,
 } from '@crm/contracts';
@@ -44,6 +45,8 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
     },
     // These two domains enforce their own contract caps; the parser must allow exactly that much, no more.
     { name: 'lead-hook', pattern: under('public/lead-hooks'), bytes: LEAD_HOOK_MAX_BODY_BYTES },
+    // A flow's Webhook trigger: a small JSON object from an outside system, bounded by its own contract number.
+    { name: 'flow-hook', pattern: under('public/flow-hooks'), bytes: FLOW_HOOK_MAX_BODY_BYTES },
     // The Forms add-on's public door: a submission is a few answers, so the class is bounded by its own contract number, not the
     // webhook class (an anonymous caller must not be able to make the parser buffer a megabyte).
     { name: 'public-form', pattern: under('public/forms'), bytes: FORM_SUBMIT_MAX_BODY_BYTES },

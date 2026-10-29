@@ -2991,6 +2991,31 @@
       "ms": 1428
     },
     {
+      "key": "POST /v2/public/flow-hooks/:flowUuid/:token",
+      "class": "public-write",
+      "declared": "none",
+      "bodyKind": "empty",
+      "sent": 121,
+      "cap": 400,
+      "first429": 121,
+      "allowedBeforeBlock": 120,
+      "limited": true,
+      "mechanism": "bespoke",
+      "declaredLimit": null,
+      "retryAfter": "36",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "404": 120,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 1428
+    },
+    {
       "key": "POST /v2/public/marketplace/hooks/:publicKey",
       "class": "public-write",
       "declared": "none",

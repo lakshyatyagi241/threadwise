@@ -18,6 +18,7 @@ import {
   type MeetCreate,
   type SheetAppend,
   type SheetAppendRows,
+  type SheetGridRead,
   type SheetRead,
 } from './google-workspace.port';
 
@@ -187,6 +188,15 @@ export class HttpGoogleWorkspace implements GoogleWorkspacePort {
       if (rows.length >= req.limit) break;
     }
     return rows;
+  }
+
+  async readSheetGrid(orgId: number, req: SheetGridRead): Promise<string[][]> {
+    const r = await this.call<{ values?: string[][] }>(
+      orgId,
+      'sheets',
+      `${apis().sheets}/${fileId(req.sheetId, 'sheets')}/values/${enc(tabRange(req.tabName, 'A:ZZ'))}`,
+    );
+    return (r.values ?? []).map((row) => row.map((c) => String(c ?? '')));
   }
 
   async generateDoc(orgId: number, req: DocGenerate): Promise<{ url: string; warnings: string[] }> {

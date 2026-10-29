@@ -103,6 +103,8 @@ export function flbExtractTrigger(graph: Pick<FlowGraph, 'flowNodes'>): FlbTrigg
     case 'schedule':
     case 'shopify_event':
     case 'woocommerce_event':
+    case 'webhook':
+    case 'google_sheet':
       valueKind = 'zero';
       break;
     default:

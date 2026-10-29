@@ -23,9 +23,9 @@
     }
   },
   "summary": {
-    "routes": 2094,
-    "public": 223,
-    "withThrottle": 79,
+    "routes": 2096,
+    "public": 224,
+    "withThrottle": 80,
     "skippedByDesign": 64,
     "byClass": {
       "credential": {
@@ -34,8 +34,8 @@
         "undeclared": 12
       },
       "public-write": {
-        "routes": 73,
-        "declared": 41,
+        "routes": 74,
+        "declared": 42,
         "undeclared": 32
       },
       "webhook": {
@@ -2877,6 +2877,16 @@
       "limiter": "none",
       "severityIfUnlimited": "High",
       "file": "apps/api/src/modules/channel-email/mail-graph-push.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/flow-hooks/:flowUuid/:token",
+      "class": "public-write",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "120/60s by ip",
+      "effective": "120/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/flow-runtime-engine/triggers/flow-hook.controller.ts"
     },
     {
       "key": "POST /v2/public/forms/:publicKey/events",
