@@ -157,6 +157,7 @@ function BuilderInner({
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
   const to = useTranslations('flb.builder.shell.overlays');
+  const tw = useTranslations('flb.builder.webBot');
   const tcm = useTranslations('flb.common');
   const tf = useFlb();
   const seed = useMemo<CanvasState>(
@@ -524,10 +525,23 @@ function BuilderInner({
     setBusy(true);
     try {
       let id = flowId;
+      const savedNow = !id;
       if (!id) {
         // A never-saved graph is saved once and THAT row is published (Reference saved twice and published a second copy).
         const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
+      }
+      // A website chat or WhatsApp bot goes live with the widget its owner chose, so Customize has to be saved once first (as in the
+      // Simple builder). A flow saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
+      if (widgetChannel) {
+        const widget = savedNow
+          ? null
+          : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
+        if (!widget) {
+          setTab('customize');
+          toast(tw(widgetChannel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'));
+          return;
+        }
       }
       const pub = await flowsApi.publish(id);
       setRowVersion(pub.rowVersion);

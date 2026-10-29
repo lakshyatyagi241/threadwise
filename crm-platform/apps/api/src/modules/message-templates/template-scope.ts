@@ -1,5 +1,5 @@
-import { sql, type SQL } from 'drizzle-orm';
-import { RequestContextStore } from '../../common/context/request-context';
+import type { SQL } from 'drizzle-orm';
+import { creatorLimit, creatorScopeSql } from '../../common/record-scope/creator-scope';
 
 /**
  * Record scope of a template key (BL-430): "Global" (`all`) sees every template of the workspace, "Restricted" (`own`) only the
@@ -12,14 +12,10 @@ export type TemplateScopeKey =
 
 /** The creator the caller is limited to under this key, or null when the caller sees every template. */
 export function templateCreatorLimit(key: TemplateScopeKey): number | null {
-  const ctx = RequestContextStore.require();
-  const grant = ctx.grants?.get(key);
-  if (!grant || grant.effect === 'deny' || grant.scope === 'all') return null;
-  return ctx.userId ?? -1;
+  return creatorLimit(key);
 }
 
 /** `AND t.user_id = me` for a restricted caller, nothing for a global one. */
 export function templateScopeSql(key: TemplateScopeKey, alias = 't'): SQL {
-  const me = templateCreatorLimit(key);
-  return me === null ? sql`` : sql` AND ${sql.raw(alias)}.user_id = ${me}`;
+  return creatorScopeSql(key, alias, 'user_id');
 }

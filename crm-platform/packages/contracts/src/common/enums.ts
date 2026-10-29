@@ -43,6 +43,14 @@ export const recordScopeSchema = z.enum(['all', 'team', 'team_and_below', 'own']
 export type RecordScope = z.infer<typeof recordScopeSchema>;
 
 /**
+ * Permission keys whose records have a creator but no owner or team (campaigns, templates; BL-430, migrations 2048 and 2049). They
+ * offer only Global (`all`) and Restricted (`own`: what the person created). One list for the roles editor and the API.
+ */
+export const CREATOR_SCOPED_KEY_PREFIXES = ['camp.campaigns.', 'tpl.templates.'] as const;
+export const isCreatorScopedKey = (key: string): boolean =>
+  CREATOR_SCOPED_KEY_PREFIXES.some((prefix) => key.startsWith(prefix));
+
+/**
  * How wide a scope reaches, narrowest first (BL-382). Merging roles keeps the widest allow; editing a role may not grant wider than
  * the editor holds. `team_and_below` is `team` plus every descendant team, so it sits between `team` and `all`.
  */

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { and, desc, eq, inArray, isNull, lt, sql, type SQL } from 'drizzle-orm';
 import {
   NOTIFICATION_CATALOG,
+  NOTIFICATION_TYPE_PLAN_FEATURE,
   NOTIFICATION_TYPE_PREF_KEY,
   effectiveEventFlags,
   resolveNotificationChannels,
@@ -11,6 +12,7 @@ import {
   type StoredUserPref,
 } from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 
 const { inboxNotifications, notificationUserPrefs } = schema;
 
@@ -18,6 +20,14 @@ const { inboxNotifications, notificationUserPrefs } = schema;
 const UNLISTED: NotificationChannelsEffective = {
   bell: true,
   toast: true,
+  sound: false,
+  push: false,
+};
+
+/** What a person gets for a type their workspace's plan does not have: nothing. */
+const NOT_OFFERED: NotificationChannelsEffective = {
+  bell: false,
+  toast: false,
   sound: false,
   push: false,
 };
@@ -94,6 +104,9 @@ export interface CollapsingNotification extends Omit<NewNotification, 'title' | 
 /** Data access for `inbox_notifications`: one person's feed. Every read and write is pinned to (org, user). */
 @Injectable()
 export class NotificationsRepository {
+  /** Absent where a repository is built by hand (tests, tools): then the plan gate is not applied. */
+  constructor(@Optional() private readonly entitlements?: PlanEntitlementService) {}
+
   private selection() {
     return {
       id: inboxNotifications.id,
@@ -251,6 +264,11 @@ export class NotificationsRepository {
   ): Promise<NotificationChannelsEffective> {
     if (!(n.type in NOTIFICATION_CATALOG)) return UNLISTED;
     const type = n.type as NotificationPrefType;
+    // A type whose feature the workspace's plan lacks gets no row at all, the same gate the preferences screen applies when it hides the type.
+    const feature = NOTIFICATION_TYPE_PLAN_FEATURE[type];
+    if (feature && this.entitlements && !(await this.entitlements.featureEnabled(orgId, feature))) {
+      return NOT_OFFERED;
+    }
     const stored =
       n.userPref !== undefined ? n.userPref : await this.userPref(tx, orgId, n.userId, type);
     const key = NOTIFICATION_TYPE_PREF_KEY[type];

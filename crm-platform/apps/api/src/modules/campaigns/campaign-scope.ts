@@ -1,5 +1,5 @@
-import { sql, type SQL } from 'drizzle-orm';
-import { RequestContextStore } from '../../common/context/request-context';
+import type { SQL } from 'drizzle-orm';
+import { creatorLimit, creatorScopeSql } from '../../common/record-scope/creator-scope';
 
 /**
  * Record scope of a campaign key (BL-430): "Global" (`all`) sees every campaign of the workspace, "Restricted" (`own`) only the
@@ -16,20 +16,14 @@ export type CampaignScopeKey =
 
 /** The creator the caller is limited to under this key, or null when the caller sees every campaign. */
 export function campaignCreatorLimit(key: CampaignScopeKey): number | null {
-  const ctx = RequestContextStore.require();
-  const grant = ctx.grants?.get(key);
-  if (!grant || grant.effect === 'deny' || grant.scope === 'all') return null;
-  return ctx.userId ?? -1;
+  return creatorLimit(key);
 }
 
-/** `AND <alias>.created_by = me` for a restricted caller, nothing for a global one. */
+/** `AND <alias>.created_by = me` for a restricted caller, nothing for a global one (`user_id` for the legacy broadcasts). */
 export function campaignScopeSql(
   key: CampaignScopeKey,
   alias: string | null = 'c',
   column: 'created_by' | 'user_id' = 'created_by',
 ): SQL {
-  const me = campaignCreatorLimit(key);
-  if (me === null) return sql``;
-  const col = sql.raw(alias === null ? column : `${alias}.${column}`);
-  return sql` AND ${col} = ${me}`;
+  return creatorScopeSql(key, alias, column);
 }
