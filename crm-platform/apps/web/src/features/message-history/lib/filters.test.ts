@@ -5,10 +5,12 @@ import {
   feedQuery,
   insightsQuery,
   isNarrowed,
+  OFFERED_SOURCES,
   OFFERED_TYPES,
   parseState,
   rangeDays,
   stateToSearch,
+  sourceOptions,
   summaryQuery,
   typeOptions,
 } from './filters';
@@ -141,5 +143,18 @@ describe('narrowing and the period', () => {
     expect(typeOptions('scheduled')).toEqual([...OFFERED_TYPES, 'scheduled']);
     // A broadcast link is a campaign link.
     expect(parseState(new URLSearchParams('type=broadcast')).type).toBe('campaign');
+  });
+
+  it('offers one Campaign source (no Broadcast, no Broadcast Test Send, no Scheduled); older links still work', () => {
+    expect(OFFERED_SOURCES).toContain('campaign');
+    for (const x of ['broadcast', 'broadcast_test', 'scheduled'] as const)
+      expect(OFFERED_SOURCES).not.toContain(x);
+    expect(sourceOptions([])).toEqual(OFFERED_SOURCES);
+    expect(sourceOptions(['scheduled'])).toEqual([...OFFERED_SOURCES, 'scheduled']);
+    // A broadcast or a broadcast test send reads as the campaign, once.
+    expect(parseState(new URLSearchParams('source=broadcast,broadcast_test,flow')).source).toEqual([
+      'campaign',
+      'flow',
+    ]);
   });
 });

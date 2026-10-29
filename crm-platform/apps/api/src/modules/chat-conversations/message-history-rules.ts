@@ -105,6 +105,20 @@ export const likeEscape = (s: string): string => s.replace(/[\\%_]/g, (c) => `\\
 // --- the type pill and the type filter ---------------------------------------------------------------------------------------
 
 /**
+ * The sources a "Sent by" filter matches. A campaign, a broadcast and a broadcast test send are one thing to the person (the filter
+ * offers only Campaign), so naming any of them matches all three; the other sources match themselves.
+ */
+export function sourceFilterValues(sources: readonly string[]): string[] {
+  const out = new Set(sources);
+  if (['campaign', 'broadcast', 'broadcast_test'].some((x) => out.has(x))) {
+    out.add('campaign');
+    out.add('broadcast');
+    out.add('broadcast_test');
+  }
+  return [...out];
+}
+
+/**
  * What the Type filter means in terms of the columns: an automated source, or the kinds of message it is made of. A campaign and a
  * broadcast are one thing to the person (the filter offers only Campaign), so `campaign` (and the old `broadcast` link) matches the rows
  * of both; a scheduled message stays its own source.

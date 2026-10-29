@@ -4,6 +4,7 @@ import { rawIdentifier } from '../../common/sql/identifier';
 import {
   likeEscape,
   phoneNeedle,
+  sourceFilterValues,
   typeFilterParts,
   type HistoryCursor,
   type HistoryWindow,
@@ -204,7 +205,7 @@ function narrowConditions(ctx: HistoryContext, sel: HistorySelection, b: BranchR
   if (source && source.length > 0) {
     out.push(
       sql`${b.source} IN (${sql.join(
-        source.map((s) => sql`${s}`),
+        sourceFilterValues(source).map((s) => sql`${s}`),
         sql`, `,
       )})`,
     );
