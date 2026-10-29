@@ -340,7 +340,12 @@ function CardItem({
                 />
               </Field>
               {b.kind === 'url' ? (
-                <Field label={t('buttonUrl')} htmlFor={`${base}-${b.key}-u`}>
+                <Field
+                  label={t('buttonUrl')}
+                  htmlFor={`${base}-${b.key}-u`}
+                  // The text box has a counter line under it; an empty line here keeps the two boxes level.
+                  hint={'\u00A0'}
+                >
                   <Input
                     id={`${base}-${b.key}-u`}
                     dir="ltr"
@@ -350,7 +355,7 @@ function CardItem({
                   />
                 </Field>
               ) : b.kind === 'phone' ? (
-                <Field label={t('buttonPhone')} htmlFor={`${base}-${b.key}-p`}>
+                <Field label={t('buttonPhone')} htmlFor={`${base}-${b.key}-p`} hint={'\u00A0'}>
                   <Input
                     id={`${base}-${b.key}-p`}
                     dir="ltr"
