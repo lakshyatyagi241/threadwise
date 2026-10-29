@@ -202,7 +202,7 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
   );
 }
 
-export function NotifyNumberForm({ data: d, set }: FormProps) {
+export function NotifyNumberForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
   const isMedia = !!d.kind && d.kind !== 'text';
   const src = d.source === 'custom' ? 'custom' : 'mirror';
@@ -248,9 +248,11 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           </Field>
           {!isMedia ? (
             <Field label={t('notifyMessage')} hint={t('notifyMessageHint')}>
-              <TextArea
+              <RichTextField
                 value={d.text}
+                label={t('notifyMessage')}
                 placeholder={t('notifyMessagePlaceholder')}
+                nodes={env.nodes}
                 onChange={(v) => set('text', v)}
               />
             </Field>
@@ -275,10 +277,12 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           ) : null}
           {isMedia ? (
             <Field label={t('caption')}>
-              <TextArea
+              <RichTextField
                 value={d.caption}
+                label={t('caption')}
                 placeholder={t('captionPlaceholder')}
                 rows={3}
+                nodes={env.nodes}
                 onChange={(v) => set('caption', v)}
               />
             </Field>
