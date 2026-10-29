@@ -109,7 +109,8 @@
       "amount": "Amount",
       "balance": "Balance",
       "noDescription": "Wallet movement",
-      "reason": "Reason"
+      "reason": "Reason",
+      "invoice": "Download invoice"
     },
     "pricingPanel": {
       "title": "Message pricing",

@@ -109,7 +109,8 @@
       "amount": "Bedrag",
       "balance": "Saldo",
       "noDescription": "Portemonneemutatie",
-      "reason": "Reden"
+      "reason": "Reden",
+      "invoice": "Factuur downloaden"
     },
     "pricingPanel": {
       "title": "Berichtprijzen",

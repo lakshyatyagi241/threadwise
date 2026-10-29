@@ -109,7 +109,8 @@
       "amount": "金額",
       "balance": "残高",
       "noDescription": "ウォレットの動き",
-      "reason": "理由"
+      "reason": "理由",
+      "invoice": "請求書をダウンロード"
     },
     "pricingPanel": {
       "title": "メッセージ料金",

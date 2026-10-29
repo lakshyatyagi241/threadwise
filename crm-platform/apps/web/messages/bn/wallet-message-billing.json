@@ -109,7 +109,8 @@
       "amount": "পরিমাণ",
       "balance": "ব্যালেন্স",
       "noDescription": "ওয়ালেটের লেনদেন",
-      "reason": "কারণ"
+      "reason": "কারণ",
+      "invoice": "ইনভয়েস ডাউনলোড করুন"
     },
     "pricingPanel": {
       "title": "মেসেজের মূল্য",

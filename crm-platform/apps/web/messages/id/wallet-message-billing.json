@@ -109,7 +109,8 @@
       "amount": "Jumlah",
       "balance": "Saldo",
       "noDescription": "Mutasi dompet",
-      "reason": "Alasan"
+      "reason": "Alasan",
+      "invoice": "Unduh faktur"
     },
     "pricingPanel": {
       "title": "Harga pesan",

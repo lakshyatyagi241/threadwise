@@ -61,6 +61,8 @@ export const walletTransactionSchema = z.object({
   description: z.string().nullable(),
   /** The reason an operator gave for a manual adjustment. */
   note: z.string().nullable(),
+  /** The order this entry was paid through: the entry has an invoice at `/billing/orders/{id}/invoice`. Null when it has none. */
+  invoiceOrderId: z.guid().nullable().optional(),
   createdAt: z.string(),
 });
 export type WalletTransaction = z.infer<typeof walletTransactionSchema>;

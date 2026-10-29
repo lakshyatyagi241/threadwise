@@ -109,7 +109,8 @@
       "amount": "المبلغ",
       "balance": "الرصيد",
       "noDescription": "حركة المحفظة",
-      "reason": "السبب"
+      "reason": "السبب",
+      "invoice": "تنزيل الفاتورة"
     },
     "pricingPanel": {
       "title": "تسعير الرسائل",

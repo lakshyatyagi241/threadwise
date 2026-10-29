@@ -247,6 +247,27 @@ describe('activity table', () => {
     expect(html).toContain('Reason: Outage credit');
     expect(html).toContain('Adjustment');
   });
+
+  it('offers the invoice of a top-up that was paid through an order, and of nothing else', () => {
+    const order = '33333333-3333-4333-8333-333333333333';
+    const html = wrap(
+      <ActivityTable
+        label="x"
+        currency="USD"
+        rows={[
+          tx({
+            type: 'topup',
+            direction: 'in',
+            description: 'Wallet top-up',
+            invoiceOrderId: order,
+          }),
+          tx({ id: '44444444-4444-4444-8444-444444444444' }),
+        ]}
+      />,
+    );
+    expect(html.match(/Download invoice/g)).toHaveLength(1);
+    expect(html).toContain(`href="/billing/orders/${order}/invoice"`);
+  });
 });
 
 const summary = (over: Partial<WalletSummary> = {}): WalletSummary => ({

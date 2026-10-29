@@ -109,7 +109,8 @@
       "amount": "Montant",
       "balance": "Solde",
       "noDescription": "Mouvement du portefeuille",
-      "reason": "Motif"
+      "reason": "Motif",
+      "invoice": "Télécharger la facture"
     },
     "pricingPanel": {
       "title": "Tarification des messages",

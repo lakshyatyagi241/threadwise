@@ -1017,7 +1017,8 @@
       "amount": "Importe",
       "balance": "Saldo",
       "noDescription": "Movimiento del monedero",
-      "reason": "Motivo"
+      "reason": "Motivo",
+      "invoice": "Descargar factura"
     },
     "pricingPanel": {
       "title": "Precios de mensajes",

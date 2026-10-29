@@ -1017,7 +1017,8 @@
       "amount": "סכום",
       "balance": "יתרה",
       "noDescription": "תנועת ארנק",
-      "reason": "סיבה"
+      "reason": "סיבה",
+      "invoice": "הורדת חשבונית"
     },
     "pricingPanel": {
       "title": "תמחור הודעות",
