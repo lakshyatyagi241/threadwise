@@ -91,13 +91,34 @@ const HEADER_FORMATS: Record<string, string> = {
   location: 'LOCATION',
 };
 
-/** Meta wants real-looking values; the literal word "example" is auto-rejected, so fall back to "Sample N". */
-function bodyExamples(body: string, map: VariableMap | null | undefined): string[] {
-  const n = tokensOf(body).length;
-  return Array.from({ length: n }, (_, i) => {
-    const slot = map?.body?.find((s) => s.num === i + 1);
-    return slot?.example?.trim() || slotLabel(slot?.key) || `Sample ${i + 1}`;
+/**
+ * The `example` of a body or text header, in the shape Meta asks for the template's parameter format: positional templates send
+ * `body_text` / `header_text` (values in order), named templates send `body_text_named_params` / `header_text_named_params`
+ * (`param_name` and `example` for each name). Sending the positional shape for a named template is refused by Meta.
+ */
+function textExample(
+  field: 'body' | 'header',
+  text: string,
+  map: VariableMap | null | undefined,
+  named: boolean,
+): Record<string, unknown> {
+  const names = tokensOf(text);
+  const values = names.map((_, i) => {
+    const slot = map?.[field]?.find((s) => s.num === i + 1);
+    return (
+      slot?.example?.trim() ||
+      slotLabel(slot?.key) ||
+      (field === 'body' ? `Sample ${i + 1}` : 'Sample')
+    );
   });
+  if (named)
+    return {
+      [`${field}_text_named_params`]: names.map((param_name, i) => ({
+        param_name,
+        example: values[i],
+      })),
+    };
+  return field === 'body' ? { body_text: [values] } : { header_text: values.slice(0, 1) };
 }
 
 const slotLabel = (key: string | undefined) => (key && !/^\d+$/.test(key) ? key : undefined);
@@ -146,6 +167,7 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
   const category = metaCategoryOf(d);
   const auth = category === 'AUTHENTICATION' || d.templateType === 'auth';
   const components: Array<Record<string, unknown>> = [];
+  const named = d.parameterFormat === 'NAMED';
 
   if (auth) {
     components.push({ type: 'BODY', add_security_recommendation: true });
@@ -160,7 +182,7 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
     // A carousel is the bubble's text and then the cards; it has no header, footer or buttons of its own.
     const body: Record<string, unknown> = { type: 'BODY', text: d.body };
     if (countPlaceholders(d.body) > 0)
-      body.example = { body_text: [bodyExamples(d.body, d.variableMap)] };
+      body.example = textExample('body', d.body, d.variableMap, named);
     components.push(body);
     components.push(carouselOf(d.cards ?? []));
   } else {
@@ -180,23 +202,13 @@ export function buildMetaTemplate(d: TemplateDraft): MetaTemplateBody {
         });
     } else if (d.header) {
       const header: Record<string, unknown> = { type: 'HEADER', format: 'TEXT', text: d.header };
-      if (countPlaceholders(d.header) > 0) {
-        const n = tokensOf(d.header).length;
-        header.example = {
-          header_text: Array.from(
-            { length: n },
-            (_, i) =>
-              d.variableMap?.header?.find((s) => s.num === i + 1)?.example?.trim() ||
-              slotLabel(d.variableMap?.header?.find((s) => s.num === i + 1)?.key) ||
-              'Sample',
-          ).slice(0, 1),
-        };
-      }
+      if (countPlaceholders(d.header) > 0)
+        header.example = textExample('header', d.header, d.variableMap, named);
       components.push(header);
     }
     const body: Record<string, unknown> = { type: 'BODY', text: d.body };
     if (countPlaceholders(d.body) > 0)
-      body.example = { body_text: [bodyExamples(d.body, d.variableMap)] };
+      body.example = textExample('body', d.body, d.variableMap, named);
     components.push(body);
     if (d.footer && d.templateType !== 'lto') components.push({ type: 'FOOTER', text: d.footer });
     if (d.buttons?.length)
