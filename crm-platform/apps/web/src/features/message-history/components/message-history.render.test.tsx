@@ -285,7 +285,7 @@ describe('Message History (en)', () => {
     expect(text()).toContain('Load more');
   });
 
-  it('the Source column says where each row came from: flows and auto replies are Automation, a contact send is Contact, a test send is Broadcast Test Send', () => {
+  it('the Source column says where each row came from: a flow is Flow, an auto reply is Auto-reply, a contact send is Contact, a test send is Broadcast Test Send', () => {
     state.feed = {
       rows: [
         row({ id: `m:${U}`, source: 'flow', direction: 'out', status: 'sent' }),
@@ -326,7 +326,7 @@ describe('Message History (en)', () => {
     const cells = [...host.querySelectorAll('[data-testid="history-source"]')].map(
       (c) => c.textContent,
     );
-    expect(cells).toEqual(['Automation', 'Automation', 'Contact', 'Broadcast Test Send']);
+    expect(cells).toEqual(['Flow', 'Auto-reply', 'Contact', 'Broadcast Test Send']);
     const testRow = host.querySelector('[data-id^="t:"]');
     expect(testRow?.textContent).toContain('welcome_tpl');
   });
