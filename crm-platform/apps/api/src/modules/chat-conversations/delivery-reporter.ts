@@ -64,6 +64,8 @@ export class DeliveryReporter {
       message: ReportableMessage;
       /** The channel's `external_id` (a Telegram bot's row id): it keeps a chat message's billing key unique across the workspace's bots. */
       channelExternalId?: string | null;
+      /** Meta's `pricing.billable` for this message; false means the wallet charges nothing (a template inside the free service window). */
+      billable?: boolean;
     },
   ): Promise<void> {
     if (!o.providerMessageId) return;
@@ -85,6 +87,7 @@ export class DeliveryReporter {
         category: template.category,
         source: walletSourceOf(o.message),
         templateName: template.templateName,
+        ...(o.billable === undefined ? {} : { billable: o.billable }),
       },
     });
   }

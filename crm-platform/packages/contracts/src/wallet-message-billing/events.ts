@@ -49,6 +49,8 @@ export const walletDeliveryReportedSchema = z.object({
   /** The Meta pricing category, else the template's category; null for chat and flow sends. */
   category: z.string().trim().max(24).nullable().optional(),
   source: walletDeliverySourceSchema.nullable().optional(),
+  /** Meta's `pricing.billable`. False = Meta does not bill this message (inside the free service window), so the wallet charges nothing. */
+  billable: z.boolean().optional(),
   /** The template as it was sent. Copied onto the charge so the expense log keeps it after the template is renamed or removed. */
   templateName: label(512),
   /** The campaign, broadcast or schedule the message belongs to, by name at send time; null for chat and flow sends. */

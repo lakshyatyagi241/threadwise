@@ -255,10 +255,25 @@ describe('normaliseMetaWebhook: delivery receipts', () => {
 
   it('sent, delivered and read carry the provider id and time', () => {
     expect(receipts('status-sent')).toEqual([
-      { providerMessageId: 'wamid.OUT1', status: 'sent', at: new Date(1760000100 * 1000) },
+      {
+        providerMessageId: 'wamid.OUT1',
+        status: 'sent',
+        at: new Date(1760000100 * 1000),
+        billable: false,
+      },
     ]);
     expect(receipts('status-delivered')[0]).toMatchObject({ status: 'delivered' });
     expect(receipts('status-read')[0]).toMatchObject({ status: 'read' });
+  });
+
+  it("carries Meta's pricing verdict: billable false for a message inside the free window, true when Meta charges it", () => {
+    expect(receipts('status-delivered-free-window')[0]).toMatchObject({ billable: false });
+    expect(receipts('status-delivered-paid')[0]).toMatchObject({ billable: true });
+  });
+
+  it('says nothing about billing when the status has no pricing, or a malformed one (charge as before, never free by guess)', () => {
+    expect(receipts('status-delivered')[0]).not.toHaveProperty('billable');
+    expect(receipts('status-delivered-pricing-malformed')[0]).not.toHaveProperty('billable');
   });
 
   it("a failure is classified into our vocabulary and keeps Meta's words", () => {

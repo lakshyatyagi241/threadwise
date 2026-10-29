@@ -71,4 +71,16 @@ describe('ChannelIngestPublisher', () => {
       receipt: { status: 'read', at: '2026-10-10T12:00:03.000Z' },
     });
   });
+
+  it("keeps Meta's billable verdict on the queued receipt (the job schema must not strip it)", async () => {
+    const { add, publisher } = build();
+    await publisher.enqueueReceipt(7, CH, {
+      providerMessageId: 'p2',
+      status: 'delivered',
+      at: new Date('2026-10-10T12:00:03Z'),
+      billable: false,
+    });
+    const job = channelIngestJobSchema.parse(JSON.parse(JSON.stringify(add.mock.calls[0]![1])));
+    expect(job).toMatchObject({ type: 'receipt', receipt: { billable: false } });
+  });
 });

@@ -112,6 +112,28 @@ describe('DeliveryReporter: the fee on email and the chat channels', () => {
   });
 });
 
+describe("DeliveryReporter: Meta's billable verdict reaches the wallet", () => {
+  const payloadOf = (reported: () => Array<{ payload: unknown }>) =>
+    reported().at(-1)!.payload as Record<string, unknown>;
+
+  it('passes billable false on, so a utility template inside the free window is not charged as utility', async () => {
+    const { report, reported } = reporter();
+    await report({
+      channelKind: 'whatsapp_cloud',
+      peerKey: '919876543210',
+      status: 'delivered',
+      billable: false,
+    });
+    expect(payloadOf(reported)).toMatchObject({ provider: 'waba', billable: false });
+  });
+
+  it('leaves billable out when the receipt had no pricing', async () => {
+    const { report, reported } = reporter();
+    await report({ channelKind: 'whatsapp_cloud', peerKey: '919876543210', status: 'delivered' });
+    expect(payloadOf(reported)).not.toHaveProperty('billable');
+  });
+});
+
 describe('OutboundService: an empty wallet is refused before an email or chat message is stored', () => {
   function build(assertCanAfford = vi.fn(async () => undefined)) {
     const none = {} as never;

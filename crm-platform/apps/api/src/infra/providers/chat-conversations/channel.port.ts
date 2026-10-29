@@ -424,6 +424,8 @@ export interface NormalisedReceipt {
   at: Date;
   errorCode?: string;
   errorMessage?: string;
+  /** Meta's verdict on whether it bills this message (`pricing.billable`); absent when the provider said nothing, which charges as before. */
+  billable?: boolean;
 }
 
 export interface ParsedInbound {
