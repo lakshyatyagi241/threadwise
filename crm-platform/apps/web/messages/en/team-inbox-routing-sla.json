@@ -20,6 +20,7 @@
       "back": "Automation and AI",
       "title": "Conversation auto-assignment",
       "recordNote": "This assigns conversations. To give new {contacts}, companies and {deals} to sales owners, see <link>Record assignment rules</link>.",
+      "agentsNote": "Who gets a chat depends on each person's availability (the status in the top bar) and their Concurrent chats limit. Set the limit in <link>Team members</link>.",
       "subtitle": "Choose who gets each new chat. The switches are enough for most workspaces; add rules only if you need more control.",
       "noAccess": "You do not have permission to view the conversation auto-assignment settings.",
       "limitUsed": "{used} of {limit} rules used",

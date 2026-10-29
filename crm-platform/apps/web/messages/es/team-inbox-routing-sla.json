@@ -39,6 +39,7 @@
       "deleteFailed": "No se pudo eliminar la regla.",
       "businessHours": "Horario laboral",
       "recordNote": "Esto asigna conversaciones. Para asignar los nuevos {contacts}, empresas y {deals} a los responsables de ventas, consulta <link>Reglas de asignación de registros</link>.",
+      "agentsNote": "Quién recibe un chat depende de la disponibilidad de cada persona (el estado de la barra superior) y de su límite de chats simultáneos. Define el límite en <link>Miembros del equipo</link>.",
       "subtitle": "Elige quién recibe cada chat nuevo. Los interruptores bastan para la mayoría de los espacios de trabajo; añade reglas solo si necesitas más control."
     },
     "rules": {

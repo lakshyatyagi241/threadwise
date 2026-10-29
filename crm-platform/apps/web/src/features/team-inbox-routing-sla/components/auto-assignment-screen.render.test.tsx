@@ -159,6 +159,13 @@ describe('/auto-assignment and the Smart routing add-on', () => {
     expect(state.rulesEnabled.every((e) => e)).toBe(true);
   });
 
+  it('points to Team members for who is available and the Concurrent chats limit', () => {
+    const out = page(['inbox_routing', 'inbox_assignment_sticky'], smartRouting('owned'));
+    expect(out).toContain('data-testid="agents-note"');
+    expect(out).toContain('Concurrent chats');
+    expect(out).toContain('href="/settings/team"');
+  });
+
   it('unknown entitlements hide nothing', () => {
     const out = page(null);
     for (const part of SMART) expect(out, part).toContain(part);
