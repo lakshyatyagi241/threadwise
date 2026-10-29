@@ -9,6 +9,7 @@ import { uploadFlowMedia } from '../lib/upload-media';
 import { acceptFor } from './inspector/forms-core/helpers';
 import { UploadBox } from './inspector/forms-core/parts';
 import { PromptBox } from './ask-media/prompt-box';
+import { FlowImage } from './flow-image';
 
 /** The node types whose text is edited on the card: a message's text, a quick-reply list's labels, a media node's caption. */
 export const INLINE_EDIT_TYPES: ReadonlySet<string> = new Set(['message', 'buttons', 'media']);
@@ -125,6 +126,7 @@ function MediaInlineBody({
           onFile={upload}
         />
       </div>
+      {url ? <MediaFilePreview kind={kind} url={url} filename={filename} /> : null}
       {url && filename ? (
         <div
           className="truncate font-mono text-[10.5px] text-muted-foreground"
@@ -144,6 +146,68 @@ function MediaInlineBody({
         placeholder={ts('media.caption')}
         onChange={(caption) => onPatch(node.id, { caption })}
       />
+    </div>
+  );
+}
+
+/**
+ * What the chosen file looks like, on the card itself, so a flow can be read at a glance without opening the node: a picture shows as a
+ * picture, a video and a voice note as a player, a document as its name. A picture that cannot load says so (FlowImage).
+ */
+function MediaFilePreview({
+  kind,
+  url,
+  filename,
+}: {
+  kind: MediaKind;
+  url: string;
+  filename: string;
+}) {
+  const tp = useTranslations('flb.builder.formsCore.previews');
+  if (kind === 'image')
+    return (
+      <div data-testid="media-card-preview" data-kind="image">
+        <FlowImage
+          src={url}
+          where="media card"
+          className="block max-h-40 w-full rounded-md border border-border object-cover"
+        />
+      </div>
+    );
+  if (kind === 'video')
+    return (
+      <video
+        src={url}
+        controls
+        preload="metadata"
+        data-testid="media-card-preview"
+        data-kind="video"
+        className="block max-h-40 w-full rounded-md bg-black"
+      />
+    );
+  if (kind === 'audio')
+    return (
+      <audio
+        src={url}
+        controls
+        preload="metadata"
+        data-testid="media-card-preview"
+        data-kind="audio"
+        className="block h-9 w-full"
+      />
+    );
+  return (
+    <div
+      data-testid="media-card-preview"
+      data-kind="document"
+      className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-2.5 py-2"
+    >
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand font-mono text-[9px] text-white">
+        {(filename.split('.').pop() ?? 'FILE').slice(0, 4).toUpperCase() || 'FILE'}
+      </span>
+      <div className="min-w-0 flex-1 truncate text-[12px]">
+        {filename || tp('documentFallback')}
+      </div>
     </div>
   );
 }
