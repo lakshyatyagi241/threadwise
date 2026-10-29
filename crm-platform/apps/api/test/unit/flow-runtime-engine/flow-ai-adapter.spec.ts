@@ -73,10 +73,40 @@ describe('flow runtime AI adapter: output-length field per vendor', () => {
     expect(body).toMatchObject({
       model: 'gpt-5.4-mini',
       max_completion_tokens: 350,
-      temperature: 0.7,
     });
+    // OpenAI's GPT-5 family answers 400 to a temperature other than its default, so it is not sent.
+    expect(body).not.toHaveProperty('temperature');
     expect(body).not.toHaveProperty('max_tokens');
     expect(out).toEqual({ text: 'ok', promptTokens: 11, completionTokens: 7 });
+  });
+
+  it('sends the temperature to the OpenAI models that take one, and to gateways and other vendors whatever the model', async () => {
+    const fetchMock = answer('ok');
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = new HttpFlowAiAdapter();
+    await adapter.complete({ ...base, model: 'gpt-4o-mini' });
+    await adapter.complete({ ...base, model: 'gpt-5-chat-latest' });
+    await adapter.complete({ ...base, provider: 'groq', model: 'gpt-5-oss' });
+    for (const call of fetchMock.mock.calls) {
+      const body = JSON.parse(
+        (call as unknown as [string, RequestInit])[1].body as string,
+      ) as Record<string, unknown>;
+      expect(body).toMatchObject({ temperature: 0.7 });
+    }
+  });
+
+  it('leaves the temperature out for the reasoning models too (o1, o3, o4-mini)', async () => {
+    const fetchMock = answer('ok');
+    vi.stubGlobal('fetch', fetchMock);
+    const adapter = new HttpFlowAiAdapter();
+    for (const model of ['o1', 'o3-mini', 'o4-mini', 'gpt-5', 'gpt-5-mini', 'gpt-5.6-pro'])
+      await adapter.complete({ ...base, model });
+    for (const call of fetchMock.mock.calls) {
+      const body = JSON.parse(
+        (call as unknown as [string, RequestInit])[1].body as string,
+      ) as Record<string, unknown>;
+      expect(body, String(body.model)).not.toHaveProperty('temperature');
+    }
   });
 
   it('keeps max_tokens for the other OpenAI-compatible vendors', async () => {

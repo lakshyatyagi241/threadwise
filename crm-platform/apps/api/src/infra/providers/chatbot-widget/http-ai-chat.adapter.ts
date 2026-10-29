@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { AiChatPort, AiChatReply, AiChatRequest } from './ai-chat.port';
-import { openAiOutputLimit } from '../openai-output-limit';
+import { openAiOutputLimit, openAiTemperature } from '../openai-output-limit';
 
 /** A token count the vendor reported, or null when its answer has none. */
 const count = (v: unknown): number | null =>
@@ -107,7 +107,7 @@ export class HttpAiChatAdapter implements AiChatPort {
       {
         model: req.model,
         ...openAiOutputLimit(req.maxTokens, vendor.openAi && !override),
-        temperature: req.temperature,
+        ...openAiTemperature(req.model, req.temperature, vendor.openAi && !override),
         messages: [
           { role: 'system', content: req.systemPrompt },
           { role: 'user', content: req.userPrompt },

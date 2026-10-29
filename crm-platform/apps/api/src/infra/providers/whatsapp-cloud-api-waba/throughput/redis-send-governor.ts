@@ -118,7 +118,12 @@ export class RedisSendGovernor implements SendGovernor {
     const used = await this.store.tierUsed(t.phoneNumberId);
     if (used < cfg.tierCap) return;
     void this.store
-      .pushEvent(t.phoneNumberId, 'tier_full', `${used} of ${cfg.tierCap} recipients`, EVENT_GATE_MS)
+      .pushEvent(
+        t.phoneNumberId,
+        'tier_full',
+        `${used} of ${cfg.tierCap} recipients`,
+        EVENT_GATE_MS,
+      )
       .catch(() => undefined);
     const mins = Math.ceil(msUntilNextHour(Date.now()) / 60_000);
     throw new AppError(
