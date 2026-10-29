@@ -2498,6 +2498,14 @@
       "read": "مقروءة",
       "failed": "فاشلة"
     },
+    "messageMix": {
+      "title": "الرسائل حسب الفئة",
+      "text": "نص عادي",
+      "autoReply": "رد تلقائي",
+      "campaign": "حملة",
+      "broadcast": "بث",
+      "scheduled": "مجدولة"
+    },
     "moreTitle": "المزيد من مساحة عملك"
   },
   "dashDate": {

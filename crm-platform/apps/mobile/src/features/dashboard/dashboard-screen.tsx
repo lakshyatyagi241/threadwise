@@ -19,7 +19,7 @@ import { useTheme } from '@/lib/theme/use-theme';
 import { AgentView } from './agent-view';
 import { BotView } from './bot-view';
 import { CampaignsCard, TemplatesCard } from './campaign-cards';
-import { DevicesCard, InstagramBand, IntegrationsCard } from './channel-cards';
+import { DevicesCard, InstagramBand } from './channel-cards';
 import { conversationStatusTiles } from './conversation-stats';
 import { asDashView, DASH_VIEWS, type DashView } from './dash-views';
 import { DEFAULT_PRESET, presetRange, todayIn, type DateRange } from './date-range';
@@ -27,6 +27,7 @@ import { DateRangePill, DateRangeSheet } from './date-range-sheet';
 import { isForbidden, isPlanLocked } from './format';
 import { FunnelCard } from './funnel-card';
 import { AutopilotCard, ContactsCard, ReadRateCard, SentCard, WalletCard } from './kpi-cards';
+import { MessageMixCard } from './message-mix-card';
 import { PipelineCard } from './pipeline-card';
 import { windowLabel } from './ranges';
 import {
@@ -46,6 +47,7 @@ import {
   useSummary,
   useTaskCounts,
   useConversationStats,
+  useMessageMix,
   useTeamPanel,
   useThroughput,
   useUnofficialWhatsapp,
@@ -105,6 +107,9 @@ export function DashboardScreen() {
   );
   // The Summary shows the same status counts for the whole workspace, so a person who may read analytics sees them there too.
   const summaryStats = useConversationStats(win, undefined, canAnalytics && view === 'summary');
+  // The message mix is the message history's, so it needs that permission (a person without it sees no such card).
+  const canHistory = can(session.data, 'msg.history.read');
+  const messageMix = useMessageMix(win, timezone, canHistory && view === 'summary');
   const taskCounts = useTaskCounts(canTasks);
   const inboxCounts = useInboxCounts(canInbox);
   const wallet = useWalletSummary(can(session.data, 'wallet.balance.read'));
@@ -127,6 +132,7 @@ export function DashboardScreen() {
       ...(canAnalytics && view === 'agent' ? [team.refetch(), conversationStats.refetch()] : []),
       ...(canAnalytics && view === 'bot' ? [conversationStats.refetch()] : []),
       ...(canAnalytics && view === 'summary' ? [summaryStats.refetch()] : []),
+      ...(canHistory && view === 'summary' ? [messageMix.refetch()] : []),
       ...(canContacts ? [newContacts.refetch()] : []),
       ...(canTasks ? [taskCounts.refetch()] : []),
       ...(canInbox ? [inboxCounts.refetch()] : []),
@@ -324,6 +330,9 @@ export function DashboardScreen() {
                 <StatusGrid items={statusItems} />
               </TitledCard>
             ) : null}
+            {canHistory ? (
+              <MessageMixCard mix={messageMix.data?.typeMix} rangeName={rangeName} />
+            ) : null}
             {s ? (
               <TitledCard title={t('summary.allMessages.title')} note={rangeName}>
                 <FigureRows items={messageItems} />
@@ -377,12 +386,8 @@ export function DashboardScreen() {
             )}
 
             {s ? <FunnelCard funnel={s.funnel} subtitle={rangeName} /> : null}
-            {w ? (
-              <>
-                <ActivityCard data={w.activity} now={now} />
-                <IntegrationsCard data={w.integrations} />
-              </>
-            ) : null}
+            {/* The Integrations card (`IntegrationsCard`, `w.integrations`) is hidden for now, by the owner's choice. */}
+            {w ? <ActivityCard data={w.activity} now={now} /> : null}
           </>
         )}
       </ScrollView>

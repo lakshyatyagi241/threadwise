@@ -4,6 +4,7 @@ import {
   fetchConversationStats,
   fetchEntitlements,
   fetchInboxCounts,
+  fetchMessageMix,
   fetchNewContacts,
   fetchSummary,
   fetchTaskCounts,
@@ -56,6 +57,16 @@ export const useConversationStats = (
   useQuery({
     queryKey: ['dash', 'conversations', win.from, win.to, agent ?? 'all'],
     queryFn: ({ signal }) => fetchConversationStats(win, agent, signal),
+    enabled,
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+
+/** The window's message mix by type. No request for a person without `msg.history.read` (`enabled: false`). */
+export const useMessageMix = (win: DashWindow, timezone: string, enabled: boolean) =>
+  useQuery({
+    queryKey: ['dash', 'messageMix', win.from, win.to, timezone],
+    queryFn: ({ signal }) => fetchMessageMix(win, timezone, signal),
     enabled,
     placeholderData: keepPreviousData,
     retry: false,

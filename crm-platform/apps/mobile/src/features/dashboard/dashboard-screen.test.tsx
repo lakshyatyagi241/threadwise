@@ -8,6 +8,7 @@ import { fetchSession } from '@/lib/session/api';
 import {
   conversationStats,
   emptyWidgets,
+  messageInsights,
   session,
   summary,
   teamPanel,
@@ -36,6 +37,7 @@ const throughputCall = jest.mocked(api.fetchThroughput);
 const widgetsCall = jest.mocked(api.fetchWidgets);
 const teamCall = jest.mocked(api.fetchTeamPanel);
 const statsCall = jest.mocked(api.fetchConversationStats);
+const messageMixCall = jest.mocked(api.fetchMessageMix);
 const walletCall = jest.mocked(api.fetchWalletSummary);
 const entitlementsCall = jest.mocked(api.fetchEntitlements);
 const newContactsCall = jest.mocked(api.fetchNewContacts);
@@ -131,10 +133,11 @@ describe('DashboardScreen', () => {
       'card-flows',
       'engagement-funnel',
       'card-activity',
-      'card-integrations',
     ]) {
       expect(await screen.findByTestId(id)).toBeTruthy();
     }
+    // Hidden for now, by the owner's choice: the Integrations card is not on the phone's dashboard.
+    expect(screen.queryByTestId('card-integrations')).toBeNull();
     expect(screen.queryByTestId('card-autopilot')).toBeNull();
     expect(screen.getByRole('button', { name: 'Dashboard view' })).toBeTruthy();
     expect(screen.getByText('Summary')).toBeTruthy();
@@ -199,6 +202,47 @@ describe('DashboardScreen', () => {
       await loaded(queryClient);
       expect(statsCall).not.toHaveBeenCalled();
       expect(screen.queryByRole('header', { name: 'Conversation status' })).toBeNull();
+    });
+
+    it('shows the message mix by type, from the message history, for a person who may read it', async () => {
+      arrange({
+        session: {
+          ...sessionAll,
+          permissions: { ...sessionAll.permissions, 'msg.history.read': 'all' },
+        } as typeof session,
+      });
+      messageMixCall.mockResolvedValue(messageInsights);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(await screen.findByRole('header', { name: 'Message by categories' })).toBeTruthy();
+      expect(screen.getByLabelText('Plain text: 4')).toBeTruthy();
+      expect(screen.getByLabelText('Media: 10')).toBeTruthy();
+      expect(messageMixCall).toHaveBeenLastCalledWith(
+        expect.objectContaining({ from: expect.any(String), to: expect.any(String) }),
+        'Asia/Kolkata',
+        expect.anything(),
+      );
+    });
+
+    it('leaves the message mix out, and asks nothing, without the message history permission', async () => {
+      arrange({ session: sessionAll });
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(messageMixCall).not.toHaveBeenCalled();
+      expect(screen.queryByRole('header', { name: 'Message by categories' })).toBeNull();
+    });
+
+    it('shows dashes in the message mix when the history cannot be read', async () => {
+      arrange({
+        session: {
+          ...sessionAll,
+          permissions: { ...sessionAll.permissions, 'msg.history.read': 'all' },
+        } as typeof session,
+      });
+      messageMixCall.mockRejectedValue(new ApiError(403, 'PLAN_FEATURE_LOCKED', 'Locked'));
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(await screen.findByLabelText('Plain text: —')).toBeTruthy();
     });
 
     it('asks for no contacts, tasks or inbox numbers without the permission, and shows a dash', async () => {

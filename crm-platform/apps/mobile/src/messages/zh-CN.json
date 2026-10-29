@@ -2353,6 +2353,14 @@
       "read": "已读",
       "failed": "失败"
     },
+    "messageMix": {
+      "title": "按类别统计的消息",
+      "text": "纯文本",
+      "autoReply": "自动回复",
+      "campaign": "营销活动",
+      "broadcast": "群发",
+      "scheduled": "定时"
+    },
     "moreTitle": "工作区的更多内容"
   },
   "dashDate": {

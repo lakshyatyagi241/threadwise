@@ -2411,6 +2411,14 @@
       "read": "Letti",
       "failed": "Non riusciti"
     },
+    "messageMix": {
+      "title": "Messaggi per categoria",
+      "text": "Testo semplice",
+      "autoReply": "Risposta automatica",
+      "campaign": "Campagna",
+      "broadcast": "Invio di massa",
+      "scheduled": "Programmato"
+    },
     "moreTitle": "Altro dal tuo workspace"
   },
   "dashDate": {

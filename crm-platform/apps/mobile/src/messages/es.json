@@ -2411,6 +2411,14 @@
       "read": "Leídos",
       "failed": "Fallidos"
     },
+    "messageMix": {
+      "title": "Mensajes por categoría",
+      "text": "Texto simple",
+      "autoReply": "Respuesta automática",
+      "campaign": "Campaña",
+      "broadcast": "Difusión",
+      "scheduled": "Programado"
+    },
     "moreTitle": "Más de tu espacio de trabajo"
   },
   "dashDate": {

@@ -2382,6 +2382,14 @@
       "read": "Read",
       "failed": "Failed"
     },
+    "messageMix": {
+      "title": "Message by categories",
+      "text": "Plain text",
+      "autoReply": "Auto-reply",
+      "campaign": "Campaign",
+      "broadcast": "Broadcast",
+      "scheduled": "Scheduled"
+    },
     "moreTitle": "More from your workspace"
   },
   "dashDate": {

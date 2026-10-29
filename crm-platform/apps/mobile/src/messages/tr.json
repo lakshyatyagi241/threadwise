@@ -2382,6 +2382,14 @@
       "read": "Okundu",
       "failed": "Başarısız"
     },
+    "messageMix": {
+      "title": "Kategoriye göre mesajlar",
+      "text": "Düz metin",
+      "autoReply": "Otomatik yanıt",
+      "campaign": "Kampanya",
+      "broadcast": "Toplu gönderim",
+      "scheduled": "Zamanlanmış"
+    },
     "moreTitle": "Çalışma alanınızdan daha fazlası"
   },
   "dashDate": {

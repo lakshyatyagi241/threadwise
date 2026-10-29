@@ -4,6 +4,7 @@ import type {
   DashSummaryResponse,
   DashThroughputResponse,
   DashWidgets,
+  MessageHistoryInsights,
   SessionResponse,
   WalletSummary,
 } from '@crm/contracts';
@@ -398,4 +399,13 @@ export const session: SessionResponse = {
   },
   sessionId: '3a7d1c9e-2b4f-4c6d-8e0a-5f1b2c3d4e5f',
   effectiveTimezone: 'Asia/Kolkata',
+};
+
+/** The message history's insights for a window: 20 messages by type (4 + 3 + 2 + 1 + 0 + 10). Only the mix is read by the dashboard. */
+export const messageInsights: MessageHistoryInsights = {
+  bucket: 'weekly',
+  tz: 'Asia/Kolkata',
+  volume: [],
+  typeMix: { text: 4, autoReply: 3, campaign: 2, broadcast: 1, scheduled: 0, media: 10 },
+  topConversations: [],
 };

@@ -2382,6 +2382,14 @@
       "read": "पढ़े गए",
       "failed": "विफल"
     },
+    "messageMix": {
+      "title": "श्रेणी के अनुसार संदेश",
+      "text": "सादा टेक्स्ट",
+      "autoReply": "ऑटो-रिप्लाई",
+      "campaign": "कैंपेन",
+      "broadcast": "ब्रॉडकास्ट",
+      "scheduled": "निर्धारित"
+    },
     "moreTitle": "आपके वर्कस्पेस से और"
   },
   "dashDate": {

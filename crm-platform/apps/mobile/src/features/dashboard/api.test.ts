@@ -1,10 +1,18 @@
 import { resetSessionForTests, startSession } from '@/lib/auth/session-manager';
-import { conversationStats, summary, throughput, wallet, widgets } from '@/test/dashboard-fixtures';
+import {
+  conversationStats,
+  messageInsights,
+  summary,
+  throughput,
+  wallet,
+  widgets,
+} from '@/test/dashboard-fixtures';
 import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
 import {
   fetchConversationStats,
   fetchEntitlements,
   fetchInboxCounts,
+  fetchMessageMix,
   fetchNewContacts,
   fetchSummary,
   fetchTaskCounts,
@@ -19,6 +27,19 @@ beforeEach(async () => {
 });
 
 describe('dashboard api', () => {
+  it('asks the message history for the mix of the window, with the days and the workspace zone', async () => {
+    const http = mockFetch(jsonResponse(200, messageInsights));
+    await expect(
+      fetchMessageMix({ from: '2026-09-13', to: '2026-10-12' }, 'Asia/Kolkata'),
+    ).resolves.toMatchObject({ typeMix: { text: 4, media: 10 } });
+    const url = http.calls[0]?.url ?? '';
+    expect(url).toContain('/v2/message-history/insights?');
+    expect(url).toContain('from=2026-09-13');
+    expect(url).toContain('to=2026-10-12');
+    expect(url).toContain('tz=Asia%2FKolkata');
+    expect(url).toContain('bucket=weekly');
+  });
+
   it('asks the summary, throughput and widgets endpoints for the chosen window', async () => {
     const http = mockFetch(
       jsonResponse(200, summary),

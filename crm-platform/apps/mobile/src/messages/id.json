@@ -2353,6 +2353,14 @@
       "read": "Dibaca",
       "failed": "Gagal"
     },
+    "messageMix": {
+      "title": "Pesan menurut kategori",
+      "text": "Teks biasa",
+      "autoReply": "Balasan otomatis",
+      "campaign": "Kampanye",
+      "broadcast": "Siaran",
+      "scheduled": "Terjadwal"
+    },
     "moreTitle": "Lainnya dari workspace Anda"
   },
   "dashDate": {

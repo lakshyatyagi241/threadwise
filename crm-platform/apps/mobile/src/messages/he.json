@@ -2411,6 +2411,14 @@
       "read": "נקראו",
       "failed": "נכשלו"
     },
+    "messageMix": {
+      "title": "הודעות לפי קטגוריה",
+      "text": "טקסט רגיל",
+      "autoReply": "מענה אוטומטי",
+      "campaign": "קמפיין",
+      "broadcast": "שידור",
+      "scheduled": "מתוזמן"
+    },
     "moreTitle": "עוד מסביבת העבודה שלכם"
   },
   "dashDate": {

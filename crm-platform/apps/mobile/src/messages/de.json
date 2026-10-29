@@ -2382,6 +2382,14 @@
       "read": "Gelesen",
       "failed": "Fehlgeschlagen"
     },
+    "messageMix": {
+      "title": "Nachrichten nach Kategorie",
+      "text": "Nur Text",
+      "autoReply": "Automatische Antwort",
+      "campaign": "Kampagne",
+      "broadcast": "Massenversand",
+      "scheduled": "Geplant"
+    },
     "moreTitle": "Mehr aus Ihrem Workspace"
   },
   "dashDate": {

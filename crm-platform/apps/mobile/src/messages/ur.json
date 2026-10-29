@@ -2382,6 +2382,14 @@
       "read": "پڑھے گئے",
       "failed": "ناکام"
     },
+    "messageMix": {
+      "title": "زمرے کے لحاظ سے پیغامات",
+      "text": "سادہ متن",
+      "autoReply": "خودکار جواب",
+      "campaign": "مہم",
+      "broadcast": "براڈکاسٹ",
+      "scheduled": "طے شدہ"
+    },
     "moreTitle": "آپ کے ورک اسپیس سے مزید"
   },
   "dashDate": {

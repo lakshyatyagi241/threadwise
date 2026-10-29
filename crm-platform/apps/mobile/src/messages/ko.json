@@ -2353,6 +2353,14 @@
       "read": "읽음",
       "failed": "실패"
     },
+    "messageMix": {
+      "title": "카테고리별 메시지",
+      "text": "일반 텍스트",
+      "autoReply": "자동 응답",
+      "campaign": "캠페인",
+      "broadcast": "단체 발송",
+      "scheduled": "예약"
+    },
     "moreTitle": "워크스페이스 더 보기"
   },
   "dashDate": {

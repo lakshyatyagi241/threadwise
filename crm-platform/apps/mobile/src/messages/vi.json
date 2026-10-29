@@ -2353,6 +2353,14 @@
       "read": "Đã đọc",
       "failed": "Thất bại"
     },
+    "messageMix": {
+      "title": "Tin nhắn theo danh mục",
+      "text": "Văn bản thuần",
+      "autoReply": "Trả lời tự động",
+      "campaign": "Chiến dịch",
+      "broadcast": "Gửi hàng loạt",
+      "scheduled": "Đã lên lịch"
+    },
     "moreTitle": "Xem thêm từ không gian làm việc của bạn"
   },
   "dashDate": {

@@ -2382,6 +2382,14 @@
       "read": "Gelezen",
       "failed": "Mislukt"
     },
+    "messageMix": {
+      "title": "Berichten per categorie",
+      "text": "Gewone tekst",
+      "autoReply": "Automatisch antwoord",
+      "campaign": "Campagne",
+      "broadcast": "Broadcast",
+      "scheduled": "Ingepland"
+    },
     "moreTitle": "Meer uit je workspace"
   },
   "dashDate": {

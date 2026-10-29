@@ -44,7 +44,9 @@ web has no pages with those names, so each shows what the API already has:
 - A 403 on the summary shows "your role (X) does not have access" instead of redirecting to the inbox: the app has no inbox yet.
 - A workspace whose `landing` is `onboarding` (setup not finished) still sees the dashboard, with a banner. The web locks such an
   account to the setup wizard; the wizard is a first-priority backlog item and is not built in the app yet.
-- Subscribed and Opted-in show the same count and the Integrations total is the catalog size, exactly as the web does.
+- Subscribed and Opted-in show the same count, exactly as the web does.
+- The Integrations card is hidden for now (the owner's choice). `IntegrationsCard` stays in `channel-cards.tsx` and `integrations` is still in the
+  widgets answer; showing it again is one line in `dashboard-screen.tsx`.
 - Instagram accounts are shown by initial and status only; remote avatar images are not loaded.
 - The throughput chart draws sent, delivered and failed side by side, and over each other when there are too many buckets for that
   (30 days, quarter). It never scrolls sideways.

@@ -2440,6 +2440,14 @@
       "read": "Przeczytane",
       "failed": "Nieudane"
     },
+    "messageMix": {
+      "title": "Wiadomości według kategorii",
+      "text": "Zwykły tekst",
+      "autoReply": "Automatyczna odpowiedź",
+      "campaign": "Kampania",
+      "broadcast": "Wysyłka masowa",
+      "scheduled": "Zaplanowana"
+    },
     "moreTitle": "Więcej z Twojej przestrzeni roboczej"
   },
   "dashDate": {

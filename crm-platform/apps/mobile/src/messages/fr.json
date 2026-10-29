@@ -2411,6 +2411,14 @@
       "read": "Lus",
       "failed": "Échoués"
     },
+    "messageMix": {
+      "title": "Messages par catégorie",
+      "text": "Texte simple",
+      "autoReply": "Réponse automatique",
+      "campaign": "Campagne",
+      "broadcast": "Diffusion",
+      "scheduled": "Programmé"
+    },
     "moreTitle": "Plus depuis votre espace de travail"
   },
   "dashDate": {

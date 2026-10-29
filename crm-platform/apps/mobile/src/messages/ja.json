@@ -2353,6 +2353,14 @@
       "read": "既読",
       "failed": "失敗"
     },
+    "messageMix": {
+      "title": "カテゴリ別メッセージ",
+      "text": "テキスト",
+      "autoReply": "自動返信",
+      "campaign": "キャンペーン",
+      "broadcast": "一斉配信",
+      "scheduled": "予約"
+    },
     "moreTitle": "ワークスペースのその他の情報"
   },
   "dashDate": {

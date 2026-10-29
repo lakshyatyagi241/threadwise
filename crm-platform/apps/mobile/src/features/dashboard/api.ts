@@ -3,6 +3,7 @@ import {
   analyticsPanelsSchema,
   dashSummaryResponseSchema,
   inboxCountsSchema,
+  messageHistoryInsightsSchema,
   taskCountsResponseSchema,
   dashThroughputResponseSchema,
   dashWidgetsSchema,
@@ -91,3 +92,15 @@ export const fetchTaskCounts = (signal?: AbortSignal) =>
 /** The live inbox counts (all, mine, unassigned, unread, archived): no dates, the API counts what is open now. */
 export const fetchInboxCounts = (signal?: AbortSignal) =>
   apiFetch('/v2/inbox/counts', { schema: inboxCountsSchema, signal });
+
+/**
+ * How many messages of the window were plain text, auto-replies, campaign, broadcast or scheduled sends, or media (`typeMix` of the
+ * message history's insights: the web's "By message type"). The history takes the two days as UTC days, the buckets of its
+ * volume chart in the workspace zone; only the mix is used here. Needs `msg.history.read`.
+ */
+export const fetchMessageMix = (win: DashWindow, timezone: string, signal?: AbortSignal) =>
+  apiFetch('/v2/message-history/insights', {
+    query: { from: win.from, to: win.to, bucket: 'weekly', tz: timezone },
+    schema: messageHistoryInsightsSchema,
+    signal,
+  });
