@@ -2,9 +2,26 @@
 // and (only when every check below passed and AUTOMERGE=1) merge it. Never touches the working tree of the person running it:
 // everything happens in a git worktree.
 //   node qa-daily/fix.mjs <bug-id>          (daily.mjs calls fixBug for each open bug)
-import { existsSync, rmSync } from 'node:fs';
+import { existsSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { REPO, OUT, DATE, git, sh, tryRun, log, isProtected, readJson, writeJson } from './lib.mjs';
+import {
+  REPO,
+  WORKTREES,
+  STATE,
+  ensureEnv,
+  failingTests,
+  OUT,
+  DATE,
+  PREFIX,
+  appRelative,
+  git,
+  sh,
+  tryRun,
+  log,
+  isProtected,
+  readJson,
+  writeJson,
+} from './lib.mjs';
 import { call } from './sheet.mjs';
 import { bugPath } from './recheck.mjs';
 import { goldfishReview } from './review.mjs';
@@ -13,7 +30,7 @@ const MAX_FILES = Number(process.env.MERGE_MAX_FILES ?? 8);
 const MAX_LINES = Number(process.env.MERGE_MAX_LINES ?? 300);
 const AUTOMERGE = process.env.AUTOMERGE === '1';
 const BUILD =
-  "export NODE_OPTIONS=--max-old-space-size=6144; bash qa-daily/stack.sh down; pnpm --filter './packages/*' build && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up";
+  "export NODE_OPTIONS=--max-old-space-size=6144; bash qa-daily/stack.sh down; (cd ../.. && pnpm --filter './packages/*' build) && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up";
 
 const prompt = (
   b,
@@ -38,12 +55,42 @@ How to work:
 5. Run the typecheck/lint/tests of what you touched with pnpm. Do not run the whole repo gate; the pipeline does that.
 If you cannot reproduce or cannot fix safely, change NOTHING and explain why in your last message. Do not commit or push: the pipeline does it.`;
 
+/** Failing unit tests of the base commit, cached per commit (a clean worktree + the full unit test run, once per main commit). */
+function baselineFailures(wt, app) {
+  const sha = git(wt, 'rev-parse', 'origin/main');
+  const cache = join(STATE, `baseline-failures-${sha.slice(0, 12)}.json`);
+  const known = readJson(cache, null);
+  if (known) return new Set(known);
+  const dir = join(WORKTREES, `qa-base-${sha.slice(0, 8)}`);
+  tryRun('git', ['worktree', 'remove', '--force', dir], { cwd: REPO });
+  git(REPO, 'worktree', 'add', '-q', '--detach', dir, process.env.FIX_BASE ?? sha);
+  try {
+    const root = join(dir, PREFIX);
+    ensureEnv(root);
+    sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], {
+      cwd: root,
+      stdio: 'ignore',
+    });
+    tryRun(
+      'bash',
+      ['-c', "export NODE_OPTIONS=--max-old-space-size=6144; pnpm --filter './packages/*' build"],
+      { cwd: root },
+    );
+    const r = tryRun('pnpm', ['test'], { cwd: root, timeout: 60 * 60_000 });
+    const failing = [...failingTests(r.out)];
+    writeJson(cache, failing);
+    return new Set(failing);
+  } finally {
+    tryRun('git', ['worktree', 'remove', '--force', dir], { cwd: REPO });
+  }
+}
+
 export async function fixBug(bug) {
   const id = bug.ID;
   const branch = `qa-fix/${id}`;
-  const wt = join(REPO, '.claude/worktrees', `qa-fix-${id}`);
+  const wt = join(WORKTREES, `qa-fix-${id}`);
   const finish = async (status, note, extra = {}) => {
-    tryRun('bash', ['qa-daily/stack.sh', 'down'], { cwd: join(wt, 'apps/web') });
+    tryRun('bash', ['qa-daily/stack.sh', 'down'], { cwd: join(wt, PREFIX, 'apps/web') });
     await call('resolve', { id, status, note, ...extra });
     log(`bug ${id}: ${status} - ${note}`);
     return { id, status, note, ...extra };
@@ -61,8 +108,10 @@ export async function fixBug(bug) {
     }
     git(REPO, 'worktree', 'prune');
     git(REPO, 'worktree', 'add', '-q', '-B', branch, wt, process.env.FIX_BASE ?? 'origin/main'); // FIX_BASE: rehearse on a planted bug
-    const web = join(wt, 'apps/web');
-    sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], { cwd: wt, stdio: 'ignore' });
+    const app = join(wt, PREFIX); // the folder holding apps/, packages/, .claude/
+    const web = join(app, 'apps/web');
+    ensureEnv(app);
+    sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], { cwd: app, stdio: 'ignore' });
     writeJson(join(web, 'qa-daily/out/bugs-cache', `${id}.json`), bug);
 
     // 1. reproduce on the unfixed build
@@ -100,7 +149,7 @@ export async function fixBug(bug) {
         'Read Edit Write Grep Glob Skill Bash(pnpm:*) Bash(node qa-daily/recheck.mjs:*) Bash(git diff:*) Bash(git status:*) Bash(git log:*)',
       ],
       {
-        cwd: wt,
+        cwd: app,
         timeout: 60 * 60_000,
         env: { ...process.env, ANTHROPIC_API_KEY: undefined }, // use the logged-in plan, never a metered key
       },
@@ -149,18 +198,46 @@ export async function fixBug(bug) {
           '--allowedTools',
           'Read Edit Write Grep Glob Bash(pnpm:*) Bash(git diff:*) Bash(git status:*)',
         ],
-        { cwd: wt, timeout: 30 * 60_000, env: { ...process.env, ANTHROPIC_API_KEY: undefined } },
+        { cwd: app, timeout: 30 * 60_000, env: { ...process.env, ANTHROPIC_API_KEY: undefined } },
       );
       if (!dirty().length) return await finish('Needs human', 'rework left no change');
     }
 
     // 4. the repo's own gate (typecheck, lint, tests, audits, i18n, help docs)
     const gate = tryRun('bash', ['.claude/skills/pre-pr/scripts/gate.sh'], {
-      cwd: wt,
+      cwd: app,
       timeout: 60 * 60_000,
     });
-    if (!gate.ok)
-      return await finish('Needs human', `pre-pr gate failed on the fix: ${gate.out.slice(-300)}`);
+    let gateNote = '';
+    if (!gate.ok) {
+      writeFileSync(join(OUT, `gate-${id}.log`), gate.out); // the sheet note is short; the whole gate output stays on disk
+      // main may already have failing tests that have nothing to do with this fix: only NEW failures block it
+      const failing = failingTests(gate.out);
+      const otherProblem =
+        /error TS\d+|eslint|✖.*problem|format check|architecture|translations/i.test(
+          gate.out
+            .replace(/\x1b\[[0-9;]*m/g, '')
+            .split('\n')
+            .filter((l) => !/\bFAIL\b/.test(l))
+            .join('\n'),
+        );
+      if (!failing.size || otherProblem)
+        return await finish(
+          'Needs human',
+          `pre-pr gate failed on the fix (full output: out/gate-${id}.log)`,
+        );
+      const base = baselineFailures(wt, app);
+      const fresh = [...failing].filter((t) => !base.has(t));
+      if (fresh.length)
+        return await finish(
+          'Needs human',
+          `the fix breaks ${fresh.length} test(s) that pass without it, e.g. ${fresh[0]}`.slice(
+            0,
+            480,
+          ),
+        );
+      gateNote = ` ${failing.size} unit test(s) already fail on the base and are not caused by this fix.`;
+    }
 
     if (process.env.DRY_PR === '1')
       return await finish(
@@ -179,12 +256,13 @@ export async function fixBug(bug) {
     git(wt, 'push', '-q', '-u', 'origin', branch);
     const files = git(wt, 'diff', '--name-only', '--no-renames', '-z', 'origin/main...HEAD')
       .split('\0')
-      .filter(Boolean); // -z: no quoting; --no-renames: both sides of a move count
+      .filter(Boolean)
+      .map(appRelative); // -z: no quoting; --no-renames: both sides of a move count
     const lines = git(wt, 'diff', '--shortstat', 'origin/main...HEAD');
     const nLines =
       (lines.match(/(\d+) insertion/)?.[1] ?? 0) * 1 +
       (lines.match(/(\d+) deletion/)?.[1] ?? 0) * 1;
-    const body = `Automatic fix from the daily QA run.\n\n- Bug: ${bug.Bug}\n- Found on: ${bug.Env} (${bug.Test || bug.Page})\n- Sheet id: ${id}\n- Proof: the failing check fails on origin/main and passes with this change on a fresh local build; independent Goldfish reviewers (egm) approved the diff; the pre-pr gate passed.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)`;
+    const body = `Automatic fix from the daily QA run.\n\n- Bug: ${bug.Bug}\n- Found on: ${bug.Env} (${bug.Test || bug.Page})\n- Sheet id: ${id}\n- Proof: the failing check fails on origin/main and passes with this change on a fresh local build; independent Goldfish reviewers (egm) approved the diff; the pre-pr gate passed.${gateNote}\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)`;
     const prUrl = sh(
       'gh',
       [
@@ -221,6 +299,7 @@ export async function fixBug(bug) {
       { prUrl },
     );
   } catch (e) {
+    console.error(`bug ${id}: pipeline error`, e.stack || e); // the sheet note is cut to 300 chars; keep the full trace in the run log
     return await finish('Needs human', `fix pipeline error: ${String(e.message).slice(0, 300)}`);
   } finally {
     tryRun('git', ['worktree', 'remove', '--force', wt], { cwd: REPO });

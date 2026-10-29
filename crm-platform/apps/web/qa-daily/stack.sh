@@ -4,6 +4,7 @@
 #   qa-daily/stack.sh down    stop them
 # Needs the dev Postgres + Redis (docker compose) and a built API and web. Never touches the `crm` database.
 set -euo pipefail
+SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 cd "$(dirname "$0")/../../.."   # crm-platform/
 OUT="$PWD/apps/web/qa-daily/out"; mkdir -p "$OUT"
 QA_DB="${QA_DB:-crm_qa}"
@@ -12,8 +13,12 @@ QA_OP_PW="${QA_LOCAL_OP_PASSWORD:-Qa-Local-Op-Pass1x}"
 OP_EMAIL="qa-operator@example.test"
 
 if [ "${1:-}" = "down" ]; then
-  [ -f "$OUT/stack.pids" ] && xargs -r kill < "$OUT/stack.pids" 2>/dev/null || true
-  rm -f "$OUT/stack.pids"; exit 0
+  # belt and braces: whatever app server still listens on the two test ports (an older stack, an orphaned next-server child)
+  for port in 3000 3001; do
+    pid=$(ss -ltnp 2>/dev/null | grep ":$port " | grep -oE "pid=[0-9]+" | head -1 | cut -d= -f2 || true)
+    if [ -n "$pid" ] && tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null | grep -qE "next-server|next start|dist/src/main.js"; then kill "$pid" 2>/dev/null; for _ in 1 2 3 4 5 6; do kill -0 "$pid" 2>/dev/null || break; sleep 1; done; kill -9 "$pid" 2>/dev/null || true; fi
+  done
+  sleep 1; rm -f "$OUT/stack.pids"; exit 0
 fi
 
 # .env is not shell-safe (unquoted values with spaces), so read only the three database URLs
@@ -38,11 +43,11 @@ if [ ! -f "$SEEDED" ]; then
   touch "$SEEDED"
 fi
 
-: > "$OUT/stack.pids"
-(cd apps/api && nohup node dist/src/main.js > "$OUT/api.log" 2>&1 & echo $! >> "$OUT/stack.pids") >/dev/null 2>&1
+bash "$SELF" down; : > "$OUT/stack.pids" # never leave an older stack answering on the same ports
+(cd apps/api && setsid nohup node dist/src/main.js > "$OUT/api.log" 2>&1 & echo $! >> "$OUT/stack.pids") >/dev/null 2>&1
 for i in $(seq 1 60); do curl -fsS http://localhost:3000/health >/dev/null 2>&1 && break; sleep 2; done
 curl -fsS http://localhost:3000/health >/dev/null || { tail -n 30 "$OUT/api.log"; exit 1; }
-(cd apps/web && nohup node node_modules/next/dist/bin/next start -p 3001 > "$OUT/web.log" 2>&1 & echo $! >> "$OUT/stack.pids") >/dev/null 2>&1
+(cd apps/web && setsid nohup node node_modules/next/dist/bin/next start -p 3001 > "$OUT/web.log" 2>&1 & echo $! >> "$OUT/stack.pids") >/dev/null 2>&1
 for i in $(seq 1 60); do curl -fsS http://localhost:3001/login >/dev/null 2>&1 && break; sleep 2; done
 curl -fsS http://localhost:3001/login >/dev/null || { tail -n 30 "$OUT/web.log"; exit 1; }
 
