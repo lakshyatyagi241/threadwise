@@ -4,6 +4,7 @@ import type { Response } from 'express';
 import { mailCallbackQuerySchema, type MailCallbackQuery } from '@crm/contracts';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { GoogleConsentService } from '../appointments-booking';
 import { MailConnectService } from './mail-connect.service';
 
 /**
@@ -16,7 +17,10 @@ import { MailConnectService } from './mail-connect.service';
 @Public()
 @Controller({ path: 'public/email', version: '2' })
 export class MailCallbackController {
-  constructor(private readonly connect: MailConnectService) {}
+  constructor(
+    private readonly connect: MailConnectService,
+    private readonly googleAccount: GoogleConsentService,
+  ) {}
 
   @Get('google/callback')
   @Header('Cache-Control', 'no-store')
@@ -31,6 +35,11 @@ export class MailCallbackController {
     @Query(zodPipe(mailCallbackQuerySchema)) query: MailCallbackQuery,
     @Res() res: Response,
   ): Promise<void> {
+    // The workspace's Google account (Integrations, Appointments, Flows) may be registered at Google with this address: finish it there.
+    if (this.googleAccount.ownsState(query.state)) {
+      res.redirect(302, await this.googleAccount.callback(query));
+      return;
+    }
     res.redirect(302, await this.connect.callback(query, 'google'));
   }
 

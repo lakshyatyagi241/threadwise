@@ -2,6 +2,7 @@ import { Module, type OnModuleInit } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { MAIL_DRIVER_PROVIDERS } from './drivers/driver-providers';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
+import { AppointmentsBookingModule } from '../appointments-booking';
 import { BroadcastsModule, EngineSenderRegistry } from '../broadcasts';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
 import { ContactConsentModule } from '../contact-consent';
@@ -37,6 +38,7 @@ import { MailboxesService } from './mailboxes.service';
  */
 @Module({
   imports: [
+    AppointmentsBookingModule,
     BroadcastsModule,
     ChatConversationsModule,
     ContactConsentModule,

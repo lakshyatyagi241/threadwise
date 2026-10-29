@@ -121,6 +121,15 @@ export class GoogleConsentService {
   // --- Google's redirect (public) --------------------------------------------------------------------------------------
 
   /**
+   * True when `state` is a Google-account consent state signed by this app. The mailbox callback uses it to hand a redirect over that
+   * Google sent to the wrong registered address (one OAuth client, or the mailbox address saved as the account's), instead of dropping the
+   * admin on the mailbox page with nothing connected.
+   */
+  ownsState(state: string | undefined): boolean {
+    return verifyState(state ?? '', this.stateKey, Date.now()).ok;
+  }
+
+  /**
    * Verifies the state, claims its record once, trades the code for tokens, checks what Google granted, and parks the result. Ends in a
    * redirect: to the confirmation page when there is something to confirm, otherwise back where the admin came from with the outcome.
    */
