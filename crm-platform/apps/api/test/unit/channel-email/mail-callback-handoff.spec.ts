@@ -1,4 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
+import {
+  deriveStateKey,
+  newState,
+  signState,
+} from '../../../src/modules/appointments-booking/google-calendar-state';
+import { GoogleConsentService } from '../../../src/modules/appointments-booking/google-consent.service';
 import { MailCallbackController } from '../../../src/modules/channel-email/mail-callback.controller';
 
 // Google may be registered with the mailbox address for the workspace Google account: that redirect must end in the consent flow.
@@ -26,5 +32,25 @@ describe('mail google callback', () => {
     await t.go();
     expect(t.res.redirect).toHaveBeenCalledWith(302, 'web/mailbox');
     expect(t.account.callback).not.toHaveBeenCalled();
+  });
+});
+
+describe('GoogleConsentService.ownsState', () => {
+  const key = deriveStateKey('k'.repeat(64));
+  const own = (k: Buffer) =>
+    Object.assign(Object.create(GoogleConsentService.prototype), {
+      stateKey: k,
+    }) as GoogleConsentService;
+  const input = { orgId: 1, userId: 2, returnTo: '/google-account' };
+
+  it('owns a fresh and an expired account state, not a foreign or forged one', () => {
+    const svc = own(key);
+    expect(svc.ownsState(signState(newState(input, Date.now()), key))).toBe(true);
+    expect(svc.ownsState(signState(newState(input, Date.now() - 3_600_000 * 24), key))).toBe(true);
+    expect(
+      svc.ownsState(signState(newState(input, Date.now()), deriveStateKey('x'.repeat(64)))),
+    ).toBe(false);
+    expect(svc.ownsState(undefined)).toBe(false);
+    expect(svc.ownsState('mailbox.state')).toBe(false);
   });
 });
