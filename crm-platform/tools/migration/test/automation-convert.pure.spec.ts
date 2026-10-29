@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { buildAutomationPlan, flowUuidOf, type MetaVerdict } from '../automation/plan';
-import { clockOf, delayOf, MAPPING } from '../automation/convert';
+import { clockOf, convertAutomation, delayOf, MAPPING } from '../automation/convert';
 import { scrub } from '../util';
 import { customDumps, type Dumps } from './helpers';
-import { A1, acmeAutomations, FAKE_SHEET_TOKEN, FAKE_TOKEN, MKL_ID } from './automation-fixtures';
+import { A1, acmeAutomations, FAKE_SHEET_TOKEN, FAKE_TOKEN, MKL_ID, wnode } from './automation-fixtures';
 
 let d: Dumps;
 let plan: Awaited<ReturnType<typeof buildAutomationPlan>>;
@@ -59,6 +59,7 @@ describe('the converter', () => {
     const keys = new Set(MAPPING.map((m) => m.key));
     for (const k of real) expect(keys.has(k), k).toBe(true);
     expect(MAPPING.find((m) => m.key === 'trigger|contact|added')).toMatchObject({ target: 'trigger kind contact_created', status: 'mapped' });
+    expect(MAPPING.find((m) => m.key === 'trigger|google|google_sheet_events')).toMatchObject({ target: 'trigger kind google_sheet', status: 'approximated' });
   });
 
   it('A1: every node is converted, edges follow the ports, delivered / failed are detached, sent fans out', () => {
@@ -153,21 +154,41 @@ describe('the converter', () => {
     });
   });
 
-  it('A3: an unsupported trigger is an inert manual_enroll placeholder that keeps its type and a scrubbed config', () => {
+  it('A3: a Google Sheet trigger becomes the google_sheet trigger on the sheet id and phone column, approximated', () => {
     const v = byName('Sheet intake');
     const g = graph(v);
     const trig = g.flowNodes.find((n) => n.type === 'trigger');
-    expect(trig.data.kind).toBe('manual_enroll');
+    expect(trig.data).toMatchObject({
+      kind: 'google_sheet',
+      sheetId: 'sheet-1',
+      tabName: '',
+      phoneColumn: 'Phone',
+      emailColumn: '',
+      nameColumn: '',
+      intervalMinutes: 5,
+    });
     expect(trig.data._waboo).toMatchObject({
-      placeholder: true,
       class: 'google',
       function: 'google_sheet_events',
+      sheetName: 'Leads',
+    });
+    expect(trig.data._waboo.placeholder).toBeUndefined();
+    expect(v.row.trigger_kind).toBe('google_sheet');
+    expect(v.row.trigger_value).toBe(0);
+    expect(v.row.trigger_config).toEqual({
+      sheetId: 'sheet-1',
+      tabName: '',
+      phoneColumn: 'Phone',
+      emailColumn: '',
+      nameColumn: '',
+      intervalMinutes: 5,
     });
     expect(JSON.stringify(g)).not.toContain(FAKE_SHEET_TOKEN);
+    expect(JSON.stringify(g)).not.toContain('acct-1');
     expect(scrub(g).redacted).toEqual([]);
-    expect(trig.data._waboo.config.googleSheet).toEqual({ id: 'sheet-1', name: 'Leads' });
-    expect(trig.data._waboo.config.accessToken).toBeUndefined();
-    expect(softOf(v, 'SECRET_SCRUBBED')).toBeTruthy();
+    expect(softOf(v, 'SHEET_TRIGGER_APPROXIMATED')?.detail).toBe(1);
+    expect(softOf(v, 'SHEET_TRIGGER_INCOMPLETE')).toBeUndefined();
+    expect(softOf(v, 'PLACEHOLDER_NODES')).toBeUndefined();
     const sheet = g.flowNodes.find((n) => n.type === 'sheet_contact');
     expect(sheet.data.map).toEqual([
       { column: 'Name', field: 'name' },
@@ -177,7 +198,50 @@ describe('the converter', () => {
     expect(
       g.flowNodes.find((n) => n.type === 'condition').data.conditions.map((c: any) => c.operator),
     ).toEqual(['exists', 'starts_with']);
-    expect(softOf(v, 'PLACEHOLDER_NODES')?.detail).toBe(1);
+  });
+
+  it('A3b: a Google Sheet trigger with no sheet id or phone column starts nothing and says so', () => {
+    const out = convertAutomation({
+      nodes: {
+        t1: wnode({
+          type: 'trigger',
+          cls: 'google',
+          fn: 'google_sheet_events',
+          data: { googleSheet: { name: 'Leads' }, googleSheetName: ' Tab 2 ' },
+        }),
+      },
+      triggerIds: ['t1'],
+      cells: new Map(),
+      templates: new Map(),
+      list: () => undefined,
+    });
+    if (!out.ok) throw new Error(out.reason);
+    expect(out.trigger.kind).toBe('google_sheet');
+    expect(out.trigger.config).toMatchObject({ sheetId: '', tabName: 'Tab 2', phoneColumn: '' });
+    expect(out.soft.find((x) => x.code === 'SHEET_TRIGGER_INCOMPLETE')?.detail).toBe(1);
+  });
+
+  it('A3c: a sheet link is cut down to its id, the same way the app stores it', () => {
+    const out = convertAutomation({
+      nodes: {
+        t1: wnode({
+          type: 'trigger',
+          cls: 'google',
+          fn: 'google_sheet_events',
+          data: {
+            googleSheet: { id: 'https://docs.google.com/spreadsheets/d/abc_123-X/edit#gid=0' },
+            mobile_contact_number: 'Phone ',
+          },
+        }),
+      },
+      triggerIds: ['t1'],
+      cells: new Map(),
+      templates: new Map(),
+      list: () => undefined,
+    });
+    if (!out.ok) throw new Error(out.reason);
+    expect(out.graph.flowNodes[0]!.data).toMatchObject({ sheetId: 'abc_123-X', phoneColumn: 'Phone' });
+    expect(out.soft.find((x) => x.code === 'SHEET_TRIGGER_INCOMPLETE')).toBeUndefined();
   });
 
   it('A4: group_join with the list id, an unknown list is soft, a second trigger is an inert placeholder', () => {

@@ -24,6 +24,7 @@ const NODE_TYPE: Record<string, string> = {
   'trigger|Datematch|date_match': 'trigger',
   'trigger|contact|added': 'trigger',
   'trigger|contact|added_to_list': 'trigger',
+  'trigger|google|google_sheet_events': 'trigger',
   'condition|contact|query': 'condition',
   'condition|google|google_sheet_query': 'condition',
   'condition|list|query': 'in_list',
@@ -224,6 +225,15 @@ export function oracleAutomations(
         };
       }
       if (key3 === 'trigger|contact|added') triggerKind = 'contact_created';
+      if (key3 === 'trigger|google|google_sheet_events') {
+        triggerKind = 'google_sheet';
+        // as the app stores them: trimmed, and a pasted sheet link cut down to its id
+        const raw = txt(rec(n.data.googleSheet).id).trim();
+        config = {
+          sheetId: /\/spreadsheets\/d\/([A-Za-z0-9_-]+)/.exec(raw)?.[1] ?? raw,
+          phoneColumn: txt(n.data.mobile_contact_number).trim(),
+        };
+      }
       if (key3 === 'trigger|contact|added_to_list') {
         triggerKind = 'group_join';
         listKey = txt(n.data.marketing_list_id) || null;
