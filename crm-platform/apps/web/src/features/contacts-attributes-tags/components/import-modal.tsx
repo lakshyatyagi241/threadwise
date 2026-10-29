@@ -4,6 +4,7 @@ import { useEffect, useId, useMemo, useState, type DragEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ImportConsent } from '@/features/contact-consent';
 import { useTranslations } from 'next-intl';
+import { optionLabel } from '@/lib/option-label';
 import { IMPORT_FIELDS, IMPORT_MAX_BYTES, type ImportField, GROUP_NAME_MAX } from '@crm/contracts';
 import {
   Alert,
@@ -408,8 +409,8 @@ function ImportBody({
                 >
                   <option value="">{t('groupPick')}</option>
                   {(groups.data ?? []).map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}
+                    <option key={g.id} value={g.id} title={g.name}>
+                      {optionLabel(g.name)}
                     </option>
                   ))}
                 </Select>
@@ -444,8 +445,8 @@ function ImportBody({
               >
                 <option value="">{t('none')}</option>
                 {(groups.data ?? []).map((g) => (
-                  <option key={g.id} value={g.id}>
-                    {g.name}
+                  <option key={g.id} value={g.id} title={g.name}>
+                    {optionLabel(g.name)}
                   </option>
                 ))}
               </Select>
