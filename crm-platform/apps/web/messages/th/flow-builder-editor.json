@@ -1093,6 +1093,9 @@
           },
           "removeRule": "ลบกฎ",
           "variablePlaceholder": "ชื่อตัวแปร (เช่น plan)",
+          "keyLabel": "คีย์",
+          "valueLabel": "ค่า",
+          "pickProperty": "เลือกคุณสมบัติของผู้ติดต่อ",
           "pickVariable": "เลือกตัวแปรที่จะทดสอบ",
           "comparePlaceholder": "เปรียบเทียบกับ…",
           "joinerAnd": "และ",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "เอกสาร (รายงาน PDF ฯลฯ)",
           "upload": "อัปโหลด",
           "uploadHint": "สูงสุด {mb} MB เราจะโฮสต์ไฟล์และให้โฟลว์มี URL สาธารณะ",
+          "acceptedFormats": {
+            "image": "รูปแบบที่รองรับ: JPG, PNG.",
+            "video": "รูปแบบที่รองรับ: MP4, 3GP.",
+            "audio": "รูปแบบที่รองรับ: MP3, AAC, AMR, OGG.",
+            "document": "รูปแบบที่รองรับ: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "แทนที่ไฟล์",
           "chooseKind": {
             "image": "เลือกรูปภาพ (หรือลากมาวางที่นี่)",

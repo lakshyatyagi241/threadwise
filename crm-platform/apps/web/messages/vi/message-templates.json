@@ -425,6 +425,7 @@
         "format": "Thẻ hiển thị",
         "formatImage": "Hình ảnh",
         "formatVideo": "Video",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB.",
         "count": "{used}/{max} thẻ",
         "add": "Thêm thẻ",
         "needTwo": "Băng chuyền cần ít nhất {min} thẻ.",

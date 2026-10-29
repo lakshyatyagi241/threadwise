@@ -425,6 +425,7 @@
         "format": "Os cartões mostram",
         "formatImage": "Imagens",
         "formatVideo": "Vídeos",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB.",
         "count": "{used}/{max} cartões",
         "add": "Adicionar cartão",
         "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",

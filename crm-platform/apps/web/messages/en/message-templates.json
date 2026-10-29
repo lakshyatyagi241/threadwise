@@ -418,6 +418,7 @@
         "format": "Cards show",
         "formatImage": "Pictures",
         "formatVideo": "Videos",
+        "limits": "Image up to 5 MB, video up to 16 MB.",
         "count": "{used}/{max} cards",
         "add": "Add card",
         "needTwo": "A carousel needs at least {min} cards.",

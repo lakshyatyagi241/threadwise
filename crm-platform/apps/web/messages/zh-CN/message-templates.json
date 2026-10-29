@@ -425,6 +425,7 @@
         "format": "卡片显示",
         "formatImage": "图片",
         "formatVideo": "视频",
+        "limits": "图片最大 5 MB,视频最大 16 MB。",
         "count": "{used}/{max} 张卡片",
         "add": "添加卡片",
         "needTwo": "轮播至少需要 {min} 张卡片。",

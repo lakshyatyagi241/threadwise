@@ -1093,6 +1093,9 @@
           },
           "removeRule": "הסר כלל",
           "variablePlaceholder": "שם משתנה (למשל plan)",
+          "keyLabel": "מפתח",
+          "valueLabel": "ערך",
+          "pickProperty": "בחרו מאפיין איש קשר",
           "pickVariable": "בחר את המשתנה לבדיקה.",
           "comparePlaceholder": "השווה מול…",
           "joinerAnd": "וגם",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "מסמך (דוח PDF וכדומה)",
           "upload": "העלאה",
           "uploadHint": "עד {mb} MB. אנו מארחים את הקובץ ומעניקים לתהליך כתובת URL ציבורית.",
+          "acceptedFormats": {
+            "image": "פורמטים נתמכים: JPG, PNG.",
+            "video": "פורמטים נתמכים: MP4, 3GP.",
+            "audio": "פורמטים נתמכים: MP3, AAC, AMR, OGG.",
+            "document": "פורמטים נתמכים: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "החלף קובץ",
           "chooseKind": {
             "image": "בחר תמונה (או גרור לכאן)",

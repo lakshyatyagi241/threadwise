@@ -253,7 +253,7 @@ function CardItem({
             ) : (
               <span className="text-muted-foreground">{t('noFile')}</span>
             )}
-            <p className="text-xs text-muted-foreground">{th('limits')}</p>
+            <p className="text-xs text-muted-foreground">{t('limits')}</p>
           </div>
           <input
             ref={input}

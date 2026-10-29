@@ -425,6 +425,7 @@
         "format": "Die Karten zeigen",
         "formatImage": "Bilder",
         "formatVideo": "Videos",
+        "limits": "Bild bis 5 MB, Video bis 16 MB.",
         "count": "{used}/{max} Karten",
         "add": "Karte hinzufügen",
         "needTwo": "Ein Karussell braucht mindestens {min} Karten.",

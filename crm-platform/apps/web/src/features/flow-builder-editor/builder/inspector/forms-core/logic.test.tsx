@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { ConditionForm } from './logic';
+import { ConditionForm, ConditionGroupEditor } from './logic';
 import type { FormProps } from '../types';
 
 // Messages are not loaded here: the key is the text, and a key with params keeps them (functions, i.e. rich tags, drop out).
@@ -88,5 +88,39 @@ describe('ConditionForm group editor', () => {
     expect(html).not.toContain('data-cond-group');
     expect(html).not.toContain('addGroup');
     expect(html).toContain('ruleLabel {&quot;n&quot;:6}');
+  });
+});
+
+describe('ConditionGroupEditor with contact properties (the Trigger field match)', () => {
+  const tree = { op: 'and' as const, items: [rule('order_id', 'contains', '1234')] };
+  const properties = [
+    { key: 'email', name: 'Email' },
+    { key: 'order_id', name: 'Order Id' },
+  ];
+  const html = renderToStaticMarkup(
+    ConditionGroupEditor({ tree, onChange: () => undefined, properties }) as ReactNode,
+  );
+
+  it('picks the key from a dropdown of the properties, labelled Key, with the saved one selected', () => {
+    expect(html).toContain('keyLabel');
+    expect(html).toContain('pickProperty');
+    expect(html).toMatch(/<option value="order_id" selected="">Order Id<\/option>/);
+    expect(html).toContain('<option value="email">Email</option>');
+  });
+
+  it('keeps a saved key that is not in the list, and types the key when no list is given', () => {
+    const old = renderToStaticMarkup(
+      ConditionGroupEditor({
+        tree: { op: 'and', items: [rule('Order No')] },
+        onChange: () => undefined,
+        properties,
+      }) as ReactNode,
+    );
+    expect(old).toContain('<option value="Order No" selected="">Order No</option>');
+    const typed = renderToStaticMarkup(
+      ConditionGroupEditor({ tree, onChange: () => undefined }) as ReactNode,
+    );
+    expect(typed).toContain('variablePlaceholder');
+    expect(typed).not.toContain('pickProperty');
   });
 });

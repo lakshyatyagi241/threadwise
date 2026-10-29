@@ -1093,6 +1093,9 @@
           },
           "removeRule": "移除规则",
           "variablePlaceholder": "变量名（例如 plan）",
+          "keyLabel": "键",
+          "valueLabel": "值",
+          "pickProperty": "选择联系人属性",
           "pickVariable": "选择要测试的变量。",
           "comparePlaceholder": "比较对象…",
           "joinerAnd": "且",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "文档（PDF 报告等）",
           "upload": "上传",
           "uploadHint": "最大 {mb} MB。我们托管该文件，并为流程提供公开 URL。",
+          "acceptedFormats": {
+            "image": "支持的格式: JPG, PNG.",
+            "video": "支持的格式: MP4, 3GP.",
+            "audio": "支持的格式: MP3, AAC, AMR, OGG.",
+            "document": "支持的格式: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "替换文件",
           "chooseKind": {
             "image": "选择图片（或拖到此处）",

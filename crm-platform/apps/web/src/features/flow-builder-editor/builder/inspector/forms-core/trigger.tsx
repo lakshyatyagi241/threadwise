@@ -1,5 +1,6 @@
 'use client';
 
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   FLB_SCHEDULE_AUDIENCES,
@@ -13,6 +14,7 @@ import type { ReactNode } from 'react';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { flowTypeLabel } from '../../../lib/contract-text';
 import { useFlb } from '../../../lib/msg';
+import { savePropertyOptions } from '../../../lib/property-options';
 import { Field, Notice, SelectInput, TextInput, type Opt } from '../kit';
 import type { FormProps } from '../types';
 import {
@@ -73,6 +75,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.trigger');
   const th = useTranslations('flb.builder.formsCore.helpers');
   const fieldMatchOps = useFieldMatchOperators();
+  const feed = usePickerFeed();
   const locale = useLocale();
   const tf = useFlb();
   const { ctx, loading } = env;
@@ -222,6 +225,7 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
         <ConditionGroupEditor
           tree={fieldMatchTree(d)}
           ops={fieldMatchOps}
+          properties={savePropertyOptions(feed.data, '')}
           onChange={(next) => set('conditionGroup', next)}
         />
       ) : null}

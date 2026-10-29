@@ -1093,6 +1093,9 @@
           },
           "removeRule": "ルールを削除",
           "variablePlaceholder": "変数名(例: plan)",
+          "keyLabel": "キー",
+          "valueLabel": "値",
+          "pickProperty": "連絡先のプロパティを選択",
           "pickVariable": "テストする変数を選択してください。",
           "comparePlaceholder": "比較対象…",
           "joinerAnd": "AND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "ドキュメント(PDFレポートなど)",
           "upload": "アップロード",
           "uploadHint": "最大{mb}MBです。ファイルをホストし、フローに公開URLを付与します。",
+          "acceptedFormats": {
+            "image": "対応形式: JPG, PNG.",
+            "video": "対応形式: MP4, 3GP.",
+            "audio": "対応形式: MP3, AAC, AMR, OGG.",
+            "document": "対応形式: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "ファイルを置き換え",
           "chooseKind": {
             "image": "画像を選択(またはここにドラッグ)",

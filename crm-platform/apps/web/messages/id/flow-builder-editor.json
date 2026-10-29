@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Hapus aturan",
           "variablePlaceholder": "Nama variabel (mis. plan)",
+          "keyLabel": "Kunci",
+          "valueLabel": "Nilai",
+          "pickProperty": "Pilih properti kontak",
           "pickVariable": "Pilih variabel yang akan diuji.",
           "comparePlaceholder": "Bandingkan dengan…",
           "joinerAnd": "DAN",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokumen (laporan PDF, dll.)",
           "upload": "Unggah",
           "uploadHint": "Maks. {mb} MB. Kami menyimpan berkas dan memberi alur URL publik.",
+          "acceptedFormats": {
+            "image": "Format yang diterima: JPG, PNG.",
+            "video": "Format yang diterima: MP4, 3GP.",
+            "audio": "Format yang diterima: MP3, AAC, AMR, OGG.",
+            "document": "Format yang diterima: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Ganti berkas",
           "chooseKind": {
             "image": "Pilih gambar (atau seret ke sini)",

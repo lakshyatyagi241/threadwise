@@ -1093,6 +1093,9 @@
           },
           "removeRule": "قاعدہ ہٹائیں",
           "variablePlaceholder": "متغیر کا نام (مثلاً plan)",
+          "keyLabel": "کلید",
+          "valueLabel": "قدر",
+          "pickProperty": "رابطے کی خصوصیت منتخب کریں",
           "pickVariable": "جانچنے کے لیے متغیر منتخب کریں۔",
           "comparePlaceholder": "اس سے موازنہ کریں…",
           "joinerAnd": "AND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "دستاویز (PDF رپورٹ وغیرہ)",
           "upload": "اپلوڈ",
           "uploadHint": "زیادہ سے زیادہ {mb} MB۔ ہم فائل ہوسٹ کرتے ہیں اور فلو کو عوامی URL دیتے ہیں۔",
+          "acceptedFormats": {
+            "image": "قبول شدہ فارمیٹس: JPG, PNG.",
+            "video": "قبول شدہ فارمیٹس: MP4, 3GP.",
+            "audio": "قبول شدہ فارمیٹس: MP3, AAC, AMR, OGG.",
+            "document": "قبول شدہ فارمیٹس: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "فائل بدلیں",
           "chooseKind": {
             "image": "تصویر منتخب کریں (یا یہاں گھسیٹیں)",

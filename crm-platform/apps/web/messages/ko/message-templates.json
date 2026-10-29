@@ -425,6 +425,7 @@
         "format": "카드에 표시",
         "formatImage": "이미지",
         "formatVideo": "동영상",
+        "limits": "이미지는 5MB, 동영상은 16MB까지 가능합니다.",
         "count": "{used}/{max}장",
         "add": "카드 추가",
         "needTwo": "캐러셀에는 카드가 최소 {min}장 필요합니다.",

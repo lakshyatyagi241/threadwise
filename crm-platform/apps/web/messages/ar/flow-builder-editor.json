@@ -819,6 +819,9 @@
           },
           "removeRule": "إزالة القاعدة",
           "variablePlaceholder": "اسم المتغير (مثل plan)",
+          "keyLabel": "المفتاح",
+          "valueLabel": "القيمة",
+          "pickProperty": "اختر خاصية جهة الاتصال",
           "pickVariable": "اختر المتغير المراد اختباره.",
           "comparePlaceholder": "المقارنة مع…",
           "joinerAnd": "و",
@@ -1009,6 +1012,12 @@
           "kindDocumentReport": "مستند (تقرير PDF وغيره)",
           "upload": "رفع",
           "uploadHint": "حتى {mb} ميغابايت. نستضيف الملف ونمنح التدفق رابطًا عامًا.",
+          "acceptedFormats": {
+            "image": "الصيغ المقبولة: JPG, PNG.",
+            "video": "الصيغ المقبولة: MP4, 3GP.",
+            "audio": "الصيغ المقبولة: MP3, AAC, AMR, OGG.",
+            "document": "الصيغ المقبولة: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "استبدال الملف",
           "chooseKind": {
             "image": "اختر صورة (أو اسحبها إلى هنا)",

@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Regel entfernen",
           "variablePlaceholder": "Variablenname (z. B. plan)",
+          "keyLabel": "Schlüssel",
+          "valueLabel": "Wert",
+          "pickProperty": "Kontakteigenschaft auswählen",
           "pickVariable": "Wählen Sie die zu prüfende Variable.",
           "comparePlaceholder": "Vergleichen mit ...",
           "joinerAnd": "UND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokument (PDF-Bericht usw.)",
           "upload": "Hochladen",
           "uploadHint": "Bis zu {mb} MB. Wir hosten die Datei und geben dem Flow eine öffentliche URL.",
+          "acceptedFormats": {
+            "image": "Zulässige Formate: JPG, PNG.",
+            "video": "Zulässige Formate: MP4, 3GP.",
+            "audio": "Zulässige Formate: MP3, AAC, AMR, OGG.",
+            "document": "Zulässige Formate: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Datei ersetzen",
           "chooseKind": {
             "image": "Bild auswählen (oder hierher ziehen)",

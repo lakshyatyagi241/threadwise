@@ -425,6 +425,7 @@
         "format": "Kartlar şunu gösterir",
         "formatImage": "Resimler",
         "formatVideo": "Videolar",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB.",
         "count": "{used}/{max} kart",
         "add": "Kart ekle",
         "needTwo": "Bir karusel için en az {min} kart gerekir.",
