@@ -94,7 +94,9 @@
       "custom_roles": "사용자 지정 역할 및 범위",
       "inbox_assignment_sticky": "스마트 라우팅: 연락처 소유자와 고정 상담원",
       "agent_status_bar": "상태 표시줄: 상단 표시줄과 받은 편지함의 응대 가능 / 자리 비움 컨트롤",
-      "agent_status_automation": "상태 자동화: 개인 근무 시간과 자동 자리 비움"
+      "agent_status_automation": "상태 자동화: 개인 근무 시간과 자동 자리 비움",
+      "products_services": "제품 및 서비스",
+      "recurring_invoices": "반복 인보이스"
     },
     "limitGroups": {
       "messaging": "메시징",

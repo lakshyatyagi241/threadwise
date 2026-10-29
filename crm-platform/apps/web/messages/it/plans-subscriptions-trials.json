@@ -94,7 +94,9 @@
       "custom_roles": "Ruoli personalizzati e ambiti",
       "inbox_assignment_sticky": "Instradamento intelligente: proprietario del contatto e agente fisso",
       "agent_status_bar": "Barra di stato: controllo Disponibile / Assente nella barra superiore e nella Posta in arrivo",
-      "agent_status_automation": "Automatizza stato: orario di lavoro personale e Assente automatico"
+      "agent_status_automation": "Automatizza stato: orario di lavoro personale e Assente automatico",
+      "products_services": "Prodotti e servizi",
+      "recurring_invoices": "Fatture ricorrenti"
     },
     "limitGroups": {
       "messaging": "Messaggistica",

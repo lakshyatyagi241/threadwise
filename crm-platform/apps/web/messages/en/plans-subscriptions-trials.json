@@ -95,7 +95,8 @@
       "lead_scoring": "AI lead scoring",
       "record_assignment": "Record assignment rules",
       "team_hierarchy": "Team hierarchy and managers",
-      "custom_roles": "Custom roles and scopes"
+      "custom_roles": "Custom roles and scopes",
+      "products_services": "Products and services"
     },
     "limitGroups": {
       "messaging": "Messaging",

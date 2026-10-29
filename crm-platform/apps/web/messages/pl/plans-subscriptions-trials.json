@@ -94,7 +94,9 @@
       "custom_roles": "Własne role i zakresy",
       "inbox_assignment_sticky": "Inteligentne kierowanie: właściciel kontaktu i stały agent",
       "agent_status_bar": "Pasek statusu: kontrolka Dostępny / Nieobecny na górnym pasku i w Skrzynce odbiorczej",
-      "agent_status_automation": "Automatyzuj status: osobiste godziny pracy i automatyczna nieobecność"
+      "agent_status_automation": "Automatyzuj status: osobiste godziny pracy i automatyczna nieobecność",
+      "products_services": "Produkty i usługi",
+      "recurring_invoices": "Faktury cykliczne"
     },
     "limitGroups": {
       "messaging": "Wiadomości",

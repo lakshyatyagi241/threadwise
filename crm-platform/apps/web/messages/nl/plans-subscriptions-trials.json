@@ -94,7 +94,9 @@
       "custom_roles": "Eigen rollen en bereiken",
       "inbox_assignment_sticky": "Slimme routering: contacteigenaar en vaste medewerker",
       "agent_status_bar": "Statusbalk: knop Beschikbaar / Afwezig in de bovenbalk en de Inbox",
-      "agent_status_automation": "Status automatiseren: persoonlijke werktijden en automatisch afwezig"
+      "agent_status_automation": "Status automatiseren: persoonlijke werktijden en automatisch afwezig",
+      "products_services": "Producten en diensten",
+      "recurring_invoices": "Terugkerende facturen"
     },
     "limitGroups": {
       "messaging": "Berichten",
