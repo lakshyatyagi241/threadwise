@@ -160,7 +160,7 @@
       "ai": "AI-assistent",
       "api": "API",
       "broadcast": "Broadcast",
-      "broadcast_test": "Testverzending broadcast",
+      "broadcast_test": "Testverzending campagne",
       "campaign": "Campagne",
       "scheduled": "Ingepland",
       "other": "Overig"
@@ -241,7 +241,7 @@
         "ai": "AI-assistent",
         "api": "API",
         "broadcast": "Broadcast",
-        "broadcast_test": "Testverzending broadcast",
+        "broadcast_test": "Testverzending campagne",
         "campaign": "Campagne",
         "scheduled": "Ingepland bericht",
         "other": "Overig"

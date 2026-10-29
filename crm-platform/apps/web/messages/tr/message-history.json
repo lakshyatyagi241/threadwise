@@ -160,7 +160,7 @@
       "ai": "Yapay zekâ asistanı",
       "api": "API",
       "broadcast": "Toplu gönderim",
-      "broadcast_test": "Yayın test gönderimi",
+      "broadcast_test": "Kampanya test gönderimi",
       "campaign": "Kampanya",
       "scheduled": "Zamanlanmış",
       "other": "Diğer"
@@ -241,7 +241,7 @@
         "ai": "Yapay zekâ asistanı",
         "api": "API",
         "broadcast": "Toplu gönderim",
-        "broadcast_test": "Yayın test gönderimi",
+        "broadcast_test": "Kampanya test gönderimi",
         "campaign": "Kampanya",
         "scheduled": "Zamanlanmış mesaj",
         "other": "Diğer"

@@ -160,7 +160,7 @@
       "ai": "AI असिस्टेंट",
       "api": "API",
       "broadcast": "ब्रॉडकास्ट",
-      "broadcast_test": "ब्रॉडकास्ट टेस्ट भेजना",
+      "broadcast_test": "कैंपेन टेस्ट भेजना",
       "campaign": "कैंपेन",
       "scheduled": "निर्धारित",
       "other": "अन्य"
@@ -241,7 +241,7 @@
         "ai": "AI असिस्टेंट",
         "api": "API",
         "broadcast": "ब्रॉडकास्ट",
-        "broadcast_test": "ब्रॉडकास्ट टेस्ट भेजना",
+        "broadcast_test": "कैंपेन टेस्ट भेजना",
         "campaign": "कैंपेन",
         "scheduled": "निर्धारित संदेश",
         "other": "अन्य"

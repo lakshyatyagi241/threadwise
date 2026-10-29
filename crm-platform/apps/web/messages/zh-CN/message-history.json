@@ -160,7 +160,7 @@
       "ai": "AI 助手",
       "api": "API",
       "broadcast": "群发",
-      "broadcast_test": "广播测试发送",
+      "broadcast_test": "营销活动测试发送",
       "campaign": "营销活动",
       "scheduled": "定时",
       "other": "其他"
@@ -241,7 +241,7 @@
         "ai": "AI 助手",
         "api": "API",
         "broadcast": "群发",
-        "broadcast_test": "广播测试发送",
+        "broadcast_test": "营销活动测试发送",
         "campaign": "营销活动",
         "scheduled": "定时消息",
         "other": "其他"

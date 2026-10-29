@@ -160,7 +160,7 @@
       "ai": "עוזר בינה מלאכותית",
       "api": "API",
       "broadcast": "שידור",
-      "broadcast_test": "שליחת בדיקה של שידור",
+      "broadcast_test": "שליחת בדיקה של קמפיין",
       "campaign": "קמפיין",
       "scheduled": "מתוזמן",
       "other": "אחר"
@@ -241,7 +241,7 @@
         "ai": "עוזר בינה מלאכותית",
         "api": "API",
         "broadcast": "שידור",
-        "broadcast_test": "שליחת בדיקה של שידור",
+        "broadcast_test": "שליחת בדיקה של קמפיין",
         "campaign": "קמפיין",
         "scheduled": "הודעה מתוזמנת",
         "other": "אחר"

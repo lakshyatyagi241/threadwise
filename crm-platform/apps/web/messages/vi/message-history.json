@@ -160,7 +160,7 @@
       "ai": "Trợ lý AI",
       "api": "API",
       "broadcast": "Gửi hàng loạt",
-      "broadcast_test": "Gửi thử chiến dịch phát",
+      "broadcast_test": "Gửi thử chiến dịch",
       "campaign": "Chiến dịch",
       "scheduled": "Đã lên lịch",
       "other": "Khác"
@@ -241,7 +241,7 @@
         "ai": "Trợ lý AI",
         "api": "API",
         "broadcast": "Gửi hàng loạt",
-        "broadcast_test": "Gửi thử chiến dịch phát",
+        "broadcast_test": "Gửi thử chiến dịch",
         "campaign": "Chiến dịch",
         "scheduled": "Tin nhắn đã lên lịch",
         "other": "Khác"

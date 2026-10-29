@@ -160,7 +160,7 @@
       "ai": "Asisten AI",
       "api": "API",
       "broadcast": "Siaran",
-      "broadcast_test": "Kirim uji coba siaran",
+      "broadcast_test": "Kirim uji coba kampanye",
       "campaign": "Kampanye",
       "scheduled": "Terjadwal",
       "other": "Lainnya"
@@ -241,7 +241,7 @@
         "ai": "Asisten AI",
         "api": "API",
         "broadcast": "Siaran",
-        "broadcast_test": "Kirim uji coba siaran",
+        "broadcast_test": "Kirim uji coba kampanye",
         "campaign": "Kampanye",
         "scheduled": "Pesan terjadwal",
         "other": "Lainnya"
