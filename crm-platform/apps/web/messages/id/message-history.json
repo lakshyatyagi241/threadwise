@@ -47,7 +47,10 @@
       "download": "Unduh",
       "rows": "{n} pesan",
       "keptUntil": "disimpan hingga {when} ({days} hari)",
-      "fromEmail": "Dari email Anda"
+      "fromEmail": "Dari email Anda",
+      "hint": "Ekspor CSV memakai filter dan tanggal yang dipilih di halaman ini. File dibuat di latar belakang dan kami mengirim email saat sudah siap.",
+      "empty": "Belum ada ekspor. Tekan Ekspor CSV untuk mendapatkan pesan yang Anda lihat di sini sebagai file.",
+      "loading": "Memuat ekspor"
     },
     "kpi": {
       "label": "Angka utama",

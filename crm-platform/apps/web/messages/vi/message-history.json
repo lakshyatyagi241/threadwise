@@ -47,7 +47,10 @@
       "download": "Tải xuống",
       "rows": "{n} tin nhắn",
       "keptUntil": "giữ đến {when} ({days} ngày)",
-      "fromEmail": "Từ email của bạn"
+      "fromEmail": "Từ email của bạn",
+      "hint": "Xuất CSV dùng các bộ lọc và ngày đã chọn trên trang này. Tệp được tạo ở nền và chúng tôi gửi email khi sẵn sàng.",
+      "empty": "Chưa có bản xuất nào. Nhấn Xuất CSV để nhận các tin nhắn bạn thấy ở đây dưới dạng tệp.",
+      "loading": "Đang tải các bản xuất"
     },
     "kpi": {
       "label": "Chỉ số chính",
