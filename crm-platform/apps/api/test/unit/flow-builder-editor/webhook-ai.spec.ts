@@ -387,7 +387,7 @@ describe('AI flow generator (TW-FLB-025)', () => {
     );
   });
 
-  it('OpenAI gets max_completion_tokens; OpenRouter keeps max_tokens; temperature is sent to both', async () => {
+  it('OpenAI gets max_completion_tokens and, for its GPT-5 model, no temperature; OpenRouter keeps max_tokens and the temperature', async () => {
     const bodies: Array<Record<string, unknown>> = [];
     const adapter = new HttpFlowAiAdapter();
     adapter.fetchImpl = (async (_url: string, init: RequestInit) => {
@@ -405,7 +405,8 @@ describe('AI flow generator (TW-FLB-025)', () => {
     };
     await adapter.generate({ ...base, provider: 'openai' });
     await adapter.generate({ ...base, provider: 'openrouter' });
-    expect(bodies[0]).toMatchObject({ max_completion_tokens: 10, temperature: 0.4 });
+    expect(bodies[0]).toMatchObject({ max_completion_tokens: 10 });
+    expect(bodies[0]).not.toHaveProperty('temperature');
     expect(bodies[0]).not.toHaveProperty('max_tokens');
     expect(bodies[1]).toMatchObject({ max_tokens: 10, temperature: 0.4 });
     expect(bodies[1]).not.toHaveProperty('max_completion_tokens');

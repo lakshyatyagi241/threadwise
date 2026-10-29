@@ -10,7 +10,7 @@ import { WabaHttp } from './waba-http';
  * (Reference's GroupClient did the same). A number onboarded through Interakt only for its credit line still holds a Meta token.
  */
 function metaAuthOf(conn: WabaConnection): { provider: 'meta'; accessToken: string } {
-  if (!conn.accessToken) throw new Error('Groups need the number\'s Meta access token');
+  if (!conn.accessToken) throw new Error("Groups need the number's Meta access token");
   return { provider: 'meta', accessToken: conn.accessToken };
 }
 

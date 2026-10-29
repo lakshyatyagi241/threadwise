@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FlowAiPort, FlowAiRequest } from './flow-ai.port';
-import { openAiOutputLimit } from '../openai-output-limit';
+import { openAiOutputLimit, openAiTemperature } from '../openai-output-limit';
 
 const TIMEOUT_MS = 90_000;
 
@@ -52,7 +52,7 @@ export class HttpFlowAiAdapter implements FlowAiPort {
       { Authorization: `Bearer ${r.apiKey}` },
       {
         model: r.model,
-        temperature: r.temperature,
+        ...openAiTemperature(r.model, r.temperature, r.provider === 'openai'),
         ...limit,
         ...(r.json ? { response_format: { type: 'json_object' } } : {}),
         messages: [

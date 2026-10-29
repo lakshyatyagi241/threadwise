@@ -59,7 +59,8 @@ export interface ParsedTier {
 
 /** `TIER_50`, `TIER_250`, `TIER_1K`, `TIER_10K`, `TIER_100K`, `TIER_UNLIMITED` (also the `current_limit` of the quality webhook). */
 export function parseTier(raw: unknown): ParsedTier {
-  if (typeof raw !== 'string' || raw.trim() === '') return { name: null, cap: null, unlimited: false };
+  if (typeof raw !== 'string' || raw.trim() === '')
+    return { name: null, cap: null, unlimited: false };
   const name = raw.trim().toUpperCase();
   if (name.includes('UNLIMITED')) return { name, cap: null, unlimited: true };
   const m = /(\d+(?:\.\d+)?)\s*([KM])?$/.exec(name);
