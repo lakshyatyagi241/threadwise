@@ -28,12 +28,7 @@ export const LEGACY_REDIRECTS: LegacyRedirect[] = [
     '/product/engagement-crm/lead-stage-automation',
     '/customer-data-platform',
   ),
-  ...to(
-    '/products/team-inbox',
-    '/product/inbox',
-    '/product/engagement-crm/unified-inbox',
-    '/inbox',
-  ),
+  ...to('/products/team-inbox', '/product/inbox', '/product/engagement-crm/unified-inbox'),
   ...to('/products/forms-lead-capture', '/product/forms'),
   ...to('/products/integrations-api', '/product/integrations'),
   ...to(
