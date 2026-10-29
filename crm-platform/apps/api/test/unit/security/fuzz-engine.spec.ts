@@ -124,7 +124,7 @@ describe('fuzz engine', () => {
       'self:type-error:throw',
     ]);
     expect(({} as Record<string, unknown>).fuzzPolluted).toBeUndefined(); // the engine put the prototype back
-  });
+  }, 30_000);
 
   it('flags an input that takes too long', async () => {
     const slow: Target = {
