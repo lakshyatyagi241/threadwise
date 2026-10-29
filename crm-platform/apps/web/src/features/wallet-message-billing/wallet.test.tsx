@@ -22,6 +22,7 @@ import { OverviewCards, ReconcileResult } from './components/admin/overview-page
 import { RecentTable } from './components/admin/workspace-detail-page';
 import { ImportPreview } from './components/admin/rate-tools';
 import { ActivityTable } from './components/customer/activity-table';
+import { LegacyInvoicePage } from './components/customer/legacy-invoice-page';
 import { PricingTiles } from './components/customer/message-pricing-panel';
 import { StatementTable, SummaryCards } from './components/customer/statement-page';
 import { WalletBody } from './components/customer/wallet-page';
@@ -267,6 +268,43 @@ describe('activity table', () => {
     );
     expect(html.match(/Download invoice/g)).toHaveLength(1);
     expect(html).toContain(`href="/billing/orders/${order}/invoice"`);
+  });
+
+  it('offers the stored invoice of a migrated top-up, which has no order', () => {
+    const legacy = '55555555-5555-4555-8555-555555555555';
+    const html = wrap(
+      <ActivityTable
+        label="x"
+        currency="USD"
+        rows={[tx({ type: 'topup', direction: 'in', legacyInvoiceId: legacy })]}
+      />,
+    );
+    expect(html).toContain('Download invoice');
+    expect(html).toContain(`href="/billing/wallet/invoice/${legacy}"`);
+  });
+});
+
+describe('the invoice of a migrated top-up', () => {
+  const id = '55555555-5555-4555-8555-555555555555';
+  it('shows the invoice in a frame with every sandbox restriction on', () => {
+    const qc = new QueryClient();
+    qc.setQueryData(KEYS.legacyInvoice(id), {
+      id,
+      number: 'INV-000123',
+      date: '2026-10-15',
+      currency: 'INR',
+      total: '2000',
+      status: 'paid',
+      html: '<html><body><script>alert(1)</script>Invoice</body></html>',
+    });
+    const out = wrap(<LegacyInvoicePage id={id} />, qc);
+    expect(out).toContain('data-testid="legacy-invoice-frame"');
+    expect(out).toMatch(/<iframe[^>]*\ssandbox=""/);
+    expect(out).toContain('referrerPolicy="no-referrer"');
+    expect(out).toContain('title="Invoice INV-000123"');
+    // the invoice is the frame's content, never part of this page
+    expect(out).not.toMatch(/<script>alert/);
+    expect(out).toContain('Back to statement');
   });
 });
 

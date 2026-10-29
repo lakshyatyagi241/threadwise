@@ -1039,6 +1039,11 @@
       "enrichment": "Consulta de contato",
       "chat_message": "Mensagem de chat",
       "webbot_message": "Mensagem do chatbot do site"
+    },
+    "legacyInvoice": {
+      "title": "Fatura",
+      "back": "Voltar ao extrato",
+      "print": "Imprimir ou salvar como PDF"
     }
   }
 }

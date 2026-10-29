@@ -1039,6 +1039,11 @@
       "enrichment": "連絡先の検索",
       "chat_message": "チャットメッセージ",
       "webbot_message": "ウェブサイトチャットボットのメッセージ"
+    },
+    "legacyInvoice": {
+      "title": "請求書",
+      "back": "明細に戻る",
+      "print": "印刷またはPDFとして保存"
     }
   }
 }

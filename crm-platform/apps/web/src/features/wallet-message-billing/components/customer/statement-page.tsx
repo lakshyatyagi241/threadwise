@@ -368,7 +368,7 @@ export function StatementTable({
                     {tctx('reason')}: {r.note}
                   </div>
                 )}
-                <InvoiceLink orderId={r.invoiceOrderId} />
+                <InvoiceLink orderId={r.invoiceOrderId} legacyId={r.legacyInvoiceId} />
               </td>
               {detailColumns.map((c) => (
                 <td key={c} className="px-2 py-2">

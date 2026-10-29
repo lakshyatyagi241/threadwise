@@ -1039,6 +1039,11 @@
       "enrichment": "Recherche de contact",
       "chat_message": "Message de chat",
       "webbot_message": "Message du chatbot du site"
+    },
+    "legacyInvoice": {
+      "title": "Facture",
+      "back": "Retour au relevé",
+      "print": "Imprimer ou enregistrer en PDF"
     }
   }
 }

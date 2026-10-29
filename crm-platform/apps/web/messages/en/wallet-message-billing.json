@@ -1039,6 +1039,11 @@
           }
         }
       }
+    },
+    "legacyInvoice": {
+      "title": "Invoice",
+      "back": "Back to statement",
+      "print": "Print or save as PDF"
     }
   }
 }

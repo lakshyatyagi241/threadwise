@@ -1039,6 +1039,11 @@
       "enrichment": "联系人查询",
       "chat_message": "聊天消息",
       "webbot_message": "网站聊天机器人消息"
+    },
+    "legacyInvoice": {
+      "title": "发票",
+      "back": "返回对账单",
+      "print": "打印或另存为 PDF"
     }
   }
 }
