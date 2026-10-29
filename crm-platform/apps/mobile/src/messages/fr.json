@@ -1709,7 +1709,6 @@
         "title": "Activité",
         "notes": "Notes",
         "tasks": "Tâches",
-        "meetings": "Réunions",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1873,12 +1872,11 @@
       "description": "Description",
       "priority": "Priorité",
       "status": "Statut",
-      "owner": "Propriétaire",
+      "owner": "Propriétaire du contact",
       "relatedTo": "Liée à",
       "noDescription": "Aucune description",
       "noDue": "Aucune date d’échéance",
       "unassigned": "Non assignée",
-      "noContact": "Aucun",
       "openContact": "Ouvrir {{name}}",
       "markComplete": "Marquer comme terminée",
       "reopen": "Rouvrir",
@@ -1934,7 +1932,16 @@
       "typeNames": {
         "follow_up": "Relance",
         "call_reminder": "Rappel d’appel"
-      }
+      },
+      "markDone": "Marquer comme terminée",
+      "savedNotCompleted": "La tâche a été enregistrée, mais n'a pas pu être marquée comme terminée. Réessayez."
+    },
+    "outcome": {
+      "label": "Résultat",
+      "none": "Aucun résultat",
+      "hiddenName": "{{name}} (masqué)",
+      "placeholder": "Sélectionner un résultat (facultatif)",
+      "completeTitle": "Terminer la tâche"
     }
   },
   "deals": {
@@ -2306,6 +2313,7 @@
     "clear": "Effacer",
     "yes": "Oui",
     "no": "Non",
+    "optedOut": "Désinscrit",
     "rowHint": "Ouvre l’éditeur",
     "locked": "Vous ne pouvez pas modifier {{label}}",
     "webOnly": "{{label}} ne peut être modifié que depuis l’application web.",
@@ -2329,6 +2337,17 @@
       "subscribed": "Abonné",
       "unsubscribed": "Désabonné",
       "pending": "En attente"
+    },
+    "consent": {
+      "intro": "Indiquez si ce contact a accepté de recevoir du marketing sur ce canal.",
+      "noteRequiredLabel": "Comment a-t-il donné son accord ? (obligatoire)",
+      "noteOptionalLabel": "Note (facultatif)",
+      "noteHint": "Ce que le contact a dit ou signé, et où.",
+      "noteRequired": "Indiquez comment le contact a donné son accord avant d'enregistrer."
+    },
+    "optOut": {
+      "label": "Désinscrit du marketing",
+      "hint": "Lorsque cette option est activée, aucun message marketing n'est envoyé à ce contact, quel que soit le canal."
     },
     "editor": {
       "title": "Modifier {{label}}",

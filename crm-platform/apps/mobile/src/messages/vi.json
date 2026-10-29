@@ -1651,7 +1651,6 @@
         "title": "Hoạt động",
         "notes": "Ghi chú",
         "tasks": "Công việc",
-        "meetings": "Cuộc họp",
         "rowLabel": "{{label}}: {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1815,12 +1814,11 @@
       "description": "Mô tả",
       "priority": "Ưu tiên",
       "status": "Trạng thái",
-      "owner": "Người phụ trách",
+      "owner": "Người phụ trách liên hệ",
       "relatedTo": "Liên quan đến",
       "noDescription": "Không có mô tả",
       "noDue": "Không có ngày đến hạn",
       "unassigned": "Chưa phân công",
-      "noContact": "Không có",
       "openContact": "Mở {{name}}",
       "markComplete": "Đánh dấu hoàn thành",
       "reopen": "Mở lại",
@@ -1876,7 +1874,16 @@
       "typeNames": {
         "follow_up": "Theo dõi",
         "call_reminder": "Nhắc gọi lại"
-      }
+      },
+      "markDone": "Đánh dấu là đã hoàn thành",
+      "savedNotCompleted": "Công việc đã được lưu nhưng không thể đánh dấu là đã hoàn thành. Hãy thử lại."
+    },
+    "outcome": {
+      "label": "Kết quả",
+      "none": "Không có kết quả",
+      "hiddenName": "{{name}} (đã ẩn)",
+      "placeholder": "Chọn kết quả (không bắt buộc)",
+      "completeTitle": "Hoàn thành công việc"
     }
   },
   "deals": {
@@ -2248,6 +2255,7 @@
     "clear": "Xóa",
     "yes": "Có",
     "no": "Không",
+    "optedOut": "Đã từ chối",
     "rowHint": "Mở trình chỉnh sửa",
     "locked": "Bạn không thể sửa {{label}}",
     "webOnly": "{{label}} chỉ có thể sửa từ ứng dụng web.",
@@ -2271,6 +2279,17 @@
       "subscribed": "Đã đăng ký",
       "unsubscribed": "Đã hủy đăng ký",
       "pending": "Đang chờ"
+    },
+    "consent": {
+      "intro": "Ghi lại việc liên hệ này có đồng ý nhận tin tiếp thị qua kênh này hay không.",
+      "noteRequiredLabel": "Họ đã đồng ý như thế nào? (bắt buộc)",
+      "noteOptionalLabel": "Ghi chú (không bắt buộc)",
+      "noteHint": "Điều liên hệ đã nói hoặc đã ký, và ở đâu.",
+      "noteRequired": "Hãy cho biết liên hệ đã đồng ý như thế nào trước khi lưu."
+    },
+    "optOut": {
+      "label": "Đã từ chối tiếp thị",
+      "hint": "Khi bật, tin nhắn tiếp thị sẽ không được gửi đến liên hệ này trên bất kỳ kênh nào."
     },
     "editor": {
       "title": "Sửa {{label}}",

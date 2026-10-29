@@ -14,6 +14,9 @@ import {
   sessionTasksComplete,
   sessionTasksFull,
   sessionTasksReadOnly,
+  taskActivity,
+  taskOutcomes,
+  INTERESTED,
 } from '@/test/tasks-fixtures';
 import * as api from './api';
 import { formatMoment } from '@/lib/format/dates';
@@ -26,6 +29,8 @@ jest.mock('expo-router', () => ({ useRouter: jest.fn(), useLocalSearchParams: je
 const sessionCall = jest.mocked(fetchSession);
 const getCall = jest.mocked(api.getTask);
 const completeCall = jest.mocked(api.completeTask);
+const activityCall = jest.mocked(api.getTaskActivity);
+const outcomesCall = jest.mocked(api.listTaskOutcomes);
 const reopenCall = jest.mocked(api.reopenTask);
 const deleteCall = jest.mocked(api.deleteTask);
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
@@ -47,6 +52,8 @@ beforeEach(() => {
   jest.mocked(useLocalSearchParams).mockReturnValue({ id: callAarav.id });
   router.canGoBack.mockReturnValue(true);
   sessionCall.mockResolvedValue(sessionTasksFull);
+  activityCall.mockResolvedValue(taskActivity());
+  outcomesCall.mockResolvedValue(taskOutcomes);
   getCall.mockResolvedValue(callAarav);
 });
 afterEach(async () => {
@@ -57,7 +64,7 @@ afterEach(async () => {
 });
 
 describe('TaskDetailsScreen', () => {
-  it('shows the task: title, due date, description, priority, status, owner and contact', async () => {
+  it('shows the task as the Geta app does: title, due date, then description, type, priority, outcome, contact and owner', async () => {
     await show();
     expect(await screen.findByRole('header', { name: 'Call Aarav about the quote' })).toBeTruthy();
     expect(screen.getByRole('header', { name: 'Task details' })).toBeTruthy();
@@ -65,7 +72,19 @@ describe('TaskDetailsScreen', () => {
     expect(screen.getByText(formatMoment(callAarav.dueAt, 'en'))).toBeTruthy();
     expect(screen.getByText('Ask whether the quote for 40 seats is approved.')).toBeTruthy();
     expect(screen.getByText('Medium')).toBeTruthy();
-    expect(screen.getByText('Open')).toBeTruthy();
+    for (const label of [
+      'Description',
+      'Task type',
+      'Priority',
+      'Outcome',
+      'Related to',
+      'Contact Owner',
+    ]) {
+      expect(screen.getByText(label)).toBeTruthy();
+    }
+    // A task that is neither done nor late carries no status pill.
+    expect(screen.queryByText('Open')).toBeNull();
+    expect(screen.queryByText('Done')).toBeNull();
     expect(screen.getByText('Asha Verma')).toBeTruthy();
     expect(screen.getByText('Aarav Sharma')).toBeTruthy();
     expect(screen.queryByText('Overdue')).toBeNull();
@@ -93,7 +112,32 @@ describe('TaskDetailsScreen', () => {
     expect(await screen.findByText('No description')).toBeTruthy();
     expect(screen.getByText('No due date')).toBeTruthy();
     expect(screen.getByText('Unassigned')).toBeTruthy();
-    expect(screen.getByText('None')).toBeTruthy();
+    // The type, the outcome and the contact each show --, as the Geta app does.
+    expect(screen.getAllByText('--')).toHaveLength(3);
+  });
+
+  it('shows the type and the outcome the task has', async () => {
+    getCall.mockResolvedValue({
+      ...callAarav,
+      taskType: {
+        id: '77777777-7777-4777-8777-777777777771',
+        key: 'follow_up',
+        name: null,
+        isSystem: true,
+        activityKey: 'task',
+        removed: false,
+      },
+      outcome: { id: INTERESTED, name: 'Interested', isActive: true },
+    });
+    await show();
+    expect(await screen.findByText('Follow up')).toBeTruthy();
+    expect(screen.getByText('Interested')).toBeTruthy();
+  });
+
+  it('draws the title of the bar in the middle', async () => {
+    await show();
+    const bar = await screen.findByRole('header', { name: 'Task details' });
+    expect(StyleSheet.flatten(bar.props.style).textAlign).toBe('center');
   });
 
   it('marks a task that is past due, in words as well as colour', async () => {
@@ -117,12 +161,79 @@ describe('TaskDetailsScreen', () => {
     it('marks the task complete with the version it read, and turns into Reopen', async () => {
       completeCall.mockResolvedValue({ ...callAarav, status: 'done', rowVersion: 3 });
       await show();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as complete' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
       await waitFor(() =>
-        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String)),
+        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), undefined),
       );
       expect(await screen.findByRole('button', { name: 'Reopen' })).toBeTruthy();
       expect(screen.queryByRole('button', { name: 'Edit task' })).toBeNull();
+    });
+
+    describe('when the workspace has task outcomes', () => {
+      beforeEach(() => {
+        activityCall.mockResolvedValue(taskActivity({ outcomesEnabled: true }));
+        completeCall.mockResolvedValue({
+          ...callAarav,
+          status: 'done',
+          rowVersion: 3,
+          outcome: { id: INTERESTED, name: 'Interested', isActive: true },
+        });
+      });
+
+      it('asks for the outcome first, and completes the task with the one picked', async () => {
+        await show();
+        await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
+        expect(completeCall).not.toHaveBeenCalled();
+        expect(await screen.findByRole('radio', { name: 'Left message' })).toBeTruthy();
+        expect(screen.getByRole('radio', { name: 'No outcome' })).toBeTruthy();
+        await fireEvent.press(screen.getByRole('radio', { name: 'Interested' }));
+        await fireEvent.press(screen.getByRole('button', { name: 'Complete task' }));
+        await waitFor(() =>
+          expect(completeCall).toHaveBeenCalledWith(
+            callAarav.id,
+            2,
+            expect.any(String),
+            INTERESTED,
+          ),
+        );
+        expect(await screen.findByText('Interested')).toBeTruthy();
+      });
+
+      it('completes with no outcome when none is picked', async () => {
+        await show();
+        await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
+        await fireEvent.press(await screen.findByRole('button', { name: 'Complete task' }));
+        await waitFor(() =>
+          expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), null),
+        );
+      });
+
+      it('sends nothing when the sheet is cancelled', async () => {
+        await show();
+        await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
+        await screen.findByRole('radio', { name: 'Interested' });
+        // The scrim and the Cancel button both close the sheet; the button is the last of them.
+        await fireEvent.press(screen.getAllByRole('button', { name: 'Cancel' }).at(-1)!);
+        expect(completeCall).not.toHaveBeenCalled();
+      });
+
+      it('reopens without asking for an outcome', async () => {
+        getCall.mockResolvedValue(doneTask);
+        reopenCall.mockResolvedValue(callAarav);
+        await show();
+        await fireEvent.press(await screen.findByRole('button', { name: 'Reopen' }));
+        await waitFor(() => expect(reopenCall).toHaveBeenCalled());
+        expect(screen.queryByRole('radio', { name: 'Interested' })).toBeNull();
+      });
+    });
+
+    it('offers no complete button when the workspace does not allow marking tasks done', async () => {
+      activityCall.mockResolvedValue(taskActivity({ allowComplete: false }));
+      await show();
+      await screen.findByRole('header', { name: 'Call Aarav about the quote' });
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: 'Mark as Complete' })).toBeNull(),
+      );
     });
 
     it('reopens a done task', async () => {
@@ -134,13 +245,13 @@ describe('TaskDetailsScreen', () => {
       await waitFor(() =>
         expect(reopenCall).toHaveBeenCalledWith(doneTask.id, 7, expect.any(String)),
       );
-      expect(await screen.findByRole('button', { name: 'Mark as complete' })).toBeTruthy();
+      expect(await screen.findByRole('button', { name: 'Mark as Complete' })).toBeTruthy();
     });
 
     it('says so, and reloads the task, when someone else changed it first', async () => {
       completeCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'Conflict'));
       await show();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as complete' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
       expect(
         await screen.findByText('This task was changed by someone else. It has been reloaded.'),
       ).toBeTruthy();
@@ -150,7 +261,7 @@ describe('TaskDetailsScreen', () => {
     it('says in words why another failure changed nothing', async () => {
       completeCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
       await show();
-      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as complete' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as Complete' }));
       expect(
         await screen.findByText("Can't reach the server. Check your connection and try again."),
       ).toBeTruthy();
@@ -160,7 +271,7 @@ describe('TaskDetailsScreen', () => {
       sessionCall.mockResolvedValue(sessionTasksReadOnly);
       await show();
       await screen.findByRole('header', { name: 'Call Aarav about the quote' });
-      expect(screen.queryByRole('button', { name: 'Mark as complete' })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Mark as Complete' })).toBeNull();
       expect(screen.queryByRole('button', { name: 'Edit task' })).toBeNull();
       expect(screen.queryByRole('button', { name: 'Delete task' })).toBeNull();
     });

@@ -13,6 +13,7 @@ import { messageForError } from '@/lib/api/error-message';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { ConsentSheet, OptOutSheet } from './consent-sheet';
 import { ContactTags } from './contact-tags';
 import { FieldEditor } from './field-editor';
 import { OwnerPicker } from './owner-picker';
@@ -20,12 +21,26 @@ import { PropertyRowView } from './property-row';
 import {
   buildRows,
   groupRows,
+  listsStandardProperties,
   searchRows,
+  standardValuesOf,
   visibleRows,
-  type Editable,
   type PropertyRow,
+  type RowEdit,
 } from './property-values';
-import { isDenied, useAssignees, useContactFields, useFieldSections } from './use-properties';
+import {
+  isDenied,
+  useAssignees,
+  useContactFields,
+  useFieldSections,
+  useStatusOptions,
+} from './use-properties';
+
+const CONSENT_LABEL = {
+  whatsapp: 'contactProps.fields.whatsapp',
+  email: 'contactProps.fields.emailSubscription',
+  sms: 'contactProps.fields.smsSubscription',
+} as const;
 
 /** How long "You can't edit X" stays on screen. */
 const NOTICE_MS = 4000;
@@ -49,16 +64,18 @@ export function AboutTab({
   const router = useRouter();
   const session = useSession();
   const canUpdate = can(session.data, 'record.contacts.update');
+  const canConsent = can(session.data, 'contacts.consent.manage');
   const canReadFields = can(session.data, 'record.contact-properties.read');
   const fields = useContactFields(canReadFields);
   const assignees = useAssignees(can(session.data, 'record.contacts.read'));
   const sections = useFieldSections(canReadFields);
+  const statusOptions = useStatusOptions(canReadFields);
 
   const [open, setOpen] = useState(true);
   const [showEmpty, setShowEmpty] = useState(false);
   const [search, setSearch] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
-  const [editing, setEditing] = useState<Editable | 'owner' | null>(null);
+  const [editing, setEditing] = useState<Exclude<RowEdit, { kind: 'locked' }> | null>(null);
 
   useEffect(() => {
     if (!notice) return undefined;
@@ -79,6 +96,10 @@ export function AboutTab({
               ownerName,
               locale: i18n.language,
               t,
+              canConsent,
+              // The workspace's property list is the order of the screen, with the contact's own values in its standard properties.
+              standard: standardValuesOf(statusOptions.data, t),
+              inOrder: true,
             }),
             showEmpty,
           ),
@@ -86,8 +107,20 @@ export function AboutTab({
         ),
         fields.data,
         sections.data,
+        { fixedLast: listsStandardProperties(fields.data) },
       ),
-    [contact, fields.data, sections.data, ownerName, i18n.language, t, showEmpty, search],
+    [
+      contact,
+      fields.data,
+      sections.data,
+      statusOptions.data,
+      ownerName,
+      i18n.language,
+      t,
+      showEmpty,
+      search,
+      canConsent,
+    ],
   );
   const fieldsFailed = fields.isError && !isDenied(fields.error);
 
@@ -102,7 +135,7 @@ export function AboutTab({
       return;
     }
     setNotice(null);
-    setEditing(edit.kind === 'owner' ? 'owner' : edit);
+    setEditing(edit);
   };
 
   return (
@@ -200,8 +233,17 @@ export function AboutTab({
         ) : null}
       </View>
 
-      {editing === 'owner' ? (
+      {editing?.kind === 'owner' ? (
         <OwnerPicker contact={contact} onClose={() => setEditing(null)} />
+      ) : editing?.kind === 'consent' ? (
+        <ConsentSheet
+          contact={contact}
+          channel={editing.channel}
+          label={t(CONSENT_LABEL[editing.channel])}
+          onClose={() => setEditing(null)}
+        />
+      ) : editing?.kind === 'optOut' ? (
+        <OptOutSheet contact={contact} onClose={() => setEditing(null)} />
       ) : editing ? (
         <FieldEditor contact={contact} edit={editing} onClose={() => setEditing(null)} />
       ) : null}

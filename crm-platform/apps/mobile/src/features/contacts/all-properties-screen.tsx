@@ -17,12 +17,9 @@ import { FieldEditor } from './field-editor';
 import { PropertyRowView } from './property-row';
 import { OwnerPicker } from './owner-picker';
 import {
-  LOST_REASON_GROUP,
-  STAGE_GROUP,
   buildRows,
   groupRows,
-  optionsOfGroup,
-  titleCaseKey,
+  standardValuesOf,
   visibleRows,
   type Editable,
   type PropertyRow,
@@ -76,20 +73,13 @@ export function AllPropertiesScreen() {
   const ownerName = assignees.data?.find((a) => a.id === data?.ownerId)?.fullName ?? null;
   const groups = useMemo(() => {
     if (!data) return [];
-    const stages = optionsOfGroup(options.data, [STAGE_GROUP]);
-    const reasons = optionsOfGroup(options.data, [LOST_REASON_GROUP]);
     const rows = buildRows({
       contact: data,
       fields: fields.data,
       ownerName,
       locale: i18n.language,
       t,
-      standard: {
-        stageLabel: (value) =>
-          stages.find((o) => o.value === value)?.label ??
-          t(`contacts.stage.${value}`, { defaultValue: titleCaseKey(value) }),
-        lostReasonLabel: (value) => reasons.find((o) => o.value === value)?.label ?? value,
-      },
+      standard: standardValuesOf(options.data, t),
     })
       // The fixed rows belong to the About tab; this screen lists the workspace's properties.
       .filter((row) => row.id.startsWith('field:'));
@@ -111,6 +101,8 @@ export function AllPropertiesScreen() {
       );
       return;
     }
+    // The consent rows are fixed About-tab rows; this screen lists only the workspace's properties.
+    if (edit.kind === 'consent' || edit.kind === 'optOut') return;
     setNotice(null);
     setEditing(edit.kind === 'owner' ? 'owner' : edit);
   };

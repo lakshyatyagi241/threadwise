@@ -151,7 +151,7 @@ describe('AllPropertiesScreen', () => {
     expect(screen.getByLabelText('Mobile Phone Number: +919812345678')).toBeTruthy();
     // The stage by the workspace's name for it, the subscription by its words, a custom property by its value.
     expect(screen.getByLabelText('Lifecycle Stage: Qualified')).toBeTruthy();
-    expect(screen.getByLabelText('SMS Subscription Status: Subscribed')).toBeTruthy();
+    expect(screen.getByLabelText('SMS Subscription Status: Yes')).toBeTruthy();
     expect(screen.getByLabelText('City: Pune')).toBeTruthy();
   });
 

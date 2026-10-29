@@ -4,6 +4,7 @@ import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
 import {
   assignees,
+  cityField,
   bare,
   fieldDefinitions,
   field,
@@ -18,12 +19,14 @@ import {
 import { sessionFull } from '@/test/contacts-fixtures';
 import { renderApp } from '@/test/render';
 import * as api from './api';
+import * as consentApi from './consent-api';
 import { AboutTab } from './about-tab';
 import * as propertiesApi from './properties-api';
 import { useContact } from './use-contacts';
 
 jest.mock('./api');
 jest.mock('./properties-api');
+jest.mock('./consent-api');
 jest.mock('@/lib/session/api');
 
 const sessionCall = jest.mocked(fetchSession);
@@ -35,6 +38,7 @@ const assigneesCall = jest.mocked(propertiesApi.listAssignees);
 const statusCall = jest.mocked(propertiesApi.listContactStatusOptions);
 const ownerCall = jest.mocked(propertiesApi.setContactAssignee);
 const sectionsCall = jest.mocked(propertiesApi.listFieldSections);
+const consentCall = jest.mocked(consentApi.recordConsent);
 
 /** The parent screen in miniature: it reads the contact and hands it to the tab, so a saved change comes back through the cache. */
 function Page() {
@@ -65,6 +69,7 @@ beforeEach(() => {
     statusCall,
     ownerCall,
     sectionsCall,
+    consentCall,
   ]) {
     fake.mockReset();
   }
@@ -92,7 +97,7 @@ describe('AboutTab rows', () => {
     expect(screen.getByRole('button', { name: 'Contact owner: Priya Nair' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Name: Aarav Sharma' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Source: import' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'WhatsApp subscription: Subscribed' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'WhatsApp subscription: Yes' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Marketing opt-out: No' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Lead score: 40' })).toBeTruthy();
     expect(await screen.findByRole('button', { name: 'City: Pune' })).toBeTruthy();
@@ -853,5 +858,225 @@ describe('AboutTab cache', () => {
       }),
     );
     expect(refresh).toHaveBeenCalledWith({ queryKey: ['contacts', 'list'] });
+  });
+});
+
+describe('AboutTab subscription and marketing opt-out', () => {
+  /** May also record consent, as the web's Consent card needs. */
+  const sessionConsent = {
+    ...sessionProps,
+    permissions: { ...sessionProps.permissions, 'contacts.consent.manage': 'all' as const },
+  };
+  const consentResult = { contactId: profile.id, optedOut: false };
+
+  it('says the subscription rows cannot be edited to a person who may not record consent', async () => {
+    await show();
+    await fireEvent.press(await row('WhatsApp subscription', 'Yes'));
+    expect(await screen.findByText("You can't edit WhatsApp subscription")).toBeTruthy();
+    expect(screen.queryByRole('header', { name: 'Edit WhatsApp subscription' })).toBeNull();
+    expect(consentCall).not.toHaveBeenCalled();
+  });
+
+  it('records an unsubscribe on the channel, without a note, and reads the contact again', async () => {
+    sessionCall.mockResolvedValue(sessionConsent);
+    consentCall.mockResolvedValue(consentResult);
+    await show();
+    await fireEvent.press(await row('WhatsApp subscription', 'Yes'));
+    expect(screen.getByRole('header', { name: 'Edit WhatsApp subscription' })).toBeTruthy();
+    expect(
+      screen.getByRole('radio', { name: 'Subscribed' }).props.accessibilityState,
+    ).toMatchObject({ checked: true });
+    await fireEvent.press(screen.getByRole('radio', { name: 'Unsubscribed' }));
+    getCall.mockResolvedValue({ ...profile, isUnsubscribed: true, rowVersion: 4 });
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(consentCall).toHaveBeenCalledWith(
+        profile.id,
+        { channel: 'whatsapp', action: 'withdrawn', note: undefined },
+        expect.any(String),
+      ),
+    );
+    expect(await row('WhatsApp subscription', 'Opted out')).toBeTruthy();
+    expect(screen.queryByRole('header', { name: 'Edit WhatsApp subscription' })).toBeNull();
+    expect(updateCall).not.toHaveBeenCalled();
+  });
+
+  it('asks how the contact agreed before recording a subscribe, then sends the note', async () => {
+    sessionCall.mockResolvedValue(sessionConsent);
+    consentCall.mockResolvedValue(consentResult);
+    getCall.mockResolvedValue({ ...profile, whatsappSubscriptionStatus: 'unsubscribed' });
+    await show();
+    await fireEvent.press(await row('WhatsApp subscription', 'No'));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Subscribed' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('Say how the contact agreed before saving.')).toBeTruthy();
+    expect(consentCall).not.toHaveBeenCalled();
+    await fireEvent.changeText(
+      screen.getByLabelText('How did they agree? (required)'),
+      '  Said yes on a call  ',
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(consentCall).toHaveBeenCalledWith(
+        profile.id,
+        { channel: 'whatsapp', action: 'granted', note: 'Said yes on a call' },
+        expect.any(String),
+      ),
+    );
+  });
+
+  it('shows the API refusal of a missing note under the field', async () => {
+    sessionCall.mockResolvedValue(sessionConsent);
+    consentCall.mockRejectedValue(new ApiError(422, 'CONSENT_NOTE_REQUIRED', 'note'));
+    getCall.mockResolvedValue({ ...profile, whatsappSubscriptionStatus: 'unsubscribed' });
+    await show();
+    await fireEvent.press(await row('WhatsApp subscription', 'No'));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Subscribed' }));
+    await fireEvent.changeText(screen.getByLabelText('How did they agree? (required)'), 'x');
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('Say how the contact agreed before saving.')).toBeTruthy();
+  });
+
+  it('closes without a request when the choice is unchanged', async () => {
+    sessionCall.mockResolvedValue(sessionConsent);
+    await show();
+    await fireEvent.press(await row('WhatsApp subscription', 'Yes'));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(consentCall).not.toHaveBeenCalled();
+    expect(screen.queryByRole('header', { name: 'Edit WhatsApp subscription' })).toBeNull();
+  });
+
+  it('turns the marketing opt-out on with the version that was read', async () => {
+    updateCall.mockResolvedValue({ ...profile, isUnsubscribed: true, rowVersion: 4 });
+    await show();
+    await fireEvent.press(await row('Marketing opt-out', 'No'));
+    expect(screen.getByRole('header', { name: 'Edit Marketing opt-out' })).toBeTruthy();
+    await fireEvent(
+      screen.getByRole('switch', { name: 'Opted out of marketing' }),
+      'valueChange',
+      true,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    await waitFor(() =>
+      expect(updateCall).toHaveBeenCalledWith(
+        profile.id,
+        { isUnsubscribed: true, rowVersion: 3 },
+        expect.any(String),
+      ),
+    );
+    expect(await row('Marketing opt-out', 'Yes')).toBeTruthy();
+    expect(screen.queryByRole('header', { name: 'Edit Marketing opt-out' })).toBeNull();
+  });
+
+  it('asks to review when someone else saved the contact first', async () => {
+    updateCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'stale'));
+    await show();
+    await fireEvent.press(await row('Marketing opt-out', 'No'));
+    await fireEvent(
+      screen.getByRole('switch', { name: 'Opted out of marketing' }),
+      'valueChange',
+      true,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(
+      await screen.findByText('This contact was changed by someone else. Review and save again.'),
+    ).toBeTruthy();
+  });
+});
+
+describe('AboutTab in the workspace property order', () => {
+  const standardField = (
+    key: string,
+    label: string,
+    position: number,
+    fieldType: 'phone' | 'radio' | 'datetime',
+  ) => field({ key, label, fieldType, isSystem: true, position });
+  const registry = [
+    standardField('mobile_phone_number', 'Mobile Phone Number', 1, 'phone'),
+    standardField('whatsapp_subscription_status', 'Whatsapp Subscription Status', 2, 'radio'),
+    standardField('modified_time', 'Modified Time', 3, 'datetime'),
+    field({ key: 'city', label: 'City', fieldType: 'text', position: 4 }),
+  ];
+
+  it('lists the workspace properties in its order, with the rows it has no property for after them', async () => {
+    fieldsCall.mockResolvedValue(registry);
+    await show();
+    await screen.findByRole('button', { name: /^Mobile Phone Number: / });
+    const labels = screen
+      .getAllByRole('button')
+      .map((b) => b.props.accessibilityLabel as string | undefined)
+      .filter((label): label is string => typeof label === 'string' && label.includes(': '))
+      .map((label) => label.split(': ')[0]);
+    expect(labels.slice(0, 4)).toEqual([
+      'Mobile Phone Number',
+      'Whatsapp Subscription Status',
+      'Modified Time',
+      'City',
+    ]);
+    // The fixed rows these properties replace are gone; the ones the workspace has no property for follow.
+    expect(screen.queryByRole('button', { name: /^Phone: / })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^WhatsApp subscription: / })).toBeNull();
+    expect(labels.slice(4)).toEqual(expect.arrayContaining(['Name', 'Marketing opt-out']));
+  });
+
+  it('edits the phone and records the subscription from the properties themselves', async () => {
+    sessionCall.mockResolvedValue({
+      ...sessionProps,
+      permissions: { ...sessionProps.permissions, 'contacts.consent.manage': 'all' as const },
+    });
+    fieldsCall.mockResolvedValue(registry);
+    await show();
+    await fireEvent.press(await row('Whatsapp Subscription Status', 'Yes'));
+    expect(screen.getByRole('header', { name: 'Edit WhatsApp subscription' })).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
+    await fireEvent.press(screen.getByRole('button', { name: /^Mobile Phone Number: / }));
+    expect(screen.getByRole('header', { name: 'Edit Phone' })).toBeTruthy();
+  });
+
+  it('says a built-in property it cannot change is not editable', async () => {
+    fieldsCall.mockResolvedValue(registry);
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: /^Modified Time: / }));
+    expect(await screen.findByText("You can't edit Modified Time")).toBeTruthy();
+  });
+
+  it('still shows the WhatsApp subscription when the API sends no label, and says No', async () => {
+    fieldsCall.mockResolvedValue(registry);
+    getCall.mockResolvedValue({ ...profile, whatsappSubscriptionStatus: null });
+    await show();
+    expect(await row('Whatsapp Subscription Status', 'No')).toBeTruthy();
+  });
+
+  it('says Opted out on every channel once the contact opted out of marketing', async () => {
+    fieldsCall.mockResolvedValue([
+      ...registry,
+      standardField('email_subscription_status', 'Email Subscription Status', 5, 'radio'),
+    ]);
+    getCall.mockResolvedValue({ ...profile, isUnsubscribed: true });
+    await show();
+    expect(await row('Whatsapp Subscription Status', 'Opted out')).toBeTruthy();
+    expect(
+      screen.getByRole('button', { name: 'Email Subscription Status: Opted out' }),
+    ).toBeTruthy();
+  });
+
+  it('keeps Email and Phone first, with the subscriptions editable, when the workspace lists no built-in property', async () => {
+    sessionCall.mockResolvedValue({
+      ...sessionProps,
+      permissions: { ...sessionProps.permissions, 'contacts.consent.manage': 'all' as const },
+    });
+    fieldsCall.mockResolvedValue([cityField]);
+    getCall.mockResolvedValue({ ...profile, whatsappSubscriptionStatus: null });
+    await show();
+    await screen.findByRole('button', { name: /^City: / });
+    const labels = screen
+      .getAllByRole('button')
+      .map((b) => b.props.accessibilityLabel as string | undefined)
+      .filter((label): label is string => typeof label === 'string' && label.includes(': '))
+      .map((label) => label.split(': ')[0]);
+    expect(labels.indexOf('Email')).toBeLessThan(labels.indexOf('City'));
+    // No label from the API is still a row, and a tap opens the consent sheet.
+    await fireEvent.press(screen.getByRole('button', { name: 'WhatsApp subscription: No' }));
+    expect(screen.getByRole('header', { name: 'Edit WhatsApp subscription' })).toBeTruthy();
   });
 });

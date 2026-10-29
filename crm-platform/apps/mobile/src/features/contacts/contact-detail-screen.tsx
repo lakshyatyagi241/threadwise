@@ -202,8 +202,8 @@ export function ContactDetailScreen() {
           label={t('contacts.detail.tabsLabel')}
           fit="content"
           options={[
-            { value: 'activity', label: t('contacts.detail.tabs.activity') },
             { value: 'about', label: t('contacts.detail.tabs.about') },
+            { value: 'activity', label: t('contacts.detail.tabs.activity') },
             ...(canStats
               ? [{ value: 'stats' as const, label: t('contacts.detail.tabs.stats') }]
               : []),

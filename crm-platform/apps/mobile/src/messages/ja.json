@@ -1651,7 +1651,6 @@
         "title": "アクティビティ",
         "notes": "メモ",
         "tasks": "タスク",
-        "meetings": "ミーティング",
         "rowLabel": "{{label}}、{{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1815,12 +1814,11 @@
       "description": "説明",
       "priority": "優先度",
       "status": "ステータス",
-      "owner": "担当者",
+      "owner": "連絡先の担当者",
       "relatedTo": "関連先",
       "noDescription": "説明なし",
       "noDue": "期限なし",
       "unassigned": "未割り当て",
-      "noContact": "なし",
       "openContact": "{{name}} を開く",
       "markComplete": "完了にする",
       "reopen": "再開",
@@ -1876,7 +1874,16 @@
       "typeNames": {
         "follow_up": "フォローアップ",
         "call_reminder": "折り返し電話のリマインダー"
-      }
+      },
+      "markDone": "完了としてマーク",
+      "savedNotCompleted": "タスクは保存されましたが、完了にできませんでした。もう一度お試しください。"
+    },
+    "outcome": {
+      "label": "結果",
+      "none": "結果なし",
+      "hiddenName": "{{name}}（非表示）",
+      "placeholder": "結果を選択（任意）",
+      "completeTitle": "タスクを完了"
     }
   },
   "deals": {
@@ -2248,6 +2255,7 @@
     "clear": "クリア",
     "yes": "はい",
     "no": "いいえ",
+    "optedOut": "配信停止",
     "rowHint": "エディターを開きます",
     "locked": "{{label}} は編集できません",
     "webOnly": "{{label}} はウェブアプリでのみ編集できます。",
@@ -2271,6 +2279,17 @@
       "subscribed": "購読中",
       "unsubscribed": "購読解除済み",
       "pending": "保留中"
+    },
+    "consent": {
+      "intro": "この連絡先がこのチャネルでのマーケティング受信に同意したかどうかを記録します。",
+      "noteRequiredLabel": "どのように同意しましたか？（必須）",
+      "noteOptionalLabel": "メモ（任意）",
+      "noteHint": "連絡先が述べた内容や署名した内容、およびその場所。",
+      "noteRequired": "保存する前に、連絡先がどのように同意したかを入力してください。"
+    },
+    "optOut": {
+      "label": "マーケティングの配信停止",
+      "hint": "オンにすると、この連絡先にはどのチャネルでもマーケティングメッセージが送信されません。"
     },
     "editor": {
       "title": "{{label}} を編集",

@@ -23,6 +23,7 @@ import {
   type ContactFilters,
   type NewContact,
 } from './api';
+import { recordConsent, type SubscriptionChannel } from './consent-api';
 import { listContactViews } from './views-api';
 
 /** Rows asked for at a time; the list asks for the next page when the person scrolls to the end. */
@@ -133,6 +134,31 @@ export function useUpdateContact(id: string) {
     onSuccess: (contact) => {
       key.renew();
       remember(queryClient, contact);
+    },
+  });
+}
+
+/**
+ * Records a subscription change in the consent ledger. The ledger decides the contact's subscription label, so the contact is read
+ * again; the mutation stays pending until it has been, and the sheet closes on the fresh copy.
+ */
+export function useRecordConsent(id: string) {
+  const queryClient = useQueryClient();
+  const key = useActionKey();
+  return useMutation({
+    gcTime: NO_KEEP,
+    mutationFn: (body: {
+      channel: SubscriptionChannel;
+      action: 'granted' | 'withdrawn';
+      note?: string;
+    }) => recordConsent(id, body, key.current()),
+    onError: key.failed,
+    onSuccess: async () => {
+      key.renew();
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: contactKey(id) }),
+        queryClient.invalidateQueries({ queryKey: [...contactsKey, 'list'] }),
+      ]);
     },
   });
 }

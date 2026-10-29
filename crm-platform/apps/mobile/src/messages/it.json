@@ -1709,7 +1709,6 @@
         "title": "Attività",
         "notes": "Note",
         "tasks": "Task",
-        "meetings": "Riunioni",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1873,12 +1872,11 @@
       "description": "Descrizione",
       "priority": "Priorità",
       "status": "Stato",
-      "owner": "Responsabile",
+      "owner": "Responsabile del contatto",
       "relatedTo": "Collegato a",
       "noDescription": "Nessuna descrizione",
       "noDue": "Nessuna scadenza",
       "unassigned": "Non assegnato",
-      "noContact": "Nessuno",
       "openContact": "Apri {{name}}",
       "markComplete": "Segna come completato",
       "reopen": "Riapri",
@@ -1934,7 +1932,16 @@
       "typeNames": {
         "follow_up": "Ricontatto",
         "call_reminder": "Promemoria di chiamata"
-      }
+      },
+      "markDone": "Segna come completata",
+      "savedNotCompleted": "L'attività è stata salvata, ma non è stato possibile segnarla come completata. Riprova."
+    },
+    "outcome": {
+      "label": "Esito",
+      "none": "Nessun esito",
+      "hiddenName": "{{name}} (nascosto)",
+      "placeholder": "Seleziona un esito (facoltativo)",
+      "completeTitle": "Completa attività"
     }
   },
   "deals": {
@@ -2306,6 +2313,7 @@
     "clear": "Cancella",
     "yes": "Sì",
     "no": "No",
+    "optedOut": "Disiscritto",
     "rowHint": "Apre l'editor",
     "locked": "Non puoi modificare {{label}}",
     "webOnly": "{{label}} si può modificare solo dalla web app.",
@@ -2329,6 +2337,17 @@
       "subscribed": "Iscritto",
       "unsubscribed": "Disiscritto",
       "pending": "In attesa"
+    },
+    "consent": {
+      "intro": "Registra se questo contatto ha accettato di ricevere marketing su questo canale.",
+      "noteRequiredLabel": "Come ha dato il consenso? (obbligatorio)",
+      "noteOptionalLabel": "Nota (facoltativa)",
+      "noteHint": "Cosa ha detto o firmato il contatto, e dove.",
+      "noteRequired": "Indica come il contatto ha dato il consenso prima di salvare."
+    },
+    "optOut": {
+      "label": "Disiscritto dal marketing",
+      "hint": "Se attivo, nessun messaggio di marketing viene inviato a questo contatto su alcun canale."
     },
     "editor": {
       "title": "Modifica {{label}}",

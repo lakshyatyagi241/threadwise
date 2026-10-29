@@ -1709,7 +1709,6 @@
         "title": "Actividad",
         "notes": "Notas",
         "tasks": "Tareas",
-        "meetings": "Reuniones",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1873,12 +1872,11 @@
       "description": "Descripción",
       "priority": "Prioridad",
       "status": "Estado",
-      "owner": "Responsable",
+      "owner": "Responsable del contacto",
       "relatedTo": "Relacionada con",
       "noDescription": "Sin descripción",
       "noDue": "Sin fecha de vencimiento",
       "unassigned": "Sin asignar",
-      "noContact": "Ninguno",
       "openContact": "Abrir {{name}}",
       "markComplete": "Marcar como completada",
       "reopen": "Reabrir",
@@ -1934,7 +1932,16 @@
       "typeNames": {
         "follow_up": "Seguimiento",
         "call_reminder": "Recordatorio de llamada"
-      }
+      },
+      "markDone": "Marcar como completada",
+      "savedNotCompleted": "La tarea se guardó, pero no se pudo marcar como completada. Inténtalo de nuevo."
+    },
+    "outcome": {
+      "label": "Resultado",
+      "none": "Sin resultado",
+      "hiddenName": "{{name}} (oculto)",
+      "placeholder": "Selecciona un resultado (opcional)",
+      "completeTitle": "Completar tarea"
     }
   },
   "deals": {
@@ -2306,6 +2313,7 @@
     "clear": "Borrar",
     "yes": "Sí",
     "no": "No",
+    "optedOut": "Dado de baja",
     "rowHint": "Abre el editor",
     "locked": "No puedes editar {{label}}",
     "webOnly": "{{label}} solo se puede editar desde la app web.",
@@ -2329,6 +2337,17 @@
       "subscribed": "Suscrito",
       "unsubscribed": "Dado de baja",
       "pending": "Pendiente"
+    },
+    "consent": {
+      "intro": "Registra si este contacto aceptó recibir marketing por este canal.",
+      "noteRequiredLabel": "¿Cómo dio su consentimiento? (obligatorio)",
+      "noteOptionalLabel": "Nota (opcional)",
+      "noteHint": "Lo que dijo o firmó el contacto, y dónde.",
+      "noteRequired": "Indica cómo dio su consentimiento el contacto antes de guardar."
+    },
+    "optOut": {
+      "label": "Baja del marketing",
+      "hint": "Si está activado, no se envían mensajes de marketing a este contacto por ningún canal."
     },
     "editor": {
       "title": "Editar {{label}}",

@@ -1738,7 +1738,6 @@
         "title": "Aktywność",
         "notes": "Notatki",
         "tasks": "Zadania",
-        "meetings": "Spotkania",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1902,12 +1901,11 @@
       "description": "Opis",
       "priority": "Priorytet",
       "status": "Status",
-      "owner": "Właściciel",
+      "owner": "Właściciel kontaktu",
       "relatedTo": "Powiązane z",
       "noDescription": "Brak opisu",
       "noDue": "Brak terminu",
       "unassigned": "Nieprzypisane",
-      "noContact": "Brak",
       "openContact": "Otwórz: {{name}}",
       "markComplete": "Oznacz jako ukończone",
       "reopen": "Otwórz ponownie",
@@ -1963,7 +1961,16 @@
       "typeNames": {
         "follow_up": "Kontakt kontrolny",
         "call_reminder": "Przypomnienie o telefonie"
-      }
+      },
+      "markDone": "Oznacz jako ukończone",
+      "savedNotCompleted": "Zadanie zostało zapisane, ale nie udało się oznaczyć go jako ukończonego. Spróbuj ponownie."
+    },
+    "outcome": {
+      "label": "Wynik",
+      "none": "Brak wyniku",
+      "hiddenName": "{{name}} (ukryty)",
+      "placeholder": "Wybierz wynik (opcjonalnie)",
+      "completeTitle": "Zakończ zadanie"
     }
   },
   "deals": {
@@ -2335,6 +2342,7 @@
     "clear": "Wyczyść",
     "yes": "Tak",
     "no": "Nie",
+    "optedOut": "Wypisany",
     "rowHint": "Otwiera edytor",
     "locked": "Nie możesz edytować pola: {{label}}",
     "webOnly": "Pole „{{label}}” można edytować tylko w aplikacji internetowej.",
@@ -2358,6 +2366,17 @@
       "subscribed": "Subskrybuje",
       "unsubscribed": "Zrezygnował",
       "pending": "Oczekuje"
+    },
+    "consent": {
+      "intro": "Zapisz, czy ten kontakt wyraził zgodę na otrzymywanie marketingu przez ten kanał.",
+      "noteRequiredLabel": "Jak wyraził zgodę? (wymagane)",
+      "noteOptionalLabel": "Notatka (opcjonalnie)",
+      "noteHint": "Co kontakt powiedział lub podpisał i gdzie.",
+      "noteRequired": "Przed zapisaniem podaj, jak kontakt wyraził zgodę."
+    },
+    "optOut": {
+      "label": "Wypisany z marketingu",
+      "hint": "Gdy włączone, wiadomości marketingowe nie są wysyłane do tego kontaktu żadnym kanałem."
     },
     "editor": {
       "title": "Edytuj: {{label}}",

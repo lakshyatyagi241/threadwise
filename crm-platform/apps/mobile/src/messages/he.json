@@ -1709,7 +1709,6 @@
         "title": "פעילות",
         "notes": "הערות",
         "tasks": "משימות",
-        "meetings": "פגישות",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1873,12 +1872,11 @@
       "description": "תיאור",
       "priority": "עדיפות",
       "status": "סטטוס",
-      "owner": "אחראי",
+      "owner": "אחראי על איש הקשר",
       "relatedTo": "קשורה אל",
       "noDescription": "אין תיאור",
       "noDue": "אין תאריך יעד",
       "unassigned": "לא משויכת",
-      "noContact": "ללא",
       "openContact": "פתיחת {{name}}",
       "markComplete": "סימון כהושלמה",
       "reopen": "פתיחה מחדש",
@@ -1934,7 +1932,16 @@
       "typeNames": {
         "follow_up": "מעקב",
         "call_reminder": "תזכורת להתקשר"
-      }
+      },
+      "markDone": "סמן כהושלמה",
+      "savedNotCompleted": "המשימה נשמרה, אך לא ניתן היה לסמן אותה כהושלמה. נסה שוב."
+    },
+    "outcome": {
+      "label": "תוצאה",
+      "none": "ללא תוצאה",
+      "hiddenName": "{{name}} (מוסתרת)",
+      "placeholder": "בחר תוצאה (אופציונלי)",
+      "completeTitle": "השלמת משימה"
     }
   },
   "deals": {
@@ -2306,6 +2313,7 @@
     "clear": "ניקוי",
     "yes": "כן",
     "no": "לא",
+    "optedOut": "ביטל הרשמה",
     "rowHint": "פותח את העורך",
     "locked": "אי אפשר לערוך את {{label}}",
     "webOnly": "את {{label}} אפשר לערוך רק מאפליקציית האינטרנט.",
@@ -2329,6 +2337,17 @@
       "subscribed": "רשום",
       "unsubscribed": "בוטל מנוי",
       "pending": "ממתין"
+    },
+    "consent": {
+      "intro": "תעדו אם איש הקשר הזה הסכים לקבל הודעות שיווקיות בערוץ הזה.",
+      "noteRequiredLabel": "כיצד הסכים? (חובה)",
+      "noteOptionalLabel": "הערה (אופציונלי)",
+      "noteHint": "מה איש הקשר אמר או חתם עליו, והיכן.",
+      "noteRequired": "ציינו כיצד איש הקשר הסכים לפני השמירה."
+    },
+    "optOut": {
+      "label": "הוסר משיווק",
+      "hint": "כשהאפשרות פעילה, לא יישלחו לאיש הקשר הזה הודעות שיווקיות באף ערוץ."
     },
     "editor": {
       "title": "עריכת {{label}}",

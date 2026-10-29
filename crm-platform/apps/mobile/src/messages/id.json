@@ -1651,7 +1651,6 @@
         "title": "Aktivitas",
         "notes": "Catatan",
         "tasks": "Tugas",
-        "meetings": "Rapat",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1815,12 +1814,11 @@
       "description": "Deskripsi",
       "priority": "Prioritas",
       "status": "Status",
-      "owner": "Pemilik",
+      "owner": "Pemilik kontak",
       "relatedTo": "Terkait dengan",
       "noDescription": "Tanpa deskripsi",
       "noDue": "Tanpa tenggat",
       "unassigned": "Belum ditetapkan",
-      "noContact": "Tidak ada",
       "openContact": "Buka {{name}}",
       "markComplete": "Tandai selesai",
       "reopen": "Buka kembali",
@@ -1876,7 +1874,16 @@
       "typeNames": {
         "follow_up": "Tindak lanjut",
         "call_reminder": "Pengingat telepon"
-      }
+      },
+      "markDone": "Tandai sebagai selesai",
+      "savedNotCompleted": "Tugas sudah disimpan, tetapi tidak dapat ditandai selesai. Coba lagi."
+    },
+    "outcome": {
+      "label": "Hasil",
+      "none": "Tanpa hasil",
+      "hiddenName": "{{name}} (disembunyikan)",
+      "placeholder": "Pilih hasil (opsional)",
+      "completeTitle": "Selesaikan tugas"
     }
   },
   "deals": {
@@ -2248,6 +2255,7 @@
     "clear": "Hapus",
     "yes": "Ya",
     "no": "Tidak",
+    "optedOut": "Berhenti berlangganan",
     "rowHint": "Membuka editor",
     "locked": "Anda tidak dapat mengedit {{label}}",
     "webOnly": "{{label}} hanya dapat diedit dari aplikasi web.",
@@ -2271,6 +2279,17 @@
       "subscribed": "Berlangganan",
       "unsubscribed": "Berhenti berlangganan",
       "pending": "Menunggu"
+    },
+    "consent": {
+      "intro": "Catat apakah kontak ini setuju menerima pemasaran melalui saluran ini.",
+      "noteRequiredLabel": "Bagaimana persetujuannya? (wajib)",
+      "noteOptionalLabel": "Catatan (opsional)",
+      "noteHint": "Apa yang dikatakan atau ditandatangani kontak, dan di mana.",
+      "noteRequired": "Sebutkan bagaimana kontak setuju sebelum menyimpan."
+    },
+    "optOut": {
+      "label": "Berhenti dari pemasaran",
+      "hint": "Jika aktif, pesan pemasaran tidak dikirim ke kontak ini di saluran mana pun."
     },
     "editor": {
       "title": "Edit {{label}}",

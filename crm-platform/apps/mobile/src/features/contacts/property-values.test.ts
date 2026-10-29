@@ -456,11 +456,12 @@ describe('buildRows', () => {
       updatedAt: '2026-10-18T15:16:00.000Z',
     };
     const byId = (id: string) => rows({ contact }).find((r) => r.id === id);
-    expect(byId('emailSubscription')?.text).toBe('Subscribed');
-    expect(byId('smsSubscription')?.text).toBe('Unsubscribed');
+    expect(byId('emailSubscription')?.text).toBe('Yes');
+    expect(byId('smsSubscription')?.text).toBe('No');
     expect(byId('modified')?.text).toBe(formatMoment('2026-10-18T15:16:00.000Z', 'en'));
     expect(byId('emailSubscription')?.edit.kind).toBe('locked');
-    expect(rows({ contact: bare }).find((r) => r.id === 'smsSubscription')?.text).toBeNull();
+    // A channel with nothing recorded still answers: No, never a missing row.
+    expect(rows({ contact: bare }).find((r) => r.id === 'smsSubscription')?.text).toBe('No');
   });
 
   it('shows the owner by name, and by nothing when the name cannot be found', () => {
@@ -516,7 +517,7 @@ describe('buildRows', () => {
       phone: '+919812345678',
       name: 'Aarav Sharma',
       source: 'import',
-      whatsapp: 'Subscribed',
+      whatsapp: 'Yes',
       marketing: 'No',
       leadScore: '40',
     });
@@ -530,7 +531,8 @@ describe('buildRows', () => {
       t,
     });
     expect(optedOut.find((r) => r.id === 'marketing')?.text).toBe('Yes');
-    expect(optedOut.find((r) => r.id === 'whatsapp')?.text).toBe('Weird State');
+    // Opting out of marketing beats any channel label.
+    expect(optedOut.find((r) => r.id === 'whatsapp')?.text).toBe('Opted out');
   });
 
   it('hides the empty rows until asked to show them', () => {
@@ -545,6 +547,9 @@ describe('buildRows', () => {
       'email',
       'phone',
       'name',
+      'whatsapp',
+      'emailSubscription',
+      'smsSubscription',
       'marketing',
       'created',
       'modified',
@@ -816,15 +821,15 @@ describe('standard properties read from the contact', () => {
     expect(text('other_lost_reason')).toBe('Moved abroad');
     expect(text('contact_owner')).toBe('Priya Nair');
     expect(text('source')).toBe('import');
-    expect(text('whatsapp_subscription_status')).toBe('Subscribed');
-    expect(text('sms_subscription_status')).toBe('Unsubscribed');
+    expect(text('whatsapp_subscription_status')).toBe('Yes');
+    expect(text('sms_subscription_status')).toBe('No');
     expect(text('lifecycle_stage_date')).toBe(formatMoment('2026-10-01T09:00:00.000Z', 'en'));
     expect(text('modified_time')).toBe(formatMoment('2026-10-02T08:00:00.000Z', 'en'));
   });
 
   it('has nothing for an empty column, an unknown key, or when the screen did not ask', () => {
     expect(text('last_name')).toBeNull();
-    expect(text('email_subscription_status')).toBeNull();
+    expect(text('email_subscription_status')).toBe('No');
     expect(text('previous_lifecycle_stage_date')).toBeNull();
     expect(text('city')).toBeNull();
     expect(columnTextOf(contact, 'email', { ...ctx, standard: undefined })).toBeNull();
@@ -840,5 +845,96 @@ describe('standard properties read from the contact', () => {
     expect(
       row({ standard, contact: { ...contact, customFields: { email: 'x@example.test' } } }),
     ).toBe('x@example.test');
+  });
+});
+
+describe('rows in the workspace order (the About tab)', () => {
+  const standard = { stageLabel: (v: string) => v, lostReasonLabel: (v: string) => v };
+  const system = (
+    key: string,
+    label: string,
+    position: number,
+    fieldType: FieldResponse['fieldType'] = 'text',
+  ) => field({ key, label, fieldType, isSystem: true, position });
+  const registry = [
+    system('mobile_phone_number', 'Mobile Phone Number', 1, 'phone'),
+    system('original_lifecycle_stage_date', 'Original Lifecycle stage Date', 2, 'datetime'),
+    {
+      ...system('whatsapp_subscription_status', 'Whatsapp Subscription Status', 3, 'radio'),
+      isReadOnly: false,
+    },
+    system('modified_time', 'Modified Time', 4, 'datetime'),
+    field({ key: 'city', label: 'City', fieldType: 'text', position: 5 }),
+  ];
+  const contact = {
+    ...profile,
+    phone: '+919812345678',
+    whatsappSubscriptionStatus: 'subscribed',
+    customFields: { city: 'Pune', original_lifecycle_stage_date: '2026-10-23T10:52:00.000Z' },
+  };
+  const build = (over: Partial<Parameters<typeof buildRows>[0]> = {}) =>
+    buildRows({
+      contact,
+      fields: registry,
+      ownerName: null,
+      locale: 'en',
+      t,
+      standard,
+      inOrder: true,
+      ...over,
+    });
+
+  it('drops the fixed row a listed property stands in for and keeps the rest', () => {
+    const ids = build().map((r) => r.id);
+    expect(ids).not.toContain('phone');
+    expect(ids).not.toContain('whatsapp');
+    expect(ids).not.toContain('modified');
+    expect(ids).toEqual(expect.arrayContaining(['email', 'owner', 'marketing', 'leadScore']));
+    expect(ids.filter((id) => id.startsWith('field:'))).toEqual([
+      'field:mobile_phone_number',
+      'field:original_lifecycle_stage_date',
+      'field:whatsapp_subscription_status',
+      'field:modified_time',
+      'field:city',
+    ]);
+  });
+
+  it('keeps every fixed row when the screen did not ask for the order', () => {
+    const ids = buildRows({ contact, fields: registry, ownerName: null, locale: 'en', t, standard })
+      .map((r) => r.id)
+      .filter((id) => !id.startsWith('field:'));
+    expect(ids).toEqual(expect.arrayContaining(['phone', 'whatsapp', 'modified']));
+  });
+
+  it('edits the phone where it lives, locks what the contact cannot change, and sends the subscription to the ledger', () => {
+    const edit = (id: string, over?: Parameters<typeof build>[0]) =>
+      build(over).find((r) => r.id === id)?.edit;
+    expect(edit('field:mobile_phone_number')).toEqual({ kind: 'standard', key: 'phone' });
+    expect(edit('field:original_lifecycle_stage_date')).toEqual({
+      kind: 'locked',
+      reason: 'readonly',
+    });
+    expect(edit('field:modified_time')).toEqual({ kind: 'locked', reason: 'readonly' });
+    expect(edit('field:whatsapp_subscription_status')).toEqual({
+      kind: 'locked',
+      reason: 'readonly',
+    });
+    expect(edit('field:whatsapp_subscription_status', { canConsent: true })).toEqual({
+      kind: 'consent',
+      channel: 'whatsapp',
+    });
+  });
+
+  it('puts the properties first, in the workspace order, and the leftover fixed rows last', () => {
+    const groups = groupRows(visibleRows(build(), false), registry, undefined, { fixedLast: true });
+    const labels = groups.flatMap((g) => g.rows.map((r) => r.label));
+    expect(labels.slice(0, 5)).toEqual([
+      'Mobile Phone Number',
+      'Original Lifecycle stage Date',
+      'Whatsapp Subscription Status',
+      'Modified Time',
+      'City',
+    ]);
+    expect(labels.slice(5)).toContain('Marketing opt-out');
   });
 });

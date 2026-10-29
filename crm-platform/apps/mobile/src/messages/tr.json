@@ -1680,7 +1680,6 @@
         "title": "Etkinlik",
         "notes": "Notlar",
         "tasks": "Görevler",
-        "meetings": "Toplantılar",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1844,12 +1843,11 @@
       "description": "Açıklama",
       "priority": "Öncelik",
       "status": "Durum",
-      "owner": "Sahip",
+      "owner": "Kişi sahibi",
       "relatedTo": "İlgili kişi",
       "noDescription": "Açıklama yok",
       "noDue": "Son tarih yok",
       "unassigned": "Atanmamış",
-      "noContact": "Yok",
       "openContact": "{{name}} kişisini aç",
       "markComplete": "Tamamlandı olarak işaretle",
       "reopen": "Yeniden aç",
@@ -1905,7 +1903,16 @@
       "typeNames": {
         "follow_up": "Takip",
         "call_reminder": "Arama hatırlatması"
-      }
+      },
+      "markDone": "Tamamlandı olarak işaretle",
+      "savedNotCompleted": "Görev kaydedildi ancak tamamlandı olarak işaretlenemedi. Lütfen tekrar deneyin."
+    },
+    "outcome": {
+      "label": "Sonuç",
+      "none": "Sonuç yok",
+      "hiddenName": "{{name}} (gizli)",
+      "placeholder": "Sonuç seçin (isteğe bağlı)",
+      "completeTitle": "Görevi tamamla"
     }
   },
   "deals": {
@@ -2277,6 +2284,7 @@
     "clear": "Temizle",
     "yes": "Evet",
     "no": "Hayır",
+    "optedOut": "Vazgeçti",
     "rowHint": "Düzenleyiciyi açar",
     "locked": "{{label}} alanını düzenleyemezsiniz",
     "webOnly": "{{label}} yalnızca web uygulamasından düzenlenebilir.",
@@ -2300,6 +2308,17 @@
       "subscribed": "Abone",
       "unsubscribed": "Abonelikten çıktı",
       "pending": "Beklemede"
+    },
+    "consent": {
+      "intro": "Bu kişinin bu kanalda pazarlama mesajı almayı kabul edip etmediğini kaydedin.",
+      "noteRequiredLabel": "Nasıl onay verdi? (zorunlu)",
+      "noteOptionalLabel": "Not (isteğe bağlı)",
+      "noteHint": "Kişinin ne söylediği veya neyi imzaladığı ve nerede.",
+      "noteRequired": "Kaydetmeden önce kişinin nasıl onay verdiğini belirtin."
+    },
+    "optOut": {
+      "label": "Pazarlamadan çıktı",
+      "hint": "Açıkken bu kişiye hiçbir kanaldan pazarlama mesajı gönderilmez."
     },
     "editor": {
       "title": "{{label}} alanını düzenle",

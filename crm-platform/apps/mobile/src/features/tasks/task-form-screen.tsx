@@ -1,3 +1,4 @@
+import type { TaskResponse } from '@crm/contracts';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -26,7 +27,14 @@ import {
   type TaskFormProblems,
   type TaskFormValues,
 } from './task-validation';
-import { taskKey, useCreateTask, useLinkedContact, useTask, useUpdateTask } from './use-tasks';
+import {
+  taskKey,
+  useCreateTask,
+  useLinkedContact,
+  useTask,
+  useToggleTask,
+  useUpdateTask,
+} from './use-tasks';
 
 /** The name to show for the contact a task is added for: its name, else first and last name, else its phone or email. */
 function contactNameOf(contact: {
@@ -67,7 +75,10 @@ export function TaskFormScreen() {
   const task = useTask(taskId, editing && canWrite && canReadTasks);
   const linked = useLinkedContact(contactId, canReadContacts);
   const create = useCreateTask();
-  const update = useUpdateTask(taskId);
+  const toggle = useToggleTask();
+  // The task as the API last returned it, once it is saved but not yet completed: a retry must not add it a second time.
+  const [saved, setSaved] = useState<TaskResponse | null>(null);
+  const update = useUpdateTask(saved?.id ?? taskId);
   const [failure, setFailure] = useState<TaskFailure | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -144,25 +155,50 @@ export function TaskFormScreen() {
       fixedContact = { id: current.contact.id, name: current.contact.name ?? '' };
     }
 
+    // Completes (or reopens) the saved task when "Mark as Completed" asks for a change of status, then leaves the form.
+    const finish = (task: TaskResponse, values: TaskFormValues) => {
+      if (values.markDone === (task.status === 'done')) return goBack();
+      toggle.mutate(
+        {
+          id: task.id,
+          rowVersion: task.rowVersion,
+          status: task.status,
+          outcomeId: values.outcomeId,
+        },
+        {
+          onSuccess: goBack,
+          onError: (error) => {
+            setSaved(task);
+            const described = describeTaskFailure(error, t);
+            if (described.conflict) {
+              setNotice(t('tasks.form.conflict'));
+              void queryClient.invalidateQueries({ queryKey: taskKey(task.id) });
+            } else {
+              setNotice(t('tasks.form.savedNotCompleted'));
+              setFailure(described);
+            }
+          },
+        },
+      );
+    };
+
     const onSubmit = (values: TaskFormValues) => {
       setFailure(null);
       setNotice(null);
-      if (current) {
-        const changes = buildUpdateBody(current, values, myId);
-        if (Object.keys(changes).length === 0) {
-          goBack();
-          return;
-        }
-        const payload = { ...changes, rowVersion: current.rowVersion };
+      const target = saved ?? current;
+      if (target) {
+        const changes = buildUpdateBody(target, values, myId);
+        if (Object.keys(changes).length === 0) return finish(target, values);
+        const payload = { ...changes, rowVersion: target.rowVersion };
         const problems = contractProblems(payload, 'update');
         if (Object.keys(problems).length > 0) return showProblems(problems);
         update.mutate(payload, {
-          onSuccess: goBack,
+          onSuccess: (task) => finish(task, values),
           onError: (error) => {
             const described = describeTaskFailure(error, t);
             if (described.conflict) {
               setNotice(t('tasks.form.conflict'));
-              void queryClient.invalidateQueries({ queryKey: taskKey(taskId) });
+              void queryClient.invalidateQueries({ queryKey: taskKey(target.id) });
             } else {
               setFailure(described);
             }
@@ -174,7 +210,7 @@ export function TaskFormScreen() {
       const problems = contractProblems(payload, 'create');
       if (Object.keys(problems).length > 0) return showProblems(problems);
       create.mutate(payload, {
-        onSuccess: goBack,
+        onSuccess: (task) => finish(task, values),
         onError: (error) => setFailure(describeTaskFailure(error, t)),
       });
     };
@@ -187,11 +223,13 @@ export function TaskFormScreen() {
         initial={initial}
         fixedContact={fixedContact}
         currentType={current?.taskType ?? null}
+        currentOutcome={current?.outcome ?? null}
+        wasDone={current?.status === 'done'}
         contactLoading={Boolean(contactId) && canReadContacts && linked.isPending}
         canListTeam={canReadContacts}
         canPickContact={canReadContacts}
         myId={myId}
-        pending={create.isPending || update.isPending}
+        pending={create.isPending || update.isPending || toggle.isPending}
         banner={failure?.banner}
         notice={notice}
         serverErrors={failure?.fields}

@@ -41,7 +41,14 @@ import { TaskFilterModal } from './task-filter-modal';
 import { TaskRow } from './task-row';
 import { TaskSkeleton } from './task-skeleton';
 import { SEARCH_DEBOUNCE_MS, useDebounced } from '@/lib/hooks/use-debounced';
-import { taskListsKey, useDeleteTask, useTaskList, useToggleTask } from './use-tasks';
+import { CompleteTaskSheet } from './task-outcome';
+import {
+  taskListsKey,
+  useDeleteTask,
+  useTaskCompletion,
+  useTaskList,
+  useToggleTask,
+} from './use-tasks';
 
 const FAB_SIZE = 52;
 const FAB_MARGIN = 24;
@@ -89,6 +96,8 @@ export function TasksScreen() {
   const locked = list.isError && isPlanLocked(list.error);
 
   const toggle = useToggleTask();
+  const completion = useTaskCompletion(allowed);
+  const [completing, setCompleting] = useState<TaskResponse | null>(null);
   const toggleTask = toggle.mutate;
   const remove = useDeleteTask();
   const busyId = toggle.isPending ? toggle.variables?.id : undefined;
@@ -97,11 +106,13 @@ export function TasksScreen() {
     (id: string) => router.push({ pathname: '/task/[id]', params: { id } }),
     [router],
   );
-  const complete = useCallback(
-    (task: TaskResponse) => {
+  const hasOutcomes = completion.outcomes.length > 0;
+  const completeWith = useCallback(
+    (task: TaskResponse, outcomeId?: string | null) => {
+      setCompleting(null);
       setNotice(null);
       toggleTask(
-        { id: task.id, rowVersion: task.rowVersion, status: task.status },
+        { id: task.id, rowVersion: task.rowVersion, status: task.status, outcomeId },
         {
           onError: (error) => {
             // Someone else changed or deleted the task first: show what is there now and say why nothing happened.
@@ -115,6 +126,14 @@ export function TasksScreen() {
       );
     },
     [toggleTask, t, queryClient],
+  );
+  // Completing asks for the outcome first when the workspace has outcomes; reopening goes straight through.
+  const complete = useCallback(
+    (task: TaskResponse) => {
+      if (task.status === 'open' && hasOutcomes) setCompleting(task);
+      else completeWith(task);
+    },
+    [hasOutcomes, completeWith],
   );
   const more = useCallback((task: TaskResponse) => setMenuFor(task), []);
 
@@ -182,7 +201,7 @@ export function TasksScreen() {
         renderItem={({ item }) => (
           <TaskRow
             task={item}
-            canUpdate={canUpdate}
+            canUpdate={canUpdate && (completion.allowComplete || item.status === 'done')}
             canMore={canDelete || (canUpdate && item.status === 'open')}
             busy={busyId === item.id}
             onOpen={open}
@@ -295,6 +314,15 @@ export function TasksScreen() {
         />
       ) : null}
 
+      <CompleteTaskSheet
+        title={completing?.title ?? null}
+        outcomes={completion.outcomes}
+        pending={toggle.isPending}
+        onConfirm={(outcomeId) => {
+          if (completing) completeWith(completing, outcomeId);
+        }}
+        onCancel={() => setCompleting(null)}
+      />
       <TaskActionsSheet
         task={menuFor}
         canEdit={canUpdate}

@@ -3,6 +3,7 @@ import {
   assigneeResponseSchema,
   contactResponseSchema,
   contactSelectItemSchema,
+  taskOutcomeResponseSchema,
   taskPageResponseSchema,
   taskResponseSchema,
   type CreateTaskInput,
@@ -58,11 +59,16 @@ export const updateTask = (id: string, body: UpdateTaskInput, idempotencyKey?: s
     idempotencyKey,
   });
 
-/** Marks a task done. Doing it to a task that is already done changes nothing. */
-export const completeTask = (id: string, rowVersion: number, idempotencyKey?: string) =>
+/** Marks a task done, recording `outcomeId` with it when one is given. Doing it to a task that is already done changes nothing. */
+export const completeTask = (
+  id: string,
+  rowVersion: number,
+  idempotencyKey?: string,
+  outcomeId?: string | null,
+) =>
   apiFetch(`/v2/tasks/${id}/complete`, {
     method: 'POST',
-    body: { rowVersion },
+    body: { rowVersion, ...(outcomeId ? { outcomeId } : {}) },
     schema: taskResponseSchema,
     idempotencyKey,
   });
@@ -101,13 +107,25 @@ export const getLinkedContact = (id: string, signal?: AbortSignal) =>
   apiFetch(`/v2/contacts/${id}`, { schema: contactResponseSchema, signal });
 
 /**
- * The task types of the workspace (Settings > Sales activities), in order: the list of the "task" activity. `null` when the workspace
- * has none to offer. The activity list is open to anyone who may read tasks.
+ * The "task" activity of the workspace (Settings > Sales activities): its task types in order and its switches (may people mark a
+ * task done, is the outcome picker offered). `null` when the list has no such activity. The activity list is open to anyone who
+ * may read tasks.
  */
-export async function listTaskTypes(signal?: AbortSignal) {
+export async function getTaskActivity(signal?: AbortSignal) {
   const list = await apiFetch('/v2/activity-types', {
     schema: activityTypesResponseSchema,
     signal,
   });
-  return list.data.find((a) => a.key === 'task')?.taskTypes ?? [];
+  return list.data.find((a) => a.key === 'task') ?? null;
 }
+
+/** The task types of the workspace, in order; empty when it has none to offer. */
+export async function listTaskTypes(signal?: AbortSignal) {
+  return (await getTaskActivity(signal))?.taskTypes ?? [];
+}
+
+const outcomeListSchema = z.array(taskOutcomeResponseSchema);
+
+/** The task outcomes a picker offers (the active ones), in the workspace's order (Settings > Task outcomes). */
+export const listTaskOutcomes = (signal?: AbortSignal) =>
+  apiFetch('/v2/task-outcomes', { query: { activeOnly: true }, schema: outcomeListSchema, signal });

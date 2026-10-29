@@ -1,7 +1,9 @@
 import type {
   AssigneeResponse,
   ContactSelectItem,
+  SalesActivityType,
   SessionResponse,
+  TaskOutcomeResponse,
   TaskPageResponse,
   TaskResponse,
 } from '@crm/contracts';
@@ -130,3 +132,43 @@ export const sessionNoTasks: SessionResponse = {
   ...baseSession,
   permissions: { 'dash.dashboard.read': 'all' },
 };
+
+/** The workspace's "task" activity: marking done is allowed and the outcome picker is off, unless a test says otherwise. */
+export const taskActivity = (over: Partial<SalesActivityType> = {}): SalesActivityType => ({
+  id: '61111111-1111-4111-8111-111111111111',
+  key: 'task',
+  name: null,
+  isDefault: true,
+  behavesAs: 'task',
+  icon: 'checkbox',
+  position: 0,
+  showInCalendar: true,
+  allowComplete: true,
+  allowEditCompleted: false,
+  mobileCheckIn: false,
+  outcomesEnabled: false,
+  taskTypes: [],
+  outcomes: [],
+  rowVersion: 1,
+  ...over,
+});
+
+const outcome = (id: string, name: string, sortOrder: number): TaskOutcomeResponse => ({
+  id,
+  name,
+  sortOrder,
+  isActive: true,
+  taskCount: 0,
+  rowVersion: 1,
+  createdAt: '2026-10-01T08:00:00.000Z',
+  updatedAt: '2026-10-01T08:00:00.000Z',
+});
+
+export const INTERESTED = '81111111-1111-4111-8111-111111111111';
+export const LEFT_MESSAGE = '82222222-2222-4222-8222-222222222222';
+
+/** The outcomes a workspace offers, in its order. */
+export const taskOutcomes: TaskOutcomeResponse[] = [
+  outcome(INTERESTED, 'Interested', 0),
+  outcome(LEFT_MESSAGE, 'Left message', 1),
+];

@@ -15,6 +15,9 @@ import {
   sessionTasksComplete,
   sessionTasksFull,
   sessionTasksReadOnly,
+  taskActivity,
+  taskOutcomes,
+  INTERESTED,
   taskPage,
   tasks,
 } from '@/test/tasks-fixtures';
@@ -29,6 +32,8 @@ jest.mock('expo-router', () => ({ useRouter: jest.fn(), useLocalSearchParams: je
 const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.listTasks);
 const completeCall = jest.mocked(api.completeTask);
+const activityCall = jest.mocked(api.getTaskActivity);
+const outcomesCall = jest.mocked(api.listTaskOutcomes);
 const reopenCall = jest.mocked(api.reopenTask);
 const deleteCall = jest.mocked(api.deleteTask);
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
@@ -55,6 +60,8 @@ beforeEach(() => {
   jest.mocked(useLocalSearchParams).mockReturnValue({});
   router.canGoBack.mockReturnValue(true);
   sessionCall.mockResolvedValue(sessionTasksFull);
+  activityCall.mockResolvedValue(taskActivity());
+  outcomesCall.mockResolvedValue(taskOutcomes);
   listCall.mockResolvedValue(taskPage(tasks));
 });
 afterEach(async () => {
@@ -188,10 +195,41 @@ describe('TasksScreen', () => {
         await screen.findByRole('checkbox', { name: 'Mark Call Aarav about the quote as done' }),
       );
       await waitFor(() =>
-        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String)),
+        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), undefined),
       );
       // The list is asked again, so the open list no longer holds it.
       await waitFor(() => expect(listCall).toHaveBeenCalledTimes(2));
+    });
+
+    it('asks for the outcome first when the workspace has outcomes, and sends the one picked', async () => {
+      activityCall.mockResolvedValue(taskActivity({ outcomesEnabled: true }));
+      completeCall.mockResolvedValue({ ...callAarav, status: 'done', rowVersion: 3 });
+      await show();
+      await fireEvent.press(
+        await screen.findByRole('checkbox', { name: 'Mark Call Aarav about the quote as done' }),
+      );
+      expect(completeCall).not.toHaveBeenCalled();
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Interested' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Complete task' }));
+      await waitFor(() =>
+        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), INTERESTED),
+      );
+    });
+
+    it('cannot complete a task when the workspace does not allow it, but can still reopen one', async () => {
+      activityCall.mockResolvedValue(taskActivity({ allowComplete: false }));
+      listCall.mockResolvedValue(taskPage([callAarav, doneTask]));
+      await show();
+      await waitFor(() =>
+        expect(
+          screen.getByRole('checkbox', { name: 'Mark Call Aarav about the quote as done' }).props
+            .accessibilityState.disabled,
+        ).toBe(true),
+      );
+      expect(
+        screen.getByRole('checkbox', { name: 'Reopen Book the demo' }).props.accessibilityState
+          .disabled,
+      ).toBe(false);
     });
 
     it('shows the circle filled the moment the answer arrives', async () => {

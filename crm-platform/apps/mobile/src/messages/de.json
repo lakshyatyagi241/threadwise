@@ -1680,7 +1680,6 @@
         "title": "Aktivität",
         "notes": "Notizen",
         "tasks": "Aufgaben",
-        "meetings": "Meetings",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1844,12 +1843,11 @@
       "description": "Beschreibung",
       "priority": "Priorität",
       "status": "Status",
-      "owner": "Verantwortlicher",
+      "owner": "Kontaktverantwortlicher",
       "relatedTo": "Bezogen auf",
       "noDescription": "Keine Beschreibung",
       "noDue": "Kein Fälligkeitsdatum",
       "unassigned": "Nicht zugewiesen",
-      "noContact": "Keiner",
       "openContact": "{{name}} öffnen",
       "markComplete": "Als erledigt markieren",
       "reopen": "Wieder öffnen",
@@ -1905,7 +1903,16 @@
       "typeNames": {
         "follow_up": "Nachfassen",
         "call_reminder": "Rückruferinnerung"
-      }
+      },
+      "markDone": "Als erledigt markieren",
+      "savedNotCompleted": "Die Aufgabe wurde gespeichert, konnte aber nicht als erledigt markiert werden. Versuchen Sie es erneut."
+    },
+    "outcome": {
+      "label": "Ergebnis",
+      "none": "Kein Ergebnis",
+      "hiddenName": "{{name}} (ausgeblendet)",
+      "placeholder": "Ergebnis auswählen (optional)",
+      "completeTitle": "Aufgabe abschließen"
     }
   },
   "deals": {
@@ -2277,6 +2284,7 @@
     "clear": "Löschen",
     "yes": "Ja",
     "no": "Nein",
+    "optedOut": "Abgemeldet",
     "rowHint": "Öffnet den Editor",
     "locked": "Sie können {{label}} nicht bearbeiten",
     "webOnly": "{{label}} kann nur in der Web-App bearbeitet werden.",
@@ -2300,6 +2308,17 @@
       "subscribed": "Abonniert",
       "unsubscribed": "Abgemeldet",
       "pending": "Ausstehend"
+    },
+    "consent": {
+      "intro": "Halte fest, ob dieser Kontakt dem Erhalt von Marketing über diesen Kanal zugestimmt hat.",
+      "noteRequiredLabel": "Wie wurde zugestimmt? (erforderlich)",
+      "noteOptionalLabel": "Notiz (optional)",
+      "noteHint": "Was der Kontakt gesagt oder unterschrieben hat und wo.",
+      "noteRequired": "Gib vor dem Speichern an, wie der Kontakt zugestimmt hat."
+    },
+    "optOut": {
+      "label": "Vom Marketing abgemeldet",
+      "hint": "Wenn aktiviert, werden an diesen Kontakt auf keinem Kanal Marketingnachrichten gesendet."
     },
     "editor": {
       "title": "{{label}} bearbeiten",

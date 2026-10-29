@@ -1651,7 +1651,6 @@
         "title": "活动",
         "notes": "备注",
         "tasks": "任务",
-        "meetings": "会议",
         "rowLabel": "{{label}}，{{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1815,12 +1814,11 @@
       "description": "描述",
       "priority": "优先级",
       "status": "状态",
-      "owner": "负责人",
+      "owner": "联系人负责人",
       "relatedTo": "关联对象",
       "noDescription": "无描述",
       "noDue": "无截止日期",
       "unassigned": "未分配",
-      "noContact": "无",
       "openContact": "打开 {{name}}",
       "markComplete": "标记为完成",
       "reopen": "重新打开",
@@ -1876,7 +1874,16 @@
       "typeNames": {
         "follow_up": "跟进",
         "call_reminder": "回电提醒"
-      }
+      },
+      "markDone": "标记为已完成",
+      "savedNotCompleted": "任务已保存，但无法标记为已完成。请重试。"
+    },
+    "outcome": {
+      "label": "结果",
+      "none": "无结果",
+      "hiddenName": "{{name}}（已隐藏）",
+      "placeholder": "选择结果（可选）",
+      "completeTitle": "完成任务"
     }
   },
   "deals": {
@@ -2248,6 +2255,7 @@
     "clear": "清除",
     "yes": "是",
     "no": "否",
+    "optedOut": "已退订",
     "rowHint": "打开编辑器",
     "locked": "您无法编辑{{label}}",
     "webOnly": "{{label}}只能在网页端编辑。",
@@ -2271,6 +2279,17 @@
       "subscribed": "已订阅",
       "unsubscribed": "已退订",
       "pending": "待处理"
+    },
+    "consent": {
+      "intro": "记录该联系人是否同意在此渠道接收营销信息。",
+      "noteRequiredLabel": "他们是如何同意的？（必填）",
+      "noteOptionalLabel": "备注（选填）",
+      "noteHint": "联系人说过或签署的内容，以及地点。",
+      "noteRequired": "保存前请说明联系人是如何同意的。"
+    },
+    "optOut": {
+      "label": "已退订营销",
+      "hint": "开启后，不会通过任何渠道向该联系人发送营销消息。"
     },
     "editor": {
       "title": "编辑{{label}}",

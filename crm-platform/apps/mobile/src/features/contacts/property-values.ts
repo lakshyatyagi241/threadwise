@@ -435,6 +435,10 @@ export function sameValue(before: unknown, after: unknown): boolean {
 export type RowEdit =
   | { kind: 'standard'; key: StandardKey }
   | { kind: 'owner' }
+  /** The contact's marketing consent on one channel, recorded in the consent ledger (the web's Consent card). */
+  | { kind: 'consent'; channel: 'whatsapp' | 'email' | 'sms' }
+  /** The contact's marketing opt-out switch. */
+  | { kind: 'optOut' }
   | { kind: 'custom'; field: FieldResponse }
   | { kind: 'locked'; reason: LockReason };
 
@@ -492,6 +496,21 @@ export interface StandardValues {
   lostReasonLabel: (value: string) => string;
 }
 
+/** How a stage or lost reason is named: the workspace's own option, else the platform's word for it. */
+export function standardValuesOf(
+  options: readonly StatusOptionResponse[] | undefined,
+  t: TFunction,
+): StandardValues {
+  const stages = optionsOfGroup(options, [STAGE_GROUP]);
+  const reasons = optionsOfGroup(options, [LOST_REASON_GROUP]);
+  return {
+    stageLabel: (value) =>
+      stages.find((o) => o.value === value)?.label ??
+      t(`contacts.stage.${value}`, { defaultValue: titleCaseKey(value) }),
+    lostReasonLabel: (value) => reasons.find((o) => o.value === value)?.label ?? value,
+  };
+}
+
 export interface RowContext {
   contact: ContactResponse;
   /** The workspace's properties; undefined while loading or when the person may not read them. */
@@ -501,11 +520,21 @@ export interface RowContext {
   locale: string;
   t: TFunction;
   /**
+   * Whether the person may record consent (`contacts.consent.manage`). Without it the subscription rows stay read-only, as the
+   * API would refuse the change anyway.
+   */
+  canConsent?: boolean;
+  /**
    * Set where every property of the workspace is listed (the All sections screen): a standard property (email, mobile phone number,
-   * lifecycle stage, the subscription statuses...) whose own value is empty then shows what the contact holds in its own column. The
-   * About tab leaves it out: it already has a fixed row for each of those.
+   * lifecycle stage, the subscription statuses...) whose own value is empty then shows what the contact holds in its own column.
    */
   standard?: StandardValues;
+  /**
+   * The About tab's mode: the workspace's property list is the order of the screen (the Geta app's). A fixed row whose property the
+   * workspace lists is dropped and the property shows in its place, and a standard property (email, phone, owner, the subscription
+   * statuses) is edited where it lives instead of being locked. Needs `standard` for the values.
+   */
+  inOrder?: boolean;
 }
 
 /** The property keys that are really columns of the contact, and the column each one reads. */
@@ -533,6 +562,25 @@ const COLUMN_KEYS = [
   'sms_subscription_status',
 ] as const;
 
+/** The subscription properties: each one answers for its channel from the contact's own label and marketing opt-out. */
+const SUBSCRIPTION_KEYS: readonly string[] = [
+  'whatsapp_subscription_status',
+  'email_subscription_status',
+  'sms_subscription_status',
+];
+
+/**
+ * Whether the contact takes marketing on a channel, as the web's Subscription status card says it: Opted out when the contact opted
+ * out of marketing (it beats any label), Yes for a "subscribed" label, No for anything else, a label the API does not send included.
+ * Always an answer, so the row is never missing.
+ */
+export function optInText(status: string | null, optedOut: boolean, t: TFunction): string {
+  if (optedOut) return t('contactProps.optedOut');
+  return (status ?? '').trim().toLowerCase() === 'subscribed'
+    ? t('contactProps.yes')
+    : t('contactProps.no');
+}
+
 /** The contact's own value for a standard property key, as words; null when it has none or the key is not a standard one. */
 export function columnTextOf(
   contact: ContactResponse,
@@ -540,10 +588,6 @@ export function columnTextOf(
   { t, standard, ownerName, locale }: Pick<RowContext, 't' | 'standard' | 'ownerName' | 'locale'>,
 ): string | null {
   if (!standard || !(COLUMN_KEYS as readonly string[]).includes(key)) return null;
-  const subscription = (status: string | null) =>
-    status
-      ? t(`contactProps.subscription.${status}`, { defaultValue: titleCaseKey(status) })
-      : null;
   switch (key) {
     case 'email':
       return textOrNull(contact.email);
@@ -583,11 +627,11 @@ export function columnTextOf(
     case 'source':
       return textOrNull(contact.source);
     case 'whatsapp_subscription_status':
-      return subscription(contact.whatsappSubscriptionStatus);
+      return optInText(contact.whatsappSubscriptionStatus, contact.isUnsubscribed, t);
     case 'email_subscription_status':
-      return subscription(contact.emailSubscriptionStatus);
+      return optInText(contact.emailSubscriptionStatus, contact.isUnsubscribed, t);
     default:
-      return subscription(contact.smsSubscriptionStatus);
+      return optInText(contact.smsSubscriptionStatus, contact.isUnsubscribed, t);
   }
 }
 
@@ -595,6 +639,52 @@ export function columnTextOf(
  * The rows of the About tab: the fixed ones first, then the workspace's custom properties. A property that is switched off or
  * hidden has no row. A value whose key has no definition at all is shown read-only under its key.
  */
+/**
+ * What tapping a standard property does. The contact's email, phone, owner and subscription statuses are edited where they live
+ * (the update, the owner call, the consent ledger); the rest of the built-in properties are shown, not edited here.
+ */
+function columnEdit(field: FieldResponse, canConsent: boolean): RowEdit {
+  const readonly: RowEdit = { kind: 'locked', reason: 'readonly' };
+  if (field.isReadOnly || field.isMasked) return readonly;
+  switch (field.key) {
+    case 'email':
+      return { kind: 'standard', key: 'email' };
+    case 'mobile_phone_number':
+    case 'phone_number':
+    case 'phone':
+      return { kind: 'standard', key: 'phone' };
+    case 'contact_owner':
+      return { kind: 'owner' };
+    case 'whatsapp_subscription_status':
+      return canConsent ? { kind: 'consent', channel: 'whatsapp' } : readonly;
+    case 'email_subscription_status':
+      return canConsent ? { kind: 'consent', channel: 'email' } : readonly;
+    case 'sms_subscription_status':
+      return canConsent ? { kind: 'consent', channel: 'sms' } : readonly;
+    default:
+      return readonly;
+  }
+}
+
+/** Whether the workspace lists any built-in property (email, mobile phone, the subscriptions...): only then is its order the screen's. */
+export const listsStandardProperties = (fields: readonly FieldResponse[] | undefined): boolean =>
+  (fields ?? []).some(
+    (f) => f.isActive && !f.isHidden && (COLUMN_KEYS as readonly string[]).includes(f.key),
+  );
+
+/** The fixed row, and the standard properties that stand in for it when the workspace lists one of them. */
+const FIXED_ROW_PROPERTIES: Readonly<Record<string, readonly string[]>> = {
+  email: ['email'],
+  phone: ['mobile_phone_number', 'phone_number', 'phone'],
+  owner: ['contact_owner'],
+  source: ['source'],
+  whatsapp: ['whatsapp_subscription_status'],
+  emailSubscription: ['email_subscription_status'],
+  smsSubscription: ['sms_subscription_status'],
+  created: ['created_time'],
+  modified: ['modified_time'],
+};
+
 export function buildRows({
   contact,
   fields,
@@ -602,14 +692,14 @@ export function buildRows({
   locale,
   t,
   standard,
+  inOrder = false,
+  canConsent = false,
 }: RowContext): PropertyRow[] {
   const yes = t('contactProps.yes');
   const no = t('contactProps.no');
   const readonly: RowEdit = { kind: 'locked', reason: 'readonly' };
-  const subscription = (status: string | null) =>
-    status
-      ? t(`contactProps.subscription.${status}`, { defaultValue: titleCaseKey(status) })
-      : null;
+  const consent = (channel: 'whatsapp' | 'email' | 'sms'): RowEdit =>
+    canConsent ? { kind: 'consent', channel } : readonly;
   const rows: PropertyRow[] = [
     {
       id: 'email',
@@ -644,26 +734,26 @@ export function buildRows({
     {
       id: 'whatsapp',
       label: t('contactProps.fields.whatsapp'),
-      text: subscription(contact.whatsappSubscriptionStatus),
-      edit: readonly,
+      text: optInText(contact.whatsappSubscriptionStatus, contact.isUnsubscribed, t),
+      edit: consent('whatsapp'),
     },
     {
       id: 'emailSubscription',
       label: t('contactProps.fields.emailSubscription'),
-      text: subscription(contact.emailSubscriptionStatus),
-      edit: readonly,
+      text: optInText(contact.emailSubscriptionStatus, contact.isUnsubscribed, t),
+      edit: consent('email'),
     },
     {
       id: 'smsSubscription',
       label: t('contactProps.fields.smsSubscription'),
-      text: subscription(contact.smsSubscriptionStatus),
-      edit: readonly,
+      text: optInText(contact.smsSubscriptionStatus, contact.isUnsubscribed, t),
+      edit: consent('sms'),
     },
     {
       id: 'marketing',
       label: t('contactProps.fields.marketing'),
       text: contact.isUnsubscribed ? yes : no,
-      edit: readonly,
+      edit: { kind: 'optOut' },
     },
     {
       id: 'leadScore',
@@ -698,14 +788,20 @@ export function buildRows({
     known.add(field.key);
     if (!field.isActive || field.isHidden) continue;
     const lock = lockReasonOf(field);
+    const isColumn = inOrder && (COLUMN_KEYS as readonly string[]).includes(field.key);
     rows.push({
       id: `field:${field.key}`,
       label: field.label,
       text:
-        (isEmptyValue(values[field.key])
+        // A subscription answers from the contact's own label and opt-out, whatever a stray custom value says.
+        (isEmptyValue(values[field.key]) || SUBSCRIPTION_KEYS.includes(field.key)
           ? columnTextOf(contact, field.key, { t, standard, ownerName, locale })
           : null) ?? formatPropertyValue(field, values[field.key], fmt),
-      edit: lock ? { kind: 'locked', reason: lock } : { kind: 'custom', field },
+      edit: isColumn
+        ? columnEdit(field, canConsent)
+        : lock
+          ? { kind: 'locked', reason: lock }
+          : { kind: 'custom', field },
     });
   }
   // Values nobody defined a property for (or all of them, when the definitions cannot be read): shown as they are, under their key.
@@ -718,7 +814,10 @@ export function buildRows({
       edit: readonly,
     });
   }
-  return rows;
+  if (!inOrder) return rows;
+  // The workspace lists these properties itself: they show in its order, so the fixed row that said the same is dropped.
+  const listed = new Set((fields ?? []).filter((f) => f.isActive && !f.isHidden).map((f) => f.key));
+  return rows.filter((row) => !FIXED_ROW_PROPERTIES[row.id]?.some((key) => listed.has(key)));
 }
 
 /** The rows to draw: all of them, or only those that have a value. */
@@ -889,12 +988,15 @@ export interface RowGroup {
 
 /**
  * The rows under the workspace's section headers: the fixed rows first with no header, then one group per section in the
- * order the workspace set (a section with no row to show is left out), then the properties that sit in no section.
+ * order the workspace set (a section with no row to show is left out), then the properties that sit in no section. With
+ * `fixedLast` the fixed rows that remain (the ones the workspace has no property for) come after the properties instead, so
+ * the screen opens with the workspace's own sequence.
  */
 export function groupRows(
   rows: readonly PropertyRow[],
   fields: readonly FieldResponse[] | undefined,
   sections: readonly FieldSectionResponse[] | undefined,
+  { fixedLast = false }: { fixedLast?: boolean } = {},
 ): RowGroup[] {
   const sectionOfKey = new Map<string, string>();
   for (const field of fields ?? []) {
@@ -922,12 +1024,13 @@ export function groupRows(
   }
 
   const groups: RowGroup[] = [];
-  if (fixed.length > 0) groups.push({ title: null, rows: fixed });
+  if (fixed.length > 0 && !fixedLast) groups.push({ title: null, rows: fixed });
   for (const section of ordered) {
     const inSection = bySection.get(section.id);
     if (inSection && inSection.length > 0) groups.push({ title: section.name, rows: inSection });
   }
   if (loose.length > 0) groups.push({ title: null, rows: loose });
+  if (fixed.length > 0 && fixedLast) groups.push({ title: null, rows: fixed });
   return groups;
 }
 

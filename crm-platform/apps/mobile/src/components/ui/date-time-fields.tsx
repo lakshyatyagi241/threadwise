@@ -1,6 +1,7 @@
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -141,6 +142,7 @@ export function DateField({ label, placeholder, error, clearLabel, value, onChan
           {clearLabel && chosen ? (
             <Button
               variant="link"
+              tone="action"
               label={clearLabel}
               onPress={() => {
                 onChange('');
@@ -199,9 +201,9 @@ function Column({
             accessibilityLabel={pad2(n)}
             accessibilityState={{ checked: on }}
             onPress={() => onPick(n)}
-            style={[styles.number, on && { backgroundColor: colors.primary }]}
+            style={[styles.number, on && { backgroundColor: colors.action }]}
           >
-            <Text variant="label" color={on ? 'onPrimary' : 'text'}>
+            <Text variant="label" color={on ? 'onAction' : 'text'}>
               {pad2(n)}
             </Text>
           </Pressable>
@@ -211,7 +213,11 @@ function Column({
   );
 }
 
-/** A time field in the shape of the Geta app's: the time written the phone's way, a clock icon, hour and minute lists in a sheet. */
+/**
+ * A time field in the shape of the Geta app's: the time written the phone's way and a clock icon. On Android it opens the system's
+ * clock dialog (the hour hand, AM/PM, a keyboard switch, Cancel and OK, in the phone's own language and 12 or 24 hour setting) with
+ * Clear inside it; elsewhere it opens hour and minute lists in a sheet.
+ */
 export function TimeField({
   label,
   placeholder,
@@ -229,7 +235,21 @@ export function TimeField({
   const now = new Date();
   const [hour, setHour] = useState(match ? Number(match[1]) : now.getHours());
   const [minute, setMinute] = useState(match ? Number(match[2]) : now.getMinutes());
+  const openClock = () => {
+    const at = new Date();
+    if (match) at.setHours(Number(match[1]), Number(match[2]), 0, 0);
+    DateTimePickerAndroid.open({
+      mode: 'time',
+      value: at,
+      // A time can be taken away again (a task without a due date): the dialog's third button, only while there is one to take.
+      ...(clearLabel && match ? { neutralButton: { label: clearLabel } } : {}),
+      onValueChange: (_event, picked) =>
+        onChange(`${pad2(picked.getHours())}:${pad2(picked.getMinutes())}`),
+      onNeutralButtonPress: () => onChange(''),
+    });
+  };
   const openSheet = () => {
+    if (Platform.OS === 'android') return openClock();
     const again = TIME_TEXT.exec(value);
     const at = new Date();
     setHour(again ? Number(again[1]) : at.getHours());
@@ -262,6 +282,7 @@ export function TimeField({
           {clearLabel && match ? (
             <Button
               variant="link"
+              tone="action"
               label={clearLabel}
               onPress={() => {
                 onChange('');

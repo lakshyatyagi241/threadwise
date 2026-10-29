@@ -13,9 +13,10 @@ import {
   createTask,
   deleteTask,
   getLinkedContact,
+  getTaskActivity,
   getTask,
   listAssignees,
-  listTaskTypes,
+  listTaskOutcomes,
   listTasks,
   reopenTask,
   searchContacts,
@@ -37,6 +38,8 @@ export const taskListKey = (source: TaskListSource, filters: TaskListFilters) =>
   [...taskListsKey, source, filters] as const;
 export const taskKey = (id: string) => [...tasksKey, 'detail', id] as const;
 export const assigneesKey = [...tasksKey, 'assignees'] as const;
+export const taskActivityKey = [...tasksKey, 'activity'] as const;
+export const taskOutcomesKey = [...tasksKey, 'outcomes'] as const;
 export const taskTypesKey = [...tasksKey, 'types'] as const;
 export const contactChoicesKey = (q: string) => [...tasksKey, 'contact-choices', q] as const;
 export const linkedContactKey = (id: string) => [...tasksKey, 'contact', id] as const;
@@ -73,13 +76,39 @@ export const useAssignees = (enabled: boolean) =>
     enabled,
   });
 
-/** The task types the workspace offers, for the "Task type" dropdown of the form. */
-export const useTaskTypes = (enabled: boolean) =>
+/** The workspace's "task" activity: its types and its switches (marking done, outcomes). Types and switches share one request. */
+const useTaskActivity = (enabled: boolean) =>
   useQuery({
-    queryKey: taskTypesKey,
-    queryFn: ({ signal }) => listTaskTypes(signal),
+    queryKey: taskActivityKey,
+    queryFn: ({ signal }) => getTaskActivity(signal),
     enabled,
   });
+
+/** The task types the workspace offers, for the "Task type" dropdown of the form. */
+export function useTaskTypes(enabled: boolean) {
+  const activity = useTaskActivity(enabled);
+  return { ...activity, data: activity.data?.taskTypes ?? [] };
+}
+
+/**
+ * Whether tasks may be marked done (Settings > Sales activities > Task: "Allow users to mark this activity as completed"; on while
+ * the setting is unknown, so a slow answer never takes the button away), and the outcomes the person may pick with it: none when
+ * the workspace switched the picker off ("Predict outcomes") or has no outcome set up.
+ */
+export function useTaskCompletion(enabled: boolean) {
+  const activity = useTaskActivity(enabled);
+  const outcomesOn = activity.data?.outcomesEnabled ?? false;
+  const outcomes = useQuery({
+    queryKey: taskOutcomesKey,
+    queryFn: ({ signal }) => listTaskOutcomes(signal),
+    enabled: enabled && outcomesOn,
+    staleTime: 60_000,
+  });
+  return {
+    allowComplete: activity.data?.allowComplete ?? true,
+    outcomes: outcomesOn ? (outcomes.data ?? []) : [],
+  };
+}
 
 /** Contacts matching the words typed in the picker; the rows stay while the next answer loads. */
 export const useContactChoices = (q: string, enabled: boolean) =>
@@ -116,10 +145,13 @@ function remember(queryClient: QueryClient, task: TaskResponse) {
 }
 
 /** What a toggle needs to know about the task it was made on. */
-export type TaskToggle = Pick<TaskResponse, 'id' | 'rowVersion' | 'status'>;
+export type TaskToggle = Pick<TaskResponse, 'id' | 'rowVersion' | 'status'> & {
+  /** Recorded with a completion; ignored when reopening. */
+  outcomeId?: string | null;
+};
 
 const toggleSignature = (task: TaskToggle) =>
-  `${task.status === 'done' ? 'reopen' : 'complete'}:${task.id}:${task.rowVersion}`;
+  `${task.status === 'done' ? 'reopen' : 'complete'}:${task.id}:${task.rowVersion}:${task.outcomeId ?? ''}`;
 
 /** Completes an open task or reopens a done one, with the version the list showed (a stale one is 409 ROW_VERSION_CONFLICT). */
 export function useToggleTask() {
@@ -131,7 +163,7 @@ export function useToggleTask() {
       const key = keys.keyFor(toggleSignature(task));
       return task.status === 'done'
         ? reopenTask(task.id, task.rowVersion, key)
-        : completeTask(task.id, task.rowVersion, key);
+        : completeTask(task.id, task.rowVersion, key, task.outcomeId);
     },
     onError: (error, task) => keys.failed(toggleSignature(task), error),
     onSuccess: (task, sent) => {

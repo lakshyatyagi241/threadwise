@@ -141,6 +141,18 @@ describe('ContactDetailScreen', () => {
     expect(screen.getByText('more tab')).toBeTruthy();
   });
 
+  it('lists the tabs as Contact details, Activities, Stats, More', async () => {
+    sessionCall.mockResolvedValue(sessionAll);
+    await show();
+    await screen.findByRole('radio', { name: 'Stats' });
+    const tabs = ['Contact details', 'Activities', 'Stats', 'More'];
+    const names = screen
+      .getAllByRole('radio')
+      .map((tab) => tab.props.accessibilityLabel as string)
+      .filter((name) => tabs.includes(name));
+    expect(names).toEqual(tabs);
+  });
+
   it('leaves out what the contact does not have', async () => {
     getCall.mockResolvedValue(phoneOnly);
     tagsCall.mockResolvedValue([]);

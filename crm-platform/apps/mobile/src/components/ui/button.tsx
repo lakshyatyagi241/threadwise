@@ -10,6 +10,8 @@ interface Props extends Omit<PressableProps, 'children' | 'style'> {
   /** `primary` is the one action of a screen, `secondary` an alternative, `danger` the one that cannot be undone (delete account), `link` a quiet text action (it sits inside a sentence of UI). */
   variant?: 'primary' | 'secondary' | 'danger' | 'link';
   loading?: boolean;
+  /** The colour of a `link`'s text: the blue of links, or the indigo of the buttons beside it (a sheet whose Done button is indigo). */
+  tone?: 'primary' | 'action';
   /** Where a `link` sits in its row: centred (after a sentence), or at the start, lined up with the fields above it. */
   align?: 'center' | 'start';
 }
@@ -19,6 +21,7 @@ export function Button({
   variant = 'primary',
   loading = false,
   align = 'center',
+  tone = 'primary',
   disabled,
   accessibilityLabel,
   ...rest
@@ -33,7 +36,7 @@ export function Button({
     : danger
       ? colors.onDanger
       : link
-        ? colors.primary
+        ? colors[tone]
         : colors.text;
   return (
     <Pressable

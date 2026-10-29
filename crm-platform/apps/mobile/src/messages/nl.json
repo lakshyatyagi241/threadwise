@@ -1680,7 +1680,6 @@
         "title": "Activiteit",
         "notes": "Notities",
         "tasks": "Taken",
-        "meetings": "Afspraken",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1844,12 +1843,11 @@
       "description": "Beschrijving",
       "priority": "Prioriteit",
       "status": "Status",
-      "owner": "Eigenaar",
+      "owner": "Contacteigenaar",
       "relatedTo": "Gerelateerd aan",
       "noDescription": "Geen beschrijving",
       "noDue": "Geen deadline",
       "unassigned": "Niet toegewezen",
-      "noContact": "Geen",
       "openContact": "{{name}} openen",
       "markComplete": "Als voltooid markeren",
       "reopen": "Heropenen",
@@ -1905,7 +1903,16 @@
       "typeNames": {
         "follow_up": "Opvolgen",
         "call_reminder": "Belherinnering"
-      }
+      },
+      "markDone": "Markeren als voltooid",
+      "savedNotCompleted": "De taak is opgeslagen, maar kon niet als voltooid worden gemarkeerd. Probeer het opnieuw."
+    },
+    "outcome": {
+      "label": "Resultaat",
+      "none": "Geen resultaat",
+      "hiddenName": "{{name}} (verborgen)",
+      "placeholder": "Kies een resultaat (optioneel)",
+      "completeTitle": "Taak voltooien"
     }
   },
   "deals": {
@@ -2277,6 +2284,7 @@
     "clear": "Wissen",
     "yes": "Ja",
     "no": "Nee",
+    "optedOut": "Afgemeld",
     "rowHint": "Opent de editor",
     "locked": "Je kunt {{label}} niet bewerken",
     "webOnly": "{{label}} kan alleen in de webapp worden bewerkt.",
@@ -2300,6 +2308,17 @@
       "subscribed": "Geabonneerd",
       "unsubscribed": "Afgemeld",
       "pending": "In afwachting"
+    },
+    "consent": {
+      "intro": "Leg vast of dit contact heeft ingestemd met marketing via dit kanaal.",
+      "noteRequiredLabel": "Hoe is er ingestemd? (verplicht)",
+      "noteOptionalLabel": "Notitie (optioneel)",
+      "noteHint": "Wat het contact heeft gezegd of ondertekend, en waar.",
+      "noteRequired": "Geef aan hoe het contact heeft ingestemd voordat je opslaat."
+    },
+    "optOut": {
+      "label": "Afgemeld voor marketing",
+      "hint": "Als dit aan staat, ontvangt dit contact op geen enkel kanaal marketingberichten."
     },
     "editor": {
       "title": "{{label}} bewerken",

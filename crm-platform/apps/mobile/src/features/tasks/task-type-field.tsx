@@ -8,6 +8,7 @@ import { Text } from '@/components/ui/text';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { type TaskTypeChoice } from './task-validation';
+import { taskTypeName } from './task-type-name';
 import { useTaskTypes } from './use-tasks';
 
 interface Props {
@@ -16,15 +17,6 @@ interface Props {
   current: ActivityOptionRef | null;
   onChange: (value: TaskTypeChoice) => void;
 }
-
-/** "follow_up" is "Follow up": the word for a type of the workspace that has no translation. */
-const humanKey = (key: string): string => {
-  const words = key
-    .replace(/^custom_/, '')
-    .replace(/_/g, ' ')
-    .trim();
-  return words ? words.charAt(0).toUpperCase() + words.slice(1) : key;
-};
 
 /**
  * The task type (Settings > Sales activities: Follow up, Call reminder, or the workspace's own), a dropdown under the contact. A
@@ -40,8 +32,7 @@ export function TaskTypeField({ value, current, onChange }: Props) {
   const kept = current && !offered.some((o) => o.id === current.id) ? current : null;
   if (offered.length === 0 && !kept) return null;
 
-  const nameOf = (o: { key: string; name: string | null }) =>
-    o.name ?? t(`tasks.form.typeNames.${o.key}`, { defaultValue: humanKey(o.key) });
+  const nameOf = (o: { key: string; name: string | null }) => taskTypeName(t, o);
   const shown = offered.find((o) => o.id === value) ?? (kept && kept.id === value ? kept : null);
   const choose = (next: TaskTypeChoice) => {
     onChange(next);

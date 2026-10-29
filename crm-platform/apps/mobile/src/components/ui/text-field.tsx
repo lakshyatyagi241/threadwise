@@ -20,6 +20,8 @@ export interface TextFieldProps extends Omit<TextInputProps, 'style'> {
   inputRef?: Ref<TextFieldHandle>;
   /** Only the input: no visible label, box, hint or error text, for a form that lays out its own rows (the label is still the name). */
   bare?: boolean;
+  /** A taller box for a long text (a description): the input is at least this high however many lines `numberOfLines` gets on this device. */
+  minInputHeight?: number;
 }
 
 /**
@@ -34,6 +36,7 @@ export function TextField({
   code,
   inputRef,
   bare,
+  minInputHeight,
   onFocus,
   onBlur,
   ...rest
@@ -82,6 +85,7 @@ export function TextField({
           style={[
             styles.input,
             code && styles.code,
+            minInputHeight !== undefined && { minHeight: minInputHeight },
             { color: disabled ? colors.textMuted : colors.text },
           ]}
         />

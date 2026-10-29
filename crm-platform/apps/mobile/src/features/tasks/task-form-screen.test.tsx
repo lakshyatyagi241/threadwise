@@ -1,6 +1,8 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { StyleSheet } from 'react-native';
+import { palette } from '@/lib/theme/tokens';
 import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
 import { aarav } from '@/test/contacts-fixtures';
@@ -12,7 +14,11 @@ import {
   sessionTasksComplete,
   sessionTasksFull,
   sessionTasksReadOnly,
+  taskActivity,
+  taskOutcomes,
   team,
+  INTERESTED,
+  LEFT_MESSAGE,
 } from '@/test/tasks-fixtures';
 import * as api from './api';
 import { showDate, showTime } from '@/components/ui/date-time-fields';
@@ -31,7 +37,10 @@ const getCall = jest.mocked(api.getTask);
 const teamCall = jest.mocked(api.listAssignees);
 const searchCall = jest.mocked(api.searchContacts);
 const contactCall = jest.mocked(api.getLinkedContact);
-const typesCall = jest.mocked(api.listTaskTypes);
+const activityCall = jest.mocked(api.getTaskActivity);
+const outcomesCall = jest.mocked(api.listTaskOutcomes);
+const completeCall = jest.mocked(api.completeTask);
+const reopenCall = jest.mocked(api.reopenTask);
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
 const DEV = team[1]!;
@@ -87,7 +96,9 @@ beforeEach(() => {
   teamCall.mockResolvedValue(team);
   searchCall.mockResolvedValue(contactChoices);
   contactCall.mockResolvedValue(aarav);
-  typesCall.mockResolvedValue([]);
+  activityCall.mockResolvedValue(taskActivity());
+  outcomesCall.mockResolvedValue(taskOutcomes);
+  completeCall.mockResolvedValue({ ...callAarav, status: 'done', rowVersion: 3 });
 });
 afterEach(async () => {
   if (client) {
@@ -101,6 +112,7 @@ describe('adding a task', () => {
     await show();
     expect(await screen.findByRole('header', { name: 'Add task' })).toBeTruthy();
     const order = [
+      screen.getByRole('checkbox', { name: 'Mark as Completed' }),
       screen.getByLabelText('Task title'),
       screen.getByLabelText('Task description'),
       screen.getByRole('button', { name: 'Link contact (optional)' }),
@@ -109,7 +121,12 @@ describe('adding a task', () => {
       screen.getByRole('button', { name: 'Time' }),
       screen.getByRole('button', { name: 'Owner' }),
     ];
-    expect(order).toHaveLength(7);
+    expect(order).toHaveLength(8);
+    expect(
+      screen.getByRole('checkbox', { name: 'Mark as Completed' }).props.accessibilityState.checked,
+    ).toBe(false);
+    // The workspace's outcome picker is off here, so there is no Outcome field.
+    expect(screen.queryByRole('button', { name: 'Outcome' })).toBeNull();
     expect(screen.getByLabelText('Task title').props.placeholder).toBe('Enter title');
     expect(valueOf('Link contact (optional)')).toBe('Type to search contact…');
     expect(valueOf('Priority')).toBe('Medium');
@@ -119,6 +136,29 @@ describe('adding a task', () => {
     expect(valueOf('Owner')).toBe('Me');
     // The workspace has no task types here, so there is no dropdown for them.
     expect(screen.queryByRole('button', { name: 'Task type' })).toBeNull();
+  });
+
+  it('draws the description as a big box, taller than a one-line field', async () => {
+    await show();
+    const style = StyleSheet.flatten(
+      (await screen.findByLabelText('Task description')).props.style,
+    );
+    expect(style.minHeight).toBeGreaterThanOrEqual(120);
+    expect(
+      StyleSheet.flatten(screen.getByLabelText('Task title').props.style).minHeight,
+    ).toBeLessThan(style.minHeight);
+  });
+
+  it('colours the picked hour and minute, the Done button and Clear the same indigo as the buttons', async () => {
+    await show();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Time' }));
+    const picked = within(screen.getByLabelText('Hour')).getAllByRole('radio', {
+      checked: true,
+    })[0]!;
+    const fill = StyleSheet.flatten(picked.props.style).backgroundColor;
+    expect(fill).toBe(palette.light.action);
+    const done = StyleSheet.flatten(screen.getByRole('button', { name: 'Done' }).props.style);
+    expect(done.backgroundColor).toBe(fill);
   });
 
   it('creates the task with just a title, for me, with the default priority', async () => {
@@ -251,7 +291,7 @@ describe('adding a task', () => {
     ] as const;
 
     it('offers the workspace’s types, named in the app’s words, and sends the one chosen', async () => {
-      typesCall.mockResolvedValue([...types]);
+      activityCall.mockResolvedValue(taskActivity({ taskTypes: [...types] }));
       await show();
       await typeTitle('Call');
       expect(await screen.findByRole('button', { name: 'Task type' })).toBeTruthy();
@@ -271,7 +311,7 @@ describe('adding a task', () => {
     });
 
     it('sends no type when none is chosen', async () => {
-      typesCall.mockResolvedValue([...types]);
+      activityCall.mockResolvedValue(taskActivity({ taskTypes: [...types] }));
       await show();
       await typeTitle('Call');
       await screen.findByRole('button', { name: 'Task type' });
@@ -501,6 +541,169 @@ describe('adding a task', () => {
     expect(await screen.findByText("You can't add tasks")).toBeTruthy();
     expect(screen.queryByLabelText('Task title')).toBeNull();
     sessionCall.mockResolvedValue(sessionNoTasks);
+  });
+});
+
+describe('completing and the outcome', () => {
+  const DONE = { ...callAarav, status: 'done' as const, rowVersion: 3 };
+  const withOutcomes = () =>
+    activityCall.mockResolvedValue(taskActivity({ outcomesEnabled: true }));
+
+  it('creates the task, then completes it, when Mark as Completed is ticked', async () => {
+    createCall.mockResolvedValue(callAarav);
+    completeCall.mockResolvedValue(DONE);
+    await show();
+    await typeTitle('Call Aarav');
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Mark as Completed' }));
+    await save();
+    await waitFor(() => expect(createCall).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), null),
+    );
+    await waitFor(() => expect(router.back).toHaveBeenCalled());
+  });
+
+  it('offers the outcomes, and sends the one picked with the new task and its completion', async () => {
+    withOutcomes();
+    createCall.mockResolvedValue(callAarav);
+    completeCall.mockResolvedValue(DONE);
+    await show();
+    await typeTitle('Call Aarav');
+    expect(await screen.findByRole('button', { name: 'Outcome' })).toBeTruthy();
+    expect(valueOf('Outcome')).toBe('Select outcome (optional)');
+    await fireEvent.press(screen.getByRole('button', { name: 'Outcome' }));
+    expect(screen.getByRole('radio', { name: 'Left message' })).toBeTruthy();
+    await fireEvent.press(screen.getByRole('radio', { name: 'Interested' }));
+    expect(valueOf('Outcome')).toBe('Interested');
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Mark as Completed' }));
+    await save();
+    await waitFor(() =>
+      expect(createCall).toHaveBeenCalledWith(
+        { title: 'Call Aarav', priority: 'medium', dueAt: NOW, outcomeId: INTERESTED },
+        expect.any(String),
+      ),
+    );
+    await waitFor(() =>
+      expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), INTERESTED),
+    );
+  });
+
+  it('does not complete a task when the box is not ticked', async () => {
+    await show();
+    await typeTitle('Call Aarav');
+    await save();
+    await waitFor(() => expect(router.back).toHaveBeenCalled());
+    expect(completeCall).not.toHaveBeenCalled();
+  });
+
+  it('keeps the task it saved when completing fails, and does not add it twice on a retry', async () => {
+    createCall.mockResolvedValue(callAarav);
+    completeCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    completeCall.mockResolvedValueOnce(DONE);
+    await show();
+    await typeTitle('Call Aarav');
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Mark as Completed' }));
+    await save();
+    expect(
+      await screen.findByText(
+        "The task was saved, but it couldn't be marked as completed. Try again.",
+      ),
+    ).toBeTruthy();
+    expect(router.back).not.toHaveBeenCalled();
+    await save();
+    await waitFor(() => expect(completeCall).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(router.back).toHaveBeenCalled());
+    expect(createCall).toHaveBeenCalledTimes(1);
+  });
+
+  it('hides Mark as Completed when the workspace does not allow it', async () => {
+    activityCall.mockResolvedValue(taskActivity({ allowComplete: false }));
+    await show();
+    await screen.findByLabelText('Task title');
+    await waitFor(() =>
+      expect(screen.queryByRole('checkbox', { name: 'Mark as Completed' })).toBeNull(),
+    );
+  });
+
+  describe('on an open task', () => {
+    beforeEach(() => {
+      jest.mocked(useLocalSearchParams).mockReturnValue({ taskId: callAarav.id });
+    });
+
+    it('updates what changed, then completes with the version the update returned', async () => {
+      withOutcomes();
+      updateCall.mockResolvedValue({ ...callAarav, title: 'Call Aarav today', rowVersion: 3 });
+      completeCall.mockResolvedValue({ ...DONE, rowVersion: 4 });
+      await show();
+      await typeTitle('Call Aarav today');
+      await fireEvent.press(screen.getByRole('checkbox', { name: 'Mark as Completed' }));
+      await fireEvent.press(await screen.findByRole('button', { name: 'Outcome' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'Left message' }));
+      await save();
+      await waitFor(() =>
+        expect(updateCall).toHaveBeenCalledWith(
+          callAarav.id,
+          { title: 'Call Aarav today', outcomeId: LEFT_MESSAGE, rowVersion: 2 },
+          expect.any(String),
+        ),
+      );
+      await waitFor(() =>
+        expect(completeCall).toHaveBeenCalledWith(
+          callAarav.id,
+          3,
+          expect.any(String),
+          LEFT_MESSAGE,
+        ),
+      );
+      await waitFor(() => expect(router.back).toHaveBeenCalled());
+    });
+
+    it('completes straight away when nothing else changed', async () => {
+      completeCall.mockResolvedValue(DONE);
+      await show();
+      await screen.findByLabelText('Task title');
+      await fireEvent.press(screen.getByRole('checkbox', { name: 'Mark as Completed' }));
+      await save();
+      await waitFor(() =>
+        expect(completeCall).toHaveBeenCalledWith(callAarav.id, 2, expect.any(String), null),
+      );
+      expect(updateCall).not.toHaveBeenCalled();
+    });
+
+    it('shows the outcome the task holds even when it was hidden since', async () => {
+      withOutcomes();
+      getCall.mockResolvedValue({
+        ...callAarav,
+        outcome: {
+          id: '83333333-3333-4333-8333-333333333333',
+          name: 'Old result',
+          isActive: false,
+        },
+      });
+      await show();
+      await screen.findByLabelText('Task title');
+      await waitFor(() => expect(valueOf('Outcome')).toBe('Old result (hidden)'));
+    });
+  });
+
+  describe('on a done task', () => {
+    beforeEach(() => {
+      jest.mocked(useLocalSearchParams).mockReturnValue({ taskId: callAarav.id });
+      getCall.mockResolvedValue(DONE);
+    });
+
+    it('starts ticked, and reopens the task when it is cleared', async () => {
+      reopenCall.mockResolvedValue(callAarav);
+      await show();
+      await screen.findByLabelText('Task title');
+      const box = () => screen.getByRole('checkbox', { name: 'Mark as Completed' });
+      expect(box().props.accessibilityState.checked).toBe(true);
+      await fireEvent.press(box());
+      await save();
+      await waitFor(() =>
+        expect(reopenCall).toHaveBeenCalledWith(callAarav.id, 3, expect.any(String)),
+      );
+    });
   });
 });
 

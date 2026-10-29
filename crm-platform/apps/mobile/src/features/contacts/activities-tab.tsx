@@ -15,7 +15,7 @@ interface Props {
 
 /**
  * The Activities tab: "All activities" is the shortcuts (call, chat, email, text, tasks, notes) and how much is logged
- * (notes, tasks, meetings), each a way into its own list; "Activity timeline" is what happened with the contact, newest
+ * (notes and tasks), each a way into its own list; "Activity timeline" is what happened with the contact, newest
  * first, where people who may update contacts log an entry of their own.
  */
 export function ActivitiesTab({ contactId, canUpdate, actions }: Props) {

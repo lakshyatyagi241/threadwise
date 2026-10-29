@@ -1,25 +1,29 @@
-import type { ActivityOptionRef, TaskPriority } from '@crm/contracts';
+import type { ActivityOptionRef, TaskOutcomeRef, TaskPriority } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import { Banner } from '@/components/ui/banner';
+import { Checkbox } from '@/components/ui/checkbox';
 import { HeaderIconButton } from '@/components/ui/screen-header';
 import { DateField, TimeField } from '@/components/ui/date-time-fields';
 import { SelectField } from '@/components/ui/select-field';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
-import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
+import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { ContactField } from './contact-field';
 import { PRIORITY_CHOICES } from './filters';
 import { OwnerField } from './owner-field';
+import { OutcomeField } from './task-outcome';
+import { useTaskCompletion } from './use-tasks';
 import { TaskTypeField } from './task-type-field';
 import {
   validateTask,
@@ -27,6 +31,9 @@ import {
   type TaskField,
   type TaskFormValues,
 } from './task-validation';
+
+/** The description box is a big one, as in the Geta app's form, so a few lines of text are visible without scrolling. */
+const DESCRIPTION_MIN_HEIGHT = CONTROL_HEIGHT * 2.5;
 
 interface Props {
   /** `create` or `edit`: only the header title differs. */
@@ -36,6 +43,10 @@ interface Props {
   fixedContact: ContactChoice | null;
   /** The task type the task holds now (edit), so one removed since still shows. */
   currentType: ActivityOptionRef | null;
+  /** The outcome the task holds now (edit), so one hidden since still shows. */
+  currentOutcome: TaskOutcomeRef | null;
+  /** The task is done already (opened for edit): it can be reopened by clearing "Mark as Completed". */
+  wasDone: boolean;
   /** The fixed contact's name is still on its way. */
   contactLoading: boolean;
   canListTeam: boolean;
@@ -54,9 +65,9 @@ interface Props {
 }
 
 /**
- * The form to add a task and to edit one, under its own header whose check button saves, in the order of the Geta app's: title,
+ * The form to add a task and to edit one, under its own header whose check button saves, in the order of the Geta app's: "Mark as Completed", title,
  * description, the linked contact, the task type, priority, the due date and time side by side (each a field with a picker in a
- * sheet), and the owner. The client
+ * sheet), the owner and the outcome. The client
  * checks what the API's schema checks; everything else is the server's answer, shown under the field or above the form.
  */
 export function TaskEditor({
@@ -64,6 +75,8 @@ export function TaskEditor({
   initial,
   fixedContact,
   currentType,
+  currentOutcome,
+  wasDone,
   contactLoading,
   canListTeam,
   canPickContact,
@@ -79,6 +92,9 @@ export function TaskEditor({
   const { colors } = useTheme();
   const [values, setValues] = useState(initial);
   const [checked, setChecked] = useState<Partial<Record<TaskField, string>>>({});
+  const completion = useTaskCompletion(true);
+  // Marking done may be switched off for tasks (Settings > Sales activities); a task that is done already can still be reopened.
+  const canMarkDone = completion.allowComplete || wasDone;
 
   const change = <K extends keyof TaskFormValues>(field: K, value: TaskFormValues[K]) => {
     setValues({ ...values, [field]: value });
@@ -108,13 +124,19 @@ export function TaskEditor({
       <StackHeader
         title={mode === 'edit' ? t('tasks.form.editTitle') : t('tasks.form.addTitle')}
         onBack={onBack}
+        centered
         actions={
           pending ? (
             <View style={styles.saving}>
               <ActivityIndicator accessibilityLabel={t('tasks.form.saving')} />
             </View>
           ) : (
-            <HeaderIconButton icon="checkmark" label={t('tasks.form.save')} onPress={submit} />
+            <HeaderIconButton
+              icon="checkmark"
+              label={t('tasks.form.save')}
+              color="action"
+              onPress={submit}
+            />
           )
         }
       />
@@ -122,6 +144,22 @@ export function TaskEditor({
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
           {notice ? <Banner tone="warning" message={notice} /> : null}
           {banner ? <Banner tone="danger" message={banner} /> : null}
+          {canMarkDone ? (
+            <View style={styles.markDone}>
+              <Checkbox
+                checked={values.markDone}
+                onChange={(v) => change('markDone', v)}
+                label={t('tasks.form.markDone')}
+              />
+              <Pressable
+                accessible={false}
+                importantForAccessibility="no-hide-descendants"
+                onPress={() => change('markDone', !values.markDone)}
+              >
+                <Text>{t('tasks.form.markDone')}</Text>
+              </Pressable>
+            </View>
+          ) : null}
           <TextField
             label={t('tasks.form.title')}
             placeholder={t('tasks.form.titlePlaceholder')}
@@ -140,6 +178,7 @@ export function TaskEditor({
             autoCapitalize="sentences"
             multiline
             numberOfLines={4}
+            minInputHeight={DESCRIPTION_MIN_HEIGHT}
             textAlignVertical="top"
           />
           {fixedContact ? (
@@ -212,6 +251,12 @@ export function TaskEditor({
             canListTeam={canListTeam}
             myId={myId}
           />
+          <OutcomeField
+            outcomes={completion.outcomes}
+            value={values.outcomeId}
+            current={currentOutcome}
+            onChange={(v) => change('outcomeId', v)}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -222,6 +267,7 @@ const styles = StyleSheet.create({
   fill: { flex: 1 },
   content: { padding: spacing.lg, gap: spacing.lg },
   group: { gap: spacing.sm },
+  markDone: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   pair: { flexDirection: 'row', gap: spacing.md },
   half: { flex: 1 },
   saving: {

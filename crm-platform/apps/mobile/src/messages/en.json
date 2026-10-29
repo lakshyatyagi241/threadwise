@@ -1680,7 +1680,6 @@
         "title": "Activity",
         "notes": "Notes",
         "tasks": "Tasks",
-        "meetings": "Meetings",
         "rowLabel": "{{label}}, {{count}}",
         "atLeast": "{{count}}+"
       },
@@ -1844,14 +1843,13 @@
       "description": "Description",
       "priority": "Priority",
       "status": "Status",
-      "owner": "Owner",
+      "owner": "Contact Owner",
       "relatedTo": "Related to",
       "noDescription": "No description",
       "noDue": "No due date",
       "unassigned": "Unassigned",
-      "noContact": "None",
       "openContact": "Open {{name}}",
-      "markComplete": "Mark as complete",
+      "markComplete": "Mark as Complete",
       "reopen": "Reopen",
       "conflict": "This task was changed by someone else. It has been reloaded."
     },
@@ -1905,7 +1903,16 @@
       "typeNames": {
         "follow_up": "Follow up",
         "call_reminder": "Call reminder"
-      }
+      },
+      "markDone": "Mark as Completed",
+      "savedNotCompleted": "The task was saved, but it couldn't be marked as completed. Try again."
+    },
+    "outcome": {
+      "label": "Outcome",
+      "none": "No outcome",
+      "hiddenName": "{{name}} (hidden)",
+      "placeholder": "Select outcome (optional)",
+      "completeTitle": "Complete task"
     }
   },
   "deals": {
@@ -2277,6 +2284,7 @@
     "clear": "Clear",
     "yes": "Yes",
     "no": "No",
+    "optedOut": "Opted out",
     "rowHint": "Opens the editor",
     "locked": "You can't edit {{label}}",
     "webOnly": "{{label}} can only be edited from the web app.",
@@ -2300,6 +2308,17 @@
       "subscribed": "Subscribed",
       "unsubscribed": "Unsubscribed",
       "pending": "Pending"
+    },
+    "consent": {
+      "intro": "Record whether this contact agreed to receive marketing on this channel.",
+      "noteRequiredLabel": "How did they agree? (required)",
+      "noteOptionalLabel": "Note (optional)",
+      "noteHint": "What the contact said or signed, and where.",
+      "noteRequired": "Say how the contact agreed before saving."
+    },
+    "optOut": {
+      "label": "Opted out of marketing",
+      "hint": "When on, marketing messages are not sent to this contact on any channel."
     },
     "editor": {
       "title": "Edit {{label}}",

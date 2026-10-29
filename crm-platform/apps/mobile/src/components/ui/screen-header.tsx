@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
+import { MIN_TOUCH_TARGET, spacing, type ThemeColors } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { Icon, MaterialIcon, type IconName, type MaterialIconName } from './icon';
 
@@ -36,10 +36,12 @@ interface ButtonProps {
   /** A small dot on the corner: something is switched on behind this button (a filter). */
   dot?: boolean;
   testID?: string;
+  /** The colour of the icon; the text colour unless a screen's main action (Save) takes the colour of its buttons. */
+  color?: keyof ThemeColors;
 }
 
 /** A square icon button with the 48 point tap target; the label is what a screen reader says. */
-export function HeaderIconButton({ icon, label, onPress, dot, testID }: ButtonProps) {
+export function HeaderIconButton({ icon, label, onPress, dot, testID, color }: ButtonProps) {
   const { colors } = useTheme();
   return (
     <Pressable
@@ -50,9 +52,9 @@ export function HeaderIconButton({ icon, label, onPress, dot, testID }: ButtonPr
       style={styles.button}
     >
       {typeof icon === 'string' ? (
-        <Icon name={icon} size={22} />
+        <Icon name={icon} size={22} color={color} />
       ) : (
-        <MaterialIcon name={icon.material} size={24} />
+        <MaterialIcon name={icon.material} size={24} color={color} />
       )}
       {dot ? <View style={[styles.dot, { backgroundColor: colors.danger }]} /> : null}
     </Pressable>

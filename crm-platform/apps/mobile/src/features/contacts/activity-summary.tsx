@@ -8,7 +8,6 @@ import { Text } from '@/components/ui/text';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { listContactTasksForSummary } from './task-summary-api';
-import { useContactMeetings } from './use-meetings';
 import { useContactNotes } from './use-notes';
 
 /** One page is plenty for a count on a summary row; a contact rarely has more open tasks than this. */
@@ -55,8 +54,8 @@ function SummaryRow({ icon, label, info, disabled, onPress }: RowProps) {
 }
 
 /**
- * How much is logged against the contact — notes, tasks and meetings — each a row that opens the full list (WD-CON-007: the
- * detail page's Activities summary). Reading notes and meetings takes the same permission as reading the contact; tasks take
+ * How much is logged against the contact — notes and tasks — each a row that opens the full list (WD-CON-007: the
+ * detail page's Activities summary). Reading notes takes the same permission as reading the contact (meetings are not listed here); tasks take
  * their own, so that row is offered faded when the person may not open it, the same as the shortcut above does.
  */
 export function ActivitySummary({ contactId }: { contactId: string }) {
@@ -67,7 +66,6 @@ export function ActivitySummary({ contactId }: { contactId: string }) {
   const canReadTasks = can(session.data, 'record.tasks.read');
 
   const notes = useContactNotes(contactId, canReadContact);
-  const meetings = useContactMeetings(contactId, canReadContact);
   const tasks = useQuery({
     queryKey: ['contacts', 'task-summary', contactId],
     queryFn: ({ signal }) => listContactTasksForSummary(contactId, TASK_COUNT_LIMIT, signal),
@@ -90,12 +88,6 @@ export function ActivitySummary({ contactId }: { contactId: string }) {
           info={countOf(tasks.data)}
           disabled={!canReadTasks}
           onPress={() => router.push({ pathname: '/tasks', params: { contactId } })}
-        />
-        <SummaryRow
-          icon="calendar-outline"
-          label={t('contacts.detail.summary.meetings')}
-          info={countOf(meetings.data?.pages[0])}
-          onPress={() => router.push({ pathname: '/contact-meetings', params: { contactId } })}
         />
       </View>
     </Card>

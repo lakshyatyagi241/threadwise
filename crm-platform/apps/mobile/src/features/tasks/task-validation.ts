@@ -33,6 +33,10 @@ export interface TaskFormValues {
   assignee: AssigneeChoice;
   contact: ContactChoice | null;
   taskTypeId: TaskTypeChoice;
+  /** The task outcome id, or `null` for none. */
+  outcomeId: string | null;
+  /** "Mark as Completed": the task is saved, then completed (or, on a done task, left done). */
+  markDone: boolean;
 }
 
 /** The fields a message can sit under. */
@@ -60,6 +64,8 @@ export const EMPTY_TASK: TaskFormValues = {
   assignee: { kind: 'me' },
   contact: null,
   taskTypeId: null,
+  outcomeId: null,
+  markDone: false,
 };
 
 /**
@@ -119,6 +125,7 @@ export function buildCreateBody(values: TaskFormValues): CreateTaskInput {
     ...assigneeBody(values.assignee),
     ...(values.contact ? { contactId: values.contact.id } : {}),
     ...(values.taskTypeId ? { taskTypeId: values.taskTypeId } : {}),
+    ...(values.outcomeId ? { outcomeId: values.outcomeId } : {}),
   };
 }
 
@@ -141,6 +148,8 @@ export function valuesOfTask(task: TaskResponse, myId: string | undefined): Task
     assignee,
     contact: task.contact ? { id: task.contact.id, name: task.contact.name ?? '' } : null,
     taskTypeId: task.taskType?.id ?? null,
+    outcomeId: task.outcome?.id ?? null,
+    markDone: task.status === 'done',
   };
 }
 
@@ -184,6 +193,7 @@ export function buildUpdateBody(
   if (contactAfter !== (task.contact?.id ?? null)) body.contactId = contactAfter;
 
   if (values.taskTypeId !== (task.taskType?.id ?? null)) body.taskTypeId = values.taskTypeId;
+  if (values.outcomeId !== (task.outcome?.id ?? null)) body.outcomeId = values.outcomeId;
   return body;
 }
 

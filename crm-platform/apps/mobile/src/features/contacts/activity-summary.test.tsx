@@ -54,8 +54,15 @@ describe('ActivitySummary', () => {
   it('counts each list from its first page', async () => {
     await show();
     expect(await screen.findByRole('button', { name: 'Notes, 1' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Meetings, 1' })).toBeTruthy();
     await waitFor(() => expect(screen.getByRole('button', { name: 'Tasks, 0' })).toBeTruthy());
+  });
+
+  it('does not list meetings, and does not ask for them', async () => {
+    await show();
+    await screen.findByRole('button', { name: 'Notes, 1' });
+    await settled(client!);
+    expect(screen.queryByText('Meetings')).toBeNull();
+    expect(meetingsCall).not.toHaveBeenCalled();
   });
 
   it('says "N+" when a list has more than the page it read', async () => {
@@ -64,7 +71,7 @@ describe('ActivitySummary', () => {
     expect(await screen.findByRole('button', { name: 'Notes, 1+' })).toBeTruthy();
   });
 
-  it('opens the notes, the tasks and the meetings of the contact', async () => {
+  it('opens the notes and the tasks of the contact', async () => {
     await show();
     await fireEvent.press(await screen.findByRole('button', { name: 'Notes, 1' }));
     expect(router.push).toHaveBeenCalledWith({
@@ -74,11 +81,6 @@ describe('ActivitySummary', () => {
     await fireEvent.press(await screen.findByRole('button', { name: 'Tasks, 0' }));
     expect(router.push).toHaveBeenCalledWith({
       pathname: '/tasks',
-      params: { contactId: CONTACT_ID },
-    });
-    await fireEvent.press(screen.getByRole('button', { name: 'Meetings, 1' }));
-    expect(router.push).toHaveBeenCalledWith({
-      pathname: '/contact-meetings',
       params: { contactId: CONTACT_ID },
     });
   });
