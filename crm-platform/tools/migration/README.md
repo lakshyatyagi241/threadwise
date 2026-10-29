@@ -535,6 +535,10 @@ Rules (load/update.ts):
 10. The verifier accepts `row_version` = the recorded `written_version` on a row the tool updated (any other version is a later edit and is
     an alarm, as before). Its independent oracle did not change: the expected final state is the same, `update` makes the target reach it.
 
+## Who created a contact list (`groups`)
+
+Waboo writes the creator's DISPLAY NAME into a list's `created_by` ("AHMAD SHAIKH") and the creator's id into `user_id` (`MarketingList/List.py`). `groups` reads the creator from `user_id` (through `id_map`, as every other user reference), and only then tries `created_by` as an id; a list whose creator does not resolve keeps `created_by` empty and loads. Before this, `created_by` (a name) never resolved, so every migrated list showed no creator. Lists already loaded are corrected by update mode: `update --client <c> --steps groups` (dry run first). `test/groups-creator.pure.spec.ts`.
+
 ## Contact files (`contact_files`, step `contact_files`)
 
 A Waboo `contact_files` document is only the label of a file (`file_name`, `file_size` as a rounded display string, `file_type` as an extension, `uploaded_by` as a display name, `created_by` user id, `uploaded_at`, `downloads`, `is_deleted`); it has **no address**. The file is the `attachments` registry row with **the same `id`** (rhythm: 3 of 3 match; `source` = https address without a query, plus `directory_prefix`, `file_extension`, `file_size`). Both are read together. iskm has no contact files (its `attachments` rows are import logs, knowledge-base and message media with no target yet).
