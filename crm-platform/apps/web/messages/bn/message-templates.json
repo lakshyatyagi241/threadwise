@@ -380,7 +380,7 @@
           "quickReplyVariable": "কুইক রিপ্লাইয়ে কোনো ভেরিয়েবল থাকতে পারে না।",
           "urlExampleRequired": "URL ভেরিয়েবলের জন্য একটি নমুনা মান দিন।",
           "quickReplyPosition": "কুইক রিপ্লাই একসাথে, বাটনের শুরুতে বা শেষে থাকতে হবে।",
-          "flowIdRequired": "Flow ID লিখুন।",
+          "flowIdRequired": "তালিকা থেকে একটি WhatsApp ফর্ম বেছে নিন।",
           "flowIdInvalid": "Flow ID একটি সংখ্যা।",
           "screenRequired": "স্ক্রিন ID লিখুন।",
           "catalogAlone": "ক্যাটালগ বোতাম অন্য বোতামের সাথে একসাথে ব্যবহার করা যায় না।",

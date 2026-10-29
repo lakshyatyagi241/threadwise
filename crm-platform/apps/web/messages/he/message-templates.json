@@ -380,7 +380,7 @@
           "quickReplyVariable": "תגובה מהירה לא יכולה להכיל משתנה.",
           "urlExampleRequired": "הזן ערך לדוגמה עבור משתנה הכתובת.",
           "quickReplyPosition": "תגובות מהירות חייבות להיות יחד, בתחילה או בסוף הכפתורים.",
-          "flowIdRequired": "הזינו את מזהה ה-Flow.",
+          "flowIdRequired": "בחרו טופס WhatsApp מהרשימה.",
           "flowIdInvalid": "מזהה ה-Flow הוא מספר.",
           "screenRequired": "הזינו את מזהה המסך.",
           "catalogAlone": "לא ניתן לשלב כפתור קטלוג עם כפתורים אחרים.",
