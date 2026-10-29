@@ -70,9 +70,11 @@ if (flag('verify-only')) {
 }
 
 // 2. the journeys, then the page crawl
+const CHROME = `${process.env.HOME}/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome`;
 const env = {
   ...process.env,
   HEADLESS: '1',
+  CHROMIUM_PATH: process.env.CHROMIUM_PATH ?? (existsSync(CHROME) ? CHROME : undefined), // a machine without the matching Playwright browser build
   QA_TARGET: target,
   QA_BASE_URL: cfg.base,
   E2E_ADMIN_EMAIL: process.env.QA_EMAIL,
