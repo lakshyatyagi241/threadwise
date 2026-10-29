@@ -18,6 +18,9 @@ export interface ChannelProfile {
   paceMs: number;
 }
 
+/** The pause between two nodes on the WhatsApp Cloud API (ms). */
+export const CLOUD_PACE_MS = 800;
+
 const FULL: ChannelProfile = {
   buttons: true,
   list: true,
@@ -37,9 +40,12 @@ const PLAIN: ChannelProfile = {
 
 export function profileOf(kind: string): ChannelProfile {
   switch (kind) {
-    case 'whatsapp_cloud':
     case 'simulator':
       return FULL;
+    // Meta takes consecutive sends in order but delivers them on its own clock: nodes sent back to back can reach the phone
+    // swapped (a media or template overtaking a text). A short pause between plain moves keeps them in the flow's order.
+    case 'whatsapp_cloud':
+      return { ...FULL, paceMs: CLOUD_PACE_MS };
     case 'whatsapp_qr':
       return { ...PLAIN, paceMs: 1500 };
     // Facebook Messenger and Instagram carry up to three reply buttons and a link button but no list and no location pin
