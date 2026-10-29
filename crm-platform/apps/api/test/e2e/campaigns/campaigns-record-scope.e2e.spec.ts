@@ -98,4 +98,55 @@ describe('campaign record scope', () => {
     const left = await h.owner.query(`SELECT 1 FROM wpcampaigns WHERE uuid = $1`, [other]);
     expect(left.rowCount).toBe(1);
   });
+
+  it('applies to the campaign summary, the wizard history and the legacy broadcasts too', async () => {
+    const t = await api.signup('crs3');
+    const mine = await api.member(
+      t,
+      'restricted',
+      KEYS.map((k) => [k, 'own'] as [string, 'own']),
+    );
+    const global = await api.member(
+      t,
+      'global',
+      KEYS.map((k) => [k, 'all'] as [string, 'all']),
+    );
+    const own = await campaign(t, mine.userId, 'Mine');
+    const other = await campaign(t, t.adminUserId, 'Theirs');
+    const get = (token: string, path: string) => api.http().get(path).set(as(token));
+
+    // The director summary of one campaign.
+    expect((await get(mine.token, `/v2/campaigns/${own}/summary`)).status).toBe(200);
+    expect((await get(mine.token, `/v2/campaigns/${other}/summary`)).status).toBe(404);
+    expect((await get(global.token, `/v2/campaigns/${other}/summary`)).status).toBe(200);
+
+    // The wizard's History page lists runs: a restricted role gets only its own.
+    const history = await get(mine.token, '/v2/broadcast-wizard/history');
+    expect(history.status, JSON.stringify(history.body)).toBe(200);
+    const names = (b: { data: Array<{ name: string }> }) => b.data.map((x) => x.name).sort();
+    expect(names(history.body)).toEqual(['Mine']);
+    expect(names((await get(global.token, '/v2/broadcast-wizard/history')).body)).toEqual([
+      'Mine',
+      'Theirs',
+    ]);
+
+    // The legacy broadcasts: list, detail and summary.
+    const broadcast = async (userId: number, name: string) =>
+      (
+        await h.owner.query(
+          `INSERT INTO broadcasts (org_id, user_id, name, status) VALUES ($1,$2,$3,'completed') RETURNING uuid`,
+          [t.orgId, userId, name],
+        )
+      ).rows[0].uuid as string;
+    const myB = await broadcast(mine.userId, 'MyB');
+    const otherB = await broadcast(t.adminUserId, 'TheirB');
+    const list = await get(mine.token, '/v2/broadcasts');
+    expect(list.status, JSON.stringify(list.body)).toBe(200);
+    expect(names(list.body)).toEqual(['MyB']);
+    expect((await get(mine.token, `/v2/broadcasts/${myB}`)).status).toBe(200);
+    expect((await get(mine.token, `/v2/broadcasts/${otherB}`)).status).toBe(404);
+    expect((await get(global.token, `/v2/broadcasts/${otherB}`)).status).toBe(200);
+    const summary = await get(mine.token, '/v2/broadcasts/summary');
+    expect(summary.body.stats.total).toBe(1);
+  });
 });

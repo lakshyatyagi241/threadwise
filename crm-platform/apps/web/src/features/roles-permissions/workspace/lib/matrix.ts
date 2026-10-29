@@ -1,4 +1,4 @@
-import { isTeamScope } from '@crm/contracts';
+import { isCreatorScopedKey, isTeamScope } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope, RoleGrant } from '@crm/contracts';
 
 /** A role's grants while editing: permission key -> effect and scope. A key that is absent is not granted. */
@@ -129,14 +129,6 @@ export function sameDraft(a: GrantDraft, b: GrantDraft): boolean {
   return true;
 }
 
-/**
- * Keys whose records have a creator but no owner or team (campaigns, templates): they offer only "Global records" (`all`) and
- * "Restricted access" (`own`: the records the person created).
- */
-export function isCreatorScoped(key: string): boolean {
-  return key.startsWith('camp.campaigns.') || key.startsWith('tpl.templates.');
-}
-
 /** Every record scope, widest first, as the matrix lists them. */
 export const ALL_SCOPES: readonly RecordScope[] = ['all', 'team_and_below', 'team', 'own'];
 
@@ -149,7 +141,7 @@ export function scopeOptions(
   current?: RecordScope,
   key?: string,
 ): RecordScope[] {
-  if (key !== undefined && isCreatorScoped(key)) {
+  if (key !== undefined && isCreatorScopedKey(key)) {
     return ALL_SCOPES.filter((s) => s === 'all' || s === 'own' || s === current);
   }
   return ALL_SCOPES.filter((s) => s !== 'team_and_below' || hierarchyOffered || current === s);

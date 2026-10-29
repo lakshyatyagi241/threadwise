@@ -569,3 +569,25 @@ describe('the test notification (the "Send a test notification" button)', () => 
     );
   });
 });
+
+describe('the producers apply the same plan gate as the preferences list (BL-433)', () => {
+  const channels = (enabled: boolean, type: string) =>
+    new NotificationsRepository({ featureEnabled: async () => enabled } as never).channelsFor(
+      {} as never,
+      1,
+      { userId: 1, type, userPref: null, workspaceInapp: true } as never,
+    );
+
+  it('writes no row for a type whose plan feature the workspace lacks', async () => {
+    expect(await channels(false, 'appointment_cancelled_by_customer')).toEqual({
+      bell: false,
+      toast: false,
+      sound: false,
+      push: false,
+    });
+  });
+  it('keeps the row when the feature is on, and for a type no plan feature governs', async () => {
+    expect((await channels(true, 'appointment_cancelled_by_customer')).bell).toBe(true);
+    expect((await channels(false, 'new_chat')).bell).toBe(true);
+  });
+});
