@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Una clave tiene al menos 8 caracteres."
-      }
+      },
+      "readOnly": "Puedes ver las claves de IA del espacio de trabajo, pero no puedes añadirlas, activarlas ni quitarlas. Pide a un administrador el permiso para gestionar claves de IA."
     }
   }
 }

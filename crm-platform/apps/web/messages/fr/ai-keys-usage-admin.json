@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Une clé comporte au moins 8 caractères."
-      }
+      },
+      "readOnly": "Vous voyez les clés d'IA de l'espace de travail, mais vous ne pouvez ni les ajouter, ni les activer, ni les supprimer. Demandez à un administrateur l'autorisation de gérer les clés d'IA."
     }
   }
 }
