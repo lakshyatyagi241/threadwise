@@ -211,12 +211,17 @@ function narrowConditions(ctx: HistoryContext, sel: HistorySelection, b: BranchR
   }
   if (type) {
     const p = typeFilterParts(type);
-    if (p.entity) {
-      // The three automated sources are their own type. A message branch can carry a broadcast (another channel's sender).
+    if (p.entities && p.sources) {
+      // The automated sources are their own type. A message branch can carry a broadcast (another channel's sender).
+      const sources = p.sources;
+      const entities: readonly string[] = p.entities;
       out.push(
         b.entity === 'message'
-          ? sql`${b.source} = ${p.source ?? p.entity}`
-          : b.entity === p.entity
+          ? sql`${b.source} IN (${sql.join(
+              sources.map((x) => sql`${x}`),
+              sql`, `,
+            )})`
+          : entities.includes(b.entity)
             ? sql`TRUE`
             : none,
       );

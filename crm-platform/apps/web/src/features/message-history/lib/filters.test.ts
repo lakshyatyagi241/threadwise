@@ -5,10 +5,12 @@ import {
   feedQuery,
   insightsQuery,
   isNarrowed,
+  OFFERED_TYPES,
   parseState,
   rangeDays,
   stateToSearch,
   summaryQuery,
+  typeOptions,
 } from './filters';
 
 const U = '0b6f6c2e-7a3d-4a0e-9c1e-2f6f6d9a1b11';
@@ -129,5 +131,15 @@ describe('narrowing and the period', () => {
     expect(rangeDays({ ...EMPTY_STATE, range: '24h' })).toBe(1);
     expect(rangeDays({ ...EMPTY_STATE, range: '90d' })).toBe(90);
     expect(rangeDays({ ...EMPTY_STATE, from: '2026-10-01', to: '2026-10-02' })).toBeNull();
+  });
+
+  it('offers one Campaign type (no Broadcast, no Scheduled), and an older link still shows what it filters by', () => {
+    expect(OFFERED_TYPES).toContain('campaign');
+    expect(OFFERED_TYPES).not.toContain('broadcast');
+    expect(OFFERED_TYPES).not.toContain('scheduled');
+    expect(typeOptions('')).toEqual(OFFERED_TYPES);
+    expect(typeOptions('scheduled')).toEqual([...OFFERED_TYPES, 'scheduled']);
+    // A broadcast link is a campaign link.
+    expect(parseState(new URLSearchParams('type=broadcast')).type).toBe('campaign');
   });
 });

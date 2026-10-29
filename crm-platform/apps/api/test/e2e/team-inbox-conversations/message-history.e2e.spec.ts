@@ -596,8 +596,9 @@ describe('the filters', () => {
     expect(rowIds(await list(S.t.admin, `?${WIDE()}&source=api,ai&limit=100`)).sort()).toEqual(
       [S.ids.m6, S.ids.m7].sort(),
     );
-    expect((await list(S.t.admin, '?type=broadcast&limit=100')).data).toHaveLength(3);
-    expect((await list(S.t.admin, '?type=campaign&limit=100')).data).toHaveLength(2);
+    // A campaign and a broadcast are one thing to the person: either filter returns the rows of both (3 broadcast + 2 campaign).
+    expect((await list(S.t.admin, '?type=broadcast&limit=100')).data).toHaveLength(5);
+    expect((await list(S.t.admin, '?type=campaign&limit=100')).data).toHaveLength(5);
     expect((await list(S.t.admin, '?type=scheduled&limit=100')).data).toHaveLength(2);
     expect(rowIds(await list(S.t.admin, '?type=template&limit=100'))).toEqual([S.ids.m3]);
     expect(rowIds(await list(S.t.admin, '?type=image&limit=100'))).toEqual([S.ids.m5]);
