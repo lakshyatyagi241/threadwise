@@ -299,6 +299,8 @@ export interface SettlementFacts {
   monthlyLimit: number;
   /** Messages already counted this month, BEFORE this one. */
   usedBefore: number;
+  /** Meta's `pricing.billable`: false means the message is free of charge whatever the template category says. */
+  metaBillable?: boolean;
 }
 
 /**
@@ -319,6 +321,10 @@ export function withinFreeQuota(
  * free with the whole price as shortfall (`wallet_empty`): nothing is charged, and the shortfall says what was owed.
  */
 export function decideSettlement(f: SettlementFacts): Settlement {
+  // Meta bills nothing for this message: it is free like a zero rate. The existing reason is reused because `usage_charges.free_reason`
+  // is a CHECK-constrained column with translated labels, and a new value would need a migration and 21 locales for the same outcome.
+  if (f.metaBillable === false)
+    return { outcome: 'free', reason: 'rate_is_zero', shortfallMinor: 0 };
   const price = Math.max(MIN_CHARGE_MINOR, Math.trunc(f.priceMinor));
   if (!f.payPerMessage && withinFreeQuota(f)) {
     return { outcome: 'free', reason: 'within_plan_free_quota', shortfallMinor: 0 };

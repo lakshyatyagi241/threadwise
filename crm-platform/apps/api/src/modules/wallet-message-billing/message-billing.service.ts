@@ -26,6 +26,8 @@ export interface SettleDelivered {
   providerMessageId: string;
   recipient?: string | null;
   category?: string | null;
+  /** Meta's `pricing.billable`; false settles the message free and leaves the plan's monthly count alone. */
+  billable?: boolean;
   source?: string | null;
   templateName?: string | null;
   subjectName?: string | null;
@@ -115,11 +117,15 @@ export class MessageBillingService {
 
       // 3. count, price, decide
       const month = monthStart(now);
-      const counted = await tx.execute(sql`
-        INSERT INTO wallet_usage_months (org_id, month, messages) VALUES (${input.orgId}, ${month}::date, 1)
-        ON CONFLICT (org_id, month) DO UPDATE SET messages = wallet_usage_months.messages + 1
-        RETURNING messages`);
-      const usedBefore = Number((counted.rows[0] as { messages: number }).messages) - 1;
+      // A message Meta does not bill is not counted against the plan's allowance either.
+      let usedBefore = 0;
+      if (input.billable !== false) {
+        const counted = await tx.execute(sql`
+          INSERT INTO wallet_usage_months (org_id, month, messages) VALUES (${input.orgId}, ${month}::date, 1)
+          ON CONFLICT (org_id, month) DO UPDATE SET messages = wallet_usage_months.messages + 1
+          RETURNING messages`);
+        usedBefore = Number((counted.rows[0] as { messages: number }).messages) - 1;
+      }
 
       const priced = await this.rates.price(tx, input.orgId, input.recipient, category, currency);
       const decision = decideSettlement({
@@ -129,6 +135,7 @@ export class MessageBillingService {
         planActive,
         monthlyLimit,
         usedBefore,
+        metaBillable: input.billable,
       });
       const costMinor = this.rates.costMinor(priced.metaCostMicros);
 

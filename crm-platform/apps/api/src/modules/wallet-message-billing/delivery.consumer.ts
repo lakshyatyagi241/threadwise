@@ -62,6 +62,7 @@ export class DeliveryBillingConsumer implements OutboxSubscriber, OnModuleInit {
           providerMessageId: d.providerMessageId,
           recipient: d.recipient ?? null,
           category: d.category ?? null,
+          billable: d.billable,
           source: d.source ?? null,
           templateName: d.templateName ?? null,
           subjectName: d.subjectName ?? null,

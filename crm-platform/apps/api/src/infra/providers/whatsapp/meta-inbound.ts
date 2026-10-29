@@ -407,6 +407,9 @@ function mapStatus(s: Dict): NormalisedReceipt | Skip {
     status,
     at: timestampOf(s.timestamp),
   };
+  // Only an explicit boolean counts: a missing or malformed pricing object leaves the message to be charged by its template category.
+  const billable = dict(s.pricing).billable;
+  if (typeof billable === 'boolean') receipt.billable = billable;
   if (status === 'failed') {
     const e = dict(arr(s.errors)[0]);
     const code = typeof e.code === 'number' ? e.code : null;
