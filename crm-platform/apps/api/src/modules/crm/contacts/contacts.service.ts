@@ -65,6 +65,7 @@ import { assertOwnerWithinScope } from '../owner-scope';
 import { SendWindowService } from '../../compliance-center';
 import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { createMethodOfActor, type CreateMethod } from '../lead-handling/lead-handling-rules';
+import { changedFlowKeys } from './contact-changed-keys';
 import { toContactResponse } from './contacts.mapper';
 import { ContactsRepository, encodeSortCursor, type ContactRow } from './contacts.repository';
 
@@ -1575,6 +1576,11 @@ export class ContactsService {
           uuid,
           previousStage: existing.lifecycleStage,
           stage: after!.lifecycleStage,
+          // which properties this write changed, for the "Contact updated" trigger that watches one of them
+          fieldKeys: changedFlowKeys(
+            existing as unknown as Record<string, unknown>,
+            input as unknown as Record<string, unknown>,
+          ),
         },
       });
 

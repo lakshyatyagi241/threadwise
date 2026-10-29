@@ -1471,7 +1471,10 @@
             "productIdHint": "Puste = dowolny produkt w zamówieniu.",
             "storeNote": "Klient jest dopasowywany do zapisanego kontaktu po numerze telefonu; dla zamówienia nikt nie jest tworzony. Zdarzeń „Dodano do koszyka” i „produkt obejrzany” nie ma, ponieważ sklep ich nie raportuje.",
             "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia.",
-            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie."
+            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie.",
+            "updatedField": "Tylko gdy ta właściwość się zmieni",
+            "updatedFieldHint": "Zostaw „Dowolna właściwość”, by startować przy każdej zmianie. Edycje, które nie wskazują, która właściwość się zmieniła (niektóre importy i akcje zbiorcze), nie uruchamiają przepływu śledzącego jedną właściwość.",
+            "updatedAny": "Dowolna właściwość"
           }
         }
       },

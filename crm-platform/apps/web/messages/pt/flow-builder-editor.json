@@ -1471,7 +1471,10 @@
             "productIdHint": "Em branco = qualquer produto do pedido.",
             "storeNote": "O cliente é associado a um contato salvo pelo número de telefone; ninguém é criado por causa de um pedido. “Adicionado ao carrinho” e “produto visualizado” não são oferecidos: a loja não informa esses eventos.",
             "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia.",
-            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes."
+            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes.",
+            "updatedField": "Somente quando esta propriedade mudar",
+            "updatedFieldHint": "Deixe em “Qualquer propriedade” para iniciar a cada mudança. Edições que não dizem qual propriedade mudou (algumas importações e ações em massa) não iniciam um fluxo que observa uma propriedade.",
+            "updatedAny": "Qualquer propriedade"
           }
         }
       },

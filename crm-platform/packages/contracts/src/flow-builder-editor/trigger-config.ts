@@ -85,7 +85,13 @@ export interface FlbStoreEventConfig {
   productId: string;
 }
 
+export interface FlbContactUpdatedConfig {
+  /** The contact property the flow watches: it starts only when this one changed. Empty means any change (the way it always was). */
+  updatedField: string;
+}
+
 export type FlbTriggerConfig =
+  | FlbContactUpdatedConfig
   | FlbSegmentJoinConfig
   | FlbFieldMatchConfig
   | FlbDateFieldMatchConfig
@@ -96,7 +102,10 @@ const text = (v: unknown): string => (v === null || v === undefined ? '' : Strin
 const oneOf = <T extends string>(list: readonly T[], v: unknown, fallback: T): T =>
   (list as readonly string[]).includes(text(v)) ? (text(v) as T) : fallback;
 /** A field as the person typed it, with the `{{ }}` braces of a variable taken off. */
-const cleanField = (v: unknown): string => text(v).replace(/^\{\{|\}\}$/g, '').trim();
+const cleanField = (v: unknown): string =>
+  text(v)
+    .replace(/^\{\{|\}\}$/g, '')
+    .trim();
 const time = (v: unknown, fallback: string): string => {
   const m = /^(\d{1,2}):(\d{2})$/.exec(text(v));
   if (!m) return fallback;
@@ -115,6 +124,8 @@ export function flbTriggerConfig(
   d: Record<string, unknown>,
 ): FlbTriggerConfig | null {
   switch (kind) {
+    case 'contact_updated':
+      return { updatedField: cleanField(d.updatedField) };
     case 'segment_join':
     case 'segment_leave':
       return { segmentId: text(d.segmentId) };

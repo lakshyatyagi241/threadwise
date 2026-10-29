@@ -176,6 +176,10 @@ export class FlowTriggerEventsConsumer implements OutboxSubscriber, OnModuleInit
       eventId: String(event.id),
       updated,
       viaFlow: event.payload.via === 'flow',
+      // the properties the write changed, when the writer said (a single edit, a bulk edit and a flow's own update do)
+      fieldKeys: [event.payload.fieldKeys, event.payload.customFieldKeys]
+        .flatMap((v) => (Array.isArray(v) ? v : []))
+        .filter((k): k is string => typeof k === 'string'),
       hops,
     });
   }

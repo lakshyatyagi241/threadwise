@@ -120,6 +120,28 @@ describe('list leave, contact update, field match and segment join start flows',
     expect((await runsOf(p, t, f.id)).every((r) => r.source === 'contact_updated')).toBe(true);
   });
 
+  it('a contact update that watches one property starts only when that property changed', async () => {
+    const t = await p.api.signup('gapupw');
+    const ch = await openChannel(p, t);
+    const f = await addFlow(p, t, {
+      graph: msg('Your city changed'),
+      trigger: { kind: 'contact_updated', value: 0 },
+    });
+    await setConfig(t, f.id, { updatedField: 'City' });
+    await p.api.seedContacts(t, [{ name: 'Mover', phone: '+919811200009' }]);
+    const cid = await contactId(t, '+919811200009');
+
+    // another property changed, and a write that did not say which: nothing starts
+    await fire(t, 'w1', 'contact.updated', cid, { fieldKeys: ['first_name'] });
+    await fire(t, 'w2', 'contact.updated', cid, {});
+    await quiet();
+    expect((await runsOf(p, t, f.id)).length).toBe(0);
+
+    // the watched one changed (named as it reads on screen or as it is stored)
+    await fire(t, 'w3', 'contact.updated', cid, { fieldKeys: ['first_name', 'city'] });
+    expect(await untilSent(p, t, ch, '919811200009', 1)).toEqual(['Your city changed']);
+  });
+
   it('a field match starts once per value, only when the field meets the operator', async () => {
     const t = await p.api.signup('gapfield');
     const ch = await openChannel(p, t);

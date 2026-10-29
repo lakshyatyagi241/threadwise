@@ -1471,7 +1471,10 @@
             "productIdHint": "Để trống = bất kỳ sản phẩm nào trong đơn hàng.",
             "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
             "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt.",
-            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó."
+            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó.",
+            "updatedField": "Chỉ khi thuộc tính này thay đổi",
+            "updatedFieldHint": "Để “Bất kỳ thuộc tính” thì sẽ chạy ở mọi thay đổi. Các chỉnh sửa không nói rõ thuộc tính nào thay đổi (một số lần nhập và thao tác hàng loạt) sẽ không chạy luồng theo dõi một thuộc tính.",
+            "updatedAny": "Bất kỳ thuộc tính"
           }
         }
       },

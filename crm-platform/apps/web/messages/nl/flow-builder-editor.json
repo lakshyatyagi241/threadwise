@@ -1903,7 +1903,10 @@
             "productIdHint": "Leeg = elk product in de bestelling.",
             "storeNote": "De klant wordt via het telefoonnummer gekoppeld aan een opgeslagen contact; voor een bestelling wordt niemand aangemaakt. „Toegevoegd aan winkelwagen” en „product bekeken” worden niet aangeboden: de winkel meldt deze niet.",
             "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet.",
-            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien."
+            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien.",
+            "updatedField": "Alleen als deze eigenschap verandert",
+            "updatedFieldHint": "Laat “Elke eigenschap” staan om bij elke wijziging te starten. Bewerkingen die niet aangeven welke eigenschap veranderde (sommige importen en bulkacties) starten geen flow die één eigenschap volgt.",
+            "updatedAny": "Elke eigenschap"
           }
         }
       },
