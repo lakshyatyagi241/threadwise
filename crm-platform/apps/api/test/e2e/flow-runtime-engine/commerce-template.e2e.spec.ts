@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { fundWallet } from '../../support/fund-wallet';
 import { simInbound } from '../chat-conversations/pipeline-support';
 import { addTemplate, interactiveIn } from './commerce-support';
 import {
@@ -29,6 +30,8 @@ describe('the Template node (TW-FLR-026)', () => {
   let t: Tenant;
   beforeAll(async () => {
     t = await p.api.signup('flrtpl');
+    // A template is a paid message: the workspace's wallet pays for it.
+    await fundWallet(p.h.app, t.orgId);
   });
 
   it('sends an approved template with the run variables filled in, then moves on', async () => {
@@ -57,9 +60,34 @@ describe('the Template node (TW-FLR-026)', () => {
     await untilRun(p, t, f.id, 'completed', (r) => r.status === 'completed');
   });
 
+  it('a question after a template reaches the customer after it, in the thread order', async () => {
+    const ch = await simChannel(p as never, t);
+    const tpl = await addTemplate(p, t, {
+      name: 'welcome_first',
+      body: 'Welcome to Acme.',
+    });
+    await addFlow(p, t, {
+      graph: graph(
+        [
+          node('t', 'trigger', {}, { isStart: true }),
+          node('tp', 'template', { tpl: 'welcome_first', tplId: tpl.id }),
+          node('q', 'ask', { prompt: 'What is your name?', var: 'who', validate: 'text' }),
+        ],
+        [edge('t', 'tp'), edge('tp', 'q')],
+      ),
+      trigger: { kind: 'keyword', keywords: 'tplask' },
+    });
+    const peer = nextPeer();
+    await simInbound(p, t, ch, { from: peer, name: 'Asha', text: 'tplask' });
+    // The thread (and so the inbox) holds them in the order the nodes ran: the template first, then the question.
+    expect(await untilSent(p, t, ch, peer, 2)).toEqual(['Welcome to Acme.', 'What is your name?']);
+  });
+
   it('opens a conversation outside the 24 hour window, where a plain message is refused', async () => {
     // Its own workspace: an enrolment writes through the workspace's one sender.
     t = await p.api.signup('flrtplw');
+    // A template is a paid message: the workspace's wallet pays for it.
+    await fundWallet(p.h.app, t.orgId);
     const ch = await simChannel(p as never, t, {
       simulator: { latencyMs: { sent: 0, delivered: 150, read: 400 }, window: 'closed' },
     });
@@ -118,6 +146,8 @@ describe('the Template node (TW-FLR-026)', () => {
 
   it('leaves by the status exit the provider reports: delivered, read, or the customer replying', async () => {
     const w = await p.api.signup('flrtplst');
+    // A template is a paid message: the workspace's wallet pays for it.
+    await fundWallet(p.h.app, w.orgId);
     const ch = await simChannel(p as never, w, {
       simulator: { latencyMs: { sent: 0, delivered: 200, read: 700 } },
     });
