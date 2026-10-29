@@ -107,7 +107,13 @@ export class KbRetrievalService {
         q.model,
         KB_RETRIEVAL.fetch,
       ),
-      unindexed: await this.chunks.unindexedPassages(tx, orgId, assistantId, q.model),
+      unindexed: await this.chunks.unindexedPassages(
+        tx,
+        orgId,
+        assistantId,
+        q.model,
+        UNINDEXED_BUDGET_CHARS,
+      ),
     }));
 
     const picked = pickPassages(near, kbFloorFor(q.model)).map((p) => ({

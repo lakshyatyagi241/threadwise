@@ -185,19 +185,29 @@ export class KbChunkRepository {
   /**
    * Passages the vectors do not cover yet (queued, failed, or made with an older model), in reading order. They are read as text so a
    * new entry answers at once and an outage of the embedding vendor does not hide knowledge.
+   * Only the passages a loop over `budget` characters reaches are returned: a row is kept while the characters before it are under the
+   * budget. `length` counts code points, not UTF-16 units, so it can keep one row more than the loop reads, never one fewer.
    */
   async unindexedPassages(
     tx: Tx,
     orgId: number,
     assistantId: number,
     model: string,
+    budget: number,
   ): Promise<Array<{ label: string; text: string }>> {
     const res = await tx.execute(sql`
-      SELECT s.label, c.text FROM ai_training_chunks c
-      JOIN ai_training_sources s ON s.org_id = c.org_id AND s.id = c.source_id
-      WHERE c.org_id = ${orgId} AND c.assistant_id = ${assistantId} AND s.status = 'ready'
-        AND NOT (c.embed_state = 'ready' AND c.embedding_model = ${model})
-      ORDER BY c.source_id, c.position`);
+      SELECT label, text FROM (
+        SELECT s.label, c.text, c.source_id, c.position,
+          COALESCE(SUM(length(c.text)) OVER (
+            ORDER BY c.source_id, c.position ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+          ), 0) AS before_chars
+        FROM ai_training_chunks c
+        JOIN ai_training_sources s ON s.org_id = c.org_id AND s.id = c.source_id
+        WHERE c.org_id = ${orgId} AND c.assistant_id = ${assistantId} AND s.status = 'ready'
+          AND NOT (c.embed_state = 'ready' AND c.embedding_model = ${model})
+      ) AS passages
+      WHERE before_chars < ${budget}
+      ORDER BY source_id, position`);
     return (res.rows as Raw[]).map((r) => ({ label: r.label as string, text: r.text as string }));
   }
 
