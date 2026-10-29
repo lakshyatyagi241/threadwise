@@ -16,7 +16,15 @@ const wrap = (el: React.ReactNode) =>
 const env = { nodes: [] } as never;
 const noop = () => undefined;
 const props = (data: Record<string, unknown>) =>
-  ({ data, set: noop, setMany: noop, env, addOption: noop, removeOption: noop }) as never;
+  ({
+    node: { id: 'n1', type: 'x', x: 0, y: 0, data },
+    data,
+    set: noop,
+    setMany: noop,
+    env,
+    addOption: noop,
+    removeOption: noop,
+  }) as unknown as Parameters<typeof SequenceForm>[0];
 
 const TOOLBAR = 'Text formatting';
 
