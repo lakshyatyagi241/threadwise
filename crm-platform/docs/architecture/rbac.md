@@ -39,6 +39,10 @@ campaign of the workspace) or **Restricted** (`own`: only the campaigns the user
 export, summary, wizard drafts and history, previous-sends); a campaign outside the scope is `404`, never `403`. Workers and
 webhooks run without grants and are not narrowed.
 
+`tpl.templates.{read,create,delete,sync}` work the same way on `wa_templates.user_id` (`create` is the edit scope), in
+`modules/message-templates/template-scope.ts`: the library list and tab counts, detail, stats, edit, delete, submit and refresh. The
+template pickers of the inbox, flows, campaigns and leads are not narrowed.
+
 ## Merge rules
 
 When a user has several roles, grants merge:

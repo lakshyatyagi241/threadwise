@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { templateScopeSql, type TemplateScopeKey } from './template-scope';
 import { rawMappedColumn } from '../../common/sql/identifier';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES } from '@crm/contracts';
@@ -116,6 +117,8 @@ function toRow(r: Raw): TemplateRow {
 
 export interface ListFilter {
   limit: number;
+  /** The templates library's own list: a restricted caller sees only the templates they created. Pickers elsewhere leave it off. */
+  scoped?: boolean;
   cursor?: string;
   status?: string;
   /** The library's status tab: approved / pending (in review) / draft (saved, not submitted yet) / rejected (rejected, paused, disabled). */
@@ -295,7 +298,9 @@ export class TemplatesRepository {
 
   /** The WHERE of a library query, without the keyset bound. */
   private filters(orgId: number, f: ListFilter): SQL[] {
-    const where: SQL[] = [sql`t.org_id = ${orgId}`];
+    const where: SQL[] = [
+      sql`t.org_id = ${orgId}${f.scoped ? templateScopeSql('tpl.templates.read') : sql``}`,
+    ];
     if (f.status) {
       // Reference's `public` (a global starter) reads as approved.
       where.push(
@@ -342,7 +347,7 @@ export class TemplatesRepository {
         count(*) FILTER (WHERE ${GROUP_WHERE.draft})::int AS draft,
         count(*) FILTER (WHERE ${GROUP_WHERE.rejected})::int AS rejected
       FROM wa_templates t
-      WHERE t.org_id = ${orgId}
+      WHERE t.org_id = ${orgId}${f.scoped ? templateScopeSql('tpl.templates.read') : sql``}
       GROUP BY 1`);
     const categories: Record<string, number> = { all: 0 };
     const statuses: Record<string, number> = {
@@ -367,10 +372,17 @@ export class TemplatesRepository {
     return { categories, statuses, filtered: Number((filtered.rows[0] as { n: number }).n) };
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<TemplateRow | null> {
+  /** `scope` narrows a restricted caller to the templates they created; a template outside it is simply not found. */
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    lock = false,
+    scope?: TemplateScopeKey,
+  ): Promise<TemplateRow | null> {
     const res = await tx.execute(sql`
       SELECT ${SELECT} FROM ${FROM}
-      WHERE t.org_id = ${orgId} AND t.uuid = ${uuid}::uuid ${lock ? sql`FOR UPDATE OF t` : sql``}`);
+      WHERE t.org_id = ${orgId} AND t.uuid = ${uuid}::uuid${scope ? templateScopeSql(scope) : sql``} ${lock ? sql`FOR UPDATE OF t` : sql``}`);
     return res.rows[0] ? toRow(res.rows[0]) : null;
   }
 

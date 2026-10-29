@@ -5,7 +5,24 @@ summary: What My records, My team's records, My team and sub-teams and All recor
 area: settings
 order: 65
 documents: [tile:teams]
-keywords: [team, access, scope, own records, team records, sub-teams, hierarchy, owning team, unassigned conversations, all records, visibility, who can see, permissions, contacts, conversations]
+keywords:
+  [
+    team,
+    access,
+    scope,
+    own records,
+    team records,
+    sub-teams,
+    hierarchy,
+    owning team,
+    unassigned conversations,
+    all records,
+    visibility,
+    who can see,
+    permissions,
+    contacts,
+    conversations,
+  ]
 ---
 
 ## What it is for

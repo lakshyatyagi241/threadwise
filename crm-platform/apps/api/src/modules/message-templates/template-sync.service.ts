@@ -78,7 +78,9 @@ export class TemplateSyncService {
   /** Re-reads one template from Meta (TW-TPL-026). A template never sent to Meta, or checked a moment ago, comes back as it is. */
   async refresh(uuid: string): Promise<TemplateDetail> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
+    const row = await this.db.tx((tx) =>
+      this.repo.findByUuid(tx, orgId, uuid, false, 'tpl.templates.sync'),
+    );
     if (!row) throw this.notFound();
     const fresh = await this.refreshRow(orgId, row, { cooldown: true, fail: true });
     return detailWithMedia(this.storage, fresh);
