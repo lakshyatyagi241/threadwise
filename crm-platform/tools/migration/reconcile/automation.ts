@@ -199,6 +199,14 @@ export async function verifyAutomations(a: Args): Promise<void> {
     const trig = triggers[0];
     if (trig && !a.allowExtraRows && String((trig.data as Rec)?.kind) !== au.triggerKind)
       alarm(`AUTOMATION_GRAPH: the trigger node of the ${tag} is not of kind ${au.triggerKind}`);
+    // a Google Sheet trigger watches the sheet and reads the phone column the source names
+    if (au.triggerKind === 'google_sheet' && au.config && !a.allowExtraRows) {
+      const tc = (r.trigger_config ?? {}) as Rec;
+      if (tc.sheetId !== au.config.sheetId || tc.phoneColumn !== au.config.phoneColumn)
+        alarm(
+          `AUTOMATION_COLUMN: trigger_config of the ${tag} does not hold the sheet id and phone column of the source`,
+        );
+    }
     // every Waboo node, exactly once, with the type the mapping gives
     const NOT_PRIMARY = new Set([
       'chain',
