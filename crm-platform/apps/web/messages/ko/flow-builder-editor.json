@@ -1093,6 +1093,9 @@
           },
           "removeRule": "규칙 제거",
           "variablePlaceholder": "변수 이름(예: plan)",
+          "keyLabel": "키",
+          "valueLabel": "값",
+          "pickProperty": "연락처 속성 선택",
           "pickVariable": "테스트할 변수를 선택하세요.",
           "comparePlaceholder": "비교 대상…",
           "joinerAnd": "AND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "문서(PDF 보고서 등)",
           "upload": "업로드",
           "uploadHint": "최대 {mb}MB. 파일을 호스팅하고 플로우에 공개 URL을 제공합니다.",
+          "acceptedFormats": {
+            "image": "지원 형식: JPG, PNG.",
+            "video": "지원 형식: MP4, 3GP.",
+            "audio": "지원 형식: MP3, AAC, AMR, OGG.",
+            "document": "지원 형식: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "파일 교체",
           "chooseKind": {
             "image": "이미지 선택(또는 여기로 끌어놓기)",

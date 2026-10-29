@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Xóa điều kiện",
           "variablePlaceholder": "Tên biến (vd. plan)",
+          "keyLabel": "Khóa",
+          "valueLabel": "Giá trị",
+          "pickProperty": "Chọn thuộc tính liên hệ",
           "pickVariable": "Chọn biến để kiểm tra.",
           "comparePlaceholder": "So sánh với…",
           "joinerAnd": "VÀ",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Tài liệu (báo cáo PDF, v.v.)",
           "upload": "Tải lên",
           "uploadHint": "Tối đa {mb} MB. Chúng tôi lưu trữ tệp và cấp cho luồng một URL công khai.",
+          "acceptedFormats": {
+            "image": "Định dạng chấp nhận: JPG, PNG.",
+            "video": "Định dạng chấp nhận: MP4, 3GP.",
+            "audio": "Định dạng chấp nhận: MP3, AAC, AMR, OGG.",
+            "document": "Định dạng chấp nhận: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Thay tệp",
           "chooseKind": {
             "image": "Chọn ảnh (hoặc kéo vào đây)",

@@ -1525,6 +1525,9 @@
           },
           "removeRule": "Regel verwijderen",
           "variablePlaceholder": "Variabelenaam (bijv. plan)",
+          "keyLabel": "Sleutel",
+          "valueLabel": "Waarde",
+          "pickProperty": "Kies een contacteigenschap",
           "pickVariable": "Kies de variabele om te testen.",
           "comparePlaceholder": "Vergelijken met…",
           "joinerAnd": "EN",
@@ -1715,6 +1718,12 @@
           "kindDocumentReport": "Document (pdf-rapport, enz.)",
           "upload": "Uploaden",
           "uploadHint": "Tot {mb} MB. Wij hosten het bestand en geven de flow een openbare URL.",
+          "acceptedFormats": {
+            "image": "Toegestane formaten: JPG, PNG.",
+            "video": "Toegestane formaten: MP4, 3GP.",
+            "audio": "Toegestane formaten: MP3, AAC, AMR, OGG.",
+            "document": "Toegestane formaten: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Bestand vervangen",
           "chooseKind": {
             "image": "Kies afbeelding (of sleep hierheen)",

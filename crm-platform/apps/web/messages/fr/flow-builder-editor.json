@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Supprimer la règle",
           "variablePlaceholder": "Nom de la variable (p. ex. plan)",
+          "keyLabel": "Clé",
+          "valueLabel": "Valeur",
+          "pickProperty": "Choisir une propriété du contact",
           "pickVariable": "Choisissez la variable à tester.",
           "comparePlaceholder": "Comparer à…",
           "joinerAnd": "ET",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Document (rapport PDF, etc.)",
           "upload": "Téléverser",
           "uploadHint": "Jusqu’à {mb} Mo. Nous hébergeons le fichier et donnons au flux une URL publique.",
+          "acceptedFormats": {
+            "image": "Formats acceptés: JPG, PNG.",
+            "video": "Formats acceptés: MP4, 3GP.",
+            "audio": "Formats acceptés: MP3, AAC, AMR, OGG.",
+            "document": "Formats acceptés: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Remplacer le fichier",
           "chooseKind": {
             "image": "Choisir une image (ou la déposer ici)",

@@ -425,6 +425,7 @@
         "format": "Kartu menampilkan",
         "formatImage": "Gambar",
         "formatVideo": "Video",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB.",
         "count": "{used}/{max} kartu",
         "add": "Tambah kartu",
         "needTwo": "Carousel memerlukan minimal {min} kartu.",

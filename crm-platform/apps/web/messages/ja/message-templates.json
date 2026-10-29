@@ -425,6 +425,7 @@
         "format": "カードの表示",
         "formatImage": "画像",
         "formatVideo": "動画",
+        "limits": "画像は5 MBまで、動画は16 MBまでです。",
         "count": "{used}/{max} 枚",
         "add": "カードを追加",
         "needTwo": "カルーセルには最低{min}枚のカードが必要です。",

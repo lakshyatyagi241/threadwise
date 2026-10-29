@@ -1123,6 +1123,9 @@
           },
           "removeRule": "Remove rule",
           "variablePlaceholder": "Variable name (e.g. plan)",
+          "keyLabel": "Key",
+          "valueLabel": "Value",
+          "pickProperty": "Choose a contact property",
           "pickVariable": "Pick the variable to test.",
           "comparePlaceholder": "Compare against…",
           "joinerAnd": "AND",
@@ -1313,6 +1316,12 @@
           "kindDocumentReport": "Document (PDF report, etc.)",
           "upload": "Upload",
           "uploadHint": "Up to {mb} MB. We host the file and give the flow a public URL.",
+          "acceptedFormats": {
+            "image": "Accepted: JPG, PNG.",
+            "video": "Accepted: MP4, 3GP.",
+            "audio": "Accepted: MP3, AAC, AMR, OGG.",
+            "document": "Accepted: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Replace file",
           "chooseKind": {
             "image": "Choose image (or drag here)",

@@ -425,6 +425,7 @@
         "format": "Las tarjetas muestran",
         "formatImage": "Imágenes",
         "formatVideo": "Vídeos",
+        "limits": "Imagen de hasta 5 MB, video de hasta 16 MB.",
         "count": "{used}/{max} tarjetas",
         "add": "Añadir tarjeta",
         "needTwo": "Un carrusel necesita al menos {min} tarjetas.",

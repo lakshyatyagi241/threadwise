@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Usuń regułę",
           "variablePlaceholder": "Nazwa zmiennej (np. plan)",
+          "keyLabel": "Klucz",
+          "valueLabel": "Wartość",
+          "pickProperty": "Wybierz właściwość kontaktu",
           "pickVariable": "Wybierz zmienną do sprawdzenia.",
           "comparePlaceholder": "Porównaj z…",
           "joinerAnd": "ORAZ",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokument (raport PDF itp.)",
           "upload": "Prześlij",
           "uploadHint": "Do {mb} MB. Hostujemy plik i dajemy przepływowi publiczny URL.",
+          "acceptedFormats": {
+            "image": "Akceptowane formaty: JPG, PNG.",
+            "video": "Akceptowane formaty: MP4, 3GP.",
+            "audio": "Akceptowane formaty: MP3, AAC, AMR, OGG.",
+            "document": "Akceptowane formaty: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Zastąp plik",
           "chooseKind": {
             "image": "Wybierz obraz (lub przeciągnij tutaj)",

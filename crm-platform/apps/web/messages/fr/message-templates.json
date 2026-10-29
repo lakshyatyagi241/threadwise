@@ -425,6 +425,7 @@
         "format": "Les cartes affichent",
         "formatImage": "Des images",
         "formatVideo": "Des vidéos",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo.",
         "count": "{used}/{max} cartes",
         "add": "Ajouter une carte",
         "needTwo": "Un carrousel nécessite au moins {min} cartes.",

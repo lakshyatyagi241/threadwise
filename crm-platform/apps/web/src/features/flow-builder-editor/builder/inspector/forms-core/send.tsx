@@ -167,7 +167,10 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('kind', v)}
         />
       </Field>
-      <Field label={t('upload')} hint={t('uploadHint', { mb: 50 })}>
+      <Field
+        label={t('upload')}
+        hint={`${t('uploadHint', { mb: 50 })} ${t(`acceptedFormats.${CHOOSE_KINDS.includes(kind) ? kind : 'image'}`)}`}
+      >
         <UploadBox
           accept={acceptFor(kind)}
           label={

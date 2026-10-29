@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Удалить правило",
           "variablePlaceholder": "Имя переменной (напр. plan)",
+          "keyLabel": "Ключ",
+          "valueLabel": "Значение",
+          "pickProperty": "Выберите свойство контакта",
           "pickVariable": "Выберите переменную для проверки.",
           "comparePlaceholder": "Сравнить с…",
           "joinerAnd": "И",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Документ (PDF-отчёт и т. д.)",
           "upload": "Загрузить",
           "uploadHint": "До {mb} МБ. Мы разместим файл и дадим сценарию публичный URL.",
+          "acceptedFormats": {
+            "image": "Допустимые форматы: JPG, PNG.",
+            "video": "Допустимые форматы: MP4, 3GP.",
+            "audio": "Допустимые форматы: MP3, AAC, AMR, OGG.",
+            "document": "Допустимые форматы: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Заменить файл",
           "chooseKind": {
             "image": "Выберите изображение (или перетащите сюда)",

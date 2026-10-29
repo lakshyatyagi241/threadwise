@@ -90,6 +90,7 @@ function RuleCard({
   onRemove,
   flagged,
   ops,
+  properties,
 }: {
   rule: FlbCondRule;
   label: string;
@@ -97,6 +98,7 @@ function RuleCard({
   onRemove: () => void;
   flagged: boolean;
   ops: OperatorSet;
+  properties?: ReadonlyArray<{ key: string; name: string }> | undefined;
 }) {
   const t = useTranslations('flb.builder.formsCore.logic');
   const operator = rule.operator || 'equals';
@@ -114,13 +116,37 @@ function RuleCard({
           <XIcon />
         </IconButton>
       </div>
-      <input
-        type="text"
-        value={str(rule.variable)}
-        onChange={(e) => onPatch({ variable: e.target.value })}
-        placeholder={t('variablePlaceholder')}
-        className={cn(controlClass, 'mb-1.5')}
-      />
+      {properties ? (
+        <>
+          <div className="mb-0.5 text-[11px] font-semibold text-muted-foreground">
+            {t('keyLabel')}
+          </div>
+          <select
+            aria-label={t('keyLabel')}
+            value={str(rule.variable)}
+            onChange={(e) => onPatch({ variable: e.target.value })}
+            className={cn(controlClass, 'mb-1.5')}
+          >
+            <option value="">{t('pickProperty')}</option>
+            {str(rule.variable) !== '' && !properties.some((p) => p.key === rule.variable) ? (
+              <option value={str(rule.variable)}>{str(rule.variable)}</option>
+            ) : null}
+            {properties.map((p) => (
+              <option key={p.key} value={p.key}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </>
+      ) : (
+        <input
+          type="text"
+          value={str(rule.variable)}
+          onChange={(e) => onPatch({ variable: e.target.value })}
+          placeholder={t('variablePlaceholder')}
+          className={cn(controlClass, 'mb-1.5')}
+        />
+      )}
       {flagged ? (
         <div className="mb-1.5 text-[11px] text-[#E87A5D]">{t('pickVariable')}</div>
       ) : null}
@@ -138,6 +164,7 @@ function RuleCard({
       {!NO_VALUE_OPERATORS.has(operator) ? (
         <input
           type="text"
+          aria-label={properties ? t('valueLabel') : undefined}
           value={str(rule.value)}
           onChange={(e) => onPatch({ value: e.target.value })}
           placeholder={t('comparePlaceholder')}
@@ -154,12 +181,14 @@ function GroupEditor({
   path,
   onChange,
   ops,
+  properties,
 }: {
   root: FlbCondGroup;
   group: FlbCondGroup;
   path: CondPath;
   onChange: (next: FlbCondGroup) => void;
   ops?: OperatorSet;
+  properties?: ReadonlyArray<{ key: string; name: string }> | undefined;
 }) {
   const t = useTranslations('flb.builder.formsCore.logic');
   const tf = useFlb();
@@ -217,6 +246,7 @@ function GroupEditor({
             path={childPath}
             onChange={onChange}
             ops={opSet}
+            properties={properties}
           />
         ) : (
           <RuleCard
@@ -227,6 +257,7 @@ function GroupEditor({
             onPatch={(patch) => onChange(patchRule(root, childPath, patch))}
             onRemove={() => onChange(removeAt(root, childPath))}
             ops={opSet}
+            properties={properties}
           />
         );
       })}
@@ -283,13 +314,25 @@ export function ConditionGroupEditor({
   tree,
   onChange,
   ops,
+  properties,
 }: {
   tree: FlbCondGroup;
   onChange: (next: FlbCondGroup) => void;
   /** The operators to offer; the Condition node's own list when absent. The Trigger node passes its field-match list. */
   ops?: OperatorSet;
+  /** The contact properties a rule's key is picked from; absent, the key is typed (a Condition tests run variables). */
+  properties?: ReadonlyArray<{ key: string; name: string }> | undefined;
 }) {
-  return <GroupEditor root={tree} group={tree} path={[]} onChange={onChange} ops={ops} />;
+  return (
+    <GroupEditor
+      root={tree}
+      group={tree}
+      path={[]}
+      onChange={onChange}
+      ops={ops}
+      properties={properties}
+    />
+  );
 }
 
 export function ConditionForm(props: FormProps) {

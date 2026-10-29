@@ -425,6 +425,7 @@
         "format": "Kaarten tonen",
         "formatImage": "Afbeeldingen",
         "formatVideo": "Video's",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB.",
         "count": "{used}/{max} kaarten",
         "add": "Kaart toevoegen",
         "needTwo": "Een carrousel heeft minstens {min} kaarten nodig.",

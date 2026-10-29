@@ -425,6 +425,7 @@
         "format": "Le schede mostrano",
         "formatImage": "Immagini",
         "formatVideo": "Video",
+        "limits": "Immagine fino a 5 MB, video fino a 16 MB.",
         "count": "{used}/{max} schede",
         "add": "Aggiungi scheda",
         "needTwo": "Un carosello richiede almeno {min} schede.",

@@ -425,6 +425,7 @@
         "format": "Karty pokazują",
         "formatImage": "Obrazy",
         "formatVideo": "Wideo",
+        "limits": "Obraz do 5 MB, wideo do 16 MB.",
         "count": "{used}/{max} kart",
         "add": "Dodaj kartę",
         "needTwo": "Karuzela wymaga co najmniej {min} kart.",

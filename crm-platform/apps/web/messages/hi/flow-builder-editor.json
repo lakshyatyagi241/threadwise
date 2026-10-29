@@ -1525,6 +1525,9 @@
           },
           "removeRule": "नियम हटाएं",
           "variablePlaceholder": "वेरिएबल का नाम (जैसे plan)",
+          "keyLabel": "कुंजी",
+          "valueLabel": "मान",
+          "pickProperty": "कॉन्टैक्ट प्रॉपर्टी चुनें",
           "pickVariable": "जांचने के लिए वेरिएबल चुनें।",
           "comparePlaceholder": "इससे तुलना करें…",
           "joinerAnd": "और",
@@ -1715,6 +1718,12 @@
           "kindDocumentReport": "दस्तावेज़ (PDF रिपोर्ट, आदि)",
           "upload": "अपलोड",
           "uploadHint": "{mb} MB तक। फ़ाइल हम होस्ट करते हैं और फ़्लो को सार्वजनिक URL देते हैं।",
+          "acceptedFormats": {
+            "image": "स्वीकृत फ़ॉर्मैट: JPG, PNG.",
+            "video": "स्वीकृत फ़ॉर्मैट: MP4, 3GP.",
+            "audio": "स्वीकृत फ़ॉर्मैट: MP3, AAC, AMR, OGG.",
+            "document": "स्वीकृत फ़ॉर्मैट: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "फ़ाइल बदलें",
           "chooseKind": {
             "image": "इमेज चुनें (या यहां खींचें)",

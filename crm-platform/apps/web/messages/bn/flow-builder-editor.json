@@ -1093,6 +1093,9 @@
           },
           "removeRule": "নিয়ম সরান",
           "variablePlaceholder": "ভেরিয়েবলের নাম (যেমন plan)",
+          "keyLabel": "কী",
+          "valueLabel": "মান",
+          "pickProperty": "একটি কন্টাক্ট প্রপার্টি বেছে নিন",
           "pickVariable": "পরীক্ষা করার ভেরিয়েবল বেছে নিন।",
           "comparePlaceholder": "তুলনা করুন…",
           "joinerAnd": "AND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "ডকুমেন্ট (PDF রিপোর্ট ইত্যাদি)",
           "upload": "আপলোড",
           "uploadHint": "সর্বোচ্চ {mb} MB। আমরা ফাইলটি হোস্ট করি এবং ফ্লোকে একটি পাবলিক URL দিই।",
+          "acceptedFormats": {
+            "image": "গ্রহণযোগ্য ফরম্যাট: JPG, PNG.",
+            "video": "গ্রহণযোগ্য ফরম্যাট: MP4, 3GP.",
+            "audio": "গ্রহণযোগ্য ফরম্যাট: MP3, AAC, AMR, OGG.",
+            "document": "গ্রহণযোগ্য ফরম্যাট: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "ফাইল বদলান",
           "chooseKind": {
             "image": "ছবি বেছে নিন (অথবা এখানে টেনে আনুন)",
