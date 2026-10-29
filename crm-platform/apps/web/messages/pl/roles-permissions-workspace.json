@@ -256,6 +256,10 @@
         "team": "Rekordy mojego zespołu",
         "team_and_below": "Mój zespół i podzespoły"
       },
+      "creatorScope": {
+        "all": "Rekordy globalne",
+        "own": "Ograniczony dostęp (tylko własne)"
+      },
       "scopeLegend": "Co obejmuje każdy zakres rekordów",
       "scopeHelp": {
         "all": "Wszystkie rekordy w przestrzeni roboczej.",

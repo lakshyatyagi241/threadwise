@@ -256,6 +256,10 @@
         "team": "Datensätze meines Teams",
         "team_and_below": "Mein Team und Unterteams"
       },
+      "creatorScope": {
+        "all": "Globale Datensätze",
+        "own": "Eingeschränkter Zugriff (nur eigene)"
+      },
       "scopeLegend": "Was jeder Datensatzbereich umfasst",
       "scopeHelp": {
         "all": "Alle Datensätze im Arbeitsbereich.",

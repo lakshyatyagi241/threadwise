@@ -208,7 +208,7 @@ export class CampaignsService {
     const form = await this.prepare(input);
 
     const row = await this.db.tx(async (tx) => {
-      const locked = await this.repo.lock(tx, orgId, uuid);
+      const locked = await this.repo.lock(tx, orgId, uuid, 'camp.campaigns.update');
       if (!locked) throw AppError.notFound('Campaign', uuid);
       if (!(EDITABLE_STATUSES as readonly string[]).includes(locked.status)) {
         throw refuse('CAMP_NOT_EDITABLE', 'This campaign can no longer be edited.');

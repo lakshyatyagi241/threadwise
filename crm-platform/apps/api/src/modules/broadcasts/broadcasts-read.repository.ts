@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { campaignScopeSql, type CampaignScopeKey } from '../campaigns/campaign-scope';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { ListBroadcastRecipientsQuery, ListBroadcastsQuery } from '@crm/contracts';
@@ -137,7 +138,9 @@ export class BroadcastsReadRepository {
 
   /** Newest first; `limit + 1` rows. The workspace's own broadcasts only: no engine scope (Reference hid a disabled engine's rows). */
   private filters(orgId: number, q: ListBroadcastsQuery) {
-    const where = [sql`b.org_id = ${orgId}`];
+    const where = [
+      sql`b.org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', 'b', 'user_id')}`,
+    ];
     if (q.status) where.push(sql`b.status = ${q.status}`);
     const days = RANGE_DAYS[q.range];
     if (days) where.push(sql`b.created_at >= now() - ${`${days} days`}::interval`);
@@ -167,9 +170,14 @@ export class BroadcastsReadRepository {
     return Number((res.rows[0] as { n: number }).n);
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<BroadcastReadRow | undefined> {
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    scope: CampaignScopeKey = 'camp.campaigns.read',
+  ): Promise<BroadcastReadRow | undefined> {
     const res = await tx.execute(
-      sql`${this.select} WHERE b.org_id = ${orgId} AND b.uuid = ${uuid}::uuid`,
+      sql`${this.select} WHERE b.org_id = ${orgId} AND b.uuid = ${uuid}::uuid${campaignScopeSql(scope, 'b', 'user_id')}`,
     );
     const row = (res.rows as unknown as Raw[])[0];
     return row ? toRow(row) : undefined;
@@ -182,13 +190,14 @@ export class BroadcastsReadRepository {
              coalesce(sum(success_count), 0)::int AS sent, coalesce(sum(delivered_count), 0)::int AS delivered,
              coalesce(sum(read_count), 0)::int AS read, coalesce(sum(fail_count), 0)::int AS failed,
              coalesce(sum(clicked_count), 0)::int AS clicked
-      FROM broadcasts WHERE org_id = ${orgId}`);
+      FROM broadcasts WHERE org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', null, 'user_id')}`);
     const byStatus = await tx.execute(sql`
-      SELECT status, count(*)::int AS n FROM broadcasts WHERE org_id = ${orgId} GROUP BY status`);
+      SELECT status, count(*)::int AS n FROM broadcasts WHERE org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', null, 'user_id')} GROUP BY status`);
     const rec = await tx.execute(sql`
       SELECT count(*) FILTER (WHERE status = 'pending')::int AS queued,
              count(*) FILTER (WHERE status IN ('processing', 'sent'))::int AS processing
-      FROM broadcast_contacts WHERE org_id = ${orgId}`);
+      FROM broadcast_contacts bc WHERE bc.org_id = ${orgId}
+        AND bc.broadcast_id IN (SELECT id FROM broadcasts WHERE org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', null, 'user_id')})`);
     return {
       totals: totals.rows[0] as unknown as Record<
         'total' | 'recipients' | 'sent' | 'delivered' | 'read' | 'failed' | 'clicked',

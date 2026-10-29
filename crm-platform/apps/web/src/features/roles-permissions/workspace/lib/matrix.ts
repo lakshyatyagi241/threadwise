@@ -129,6 +129,14 @@ export function sameDraft(a: GrantDraft, b: GrantDraft): boolean {
   return true;
 }
 
+/**
+ * Keys whose records have a creator but no owner or team (campaigns): they offer only "Global records" (`all`) and
+ * "Restricted access" (`own`: the records the person created).
+ */
+export function isCreatorScoped(key: string): boolean {
+  return key.startsWith('camp.campaigns.');
+}
+
 /** Every record scope, widest first, as the matrix lists them. */
 export const ALL_SCOPES: readonly RecordScope[] = ['all', 'team_and_below', 'team', 'own'];
 
@@ -136,7 +144,14 @@ export const ALL_SCOPES: readonly RecordScope[] = ['all', 'team_and_below', 'tea
  * The scope options one row offers. `team_and_below` is left out when the workspace does not have the team hierarchy feature, unless the
  * row already holds it: a value the plan no longer offers stays visible (and is kept on save) instead of being changed silently.
  */
-export function scopeOptions(hierarchyOffered: boolean, current?: RecordScope): RecordScope[] {
+export function scopeOptions(
+  hierarchyOffered: boolean,
+  current?: RecordScope,
+  key?: string,
+): RecordScope[] {
+  if (key !== undefined && isCreatorScoped(key)) {
+    return ALL_SCOPES.filter((s) => s === 'all' || s === 'own' || s === current);
+  }
   return ALL_SCOPES.filter((s) => s !== 'team_and_below' || hierarchyOffered || current === s);
 }
 

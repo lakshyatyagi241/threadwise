@@ -192,7 +192,7 @@ export class WizardTestSendService {
   /** The draft, its template, the sender it would go from and a sample contact to resolve the variables for. Throws what the person can fix. */
   async prepare(orgId: number, draftId: string) {
     return this.db.tx(async (tx) => {
-      const row = await this.repo.campaignByUuid(tx, orgId, draftId);
+      const row = await this.repo.campaignByUuid(tx, orgId, draftId, 'camp.campaigns.test');
       if (!row) throw AppError.notFound('Broadcast draft', draftId);
       const draft = draftOf(row);
       const template = draft.templateId
@@ -409,7 +409,7 @@ export class WizardTestSendService {
   async log(uuid: string): Promise<WizardTestLog> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const row = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.test');
       if (!row) throw AppError.notFound('Broadcast draft', uuid);
       const rows = await this.repo.testSends(tx, orgId, row.id, 50);
       const charged = await this.repo.chargesOf(

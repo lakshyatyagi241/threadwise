@@ -58,7 +58,7 @@ export class BroadcastsActionsService {
   async delete(uuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
-      const row = await this.repo.lock(tx, ctx.orgId, uuid);
+      const row = await this.repo.lock(tx, ctx.orgId, uuid, 'camp.campaigns.delete');
       if (!row) throw AppError.notFound('Broadcast', uuid);
       if (!(DELETABLE_STATUSES as readonly string[]).includes(row.status)) {
         throw refuse('BCAST_NOT_DELETABLE', 'Only scheduled or failed broadcasts can be deleted.');
@@ -92,7 +92,7 @@ export class BroadcastsActionsService {
   async retryFailed(uuid: string): Promise<RetryBroadcastResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.lock(tx, ctx.orgId, uuid);
+      const row = await this.repo.lock(tx, ctx.orgId, uuid, 'camp.campaigns.control');
       if (!row) throw AppError.notFound('Broadcast', uuid);
       if (row.status === 'processing' || row.status === 'scheduled') {
         throw refuse(
@@ -145,7 +145,7 @@ export class BroadcastsActionsService {
   async resume(uuid: string): Promise<ResumeBroadcastResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.lock(tx, ctx.orgId, uuid);
+      const row = await this.repo.lock(tx, ctx.orgId, uuid, 'camp.campaigns.control');
       if (!row) throw AppError.notFound('Broadcast', uuid);
       if (row.status !== 'paused') {
         throw refuse(
@@ -176,7 +176,7 @@ export class BroadcastsActionsService {
   async export(uuid: string): Promise<{ stream: Readable; fileName: string }> {
     const ctx = RequestContextStore.require();
     const b = await this.db.tx(async (tx) => {
-      const row = await this.read.findByUuid(tx, ctx.orgId, uuid);
+      const row = await this.read.findByUuid(tx, ctx.orgId, uuid, 'camp.campaigns.export');
       if (!row) throw AppError.notFound('Broadcast', uuid);
       await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'export' });
       return row;

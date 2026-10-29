@@ -21,6 +21,7 @@ import {
   filterDefs,
   groupByCategory,
   needsTeamWarning,
+  isCreatorScoped,
   scopeOptions,
   setEffect,
   setMany,
@@ -274,11 +275,15 @@ export function PermissionMatrix({
                                 }
                                 className="h-8 w-auto px-2 text-xs"
                               >
-                                {scopeOptions(hierarchyOffered, grant.recordScope).map((s) => (
-                                  <option key={s} value={s}>
-                                    {t(`scope.${s}`)}
-                                  </option>
-                                ))}
+                                {scopeOptions(hierarchyOffered, grant.recordScope, d.key).map(
+                                  (s) => (
+                                    <option key={s} value={s}>
+                                      {isCreatorScoped(d.key) && (s === 'all' || s === 'own')
+                                        ? t(`creatorScope.${s}`)
+                                        : t(`scope.${s}`)}
+                                    </option>
+                                  ),
+                                )}
                               </Select>
                             )}
                           </div>
