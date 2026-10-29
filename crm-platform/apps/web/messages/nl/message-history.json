@@ -47,7 +47,10 @@
       "download": "Downloaden",
       "rows": "{n} berichten",
       "keptUntil": "bewaard tot {when} ({days} dagen)",
-      "fromEmail": "Uit je e-mail"
+      "fromEmail": "Uit je e-mail",
+      "hint": "CSV exporteren gebruikt de filters en datums die op deze pagina zijn gekozen. Het bestand wordt op de achtergrond gemaakt en we mailen u zodra het klaar is.",
+      "empty": "Nog geen exports. Kies CSV exporteren om de berichten die u hier ziet als bestand te krijgen.",
+      "loading": "Exports laden"
     },
     "kpi": {
       "label": "Kerncijfers",
