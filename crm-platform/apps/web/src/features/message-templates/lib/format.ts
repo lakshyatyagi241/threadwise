@@ -23,7 +23,8 @@ export function wrapSelection(
 /**
  * Turns a marker on or off around the selection. Already marked (inside the selection or
  * right outside it) → the marker is removed; otherwise it is wrapped like `wrapSelection`.
- * A one-character mark (`*`, `_`, `~`) takes whole words, since WhatsApp shows it only at a word edge.
+ * Every mark, the code block too, takes whole words: WhatsApp shows a mark only at a word edge, so one round part of a word would stay
+ * plain text with stray marks in it.
  */
 export function toggleSelection(
   value: string,
@@ -32,8 +33,7 @@ export function toggleSelection(
   marker: string,
   fallback = 'text',
 ): { value: string; start: number; end: number } {
-  const { start, end } =
-    marker.length === 1 ? widenToWords(value, from, to) : { start: from, end: to };
+  const { start, end } = widenToWords(value, from, to);
   const inner = value.slice(start, end);
   if (inner.length > marker.length * 2 && inner.startsWith(marker) && inner.endsWith(marker)) {
     const picked = inner.slice(marker.length, inner.length - marker.length);
