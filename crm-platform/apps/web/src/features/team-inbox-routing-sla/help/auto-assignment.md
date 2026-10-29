@@ -77,7 +77,7 @@ Each team keeps its own method, opening hours and default assignee on the **Team
 Select **Add a rule**, give it a name and say who should get the chats. By default a rule applies to **every new conversation**. To limit it, switch on **Only for conversations that match...** and add conditions one at a time with **Add a condition**. Only the conditions you add are shown. Every condition you add must match.
 
 - **New or returning contact**: a contact is returning when it has an earlier chat, or was saved more than 10 minutes before this chat. A contact the chat itself created is new.
-- **Channel**: only chats that arrive on the channels you tick.
+- **Channel**: the first thing the form asks. Tick the channels the rule is for; none ticked means every channel. It is not in the Add a condition menu, because it comes before the conditions.
 - **Message words**: words or phrases in the customer's message, separated by commas; any word or every word. Capital letters do not matter.
 - **Customer language**: language codes such as en or ar. It uses the language found in the conversation, else the **Language** saved on the contact; it matches only when one of them is known.
 - **Business hours**: only inside or only outside the business hours of your workspace (see below).
