@@ -1,4 +1,5 @@
 import { ALL_PRODUCTS, CHANNELS, PRODUCT_GROUPS, PRODUCTS, hrefOf } from '../data/products';
+import { StatCards } from '../tint';
 import { Card, CtaBand, Hero, SecHead, Section } from '../ui';
 
 export function PlatformPage() {
@@ -15,6 +16,28 @@ export function PlatformPage() {
         ]}
         secondary={{ href: '/get-started', label: 'Find your fit' }}
       />
+      <Section label="The platform in numbers">
+        <StatCards
+          stats={[
+            {
+              to: PRODUCTS.length,
+              label: 'Products',
+              text: 'Inbox, agents, campaigns, CRM and more, working as one platform.',
+            },
+            {
+              to: PRODUCTS.reduce((n, p) => n + p.features.length, 0),
+              suffix: '+',
+              label: 'Capabilities',
+              text: 'Everything they can do, listed on each product page.',
+            },
+            {
+              to: CHANNELS.length,
+              label: 'Channels',
+              text: 'WhatsApp, email, SMS, calling, social and your website, in one inbox.',
+            },
+          ]}
+        />
+      </Section>
       {(Object.keys(PRODUCT_GROUPS) as Array<keyof typeof PRODUCT_GROUPS>).map((g, i) => (
         <Section key={g} soft={i % 2 === 0} label={PRODUCT_GROUPS[g].label}>
           <SecHead eyebrow={PRODUCT_GROUPS[g].label} title={PRODUCT_GROUPS[g].blurb} />
