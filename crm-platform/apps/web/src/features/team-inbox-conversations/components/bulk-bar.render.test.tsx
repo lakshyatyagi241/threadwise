@@ -151,18 +151,22 @@ describe('the bulk bar', () => {
     expect(p.onToggleAll).toHaveBeenCalledOnce();
   });
 
+  it('has no Close button: Resolve is the one way to finish conversations in bulk', () => {
+    render(<BulkBar {...props()} />);
+    expect(host.querySelector('[data-testid="inbox-bulk-resolve"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-close"]')).toBeNull();
+  });
+
   it('runs the action named on the button', () => {
     const p = props();
     render(<BulkBar {...p} />);
     const ran = () => (p.onRun as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0]);
     click('inbox-bulk-read');
     click('inbox-bulk-resolve');
-    click('inbox-bulk-close');
     click('inbox-bulk-reopen');
     expect(ran()).toEqual<BulkConversationAction[]>([
       { type: 'mark_read' },
       { type: 'status', status: 'resolved' },
-      { type: 'status', status: 'closed' },
       { type: 'status', status: 'open' },
     ]);
   });
@@ -383,7 +387,7 @@ describe('the bulk bar', () => {
     expect(host.querySelector('[data-testid="inbox-bulk-reopen"]')).toBeNull();
     expect(host.querySelector('[data-testid="inbox-bulk-snooze"]')).toBeNull();
     expect(host.querySelector('[data-testid="inbox-bulk-spam"]')).toBeNull();
-    expect(host.querySelector('[data-testid="inbox-bulk-close"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="inbox-bulk-resolve"]')).not.toBeNull();
   });
 
   it('still offers Reopen for resolved conversations on other channels', () => {
