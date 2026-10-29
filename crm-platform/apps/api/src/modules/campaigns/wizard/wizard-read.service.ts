@@ -15,6 +15,7 @@ import {
   BroadcastsComposeService,
   PreviousSendsService,
   SENDER_DIRECTORY,
+  PREVIEW_MEDIA_LINK_TTL_S,
   TEMPLATE_DIRECTORY,
   templateMediaPaths,
   templateRefusals,
@@ -102,7 +103,10 @@ export class WizardReadService {
           ).length === 0,
       );
       // The preview shows the file the template was approved with: a stored key needs a link the browser can open.
-      const links = await this.templates.mediaUrls(usable.flatMap((r) => templateMediaPaths(r)));
+      const links = await this.templates.mediaUrls(
+        usable.flatMap((r) => templateMediaPaths(r)),
+        PREVIEW_MEDIA_LINK_TTL_S,
+      );
       return { data: usable.map((r) => this.toTemplate(r, links)) };
     });
   }

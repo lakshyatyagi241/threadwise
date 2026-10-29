@@ -137,9 +137,10 @@ export function buildRecipientVars(
   // Header media: the template's own stored file, passed as a link (nothing is pre-uploaded to Meta). The file is the storage key the
   // user's upload was kept under; `attachmentFile` is Meta's handle for the example, so it only counts when it is itself a web address.
   const att = (t.attachmentType ?? '').toLowerCase();
-  const headerFile = t.headerMediaKey || t.attachmentFile;
-  if (headerFile && att !== '' && att !== 'none' && att !== 'text') {
-    const url = ctx.mediaUrl(headerFile);
+  if ((t.headerMediaKey || t.attachmentFile) && att !== '' && att !== 'none' && att !== 'text') {
+    const url =
+      (t.headerMediaKey ? ctx.mediaUrl(t.headerMediaKey) : null) ??
+      (t.attachmentFile ? ctx.mediaUrl(t.attachmentFile) : null);
     if (url) vars.headerMediaUrl = url;
   }
   // Reference read a location header's coordinates nowhere on this path, so a location template lost its header and Meta

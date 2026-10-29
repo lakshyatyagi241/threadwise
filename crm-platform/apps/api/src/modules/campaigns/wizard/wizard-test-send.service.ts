@@ -267,6 +267,22 @@ export class WizardTestSendService {
     const tpl = await this.db.tx((tx) => this.templates.findById(tx, orgId, template.id));
     if (!tpl) throw AppError.notFound('Template');
 
+    // A header file that cannot be linked would leave the header out and Meta would refuse the message (#132012) with no reason.
+    const kind = (tpl.attachmentType ?? '').toLowerCase();
+    if (tpl.headerMediaKey && ['image', 'video', 'document'].includes(kind)) {
+      const links = await this.templates.mediaUrls([tpl.headerMediaKey]);
+      if (
+        !links.has(tpl.headerMediaKey) &&
+        !(tpl.attachmentFile && /^https?:\/\//i.test(tpl.attachmentFile))
+      ) {
+        throw new AppError(
+          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+          'The header file of this template has no public link: header media needs cloud object storage.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
+
     const resolved = resolveMapping(slots, draft.variables, mergeCtx);
     const rendered = fillText(template.body, 'body', slots, resolved.values) ?? '';
     return { opened, tpl, rendered };

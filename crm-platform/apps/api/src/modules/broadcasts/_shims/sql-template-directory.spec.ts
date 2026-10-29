@@ -42,3 +42,19 @@ describe('templateMediaPaths', () => {
     expect(templateMediaPaths({ headerMediaKey: null })).toEqual([]);
   });
 });
+
+describe('SqlTemplateDirectory.mediaUrls cache and ttl', () => {
+  it('remembers a key with no link, so a run does not ask storage for every recipient', async () => {
+    const { dir, linker } = directory(async () => null);
+    await dir.mediaUrls(['gone.png']);
+    await dir.mediaUrls(['gone.png']);
+    expect(linker).toHaveBeenCalledTimes(1);
+  });
+
+  it('asks storage for the requested lifetime and keeps lifetimes apart', async () => {
+    const { dir, linker } = directory(async (key) => `https://cdn.example.com/${key}`);
+    await dir.mediaUrls(['p.png'], 3600);
+    await dir.mediaUrls(['p.png']);
+    expect(linker.mock.calls.map((c) => (c as unknown as number[])[0])).toEqual([3600, 86400]);
+  });
+});
