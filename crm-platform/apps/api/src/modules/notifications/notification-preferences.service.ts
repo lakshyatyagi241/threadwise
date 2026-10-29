@@ -27,7 +27,7 @@ const NONE: StoredUserPref = { bell: null, toast: null, sound: null, push: null 
  * else's. The stored document is sparse (a channel left unset inherits the owner's toggle, then the catalogue default), and the
  * producers read it through `NotificationsRepository.channelsFor`, so what this screen shows is exactly what the producers do.
  *
- * A type that needs a plan feature (`NOTIFICATION_TYPE_PLAN_FEATURE`: the WhatsApp Groups ones) is left out of the list when the
+ * A type that needs a plan feature (`NOTIFICATION_TYPE_PLAN_FEATURE`: Groups, tasks, leads, forms, SLA, routing, appointments, team chat, email, marketplace, scheduled sends) is left out of the list when the
  * workspace's plan lacks it, so a person never sees a switch for something that cannot reach them. The producers apply the same gate.
  *
  * Changing a preference is audited (who, which type and channel, from what to what) in the same transaction as the write. Sending the

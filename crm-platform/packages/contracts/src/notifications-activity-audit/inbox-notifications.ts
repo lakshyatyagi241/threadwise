@@ -144,14 +144,42 @@ export const NOTIFICATION_TYPE_PREF_KEY: Partial<
 };
 
 /**
- * The plan feature a type needs. A workspace whose plan lacks it gets no row of that type and the type is left out of the preferences
- * (BL-099: the Groups notifications follow the plan gate of the Groups screen).
+ * The plan feature a type needs. A workspace whose plan lacks it gets no preference row for that type, so a person never sees a switch
+ * for something their workspace does not have (BL-099: the Groups notifications follow the plan gate of the Groups screen; BL-433: every
+ * other type that belongs to a plan-gated area). Each feature is the one the area's own screens and API already check, so the two agree.
+ * A type that is absent here belongs to something every workspace has (chats, wallet, billing, devices, broadcasts).
  */
 export const NOTIFICATION_TYPE_PLAN_FEATURE: Partial<Record<NotificationPrefType, PlanFeatureKey>> =
   {
     waba_group_join_request: 'waba_groups',
     waba_group_suspended: 'waba_groups',
     waba_group_suspension_cleared: 'waba_groups',
+    // The deals, tasks and documents area (SalesPipelineGuard).
+    task_assigned: 'sales_pipeline',
+    task_due: 'sales_pipeline',
+    task_completed: 'sales_pipeline',
+    sales_doc_decided: 'sales_pipeline',
+    new_lead: 'lead_sources',
+    // The Forms app: its plan feature is granted only by owning the app.
+    form_submission: 'form_builder',
+    form_needs_review: 'form_builder',
+    form_payment: 'form_builder',
+    form_payment_duplicate: 'form_builder',
+    sla_breached: 'inbox_sla',
+    // Smart routing: a leave only matters to the people who run the routing.
+    member_leave_started: 'inbox_routing',
+    assignment_blocked_by_leave: 'inbox_routing',
+    appointment_calendar_drift: 'appointment_booking',
+    appointment_cancelled_by_customer: 'appointment_booking',
+    appointment_reminder_test: 'appointment_booking',
+    teamchat_mention: 'team_chat',
+    teamchat_message: 'team_chat',
+    email_bounced: 'email_channel',
+    marketplace_renewal_due: 'marketplace',
+    marketplace_payment_failed: 'marketplace',
+    marketplace_subscription_ended: 'marketplace',
+    scheduled_completed: 'scheduled_messages',
+    scheduled_failed: 'scheduled_messages',
   };
 
 /** What a row is about: lets a client mark rows read by subject and open the right screen. */
