@@ -380,7 +380,7 @@
           "quickReplyVariable": "Hızlı yanıt bir değişken içeremez.",
           "urlExampleRequired": "URL değişkeni için bir örnek değer girin.",
           "quickReplyPosition": "Hızlı yanıtlar birlikte, düğmelerin başında veya sonunda olmalıdır.",
-          "flowIdRequired": "Flow kimliğini girin.",
+          "flowIdRequired": "Listeden bir WhatsApp Formu seçin.",
           "flowIdInvalid": "Flow kimliği bir sayıdır.",
           "screenRequired": "Ekran kimliğini girin.",
           "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz.",

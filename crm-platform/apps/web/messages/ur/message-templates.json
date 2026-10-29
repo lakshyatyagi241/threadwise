@@ -380,7 +380,7 @@
           "quickReplyVariable": "فوری جواب میں متغیر نہیں ہو سکتا۔",
           "urlExampleRequired": "URL متغیر کے لیے نمونہ قدر دیں۔",
           "quickReplyPosition": "فوری جوابات ایک ساتھ ہونے چاہئیں، بٹنز کے شروع یا آخر میں۔",
-          "flowIdRequired": "Flow ID درج کریں۔",
+          "flowIdRequired": "فہرست سے ایک WhatsApp فارم منتخب کریں۔",
           "flowIdInvalid": "Flow ID ایک عدد ہے۔",
           "screenRequired": "اسکرین کی ID درج کریں۔",
           "catalogAlone": "کیٹلاگ بٹن کو دوسرے بٹنوں کے ساتھ ملایا نہیں جا سکتا۔",

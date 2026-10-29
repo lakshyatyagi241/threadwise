@@ -380,7 +380,7 @@
           "quickReplyVariable": "クイック返信に変数を含めることはできません。",
           "urlExampleRequired": "URLの変数のサンプル値を入力してください。",
           "quickReplyPosition": "クイック返信は、ボタンの先頭または末尾にまとめて配置してください。",
-          "flowIdRequired": "Flow IDを入力してください。",
+          "flowIdRequired": "リストから WhatsApp フォームを選んでください。",
           "flowIdInvalid": "Flow IDは数字です。",
           "screenRequired": "画面IDを入力してください。",
           "catalogAlone": "カタログボタンは他のボタンと組み合わせられません。",

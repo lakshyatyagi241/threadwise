@@ -380,7 +380,7 @@
           "quickReplyVariable": "لا يمكن أن يحتوي الرد السريع على متغير.",
           "urlExampleRequired": "أعطِ قيمة نموذجية لمتغير عنوان URL.",
           "quickReplyPosition": "يجب أن تكون الردود السريعة معًا، في بداية الأزرار أو نهايتها.",
-          "flowIdRequired": "أدخل معرّف Flow.",
+          "flowIdRequired": "اختر نموذج واتساب من القائمة.",
           "flowIdInvalid": "معرّف Flow رقم.",
           "flowIdNotMeta": "هذا النموذج ليس Flow على Meta بعد (معرّف Flow ليس رقمًا). افتح نماذج WhatsApp، احفظه وانشره، ثم اخترْه هنا.",
           "screenRequired": "أدخل معرّف الشاشة.",

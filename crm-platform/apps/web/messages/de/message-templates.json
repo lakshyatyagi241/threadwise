@@ -380,7 +380,7 @@
           "quickReplyVariable": "Eine Schnellantwort darf keine Variable enthalten.",
           "urlExampleRequired": "Geben Sie einen Beispielwert für die URL-Variable an.",
           "quickReplyPosition": "Schnellantworten müssen zusammen am Anfang oder am Ende der Schaltflächen stehen.",
-          "flowIdRequired": "Geben Sie die Flow-ID ein.",
+          "flowIdRequired": "Wählen Sie ein WhatsApp-Formular aus der Liste.",
           "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
           "screenRequired": "Geben Sie die Bildschirm-ID ein.",
           "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren.",
