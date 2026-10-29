@@ -606,7 +606,7 @@
       "tone": "Tono",
       "pickTone": "Selecciona un tono",
       "language": "Idioma",
-      "languageHint": "El borrador se redacta en el idioma del formulario.",
+      "languageHint": "Elige cualquier idioma que acepte Meta. El borrador se escribe en él y la plantilla lo adopta.",
       "notes": "Instrucciones personalizadas",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Cualquier detalle que quieras incluir: variables, enlaces, frases obligatorias, qué evitar…",

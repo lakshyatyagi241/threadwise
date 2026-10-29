@@ -606,7 +606,7 @@
       "tone": "Tonalität",
       "pickTone": "Tonalität auswählen",
       "language": "Sprache",
-      "languageHint": "Der Entwurf wird in der Sprache des Formulars verfasst.",
+      "languageHint": "Wählen Sie eine beliebige Sprache, die Meta akzeptiert. Der Entwurf wird darin geschrieben, und die Vorlage übernimmt sie.",
       "notes": "Eigener Prompt",
       "notesNote": "optional / max. 2000",
       "notesPlaceholder": "Alles, was enthalten sein soll: Variablen, Links, zwingende Formulierungen, was vermieden werden soll…",

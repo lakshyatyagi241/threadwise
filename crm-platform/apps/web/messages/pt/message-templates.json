@@ -606,7 +606,7 @@
       "tone": "Tom",
       "pickTone": "Selecione o tom",
       "language": "Idioma",
-      "languageHint": "O rascunho é escrito no idioma do formulário.",
+      "languageHint": "Escolha qualquer idioma que a Meta aceite. O rascunho é escrito nele e o modelo o adota.",
       "notes": "Prompt personalizado",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Algo específico que você queira incluir: variáveis, links, frases obrigatórias, o que evitar…",

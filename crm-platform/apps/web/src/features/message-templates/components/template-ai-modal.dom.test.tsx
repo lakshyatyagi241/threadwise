@@ -137,7 +137,7 @@ describe('Build with AI for a template', () => {
     expect(generateButton().disabled).toBe(true);
   });
 
-  it('offers every brief field and shows the language read-only', () => {
+  it("offers every brief field and a language select that starts on the caller's language", () => {
     mount([model()]);
     expect($<HTMLSelectElement>('#tpl-ai-industry').options).toHaveLength(13);
     expect($<HTMLSelectElement>('#tpl-ai-occasion').options).toHaveLength(13);
@@ -146,9 +146,11 @@ describe('Build with AI for a template', () => {
     expect($<HTMLSelectElement>('#tpl-ai-tone').options).toHaveLength(7);
     expect($<HTMLInputElement>('#tpl-ai-business').maxLength).toBe(120);
     expect($<HTMLTextAreaElement>('#tpl-ai-notes').maxLength).toBe(2000);
-    const lang = $<HTMLInputElement>('#tpl-ai-language');
-    expect(lang.readOnly).toBe(true);
-    expect(lang.value).toContain('en_US');
+    const lang = $<HTMLSelectElement>('#tpl-ai-language');
+    expect(lang.value).toBe('en_US');
+    // Any language Meta accepts, not only the form's.
+    const codes = [...lang.options].map((o) => o.value);
+    expect(codes).toEqual(expect.arrayContaining(['en_US', 'hi', 'ar', 'es', 'pt_BR', 'zh_CN']));
   });
 
   it('says the template still goes to Meta when the caller passes that note', () => {
@@ -189,8 +191,19 @@ describe('Build with AI for a template', () => {
       tone: 'Friendly',
       customPrompt: 'mention the weekend',
     });
-    expect(onDraft).toHaveBeenCalledWith(DRAFT);
+    expect(onDraft).toHaveBeenCalledWith(DRAFT, 'en_US');
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it('writes the draft in the language picked, and hands that language over with it', async () => {
+    generate.mockResolvedValue({ template: DRAFT, model: 'gpt-4o-mini' });
+    mount([model()]);
+    type($('#tpl-ai-model'), 'openai:gpt-4o-mini');
+    type($('#tpl-ai-business'), 'Bloomly Florals');
+    type($('#tpl-ai-language'), 'hi');
+    await click(generateButton());
+    expect(generate).toHaveBeenCalledWith(expect.objectContaining({ language: 'hi' }));
+    expect(onDraft).toHaveBeenCalledWith(DRAFT, 'hi');
   });
 
   it.each([

@@ -606,7 +606,7 @@
       "tone": "Ton",
       "pickTone": "Wybierz ton",
       "language": "Język",
-      "languageHint": "Szkic jest pisany w języku formularza.",
+      "languageHint": "Wybierz dowolny język akceptowany przez Meta. Wersja robocza powstaje w nim, a szablon go przyjmuje.",
       "notes": "Własna instrukcja",
       "notesNote": "opcjonalnie / maks. 2000",
       "notesPlaceholder": "Wszystko, co ma się znaleźć w treści: zmienne, linki, obowiązkowe sformułowania, czego unikać…",

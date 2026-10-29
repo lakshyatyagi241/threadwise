@@ -293,8 +293,9 @@ function TemplateForm({
 
   // "Build with AI" (TW-TPL-016): fills this form's own fields for review; nothing is submitted.
   const [aiOpen, setAiOpen] = useState(false);
-  const fillFromAi = (draft: TplAiDraft) => {
-    setState((s) => applyAiDraft(s, draft));
+  const fillFromAi = (draft: TplAiDraft, language: string) => {
+    // The draft is written in the language picked in the dialog, and the template takes it.
+    setState((s) => ({ ...applyAiDraft(s, draft), language }));
     setFailure(null);
     setResult(null);
     toast(t('ai.applied'), 'success');

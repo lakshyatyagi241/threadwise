@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  languageForPrompt,
   parseTemplateDraft,
   templateBriefLines,
   templateSlug,
@@ -94,11 +95,20 @@ describe('the brief', () => {
     expect(lines).toEqual([
       'Business name: B',
       'Template category (Meta review path): utility',
-      'Language: hi_IN',
+      expect.stringMatching(/^Language: Hindi.*\(hi_IN\)$/),
       'Message purpose: Order update',
       '',
       'Additional operator notes:',
       'Short please',
     ]);
+  });
+
+  it('names the language beside its code, so any language Meta accepts reads clearly', () => {
+    expect(languageForPrompt('hi')).toBe('Hindi (hi)');
+    // The wording of a regional name is the runtime's own, so only the language and the code are checked.
+    expect(languageForPrompt('pt_BR')).toMatch(/Portuguese.*\(pt_BR\)$/);
+    expect(languageForPrompt('zh_CN')).toMatch(/Chinese.*\(zh_CN\)$/);
+    // A code the platform cannot name stays as it was.
+    expect(languageForPrompt('xx_YY')).toContain('xx_YY');
   });
 });

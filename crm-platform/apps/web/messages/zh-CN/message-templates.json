@@ -606,7 +606,7 @@
       "tone": "语气",
       "pickTone": "选择语气",
       "language": "语言",
-      "languageHint": "草稿将使用表单所用的语言撰写。",
+      "languageHint": "可选择 Meta 支持的任意语言。草稿将用该语言撰写，模板也采用该语言。",
       "notes": "自定义提示",
       "notesNote": "选填 / 最多 2000 字",
       "notesPlaceholder": "您希望包含的具体内容：变量、链接、必须使用的措辞、需要避免的内容…",
