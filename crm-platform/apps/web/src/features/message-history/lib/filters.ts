@@ -18,6 +18,21 @@ import {
  * API query from it; nothing here touches the DOM.
  */
 
+/**
+ * The types the Type filter offers. A broadcast is a campaign to the person, and scheduled messages are not kept as a type of their own,
+ * so neither is offered; an older link that names one still filters (see `typeOptions`).
+ */
+export const OFFERED_TYPES: readonly MessageHistoryType[] = MESSAGE_HISTORY_TYPES.filter(
+  (x) => x !== 'broadcast' && x !== 'scheduled',
+);
+
+/** The offered types, plus the one an older link brought when it is not among them, so the select still shows what it filters by. */
+export function typeOptions(current: HistoryState['type']): readonly MessageHistoryType[] {
+  return current !== '' && !OFFERED_TYPES.includes(current)
+    ? [...OFFERED_TYPES, current]
+    : OFFERED_TYPES;
+}
+
 export const DEFAULT_RANGE: MessageHistoryRange = '30d';
 export type Bucket = 'hourly' | 'daily' | 'weekly';
 export const BUCKETS: readonly Bucket[] = ['daily', 'hourly', 'weekly'];
@@ -84,7 +99,10 @@ export function parseState(sp: URLSearchParams): HistoryState {
     from: custom ? from : '',
     to: custom ? to : '',
     dir: oneOf(MESSAGE_HISTORY_DIRECTIONS, sp.get('dir')) ?? 'all',
-    type: oneOf(MESSAGE_HISTORY_TYPES, sp.get('type')) ?? '',
+    // An older link may say broadcast: it is a campaign to the person (and to the filter).
+    type: ((t) => (t === 'broadcast' ? 'campaign' : (t ?? '')))(
+      oneOf(MESSAGE_HISTORY_TYPES, sp.get('type')),
+    ),
     source: [...new Set(source)],
     status: oneOf(MESSAGE_HISTORY_STATUSES, sp.get('status')) ?? '',
     channelId: id('channelId'),

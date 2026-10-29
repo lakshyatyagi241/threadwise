@@ -208,7 +208,16 @@ describe('the KPI cards', () => {
 
 describe('the type filter', () => {
   it('maps the automated sources to themselves and the rest to message kinds', () => {
-    expect(typeFilterParts('broadcast')).toEqual({ entity: 'broadcast', source: 'broadcast' });
+    // A campaign and a broadcast are one thing to the person: either one matches the rows of both.
+    expect(typeFilterParts('campaign')).toEqual({
+      entities: ['campaign', 'broadcast'],
+      sources: ['campaign', 'broadcast'],
+    });
+    expect(typeFilterParts('broadcast')).toEqual(typeFilterParts('campaign'));
+    expect(typeFilterParts('scheduled')).toEqual({
+      entities: ['scheduled'],
+      sources: ['scheduled'],
+    });
     expect(typeFilterParts('auto_reply')).toEqual({ source: 'auto_reply' });
     expect(typeFilterParts('audio').kinds).toEqual(['audio', 'voice']);
     expect(typeFilterParts('document').kinds).toEqual(['document', 'sticker']);

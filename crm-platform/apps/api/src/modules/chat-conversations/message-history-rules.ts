@@ -104,17 +104,23 @@ export const likeEscape = (s: string): string => s.replace(/[\\%_]/g, (c) => `\\
 
 // --- the type pill and the type filter ---------------------------------------------------------------------------------------
 
-/** What the Type filter means in terms of the columns: an automated source, or the kinds of message it is made of. */
+/**
+ * What the Type filter means in terms of the columns: an automated source, or the kinds of message it is made of. A campaign and a
+ * broadcast are one thing to the person (the filter offers only Campaign), so `campaign` (and the old `broadcast` link) matches the rows
+ * of both; a scheduled message stays its own source.
+ */
 export function typeFilterParts(t: MessageHistoryType): {
-  entity?: 'broadcast' | 'campaign' | 'scheduled';
+  entities?: Array<'broadcast' | 'campaign' | 'scheduled'>;
+  sources?: string[];
   source?: string;
   kinds?: string[];
 } {
   switch (t) {
     case 'broadcast':
     case 'campaign':
+      return { entities: ['campaign', 'broadcast'], sources: ['campaign', 'broadcast'] };
     case 'scheduled':
-      return { entity: t, source: t };
+      return { entities: ['scheduled'], sources: ['scheduled'] };
     case 'auto_reply':
       return { source: 'auto_reply' };
     case 'image':

@@ -5,13 +5,18 @@ import { useLocale, useTranslations } from 'next-intl';
 import {
   MESSAGE_HISTORY_SOURCES,
   MESSAGE_HISTORY_STATUSES,
-  MESSAGE_HISTORY_TYPES,
   type MessageHistorySource,
   type MessageHistorySummary,
 } from '@crm/contracts';
 import { Button, Input, Select, cn } from '@crm/ui';
 import { formatCount } from '../lib/format';
-import { SCOPE_KEYS, isNarrowed, type HistoryState, type ScopeKey } from '../lib/filters';
+import {
+  SCOPE_KEYS,
+  isNarrowed,
+  typeOptions,
+  type HistoryState,
+  type ScopeKey,
+} from '../lib/filters';
 import { CrossIcon, SearchIcon } from './parts';
 
 export interface ChannelOption {
@@ -129,7 +134,7 @@ export function FilterBar({ state, summary, channels, onChange, onClear }: Props
           className="h-9 w-auto min-w-[140px]"
         >
           <option value="">{t('allTypes')}</option>
-          {MESSAGE_HISTORY_TYPES.map((x) => (
+          {typeOptions(state.type).map((x) => (
             <option key={x} value={x}>
               {type(x)}
             </option>
