@@ -71,6 +71,7 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { ShellHidden } from '../shell-hidden';
 import { FaqsPanel, flowAgentIds } from '../faqs-panel';
 import { TestPanel } from '../simulator/test-panel';
 import { templateQuickReplies } from '../../lib/templates';
@@ -679,8 +680,12 @@ function Editor({
     <FlowEditorContext.Provider
       value={{ flowId, web: channel === 'web', channel, whatsapp: channel === 'chat' }}
     >
-      <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
+      <div
+        className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground"
+        data-testid="flow-builder"
+      >
         <BuilderFonts />
+        <ShellHidden />
         <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
           <Link
             href="/flows"
