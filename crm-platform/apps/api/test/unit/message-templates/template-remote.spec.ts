@@ -142,8 +142,9 @@ describe('the webhook and the sync agree on the local status', () => {
       NOW,
     )!.status;
     expect(viaSync).toBe(viaWebhook ?? null);
-    // Every local value is one the contract knows.
-    expect(tplStatusSchema.safeParse(viaSync).success).toBe(true);
+    // Every local value is one the contract knows (FLAGGED, Meta's "at risk" warning, leaves the status as it was).
+    if (state === 'FLAGGED') expect(viaSync).toBeNull();
+    else expect(tplStatusSchema.safeParse(viaSync).success).toBe(true);
   });
 });
 

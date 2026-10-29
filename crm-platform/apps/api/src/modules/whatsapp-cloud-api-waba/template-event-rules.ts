@@ -56,8 +56,9 @@ export function localStatusFor(metaStatus: string): string | null {
       return 'paused';
     case 'DISABLED':
     case 'LIMIT_EXCEEDED':
-    case 'FLAGGED':
       return 'disabled';
+    // FLAGGED is Meta's warning that a template "is at risk of being disabled": it is still approved and can be sent, so the local state is
+    // left as it was (null), not turned into a disabled template that cannot be sent or edited.
     case 'DELETED':
       return 'deleted';
     default:
@@ -80,7 +81,10 @@ export function applyTemplateEvent(
     case 'message_template_status_update': {
       const event = String(value.event ?? '').toUpperCase();
       if (!event) return null;
-      patch.metaStatus = event;
+      // A warning only: the template stays as it is on Meta (approved) until Meta pauses or disables it.
+      if (event === 'FLAGGED') return patch;
+      // REINSTATED: no longer flagged or disabled, "can be sent in template messages again" = approved again.
+      patch.metaStatus = event === 'REINSTATED' ? 'APPROVED' : event;
       patch.rejectionReasonCode =
         event === 'REJECTED' ? String(value.reason ?? '').toUpperCase() || 'NONE' : null;
       if (event === 'PAUSED') patch.pausedUntil = new Date(now.getTime() + DAY_MS);

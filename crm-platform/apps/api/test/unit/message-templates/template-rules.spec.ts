@@ -147,6 +147,83 @@ describe('Meta create payload (TW-TPL-024)', () => {
   });
 });
 
+describe("Meta's rules, as its template documentation states them (BL-92)", () => {
+  it('a named template sends named examples, a positional one sends ordered values', () => {
+    const named = buildMetaTemplate({
+      name: 'order_update',
+      language: 'en_US',
+      metaCategory: 'UTILITY',
+      templateType: 'standard',
+      parameterFormat: 'NAMED',
+      header: 'Sale starts {{sale_start}}',
+      body: 'Hi {{first_name}}, order {{order_number}} is ready.',
+      variableMap: {
+        header: [{ num: 1, key: 'sale_start', example: 'December 1st' }],
+        body: [
+          { num: 1, key: 'first_name', example: 'Pablo' },
+          { num: 2, key: 'order_number' },
+        ],
+      },
+    } as never);
+    expect(named.parameter_format).toBe('NAMED');
+    const header = named.components.find((c) => c.type === 'HEADER') as { example: unknown };
+    const body = named.components.find((c) => c.type === 'BODY') as { example: unknown };
+    expect(header.example).toEqual({
+      header_text_named_params: [{ param_name: 'sale_start', example: 'December 1st' }],
+    });
+    expect(body.example).toEqual({
+      body_text_named_params: [
+        { param_name: 'first_name', example: 'Pablo' },
+        { param_name: 'order_number', example: 'order_number' },
+      ],
+    });
+    const positional = buildMetaTemplate({
+      name: 'order_update',
+      language: 'en_US',
+      metaCategory: 'UTILITY',
+      templateType: 'standard',
+      body: 'Hi {{1}}, order {{2}}.',
+      variableMap: { body: [{ num: 1, key: '1', example: 'Pablo' }] },
+    } as never);
+    const pb = positional.components.find((c) => c.type === 'BODY') as { example: unknown };
+    expect(pb.example).toEqual({ body_text: [['Pablo', 'Sample 2']] });
+  });
+
+  it('a URL button variable must be at the very end, and the address, phone and example code have length limits', () => {
+    const lint = (button: Record<string, unknown>) =>
+      codes(lintTemplate({ ...base, buttons: [{ type: 'URL', text: 'Go', ...button }] } as never));
+    expect(lint({ url: 'https://x.test/p/{{1}}' })).not.toContain('url_variable_position');
+    expect(lint({ url: 'https://x.test/{{1}}/more' })).toContain('url_variable_position');
+    expect(lint({ url: `https://x.test/${'a'.repeat(2000)}` })).toContain('url_long');
+    expect(
+      codes(
+        lintTemplate({
+          ...base,
+          buttons: [{ type: 'PHONE_NUMBER', text: 'Call', phone_number: '+'.padEnd(21, '1') }],
+        } as never),
+      ),
+    ).toContain('phone_long');
+    expect(
+      codes(
+        lintTemplate({
+          ...base,
+          buttons: [{ type: 'COPY_CODE', example: 'A'.repeat(21) }],
+        } as never),
+      ),
+    ).toContain('copy_code_long');
+  });
+
+  it('a carousel outside Marketing is an error, not a warning', () => {
+    const issues = lintTemplate({
+      ...base,
+      templateType: 'carousel',
+      metaCategory: 'UTILITY',
+      cards: [],
+    } as never);
+    expect(issues.find((i) => i.code === 'carousel_category')?.severity).toBe('error');
+  });
+});
+
 describe('pre-submit linter (TW-TPL-023)', () => {
   it('passes a clean template', () => {
     expect(
