@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Revient {time}",
       "erased": "Contacts effacés",
-      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles ni le texte des messages. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
+      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
       "erasedTitle": "Contact effacé"
     },
     "status": {

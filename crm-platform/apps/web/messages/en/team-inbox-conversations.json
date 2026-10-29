@@ -62,7 +62,7 @@
       "archived": "Archived",
       "backToInbox": "Back to the inbox",
       "erased": "Erased contacts",
-      "erasedHint": "These contacts were erased, and their conversations were kept without their details or message text. Times show the last message, because the erase date is not recorded.",
+      "erasedHint": "These contacts were erased, and their conversations were kept without their details. Times show the last message, because the erase date is not recorded.",
       "erasedTitle": "Erased contact",
       "loading": "Loading conversations",
       "retry": "Try again",

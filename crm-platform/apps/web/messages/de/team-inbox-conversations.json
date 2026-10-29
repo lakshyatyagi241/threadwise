@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wird um {time} wieder geöffnet",
       "erased": "Gelöschte Kontakte",
-      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person und ohne Nachrichtentext behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
+      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
       "erasedTitle": "Gelöschter Kontakt"
     },
     "status": {
