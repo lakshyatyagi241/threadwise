@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · à l’arrivée dans un groupe",
       "triggerManual": "Inscription manuelle",
       "triggerKeyword": "Mot-clé",
+      "triggerAny": "N'importe quel message",
       "active": "actifs",
       "done": "terminés",
       "failed": "échoués",
@@ -130,7 +131,10 @@
         "reEngagement": "Réactive les contacts dormants avec une offre personnalisée ou un message de prise de nouvelles.",
         "lead": "Fait mûrir les nouveaux leads avec des contenus pédagogiques avant de les passer aux ventes.",
         "event": "Diffusion limitée dans le temps autour d’un lancement, de soldes ou d’un moment saisonnier.",
-        "default": "Parcours WhatsApp automatisé créé dans l’éditeur de flux."
+        "default": "Parcours WhatsApp automatisé créé dans l’éditeur de flux.",
+        "defaultWeb": "Chatbot de site web créé dans l'éditeur de flux.",
+        "defaultCall": "Appel automatisé créé dans l'éditeur de flux.",
+        "defaultOther": "Conversation automatisée créée dans l'éditeur de flux."
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "{steps, plural, one {# étape importée} other {# étapes importées}} dans {flows, plural, one {# flux} other {# flux}}. Vérifiez-les, puis enregistrez.",
         "invalidJson": "Ce fichier n’est pas un JSON valide.",
         "saved": "« {name} » enregistré",
+        "nodeSaved": "Nœud mis à jour avec succès !",
         "saveFailed": "Échec de l’enregistrement : {error}",
         "publishedToast": "Publié",
         "publishFailed": "Échec de la publication : {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "Supprimer la règle",
           "variablePlaceholder": "Nom de la variable (p. ex. plan)",
+          "keyLabel": "Clé",
+          "valueLabel": "Valeur",
+          "pickProperty": "Choisir une propriété du contact",
           "pickVariable": "Choisissez la variable à tester.",
           "comparePlaceholder": "Comparer à…",
           "joinerAnd": "ET",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "Document (rapport PDF, etc.)",
           "upload": "Téléverser",
           "uploadHint": "Jusqu’à {mb} Mo. Nous hébergeons le fichier et donnons au flux une URL publique.",
+          "acceptedFormats": {
+            "image": "Formats acceptés: JPG, PNG.",
+            "video": "Formats acceptés: MP4, 3GP.",
+            "audio": "Formats acceptés: MP3, AAC, AMR, OGG.",
+            "document": "Formats acceptés: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Remplacer le fichier",
           "chooseKind": {
             "image": "Choisir une image (ou la déposer ici)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "Sans le @. Le lien devient ig.me/m/votremarque : le toucher ouvre un DM vers votre compte.",
           "igMessage": "Message WhatsApp",
           "igMessageHint": "Envoyé au client sur WhatsApp avec le lien Instagram. Prend en charge les '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continuez avec nous sur Instagram 👇"
+          "igMessagePlaceholder": "Continuez avec nous sur Instagram 👇",
+          "templateFills": "Ce qui remplit chaque numéro",
+          "templateFillsHint": "Saisissez le texte de chaque numéro du modèle, ou appuyez sur / pour insérer une information du contact ou une variable du flux. Laissez vide pour utiliser la valeur du modèle.",
+          "templateHeaderMedia": "Fichier d'en-tête",
+          "templateHeaderMediaHint": "L'image, la vidéo ou le fichier de l'en-tête de ce modèle. Nécessaire quand le modèle n'a pas de fichier propre.",
+          "templateHeaderMediaMissing": "Ajoutez le fichier d'en-tête : ce modèle n'en a aucun et WhatsApp ne l'enverra pas sans."
         },
         "sequence": {
           "info": "Chaque réponse est envoyée dans l’ordre au client. Combinez texte, images, vidéo, audio et documents dans un seul nœud : parfait pour les fiches produit ou les kits d’accueil.",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "Envoyer la réponse au client",
           "variable": "Enregistrer la réponse sous",
           "variableHint": "Les étapes suivantes lisent la réponse sous ce nom, par exemple faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Chargement des listes…",
+          "listPick": "— choisir une liste —",
+          "listFallback": "Liste",
+          "listNotLoaded": "Liste {id} (non chargée)",
+          "segmentLoading": "Chargement des segments…",
+          "segmentPick": "— choisir un segment —",
+          "segmentFallback": "Segment",
+          "segmentNotLoaded": "Segment {id} (non chargé)",
+          "updateIntroSub": "Les champs du contact se trouvent dans <link>/contacts</link>. Le numéro de téléphone ne peut pas être modifié ici.",
+          "updateIntro": "Définit <b>un champ</b> de ce contact. Utilisez <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> ou la clé d'un de vos champs personnalisés. Les nœuds suivants voient la nouvelle valeur.",
+          "fieldLabel": "Champ",
+          "fieldHint": "La clé du champ, par exemple city ou email.",
+          "newValueLabel": "Nouvelle valeur",
+          "newValueHint": "Un texte quelconque ou {example}. Laissez vide pour effacer le champ (un nom ne peut pas être effacé).",
+          "listIntroSub": "Gérez les listes dans <link>/contacts/groups</link>.",
+          "listIntro": "Ajoute ce contact à une <b>liste</b> ou l'en retire. Une liste modifiée par un parcours ne déclenche pas les parcours « rejoint / quitte une liste », ainsi un parcours ne peut pas boucler sur lui-même.",
+          "actionLabel": "Action",
+          "actionAdd": "Ajouter le contact à la liste",
+          "actionRemove": "Retirer le contact de la liste",
+          "listLabel": "Liste",
+          "inListIntro": "Branche selon que ce contact figure dans une <b>liste</b> : <mono>yes</mono> s'il y figure, <mono>no</mono> s'il n'y figure pas (ou si la liste a disparu).",
+          "segmentIntroSub": "Créez les segments dans <link>/segments</link>.",
+          "segmentIntro": "Branche selon que ce contact correspond à un <b>segment</b> à l'instant : <mono>yes</mono> ou <mono>no</mono>.",
+          "segmentLabel": "Segment",
+          "waSessionIntro": "<mono>yes</mono> si le client vous a écrit au cours des dernières <b>24 heures</b>, un message simple peut donc encore être envoyé ; <mono>no</mono> si la fenêtre est fermée et seul un modèle approuvé peut l'atteindre.",
+          "windowLabel": "Fenêtre (heures)",
+          "windowHint": "La fenêtre WhatsApp dure 24 heures. Choisissez une durée plus courte pour un contrôle plus strict.",
+          "spreadsheetLabel": "Feuille de calcul",
+          "spreadsheetHint": "Choisissez une feuille de votre compte Google connecté.",
+          "tabLabel": "Onglet (facultatif)",
+          "tabHint": "Vide = le premier onglet.",
+          "matchColumnLabel": "Trouver la ligne où la colonne",
+          "matchColumnHint": "L'en-tête de la colonne dans laquelle chercher.",
+          "matchValueLabel": "est égale à",
+          "matchValueHint": "En général {example}.",
+          "sheetCheckIntro": "Recherche une ligne dans une feuille de calcul Google et vérifie l'une de ses cellules : <mono>yes</mono> si la cellule satisfait le test, <mono>no</mono> si ce n'est pas le cas, si aucune ligne ne correspond ou si Google est injoignable.",
+          "checkColumnLabel": "Colonne à vérifier",
+          "testLabel": "Critère",
+          "valueLabel": "Valeur",
+          "sheetContactIntro": "Recherche une ligne dans une feuille de calcul Google et copie des cellules dans <b>ce contact</b> : une colonne par champ. Il met à jour le contact avec lequel le parcours échange ; il ne crée pas de contacts à partir de nouvelles lignes.",
+          "copyColumnsLabel": "Copier ces colonnes",
+          "copyColumnsHint": "En-tête de colonne de la feuille → clé du champ du contact.",
+          "columnHeaderPlaceholder": "En-tête de colonne",
+          "addColumn": "Ajouter une colonne",
+          "op": {
+            "equals": "est égal à",
+            "not_equals": "n'est pas égal à",
+            "contains": "contient",
+            "not_contains": "ne contient pas",
+            "starts_with": "commence par",
+            "ends_with": "finit par",
+            "greater_than": "est supérieur à",
+            "less_than": "est inférieur à",
+            "is_set": "a une valeur",
+            "is_not_set": "n'a pas de valeur",
+            "is_empty": "est vide",
+            "is_not_empty": "n'est pas vide"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Exécute une API enregistrée dans l’<b>API Library</b> pour le contact de cette exécution. Elle sort par <mono>success</mono> lorsque l'API répond 2xx, et par <mono>error</mono> pour toute autre réponse.",
+          "apiLabel": "API",
+          "loadFailed": "Impossible de charger vos API enregistrées.",
+          "manageApis": "Gérer les API",
+          "refreshList": "Actualiser la liste",
+          "loading": "Chargement des API…",
+          "pickApi": "— choisir une API —",
+          "noApis": "Aucune API enregistrée pour l'instant",
+          "loadingName": "Chargement…",
+          "savedApiName": "API enregistrée",
+          "notFound": "{name} (introuvable)",
+          "variablesLabel": "Variables",
+          "variablesHint": "Laissez une valeur vide pour utiliser la variable de l'exécution portant ce nom, puis la propriété du contact, puis la valeur par défaut. Les valeurs peuvent utiliser {example}.",
+          "defaultPlaceholder": "Par défaut : {value}",
+          "saveLabel": "Enregistrer la réponse dans",
+          "saveHint": "Les nœuds suivants lisent la réponse sous <mono>{variable}</mono>, un champ sous <mono>{field}</mono> et le statut sous <mono>{status}</mono>.",
+          "exposes": "Cette API expose aussi <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Déclencher un autre chatbot"
+          "description": "Passer la conversation à un agent IA"
         },
         "whatsapp_shop": {
           "label": "Boutique WhatsApp",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "« {node} » n’a aucune connexion entrante : rien ne mène vers lui.",
+        "buttonNoExit": "« {node} » : le bouton « {button} » ne mène à aucune étape.",
         "notConnected": "« {node} » n’est relié à rien.",
         "wrongChannel": "« {node} » ne fonctionne pas sur {channel} : supprimez-le ou réactivez le canal sur le nœud Déclencheur.",
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",

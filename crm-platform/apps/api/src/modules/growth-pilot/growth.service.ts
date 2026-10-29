@@ -42,6 +42,7 @@ import { GrowthRepository } from './growth.repository';
 import {
   applyConfigPatch,
   buildPropensity,
+  digestDay,
   digestHighlights,
   safeTimezone,
   sendTimeProfile,
@@ -134,10 +135,12 @@ export class GrowthService {
 
   async overview(orgId: number): Promise<GrowthOverview> {
     const ctx = await this.gate.require(orgId);
-    const stored = await this.db.txAs({ orgId, userId: null }, (tx) =>
-      this.repo.latestDigest(tx, orgId),
-    );
+    const { stored, timezone } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
+      stored: await this.repo.latestDigest(tx, orgId),
+      timezone: await this.repo.timezone(tx, orgId),
+    }));
     let digest = stored as GrowthDailyDigest | null;
+    if (digest && digest.day !== digestDay(new Date(), timezone)) digest = null;
     if (!digest && ctx.features.daily_digest) digest = await this.buildDigest(orgId);
     return { settings: this.toSettings(ctx), digest };
   }
@@ -450,8 +453,11 @@ export class GrowthService {
   }
 
   async buildDigest(orgId: number): Promise<GrowthDailyDigest> {
-    const f = await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.digestFacts(tx, orgId));
-    const day = new Date().toISOString().slice(0, 10);
+    const { f, timezone } = await this.db.txAs({ orgId, userId: null }, async (tx) => ({
+      f: await this.repo.digestFacts(tx, orgId),
+      timezone: await this.repo.timezone(tx, orgId),
+    }));
+    const day = digestDay(new Date(), timezone);
     const campaigns = { sent: Number(f.sent), read: Number(f.read), replied24h: Number(f.replied) };
     const base = {
       hotLeads: Number(f.hot),

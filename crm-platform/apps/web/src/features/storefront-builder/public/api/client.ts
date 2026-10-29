@@ -11,7 +11,7 @@ import {
   type PublicHome,
   type PublicReviewInput,
 } from '@crm/contracts';
-import type { ZodType, ZodTypeDef } from 'zod';
+import type { ZodType } from 'zod';
 
 /**
  * Browser calls of the public shop. They go to the shop's own route handlers (`/s/<slug>/...`, same origin, so they work on a
@@ -35,7 +35,7 @@ const shop = (slug: string) => `/s/${encodeURIComponent(slug)}`;
 async function call<T>(
   url: string,
   init: RequestInit,
-  schema: ZodType<T, ZodTypeDef, unknown>,
+  schema: ZodType<T, unknown>,
 ): Promise<CallResult<T>> {
   let res: Response;
   try {

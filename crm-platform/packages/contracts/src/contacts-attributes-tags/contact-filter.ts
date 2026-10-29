@@ -82,8 +82,8 @@ export const contactFilterShape = {
 export const contactFilterSchema = z
   .object(contactFilterShape)
   .refine((v) => !(v.groupId && v.noGroup), {
-    message: 'groupId and noGroup cannot be combined',
     path: ['noGroup'],
+    error: 'groupId and noGroup cannot be combined',
   });
 export type ContactFilter = z.infer<typeof contactFilterSchema>;
 

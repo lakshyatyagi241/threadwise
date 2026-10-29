@@ -19,3 +19,16 @@ export function flowVariables(doc: Pick<SimpleDoc, 'journeys' | 'vars'>): string
     }
   return names;
 }
+
+/** The same names for the Advanced canvas: what the nodes of the flow save (`var`, `save`), each once, in the order of the nodes. */
+export function nodeVariables(nodes: ReadonlyArray<{ data?: Record<string, unknown> }>): string[] {
+  const names: string[] = [];
+  const add = (n: string) => {
+    if (n !== '' && !names.includes(n)) names.push(n);
+  };
+  for (const n of nodes) {
+    add(str(n.data?.var));
+    add(str(n.data?.save));
+  }
+  return names;
+}

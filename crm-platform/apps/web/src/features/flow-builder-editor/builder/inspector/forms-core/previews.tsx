@@ -330,7 +330,7 @@ export function ListPreview({ d }: { d: Data }) {
             ))
           ) : (
             <div
-              className="p-3.5 text-center text-[11px] italic"
+              className="p-3.5 text-center text-[11px]"
               style={{ color: 'rgba(0,0,0,0.5)' }}
             >
               {t('listEmpty')}
@@ -538,7 +538,7 @@ export function SequencePreview({ d }: { d: Data }) {
         })
       ) : (
         <div
-          className="py-6 text-center text-[11px] italic"
+          className="py-6 text-center text-[11px]"
           style={{ color: 'rgba(255,255,255,0.55)' }}
         >
           {t('noReplies')}

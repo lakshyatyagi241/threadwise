@@ -183,9 +183,10 @@ describe('chat page (TW-WGT-009)', () => {
     expect(script).not.toMatch(/innerHTML\s*=/);
   });
 
-  it('TW-WGT-009: it asks for config, posts messages and polls history every 4 seconds', () => {
+  it('TW-WGT-009: it asks for config, posts messages and polls history every 4 seconds, backing off while nothing arrives', () => {
     expect(page).toContain("'/widget/' + TOKEN + '/api/'");
-    expect(page).toContain('setInterval(poll, 4000)');
+    expect(page).toContain('POLL_BASE_MS = 4000');
+    expect(page).toContain('Math.min(pollMs * 2, POLL_MAX_MS)');
     expect(page).toContain("'Tell us a bit about you'");
     expect(page).toContain("'Open WhatsApp'");
     expect(page).toContain('placeholder="Type a message');
@@ -313,6 +314,30 @@ describe('the cross: end the conversation, rate it, or restart', () => {
     const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
     expect(page).toContain("mn.dataset.minimize = '1'");
     expect(page).toContain("tx('minimize', 'Minimize')");
+  });
+});
+
+describe('the date and time picker of the chat window', () => {
+  const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme' });
+
+  it('says its words in the visitor language, not in English only', () => {
+    for (const k of ['previous', 'next', 'selectTime', 'cancel', 'ok', 'datePicker'])
+      expect(page).toContain(`tx('${k}'`);
+    expect(CHAT_TEXT.ar!.selectTime).not.toBe(CHAT_TEXT.en!.selectTime);
+    expect(CHAT_TEXT.hi!.cancel).not.toBe(CHAT_TEXT.en!.cancel);
+  });
+  it('names the dialog, reads each day as a whole date and says which is chosen', () => {
+    expect(page).toContain("box.setAttribute('aria-label', tx('datePicker'");
+    expect(page).toContain("dateStyle: 'full'");
+    expect(page).toContain("b.setAttribute('aria-pressed'");
+  });
+  it('points the arrows the way the buttons move in a right-to-left page', () => {
+    expect(page).toContain("document.documentElement.dir === 'rtl'");
+    expect(page).toContain('dpSvg(rtl ? right : left)');
+    expect(page).toContain('dpSvg(rtl ? left : right)');
+  });
+  it('writes AM and PM as the language does', () => {
+    expect(page).toContain("type === 'dayPeriod'");
   });
 });
 

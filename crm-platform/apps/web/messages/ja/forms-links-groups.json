@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "このリンクは一時停止中、または期限が切れています。",
       "ROW_VERSION_CONFLICT": "この項目は別の場所で変更されました。再読み込みしてもう一度お試しください。",
       "VALIDATION_FAILED": "ハイライトされた項目を確認してもう一度お試しください。",
-      "PLAN_FEATURE_LOCKED": "この機能を使用するにはプランをアップグレードしてください。"
+      "PLAN_FEATURE_LOCKED": "この機能を使用するにはプランをアップグレードしてください。",
+      "WFL_FORM_SYNC_FAILED": "Metaからフォームを読み取れませんでした。"
     },
     "forms": {
       "heading": "WhatsAppフォーム",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "フォームはまだありません",
-        "description": "フォームを作成し、フロー内のWhatsAppフォームステップから送信してください。"
+        "description": "フォームを作成し、フロー内のWhatsAppフォームステップから送信してください。",
+        "noMatch": "「{q}」に一致するフォームはありません。"
       },
       "table": {
         "form": "フォーム",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "保存しました。",
-        "published": "WhatsAppに公開しました。"
+        "published": "WhatsAppに公開しました。",
+        "connectHint": "フォームは WhatsApp Cloud API への直接接続でのみ公開できます。管理者にチャネル → WhatsApp で接続してもらってください。",
+        "connectLink": "WhatsApp チャネルを開く"
       },
       "builder": {
         "back": "フォーム一覧に戻る",
@@ -143,6 +147,14 @@
           "contact": "連絡先",
           "phone": "電話番号"
         }
+      },
+      "sync": {
+        "cta": "Metaと同期",
+        "syncing": "同期中…",
+        "done": "Metaと同期しました: {checked}件確認、{updated}件更新、Metaにない{missing}件、Metaのみ{metaOnly}件。"
+      },
+      "search": {
+        "placeholder": "フォームを検索"
       }
     },
     "links": {

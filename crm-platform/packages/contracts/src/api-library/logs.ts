@@ -22,22 +22,25 @@ export const apiLibraryLogItemSchema = z.object({
   /** The API that ran. Null for a test of a definition that was never saved. The id outlives the API (a deleted API's log stays; `apiName` remembers it). */
   apiId: uuidSchema.nullable(),
   apiName: z.string(),
+  /** The bot (flow) whose step made the call; null for a test or another source. Its name is read live, so a rename shows at once. */
+  botId: uuidSchema.nullable(),
+  botName: z.string().nullable(),
   source: apiLibraryLogSourceSchema,
   method: z.string(),
   url: z.string(),
   ok: z.boolean(),
-  statusCode: z.number().int().nullable(),
-  durationMs: z.number().int(),
+  statusCode: z.int().nullable(),
+  durationMs: z.int(),
   errorKind: apiLibraryErrorKindSchema.nullable(),
   error: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type ApiLibraryLogItem = z.infer<typeof apiLibraryLogItemSchema>;
 
 export const apiLibraryLogDetailSchema = apiLibraryLogItemSchema.extend({
-  requestHeaders: z.record(z.string()),
+  requestHeaders: z.record(z.string(), z.string()),
   requestBody: z.string().nullable(),
-  responseHeaders: z.record(z.union([z.string(), z.array(z.string())])),
+  responseHeaders: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
   responseBody: z.string().nullable(),
   /** The stored response body was cut. */
   responseTruncated: z.boolean(),
@@ -56,16 +59,27 @@ export const listApiLibraryLogsQuerySchema = paginationQuerySchema.extend({
   /** Numbered pages: 1-based. Present: offset pagination (`cursor` is ignored) and the answer carries the totals. Absent: cursor mode. */
   page: z.coerce.number().int().min(1).max(100000).optional(),
   apiId: uuidSchema.optional(),
+  /** Only the runs one bot (flow) made. */
+  botId: uuidSchema.optional(),
   status: z.enum(['success', 'failed']).optional(),
   /** An exact HTTP status code. */
   statusCode: z.coerce.number().int().min(100).max(599).optional(),
   source: apiLibraryLogSourceSchema.optional(),
-  from: z.string().datetime().optional(),
-  to: z.string().datetime().optional(),
+  from: z.iso.datetime().optional(),
+  to: z.iso.datetime().optional(),
   /** Matches the URL, the API name and the error text, ignoring case. */
   search: z.string().trim().max(API_LIBRARY_LOG_SEARCH_MAX).optional(),
 });
 export type ListApiLibraryLogsQuery = z.infer<typeof listApiLibraryLogsQuerySchema>;
+
+/** The log export takes the list's filters, not its paging: the newest runs first, at most 5,000 of them in one file. */
+export const exportApiLibraryLogsQuerySchema = listApiLibraryLogsQuerySchema.omit({
+  page: true,
+  cursor: true,
+  limit: true,
+  order: true,
+});
+export type ExportApiLibraryLogsQuery = z.infer<typeof exportApiLibraryLogsQuerySchema>;
 
 export const listApiLibraryLogsResponseSchema = numberedPageResponseSchema(apiLibraryLogItemSchema);
 export type ListApiLibraryLogsResponse = z.infer<typeof listApiLibraryLogsResponseSchema>;
@@ -81,3 +95,9 @@ export type ApiLibraryLogApi = z.infer<typeof apiLibraryLogApiSchema>;
 
 export const apiLibraryLogApisResponseSchema = z.object({ data: z.array(apiLibraryLogApiSchema) });
 export type ApiLibraryLogApisResponse = z.infer<typeof apiLibraryLogApisResponseSchema>;
+
+/** One entry of the logs' bot filter: a bot (flow) that has runs in the log. */
+export const apiLibraryLogBotSchema = z.object({ id: uuidSchema, name: z.string() });
+export type ApiLibraryLogBot = z.infer<typeof apiLibraryLogBotSchema>;
+export const apiLibraryLogBotsResponseSchema = z.object({ data: z.array(apiLibraryLogBotSchema) });
+export type ApiLibraryLogBotsResponse = z.infer<typeof apiLibraryLogBotsResponseSchema>;

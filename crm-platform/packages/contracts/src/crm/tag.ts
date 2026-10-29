@@ -13,10 +13,10 @@ export const tagResponseSchema = z.object({
   name: z.string(),
   color: z.string().nullable(),
   /** Only when the list was asked for `includeCounts`. */
-  contactCount: z.number().int().optional(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  contactCount: z.int().optional(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type TagResponse = z.infer<typeof tagResponseSchema>;
 
@@ -29,7 +29,7 @@ export type CreateTagInput = z.infer<typeof createTagSchema>;
 export const updateTagSchema = z.object({
   name: z.string().trim().min(1).max(TAG_NAME_MAX).optional(),
   color: z.string().max(32).nullish(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateTagInput = z.infer<typeof updateTagSchema>;
 
@@ -57,5 +57,5 @@ export const attachContactTagSchema = z
     tagId: uuidSchema.optional(),
     name: z.string().trim().min(1).max(TAG_NAME_MAX).optional(),
   })
-  .refine((v) => v.tagId || v.name, { message: 'send a tagId or a name', path: ['tagId'] });
+  .refine((v) => v.tagId || v.name, { path: ['tagId'], error: 'send a tagId or a name' });
 export type AttachContactTagInput = z.infer<typeof attachContactTagSchema>;

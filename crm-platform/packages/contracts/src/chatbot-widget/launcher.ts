@@ -210,7 +210,7 @@ export const widgetChatOptionsSchema = z.object({
   avatar: chatImage,
   background: chatImage,
   corner: z.enum(CHAT_CORNERS).default('rounded'),
-  autoOpen: z.number().int().min(0).max(CHAT_AUTO_OPEN_MAX).default(0),
+  autoOpen: z.int().min(0).max(CHAT_AUTO_OPEN_MAX).default(0),
   /** A soft sound when a bot line arrives while the window is open. */
   sound: z.boolean().default(false),
   /** The bell in the header: cards with a picture, a title, a line, a button and a footer. */
@@ -220,7 +220,7 @@ export const widgetChatOptionsSchema = z.object({
       icon: chatNoticeIcon.default(1),
       items: z.array(chatNoticeItemSchema).max(CHAT_ITEMS_MAX).default([]),
     })
-    .default({}),
+    .prefault({}),
   /** The menu in the header: rows or blocks, each opens a page or sends its title as the visitor's message. */
   quickMenu: z
     .object({
@@ -228,22 +228,22 @@ export const widgetChatOptionsSchema = z.object({
       view: z.enum(CHAT_MENU_VIEWS).default('list'),
       items: z.array(chatMenuItemSchema).max(CHAT_ITEMS_MAX).default([]),
     })
-    .default({}),
+    .prefault({}),
   /** A picture or video strip above the conversation, one slide at a time. */
   banners: z
     .object({
       enabled: z.boolean().default(false),
       items: z.array(chatBannerItemSchema).max(CHAT_ITEMS_MAX).default([]),
     })
-    .default({}),
-  fontSize: z.number().int().min(CHAT_FONT_SIZE_MIN).max(CHAT_FONT_SIZE_MAX).default(14),
+    .prefault({}),
+  fontSize: z.int().min(CHAT_FONT_SIZE_MIN).max(CHAT_FONT_SIZE_MAX).default(14),
   /** Reply buttons' background while the pointer is on them; empty keeps the tint. */
   hoverBg: z
     .string()
     .refine((v) => v === '' || LAUNCHER_HEX.test(v), 'Use a hex colour.')
     .default(''),
   /** The volume of the new-line sound, 0 to 100. */
-  soundVolume: z.number().int().min(0).max(100).default(70),
+  soundVolume: z.int().min(0).max(100).default(70),
   /** Read the bot's lines aloud with the browser's own voice. */
   speak: z.boolean().default(false),
   /** Offer a floating chat window (picture-in-picture) when the visitor switches to another tab mid-conversation. */
@@ -257,7 +257,7 @@ export const widgetChatOptionsSchema = z.object({
       enabled: z.boolean().default(true),
       message: z.string().max(LAUNCHER_LIMITS.feedbackMessage).default(''),
     })
-    .default({}),
+    .prefault({}),
   /**
    * The languages the chat window speaks. `primary` empty follows the visitor's browser (how every window behaved before this setting);
    * a code makes that language the window's own, and a visitor's browser language is honoured only when listed in `additional`.
@@ -271,7 +271,7 @@ export const widgetChatOptionsSchema = z.object({
         .default(''),
       additional: z.array(z.string().regex(CHAT_LANGUAGE_CODE)).max(CHAT_LANGUAGES_MAX).default([]),
     })
-    .default({}),
+    .prefault({}),
   /** Where the widget shows at all. */
   devices: z
     .object({
@@ -279,7 +279,7 @@ export const widgetChatOptionsSchema = z.object({
       tablet: z.boolean().default(true),
       mobile: z.boolean().default(true),
     })
-    .default({}),
+    .prefault({}),
 });
 export type WidgetChatOptions = z.infer<typeof widgetChatOptionsSchema>;
 
@@ -457,7 +457,6 @@ export function buildWhatsappLink(
 // --- the config ---------------------------------------------------------------------------------------------------------
 
 const spacing = z
-  .number({ invalid_type_error: 'Use a whole number of pixels.' })
   .int('Use a whole number of pixels.')
   .min(0, 'Spacing cannot be negative.')
   .max(LAUNCHER_LIMITS.spacing, `Spacing cannot be more than ${LAUNCHER_LIMITS.spacing}px.`);
@@ -469,7 +468,7 @@ const placement = (bottom: number) =>
       sideSpacing: spacing.default(10),
       bottomSpacing: spacing.default(bottom),
     })
-    .default({});
+    .prefault({});
 
 export const widgetLauncherSchema = z.object({
   buttonType: z.enum(LAUNCHER_BUTTON_TYPES).default('pill'),
@@ -521,11 +520,11 @@ export const widgetLauncherSchema = z.object({
         .refine(isLauncherAvatar, 'Use a built-in image or an http(s) image address.')
         .default(''),
     })
-    .default({}),
+    .prefault({}),
   animation: z.enum(LAUNCHER_ANIMATIONS).default('none'),
   /** The unread dot on a website chat bot's closed launcher. */
   badge: z.boolean().default(true),
-  chat: widgetChatOptionsSchema.default({}),
+  chat: widgetChatOptionsSchema.prefault({}),
   desktop: placement(10),
   mobile: placement(60),
 });
@@ -534,8 +533,8 @@ export type WidgetLauncher = z.infer<typeof widgetLauncherSchema>;
 /** The same object as the API returns it: every key present, no defaults (a response is never parsed into a default). */
 const placementView = z.object({
   side: z.enum(LAUNCHER_SIDES),
-  sideSpacing: z.number().int(),
-  bottomSpacing: z.number().int(),
+  sideSpacing: z.int(),
+  bottomSpacing: z.int(),
 });
 export const widgetLauncherViewSchema = z.object({
   buttonType: z.enum(LAUNCHER_BUTTON_TYPES),
@@ -573,7 +572,7 @@ export const widgetLauncherViewSchema = z.object({
     avatar: z.string(),
     background: z.string(),
     corner: z.enum(CHAT_CORNERS),
-    autoOpen: z.number().int(),
+    autoOpen: z.int(),
     sound: z.boolean(),
     notice: z.object({
       enabled: z.boolean(),
@@ -586,9 +585,9 @@ export const widgetLauncherViewSchema = z.object({
       items: z.array(chatMenuItemSchema),
     }),
     banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
-    fontSize: z.number().int(),
+    fontSize: z.int(),
     hoverBg: z.string(),
-    soundVolume: z.number().int(),
+    soundVolume: z.int(),
     speak: z.boolean(),
     pip: z.boolean(),
     feedback: z.object({ enabled: z.boolean(), message: z.string() }),
@@ -647,7 +646,7 @@ export const widgetPublicLauncherSchema = z.object({
     avatar: z.string(),
     background: z.string(),
     corner: z.enum(CHAT_CORNERS),
-    autoOpen: z.number().int(),
+    autoOpen: z.int(),
     sound: z.boolean(),
     notice: z.object({
       enabled: z.boolean(),
@@ -660,9 +659,9 @@ export const widgetPublicLauncherSchema = z.object({
       items: z.array(chatMenuItemSchema),
     }),
     banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
-    fontSize: z.number().int(),
+    fontSize: z.int(),
     hoverBg: z.string(),
-    soundVolume: z.number().int(),
+    soundVolume: z.int(),
     speak: z.boolean(),
     pip: z.boolean(),
     feedback: z.object({ enabled: z.boolean(), message: z.string() }),
@@ -671,13 +670,13 @@ export const widgetPublicLauncherSchema = z.object({
   }),
   desktop: z.object({
     side: z.enum(LAUNCHER_SIDES),
-    side_spacing: z.number().int(),
-    bottom_spacing: z.number().int(),
+    side_spacing: z.int(),
+    bottom_spacing: z.int(),
   }),
   mobile: z.object({
     side: z.enum(LAUNCHER_SIDES),
-    side_spacing: z.number().int(),
-    bottom_spacing: z.number().int(),
+    side_spacing: z.int(),
+    bottom_spacing: z.int(),
   }),
 });
 export type WidgetPublicLauncher = z.infer<typeof widgetPublicLauncherSchema>;

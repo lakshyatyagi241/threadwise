@@ -147,7 +147,7 @@ export const createInvoiceSchema = z.object({
   issueDate: date.nullish(),
   /** An explicit due date, or `paymentTermsDays` from the issue date; absent for both: the profile's default terms. */
   dueDate: date.nullish(),
-  paymentTermsDays: z.number().int().min(0).max(365).nullish(),
+  paymentTermsDays: z.int().min(0).max(365).nullish(),
   /** The buyer's purchase-order number or any reference printed on the invoice. */
   reference: z.string().trim().max(191).nullish(),
   discount: invoiceDiscountSchema.nullish(),
@@ -190,7 +190,7 @@ export const updateInvoiceSchema = z.object({
   issueDate: date.nullish(),
   /** Still editable after issue (extend or shorten the terms). */
   dueDate: date.nullish(),
-  paymentTermsDays: z.number().int().min(0).max(365).nullish(),
+  paymentTermsDays: z.int().min(0).max(365).nullish(),
   /** Still editable after issue. */
   reference: z.string().trim().max(191).nullish(),
   discount: invoiceDiscountSchema.nullish(),
@@ -201,7 +201,7 @@ export const updateInvoiceSchema = z.object({
   terms: z.string().trim().max(INVOICE_TERMS_MAX).nullish(),
   legalNotes: z.string().trim().max(1000).nullish(),
   lines: z.array(invoiceLineInputSchema).min(1).max(INVOICE_MAX_LINES).optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
 
@@ -210,8 +210,8 @@ export const issueInvoiceSchema = z.object({
   /** Default today in the workspace calendar. */
   issueDate: date.nullish(),
   dueDate: date.nullish(),
-  paymentTermsDays: z.number().int().min(0).max(365).nullish(),
-  rowVersion: z.number().int().positive().optional(),
+  paymentTermsDays: z.int().min(0).max(365).nullish(),
+  rowVersion: z.int().positive().optional(),
 });
 export type IssueInvoiceInput = z.infer<typeof issueInvoiceSchema>;
 
@@ -225,14 +225,14 @@ export type SendInvoiceInput = z.infer<typeof sendInvoiceSchema>;
 
 export const voidInvoiceSchema = z.object({
   reason: z.string().trim().min(1).max(500),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type VoidInvoiceInput = z.infer<typeof voidInvoiceSchema>;
 
 /** Regenerate gives the invoice a new link (the old one stops working); `revoke` only turns the current one off. */
 export const publicLinkSchema = z.object({
   /** Days the new link lives; absent for no expiry. */
-  expiresInDays: z.number().int().min(1).max(3650).nullish(),
+  expiresInDays: z.int().min(1).max(3650).nullish(),
 });
 export type PublicLinkInput = z.infer<typeof publicLinkSchema>;
 
@@ -262,7 +262,7 @@ const userRef = z.object({ id: uuidSchema, name: z.string() });
 
 export const invoiceLineResponseSchema = z.object({
   id: uuidSchema,
-  position: z.number().int(),
+  position: z.int(),
   description: z.string(),
   sku: z.string().nullable(),
   hsnSac: z.string().nullable(),
@@ -310,7 +310,7 @@ export const invoiceSellerSchema = z.object({
   email: z.string().nullable(),
   /** Free statutory fields the workspace prints (label and value). */
   extra: z.array(z.object({ label: z.string(), value: z.string() })),
-  bankDetails: z.record(z.string()).nullable(),
+  bankDetails: z.record(z.string(), z.string()).nullable(),
 });
 export type InvoiceSeller = z.infer<typeof invoiceSellerSchema>;
 
@@ -319,8 +319,8 @@ export const invoiceLinkStateSchema = z.object({
   token: z.string(),
   /** `/i/<token>` on the web app. */
   path: z.string(),
-  expiresAt: z.string().datetime().nullable(),
-  revokedAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
+  revokedAt: z.iso.datetime().nullable(),
   /** False when revoked or expired: the buyer sees a "link unavailable" page. */
   active: z.boolean(),
 });
@@ -339,9 +339,9 @@ export const invoiceSummarySchema = z.object({
   paymentStatus: invoicePaymentStatusSchema,
   overdue: z.boolean(),
   /** Calendar days past the due date while open and overdue; null otherwise. */
-  daysOverdue: z.number().int().nullable(),
+  daysOverdue: z.int().nullable(),
   currency: z.string(),
-  currencyExponent: z.number().int(),
+  currencyExponent: z.int(),
   amounts: amountStrings,
   amountsMinor: amountStrings,
   buyerName: z.string().nullable(),
@@ -352,14 +352,14 @@ export const invoiceSummarySchema = z.object({
   owner: userRef.nullable(),
   issueDate: z.string().nullable(),
   dueDate: z.string().nullable(),
-  issuedAt: z.string().datetime().nullable(),
-  paidAt: z.string().datetime().nullable(),
-  sentAt: z.string().datetime().nullable(),
-  viewCount: z.number().int(),
+  issuedAt: z.iso.datetime().nullable(),
+  paidAt: z.iso.datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
+  viewCount: z.int(),
   reference: z.string().nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type InvoiceSummary = z.infer<typeof invoiceSummarySchema>;
 
@@ -402,9 +402,9 @@ export const invoiceResponseSchema = invoiceSummarySchema.extend({
   createdBy: userRef.nullable(),
   publicLink: invoiceLinkStateSchema.nullable(),
   deliveryChannel: z.string().nullable(),
-  firstViewedAt: z.string().datetime().nullable(),
-  lastViewedAt: z.string().datetime().nullable(),
-  voidedAt: z.string().datetime().nullable(),
+  firstViewedAt: z.iso.datetime().nullable(),
+  lastViewedAt: z.iso.datetime().nullable(),
+  voidedAt: z.iso.datetime().nullable(),
   voidReason: z.string().nullable(),
 });
 export type InvoiceResponse = z.infer<typeof invoiceResponseSchema>;
@@ -437,7 +437,7 @@ const filterShape = {
 };
 
 export const listInvoicesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
   /** Derived statuses, comma separated: `status=issued,partially_paid`. */
@@ -451,13 +451,13 @@ export const invoiceCountsQuerySchema = z.object(filterShape);
 export type InvoiceCountsQuery = z.infer<typeof invoiceCountsQuerySchema>;
 
 export const invoiceCountsResponseSchema = z.object({
-  all: z.number().int(),
-  draft: z.number().int(),
-  issued: z.number().int(),
-  partiallyPaid: z.number().int(),
-  paid: z.number().int(),
-  overdue: z.number().int(),
-  void: z.number().int(),
+  all: z.int(),
+  draft: z.int(),
+  issued: z.int(),
+  partiallyPaid: z.int(),
+  paid: z.int(),
+  overdue: z.int(),
+  void: z.int(),
   /** Open balance of the invoices in the filter, per currency (issued, partly paid and overdue). */
   outstanding: z.array(moneyTotalSchema),
   /** Of which past due. */
@@ -467,7 +467,7 @@ export type InvoiceCountsResponse = z.infer<typeof invoiceCountsResponseSchema>;
 
 /** The invoices of one contact or deal, for their detail pages, with the money rolled up per currency. */
 export const linkedInvoicesQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   status: queryList(invoiceStatusSchema).optional(),
 });
@@ -512,8 +512,8 @@ export const invoiceEventSchema = z.object({
     kind: z.enum(['user', 'buyer', 'gateway', 'system']),
     user: userRef.nullable(),
   }),
-  meta: z.record(z.unknown()).nullable(),
-  at: z.string().datetime(),
+  meta: z.record(z.string(), z.unknown()).nullable(),
+  at: z.iso.datetime(),
 });
 export type InvoiceEvent = z.infer<typeof invoiceEventSchema>;
 
@@ -524,7 +524,7 @@ export const invoiceEventsResponseSchema = z.object({
 export type InvoiceEventsResponse = z.infer<typeof invoiceEventsResponseSchema>;
 
 export const invoiceEventsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type InvoiceEventsQuery = z.infer<typeof invoiceEventsQuerySchema>;

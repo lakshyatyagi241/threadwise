@@ -17,18 +17,19 @@
       "refresh": "Segarkan",
       "newCampaign": "Kampanye baru",
       "tile": {
-        "sent": "Terkirim",
+        "sent": "Pesan terkirim",
         "delivered": "Tersampaikan",
         "read": "Terbaca",
-        "failed": "Gagal",
-        "processing": "Diproses",
-        "campaigns": "{count} kampanye",
+        "failed": "Pesan gagal",
+        "processing": "Kampanye sedang mengirim",
+        "campaigns": "dari {count, plural, other {# kampanye}}",
         "inFlight": "sedang berjalan",
         "awaiting": "menunggu",
-        "queued": "{count} antre",
+        "queued": "{count} dijadwalkan mulai",
         "deliveredRate": "{rate}% pengiriman",
         "readRate": "{rate}% tingkat baca",
-        "failedCampaigns": "{count} kampanye gagal"
+        "failedCampaigns": "{count, plural, other {# kampanye}} ditandai gagal",
+        "note": "Terkirim, Diterima, Dibaca, dan Gagal menghitung pesan, dan pesan gagal tidak dihitung dalam Terkirim. Baris kecil di bawah setiap angka menghitung kampanye. Semuanya mengikuti rentang tanggal yang dipilih di bawah: {range}."
       },
       "range": {
         "all": "Sepanjang waktu",
@@ -174,7 +175,8 @@
         "status": "Status",
         "schedule": "Jadwal",
         "actions": "Tindakan"
-      }
+      },
+      "newCampaignAny": "Kampanye baru"
     },
     "builder": {
       "loadError": "Tidak dapat memuat kampanye ini.",
@@ -314,7 +316,22 @@
         "previousTitle": "Pengiriman sebelumnya",
         "previousHint": "Tambahkan orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, membalas, atau mengklik.",
         "previousEstimate": "{count, plural, other {Hingga # orang dari pengiriman sebelumnya (perkiraan: orang yang ada di dua pengiriman dihitung dua kali).}}",
-        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang."
+        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang.",
+        "emails": "Email manual",
+        "emailsHint": "Satu per baris, atau pisahkan dengan koma atau titik koma.",
+        "emailsPlaceholder": "Satu alamat email per baris",
+        "emailsCount": "{count} alamat",
+        "emailCsvHint": "Kolom: nama, email. Kolom lain menjadi variabel yang dapat dipakai dalam pesan.",
+        "emailModes": {
+          "csv": {
+            "title": "Unggah CSV",
+            "hint": "Impor alamat email untuk kampanye ini."
+          },
+          "manual": {
+            "title": "Email manual",
+            "hint": "Tempel satu alamat email per baris."
+          }
+        }
       },
       "message": {
         "title": "Pesan",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "draftChip": "Draf / belum disimpan",
+      "draftSavedChip": "Draf · tersimpan",
       "steps": {
         "label": "Langkah kampanye",
         "required": "wajib",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Templat",
         "pickTemplate": "— Pilih templat —",
+        "searchTemplates": "Cari templat berdasarkan nama atau bahasa",
+        "noTemplateMatch": "Tidak ada templat yang cocok dengan pencarian Anda.",
         "templateHint": "Hanya templat yang disetujui dari nomor yang dipilih. Variabelnya diisi di bawah.",
         "noTemplates": "Nomor ini belum memiliki templat yang disetujui. Buat satu dan tunggu persetujuannya.",
         "deliveryTitle": "Pengiriman",
@@ -725,7 +745,11 @@
         "balanceShort": "Saldo tidak cukup: Anda membutuhkan {shortfall} lagi.",
         "balanceLowFull": "Saldo lebih rendah dari biaya penuh sebesar {full}: paket Anda menanggungnya sekarang, tetapi tidak setelah paket habis.",
         "chargedNowLabel": "Dibebankan ke dompet Anda sekarang"
-      }
+      },
+      "kickerEmail": "Kampanye email / Baru",
+      "kickerEditEmail": "Kampanye email / Ubah",
+      "titleEmail": "Buat email baru",
+      "titleEditEmail": "Ubah email Anda"
     },
     "detail": {
       "notFound": "Kampanye itu tidak ditemukan.",
@@ -1126,7 +1150,8 @@
         "saved": "Draf disimpan",
         "saving": "Menyimpan...",
         "failed": "Tidak dapat menyimpan",
-        "retry": "Coba lagi"
+        "retry": "Coba lagi",
+        "nameTaken": "Kampanye dengan nama yang sama sudah ada"
       },
       "errors": {
         "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Centang nomor pengirim dan beri masing-masing bagian. Audiens dibagi menurut bagian tersebut dan setiap kontak menerima pesan dari satu nomor saja. Bagian yang kosong atau 0 dihitung 1.",
         "shareWeight": "Bagian",
         "shareWeightLabel": "Bagian {name}",
-        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang."
+        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang.",
+        "nameTaken": "Kampanye dengan nama yang sama sudah ada"
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Pratinjau nomor valid dalam file",
         "csvLine": "Baris",
         "csvName": "Nama",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Kontak baru",
           "existing": "Kontak yang ada",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Kirim ke pengiriman sebelumnya",
         "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
         "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})",
-        "filterNoConditions": "Tambahkan kondisi untuk melihat berapa kontak yang cocok."
+        "filterNoConditions": "Tambahkan kondisi untuk melihat berapa kontak yang cocok.",
+        "csvConsentCol": "Persetujuan",
+        "csvContactCol": "Kontak",
+        "csvConsent": {
+          "optedIn": "Berlangganan",
+          "optedOut": "Berhenti berlangganan"
+        },
+        "clearAudience": "Hapus audiens"
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",
@@ -1597,7 +1629,7 @@
         "retries": "Percobaan ulang",
         "retriesOn": "Aktif, hingga {date}",
         "retriesOff": "Nonaktif",
-        "recurringNote": "Setiap putaran dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
+        "recurringNote": "Tidak ada yang dikirim sekarang. Eksekusi pertama dimulai pada waktu di atas, lalu setiap eksekusi muncul di Riwayat sebagai baris tersendiri. Sampai saat itu, temukan kampanye ini di Berulang. Setiap eksekusi dikirim ke audiens sesuai kondisinya saat itu, sehingga jumlah penerima dapat berubah."
       },
       "status": {
         "back": "Kembali ke kampanye",
@@ -1811,7 +1843,8 @@
         "add": "Tambah templat",
         "count": "{used} dari {max} templat",
         "limitReached": "Batas tercapai: {max} templat.",
-        "variablesTitle": "Variabel templat {position}: {name}"
+        "variablesTitle": "Variabel templat {position}: {name}",
+        "variablesLater": "{count, plural, other {# variabel}} mengambil nilainya dari pemetaan, bukan dari pratinjau ini."
       }
     },
     "history": {

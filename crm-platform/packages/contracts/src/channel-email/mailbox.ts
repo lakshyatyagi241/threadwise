@@ -34,11 +34,11 @@ export const DEFAULT_EMAIL_MAILBOXES = 3;
 /** What the hub shows of an IMAP/SMTP connection. The password is never part of it. */
 export const imapSummarySchema = z.object({
   host: z.string(),
-  port: z.number().int(),
+  port: z.int(),
   security: mailTlsModeSchema,
   username: z.string(),
   smtpHost: z.string(),
-  smtpPort: z.number().int(),
+  smtpPort: z.int(),
   smtpSecurity: mailTlsModeSchema,
 });
 export type ImapSummary = z.infer<typeof imapSummarySchema>;
@@ -60,23 +60,23 @@ export const mailboxResponseSchema = z.object({
   /** Mail arrives by provider push (Gmail Pub/Sub, Graph subscription) rather than by polling alone. */
   pushActive: z.boolean(),
   /** Messages this mailbox may send per hour; null = the platform default. */
-  sendLimitPerHour: z.number().int().nullable(),
+  sendLimitPerHour: z.int().nullable(),
   /** Only on an `imap` mailbox. */
   imap: imapSummarySchema.nullable(),
   /** The inbox channel this mailbox feeds (filter the inbox by it). Null until the first sync created it. */
   channelId: uuidSchema.nullable(),
-  connectedAt: z.string().datetime().nullable(),
-  lastSyncedAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastSyncedAt: z.iso.datetime().nullable(),
   /** Why the last sync or send failed; null when healthy. */
   lastError: z.string().nullable(),
   /**
    * Seconds since the last successful sync of a connected mailbox: how far behind the inbox may be (the sweep syncs about once a minute,
    * push within seconds). Null when never synced or not connected. Absent on a summary row.
    */
-  syncLagSeconds: z.number().int().nullable().optional(),
+  syncLagSeconds: z.int().nullable().optional(),
   /** Conversations from this mailbox. */
-  conversationCount: z.number().int(),
-  rowVersion: z.number().int(),
+  conversationCount: z.int(),
+  rowVersion: z.int(),
   /**
    * True on another person's personal mailbox that the viewer (an admin) may see exists but not read: the row is a summary (no conversation
    * count, no error text, no server settings, no inbox filter) and offers no actions but Disconnect. Absent / false otherwise.
@@ -88,8 +88,8 @@ export type MailboxResponse = z.infer<typeof mailboxResponseSchema>;
 export const mailboxListResponseSchema = z.object({
   data: z.array(mailboxResponseSchema),
   /** The plan's `email_mailboxes` limit; 0 = unlimited. */
-  limit: z.number().int(),
-  used: z.number().int(),
+  limit: z.int(),
+  used: z.int(),
   /** False while the platform operator has not entered the Google credentials: Connect shows who must set it up. */
   providerReady: z.boolean(),
 });
@@ -132,13 +132,13 @@ const hostSchema = z
   .min(1)
   .max(253)
   .regex(/^[A-Za-z0-9.-]+$/, 'host must be a host name or an address');
-const portSchema = z.number().int().min(1).max(65535);
+const portSchema = z.int().min(1).max(65535);
 
 /** Connects an IMAP/SMTP mailbox (TW-MAIL-031). The server verifies both logins before storing anything. */
 export const connectImapMailboxSchema = z.object({
   scope: mailScopeSchema.default('shared'),
   /** The mailbox address replies go out from. */
-  address: z.string().trim().toLowerCase().email().max(320),
+  address: z.string().trim().toLowerCase().pipe(z.email().max(320)),
   displayName: z.string().trim().min(1).max(80),
   imap: z.object({
     host: hostSchema,
@@ -195,7 +195,7 @@ export const mailTestSideSchema = z.object({
   /** One sentence in our words (never the server's text, a host or a password); null when `ok`. */
   message: z.string().nullable(),
   /** IMAP only, when `ok`: how many messages the INBOX holds. */
-  inboxMessages: z.number().int().nullable(),
+  inboxMessages: z.int().nullable(),
 });
 export type MailTestSide = z.infer<typeof mailTestSideSchema>;
 
@@ -209,14 +209,14 @@ export type MailConnectionTestResponse = z.infer<typeof mailConnectionTestRespon
 
 /** What the hub can change on a mailbox besides its name: the hourly send cap (null = platform default). */
 export const MAIL_SEND_LIMIT_MAX = 10_000;
-export const startMailboxConnectResponseSchema = z.object({ authorizeUrl: z.string().url() });
+export const startMailboxConnectResponseSchema = z.object({ authorizeUrl: z.url() });
 export type StartMailboxConnectResponse = z.infer<typeof startMailboxConnectResponseSchema>;
 
 export const updateMailboxSchema = z.object({
   displayName: z.string().trim().min(1).max(80),
   /** Omit to leave as it is; `null` = the platform default (TW-MAIL-032). */
-  sendLimitPerHour: z.number().int().min(1).max(MAIL_SEND_LIMIT_MAX).nullable().optional(),
-  rowVersion: z.number().int(),
+  sendLimitPerHour: z.int().min(1).max(MAIL_SEND_LIMIT_MAX).nullable().optional(),
+  rowVersion: z.int(),
 });
 export type UpdateMailboxInput = z.infer<typeof updateMailboxSchema>;
 
@@ -228,6 +228,14 @@ export const MAIL_CONNECT_OUTCOMES = [
   'limit',
   'not_configured',
   'wrong_account',
+  /** The workspace's plan does not include email (or it was switched off while the person was signing in). */
+  'not_enabled',
+  /** The person may not connect this kind of mailbox (personal mailboxes are off, or the right was lost). */
+  'not_allowed',
+  /** The provider did not give the mailbox's email address. */
+  'no_address',
+  /** The provider gave no refresh token, so the mailbox could not stay signed in. */
+  'no_refresh_token',
   'failed',
 ] as const;
 export type MailConnectOutcome = (typeof MAIL_CONNECT_OUTCOMES)[number];

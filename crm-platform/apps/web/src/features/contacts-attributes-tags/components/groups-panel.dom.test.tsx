@@ -169,4 +169,11 @@ describe('GroupsPanel: the groups table', () => {
     // The box keeps what was typed, so a person can correct it without retyping.
     expect((host!.querySelector('input[type="search"]') as HTMLInputElement).value).toBe('zzz');
   });
+
+  it('opens the group from its name, the same contacts view as View contacts', async () => {
+    await mount();
+
+    const nameLink = [...host!.querySelectorAll('tbody a')].find((a) => a.textContent === 'VIP');
+    expect(nameLink?.getAttribute('href')).toBe(`/contacts?group=${GROUPS[0]!.id}`);
+  });
 });

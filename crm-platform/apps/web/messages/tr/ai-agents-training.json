@@ -297,7 +297,17 @@
         "removeRow": "Bu soruyu kaldır"
       },
       "reading": "Okunuyor…",
-      "failed": "Bu okunamadı."
+      "failed": "Bu okunamadı.",
+      "view": "Görüntüle",
+      "viewNamed": "{label} görüntüle",
+      "viewClose": "Kapat",
+      "viewLoading": "Yükleniyor",
+      "viewFailed": "Bu kayıt yüklenemedi. Yeniden deneyin.",
+      "viewQuestion": "Soru",
+      "viewAnswer": "Yanıt",
+      "viewNotReadYet": "Bu sayfa hâlâ okunuyor. Hazır olduğunda metni burada görünecek.",
+      "viewNoText": "Bu kaydın metni yok.",
+      "viewTruncated": "Burada yalnızca ilk bölüm gösteriliyor; asistan kaydın tamamını okur."
     }
   }
 }

@@ -44,9 +44,9 @@ export type CompanyUserRef = z.infer<typeof companyUserRefSchema>;
  * that kind of record (contacts need record.contacts.read, deals need record.deals.read).
  */
 export const companyDealRollupSchema = z.object({
-  total: z.number().int(),
-  open: z.number().int(),
-  won: z.number().int(),
+  total: z.int(),
+  open: z.int(),
+  won: z.int(),
   /** Per currency, never mixed. */
   openValue: z.array(moneyTotalSchema),
   wonValue: z.array(moneyTotalSchema),
@@ -54,7 +54,7 @@ export const companyDealRollupSchema = z.object({
 export type CompanyDealRollup = z.infer<typeof companyDealRollupSchema>;
 
 export const companyRollupSchema = z.object({
-  contacts: z.number().int().nullable(),
+  contacts: z.int().nullable(),
   deals: companyDealRollupSchema.nullable(),
 });
 export type CompanyRollup = z.infer<typeof companyRollupSchema>;
@@ -89,13 +89,13 @@ export const companyResponseSchema = z.object({
   address: z.string().nullable(),
   notes: z.string().nullable(),
   /** The values of the workspace's company properties, by property key; a key with no value is absent. */
-  customFields: z.record(z.unknown()),
+  customFields: z.record(z.string(), z.unknown()),
   owner: companyUserRefSchema.nullable(),
   createdBy: companyUserRefSchema.nullable(),
   rollup: companyRollupSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type CompanyResponse = z.infer<typeof companyResponseSchema>;
 
@@ -120,7 +120,7 @@ const text = (max: number) =>
 const emailText = z
   .preprocess(
     (v) => (typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v),
-    z.string().email().max(COMPANY_EMAIL_MAX).nullable(),
+    z.email().max(COMPANY_EMAIL_MAX).nullable(),
   )
   .optional();
 
@@ -156,7 +156,7 @@ export const updateCompanySchema = z.object({
   customFields: companyCustomFieldsSchema.optional(),
   ownerId: uuidSchema.nullish(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409 ROW_VERSION_CONFLICT. */
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateCompanyInput = z.infer<typeof updateCompanySchema>;
 
@@ -164,13 +164,11 @@ export type UpdateCompanyInput = z.infer<typeof updateCompanySchema>;
  * One condition on a company property, in the vocabulary of segment rules (the same operators for the same kinds of property:
  * text, number, date, option, multi, checkbox). Conditions are combined with AND.
  */
-export const companyPropertyFilterSchema = z
-  .object({
-    key: z.string().regex(COMPANY_PROPERTY_KEY),
-    operator: segmentOperatorSchema,
-    value: segmentValueSchema.optional(),
-  })
-  .strict();
+export const companyPropertyFilterSchema = z.strictObject({
+  key: z.string().regex(COMPANY_PROPERTY_KEY),
+  operator: segmentOperatorSchema,
+  value: segmentValueSchema.optional(),
+});
 export type CompanyPropertyFilter = z.infer<typeof companyPropertyFilterSchema>;
 
 /** Property conditions arrive in a query string as JSON (`props=[{"key":"tier","operator":"equals","value":"gold"}]`). */
@@ -206,7 +204,7 @@ const ownerMessage = { message: 'ownerId and unassigned cannot be combined', pat
 
 export const listCompaniesQuerySchema = z
   .object({
-    limit: z.coerce.number().int().min(1).max(200).default(50),
+    limit: z.coerce.number().int().min(1).max(200).prefault(50),
     cursor: z.string().min(1).max(512).optional(),
     /**
      * `created` (newest first, Reference's order; default), `name` (A to Z) or `property` (by the property `sortKey`; text and
@@ -220,8 +218,8 @@ export const listCompaniesQuerySchema = z
   })
   .refine(refineOwner, ownerMessage)
   .refine((q) => q.sort !== 'property' || q.sortKey !== undefined, {
-    message: 'sortKey is required when sort is property',
     path: ['sortKey'],
+    error: 'sortKey is required when sort is property',
   });
 export type ListCompaniesQuery = z.infer<typeof listCompaniesQuerySchema>;
 
@@ -232,9 +230,9 @@ export type CompanyStatsQuery = z.infer<typeof companyStatsQuerySchema>;
 
 /** The three tiles over the list: how many companies match, how many have an open deal, what they won. Same filters as the list. */
 export const companyStatsResponseSchema = z.object({
-  total: z.number().int(),
+  total: z.int(),
   /** `null` when the caller may not read deals. */
-  withOpenDeals: z.number().int().nullable(),
+  withOpenDeals: z.int().nullable(),
   wonValue: z.array(moneyTotalSchema).nullable(),
 });
 export type CompanyStatsResponse = z.infer<typeof companyStatsResponseSchema>;
@@ -253,7 +251,7 @@ export type CompanySelectItem = z.infer<typeof companySelectItemSchema>;
 
 export const companySelectQuerySchema = z.object({
   q: z.string().trim().min(1).max(100).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
 });
 export type CompanySelectQuery = z.infer<typeof companySelectQuerySchema>;
 
@@ -275,7 +273,7 @@ export const companyContactsPageSchema = z.object({
 export type CompanyContactsPage = z.infer<typeof companyContactsPageSchema>;
 
 export const listCompanyContactsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListCompanyContactsQuery = z.infer<typeof listCompanyContactsQuerySchema>;
@@ -310,7 +308,7 @@ export const companyActivityChangeSchema = z.object({
 export const companyActivityEntrySchema = z.object({
   action: z.enum(['insert', 'update', 'delete']),
   actor: companyUserRefSchema.nullable(),
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   changes: z.array(companyActivityChangeSchema),
 });
 export type CompanyActivityEntry = z.infer<typeof companyActivityEntrySchema>;
@@ -322,7 +320,7 @@ export const companyActivityPageSchema = z.object({
 export type CompanyActivityPage = z.infer<typeof companyActivityPageSchema>;
 
 export const listCompanyActivityQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListCompanyActivityQuery = z.infer<typeof listCompanyActivityQuerySchema>;
@@ -370,8 +368,8 @@ export const exportCompaniesQuerySchema = z
   })
   .refine(refineOwner, ownerMessage)
   .refine((q) => q.sort !== 'property' || q.sortKey !== undefined, {
-    message: 'sortKey is required when sort is property',
     path: ['sortKey'],
+    error: 'sortKey is required when sort is property',
   });
 export type ExportCompaniesQuery = z.infer<typeof exportCompaniesQuerySchema>;
 
@@ -392,16 +390,14 @@ export type ImportCompaniesInput = z.infer<typeof importCompaniesSchema>;
 
 export const companyImportResultSchema = z.object({
   /** Data rows read (the header is not one). */
-  total: z.number().int(),
-  created: z.number().int(),
+  total: z.int(),
+  created: z.int(),
   /** An existing company that had blanks filled in. */
-  updated: z.number().int(),
+  updated: z.int(),
   /** An existing company with nothing to fill. */
-  unchanged: z.number().int(),
+  unchanged: z.int(),
   /** Rows that were not imported, with the line of the file and why. */
-  failed: z.array(
-    z.object({ line: z.number().int(), field: z.string().nullable(), message: z.string() }),
-  ),
+  failed: z.array(z.object({ line: z.int(), field: z.string().nullable(), message: z.string() })),
   /** Header names that matched no column or property (their cells were ignored). */
   ignoredColumns: z.array(z.string()),
 });

@@ -52,6 +52,7 @@ export const CLASSES = {
   CALENDAR_RECONCILE: MAINT('calendar-reconcile', 'provider', 'google'),
   CALENDAR_BACKFILL: MAINT('calendar-backfill', 'provider', 'google'),
   MEETING_MIRROR_BACKFILL: MAINT('meeting-mirror', 'db', 'postgres'),
+  OWNING_TEAM_BACKFILL: MAINT('owning-team', 'db', 'postgres'),
   CALENDAR_ICS_REFRESH: MAINT('ics-refresh', 'provider', 'ics-hosts'),
   MSG_LOG_EXPORT: MAINT('message-log-export', 'db', 'postgres,media-store'),
   CONSENT_EXPORT: MAINT('consent-export', 'db', 'postgres'),

@@ -117,8 +117,12 @@ export function ScheduledBroadcastsScreen({ highlight }: { highlight: string | n
                   }}
                 >
                   <td className={`${TD} max-w-[18rem]`}>
-                    <div className="flex items-center gap-2">
-                      <Link href={href} className="truncate font-medium text-brand hover:underline">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <Link
+                        href={href}
+                        title={r.name}
+                        className="min-w-0 truncate font-medium text-brand hover:underline"
+                      >
                         {r.name}
                       </Link>
                       {mark && <NewChip />}

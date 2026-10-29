@@ -6,7 +6,10 @@ import { expect, test, type Page } from '@playwright/test';
  * super admin has its own test. Both accounts exist only in the local development database.
  */
 const SUPPORT = { email: 'e2e-support@example.test', password: 'E2e-Console-Pass1' };
-const SUPER_ADMIN = { email: 'operator@example.test', password: 'Passw0rd!' };
+const SUPER_ADMIN = {
+  email: 'operator@example.test',
+  password: process.env.DEV_SEED_PASSWORD ?? '',
+};
 const ORIGIN = 'http://localhost:3001';
 
 async function signIn(page: Page, who: { email: string; password: string }) {

@@ -118,11 +118,11 @@
       "moreActions": "Więcej działań",
       "modifyColumns": "Zmień kolumny",
       "resetColumns": "Przywróć domyślne",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Szukaj kolumn",
+      "columnsSelectAll": "Zaznacz wszystko",
+      "dragToReorder": "Przeciągnij, aby zmienić kolejność kolumn",
+      "removeColumn": "Usuń {name}",
+      "columnsSave": "Zapisz",
       "colContactName": "Nazwa kontaktu",
       "colPhone": "Numer telefonu",
       "colEmailId": "Adres e-mail",
@@ -297,7 +297,8 @@
       "allTeams": "Wszystkie zespoły",
       "teamFormer": "Dawny zespół",
       "unhideColumn": "Pokaż kolumnę",
-      "resizeColumn": "Przeciągnij, aby zmienić szerokość kolumny {column}; dwukrotne kliknięcie przywraca"
+      "resizeColumn": "Przeciągnij, aby zmienić szerokość kolumny {column}; dwukrotne kliknięcie przywraca",
+      "pqlNoKey": "Wyszukiwanie po angielsku nie jest jeszcze skonfigurowane dla tego obszaru roboczego. Poproś administratora o dodanie klucza OpenRouter w sekcji Klucze AI."
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -447,7 +448,8 @@
         "number": "Wpisz liczbę.",
         "integer": "Wpisz liczbę całkowitą.",
         "email": "Wpisz prawidłowy adres e-mail.",
-        "url": "Wpisz pełny link zaczynający się od http:// lub https://."
+        "url": "Wpisz pełny link zaczynający się od http:// lub https://.",
+        "phone": "Wpisz prawidłowy numer telefonu dla wybranego kraju."
       },
       "readOnlyField": "Tylko do odczytu",
       "yes": "Tak",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Nazwa nowej grupy",
       "groupRequiredHint": "Każdy zaimportowany kontakt trafia do tej jednej grupy. Kolumna grupy z pliku jest ignorowana, chyba że zmapujesz ją powyżej.",
       "customProperties": "Właściwości niestandardowe",
-      "customPropertiesHint": "Kolumna, której nagłówek to nazwa właściwości (lub attr:key, tak jak zapisuje ją eksport), wypełnia tę właściwość. Pusta komórka zachowuje wartość, którą kontakt już ma."
+      "customPropertiesHint": "Kolumna, której nagłówek to nazwa właściwości (lub attr:key, tak jak zapisuje ją eksport), wypełnia tę właściwość. Pusta komórka zachowuje wartość, którą kontakt już ma.",
+      "propertyFormat": {
+        "checkbox": "Wpisz yes lub no. Akceptowane są także: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Oddziel klucze opcji przecinkiem, średnikiem lub kreską pionową, np. vip, new_leads. Wpisz klucz, a nie nazwę. Wielkość liter nie ma znaczenia."
+      }
     },
     "detail": {
       "back": "Wszystkie kontakty",
@@ -1345,7 +1351,10 @@
       "save": "Zapisz i otwórz reguły",
       "created": "Utworzono segment „{name}”. Dopracuj jego reguły poniżej.",
       "forbidden": "Nie masz uprawnień do tworzenia segmentów.",
-      "failed": "Nie udało się utworzyć segmentu. Spróbuj ponownie."
+      "failed": "Nie udało się utworzyć segmentu. Spróbuj ponownie.",
+      "specific": "Konkretne osoby",
+      "specificHint": "Tylko wybrane osoby i zespoły oraz Ty i osoby, które mogą edytować wszystkie segmenty.",
+      "shareRequired": "Wybierz co najmniej jedną osobę lub zespół, z którym udostępnisz."
     },
     "bulkUpdate": {
       "title": "Zaktualizuj {count, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}",
@@ -1372,7 +1381,8 @@
         "setValue": "Ustaw wartość",
         "willClear": "Zostanie opróżniona dla {count, plural, one {zaznaczonego kontaktu} few {wszystkich # zaznaczonych kontaktów} many {wszystkich # zaznaczonych kontaktów} other {wszystkich # zaznaczonych kontaktów}}.",
         "requiredNoClear": "Wymaganej właściwości nie można wyczyścić.",
-        "problemEmpty": "Wpisz wartość lub wybierz Wyczyść."
+        "problemEmpty": "Wpisz wartość lub wybierz Wyczyść.",
+        "parentFirst": "Najpierw zaktualizuj {parent}, potem tę właściwość: jej wybory zależą od tamtej."
       },
       "titleAll": "Zaktualizuj wszystkie pasujące kontakty",
       "hintAll": "Ustaw te same wartości dla każdego kontaktu pasującego do bieżących filtrów. Pola ustawione na Zachowaj nie zostaną zmienione.",
@@ -1414,10 +1424,15 @@
         "by": "Zaimportował"
       },
       "exports": {
-        "title": "Eksporty",
-        "hint": "Eksporty kontaktów z Hubu, od najnowszych. Każdy plik jest przechowywany 30 dni, aby Ty i współpracownicy z uprawnieniem do eksportu mogli pobrać go ponownie.",
+        "title": "Historia eksportów",
+        "hint": "Eksporty z Hub, od najnowszych, z informacją, skąd pochodzą. Każdy plik jest przechowywany przez 30 dni, aby Ty i członkowie zespołu z uprawnieniami do eksportu mogli go ponownie pobrać.",
         "empty": "Brak eksportów.",
         "by": "Przez",
+        "source": "Źródło",
+        "sources": {
+          "contacts": "Kontakty",
+          "campaigns": "Kampanie"
+        },
         "rows": "Kontakty",
         "selection": "Zakres",
         "unknown": "Nieznany",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "Otwórz w aplikacji do wiadomości"
+      },
+      "reason": {
+        "not_linked": "Ten numer nie jest połączony z kontem WhatsApp Business, więc nie można wysłać żadnego szablonu.",
+        "paused": "Wstrzymane przez WhatsApp. Można wysłać ponownie, gdy wstrzymanie się skończy.",
+        "media_header": "Ma nagłówek ze zdjęciem, wideo lub dokumentem, którego na razie nie można wysłać stąd.",
+        "header_variable": "Ma zmienną w nagłówku, której na razie nie można uzupełnić stąd.",
+        "dynamic_button": "Ma przycisk z linkiem zawierającym zmienną, której na razie nie można uzupełnić stąd.",
+        "authentication": "Szablony z jednorazowym hasłem wysyła system, nie stąd.",
+        "named_variables": "Używa zmiennych nazwanych, których na razie nie można uzupełnić stąd."
       }
     },
     "views": {

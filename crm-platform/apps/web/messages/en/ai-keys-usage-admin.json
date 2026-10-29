@@ -161,7 +161,7 @@
         "title": "This month · plan AI cap",
         "used": "{used, number} of {limit, number} tokens used this month",
         "unlimited": "{used, number} tokens used this month: unlimited on your plan",
-        "reached": "Almost at your monthly cap. Upgrade your plan or add your own keys (BYOK) to keep using AI.",
+        "reached": "You have reached your monthly cap. Upgrade your plan or add your own keys (BYOK) to keep using AI.",
         "note": "BYOK tokens run on your own provider account and never count against your plan cap."
       },
       "daily": "Daily token burn",
@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "A key is at least 8 characters."
-      }
+      },
+      "readOnly": "You can see the workspace's AI keys but you cannot add, switch or remove them. Ask an administrator for the permission to manage AI keys."
     }
   }
 }

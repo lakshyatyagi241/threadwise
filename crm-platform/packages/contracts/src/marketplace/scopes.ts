@@ -133,6 +133,20 @@ export const MARKET_SCOPES = [
     permissions: ['record.forms.create', 'record.forms.update', 'record.form-submissions.update'],
   },
   {
+    id: 'sales-items.read',
+    label: 'Read products and services',
+    description: 'See the price list of products and services.',
+    risk: 'low',
+    permissions: ['record.sales-items.read'],
+  },
+  {
+    id: 'sales-items.write',
+    label: 'Create and edit products and services',
+    description: 'Add, change and deactivate items on the price list.',
+    risk: 'medium',
+    permissions: ['record.sales-items.create', 'record.sales-items.update'],
+  },
+  {
     id: 'email.read',
     label: 'Read email mailboxes',
     description: 'See the Gmail mailboxes connected to your workspace and their status.',

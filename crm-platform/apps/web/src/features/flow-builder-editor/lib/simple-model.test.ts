@@ -331,6 +331,26 @@ describe('checks', () => {
     ]);
   });
 
+  it('outlines the trigger card only for what is fixed on it: the keywords and the number, not a flow with no step yet', () => {
+    const doc = emptyDoc();
+    const flagged = (d: typeof doc) =>
+      problems(d, { senderRequired: true }).map((p) => [p.onTrigger === true, en(p.message)]);
+    expect(flagged(doc)).toEqual([
+      [true, 'The trigger needs at least one keyword (or choose any message).'],
+      [true, 'Pick the WhatsApp number this flow runs on.'],
+      [false, 'Add a first step: it is what the customer receives.'],
+    ]);
+    // Keywords and number fixed, still no step: nothing on the trigger card is wrong any more.
+    const fixed = {
+      ...doc,
+      trigger: {
+        ...doc.trigger,
+        data: { ...doc.trigger.data, keywords: 'hi', deviceId: 'waba:1' },
+      },
+    };
+    expect(problems(fixed, { senderRequired: true }).some((p) => p.onTrigger)).toBe(false);
+  });
+
   it('asks for a header file when the chosen template has a picture header with no file of its own', () => {
     const templates = [
       { name: 'promo', attachmentType: 'image', attachmentFile: 'meta-handle-123' },
@@ -725,6 +745,7 @@ describe('steps per channel', () => {
         'ask_location',
         'delay',
         'cta',
+        'api_library',
         'webhook',
         'ai',
       ]),
@@ -1035,11 +1056,11 @@ describe('API call and JS function steps (the Actions list)', () => {
     return { d, a };
   };
 
-  it('are offered in the + menu on WhatsApp and not on a website chat bot', () => {
+  it('are offered in the + menu on WhatsApp, and the API step on a website chat bot too (code is WhatsApp only)', () => {
     expect(stepKindsFor('chat').map((k) => k.key)).toEqual(
       expect.arrayContaining(['api-library', 'code']),
     );
-    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('api-library');
+    expect(stepKindsFor('web').map((k) => k.key)).toContain('api-library');
     expect(stepKindsFor('web').map((k) => k.key)).not.toContain('code');
   });
 

@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type WalletReportedKind, type WalletUsageReported } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -38,6 +38,9 @@ export type UsageOutcome =
 
 const NO_ORG = 0;
 
+/** How long an AI call's hold lasts if its charge never posts (the vendor call failed after the hold). See the wallet_holds migration. */
+const AI_HOLD_TTL_SECONDS = 10 * 60;
+
 /** What a refund of each kind says on the statement. */
 const REFUND_TEXT: Record<WalletReportedKind, string> = {
   sms: 'Refund - SMS not delivered',
@@ -62,6 +65,8 @@ const REFUND_TEXT: Record<WalletReportedKind, string> = {
  */
 @Injectable()
 export class UsageBillingService {
+  private readonly logger = new Logger(UsageBillingService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: WalletRepository,
@@ -144,6 +149,12 @@ export class UsageBillingService {
     let txRowId: number | null = null;
     let balanceAfter = wallet.balanceMinor;
 
+    // The AI call held its price before the vendor was called (holdAiCall): the hold leaves `reserved` before any charge lowers the
+    // balance, so reserved never sits above balance (chk_wallet_invariant is checked on every statement).
+    if (input.kind === 'ai') {
+      await this.repo.settleHold(tx, orgId, currency);
+    }
+
     if (price.basis === 'none') {
       freeReason = coveredByAllowance ? 'within_plan_free_quota' : freeReasonOf(price);
     } else if (wallet.balanceMinor <= 0) {
@@ -151,6 +162,8 @@ export class UsageBillingService {
       shortfallMinor = priceMinor;
     } else {
       const wanted = Math.min(priceMinor, wallet.balanceMinor);
+      // A charge dearer than the hold it settles caps what is still reserved to the balance it leaves, before the post (see above).
+      await this.repo.fitReservedBefore(tx, orgId, currency, wanted);
       const posted = await this.ledger.post(tx, {
         orgId,
         unit: currency,
@@ -229,6 +242,10 @@ export class UsageBillingService {
     if (status === 'charged' || freeReason === 'wallet_empty') {
       await this.messages.alertIfLow(tx, orgId, wallet, balanceAfter, currency);
     }
+    // The AI call's hold was settled before the charge (above), so the balance never falls below `reserved`; this caps what the charge left.
+    if (input.kind === 'ai') {
+      await this.repo.capReserved(tx, orgId, currency);
+    }
 
     return status === 'charged'
       ? { status: 'charged', chargedMinor, shortfallMinor, balanceAfterMinor: balanceAfter }
@@ -264,6 +281,49 @@ export class UsageBillingService {
         kind === 'ai'
           ? 'Your wallet balance is empty. Top up to use AI features.'
           : `Your wallet balance is too low for this ${USAGE_KIND_LABELS[kind].toLowerCase()}. Top up to continue.`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'balanceMinor', message: String(need.balance) }],
+      );
+    }
+  }
+
+  /**
+   * Holds the price of one AI call on the platform's key before the vendor is called (#1164): the balance is checked and the price taken
+   * out of the available balance in one step, so parallel calls cannot all pass the same balance. The call's charge settles the hold
+   * (see `charge`). Refused with 422 `WALLET_EMPTY`. A failure to look the wallet up is refused too, with a retryable 503
+   * `SERVICE_UNAVAILABLE` and an error log: the platform pays for this call, so an unreadable wallet must not let it through unheld.
+   * `assertCanAfford` keeps its fail-open behaviour for the other callers.
+   */
+  async holdAiCall(orgId: number): Promise<void> {
+    let need: { balance: number; priceMinor: number } | null;
+    try {
+      need = await this.balanceAndPrice(orgId, 'ai', 1);
+    } catch (err) {
+      this.logger.error(
+        { err, orgId },
+        '[WALLET] could not read the wallet before a platform-key AI call; the call is refused',
+      );
+      throw new AppError(
+        ERROR_CODES.SERVICE_UNAVAILABLE,
+        'AI features are temporarily unavailable. Try again in a moment.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
+    }
+    if (!need) return;
+    const amount = Math.max(1, need.priceMinor);
+    const held = await this.db.retry.txAs({ orgId, userId: null }, async (tx) =>
+      this.repo.holdMinor(
+        tx,
+        orgId,
+        await this.billing.forOrg(tx, orgId),
+        amount,
+        AI_HOLD_TTL_SECONDS,
+      ),
+    );
+    if (held === null) {
+      throw new AppError(
+        ERROR_CODES.WALLET_EMPTY,
+        'Your wallet balance is empty. Top up to use AI features.',
         HttpStatus.UNPROCESSABLE_ENTITY,
         [{ path: 'balanceMinor', message: String(need.balance) }],
       );

@@ -17,25 +17,25 @@ const schema = z.object({
     .int()
     .min(1_000)
     .max(120_000)
-    .default(20_000),
+    .prefault(20_000),
   /** A connection that delivers nothing for this long is cut (a stalled download). */
-  WHATSAPP_MEDIA_IDLE_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(300_000).default(30_000),
+  WHATSAPP_MEDIA_IDLE_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(300_000).prefault(30_000),
   /** The whole transfer, however slowly it flows: a 100 MB document on a slow link still ends. */
   WHATSAPP_MEDIA_TOTAL_TIMEOUT_MS: z.coerce
     .number()
     .int()
     .min(5_000)
     .max(1_800_000)
-    .default(300_000),
+    .prefault(300_000),
   /** How long an uploaded media id is reused for the same file on the same number. Meta keeps ids for 30 days; this is far shorter. */
   WHATSAPP_MEDIA_UPLOAD_CACHE_TTL_SECONDS: z.coerce
     .number()
     .int()
     .min(0)
     .max(7 * 24 * 3600)
-    .default(6 * 3600),
+    .prefault(6 * 3600),
   /** How long a temporary link to a stored file works, for a provider that cannot take an upload (the provider fetches it right away). */
-  WHATSAPP_MEDIA_LINK_TTL_SECONDS: z.coerce.number().int().min(60).max(3600).default(900),
+  WHATSAPP_MEDIA_LINK_TTL_SECONDS: z.coerce.number().int().min(60).max(3600).prefault(900),
 });
 
 export interface WhatsappMediaConfig {

@@ -1,4 +1,4 @@
-// Polls Sentry (read-only Internal Integration token) and opens ONE incident per Sentry issue via resolver.openSentryIssue.
+// Polls Sentry (Internal Integration token; read-only is enough to poll, Issue & Event write adds the status comments) and opens ONE incident per Sentry issue via resolver.openSentryIssue.
 // No token file (or empty) = the whole feature is off. Never throws; the token is never logged. RESOLVED is decided by the resolver, never here.
 import fs from 'node:fs';
 
@@ -9,7 +9,7 @@ const sum = (a) => (Array.isArray(a) ? a.reduce((t, p) => t + (Number(Array.isAr
 export function startSentryPoller({ resolver, env = process.env, fetchImpl = fetch, log = () => {}, now = Date.now, readFile = (f) => fs.readFileSync(f, 'utf8') }) {
   let token = '';
   try { token = String(readFile(env.SENTRY_TOKEN_FILE ?? '/run/secrets/sentry_token')).trim(); } catch { /* no token file: feature off */ }
-  if (!token || !resolver?.openSentryIssue) return { enabled: false, tick: async () => {}, stop() {} };
+  if (!token || !resolver?.openSentryIssue) return { enabled: false, tick: async () => {}, comment: async () => false, stop() {} };
   const base = /^https:\/\/[A-Za-z0-9.-]+$/.test((env.SENTRY_API_BASE ?? '').replace(/\/+$/, '')) ? env.SENTRY_API_BASE.replace(/\/+$/, '') : 'https://sentry.io';
   const org = env.SENTRY_ORG || 'geta-ai-cj', sentryEnv = env.SENTRY_ENV || 'production';
   const projects = (env.SENTRY_PROJECTS ?? '').split(',').map((s) => s.trim()).filter(Boolean);
@@ -60,6 +60,17 @@ export function startSentryPoller({ resolver, env = process.env, fetchImpl = fet
       } catch (e) { log({ evt: 'sentry_status_failed', err: e?.status ?? e?.name ?? 'error' }); }
     }
   }
+  // Writes the incident's lifecycle line (claimed, PR, released, resolved) onto the Sentry issue as a comment, so Sentry shows the status too.
+  // Needs a token with Issue & Event write access; a refusal (401/403) switches comments off for good and never touches the incident flow.
+  let writes = true;
+  async function comment(issueId, text) {
+    if (!writes || !/^\d{1,20}$/.test(String(issueId))) return false;
+    try {
+      const r = await fetchImpl(`${base}/api/0/issues/${issueId}/comments/`, { method: 'POST', headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json', accept: 'application/json', 'user-agent': 'threadwise-chat-bridge' }, body: JSON.stringify({ text: `Threadwise bot: ${clip(text, 480)}` }), signal: AbortSignal.timeout(8000) });
+      if (r.status === 401 || r.status === 403) { writes = false; log({ evt: 'sentry_comment_disabled', status: r.status }); return false; }
+      return !!r.ok;
+    } catch (e) { log({ evt: 'sentry_comment_failed', err: e?.name ?? 'error' }); return false; }
+  }
   let running = false;
   async function tick() { // never throws; a failed fetch leaves all state unchanged
     if (running) return; running = true;
@@ -81,5 +92,10 @@ export function startSentryPoller({ resolver, env = process.env, fetchImpl = fet
     } catch { /* ignore */ } finally { running = false; }
   }
   const timer = setInterval(tick, secs * 1000); timer.unref();
-  return { enabled: true, tick, stop: () => clearInterval(timer) };
+  return { enabled: true, tick, comment, stop: () => clearInterval(timer) };
+}
+
+/** Sentry incidents write their lifecycle lines onto the Sentry issue (no-op when the poller is off or the resolver has no hook). */
+export function mirrorToSentry(resolver, poller) {
+  resolver?.setLifeHook?.((inc, text, who) => (inc.meta?.issueId ? poller.comment(inc.meta.issueId, who && who !== 'bridge' ? `${who}: ${text}` : text) : false));
 }

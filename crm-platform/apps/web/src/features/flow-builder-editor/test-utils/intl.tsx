@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTranslator, NextIntlClientProvider } from 'next-intl';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { loadMessages } from '@/i18n/messages';
@@ -8,10 +9,14 @@ export const enMessages = loadMessages('en');
 
 /** Wraps a tree in the intl provider with locale `en` and the real English messages. */
 export function WithIntl({ children }: { children: ReactElement }): ReactElement {
+  // Fields that read the contact properties (the message box's variable menu) need a query client, though a static render never fetches.
+  const client = new QueryClient();
   return (
-    <NextIntlClientProvider locale="en" timeZone="UTC" messages={enMessages as never}>
-      {children}
-    </NextIntlClientProvider>
+    <QueryClientProvider client={client}>
+      <NextIntlClientProvider locale="en" timeZone="UTC" messages={enMessages as never}>
+        {children}
+      </NextIntlClientProvider>
+    </QueryClientProvider>
   );
 }
 

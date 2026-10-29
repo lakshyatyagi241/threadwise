@@ -97,7 +97,7 @@
       "selectRow": "Selecionar {name}",
       "unnamed": "Sem nome",
       "colGroups": "Grupos",
-      "colTags": "Tags",
+      "colTags": "Etiquetas",
       "colMemo": "Memorando",
       "colDateOfBirth": "Data de nascimento",
       "colMinor": "Menor",
@@ -118,11 +118,11 @@
       "moreActions": "Mais ações",
       "modifyColumns": "Modificar colunas",
       "resetColumns": "Restaurar padrão",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Pesquisar colunas",
+      "columnsSelectAll": "Selecionar tudo",
+      "dragToReorder": "Arraste para reordenar as colunas",
+      "removeColumn": "Remover {name}",
+      "columnsSave": "Salvar",
       "colContactName": "Nome do contato",
       "colPhone": "Número de telefone",
       "colEmailId": "E-mail",
@@ -161,7 +161,7 @@
       "copyFailed": "Não foi possível copiar",
       "view": "Ver",
       "addToGroup": "Adicionar ao grupo",
-      "tag": "Tag",
+      "tag": "Etiqueta",
       "scrollArea": "Tabela de contatos, rolável",
       "previous": "Anterior",
       "next": "Próxima",
@@ -226,7 +226,7 @@
       "addContactShort": "Adicionar contato",
       "segmentLabel": "Segmento ou grupo",
       "groupLabel": "Grupo",
-      "tagLabel": "Tag",
+      "tagLabel": "Etiqueta",
       "ownerLabel": "Responsável",
       "stageLabel": "Estágio do ciclo de vida",
       "statusLabel": "Status",
@@ -297,7 +297,8 @@
       "allTeams": "Todas as equipes",
       "teamFormer": "Equipe anterior",
       "unhideColumn": "Mostrar coluna",
-      "resizeColumn": "Arraste para redimensionar {column}; clique duas vezes para redefinir"
+      "resizeColumn": "Arraste para redimensionar {column}; clique duas vezes para redefinir",
+      "pqlNoKey": "A pesquisa em inglês ainda não está configurada para este workspace. Peça a um administrador para adicionar uma chave do OpenRouter em Chaves de IA."
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -319,7 +320,7 @@
       "createGroupFirst": "Crie um grupo primeiro.",
       "addTag": "Adicionar tag",
       "removeTag": "Remover tag",
-      "tagSelect": "Tag",
+      "tagSelect": "Etiqueta",
       "noTagsType": "Nenhuma tag ainda - digite uma abaixo",
       "noTagsToRemove": "Nenhuma tag para remover ainda.",
       "loading": "Carregando...",
@@ -447,7 +448,8 @@
         "number": "Informe um número.",
         "integer": "Informe um número inteiro.",
         "email": "Informe um endereço de e-mail válido.",
-        "url": "Informe um link completo começando com http:// ou https://."
+        "url": "Informe um link completo começando com http:// ou https://.",
+        "phone": "Informe um número de telefone válido para o país escolhido."
       },
       "readOnlyField": "Somente leitura",
       "yes": "Sim",
@@ -471,7 +473,7 @@
       "cascadeWaiting": "Escolha primeiro {parent} para ver as opções."
     },
     "tags": {
-      "title": "Tags",
+      "title": "Etiquetas",
       "hintEdit": "As alterações nas tags são salvas imediatamente.",
       "hintAdd": "As tags são anexadas quando o contato é salvo.",
       "loading": "Carregando tags",
@@ -581,7 +583,7 @@
         "group": "Grupo",
         "language": "Idioma",
         "firstName": "Nome",
-        "tags": "Tags",
+        "tags": "Etiquetas",
         "title": "Tratamento",
         "address": "Endereço",
         "memo": "Memorando",
@@ -605,7 +607,7 @@
       "groupHint": "Todos os contatos importados são adicionados a este grupo. Os grupos por linha do CSV também se aplicam.",
       "groupsUnavailable": "Os grupos ainda não estão disponíveis.",
       "groupsFailed": "Não foi possível carregar os grupos.",
-      "tags": "Tags",
+      "tags": "Etiquetas",
       "cancel": "Cancelar",
       "working": "Processando...",
       "upload": "{count, plural, one {Importar # contato} other {Importar # contatos}}",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Nome do novo grupo",
       "groupRequiredHint": "Todo contato importado entra neste único grupo. A coluna de grupo do próprio arquivo é ignorada, a menos que você a mapeie acima.",
       "customProperties": "Propriedades personalizadas",
-      "customPropertiesHint": "Uma coluna cujo cabeçalho é o nome da propriedade, ou attr:key como a exportação o escreve, preenche essa propriedade. Uma célula em branco mantém o valor que o contato já tem."
+      "customPropertiesHint": "Uma coluna cujo cabeçalho é o nome da propriedade, ou attr:key como a exportação o escreve, preenche essa propriedade. Uma célula em branco mantém o valor que o contato já tem.",
+      "propertyFormat": {
+        "checkbox": "Escreva yes ou no. Também são aceitos: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Separe as chaves das opções com vírgula, ponto e vírgula ou barra vertical, por exemplo vip, new_leads. Use a chave, não o nome exibido. Maiúsculas e minúsculas não fazem diferença."
+      }
     },
     "detail": {
       "back": "Todos os contatos",
@@ -1345,7 +1351,10 @@
       "save": "Salvar e abrir regras",
       "created": "Segmento “{name}” criado. Refine as regras abaixo.",
       "forbidden": "Você não tem permissão para criar segmentos.",
-      "failed": "Não foi possível criar o segmento. Tente novamente."
+      "failed": "Não foi possível criar o segmento. Tente novamente.",
+      "specific": "Pessoas específicas",
+      "specificHint": "Somente as pessoas e equipes que você escolher, além de você e de quem pode editar todos os segmentos.",
+      "shareRequired": "Escolha pelo menos uma pessoa ou equipe para compartilhar."
     },
     "bulkUpdate": {
       "title": "Atualizar {count, plural, one {# contato} other {# contatos}}",
@@ -1372,7 +1381,8 @@
         "setValue": "Definir um valor",
         "willClear": "Será esvaziada em {count, plural, one {o contato selecionado} other {todos os # contatos selecionados}}.",
         "requiredNoClear": "Uma propriedade obrigatória não pode ser limpa.",
-        "problemEmpty": "Informe um valor ou escolha Limpar."
+        "problemEmpty": "Informe um valor ou escolha Limpar.",
+        "parentFirst": "Atualize primeiro {parent}; depois esta propriedade, pois as opções dependem dela."
       },
       "titleAll": "Atualizar todos os contatos correspondentes",
       "hintAll": "Defina os mesmos valores em todos os contatos que correspondem aos filtros atuais. Os campos em Manter não são alterados.",
@@ -1414,10 +1424,15 @@
         "by": "Importado por"
       },
       "exports": {
-        "title": "Exportações",
-        "hint": "Exportações de contatos do Hub, das mais recentes às mais antigas. Cada arquivo é mantido por 30 dias para que você e os colegas com permissão de exportar possam baixá-lo de novo.",
+        "title": "Histórico de exportações",
+        "hint": "Exportações do Hub, das mais recentes para as mais antigas, com a origem de cada uma. Cada arquivo fica guardado por 30 dias para que você e colegas que podem exportar possam baixá-lo de novo.",
         "empty": "Ainda não há exportações.",
         "by": "Por",
+        "source": "Origem",
+        "sources": {
+          "contacts": "Contatos",
+          "campaigns": "Campanhas"
+        },
         "rows": "Contatos",
         "selection": "Escopo",
         "unknown": "Desconhecido",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "Abrir no app de mensagens"
+      },
+      "reason": {
+        "not_linked": "Este número não está vinculado a uma conta do WhatsApp Business, então nenhum modelo pode ser enviado.",
+        "paused": "Pausado pelo WhatsApp. Pode ser enviado novamente quando a pausa terminar.",
+        "media_header": "Tem cabeçalho de imagem, vídeo ou documento, que ainda não pode ser enviado daqui.",
+        "header_variable": "Tem uma variável no cabeçalho, que ainda não pode ser preenchida daqui.",
+        "dynamic_button": "Tem um botão com link e variável, que ainda não pode ser preenchido daqui.",
+        "authentication": "Modelos de senha de uso único são enviados pelo sistema, não daqui.",
+        "named_variables": "Usa variáveis nomeadas, que ainda não podem ser preenchidas daqui."
       }
     },
     "views": {

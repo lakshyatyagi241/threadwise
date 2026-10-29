@@ -156,6 +156,33 @@ const ORIGIN_TYPES = new Set([
 ]);
 const HEADER_MEDIA = new Set(['image', 'video', 'document']);
 
+const MEDIA_KINDS: ReadonlySet<MessageKind> = new Set([
+  'image',
+  'video',
+  'audio',
+  'voice',
+  'document',
+  'sticker',
+]);
+
+/**
+ * A file or image message whose dump holds no URL: nothing can be copied, and Waboo kept only the caption (or nothing). It is flagged, so the
+ * files step counts it as a known gap instead of failing the whole step, and the inbox shows the content as unavailable.
+ */
+function flagMediaWithoutFile(
+  kind: MessageKind,
+  url: string | null,
+  legacy: Record<string, unknown>,
+  soft: Soft[],
+): void {
+  if (url !== null || !MEDIA_KINDS.has(kind)) return;
+  legacy.contentUnavailable = true;
+  soft.push({
+    code: 'MEDIA_UNAVAILABLE',
+    reason: 'a file or image with no URL in the dump: kept without the file',
+  });
+}
+
 const textOf = (v: unknown): string | null => {
   if (typeof v === 'string') return v.trim() === '' ? null : v;
   const o = obj(v);
@@ -429,6 +456,7 @@ export function parseTurn(doc: Doc): ParsedTurn {
         code: 'NO_TEXT',
         reason: 'the bot turn has a response payload but no text; body left empty',
       });
+    flagMediaWithoutFile(kind, media.url, legacy, soft);
     return { direction: 'out', kind, senderKind, body, mediaUrl: media.url, legacy, soft, empty };
   }
 
@@ -503,6 +531,7 @@ export function parseTurn(doc: Doc): ParsedTurn {
       if (kind === 'text') kind = kindOfUrl(mediaUrl);
     }
   }
+  flagMediaWithoutFile(kind, mediaUrl, legacy, soft);
   let empty = (body === null || body.trim() === '') && mediaUrl === null && senderKind !== 'system';
   // A customer turn that Waboo recorded (typed query object, time, phone) but without any text, file or reply payload: the customer did
   // write, only the content is gone. Kept as a placeholder so the thread and its inbound count match the old inbox; the flag lets a

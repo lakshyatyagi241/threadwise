@@ -236,7 +236,10 @@ export class MicrosoftCalendarTokens {
       },
       () =>
         this.db.txAs({ orgId, userId: null }, async (tx) => {
-          if (!(await this.repo.markNeedsReconnect(tx, orgId, conn.id, reason))) return;
+          if (
+            !(await this.repo.markNeedsReconnect(tx, orgId, conn.id, reason, conn.refreshTokenEnc))
+          )
+            return;
           await this.audit.record(tx, {
             module: MICROSOFT_CALENDAR_AUDIT_MODULE,
             recordId: conn.id,

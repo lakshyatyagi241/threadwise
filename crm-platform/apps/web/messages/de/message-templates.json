@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta erlaubt bei einer genehmigten Vorlage eine Bearbeitung in 24 Stunden und zehn in 30 Tagen. Versuchen Sie es später erneut.",
       "ROW_VERSION_CONFLICT": "Jemand hat diese Vorlage geändert, während Sie sie bearbeitet haben. Laden Sie neu, um die neueste Version zu sehen, und wenden Sie Ihre Änderung dann erneut an.",
       "VALIDATION_FAILED": "Einige Felder sind ungültig. Prüfen Sie die Felder unten.",
-      "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut."
+      "INTERNAL": "Der Server konnte diese Anfrage nicht verarbeiten. Versuchen Sie es in Kürze erneut.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Vorschau",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Geben Sie die Flow-ID ein.",
           "flowIdInvalid": "Die Flow-ID ist eine Zahl.",
           "screenRequired": "Geben Sie die Bildschirm-ID ein.",
-          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren."
+          "catalogAlone": "Eine Katalog-Schaltfläche lässt sich nicht mit anderen Schaltflächen kombinieren.",
+          "flowIdNotMeta": "Dieses Formular ist noch kein Meta-Flow (seine Flow-ID ist keine Zahl). Öffnen Sie WhatsApp-Formulare, speichern und veröffentlichen Sie es und wählen Sie es dann hier aus."
         },
         "catalogHint": "Öffnet Ihren WhatsApp-Katalog. Die Schaltfläche heißt „Katalog ansehen“ und muss die einzige Schaltfläche sein.",
-        "flowId": "WhatsApp-Flow-ID",
-        "flowIdHint": "Die numerische ID eines veröffentlichten WhatsApp Flows aus dem Flows-Manager von Meta.",
-        "screen": "Startbildschirm",
-        "screenHint": "Die ID des Bildschirms, mit dem sich das Formular öffnet, zum Beispiel WELCOME."
+        "flowPick": "WhatsApp-Formular",
+        "flowPickHint": "Wählen Sie eines Ihrer veröffentlichten WhatsApp-Formulare. Die Schaltfläche öffnet es in WhatsApp.",
+        "flowChoose": "WhatsApp-Formular auswählen",
+        "flowLoading": "Formulare werden geladen…",
+        "flowNone": "Sie haben noch keine veröffentlichten WhatsApp-Formulare.",
+        "flowNoneLink": "Eines erstellen und veröffentlichen",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (zuerst bei Meta veröffentlichen)"
       },
       "result": {
         "metaRefused": "Gespeichert, aber Meta hat die Vorlage abgelehnt.",
@@ -413,6 +425,7 @@
         "format": "Die Karten zeigen",
         "formatImage": "Bilder",
         "formatVideo": "Videos",
+        "limits": "Bild bis 5 MB, Video bis 16 MB.",
         "count": "{used}/{max} Karten",
         "add": "Karte hinzufügen",
         "needTwo": "Ein Karussell braucht mindestens {min} Karten.",
@@ -425,7 +438,9 @@
         "buttons": "Schaltflächen",
         "buttonText": "Text der Schaltfläche",
         "buttonUrl": "Website-URL",
-        "buttonPhone": "Telefonnummer"
+        "buttonPhone": "Telefonnummer",
+        "moveUp": "Karte {n} nach oben",
+        "moveDown": "Karte {n} nach unten"
       },
       "offer": {
         "title": "Zeitlich begrenztes Angebot",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Werbesprache ist in dieser Kategorie nicht erlaubt.",
         "TAG_CONTENT_MISMATCH": "Kategorie passt nicht zum Inhalt (z. B. Werbetext in einer UTILITY-Vorlage).",
         "SCAM": "Meta hat die Vorlage als möglichen Betrug markiert. Prüfen Sie Aussagen und Sprache."
+      },
+      "stats": {
+        "title": "So lief diese Vorlage",
+        "hint": "Gezählt aus den damit gesendeten Nachrichten",
+        "loading": "Zahlen werden geladen",
+        "error": "Die Zahlen konnten nicht geladen werden.",
+        "none": "Mit dieser Vorlage wurde noch nichts gesendet.",
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "read": "Gelesen",
+        "replied": "Beantwortet",
+        "failed": "Fehlgeschlagen",
+        "percent": "{value} %",
+        "footer": "{total, plural, one {# Nachricht} other {# Nachrichten}} mit dieser Vorlage gesendet, {queued} warten noch",
+        "lastSent": "zuletzt gesendet {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Tonalität",
       "pickTone": "Tonalität auswählen",
       "language": "Sprache",
-      "languageHint": "Der Entwurf wird in der Sprache des Formulars verfasst.",
+      "languageHint": "Wählen Sie eine beliebige Sprache, die Meta akzeptiert. Der Entwurf wird darin geschrieben, und die Vorlage übernimmt sie.",
       "notes": "Eigener Prompt",
       "notesNote": "optional / max. 2000",
       "notesPlaceholder": "Alles, was enthalten sein soll: Variablen, Links, zwingende Formulierungen, was vermieden werden soll…",

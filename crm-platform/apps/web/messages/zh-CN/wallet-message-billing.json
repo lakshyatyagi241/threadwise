@@ -109,7 +109,8 @@
       "amount": "金额",
       "balance": "余额",
       "noDescription": "钱包变动",
-      "reason": "原因"
+      "reason": "原因",
+      "invoice": "下载发票"
     },
     "pricingPanel": {
       "title": "消息定价",
@@ -1038,6 +1039,11 @@
       "enrichment": "联系人查询",
       "chat_message": "聊天消息",
       "webbot_message": "网站聊天机器人消息"
+    },
+    "legacyInvoice": {
+      "title": "发票",
+      "back": "返回对账单",
+      "print": "打印或另存为 PDF"
     }
   }
 }

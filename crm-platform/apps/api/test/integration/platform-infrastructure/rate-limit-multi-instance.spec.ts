@@ -104,7 +104,8 @@ describe('rate limit across instances', () => {
 
     await proxy.setMode('pass');
     let after = await limiter.consume(key, 5, WINDOW, t(0, 1000));
-    for (let i = 0; i < 40 && after.degraded; i++) {
+    // the breaker (BREAKER_OPEN_MS) skips Redis for a few seconds after a failure, then one request probes it
+    for (let i = 0; i < 80 && after.degraded; i++) {
       await new Promise((r) => setTimeout(r, 100));
       after = await limiter.consume(key, 5, WINDOW, t(0, 1000));
     }

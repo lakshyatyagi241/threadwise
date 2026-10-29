@@ -297,7 +297,17 @@
         "removeRow": "이 질문 삭제"
       },
       "reading": "읽는 중…",
-      "failed": "읽을 수 없습니다."
+      "failed": "읽을 수 없습니다.",
+      "view": "보기",
+      "viewNamed": "{label} 보기",
+      "viewClose": "닫기",
+      "viewLoading": "불러오는 중",
+      "viewFailed": "이 항목을 불러올 수 없습니다. 다시 시도하세요.",
+      "viewQuestion": "질문",
+      "viewAnswer": "답변",
+      "viewNotReadYet": "이 페이지는 아직 읽는 중입니다. 준비되면 여기에 텍스트가 표시됩니다.",
+      "viewNoText": "이 항목에는 텍스트가 없습니다.",
+      "viewTruncated": "여기에는 첫 부분만 표시됩니다. 에이전트는 항목 전체를 읽습니다."
     }
   }
 }

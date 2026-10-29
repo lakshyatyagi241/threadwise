@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "{time} için yeniden açılır",
       "erased": "Silinen kişiler",
-      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri ve mesaj metni olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
+      "erasedHint": "Bu kişiler silindi; konuşmaları kişinin bilgileri olmadan saklandı. Silme tarihi kaydedilmediği için saatler son mesajı gösterir.",
       "erasedTitle": "Silinen kişi"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Bir reklamdan veya bağlantıdan geldi",
       "sentIn": "{lang} dilinde gönderildi. Yazdığınız metni göster",
       "translatedFrom": "{lang} dilinden çevrildi. Orijinali göster",
+      "translationFailed": "Çevrilmeden gönderildi. Çeviri başarısız oldu, bu yüzden metniniz yazdığınız haliyle gönderildi.",
       "bot": "Bot",
       "broadcast": "Toplu gönderim",
       "reacted": "Tepki {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Çözüldü",
           "closed": "Kapalı",
           "spam": "Spam"
-        }
+        },
+        "created": "Başlangıç: {date}",
+        "showMore": "{count} tane daha göster",
+        "showLess": "Daha az göster"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Resmi olmayan",
       "officialFull": "Resmi (WhatsApp Cloud API)",
       "unofficialFull": "Resmi olmayan (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Önceki konuşmalar",
+      "began": "Başlangıç: {date}",
+      "showMore": "{count} tane daha göster",
+      "showLess": "Daha az göster",
+      "loading": "Yükleniyor…",
+      "failed": "Bu konuşma yüklenemedi.",
+      "unknown": "Bilinmeyen gönderen",
+      "openThread": "Konuşmayı aç"
     }
   }
 }

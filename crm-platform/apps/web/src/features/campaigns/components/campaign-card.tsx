@@ -165,7 +165,8 @@ export function CampaignCard({
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href={titleHref}
-              className="min-h-6 min-w-6 truncate text-[15px] font-semibold leading-6 hover:underline"
+              title={c.name}
+              className="min-h-6 min-w-6 max-w-full truncate text-[15px] font-semibold leading-6 hover:underline"
             >
               {c.name}
             </Link>

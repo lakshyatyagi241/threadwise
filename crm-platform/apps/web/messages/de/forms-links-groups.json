@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Dieser Link ist pausiert oder abgelaufen.",
       "ROW_VERSION_CONFLICT": "Dies wurde an anderer Stelle geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
       "VALIDATION_FAILED": "Überprüfen Sie die markierten Felder und versuchen Sie es erneut.",
-      "PLAN_FEATURE_LOCKED": "Führen Sie ein Upgrade Ihres Plans durch, um diese Funktion zu nutzen."
+      "PLAN_FEATURE_LOCKED": "Führen Sie ein Upgrade Ihres Plans durch, um diese Funktion zu nutzen.",
+      "WFL_FORM_SYNC_FAILED": "Die Formulare konnten nicht von Meta gelesen werden."
     },
     "forms": {
       "heading": "WhatsApp-Formulare",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Noch keine Formulare",
-        "description": "Erstellen Sie ein Formular und senden Sie es dann über einen WhatsApp-Formularschritt in einem Flow."
+        "description": "Erstellen Sie ein Formular und senden Sie es dann über einen WhatsApp-Formularschritt in einem Flow.",
+        "noMatch": "Kein Formular passt zu „{q}“."
       },
       "table": {
         "form": "Formular",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "Gespeichert.",
-        "published": "Auf WhatsApp veröffentlicht."
+        "published": "Auf WhatsApp veröffentlicht.",
+        "connectHint": "Formulare werden nur über eine direkte WhatsApp-Cloud-API-Verbindung veröffentlicht. Bitten Sie einen Admin, unter Kanäle → WhatsApp eine solche zu verbinden.",
+        "connectLink": "WhatsApp-Kanäle öffnen"
       },
       "builder": {
         "back": "Zurück zu Formularen",
@@ -143,6 +147,14 @@
           "contact": "Kontakt",
           "phone": "Telefon"
         }
+      },
+      "sync": {
+        "cta": "Mit Meta synchronisieren",
+        "syncing": "Synchronisiere…",
+        "done": "Mit Meta synchronisiert: {checked} geprüft, {updated} aktualisiert, {missing} nicht in Meta gefunden, {metaOnly} nur in Meta."
+      },
+      "search": {
+        "placeholder": "Formulare suchen"
       }
     },
     "links": {

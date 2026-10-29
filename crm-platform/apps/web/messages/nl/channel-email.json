@@ -135,7 +135,11 @@
       "limit": "De mailboxlimiet van je abonnement is bereikt, dus deze mailbox is niet verbonden.",
       "not_configured": "Aanmelden voor deze provider is nog niet ingesteld voor dit platform. Vraag het aan de platformbeheerder.",
       "wrong_account": "Je hebt je aangemeld met een ander account dan de mailbox die opnieuw wordt gekoppeld. Meld je aan met hetzelfde adres.",
-      "failed": "Er is iets misgegaan bij het verbinden van de mailbox. Probeer het opnieuw."
+      "failed": "Er is iets misgegaan bij het verbinden van de mailbox. Probeer het opnieuw.",
+      "not_enabled": "E-mail zit niet in het abonnement van uw werkruimte, dus er is niets verbonden. Vraag een beheerder het aan te zetten.",
+      "not_allowed": "U mag dit soort postvak niet verbinden. Vraag een beheerder om toegang of gebruik een gedeeld postvak.",
+      "no_address": "De aanbieder heeft het e-mailadres van het postvak niet gedeeld, dus er is niets verbonden. Verbind opnieuw en sta toegang tot het e-mailadres toe.",
+      "no_refresh_token": "De aanbieder stond niet toe dat dit postvak ingelogd blijft, dus er is niets verbonden. Verwijder de toegang van deze app in de instellingen van uw Google- of Microsoft-account en verbind opnieuw."
     },
     "errors": {
       "notConfigured": "Aanmelden voor deze provider is nog niet ingesteld voor dit platform. Vraag het aan de platformbeheerder.",

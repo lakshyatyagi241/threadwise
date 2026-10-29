@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const CONSENT_EXPORT_JOB = 'consent.export';
 
 export const consentExportJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  exportUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  exportUuid: z.guid(),
 });
 export type ConsentExportJob = z.infer<typeof consentExportJobSchema>;
 

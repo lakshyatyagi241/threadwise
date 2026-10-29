@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "{time} に再開",
       "erased": "削除済みの連絡先",
-      "erasedHint": "これらの連絡先は削除され、会話は相手の情報やメッセージ本文を除いて保存されています。削除日は記録されていないため、時刻は最後のメッセージを表示します。",
+      "erasedHint": "これらの連絡先は削除され、会話は相手の情報を除いて保存されています。削除日は記録されていないため、時刻は最後のメッセージを表示します。",
       "erasedTitle": "削除済みの連絡先"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "広告またはリンクから流入",
       "sentIn": "{lang} で送信されました。入力したテキストを表示",
       "translatedFrom": "{lang} から翻訳されました。原文を表示",
+      "translationFailed": "翻訳なしで送信されました。翻訳に失敗したため、入力したとおりの文面で送信されました。",
       "bot": "ボット",
       "broadcast": "一斉配信",
       "reacted": "リアクション {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "解決済み",
           "closed": "終了",
           "spam": "スパム"
-        }
+        },
+        "created": "開始日 {date}",
+        "showMore": "さらに{count}件表示",
+        "showLess": "表示を減らす"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "非公式",
       "officialFull": "公式 (WhatsApp Cloud API)",
       "unofficialFull": "非公式 (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "以前のスレッド",
+      "began": "開始日 {date}",
+      "showMore": "さらに{count}件表示",
+      "showLess": "表示を減らす",
+      "loading": "読み込み中…",
+      "failed": "このスレッドを読み込めませんでした。",
+      "unknown": "不明な送信者",
+      "openThread": "スレッドを開く"
     }
   }
 }

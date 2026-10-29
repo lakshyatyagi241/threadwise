@@ -99,6 +99,7 @@
       "triggerGroup": "Automatisch · bij groepslidmaatschap",
       "triggerManual": "Handmatig inschrijven",
       "triggerKeyword": "Trefwoord",
+      "triggerAny": "Elk bericht",
       "active": "actief",
       "done": "klaar",
       "failed": "mislukt",
@@ -130,7 +131,10 @@
         "reEngagement": "Activeert slapende contacten opnieuw met een persoonlijke aanbieding of check-in.",
         "lead": "Koestert nieuwe leads met leerzame berichten voordat ze naar sales gaan.",
         "event": "Broadcast met een beperkte looptijd rond een lancering, actie of seizoensmoment.",
-        "default": "Geautomatiseerde WhatsApp-reis, gebouwd in de flow-editor."
+        "default": "Geautomatiseerde WhatsApp-reis, gebouwd in de flow-editor.",
+        "defaultWeb": "Website-chatbot gemaakt in de flow-editor.",
+        "defaultCall": "Geautomatiseerd gesprek gemaakt in de flow-editor.",
+        "defaultOther": "Geautomatiseerde conversatie gemaakt in de flow-editor."
       }
     },
     "featured": {
@@ -581,6 +585,85 @@
           "sendAnswer": "Antwoord naar de klant sturen",
           "variable": "Antwoord opslaan als",
           "variableHint": "Latere stappen lezen het antwoord onder deze naam, bijvoorbeeld faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Lijsten laden…",
+          "listPick": "— kies een lijst —",
+          "listFallback": "Lijst",
+          "listNotLoaded": "Lijst {id} (niet geladen)",
+          "segmentLoading": "Segmenten laden…",
+          "segmentPick": "— kies een segment —",
+          "segmentFallback": "Segment",
+          "segmentNotLoaded": "Segment {id} (niet geladen)",
+          "updateIntroSub": "Contactvelden vind je op <link>/contacts</link>. Het telefoonnummer kan hier niet worden gewijzigd.",
+          "updateIntro": "Stelt <b>één veld</b> van dit contact in. Gebruik <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> of de sleutel van een van je eigen velden. Latere stappen zien de nieuwe waarde.",
+          "fieldLabel": "Veld",
+          "fieldHint": "De veldsleutel, bijvoorbeeld stad of e-mail.",
+          "newValueLabel": "Nieuwe waarde",
+          "newValueHint": "Elke tekst of {example}. Laat leeg om het veld te wissen (een naam kan niet gewist worden).",
+          "listIntroSub": "Beheer lijsten op <link>/contacts/groups</link>.",
+          "listIntro": "Zet dit contact in een <b>lijst</b>, of haalt het eruit. Een lijst die een flow wijzigt, start de flows “komt in / verlaat een lijst” niet, zodat een flow niet in een lus kan raken.",
+          "actionLabel": "Actie",
+          "actionAdd": "Voeg het contact toe aan de lijst",
+          "actionRemove": "Verwijder het contact uit de lijst",
+          "listLabel": "Lijst",
+          "inListIntro": "Vertakt op basis van of dit contact in een <b>lijst</b> zit: <mono>yes</mono> als dat zo is, <mono>no</mono> als dat niet zo is (of de lijst is verwijderd).",
+          "segmentIntroSub": "Maak segmenten op <link>/segments</link>.",
+          "segmentIntro": "Vertakt op basis van of dit contact op dit moment bij een <b>segment</b> hoort: <mono>yes</mono> of <mono>no</mono>.",
+          "segmentLabel": "Segment",
+          "waSessionIntro": "<mono>yes</mono> wanneer de klant je in de afgelopen <b>24 uur</b> heeft geschreven, zodat een gewoon bericht nog kan worden verstuurd; <mono>no</mono> wanneer het venster is gesloten en alleen een goedgekeurde sjabloon hen nog kan bereiken.",
+          "windowLabel": "Venster (uren)",
+          "windowHint": "Het WhatsApp-venster is 24 uur. Gebruik een kortere periode om strenger te zijn.",
+          "spreadsheetLabel": "Rekenblad",
+          "spreadsheetHint": "Kies een rekenblad uit je verbonden Google-account.",
+          "tabLabel": "Tabblad (optioneel)",
+          "tabHint": "Leeg = het eerste tabblad.",
+          "matchColumnLabel": "Zoek de rij waarin kolom",
+          "matchColumnHint": "De koptekst van de kolom waarin wordt gezocht.",
+          "matchValueLabel": "gelijk is aan",
+          "matchValueHint": "Meestal {example}.",
+          "sheetCheckIntro": "Zoekt een rij op in een Google-rekenblad en controleert een van de cellen: <mono>yes</mono> wanneer de cel aan de voorwaarde voldoet, <mono>no</mono> wanneer dat niet zo is, wanneer geen rij overeenkomt, of wanneer Google niet kan worden gelezen.",
+          "checkColumnLabel": "Controleer kolom",
+          "testLabel": "Voorwaarde",
+          "valueLabel": "Waarde",
+          "sheetContactIntro": "Zoekt een rij op in een Google-rekenblad en kopieert cellen naar <b>dit contact</b>: één kolom per veld. Het werkt het contact bij waarmee de flow bezig is; het maakt geen contacten aan op basis van nieuwe rijen.",
+          "copyColumnsLabel": "Kopieer deze kolommen",
+          "copyColumnsHint": "Kolomkop in het rekenblad → veldsleutel van het contact.",
+          "columnHeaderPlaceholder": "Kolomkop",
+          "addColumn": "Kolom toevoegen",
+          "op": {
+            "equals": "is gelijk aan",
+            "not_equals": "is niet gelijk aan",
+            "contains": "bevat",
+            "not_contains": "bevat niet",
+            "starts_with": "begint met",
+            "ends_with": "eindigt op",
+            "greater_than": "is groter dan",
+            "less_than": "is kleiner dan",
+            "is_set": "heeft een waarde",
+            "is_not_set": "is niet ingevuld",
+            "is_empty": "is leeg",
+            "is_not_empty": "is niet leeg"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Voert een API uit die je hebt opgeslagen in de <b>API Library</b> voor het contact van deze uitvoering. De stap gaat verder via <mono>success</mono> wanneer de API 2xx antwoordt, en via <mono>error</mono> bij al het andere.",
+          "apiLabel": "API",
+          "loadFailed": "Je opgeslagen API's konden niet worden geladen.",
+          "manageApis": "API's beheren",
+          "refreshList": "Lijst vernieuwen",
+          "loading": "API's laden…",
+          "pickApi": "— kies een API —",
+          "noApis": "Nog geen opgeslagen API's",
+          "loadingName": "Laden…",
+          "savedApiName": "Opgeslagen API",
+          "notFound": "{name} (niet gevonden)",
+          "variablesLabel": "Variabelen",
+          "variablesHint": "Laat een waarde leeg om de variabele met die naam uit de uitvoering te gebruiken, daarna de eigenschap van het contact, en daarna de standaardwaarde. Waarden mogen {example} bevatten.",
+          "defaultPlaceholder": "Standaard: {value}",
+          "saveLabel": "Antwoord opslaan in",
+          "saveHint": "Latere stappen lezen het antwoord als <mono>{variable}</mono>, een veld als <mono>{field}</mono> en de status als <mono>{status}</mono>.",
+          "exposes": "Deze API toont ook <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -998,6 +1081,7 @@
         "imported": "{steps, plural, one {# stap} other {# stappen}} geïmporteerd in {flows, plural, one {# flow} other {# flows}}. Controleer ze en sla daarna op.",
         "invalidJson": "Dat bestand is geen geldige JSON.",
         "saved": "\"{name}\" opgeslagen",
+        "nodeSaved": "Node succesvol bijgewerkt!",
         "saveFailed": "Opslaan mislukt: {error}",
         "publishedToast": "Gepubliceerd",
         "publishFailed": "Publiceren mislukt: {error}",
@@ -1441,6 +1525,9 @@
           },
           "removeRule": "Regel verwijderen",
           "variablePlaceholder": "Variabelenaam (bijv. plan)",
+          "keyLabel": "Sleutel",
+          "valueLabel": "Waarde",
+          "pickProperty": "Kies een contacteigenschap",
           "pickVariable": "Kies de variabele om te testen.",
           "comparePlaceholder": "Vergelijken met…",
           "joinerAnd": "EN",
@@ -1631,6 +1718,12 @@
           "kindDocumentReport": "Document (pdf-rapport, enz.)",
           "upload": "Uploaden",
           "uploadHint": "Tot {mb} MB. Wij hosten het bestand en geven de flow een openbare URL.",
+          "acceptedFormats": {
+            "image": "Toegestane formaten: JPG, PNG.",
+            "video": "Toegestane formaten: MP4, 3GP.",
+            "audio": "Toegestane formaten: MP3, AAC, AMR, OGG.",
+            "document": "Toegestane formaten: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Bestand vervangen",
           "chooseKind": {
             "image": "Kies afbeelding (of sleep hierheen)",
@@ -1661,7 +1754,12 @@
           "igUsernameHint": "Zonder de @. De link wordt ig.me/m/yourbrand — tikken erop opent een DM naar je account.",
           "igMessage": "WhatsApp-bericht",
           "igMessageHint": "Verzonden naar de klant via WhatsApp met de Instagram-link. Ondersteunt '{{'variabelen'}}'.",
-          "igMessagePlaceholder": "Ga verder met ons op Instagram 👇"
+          "igMessagePlaceholder": "Ga verder met ons op Instagram 👇",
+          "templateFills": "Waarmee elk nummer wordt gevuld",
+          "templateFillsHint": "Typ de tekst voor elk nummer van de sjabloon, of druk op / om een contactgegeven of een flowvariabele in te voegen. Laat leeg om de waarde van de sjabloon te gebruiken.",
+          "templateHeaderMedia": "Koptekstbestand",
+          "templateHeaderMediaHint": "De afbeelding, video of het bestand in de kop van deze sjabloon. Nodig als de sjabloon geen eigen bestand heeft.",
+          "templateHeaderMediaMissing": "Voeg het koptekstbestand toe: deze sjabloon heeft er geen en WhatsApp verstuurt hem niet zonder."
         },
         "sequence": {
           "info": "Elk antwoord wordt in volgorde naar de klant verzonden. Combineer tekst, afbeeldingen, video, audio en documenten in één node — ideaal voor productkaarten of onboardingkits.",
@@ -2027,7 +2125,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Een andere chatbot starten"
+          "description": "Draag de chat over aan een AI-agent"
         },
         "whatsapp_shop": {
           "label": "WhatsApp-winkel",
@@ -2352,6 +2450,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” heeft geen inkomende verbinding — er leidt niets naartoe.",
+        "buttonNoExit": "\"{node}\": de knop \"{button}\" leidt naar geen enkele stap.",
         "notConnected": "“{node}” is met niets verbonden.",
         "wrongChannel": "“{node}” werkt niet op {channel} — verwijder hem of zet het kanaal weer aan in de Trigger-node.",
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",

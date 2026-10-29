@@ -263,7 +263,7 @@ describe('pull connector (framework)', () => {
   const answer =
     (status: number, json: unknown): FetchLike =>
     async () => ({ status, text: async () => JSON.stringify(json) });
-  const allow = async () => undefined;
+  const allow = async () => null;
 
   it('renders the request from its templates: encoded in the path and query, plain in headers', async () => {
     const fetchImpl = vi.fn(answer(200, { data: { items: [] } }));
@@ -277,6 +277,15 @@ describe('pull connector (framework)', () => {
     );
     expect(init.method).toBe('GET');
     expect(init.headers).toEqual({ 'X-Account': 'acme' });
+  });
+
+  it('connects to the address the guard approved, and to no other (no second lookup)', async () => {
+    const fetchImpl = vi.fn(answer(200, { data: { items: [] } }));
+    await new PullConnector(fetchImpl, async () => '93.184.216.34').pull(
+      { recipe: r, credentials: creds, config: {} },
+      state,
+    );
+    expect(fetchImpl.mock.calls[0]![1].pinAddress).toBe('93.184.216.34');
   });
 
   it('maps the items to leads and moves the cursor to the greatest id', async () => {

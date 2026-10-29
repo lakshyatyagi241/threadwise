@@ -106,7 +106,11 @@
         "failed": "Lỗi",
         "rolled_back": "Đã hoàn lại"
       },
-      "by": "bởi {author}"
+      "by": "bởi {author}",
+      "raisedIst": "Tạo lúc {time} IST",
+      "noProgress": "Không có tiến triển trong {minutes} phút. Bản dựng hoặc bản phát hành có thể đã dừng.",
+      "noChangesAlert": "Các bản phát hành mới nhất không liệt kê pull request của chúng. Nhiều khả năng deploy-main.sh trên máy chủ build hoặc ci-entry.sh trên máy chủ chính đã cũ: hãy cài phiên bản hiện tại (deploy/build-server/README.md).",
+      "moreChanges": "{count} thay đổi khác"
     }
   }
 }

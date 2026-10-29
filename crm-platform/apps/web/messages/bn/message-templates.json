@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "অনুমোদিত টেমপ্লেটে Meta ২৪ ঘণ্টায় একটি এবং ৩০ দিনে দশটি সম্পাদনার অনুমতি দেয়। পরে আবার চেষ্টা করুন।",
       "ROW_VERSION_CONFLICT": "আপনি সম্পাদনা করার সময় কেউ এই টেমপ্লেট বদলেছে। সর্বশেষ সংস্করণ দেখতে রিলোড করুন, তারপর আবার আপনার পরিবর্তন প্রয়োগ করুন।",
       "VALIDATION_FAILED": "কিছু ফিল্ড বৈধ নয়। নিচের ফিল্ডগুলো দেখুন।",
-      "INTERNAL": "সার্ভার এই অনুরোধ প্রক্রিয়া করতে ব্যর্থ হয়েছে। একটু পরে আবার চেষ্টা করুন।"
+      "INTERNAL": "সার্ভার এই অনুরোধ প্রক্রিয়া করতে ব্যর্থ হয়েছে। একটু পরে আবার চেষ্টা করুন।",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "প্রিভিউ",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Flow ID লিখুন।",
           "flowIdInvalid": "Flow ID একটি সংখ্যা।",
           "screenRequired": "স্ক্রিন ID লিখুন।",
-          "catalogAlone": "ক্যাটালগ বোতাম অন্য বোতামের সাথে একসাথে ব্যবহার করা যায় না।"
+          "catalogAlone": "ক্যাটালগ বোতাম অন্য বোতামের সাথে একসাথে ব্যবহার করা যায় না।",
+          "flowIdNotMeta": "এই ফর্ম এখনও Meta Flow নয় (এর Flow ID সংখ্যা নয়)। WhatsApp ফর্ম খুলে সংরক্ষণ ও প্রকাশ করুন, তারপর এখানে বেছে নিন।"
         },
         "catalogHint": "আপনার WhatsApp ক্যাটালগ খোলে। বোতামে “ক্যাটালগ দেখুন” লেখা থাকে এবং এটি একমাত্র বোতাম হতে হবে।",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "প্রকাশিত WhatsApp Flow-এর সংখ্যাসূচক ID, Meta-র Flows ম্যানেজার থেকে।",
-        "screen": "শুরুর স্ক্রিন",
-        "screenHint": "যে স্ক্রিনে ফর্ম খোলে তার ID, যেমন WELCOME।"
+        "flowPick": "WhatsApp ফর্ম",
+        "flowPickHint": "আপনার প্রকাশিত WhatsApp ফর্মগুলোর একটি বেছে নিন। বোতামটি এটি WhatsApp-এর ভেতরেই খোলে।",
+        "flowChoose": "WhatsApp ফর্ম বেছে নিন",
+        "flowLoading": "ফর্ম লোড হচ্ছে…",
+        "flowNone": "আপনার এখনও কোনো প্রকাশিত WhatsApp ফর্ম নেই।",
+        "flowNoneLink": "একটি তৈরি করে প্রকাশ করুন",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (আগে Meta-তে প্রকাশ করুন)"
       },
       "result": {
         "metaRefused": "সংরক্ষিত হয়েছে, কিন্তু Meta টেমপ্লেটটি প্রত্যাখ্যান করেছে।",
@@ -413,6 +425,7 @@
         "format": "কার্ডে দেখানো হবে",
         "formatImage": "ছবি",
         "formatVideo": "ভিডিও",
+        "limits": "ছবি ৫ MB পর্যন্ত, ভিডিও ১৬ MB পর্যন্ত।",
         "count": "{used}/{max}টি কার্ড",
         "add": "কার্ড যোগ করুন",
         "needTwo": "ক্যারোসেলে অন্তত {min}টি কার্ড লাগবে।",
@@ -425,7 +438,9 @@
         "buttons": "বোতাম",
         "buttonText": "বোতামের লেখা",
         "buttonUrl": "ওয়েবসাইট URL",
-        "buttonPhone": "ফোন নম্বর"
+        "buttonPhone": "ফোন নম্বর",
+        "moveUp": "কার্ড {n} উপরে সরান",
+        "moveDown": "কার্ড {n} নিচে সরান"
       },
       "offer": {
         "title": "সীমিত সময়ের অফার",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "এই ক্যাটাগরিতে মার্কেটিং ভাষা অনুমোদিত নয়।",
         "TAG_CONTENT_MISMATCH": "ক্যাটাগরি কনটেন্টের সাথে মেলে না (যেমন UTILITY টেমপ্লেটে প্রচারমূলক লেখা)।",
         "SCAM": "Meta টেমপ্লেটটিকে সম্ভাব্য স্ক্যাম হিসেবে চিহ্নিত করেছে। দাবি ও ভাষা পর্যালোচনা করুন।"
+      },
+      "stats": {
+        "title": "এই টেমপ্লেটের ফলাফল",
+        "hint": "এর সাথে পাঠানো বার্তা থেকে গণনা করা",
+        "loading": "সংখ্যা লোড হচ্ছে",
+        "error": "সংখ্যা লোড করা যায়নি।",
+        "none": "এই টেমপ্লেট দিয়ে এখনো কিছু পাঠানো হয়নি।",
+        "sent": "পাঠানো হয়েছে",
+        "delivered": "ডেলিভার হয়েছে",
+        "read": "পড়া হয়েছে",
+        "replied": "উত্তর এসেছে",
+        "failed": "ব্যর্থ",
+        "percent": "{value}%",
+        "footer": "এই টেমপ্লেট দিয়ে {total}টি বার্তা পাঠানো হয়েছে, {queued}টি অপেক্ষায়",
+        "lastSent": "শেষবার পাঠানো {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "সুর",
       "pickTone": "সুর বেছে নিন",
       "language": "ভাষা",
-      "languageHint": "খসড়াটি ফর্মের ভাষায় লেখা হয়।",
+      "languageHint": "Meta যে কোনো ভাষা গ্রহণ করে তার যেকোনোটি বেছে নিন। খসড়া সেই ভাষায় লেখা হয় এবং টেমপ্লেটও সেটিই নেয়।",
       "notes": "কাস্টম প্রম্পট",
       "notesNote": "ঐচ্ছিক / সর্বোচ্চ ২০০০",
       "notesPlaceholder": "নির্দিষ্ট কিছু রাখতে চাইলে লিখুন: ভেরিয়েবল, লিংক, অবশ্যই থাকা বাক্যাংশ, যা এড়াতে হবে…",

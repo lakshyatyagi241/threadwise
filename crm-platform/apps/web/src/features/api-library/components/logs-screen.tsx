@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Alert } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useApiLogApis } from '../api/hooks';
+import { useApiLogApis, useApiLogBots } from '../api/hooks';
 import { LogsIcon } from './icons';
 import { PageHeader } from './page-chrome';
 import { LogsPanel } from './logs-panel';
@@ -15,6 +15,7 @@ export function LogsScreen() {
   const canRead = useCan('integ.apilibrary.read');
   // Every saved API and each deleted API that still has runs (a workspace holds at most 200 saved APIs); the filter needs nothing else.
   const logApis = useApiLogApis(canRead);
+  const logBots = useApiLogBots(canRead);
   const paging = useUrlPaging();
   if (!canRead) {
     return (
@@ -31,7 +32,11 @@ export function LogsScreen() {
         subtitle={t('subtitle')}
         back={{ href: '/api-library', label: t('back') }}
       />
-      <LogsPanel paging={paging} apis={logApis.data?.data ?? []} />
+      <LogsPanel
+        paging={paging}
+        apis={logApis.data?.data ?? []}
+        bots={logBots.data?.data ?? []}
+      />
     </section>
   );
 }

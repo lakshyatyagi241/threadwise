@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "boş = sınırsız",
           "maxUsesHint": "Tüm müşteriler genelinde.",
           "perUser": "Kullanıcı başına sınır",
-          "perUserHint": "Her müşteri için izin verilen kullanım sayısı.",
+          "perUserHint": "Her müşteri için izin verilen kullanım sayısı, tüm çalışma alanlarında.",
           "firstPurchaseTitle": "Yalnızca ilk satın alma",
-          "firstPurchaseHint": "Yalnızca ücretli sipariş vermemiş çalışma alanları",
+          "firstPurchaseHint": "Yalnızca hiçbir çalışma alanında ödenmiş siparişi olmayan alıcılar",
           "stackableTitle": "Diğer kuponlarla birleştirilebilir",
           "stackableHint": "Müşterilerin ödeme sırasında başka bir etkin kodla birlikte kullanmasına izin verir"
         }

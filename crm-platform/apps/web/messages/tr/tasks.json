@@ -155,7 +155,12 @@
       "deleted": "{count, plural, other {# görev silindi.}}",
       "deleteTitle": "Seçili görevler silinsin mi?",
       "deleteMessage": "{count, plural, other {# görev herkes için silinecek. Bu işlem geri alınamaz.}}",
-      "keep": "Vazgeç"
+      "keep": "Vazgeç",
+      "reopen": "Yeniden aç",
+      "completeWithOutcome": "Görev sonucuyla tamamla",
+      "reopenWithOutcome": "Görev sonucuyla yeniden aç",
+      "pickOutcome": "Görev sonucu",
+      "reopened": "{count, plural, one {# görev yeniden açıldı.} other {# görev yeniden açıldı.}}"
     },
     "quick": {
       "label": "Görev ekle",

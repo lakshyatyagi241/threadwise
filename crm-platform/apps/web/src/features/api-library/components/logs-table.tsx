@@ -25,7 +25,8 @@ export function LogsTable({
   const t = useTranslations('api-library.logs');
   const tc = useTranslations('api-library.common');
   const fmt = useFormatDate();
-  const cols = showApi ? 7 : 6;
+  // The full page (showApi) also shows which bot made each call; a drawer of one API does not need it.
+  const cols = showApi ? 8 : 6;
   return (
     <div className="thin-scrollbar overflow-x-auto">
       <table className="w-full min-w-[52rem] border-separate border-spacing-0 text-sm">
@@ -34,7 +35,7 @@ export function LogsTable({
           <tr>
             {[
               'requestedOn',
-              ...(showApi ? ['api'] : []),
+              ...(showApi ? ['api', 'bot'] : []),
               'url',
               'source',
               'result',
@@ -68,6 +69,11 @@ export function LogsTable({
                     {r.apiName || (
                       <span className="font-normal text-muted-foreground">{t('unsaved')}</span>
                     )}
+                  </td>
+                )}
+                {showApi && (
+                  <td className={TD}>
+                    {r.botName ?? <span className="text-muted-foreground">{t('noBot')}</span>}
                   </td>
                 )}
                 <td className={cn(TD, 'max-w-0 w-full')}>

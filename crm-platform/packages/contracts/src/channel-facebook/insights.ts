@@ -27,23 +27,23 @@ export const fbInsightsSchema = z.object({
       pageId: z.string(),
     })
     .nullable(),
-  followers: z.number().int().nullable(),
+  followers: z.int().nullable(),
   /** Live 28 day metrics by name (page_impressions, page_post_engagements, ...). */
   kpis: z.record(z.string(), z.number()),
   local: z.object({
-    convos: z.number().int(),
-    convosOpen: z.number().int(),
-    msgIn: z.number().int(),
-    msgOut: z.number().int(),
-    posts: z.number().int(),
-    postsPublished: z.number().int(),
-    postsScheduled: z.number().int(),
+    convos: z.int(),
+    convosOpen: z.int(),
+    msgIn: z.int(),
+    msgOut: z.int(),
+    posts: z.int(),
+    postsPublished: z.int(),
+    postsScheduled: z.int(),
   }),
   /** Messages in and out per day over the last 14 days, oldest first; `days` are `YYYY-MM-DD` in the viewer's time zone. */
   trend: z.object({
     days: z.array(z.string()),
-    in: z.array(z.number().int()),
-    out: z.array(z.number().int()),
+    in: z.array(z.int()),
+    out: z.array(z.int()),
   }),
   /** Posts made here, by type. */
   contentMix: z.record(z.string(), z.number()),

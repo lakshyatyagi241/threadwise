@@ -46,18 +46,18 @@ export const lineChannelResponseSchema = z.object({
   displayName: z.string().nullable(),
   pictureUrl: z.string().nullable(),
   active: z.boolean(),
-  connectedAt: z.string().datetime().nullable(),
-  lastInboundAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastInboundAt: z.iso.datetime().nullable(),
   /** Why the webhook, a token renewal or the last send failed; null when healthy. */
   lastError: z.string().nullable(),
   /** The Assertion Signing Key's id (not a secret), shown back so it can be edited. */
   assertionKid: z.string().nullable(),
   rotationEnabled: z.boolean(),
   /** When the current rotated token lapses; null when rotation is off or no token was issued yet. */
-  rotationExpiresAt: z.string().datetime().nullable(),
+  rotationExpiresAt: z.iso.datetime().nullable(),
   /** The address LINE pushes to for this channel (always https). */
   webhookUrl: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type LineChannelResponse = z.infer<typeof lineChannelResponseSchema>;
 

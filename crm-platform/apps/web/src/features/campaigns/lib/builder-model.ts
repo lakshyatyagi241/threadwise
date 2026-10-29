@@ -57,6 +57,8 @@ export interface BuilderForm {
   groupIds: string[];
   tagIds: string[];
   segmentIds: string[];
+  /** How the groups, tags and segments combine: a contact in any of them, or in one of each kind picked. */
+  audienceMatch: 'any' | 'all';
   manualNumbers: string;
   csvText: string;
   /** Earlier broadcasts and campaigns whose recipients are added (not rebuilt on edit: the campaign holds its recipients as contacts). */
@@ -103,6 +105,7 @@ export const EMPTY_FORM: BuilderForm = {
   groupIds: [],
   tagIds: [],
   segmentIds: [],
+  audienceMatch: 'any',
   manualNumbers: '',
   csvText: '',
   previousSends: EMPTY_PREVIOUS,
@@ -261,6 +264,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     groupIds: f.groupIds,
     tagIds: f.tagIds,
     segmentIds: f.segmentIds,
+    audienceMatch: f.audienceMatch,
     manualNumbers: f.manualNumbers,
     csvText: f.csvText,
     ...(hasPrevious(f.previousSends) ? { previousSends: sanitizePrevious(f.previousSends) } : {}),

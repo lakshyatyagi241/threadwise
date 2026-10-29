@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta staat bij een goedgekeurd sjabloon één bewerking per 24 uur en tien per 30 dagen toe. Probeer het later opnieuw.",
       "ROW_VERSION_CONFLICT": "Iemand heeft dit sjabloon gewijzigd terwijl jij het bewerkte. Laad de pagina opnieuw om de nieuwste versie te zien en pas daarna je wijziging opnieuw toe.",
       "VALIDATION_FAILED": "Sommige velden zijn ongeldig. Controleer de velden hieronder.",
-      "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw."
+      "INTERNAL": "De server kon dit verzoek niet verwerken. Probeer het zo dadelijk opnieuw.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Voorbeeld",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Vul het Flow-ID in.",
           "flowIdInvalid": "Het Flow-ID is een getal.",
           "screenRequired": "Vul het scherm-ID in.",
-          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd."
+          "catalogAlone": "Een catalogusknop kan niet met andere knoppen worden gecombineerd.",
+          "flowIdNotMeta": "Dit formulier is nog geen Meta Flow (de Flow-ID is geen getal). Open WhatsApp-formulieren, sla het op en publiceer het, en kies het dan hier."
         },
         "catalogHint": "Opent uw WhatsApp-catalogus. De knop zegt “Catalogus bekijken” en moet de enige knop zijn.",
-        "flowId": "WhatsApp Flow-ID",
-        "flowIdHint": "Het numerieke ID van een gepubliceerde WhatsApp Flow, uit de Flows-beheerder van Meta.",
-        "screen": "Openingsscherm",
-        "screenHint": "Het ID van het scherm waarop het formulier opent, bijvoorbeeld WELCOME."
+        "flowPick": "WhatsApp-formulier",
+        "flowPickHint": "Kies een van je gepubliceerde WhatsApp-formulieren. De knop opent het in WhatsApp.",
+        "flowChoose": "Kies een WhatsApp-formulier",
+        "flowLoading": "Formulieren laden…",
+        "flowNone": "Je hebt nog geen gepubliceerde WhatsApp-formulieren.",
+        "flowNoneLink": "Maak er een en publiceer het",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publiceer eerst bij Meta)"
       },
       "result": {
         "metaRefused": "Opgeslagen, maar Meta heeft het sjabloon geweigerd.",
@@ -413,6 +425,7 @@
         "format": "Kaarten tonen",
         "formatImage": "Afbeeldingen",
         "formatVideo": "Video's",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB.",
         "count": "{used}/{max} kaarten",
         "add": "Kaart toevoegen",
         "needTwo": "Een carrousel heeft minstens {min} kaarten nodig.",
@@ -425,7 +438,9 @@
         "buttons": "Knoppen",
         "buttonText": "Knoptekst",
         "buttonUrl": "Website-URL",
-        "buttonPhone": "Telefoonnummer"
+        "buttonPhone": "Telefoonnummer",
+        "moveUp": "Kaart {n} omhoog",
+        "moveDown": "Kaart {n} omlaag"
       },
       "offer": {
         "title": "Tijdelijke aanbieding",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Marketingtaal is niet toegestaan in deze categorie.",
         "TAG_CONTENT_MISMATCH": "Categorie komt niet overeen met de inhoud (bijv. promotionele tekst in een UTILITY-sjabloon).",
         "SCAM": "Meta heeft het sjabloon gemarkeerd als mogelijke oplichting. Controleer beweringen en taalgebruik."
+      },
+      "stats": {
+        "title": "Resultaten van deze sjabloon",
+        "hint": "Geteld uit de berichten die ermee zijn verzonden",
+        "loading": "Cijfers laden",
+        "error": "De cijfers konden niet worden geladen.",
+        "none": "Met deze sjabloon is nog niets verzonden.",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "replied": "Beantwoord",
+        "failed": "Mislukt",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# bericht} other {# berichten}} verzonden met deze sjabloon, {queued} wachten nog",
+        "lastSent": "laatst verzonden {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Toon",
       "pickTone": "Kies een toon",
       "language": "Taal",
-      "languageHint": "Het concept wordt geschreven in de taal van het formulier.",
+      "languageHint": "Kies een taal die Meta accepteert. Het concept wordt erin geschreven en de sjabloon neemt die taal over.",
       "notes": "Eigen instructie",
       "notesNote": "optioneel / max. 2000",
       "notesPlaceholder": "Alles wat u specifiek wilt opnemen: variabelen, links, verplichte formuleringen, wat vermeden moet worden…",

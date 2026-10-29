@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wird um {time} wieder geöffnet",
       "erased": "Gelöschte Kontakte",
-      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person und ohne Nachrichtentext behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
+      "erasedHint": "Diese Kontakte wurden gelöscht; ihre Unterhaltungen wurden ohne Angaben zur Person behalten. Die Zeiten zeigen die letzte Nachricht, weil das Löschdatum nicht erfasst wird.",
       "erasedTitle": "Gelöschter Kontakt"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Kam über eine Anzeige oder einen Link",
       "sentIn": "In {lang} gesendet. Originaltext anzeigen",
       "translatedFrom": "Aus {lang} übersetzt. Original anzeigen",
+      "translationFailed": "Ohne Übersetzung gesendet. Die Übersetzung ist fehlgeschlagen, daher wurde Ihr Text so gesendet, wie Sie ihn geschrieben haben.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaktion {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Gelöst",
           "closed": "Geschlossen",
           "spam": "Spam"
-        }
+        },
+        "created": "Begonnen am {date}",
+        "showMore": "{count} weitere anzeigen",
+        "showLess": "Weniger anzeigen"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Inoffiziell",
       "officialFull": "Offiziell (WhatsApp Cloud API)",
       "unofficialFull": "Inoffiziell (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Frühere Verläufe",
+      "began": "Begonnen am {date}",
+      "showMore": "{count} weitere anzeigen",
+      "showLess": "Weniger anzeigen",
+      "loading": "Wird geladen…",
+      "failed": "Dieser Verlauf konnte nicht geladen werden.",
+      "unknown": "Unbekannter Absender",
+      "openThread": "Verlauf öffnen"
     }
   }
 }

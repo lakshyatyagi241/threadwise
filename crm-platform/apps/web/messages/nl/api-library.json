@@ -16,8 +16,8 @@
       "failed": "Mislukt",
       "source": {
         "test": "Test",
-        "flow": "Flow",
-        "automation": "Automatisering"
+        "flow": "Eenvoudige flow",
+        "automation": "Geavanceerde flow"
       },
       "errorKind": {
         "blocked": "Adres geblokkeerd",
@@ -91,7 +91,6 @@
       "title": "API verwijderen",
       "message": "Weet je zeker dat je {name} wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
       "delete": "Verwijderen",
-      "deleteAnyway": "Toch verwijderen",
       "done": "{name} is verwijderd.",
       "checking": "Controleren welke flows hem gebruiken...",
       "usageFailed": "Kon niet controleren welke flows deze API gebruiken. Als er een flow is die hem gebruikt, verlaat die stap na verwijdering de flow via de foutpoort.",
@@ -99,7 +98,9 @@
       "published": "Gepubliceerd",
       "draft": "Concept",
       "nodes": "{count, plural, one {# stap} other {# stappen}}",
-      "forceNote": "Als je hem toch verwijdert, werken die stappen niet meer en verlaten ze de flow via hun foutpoort. De logs blijven bewaard."
+      "blocked": "Deze API kan niet worden verwijderd zolang flows hem gebruiken. Verwijder de stap uit deze flows of kies daar een andere API, en verwijder hem dan hier.",
+      "publishedCopy": "De gepubliceerde versie roept hem nog aan",
+      "republish": "Publiceer de flow opnieuw zonder deze stap en verwijder dan de API."
     },
     "logs": {
       "title": "API-logs",
@@ -114,7 +115,8 @@
         "source": "Bron",
         "result": "Resultaat",
         "statusCode": "Statuscode",
-        "duration": "Duur"
+        "duration": "Duur",
+        "bot": "Bot"
       },
       "openLog": "Open de uitvoering van {when}",
       "drawerTitle": "Logs: {name}",
@@ -139,7 +141,9 @@
         "to": "Tot",
         "clear": "Filters wissen",
         "deletedApi": "{name} (verwijderd)",
-        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken."
+        "searchTooLong": "Zoeken mag maximaal {max} tekens bevatten. Korter het om te zoeken.",
+        "bot": "Bot",
+        "allBots": "Alle bots"
       },
       "detail": {
         "title": "Details API-log",
@@ -171,7 +175,10 @@
         "user": "Uitgevoerd door (gebruikers-ID)",
         "noContext": "Er was geen flow of contact bij betrokken."
       },
-      "unsaved": "Niet opgeslagen"
+      "unsaved": "Niet opgeslagen",
+      "export": "CSV exporteren",
+      "exporting": "Bezig met exporteren…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Een variabele invoegen in {label}",
@@ -322,7 +329,10 @@
       "requestHint": "De naam, methode en het adres van de aanroep.",
       "payloadHint": "Wat in de body wordt verzonden. Gebruik de knop '{ }' om een variabele in een waarde te zetten.",
       "functionHint": "Pas de payload met JavaScript aan voordat hij wordt verzonden. Optioneel.",
-      "plainHttpWarning": "Dit adres begint met http://, dus het wachtwoord of de sleutel in uw headers zou onversleuteld worden verzonden. Gebruik https:// als de server dat ondersteunt."
+      "plainHttpWarning": "Dit adres begint met http://, dus het wachtwoord of de sleutel in uw headers zou onversleuteld worden verzonden. Gebruik https:// als de server dat ondersteunt.",
+      "importSkipped": "Het geplakte commando verstuurt ook een bestand ({names}). Een bestand kan hier niet worden geïmporteerd en is dus weggelaten. Al het andere is ingevuld.",
+      "importForm": "Het geplakte commando stuurt zijn gegevens als webformulier (a=1&b=2). Deze API stuurt JSON of multipart form-data, dus de formuliervelden zijn omgezet in een JSON-object. Controleer of de API die je aanroept JSON accepteert.",
+      "payloadTypedHint": "Om een echt getal of ja/nee te versturen, schrijf je de variabele zonder aanhalingstekens: {example}."
     },
     "test": {
       "title": "Antwoord",

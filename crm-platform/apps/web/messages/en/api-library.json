@@ -16,8 +16,8 @@
       "failed": "Failed",
       "source": {
         "test": "Test",
-        "flow": "Flow",
-        "automation": "Automation"
+        "flow": "Simple flow",
+        "automation": "Advanced flow"
       },
       "errorKind": {
         "blocked": "Address blocked",
@@ -91,7 +91,6 @@
       "title": "Delete API",
       "message": "Are you sure you want to delete {name}? This cannot be undone.",
       "delete": "Delete",
-      "deleteAnyway": "Delete anyway",
       "done": "{name} was deleted.",
       "checking": "Checking which flows use it...",
       "usageFailed": "Could not check which flows use this API. If one does, deleting it makes that step leave through its error port.",
@@ -99,7 +98,9 @@
       "published": "Published",
       "draft": "Draft",
       "nodes": "{count, plural, one {# step} other {# steps}}",
-      "forceNote": "If you delete it anyway, those steps stop working and leave through their error port. Its logs are kept."
+      "blocked": "This API cannot be deleted while flows use it. Remove its step from these flows, or pick another API there, then delete it here.",
+      "publishedCopy": "The published version still calls it",
+      "republish": "Publish the flow again without this step, then delete the API."
     },
     "logs": {
       "title": "API logs",
@@ -114,7 +115,8 @@
         "source": "Source",
         "result": "Result",
         "statusCode": "Status code",
-        "duration": "Duration"
+        "duration": "Duration",
+        "bot": "Bot"
       },
       "openLog": "Open the run of {when}",
       "unsaved": "Not saved",
@@ -140,7 +142,9 @@
         "allSources": "All sources",
         "from": "From",
         "to": "To",
-        "clear": "Clear filters"
+        "clear": "Clear filters",
+        "bot": "Bot",
+        "allBots": "All bots"
       },
       "detail": {
         "title": "API log details",
@@ -171,7 +175,10 @@
         "openContact": "Open the contact",
         "user": "Run by (user id)",
         "noContext": "No flow or contact was involved."
-      }
+      },
+      "export": "Export CSV",
+      "exporting": "Exporting…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Insert a variable into {label}",
@@ -322,7 +329,12 @@
       "tested": "Test passed",
       "requestHint": "The name, method and address of the call.",
       "payloadHint": "What is sent in the body. Use the '{ }' button to put a variable in a value.",
-      "functionHint": "Reshape the payload with JavaScript before it is sent. Optional."
+      "functionHint": "Reshape the payload with JavaScript before it is sent. Optional.",
+      "importBody": "The pasted command is a {method} that also has a message. A {method} call here sends no message, so the message is kept in the form but will not be sent. Change the method to POST, PUT or PATCH to send it.",
+      "importMethod": "The method \"{method}\" in the pasted command is not one we know (GET, POST, PUT, PATCH, DELETE). It was set to GET: check the method before saving.",
+      "importSkipped": "The pasted command also sends a file ({names}). A file cannot be imported here, so it was left out. Everything else was filled in.",
+      "importForm": "The pasted command sends its data as a web form (a=1&b=2). This API sends JSON or multipart form-data, so the form fields were turned into a JSON object. Check that the API you call accepts JSON.",
+      "payloadTypedHint": "To send a real number or yes/no, write the variable without quotes: {example}."
     },
     "test": {
       "title": "Response",

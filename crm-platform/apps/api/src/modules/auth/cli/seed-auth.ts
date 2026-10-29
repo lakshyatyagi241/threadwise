@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import { devSeedPassword, seedRefusal } from '@crm/db';
 import { bumpRolesVersionOffline } from '../../../kernel/rbac/roles-version-offline';
 
 loadEnv({ path: resolve(__dirname, '../../../../../../.env') });
@@ -12,16 +13,16 @@ loadEnv({ path: resolve(process.cwd(), '.env') });
 /**
  * Development seed for the auth domain (run after `pnpm db:seed`).
  *
- * The base seed creates staff users without a password (they used Clerk), so
+ * The base seed creates staff users without a password, so
  * nobody can sign in with email and password. This gives every existing staff
  * user a known dev password and a verified email, adds one non-admin agent to
  * the first organization, and creates a platform operator.
  *
- * The passwords are well known and weak by design: the script refuses to run
- * with NODE_ENV=production.
+ * The password is generated for each run and printed once; the script runs only
+ * with ALLOW_DEV_SEED=1, never in production, and only against a local database.
  */
 
-const DEV_PASSWORD = 'Passw0rd!';
+const DEV_PASSWORD = devSeedPassword();
 const OPERATOR = { email: 'operator@example.test', name: 'Platform Operator' };
 
 /**
@@ -271,8 +272,12 @@ async function seedPlans(client: Client): Promise<number> {
 }
 
 async function main(): Promise<void> {
-  if (process.env.NODE_ENV === 'production') {
-    console.error('refusing to seed with NODE_ENV=production');
+  const refusal = seedRefusal(
+    process.env,
+    process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL ?? '',
+  );
+  if (refusal) {
+    console.error(refusal);
     process.exit(1);
   }
   const url = process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL;

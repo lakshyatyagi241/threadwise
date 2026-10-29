@@ -27,26 +27,26 @@ export const teamAnalyticsAgentSchema = z.object({
   userId: uuidSchema,
   name: z.string().nullable(),
   /** Human replies sent in the window; automatic replies are not counted. */
-  replies: z.number().int(),
-  resolved: z.number().int(),
+  replies: z.int(),
+  resolved: z.int(),
   /** Mean minutes to the first reply over the conversations resolved in the window that were assigned to this person; one decimal. */
   avgResponseMin: z.number().nullable(),
   /** online, away, busy or offline (offline when the person never set one). */
   status: z.string(),
   /** Open and pending conversations assigned to the person right now. */
-  currentLoad: z.number().int(),
-  lastSeenAt: z.string().datetime().nullable(),
+  currentLoad: z.int(),
+  lastSeenAt: z.iso.datetime().nullable(),
 });
 export type TeamAnalyticsAgent = z.infer<typeof teamAnalyticsAgentSchema>;
 
 export const teamAnalyticsResponseSchema = z.object({
   range: z.enum(TEAM_ANALYTICS_RANGES),
   /** Start of the window. */
-  since: z.string().datetime(),
+  since: z.iso.datetime(),
   totals: z.object({
-    replies: z.number().int(),
-    resolved: z.number().int(),
-    inbounds: z.number().int(),
+    replies: z.int(),
+    resolved: z.int(),
+    inbounds: z.int(),
     /** Mean minutes to the first reply over every conversation resolved in the window; null when none. */
     avgFirstResponseMin: z.number().nullable(),
   }),

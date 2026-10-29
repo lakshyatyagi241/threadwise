@@ -1,7 +1,8 @@
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
-import { API_LIBRARY_SECRET_MASK } from '@crm/contracts';
+import { API_LIBRARY_SECRET_MASK, apiLibraryIsSensitiveName } from '@crm/contracts';
 import {
+  addressMovedFromSaved,
   applyMapping,
   buildMultipart,
   extractByPath,
@@ -14,6 +15,7 @@ import {
   maskResponseHeaders,
   maskUrl,
   looksBinary,
+  maskResponseText,
   readAnswer,
   scrubSecretHeaders,
   scrubSecretValues,
@@ -22,6 +24,8 @@ import {
   renderHeaders,
   renderText,
   renderUrl,
+  typedValue,
+  withoutDotSegments,
   resolveVariables,
   sameOrigin,
   urlWithDefaults,
@@ -315,9 +319,23 @@ describe('numbered pages', () => {
 });
 
 describe('readAnswer', () => {
-  it('unpacks a gzip answer and counts the real bytes', () => {
+  // Decompression runs on the libuv pool, not the event loop: the runner awaits it, so it must be async.
+  it('returns a promise, so decompression does not block the event loop', async () => {
+    const pending = readAnswer(gzipSync('hi'), { 'content-encoding': 'gzip' }, 1 << 20);
+    expect(pending).toBeInstanceOf(Promise);
+    expect((await pending).text).toContain('hi');
+  });
+
+  it('refuses a gzip bomb past the limit instead of inflating it', async () => {
+    const bomb = gzipSync(Buffer.alloc(4 << 20, 97));
+    const out = await readAnswer(bomb, { 'content-encoding': 'gzip' }, 1 << 20);
+    expect(out.isText).toBe(false);
+    expect(out.text).toContain('could not be unpacked');
+  });
+
+  it('unpacks a gzip answer and counts the real bytes', async () => {
     const text = JSON.stringify({ hello: 'world' });
-    const out = readAnswer(
+    const out = await readAnswer(
       gzipSync(text),
       { 'content-encoding': 'gzip', 'content-type': 'application/json' },
       1 << 20,
@@ -325,24 +343,24 @@ describe('readAnswer', () => {
     expect(out).toEqual({ text, isText: true, sizeBytes: text.length });
   });
 
-  it('names a file instead of printing it as symbols, with its byte size', () => {
+  it('names a file instead of printing it as symbols, with its byte size', async () => {
     const png = Buffer.alloc(102_400, 7);
-    const out = readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
+    const out = await readAnswer(png, { 'content-type': 'image/png' }, 1 << 20);
     expect(out.isText).toBe(false);
     expect(out.sizeBytes).toBe(102_400);
     expect(out.text).toContain('image/png');
     expect(out.text).toContain('102400 bytes');
   });
 
-  it('treats a NUL byte as binary even with a text type, and plain text as text', () => {
+  it('treats a NUL byte as binary even with a text type, and plain text as text', async () => {
     expect(looksBinary('text/plain', Buffer.from([65, 0, 66]))).toBe(true);
-    expect(readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100).isText).toBe(
-      true,
-    );
+    expect(
+      (await readAnswer(Buffer.from('plain'), { 'content-type': 'text/plain' }, 100)).isText,
+    ).toBe(true);
   });
 
-  it('does not throw on a broken compressed answer', () => {
-    const out = readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
+  it('does not throw on a broken compressed answer', async () => {
+    const out = await readAnswer(Buffer.from('not gzip'), { 'content-encoding': 'gzip' }, 100);
     expect(out.isText).toBe(false);
     expect(out.text).toContain('could not be unpacked');
   });
@@ -438,5 +456,107 @@ describe('the logs API filter', () => {
     );
     expect(out.map((a) => a.name)).toEqual(['alpha', 'zeta']);
     expect(out.every((a) => a.deleted)).toBe(true);
+  });
+});
+
+describe('addressMovedFromSaved', () => {
+  const vars = (o: Record<string, string>) =>
+    new Map(Object.entries(o).map(([k, v]) => [k.toLowerCase(), v]));
+  it('is false while a flow value only changes the path or query, true when it changes the host', () => {
+    const url = 'https://{{host}}/orders/{{id}}?k=1';
+    const defaults = vars({ host: 'api.example.com', id: '1' });
+    expect(addressMovedFromSaved(url, vars({ host: 'api.example.com', id: '99' }), defaults)).toBe(
+      false,
+    );
+    expect(addressMovedFromSaved(url, vars({ host: 'evil.test', id: '1' }), defaults)).toBe(true);
+    expect(addressMovedFromSaved('https://api.example.com/x', vars({}), vars({}))).toBe(false);
+  });
+});
+
+describe('more secret names, and a reply that echoes them', () => {
+  it('knows pwd, pin, otp, cvv, card number, ssn, jwt and session, but not words that only contain them', () => {
+    for (const n of [
+      'pwd',
+      'PIN',
+      'otp',
+      'cvv',
+      'card_number',
+      'ssn',
+      'jwt',
+      'session',
+      'sessionId',
+    ])
+      expect(apiLibraryIsSensitiveName(n), n).toBe(true);
+    for (const n of ['shipping', 'footprint', 'pincode', 'mapping', 'sessions_count', 'name'])
+      expect(apiLibraryIsSensitiveName(n), n).toBe(false);
+  });
+
+  it('masks them in a JSON reply at any depth, also when the JSON is cut off', () => {
+    const json = maskResponseText(
+      '{"user":{"pwd":"abc123","pin":"4321","name":"Asha"},"card_number":"4111111111111111"}',
+    );
+    expect(json).not.toMatch(/abc123|4321|4111111111111111/);
+    expect(json).toContain('Asha');
+    const cut = maskJsonText('{"otp":"99887","jwt":"eyJ.x.y","name":"A');
+    expect(cut).not.toMatch(/99887|eyJ/);
+  });
+
+  it('masks name=value and name: value pairs in a plain-text or form-encoded echo', () => {
+    const out = maskResponseText('user=asha&pwd=hunter22&pin=5555\nsession: s3cr3t\nshipping=fast');
+    expect(out).not.toMatch(/hunter22|5555|s3cr3t/);
+    expect(out).toContain('user=asha');
+    expect(out).toContain('shipping=fast');
+  });
+});
+
+describe('a dot in the path and a value written without quotes', () => {
+  const v = vars({
+    value: '.',
+    up: '..',
+    price: '19.99',
+    on: 'yes',
+    off: 'false',
+    empty: '',
+    word: 'hello',
+  });
+
+  it('shows and calls the address the web really reaches when a path value is a dot', () => {
+    expect(renderUrl('https://api.example.com/orders/{{value}}/details', v)).toBe(
+      'https://api.example.com/orders/details',
+    );
+    expect(renderUrl('https://api.example.com/a/b/{{up}}/c', v)).toBe(
+      'https://api.example.com/a/c',
+    );
+    expect(withoutDotSegments('https://api.example.com/a/%2e/b')).toBe(
+      'https://api.example.com/a/b',
+    );
+    // Nothing else is touched.
+    expect(withoutDotSegments('https://API.example.com/a/b.c/../')).toBe(
+      'https://api.example.com/a/',
+    );
+    expect(renderUrl('https://api.example.com/o/{{word}}', v)).toBe(
+      'https://api.example.com/o/hello',
+    );
+  });
+
+  it('sends a marked token as a number or a yes/no, and an ordinary one as text', () => {
+    expect(typedValue('19.99')).toBe(19.99);
+    expect(typedValue('yes')).toBe(true);
+    expect(typedValue('No')).toBe(false);
+    expect(typedValue('')).toBeNull();
+    expect(typedValue('hello')).toBe('hello');
+    expect(
+      renderBody(
+        {
+          p: '\u0001{{price}}',
+          a: '\u0001{{ on }}',
+          b: '\u0001{{off}}',
+          e: '\u0001{{empty}}',
+          w: '\u0001{{word}}',
+          t: '{{price}}',
+        },
+        v,
+      ),
+    ).toEqual({ p: 19.99, a: true, b: false, e: null, w: 'hello', t: '19.99' });
   });
 });

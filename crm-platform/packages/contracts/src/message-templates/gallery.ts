@@ -21,27 +21,23 @@ export const templateGalleryCategorySchema = z.object({
 });
 
 /** One component of a gallery template, as Meta writes it (`type`: HEADER, BODY, FOOTER or BUTTONS). */
-export const templateGalleryComponentSchema = z
-  .object({
-    type: z.enum(['HEADER', 'BODY', 'FOOTER', 'BUTTONS']),
-    format: z.string().optional(),
-    text: z.string().optional(),
-    example: z.record(z.unknown()).optional(),
-    buttons: z
-      .array(
-        z
-          .object({
-            type: z.string(),
-            text: z.string().optional(),
-            url: z.string().optional(),
-            phone_number: z.string().optional(),
-            example: z.union([z.string(), z.array(z.string())]).optional(),
-          })
-          .passthrough(),
-      )
-      .optional(),
-  })
-  .passthrough();
+export const templateGalleryComponentSchema = z.looseObject({
+  type: z.enum(['HEADER', 'BODY', 'FOOTER', 'BUTTONS']),
+  format: z.string().optional(),
+  text: z.string().optional(),
+  example: z.record(z.string(), z.unknown()).optional(),
+  buttons: z
+    .array(
+      z.looseObject({
+        type: z.string(),
+        text: z.string().optional(),
+        url: z.string().optional(),
+        phone_number: z.string().optional(),
+        example: z.union([z.string(), z.array(z.string())]).optional(),
+      }),
+    )
+    .optional(),
+});
 export type TemplateGalleryComponent = z.infer<typeof templateGalleryComponentSchema>;
 
 export const templateGalleryItemSchema = z.object({
@@ -65,10 +61,10 @@ export type TemplateGalleryQuery = z.infer<typeof templateGalleryQuerySchema>;
 export const templateGalleryResponseSchema = z.object({
   categorieList: z.array(templateGalleryCategorySchema),
   pagination: z.object({
-    currentPage: z.number().int(),
-    perPage: z.number().int(),
-    totalPages: z.number().int(),
-    totalRecords: z.number().int(),
+    currentPage: z.int(),
+    perPage: z.int(),
+    totalPages: z.int(),
+    totalRecords: z.int(),
   }),
   templateList: z.array(templateGalleryItemSchema),
 });

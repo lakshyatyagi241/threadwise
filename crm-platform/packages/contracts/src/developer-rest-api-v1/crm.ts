@@ -10,7 +10,7 @@ import { birthDateSchema } from '../contact-consent/age';
 export const v1MeSchema = z.object({
   account: z.object({ name: z.string().nullable(), email: z.string().nullable() }),
   workspace: z.object({
-    id: z.string().uuid(),
+    id: z.guid(),
     name: z.string(),
     slug: z.string(),
     timezone: z.string().nullable(),
@@ -18,38 +18,38 @@ export const v1MeSchema = z.object({
   }),
   plan: z.object({ id: z.string().nullable(), name: z.string().nullable(), is_free: z.boolean() }),
   /** One entry per metered key; null is unlimited. */
-  limits: z.record(z.number().int().nullable()),
+  limits: z.record(z.string(), z.int().nullable()),
   /** `<feature_key>: true` for every unlocked feature. */
-  features: z.record(z.literal(true)),
+  features: z.record(z.string(), z.literal(true)),
 });
 export type V1Me = z.infer<typeof v1MeSchema>;
 
 const v1MeterSchema = z.object({
   label: z.string(),
-  used: z.number().int(),
-  limit: z.number().int().nullable(),
+  used: z.int(),
+  limit: z.int().nullable(),
   unlimited: z.boolean(),
-  percent: z.number().int().nullable(),
+  percent: z.int().nullable(),
 });
 
 export const v1UsageSchema = z.object({
-  period: z.object({ label: z.string(), resets_on: z.string(), days_left: z.number().int() }),
+  period: z.object({ label: z.string(), resets_on: z.string(), days_left: z.int() }),
   plan: z.object({
     name: z.string().nullable(),
     valid_until: z.string().nullable(),
-    valid_until_days: z.number().int().nullable(),
+    valid_until_days: z.int().nullable(),
   }),
   messages: z.object({
-    used: z.number().int(),
-    limit: z.number().int().nullable(),
+    used: z.int(),
+    limit: z.int().nullable(),
     unlimited: z.boolean(),
-    remaining: z.number().int().nullable(),
-    percent: z.number().int().nullable(),
+    remaining: z.int().nullable(),
+    percent: z.int().nullable(),
   }),
   /** Wallet balance in minor units of `currency`, as a string (money rule). Reference answered a credit count. */
   credits: z.string(),
   currency: z.string(),
-  meters: z.record(v1MeterSchema),
+  meters: z.record(z.string(), v1MeterSchema),
 });
 export type V1Usage = z.infer<typeof v1UsageSchema>;
 
@@ -82,7 +82,7 @@ export const v1ConsentSchema = z
     note: text(500),
     text: text(2000),
     version: text(64),
-    at: z.string().datetime().optional(),
+    at: z.iso.datetime().optional(),
   })
   .nullable()
   .optional();
@@ -92,7 +92,7 @@ const contactFields = {
   last_name: text(191),
   title: text(50),
   country_code: text(10),
-  email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
+  email: z.preprocess(blankToNull, z.email().max(191).nullable().optional()),
   language: text(80),
   address: text(1000),
   /**
@@ -104,7 +104,7 @@ const contactFields = {
   /** An IANA time zone such as `Asia/Kolkata` (BL-193, a product extension): the quiet hours are read on it. `null` clears it. */
   timezone: text(64),
   group_ids: z.array(z.string().max(64)).nullable().optional(),
-  attributes: z.record(z.unknown()).nullable().optional(),
+  attributes: z.record(z.string(), z.unknown()).nullable().optional(),
   is_unsubscribed: flag,
   consent: v1ConsentSchema,
 };
@@ -115,14 +115,19 @@ export const v1CreateContactSchema = z
     first_name: text(191),
     phone: z.preprocess(
       blankToNull,
-      z.string({ required_error: 'The phone field is required.' }).max(32),
+      z
+        .string({
+          error: (issue) =>
+            issue.input === undefined ? 'The phone field is required.' : undefined,
+        })
+        .max(32),
     ),
     ...contactFields,
   })
   .superRefine((v, ctx) => {
     if (!v.name && !v.first_name) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: ['name'],
         message: 'The name field is required when first name is not present.',
       });
@@ -143,12 +148,12 @@ export const v1ContactsQuerySchema = z.object({ search: z.string().trim().max(20
 export type V1ContactsQuery = z.infer<typeof v1ContactsQuerySchema>;
 
 export const v1ContactSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string().nullable(),
   phone: z.string().nullable(),
   email: z.string().nullable(),
-  tags: z.array(z.object({ id: z.string().uuid(), name: z.string() })),
-  attributes: z.record(z.unknown()),
+  tags: z.array(z.object({ id: z.guid(), name: z.string() })),
+  attributes: z.record(z.string(), z.unknown()),
   /** The contact's own IANA time zone, or null (BL-193, a product extension). */
   timezone: z.string().nullable(),
   /** Who set it: `staff`, `import` or `api`; null when no zone is stored. */
@@ -166,7 +171,11 @@ export type V1Contact = z.infer<typeof v1ContactSchema>;
 export const v1CreateContactGroupSchema = z.object({
   name: z.preprocess(
     blankToNull,
-    z.string({ required_error: 'The name field is required.' }).max(191),
+    z
+      .string({
+        error: (issue) => (issue.input === undefined ? 'The name field is required.' : undefined),
+      })
+      .max(191),
   ),
   note: text(500),
   color: text(32),
@@ -174,11 +183,11 @@ export const v1CreateContactGroupSchema = z.object({
 export type V1CreateContactGroup = z.infer<typeof v1CreateContactGroupSchema>;
 
 export const v1ContactGroupSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   note: z.string().nullable(),
   color: z.string().nullable(),
-  contacts_count: z.number().int(),
+  contacts_count: z.int(),
   created_at: z.string(),
 });
 export type V1ContactGroup = z.infer<typeof v1ContactGroupSchema>;
@@ -188,18 +197,18 @@ export type V1ContactGroup = z.infer<typeof v1ContactGroupSchema>;
 const dealStatus = z.enum(['open', 'won', 'lost']);
 
 export const v1DealSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   title: z.string(),
-  pipeline_id: z.string().uuid(),
-  stage_id: z.string().uuid(),
+  pipeline_id: z.guid(),
+  stage_id: z.guid(),
   stage: z.string().nullable(),
   status: dealStatus,
   /** Major units: a whole number when the minor amount divides evenly, else a decimal (Reference's `value_minor / 100`). */
   value: z.number(),
-  value_minor: z.number().int(),
+  value_minor: z.int(),
   currency: z.string(),
-  contact_id: z.string().uuid().nullable(),
-  owner_user_id: z.string().uuid().nullable(),
+  contact_id: z.guid().nullable(),
+  owner_user_id: z.guid().nullable(),
   source: z.string(),
   expected_close_date: z.string().nullable(),
   lost_reason: z.string().nullable(),
@@ -261,7 +270,11 @@ const closeDate = z.preprocess(
 export const v1CreateDealSchema = z.object({
   title: z.preprocess(
     blankToNull,
-    z.string({ required_error: 'The title field is required.' }).max(191),
+    z
+      .string({
+        error: (issue) => (issue.input === undefined ? 'The title field is required.' : undefined),
+      })
+      .max(191),
   ),
   pipeline_id: looseRef,
   stage_id: looseRef,
@@ -315,10 +328,14 @@ const companyCustomFields = z.record(z.string().min(1).max(100), z.unknown()).nu
 export const v1CreateCompanySchema = z.object({
   name: z.preprocess(
     blankToNull,
-    z.string({ required_error: 'The name field is required.' }).max(191),
+    z
+      .string({
+        error: (issue) => (issue.input === undefined ? 'The name field is required.' : undefined),
+      })
+      .max(191),
   ),
   website: companyField(191),
-  email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
+  email: z.preprocess(blankToNull, z.email().max(191).nullable().optional()),
   phone: companyField(32),
   industry: companyField(100),
   size_range: companyField(40),
@@ -336,7 +353,7 @@ export const v1UpdateCompanySchema = z.object({
     z.string().min(1, 'The name field must not be empty.').max(191).optional(),
   ),
   website: companyField(191),
-  email: z.preprocess(blankToNull, z.string().email().max(191).nullable().optional()),
+  email: z.preprocess(blankToNull, z.email().max(191).nullable().optional()),
   phone: companyField(32),
   industry: companyField(100),
   size_range: companyField(40),
@@ -355,7 +372,7 @@ export const v1CompaniesQuerySchema = z.object({
 export type V1CompaniesQuery = z.infer<typeof v1CompaniesQuerySchema>;
 
 export const v1CompanySchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   website: z.string().nullable(),
   email: z.string().nullable(),
@@ -364,8 +381,8 @@ export const v1CompanySchema = z.object({
   size_range: z.string().nullable(),
   address: z.string().nullable(),
   notes: z.string().nullable(),
-  owner_user_id: z.string().uuid().nullable(),
-  custom_fields: z.record(z.unknown()),
+  owner_user_id: z.guid().nullable(),
+  custom_fields: z.record(z.string(), z.unknown()),
   created_at: z.string(),
   updated_at: z.string(),
 });

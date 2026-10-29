@@ -214,3 +214,21 @@ describe('a file with custom property columns (analysis)', () => {
     expect(r.ok && r.row.properties).toBeUndefined();
   });
 });
+
+describe('a cell naming a choice or a date a little differently', () => {
+  it('matches an option whatever the case, accents or extra spaces', () => {
+    const tiers: PropertyDef = { ...tier, options: ['Gold Plus', 'Café'] };
+    expect(cellToPropertyValue(tiers, ' gold   plus ')).toBe('Gold Plus');
+    expect(cellToPropertyValue(tiers, 'gold\u00a0plus')).toBe('Gold Plus');
+    expect(cellToPropertyValue(tiers, 'cafe')).toBe('Café');
+    expect(cellToPropertyValue(tiers, 'Platinum')).toBe('Platinum');
+  });
+  it('reads a date a spreadsheet wrote year last when it cannot mean two days', () => {
+    const joined: PropertyDef = { key: 'joined', label: 'Joined', fieldType: 'date', options: [] };
+    expect(cellToPropertyValue(joined, '2026-05-21')).toBe('2026-05-21');
+    expect(cellToPropertyValue(joined, '21-05-2026')).toBe('2026-05-21');
+    expect(cellToPropertyValue(joined, '05/21/2026')).toBe('2026-05-21');
+    // 10-05-2026 is 10 May or 5 October: left as it is, so the write rules refuse it
+    expect(cellToPropertyValue(joined, '10-05-2026')).toBe('10-05-2026');
+  });
+});

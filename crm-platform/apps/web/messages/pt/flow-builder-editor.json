@@ -99,6 +99,7 @@
       "triggerGroup": "Automático · ao entrar no grupo",
       "triggerManual": "Inscrição manual",
       "triggerKeyword": "Palavra-chave",
+      "triggerAny": "Qualquer mensagem",
       "active": "ativos",
       "done": "concluídos",
       "failed": "com falha",
@@ -130,7 +131,10 @@
         "reEngagement": "Reativa contatos inativos com uma oferta personalizada ou um contato de acompanhamento.",
         "lead": "Nutre novos leads com conteúdos educativos antes de passá-los para vendas.",
         "event": "Transmissão com prazo definido em torno de um lançamento, promoção ou data sazonal.",
-        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos."
+        "default": "Jornada automatizada do WhatsApp criada no editor de fluxos.",
+        "defaultWeb": "Bot de chat do site criado no editor de fluxos.",
+        "defaultCall": "Chamada automatizada criada no editor de fluxos.",
+        "defaultOther": "Conversa automatizada criada no editor de fluxos."
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "{steps, plural, one {# etapa importada} other {# etapas importadas}} em {flows, plural, one {# fluxo} other {# fluxos}}. Confira e depois clique em Salvar.",
         "invalidJson": "Esse arquivo não é um JSON válido.",
         "saved": "“{name}” salvo",
+        "nodeSaved": "Nó atualizado com sucesso!",
         "saveFailed": "Falha ao salvar: {error}",
         "publishedToast": "Publicado",
         "publishFailed": "Falha ao publicar: {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "Remover regra",
           "variablePlaceholder": "Nome da variável (ex.: plano)",
+          "keyLabel": "Chave",
+          "valueLabel": "Valor",
+          "pickProperty": "Escolha uma propriedade do contato",
           "pickVariable": "Escolha a variável a testar.",
           "comparePlaceholder": "Comparar com…",
           "joinerAnd": "E",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "Documento (relatório em PDF etc.)",
           "upload": "Enviar",
           "uploadHint": "Até {mb} MB. Nós hospedamos o arquivo e damos ao fluxo uma URL pública.",
+          "acceptedFormats": {
+            "image": "Formatos aceitos: JPG, PNG.",
+            "video": "Formatos aceitos: MP4, 3GP.",
+            "audio": "Formatos aceitos: MP3, AAC, AMR, OGG.",
+            "document": "Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Substituir arquivo",
           "chooseKind": {
             "image": "Escolha a imagem (ou arraste aqui)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "Sem o @. O link vira ig.me/m/suamarca — tocar nele abre uma DM para a sua conta.",
           "igMessage": "Mensagem de WhatsApp",
           "igMessageHint": "Enviada ao cliente no WhatsApp com o link do Instagram. Aceita '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇"
+          "igMessagePlaceholder": "Continue a conversa conosco no Instagram 👇",
+          "templateFills": "O que preenche cada número",
+          "templateFillsHint": "Digite o texto de cada número do modelo, ou pressione / para inserir um dado do contato ou uma variável do fluxo. Deixe vazio para usar o que o modelo diz.",
+          "templateHeaderMedia": "Arquivo do cabeçalho",
+          "templateHeaderMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+          "templateHeaderMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
         },
         "sequence": {
           "info": "Cada resposta é enviada em ordem ao cliente. Combine texto, imagens, vídeo, áudio e documentos em um só nó — ótimo para cartões de produto ou kits de integração.",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "Enviar a resposta ao cliente",
           "variable": "Salvar a resposta como",
           "variableHint": "As etapas seguintes leem a resposta com este nome, por exemplo faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Carregando listas…",
+          "listPick": "— escolha uma lista —",
+          "listFallback": "Lista",
+          "listNotLoaded": "Lista {id} (não carregada)",
+          "segmentLoading": "Carregando segmentos…",
+          "segmentPick": "— escolha um segmento —",
+          "segmentFallback": "Segmento",
+          "segmentNotLoaded": "Segmento {id} (não carregado)",
+          "updateIntroSub": "Os campos do contato ficam em <link>/contacts</link>. O número de telefone não pode ser alterado aqui.",
+          "updateIntro": "Define <b>um campo</b> deste contato. Use <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> ou a chave de um dos seus campos personalizados. Os nós seguintes veem o novo valor.",
+          "fieldLabel": "Campo",
+          "fieldHint": "A chave do campo, por exemplo cidade ou e-mail.",
+          "newValueLabel": "Novo valor",
+          "newValueHint": "Qualquer texto ou {example}. Deixe em branco para limpar o campo (um nome não pode ser limpo).",
+          "listIntroSub": "Gerencie as listas em <link>/contacts/groups</link>.",
+          "listIntro": "Coloca este contato em uma <b>lista</b> ou o tira dela. Uma lista alterada por um fluxo não dispara os fluxos de “entra em uma lista” / “sai de uma lista”, então um fluxo não pode entrar em loop consigo mesmo.",
+          "actionLabel": "Ação",
+          "actionAdd": "Adicionar o contato à lista",
+          "actionRemove": "Remover o contato da lista",
+          "listLabel": "Lista",
+          "inListIntro": "Ramifica conforme o contato esteja em uma <b>lista</b>: <mono>yes</mono> quando está, <mono>no</mono> quando não está (ou quando a lista não existe mais).",
+          "segmentIntroSub": "Crie segmentos em <link>/segments</link>.",
+          "segmentIntro": "Ramifica conforme o contato corresponda agora a um <b>segmento</b>: <mono>yes</mono> ou <mono>no</mono>.",
+          "segmentLabel": "Segmento",
+          "waSessionIntro": "<mono>yes</mono> quando o cliente escreveu para você nas últimas <b>24 horas</b>, então ainda é possível enviar uma mensagem comum; <mono>no</mono> quando a janela já fechou e só um modelo aprovado pode alcançá-lo.",
+          "windowLabel": "Janela (horas)",
+          "windowHint": "A janela do WhatsApp é de 24 horas. Use uma menor para ser mais rigoroso.",
+          "spreadsheetLabel": "Planilha",
+          "spreadsheetHint": "Escolha uma planilha da sua conta Google conectada.",
+          "tabLabel": "Aba (opcional)",
+          "tabHint": "Em branco = a primeira aba.",
+          "matchColumnLabel": "Encontre a linha em que a coluna",
+          "matchColumnHint": "O cabeçalho da coluna em que procurar.",
+          "matchValueLabel": "é igual a",
+          "matchValueHint": "Geralmente {example}.",
+          "sheetCheckIntro": "Procura uma linha em uma planilha do Google e verifica uma das suas células: <mono>yes</mono> quando a célula atende ao teste, <mono>no</mono> quando não atende, quando nenhuma linha corresponde ou quando não for possível acessar o Google.",
+          "checkColumnLabel": "Coluna a verificar",
+          "testLabel": "Teste",
+          "valueLabel": "Valor",
+          "sheetContactIntro": "Procura uma linha em uma planilha do Google e copia células para <b>este contato</b>: uma coluna por campo. Ele atualiza o contato com o qual o fluxo está conversando; não cria contatos a partir de novas linhas.",
+          "copyColumnsLabel": "Copiar estas colunas",
+          "copyColumnsHint": "Cabeçalho da coluna da planilha → chave do campo do contato.",
+          "columnHeaderPlaceholder": "Cabeçalho da coluna",
+          "addColumn": "Adicionar coluna",
+          "op": {
+            "equals": "é igual a",
+            "not_equals": "não é igual a",
+            "contains": "contém",
+            "not_contains": "não contém",
+            "starts_with": "começa com",
+            "ends_with": "termina com",
+            "greater_than": "é maior que",
+            "less_than": "é menor que",
+            "is_set": "tem um valor",
+            "is_not_set": "está em branco",
+            "is_empty": "está vazio",
+            "is_not_empty": "não está vazio"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Executa uma API salva na <b>API Library</b> para o contato desta execução. Ela sai pela saída <mono>success</mono> quando a API responde com 2xx, e pela saída <mono>error</mono> em qualquer outro caso.",
+          "apiLabel": "API",
+          "loadFailed": "Não foi possível carregar suas APIs salvas.",
+          "manageApis": "Gerenciar APIs",
+          "refreshList": "Atualizar lista",
+          "loading": "Carregando APIs…",
+          "pickApi": "— escolha uma API —",
+          "noApis": "Nenhuma API salva ainda",
+          "loadingName": "Carregando…",
+          "savedApiName": "API salva",
+          "notFound": "{name} (não existe mais)",
+          "variablesLabel": "Variáveis",
+          "variablesHint": "Deixe um valor vazio para usar a variável da execução com esse nome, depois a propriedade do contato e, por fim, o padrão. Os valores podem usar {example}.",
+          "defaultPlaceholder": "Padrão: {value}",
+          "saveLabel": "Salvar resposta em",
+          "saveHint": "Os nós seguintes leem a resposta como <mono>{variable}</mono>, um campo como <mono>{field}</mono> e o status como <mono>{status}</mono>.",
+          "exposes": "Esta API também expõe <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Acionar outro chatbot"
+          "description": "Passa a conversa para um agente de IA"
         },
         "whatsapp_shop": {
           "label": "Loja do WhatsApp",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” não tem conexão de entrada — nada leva até ele.",
+        "buttonNoExit": "\"{node}\": o botão \"{button}\" não leva a nenhuma etapa.",
         "notConnected": "“{node}” não está conectado a nada.",
         "wrongChannel": "“{node}” não funciona em {channel} — exclua-o ou reative o canal no nó Gatilho.",
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",

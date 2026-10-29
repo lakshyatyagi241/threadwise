@@ -118,6 +118,15 @@ export class TemplatesController {
     return galleryOf(query);
   }
 
+  @Get(':id/stats')
+  @RequirePermission('tpl.templates.read')
+  @ApiOperation({
+    summary: 'How one template did: sent, delivered, read, failed and replied counts',
+  })
+  async stats(@Param('id', ParseUUIDPipe) id: string) {
+    return this.templates.stats(id);
+  }
+
   @Get(':id')
   @RequirePermission('tpl.templates.read')
   @ApiOperation({ summary: 'One template with the Meta payload it produces and its lint result' })

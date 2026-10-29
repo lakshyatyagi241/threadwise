@@ -99,6 +99,7 @@
       "triggerGroup": "אוטומטי · בעת הצטרפות לקבוצה",
       "triggerManual": "רישום ידני",
       "triggerKeyword": "מילת מפתח",
+      "triggerAny": "כל הודעה",
       "active": "פעיל",
       "done": "הושלם",
       "failed": "נכשל",
@@ -130,7 +131,10 @@
         "reEngagement": "מפעיל מחדש אנשי קשר רדומים עם הצעה אישית או בדיקת מצב.",
         "lead": "מטפח לידים חדשים בתוכן מעשיר לפני העברה למכירות.",
         "event": "שידור מוגבל בזמן סביב השקה, מבצע או מועד עונתי.",
-        "default": "מסע WhatsApp אוטומטי שנבנה בעורך התהליכים."
+        "default": "מסע WhatsApp אוטומטי שנבנה בעורך התהליכים.",
+        "defaultWeb": "צ'אטבוט לאתר שנוצר בעורך הזרימות.",
+        "defaultCall": "שיחה אוטומטית שנוצרה בעורך הזרימות.",
+        "defaultOther": "שיחה אוטומטית שנוצרה בעורך הזרימות."
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "יובאו {steps, plural, one {שלב אחד} two {שני שלבים} other {# שלבים}} ב-{flows, plural, one {תהליך אחד} two {שני תהליכים} other {# תהליכים}}. בדוק אותם ולאחר מכן שמור.",
         "invalidJson": "הקובץ אינו JSON תקין.",
         "saved": "נשמר “{name}”",
+        "nodeSaved": "הצומת עודכן בהצלחה!",
         "saveFailed": "השמירה נכשלה: {error}",
         "publishedToast": "פורסם",
         "publishFailed": "הפרסום נכשל: {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "הסר כלל",
           "variablePlaceholder": "שם משתנה (למשל plan)",
+          "keyLabel": "מפתח",
+          "valueLabel": "ערך",
+          "pickProperty": "בחרו מאפיין איש קשר",
           "pickVariable": "בחר את המשתנה לבדיקה.",
           "comparePlaceholder": "השווה מול…",
           "joinerAnd": "וגם",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "מסמך (דוח PDF וכדומה)",
           "upload": "העלאה",
           "uploadHint": "עד {mb} MB. אנו מארחים את הקובץ ומעניקים לתהליך כתובת URL ציבורית.",
+          "acceptedFormats": {
+            "image": "פורמטים נתמכים: JPG, PNG.",
+            "video": "פורמטים נתמכים: MP4, 3GP.",
+            "audio": "פורמטים נתמכים: MP3, AAC, AMR, OGG.",
+            "document": "פורמטים נתמכים: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "החלף קובץ",
           "chooseKind": {
             "image": "בחר תמונה (או גרור לכאן)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "ללא @. הקישור יהפוך ל-ig.me/m/yourbrand — הקשה עליו פותחת הודעה פרטית לחשבון שלך.",
           "igMessage": "הודעת WhatsApp",
           "igMessageHint": "נשלחת ללקוח ב-WhatsApp עם קישור ה-Instagram. תומך ב-'{{'variables'}}'.",
-          "igMessagePlaceholder": "המשך איתנו ב-Instagram 👇"
+          "igMessagePlaceholder": "המשך איתנו ב-Instagram 👇",
+          "templateFills": "במה ממלאים כל מספר",
+          "templateFillsHint": "הקלידו את הטקסט לכל מספר בתבנית, או הקישו / כדי להוסיף פרט של איש הקשר או משתנה של הזרימה. השאירו ריק כדי להשתמש בערך שבתבנית.",
+          "templateHeaderMedia": "קובץ כותרת",
+          "templateHeaderMediaHint": "התמונה, הסרטון או הקובץ בכותרת של תבנית זו. נדרש כשלתבנית אין קובץ משלה.",
+          "templateHeaderMediaMissing": "הוסיפו את קובץ הכותרת: לתבנית זו אין כזה, ו-WhatsApp לא ישלח אותה בלעדיו."
         },
         "sequence": {
           "info": "כל תשובה נשלחת ללקוח לפי הסדר. שלב טקסט, תמונות, וידאו, אודיו ומסמכים בצומת אחד — מושלם לכרטיסי מוצר או ערכות קליטה.",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "שליחת התשובה ללקוח",
           "variable": "שמירת התשובה בשם",
           "variableHint": "שלבים הבאים קוראים את התשובה בשם הזה, למשל faq.answer."
+        },
+        "workflow": {
+          "listLoading": "טוען רשימות…",
+          "listPick": "— בחרו רשימה —",
+          "listFallback": "רשימה",
+          "listNotLoaded": "רשימה {id} (לא נטענה)",
+          "segmentLoading": "טוען פלחים…",
+          "segmentPick": "— בחרו פלח —",
+          "segmentFallback": "פלח",
+          "segmentNotLoaded": "פלח {id} (לא נטען)",
+          "updateIntroSub": "שדות איש הקשר נמצאים ב-<link>/contacts</link>. מספר הטלפון אינו ניתן לשינוי כאן.",
+          "updateIntro": "מגדיר <b>שדה אחד</b> של איש הקשר הזה. השתמשו ב-<mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> או במפתח של אחד השדות המותאמים אישית שלכם. צמתים הבאים בזרימה יראו את הערך החדש.",
+          "fieldLabel": "שדה",
+          "fieldHint": "מפתח השדה, למשל עיר או אימייל.",
+          "newValueLabel": "ערך חדש",
+          "newValueHint": "כל טקסט או {example}. השאירו ריק כדי לנקות את השדה (שם לא ניתן לניקוי).",
+          "listIntroSub": "נהלו רשימות ב-<link>/contacts/groups</link>.",
+          "listIntro": "מוסיף את איש הקשר הזה ל<b>רשימה</b>, או מוציא אותו ממנה. רשימה ששונתה על ידי זרימה אינה מפעילה את זרימות “הצטרפות / עזיבה של רשימה”, ולכן זרימה לא יכולה לחזור על עצמה.",
+          "actionLabel": "פעולה",
+          "actionAdd": "הוספת איש הקשר לרשימה",
+          "actionRemove": "הסרת איש הקשר מהרשימה",
+          "listLabel": "רשימה",
+          "inListIntro": "מפצל לפי האם איש הקשר נמצא ב<b>רשימה</b>: <mono>yes</mono> אם הוא נמצא בה, <mono>no</mono> אם הוא לא נמצא בה (או אם הרשימה נמחקה).",
+          "segmentIntroSub": "צרו פלחים ב-<link>/segments</link>.",
+          "segmentIntro": "מפצל לפי האם איש הקשר תואם כרגע ל<b>פלח</b>: <mono>yes</mono> או <mono>no</mono>.",
+          "segmentLabel": "פלח",
+          "waSessionIntro": "<mono>yes</mono> כשהלקוח כתב אליכם ב-<b>24 השעות</b> האחרונות, כך שעדיין אפשר לשלוח הודעה רגילה; <mono>no</mono> כשחלון הזמן נסגר, ורק תבנית מאושרת יכולה להגיע אליו.",
+          "windowLabel": "חלון זמן (שעות)",
+          "windowHint": "חלון הזמן של WhatsApp הוא 24 שעות. לכללים מחמירים יותר, בחרו חלון קצר יותר.",
+          "spreadsheetLabel": "גיליון אלקטרוני",
+          "spreadsheetHint": "בחרו גיליון מתוך חשבון Google המחובר שלכם.",
+          "tabLabel": "לשונית (רשות)",
+          "tabHint": "ריק = הלשונית הראשונה.",
+          "matchColumnLabel": "מצאו את השורה שבה העמודה",
+          "matchColumnHint": "כותרת העמודה לחיפוש.",
+          "matchValueLabel": "שווה ל",
+          "matchValueHint": "בדרך כלל {example}.",
+          "sheetCheckIntro": "מחפש שורה בגיליון Google ובודק אחד מהתאים שלה: <mono>yes</mono> כשהתא עומד במבחן, <mono>no</mono> כשלא, כשאף שורה אינה תואמת, או כש-Google אינו מאפשר לקרוא את הנתונים.",
+          "checkColumnLabel": "עמודה לבדיקה",
+          "testLabel": "מבחן",
+          "valueLabel": "ערך",
+          "sheetContactIntro": "מחפש שורה בגיליון Google ומעתיק תאים אל <b>איש הקשר הזה</b>: עמודה אחת לכל שדה. הפעולה מעדכנת את איש הקשר שהזרימה עובדת איתו; היא אינה יוצרת אנשי קשר משורות חדשות.",
+          "copyColumnsLabel": "העתיקו את העמודות האלה",
+          "copyColumnsHint": "כותרת עמודה בגיליון → מפתח שדה של איש הקשר.",
+          "columnHeaderPlaceholder": "כותרת עמודה",
+          "addColumn": "הוספת עמודה",
+          "op": {
+            "equals": "שווה ל",
+            "not_equals": "לא שווה ל",
+            "contains": "מכיל",
+            "not_contains": "לא מכיל",
+            "starts_with": "מתחיל ב",
+            "ends_with": "מסתיים ב",
+            "greater_than": "גדול מ",
+            "less_than": "קטן מ",
+            "is_set": "יש לו ערך",
+            "is_not_set": "ללא ערך",
+            "is_empty": "ריק",
+            "is_not_empty": "לא ריק"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "מריץ ממשק ששמרתם ב-<b>API Library</b> עבור איש הקשר של ההרצה. היציאה היא דרך <mono>success</mono> כשהממשק עונה 2xx, ודרך <mono>error</mono> בכל מקרה אחר.",
+          "apiLabel": "ממשק",
+          "loadFailed": "לא ניתן לטעון את הממשקים השמורים שלכם.",
+          "manageApis": "ניהול ממשקים",
+          "refreshList": "רענון הרשימה",
+          "loading": "טוען ממשקים…",
+          "pickApi": "— בחרו ממשק —",
+          "noApis": "אין עדיין ממשקים שמורים",
+          "loadingName": "טוען…",
+          "savedApiName": "ממשק שמור",
+          "notFound": "{name} (לא נמצא)",
+          "variablesLabel": "משתנים",
+          "variablesHint": "השאירו ערך ריק כדי להשתמש במשתנה באותו שם מההרצה, אחר כך בתכונה של איש הקשר, ואחר כך בברירת המחדל. ערכים יכולים להשתמש ב-{example}.",
+          "defaultPlaceholder": "ברירת מחדל: {value}",
+          "saveLabel": "שמירת התשובה אל",
+          "saveHint": "צמתים הבאים יקראו את התשובה כ-<mono>{variable}</mono>, שדה כ-<mono>{field}</mono> והסטטוס כ-<mono>{status}</mono>.",
+          "exposes": "ממשק זה חושף גם את <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "צ׳אטבוט",
-          "description": "הפעלת צ׳אטבוט אחר"
+          "description": "העבר את השיחה לסוכן בינה מלאכותית"
         },
         "whatsapp_shop": {
           "label": "חנות WhatsApp",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "ל“{node}” אין חיבור נכנס — אף דבר לא מוביל אליו.",
+        "buttonNoExit": "\"{node}\": הכפתור \"{button}\" לא מוביל לשום שלב.",
         "notConnected": "“{node}” אינו מחובר לכלום.",
         "wrongChannel": "“{node}” לא פועל ב-{channel} — מחקו אותו, או הפעילו מחדש את הערוץ בצומת הטריגר.",
         "noSenderInstagram": "בצומת הטריגר לא נבחר חשבון Instagram — בחרו אחד בשלב הטריגר.",

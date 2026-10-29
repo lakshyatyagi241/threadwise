@@ -39,13 +39,13 @@ export function EmailComposerFooter({
 }) {
   const t = useTranslations('email.composer');
   return (
-    <div className="mx-3 mt-2 flex flex-wrap items-center gap-2 text-xs">
+    <div className="flex flex-wrap items-center gap-1 text-xs">
       <button
         type="button"
         data-testid="email-rich-toggle"
         aria-pressed={rich}
         onClick={onToggle}
-        className="rounded text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+        className="inline-flex h-7 items-center rounded px-2 text-xs text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
       >
         {rich ? t('editor.toPlain') : t('editor.toRich')}
       </button>

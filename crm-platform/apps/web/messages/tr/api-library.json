@@ -16,8 +16,8 @@
       "failed": "Başarısız",
       "source": {
         "test": "Test",
-        "flow": "Akış",
-        "automation": "Otomasyon"
+        "flow": "Basit akış",
+        "automation": "Gelişmiş akış"
       },
       "errorKind": {
         "blocked": "Adres engellendi",
@@ -91,7 +91,6 @@
       "title": "API'yi sil",
       "message": "{name} silinsin mi? Bu işlem geri alınamaz.",
       "delete": "Sil",
-      "deleteAnyway": "Yine de sil",
       "done": "{name} silindi.",
       "checking": "Hangi akışların kullandığı kontrol ediliyor...",
       "usageFailed": "Bu API'yi hangi akışların kullandığı kontrol edilemedi. Kullanan bir akış varsa, silindiğinde o adım hata çıkışından ayrılır.",
@@ -99,7 +98,9 @@
       "published": "Yayında",
       "draft": "Taslak",
       "nodes": "{count, plural, one {# adım} other {# adım}}",
-      "forceNote": "Yine de silerseniz bu adımlar çalışmayı durdurur ve hata çıkışından ayrılır. Günlükleri saklanır."
+      "blocked": "Akışlar bu API'yi kullandığı sürece silinemez. Bu akışlardan adımını kaldırın veya orada başka bir API seçin, ardından burada silin.",
+      "publishedCopy": "Yayınlanan sürüm hâlâ bunu çağırıyor",
+      "republish": "Akışı bu adım olmadan yeniden yayınlayın, ardından API'yi silin."
     },
     "logs": {
       "title": "API günlükleri",
@@ -114,7 +115,8 @@
         "source": "Kaynak",
         "result": "Sonuç",
         "statusCode": "Durum kodu",
-        "duration": "Süre"
+        "duration": "Süre",
+        "bot": "Bot"
       },
       "openLog": "{when} tarihli çalıştırmayı aç",
       "drawerTitle": "Günlükler: {name}",
@@ -139,7 +141,9 @@
         "to": "Bitiş",
         "clear": "Filtreleri temizle",
         "deletedApi": "{name} (silindi)",
-        "searchTooLong": "Arama en fazla {max} karakter olabilir. Aramak için kısaltın."
+        "searchTooLong": "Arama en fazla {max} karakter olabilir. Aramak için kısaltın.",
+        "bot": "Bot",
+        "allBots": "Tüm botlar"
       },
       "detail": {
         "title": "API günlük ayrıntıları",
@@ -171,7 +175,10 @@
         "user": "Çalıştıran (kullanıcı kimliği)",
         "noContext": "Bir akış veya kişi yer almadı."
       },
-      "unsaved": "Kaydedilmedi"
+      "unsaved": "Kaydedilmedi",
+      "export": "CSV olarak dışa aktar",
+      "exporting": "Dışa aktarılıyor…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "{label} alanına değişken ekle",
@@ -322,7 +329,10 @@
       "requestHint": "Çağrının adı, yöntemi ve adresi.",
       "payloadHint": "Gövdede gönderilenler. Bir değere değişken eklemek için '{ }' düğmesini kullanın.",
       "functionHint": "Gönderilmeden önce yükü JavaScript ile yeniden biçimlendirin. İsteğe bağlı.",
-      "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın."
+      "plainHttpWarning": "Bu adres http:// ile başlıyor, bu yüzden başlıklarınızdaki parola veya anahtar şifrelenmeden iletilir. Sunucu destekliyorsa https:// kullanın.",
+      "importSkipped": "Yapıştırılan komut ayrıca bir dosya ({names}) gönderiyor. Burada dosya içe aktarılamaz, bu yüzden atlandı. Diğer her şey dolduruldu.",
+      "importForm": "Yapıştırılan komut verilerini web formu (a=1&b=2) olarak gönderiyor. Bu API JSON veya multipart form-data gönderir; bu yüzden form alanları bir JSON nesnesine çevrildi. Çağırdığınız API'nin JSON kabul ettiğini kontrol edin.",
+      "payloadTypedHint": "Gerçek bir sayı veya evet/hayır göndermek için değişkeni tırnak işaretsiz yazın: {example}."
     },
     "test": {
       "title": "Yanıt",

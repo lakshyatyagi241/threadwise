@@ -109,7 +109,8 @@
       "amount": "Jumlah",
       "balance": "Saldo",
       "noDescription": "Mutasi dompet",
-      "reason": "Alasan"
+      "reason": "Alasan",
+      "invoice": "Unduh faktur"
     },
     "pricingPanel": {
       "title": "Harga pesan",
@@ -1038,6 +1039,11 @@
       "enrichment": "Pencarian kontak",
       "chat_message": "Pesan obrolan",
       "webbot_message": "Pesan chatbot situs web"
+    },
+    "legacyInvoice": {
+      "title": "Faktur",
+      "back": "Kembali ke laporan",
+      "print": "Cetak atau simpan sebagai PDF"
     }
   }
 }

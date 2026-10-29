@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "הקישור הזה מושהה או שתוקפו פג.",
       "ROW_VERSION_CONFLICT": "פריט זה שונה במקום אחר. רעננו את הדף ונסו שוב.",
       "VALIDATION_FAILED": "בדקו את השדות המסומנים ונסו שוב.",
-      "PLAN_FEATURE_LOCKED": "שדרגו את התוכנית שלכם כדי להשתמש בתכונה זו."
+      "PLAN_FEATURE_LOCKED": "שדרגו את התוכנית שלכם כדי להשתמש בתכונה זו.",
+      "WFL_FORM_SYNC_FAILED": "לא ניתן לקרוא את הטפסים מ-Meta."
     },
     "forms": {
       "heading": "טפסי WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "אין עדיין טפסים",
-        "description": "צרו טופס, ואז שלחו אותו משלב טופס WhatsApp בתוך תהליך אוטומטי."
+        "description": "צרו טופס, ואז שלחו אותו משלב טופס WhatsApp בתוך תהליך אוטומטי.",
+        "noMatch": "אין טפסים התואמים ל-“{q}”."
       },
       "table": {
         "form": "טופס",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "נשמר.",
-        "published": "פורסם ל-WhatsApp."
+        "published": "פורסם ל-WhatsApp.",
+        "connectHint": "טפסים מפורסמים רק דרך חיבור ישיר ל-WhatsApp Cloud API. בקשו ממנהל לחבר חיבור כזה תחת ערוצים ← WhatsApp.",
+        "connectLink": "פתיחת ערוצי WhatsApp"
       },
       "builder": {
         "back": "חזרה לטפסים",
@@ -143,6 +147,14 @@
           "contact": "איש קשר",
           "phone": "טלפון"
         }
+      },
+      "sync": {
+        "cta": "סנכרון עם Meta",
+        "syncing": "מסנכרן…",
+        "done": "סונכרן עם Meta: נבדקו {checked}, עודכנו {updated}, לא נמצאו ב-Meta {missing}, רק ב-Meta {metaOnly}."
+      },
+      "search": {
+        "placeholder": "חיפוש טפסים"
       }
     },
     "links": {

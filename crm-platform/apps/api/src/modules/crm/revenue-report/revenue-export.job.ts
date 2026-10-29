@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const REVENUE_EXPORT_JOB = 'revenue-report.export';
 
 export const revenueExportJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  exportUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  exportUuid: z.guid(),
 });
 export type RevenueExportJob = z.infer<typeof revenueExportJobSchema>;
 

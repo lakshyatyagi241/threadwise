@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta อนุญาตให้แก้ไขเทมเพลตที่อนุมัติแล้วได้ 1 ครั้งใน 24 ชั่วโมง และ 10 ครั้งใน 30 วัน กรุณาลองใหม่ภายหลัง",
       "ROW_VERSION_CONFLICT": "มีผู้อื่นเปลี่ยนเทมเพลตนี้ขณะที่คุณกำลังแก้ไข โหลดใหม่เพื่อดูเวอร์ชันล่าสุด แล้วใช้การเปลี่ยนแปลงของคุณอีกครั้ง",
       "VALIDATION_FAILED": "บางช่องไม่ถูกต้อง ตรวจสอบช่องด้านล่าง",
-      "INTERNAL": "เซิร์ฟเวอร์ประมวลผลคำขอนี้ไม่สำเร็จ ลองอีกครั้งในไม่ช้า"
+      "INTERNAL": "เซิร์ฟเวอร์ประมวลผลคำขอนี้ไม่สำเร็จ ลองอีกครั้งในไม่ช้า",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "ตัวอย่าง",
@@ -375,13 +382,18 @@
           "flowIdRequired": "กรอกรหัส Flow",
           "flowIdInvalid": "รหัส Flow ต้องเป็นตัวเลข",
           "screenRequired": "กรอกรหัสหน้าจอ",
-          "catalogAlone": "ปุ่มแคตตาล็อกใช้ร่วมกับปุ่มอื่นไม่ได้"
+          "catalogAlone": "ปุ่มแคตตาล็อกใช้ร่วมกับปุ่มอื่นไม่ได้",
+          "flowIdNotMeta": "ฟอร์มนี้ยังไม่ใช่ Flow ของ Meta (Flow ID ไม่ใช่ตัวเลข) เปิดฟอร์ม WhatsApp บันทึกและเผยแพร่ แล้วเลือกที่นี่"
         },
         "catalogHint": "เปิดแคตตาล็อก WhatsApp ของคุณ ปุ่มจะแสดงว่า “ดูแคตตาล็อก” และต้องเป็นปุ่มเดียวเท่านั้น",
-        "flowId": "รหัส WhatsApp Flow",
-        "flowIdHint": "รหัสตัวเลขของ WhatsApp Flow ที่เผยแพร่แล้ว จากตัวจัดการ Flows ของ Meta",
-        "screen": "หน้าจอแรก",
-        "screenHint": "รหัสของหน้าจอที่แบบฟอร์มเปิดขึ้น เช่น WELCOME"
+        "flowPick": "แบบฟอร์ม WhatsApp",
+        "flowPickHint": "เลือกแบบฟอร์ม WhatsApp ที่เผยแพร่แล้วของคุณ ปุ่มจะเปิดแบบฟอร์มนั้นใน WhatsApp",
+        "flowChoose": "เลือกแบบฟอร์ม WhatsApp",
+        "flowLoading": "กำลังโหลดแบบฟอร์ม…",
+        "flowNone": "คุณยังไม่มีแบบฟอร์ม WhatsApp ที่เผยแพร่",
+        "flowNoneLink": "สร้างและเผยแพร่หนึ่งแบบฟอร์ม",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (เผยแพร่ไปที่ Meta ก่อน)"
       },
       "result": {
         "metaRefused": "บันทึกแล้ว แต่ Meta ปฏิเสธเทมเพลต",
@@ -413,6 +425,7 @@
         "format": "การ์ดแสดง",
         "formatImage": "รูปภาพ",
         "formatVideo": "วิดีโอ",
+        "limits": "รูปภาพไม่เกิน 5 MB วิดีโอไม่เกิน 16 MB",
         "count": "{used}/{max} ใบ",
         "add": "เพิ่มการ์ด",
         "needTwo": "แคโรเซลต้องมีการ์ดอย่างน้อย {min} ใบ",
@@ -425,7 +438,9 @@
         "buttons": "ปุ่ม",
         "buttonText": "ข้อความปุ่ม",
         "buttonUrl": "URL เว็บไซต์",
-        "buttonPhone": "หมายเลขโทรศัพท์"
+        "buttonPhone": "หมายเลขโทรศัพท์",
+        "moveUp": "ย้ายการ์ด {n} ขึ้น",
+        "moveDown": "ย้ายการ์ด {n} ลง"
       },
       "offer": {
         "title": "ข้อเสนอแบบจำกัดเวลา",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "ไม่อนุญาตให้ใช้ภาษาการตลาดในหมวดหมู่นี้",
         "TAG_CONTENT_MISMATCH": "หมวดหมู่ไม่ตรงกับเนื้อหา (เช่น ข้อความโปรโมตในเทมเพลต UTILITY)",
         "SCAM": "Meta ระบุว่าเทมเพลตนี้อาจเป็นการหลอกลวง ตรวจสอบข้อความและภาษาที่ใช้"
+      },
+      "stats": {
+        "title": "ผลลัพธ์ของเทมเพลตนี้",
+        "hint": "นับจากข้อความที่ส่งด้วยเทมเพลตนี้",
+        "loading": "กำลังโหลดตัวเลข",
+        "error": "โหลดตัวเลขไม่สำเร็จ",
+        "none": "ยังไม่มีการส่งข้อความด้วยเทมเพลตนี้",
+        "sent": "ส่งแล้ว",
+        "delivered": "ส่งถึงแล้ว",
+        "read": "อ่านแล้ว",
+        "replied": "ตอบกลับ",
+        "failed": "ล้มเหลว",
+        "percent": "{value}%",
+        "footer": "ส่งข้อความด้วยเทมเพลตนี้ {total} ข้อความ รอคิว {queued}",
+        "lastSent": "ส่งล่าสุด {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "น้ำเสียง",
       "pickTone": "เลือกน้ำเสียง",
       "language": "ภาษา",
-      "languageHint": "ร่างจะเขียนด้วยภาษาเดียวกับแบบฟอร์ม",
+      "languageHint": "เลือกภาษาใดก็ได้ที่ Meta รองรับ ร่างจะเขียนด้วยภาษานั้น และเทมเพลตจะใช้ภาษานั้น",
       "notes": "พรอมต์กำหนดเอง",
       "notesNote": "ไม่บังคับ / สูงสุด 2000",
       "notesPlaceholder": "สิ่งที่ต้องการใส่เป็นพิเศษ เช่น ตัวแปร ลิงก์ ถ้อยคำที่ต้องมี สิ่งที่ควรหลีกเลี่ยง…",

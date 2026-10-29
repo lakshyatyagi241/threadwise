@@ -609,6 +609,34 @@ describe('save, versions, trigger columns and publish (TW-FLB-019, 020, 021, 022
     expect(un.body).toMatchObject({ state: 'draft', isPublished: false, publishedAt: null });
   });
 
+  it('a flow with no trigger cannot go live', async () => {
+    const empty = await create(t.admin, 'Empty', { flowNodes: [], flowEdges: [], vars: [] });
+    const refused = await api.as(t.admin).post(`/v2/flows/${empty.id}/publish`);
+    expect(refused.status).toBe(422);
+    const noTrigger = await create(t.admin, 'No trigger', {
+      flowNodes: [{ id: 'n_msg', type: 'message', x: 0, y: 0, data: { text: 'hi' } }],
+      flowEdges: [],
+      vars: [],
+    });
+    expect((await api.as(t.admin).post(`/v2/flows/${noTrigger.id}/publish`)).status).toBe(422);
+    const read = await api.as(t.admin).get(`/v2/flows/${empty.id}`);
+    expect(read.body.isPublished).toBe(false);
+  });
+
+  it('a second flow left with the default name is "New flow 2", a named one keeps its name', async () => {
+    const o = await api.signup('flbnames');
+    const first = await create(o.admin, 'New flow');
+    const second = await create(o.admin, 'New flow');
+    const third = await create(o.admin, 'new flow');
+    const named = await create(o.admin, 'Welcome');
+    expect([first.name, second.name, third.name, named.name]).toEqual([
+      'New flow',
+      'New flow 2',
+      'New flow 3',
+      'Welcome',
+    ]);
+  });
+
   it('TW-FLB-022 #3: publishing a saved flow publishes THAT row (Reference created a second flow for a never-saved graph)', async () => {
     const o = await api.signup('flbpub');
     const f = await create(o.admin, 'Only one');
@@ -1942,6 +1970,55 @@ describe('acceptance: save, trigger columns, keyword matching, publish, gates, p
     });
     expect(await col(two.id, 'trigger_kind')).toBe('opt_in');
   });
+
+  it.each([
+    {
+      engine: 'facebook',
+      // The Page's inbox channel is keyed by Meta's Page id, the sender key by the row's uuid.
+      account: (orgId: number) =>
+        sql(
+          `INSERT INTO facebook_pages (org_id, page_id) VALUES ($1,'1029384756') RETURNING uuid`,
+          [orgId],
+        ),
+      handle: '1029384756',
+    },
+    {
+      engine: 'instagram',
+      // The account's inbox channel is keyed by the engine's account id.
+      account: (orgId: number) =>
+        sql(
+          `INSERT INTO workspace_ig_accounts (org_id, instaflow_account_id, username, status) VALUES ($1,'17841400000001','shop','connected') RETURNING uuid`,
+          [orgId],
+        ),
+      handle: '17841400000001',
+    },
+  ])(
+    'an $engine flow is tied to its inbox channel and starts on a keyword sent there',
+    async ({ engine, account, handle }) => {
+      const o = await api.signup(`flb${engine}`);
+      const row = (await account(o.orgId)).rows[0] as { uuid: string };
+      const ch = Number(
+        (
+          await sql(
+            `INSERT INTO channels (org_id, kind, name, status, external_id) VALUES ($1,$2,'Inbox','connected',$3) RETURNING id`,
+            [o.orgId, engine, handle],
+          )
+        ).rows[0].id,
+      );
+      const f = await create(o.admin, `${engine} flow`, {
+        flowNodes: [
+          trigger({ channel: engine, deviceId: `${engine}:${row.uuid}` }),
+          { id: 'n_msg', type: 'message', x: 300, y: 0, data: { text: 'hello' } },
+        ],
+        flowEdges: [{ id: 'e_1', source: 'n_trig', sourceHandle: 'out', target: 'n_msg' }],
+      });
+      expect(Number(await col(f.id, 'trigger_channel_id'))).toBe(ch);
+      expect(await col(f.id, 'provider')).toBe(engine);
+      expect((await api.as(o.admin).post(`/v2/flows/${f.id}/publish`)).status).toBe(200);
+      const hit = await triggers().keywordFlow(o.orgId, ch, engine, 'hi');
+      expect(hit?.channelId).toBe(ch);
+    },
+  );
 
   it("TW-FLB-020 rule 3 / port: an unofficial device resolves to its whatsapp_qr channel (trigger_channel_id), another workspace's never does, a blank sender stores null and the next save re-derives it", async () => {
     const o = await api.signup('flb20e');

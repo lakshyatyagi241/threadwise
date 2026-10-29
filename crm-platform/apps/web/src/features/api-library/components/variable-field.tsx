@@ -8,6 +8,7 @@ import {
   type ApiLibraryOption,
 } from '@crm/contracts';
 import { Button, Input, Popover, Textarea, cn } from '@crm/ui';
+import { rememberVariableSource } from '../lib/form-model';
 import { insertAt, removeTokenBefore, tokenText } from '../lib/paths';
 
 /** Where a `{{variable}}` can come from, as the old chip menu offered it: contact properties, other saved APIs, or a flow variable. */
@@ -67,7 +68,8 @@ export function VariableField({
     if (el) caret.current = [el.selectionStart ?? value.length, el.selectionEnd ?? value.length];
   }
 
-  function insert(name: string) {
+  function insert(name: string, source: 'contact' | 'api' | 'flow') {
+    rememberVariableSource(name, source);
     const [s, e] = caret.current ?? [value.length, value.length];
     const r = insertAt(value, s, e, tokenText(name));
     onChange(r.text);
@@ -167,7 +169,7 @@ function VariableMenu({
 }: {
   open: boolean;
   onClose: () => void;
-  onPick: (name: string) => void;
+  onPick: (name: string, source: 'contact' | 'api' | 'flow') => void;
   sources: VariableSources;
 }) {
   const t = useTranslations('api-library.variables');
@@ -200,14 +202,19 @@ function VariableMenu({
         <div className="max-h-64 space-y-3 overflow-y-auto">
           <Group title={t('contactGroup')} empty={t('noContactMatch')} show={contacts.length > 0}>
             {contacts.map((c) => (
-              <Item key={c.key} onClick={() => onPick(c.key)} primary={c.label} secondary={c.key} />
+              <Item
+                key={c.key}
+                onClick={() => onPick(c.key, 'contact')}
+                primary={c.label}
+                secondary={c.key}
+              />
             ))}
           </Group>
           <Group title={t('apiGroup')} empty={t('noApiMatch')} show={apis.length > 0}>
             {apis.map((x) => (
               <Item
                 key={x.name}
-                onClick={() => onPick(x.name)}
+                onClick={() => onPick(x.name, 'api')}
                 primary={x.name}
                 secondary={t('fromApi')}
               />
@@ -225,7 +232,7 @@ function VariableMenu({
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && customOk) {
                     e.preventDefault();
-                    onPick(customName);
+                    onPick(customName, 'flow');
                     setCustom('');
                   }
                 }}
@@ -235,7 +242,7 @@ function VariableMenu({
                 variant="secondary"
                 disabled={!customOk}
                 onClick={() => {
-                  onPick(customName);
+                  onPick(customName, 'flow');
                   setCustom('');
                 }}
               >

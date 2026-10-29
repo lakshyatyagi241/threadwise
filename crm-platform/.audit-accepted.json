@@ -33,5 +33,12 @@
     "reason": "Stack exhaustion on deeply nested glob patterns. Used by file-matching in build and commit tooling on files in this repository, never on request input. No fixed release exists yet.",
     "expires": "2026-12-31",
     "exit": "Upgrade micromatch/braces when a fixed release is published."
+  },
+  {
+    "id": "marketplace-hmac-replay",
+    "package": "not a package: marketplace connection HMAC delivery (apps/api infra/providers/marketplace/hook-auth.ts)",
+    "reason": "A signed delivery has no timestamp, so a captured body can be posted again until the connection's secret is rotated. Adding a replay window needs the sender to send a timestamp, which the existing token and HMAC senders do not do, so a window would reject their deliveries. Duplicate leads are dropped by external id, which bounds the effect. Accepted instead of a breaking change.",
+    "expires": "2027-01-31",
+    "exit": "Add an optional signed timestamp header that is checked only when present, then require it for new connections. Decide again at the review date."
   }
 ]

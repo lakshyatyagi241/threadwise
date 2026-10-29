@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "تسمح Meta بتعديل واحد كل 24 ساعة و10 تعديلات كل 30 يوما للقالب المعتمد. حاول لاحقا.",
       "ROW_VERSION_CONFLICT": "غيّر شخص آخر هذا القالب أثناء تعديلك. أعد التحميل لرؤية أحدث إصدار ثم طبّق تغييرك مرة أخرى.",
       "VALIDATION_FAILED": "بعض الحقول غير صالحة. تحقق من الحقول أدناه.",
-      "INTERNAL": "فشل الخادم في معالجة هذا الطلب. حاول مرة أخرى بعد قليل."
+      "INTERNAL": "فشل الخادم في معالجة هذا الطلب. حاول مرة أخرى بعد قليل.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "معاينة",
@@ -374,14 +381,19 @@
           "quickReplyPosition": "يجب أن تكون الردود السريعة معًا، في بداية الأزرار أو نهايتها.",
           "flowIdRequired": "أدخل معرّف Flow.",
           "flowIdInvalid": "معرّف Flow رقم.",
+          "flowIdNotMeta": "هذا النموذج ليس Flow على Meta بعد (معرّف Flow ليس رقمًا). افتح نماذج WhatsApp، احفظه وانشره، ثم اخترْه هنا.",
           "screenRequired": "أدخل معرّف الشاشة.",
           "catalogAlone": "لا يمكن الجمع بين زر الكتالوج وأزرار أخرى."
         },
         "catalogHint": "يفتح كتالوج واتساب الخاص بك. يظهر على الزر «عرض الكتالوج» ويجب أن يكون الزر الوحيد.",
-        "flowId": "معرّف WhatsApp Flow",
-        "flowIdHint": "المعرّف الرقمي لـ WhatsApp Flow منشور، من مدير Flows في Meta.",
-        "screen": "شاشة الفتح",
-        "screenHint": "معرّف الشاشة التي يفتح عليها النموذج، مثل WELCOME."
+        "flowPick": "نموذج واتساب",
+        "flowPickHint": "اختر أحد نماذج واتساب المنشورة لديك. يفتحه الزر داخل واتساب.",
+        "flowChoose": "اختر نموذج واتساب",
+        "flowLoading": "جارٍ تحميل النماذج…",
+        "flowNone": "ليس لديك نماذج واتساب منشورة بعد.",
+        "flowNoneLink": "أنشئ نموذجًا وانشره",
+        "flowNotOnMeta": "{title} (انشره على Meta أولًا)",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "تم الحفظ، لكن Meta رفضت القالب.",
@@ -413,6 +425,7 @@
         "format": "تعرض البطاقات",
         "formatImage": "صورًا",
         "formatVideo": "مقاطع فيديو",
+        "limits": "صورة حتى 5 ميغابايت، وفيديو حتى 16 ميغابايت.",
         "count": "{used}/{max} بطاقات",
         "add": "إضافة بطاقة",
         "needTwo": "تحتاج الشرائح إلى {min} بطاقات على الأقل.",
@@ -425,7 +438,9 @@
         "buttons": "الأزرار",
         "buttonText": "نص الزر",
         "buttonUrl": "رابط الموقع",
-        "buttonPhone": "رقم الهاتف"
+        "buttonPhone": "رقم الهاتف",
+        "moveUp": "نقل البطاقة {n} لأعلى",
+        "moveDown": "نقل البطاقة {n} لأسفل"
       },
       "offer": {
         "title": "عرض لفترة محدودة",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "اللغة التسويقية غير مسموح بها في هذه الفئة.",
         "TAG_CONTENT_MISMATCH": "الفئة لا تطابق المحتوى (مثل نص ترويجي في قالب UTILITY).",
         "SCAM": "أبلغت Meta عن القالب بوصفه احتيالًا محتملًا. راجع الادعاءات واللغة."
+      },
+      "stats": {
+        "title": "أداء هذا القالب",
+        "hint": "محسوب من الرسائل المرسلة به",
+        "loading": "جارٍ تحميل الأرقام",
+        "error": "تعذّر تحميل الأرقام.",
+        "none": "لم يُرسَل شيء بهذا القالب بعد.",
+        "sent": "أُرسلت",
+        "delivered": "سُلّمت",
+        "read": "قُرئت",
+        "replied": "تم الرد",
+        "failed": "فشلت",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {رسالة واحدة} other {# رسائل}} أُرسلت بهذا القالب، و{queued} قيد الانتظار",
+        "lastSent": "آخر إرسال {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "النبرة",
       "pickTone": "اختر النبرة",
       "language": "اللغة",
-      "languageHint": "تُكتب المسودة بلغة النموذج.",
+      "languageHint": "اختر أي لغة تقبلها Meta. تُكتب المسودة بها ويتخذها القالب.",
       "notes": "تعليمات مخصصة",
       "notesNote": "اختياري / بحد أقصى 2000",
       "notesPlaceholder": "أي شيء محدد تريد تضمينه: متغيرات أو روابط أو عبارات لا بد منها أو ما يجب تجنبه…",

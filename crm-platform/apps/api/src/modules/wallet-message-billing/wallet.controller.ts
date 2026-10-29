@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Res, StreamableFile } from '@nestjs/common';
+import { Controller, Get, Param, Query, Res, StreamableFile } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import {
@@ -7,6 +7,7 @@ import {
   expenseSummaryQuerySchema,
   messagePricingQuerySchema,
   statementQuerySchema,
+  uuidSchema,
   walletLedgerQuerySchema,
   type ExpenseDaysQuery,
   type ExpenseListQuery,
@@ -56,6 +57,16 @@ export class WalletController {
   @ApiOperation({ summary: 'Recent wallet activity, newest first (cursor paginated)' })
   async ledger(@Query(zodPipe(walletLedgerQuerySchema)) q: WalletLedgerQuery) {
     return this.query.ledger(q);
+  }
+
+  @Get('legacy-invoices/:id')
+  @RequirePermission('wallet.statement.read')
+  @ApiOperation({
+    summary:
+      'The invoice the old system issued for a migrated top-up (HTML as issued; show it sandboxed)',
+  })
+  async legacyInvoice(@Param('id', zodPipe(uuidSchema)) id: string) {
+    return this.query.legacyInvoice(id);
   }
 
   @Get('statement')

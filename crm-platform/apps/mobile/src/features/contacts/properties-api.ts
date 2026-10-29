@@ -32,7 +32,7 @@ const statusOptionPageSchema = pageResponseSchema(statusOptionResponseSchema);
 async function allPages<Item>(
   path: string,
   query: NonNullable<ApiRequest<unknown>['query']>,
-  schema: z.ZodType<PageResponse<Item>, z.ZodTypeDef, unknown>,
+  schema: z.ZodType<PageResponse<Item>, unknown>,
   signal?: AbortSignal,
 ): Promise<Item[]> {
   const items: Item[] = [];

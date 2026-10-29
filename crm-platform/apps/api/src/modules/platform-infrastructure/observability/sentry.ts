@@ -64,16 +64,74 @@ export function sentryOptions(
     serverName: undefined, // the container id says nothing a person can use
     dataCollection: NO_EXTRA_DATA,
     tracesSampleRate: Number.isFinite(traces) && traces > 0 && traces <= 1 ? traces : 0,
-    integrations: (defaults) =>
-      defaults.filter((i) => i.name !== 'OnUncaughtException' && i.name !== 'OnUnhandledRejection'),
+    integrations: (defaults) => [
+      ...defaults.filter(
+        (i) => i.name !== 'OnUncaughtException' && i.name !== 'OnUnhandledRejection',
+      ),
+      // Every `logger.error` / `logger.fatal` becomes an issue (a failure that was caught and logged is still a failure) and every
+      // warn-or-worse line a searchable Sentry log. `info` and `debug` stay out: the default sends them all. The integration reads
+      // the line after pino has applied its redaction and serializers (it listens to `pino_asJson` and parses the finished JSON),
+      // so what reaches Sentry is what reaches stdout.
+      Sentry.pinoIntegration({
+        error: { levels: ['error', 'fatal'] },
+        log: { levels: ['warn', 'error', 'fatal'] },
+      }),
+    ],
     initialScope: { tags: { service } },
-    beforeSend: scrubSentryEvent,
+    beforeSend: (event: Sentry.ErrorEvent) =>
+      allowEvent(throttleKey(event)) ? scrubSentryEvent(event) : null,
+    beforeSendLog: (log: Sentry.Log) =>
+      allowLog(
+        `${String(log.message)}|${String(log.attributes?.code)}|${String(log.attributes?.module)}`,
+      )
+        ? scrubSentryLog(log)
+        : null,
     beforeSendSpan: scrubSentrySpan,
     tracePropagationTargets: [],
   };
 }
 
 export const sentryEnabled = (): boolean => enabled;
+
+/**
+ * A rate limit per key: at most `limit` pass in each `windowMs`, the rest are refused. Sentry bills every event, a failing
+ * dependency produces the same error on every request or job (an API outage made tens of thousands of identical events in a few
+ * hours and used up the quota, after which nothing at all was recorded), and the 5th copy of an error in a minute says what the
+ * 5,000th would. Grouping does not help: it saves reading, not events. A quiet window starts a fresh count. The table is capped
+ * so a stream of distinct keys cannot grow it without bound. Per process, which is enough to turn a flood into a trickle.
+ */
+export function createThrottle(
+  limit: number,
+  windowMs = 60_000,
+  now: () => number = Date.now,
+  maxKeys = 500,
+): (key: string) => boolean {
+  const seen = new Map<string, { start: number; n: number }>();
+  return (key) => {
+    const t = now();
+    const entry = seen.get(key);
+    if (entry && t - entry.start < windowMs) return ++entry.n <= limit;
+    if (!entry && seen.size >= maxKeys) {
+      for (const [k, v] of seen) if (t - v.start >= windowMs) seen.delete(k);
+      if (seen.size >= maxKeys) seen.clear();
+    }
+    seen.set(key, { start: t, n: 1 });
+    return true;
+  };
+}
+
+/** What makes two error reports "the same": the exception type and the start of its text, or the message of a captured message. */
+export function throttleKey(event: {
+  message?: string;
+  exception?: { values?: Array<{ type?: string; value?: string }> };
+}): string {
+  const ex = event.exception?.values?.[0];
+  return `${ex?.type ?? ''}:${(ex?.value ?? event.message ?? '').slice(0, 120)}`;
+}
+
+const allowEvent = createThrottle(5);
+/** Logs are meant to be plentiful (one per refused request), so the same line may repeat more before it is cut. */
+const allowLog = createThrottle(60);
 
 interface ScrubbableEvent {
   /** The name of the request being handled when the error happened: `GET /path`. */
@@ -85,8 +143,20 @@ interface ScrubbableEvent {
     data?: unknown;
     query_string?: unknown;
   };
-  breadcrumbs?: Array<{ data?: Record<string, unknown> }>;
+  breadcrumbs?: Array<{ message?: string; data?: Record<string, unknown> }>;
+  /** The error text. Sentry fills `exception.values[].value` from `err.message`, and `message` from a captured message. */
+  message?: string;
+  exception?: { values?: Array<{ value?: string }> };
 }
+
+/**
+ * Drizzle puts the bound values of a failed statement at the end of the error text (`Failed query: <sql> params: 15,{62389}`), and
+ * those are an actor id, a client address, a record id. Everything from `params:` on goes; the statement itself stays, because it
+ * is what tells a person which query failed.
+ */
+const SQL_PARAMS = /\sparams:[\s\S]*$/;
+export const stripSqlParams = (text: string): string =>
+  text.replace(SQL_PARAMS, ' params: [removed]');
 
 /**
  * Removes what must not leave the building before an event is sent: credentials in headers, cookies, the request body (it can
@@ -102,7 +172,12 @@ export function scrubSentryEvent<T extends ScrubbableEvent>(event: T): T {
     delete req.data;
     delete req.query_string;
   }
+  if (event.message) event.message = stripSqlParams(event.message);
+  for (const ex of event.exception?.values ?? []) {
+    if (ex.value) ex.value = stripSqlParams(ex.value);
+  }
   for (const crumb of event.breadcrumbs ?? []) {
+    if (crumb.message) crumb.message = stripSqlParams(crumb.message);
     const url = crumb.data?.url;
     if (typeof url === 'string' && crumb.data)
       crumb.data.url = maskSecretUrl(url.split('?')[0] ?? url);
@@ -208,6 +283,46 @@ export function reportJobFailure(
       if (job.name) scope.setTag('job', job.name);
       if (job.attemptsMade !== undefined) scope.setExtra('attemptsMade', job.attemptsMade);
       Sentry.captureException(err);
+    });
+  } catch {
+    /* reporting must never be the thing that fails */
+  }
+}
+
+interface ScrubbableLog {
+  message?: unknown;
+  attributes?: Record<string, unknown>;
+}
+
+const scrubText = (v: unknown): unknown =>
+  typeof v === 'string' ? maskSecretUrl(stripSqlParams(v)) : v;
+
+/** The same rules for a Sentry log line: bound SQL values are cut and a secret in an address is masked, in the message and every string attribute. */
+export function scrubSentryLog<T extends ScrubbableLog>(log: T): T {
+  log.message = scrubText(log.message) as T['message'];
+  const attrs = log.attributes;
+  if (attrs) for (const [key, value] of Object.entries(attrs)) attrs[key] = scrubText(value);
+  return log;
+}
+
+/**
+ * Records a response that was not a fault of ours (a 4xx, or a 5xx that is a handled state) as a Sentry log, not an issue: it is
+ * searchable and countable per status, code and module without opening an incident for a caller's typo. 401 and 404 are `info`
+ * (scanners and expired sessions make most of them); everything else a client can cause is `warn`. Never throws.
+ */
+export function reportClientError(
+  status: number,
+  context: { code?: string; path?: string; requestId?: string; expected?: boolean },
+): void {
+  if (!enabled) return;
+  try {
+    const level = context.expected || status === 401 || status === 404 ? 'info' : 'warn';
+    Sentry.logger[level](`handled response ${status}`, {
+      status,
+      code: context.code,
+      module: moduleFromPath(context.path),
+      path: context.path ? maskSecretUrl(context.path.split('?')[0] ?? context.path) : undefined,
+      requestId: context.requestId,
     });
   } catch {
     /* reporting must never be the thing that fails */

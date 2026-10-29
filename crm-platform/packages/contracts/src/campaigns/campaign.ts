@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
 import { previousSendsAudienceSchema } from '../broadcasts/previous-sends';
 import { marketingMediaSchema } from '../broadcasts/marketing-media';
+import { WIZARD_NAME_MAX } from './wizard-limits';
 import { WIZARD_SENDERS_MAX, senderShareSchema } from './sender-split';
 
 /**
@@ -65,11 +66,11 @@ const localDateTime = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d$/, 'must be YYYY-MM-DDTHH:mm');
 
-const buttonSchema = z.record(z.unknown());
+const buttonSchema = z.record(z.string(), z.unknown());
 
 /** Everything a campaign carries apart from its audience. */
 const campaignFields = {
-  name: z.string().trim().min(1).max(191),
+  name: z.string().trim().min(1).max(WIZARD_NAME_MAX),
   /** `<engine>:<uuid>`. None picked leaves the campaign on the workspace's default engine. */
   senderKey: senderKeySchema.nullish(),
   /**
@@ -84,7 +85,7 @@ const campaignFields = {
   status: z.literal('draft').nullish(),
   abTesting: z.boolean().default(false),
   /** Percent sent variant A. */
-  abSplit: z.number().int().min(0).max(100).default(50),
+  abSplit: z.int().min(0).max(100).default(50),
   customMessage: z.string().max(65_000).nullish(),
   customMessageB: z.string().max(65_000).nullish(),
   customHeader: z.string().max(255).nullish(),
@@ -92,17 +93,17 @@ const campaignFields = {
   customButtons: z.array(buttonSchema).max(10).nullish(),
   customQuickReplies: z.array(buttonSchema).max(10).nullish(),
   /** Positional slot to attribute key, `{"1":"order_id"}`. */
-  variableMap: z.record(z.string()).nullish(),
+  variableMap: z.record(z.string(), z.string()).nullish(),
   /**
    * One public address for the message's media (image jpg, jpeg or png, video mp4, document pdf, doc or docx). Uploading a file
    * waits on the storage service.
    */
-  mediaUrl: z.string().trim().url().max(2048).nullish(),
+  mediaUrl: z.string().trim().pipe(z.url().max(2048)).nullish(),
   templateId: uuidSchema.nullish(),
   templateIdA: uuidSchema.nullish(),
   templateIdB: uuidSchema.nullish(),
-  templateOverrides: z.record(z.unknown()).nullish(),
-  templateOverridesB: z.record(z.unknown()).nullish(),
+  templateOverrides: z.record(z.string(), z.unknown()).nullish(),
+  templateOverridesB: z.record(z.string(), z.unknown()).nullish(),
   flowId: uuidSchema.nullish(),
   flowIdB: uuidSchema.nullish(),
   useAttributes: z.boolean().default(false),
@@ -117,11 +118,11 @@ const campaignFields = {
   timezone: z.string().trim().min(1).max(64).nullish(),
   repeatInterval: z.enum(CAMPAIGN_REPEAT_INTERVALS).nullish(),
   repeatUntil: dateOnly.nullish(),
-  throttleMinSec: z.number().int().min(0).max(3600).nullish(),
-  throttleMaxSec: z.number().int().min(0).max(3600).nullish(),
-  batchSize: z.number().int().min(1).max(10_000).nullish(),
-  batchPauseMin: z.number().int().min(0).max(1440).nullish(),
-  dailyLimit: z.number().int().min(1).max(100_000).nullish(),
+  throttleMinSec: z.int().min(0).max(3600).nullish(),
+  throttleMaxSec: z.int().min(0).max(3600).nullish(),
+  batchSize: z.int().min(1).max(10_000).nullish(),
+  batchPauseMin: z.int().min(0).max(1440).nullish(),
+  dailyLimit: z.int().min(1).max(100_000).nullish(),
   windowStart: timeOfDay.nullish(),
   windowEnd: timeOfDay.nullish(),
 };
@@ -131,6 +132,12 @@ const audienceFields = {
   groupIds: z.array(uuidSchema).max(1_000).default([]),
   tagIds: z.array(uuidSchema).max(1_000).default([]),
   segmentIds: z.array(uuidSchema).max(1_000).default([]),
+  /**
+   * How the groups, tags and segments picked combine. `any` (the default): a contact in at least one of them. `all`: a contact in one
+   * of the picked items of each kind that has picks (any group, and any tag, and any segment). Individual contacts, numbers, CSV and
+   * previous sends are always added.
+   */
+  audienceMatch: z.enum(['any', 'all']).default('any'),
   /** One per line, or separated by commas or semicolons. */
   manualNumbers: z.string().max(500_000).default(''),
   /** The text of an uploaded CSV (`name,country_code,phone` plus any attribute columns). */
@@ -185,6 +192,7 @@ export const updateCampaignSchema = z
     groupIds: audienceFields.groupIds.optional(),
     tagIds: audienceFields.tagIds.optional(),
     segmentIds: audienceFields.segmentIds.optional(),
+    audienceMatch: audienceFields.audienceMatch.optional(),
     manualNumbers: audienceFields.manualNumbers.optional(),
     csvText: audienceFields.csvText.optional(),
     previousSends: audienceFields.previousSends,
@@ -216,13 +224,13 @@ export type BulkDeleteCampaignsInput = z.infer<typeof bulkDeleteCampaignsSchema>
 
 /** The five counters of a campaign, always derived from its recipient rows. */
 export const campaignCountsSchema = z.object({
-  recipients: z.number().int(),
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  replies: z.number().int(),
-  clicks: z.number().int(),
-  failed: z.number().int(),
+  recipients: z.int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  replies: z.int(),
+  clicks: z.int(),
+  failed: z.int(),
 });
 export type CampaignCounts = z.infer<typeof campaignCountsSchema>;
 
@@ -232,7 +240,7 @@ export type CampaignCounts = z.infer<typeof campaignCountsSchema>;
  * campaign runs. `currency` is null only when the workspace has no wallet yet.
  */
 export const campaignCostSchema = z.object({
-  amountMinor: z.number().int(),
+  amountMinor: z.int(),
   currency: z.string().nullable(),
 });
 export type CampaignCost = z.infer<typeof campaignCostSchema>;
@@ -254,16 +262,16 @@ export const campaignSchema = z.object({
   sendTime: z.string().nullable(),
   timezone: z.string().nullable(),
   repeatInterval: z.enum(CAMPAIGN_REPEAT_INTERVALS).nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   templateId: uuidSchema.nullable(),
   templateName: z.string().nullable(),
   counts: campaignCountsSchema,
   cost: campaignCostSchema.default({ amountMinor: 0, currency: null }),
-  lastRunAt: z.string().datetime().nullable(),
-  completedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  lastRunAt: z.iso.datetime().nullable(),
+  completedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type Campaign = z.infer<typeof campaignSchema>;
 
@@ -272,20 +280,20 @@ export const campaignConfigSchema = campaignSchema.extend({
   senderKey: z.string().nullable(),
   /** The numbers a shared send goes out from (the first is `senderKey`), with weights equal to their recipient counts; empty for one number. */
   senderKeys: z.array(z.string()).default([]),
-  senderShare: z.record(z.number()).default({}),
-  abSplit: z.number().int(),
+  senderShare: z.record(z.string(), z.number()).default({}),
+  abSplit: z.int(),
   customMessage: z.string().nullable(),
   customMessageB: z.string().nullable(),
   customHeader: z.string().nullable(),
   customFooter: z.string().nullable(),
   customButtons: z.array(buttonSchema).nullable(),
   customQuickReplies: z.array(buttonSchema).nullable(),
-  variableMap: z.record(z.string()).nullable(),
+  variableMap: z.record(z.string(), z.string()).nullable(),
   mediaUrl: z.string().nullable(),
   templateIdA: uuidSchema.nullable(),
   templateIdB: uuidSchema.nullable(),
-  templateOverrides: z.record(z.unknown()).nullable(),
-  templateOverridesB: z.record(z.unknown()).nullable(),
+  templateOverrides: z.record(z.string(), z.unknown()).nullable(),
+  templateOverridesB: z.record(z.string(), z.unknown()).nullable(),
   flowId: uuidSchema.nullable(),
   flowIdB: uuidSchema.nullable(),
   useAttributes: z.boolean(),
@@ -294,11 +302,11 @@ export const campaignConfigSchema = campaignSchema.extend({
   /** As typed in the form: `YYYY-MM-DDTHH:mm` in the campaign's time zone. */
   expiresAtLocal: z.string().nullable(),
   repeatUntil: z.string().nullable(),
-  throttleMinSec: z.number().int().nullable(),
-  throttleMaxSec: z.number().int().nullable(),
-  batchSize: z.number().int().nullable(),
-  batchPauseMin: z.number().int().nullable(),
-  dailyLimit: z.number().int().nullable(),
+  throttleMinSec: z.int().nullable(),
+  throttleMaxSec: z.int().nullable(),
+  batchSize: z.int().nullable(),
+  batchPauseMin: z.int().nullable(),
+  dailyLimit: z.int().nullable(),
   windowStart: z.string().nullable(),
   windowEnd: z.string().nullable(),
   recipientContactIds: z.array(uuidSchema),
@@ -314,7 +322,7 @@ export type CampaignActionResponse = z.infer<typeof campaignActionResponseSchema
 
 export const resendCampaignResponseSchema = campaignActionResponseSchema.extend({
   scope: z.enum(RESEND_SCOPES),
-  recipients: z.number().int(),
+  recipients: z.int(),
 });
 export type ResendCampaignResponse = z.infer<typeof resendCampaignResponseSchema>;
 

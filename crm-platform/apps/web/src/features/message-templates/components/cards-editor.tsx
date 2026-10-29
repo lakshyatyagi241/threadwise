@@ -16,13 +16,22 @@ import {
   type CardFormat,
   type CardRow,
 } from '../lib/form-model';
+import { toggleSelection } from '../lib/format';
 import { MEDIA_ACCEPT, MEDIA_MAX_BYTES, mediaProblem, megabytes } from '../lib/media';
 import { ErrorAlert } from './error-line';
-import { ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
-import { useErrorText } from './use-error-text';
+import { ArrowDownIcon, ArrowUpIcon, ImageIcon, PlusIcon, TrashIcon, VideoIcon } from './icons';
+import { useUploadErrorText } from './use-error-text';
 
 /** The button kinds a card can carry (Meta: a quick reply, a link or a phone number; up to two, the same on every card). */
 const CARD_KINDS: readonly AddableKind[] = ['quick_reply', 'url', 'phone'];
+
+/** The marks a card's text takes, as the message body takes them. */
+const CARD_MARKS = [
+  { id: 'bold', marker: '*' },
+  { id: 'italic', marker: '_' },
+  { id: 'strike', marker: '~' },
+  { id: 'code', marker: '```' },
+] as const;
 
 /**
  * A carousel's cards: 2 to 10, each a picture or video (one kind for all), a short text and up to two buttons. The files go to Meta
@@ -45,6 +54,14 @@ export function CardsEditor({
   const base = useId();
   const patch = (key: string, p: Partial<CardRow>) =>
     onChange(cards.map((c) => (c.key === key ? { ...c, ...p } : c)));
+  /** Swaps a card with its neighbour: the order here is the order the customer swipes through. */
+  const move = (i: number, by: -1 | 1) => {
+    const j = i + by;
+    if (j < 0 || j >= cards.length) return;
+    const next = [...cards];
+    [next[i], next[j]] = [next[j]!, next[i]!];
+    onChange(next);
+  };
 
   return (
     <div className="space-y-4">
@@ -72,6 +89,9 @@ export function CardsEditor({
             card={c}
             connectionId={connectionId}
             removable={cards.length > CARDS_MIN}
+            onMove={(by) => move(i, by)}
+            canMoveUp={i > 0}
+            canMoveDown={i < cards.length - 1}
             onPatch={(p) => patch(c.key, p)}
             onRemove={() => onChange(cards.filter((x) => x.key !== c.key))}
           />
@@ -101,6 +121,9 @@ function CardItem({
   card,
   connectionId,
   removable,
+  onMove,
+  canMoveUp,
+  canMoveDown,
   onPatch,
   onRemove,
 }: {
@@ -108,13 +131,16 @@ function CardItem({
   card: CardRow;
   connectionId: string;
   removable: boolean;
+  onMove: (by: -1 | 1) => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
   onPatch: (p: Partial<CardRow>) => void;
   onRemove: () => void;
 }) {
   const t = useTranslations('message-templates.form.cards');
   const th = useTranslations('message-templates.form.header');
   const tb = useTranslations('message-templates.form.buttons');
-  const errorText = useErrorText();
+  const errorText = useUploadErrorText();
   const base = useId();
   const input = useRef<HTMLInputElement>(null);
   const [problem, setProblem] = useState<string | null>(null);
@@ -130,6 +156,26 @@ function CardItem({
   });
   const kind = card.format;
   const Icon = kind === 'video' ? VideoIcon : ImageIcon;
+  const tf = useTranslations('message-templates.form.body');
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  // The marks of the message body (bold, italic, strikethrough, code), applied to this card's text the same way.
+  function mark(marker: string) {
+    const el = bodyRef.current;
+    if (!el) return;
+    const r = toggleSelection(
+      card.body,
+      el.selectionStart,
+      el.selectionEnd,
+      marker,
+      tf('wrapSample'),
+    );
+    onPatch({ body: r.value });
+    requestAnimationFrame(() => {
+      el.focus();
+      el.setSelectionRange(r.start, r.end);
+    });
+  }
 
   function pick(file: File | undefined) {
     if (!file) return;
@@ -159,17 +205,33 @@ function CardItem({
         <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {t('card', { n })}
         </span>
-        {removable && (
+        <div className="ms-auto flex items-center gap-1">
           <Button
             size="sm"
             variant="ghost"
-            className="ms-auto"
-            aria-label={t('remove', { n })}
-            onClick={onRemove}
+            aria-label={t('moveUp', { n })}
+            title={t('moveUp', { n })}
+            disabled={!canMoveUp}
+            onClick={() => onMove(-1)}
           >
-            <TrashIcon className="size-3.5" />
+            <ArrowUpIcon className="size-3.5" />
           </Button>
-        )}
+          <Button
+            size="sm"
+            variant="ghost"
+            aria-label={t('moveDown', { n })}
+            title={t('moveDown', { n })}
+            disabled={!canMoveDown}
+            onClick={() => onMove(1)}
+          >
+            <ArrowDownIcon className="size-3.5" />
+          </Button>
+          {removable && (
+            <Button size="sm" variant="ghost" aria-label={t('remove', { n })} onClick={onRemove}>
+              <TrashIcon className="size-3.5" />
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -191,6 +253,7 @@ function CardItem({
             ) : (
               <span className="text-muted-foreground">{t('noFile')}</span>
             )}
+            <p className="text-xs text-muted-foreground">{t('limits')}</p>
           </div>
           <input
             ref={input}
@@ -214,8 +277,15 @@ function CardItem({
           </Button>
         </div>
         {problem && <Alert tone="danger">{problem}</Alert>}
-        {upload.isError && <ErrorAlert error={errorText(upload.error)} />}
+        {upload.isError && <ErrorAlert error={errorText(upload.error, kind)} />}
 
+        <div className="flex flex-wrap gap-1.5">
+          {CARD_MARKS.map((m) => (
+            <Button key={m.id} size="sm" variant="secondary" onClick={() => mark(m.marker)}>
+              {tf(`format.${m.id}`)}
+            </Button>
+          ))}
+        </div>
         <Field
           label={t('text')}
           htmlFor={`${base}-body`}
@@ -223,6 +293,7 @@ function CardItem({
         >
           <Textarea
             id={`${base}-body`}
+            ref={bodyRef}
             rows={2}
             value={card.body}
             maxLength={CARD_BODY_MAX + 40}
@@ -251,7 +322,16 @@ function CardItem({
               <span className="pb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {tb(`kind.${b.kind}`)}
               </span>
-              <Field label={t('buttonText')} htmlFor={`${base}-${b.key}-t`}>
+              <Field
+                label={t('buttonText')}
+                htmlFor={`${base}-${b.key}-t`}
+                hint={t('textCounter', { used: b.text.length, max: BUTTON_TEXT_MAX })}
+                error={
+                  b.text.trim().length > BUTTON_TEXT_MAX
+                    ? tb('issue.textTooLong', { max: BUTTON_TEXT_MAX })
+                    : undefined
+                }
+              >
                 <Input
                   id={`${base}-${b.key}-t`}
                   value={b.text}

@@ -6,6 +6,8 @@ export interface RoleViewContext {
   membersWithoutTeam: number;
   grantable: boolean;
   editable: boolean;
+  /** The name of the person who last saved the role, or null when the audit trail has none. */
+  updatedBy: string | null;
 }
 
 export function toRoleResponse(
@@ -31,5 +33,6 @@ export function toRoleResponse(
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
+    updatedBy: view.updatedBy,
   };
 }

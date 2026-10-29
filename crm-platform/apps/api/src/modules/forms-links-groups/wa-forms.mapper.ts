@@ -101,6 +101,7 @@ export function toWaFormResponse(row: WaFormRow): WaForm {
     definition: normalizeDefinition(row.definition_json),
     status: row.status as WaFormStatus,
     isLive: row.status === 'published' && Boolean(row.meta_flow_id),
+    metaFlowId: row.meta_flow_id ?? null,
     publishedAt: row.published_at?.toISOString() ?? null,
     publishError: row.publish_error,
     fieldsCount: countFields(row.definition_json),
@@ -121,6 +122,9 @@ export function toWaFormPickerItem(row: {
     title: row.title,
     status: row.status as WaFormStatus,
     isPublished: row.status === 'published' && Boolean(row.meta_flow_id),
+    metaFlowId: row.meta_flow_id,
+    // The Flow JSON names its screens A, B, C...: the first is always A.
+    firstScreenId: 'A',
   };
 }
 

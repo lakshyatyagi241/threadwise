@@ -605,6 +605,7 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'ask_location',
   'delay',
   'cta',
+  'api_library',
   'webhook',
   'ai',
 ]);
@@ -919,9 +920,11 @@ export function removeJourney(doc: SimpleDoc, ji: number): SimpleDoc {
 // --- checks ---------------------------------------------------------------------------------------------------------------
 
 export interface SimpleProblem {
-  /** The step to scroll to; `null` for the trigger. */
+  /** The step to scroll to; `null` for the trigger (and for a problem with the flow itself, such as having no step yet). */
   stepId: string | null;
   message: Msg;
+  /** Set when the fix is on the trigger card (the keywords, the number): only these outline the card, not a flow with no step yet. */
+  onTrigger?: true;
 }
 
 const cut = (s: string, n: number) => s.length > n;
@@ -982,9 +985,17 @@ export function problems(
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
   if (str(t.kind) === 'keyword' && str(t.keywordMode) !== 'any' && !str(t.keywords).trim())
-    out.push({ stepId: null, message: msg('simpleModel.problems.triggerKeyword') });
+    out.push({
+      stepId: null,
+      message: msg('simpleModel.problems.triggerKeyword'),
+      onTrigger: true,
+    });
   if (opts.senderRequired && !str(t.deviceId).trim())
-    out.push({ stepId: null, message: msg('simpleModel.problems.triggerSender') });
+    out.push({
+      stepId: null,
+      message: msg('simpleModel.problems.triggerSender'),
+      onTrigger: true,
+    });
   if (doc.journeys[0]!.steps.length === 0)
     out.push({ stepId: null, message: msg('simpleModel.problems.firstStep') });
 

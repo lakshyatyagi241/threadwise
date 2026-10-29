@@ -96,7 +96,8 @@ describe('module ceiling', () => {
     const r = closedKeys(loadModuleCeiling(), new Set(['tchat.channels.read']), t);
     expect(r.closed).toContain('team-chat');
     expect(r.keys).toEqual(expect.arrayContaining(['tchat.channels.read', 'tchat.messages.send']));
-    expect(r.keys).not.toContain('record.deals.read');
+    // the deals module is not team chat: it stays open (access/module-ceiling.ts, deals); only the team-chat keys are closed
+    expect(r.keys).toContain('record.deals.read');
   });
 
   it('never keeps the unofficial WhatsApp engine or the TikTok channel, even when a Waboo permission maps into them', () => {

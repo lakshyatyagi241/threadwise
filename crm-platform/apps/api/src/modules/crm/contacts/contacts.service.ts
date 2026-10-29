@@ -54,6 +54,7 @@ import {
   MinorDetectionService,
   hasProof,
   intakeEvidence,
+  isSubscribedStatus,
   planIntakeGrants,
   type IntakePlan,
 } from '../../contact-consent';
@@ -1111,7 +1112,8 @@ export class ContactsService {
       const res = await tx.execute(
         column
           ? sql`SELECT ${sql.raw(column)}::text AS v FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`
-          : sql`SELECT data ->> ${clean} AS v FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+          : // A flow that names the property as it reads on screen ("Order Id") still finds the stored key (`order_id`).
+            sql`SELECT COALESCE(data ->> ${clean}, data ->> lower(regexp_replace(${clean}, '[[:space:]]+', '_', 'g'))) AS v FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
       );
       const v = (res.rows[0] as { v: string | null } | undefined)?.v;
       return v === null || v === undefined || v.trim() === '' ? null : v;
@@ -1369,7 +1371,15 @@ export class ContactsService {
       });
       this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
       for (const ch of plan.fillStatus) values[STATUS_COLUMN[ch]] = 'subscribed';
-      if (input.whatsappSubscriptionStatus !== undefined) {
+      // A read shows null for a legacy `subscribed` label with no grant (shownSubscriptionLabel). Sending that null back must not wipe the
+      // stored label, so a null never clears a stored `subscribed`.
+      if (
+        input.whatsappSubscriptionStatus !== undefined &&
+        !(
+          input.whatsappSubscriptionStatus === null &&
+          isSubscribedStatus(existing.whatsappSubscriptionStatus)
+        )
+      ) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }
       if (input.smsSubscriptionStatus !== undefined) {

@@ -131,7 +131,11 @@
         "required": "To pole jest wymagane.",
         "tooLong": "Tekst jest za długi (maksymalnie {limit} znaków).",
         "subjectLines": "Temat musi mieścić się w jednym wierszu."
-      }
+      },
+      "bodyMode": "Format treści",
+      "bodyRich": "Tekst sformatowany",
+      "bodyHtml": "HTML",
+      "htmlPlaceholder": "<p>Napisz HTML wiadomości. Użyj zmiennych poniżej, aby ją spersonalizować.</p>"
     },
     "preview": {
       "title": "Podgląd z przykładowymi danymi",

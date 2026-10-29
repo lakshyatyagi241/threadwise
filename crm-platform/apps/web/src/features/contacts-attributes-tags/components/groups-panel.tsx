@@ -114,8 +114,8 @@ export function GroupsPanel({
               <th scope="col" className={th}>
                 {t('colUpdatedAt')}
               </th>
-              <th scope="col" className={th}>
-                <span className="sr-only">{t('colActions')}</span>
+              <th scope="col" className={cn(th, 'text-end')}>
+                {t('colActions')}
               </th>
             </tr>
           </thead>
@@ -129,8 +129,13 @@ export function GroupsPanel({
                       className="size-3 shrink-0 rounded-full"
                       style={{ background: g.color || GROUP_DOT_FALLBACK }}
                     />
-                    <div className="min-w-0">
-                      <div className="truncate font-medium">{g.name}</div>
+                    <div className="min-w-0 max-w-[18rem]">
+                      <Link
+                        href={`/contacts?group=${g.id}`}
+                        className="block truncate font-medium hover:underline"
+                      >
+                        {g.name}
+                      </Link>
                       {g.note && (
                         <div className="line-clamp-1 text-xs text-muted-foreground">{g.note}</div>
                       )}

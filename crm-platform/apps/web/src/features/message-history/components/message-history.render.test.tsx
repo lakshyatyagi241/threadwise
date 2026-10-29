@@ -122,6 +122,7 @@ const state = vi.hoisted(() => ({
   feed: { rows: [] as unknown[], pending: false, error: false },
   replace: vi.fn(),
   exportRequests: 0,
+  noExports: false,
   detail: null as unknown,
 }));
 
@@ -179,23 +180,25 @@ vi.mock('../api/history', () => ({
   useHistoryExports: () => ({
     isPending: false,
     data: {
-      data: [
-        {
-          id: U,
-          kind: 'messages',
-          status: 'ready',
-          from: '2026-10-01',
-          to: '2026-10-13',
-          messageStatus: null,
-          rowCount: 42,
-          fileBytes: 100,
-          error: null,
-          requestedAt: '2026-10-13T10:00:00.000Z',
-          completedAt: '2026-10-13T10:01:00.000Z',
-          expiresAt: '2026-10-20T10:01:00.000Z',
-          emailedTo: 'a@b.test',
-        },
-      ],
+      data: state.noExports
+        ? []
+        : [
+            {
+              id: U,
+              kind: 'messages',
+              status: 'ready',
+              from: '2026-10-01',
+              to: '2026-10-13',
+              messageStatus: null,
+              rowCount: 42,
+              fileBytes: 100,
+              error: null,
+              requestedAt: '2026-10-13T10:00:00.000Z',
+              completedAt: '2026-10-13T10:01:00.000Z',
+              expiresAt: '2026-10-20T10:01:00.000Z',
+              emailedTo: 'a@b.test',
+            },
+          ],
     },
   }),
   useRequestHistoryExport: () => ({
@@ -264,6 +267,13 @@ describe('Message History (en)', () => {
     expect(host.querySelector('[data-testid="kpi-response"]')?.textContent).toContain('3m 20s');
     expect(host.querySelector('[data-testid="kpi-rate"]')?.textContent).toContain('91.2%');
     expect(host.querySelector('[data-testid="kpi-cost"]')?.textContent).toContain('$12.50');
+    // hovering a bar names every status of the day, not only the total
+    const bar = host.querySelector('[data-testid="volume-chart"] > div');
+    expect(bar?.getAttribute('title')?.split('\n').slice(1)).toEqual([
+      'Sent: 4',
+      'Received: 2',
+      'Failed: 1',
+    ]);
     const rows = host.querySelectorAll('[data-testid="history-row"]');
     expect(rows).toHaveLength(3);
     expect(rows[0]!.textContent).toContain('•••••••5678');
@@ -361,21 +371,31 @@ describe('Message History (en)', () => {
     expect(drawer.textContent).toContain('events older than 90 days');
   });
 
-  it('offers the export only to a person who may export, and lists the exports with a download', () => {
+  it('offers the export only to a person who may export, inside the exports list, and lists the exports with a download', () => {
     show('en');
-    expect(text()).toContain('Export CSV');
-    expect(host.querySelector('[data-testid="history-exports"]')?.textContent).toContain(
-      '42 messages',
-    );
-    expect(host.querySelector('[data-testid="history-exports"]')?.textContent).toContain(
-      'Download',
-    );
+    const panel = host.querySelector('[data-testid="history-exports"]');
+    // The request button lives in the exports list, not at the top of the page.
+    expect(panel?.textContent).toContain('Export CSV');
+    expect(host.querySelector('header')?.textContent).not.toContain('Export CSV');
+    expect(panel?.textContent).toContain('42 messages');
+    expect(panel?.textContent).toContain('Download');
     act(() => root.unmount());
     root = createRoot(host);
     state.perms = new Set();
     show('en');
     expect(text()).not.toContain('Export CSV');
     expect(host.querySelector('[data-testid="history-exports"]')).toBeNull();
+  });
+
+  it('still offers the export, with a hint, before there is any export to list', () => {
+    state.noExports = true;
+    show('en');
+    const panel = host.querySelector('[data-testid="history-exports"]');
+    expect(panel?.textContent).toContain('Export CSV');
+    expect(panel?.querySelector('[data-testid="history-exports-empty"]')?.textContent).toContain(
+      'No exports yet',
+    );
+    state.noExports = false;
   });
 
   it('says which period is empty, and says so differently when a filter is the reason', () => {

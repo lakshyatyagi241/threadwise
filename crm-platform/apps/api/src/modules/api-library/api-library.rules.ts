@@ -1,4 +1,5 @@
-import { brotliDecompressSync, gunzipSync, inflateSync } from 'node:zlib';
+import { promisify } from 'node:util';
+import { brotliDecompress, gunzip, inflate } from 'node:zlib';
 import {
   API_LIBRARY_SECRET_MASK,
   API_LIBRARY_TOKEN_RE,
@@ -64,13 +65,55 @@ export function renderText(template: string, values: VariableValues): string {
  * contact called "A & B" cannot add a parameter or end the path. The rule lives in @crm/contracts, where the save check runs it too.
  */
 export function renderUrl(template: string, values: VariableValues): string {
-  return apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase()));
+  return withoutDotSegments(
+    apiLibraryRenderUrl(template, (name) => values.get(name.toLowerCase())),
+  );
+}
+
+/**
+ * A path segment that is `.` or `..` (also written `%2e`) is dropped by every web client before the call, so `/orders/{value}/details`
+ * with `{value}` set to `.` is really called as `/orders/details`. The address that is shown, logged and called is that real one, so
+ * nobody has to guess why the call did not go where the template said.
+ */
+export function withoutDotSegments(url: string): string {
+  const path = /^[a-z][a-z0-9+.-]*:\/\/[^/?#]*([^?#]*)/i.exec(url)?.[1] ?? '';
+  if (!path.split('/').some((s) => /^(\.|%2e){1,2}$/i.test(s))) return url;
+  try {
+    return new URL(url).href;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * A token written without quotes in the JSON (`{"price": {{price}}}`) is stored as a string that starts with this mark, so the run
+ * knows to send the value as what it looks like (a number, a yes/no) and not as text.
+ */
+export const RAW_TOKEN_MARK = '\u0001';
+// The body of a marked token: the mark is cut off first, so no control character has to sit in a pattern.
+const RAW_TOKEN_BODY_RE = /^\{\{\s*([^{}]+?)\s*\}\}$/;
+
+/** The text of a value as a JSON value: `19.99` is a number, `yes` or `true` is true, `no` or `false` is false, empty is null; any other text stays text. */
+export function typedValue(text: string): string | number | boolean | null {
+  const v = text.trim();
+  if (v === '') return null;
+  if (/^-?\d+(\.\d+)?$/.test(v)) return Number(v);
+  if (/^(true|yes)$/i.test(v)) return true;
+  if (/^(false|no)$/i.test(v)) return false;
+  return text;
 }
 
 /** Every string leaf of a JSON payload filled in; numbers, booleans and nulls stay as they are. */
 export function renderBody(body: ApiLibraryBody, values: VariableValues): ApiLibraryBody {
   const walk = (v: unknown): unknown => {
-    if (typeof v === 'string') return renderText(v, values);
+    if (typeof v === 'string') {
+      if (v.startsWith(RAW_TOKEN_MARK)) {
+        const rest = v.slice(RAW_TOKEN_MARK.length);
+        const raw = RAW_TOKEN_BODY_RE.exec(rest);
+        return raw ? typedValue(valueOf(values, raw[1]!)) : renderText(rest, values);
+      }
+      return renderText(v, values);
+    }
     if (Array.isArray(v)) return v.map(walk);
     if (v !== null && typeof v === 'object')
       return Object.fromEntries(
@@ -207,7 +250,11 @@ export function maskJson(value: unknown, depth = 0): unknown {
 // "…token…": "value" or a bare scalar; the key part may carry any text around the word. Used only when the text is JSON-shaped but cut
 // (an answer larger than the log keeps), where the structure cannot be parsed.
 const SECRET_PAIR =
-  /("(?:[^"\\]|\\.)*(?:authorization|token|secret|password|passwd|api[-_ ]?key|cookie|credential|signature|bearer|private[-_ ]?key)(?:[^"\\]|\\.)*"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
+  /("(?:[^"\\]|\\.)*(?:authorization|token|secret|password|passwd|api[-_ ]?key|cookie|credential|signature|bearer|private[-_ ]?key|card[-_ ]?number|session[-_ ]?id|otp[-_ ]?code)(?:[^"\\]|\\.)*"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
+
+// Short secret names (`pwd`, `pin`, `otp`, `cvv`, `ssn`, `jwt`, `session`) are only a secret as the whole key, in a cut JSON text too.
+const SHORT_SECRET_PAIR =
+  /("(?:pwd|pin|otp|cvv2?|cvc|ssn|jwt|session|session[-_ ]?key|card[-_ ]?no)"\s*:\s*)("(?:[^"\\]|\\.)*"?|[^,}\]\s]+)/gi;
 
 /**
  * A JSON text with its secret-looking keys masked. Text that parses is masked by key at any depth; JSON-shaped text that does not parse
@@ -218,7 +265,9 @@ export function maskJsonText(text: string): string {
     return JSON.stringify(maskJson(JSON.parse(text)));
   } catch {
     return /^\s*[{[]/.test(text)
-      ? text.replace(SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
+      ? text
+          .replace(SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
+          .replace(SHORT_SECRET_PAIR, (_m, key: string) => `${key}"${API_LIBRARY_SECRET_MASK}"`)
       : text;
   }
 }
@@ -238,6 +287,18 @@ export function sameOrigin(a: string, b: string): boolean {
   } catch {
     return false;
   }
+}
+
+/**
+ * True when the address a run really calls (its variables filled in with what the flow passed) is on another origin than the one the
+ * saved defaults give. A saved secret header must not be sent then: a value from a flow or a contact could aim it at a host of its own.
+ */
+export function addressMovedFromSaved(
+  url: string,
+  values: VariableValues,
+  defaults: VariableValues,
+): boolean {
+  return !sameOrigin(renderUrl(url, values), renderUrl(url, defaults));
 }
 
 export function truncateText(text: string, max: number): { text: string; truncated: boolean } {
@@ -437,11 +498,11 @@ export interface ReadAnswer {
  * whatever was asked) is unpacked first, with the output held to `maxBytes`; a file (image, PDF, archive) is named, not printed as
  * symbols; the size is the bytes, not the length of a text made from them.
  */
-export function readAnswer(
+export async function readAnswer(
   raw: Buffer,
   headers: Record<string, string | string[] | undefined>,
   maxBytes: number,
-): ReadAnswer {
+): Promise<ReadAnswer> {
   const type = typeof headers['content-type'] === 'string' ? headers['content-type'] : null;
   const encoding = String(headers['content-encoding'] ?? '')
     .trim()
@@ -449,10 +510,13 @@ export function readAnswer(
   let bytes = raw;
   let note = '';
   try {
+    // Async on purpose: a synchronous inflate blocks the event loop for the whole decode of up to maxBytes.
     if (encoding === 'gzip' || encoding === 'x-gzip')
-      bytes = gunzipSync(raw, { maxOutputLength: maxBytes });
-    else if (encoding === 'deflate') bytes = inflateSync(raw, { maxOutputLength: maxBytes });
-    else if (encoding === 'br') bytes = brotliDecompressSync(raw, { maxOutputLength: maxBytes });
+      bytes = await promisify(gunzip)(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'deflate')
+      bytes = await promisify(inflate)(raw, { maxOutputLength: maxBytes });
+    else if (encoding === 'br')
+      bytes = await promisify(brotliDecompress)(raw, { maxOutputLength: maxBytes });
   } catch {
     note = ' (it could not be unpacked)';
     bytes = raw;
@@ -534,5 +598,19 @@ export function scrubSecretHeaders(
         ? v.map((x) => scrubSecretValues(x, secrets))
         : scrubSecretValues(v, secrets),
     ]),
+  );
+}
+
+/**
+ * An answer's text as it may be shown and stored: JSON is masked by key at any depth; any other text (a form-encoded echo, a plain
+ * `name: value` page, HTML) has its `secret-name=value` and `secret-name: value` pairs masked. The server's own reply is not trusted
+ * to leave out what it was sent.
+ */
+export function maskResponseText(text: string): string {
+  if (/^\s*[{[]/.test(text)) return maskJsonText(text);
+  return text.replace(
+    /([A-Za-z][A-Za-z0-9_.-]{1,40})(\s*[=:]\s*)([^\s&;,"'<>]+)/g,
+    (m, name: string, sep: string) =>
+      apiLibraryIsSensitiveName(name) ? `${name}${sep}${API_LIBRARY_SECRET_MASK}` : m,
   );
 }

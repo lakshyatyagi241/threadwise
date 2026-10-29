@@ -39,6 +39,7 @@ import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log
 import { REVENUE_ERROR_CODES } from '../crm/revenue-report';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
+import { PRD_ERROR_CODES } from '../products-services/errors';
 import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 import { STORAGE_ERROR_CODES } from '../storage-quota/errors';
 import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
@@ -55,6 +56,7 @@ export const ERROR_CODES = {
   ...REVENUE_ERROR_CODES,
   ...PQL_ERROR_CODES,
   ...WFL_ERROR_CODES,
+  ...PRD_ERROR_CODES,
   ...AICRM_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...GOOGLE_ERROR_CODES,
@@ -458,6 +460,8 @@ export const ERROR_CODES = {
   CAMP_WIZARD_INCOMPLETE: 'CAMP_WIZARD_INCOMPLETE',
   /** The wizard draft was already launched, so it can no longer be edited or launched again. */
   CAMP_WIZARD_LAUNCHED: 'CAMP_WIZARD_LAUNCHED',
+  /** Another campaign or draft of the workspace already has this name (compared without case or edge spaces). */
+  CAMP_NAME_TAKEN: 'CAMP_NAME_TAKEN',
   /** A test send needs at least one valid E.164 number and at most ten. */
   CAMP_TEST_RECIPIENTS_INVALID: 'CAMP_TEST_RECIPIENTS_INVALID',
   /** Pause, resume or cancel asked of a broadcast whose status does not allow it. */
@@ -793,7 +797,7 @@ export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
 export const problemSchema = z.object({
   type: z.string(),
   title: z.string(),
-  status: z.number().int(),
+  status: z.int(),
   detail: z.string().optional(),
   instance: z.string().optional(),
   code: z.string(),

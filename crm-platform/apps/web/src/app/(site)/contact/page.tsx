@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
-import { loadSiteContent } from '@/features/marketing-site-cms/public/load';
-import { pageMetadata } from '@/features/marketing-site-cms/site/page-meta';
-import { SitePage } from '@/features/marketing-site-cms/site/site-page';
+import { pageMeta } from '@/features/marketing-site-cms/geta/seo';
+import { ContactPage } from '@/features/marketing-site-cms/geta/pages/contact';
 
-export const generateMetadata = (): Promise<Metadata> => pageMetadata('contact');
+export const generateMetadata = (): Promise<Metadata> =>
+  pageMeta({
+    path: '/contact',
+    title: 'Contact Geta.ai: talk to our team',
+    description:
+      'Questions about plans, setup, security or partnerships? Send us a message and the Geta.ai team will reply within one working day.',
+  });
 
-/** Composed from the editable sections; the plan cards inside come from the plan catalogue. */
-export default async function Page() {
-  return <SitePage page="contact" content={await loadSiteContent()} />;
+export default function Page() {
+  return <ContactPage />;
 }

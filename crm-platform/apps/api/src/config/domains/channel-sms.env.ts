@@ -6,13 +6,13 @@ import { z } from 'zod';
  * change. Read at call time, like the other domain files, so a test can point them at a local stub.
  */
 const channelSmsEnvSchema = z.object({
-  SMS_TWILIO_API_BASE: z.string().url().default('https://api.twilio.com'),
-  SMS_TWILIO_LOOKUP_BASE: z.string().url().default('https://lookups.twilio.com'),
-  SMS_MSG91_API_BASE: z.string().url().default('https://control.msg91.com'),
+  SMS_TWILIO_API_BASE: z.url().default('https://api.twilio.com'),
+  SMS_TWILIO_LOOKUP_BASE: z.url().default('https://lookups.twilio.com'),
+  SMS_MSG91_API_BASE: z.url().default('https://control.msg91.com'),
   /** A send (Reference: 20 s). */
-  SMS_SEND_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(60_000).default(20_000),
+  SMS_SEND_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(60_000).prefault(20_000),
   /** Checking credentials and looking a number up (Reference: 12 s). */
-  SMS_VERIFY_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(60_000).default(12_000),
+  SMS_VERIFY_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(60_000).prefault(12_000),
 });
 
 export type ChannelSmsEnv = z.infer<typeof channelSmsEnvSchema>;

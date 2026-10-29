@@ -16,6 +16,7 @@ import {
   type ButtonRow,
 } from '../lib/buttons';
 import { countPlaceholders } from '../lib/variables';
+import { FlowPick } from './flow-pick';
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon, TrashIcon } from './icons';
 
 /**
@@ -182,45 +183,20 @@ export function ButtonsEditor({
                       </Field>
                     )}
                     {r.kind === 'form' && (
-                      <Field
-                        label={t('flowId')}
-                        htmlFor={`${id}-flow`}
-                        hint={t('flowIdHint')}
+                      <FlowPick
+                        row={r}
+                        id={`${id}-flow`}
                         error={
                           err('flowIdRequired')
                             ? t('issue.flowIdRequired')
                             : err('flowIdInvalid')
-                              ? t('issue.flowIdInvalid')
-                              : undefined
+                              ? t('issue.flowIdNotMeta')
+                              : err('screenRequired')
+                                ? t('issue.screenRequired')
+                                : undefined
                         }
-                      >
-                        <Input
-                          id={`${id}-flow`}
-                          inputMode="numeric"
-                          dir="ltr"
-                          placeholder="1234567890123456"
-                          value={r.flowId}
-                          invalid={Boolean(err('flowIdRequired') || err('flowIdInvalid'))}
-                          onChange={(e) => patch(r.key, { flowId: e.target.value })}
-                        />
-                      </Field>
-                    )}
-                    {r.kind === 'form' && (
-                      <Field
-                        label={t('screen')}
-                        htmlFor={`${id}-screen`}
-                        hint={t('screenHint')}
-                        error={err('screenRequired') ? t('issue.screenRequired') : undefined}
-                      >
-                        <Input
-                          id={`${id}-screen`}
-                          dir="ltr"
-                          placeholder="WELCOME"
-                          value={r.screen}
-                          invalid={Boolean(err('screenRequired'))}
-                          onChange={(e) => patch(r.key, { screen: e.target.value })}
-                        />
-                      </Field>
+                        onPick={(p) => patch(r.key, { flowId: p.flowId, screen: p.screen })}
+                      />
                     )}
                     {r.kind === 'phone' && (
                       <Field

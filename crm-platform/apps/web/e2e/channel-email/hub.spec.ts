@@ -10,7 +10,7 @@ import { expect, test, type Page } from '@playwright/test';
 const ORG = process.env.E2E_ORG ?? 'Admin';
 const ADMIN = {
   email: process.env.E2E_ADMIN_EMAIL ?? 'nachiket.challawar@geta.ai',
-  password: process.env.E2E_PASSWORD ?? 'Passw0rd!',
+  password: process.env.E2E_PASSWORD ?? process.env.DEV_SEED_PASSWORD ?? '',
 };
 
 async function signIn(page: Page) {

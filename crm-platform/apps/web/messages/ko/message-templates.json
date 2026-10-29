@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "승인된 템플릿은 Meta 기준 24시간에 한 번, 30일에 10번까지 편집할 수 있습니다. 나중에 다시 시도하세요.",
       "ROW_VERSION_CONFLICT": "편집하는 동안 다른 사용자가 이 템플릿을 변경했습니다. 새로고침해 최신 버전을 확인한 뒤 변경 사항을 다시 적용하세요.",
       "VALIDATION_FAILED": "일부 항목이 올바르지 않습니다. 아래 항목을 확인하세요.",
-      "INTERNAL": "서버가 이 요청을 처리하지 못했습니다. 잠시 후 다시 시도하세요."
+      "INTERNAL": "서버가 이 요청을 처리하지 못했습니다. 잠시 후 다시 시도하세요.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "미리보기",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Flow ID를 입력하세요.",
           "flowIdInvalid": "Flow ID는 숫자입니다.",
           "screenRequired": "화면 ID를 입력하세요.",
-          "catalogAlone": "카탈로그 버튼은 다른 버튼과 함께 사용할 수 없습니다."
+          "catalogAlone": "카탈로그 버튼은 다른 버튼과 함께 사용할 수 없습니다.",
+          "flowIdNotMeta": "이 양식은 아직 Meta Flow가 아닙니다(Flow ID가 숫자가 아님). WhatsApp 양식에서 저장하고 게시한 뒤 여기서 선택하세요."
         },
         "catalogHint": "WhatsApp 카탈로그를 엽니다. 버튼에는 “카탈로그 보기”가 표시되며 유일한 버튼이어야 합니다.",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "게시된 WhatsApp Flow의 숫자 ID이며 Meta의 Flows 관리자에서 확인할 수 있습니다.",
-        "screen": "시작 화면",
-        "screenHint": "양식이 처음 열리는 화면의 ID입니다. 예: WELCOME"
+        "flowPick": "WhatsApp 양식",
+        "flowPickHint": "게시한 WhatsApp 양식 중 하나를 선택하세요. 버튼이 WhatsApp 안에서 양식을 엽니다.",
+        "flowChoose": "WhatsApp 양식 선택",
+        "flowLoading": "양식을 불러오는 중…",
+        "flowNone": "게시된 WhatsApp 양식이 아직 없습니다.",
+        "flowNoneLink": "양식 만들고 게시하기",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title}(먼저 Meta에 게시하세요)"
       },
       "result": {
         "metaRefused": "저장했지만 Meta가 템플릿을 거부했습니다.",
@@ -413,6 +425,7 @@
         "format": "카드에 표시",
         "formatImage": "이미지",
         "formatVideo": "동영상",
+        "limits": "이미지는 5MB, 동영상은 16MB까지 가능합니다.",
         "count": "{used}/{max}장",
         "add": "카드 추가",
         "needTwo": "캐러셀에는 카드가 최소 {min}장 필요합니다.",
@@ -425,7 +438,9 @@
         "buttons": "버튼",
         "buttonText": "버튼 텍스트",
         "buttonUrl": "웹사이트 URL",
-        "buttonPhone": "전화번호"
+        "buttonPhone": "전화번호",
+        "moveUp": "카드 {n} 위로 이동",
+        "moveDown": "카드 {n} 아래로 이동"
       },
       "offer": {
         "title": "기간 한정 혜택",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "이 카테고리에서는 마케팅 표현이 허용되지 않습니다.",
         "TAG_CONTENT_MISMATCH": "카테고리가 콘텐츠와 일치하지 않습니다(예: UTILITY 템플릿에 홍보성 문구).",
         "SCAM": "Meta가 이 템플릿을 사기 가능성이 있는 것으로 신고했습니다. 주장과 표현을 검토하세요."
+      },
+      "stats": {
+        "title": "이 템플릿의 성과",
+        "hint": "이 템플릿으로 보낸 메시지를 기준으로 집계",
+        "loading": "수치를 불러오는 중",
+        "error": "수치를 불러오지 못했습니다.",
+        "none": "이 템플릿으로 보낸 메시지가 아직 없습니다.",
+        "sent": "발송",
+        "delivered": "전달",
+        "read": "읽음",
+        "replied": "답장",
+        "failed": "실패",
+        "percent": "{value}%",
+        "footer": "이 템플릿으로 보낸 메시지 {total}건, 대기 중 {queued}건",
+        "lastSent": "마지막 발송 {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "어조",
       "pickTone": "어조 선택",
       "language": "언어",
-      "languageHint": "초안은 양식의 언어로 작성됩니다.",
+      "languageHint": "Meta가 지원하는 어떤 언어든 고를 수 있습니다. 초안이 그 언어로 작성되고 템플릿도 그 언어를 사용합니다.",
       "notes": "사용자 지정 프롬프트",
       "notesNote": "선택 사항 / 최대 2000자",
       "notesPlaceholder": "포함하고 싶은 구체적인 내용을 입력하세요: 변수, 링크, 꼭 들어가야 할 문구, 피해야 할 내용…",

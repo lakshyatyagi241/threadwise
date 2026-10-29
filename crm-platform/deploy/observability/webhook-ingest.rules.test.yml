@@ -37,6 +37,25 @@ tests:
         values: '6000x24'
       - series: 'crm_queue_jobs_pending{queue="campaign",state="waiting"}'
         values: '60000x24'
+      # D-07: primary checkouts at 10/s, 25% over 5 ms (p95 about 9 ms) fires; webhook checkouts all under 2.5 ms do not
+      - series: 'crm_db_pool_acquire_seconds_count{service="api",pool="primary"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="primary",le="0.0025"}'
+        values: '0+300x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="primary",le="0.005"}'
+        values: '0+450x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="primary",le="0.01"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="primary",le="+Inf"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_count{service="api",pool="webhook"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="webhook",le="0.0025"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="webhook",le="0.005"}'
+        values: '0+600x30'
+      - series: 'crm_db_pool_acquire_seconds_bucket{service="api",pool="webhook",le="+Inf"}'
+        values: '0+600x30'
     alert_rule_test:
       - eval_time: 12m
         alertname: WebhookRateHigh
@@ -55,10 +74,22 @@ tests:
       - eval_time: 12m
         alertname: DbPoolSaturated
         exp_alerts:
-          - exp_labels: { severity: warning, service: api, pool: webhook }
+          - exp_labels: { severity: warning, owner: vedant, service: api, pool: webhook }
             exp_annotations:
               summary: 'The webhook DB pool of api is at its maximum with no idle connection'
               description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+              runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolsaturated'
+      - eval_time: 22m
+        alertname: DbPoolAcquireSlow
+        exp_alerts:
+          - exp_labels: { severity: warning, owner: vedant, service: api, pool: primary }
+            exp_annotations:
+              summary: 'Checking a connection out of the primary DB pool of api has a p95 of 9ms'
+              description: 'Callers queue for a connection before their first query starts (target p95 under 5 ms). DbPoolSaturated and DbPoolExhausted fire later, when the pool is full for minutes.'
+              runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolacquireslow'
+      - eval_time: 12m
+        alertname: DbPoolAcquireSlow
+        exp_alerts: [] # over 5 ms, but not for 15 minutes yet
       - eval_time: 12m
         alertname: WabaIngestBacklogGrowing
         exp_alerts:

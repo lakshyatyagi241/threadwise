@@ -28,6 +28,10 @@ export interface LedgerRow {
   actorType: string;
   actorLabel: string | null;
   createdAt: Date;
+  /** The purchase (order) this entry came from, when it has an invoice to download; null for every other entry. */
+  invoiceOrderId?: string | null;
+  /** The stored invoice of a migrated top-up (`wallet_legacy_invoices.uuid`), or null. */
+  legacyInvoiceId?: string | null;
 }
 
 /**
@@ -157,6 +161,75 @@ export class WalletRepository {
     }
   }
 
+  /**
+   * Takes `amountMinor` out of the available balance (balance - reserved) for a send that is allowed but not charged yet, and records
+   * the hold so it can be settled or expire. Holds that have lapsed are given back first, so a send whose delivery never came cannot
+   * lock the balance. One conditional UPDATE on the wallet row: concurrent holds queue on it and cannot both pass the same balance.
+   * Returns the hold's id, or null (nothing held) when the available balance does not cover it or the workspace has no wallet in `unit`.
+   */
+  async holdMinor(
+    tx: Tx,
+    orgId: number,
+    unit: string,
+    amountMinor: number,
+    ttlSeconds: number,
+  ): Promise<number | null> {
+    const amount = minorToDecimal(amountMinor);
+    await tx.execute(sql`
+      WITH lapsed AS (
+        UPDATE wallet_holds SET status = 'expired', settled_at = now()
+        WHERE org_id = ${orgId} AND unit = ${unit} AND status = 'held' AND expires_at <= now()
+        RETURNING amount)
+      UPDATE wallets SET reserved = GREATEST(reserved - (SELECT COALESCE(SUM(amount), 0) FROM lapsed), 0)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+    const res = await tx.execute(sql`
+      WITH taken AS (
+        UPDATE wallets SET reserved = reserved + ${amount}::numeric
+        WHERE org_id = ${orgId} AND unit = ${unit} AND balance - reserved >= ${amount}::numeric
+        RETURNING org_id)
+      INSERT INTO wallet_holds (org_id, unit, amount, expires_at)
+      SELECT org_id, ${unit}, ${amount}::numeric, now() + make_interval(secs => ${ttlSeconds})
+      FROM taken
+      RETURNING id`);
+    return res.rows.length > 0 ? Number((res.rows[0] as { id: string | number }).id) : null;
+  }
+
+  /**
+   * A delivered send was charged: its hold, the oldest one still open in the wallet, is consumed and its amount leaves `reserved`.
+   * Holds are settled in order rather than matched to a provider id, because a send's id is only known after the provider answers and
+   * a hold must exist before the send. Each charge consumes one hold, so the sum of open holds stays the amount still to be charged.
+   */
+  async settleHold(tx: Tx, orgId: number, unit: string): Promise<void> {
+    await tx.execute(sql`
+      WITH oldest AS (
+        UPDATE wallet_holds SET status = 'consumed', settled_at = now()
+        WHERE org_id = ${orgId} AND id = (
+          SELECT id FROM wallet_holds
+          WHERE org_id = ${orgId} AND unit = ${unit} AND status = 'held'
+          ORDER BY created_at, id LIMIT 1 FOR UPDATE SKIP LOCKED)
+        RETURNING amount)
+      UPDATE wallets SET reserved = GREATEST(reserved - (SELECT COALESCE(SUM(amount), 0) FROM oldest), 0)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+  }
+
+  /** After a charge the balance can fall below `reserved` when the charge was dearer than its hold: the excess is no longer fundable. */
+  async capReserved(tx: Tx, orgId: number, unit: string): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wallets SET reserved = LEAST(reserved, balance)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+  }
+
+  /**
+   * Before a charge of `spendMinor` lowers the balance: `reserved` is capped to what the balance keeps after it, in the same statement
+   * order as the charge. chk_wallet_invariant is checked on every statement, so this runs before the ledger post, not after it.
+   */
+  async fitReservedBefore(tx: Tx, orgId: number, unit: string, spendMinor: number): Promise<void> {
+    const spend = minorToDecimal(spendMinor);
+    await tx.execute(sql`
+      UPDATE wallets SET reserved = LEAST(reserved, balance - ${spend}::numeric)
+      WHERE org_id = ${orgId} AND unit = ${unit}`);
+  }
+
   async markAlerted(tx: Tx, orgId: number, walletId: number, at: Date): Promise<void> {
     await tx.execute(sql`
       UPDATE wallets SET low_balance_alerted_at = ${at.toISOString()}::timestamptz
@@ -221,10 +294,17 @@ interface RawLedger {
   actor_type: string;
   actor_label: string | null;
   created_at: Date;
+  invoice_order_id?: string | null;
+  legacy_invoice_id?: string | null;
 }
 
+/** `invoice_order_id`: the order a top-up was paid through (its invoice is the order's), else null. */
 export const LEDGER_COLUMNS = sql`id, uuid, type, direction, amount::text AS amount, balance_after::text AS balance_after, source,
-  description, note, actor_type, actor_label, created_at`;
+  description, note, actor_type, actor_label, created_at,
+  (SELECT o.uuid::text FROM orders o WHERE o.org_id = wallet_transactions.org_id AND wallet_transactions.subject_type = 'order'
+     AND o.id = wallet_transactions.subject_id) AS invoice_order_id,
+  (SELECT i.uuid::text FROM wallet_legacy_invoices i WHERE i.org_id = wallet_transactions.org_id
+     AND i.invoice_id = wallet_transactions.meta #>> '{legacy,waboo,invoice}') AS legacy_invoice_id`;
 
 export function toLedger(r: RawLedger): LedgerRow {
   return {
@@ -242,5 +322,7 @@ export function toLedger(r: RawLedger): LedgerRow {
     actorType: r.actor_type,
     actorLabel: r.actor_label,
     createdAt: new Date(r.created_at),
+    invoiceOrderId: r.invoice_order_id ?? null,
+    legacyInvoiceId: r.legacy_invoice_id ?? null,
   };
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   API_LIBRARY_SECRET_MASK,
   apiLibraryIsSensitiveName,
@@ -19,6 +20,7 @@ import {
   renderBody,
   renderUrl,
   resolveVariables,
+  addressMovedFromSaved,
   sameOrigin,
   type VariableValues,
 } from './api-library.rules';
@@ -93,7 +95,7 @@ export class ApiLibraryRunService {
               source: 'flow' as const,
               defaultValue: v.defaultValue,
             })),
-            { overrides: input.values },
+            // The address a secret was saved for is the one the DEFAULTS give: values typed into the test form must not move it.
           ),
         ),
       );
@@ -214,27 +216,44 @@ export class ApiLibraryRunService {
       })),
       { overrides: input.overrides, lookup: input.lookup },
     );
-    const outcome = await this.runner.run(
-      {
-        method: row.method,
-        url: row.url,
-        payloadType: row.payloadType,
-        headers: row.headers.map((h) => ({
-          key: h.key,
-          value: h.secret ? this.crypto.decrypt(h.value) : h.value,
-          secret: h.secret,
-        })),
-        body: row.body,
-        functionCode: row.functionCode,
-        idempotencyKey: input.idempotencyKey,
-      },
-      values,
+    // A saved secret goes only to the address it was saved for. A value the flow passes in (or reads from the contact) can change the
+    // host of a `{{variable}}` address, so the address this run really calls is compared with the one the defaults give.
+    const defaults = await resolveVariables(
+      row.variables.map((v) => ({
+        name: v.name,
+        source: 'flow' as const,
+        defaultValue: v.defaultValue,
+      })),
     );
-    await this.db.txAs({ orgId: input.orgId }, (tx) =>
+    const outcome =
+      row.headers.some((h) => h.secret) && addressMovedFromSaved(row.url, values, defaults)
+        ? secretElsewhere()
+        : await this.runner.run(
+            {
+              method: row.method,
+              url: row.url,
+              payloadType: row.payloadType,
+              headers: row.headers.map((h) => ({
+                key: h.key,
+                value: h.secret ? this.crypto.decrypt(h.value) : h.value,
+                secret: h.secret,
+              })),
+              body: row.body,
+              functionCode: row.functionCode,
+              idempotencyKey: input.idempotencyKey,
+            },
+            values,
+          );
+    await this.db.txAs({ orgId: input.orgId }, async (tx) =>
       this.logs.record(
         tx,
         input.orgId,
-        { source: 'flow', apiUuid: row.uuid, apiName: row.name, ...input.context },
+        {
+          source: await this.flowSource(tx, input.orgId, input.context.flowId),
+          apiUuid: row.uuid,
+          apiName: row.name,
+          ...input.context,
+        },
         outcome,
       ),
     );
@@ -267,15 +286,53 @@ export class ApiLibraryRunService {
       response: null,
       processedPayload: null,
     };
-    await this.db.txAs({ orgId: input.orgId }, (tx) =>
+    await this.db.txAs({ orgId: input.orgId }, async (tx) =>
       this.logs.record(
         tx,
         input.orgId,
-        { source: 'flow', apiUuid: input.apiId, apiName: '', ...input.context },
+        {
+          source: await this.flowSource(tx, input.orgId, input.context.flowId),
+          apiUuid: input.apiId,
+          apiName: '',
+          ...input.context,
+        },
         outcome,
       ),
     );
   }
+
+  /**
+   * The log's source for a run made by a flow: `flow` for one built in the Simple builder, `automation` for one built in the Advanced
+   * builder (the Logs filter names them Simple flow and Advanced flow). A run with no flow named stays `flow`.
+   */
+  private async flowSource(
+    tx: Parameters<ApiLibraryRepository['findByUuid']>[0],
+    orgId: number,
+    flowId: number | null | undefined,
+  ): Promise<'flow' | 'automation'> {
+    if (flowId == null) return 'flow';
+    const res = await tx.execute(
+      sql`SELECT builder FROM flows WHERE org_id = ${orgId} AND id = ${flowId}`,
+    );
+    return (res.rows[0] as { builder?: string } | undefined)?.builder === 'advanced'
+      ? 'automation'
+      : 'flow';
+  }
+}
+
+/** A run stopped before any request: a saved secret would have gone to an address other than the one it was saved for. */
+function secretElsewhere(): RunOutcome {
+  return {
+    ok: false,
+    status: null,
+    durationMs: 0,
+    errorKind: 'invalid',
+    error:
+      'This API holds a secret header, which is only sent to the address it was saved for. The address this step built points somewhere else, so nothing was sent.',
+    request: null,
+    response: null,
+    processedPayload: null,
+  };
 }
 
 export function toTestResponse(

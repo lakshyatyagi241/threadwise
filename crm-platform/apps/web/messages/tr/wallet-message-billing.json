@@ -109,7 +109,8 @@
       "amount": "Tutar",
       "balance": "Bakiye",
       "noDescription": "Cüzdan hareketi",
-      "reason": "Neden"
+      "reason": "Neden",
+      "invoice": "Faturayı indir"
     },
     "pricingPanel": {
       "title": "Mesaj fiyatlandırması",
@@ -1038,6 +1039,11 @@
       "enrichment": "Kişi sorgusu",
       "chat_message": "Sohbet mesajı",
       "webbot_message": "Web sitesi sohbet botu mesajı"
+    },
+    "legacyInvoice": {
+      "title": "Fatura",
+      "back": "Ekstreye dön",
+      "print": "Yazdır veya PDF olarak kaydet"
     }
   }
 }

@@ -117,10 +117,13 @@ export function AudienceModes({
 export function AudienceSummary({
   tally,
   allTotal,
+  onClear,
 }: {
   tally: AudienceTally;
   /** The size of "all matching" while the table that chose it is open. */
   allTotal: number | null;
+  /** Drops every selection in every mode; left out, the button is not drawn. */
+  onClear?: (() => void) | undefined;
 }) {
   const t = useTranslations('campaigns.wizard.audience');
   const tp = useTranslations('campaigns.previousSends');
@@ -155,6 +158,16 @@ export function AudienceSummary({
         )}
       </div>
       <p className="text-xs text-muted-foreground">{t('unionRule')}</p>
+      {onClear && chips.length > 0 && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="text-xs font-semibold text-danger hover:underline"
+          data-testid="audience-clear"
+        >
+          {t('clearAudience')}
+        </button>
+      )}
     </div>
   );
 }

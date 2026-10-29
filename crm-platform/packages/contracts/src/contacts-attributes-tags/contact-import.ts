@@ -231,7 +231,7 @@ export const IMPORT_SAMPLE_ROWS: readonly (readonly string[])[] = [
     'no',
     'no',
     'yes',
-    '1988-11-02',
+    '1988-11-22',
     'no',
   ],
 ];
@@ -306,14 +306,45 @@ const CONSENT_NO = new Set([
 ]);
 
 /**
- * One cell of the date of birth column: year first (`2010-05-04`, `2010/05/04`, `2010.05.04`), a real day that can be a birth date.
+ * One date cell as `YYYY-MM-DD`. Year first (`2010-05-04`, `2010/05/04`, `2010.05.04`) always reads. A year-last date (`14-05-1990`,
+ * `05/14/1990`, which is what a spreadsheet writes back when it reformats the cell) reads only when it cannot mean two dates: one of
+ * its first two numbers is above 12. `10-05-2026` is day first or month first, so it is refused and the person writes it year first.
+ * Null for anything else, and for a day that does not exist.
+ */
+export function normalizeImportDate(cell: string): string | null {
+  const text = cell.trim();
+  let y: string;
+  let mo: string;
+  let d: string;
+  const first = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(text);
+  if (first) {
+    [, y, mo, d] = first as unknown as [string, string, string, string];
+  } else {
+    const last = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})$/.exec(text);
+    if (!last) return null;
+    const a = Number(last[1]);
+    const b = Number(last[2]);
+    y = last[3]!;
+    if (a > 12 && b <= 12) {
+      d = last[1]!;
+      mo = last[2]!;
+    } else if (b > 12 && a <= 12) {
+      mo = last[1]!;
+      d = last[2]!;
+    } else return null;
+  }
+  const iso = `${y}-${mo.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  const at = new Date(`${iso}T00:00:00.000Z`);
+  return Number.isNaN(at.getTime()) || at.toISOString().slice(0, 10) !== iso ? null : iso;
+}
+
+/**
+ * One cell of the date of birth column (see `normalizeImportDate`), a real day that can be a birth date.
  * Null for anything else; a blank cell is "no date" and is the caller's to tell apart.
  */
 export function parseImportBirthDate(cell: string, now: Date = new Date()): string | null {
-  const m = /^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/.exec(cell.trim());
-  if (!m) return null;
-  const iso = `${m[1]}-${m[2]!.padStart(2, '0')}-${m[3]!.padStart(2, '0')}`;
-  return isPlausibleBirthDate(iso, now) ? iso : null;
+  const iso = normalizeImportDate(cell);
+  return iso !== null && isPlausibleBirthDate(iso, now) ? iso : null;
 }
 
 /** Yes / no spellings of a consent cell: case, spaces, hyphens and accents do not matter. Anything else is `unrecognised` (not granted). */
@@ -334,13 +365,13 @@ export function parseImportConsent(cell: string): ImportConsentValue {
 
 export const contactImportOptionsSchema = z.object({
   /** Field -> column index. Omitted: auto-detected from the header row. null: ignore that field. */
-  mapping: z.record(importFieldSchema, z.number().int().min(0).nullable()).optional(),
+  mapping: z.partialRecord(importFieldSchema, z.int().min(0).nullable()).optional(),
   /**
    * Custom property key -> column index, the same way as `mapping`. Omitted: a column is matched to a property by its label or its key
    * (`attr:<key>`, as the export writes it). null: ignore that property's column.
    */
   propertyMapping: z
-    .record(z.string().trim().min(1).max(255), z.number().int().min(0).nullable())
+    .record(z.string().trim().min(1).max(255), z.int().min(0).nullable())
     .optional(),
   /** Omitted: detected from the header row (comma, semicolon, tab, pipe). */
   delimiter: z.enum([',', ';', '\t', '|']).optional(),
@@ -380,11 +411,11 @@ export type ContactImportOptions = z.infer<typeof contactImportOptionsSchema>;
 
 export const importRowIssueSchema = z.object({
   /** 1-based line in the file, header included. */
-  row: z.number().int(),
+  row: z.int(),
   reason: z.string(),
   /** The header of the column that failed, when one column is to blame (`invalid_property_value`). */
   column: z.string().optional(),
-  values: z.record(z.string()).optional(),
+  values: z.record(z.string(), z.string()).optional(),
 });
 export type ImportRowIssue = z.infer<typeof importRowIssueSchema>;
 
@@ -412,16 +443,16 @@ export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
 export const importQuotaSchema = z.object({
   /** 0 = unlimited. */
-  limit: z.number().int(),
-  used: z.number().int(),
+  limit: z.int(),
+  used: z.int(),
   /** null = unlimited. */
-  remaining: z.number().int().nullable(),
+  remaining: z.int().nullable(),
 });
 
 const importConsentSummarySchema = z.object({
-  granted: z.number().int(),
-  notGranted: z.number().int(),
-  unrecognised: z.number().int(),
+  granted: z.int(),
+  notGranted: z.int(),
+  unrecognised: z.int(),
   /** Up to 5 values that are not yes or no, as written. */
   unrecognisedSamples: z.array(z.string()),
 });
@@ -431,7 +462,7 @@ export const importPropertyColumnSchema = z.object({
   key: z.string(),
   label: z.string(),
   fieldType: z.string(),
-  column: z.number().int().nullable(),
+  column: z.int().nullable(),
 });
 export type ImportPropertyColumn = z.infer<typeof importPropertyColumnSchema>;
 
@@ -439,22 +470,22 @@ export const contactImportPreviewSchema = z.object({
   fileName: z.string(),
   delimiter: z.string(),
   headers: z.array(z.string()),
-  detected: z.record(z.number().int()),
+  detected: z.record(z.string(), z.int()),
   /** The mapping that would be used (detected, overridden by the request). */
-  mapping: z.record(z.number().int().nullable()),
+  mapping: z.record(z.string(), z.int().nullable()),
   /** Every active custom contact property the workspace has, with the column it would read. Omitted by an older server. */
   properties: z.array(importPropertyColumnSchema).optional(),
   missingRequired: z.array(importFieldSchema),
   /** Up to 5 data rows, keyed by header. */
-  sampleRows: z.array(z.record(z.string())),
+  sampleRows: z.array(z.record(z.string(), z.string())),
   totals: z.object({
-    rows: z.number().int(),
-    valid: z.number().int(),
-    invalid: z.number().int(),
+    rows: z.int(),
+    valid: z.int(),
+    invalid: z.int(),
     /** Rows repeating a number that appears earlier in the file. */
-    duplicateInFile: z.number().int(),
-    willCreate: z.number().int(),
-    willUpdate: z.number().int(),
+    duplicateInFile: z.int(),
+    willCreate: z.int(),
+    willUpdate: z.int(),
   }),
   invalidSamples: z.array(importRowIssueSchema),
   /** Group and tag names the file mentions that do not exist yet. */
@@ -483,21 +514,21 @@ export const contactImportJobSchema = z.object({
   id: uuidSchema,
   status: importJobStatusSchema,
   fileName: z.string(),
-  totalRows: z.number().int(),
-  processedRows: z.number().int(),
+  totalRows: z.int(),
+  processedRows: z.int(),
   /** Result, each outcome counted on its own. */
-  created: z.number().int(),
-  updated: z.number().int(),
-  invalid: z.number().int(),
-  duplicatesInFile: z.number().int(),
+  created: z.int(),
+  updated: z.int(),
+  invalid: z.int(),
+  duplicatesInFile: z.int(),
   /** New contacts the plan's contact limit stopped. */
-  limitExceeded: z.number().int(),
+  limitExceeded: z.int(),
   error: z.string().nullable(),
   /** Who started the import; null for a deleted user. */
   createdBy: z.string().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type ContactImportJob = z.infer<typeof contactImportJobSchema>;
 
@@ -509,21 +540,23 @@ export type ListImportJobsQuery = z.infer<typeof listImportJobsQuerySchema>;
 export const EXPORT_KEEP_DAYS = 30;
 
 export const exportHistoryQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
 });
 export type ExportHistoryQuery = z.infer<typeof exportHistoryQuerySchema>;
 
 export const exportHistoryItemSchema = z.object({
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   /** Who exported; null for a deleted user or a system actor. */
   by: z.string().nullable(),
-  rows: z.number().int(),
+  rows: z.int(),
   /** `ids`: the rows ticked; `filter`: everything the filter matched ("select all N matching" or Export all). */
   selection: z.enum(['ids', 'filter']),
+  /** Where the export came from: the contacts list, or a campaign's recipients. */
+  source: z.enum(['contacts', 'campaigns']),
   /** The saved file's id while it can still be downloaded (30 days, and only for exports made since files were kept). */
-  fileId: z.string().uuid().nullable(),
-  fileBytes: z.number().int().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  fileId: z.guid().nullable(),
+  fileBytes: z.int().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
 });
 export type ExportHistoryItem = z.infer<typeof exportHistoryItemSchema>;
 

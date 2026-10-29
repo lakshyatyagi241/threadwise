@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Riapre {time}",
       "erased": "Contatti cancellati",
-      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona né il testo dei messaggi. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
+      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
       "erasedTitle": "Contatto cancellato"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Proveniente da un annuncio o da un link",
       "sentIn": "Inviato in {lang}. Mostra il testo scritto",
       "translatedFrom": "Tradotto da {lang}. Mostra l’originale",
+      "translationFailed": "Inviato senza traduzione. La traduzione non è riuscita, quindi il testo è stato inviato come lo hai scritto.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reazione {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Risolta",
           "closed": "Chiusa",
           "spam": "Spam"
-        }
+        },
+        "created": "Iniziata il {date}",
+        "showMore": "Mostra altre {count}",
+        "showLess": "Mostra meno"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Non ufficiale",
       "officialFull": "Ufficiale (API WhatsApp Cloud)",
       "unofficialFull": "Non ufficiale (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Thread precedenti",
+      "began": "Iniziato il {date}",
+      "showMore": "Mostra altri {count}",
+      "showLess": "Mostra meno",
+      "loading": "Caricamento…",
+      "failed": "Impossibile caricare questo thread.",
+      "unknown": "Mittente sconosciuto",
+      "openThread": "Apri thread"
     }
   }
 }

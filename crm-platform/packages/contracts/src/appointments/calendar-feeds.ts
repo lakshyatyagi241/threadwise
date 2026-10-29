@@ -46,16 +46,16 @@ export type IcsFeedError = z.infer<typeof icsFeedErrorSchema>;
 
 export const icsFeedWarningsSchema = z.object({
   /** Events whose time zone is unknown here were read in the workspace's zone. */
-  unknownZone: z.number().int().min(0).default(0),
+  unknownZone: z.int().min(0).default(0),
   /** Recurrence rules this reader does not support were read as their first occurrence only. */
-  unsupportedRule: z.number().int().min(0).default(0),
+  unsupportedRule: z.int().min(0).default(0),
   /** The feed has more than the cap: the busy time is incomplete. */
   truncated: z.boolean().default(false),
 });
 export type IcsFeedWarnings = z.infer<typeof icsFeedWarningsSchema>;
 
 export const icsFeedSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   name: z.string(),
   /** The host the address points at, for display ("calendar.google.com"). Never the path or the query: those may hold the secret. */
   host: z.string(),
@@ -64,16 +64,16 @@ export const icsFeedSchema = z.object({
   blockAllDay: z.boolean(),
   status: icsFeedStatusSchema,
   errorCode: icsFeedErrorSchema.nullable(),
-  lastFetchedAt: z.string().datetime().nullable(),
-  lastSuccessAt: z.string().datetime().nullable(),
+  lastFetchedAt: z.iso.datetime().nullable(),
+  lastSuccessAt: z.iso.datetime().nullable(),
   /** The calendar's own name, when the feed says one. */
   calendarName: z.string().nullable(),
   /** Events read, and busy blocks they make within the horizon. */
-  eventCount: z.number().int().min(0),
-  busyCount: z.number().int().min(0),
+  eventCount: z.int().min(0),
+  busyCount: z.int().min(0),
   warnings: icsFeedWarningsSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type IcsFeed = z.infer<typeof icsFeedSchema>;
 
@@ -93,10 +93,10 @@ export const updateIcsFeedInputSchema = z
     name: z.string().trim().min(1).max(ICS_FEED_NAME_MAX).optional(),
     isActive: z.boolean().optional(),
     blockAllDay: z.boolean().optional(),
-    rowVersion: z.number().int().min(1),
+    rowVersion: z.int().min(1),
   })
   .refine((v) => v.name !== undefined || v.isActive !== undefined || v.blockAllDay !== undefined, {
-    message: 'nothing to change',
+    error: 'nothing to change',
   });
 export type UpdateIcsFeedInput = z.infer<typeof updateIcsFeedInputSchema>;
 
@@ -108,9 +108,9 @@ export const BOOKINGS_FEED_FUTURE_DAYS = 180;
 
 export const bookingsFeedLinkSchema = z.object({
   /** The link to give to a calendar app; null while the person has none. Anyone who holds it sees the person's bookings: treat it as a password. */
-  url: z.string().url().nullable(),
-  createdAt: z.string().datetime().nullable(),
+  url: z.url().nullable(),
+  createdAt: z.iso.datetime().nullable(),
   /** The last time a calendar app read it. */
-  lastUsedAt: z.string().datetime().nullable(),
+  lastUsedAt: z.iso.datetime().nullable(),
 });
 export type BookingsFeedLink = z.infer<typeof bookingsFeedLinkSchema>;

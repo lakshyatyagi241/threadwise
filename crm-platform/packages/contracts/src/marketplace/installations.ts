@@ -28,50 +28,44 @@ const configValuesSchema = z
   .record(z.string().regex(/^[a-z][A-Za-z0-9_]{0,39}$/), z.unknown())
   .default({});
 
-export const installAppSchema = z
-  .object({
-    /** The permission list the admin confirmed. It must equal the scopes of the version being installed. */
-    acceptedScopes: z.array(z.string().max(60)).max(30),
-    credentials: credentialValuesSchema,
-    config: configValuesSchema.refine(
-      (c) => JSON.stringify(c).length <= 16_384,
-      'The configuration is at most 16 KB.',
-    ),
-  })
-  .strict();
+export const installAppSchema = z.strictObject({
+  /** The permission list the admin confirmed. It must equal the scopes of the version being installed. */
+  acceptedScopes: z.array(z.string().max(60)).max(30),
+  credentials: credentialValuesSchema,
+  config: configValuesSchema.refine(
+    (c) => JSON.stringify(c).length <= 16_384,
+    'The configuration is at most 16 KB.',
+  ),
+});
 export type InstallAppInput = z.infer<typeof installAppSchema>;
 export type InstallAppRequest = z.input<typeof installAppSchema>;
 
-export const configureInstallationSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
-    config: configValuesSchema.optional(),
-    /** Fields given here replace the stored secret; fields left out keep theirs. */
-    credentials: z
-      .record(z.string().regex(/^[a-z][A-Za-z0-9_]{0,39}$/), z.string().max(2000))
-      .optional(),
-    clearCredentials: z.array(z.string().max(40)).max(10).optional(),
-  })
-  .strict();
+export const configureInstallationSchema = z.strictObject({
+  rowVersion: z.int().positive(),
+  config: configValuesSchema.optional(),
+  /** Fields given here replace the stored secret; fields left out keep theirs. */
+  credentials: z
+    .record(z.string().regex(/^[a-z][A-Za-z0-9_]{0,39}$/), z.string().max(2000))
+    .optional(),
+  clearCredentials: z.array(z.string().max(40)).max(10).optional(),
+});
 export type ConfigureInstallationInput = z.infer<typeof configureInstallationSchema>;
 
 /** Accepting the permission list of a newer version that asks for more than was granted. */
-export const consentInstallationSchema = z
-  .object({ acceptedScopes: z.array(z.string().max(60)).max(30) })
-  .strict();
+export const consentInstallationSchema = z.strictObject({
+  acceptedScopes: z.array(z.string().max(60)).max(30),
+});
 export type ConsentInstallationInput = z.infer<typeof consentInstallationSchema>;
 
-export const uninstallAppSchema = z.object({ dataChoice: marketDataChoiceSchema }).strict();
+export const uninstallAppSchema = z.strictObject({ dataChoice: marketDataChoiceSchema });
 export type UninstallAppInput = z.infer<typeof uninstallAppSchema>;
 
-export const installationStateActionSchema = z
-  .object({ rowVersion: z.number().int().positive() })
-  .strict();
+export const installationStateActionSchema = z.strictObject({ rowVersion: z.int().positive() });
 export type InstallationStateActionInput = z.infer<typeof installationStateActionSchema>;
 
-export const sendSampleLeadSchema = z
-  .object({ payloadName: z.string().trim().max(60).optional() })
-  .strict();
+export const sendSampleLeadSchema = z.strictObject({
+  payloadName: z.string().trim().max(60).optional(),
+});
 export type SendSampleLeadInput = z.infer<typeof sendSampleLeadSchema>;
 
 // --- shapes ----------------------------------------------------------------------------------------------------------------------
@@ -110,21 +104,21 @@ export const marketConnectionViewSchema = z.object({
       delivery: z.enum(['sync', 'async']).optional(),
     })
     .nullable(),
-  pollIntervalSeconds: z.number().int().nullable(),
+  pollIntervalSeconds: z.int().nullable(),
   /** The next poll of a pull connection (null for the others, and while the connection is stopped). */
-  nextPollAt: z.string().datetime().nullable().optional(),
+  nextPollAt: z.iso.datetime().nullable().optional(),
   /** Leads up to this time have been fetched (a pull connection that works in time windows). */
-  syncedThrough: z.string().datetime().nullable().optional(),
+  syncedThrough: z.iso.datetime().nullable().optional(),
   /** Fewest seconds between two requests to the portal: what a Sync now waits for. */
-  minSyncIntervalSeconds: z.number().int().nullable().optional(),
-  lastEventAt: z.string().datetime().nullable(),
-  lastSuccessAt: z.string().datetime().nullable(),
+  minSyncIntervalSeconds: z.int().nullable().optional(),
+  lastEventAt: z.iso.datetime().nullable(),
+  lastSuccessAt: z.iso.datetime().nullable(),
   lastError: z.string().nullable(),
   counters: z.object({
-    received: z.number().int(),
-    accepted: z.number().int(),
-    duplicates: z.number().int(),
-    failed: z.number().int(),
+    received: z.int(),
+    accepted: z.int(),
+    duplicates: z.int(),
+    failed: z.int(),
   }),
 });
 export type MarketConnectionView = z.infer<typeof marketConnectionViewSchema>;
@@ -143,9 +137,9 @@ export const marketInstallationSchema = z.object({
   status: marketInstallStatusSchema,
   health: z.object({
     status: marketHealthSchema,
-    checkedAt: z.string().datetime().nullable(),
+    checkedAt: z.iso.datetime().nullable(),
     lastError: z.string().nullable(),
-    lastErrorAt: z.string().datetime().nullable(),
+    lastErrorAt: z.iso.datetime().nullable(),
   }),
   version: z.string(),
   /** A newer published version that asks for more permissions than were granted. The installation runs on `version` until it is accepted. */
@@ -169,8 +163,8 @@ export const marketInstallationSchema = z.object({
   /** The workspace's subscription to the app, when it has one. */
   subscription: marketSubscriptionSchema.nullable(),
   installedBy: z.object({ id: uuidSchema, name: z.string() }).nullable(),
-  installedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  installedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type MarketInstallation = z.infer<typeof marketInstallationSchema>;
 
@@ -188,7 +182,7 @@ export const marketInstallationListQuerySchema = z.object({
 export type MarketInstallationListQuery = z.infer<typeof marketInstallationListQuerySchema>;
 export const marketInstallationListSchema = z.object({
   data: z.array(marketInstallationSchema),
-  usage: z.object({ installed: z.number().int(), limit: z.number().int() }),
+  usage: z.object({ installed: z.int(), limit: z.int() }),
 });
 export type MarketInstallationList = z.infer<typeof marketInstallationListSchema>;
 
@@ -196,8 +190,8 @@ export const marketTestResultSchema = z.object({
   ok: z.boolean(),
   code: z.string().nullable(),
   message: z.string().nullable(),
-  latencyMs: z.number().int(),
-  checkedAt: z.string().datetime(),
+  latencyMs: z.int(),
+  checkedAt: z.iso.datetime(),
 });
 export type MarketTestResult = z.infer<typeof marketTestResultSchema>;
 
@@ -207,8 +201,8 @@ export type MarketTestResult = z.infer<typeof marketTestResultSchema>;
  */
 export const marketSyncResultSchema = z.object({
   status: z.literal('scheduled'),
-  runAt: z.string().datetime(),
-  minIntervalSeconds: z.number().int(),
+  runAt: z.iso.datetime(),
+  minIntervalSeconds: z.int(),
 });
 export type MarketSyncResult = z.infer<typeof marketSyncResultSchema>;
 
@@ -219,7 +213,7 @@ export const marketSampleLeadResultSchema = z.object({
 export type MarketSampleLeadResult = z.infer<typeof marketSampleLeadResultSchema>;
 
 export const marketConnectionEventsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: cursorSchema.optional(),
 });
 export type MarketConnectionEventsQuery = z.infer<typeof marketConnectionEventsQuerySchema>;
@@ -229,7 +223,7 @@ export const marketConnectionEventSchema = z.object({
   externalId: z.string().nullable(),
   status: z.enum(['accepted', 'duplicate', 'rejected', 'failed']),
   error: z.string().nullable(),
-  receivedAt: z.string().datetime(),
+  receivedAt: z.iso.datetime(),
 });
 export const marketConnectionEventListSchema = z.object({
   data: z.array(marketConnectionEventSchema),

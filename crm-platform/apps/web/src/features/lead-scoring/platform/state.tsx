@@ -1,22 +1,15 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { Alert, Button } from '@crm/ui';
 import { errorKind } from './logic';
+import { PageLoader } from '@/components/page-loader';
 
 const NS = 'lead-scoring-admin.common';
 
 export function LoadingBlock() {
   const t = useTranslations(NS);
-  return (
-    <div
-      role="status"
-      className="flex min-h-32 items-center justify-center gap-2 text-sm text-muted-foreground"
-    >
-      <Spinner label={t('loading')} />
-      {t('loading')}
-    </div>
-  );
+  return <PageLoader label={t('loading')} size={96} className="grid min-h-32 place-items-center" />;
 }
 
 /** A failed call: a sentence for the kind of failure, the request id for support, and a retry. */

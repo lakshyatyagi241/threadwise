@@ -9,7 +9,7 @@ import type { CryptoService } from '../../common/crypto/crypto.service';
  */
 const serverLogin = z.object({
   host: z.string().min(1),
-  port: z.number().int().min(1).max(65535),
+  port: z.int().min(1).max(65535),
   security: z.enum(['ssl', 'starttls', 'none']),
   username: z.string().min(1),
   password: z.string().min(1),

@@ -269,6 +269,16 @@ export function safeTimezone(tz: string | null | undefined): string {
   }
 }
 
+/** The calendar day (YYYY-MM-DD) of `now` in the workspace's zone; a UTC day would show a digest a day early or late. */
+export function digestDay(now: Date, timezone: string | null | undefined): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: safeTimezone(timezone),
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+}
+
 // --- service rules -----------------------------------------------------------------------------------------------------------
 
 export const serviceRuleKey = (index: number): string => `service_due:${index}`;

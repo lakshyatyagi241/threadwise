@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "留空 = 不限",
           "maxUsesHint": "所有客户合计。",
           "perUser": "每位用户限用次数",
-          "perUserHint": "每位客户允许的兑换次数。",
+          "perUserHint": "每位客户可使用的次数，跨所有工作区计算。",
           "firstPurchaseTitle": "仅限首次购买",
-          "firstPurchaseHint": "仅限尚未下过付费订单的工作区",
+          "firstPurchaseHint": "仅限在任何工作区都未付费下过订单的买家",
           "stackableTitle": "可与其他优惠券叠加",
           "stackableHint": "允许买家在结账时与另一个有效代码同时使用"
         }

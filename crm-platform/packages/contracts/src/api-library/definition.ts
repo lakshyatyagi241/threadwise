@@ -101,7 +101,30 @@ const SENSITIVE_PARTS = [
   'bearer',
   'privatekey',
   'xauth',
+  'cardnumber',
+  'sessionid',
+  'sessiontoken',
+  'otpcode',
 ];
+
+/**
+ * Short names that only count when they are the whole name: `pin` or `otp` as a part would also match `shipping` and `footprint`, and
+ * `pincode` is a postal code. Compared compact and lower-case, like the parts above.
+ */
+const SENSITIVE_EXACT = new Set([
+  'pwd',
+  'pin',
+  'otp',
+  'cvv',
+  'cvv2',
+  'cvc',
+  'ssn',
+  'jwt',
+  'session',
+  'sessionkey',
+  'cardno',
+  'creditcard',
+]);
 
 /**
  * Whether a header, query-parameter or JSON key reads like a secret (Authorization, X-API-Key, access_token, client_secret, ...). The
@@ -109,7 +132,11 @@ const SENSITIVE_PARTS = [
  */
 export function apiLibraryIsSensitiveName(name: string): boolean {
   const compact = name.toLowerCase().replace(/[-_.\s]/g, '');
-  return compact === 'auth' || SENSITIVE_PARTS.some((p) => compact.includes(p));
+  return (
+    compact === 'auth' ||
+    SENSITIVE_EXACT.has(compact) ||
+    SENSITIVE_PARTS.some((p) => compact.includes(p))
+  );
 }
 
 /** A response path: `data.items[0].name` (one element) or `data.items[].name` (every element, collected into a list). */
@@ -336,17 +363,15 @@ export function apiLibraryDefinitionProblems(
 export const apiLibraryDefinitionObject = z.object(definitionFields);
 
 /** Attaches `apiLibraryDefinitionProblems` to a zod object that has all the definition fields. */
-export function withApiLibraryDefinitionRules<T extends z.ZodTypeAny>(
-  schema: T,
-): z.ZodEffects<T, z.output<T>, z.input<T>> {
+export function withApiLibraryDefinitionRules<T extends z.ZodType>(schema: T): T {
   return schema.superRefine((v, ctx) => {
     for (const [path, message] of apiLibraryDefinitionProblems(v as ApiLibraryDefinitionShape))
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         path: path.split('.').map((p) => (/^\d+$/.test(p) ? Number(p) : p)),
         message,
       });
-  }) as z.ZodEffects<T, z.output<T>, z.input<T>>;
+  }) as T;
 }
 
 export const apiLibraryNameSchema = z
@@ -364,6 +389,6 @@ export type CreateApiLibraryApiInput = z.infer<typeof createApiLibraryApiSchema>
 
 /** Update replaces the whole definition (the form sends all of it) and carries the optimistic lock. */
 export const updateApiLibraryApiSchema = withApiLibraryDefinitionRules(
-  z.object({ ...definitionFields, rowVersion: z.number().int().positive() }),
+  z.object({ ...definitionFields, rowVersion: z.int().positive() }),
 );
 export type UpdateApiLibraryApiInput = z.infer<typeof updateApiLibraryApiSchema>;

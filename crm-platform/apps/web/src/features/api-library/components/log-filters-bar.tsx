@@ -5,6 +5,7 @@ import {
   API_LIBRARY_LOG_SEARCH_MAX,
   API_LIBRARY_LOG_SOURCES,
   type ApiLibraryLogApi,
+  type ApiLibraryLogBot,
 } from '@crm/contracts';
 import { Button, Field, Input, Select, cn } from '@crm/ui';
 import { EMPTY_LOG_FILTERS, hasLogFilters, type LogFilterForm } from '../lib/log-filters';
@@ -18,11 +19,14 @@ export function LogFiltersBar({
   value,
   onChange,
   apis,
+  bots,
   searchInvalid = false,
 }: {
   value: LogFilterForm;
   onChange: (next: LogFilterForm) => void;
   apis?: ApiLibraryLogApi[];
+  /** The bots (flows) with runs in the log, for the bot filter. */
+  bots?: ApiLibraryLogBot[];
   searchInvalid?: boolean;
 }) {
   const t = useTranslations('api-library.logs.filters');
@@ -71,6 +75,18 @@ export function LogFiltersBar({
             {apis.map((a) => (
               <option key={a.id} value={a.id}>
                 {a.deleted ? t('deletedApi', { name: a.name }) : a.name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      )}
+      {bots && (
+        <Field label={t('bot')} htmlFor="alib-log-bot">
+          <Select id="alib-log-bot" value={value.botId} onChange={(e) => set('botId', e.target.value)}>
+            <option value="">{t('allBots')}</option>
+            {bots.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
               </option>
             ))}
           </Select>

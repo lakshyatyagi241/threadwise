@@ -45,18 +45,16 @@ const secretSchema = (min: number, max: number) =>
     .regex(/^[\x21-\x7e]+$/, 'No spaces or control characters');
 
 /** Written, never read. On an update an absent key keeps the stored value. */
-export const providerCredentialsInputSchema = z
-  .object({
-    /** The platform's token at the provider (a BSP partner token). */
-    providerToken: secretSchema(8, 4096).optional(),
-    /** Signs deliveries with `X-Hub-Signature-256` (`meta_app_secret_sha256`). */
-    appSecret: secretSchema(8, 256).optional(),
-    /** The secret a delivery carries in the signature header (`shared_secret_header`). */
-    webhookSecret: secretSchema(8, 512).optional(),
-    /** Answers the provider's GET subscription challenge. */
-    verifyToken: secretSchema(8, 256).optional(),
-  })
-  .strict();
+export const providerCredentialsInputSchema = z.strictObject({
+  /** The platform's token at the provider (a BSP partner token). */
+  providerToken: secretSchema(8, 4096).optional(),
+  /** Signs deliveries with `X-Hub-Signature-256` (`meta_app_secret_sha256`). */
+  appSecret: secretSchema(8, 256).optional(),
+  /** The secret a delivery carries in the signature header (`shared_secret_header`). */
+  webhookSecret: secretSchema(8, 512).optional(),
+  /** Answers the provider's GET subscription challenge. */
+  verifyToken: secretSchema(8, 256).optional(),
+});
 export type ProviderCredentialsInput = z.infer<typeof providerCredentialsInputSchema>;
 
 const onboardingFields = {
@@ -98,7 +96,7 @@ const baseUrlSchema = z
   .superRefine((v, ctx) => {
     // The shape check; whether a loopback address is tolerated and whether the name resolves to a public address are the API's call.
     const verdict = checkProviderBaseUrl(v, { allowDevLoopback: true });
-    if (!verdict.ok) ctx.addIssue({ code: z.ZodIssueCode.custom, message: verdict.reason });
+    if (!verdict.ok) ctx.addIssue({ code: 'custom', message: verdict.reason });
   });
 
 /** A custom-header scheme needs at least one header to carry the credential; a shared-secret signature needs the header's name. */
@@ -116,14 +114,14 @@ const consistency = (
 ) => {
   if (v.partnerProgram && !v.partnerSolutionId) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       path: ['partnerSolutionId'],
       message: 'A partner program needs its solution id',
     });
   }
   if (v.partnerProgram && v.credentialMode !== undefined && v.credentialMode !== 'channel_token') {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       path: ['credentialMode'],
       message: 'A partner program gives each number its own token: use channel_token',
     });
@@ -134,14 +132,14 @@ const consistency = (
     Object.keys(v.headerTemplates).length === 0
   ) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       path: ['headerTemplates'],
       message: 'Custom headers need at least one header',
     });
   }
   if (v.signatureScheme === 'shared_secret_header' && !v.signatureHeaderName) {
     ctx.addIssue({
-      code: z.ZodIssueCode.custom,
+      code: 'custom',
       path: ['signatureHeaderName'],
       message: 'Name the header that carries the secret',
     });
@@ -164,7 +162,7 @@ const commonFields = {
 
 /** Create. Secrets are written here too; a new provider is `active` only once the operator activates it (it starts `disabled`). */
 export const createWhatsappProviderSchema = z
-  .object({
+  .strictObject({
     key: providerKeySchema,
     label: labelSchema,
     adapterKind: whatsappAdapterKindSchema.optional(),
@@ -172,28 +170,24 @@ export const createWhatsappProviderSchema = z
     apiVersion: apiVersionSchema.optional(),
     ...commonFields,
   })
-  .strict()
   .superRefine(consistency);
 export type CreateWhatsappProviderInput = z.infer<typeof createWhatsappProviderSchema>;
 
 /** Update. `rowVersion` is the version the operator read. Absent credential keys keep their value; `clearCredentials` removes some. */
 export const updateWhatsappProviderSchema = z
-  .object({
-    rowVersion: z.number().int().positive(),
+  .strictObject({
+    rowVersion: z.int().positive(),
     label: labelSchema.optional(),
     baseUrl: baseUrlSchema.optional(),
     apiVersion: apiVersionSchema.optional(),
     ...commonFields,
     clearCredentials: z.array(whatsappCredentialKeySchema).max(4).optional(),
   })
-  .strict()
   .superRefine(consistency);
 export type UpdateWhatsappProviderInput = z.infer<typeof updateWhatsappProviderSchema>;
 
 /** Enable, disable, archive and make-default carry the version the operator read. */
-export const providerVersionedActionSchema = z
-  .object({ rowVersion: z.number().int().positive() })
-  .strict();
+export const providerVersionedActionSchema = z.strictObject({ rowVersion: z.int().positive() });
 export type ProviderVersionedActionInput = z.infer<typeof providerVersionedActionSchema>;
 
 // --- responses ------------------------------------------------------------------------------------------------------------------
@@ -211,9 +205,9 @@ export type CredentialState = z.infer<typeof credentialStateSchema>;
  */
 export const providerTestResultSchema = z.object({
   ok: z.boolean(),
-  testedAt: z.string().datetime(),
-  latencyMs: z.number().int().nonnegative(),
-  httpStatus: z.number().int().nullable(),
+  testedAt: z.iso.datetime(),
+  latencyMs: z.int().nonnegative(),
+  httpStatus: z.int().nullable(),
   /** A problem code (`WAP_BASE_URL_REFUSED`, `WAP_CREDENTIALS_MISSING`, ...) or the provider's HTTP outcome; null when ok. */
   errorCode: z.string().nullable(),
   /** The reason, with every secret removed. */
@@ -229,7 +223,7 @@ export const whatsappProviderSchema = z.object({
   baseUrl: z.string(),
   apiVersion: z.string(),
   authScheme: whatsappAuthSchemeSchema,
-  headerTemplates: z.record(z.string()),
+  headerTemplates: z.record(z.string(), z.string()),
   credentialMode: whatsappCredentialModeSchema,
   webhookMode: whatsappWebhookModeSchema,
   signatureScheme: whatsappSignatureSchemeSchema,
@@ -262,11 +256,11 @@ export const whatsappProviderSchema = z.object({
   webhookPath: z.string(),
   lastTest: providerTestResultSchema.nullable(),
   /** WABA numbers on this provider, and workspaces with an override pointing at it. */
-  numberCount: z.number().int().nonnegative(),
-  workspaceCount: z.number().int().nonnegative(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  numberCount: z.int().nonnegative(),
+  workspaceCount: z.int().nonnegative(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type WhatsappProvider = z.infer<typeof whatsappProviderSchema>;
 

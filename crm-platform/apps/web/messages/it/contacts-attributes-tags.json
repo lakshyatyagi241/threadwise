@@ -41,7 +41,7 @@
       "assignedToOther": "Questa chat è assegnata a un altro agente. Assegnatela prima a te per inviare un messaggio."
     },
     "list": {
-      "title": "Contact Hub",
+      "title": "Hub contatti",
       "subtitle": "Gestisci tutti i tuoi contatti in un unico posto per vendite, assistenza e molto altro",
       "dedupe": "Rimuovi duplicati",
       "exportAll": "Esporta tutto",
@@ -66,7 +66,7 @@
       "sort": "Ordinamento",
       "perPage": "Righe per pagina",
       "perPageOption": "{count} per pagina",
-      "viewToggle": "Layout",
+      "viewToggle": "Vista",
       "listView": "Vista elenco",
       "banner": {
         "pageSelected": "Tutti i {count} contatti di questa pagina sono selezionati.",
@@ -98,7 +98,7 @@
       "unnamed": "Senza nome",
       "colGroups": "Gruppi",
       "colTags": "Tag",
-      "colMemo": "Memo",
+      "colMemo": "Nota",
       "colDateOfBirth": "Data di nascita",
       "colMinor": "Minorenne",
       "minorBadge": "Minorenne",
@@ -118,11 +118,11 @@
       "moreActions": "Altre azioni",
       "modifyColumns": "Modifica colonne",
       "resetColumns": "Ripristina predefiniti",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Cerca colonne",
+      "columnsSelectAll": "Seleziona tutto",
+      "dragToReorder": "Trascina per riordinare le colonne",
+      "removeColumn": "Rimuovi {name}",
+      "columnsSave": "Salva",
       "colContactName": "Nome contatto",
       "colPhone": "Numero di telefono",
       "colEmailId": "ID email",
@@ -297,7 +297,8 @@
       "allTeams": "Tutti i team",
       "teamFormer": "Team precedente",
       "unhideColumn": "Mostra colonna",
-      "resizeColumn": "Trascina per ridimensionare {column}; doppio clic per ripristinare"
+      "resizeColumn": "Trascina per ridimensionare {column}; doppio clic per ripristinare",
+      "pqlNoKey": "La ricerca in inglese non è ancora configurata per questo spazio di lavoro. Chiedi a un amministratore di aggiungere una chiave OpenRouter in Chiavi AI."
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -396,7 +397,7 @@
       "languagePlaceholder": "Inglese",
       "source": "Origine",
       "sourcePlaceholder": "es. Modulo del sito web",
-      "memo": "Memo",
+      "memo": "Nota",
       "memoPlaceholder": "Note su questo contatto",
       "address": "Indirizzo",
       "addressPlaceholder": "Inserisci l'indirizzo",
@@ -447,7 +448,8 @@
         "number": "Inserisci un numero.",
         "integer": "Inserisci un numero intero.",
         "email": "Inserisci un indirizzo email valido.",
-        "url": "Inserisci un link completo che inizi con http:// o https://."
+        "url": "Inserisci un link completo che inizi con http:// o https://.",
+        "phone": "Inserisci un numero di telefono valido per il paese scelto."
       },
       "readOnlyField": "Sola lettura",
       "yes": "Sì",
@@ -492,7 +494,7 @@
       "quickHintPick": "Scegli più tag dall'elenco."
     },
     "groups": {
-      "eyebrow": "Workspace · {workspace}",
+      "eyebrow": "Spazio di lavoro · {workspace}",
       "title": "Gruppi di contatti",
       "subtitle": "Segmenti che puoi filtrare, in cui importare e a cui inviare campagne.",
       "allContacts": "Tutti i contatti",
@@ -584,7 +586,7 @@
         "tags": "Tag",
         "title": "Titolo",
         "address": "Indirizzo",
-        "memo": "Memo",
+        "memo": "Nota",
         "status": "Stato",
         "source": "Origine",
         "consent": "Consenso marketing (sì / no)",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Nome del nuovo gruppo",
       "groupRequiredHint": "Ogni contatto importato entra in questo unico gruppo. La colonna dei gruppi del file viene ignorata, a meno che tu non la associ qui sopra.",
       "customProperties": "Proprietà personalizzate",
-      "customPropertiesHint": "Una colonna la cui intestazione è il nome della proprietà, o attr:key come lo scrive l'esportazione, compila quella proprietà. Una cella vuota mantiene il valore che il contatto ha già."
+      "customPropertiesHint": "Una colonna la cui intestazione è il nome della proprietà, o attr:key come lo scrive l'esportazione, compila quella proprietà. Una cella vuota mantiene il valore che il contatto ha già.",
+      "propertyFormat": {
+        "checkbox": "Scrivi yes o no. Sono accettati anche: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Separa le chiavi delle opzioni con virgola, punto e virgola o barra verticale, per esempio vip, new_leads. Usa la chiave, non l’etichetta. Maiuscole e minuscole non contano."
+      }
     },
     "detail": {
       "back": "Tutti i contatti",
@@ -963,7 +969,7 @@
         "won": "Vinto",
         "lost": "Perso",
         "allStages": "Tutte le fasi",
-        "inStage": "In {stage}",
+        "inStage": "Nella fase {stage}",
         "defaultInStage": "Predefinito nella fase",
         "unsetDefault": "Non usare più {name} come predefinito della sua fase",
         "makeStageDefault": "Imposta {name} come predefinito della sua fase"
@@ -1345,7 +1351,10 @@
       "save": "Salva e apri le regole",
       "created": "Segmento «{name}» creato. Rifinisci le sue regole qui sotto.",
       "forbidden": "Non hai il permesso di creare segmenti.",
-      "failed": "Non è stato possibile creare il segmento. Riprova."
+      "failed": "Non è stato possibile creare il segmento. Riprova.",
+      "specific": "Persone specifiche",
+      "specificHint": "Solo le persone e i team che scegli, oltre a te e alle persone che possono modificare ogni segmento.",
+      "shareRequired": "Scegli almeno una persona o un team con cui condividere."
     },
     "bulkUpdate": {
       "title": "Aggiorna {count, plural, one {# contatto} other {# contatti}}",
@@ -1372,7 +1381,8 @@
         "setValue": "Imposta un valore",
         "willClear": "Verrà svuotata su {count, plural, one {il contatto selezionato} other {tutti i # contatti selezionati}}.",
         "requiredNoClear": "Una proprietà obbligatoria non può essere svuotata.",
-        "problemEmpty": "Inserisci un valore o scegli Svuota."
+        "problemEmpty": "Inserisci un valore o scegli Svuota.",
+        "parentFirst": "Aggiorna prima {parent}, poi questa proprietà: le sue opzioni dipendono da quella."
       },
       "titleAll": "Aggiorna tutti i contatti corrispondenti",
       "hintAll": "Imposta gli stessi valori su ogni contatto che corrisponde ai filtri attuali. I campi lasciati su Mantieni non vengono modificati.",
@@ -1414,10 +1424,15 @@
         "by": "Importato da"
       },
       "exports": {
-        "title": "Esportazioni",
-        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Ogni file viene conservato 30 giorni, così tu e i colleghi con permesso di esportazione potete scaricarlo di nuovo.",
+        "title": "Cronologia esportazioni",
+        "hint": "Esportazioni dall'Hub, dalla più recente, con la loro origine. Ogni file viene conservato per 30 giorni, così tu e i colleghi che possono esportare potete scaricarlo di nuovo.",
         "empty": "Ancora nessuna esportazione.",
         "by": "Da",
+        "source": "Origine",
+        "sources": {
+          "contacts": "Contatti",
+          "campaigns": "Campagne"
+        },
         "rows": "Contatti",
         "selection": "Ambito",
         "unknown": "Sconosciuto",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "Apri nella tua app di messaggi"
+      },
+      "reason": {
+        "not_linked": "Questo numero non è collegato a un account WhatsApp Business, quindi non è possibile inviare alcun modello.",
+        "paused": "Sospeso da WhatsApp. Potrà essere inviato di nuovo al termine della sospensione.",
+        "media_header": "Ha un'intestazione con immagine, video o documento, che per ora non si può inviare da qui.",
+        "header_variable": "Ha una variabile nell'intestazione, che per ora non si può compilare da qui.",
+        "dynamic_button": "Ha un pulsante con link che contiene una variabile, che per ora non si può compilare da qui.",
+        "authentication": "I modelli con password monouso sono inviati dal sistema, non da qui.",
+        "named_variables": "Usa variabili con nome, che per ora non si possono compilare da qui."
       }
     },
     "views": {

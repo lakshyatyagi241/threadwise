@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta autorise une modification en 24 heures et dix en 30 jours pour un modèle approuvé. Réessayez plus tard.",
       "ROW_VERSION_CONFLICT": "Quelqu’un a modifié ce modèle pendant que vous le modifiiez. Rechargez la page pour voir la dernière version, puis appliquez à nouveau votre modification.",
       "VALIDATION_FAILED": "Certains champs sont invalides. Vérifiez les champs ci-dessous.",
-      "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant."
+      "INTERNAL": "Le serveur n’a pas pu traiter cette demande. Réessayez dans un instant.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Aperçu",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Saisissez l’ID du Flow.",
           "flowIdInvalid": "L’ID du Flow est un nombre.",
           "screenRequired": "Saisissez l’ID de l’écran.",
-          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons."
+          "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons.",
+          "flowIdNotMeta": "Ce formulaire n'est pas encore un Flow Meta (son ID de Flow n'est pas un nombre). Ouvrez les formulaires WhatsApp, enregistrez-le et publiez-le, puis choisissez-le ici."
         },
         "catalogHint": "Ouvre votre catalogue WhatsApp. Le bouton affiche « Voir le catalogue » et doit être le seul bouton.",
-        "flowId": "ID du WhatsApp Flow",
-        "flowIdHint": "L’ID numérique d’un WhatsApp Flow publié, dans le gestionnaire de Flows de Meta.",
-        "screen": "Écran d’ouverture",
-        "screenHint": "L’ID de l’écran sur lequel le formulaire s’ouvre, par exemple WELCOME."
+        "flowPick": "Formulaire WhatsApp",
+        "flowPickHint": "Choisissez l’un de vos formulaires WhatsApp publiés. Le bouton l’ouvre dans WhatsApp.",
+        "flowChoose": "Choisissez un formulaire WhatsApp",
+        "flowLoading": "Chargement des formulaires…",
+        "flowNone": "Vous n’avez pas encore de formulaire WhatsApp publié.",
+        "flowNoneLink": "En créer et en publier un",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (à publier d'abord sur Meta)"
       },
       "result": {
         "metaRefused": "Enregistré, mais Meta a refusé le modèle.",
@@ -413,6 +425,7 @@
         "format": "Les cartes affichent",
         "formatImage": "Des images",
         "formatVideo": "Des vidéos",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo.",
         "count": "{used}/{max} cartes",
         "add": "Ajouter une carte",
         "needTwo": "Un carrousel nécessite au moins {min} cartes.",
@@ -425,7 +438,9 @@
         "buttons": "Boutons",
         "buttonText": "Texte du bouton",
         "buttonUrl": "URL du site web",
-        "buttonPhone": "Numéro de téléphone"
+        "buttonPhone": "Numéro de téléphone",
+        "moveUp": "Monter la carte {n}",
+        "moveDown": "Descendre la carte {n}"
       },
       "offer": {
         "title": "Offre à durée limitée",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Langage marketing non autorisé dans cette catégorie.",
         "TAG_CONTENT_MISMATCH": "La catégorie ne correspond pas au contenu (p. ex. texte promotionnel dans un modèle UTILITY).",
         "SCAM": "Meta a signalé le modèle comme une arnaque potentielle. Vérifiez les affirmations et le langage."
+      },
+      "stats": {
+        "title": "Résultats de ce modèle",
+        "hint": "Calculé à partir des messages envoyés avec lui",
+        "loading": "Chargement des chiffres",
+        "error": "Impossible de charger les chiffres.",
+        "none": "Rien n'a encore été envoyé avec ce modèle.",
+        "sent": "Envoyés",
+        "delivered": "Distribués",
+        "read": "Lus",
+        "replied": "Réponses",
+        "failed": "Échecs",
+        "percent": "{value} %",
+        "footer": "{total, plural, one {# message envoyé} other {# messages envoyés}} avec ce modèle, {queued} en attente",
+        "lastSent": "dernier envoi {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Ton",
       "pickTone": "Sélectionner un ton",
       "language": "Langue",
-      "languageHint": "Le brouillon est rédigé dans la langue du formulaire.",
+      "languageHint": "Choisissez n'importe quelle langue acceptée par Meta. Le brouillon est écrit dans cette langue et le modèle l'adopte.",
       "notes": "Instructions personnalisées",
       "notesNote": "facultatif / 2000 max.",
       "notesPlaceholder": "Tout élément précis à inclure : variables, liens, formulations obligatoires, ce qu'il faut éviter…",

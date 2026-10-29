@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "{time} 恢复",
       "erased": "已删除的联系人",
-      "erasedHint": "这些联系人已被删除，其会话在保留的同时已去除其个人信息和消息文本。时间显示的是最后一条消息，因为系统未记录删除日期。",
+      "erasedHint": "这些联系人已被删除，其会话在保留的同时已去除其个人信息。时间显示的是最后一条消息，因为系统未记录删除日期。",
       "erasedTitle": "已删除的联系人"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "来自广告或链接",
       "sentIn": "以 {lang} 发送。显示您输入的文本",
       "translatedFrom": "已从 {lang} 翻译。显示原文",
+      "translationFailed": "未翻译即已发送。翻译失败，因此按您输入的原文发送。",
       "bot": "机器人",
       "broadcast": "群发",
       "reacted": "表情回应 {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "已解决",
           "closed": "已关闭",
           "spam": "垃圾信息"
-        }
+        },
+        "created": "开始于 {date}",
+        "showMore": "再显示 {count} 条",
+        "showLess": "收起"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "非官方",
       "officialFull": "官方 (WhatsApp Cloud API)",
       "unofficialFull": "非官方 (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "之前的会话串",
+      "began": "开始于 {date}",
+      "showMore": "再显示 {count} 条",
+      "showLess": "收起",
+      "loading": "加载中…",
+      "failed": "无法加载此会话串。",
+      "unknown": "未知发件人",
+      "openThread": "打开会话串"
     }
   }
 }

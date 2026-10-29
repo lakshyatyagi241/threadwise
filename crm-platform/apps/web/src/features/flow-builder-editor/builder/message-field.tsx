@@ -152,16 +152,19 @@ export function MessageField({
 
   useEffect(() => {
     if (!panel) return;
-    const onDown = (e: MouseEvent) => {
+    // Capture phase: the canvas and the cards stop pointer and mouse events from travelling up, and a press there must still close it.
+    const onDown = (e: Event) => {
       if (!box.current?.contains(e.target as Node)) setPanel(null);
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setPanel(null);
     };
-    document.addEventListener('mousedown', onDown);
+    document.addEventListener('mousedown', onDown, true);
+    document.addEventListener('pointerdown', onDown, true);
     document.addEventListener('keydown', onKey);
     return () => {
-      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('mousedown', onDown, true);
+      document.removeEventListener('pointerdown', onDown, true);
       document.removeEventListener('keydown', onKey);
     };
   }, [panel]);

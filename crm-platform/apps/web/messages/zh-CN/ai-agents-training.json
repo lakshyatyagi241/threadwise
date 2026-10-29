@@ -297,7 +297,17 @@
         "removeRow": "删除此问题"
       },
       "reading": "正在读取…",
-      "failed": "无法读取。"
+      "failed": "无法读取。",
+      "view": "查看",
+      "viewNamed": "查看{label}",
+      "viewClose": "关闭",
+      "viewLoading": "加载中",
+      "viewFailed": "无法加载此条目。请重试。",
+      "viewQuestion": "问题",
+      "viewAnswer": "答案",
+      "viewNotReadYet": "此页面仍在读取中。准备好后，其文本将显示在此处。",
+      "viewNoText": "此条目没有文本。",
+      "viewTruncated": "此处仅显示前面部分；智能体会读取整个条目。"
     }
   }
 }

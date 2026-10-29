@@ -21,13 +21,13 @@ export const contactGroupResponseSchema = z.object({
   note: z.string().nullable(),
   color: z.string().nullable(),
   /** Contacts in the group, workspace-wide; filters do not change it. */
-  memberCount: z.number().int(),
-  rowVersion: z.number().int(),
+  memberCount: z.int(),
+  rowVersion: z.int(),
   createdBy: personRefSchema.nullable(),
   /** Null until the group is first renamed, re-noted or re-coloured. */
   updatedBy: personRefSchema.nullable(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type ContactGroupResponse = z.infer<typeof contactGroupResponseSchema>;
 
@@ -64,7 +64,7 @@ export const updateContactGroupSchema = z.object({
   name: z.string().trim().min(1).max(GROUP_NAME_MAX).optional(),
   note: z.string().trim().max(GROUP_NOTE_MAX).nullish(),
   color: hexColorSchema.nullish(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateContactGroupInput = z.infer<typeof updateContactGroupSchema>;
 

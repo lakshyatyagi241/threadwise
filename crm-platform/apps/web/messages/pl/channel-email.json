@@ -135,7 +135,11 @@
       "limit": "Osiągnięto limit skrzynek w Twoim planie, więc ta skrzynka nie została połączona.",
       "not_configured": "Logowanie dla tego dostawcy nie jest jeszcze skonfigurowane na tej platformie. Zapytaj administratora platformy.",
       "wrong_account": "Zalogowano na inne konto niż skrzynka, która jest łączona ponownie. Zaloguj się tym samym adresem.",
-      "failed": "Podczas łączenia skrzynki coś poszło nie tak. Spróbuj ponownie."
+      "failed": "Podczas łączenia skrzynki coś poszło nie tak. Spróbuj ponownie.",
+      "not_enabled": "Poczta nie jest objęta planem Twojego obszaru roboczego, więc nic nie zostało połączone. Poproś administratora o jej włączenie.",
+      "not_allowed": "Nie możesz połączyć tego rodzaju skrzynki. Poproś administratora o dostęp lub użyj skrzynki współdzielonej.",
+      "no_address": "Dostawca nie udostępnił adresu e-mail skrzynki, więc nic nie zostało połączone. Połącz ponownie i zezwól na dostęp do adresu e-mail.",
+      "no_refresh_token": "Dostawca nie pozwolił, aby ta skrzynka pozostała zalogowana, więc nic nie zostało połączone. Usuń dostęp tej aplikacji w ustawieniach konta Google lub Microsoft, a potem połącz ponownie."
     },
     "errors": {
       "notConfigured": "Logowanie dla tego dostawcy nie jest jeszcze skonfigurowane na tej platformie. Zapytaj administratora platformy.",

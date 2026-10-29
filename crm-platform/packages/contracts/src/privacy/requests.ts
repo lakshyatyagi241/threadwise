@@ -108,7 +108,7 @@ export const listPrivacyRequestsQuerySchema = z.object({
   overdue: z.preprocess((v) => v === 'true' || v === true, z.boolean()).optional(),
   /** Requests waiting on a legal hold ("restricted: legal hold"), BL-295. */
   restricted: z.preprocess((v) => v === 'true' || v === true, z.boolean()).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListPrivacyRequestsQuery = z.infer<typeof listPrivacyRequestsQuerySchema>;
@@ -143,7 +143,7 @@ export const erasePrivacyRequestSchema = z.object({
 export type ErasePrivacyRequestInput = z.infer<typeof erasePrivacyRequestSchema>;
 
 export const privacyRequestsSettingsSchema = z.object({
-  slaDays: z.number().int().min(1).max(90),
+  slaDays: z.int().min(1).max(90),
   /**
    * The workspace's own wording of the answer to a person whose erasure is held back by a legal hold (counsel's text). null clears it
    * (the default text applies); absent leaves it as it is. At most 1500 characters; it must not name the matter.
@@ -168,7 +168,7 @@ export const privacyErasureLineSchema = z.object({
   holder: z.string(),
   table: z.string(),
   disposition: privacyDispositionSchema,
-  count: z.number().int().nonnegative(),
+  count: z.int().nonnegative(),
   /** Why the rows are kept or only anonymised (legal hold, statutory retention), when they are. */
   reason: z.string().nullable(),
 });
@@ -178,25 +178,25 @@ export const privacyErasureReportSchema = z.object({
   dryRun: z.boolean(),
   lines: z.array(privacyErasureLineSchema),
   /** Stored files (chat media, contact files, call recordings) queued for deletion. */
-  files: z.number().int().nonnegative(),
+  files: z.int().nonnegative(),
   totals: z.object({
-    deleted: z.number().int().nonnegative(),
-    anonymised: z.number().int().nonnegative(),
-    retained: z.number().int().nonnegative(),
+    deleted: z.int().nonnegative(),
+    anonymised: z.int().nonnegative(),
+    retained: z.int().nonnegative(),
   }),
   historyMode: privacyHistoryModeSchema,
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
 });
 export type PrivacyErasureReport = z.infer<typeof privacyErasureReportSchema>;
 
 export const privacyProofSchema = z.object({
   requestReference: z.string(),
   requestType: privacyRequestTypeSchema,
-  executedAt: z.string().datetime(),
+  executedAt: z.iso.datetime(),
   executedBy: z.string().nullable(),
   historyMode: privacyHistoryModeSchema,
   lines: z.array(privacyErasureLineSchema),
-  files: z.number().int().nonnegative(),
+  files: z.int().nonnegative(),
   /** The registry the erasure ran with: a change of a holder shows in the digest. */
   registryDigest: z.string(),
   /** Stated limits: what this erasure does not reach (backups, vendors). */
@@ -221,29 +221,29 @@ export const privacyRequestSchema = z.object({
   subjectLabel: z.string(),
   requesterChannel: privacyRequesterChannelSchema,
   internalNote: z.string().nullable(),
-  receivedAt: z.string().datetime(),
-  dueAt: z.string().datetime(),
+  receivedAt: z.iso.datetime(),
+  dueAt: z.iso.datetime(),
   /** Whole days to `dueAt` (negative when late); null when the request is closed. */
-  daysLeft: z.number().int().nullable(),
+  daysLeft: z.int().nullable(),
   overdue: z.boolean(),
   verificationMethod: privacyVerificationMethodSchema.nullable(),
   verificationEvidenceRef: z.string().nullable(),
-  verifiedAt: z.string().datetime().nullable(),
+  verifiedAt: z.iso.datetime().nullable(),
   legalHold: z.boolean(),
   legalHoldReason: z.string().nullable(),
   /** True while the case waits on a legal hold on the person (BL-295): the data is kept and locked, the erasure is not executed. */
   restricted: z.boolean(),
-  restrictedAt: z.string().datetime().nullable(),
+  restrictedAt: z.iso.datetime().nullable(),
   /** The workspace's own wording of the answer to the person, when it set one; null means the default text applies. */
   restrictionNotice: z.string().nullable(),
   historyMode: privacyHistoryModeSchema,
   rejectionReason: z.string().nullable(),
   dryRun: privacyErasureReportSchema.nullable(),
-  result: z.record(z.unknown()),
+  result: z.record(z.string(), z.unknown()),
   proof: privacyProofSchema.nullable(),
-  completedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  completedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
   /** What the caller may do next from here (the screen shows only these). */
   allowed: z.object({
     verify: z.boolean(),
@@ -264,8 +264,8 @@ export const privacyRequestEventSchema = z.object({
   fromStatus: privacyRequestStatusSchema.nullable(),
   toStatus: privacyRequestStatusSchema.nullable(),
   actor: z.string().nullable(),
-  detail: z.record(z.unknown()),
-  at: z.string().datetime(),
+  detail: z.record(z.string(), z.unknown()),
+  at: z.iso.datetime(),
 });
 export type PrivacyRequestEvent = z.infer<typeof privacyRequestEventSchema>;
 
@@ -279,13 +279,13 @@ export const privacyExportStatusSchema = z.enum([
 export const privacyExportSchema = z.object({
   id: uuidSchema,
   status: privacyExportStatusSchema,
-  fileBytes: z.number().int().nonnegative().nullable(),
+  fileBytes: z.int().nonnegative().nullable(),
   /** Rows per section of the file (module key to count). */
-  sections: z.record(z.number().int().nonnegative()),
+  sections: z.record(z.string(), z.int().nonnegative()),
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
 });
 export type PrivacyExport = z.infer<typeof privacyExportSchema>;
 

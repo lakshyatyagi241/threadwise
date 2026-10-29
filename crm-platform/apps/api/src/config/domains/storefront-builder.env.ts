@@ -9,8 +9,8 @@ import { z } from 'zod';
  * the process at the first read with a readable message instead of becoming `undefined` mid-request.
  */
 const storefrontEnvSchema = z.object({
-  APP_URL: z.string().url().default('http://localhost:3000'),
-  WEB_APP_URL: z.string().url().default('http://localhost:3001'),
+  APP_URL: z.url().default('http://localhost:3000'),
+  WEB_APP_URL: z.url().default('http://localhost:3001'),
   /** Parent host of the shop subdomains (`<slug>.<host>`). Unset, `localhost`, an IP or the app host means path mode. */
   STOREFRONT_HOST: z.string().trim().optional(),
   /** What a custom domain's CNAME must point at. Default: the host of the web app. */
@@ -18,7 +18,7 @@ const storefrontEnvSchema = z.object({
   /** `fixture` swaps Razorpay and the DNS resolver for deterministic stand-ins (tests, demos). */
   STORE_PROVIDER_MODE: z.enum(['live', 'fixture']).default('live'),
   /** The Node bridge that holds the unofficial (QR-paired) WhatsApp sessions. */
-  BAILEYS_SERVER_URL: z.string().url().optional(),
+  BAILEYS_SERVER_URL: z.url().optional(),
   BAILEYS_NODE_TOKEN: z.string().optional(),
 });
 

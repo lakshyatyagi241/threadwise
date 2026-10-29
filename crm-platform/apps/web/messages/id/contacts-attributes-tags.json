@@ -41,7 +41,7 @@
       "assignedToOther": "Chat ini ditugaskan ke agen lain. Tugaskan ke diri Anda dulu untuk mengirim pesan."
     },
     "list": {
-      "title": "Contact Hub",
+      "title": "Hub Kontak",
       "subtitle": "Kelola semua kontak Anda dengan mulus di satu tempat untuk penjualan, dukungan, dan lainnya",
       "dedupe": "Hapus duplikat",
       "exportAll": "Ekspor semua",
@@ -87,8 +87,8 @@
       "cancel": "Batal",
       "deleted": "Kontak dihapus.",
       "alreadyDeleted": "Kontak ini sudah dihapus. Daftar telah disegarkan.",
-      "edit": "Edit",
-      "editNamed": "Edit {name}",
+      "edit": "Ubah",
+      "editNamed": "Ubah {name}",
       "deleteNamed": "Hapus {name}",
       "optedOut": "Berhenti langganan",
       "filterByTag": "Filter berdasarkan {name}",
@@ -98,7 +98,7 @@
       "unnamed": "Tanpa Nama",
       "colGroups": "Grup",
       "colTags": "Tag",
-      "colMemo": "Memo",
+      "colMemo": "Catatan",
       "colDateOfBirth": "Tanggal lahir",
       "colMinor": "Di bawah umur",
       "minorBadge": "Di bawah umur",
@@ -118,11 +118,11 @@
       "moreActions": "Tindakan Lainnya",
       "modifyColumns": "Ubah Kolom",
       "resetColumns": "Reset ke default",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Cari kolom",
+      "columnsSelectAll": "Pilih semua",
+      "dragToReorder": "Seret untuk mengurutkan ulang kolom",
+      "removeColumn": "Hapus {name}",
+      "columnsSave": "Simpan",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
       "colEmailId": "ID Email",
@@ -249,7 +249,7 @@
       "columnMenu": "Opsi untuk kolom {column}",
       "sortAsc": "Urutkan A ke Z",
       "sortDesc": "Urutkan Z ke A",
-      "filterByColumn": "Filter",
+      "filterByColumn": "Filter berdasarkan kolom",
       "hideColumn": "Sembunyikan kolom",
       "addColumn": "Tambah kolom",
       "allColumnsShown": "Semua kolom sudah ditampilkan.",
@@ -297,7 +297,8 @@
       "allTeams": "Semua tim",
       "teamFormer": "Tim sebelumnya",
       "unhideColumn": "Tampilkan kolom",
-      "resizeColumn": "Seret untuk mengubah lebar {column}; klik dua kali untuk mengatur ulang"
+      "resizeColumn": "Seret untuk mengubah lebar {column}; klik dua kali untuk mengatur ulang",
+      "pqlNoKey": "Pencarian bahasa Inggris belum disiapkan untuk ruang kerja ini. Minta admin menambahkan kunci OpenRouter di Kunci AI."
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -396,7 +397,7 @@
       "languagePlaceholder": "Inggris",
       "source": "Sumber",
       "sourcePlaceholder": "mis. Formulir situs web",
-      "memo": "Memo",
+      "memo": "Catatan",
       "memoPlaceholder": "Catatan tentang kontak ini",
       "address": "Alamat",
       "addressPlaceholder": "Masukkan alamat",
@@ -411,7 +412,7 @@
         "vip": "VIP"
       },
       "stage": "Tahap siklus hidup",
-      "stageDefault": "Default",
+      "stageDefault": "Bawaan",
       "optOut": "Berhenti menerima pemasaran",
       "optOutHint": "Kontak yang berhenti dilewati oleh broadcast dan kampanye.",
       "groups": "Grup kontak",
@@ -447,7 +448,8 @@
         "number": "Masukkan angka.",
         "integer": "Masukkan bilangan bulat.",
         "email": "Masukkan alamat email yang valid.",
-        "url": "Masukkan tautan lengkap yang diawali http:// atau https://."
+        "url": "Masukkan tautan lengkap yang diawali http:// atau https://.",
+        "phone": "Masukkan nomor telepon yang valid untuk negara yang dipilih."
       },
       "readOnlyField": "Hanya baca",
       "yes": "Ya",
@@ -492,7 +494,7 @@
       "quickHintPick": "Pilih beberapa tag dari daftar."
     },
     "groups": {
-      "eyebrow": "Workspace · {workspace}",
+      "eyebrow": "Ruang kerja · {workspace}",
       "title": "Grup kontak",
       "subtitle": "Segmen yang dapat Anda filter, impor, dan kirimi kampanye.",
       "allContacts": "Semua kontak",
@@ -584,7 +586,7 @@
         "tags": "Tag",
         "title": "Gelar",
         "address": "Alamat",
-        "memo": "Memo",
+        "memo": "Catatan",
         "status": "Status",
         "source": "Sumber",
         "consent": "Persetujuan pemasaran (ya / tidak)",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Nama grup baru",
       "groupRequiredHint": "Setiap kontak yang diimpor masuk ke satu grup ini. Kolom grup dalam file diabaikan kecuali Anda memetakannya di atas.",
       "customProperties": "Properti kustom",
-      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak."
+      "customPropertiesHint": "Kolom yang judul headernya adalah nama properti, atau attr:key seperti yang ditulis ekspor, mengisi properti tersebut. Sel kosong mempertahankan nilai yang sudah dimiliki kontak.",
+      "propertyFormat": {
+        "checkbox": "Tulis yes atau no. Juga diterima: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Pisahkan kunci opsi dengan koma, titik koma, atau garis tegak, misalnya vip, new_leads. Tulis kuncinya, bukan labelnya. Huruf besar dan kecil tidak dibedakan."
+      }
     },
     "detail": {
       "back": "Semua kontak",
@@ -783,8 +789,8 @@
       "create": "Buat atribut",
       "col": {
         "name": "Nama",
-        "key": "Key",
-        "default": "Default",
+        "key": "Kunci",
+        "default": "Bawaan",
         "description": "Deskripsi",
         "status": "Status",
         "actions": "Aksi"
@@ -828,7 +834,7 @@
       "conflict": "Orang lain telah mengubah atribut ini. Tutup jendela ini, lalu buka lagi.",
       "name": "Nama tampilan",
       "namePlaceholder": "mis. ID Pesanan",
-      "key": "Key",
+      "key": "Kunci",
       "keyHint": "a-z, 0-9 dan garis bawah, diawali huruf. Harus unik.",
       "readOnly": "Hanya baca.",
       "defaultValue": "Nilai default",
@@ -952,7 +958,7 @@
       },
       "row": {
         "drag": "Seret untuk mengurutkan ulang",
-        "default": "Default",
+        "default": "Bawaan",
         "hidden": "Tersembunyi",
         "contacts": "{count, plural, other {# kontak}}",
         "moveUp": "Naikkan {name}",
@@ -1080,7 +1086,7 @@
       "yes": "Ya",
       "col": {
         "name": "Nama",
-        "key": "Key",
+        "key": "Kunci",
         "type": "Tipe",
         "required": "Wajib",
         "visible": "Terlihat",
@@ -1178,7 +1184,7 @@
         "url": "Tautan (URL)",
         "email": "Email",
         "phone": "Telepon",
-        "select": "Dropdown",
+        "select": "Daftar pilihan",
         "multiselect": "Pilihan ganda",
         "lookup": "Pencarian",
         "rating": "Peringkat",
@@ -1209,7 +1215,7 @@
         "partial": "Sebagian perubahan Anda mungkin sudah tersimpan. Tutup jendela ini dan buka kembali properti untuk memeriksa.",
         "name": "Nama",
         "namePlaceholder": "Tanggal perpanjangan",
-        "key": "Key",
+        "key": "Kunci",
         "keyFixed": "Key tidak pernah berubah setelah dibuat.",
         "keyHint": "Dipakai untuk menyimpan nilai dan sebagai nama variabel. Huruf kecil, angka, dan garis bawah.",
         "type": "Tipe",
@@ -1290,7 +1296,7 @@
         "add": "Tambah bidang bergantung",
         "needTwoChoiceFields": "Bidang bergantung memerlukan minimal dua properti dengan daftar pilihan (dropdown, multi-pilih, atau radio).",
         "dependsOn": "bergantung pada {parent}",
-        "editLabel": "Edit {name}",
+        "editLabel": "Ubah {name}",
         "removeLabel": "Hapus {name}",
         "parent": "Properti induk",
         "child": "Properti bergantung",
@@ -1345,7 +1351,10 @@
       "save": "Simpan dan buka aturan",
       "created": "Segmen \"{name}\" dibuat. Sempurnakan aturannya di bawah.",
       "forbidden": "Anda tidak memiliki izin untuk membuat segmen.",
-      "failed": "Segmen tidak dapat dibuat. Coba lagi."
+      "failed": "Segmen tidak dapat dibuat. Coba lagi.",
+      "specific": "Orang tertentu",
+      "specificHint": "Hanya orang dan tim yang Anda pilih, plus Anda dan orang yang bisa mengedit setiap segmen.",
+      "shareRequired": "Pilih setidaknya satu orang atau tim untuk dibagikan."
     },
     "bulkUpdate": {
       "title": "Perbarui {count, plural, other {# kontak}}",
@@ -1372,7 +1381,8 @@
         "setValue": "Atur nilai",
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",
-        "problemEmpty": "Masukkan nilai, atau pilih Kosongkan."
+        "problemEmpty": "Masukkan nilai, atau pilih Kosongkan.",
+        "parentFirst": "Perbarui {parent} dulu, lalu properti ini: pilihannya bergantung pada properti itu."
       },
       "titleAll": "Perbarui semua kontak yang cocok",
       "hintAll": "Terapkan nilai yang sama ke setiap kontak yang cocok dengan filter saat ini. Kolom yang tetap Pertahankan tidak diubah.",
@@ -1414,10 +1424,15 @@
         "by": "Diimpor oleh"
       },
       "exports": {
-        "title": "Ekspor",
-        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. Setiap file disimpan 30 hari agar Anda dan rekan yang boleh mengekspor dapat mengunduhnya lagi.",
+        "title": "Riwayat ekspor",
+        "hint": "Ekspor dari Hub, terbaru lebih dulu, beserta sumbernya. Setiap file disimpan 30 hari agar Anda dan rekan yang bisa mengekspor dapat mengunduhnya lagi.",
         "empty": "Belum ada ekspor.",
         "by": "Oleh",
+        "source": "Sumber",
+        "sources": {
+          "contacts": "Kontak",
+          "campaigns": "Kampanye"
+        },
         "rows": "Kontak",
         "selection": "Cakupan",
         "unknown": "Tidak diketahui",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "Buka di aplikasi pesan Anda"
+      },
+      "reason": {
+        "not_linked": "Nomor ini belum terhubung ke akun WhatsApp Business, jadi templat tidak bisa dikirim.",
+        "paused": "Dijeda oleh WhatsApp. Templat bisa dikirim lagi setelah jeda berakhir.",
+        "media_header": "Memiliki header gambar, video, atau dokumen, yang belum bisa dikirim dari sini.",
+        "header_variable": "Memiliki variabel di header, yang belum bisa diisi dari sini.",
+        "dynamic_button": "Memiliki tautan tombol dengan variabel, yang belum bisa diisi dari sini.",
+        "authentication": "Templat kata sandi sekali pakai dikirim oleh sistem, bukan dari sini.",
+        "named_variables": "Menggunakan variabel bernama, yang belum bisa diisi dari sini."
       }
     },
     "views": {

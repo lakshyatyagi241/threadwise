@@ -16,6 +16,7 @@ import { previewOfSummary } from '../lib/preview';
 import { TemplateCard } from './template-card';
 import { initialState, previewOf, withBody, type PreviewModel } from '../lib/form-model';
 import { CategoryBadge, QualityBadge, StatusBadge } from './badges';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ButtonsEditor } from './buttons-editor';
 import { LintPanel } from './lint-panel';
 import { MessageBubble, PhonePreview } from './message-bubble';
@@ -152,6 +153,21 @@ describe('buttons editor', () => {
     expect(out).toContain('aria-label="Remove button 1"');
     expect(out).toContain('Enter the button text.');
     expect(out).toContain('Enter the URL.');
+  });
+
+  it('tells a Form button with a non-numeric Flow id, or no screen, what is wrong', () => {
+    const qc = new QueryClient();
+    const withQuery = (row: ReturnType<typeof newRow>) =>
+      html(
+        <QueryClientProvider client={qc}>
+          <ButtonsEditor rows={[row]} onChange={noop} />
+        </QueryClientProvider>,
+      );
+    const base = { ...newRow('form'), text: 'Open' };
+    expect(withQuery({ ...base, flowId: 'abc', screen: 'A' })).toContain(
+      'This form is not a Meta Flow yet',
+    );
+    expect(withQuery({ ...base, flowId: '123', screen: '' })).toContain('Enter the screen ID.');
   });
 
   it('has an empty state', () => {

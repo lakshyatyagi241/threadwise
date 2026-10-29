@@ -599,6 +599,10 @@
       "notInFile": "Not in file",
       "customProperties": "Custom properties",
       "customPropertiesHint": "A column whose header is the property's name, or attr:key as the export writes it, fills that property. A blank cell keeps the value the contact already has.",
+      "propertyFormat": {
+        "checkbox": "Write yes or no. Also accepted: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Separate the option keys with a comma, semicolon or pipe, for example vip, new_leads. Use the key, not the label. Case does not matter."
+      },
       "columnN": "Column {n}",
       "applyTitle": "Apply to every imported contact",
       "status": "Status",
@@ -653,7 +657,7 @@
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
         "tag_limit_reached": "plan tag limit reached",
-        "invalid_date_of_birth": "date of birth is not a year-first date that can be a birth date",
+        "invalid_date_of_birth": "date of birth is not a clear date that can be a birth date: write it year first, like 1990-05-14",
         "duplicate_in_file": "repeated number, merged into an earlier row",
         "invalid_timezone": "invalid time zone",
         "legal_hold": "protected record, not changed",
@@ -1420,10 +1424,15 @@
         "by": "Imported by"
       },
       "exports": {
-        "title": "Exports",
-        "hint": "Contact exports from the Hub, newest first. Each file is kept for 30 days so you and teammates who can export can download it again.",
+        "title": "Export history",
+        "hint": "Exports from the Hub, newest first, with where each one came from. Each file is kept for 30 days so you and teammates who can export can download it again.",
         "empty": "No exports yet.",
         "by": "By",
+        "source": "Source",
+        "sources": {
+          "contacts": "Contacts",
+          "campaigns": "Campaigns"
+        },
         "rows": "Contacts",
         "selection": "Scope",
         "unknown": "Unknown",
@@ -1480,6 +1489,19 @@
         "dynamic_button": "Has a button link with a variable, which cannot be filled in from here yet.",
         "authentication": "One-time-password templates are sent by the system, not from here.",
         "named_variables": "Uses named variables, which cannot be filled in from here yet."
+      },
+      "source": "Source of {name}",
+      "sourceText": "Type text",
+      "sourceField": "Contact detail",
+      "fieldOf": "Contact detail for {name}",
+      "fallbackOf": "Fallback for {name}",
+      "fallbackPlaceholder": "Used when the contact has none",
+      "field": {
+        "name": "Full name",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "phone": "Phone"
       },
       "variables": "Template variables",
       "preview": "Preview",

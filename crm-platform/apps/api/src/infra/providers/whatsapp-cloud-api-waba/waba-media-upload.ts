@@ -23,7 +23,11 @@ export async function retryOnRateLimit<T>(
       return await call();
     } catch (e) {
       const wait = waits[attempt];
-      if (wait === undefined || !(e instanceof WabaApiError) || classifySendError(e) !== 'rate_limited')
+      if (
+        wait === undefined ||
+        !(e instanceof WabaApiError) ||
+        classifySendError(e) !== 'rate_limited'
+      )
         throw e;
       await new Promise((resolve) => setTimeout(resolve, wait));
     }
@@ -66,7 +70,8 @@ export async function uploadMediaHandle(
   }
   const appId = env.META_APP_ID;
   if (!appId) throw new Error(`META_APP_ID is needed to upload ${purpose}`);
-  return resumableUpload(http, appId, conn.accessToken ?? '', media);
+  // Meta throttles the upload's calls like any other: the whole upload is sent again (a new session), as the Interakt call is.
+  return retryOnRateLimit(() => resumableUpload(http, appId, conn.accessToken ?? '', media));
 }
 
 /**

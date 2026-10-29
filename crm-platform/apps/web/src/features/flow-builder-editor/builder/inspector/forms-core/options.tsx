@@ -39,11 +39,12 @@ import {
   LIST_DESC_MAX,
   LIST_SECTION_MAX,
   LIST_TITLE_MAX,
-  listItems,
+  listItemsAsTyped,
   patchItem,
   type ListItem,
 } from './helpers';
 import { AddLink, OptionRow, V } from './parts';
+import { RichTextField } from '../rich-text-field';
 import { ChoiceVariableField, SaveToAttributeField } from './save-to-attribute';
 import { ButtonsPreview, ListPreview, PollPreview } from './previews';
 
@@ -67,10 +68,12 @@ export function ButtonsForm({
     <>
       <ButtonsPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea
+        <RichTextField
           value={d.prompt}
+          label={t('prompt')}
           rows={3}
-          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
+          max={whatsapp ? FLB_WA_LIMITS.body : undefined}
+          nodes={env.nodes}
           onChange={(v) => set('prompt', v)}
         />
       </Field>
@@ -131,11 +134,11 @@ function Counter({ len, max }: { len: number; max: number }) {
 
 const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`;
 
-export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+export function ListForm({ node, data: d, set, env, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const unofficial = useUnofficialWhatsapp();
   const { whatsapp } = useContext(FlowEditorContext);
-  const items = listItems(d.options);
+  const items = listItemsAsTyped(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
   const groups = groupBySection(items);
@@ -145,10 +148,12 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
     <>
       <ListPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea
+        <RichTextField
           value={d.prompt}
+          label={t('prompt')}
           rows={3}
-          maxLength={whatsapp ? FLB_WA_LIMITS.listBody : undefined}
+          max={whatsapp ? FLB_WA_LIMITS.listBody : undefined}
+          nodes={env.nodes}
           onChange={(v) => set('prompt', v)}
         />
       </Field>
@@ -235,7 +240,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
   );
 }
 
-export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+export function AskForm({ node, data: d, set, env, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const ts = useTranslations('flb.builder.simple.editors');
   const ta = useTranslations('flb.builder.askAge');
@@ -249,12 +254,12 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
   return (
     <>
       <Field label={t('askQuestion')}>
-        <TextArea
+        <RichTextField
           value={d.prompt}
+          label={t('askQuestion')}
           rows={3}
-          maxLength={
-            whatsapp ? (options.length ? FLB_WA_LIMITS.body : FLB_WA_LIMITS.text) : undefined
-          }
+          max={whatsapp ? (options.length ? FLB_WA_LIMITS.body : FLB_WA_LIMITS.text) : undefined}
+          nodes={env.nodes}
           onChange={(v) => set('prompt', v)}
         />
       </Field>
@@ -395,7 +400,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
         {options.length < 3 ? (
           <AddLink onClick={addOption}>{t('addAnswer')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">
+          <div className="mt-1 text-[11px] text-muted-foreground">
             {t('maxReached', { max: 3 })}
           </div>
         )}
@@ -431,7 +436,7 @@ export function PollForm({ node, data: d, set, addOption, removeOption }: FormPr
         {options.length < 3 ? (
           <AddLink onClick={addOption}>{t('addOption')}</AddLink>
         ) : (
-          <div className="mt-1 text-[11px] italic text-muted-foreground">
+          <div className="mt-1 text-[11px] text-muted-foreground">
             {t('maxReached', { max: 3 })}
           </div>
         )}

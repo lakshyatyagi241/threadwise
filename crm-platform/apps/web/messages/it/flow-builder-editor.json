@@ -99,6 +99,7 @@
       "triggerGroup": "Automatico · all’ingresso nel gruppo",
       "triggerManual": "Iscrizione manuale",
       "triggerKeyword": "Parola chiave",
+      "triggerAny": "Qualsiasi messaggio",
       "active": "attivo",
       "done": "completato",
       "failed": "fallito",
@@ -130,7 +131,10 @@
         "reEngagement": "Riattiva i contatti inattivi con un’offerta personalizzata o un check-in.",
         "lead": "Coltiva i nuovi lead con contenuti educativi prima di passarli alle vendite.",
         "event": "Broadcast a tempo intorno a un lancio, una vendita o un momento stagionale.",
-        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow."
+        "default": "Percorso WhatsApp automatizzato creato nell’editor dei flow.",
+        "defaultWeb": "Chatbot del sito creato nell'editor dei flussi.",
+        "defaultCall": "Chiamata automatizzata creata nell'editor dei flussi.",
+        "defaultOther": "Conversazione automatizzata creata nell'editor dei flussi."
       }
     },
     "featured": {
@@ -581,6 +585,85 @@
           "sendAnswer": "Invia la risposta al cliente",
           "variable": "Salva la risposta come",
           "variableHint": "I passaggi successivi leggono la risposta con questo nome, ad esempio faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Caricamento elenchi…",
+          "listPick": "— scegli elenco —",
+          "listFallback": "Elenco",
+          "listNotLoaded": "Elenco {id} (non caricato)",
+          "segmentLoading": "Caricamento segmenti…",
+          "segmentPick": "— scegli segmento —",
+          "segmentFallback": "Segmento",
+          "segmentNotLoaded": "Segmento {id} (non caricato)",
+          "updateIntroSub": "I campi del contatto si trovano in <link>/contacts</link>. Il numero di telefono non può essere modificato qui.",
+          "updateIntro": "Imposta <b>un campo</b> di questo contatto. Usa <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> oppure la chiave di uno dei tuoi campi personalizzati. I nodi successivi vedranno il nuovo valore.",
+          "fieldLabel": "Campo",
+          "fieldHint": "La chiave del campo, ad esempio city o email.",
+          "newValueLabel": "Nuovo valore",
+          "newValueHint": "Qualsiasi testo o {example}. Lascia vuoto per svuotare il campo (un nome non può essere svuotato).",
+          "listIntroSub": "Gestisci gli elenchi in <link>/contacts/groups</link>.",
+          "listIntro": "Aggiunge questo contatto a un <b>elenco</b> oppure lo rimuove. Un elenco modificato da un flusso non avvia i flussi “entra in un elenco / esce da un elenco”, così un flusso non può richiamare se stesso.",
+          "actionLabel": "Azione",
+          "actionAdd": "Aggiungi il contatto all'elenco",
+          "actionRemove": "Rimuovi il contatto dall'elenco",
+          "listLabel": "Elenco",
+          "inListIntro": "Si dirama in base al fatto che il contatto sia in un <b>elenco</b>: <mono>yes</mono> se lo è, <mono>no</mono> se non lo è (oppure se l'elenco non esiste più).",
+          "segmentIntroSub": "Crea i segmenti in <link>/segments</link>.",
+          "segmentIntro": "Si dirama in base al fatto che il contatto corrisponda ora a un <b>segmento</b>: <mono>yes</mono> oppure <mono>no</mono>.",
+          "segmentLabel": "Segmento",
+          "waSessionIntro": "<mono>yes</mono> quando il cliente ti ha scritto nelle ultime <b>24 ore</b>, quindi è ancora possibile inviare un messaggio normale; <mono>no</mono> quando la finestra è chiusa e solo un modello approvato può raggiungerlo.",
+          "windowLabel": "Finestra (ore)",
+          "windowHint": "La finestra di WhatsApp dura 24 ore. Usane una più breve per essere più restrittivo.",
+          "spreadsheetLabel": "Foglio di calcolo",
+          "spreadsheetHint": "Scegli un foglio dal tuo account Google collegato.",
+          "tabLabel": "Scheda (facoltativo)",
+          "tabHint": "Vuoto = la prima scheda.",
+          "matchColumnLabel": "Trova la riga in cui la colonna",
+          "matchColumnHint": "L'intestazione della colonna in cui cercare.",
+          "matchValueLabel": "è uguale a",
+          "matchValueHint": "Di solito {example}.",
+          "sheetCheckIntro": "Cerca una riga in un foglio Google e controlla una delle sue celle: <mono>yes</mono> quando la cella supera il test, <mono>no</mono> quando non lo supera, quando nessuna riga corrisponde o quando non è possibile leggere da Google.",
+          "checkColumnLabel": "Colonna da controllare",
+          "testLabel": "Test",
+          "valueLabel": "Valore",
+          "sheetContactIntro": "Cerca una riga in un foglio Google e copia le celle in <b>questo contatto</b>: una colonna per ogni campo. Aggiorna il contatto con cui parla il flusso; non crea contatti dalle nuove righe.",
+          "copyColumnsLabel": "Copia queste colonne",
+          "copyColumnsHint": "Intestazione della colonna del foglio → chiave del campo del contatto.",
+          "columnHeaderPlaceholder": "Intestazione colonna",
+          "addColumn": "Aggiungi colonna",
+          "op": {
+            "equals": "è uguale a",
+            "not_equals": "non è uguale a",
+            "contains": "contiene",
+            "not_contains": "non contiene",
+            "starts_with": "inizia con",
+            "ends_with": "finisce con",
+            "greater_than": "è maggiore di",
+            "less_than": "è minore di",
+            "is_set": "ha un valore",
+            "is_not_set": "non ha un valore",
+            "is_empty": "è vuoto",
+            "is_not_empty": "non è vuoto"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Esegue un'API salvata in <b>API Library</b> per il contatto di questa esecuzione. Esce da <mono>success</mono> quando l'API risponde con 2xx, e da <mono>error</mono> per qualsiasi altra risposta.",
+          "apiLabel": "API",
+          "loadFailed": "Non è stato possibile caricare le API salvate.",
+          "manageApis": "Gestisci API",
+          "refreshList": "Aggiorna elenco",
+          "loading": "Caricamento API…",
+          "pickApi": "— scegli un'API —",
+          "noApis": "Nessuna API salvata",
+          "loadingName": "Caricamento…",
+          "savedApiName": "API salvata",
+          "notFound": "{name} (non trovata)",
+          "variablesLabel": "Variabili",
+          "variablesHint": "Lascia vuoto un valore per usare la variabile dell'esecuzione con quel nome, poi la proprietà del contatto, poi il valore predefinito. I valori possono usare {example}.",
+          "defaultPlaceholder": "Predefinito: {value}",
+          "saveLabel": "Salva la risposta in",
+          "saveHint": "I nodi successivi leggono la risposta come <mono>{variable}</mono>, un campo come <mono>{field}</mono> e lo stato come <mono>{status}</mono>.",
+          "exposes": "Questa API espone anche <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -998,6 +1081,7 @@
         "imported": "Importati {steps, plural, one {# passaggio} other {# passaggi}} in {flows, plural, one {# flow} other {# flow}}. Controllali, poi Salva.",
         "invalidJson": "Il file non è un JSON valido.",
         "saved": "Salvato «{name}»",
+        "nodeSaved": "Nodo aggiornato con successo!",
         "saveFailed": "Salvataggio non riuscito: {error}",
         "publishedToast": "Pubblicato",
         "publishFailed": "Pubblicazione non riuscita: {error}",
@@ -1441,6 +1525,9 @@
           },
           "removeRule": "Rimuovi regola",
           "variablePlaceholder": "Nome della variabile (ad es. plan)",
+          "keyLabel": "Chiave",
+          "valueLabel": "Valore",
+          "pickProperty": "Scegli una proprietà del contatto",
           "pickVariable": "Scegli la variabile da verificare.",
           "comparePlaceholder": "Confronta con…",
           "joinerAnd": "E",
@@ -1631,6 +1718,12 @@
           "kindDocumentReport": "Documento (report PDF, ecc.)",
           "upload": "Carica",
           "uploadHint": "Fino a {mb} MB. Ospitiamo noi il file e diamo al flow un URL pubblico.",
+          "acceptedFormats": {
+            "image": "Formati accettati: JPG, PNG.",
+            "video": "Formati accettati: MP4, 3GP.",
+            "audio": "Formati accettati: MP3, AAC, AMR, OGG.",
+            "document": "Formati accettati: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Sostituisci file",
           "chooseKind": {
             "image": "Scegli un’immagine (o trascinala qui)",
@@ -1661,7 +1754,12 @@
           "igUsernameHint": "Senza la @. Il link diventa ig.me/m/yourbrand — toccandolo si apre un DM al tuo account.",
           "igMessage": "Messaggio WhatsApp",
           "igMessageHint": "Inviato al cliente su WhatsApp con il link Instagram. Supporta '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continua con noi su Instagram 👇"
+          "igMessagePlaceholder": "Continua con noi su Instagram 👇",
+          "templateFills": "Cosa riempie ogni numero",
+          "templateFillsHint": "Scrivi il testo per ogni numero del modello, oppure premi / per inserire un dato del contatto o una variabile del flusso. Lascia vuoto per usare il valore del modello.",
+          "templateHeaderMedia": "File dell'intestazione",
+          "templateHeaderMediaHint": "L'immagine, il video o il file nell'intestazione di questo modello. Serve quando il modello non ha un file proprio.",
+          "templateHeaderMediaMissing": "Aggiungi il file dell'intestazione: questo modello non ne ha uno e WhatsApp non lo invierà senza."
         },
         "sequence": {
           "info": "Ogni risposta viene inviata al cliente in ordine. Combina testo, immagini, video, audio e documenti in un solo nodo — perfetto per schede prodotto o kit di benvenuto.",
@@ -2027,7 +2125,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Attiva un altro chatbot"
+          "description": "Passa la chat a un agente IA"
         },
         "whatsapp_shop": {
           "label": "Negozio WhatsApp",
@@ -2352,6 +2450,7 @@
       },
       "validation": {
         "noIncoming": "«{node}» non ha connessioni in entrata — nulla vi conduce.",
+        "buttonNoExit": "«{node}»: il pulsante «{button}» non porta a nessun passaggio.",
         "notConnected": "«{node}» non è collegato a nulla.",
         "wrongChannel": "«{node}» non funziona su {channel} — eliminalo oppure riattiva il canale nel nodo Trigger.",
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",

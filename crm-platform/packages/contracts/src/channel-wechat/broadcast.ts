@@ -20,7 +20,7 @@ export const WECHAT_LIST_MAX = 1000;
 export const wechatChatSchema = z.object({
   openid: z.string(),
   title: z.string(),
-  lastMessageAt: z.string().datetime().nullable(),
+  lastMessageAt: z.iso.datetime().nullable(),
 });
 export type WechatChat = z.infer<typeof wechatChatSchema>;
 export const wechatChatListSchema = z.object({ data: z.array(wechatChatSchema) });
@@ -64,7 +64,7 @@ export const createWechatBroadcastSchema = z
   })
   .refine((v) => v.audience !== 'tag' || v.tagId !== undefined, {
     path: ['tagId'],
-    message: 'Enter the tag ID.',
+    error: 'Enter the tag ID.',
   });
 export type CreateWechatBroadcastInput = z.infer<typeof createWechatBroadcastSchema>;
 
@@ -79,17 +79,17 @@ export const wechatBroadcastSchema = z.object({
   massMsgId: z.string().nullable(),
   status: z.enum(WECHAT_BROADCAST_STATUSES),
   /** The picked recipients for a `list` audience; 0 for all followers and a tag (WeChat does not say how many). */
-  total: z.number().int(),
-  sent: z.number().int(),
-  failed: z.number().int(),
+  total: z.int(),
+  sent: z.int(),
+  failed: z.int(),
   lastError: z.string().nullable(),
   /** Send can be tried again: the last attempt failed, or a worker died while sending and left it stuck. */
   canRetry: z.boolean(),
   /** BL-191: the mass send waits for the workspace's quiet hours until this instant; null when it is not held. */
-  heldUntil: z.string().datetime().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  heldUntil: z.iso.datetime().nullable(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type WechatBroadcast = z.infer<typeof wechatBroadcastSchema>;
 

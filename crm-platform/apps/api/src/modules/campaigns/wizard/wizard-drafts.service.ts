@@ -79,6 +79,7 @@ export class WizardDraftsService {
     const row = await this.db.tx(async (tx) => {
       await this.plan.lockCap(tx, orgId);
       await this.plan.assertWithinCap(orgId, await this.campaigns.count(tx, orgId));
+      await this.assertNameFree(tx, orgId, draft.name, null);
       const templateId = await this.checked(tx, orgId, draft);
       const provider = await this.senders.defaultEngine(tx, orgId);
       const id = await this.campaigns.insert(
@@ -99,6 +100,24 @@ export class WizardDraftsService {
       return fresh;
     });
     return draftResponse(row);
+  }
+
+  /** A name is one workspace's alone: another campaign or draft already using it refuses the save (a blank name is the placeholder, shared). */
+  private async assertNameFree(
+    tx: Tx,
+    orgId: number,
+    name: string,
+    selfId: number | null,
+  ): Promise<void> {
+    const trimmed = name.trim();
+    if (trimmed === '') return;
+    if (await this.campaigns.nameTaken(tx, orgId, trimmed, selfId)) {
+      throw new AppError(
+        ERROR_CODES.CAMP_NAME_TAKEN,
+        'Same campaign name already exists',
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 
   async get(uuid: string): Promise<WizardDraftResponse> {
@@ -124,6 +143,7 @@ export class WizardDraftsService {
       if (locked.rowVersion !== rowVersion) throw AppError.rowVersionConflict('Broadcast draft');
 
       const draft = wizardDraftSchema.parse({ ...draftOf(locked), ...patch });
+      await this.assertNameFree(tx, orgId, draft.name, locked.id);
       const templateId = await this.checked(tx, orgId, draft);
       await this.repo.saveDraft(tx, orgId, locked.id, {
         wizard: { ...locked.wizard, draft },

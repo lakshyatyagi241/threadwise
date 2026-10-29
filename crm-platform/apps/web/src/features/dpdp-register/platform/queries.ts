@@ -23,8 +23,8 @@ export const REGISTER_KEY = ['operator', 'dpdp-register'] as const;
 /** The attestations of one check. Under `REGISTER_KEY` so one prefix covers the page. */
 export const historyKey = (checkKey: string) => [...REGISTER_KEY, 'history', checkKey] as const;
 
-type Out<T> = z.ZodType<T, z.ZodTypeDef, unknown>;
-const count = z.number().int().nonnegative();
+type Out<T> = z.ZodType<T, unknown>;
+const count = z.int().nonnegative();
 
 const attestationSchema = z.object({
   result: z.enum(['pass', 'fail']),
@@ -40,7 +40,7 @@ const checkSchema = z.object({
   source: z.enum(DPDP_CHECK_SOURCES),
   result: z.enum(DPDP_CHECK_RESULTS),
   detail: z.string(),
-  params: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+  params: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])).optional(),
   attestation: attestationSchema.optional(),
 }) satisfies Out<DpdpCheckView>;
 

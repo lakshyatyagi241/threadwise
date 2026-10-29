@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta 对已批准的模板允许每 24 小时编辑一次、每 30 天编辑十次。请稍后再试。",
       "ROW_VERSION_CONFLICT": "你在编辑时此模板已被他人更改。请刷新以查看最新版本,然后重新应用你的更改。",
       "VALIDATION_FAILED": "部分字段无效。请检查下方字段。",
-      "INTERNAL": "服务器无法处理此请求。请稍后重试。"
+      "INTERNAL": "服务器无法处理此请求。请稍后重试。",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "预览",
@@ -375,13 +382,18 @@
           "flowIdRequired": "请输入 Flow ID。",
           "flowIdInvalid": "Flow ID 必须是数字。",
           "screenRequired": "请输入页面 ID。",
-          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。"
+          "catalogAlone": "商品目录按钮不能与其他按钮组合使用。",
+          "flowIdNotMeta": "此表单还不是 Meta Flow（其 Flow ID 不是数字）。请打开 WhatsApp 表单，保存并发布后，再在此选择。"
         },
         "catalogHint": "打开你的 WhatsApp 商品目录。按钮显示“查看商品目录”，且必须是唯一的按钮。",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "已发布的 WhatsApp Flow 的数字 ID，可在 Meta 的 Flows 管理器中查看。",
-        "screen": "起始页面",
-        "screenHint": "表单打开时显示的页面 ID，例如 WELCOME。"
+        "flowPick": "WhatsApp 表单",
+        "flowPickHint": "从已发布的 WhatsApp 表单中选择一个。按钮会在 WhatsApp 内打开它。",
+        "flowChoose": "选择 WhatsApp 表单",
+        "flowLoading": "正在加载表单…",
+        "flowNone": "你还没有已发布的 WhatsApp 表单。",
+        "flowNoneLink": "创建并发布一个",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title}（请先发布到 Meta）"
       },
       "result": {
         "metaRefused": "已保存,但 Meta 拒绝了该模板。",
@@ -413,6 +425,7 @@
         "format": "卡片显示",
         "formatImage": "图片",
         "formatVideo": "视频",
+        "limits": "图片最大 5 MB,视频最大 16 MB。",
         "count": "{used}/{max} 张卡片",
         "add": "添加卡片",
         "needTwo": "轮播至少需要 {min} 张卡片。",
@@ -425,7 +438,9 @@
         "buttons": "按钮",
         "buttonText": "按钮文字",
         "buttonUrl": "网站链接",
-        "buttonPhone": "电话号码"
+        "buttonPhone": "电话号码",
+        "moveUp": "将卡片 {n} 上移",
+        "moveDown": "将卡片 {n} 下移"
       },
       "offer": {
         "title": "限时优惠",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "此类别不允许使用营销用语。",
         "TAG_CONTENT_MISMATCH": "类别与内容不符（例如在 UTILITY 模板中使用促销文案）。",
         "SCAM": "Meta 将此模板标记为潜在诈骗。请检查声明和措辞。"
+      },
+      "stats": {
+        "title": "此模板的效果",
+        "hint": "根据用此模板发送的消息统计",
+        "loading": "正在加载数据",
+        "error": "无法加载数据。",
+        "none": "此模板还没有发送过任何消息。",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "read": "已读",
+        "replied": "已回复",
+        "failed": "失败",
+        "percent": "{value}%",
+        "footer": "此模板已发送 {total} 条消息，{queued} 条仍在等待",
+        "lastSent": "最近发送 {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "语气",
       "pickTone": "选择语气",
       "language": "语言",
-      "languageHint": "草稿将使用表单所用的语言撰写。",
+      "languageHint": "可选择 Meta 支持的任意语言。草稿将用该语言撰写，模板也采用该语言。",
       "notes": "自定义提示",
       "notesNote": "选填 / 最多 2000 字",
       "notesPlaceholder": "您希望包含的具体内容：变量、链接、必须使用的措辞、需要避免的内容…",

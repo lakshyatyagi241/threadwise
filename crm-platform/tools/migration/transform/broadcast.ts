@@ -7,6 +7,7 @@ import {
   classifyRecipient,
   errorParts,
   intOf,
+  minorOf,
   moneyString,
   nameOf,
   utcDate,
@@ -32,6 +33,8 @@ const NOT_PRESENT = 'NOT PRESENT: no column in wpcampaigns / wp_campaign_contact
 export const CAMPAIGN_FIELDS: FieldMap = {
   _id: 'id (wpcampaigns.uuid is derived from it; registered in migration.id_map)',
   id: 'id (registered in migration.id_map: the recipient rows reference the campaign by it)',
+  broadcast_action:
+    'drop:the action a broadcast was started with (send now, schedule) has no column; the status and dates are kept',
   broadcast_id:
     'id (registered in migration.id_map: the recipient rows reference the campaign by it)',
   broadcast_name: 'col:campaign_name',
@@ -64,13 +67,14 @@ export const CAMPAIGN_FIELDS: FieldMap = {
   last_retry: `drop:${NOT_PRESENT}; retry bookkeeping`,
   broadcast_template_id:
     'col:template_id (the Waboo template id, matched to the migrated wa_templates row through migration.id_map; see broadcast/template-link.ts)',
-  broadcast_template_name:
-    `drop:${NOT_PRESENT}; the name must equal the linked template's name (else CONFLICT, template_id NULL); kept in quarantine TEMPLATE_UNLINKED when unlinked`,
+  broadcast_template_name: `drop:${NOT_PRESENT}; the name must equal the linked template's name (else CONFLICT, template_id NULL); kept in quarantine TEMPLATE_UNLINKED when unlinked`,
   broadcast_template_type: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   broadcast_template_category: `drop:${NOT_PRESENT}; kept in quarantine TEMPLATE_UNLINKED when unlinked (proposal P1)`,
   sender_number: `drop:${NOT_PRESENT} (device_id points into wa_provider_configs); kept in quarantine SENDER_NUMBER (proposal P1)`,
-  billable_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
-  refunded_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
+  billable_amount:
+    'col:legacy_billed_minor (hundredths, rounded half up: what the campaign shows as its cost, less the refund, when it has no usage charges); also kept as a string in quarantine COST_FIELDS',
+  refunded_amount:
+    'col:legacy_refunded_minor (hundredths, rounded half up); also kept as a string in quarantine COST_FIELDS',
   reseller_amount: `drop:${NOT_PRESENT}; money belongs to the credits step; kept as a string in quarantine COST_FIELDS`,
   filter_query: `drop:${NOT_PRESENT}; Waboo filter DSL (wpcampaigns.wizard is the wizard's own contract and must not hold it; proposal P1)`,
   mongodb_query: `drop:${NOT_PRESENT}; raw Mongo query (proposal P1)`,
@@ -113,6 +117,10 @@ export const RECIPIENT_FIELDS: FieldMap = {
   reverted_at: `drop:${NOT_PRESENT}; refund time, credits step`,
   refund_run_id: `drop:${NOT_PRESENT}; refund run, credits step`,
   interakt_reponse_time: 'drop:telemetry of the Waboo sender',
+  phone_number_id:
+    'drop:the Meta id of the sending phone number; the number is linked by the channel map (the provider config), not copied onto a recipient',
+  meta_pricing:
+    "drop:Meta's price breakdown of the send; the money is kept by the credits step (amount and cost on the usage charge)",
   template_id: `drop:${NOT_PRESENT}; wp_campaign_contacts has no template column: the recipient points at its campaign, which carries the template (the value equals the campaign's on every campaign checked)`,
   meta_template_id: `drop:${NOT_PRESENT}; read (not stored) to confirm / find the campaign's template (broadcast/template-link.ts)`,
   template_category: `drop:${NOT_PRESENT}; Meta category of the send (proposal P1)`,
@@ -234,6 +242,8 @@ export const campaigns: HandlerSpec = {
         c('read_count', 'integer'),
         c('responded_count', 'integer'),
         c('retry_enabled', 'boolean'),
+        c('legacy_billed_minor', 'bigint'),
+        c('legacy_refunded_minor', 'bigint'),
         c('created_at', 'timestamptz'),
         c('updated_at', 'timestamptz'),
       ],
@@ -389,6 +399,8 @@ export const campaigns: HandlerSpec = {
       read_count: agg.read,
       responded_count: agg.responded,
       retry_enabled: false,
+      legacy_billed_minor: minorOf(money.billable_amount),
+      legacy_refunded_minor: minorOf(money.refunded_amount),
       created_at: t.created,
       updated_at: t.updated,
     };
@@ -434,7 +446,10 @@ export const recipients: HandlerSpec = {
   fields: RECIPIENT_FIELDS,
   // `update` mode: a recipient's delivery status moves on (sent -> delivered -> read) after the first load. retry_count is never written (nor
   // are next_attempt_at / retry_*: they are not columns of this step); a failed row keeps send_attempts >= 3 so the sweeper skips it
-  update: { ignore: ['retry_count'], allow: { status: ['sent', 'delivered', 'read', 'responded', 'failed'] } },
+  update: {
+    ignore: ['retry_count'],
+    allow: { status: ['sent', 'delivered', 'read', 'responded', 'failed'] },
+  },
   tables: {
     wp_campaign_contacts: {
       columns: [

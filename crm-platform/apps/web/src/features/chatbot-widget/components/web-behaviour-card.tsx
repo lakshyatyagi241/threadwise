@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { CHAT_AUTO_OPEN_MAX, LAUNCHER_LIMITS, WIDGET_LIMITS } from '@crm/contracts';
+import { CHAT_AUTO_OPEN_MAX, LAUNCHER_LIMITS } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { ConsentNoticeEditor } from '@/features/contact-consent';
 import type { BuilderState } from '../lib/builder-model';
@@ -15,20 +15,18 @@ const CAPTION =
   'mb-2 block text-[11px] font-extrabold uppercase tracking-wider text-muted-foreground';
 
 /**
- * How a website bot's chat window behaves: the opening message, what it asks the visitor first, when it opens by itself, the
+ * How a website bot's chat window behaves: what it asks the visitor first, when it opens by itself, the
  * sound, the voice (listening and reading aloud) and the devices it shows on.
  */
 export function WebBehaviourCard({
   s,
   set,
-  flash,
   domains,
   onDomains,
   widgetId = null,
 }: {
   s: BuilderState;
   set: (patch: Partial<BuilderState>) => void;
-  flash: string | null;
   /** The websites the chat may show on; empty means any. */
   domains: string[];
   onDomains: (next: string[]) => void;
@@ -43,22 +41,6 @@ export function WebBehaviourCard({
     set({ launcher: { ...s.launcher, chat: { ...chat, ...patch } } });
   return (
     <div data-testid="web-behaviour-card" className="space-y-6">
-      <div>
-        <label htmlFor="wgt-f-welcomeMessage" className={CAPTION}>
-          {tv('opening')}
-        </label>
-        <textarea
-          id="wgt-f-welcomeMessage"
-          rows={3}
-          value={s.welcomeMessage}
-          maxLength={WIDGET_LIMITS.longText}
-          placeholder={tv('openingPlaceholder')}
-          aria-invalid={flash === 'welcomeMessage' || undefined}
-          onChange={(e) => set({ welcomeMessage: e.target.value })}
-          className={cn(INPUT, flash === 'welcomeMessage' && 'border-danger')}
-        />
-      </div>
-
       <div>
         <span className={CAPTION}>{tv('intake')}</span>
         <div className="space-y-1">

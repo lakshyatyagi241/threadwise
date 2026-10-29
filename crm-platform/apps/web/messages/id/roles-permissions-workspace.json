@@ -172,7 +172,8 @@
         "type": "Jenis",
         "members": "Anggota",
         "permissions": "Izin",
-        "lastEdited": "Terakhir diubah",
+        "lastEdited": "Terakhir diubah pada",
+        "lastEditedBy": "oleh {name}",
         "actions": "Tindakan"
       },
       "row": {

@@ -210,6 +210,7 @@ export function toDetail(row: TemplateRow): TemplateDetail {
   return {
     ...toSummary(row),
     headerLocation: locationOf(row),
+    headerMediaKey: row.headerMediaKey,
     variableMap: variableMapOf(row),
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),

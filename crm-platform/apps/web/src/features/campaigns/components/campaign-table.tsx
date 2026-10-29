@@ -138,6 +138,7 @@ export function CampaignTable({
                 <td className="max-w-[16rem] px-3 py-3">
                   <Link
                     href={wizardDraft ? editHref : `/campaigns/${c.id}`}
+                    title={c.name}
                     className="block truncate font-semibold hover:underline"
                   >
                     {c.name}
@@ -169,7 +170,7 @@ export function CampaignTable({
                 <td className="whitespace-nowrap px-3 py-3 font-mono text-[11px] text-muted-foreground">
                   {c.scheduleType === 'scheduled' && c.sendDate
                     ? `${c.sendDate}${c.sendTime ? ` · ${c.sendTime}` : ''}`
-                    : c.createdAt.slice(0, 10)}
+                    : '—'}
                 </td>
                 <td className="px-3 py-3">
                   <div className="flex items-center justify-end gap-1.5">

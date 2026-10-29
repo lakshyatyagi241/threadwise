@@ -1,7 +1,10 @@
 import { createHmac } from 'node:crypto';
+import { request as httpRequest, type ClientRequest, type IncomingMessage } from 'node:http';
+import { request as httpsRequest, type RequestOptions } from 'node:https';
+import { isIP } from 'node:net';
 import { Inject, Injectable, Optional } from '@nestjs/common';
 import { recipePlaceholdersOf, type MarketRecipe, type PullWindow } from '@crm/contracts';
-import { assertPublicUrl } from '../whatsapp-cloud-api-waba/provider-url-guard';
+import { resolvePublicUrl } from '../whatsapp-cloud-api-waba/provider-url-guard';
 import {
   ConnectorError,
   type ConnectorContext,
@@ -29,6 +32,8 @@ export type FetchLike = (
     signal?: AbortSignal;
     /** A redirect is never followed: the host the recipe names is the only host this connector talks to. */
     redirect?: 'manual';
+    /** The address the guard approved for this host: the connection goes there and nowhere else (#1272). */
+    pinAddress?: string;
   },
 ) => Promise<{
   status: number;
@@ -40,8 +45,11 @@ export type FetchLike = (
 }>;
 export const MARKET_FETCH = Symbol('MARKET_FETCH');
 
-/** Checks where a host name points, right before the call. Replaced in tests. */
-export type UrlGuard = (url: string) => Promise<void>;
+/**
+ * Checks where a host name points, right before the call, and returns the address it approved (null in development, where no check runs).
+ * Replaced in tests.
+ */
+export type UrlGuard = (url: string) => Promise<string | null>;
 export const MARKET_URL_GUARD = Symbol('MARKET_URL_GUARD');
 
 /** Waits between the pages of one poll (the portal's requests-per-minute limit). Replaced in tests. */
@@ -62,8 +70,89 @@ type Vars = {
   window_end?: string;
 };
 
+type OpenRequest = (options: RequestOptions, cb: (res: IncomingMessage) => void) => ClientRequest;
+
+/**
+ * The same request, connected to the address the guard approved and to no other. The client's own lookup would be a second answer from the
+ * name, which a rebinding DNS server can make private (#1272). The name still goes out as the Host header and as the TLS server name, so
+ * the certificate is checked for the host the recipe names. Redirects are not followed. The answer is read only up to the cap.
+ */
+export function pinnedFetch(
+  url: string,
+  init: Parameters<FetchLike>[1],
+  address: string,
+): ReturnType<FetchLike> {
+  const u = new URL(url);
+  // The guard only lets https through; plain http exists so the connection can be tested against a local server.
+  const open: OpenRequest =
+    u.protocol === 'https:' ? (httpsRequest as OpenRequest) : (httpRequest as OpenRequest);
+  return new Promise((resolve, reject) => {
+    const req = open(
+      {
+        hostname: u.hostname,
+        port: u.port || undefined,
+        path: `${u.pathname}${u.search}`,
+        method: init.method,
+        headers: init.headers,
+        signal: init.signal,
+        lookup: (
+          _host: string,
+          options: { all?: boolean },
+          cb: (err: null, a: unknown, family?: number) => void,
+        ) => {
+          const family = isIP(address);
+          if (options.all) cb(null, [{ address, family }]);
+          else cb(null, address, family);
+        },
+      } as RequestOptions,
+      (res: IncomingMessage) => {
+        const chunks: Buffer[] = [];
+        let bytes = 0;
+        let truncated = false;
+        let finish = (): void => undefined;
+        const body = new Promise<string>((ok, bad) => {
+          finish = () => ok(Buffer.concat(chunks).toString('utf8'));
+          res.on('data', (chunk: Buffer) => {
+            if (truncated) return;
+            const room = MAX_RESPONSE_BYTES - bytes;
+            if (chunk.length > room) {
+              chunks.push(chunk.subarray(0, room));
+              bytes = MAX_RESPONSE_BYTES;
+              truncated = true;
+              res.destroy();
+              finish();
+              return;
+            }
+            chunks.push(chunk);
+            bytes += chunk.length;
+          });
+          res.on('end', () => finish());
+          res.on('error', (err) => (truncated ? finish() : bad(err)));
+        });
+        resolve({
+          status: res.statusCode ?? 0,
+          text: () => body,
+          headers: {
+            get: (name: string) => {
+              const v = res.headers[name.toLowerCase()];
+              return Array.isArray(v) ? (v[0] ?? null) : (v ?? null);
+            },
+          },
+          get truncated() {
+            return truncated;
+          },
+        });
+      },
+    );
+    req.on('error', reject);
+    if (init.body !== undefined) req.write(init.body);
+    req.end();
+  });
+}
+
 /** The real `fetch`, with the answer read only up to the cap (a hostile or broken portal cannot make a worker hold a huge body). */
 async function boundedFetch(url: string, init: Parameters<FetchLike>[1]): ReturnType<FetchLike> {
+  if (init.pinAddress !== undefined) return pinnedFetch(url, init, init.pinAddress);
   const res = await fetch(url, { ...init, redirect: 'manual' });
   let text = '';
   let truncated = false;
@@ -241,7 +330,7 @@ export class PullConnector implements PullConnectorType, InboundConnectorType {
     @Optional() @Inject(MARKET_SLEEP) sleep?: Sleep,
   ) {
     this.fetchImpl = fetchImpl ?? boundedFetch;
-    this.guard = guard ?? ((url) => assertPublicUrl(url));
+    this.guard = guard ?? ((url) => resolvePublicUrl(url));
     this.sleep = sleep ?? ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
   }
 
@@ -446,8 +535,10 @@ export class PullConnector implements PullConnectorType, InboundConnectorType {
     }
 
     // Right before the connection, not only when the recipe was saved; and the host is the recipe's own host, nothing a value could change.
+    // The address the check approved is the one the connection uses (#1272).
+    let pinAddress: string | null = null;
     try {
-      await this.guard(c.request.baseUrl);
+      pinAddress = await this.guard(c.request.baseUrl);
       if (new URL(url).hostname !== new URL(c.request.baseUrl).hostname) throw new Error('host');
     } catch {
       throw new ConnectorError('url_refused', 'The portal address is not allowed.', false, 'error');
@@ -466,6 +557,7 @@ export class PullConnector implements PullConnectorType, InboundConnectorType {
         body,
         signal: abort.signal,
         redirect: 'manual',
+        ...(pinAddress !== null ? { pinAddress } : {}),
       });
       status = res.status;
       text = (await res.text()).slice(0, MAX_RESPONSE_BYTES);

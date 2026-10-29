@@ -62,6 +62,8 @@ const FLOW =
 const NODE_FIELDS: FieldMap = {
   _id: 'id (registered in migration.id_map; points at the flow the step went into)',
   id: 'id (registered in migration.id_map)',
+  response_hindi:
+    'drop:the Hindi copy of a reply has no column; the app keeps one language per reply here',
   botid: 'the bot (one flow per bot)',
   nodeId: `flows.flow_data: the step id (n_ + the first 8 characters)`,
   version_id: 'selects the latest version',
@@ -242,6 +244,10 @@ for (const k of [
 CONFIG_FIELDS.ai_configuration =
   'chatbot_widgets.mode and ai_chat_assistants (model, prompt, temperature); apiKeys / openRouterKey / normalKey are NEVER copied';
 CONFIG_FIELDS['ai_configuration '] = CONFIG_FIELDS.ai_configuration; // a key with a trailing space exists at the source
+CONFIG_FIELDS.auto_assignment =
+  'drop:the auto-assignment switch is the workspace routing rule (routing_rules), set by the settings step';
+CONFIG_FIELDS.enable_sentiment_intent_analytics =
+  'drop:the sentiment and intent analytics switch has no column in the app';
 export const THEME_FIELDS: FieldMap = {
   _id: 'id (registered in migration.id_map)',
   id: 'id (registered in migration.id_map)',
@@ -311,6 +317,7 @@ export const flowBots: HandlerSpec = {
         c('trigger_config', 'jsonb'),
         c('provider', 'text'),
         c('flow_type', 'text'),
+        c('builder', 'text'),
         c('is_published', 'boolean'),
         c('is_active', 'boolean'),
         c('published_at', 'timestamptz'),
@@ -318,6 +325,9 @@ export const flowBots: HandlerSpec = {
         c('updated_at', 'timestamptz'),
       ],
       constants: FLOW_CONSTANTS,
+      // the flow-state step arms the live flows (is_published, is_active, published_at) and its UPDATE moves updated_at and row_version: the
+      // step's run record (migration.run_log _flows) is the check for those columns
+      skipCompare: ['is_published', 'is_active', 'published_at', 'updated_at', 'row_version'],
       // what the live application changes once people work in the app (publish, edit, bind a channel)
       liveColumns: [
         'flow_name',
@@ -551,7 +561,11 @@ export const widgetAssistants: HandlerSpec = {
       kind: 'rows',
       // the bot's "did not understand" reply lives on the agent now (the FAQ engine's faq_settings.fallback_message is retired)
       rows: [
-        { table: 'ai_chat_assistants', sub: '', row: { ...w.assistant, fallback_message: w.fallback } },
+        {
+          table: 'ai_chat_assistants',
+          sub: '',
+          row: { ...w.assistant, fallback_message: w.fallback },
+        },
       ],
     };
   },

@@ -31,7 +31,8 @@ import {
   previousWindow,
   recipientTimeline,
   resolveWindow,
-  safeZone,
+  chartZone,
+  volumeSeriesFrom,
   toHistoryRow,
   type HistoryContext,
   type FeedRollup,
@@ -51,7 +52,6 @@ import { visibleToJoinedSql } from './visibility-sql';
 export const PERM_HISTORY_READ = 'msg.history.read';
 const PERM_CONTACTS_READ = 'record.contacts.read';
 const PERM_WALLET_STATEMENT = 'wallet.statement.read';
-const DAY_MS = 86_400_000;
 const isEmpty = (o: object): boolean => Object.keys(o).length === 0;
 
 /** Structural equality of two summaries, leaving out one key. */
@@ -137,12 +137,8 @@ export class MessageHistoryService {
     const ctx = RequestContextStore.require();
     const window = this.windowOf(query, now);
     const sel = selectionOf(query, window);
-    const tz = safeZone(query.tz);
-    // Reference's hourly view is the last 24 hours, whatever the range.
-    const seriesFrom =
-      query.bucket === 'hourly'
-        ? new Date(Math.max(window.from.getTime(), window.to.getTime() - DAY_MS))
-        : window.from;
+    const tz = chartZone(query);
+    const seriesFrom = volumeSeriesFrom(query, query.bucket, window, now, tz);
     const out = await this.db.tx(async (tx) => {
       const hc = await this.context(tx, ctx);
       const o = { bucket: query.bucket, tz, seriesFrom };

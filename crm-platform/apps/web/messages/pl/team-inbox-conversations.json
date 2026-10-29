@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wróci {time}",
       "erased": "Usunięte kontakty",
-      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby i treści wiadomości. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
+      "erasedHint": "Te kontakty zostały usunięte, a ich rozmowy zachowano bez danych osoby. Czasy pokazują ostatnią wiadomość, ponieważ data usunięcia nie jest zapisywana.",
       "erasedTitle": "Usunięty kontakt"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Pochodzi z reklamy lub linku",
       "sentIn": "Wysłano w języku: {lang}. Pokaż tekst, który napisałeś",
       "translatedFrom": "Przetłumaczono z języka: {lang}. Pokaż oryginał",
+      "translationFailed": "Wysłano bez tłumaczenia. Tłumaczenie się nie powiodło, więc tekst został wysłany tak, jak go napisano.",
       "bot": "Bot",
       "broadcast": "Wiadomość masowa",
       "reacted": "Reakcja {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Zakończone",
           "closed": "Zamknięte",
           "spam": "Spam"
-        }
+        },
+        "created": "Rozpoczęta {date}",
+        "showMore": "Pokaż jeszcze {count}",
+        "showLess": "Pokaż mniej"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Nieoficjalny",
       "officialFull": "Oficjalny (WhatsApp Cloud API)",
       "unofficialFull": "Nieoficjalny (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Wcześniejsze wątki",
+      "began": "Rozpoczęty {date}",
+      "showMore": "Pokaż jeszcze {count}",
+      "showLess": "Pokaż mniej",
+      "loading": "Ładowanie…",
+      "failed": "Nie udało się wczytać tego wątku.",
+      "unknown": "Nieznany nadawca",
+      "openThread": "Otwórz wątek"
     }
   }
 }

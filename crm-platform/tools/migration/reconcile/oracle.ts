@@ -9,14 +9,52 @@ type Doc = Record<string, unknown>;
 /** Written from the README ("Contact properties"), not imported from the transform: the two timestamp properties shown as read-only fields. */
 const TIME_NAMES = ['created_time', 'modified_time'];
 /** the verifier's own copy: system properties the old contact page showed (README, "Contact properties"), and the three that hold a name or a label */
-const VISIBLE_SYSTEM_NAMES = ['original_lifecycle_stage', 'original_lifecycle_stage_date', 'created_by', 'updated_by', 'chatbot_language'];
+const VISIBLE_SYSTEM_NAMES = [
+  'original_lifecycle_stage',
+  'original_lifecycle_stage_date',
+  'created_by',
+  'updated_by',
+  'chatbot_language',
+];
 const NAME_VALUED_NAMES = ['original_lifecycle_stage', 'created_by', 'updated_by'];
+
+/** Written from the README ("Contact properties"), not imported from the transform: the Waboo property names the app reserves; they are created with a waboo_ prefix. */
+const RESERVED_RENAMED = [
+  'business_name',
+  'company_name',
+  'contact_group',
+  'mobile',
+  'name',
+  'phone_number',
+  'tags',
+  'today',
+  'uuid',
+];
 
 /** Written from the README ("Contact properties"), not imported from the transform: the Waboo web-analytics property names that become ordinary fields. */
 const WEB_ANALYTICS_NAMES = [
-  'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url', 'utm_medium', 'utm_campaign', 'utm_source',
-  'device_type', 'device_model', 'operating_system', 'operating_system_name', 'browser_version', 'browser_name',
-  'ip_continent', 'ip_country_region', 'ip_state_region', 'ip_city', 'channel', 'bot_name', 'module_type', 'module_name', 'platform',
+  'referrer',
+  'referrer_name',
+  'referrer_keyword',
+  'referrer_url',
+  'utm_medium',
+  'utm_campaign',
+  'utm_source',
+  'device_type',
+  'device_model',
+  'operating_system',
+  'operating_system_name',
+  'browser_version',
+  'browser_name',
+  'ip_continent',
+  'ip_country_region',
+  'ip_state_region',
+  'ip_city',
+  'channel',
+  'bot_name',
+  'module_type',
+  'module_name',
+  'platform',
 ];
 
 export const text = (v: unknown): string => (v === null || v === undefined ? '' : String(v).trim());
@@ -46,7 +84,9 @@ export function dateOf(v: unknown): Date | null {
     const t = v.trim();
     const d = /^\d{9,13}$/.test(t)
       ? new Date(Number(t) < 1e11 ? Number(t) * 1000 : Number(t))
-      : new Date(/^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(t) ? `${t.replace(' ', 'T')}Z` : t);
+      : new Date(
+          /^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(t) ? `${t.replace(' ', 'T')}Z` : t,
+        );
     return Number.isNaN(d.getTime()) ? null : d;
   }
   return null;
@@ -349,19 +389,31 @@ export class TableOracle {
           ...this.dates(doc),
         };
       case 'fields': {
-        const key = text(doc.name);
+        const name = text(doc.name);
+        // the app reserves these keys: the migration creates them as waboo_<key> (transform/contacts.ts RESERVED_PROPERTY_KEYS)
+        const key = RESERVED_RENAMED.includes(name) ? `waboo_${name}` : name;
         return {
           module_key: 'contacts',
           key,
-          label: text(doc.label) || key,
-          field_type: NAME_VALUED_NAMES.includes(key) ? 'text' : (FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text'),
+          label: text(doc.label) || name,
+          field_type: NAME_VALUED_NAMES.includes(name)
+            ? 'text'
+            : (FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text'),
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
-          is_read_only: TIME_NAMES.includes(String(doc.name)) ? true : truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
+          // the web-analytics properties are read-only in WaDesk (2029_web_analytics_fields_read_only; the tool writes the same flag)
+          is_read_only:
+            TIME_NAMES.includes(name) || WEB_ANALYTICS_NAMES.includes(name)
+              ? true
+              : truthy(doc.read_only),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
           // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
-          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)) && !TIME_NAMES.includes(String(doc.name)) && !VISIBLE_SYSTEM_NAMES.includes(String(doc.name)),
+          is_system:
+            truthy(doc.system_default) &&
+            !WEB_ANALYTICS_NAMES.includes(String(doc.name)) &&
+            !TIME_NAMES.includes(String(doc.name)) &&
+            !VISIBLE_SYSTEM_NAMES.includes(String(doc.name)),
           is_active: true,
           position: Number(doc.position) || 0,
           ...this.dates(doc),

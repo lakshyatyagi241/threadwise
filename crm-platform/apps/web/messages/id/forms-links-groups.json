@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Tautan ini sedang dijeda atau sudah kedaluwarsa.",
       "ROW_VERSION_CONFLICT": "Data ini telah diubah di tempat lain. Muat ulang dan coba lagi.",
       "VALIDATION_FAILED": "Periksa kolom yang disorot dan coba lagi.",
-      "PLAN_FEATURE_LOCKED": "Tingkatkan paket Anda untuk menggunakan fitur ini."
+      "PLAN_FEATURE_LOCKED": "Tingkatkan paket Anda untuk menggunakan fitur ini.",
+      "WFL_FORM_SYNC_FAILED": "Tidak dapat membaca formulir dari Meta."
     },
     "forms": {
       "heading": "Formulir WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Belum ada formulir",
-        "description": "Buat formulir, lalu kirim dari langkah Formulir WhatsApp dalam sebuah flow."
+        "description": "Buat formulir, lalu kirim dari langkah Formulir WhatsApp dalam sebuah flow.",
+        "noMatch": "Tidak ada formulir yang cocok dengan “{q}”."
       },
       "table": {
         "form": "Formulir",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "Tersimpan.",
-        "published": "Diterbitkan ke WhatsApp."
+        "published": "Diterbitkan ke WhatsApp.",
+        "connectHint": "Formulir hanya dipublikasikan lewat koneksi langsung WhatsApp Cloud API. Minta admin menghubungkannya di Saluran → WhatsApp.",
+        "connectLink": "Buka saluran WhatsApp"
       },
       "builder": {
         "back": "Kembali ke formulir",
@@ -143,6 +147,14 @@
           "contact": "Kontak",
           "phone": "Telepon"
         }
+      },
+      "sync": {
+        "cta": "Sinkronkan dengan Meta",
+        "syncing": "Menyinkronkan…",
+        "done": "Disinkronkan dengan Meta: {checked} diperiksa, {updated} diperbarui, {missing} tidak ditemukan di Meta, {metaOnly} hanya di Meta."
+      },
+      "search": {
+        "placeholder": "Cari formulir"
       }
     },
     "links": {

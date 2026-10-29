@@ -38,7 +38,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
     ).toBe(false);
   });
 
-  it('a Facebook flow lists exactly the shared nodes plus the five fb_ nodes', () => {
+  it('a Facebook flow lists exactly the shared nodes (API from library left out: WhatsApp and website only) plus the five fb_ nodes', () => {
     expect(ids('facebook').sort()).toEqual(
       [
         'trigger',

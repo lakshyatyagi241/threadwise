@@ -64,9 +64,9 @@ function LogLine({ event: e, last }: { event: MessageLogEvent; last: boolean }) 
             {e.providerMessageId}
           </p>
         )}
-        {ignored && <p className="text-xs italic text-muted-foreground">{t('notApplied')}</p>}
+        {ignored && <p className="text-xs text-muted-foreground">{t('notApplied')}</p>}
         {e.replayed === true && (
-          <p className="text-xs italic text-muted-foreground">{t('replayed')}</p>
+          <p className="text-xs text-muted-foreground">{t('replayed')}</p>
         )}
         {e.event === 'retry' && typeof e.detail.previousProviderMessageId === 'string' && (
           <p className="text-xs text-muted-foreground">{t('resent')}</p>

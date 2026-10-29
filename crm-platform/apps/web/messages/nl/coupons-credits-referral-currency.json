@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "leeg = onbeperkt",
           "maxUsesHint": "Over alle klanten heen.",
           "perUser": "Limiet per gebruiker",
-          "perUserHint": "Aantal toegestane inwisselingen per klant.",
+          "perUserHint": "Aantal keer dat een klant de code mag gebruiken, over alle werkruimten heen.",
           "firstPurchaseTitle": "Alleen eerste aankoop",
-          "firstPurchaseHint": "Alleen workspaces die nog geen betaalde bestelling hebben geplaatst",
+          "firstPurchaseHint": "Alleen kopers die in geen enkele werkruimte een betaalde bestelling hebben geplaatst",
           "stackableTitle": "Te combineren met andere coupons",
           "stackableHint": "Laat klanten hem naast een andere actieve code gebruiken bij het afrekenen"
         }

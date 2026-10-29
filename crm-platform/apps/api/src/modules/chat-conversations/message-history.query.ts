@@ -4,6 +4,7 @@ import { rawIdentifier } from '../../common/sql/identifier';
 import {
   likeEscape,
   phoneNeedle,
+  sourceFilterValues,
   typeFilterParts,
   type HistoryCursor,
   type HistoryWindow,
@@ -204,32 +205,41 @@ function narrowConditions(ctx: HistoryContext, sel: HistorySelection, b: BranchR
   if (source && source.length > 0) {
     out.push(
       sql`${b.source} IN (${sql.join(
-        source.map((s) => sql`${s}`),
+        sourceFilterValues(source).map((s) => sql`${s}`),
         sql`, `,
       )})`,
     );
   }
   if (type) {
     const p = typeFilterParts(type);
-    if (p.entity) {
-      // The three automated sources are their own type. A message branch can carry a broadcast (another channel's sender).
+    if (p.entities && p.sources) {
+      // The automated sources are their own type. A message branch can carry a broadcast (another channel's sender).
+      const sources = p.sources;
+      const entities: readonly string[] = p.entities;
       out.push(
         b.entity === 'message'
-          ? sql`${b.source} = ${p.source ?? p.entity}`
-          : b.entity === p.entity
+          ? sql`${b.source} IN (${sql.join(
+              sources.map((x) => sql`${x}`),
+              sql`, `,
+            )})`
+          : entities.includes(b.entity)
             ? sql`TRUE`
             : none,
       );
     } else if (p.source) {
       out.push(b.entity === 'message' ? sql`${b.source} = ${p.source}` : none);
     } else if (p.kinds) {
+      const kinds = sql`${b.kind} IN (${sql.join(
+        p.kinds.map((k) => sql`${k}`),
+        sql`, `,
+      )})`;
+      // A wizard test send is a plain text or template message too, so those filters keep it.
       out.push(
         b.entity === 'message'
-          ? sql`${b.kind} IN (${sql.join(
-              p.kinds.map((k) => sql`${k}`),
-              sql`, `,
-            )}) AND ${b.source} NOT IN ('auto_reply', 'broadcast')`
-          : none,
+          ? sql`${kinds} AND ${b.source} NOT IN ('auto_reply', 'broadcast')`
+          : b.entity === 'test'
+            ? kinds
+            : none,
       );
     }
   }
@@ -711,7 +721,7 @@ function testBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions
     source: sql`'broadcast_test'`,
     kind: sql`CASE WHEN tt.template_id IS NULL THEN 'text' ELSE 'template' END`,
     names: [sql`k.campaign_name`],
-    text: null,
+    text: sql`tt.rendered_body`,
     phoneDigits: phone,
     phoneOpen: contactOpen(ctx, null),
     templateMatch: (t) => sql`tt.template_id = ${t}`,
@@ -743,7 +753,7 @@ function testBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions
     channel_uuid: sql`NULL::uuid`,
     channel_kind: sql`NULL::text`,
     channel_name: sql`NULL::text`,
-    body: sql`NULL::text`,
+    body: sql`tt.rendered_body`,
     media_name: sql`NULL::text`,
     template_uuid: sql`t.uuid`,
     template_name: sql`t.template_name`,

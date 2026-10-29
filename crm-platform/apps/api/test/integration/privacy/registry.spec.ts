@@ -321,8 +321,12 @@ function checkLink(
 
 function anonymiseOf(spec: TableSpec): Readonly<Record<string, Replacement>> {
   if (spec.disposition === 'anonymise') return spec.set;
-  if (spec.disposition === 'delete' && spec.whenAnonymising && spec.whenAnonymising !== 'keep')
-    return spec.whenAnonymising;
+  if (spec.disposition === 'delete') {
+    const sets = [spec.whenAnonymising, spec.whenKeepingText].filter(
+      (x): x is Readonly<Record<string, Replacement>> => !!x && x !== 'keep',
+    );
+    return Object.assign({}, ...sets);
+  }
   return {};
 }
 

@@ -99,6 +99,7 @@
       "triggerGroup": "自动 · 加入群组时",
       "triggerManual": "手动加入",
       "triggerKeyword": "关键词",
+      "triggerAny": "任意消息",
       "active": "进行中",
       "done": "已完成",
       "failed": "失败",
@@ -130,7 +131,10 @@
         "reEngagement": "通过个性化优惠或问候重新激活沉睡联系人。",
         "lead": "在交给销售之前，通过教育性触达培育新线索。",
         "event": "围绕新品发布、促销或节日时点的限时群发。",
-        "default": "在流程编辑器中构建的自动化 WhatsApp 旅程。"
+        "default": "在流程编辑器中构建的自动化 WhatsApp 旅程。",
+        "defaultWeb": "在流程编辑器中创建的网站聊天机器人。",
+        "defaultCall": "在流程编辑器中创建的自动通话。",
+        "defaultOther": "在流程编辑器中创建的自动对话。"
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "已导入 {flows, plural, other {# 个流程}}中的 {steps, plural, other {# 个步骤}}。请检查后保存。",
         "invalidJson": "该文件不是有效的 JSON。",
         "saved": "已保存“{name}”",
+        "nodeSaved": "节点更新成功！",
         "saveFailed": "保存失败：{error}",
         "publishedToast": "已发布",
         "publishFailed": "发布失败：{error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "移除规则",
           "variablePlaceholder": "变量名（例如 plan）",
+          "keyLabel": "键",
+          "valueLabel": "值",
+          "pickProperty": "选择联系人属性",
           "pickVariable": "选择要测试的变量。",
           "comparePlaceholder": "比较对象…",
           "joinerAnd": "且",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "文档（PDF 报告等）",
           "upload": "上传",
           "uploadHint": "最大 {mb} MB。我们托管该文件，并为流程提供公开 URL。",
+          "acceptedFormats": {
+            "image": "支持的格式: JPG, PNG.",
+            "video": "支持的格式: MP4, 3GP.",
+            "audio": "支持的格式: MP3, AAC, AMR, OGG.",
+            "document": "支持的格式: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "替换文件",
           "chooseKind": {
             "image": "选择图片（或拖到此处）",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "不带 @。链接形如 ig.me/m/yourbrand，点击后会打开与您账号的私信。",
           "igMessage": "WhatsApp 消息",
           "igMessageHint": "通过 WhatsApp 连同 Instagram 链接发送给客户。支持 '{{'variables'}}'。",
-          "igMessagePlaceholder": "在 Instagram 上继续与我们互动 👇"
+          "igMessagePlaceholder": "在 Instagram 上继续与我们互动 👇",
+          "templateFills": "每个编号填什么",
+          "templateFillsHint": "输入模板中每个编号的文字，或按 / 插入联系人信息或流程变量。留空则使用模板自带的内容。",
+          "templateHeaderMedia": "头部文件",
+          "templateHeaderMediaHint": "此模板头部的图片、视频或文件。模板自身没有文件时需要提供。",
+          "templateHeaderMediaMissing": "请添加头部文件：此模板没有文件，没有它 WhatsApp 不会发送。"
         },
         "sequence": {
           "info": "每条回复会按顺序发送给客户。可在一个节点中组合文本、图片、视频、音频和文档，非常适合商品卡片或入门资料包。",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "将回答发送给客户",
           "variable": "回答保存为",
           "variableHint": "后续步骤用此名称读取回答，例如 faq.answer。"
+        },
+        "workflow": {
+          "listLoading": "正在加载列表…",
+          "listPick": "— 选择列表 —",
+          "listFallback": "列表",
+          "listNotLoaded": "列表 {id}（未加载）",
+          "segmentLoading": "正在加载分群…",
+          "segmentPick": "— 选择分群 —",
+          "segmentFallback": "分群",
+          "segmentNotLoaded": "分群 {id}（未加载）",
+          "updateIntroSub": "联系人字段位于 <link>/contacts</link>。此处无法更改电话号码。",
+          "updateIntro": "设置此联系人的<b>一个字段</b>。可使用 <mono>name</mono>、<mono>first_name</mono>、<mono>last_name</mono>、<mono>email</mono>、<mono>title</mono>、<mono>language</mono>、<mono>address</mono>，或您自定义字段之一的键名。后续节点会读取新值。",
+          "fieldLabel": "字段",
+          "fieldHint": "字段的键名，例如“城市”或“邮箱”。",
+          "newValueLabel": "新值",
+          "newValueHint": "任意文本或 {example}。留空可清空该字段（姓名无法清空）。",
+          "listIntroSub": "在 <link>/contacts/groups</link> 中管理列表。",
+          "listIntro": "将此联系人加入<b>列表</b>，或将其移出列表。流程所更改的列表不会触发“加入/离开列表”流程，因此流程无法自我循环。",
+          "actionLabel": "操作",
+          "actionAdd": "将联系人加入列表",
+          "actionRemove": "将联系人移出列表",
+          "listLabel": "列表",
+          "inListIntro": "根据此联系人是否在<b>列表</b>中进行分支：在列表中时走 <mono>yes</mono>，不在列表中（或列表已删除）时走 <mono>no</mono>。",
+          "segmentIntroSub": "在 <link>/segments</link> 中创建分群。",
+          "segmentIntro": "根据此联系人当前是否符合某个<b>分群</b>进行分支：<mono>yes</mono> 或 <mono>no</mono>。",
+          "segmentLabel": "分群",
+          "waSessionIntro": "客户在过去 <b>24 小时</b>内给您发过消息时走 <mono>yes</mono>，仍可发送普通消息；会话窗口已关闭时走 <mono>no</mono>，此时只能通过已审核的模板触达客户。",
+          "windowLabel": "会话窗口（小时）",
+          "windowHint": "WhatsApp 的会话窗口为 24 小时。设置更短的时长可以更严格。",
+          "spreadsheetLabel": "电子表格",
+          "spreadsheetHint": "从已连接的 Google 账号中选择表格。",
+          "tabLabel": "工作表（可选）",
+          "tabHint": "留空则使用第一个工作表。",
+          "matchColumnLabel": "查找列",
+          "matchColumnHint": "要查找的列的表头。",
+          "matchValueLabel": "等于",
+          "matchValueHint": "通常为 {example}。",
+          "sheetCheckIntro": "在 Google 表格中查找一行，并检查其中一个单元格：单元格符合测试条件时走 <mono>yes</mono>；不符合、没有匹配的行，或无法读取 Google 表格时走 <mono>no</mono>。",
+          "checkColumnLabel": "检查列",
+          "testLabel": "测试条件",
+          "valueLabel": "值",
+          "sheetContactIntro": "在 Google 表格中查找一行，并将单元格复制到<b>此联系人</b>中，每列对应一个字段。它会更新当前流程正在对话的联系人，不会根据新行创建联系人。",
+          "copyColumnsLabel": "复制以下列",
+          "copyColumnsHint": "表格列表头 → 联系人字段键名。",
+          "columnHeaderPlaceholder": "列表头",
+          "addColumn": "添加列",
+          "op": {
+            "equals": "等于",
+            "not_equals": "不等于",
+            "contains": "包含",
+            "not_contains": "不包含",
+            "starts_with": "开头为",
+            "ends_with": "结尾为",
+            "greater_than": "大于",
+            "less_than": "小于",
+            "is_set": "已设置",
+            "is_not_set": "未设置",
+            "is_empty": "为空",
+            "is_not_empty": "不为空"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "为本次运行的联系人调用您在<b>API Library</b>中保存的接口。接口返回 2xx 时走 <mono>success</mono>，其他情况走 <mono>error</mono>。",
+          "apiLabel": "接口",
+          "loadFailed": "无法加载您保存的接口。",
+          "manageApis": "管理接口",
+          "refreshList": "刷新列表",
+          "loading": "正在加载接口…",
+          "pickApi": "— 选择接口 —",
+          "noApis": "暂无已保存的接口",
+          "loadingName": "正在加载…",
+          "savedApiName": "已保存的接口",
+          "notFound": "{name}（未找到）",
+          "variablesLabel": "变量",
+          "variablesHint": "留空则依次使用本次运行中同名的变量、联系人的属性，最后使用默认值。值中可使用 {example}。",
+          "defaultPlaceholder": "默认值：{value}",
+          "saveLabel": "将响应保存到",
+          "saveHint": "后续节点通过 <mono>{variable}</mono> 读取响应，通过 <mono>{field}</mono> 读取字段，通过 <mono>{status}</mono> 读取状态。",
+          "exposes": "此接口还会输出 <mono>{list}</mono>。"
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "聊天机器人",
-          "description": "触发另一个聊天机器人"
+          "description": "将对话交给 AI 代理"
         },
         "whatsapp_shop": {
           "label": "WhatsApp 商店",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" 没有传入连接 — 没有任何内容指向它。",
+        "buttonNoExit": "“{node}”：按钮“{button}”没有连接到任何步骤。",
         "notConnected": "\"{node}\" 未连接到任何内容。",
         "wrongChannel": "\"{node}\" 无法用于 {channel} — 请删除它，或在触发器节点中重新启用该渠道。",
         "noSenderInstagram": "触发器节点未选择 Instagram 账户 — 请在触发步骤中选择一个。",

@@ -109,7 +109,8 @@
       "amount": "金額",
       "balance": "残高",
       "noDescription": "ウォレットの動き",
-      "reason": "理由"
+      "reason": "理由",
+      "invoice": "請求書をダウンロード"
     },
     "pricingPanel": {
       "title": "メッセージ料金",
@@ -1038,6 +1039,11 @@
       "enrichment": "連絡先の検索",
       "chat_message": "チャットメッセージ",
       "webbot_message": "ウェブサイトチャットボットのメッセージ"
+    },
+    "legacyInvoice": {
+      "title": "請求書",
+      "back": "明細に戻る",
+      "print": "印刷またはPDFとして保存"
     }
   }
 }

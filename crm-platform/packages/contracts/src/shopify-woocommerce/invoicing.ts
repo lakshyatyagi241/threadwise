@@ -22,12 +22,11 @@ export const ecomInvoicePolicySchema = z.object({
 export type EcomInvoicePolicy = z.infer<typeof ecomInvoicePolicySchema>;
 
 export const updateEcomInvoicePolicySchema = z
-  .object({
+  .strictObject({
     autoInvoice: z.boolean().optional(),
     trigger: ecomInvoiceTriggerSchema.optional(),
   })
-  .strict()
   .refine((v) => v.autoInvoice !== undefined || v.trigger !== undefined, {
-    message: 'send autoInvoice, trigger or both',
+    error: 'send autoInvoice, trigger or both',
   });
 export type UpdateEcomInvoicePolicyInput = z.infer<typeof updateEcomInvoicePolicySchema>;

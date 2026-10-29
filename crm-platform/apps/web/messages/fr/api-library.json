@@ -16,8 +16,8 @@
       "failed": "Échec",
       "source": {
         "test": "Test",
-        "flow": "Flux",
-        "automation": "Automatisation"
+        "flow": "Flux simple",
+        "automation": "Flux avancé"
       },
       "errorKind": {
         "blocked": "Adresse bloquée",
@@ -91,7 +91,6 @@
       "title": "Supprimer l'API",
       "message": "Voulez-vous vraiment supprimer {name} ? Cette action est irréversible.",
       "delete": "Supprimer",
-      "deleteAnyway": "Supprimer quand même",
       "done": "{name} a été supprimée.",
       "checking": "Vérification des flux qui l'utilisent...",
       "usageFailed": "Impossible de vérifier quels flux utilisent cette API. Si l'un d'eux l'utilise, sa suppression fait sortir cette étape par son port d'erreur.",
@@ -99,7 +98,9 @@
       "published": "Publié",
       "draft": "Brouillon",
       "nodes": "{count, plural, one {# étape} other {# étapes}}",
-      "forceNote": "Si vous la supprimez quand même, ces étapes ne fonctionneront plus et sortiront par leur port d'erreur. Ses journaux sont conservés."
+      "blocked": "Cette API ne peut pas être supprimée tant que des flux l'utilisent. Retirez son étape de ces flux, ou choisissez-y une autre API, puis supprimez-la ici.",
+      "publishedCopy": "La version publiée l'appelle encore",
+      "republish": "Publiez de nouveau le flux sans cette étape, puis supprimez l'API."
     },
     "logs": {
       "title": "Journaux des API",
@@ -114,7 +115,8 @@
         "source": "Source",
         "result": "Résultat",
         "statusCode": "Code d'état",
-        "duration": "Durée"
+        "duration": "Durée",
+        "bot": "Bot"
       },
       "openLog": "Ouvrir l'exécution du {when}",
       "drawerTitle": "Journaux : {name}",
@@ -139,7 +141,9 @@
         "to": "Au",
         "clear": "Effacer les filtres",
         "deletedApi": "{name} (supprimée)",
-        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher."
+        "searchTooLong": "La recherche peut comporter au maximum {max} caractères. Raccourcissez-la pour rechercher.",
+        "bot": "Bot",
+        "allBots": "Tous les bots"
       },
       "detail": {
         "title": "Détails du journal d'API",
@@ -171,7 +175,10 @@
         "user": "Exécuté par (ID utilisateur)",
         "noContext": "Aucun flux ni contact n'était impliqué."
       },
-      "unsaved": "Non enregistrée"
+      "unsaved": "Non enregistrée",
+      "export": "Exporter en CSV",
+      "exporting": "Export en cours…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Insérer une variable dans {label}",
@@ -322,7 +329,10 @@
       "requestHint": "Le nom, la méthode et l'adresse de l'appel.",
       "payloadHint": "Ce qui est envoyé dans le corps. Utilisez le bouton '{ }' pour insérer une variable dans une valeur.",
       "functionHint": "Remodelez la charge utile avec JavaScript avant son envoi. Facultatif.",
-      "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet."
+      "plainHttpWarning": "Cette adresse commence par http://, donc le mot de passe ou la clé dans vos en-têtes circulerait sans chiffrement. Utilisez https:// si le serveur le permet.",
+      "importSkipped": "La commande collée envoie aussi un fichier ({names}). Un fichier ne peut pas être importé ici, il a donc été laissé de côté. Tout le reste a été rempli.",
+      "importForm": "La commande collée envoie ses données comme un formulaire web (a=1&b=2). Cette API envoie du JSON ou du multipart form-data : les champs ont donc été convertis en objet JSON. Vérifiez que l'API appelée accepte le JSON.",
+      "payloadTypedHint": "Pour envoyer un vrai nombre ou oui/non, écrivez la variable sans guillemets : {example}."
     },
     "test": {
       "title": "Réponse",

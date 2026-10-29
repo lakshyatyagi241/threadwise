@@ -367,6 +367,8 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
         allowedHosts: cfg.mediaHosts || ['assets.getalabs.com'],
         // the largest media file the copy downloads: the client config may raise it (maxFileMB, a positive number of MB); 50 by default
         maxFileMB: Number(cfg.maxFileMB) > 0 ? Number(cfg.maxFileMB) : 50,
+        // the public https origin of the media bucket: converted flows and widgets show their images by link (copy-files.cjs refuses without it)
+        flowMediaPublicBase: typeof cfg.flowMediaPublicBase === 'string' ? cfg.flowMediaPublicBase : '',
         timeoutMs: 60000,
       }) + '\n',
     );
@@ -1052,9 +1054,17 @@ async function cmdFiles(srv, cfg, sub, flags = {}) {
     );
   const inner = `NODE_PATH=/app/node_modules TARGET_DATABASE_URL="$DATABASE_URL" exec node /mig/files/copy-files.cjs ${a.map(shq).join(' ')}`;
   const label = `files ${sub}${sub === 'copy' ? (flags.apply ? ' (APPLY)' : ' (dry run)') : ''}`;
+  // the copy holds each file in memory while it moves it (up to maxFileMB, three at a time). At the 1 GB worker cap a run with
+  // 100 MB files was OOM-killed (exit 137, tirupatibank 2026-10-27), so the copy gets its own cap, as the verifier does.
+  const memMb =
+    sub === 'copy'
+      ? Number(process.env.CYCLE_FILES_MEM_MB) > 0
+        ? Number(process.env.CYCLE_FILES_MEM_MB)
+        : 2048
+      : 0;
   const r = await runShown(
     srv,
-    containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`] }),
+    containerRun(srv, inner, { mounts: [`${srv.mig}/files:/mig/files:ro`], memMb }),
     label,
     `files-${sub}-${cfg.client}.txt`,
   );
@@ -1359,6 +1369,9 @@ async function manifestFresh(srv, client) {
   };
 }
 
+// Waboo's collections are live while they are exported: messages and broadcast logs arrive during the read, so the count taken before the
+// read and the documents written differ by the traffic of those minutes. The stream is still checked document by document.
+const LIVE_COUNT_TOLERANCE = 500;
 const exportArgs = (client, db, force = false) => [
   '--db',
   db,
@@ -1368,6 +1381,8 @@ const exportArgs = (client, db, force = false) => [
   '--i-confirm-server-is-staging',
   '--registry-classes',
   'MIGRATE,MIGRATE_LATER',
+  '--tolerance',
+  String(LIVE_COUNT_TOLERANCE),
   ...(force ? ['--force'] : []), // without it the exporter keeps a server file whose record matches, even when Waboo has moved on
 ];
 function runExport(client, db, force = false) {
@@ -1439,7 +1454,8 @@ function runExport(client, db, force = false) {
  */
 function coreSnapshot(cfg, db) {
   const bin = process.env.CORE_OPENING_BIN || path.join(HERE, 'core-opening.cjs');
-  if (!fs.existsSync(bin)) refuse(`the geta_core reader ${bin} does not exist (set CORE_OPENING_BIN)`);
+  if (!fs.existsSync(bin))
+    refuse(`the geta_core reader ${bin} does not exist (set CORE_OPENING_BIN)`);
   const out = fs.mkdtempSync(path.join(os.tmpdir(), 'core-snapshot-'));
   try {
     const r = spawnSync(
@@ -1635,7 +1651,10 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
-      (s !== 'flow-state' || cfg.flowState !== 'inactive') && // "flowState": "inactive" in the client config keeps every flow a draft
+      // flow-state is NOT part of a migration: a live flow is enrolled by the app's worker as soon as it is published, and with no WhatsApp
+      // number connected those enrolments fail and stay failed, so a later cutover could never reach those contacts. The WhatsApp cutover
+      // arms the flows as its last step, once the number is connected (load/cutover.ts), so the flows stay drafts until then.
+      s !== 'flow-state' && // (the "flowState": "inactive" client setting is now the default)
       // the WhatsApp number (the last steps, so a failure there never costs the reports of the data migration): only on request (--activate-whatsapp, the panel's load passes it), never for a catch-up, and "whatsapp": "off" in the client config skips it
       ((s !== 'wa-credentials' && s !== 'wa-cutover') ||
         (flags['activate-whatsapp'] && cfg.whatsapp !== 'off')),

@@ -90,6 +90,20 @@ const SENDER_CHANNELS: readonly string[] = [
   'email',
 ];
 
+/**
+ * What changes on the Trigger when its channel is switched: the sender (it belongs to the old channel) and, when the kind exists on
+ * the old channel only ("On comment → DM" is Instagram's), the kind and its rules, which fall back to a keyword start.
+ */
+export function channelSwitchPatch(kind: string, next: string): Record<string, unknown> {
+  return {
+    channel: next,
+    deviceId: '',
+    ...(kind === 'comment_to_dm' && next !== 'instagram'
+      ? { kind: 'keyword', keywordRuleIds: [] }
+      : {}),
+  };
+}
+
 /** The channel a Trigger runs on: the saved one when the workspace offers it, else the flow's own channel. */
 export function resolveTriggerChannel(
   saved: unknown,
@@ -201,6 +215,21 @@ export interface ListItem {
 
 export function listItems(options: unknown): ListItem[] {
   return asArray(options).map((o, i) => flbListOption(o, i));
+}
+
+/**
+ * The items as stored, for the form's own inputs: a title the person has cleared stays empty while they type (the preview and the
+ * runtime fill an empty title with "Item N", but an input that did the same would bring the text back at every backspace).
+ */
+export function listItemsAsTyped(options: unknown): ListItem[] {
+  return asArray(options).map((o, i) => {
+    if (typeof o !== 'string' && o && typeof o === 'object') {
+      const r = o as Record<string, unknown>;
+      const text = (v: unknown) => (typeof v === 'string' ? v : '');
+      return { title: text(r.title), description: text(r.description), section: text(r.section) };
+    }
+    return flbListOption(o, i);
+  });
 }
 
 export interface SectionGroup<T> {

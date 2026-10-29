@@ -78,47 +78,6 @@ export function AuthMedia({
   return <img src={src} alt="" aria-hidden="true" className={className} />;
 }
 
-/** Media filling its panel, with the dark veil that keeps the text on top of it readable. */
-export function MediaBackdrop({
-  content,
-  veil = 'bg-black/55',
-}: {
-  content: Pick<AuthPageContent, 'mediaUrl' | 'mediaType'>;
-  veil?: string;
-}) {
-  if (!safeUrl(content.mediaUrl)) return null;
-  return (
-    <>
-      <AuthMedia content={content} className="absolute inset-0 size-full object-cover" />
-      <div aria-hidden="true" className={cn('absolute inset-0', veil)} />
-    </>
-  );
-}
-
-/** The two soft lights behind a dark panel. */
-export function Blobs({ variant = 'pair' }: { variant?: 'pair' | 'corner' }) {
-  if (variant === 'corner') {
-    return (
-      <div
-        aria-hidden="true"
-        className="auth-blob -end-10 -top-10 size-[280px] bg-(--auth-light)/30"
-      />
-    );
-  }
-  return (
-    <>
-      <div
-        aria-hidden="true"
-        className="auth-blob -start-12 -top-12 size-[300px] bg-(--auth-green)"
-      />
-      <div
-        aria-hidden="true"
-        className="auth-blob end-12 bottom-12 size-[260px] bg-(--auth-amber)"
-      />
-    </>
-  );
-}
-
 type HeadingTone = 'accent' | 'deep' | 'plain' | 'soft';
 
 /**
@@ -146,70 +105,31 @@ export function AccentHeading({
     <>
       {heading}
       {heading && accent ? ' ' : null}
-      {accent ? (
-        <span style={style} className="italic rtl:not-italic">
-          {accent}
-        </span>
-      ) : null}
+      {accent ? <span style={style}>{accent}</span> : null}
       {heading || accent ? '.' : null}
     </>
   );
 }
 
-/** The product mark: a speech-bubble tile and the name in the display type. */
-export function BrandMark({ name, className }: { name: string; className?: string }) {
-  return (
-    <span className={cn('inline-flex items-center gap-2', className)}>
-      <span
-        aria-hidden="true"
-        className="grid size-8 place-items-center rounded-md bg-(--auth-deep) text-(--auth-light)"
-      >
-        <svg viewBox="0 0 24 24" className="size-4" fill="currentColor">
-          <path d="M5 3h14a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-7l-5 4v-4H5a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z" />
-        </svg>
-      </span>
-      <span className="font-serif text-[22px] tracking-[-0.01em]">{name}</span>
-    </span>
-  );
-}
+/** Geta's logo for design 6, a picture hosted outside this app (swap the address here to change it). */
+export const GETA_LOGO_URL =
+  'https://ci3.googleusercontent.com/mail-sig/AIorK4wAnlEhcIIYJ558cB7za1t6U844T7z0JH3CJfssd5vNBbjbURNBlLXD4cV_v060A86DcgjDG84';
 
-/** Design 6's wordmark: a round indigo "G" mark with a small tail dot, Geta's own brand, not the shared one. */
-export function GetaMark({
-  name,
-  tone = 'light',
-  className,
-}: {
-  name: string;
-  tone?: 'light' | 'dark';
-  className?: string;
-}) {
+/** Design 6's mark: Geta's own logo picture (the product name is its alt text), not the shared brand mark. */
+export function GetaMark({ name, className }: { name: string; className?: string }) {
   return (
-    <span className={cn('inline-flex items-center gap-2.5', className)}>
-      <span
-        aria-hidden="true"
-        className="relative grid size-9 shrink-0 place-items-center rounded-full bg-(--auth-geta-primary)"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          className="size-[18px]"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2.6"
-          strokeLinecap="round"
-        >
-          <path d="M17.6 8.3A6.6 6.6 0 1 0 18.6 13h-6.1" />
-        </svg>
-        <span className="absolute -bottom-px -end-px size-[5px] rounded-full bg-(--auth-geta-ink)" />
-      </span>
-      <span
-        className={cn(
-          'text-[21px] font-extrabold tracking-[-0.01em]',
-          tone === 'dark' ? 'text-white' : 'text-foreground',
-        )}
-      >
-        {name}
-      </span>
-    </span>
+    <img
+      src={GETA_LOGO_URL}
+      alt={name}
+      // The picture lives on another site: send it no referrer, so a visitor's page address is not passed along.
+      referrerPolicy="no-referrer"
+      decoding="async"
+      // The picture has dark lettering: in dark mode it sits on a white rounded chip so it stays readable.
+      className={cn(
+        'h-9 w-auto max-w-full dark:box-content dark:rounded-lg dark:bg-white dark:px-2 dark:py-1',
+        className,
+      )}
+    />
   );
 }
 
@@ -347,145 +267,5 @@ export function Eyebrow({
     >
       {children}
     </p>
-  );
-}
-
-function Check() {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      className="size-3 shrink-0 text-(--auth-green)"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      aria-hidden="true"
-    >
-      <path d="M3 8l3 3 7-7" />
-    </svg>
-  );
-}
-
-const CARD = 'rounded-2xl border border-(--auth-light)/15 bg-(--auth-light)/8 backdrop-blur-sm';
-
-/** The hero card at the top of a showcase: icon tile, bold line, small line. */
-export function HeroCard({
-  title,
-  description,
-  icon = 1,
-}: {
-  title: string;
-  description: string;
-  icon?: number;
-}) {
-  if (!title && !description) return null;
-  return (
-    <div className={cn(CARD, 'mb-4 p-5')}>
-      <div className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-(--auth-green)/25 text-(--auth-green)">
-          <Glyph index={icon} />
-        </span>
-        <div>
-          <p className="text-[14px] font-semibold leading-tight">{title}</p>
-          <p className="mt-1 text-[12px] leading-snug text-(--auth-light)/75">{description}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * The dark marketing panel of design 1 (Split showcase): hero card, eyebrow, big heading with an accent word,
- * one paragraph, then (sign-in and sign-up only) three stat tiles, four feature cards and a checklist, and a
- * footer line at the bottom edge.
- */
-export function ShowcasePanel({
-  page,
-  content,
-  extra,
-  footer,
-}: {
-  page: AuthPageName;
-  content: AuthPageContent;
-  extra?: Record<string, string>;
-  /** Resolved footer line (the admin's text, or year, name and country). */
-  footer: string;
-}) {
-  const copy = useShowcaseCopy(page, extra);
-  const showDetails = page !== 'forgot';
-  const chips = CHIP_INDEXES.map((i) => copy(`chip${i}`)).filter(Boolean);
-
-  return (
-    <>
-      <div className="relative z-10 flex w-full flex-1 flex-col justify-center">
-        <HeroCard title={copy('hero_title')} description={copy('hero_desc')} />
-
-        {content.eyebrow && (
-          <Eyebrow on="dark" className="mb-3">
-            {content.eyebrow}
-          </Eyebrow>
-        )}
-        <h1 className="font-serif text-[42px] leading-[1.05] tracking-[-0.01em]">
-          <AccentHeading heading={content.heading} accent={content.headingAccent} tone="accent" />
-        </h1>
-        {content.subheading && (
-          <p className="mt-3 text-[13px] leading-relaxed text-(--auth-light)/85">
-            {content.subheading}
-          </p>
-        )}
-
-        {showDetails && (
-          <>
-            <dl className="mt-5 grid grid-cols-3 gap-3">
-              {STAT_INDEXES.map((i) => (
-                <div key={i} className="auth-stat-pill rounded-2xl p-4 text-center">
-                  <dt className="font-serif text-[24px] leading-none">{copy(`stat${i}_num`)}</dt>
-                  <dd className="mt-1 text-[10.5px] text-(--auth-light)/70">
-                    {copy(`stat${i}_label`)}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <ul className="mt-5 grid grid-cols-2 gap-3">
-              {FEATURE_INDEXES.map((i) => (
-                <li key={i} className={cn(CARD, 'p-4')}>
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="grid size-7 place-items-center rounded-lg bg-(--auth-green)/25 text-(--auth-green)">
-                      <Glyph index={i - 1} className="size-3.5" />
-                    </span>
-                    <span className="text-[12.5px] font-semibold">{copy(`feat${i}_title`)}</span>
-                  </div>
-                  <p className="text-[11px] leading-snug text-(--auth-light)/70">
-                    {copy(`feat${i}_desc`)}
-                  </p>
-                </li>
-              ))}
-            </ul>
-
-            {chips.length > 0 && (
-              <div className={cn(CARD, 'mt-4 p-4')}>
-                <p className="mb-2 font-mono rtl:font-sans text-[10px] uppercase tracking-[0.16em] rtl:tracking-normal text-(--auth-light)/70">
-                  {copy('inside_heading')}
-                </p>
-                <ul className="grid grid-cols-3 gap-x-3 gap-y-1.5 text-[11.5px] text-(--auth-light)/85">
-                  {chips.map((chip, i) => (
-                    <li key={i} className="flex items-center gap-1.5">
-                      <Check />
-                      <span>{chip}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {footer && (
-        <p className="relative z-10 mt-6 text-end font-mono rtl:font-sans text-[11px] text-(--auth-light)/60">
-          {footer}
-        </p>
-      )}
-    </>
   );
 }

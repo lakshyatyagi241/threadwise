@@ -24,9 +24,12 @@ const CARD =
  */
 export function NewCampaignButton({
   label: custom,
+  chooserLabel,
   variant = 'button',
 }: {
   label?: string;
+  /** The label when the button opens the channel chooser (it is more than WhatsApp then); `label` is kept for the direct link. */
+  chooserLabel?: string;
   variant?: 'button' | 'link';
 } = {}) {
   const t = useTranslations('broadcasts.chooser');
@@ -34,17 +37,17 @@ export function NewCampaignButton({
   const channels = useBroadcastChannels();
   const [open, setOpen] = useState(false);
   const style = variant === 'link' ? LINK : BUTTON;
+  const cards = channelCards(channels);
+  const text = (cards.length > 1 ? chooserLabel : undefined) ?? custom ?? t('newBroadcast');
   const label =
     variant === 'link' ? (
-      <>{custom ?? t('newBroadcast')} →</>
+      <>{text} →</>
     ) : (
       <>
         <PlusIcon className="size-3.5" />
-        {custom ?? t('newBroadcast')}
+        {text}
       </>
     );
-
-  const cards = channelCards(channels);
 
   if (cards.length === 1) {
     return (

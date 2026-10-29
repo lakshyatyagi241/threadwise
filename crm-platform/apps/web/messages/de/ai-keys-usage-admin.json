@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Ein Schlüssel hat mindestens 8 Zeichen."
-      }
+      },
+      "readOnly": "Sie sehen die KI-Schlüssel des Arbeitsbereichs, können sie aber nicht hinzufügen, ein- oder ausschalten oder entfernen. Bitten Sie einen Administrator um die Berechtigung, KI-Schlüssel zu verwalten."
     }
   }
 }

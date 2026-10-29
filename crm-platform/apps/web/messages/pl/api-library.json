@@ -16,8 +16,8 @@
       "failed": "Błąd",
       "source": {
         "test": "Test",
-        "flow": "Przepływ",
-        "automation": "Automatyzacja"
+        "flow": "Prosty przepływ",
+        "automation": "Zaawansowany przepływ"
       },
       "errorKind": {
         "blocked": "Adres zablokowany",
@@ -91,7 +91,6 @@
       "title": "Usuń API",
       "message": "Czy na pewno chcesz usunąć {name}? Tej operacji nie można cofnąć.",
       "delete": "Usuń",
-      "deleteAnyway": "Usuń mimo to",
       "done": "Usunięto: {name}.",
       "checking": "Sprawdzanie, które przepływy go używają...",
       "usageFailed": "Nie udało się sprawdzić, które przepływy korzystają z tego API. Jeśli jakieś korzystają, usunięcie go spowoduje, że ten krok zakończy się przez port błędu.",
@@ -99,7 +98,9 @@
       "published": "Opublikowane",
       "draft": "Szkic",
       "nodes": "{count, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}",
-      "forceNote": "Jeśli mimo to je usuniesz, te kroki przestaną działać i zakończą się przez port błędu. Dzienniki API zostaną zachowane."
+      "blocked": "Tego API nie można usunąć, dopóki używają go przepływy. Usuń jego krok z tych przepływów lub wybierz tam inne API, a potem usuń je tutaj.",
+      "publishedCopy": "Opublikowana wersja nadal go wywołuje",
+      "republish": "Opublikuj przepływ ponownie bez tego kroku, a potem usuń API."
     },
     "logs": {
       "title": "Dzienniki API",
@@ -114,7 +115,8 @@
         "source": "Źródło",
         "result": "Wynik",
         "statusCode": "Kod stanu",
-        "duration": "Czas trwania"
+        "duration": "Czas trwania",
+        "bot": "Bot"
       },
       "openLog": "Otwórz uruchomienie z: {when}",
       "drawerTitle": "Dzienniki: {name}",
@@ -139,7 +141,9 @@
         "to": "Do",
         "clear": "Wyczyść filtry",
         "deletedApi": "{name} (usunięte)",
-        "searchTooLong": "Wyszukiwanie może mieć najwyżej {max} znaków. Skróć je, aby wyszukać."
+        "searchTooLong": "Wyszukiwanie może mieć najwyżej {max} znaków. Skróć je, aby wyszukać.",
+        "bot": "Bot",
+        "allBots": "Wszystkie boty"
       },
       "detail": {
         "title": "Szczegóły dziennika API",
@@ -171,7 +175,10 @@
         "user": "Uruchomił (ID użytkownika)",
         "noContext": "Nie uczestniczył żaden przepływ ani kontakt."
       },
-      "unsaved": "Niezapisane"
+      "unsaved": "Niezapisane",
+      "export": "Eksportuj CSV",
+      "exporting": "Eksportowanie…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "Wstaw zmienną do: {label}",
@@ -322,7 +329,10 @@
       "requestHint": "Nazwa, metoda i adres wywołania.",
       "payloadHint": "Co jest wysyłane w treści. Użyj przycisku '{ }', aby wstawić zmienną do wartości.",
       "functionHint": "Przekształć ładunek za pomocą JavaScript przed wysłaniem. Opcjonalne.",
-      "plainHttpWarning": "Ten adres zaczyna się od http://, więc hasło lub klucz w nagłówkach zostałyby wysłane bez szyfrowania. Użyj https://, jeśli serwer to obsługuje."
+      "plainHttpWarning": "Ten adres zaczyna się od http://, więc hasło lub klucz w nagłówkach zostałyby wysłane bez szyfrowania. Użyj https://, jeśli serwer to obsługuje.",
+      "importSkipped": "Wklejone polecenie wysyła także plik ({names}). Pliku nie można tu zaimportować, więc go pominięto. Wszystko inne zostało wypełnione.",
+      "importForm": "Wklejone polecenie wysyła dane jako formularz webowy (a=1&b=2). To API wysyła JSON lub multipart form-data, więc pola formularza zamieniono na obiekt JSON. Sprawdź, czy wywoływane API akceptuje JSON.",
+      "payloadTypedHint": "Aby wysłać prawdziwą liczbę lub tak/nie, wpisz zmienną bez cudzysłowów: {example}."
     },
     "test": {
       "title": "Odpowiedź",

@@ -14,6 +14,13 @@ interface ContactRow {
   address: string | null;
   title: string | null;
   language: string | null;
+  middle_name: string | null;
+  source: string | null;
+  status: string | null;
+  lifecycle_stage: string | null;
+  is_unsubscribed: boolean | null;
+  owner_name: string | null;
+  groups: string | null;
   data: Record<string, unknown> | null;
 }
 
@@ -49,8 +56,14 @@ export async function seedVariables(
   let c: ContactRow | undefined;
   if (contactId !== null) {
     const res = await tx.execute(sql`
-      SELECT name, first_name, last_name, phone, email::text AS email, address, title, language, data
-      FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`);
+      SELECT c.name, c.first_name, c.last_name, c.phone, c.email::text AS email, c.address, c.title, c.language,
+             c.middle_name, c.source, c.status, c.lifecycle_stage, c.is_unsubscribed,
+             (SELECT u.full_name FROM users u WHERE u.org_id = c.org_id AND u.id = c.owner_id) AS owner_name,
+             (SELECT string_agg(g.name, ', ' ORDER BY g.name) FROM contact_group_members m
+                JOIN contact_groups g ON g.org_id = m.org_id AND g.id = m.group_id
+              WHERE m.org_id = c.org_id AND m.contact_id = c.id) AS groups,
+             c.data
+      FROM contacts c WHERE c.org_id = ${orgId} AND c.id = ${contactId}`);
     c = (res as unknown as { rows: ContactRow[] }).rows[0];
   }
   const first =
@@ -68,6 +81,13 @@ export async function seedVariables(
   set('address', c?.address);
   set('title', c?.title);
   set('language', c?.language);
+  set('middle_name', c?.middle_name);
+  set('source', c?.source);
+  set('status', c?.status);
+  set('lifecycle_stage', c?.lifecycle_stage);
+  set('owner', c?.owner_name);
+  set('groups', c?.groups);
+  if (c) set('opt_out', c.is_unsubscribed ? 'yes' : 'no');
   for (const [k, v] of Object.entries(c?.data ?? {})) {
     if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') {
       if (!(k in bag) || !blank(v)) set(k, v);

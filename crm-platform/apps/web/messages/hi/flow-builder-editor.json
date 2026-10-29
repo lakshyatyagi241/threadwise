@@ -99,6 +99,7 @@
       "triggerGroup": "अपने-आप · ग्रुप जॉइन पर",
       "triggerManual": "मैन्युअल एनरोल",
       "triggerKeyword": "कीवर्ड",
+      "triggerAny": "कोई भी संदेश",
       "active": "सक्रिय",
       "done": "पूर्ण",
       "failed": "विफल",
@@ -130,7 +131,10 @@
         "reEngagement": "व्यक्तिगत ऑफ़र या चेक-इन से निष्क्रिय कॉन्टैक्ट को फिर सक्रिय करता है।",
         "lead": "सेल्स को सौंपने से पहले शैक्षिक संपर्कों से नए लीड को पोषित करता है।",
         "event": "लॉन्च, सेल या मौसमी अवसर के आसपास समय-सीमित ब्रॉडकास्ट।",
-        "default": "फ़्लो एडिटर में बना स्वचालित WhatsApp सफ़र।"
+        "default": "फ़्लो एडिटर में बना स्वचालित WhatsApp सफ़र।",
+        "defaultWeb": "फ़्लो एडिटर में बना वेबसाइट चैट बॉट।",
+        "defaultCall": "फ़्लो एडिटर में बनी स्वचालित कॉल।",
+        "defaultOther": "फ़्लो एडिटर में बनी स्वचालित बातचीत।"
       }
     },
     "featured": {
@@ -581,6 +585,85 @@
           "sendAnswer": "ग्राहक को जवाब भेजें",
           "variable": "जवाब इस नाम से सहेजें",
           "variableHint": "आगे के स्टेप जवाब इस नाम से पढ़ते हैं, जैसे faq.answer।"
+        },
+        "workflow": {
+          "listLoading": "सूचियाँ लोड हो रही हैं…",
+          "listPick": "— सूची चुनें —",
+          "listFallback": "सूची",
+          "listNotLoaded": "सूची {id} (लोड नहीं हुई)",
+          "segmentLoading": "सेगमेंट लोड हो रहे हैं…",
+          "segmentPick": "— सेगमेंट चुनें —",
+          "segmentFallback": "सेगमेंट",
+          "segmentNotLoaded": "सेगमेंट {id} (लोड नहीं हुआ)",
+          "updateIntroSub": "संपर्क के फ़ील्ड <link>/contacts</link> पर हैं। फ़ोन नंबर यहाँ नहीं बदला जा सकता।",
+          "updateIntro": "इस संपर्क का <b>एक फ़ील्ड</b> सेट करता है। <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> या अपने किसी कस्टम फ़ील्ड की कुंजी का उपयोग करें। बाद के नोड नया मान देखेंगे।",
+          "fieldLabel": "फ़ील्ड",
+          "fieldHint": "फ़ील्ड की कुंजी, जैसे शहर या ईमेल।",
+          "newValueLabel": "नया मान",
+          "newValueHint": "कोई भी टेक्स्ट या {example}। फ़ील्ड साफ़ करने के लिए इसे खाली छोड़ें (नाम साफ़ नहीं किया जा सकता)।",
+          "listIntroSub": "सूचियाँ <link>/contacts/groups</link> पर प्रबंधित करें।",
+          "listIntro": "इस संपर्क को एक <b>सूची</b> में डालता है, या उसे सूची से हटाता है। कोई फ़्लो जिस सूची को बदलता है, वह “सूची में जुड़ता है / सूची छोड़ता है” वाले फ़्लो शुरू नहीं करती, इसलिए कोई फ़्लो खुद पर लूप नहीं बन सकता।",
+          "actionLabel": "क्रिया",
+          "actionAdd": "संपर्क को सूची में जोड़ें",
+          "actionRemove": "संपर्क को सूची से हटाएँ",
+          "listLabel": "सूची",
+          "inListIntro": "जाँचता है कि यह संपर्क किसी <b>सूची</b> में है या नहीं: हो तो <mono>yes</mono>, न हो (या सूची मौजूद न हो) तो <mono>no</mono>।",
+          "segmentIntroSub": "सेगमेंट <link>/segments</link> पर बनाएँ।",
+          "segmentIntro": "जाँचता है कि यह संपर्क अभी किसी <b>सेगमेंट</b> से मेल खाता है या नहीं: <mono>yes</mono> या <mono>no</mono>।",
+          "segmentLabel": "सेगमेंट",
+          "waSessionIntro": "<mono>yes</mono> जब ग्राहक ने पिछले <b>24 घंटों</b> में आपको संदेश भेजा हो, ताकि सादा संदेश अब भी भेजा जा सके; <mono>no</mono> जब यह अवधि बंद हो चुकी हो और केवल स्वीकृत टेम्पलेट ही उन तक पहुँच सकता हो।",
+          "windowLabel": "अवधि (घंटे)",
+          "windowHint": "WhatsApp की अवधि 24 घंटे है। अधिक सख्त रहने के लिए छोटी अवधि चुनें।",
+          "spreadsheetLabel": "स्प्रेडशीट",
+          "spreadsheetHint": "अपने जुड़े हुए Google खाते से एक स्प्रेडशीट चुनें।",
+          "tabLabel": "टैब (वैकल्पिक)",
+          "tabHint": "खाली = पहला टैब।",
+          "matchColumnLabel": "वह पंक्ति खोजें जहाँ कॉलम",
+          "matchColumnHint": "वह कॉलम हेडर जिसमें खोजना है।",
+          "matchValueLabel": "बराबर हो",
+          "matchValueHint": "आम तौर पर {example}।",
+          "sheetCheckIntro": "एक Google स्प्रेडशीट में पंक्ति खोजता है और उसका एक सेल जाँचता है: जब सेल शर्त पूरी करे तो <mono>yes</mono>, जब न करे, कोई पंक्ति न मिले, या Google पढ़ा न जा सके तो <mono>no</mono>।",
+          "checkColumnLabel": "जाँचने वाला कॉलम",
+          "testLabel": "शर्त",
+          "valueLabel": "मान",
+          "sheetContactIntro": "एक Google स्प्रेडशीट में पंक्ति खोजता है और सेल <b>इस संपर्क</b> में कॉपी करता है: हर फ़ील्ड के लिए एक कॉलम। यह उस संपर्क को अपडेट करता है जिससे फ़्लो बात कर रहा है; नई पंक्तियों से संपर्क नहीं बनाता।",
+          "copyColumnsLabel": "ये कॉलम कॉपी करें",
+          "copyColumnsHint": "स्प्रेडशीट कॉलम हेडर → संपर्क फ़ील्ड कुंजी।",
+          "columnHeaderPlaceholder": "कॉलम हेडर",
+          "addColumn": "कॉलम जोड़ें",
+          "op": {
+            "equals": "बराबर हो",
+            "not_equals": "बराबर न हो",
+            "contains": "शामिल हो",
+            "not_contains": "शामिल न हो",
+            "starts_with": "से शुरू हो",
+            "ends_with": "पर खत्म हो",
+            "greater_than": "से बड़ा हो",
+            "less_than": "से छोटा हो",
+            "is_set": "मान हो",
+            "is_not_set": "मान न हो",
+            "is_empty": "खाली हो",
+            "is_not_empty": "खाली न हो"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "इस रन के संपर्क के लिए <b>API Library</b> में सहेजा गया एक एपीआई चलाता है। एपीआई 2xx का जवाब दे तो <mono>success</mono> से, और बाकी किसी भी स्थिति में <mono>error</mono> से बाहर निकलता है।",
+          "apiLabel": "एपीआई",
+          "loadFailed": "आपके सहेजे गए एपीआई लोड नहीं हो सके।",
+          "manageApis": "एपीआई प्रबंधित करें",
+          "refreshList": "सूची ताज़ा करें",
+          "loading": "एपीआई लोड हो रहे हैं…",
+          "pickApi": "— एक एपीआई चुनें —",
+          "noApis": "अभी कोई सहेजा गया एपीआई नहीं है",
+          "loadingName": "लोड हो रहा है…",
+          "savedApiName": "सहेजा गया एपीआई",
+          "notFound": "{name} (नहीं मिला)",
+          "variablesLabel": "वैरिएबल",
+          "variablesHint": "किसी मान को खाली छोड़ें तो उस नाम का रन का वैरिएबल, फिर संपर्क की प्रॉपर्टी, फिर डिफ़ॉल्ट उपयोग होगा। मान में {example} का उपयोग किया जा सकता है।",
+          "defaultPlaceholder": "डिफ़ॉल्ट: {value}",
+          "saveLabel": "जवाब इसमें सहेजें",
+          "saveHint": "बाद के नोड जवाब को <mono>{variable}</mono> के रूप में, फ़ील्ड को <mono>{field}</mono> के रूप में और स्थिति को <mono>{status}</mono> के रूप में पढ़ते हैं।",
+          "exposes": "यह एपीआई <mono>{list}</mono> भी उपलब्ध कराता है।"
         }
       },
       "attrPicker": {
@@ -998,6 +1081,7 @@
         "imported": "{flows, plural, one {# फ़्लो} other {# फ़्लो}} में से {steps, plural, one {# स्टेप} other {# स्टेप}} इंपोर्ट हुए। इन्हें जांचें, फिर सेव करें।",
         "invalidJson": "यह फ़ाइल मान्य JSON नहीं है।",
         "saved": "“{name}” सेव हुआ",
+        "nodeSaved": "नोड सफलतापूर्वक अपडेट हो गया!",
         "saveFailed": "सेव विफल: {error}",
         "publishedToast": "प्रकाशित",
         "publishFailed": "प्रकाशन विफल: {error}",
@@ -1441,6 +1525,9 @@
           },
           "removeRule": "नियम हटाएं",
           "variablePlaceholder": "वेरिएबल का नाम (जैसे plan)",
+          "keyLabel": "कुंजी",
+          "valueLabel": "मान",
+          "pickProperty": "कॉन्टैक्ट प्रॉपर्टी चुनें",
           "pickVariable": "जांचने के लिए वेरिएबल चुनें।",
           "comparePlaceholder": "इससे तुलना करें…",
           "joinerAnd": "और",
@@ -1631,6 +1718,12 @@
           "kindDocumentReport": "दस्तावेज़ (PDF रिपोर्ट, आदि)",
           "upload": "अपलोड",
           "uploadHint": "{mb} MB तक। फ़ाइल हम होस्ट करते हैं और फ़्लो को सार्वजनिक URL देते हैं।",
+          "acceptedFormats": {
+            "image": "स्वीकृत फ़ॉर्मैट: JPG, PNG.",
+            "video": "स्वीकृत फ़ॉर्मैट: MP4, 3GP.",
+            "audio": "स्वीकृत फ़ॉर्मैट: MP3, AAC, AMR, OGG.",
+            "document": "स्वीकृत फ़ॉर्मैट: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "फ़ाइल बदलें",
           "chooseKind": {
             "image": "इमेज चुनें (या यहां खींचें)",
@@ -1661,7 +1754,12 @@
           "igUsernameHint": "@ के बिना। लिंक ig.me/m/yourbrand बन जाता है — उस पर टैप करने से आपके अकाउंट पर DM खुलता है।",
           "igMessage": "WhatsApp संदेश",
           "igMessageHint": "Instagram लिंक के साथ ग्राहक को WhatsApp पर भेजा जाता है। '{{'variables'}}' समर्थित हैं।",
-          "igMessagePlaceholder": "Instagram पर हमारे साथ जुड़े रहें 👇"
+          "igMessagePlaceholder": "Instagram पर हमारे साथ जुड़े रहें 👇",
+          "templateFills": "हर नंबर में क्या भरे",
+          "templateFillsHint": "टेम्पलेट के हर नंबर का टेक्स्ट लिखें, या / दबाकर संपर्क की कोई जानकारी या फ्लो वेरिएबल डालें। खाली छोड़ने पर टेम्पलेट का अपना मान इस्तेमाल होगा।",
+          "templateHeaderMedia": "हेडर फ़ाइल",
+          "templateHeaderMediaHint": "इस टेम्पलेट के हेडर की तस्वीर, वीडियो या फ़ाइल। तब ज़रूरी है जब टेम्पलेट की अपनी कोई फ़ाइल न हो।",
+          "templateHeaderMediaMissing": "हेडर फ़ाइल जोड़ें: इस टेम्पलेट में कोई फ़ाइल नहीं है, और उसके बिना WhatsApp इसे नहीं भेजेगा।"
         },
         "sequence": {
           "info": "हर जवाब ग्राहक को क्रम से भेजा जाता है। एक ही नोड में टेक्स्ट, इमेज, वीडियो, ऑडियो और दस्तावेज़ मिलाएं — प्रोडक्ट कार्ड या ऑनबोर्डिंग किट के लिए सही।",
@@ -2027,7 +2125,7 @@
         },
         "chatbot": {
           "label": "चैटबॉट",
-          "description": "दूसरा चैटबॉट ट्रिगर करें"
+          "description": "चैट को AI एजेंट को सौंपें"
         },
         "whatsapp_shop": {
           "label": "WhatsApp शॉप",
@@ -2352,6 +2450,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" में कोई इनकमिंग कनेक्शन नहीं है — इसमें कुछ भी नहीं जाता।",
+        "buttonNoExit": "\"{node}\": बटन \"{button}\" किसी भी चरण तक नहीं ले जाता।",
         "notConnected": "\"{node}\" किसी से भी कनेक्ट नहीं है।",
         "wrongChannel": "\"{node}\" {channel} पर काम नहीं करता — इसे हटाएँ या Trigger नोड पर चैनल वापस चालू करें।",
         "noSenderInstagram": "Trigger नोड पर कोई Instagram अकाउंट चुना नहीं गया है — Trigger स्टेप पर एक चुनें।",

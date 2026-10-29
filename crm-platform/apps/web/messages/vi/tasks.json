@@ -155,7 +155,12 @@
       "deleted": "{count, plural, other {Đã xóa # công việc.}}",
       "deleteTitle": "Xóa các công việc đã chọn?",
       "deleteMessage": "{count, plural, other {# công việc sẽ bị xóa với tất cả mọi người. Không thể hoàn tác.}}",
-      "keep": "Giữ lại"
+      "keep": "Giữ lại",
+      "reopen": "Mở lại",
+      "completeWithOutcome": "Hoàn tất kèm kết quả công việc",
+      "reopenWithOutcome": "Mở lại kèm kết quả công việc",
+      "pickOutcome": "Kết quả công việc",
+      "reopened": "{count, plural, other {Đã mở lại # công việc.}}"
     },
     "quick": {
       "label": "Thêm công việc",

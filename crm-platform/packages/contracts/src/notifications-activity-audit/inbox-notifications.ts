@@ -187,7 +187,7 @@ export const conversationNotificationDataSchema = z.object({
   channelKind: z.string().nullable().optional(),
   preview: z.string().max(80).nullable().optional(),
   /** How many messages the (collapsed) row stands for. */
-  count: z.number().int().min(1).optional(),
+  count: z.int().min(1).optional(),
   /** `conversation_assigned`: who assigned it (a name, or null for the system), and whether it went to a team. */
   assignedByName: z.string().nullable().optional(),
   teamAssigned: z.boolean().optional(),
@@ -205,18 +205,18 @@ export const notificationResponseSchema = z.object({
   body: z.string().nullable(),
   /** App path to open (`/tasks`), never an absolute URL. */
   link: z.string().nullable(),
-  data: z.record(z.unknown()).nullable(),
-  readAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  data: z.record(z.string(), z.unknown()).nullable(),
+  readAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
   /** How many events the row stands for (a collapsed chat: "3 new messages"). Absent on rows that never collapse. */
-  count: z.number().int().min(1).optional(),
+  count: z.int().min(1).optional(),
   /** What the row is about; null/absent for rows written before subjects existed. */
   subject: notificationSubjectSchema.nullable().optional(),
 });
 export type NotificationResponse = z.infer<typeof notificationResponseSchema>;
 
 export const listNotificationsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(50).default(20),
+  limit: z.coerce.number().int().min(1).max(50).prefault(20),
   cursor: cursorSchema.optional(),
   unreadOnly: queryBoolean().default(false),
   /** Only this type (a NotificationType or a legacy type). */
@@ -230,14 +230,14 @@ export type ListNotificationsQuery = z.infer<typeof listNotificationsQuerySchema
 export const notificationListResponseSchema = z.object({
   data: z.array(notificationResponseSchema),
   page: pageInfoSchema,
-  meta: z.object({ unread: z.number().int().min(0) }),
+  meta: z.object({ unread: z.int().min(0) }),
 });
 export type NotificationListResponse = z.infer<typeof notificationListResponseSchema>;
 
-export const unreadCountResponseSchema = z.object({ unread: z.number().int().min(0) });
+export const unreadCountResponseSchema = z.object({ unread: z.int().min(0) });
 export type UnreadCountResponse = z.infer<typeof unreadCountResponseSchema>;
 
-export const markAllReadResponseSchema = z.object({ updated: z.number().int().min(0) });
+export const markAllReadResponseSchema = z.object({ updated: z.int().min(0) });
 export type MarkAllReadResponse = z.infer<typeof markAllReadResponseSchema>;
 
 /** `POST /v2/notifications/read-subject`: mark the caller's unread rows about one thing read (opening the conversation does this server-side too). */
@@ -248,23 +248,23 @@ export const readSubjectRequestSchema = z.object({
 export type ReadSubjectRequest = z.infer<typeof readSubjectRequestSchema>;
 
 export const readSubjectResponseSchema = z.object({
-  updated: z.number().int().min(0),
-  unread: z.number().int().min(0),
+  updated: z.int().min(0),
+  unread: z.int().min(0),
 });
 export type ReadSubjectResponse = z.infer<typeof readSubjectResponseSchema>;
 
 /** `GET /v2/notifications/summary`: the numbers around the Notifications page (all about the caller's own rows). */
 export const notificationSummaryResponseSchema = z.object({
-  unread: z.number().int().min(0),
+  unread: z.int().min(0),
   /** Rows received in the last 24 hours. */
-  last24Hours: z.number().int().min(0),
-  last7Days: z.number().int().min(0),
-  total: z.number().int().min(0),
+  last24Hours: z.int().min(0),
+  last7Days: z.int().min(0),
+  total: z.int().min(0),
   /** Rows per type (all that are kept, read or not), for the type filter. */
-  byType: z.record(z.number().int().min(0)),
+  byType: z.record(z.string(), z.int().min(0)),
 });
 export type NotificationSummaryResponse = z.infer<typeof notificationSummaryResponseSchema>;
 
 /** `DELETE /v2/notifications/:id` (dismiss one; "clear all" is the shell's existing `DELETE /v2/shell/notifications`): how many rows went. */
-export const deleteNotificationsResponseSchema = z.object({ deleted: z.number().int().min(0) });
+export const deleteNotificationsResponseSchema = z.object({ deleted: z.int().min(0) });
 export type DeleteNotificationsResponse = z.infer<typeof deleteNotificationsResponseSchema>;

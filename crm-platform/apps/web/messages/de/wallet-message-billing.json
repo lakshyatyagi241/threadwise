@@ -109,7 +109,8 @@
       "amount": "Betrag",
       "balance": "Saldo",
       "noDescription": "Guthabenbewegung",
-      "reason": "Grund"
+      "reason": "Grund",
+      "invoice": "Rechnung herunterladen"
     },
     "pricingPanel": {
       "title": "Nachrichtenpreise",
@@ -1038,6 +1039,11 @@
       "enrichment": "Kontaktabfrage",
       "chat_message": "Chat-Nachricht",
       "webbot_message": "Website-Chatbot-Nachricht"
+    },
+    "legacyInvoice": {
+      "title": "Rechnung",
+      "back": "Zurück zum Kontoauszug",
+      "print": "Drucken oder als PDF speichern"
     }
   }
 }

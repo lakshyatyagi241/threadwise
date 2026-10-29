@@ -149,7 +149,7 @@ export const fetchAttribution = (contactId: string, signal?: AbortSignal) =>
 /** Reads a cursor list to its end (bounded): these lists are short and a picker must never show half of one. */
 async function allPages<T>(
   path: string,
-  item: z.ZodType<T, z.ZodTypeDef, unknown>,
+  item: z.ZodType<T, unknown>,
   query: Record<string, string | number | boolean | undefined>,
   signal?: AbortSignal,
 ): Promise<T[]> {

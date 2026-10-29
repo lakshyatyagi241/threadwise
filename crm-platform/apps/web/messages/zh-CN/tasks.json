@@ -155,7 +155,12 @@
       "deleted": "{count, plural, other {已删除 # 项任务。}}",
       "deleteTitle": "删除所选任务？",
       "deleteMessage": "{count, plural, other {将对所有人删除 # 项任务。此操作无法撤销。}}",
-      "keep": "保留"
+      "keep": "保留",
+      "reopen": "重新打开",
+      "completeWithOutcome": "完成并填写任务结果",
+      "reopenWithOutcome": "重新打开并填写任务结果",
+      "pickOutcome": "任务结果",
+      "reopened": "{count, plural, other {已重新打开 {count} 个任务。}}"
     },
     "quick": {
       "label": "添加任务",

@@ -41,18 +41,19 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   // Lifecycle line (claim, PR, release, resolved): recorded on the incident timeline. When the Chat app edited the alert card (ownerHook true) that
   // card IS the message: no thread reply, no top-level announce. Webhook mode / no card: today's thread reply (+ announce) exactly as before.
   let ownerHook = null, cardHook = null; // cardHook(channel, body, opts) -> true when the Chat app created the one editable card
+  let lifeHook = null; // lifeHook(inc, text, who): Sentry incidents only, fire and forget (the bridge writes the line onto the Sentry issue)
   const esc = (x) => String(x).replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').slice(0, 200);
   // App mode: the deploy failure is ONE interactive card; unknown values are left out. Returns the channels where it could not be created.
   const openDeployCard = async (inc) => {
-    const m = inc.meta ?? {}, rows = [['Attempted', sha7(m.attemptedSha)], ...(m.liveSha ? [['Live', sha7(m.liveSha)]] : []), ...(m.prs?.length ? [['PRs', m.prs.map((n) => `#${Number(n)}`).join(' ')]] : []), ...(m.mergers?.length ? [['Merged by', m.mergers.join(' ')]] : []), ...(m.durationSeconds ? [['Took', `${Number(m.durationSeconds)} s`]] : [])];
-    const title = '\uD83D\uDD34 Deploy failed or was refused', body = { text: `${title}: needs a human or a fix PR`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `needs a human or a fix PR, incident ${inc.id}` }, sections: [{ widgets: rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } })) }] } }] };
+    const m = inc.meta ?? {}, rows = [['Release attempted', sha7(m.attemptedSha)], ...(m.liveSha ? [['Still live', sha7(m.liveSha)]] : []), ...(m.prs?.length ? [['Changes included', m.prs.map((n) => `#${Number(n)}`).join(' ')]] : []), ...(m.mergers?.length ? [['Merged by', m.mergers.join(' ')]] : []), ...(m.durationSeconds ? [['Build time', Number(m.durationSeconds) >= 90 ? `${Math.floor(Number(m.durationSeconds) / 60)} min ${Number(m.durationSeconds) % 60} s` : `${Number(m.durationSeconds)} s`]] : [])];
+    const title = '\uD83D\uDD34 Release did not go live', body = { text: `${title}: a person or a fix is needed`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `A person or a fix is needed · incident ${inc.id}` }, sections: [{ widgets: rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } })) }] } }] };
     const failed = [];
     for (const ch of inc.channels) if (!(await Promise.resolve(cardHook?.(ch, body, { threadKey: inc.threadKey, interactive: { incidentId: inc.id, firedAt: inc.startedAt } })).catch(() => false))) failed.push(ch);
     return failed;
   };
   // Sentry issue card (app mode): the Sentry fields are untrusted text, so every value goes through esc(); the link is allow-listed when the incident is created.
   const openSentryCard = async (inc) => {
-    const m = inc.meta ?? {}, rows = [['Project', m.project], ['Level', m.level], ['Events (last hour)', m.count], ['Users', m.userCount], ['Culprit', m.culprit], ...(m.frames?.length ? [['Stack (in-app)', m.frames.join('\n')]] : [])].filter(([, v]) => v !== '' && v != null);
+    const m = inc.meta ?? {}, rows = [['Project', m.project], ['Level', m.level], ['Events in the last hour', m.count], ['People affected', m.userCount], ['Where it happens', m.culprit], ...(m.frames?.length ? [['Code location', m.frames.join('\n')]] : [])].filter(([, v]) => v !== '' && v != null);
     const widgets = rows.map(([k, v]) => ({ decoratedText: { topLabel: k, text: esc(v), wrapText: true } }));
     if (m.url) widgets.push({ decoratedText: { topLabel: 'Sentry', text: `<a href="${m.url}">${esc(m.shortId || 'open in Sentry')}</a>`, wrapText: true } });
     const title = `\uD83D\uDD34 Sentry ${esc(m.level)}: ${esc(m.title)}`.slice(0, 200), body = { text: `${title}`.slice(0, 300), cardsV2: [{ cardId: 'inc', card: { header: { title, subtitle: `${esc(m.project)}, incident ${inc.id}` }, sections: [{ widgets }] } }] };
@@ -62,6 +63,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   };
   const life = async (inc, text, { who = 'bridge', tl, label = '', announceToo = false } = {}) => {
     inc.tl.push({ t: now(), who, text: String(tl ?? text).slice(0, 300) }); if (inc.tl.length > 40) inc.tl.shift();
+    if (inc.kind === 'sentry_issue') Promise.resolve().then(() => lifeHook?.(inc, String(tl ?? text), who)).catch(() => {});
     if (await Promise.resolve(ownerHook?.(inc.id)).catch(() => false)) return true;
     await step(inc, label, text); if (announceToo) await announce(inc, text); return false;
   };
@@ -286,13 +288,13 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
   }
   // A deploy that ended without changing the live version: one incident per attempted sha (dedup), resolved by the next live release.
   const openDeployFailure = ({ attemptedSha, liveSha, prs = [], mergers = [], durationSeconds = 0 }) => {
-    const message = ['\uD83D\uDD34 Deploy failed or was refused: needs a human or a fix PR', `Attempted: ${sha7(attemptedSha)} (live: ${sha7(liveSha) || 'unknown'})`, `PRs: ${prs.length ? prs.map((n) => `#${n}`).join(' ') : 'unknown'}`, `Merged by: ${mergers.join(' ') || 'unknown'}`, `Took ${durationSeconds}s`].join('\n');
+    const message = ['\uD83D\uDD34 Release did not go live: a person or a fix is needed', `Release attempted: ${sha7(attemptedSha)} (still live: ${sha7(liveSha) || 'unknown'})`, `PRs: ${prs.length ? prs.map((n) => `#${n}`).join(' ') : 'unknown'}`, `Merged by: ${mergers.join(' ') || 'unknown'}`, `Took ${durationSeconds}s`].join('\n');
     return handle({ playbook: 'deploy_failure', kind: 'deploy_failure', key: `deploy:${attemptedSha}`, threadKey: `deploy-${sha7(attemptedSha)}`, channel: 'deploy', diagnosis: message.split('\n')[1], message, meta: { attemptedSha, liveSha, prs, mergers, durationSeconds } });
   };
 
   // ---- team claim flow (docs/runbooks/team-incident-flow.md). Claims are checked and set synchronously (no await in between), so two racing callers cannot both win.
   const ttlMs = () => Math.max(0.01, Number(env.INCIDENT_CLAIM_TTL_HOURS ?? 4)) * 3600e3;
-  const hhmm = (t) => `${new Date(t).toISOString().slice(11, 16)} UTC`;
+  const hhmm = (t) => `${new Date(new Date(t).getTime() + 19800000).toISOString().slice(11, 16)} IST`; // IST, UTC+5:30: what the team reads
   const held = (inc) => !!inc.owner && (!!inc.prUrl || inc.claimExpiresAt > now());
   const statusOf = (inc) => inc.state === 'resolved' ? 'resolved' : inc.state === 'released' ? 'released' : inc.prUrl ? 'pr_raised' : held(inc) ? 'claimed' : inc.state === 'escalated' ? 'escalated' : 'open';
   const view = (inc) => ({ id: inc.id, playbook: inc.playbook, kind: inc.kind, alertname: inc.alertname ?? null, meta: inc.meta ?? null, releasedSha: inc.releasedSha ?? null, prSummary: inc.prSummary ?? null, resolution: inc.resolution ?? null, tl: inc.tl.slice(-40), state: inc.state, status: statusOf(inc), owner: held(inc) ? inc.owner : null, claimedAt: inc.claimedAt ?? null, claimExpiresAt: inc.claimExpiresAt ?? null, prUrl: inc.prUrl ?? null, prNumber: inc.prNumber ?? null, prMerged: inc.prMerged ?? null, prClosed: inc.prClosed ?? null, threadKey: inc.threadKey, startedAt: inc.startedAt, diagnosis: inc.diagnosis, notes: inc.notes, events: inc.events.map((e) => ({ t: e.t, label: e.label })) });
@@ -357,7 +359,7 @@ export function createResolver({ env = process.env, db = {}, post, promQuery, lo
     await life(inc, `PR #${inc.prClosed.number} was closed without merging; needs a human`, { tl: `PR #${inc.prClosed.number} closed without merging` }); return true;
   }
   return {
-    markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
+    markPrMerged, markPrClosed, mode, setOwnerHook: (f) => { ownerHook = f; }, setCardHook: (f) => { cardHook = f; }, setLifeHook: (f) => { lifeHook = f; }, handle, statementRecovered, settle: async () => { while (pending.size) await Promise.all([...pending]); },
     setRelease, openDeployFailure, openSentryIssue, sentryStatus, claim, releaseClaim, raisePr, addNote, sweepClaims, alertCleared, markCleared,
     get: (id) => (incidents.has(id) ? view(incidents.get(id)) : null),
     listFull: (status) => [...incidents.values()].map(view).filter((v) => !status || v.status === status),

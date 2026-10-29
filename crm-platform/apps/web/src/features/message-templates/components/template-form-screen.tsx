@@ -67,6 +67,7 @@ import {
   KINDS_OF_BUTTON_TYPE,
   OFFER_TEXT_MAX,
   isOffer,
+  copyState,
 } from '../lib/form-model';
 import { languageOptions } from '../lib/languages';
 import { CATEGORIES, canEdit, isLive } from '../lib/status-model';
@@ -243,16 +244,6 @@ export function TemplateFormScreen({
   );
 }
 
-/** A new template that starts as a copy of `d`: its own name, and no media sample (a new file is chosen for the copy). */
-function copyState(d: TemplateDetail): FormState {
-  return {
-    ...stateFromDetail(d),
-    name: `${d.name.slice(0, 512 - '_copy'.length)}_copy`,
-    headerSampleUrl: '',
-    headerPreviewUrl: '',
-  };
-}
-
 interface Saved {
   id: string;
   rowVersion: number;
@@ -302,8 +293,9 @@ function TemplateForm({
 
   // "Build with AI" (TW-TPL-016): fills this form's own fields for review; nothing is submitted.
   const [aiOpen, setAiOpen] = useState(false);
-  const fillFromAi = (draft: TplAiDraft) => {
-    setState((s) => applyAiDraft(s, draft));
+  const fillFromAi = (draft: TplAiDraft, language: string) => {
+    // The draft is written in the language picked in the dialog, and the template takes it.
+    setState((s) => ({ ...applyAiDraft(s, draft), language }));
     setFailure(null);
     setResult(null);
     toast(t('ai.applied'), 'success');
@@ -643,6 +635,21 @@ function TemplateForm({
           ) : carousel ? (
             <>
               <Section title={t('body.title')} hint={t('body.hint')}>
+                <div role="toolbar" aria-label={t('body.toolbar')} className="flex flex-wrap gap-1">
+                  {TOOLBAR.map((b) => (
+                    <Button
+                      key={b.id}
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => toggle(b.marker)}
+                    >
+                      {t(`body.format.${b.id}`)}
+                    </Button>
+                  ))}
+                  <Button size="sm" variant="secondary" onClick={insertVariable}>
+                    {t('body.variable')}
+                  </Button>
+                </div>
                 <Field
                   label={t('body.label')}
                   htmlFor={`${base}-body`}

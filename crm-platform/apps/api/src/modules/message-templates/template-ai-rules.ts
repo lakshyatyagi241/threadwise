@@ -25,12 +25,22 @@ Rules:
 4. Keep tone, language, and intent consistent with the brief.
 5. Output ONLY the JSON object. No explanation. No code fences.`;
 
+/** A Meta language code as the model reads it best: its English name beside the code ("Hindi (hi)"). */
+export function languageForPrompt(code: string): string {
+  try {
+    const name = new Intl.DisplayNames(['en'], { type: 'language' }).of(code.replace('_', '-'));
+    return name && name !== code ? `${name} (${code})` : code;
+  } catch {
+    return code;
+  }
+}
+
 /** The brief as the model reads it: one line per field the person filled in. */
 export function templateBriefLines(i: TplAiGenerateInput): string[] {
   const lines = [
     `Business name: ${i.businessName}`,
     `Template category (Meta review path): ${i.metaCategory.toLowerCase()}`,
-    `Language: ${i.language}`,
+    `Language: ${languageForPrompt(i.language)}`,
   ];
   if (i.industry) lines.push(`Industry: ${i.industry}`);
   if (i.occasion) lines.push(`Occasion: ${i.occasion}`);
@@ -66,6 +76,20 @@ export function templateSlug(raw: unknown): string {
  * header and footer lose any variable (Meta allows none there), at most three buttons are kept, a link button needs an http(s)
  * address and a call button a phone number, a quick reply is never kept next to a link button (Meta's order rule).
  */
+/** The wait before the one more try of a vendor call that failed with a throttle or a server error. */
+export const VENDOR_RETRY_WAIT_MS = 2_000;
+
+/**
+ * A vendor answer worth one more try: a throttle (429) or a server error (5xx), which the adapter reports as "AI provider answered
+ * <status>". A timeout or a refusal (a bad key, a bad request) is not: the same call would fail the same way.
+ */
+export function isRetryableVendorError(err: unknown): boolean {
+  const m = /AI provider answered (\d{3})\b/.exec(err instanceof Error ? err.message : '');
+  if (!m) return false;
+  const status = Number(m[1]);
+  return status === 429 || status >= 500;
+}
+
 export function parseTemplateDraft(raw: string): TplAiDraft | null {
   let clean = raw.trim();
   const fenced = /^```(?:json)?\s*([\s\S]*?)\s*```$/.exec(clean);

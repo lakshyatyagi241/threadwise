@@ -15,6 +15,7 @@ import { useFlb } from '../lib/msg';
 import { lookOf } from '../lib/node-ui';
 import { NODE_W } from '../lib/graph-ops';
 import { AskFileCardBody, AskLocationCardBody } from './ask-media/cards';
+import { InlineEditBody, INLINE_EDIT_TYPES } from './inline-edit-body';
 import { opensNodeOnDoubleClick } from './node-open';
 import { NodePreview } from './node-preview';
 import { SubflowCardBody } from './subflow-card';
@@ -40,6 +41,16 @@ export const Icon = ({ d, className = 'h-4 w-4' }: { d: string; className?: stri
   </svg>
 );
 
+/** The node(s) an output port is wired to, written beside the port so the card says where it leads without following the line. */
+function PortTarget({ ids }: { ids: readonly string[] | undefined }) {
+  if (!ids || ids.length === 0) return null;
+  return (
+    <span data-testid="port-target" className="port-target">
+      → {ids.join(', ')}
+    </span>
+  );
+}
+
 interface Props {
   node: FlowNode;
   ctx: FlbBuilderContext;
@@ -50,6 +61,8 @@ interface Props {
   /** While another node is selected: how this one relates to it (`dim` = not wired to it). */
   focus?: 'upstream' | 'downstream' | 'dim' | null;
   hoveredPort: string | null;
+  /** Where each output goes: the ids of the nodes it is wired to, by port (handle) id. Drawn beside the port, outside the card. */
+  outTo?: Readonly<Record<string, readonly string[]>>;
   onPointerDown: (e: React.PointerEvent, id: string) => void;
   onSelect: (id: string) => void;
   /** Double-click on the card: select it and open the inspector. */
@@ -73,6 +86,7 @@ export const NodeCard = memo(function NodeCard({
   dragging,
   focus,
   hoveredPort,
+  outTo,
   onPointerDown,
   onSelect,
   onOpen,
@@ -165,7 +179,7 @@ export const NodeCard = memo(function NodeCard({
       </div>
 
       {node.type === 'end' ? (
-        <div className="px-3 py-4 text-center text-[11.5px] italic text-muted-foreground">
+        <div className="px-3 py-4 text-center text-[11.5px] text-muted-foreground">
           {tn('flowEnds')}
         </div>
       ) : null}
@@ -176,6 +190,8 @@ export const NodeCard = memo(function NodeCard({
         <AskLocationCardBody node={node} onPatch={onPatch} />
       ) : node.type === 'subflow' ? (
         <SubflowCardBody node={node} ctx={ctx} onPatch={onPatch} />
+      ) : INLINE_EDIT_TYPES.has(node.type) && onPatch ? (
+        <InlineEditBody node={node} onPatch={onPatch} />
       ) : (
         <NodePreview node={node} ctx={ctx} />
       )}
@@ -246,7 +262,9 @@ export const NodeCard = memo(function NodeCard({
                 onMouseLeave={() => onPortHover(null)}
                 className={`port out ${r.kind === 'yes' ? 'is-yes ' : r.kind === 'no' ? 'is-no ' : ''}${hoveredPort === `${node.id}:${r.id}` ? 'active' : ''}`}
                 title={tn('outPort', { label: portLabel(tf, node, r) })}
-              />
+              >
+                <PortTarget ids={outTo?.[r.id]} />
+              </div>
             </div>
           ))}
         </div>
@@ -264,7 +282,9 @@ export const NodeCard = memo(function NodeCard({
           className={`port out ${hoveredPort === `${node.id}:${rows[0]!.id}` ? 'active' : ''}`}
           style={{ top: '50%' }}
           title={tn('output')}
-        />
+        >
+          <PortTarget ids={outTo?.[rows[0]!.id]} />
+        </div>
       ) : null}
     </div>
   );

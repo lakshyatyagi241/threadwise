@@ -166,16 +166,23 @@ case "$action" in
     echo "recorded"
     ;;
   changes)
-    # The pull requests in a release, for the console. Cut to 8000 characters, control characters dropped, and the SQL accepts only a
+    # The pull requests in a release, for the console. Cut to 60000 characters (20 PRs with a description each), control characters dropped, and the SQL accepts only a
     # JSON array (the column's check); anything else is simply not recorded.
     cattempt=$arg
     [[ "$cattempt" =~ ^[0-9a-f-]{36}$ ]] || { echo "bad attempt id" >&2; exit 2; }
-    cjson=$(head -c 8000 | LC_ALL=C tr -d '\000-\037\177' || true)
-    compose exec -T postgres sh -c 'exec psql -X -q -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -v attempt="$1" -v changes="$2" -f -' \
-      sh "$cattempt" "$cjson" >/dev/null 2>&1 <<'SQL' || true
+    cjson=$(head -c 60000 | LC_ALL=C tr -d '\000-\037\177' || true)
+    # Says what happened: this used to print "recorded" whatever the database did, so a refused update (bad JSON, no such column) looked like
+    # success to the build server and the console just showed an empty Changes column. The build server logs a non-zero answer.
+    if compose exec -T postgres sh -c 'exec psql -X -q -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -v attempt="$1" -v changes="$2" -f -' \
+      sh "$cattempt" "$cjson" >/dev/null 2>&1 <<'SQL'
 UPDATE platform_releases SET changes = :'changes'::jsonb WHERE attempt = :'attempt';
 SQL
-    echo "recorded"
+    then
+      echo "recorded"
+    else
+      echo "not recorded: the database refused the update" >&2
+      exit 1
+    fi
     ;;
   release)
     [[ "$arg" =~ ^[a-f0-9]{7,40}$ ]] || { echo "bad tag" >&2; exit 2; }

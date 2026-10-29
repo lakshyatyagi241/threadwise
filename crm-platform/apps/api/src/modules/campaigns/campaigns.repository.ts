@@ -25,6 +25,14 @@ const list = (values: readonly (string | number)[], cast: 'uuid' | 'bigint' | 't
 export const AGG_SENT = `r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
 export const AGG_DELIVERED = `r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
 export const AGG_READ = `r.status IN ('read','responded') OR r.read_at IS NOT NULL`;
+/**
+ * A recipient who opted out: the row itself says so (a STOP reported for this campaign), or the contact opted out after this campaign's
+ * message reached them (a STOP typed in the inbox, the contact screen, a consent change), which the row is never told about. Needs the
+ * contact joined as `c` (a LEFT JOIN: a recipient with no contact has none).
+ */
+export const OPTED_OUT = sql.raw(
+  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND r.sent_at IS NOT NULL AND coalesce(c.unsubscribed_at, r.sent_at) >= r.sent_at))`,
+);
 export const AGG = sql.raw(`
   count(*) FILTER (WHERE ${AGG_SENT})::int AS a_sent,
   count(*) FILTER (WHERE ${AGG_DELIVERED})::int AS a_delivered,
@@ -218,7 +226,12 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*, cost.cost_minor, cost.cost_currency
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*,
+         -- A campaign migrated from the old system has no charge rows; it shows what the old system billed, less what it refunded.
+         CASE WHEN cost.cost_minor = 0 AND c.legacy_billed_minor IS NOT NULL
+              THEN greatest(c.legacy_billed_minor - coalesce(c.legacy_refunded_minor, 0), 0)
+              ELSE cost.cost_minor END AS cost_minor,
+         cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
@@ -345,6 +358,24 @@ export class CampaignsRepository {
       sql`SELECT count(*)::int AS n FROM wpcampaigns WHERE org_id = ${orgId}`,
     );
     return Number((res.rows[0] as { n: number }).n);
+  }
+
+  /**
+   * Whether another campaign or draft of the workspace already goes by this name (without case or edge spaces). `selfId` is the one
+   * being saved: it never counts against itself, and keeps a name it already had, so a workspace that already holds two of a name can
+   * still edit them without renaming.
+   */
+  async nameTaken(tx: Tx, orgId: number, name: string, selfId: number | null): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wpcampaigns o
+      WHERE o.org_id = ${orgId}
+        AND lower(btrim(o.campaign_name)) = lower(btrim(${name}))
+        AND (${selfId}::bigint IS NULL OR o.id <> ${selfId}::bigint)
+        AND NOT EXISTS (
+          SELECT 1 FROM wpcampaigns s
+          WHERE s.org_id = ${orgId} AND s.id = ${selfId}::bigint AND lower(btrim(s.campaign_name)) = lower(btrim(${name})))
+      LIMIT 1`);
+    return res.rows.length > 0;
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<CampaignRow | undefined> {
@@ -1387,6 +1418,18 @@ export class CampaignsRepository {
     };
   }
 
+  /** How many recipients the given campaigns (runs) have: the row count of an export. */
+  async recipientCount(tx: Tx, orgId: number, campaignIds: number[]): Promise<number> {
+    if (campaignIds.length === 0) return 0;
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM wp_campaign_contacts r
+      WHERE r.org_id = ${orgId} AND r.campaign_id IN (${sql.join(
+        campaignIds.map((id) => sql`${id}`),
+        sql`, `,
+      )})`);
+    return Number((res.rows[0] as { n?: number } | undefined)?.n ?? 0);
+  }
+
   /** Every recipient, newest first, for the CSV export (read in pages by the caller). */
   async recipientsAfter(
     tx: Tx,
@@ -1500,7 +1543,17 @@ export class CampaignsRepository {
   async replies(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
       SELECT c.uuid AS contact_uuid, coalesce(r.recipient_name, c.name, '') AS name,
-             coalesce(r.phone_number, ${REACHED_AT}, '') AS phone, coalesce(r.response, '') AS response, r.responded_at
+             coalesce(r.phone_number, ${REACHED_AT}, '') AS phone,
+             coalesce(
+               nullif(r.response, ''),
+               -- No text was reported with the reply: show the customer's own message nearest to the moment it was recorded.
+               (SELECT coalesce(nullif(m.body, ''), '[' || m.kind || ']')
+                  FROM messages m JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+                 WHERE m.org_id = r.org_id AND cv.contact_id = r.contact_id AND m.direction = 'in'
+                   AND m.created_at BETWEEN r.responded_at - interval '1 hour' AND r.responded_at + interval '1 hour'
+                 ORDER BY abs(extract(epoch FROM (m.created_at - r.responded_at))) LIMIT 1),
+               '') AS response,
+             r.responded_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND r.responded_at IS NOT NULL
       ORDER BY r.responded_at DESC LIMIT ${limit}`);
@@ -1517,9 +1570,10 @@ export class CampaignsRepository {
   async audienceMakeup(tx: Tx, orgId: number, campaignId: number) {
     const manual = await tx.execute(sql`
       SELECT count(*)::int AS n,
-             count(*) FILTER (WHERE phone_number IS NULL AND contact_id IS NULL)::int AS invalid,
-             count(*) FILTER (WHERE status = 'unsubscribed' OR is_unsubscribed)::int AS opted_out
-      FROM wp_campaign_contacts WHERE org_id = ${orgId} AND campaign_id = ${campaignId}`);
+             count(*) FILTER (WHERE r.phone_number IS NULL AND r.contact_id IS NULL)::int AS invalid,
+             count(*) FILTER (WHERE ${OPTED_OUT})::int AS opted_out
+      FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId}`);
     const m = manual.rows[0] as { n: number; invalid: number; opted_out: number };
     const groups = await tx.execute(sql`
       SELECT g.name AS name, count(*)::int AS n
@@ -1548,8 +1602,9 @@ export class CampaignsRepository {
       SELECT g.name AS name, count(DISTINCT r.id)::int AS recipients,
              count(DISTINCT r.id) FILTER (WHERE r.responded_at IS NOT NULL)::int AS replies,
              count(DISTINCT r.id) FILTER (WHERE r.read_at IS NOT NULL)::int AS reads,
-             count(DISTINCT r.id) FILTER (WHERE r.is_unsubscribed OR r.status = 'unsubscribed')::int AS opt_outs
+             count(DISTINCT r.id) FILTER (WHERE ${OPTED_OUT})::int AS opt_outs
       FROM wp_campaign_contacts r
+      LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       JOIN contact_group_members gm ON gm.org_id = r.org_id AND gm.contact_id = r.contact_id
       JOIN contact_groups g ON g.org_id = gm.org_id AND g.id = gm.group_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId}
@@ -1582,10 +1637,10 @@ export class CampaignsRepository {
   async optOuts(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
       SELECT coalesce(r.recipient_name, c.name, '') AS name, coalesce(r.phone_number, ${REACHED_AT}, '') AS phone,
-             r.unsubscribed_at, r.sent_at
+             coalesce(r.unsubscribed_at, c.unsubscribed_at) AS unsubscribed_at, r.sent_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
-      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND (r.is_unsubscribed OR r.status = 'unsubscribed')
-      ORDER BY coalesce(r.unsubscribed_at, r.sent_at) DESC NULLS LAST, r.id DESC LIMIT ${limit}`);
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND ${OPTED_OUT}
+      ORDER BY coalesce(r.unsubscribed_at, c.unsubscribed_at, r.sent_at) DESC NULLS LAST, r.id DESC LIMIT ${limit}`);
     return (res.rows as Raw[]).map((r) => ({
       name: String(r.name),
       phone: String(r.phone),

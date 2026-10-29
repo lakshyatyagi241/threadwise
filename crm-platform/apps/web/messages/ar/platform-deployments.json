@@ -106,7 +106,11 @@
         "failed": "فشل",
         "rolled_back": "أُرجع"
       },
-      "by": "بواسطة {author}"
+      "by": "بواسطة {author}",
+      "raisedIst": "تاريخ الإنشاء {time} IST",
+      "noProgress": "لا تقدّم منذ {minutes} دقيقة. ربما توقف البناء أو الإصدار.",
+      "noChangesAlert": "لا تعرض أحدث الإصدارات طلبات السحب الخاصة بها. على الأرجح أن deploy-main.sh على خادم البناء أو ci-entry.sh على المضيف قديم: ثبّت الإصدارات الحالية (deploy/build-server/README.md).",
+      "moreChanges": "{count} تغييرات أخرى"
     }
   }
 }

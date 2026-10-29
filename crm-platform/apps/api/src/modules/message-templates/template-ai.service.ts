@@ -6,11 +6,15 @@ import { AppError } from '../../common/errors/app-error';
 import {
   CAMPAIGN_AI_PORT,
   type CampaignAiPort,
+  type CampaignAiRequest,
+  type CampaignAiResult,
 } from '../../infra/providers/campaigns/campaign-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { AiChargeService } from '../wallet-message-billing';
 import {
   TEMPLATE_AI_SYSTEM_PROMPT,
+  VENDOR_RETRY_WAIT_MS,
+  isRetryableVendorError,
   parseTemplateDraft,
   templateBriefLines,
 } from './template-ai-rules';
@@ -61,7 +65,7 @@ export class TemplateAiService {
     const usageId = randomUUID();
     let text = '';
     try {
-      const result = await this.ai.complete({
+      const result = await this.complete({
         provider: input.provider,
         model: input.model,
         apiKey: resolved.key,
@@ -115,5 +119,20 @@ export class TemplateAiService {
       );
     }
     return { template, model: input.model };
+  }
+
+  /**
+   * The vendor call, once more after a throttle or a server error: the vendor often answers the same request a few seconds later.
+   * A timeout or a refusal is thrown at once, as before.
+   */
+  private async complete(req: CampaignAiRequest): Promise<CampaignAiResult> {
+    try {
+      return await this.ai.complete(req);
+    } catch (err) {
+      if (!isRetryableVendorError(err)) throw err;
+      this.logger.warn({ err: String(err) }, '[TPL] the AI provider was busy; trying once more');
+      await new Promise((resolve) => setTimeout(resolve, VENDOR_RETRY_WAIT_MS));
+      return this.ai.complete(req);
+    }
   }
 }

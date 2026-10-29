@@ -13,6 +13,7 @@ import { Redis } from 'ioredis';
 import type { Response } from 'express';
 import { Public } from '../common/decorators';
 import { isDependencyOutage } from '../common/errors/dependency-outage';
+import { inflight } from '../common/http/http-drain';
 import { DatabaseService } from '../infra/db/database.service';
 import { HealthDb } from '../infra/db/side-pools';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
@@ -100,6 +101,11 @@ export class HealthController {
   @Get('ready')
   @ApiOperation({ summary: 'Readiness — dependencies reachable (503 when not)' })
   async readiness(@Res({ passthrough: true }) res: Response) {
+    // Shutting down: tell the proxy to stop sending requests here while the ones running finish (HttpDrainService).
+    if (inflight.draining) {
+      res.status(HttpStatus.SERVICE_UNAVAILABLE);
+      return { status: 'draining' };
+    }
     // Concurrent probes share one in-flight check: a burst of probes (or a scraper) costs the database one SELECT 1, not one per request.
     this.inflight ??= this.runReadiness().finally(() => (this.inflight = undefined));
     const { ready, body } = await this.inflight;
@@ -123,7 +129,10 @@ export class HealthController {
     const ready = primary.status === 'up' && redis.status === 'up';
     return {
       ready,
-      body: { status: ready ? 'ok' : 'degraded', checks: { primary, replica, redis, workers, outbox } },
+      body: {
+        status: ready ? 'ok' : 'degraded',
+        checks: { primary, replica, redis, workers, outbox },
+      },
     };
   }
 

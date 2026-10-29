@@ -172,7 +172,8 @@
         "type": "유형",
         "members": "멤버",
         "permissions": "권한",
-        "lastEdited": "마지막 수정",
+        "lastEdited": "마지막 수정 시각",
+        "lastEditedBy": "수정: {name}",
         "actions": "작업"
       },
       "row": {

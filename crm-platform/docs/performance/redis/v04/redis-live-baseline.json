@@ -1,0 +1,278 @@
+{
+  "at": "2026-10-26T10:36:35.897Z",
+  "url": "redis://127.0.0.1:7201",
+  "db": 0,
+  "prefix": "",
+  "server": "7.4.11",
+  "memory": {
+    "usedMemory": 3771944,
+    "usedMemoryPeak": 12457720,
+    "fragmentation": 3.39,
+    "maxmemory": 0,
+    "policy": "noeviction"
+  },
+  "families": [
+    {
+      "family": "rbac:*:v1:u3",
+      "keys": 1,
+      "bytes": 24632,
+      "avgBytes": 24632,
+      "maxBytes": 24632,
+      "noTtl": 0,
+      "ttlMaxSeconds": 565,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "bull:*:events",
+      "keys": 2,
+      "bytes": 9520,
+      "avgBytes": 4760,
+      "maxBytes": 4760,
+      "noTtl": 2,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "stream"
+      ],
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "ownerReason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12).",
+      "status": "owned"
+    },
+    {
+      "family": "bull:*:meta",
+      "keys": 52,
+      "bytes": 6488,
+      "avgBytes": 125,
+      "maxBytes": 136,
+      "noTtl": 52,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "hash"
+      ],
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "ownerReason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12).",
+      "status": "owned"
+    },
+    {
+      "family": "bull:*:*",
+      "keys": 4,
+      "bytes": 4512,
+      "avgBytes": 1128,
+      "maxBytes": 1136,
+      "noTtl": 4,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "hash"
+      ],
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "ownerReason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12).",
+      "status": "owned"
+    },
+    {
+      "family": "bull:*:stalled-check",
+      "keys": 46,
+      "bytes": 3592,
+      "avgBytes": 78,
+      "maxBytes": 88,
+      "noTtl": 0,
+      "ttlMaxSeconds": 16,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "infra:workers",
+      "keys": 1,
+      "bytes": 376,
+      "avgBytes": 376,
+      "maxBytes": 376,
+      "noTtl": 1,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "zset"
+      ],
+      "owner": "platform-infrastructure (observability/worker-heartbeat.service.ts)",
+      "ownerReason": "One sorted-set member per worker process; every beat removes members older than twice the alive window (zremrangebyscore) and a clean stop removes its own.",
+      "status": "owned"
+    },
+    {
+      "family": "bull:*:completed",
+      "keys": 1,
+      "bytes": 272,
+      "avgBytes": 272,
+      "maxBytes": 272,
+      "noTtl": 1,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "zset"
+      ],
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "ownerReason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12).",
+      "status": "owned"
+    },
+    {
+      "family": "auth:gate:*:*",
+      "keys": 1,
+      "bytes": 248,
+      "avgBytes": 248,
+      "maxBytes": 248,
+      "noTtl": 0,
+      "ttlMaxSeconds": 25,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "bull:*:id",
+      "keys": 2,
+      "bytes": 152,
+      "avgBytes": 76,
+      "maxBytes": 80,
+      "noTtl": 2,
+      "ttlMaxSeconds": 0,
+      "types": [
+        "string"
+      ],
+      "owner": "queues (apps/api/src/infra/queue/queues.ts)",
+      "ownerReason": "BullMQ job state cannot expire (evicting or expiring it loses the job). Bounded per queue by removeOnComplete (last 1,000, 1 h) and removeOnFail (last 500, 3 days); the event stream is trimmed by BullMQ at 10,000 entries (maxEvents default, bullmq 6.3.12).",
+      "status": "owned"
+    },
+    {
+      "family": "infra:outbox:sample",
+      "keys": 1,
+      "bytes": 144,
+      "avgBytes": 144,
+      "maxBytes": 144,
+      "noTtl": 0,
+      "ttlMaxSeconds": 57,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "auth:known-nets:staff:*:*",
+      "keys": 1,
+      "bytes": 136,
+      "avgBytes": 136,
+      "maxBytes": 136,
+      "noTtl": 0,
+      "ttlMaxSeconds": 7775965,
+      "types": [
+        "set"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "wa:worker:*",
+      "keys": 1,
+      "bytes": 136,
+      "avgBytes": 136,
+      "maxBytes": 136,
+      "noTtl": 0,
+      "ttlMaxSeconds": 86,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "auth:act:*",
+      "keys": 1,
+      "bytes": 96,
+      "avgBytes": 96,
+      "maxBytes": 96,
+      "noTtl": 0,
+      "ttlMaxSeconds": 604795,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "auth:cap:*",
+      "keys": 1,
+      "bytes": 96,
+      "avgBytes": 96,
+      "maxBytes": 96,
+      "noTtl": 0,
+      "ttlMaxSeconds": 2678364,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "auth:gate-gen:*:*",
+      "keys": 1,
+      "bytes": 64,
+      "avgBytes": 64,
+      "maxBytes": 64,
+      "noTtl": 0,
+      "ttlMaxSeconds": 84,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "auth:epoch",
+      "keys": 1,
+      "bytes": 56,
+      "avgBytes": 56,
+      "maxBytes": 56,
+      "noTtl": 0,
+      "ttlMaxSeconds": 25,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    },
+    {
+      "family": "rbac:version:*",
+      "keys": 1,
+      "bytes": 56,
+      "avgBytes": 56,
+      "maxBytes": 56,
+      "noTtl": 0,
+      "ttlMaxSeconds": 565,
+      "types": [
+        "string"
+      ],
+      "owner": null,
+      "ownerReason": null,
+      "status": "ttl"
+    }
+  ],
+  "totals": {
+    "keys": 118,
+    "bytes": 50576,
+    "families": 17,
+    "keysNoTtl": 62,
+    "familiesUnowned": 0
+  }
+}

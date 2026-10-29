@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta cho phép một lần chỉnh sửa trong 24 giờ và mười lần trong 30 ngày đối với mẫu đã được duyệt. Hãy thử lại sau.",
       "ROW_VERSION_CONFLICT": "Người khác đã thay đổi mẫu này trong lúc bạn đang chỉnh sửa. Hãy tải lại để xem phiên bản mới nhất, rồi áp dụng lại thay đổi của bạn.",
       "VALIDATION_FAILED": "Một số trường không hợp lệ. Hãy kiểm tra các trường bên dưới.",
-      "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút."
+      "INTERNAL": "Máy chủ không xử lý được yêu cầu này. Hãy thử lại sau ít phút.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Xem trước",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Nhập ID Flow.",
           "flowIdInvalid": "ID Flow là một số.",
           "screenRequired": "Nhập ID màn hình.",
-          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác."
+          "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác.",
+          "flowIdNotMeta": "Biểu mẫu này chưa phải Flow của Meta (Flow ID không phải là số). Hãy mở Biểu mẫu WhatsApp, lưu và xuất bản, rồi chọn tại đây."
         },
         "catalogHint": "Mở danh mục WhatsApp của bạn. Nút hiển thị “Xem danh mục” và phải là nút duy nhất.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "ID dạng số của một WhatsApp Flow đã xuất bản, lấy từ trình quản lý Flows của Meta.",
-        "screen": "Màn hình mở đầu",
-        "screenHint": "ID của màn hình mà biểu mẫu mở ra, ví dụ WELCOME."
+        "flowPick": "Biểu mẫu WhatsApp",
+        "flowPickHint": "Chọn một biểu mẫu WhatsApp đã xuất bản của bạn. Nút sẽ mở nó ngay trong WhatsApp.",
+        "flowChoose": "Chọn biểu mẫu WhatsApp",
+        "flowLoading": "Đang tải biểu mẫu…",
+        "flowNone": "Bạn chưa có biểu mẫu WhatsApp nào đã xuất bản.",
+        "flowNoneLink": "Tạo và xuất bản một biểu mẫu",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (hãy xuất bản lên Meta trước)"
       },
       "result": {
         "metaRefused": "Đã lưu, nhưng Meta từ chối mẫu.",
@@ -413,6 +425,7 @@
         "format": "Thẻ hiển thị",
         "formatImage": "Hình ảnh",
         "formatVideo": "Video",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB.",
         "count": "{used}/{max} thẻ",
         "add": "Thêm thẻ",
         "needTwo": "Băng chuyền cần ít nhất {min} thẻ.",
@@ -425,7 +438,9 @@
         "buttons": "Nút",
         "buttonText": "Văn bản nút",
         "buttonUrl": "URL trang web",
-        "buttonPhone": "Số điện thoại"
+        "buttonPhone": "Số điện thoại",
+        "moveUp": "Chuyển thẻ {n} lên",
+        "moveDown": "Chuyển thẻ {n} xuống"
       },
       "offer": {
         "title": "Ưu đãi có thời hạn",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Ngôn từ quảng cáo không được phép trong danh mục này.",
         "TAG_CONTENT_MISMATCH": "Danh mục không khớp với nội dung (ví dụ: nội dung khuyến mãi trong mẫu tin UTILITY).",
         "SCAM": "Meta gắn cờ mẫu tin này có khả năng lừa đảo. Hãy xem lại các tuyên bố và ngôn từ."
+      },
+      "stats": {
+        "title": "Hiệu quả của mẫu này",
+        "hint": "Tính từ các tin nhắn đã gửi bằng mẫu",
+        "loading": "Đang tải số liệu",
+        "error": "Không tải được số liệu.",
+        "none": "Chưa có tin nhắn nào được gửi bằng mẫu này.",
+        "sent": "Đã gửi",
+        "delivered": "Đã nhận",
+        "read": "Đã đọc",
+        "replied": "Đã trả lời",
+        "failed": "Thất bại",
+        "percent": "{value}%",
+        "footer": "{total} tin nhắn đã gửi bằng mẫu này, {queued} đang chờ",
+        "lastSent": "gửi lần cuối {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Giọng điệu",
       "pickTone": "Chọn giọng điệu",
       "language": "Ngôn ngữ",
-      "languageHint": "Bản nháp được viết bằng ngôn ngữ của biểu mẫu.",
+      "languageHint": "Chọn bất kỳ ngôn ngữ nào Meta chấp nhận. Bản nháp được viết bằng ngôn ngữ đó và mẫu tin dùng ngôn ngữ này.",
       "notes": "Yêu cầu tùy chỉnh",
       "notesNote": "tùy chọn / tối đa 2000",
       "notesPlaceholder": "Bất kỳ điều gì bạn muốn đưa vào: biến, liên kết, cách diễn đạt bắt buộc, điều cần tránh…",

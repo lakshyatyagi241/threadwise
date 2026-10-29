@@ -17,18 +17,19 @@
       "refresh": "更新",
       "newCampaign": "新規キャンペーン",
       "tile": {
-        "sent": "送信済み",
+        "sent": "送信メッセージ",
         "delivered": "配信済み",
         "read": "既読",
-        "failed": "失敗",
-        "processing": "処理中",
-        "campaigns": "{count}件のキャンペーン",
+        "failed": "失敗メッセージ",
+        "processing": "送信中のキャンペーン",
+        "campaigns": "{count, plural, other {#件のキャンペーン}}から",
         "inFlight": "送信中",
         "awaiting": "待機中",
-        "queued": "{count}件待機中",
+        "queued": "開始予定 {count}件",
         "deliveredRate": "配信率 {rate}%",
         "readRate": "既読率 {rate}%",
-        "failedCampaigns": "失敗したキャンペーン {count}件"
+        "failedCampaigns": "{count, plural, other {#件のキャンペーン}}が失敗",
+        "note": "送信・配信・既読・失敗はメッセージ数で、失敗したメッセージは送信に含まれません。各数字の下の小さい行はキャンペーン数です。すべて下で選んだ期間（{range}）に従います。"
       },
       "range": {
         "all": "全期間",
@@ -174,7 +175,8 @@
         "status": "ステータス",
         "schedule": "スケジュール",
         "actions": "操作"
-      }
+      },
+      "newCampaignAny": "新規キャンペーン"
     },
     "builder": {
       "loadError": "このキャンペーンを読み込めませんでした。",
@@ -314,7 +316,22 @@
         "previousTitle": "過去の配信",
         "previousHint": "過去の一斉配信やキャンペーンの配信先を追加します。既読、返信、クリックした人だけに絞ることもできます。",
         "previousEstimate": "{count, plural, other {過去の配信から最大#人(概算: 2件の配信に含まれる人は2回数えられます)。}}",
-        "previousEditHint": "編集時には、以前に選択した過去の配信は表示されません。このキャンペーンの受信者はすでに連絡先として保存されています。さらに追加するには、もう一度選択してください。"
+        "previousEditHint": "編集時には、以前に選択した過去の配信は表示されません。このキャンペーンの受信者はすでに連絡先として保存されています。さらに追加するには、もう一度選択してください。",
+        "emails": "メールアドレスを手入力",
+        "emailsHint": "1行に1件、またはカンマかセミコロンで区切ります。",
+        "emailsPlaceholder": "1行に1つのメールアドレス",
+        "emailsCount": "{count} 件のアドレス",
+        "emailCsvHint": "列: 名前、メール。それ以外の列はメッセージで使える変数になります。",
+        "emailModes": {
+          "csv": {
+            "title": "CSVをアップロード",
+            "hint": "このキャンペーンのメールアドレスをインポートします。"
+          },
+          "manual": {
+            "title": "メールアドレスを手入力",
+            "hint": "1行に1つのメールアドレスを貼り付けてください。"
+          }
+        }
       },
       "message": {
         "title": "メッセージ",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
       "draftChip": "下書き / 未保存",
+      "draftSavedChip": "下書き · 保存済み",
       "steps": {
         "label": "キャンペーンの手順",
         "required": "必須",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "テンプレート",
         "pickTemplate": "— テンプレートを選択 —",
+        "searchTemplates": "名前または言語でテンプレートを検索",
+        "noTemplateMatch": "検索に一致するテンプレートはありません。",
         "templateHint": "選択した番号の承認済みテンプレートのみ表示されます。変数は下で入力します。",
         "noTemplates": "この番号には承認済みのテンプレートがまだありません。作成して承認されるまでお待ちください。",
         "deliveryTitle": "配信",
@@ -725,7 +745,11 @@
         "balanceShort": "残高が不足しています。あと {shortfall} 必要です。",
         "balanceLowFull": "残高が全額 {full} を下回っています。現在はプランで賄えますが、プランが終了すると賄えません。",
         "chargedNowLabel": "今回ウォレットから請求される金額"
-      }
+      },
+      "kickerEmail": "メールキャンペーン / 新規",
+      "kickerEditEmail": "メールキャンペーン / 編集",
+      "titleEmail": "新しいメールを作成",
+      "titleEditEmail": "メールを編集"
     },
     "detail": {
       "notFound": "そのキャンペーンが見つかりませんでした。",
@@ -1126,7 +1150,8 @@
         "saved": "下書きを保存しました",
         "saving": "保存中...",
         "failed": "保存できませんでした",
-        "retry": "再試行"
+        "retry": "再試行",
+        "nameTaken": "同じ名前のキャンペーンが既に存在します"
       },
       "errors": {
         "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
@@ -1226,7 +1251,8 @@
         "shareHint": "送信元にする番号を選び、それぞれにシェアを設定します。オーディエンスはそのシェアで分けられ、各連絡先には1つの番号からだけメッセージが届きます。シェアが空または0の場合は1として扱われます。",
         "shareWeight": "シェア",
         "shareWeightLabel": "{name}のシェア",
-        "shareKeepOne": "少なくとも1つの番号を選択したままにしてください。"
+        "shareKeepOne": "少なくとも1つの番号を選択したままにしてください。",
+        "nameTaken": "同じ名前のキャンペーンが既に存在します"
       },
       "audience": {
         "selectionTitle": "連絡先ハブで選択済み",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "ファイル内の有効な番号のプレビュー",
         "csvLine": "行",
         "csvName": "名前",
-        "csvStatus": "ステータス",
         "csvRow": {
           "new": "新規連絡先",
           "existing": "既存の連絡先",
@@ -1376,7 +1401,14 @@
         "modePrevious": "過去の配信先に送信",
         "previousHint": "過去の一斉配信やキャンペーンの配信先に再度送信します。既読、未読、返信、クリックした人だけに絞ることもできます。",
         "chipPrevious": "{count, plural, other {過去の配信#件}}({outcome})",
-        "filterNoConditions": "条件を追加すると、一致する連絡先の数がわかります。"
+        "filterNoConditions": "条件を追加すると、一致する連絡先の数がわかります。",
+        "csvConsentCol": "同意",
+        "csvContactCol": "連絡先",
+        "csvConsent": {
+          "optedIn": "オプトイン",
+          "optedOut": "オプトアウト"
+        },
+        "clearAudience": "対象者をクリア"
       },
       "review": {
         "intro": "コストを確認し、各テンプレート変数に何を入力するかを指定して、一斉配信を確認します。",
@@ -1597,7 +1629,7 @@
         "retries": "再試行",
         "retriesOn": "オン、{date}まで",
         "retriesOff": "オフ",
-        "recurringNote": "実行のたびにその時点の対象に送信されるため、受信者数は変わることがあります。"
+        "recurringNote": "今は何も送信されません。最初の実行は上の時刻に始まり、その後は実行ごとに履歴へ1行ずつ表示されます。それまでは「定期」でこのキャンペーンを確認できます。各実行はその時点のオーディエンスに送られるため、受信者数は変わることがあります。"
       },
       "status": {
         "back": "キャンペーンに戻る",
@@ -1811,7 +1843,8 @@
         "add": "テンプレートを追加",
         "count": "{used} / {max} 件のテンプレート",
         "limitReached": "上限に達しました：テンプレートは{max}件までです。",
-        "variablesTitle": "テンプレート{position}の変数：{name}"
+        "variablesTitle": "テンプレート{position}の変数：{name}",
+        "variablesLater": "{count, plural, other {#個の変数}}の値は、このプレビューではなくマッピングから入ります。"
       }
     },
     "history": {

@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta منظور شدہ ٹیمپلیٹ میں 24 گھنٹے میں ایک اور 30 دنوں میں دس ترامیم کی اجازت دیتا ہے۔ بعد میں دوبارہ کوشش کریں۔",
       "ROW_VERSION_CONFLICT": "آپ ترمیم کر رہے تھے تو کسی نے یہ ٹیمپلیٹ بدل دیا۔ تازہ ترین ورژن دیکھنے کے لیے دوبارہ لوڈ کریں، پھر اپنی تبدیلی دوبارہ لاگو کریں۔",
       "VALIDATION_FAILED": "کچھ فیلڈز درست نہیں ہیں۔ نیچے دی گئی فیلڈز جانچیں۔",
-      "INTERNAL": "سرور اس درخواست کو سنبھال نہیں سکا۔ کچھ دیر بعد دوبارہ کوشش کریں۔"
+      "INTERNAL": "سرور اس درخواست کو سنبھال نہیں سکا۔ کچھ دیر بعد دوبارہ کوشش کریں۔",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "پیش نظارہ",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Flow ID درج کریں۔",
           "flowIdInvalid": "Flow ID ایک عدد ہے۔",
           "screenRequired": "اسکرین کی ID درج کریں۔",
-          "catalogAlone": "کیٹلاگ بٹن کو دوسرے بٹنوں کے ساتھ ملایا نہیں جا سکتا۔"
+          "catalogAlone": "کیٹلاگ بٹن کو دوسرے بٹنوں کے ساتھ ملایا نہیں جا سکتا۔",
+          "flowIdNotMeta": "یہ فارم ابھی Meta Flow نہیں ہے (اس کا Flow ID عدد نہیں ہے)۔ WhatsApp فارمز کھولیں، اسے محفوظ کر کے شائع کریں، پھر یہاں منتخب کریں۔"
         },
         "catalogHint": "آپ کا WhatsApp کیٹلاگ کھولتا ہے۔ بٹن پر “کیٹلاگ دیکھیں” لکھا ہوتا ہے اور یہ واحد بٹن ہونا چاہیے۔",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "شائع شدہ WhatsApp Flow کی عددی ID، Meta کے Flows مینیجر سے۔",
-        "screen": "ابتدائی اسکرین",
-        "screenHint": "اس اسکرین کی ID جس پر فارم کھلتا ہے، مثلاً WELCOME۔"
+        "flowPick": "WhatsApp فارم",
+        "flowPickHint": "اپنے شائع شدہ WhatsApp فارمز میں سے ایک منتخب کریں۔ بٹن اسے WhatsApp کے اندر کھولتا ہے۔",
+        "flowChoose": "WhatsApp فارم منتخب کریں",
+        "flowLoading": "فارم لوڈ ہو رہے ہیں…",
+        "flowNone": "آپ کے پاس ابھی کوئی شائع شدہ WhatsApp فارم نہیں ہے۔",
+        "flowNoneLink": "ایک بنائیں اور شائع کریں",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (پہلے اسے Meta پر شائع کریں)"
       },
       "result": {
         "metaRefused": "محفوظ ہو گیا، لیکن Meta نے ٹیمپلیٹ مسترد کر دیا۔",
@@ -413,6 +425,7 @@
         "format": "کارڈ میں دکھائیں",
         "formatImage": "تصاویر",
         "formatVideo": "ویڈیوز",
+        "limits": "تصویر 5 MB تک، ویڈیو 16 MB تک۔",
         "count": "{used}/{max} کارڈ",
         "add": "کارڈ شامل کریں",
         "needTwo": "کیروسل کے لیے کم از کم {min} کارڈ درکار ہیں۔",
@@ -425,7 +438,9 @@
         "buttons": "بٹن",
         "buttonText": "بٹن کا متن",
         "buttonUrl": "ویب سائٹ URL",
-        "buttonPhone": "فون نمبر"
+        "buttonPhone": "فون نمبر",
+        "moveUp": "کارڈ {n} اوپر لے جائیں",
+        "moveDown": "کارڈ {n} نیچے لے جائیں"
       },
       "offer": {
         "title": "محدود وقت کی پیشکش",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "اس زمرے میں مارکیٹنگ کی زبان کی اجازت نہیں۔",
         "TAG_CONTENT_MISMATCH": "زمرہ مواد سے مطابقت نہیں رکھتا (مثلاً UTILITY ٹیمپلیٹ میں تشہیری متن)۔",
         "SCAM": "Meta نے ٹیمپلیٹ کو ممکنہ فراڈ قرار دیا۔ دعووں اور زبان کا جائزہ لیں۔"
+      },
+      "stats": {
+        "title": "اس ٹیمپلیٹ کی کارکردگی",
+        "hint": "اس کے ساتھ بھیجے گئے پیغامات سے گنا گیا",
+        "loading": "اعداد لوڈ ہو رہے ہیں",
+        "error": "اعداد لوڈ نہیں ہو سکے۔",
+        "none": "اس ٹیمپلیٹ سے ابھی تک کچھ نہیں بھیجا گیا۔",
+        "sent": "بھیجے گئے",
+        "delivered": "ڈیلیور ہوئے",
+        "read": "پڑھے گئے",
+        "replied": "جواب ملے",
+        "failed": "ناکام",
+        "percent": "{value}%",
+        "footer": "اس ٹیمپلیٹ سے {total} پیغامات بھیجے گئے، {queued} ابھی انتظار میں",
+        "lastSent": "آخری بار بھیجا {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "لہجہ",
       "pickTone": "لہجہ منتخب کریں",
       "language": "زبان",
-      "languageHint": "مسودہ فارم کی زبان میں لکھا جاتا ہے۔",
+      "languageHint": "Meta کی قبول کردہ کوئی بھی زبان چنیں۔ مسودہ اسی میں لکھا جاتا ہے اور ٹیمپلیٹ بھی یہی زبان اپناتا ہے۔",
       "notes": "حسب ضرورت ہدایت",
       "notesNote": "اختیاری / زیادہ سے زیادہ 2000",
       "notesPlaceholder": "کوئی خاص بات جو شامل کرنی ہو: ویری ایبلز، لنکس، لازمی الفاظ، یا جس سے بچنا ہو…",

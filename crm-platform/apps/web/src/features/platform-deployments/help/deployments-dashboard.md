@@ -23,6 +23,8 @@ The first view, **Product releases**, is the release history of the product itse
 - Each attempt shows its **State** (Building, Shipping, Releasing, Live, Failed, Rolled back), the **Step** it reached, and the **Error** if it stopped.
 - **Failed** means the release stopped before traffic moved. **Rolled back** means traffic was moved to the new release and then moved back, so the previous release is still serving.
 
+Each pull request in the **Changes** column takes two lines: its number and title, then who raised it and when (**Raised**, always in Indian Standard Time whatever time zone your browser is in). The other times on the row follow your browser.
+
 A **Stalled** badge means an attempt has not changed for 45 minutes. The build or the release most likely stopped; check the build server before doing anything else.
 
 ## Flow publishes

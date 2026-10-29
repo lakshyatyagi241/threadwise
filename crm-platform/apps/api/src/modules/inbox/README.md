@@ -1,6 +1,7 @@
 # Inbox & Bot
 
-Not implemented yet. Structure to follow when it lands:
+Not implemented yet in this folder. The conversation code lives in `chat-conversations` and `team-inbox-conversations`; the schema
+(`packages/db/migrations`) is the source of truth where this README and the code disagree. Structure to follow when it lands:
 
 ```
 inbox/
@@ -16,8 +17,8 @@ inbox/
 
 ## Decisions already made
 
-- **One perpetual thread per contact per channel.** Unique on
-  `(org_id, channel_id, contact_id)`. Resolving a conversation does not close
+- **One perpetual thread per peer per channel.** Unique on
+  `(org_id, channel_id, peer_key)`: the channel's own identity for the customer, which exists before any contact is linked. Resolving a conversation does not close
   it — the next inbound message reopens the same row. A new thread per message
   burst would fragment the history the agent needs.
 - **`messages` and `message_events` are exempt from audit and outbox triggers.**

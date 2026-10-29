@@ -18,7 +18,7 @@ if (!['localhost', '127.0.0.1', '::1'].includes(host)) {
   console.error(`refusing non-local target ${BASE}`);
   process.exit(2);
 }
-const PW = process.env.VAPT_PASSWORD ?? 'Passw0rd!';
+const PW = process.env.VAPT_PASSWORD ?? process.env.DEV_SEED_PASSWORD;
 const USERS = {
   adminA: process.env.VAPT_ADMIN_A ?? 'nachiket.challawar@geta.ai',
   adminB: process.env.VAPT_ADMIN_B ?? 'nachiket.challawar+ten@geta.ai',

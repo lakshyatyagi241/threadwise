@@ -16,25 +16,25 @@ export const fieldSectionResponseSchema = z.object({
   id: uuidSchema,
   moduleKey: moduleKeySchema,
   name: z.string(),
-  position: z.number().int(),
+  position: z.int(),
   isActive: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type FieldSectionResponse = z.infer<typeof fieldSectionResponseSchema>;
 
 export const createFieldSectionSchema = z.object({
   moduleKey: moduleKeySchema,
   name: z.string().min(1).max(255),
-  position: z.number().int().optional(),
+  position: z.int().optional(),
 });
 export type CreateFieldSectionInput = z.infer<typeof createFieldSectionSchema>;
 
 export const updateFieldSectionSchema = z.object({
   name: z.string().min(1).max(255).optional(),
   isActive: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateFieldSectionInput = z.infer<typeof updateFieldSectionSchema>;
 
@@ -57,16 +57,16 @@ export const fieldOptionResponseSchema = z.object({
   fieldId: uuidSchema,
   value: z.string(),
   label: z.string(),
-  position: z.number().int(),
+  position: z.int(),
   isHidden: z.boolean(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type FieldOptionResponse = z.infer<typeof fieldOptionResponseSchema>;
 
 export const createFieldOptionSchema = z.object({
   value: z.string().min(1).max(255),
   label: z.string().min(1).max(255),
-  position: z.number().int().optional(),
+  position: z.int().optional(),
 });
 export type CreateFieldOptionInput = z.infer<typeof createFieldOptionSchema>;
 
@@ -74,7 +74,7 @@ export const updateFieldOptionSchema = z.object({
   value: z.string().min(1).max(255).optional(),
   label: z.string().min(1).max(255).optional(),
   isHidden: z.boolean().optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateFieldOptionInput = z.infer<typeof updateFieldOptionSchema>;
 
@@ -112,15 +112,15 @@ export const fieldResponseSchema = z.object({
   isGlobalSearch: z.boolean(),
   isSystem: z.boolean(),
   isActive: z.boolean(),
-  position: z.number().int(),
+  position: z.int(),
   /** Type-specific: currency->{code}, rating->{max}, formula->{expression}, ... */
-  config: z.record(z.unknown()),
+  config: z.record(z.string(), z.unknown()),
   replacesFieldId: uuidSchema.nullable(),
   options: z.array(fieldOptionResponseSchema).optional(),
-  optionCount: z.number().int().nonnegative().optional(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  optionCount: z.int().nonnegative().optional(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type FieldResponse = z.infer<typeof fieldResponseSchema>;
 
@@ -142,8 +142,8 @@ export const createFieldSchema = z.object({
   isUnique: z.boolean().default(false),
   isQuickCreate: z.boolean().default(false),
   isGlobalSearch: z.boolean().default(false),
-  config: z.record(z.unknown()).default({}),
-  position: z.number().int().optional(),
+  config: z.record(z.string(), z.unknown()).default({}),
+  position: z.int().optional(),
   /** select/multiselect/radio only — lookup/formula configure via `config` instead. */
   options: z.array(createFieldOptionSchema).optional(),
 });
@@ -165,15 +165,15 @@ export const updateFieldSchema = z.object({
   isQuickCreate: z.boolean().optional(),
   isGlobalSearch: z.boolean().optional(),
   isActive: z.boolean().optional(),
-  config: z.record(z.unknown()).optional(),
-  rowVersion: z.number().int().positive(),
+  config: z.record(z.string(), z.unknown()).optional(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateFieldInput = z.infer<typeof updateFieldSchema>;
 
 export const listFieldsQuerySchema = paginationQuerySchema.extend({
   moduleKey: moduleKeySchema,
   sectionId: uuidSchema.optional(),
-  includeInactive: z.coerce.boolean().default(false),
+  includeInactive: z.coerce.boolean().prefault(false),
   /** `inline` (default): options of a field with at most FIELD_INLINE_OPTIONS_MAX of them. `all`: every field's options. */
   options: z.enum(['inline', 'all']).default('inline'),
 });
@@ -185,7 +185,7 @@ export const searchFieldOptionsQuerySchema = z.object({
   q: z.string().trim().max(100).optional(),
   /** Exactly these stored values, hidden options included: how a form shows the label of a value it already holds. */
   values: queryList(z.string().min(1).max(255)).pipe(z.array(z.string()).max(200)).optional(),
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: cursorSchema.optional(),
 });
 export type SearchFieldOptionsQuery = z.infer<typeof searchFieldOptionsQuerySchema>;
@@ -209,7 +209,7 @@ export const fieldDependencyResponseSchema = z.object({
   dependsOnFieldId: uuidSchema,
   dependsOnOptionId: uuidSchema.nullable(),
   dependsOnValue: z.string().nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type FieldDependencyResponse = z.infer<typeof fieldDependencyResponseSchema>;
 
@@ -221,12 +221,12 @@ export const createFieldDependencySchema = z
     dependsOnValue: z.string().optional(),
   })
   .refine((v) => v.fieldId !== v.dependsOnFieldId, {
-    message: 'a field cannot depend on itself',
     path: ['dependsOnFieldId'],
+    error: 'a field cannot depend on itself',
   })
   .refine((v) => !(v.dependsOnOptionId && v.dependsOnValue), {
-    message: 'set at most one of dependsOnOptionId, dependsOnValue',
     path: ['dependsOnOptionId'],
+    error: 'set at most one of dependsOnOptionId, dependsOnValue',
   });
 export type CreateFieldDependencyInput = z.infer<typeof createFieldDependencySchema>;
 
@@ -238,9 +238,43 @@ export const fieldOptionDependencyResponseSchema = z.object({
   parentOptionId: uuidSchema,
   childFieldId: uuidSchema,
   childOptionId: uuidSchema,
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type FieldOptionDependencyResponse = z.infer<typeof fieldOptionDependencyResponseSchema>;
+
+/**
+ * The same option pairs, grouped: one entry per parent option and child field, with the ids of every child option it allows. The flat
+ * list repeats four uuids per pair (17.5 MB for 52,500 pairs); this carries each parent once and is about a tenth of that.
+ */
+export const fieldOptionDependencyGroupSchema = z.object({
+  parentFieldId: uuidSchema,
+  parentOptionId: uuidSchema,
+  childFieldId: uuidSchema,
+  childOptionIds: z.array(uuidSchema),
+});
+export type FieldOptionDependencyGroup = z.infer<typeof fieldOptionDependencyGroupSchema>;
+export const fieldOptionDependencyGroupsResponseSchema = z.array(fieldOptionDependencyGroupSchema);
+
+/**
+ * Flat pairs from the grouped form, for code that works one pair at a time. A grouped pair has no row of its own, so `id` is
+ * "<parent option>:<child option>" (stable, not a server id) and `createdAt` is the epoch; nothing reads either.
+ */
+export function expandOptionPairGroups(
+  groups: readonly FieldOptionDependencyGroup[],
+): FieldOptionDependencyResponse[] {
+  const out: FieldOptionDependencyResponse[] = [];
+  for (const g of groups)
+    for (const childOptionId of g.childOptionIds)
+      out.push({
+        id: `${g.parentOptionId}:${childOptionId}`,
+        parentFieldId: g.parentFieldId,
+        parentOptionId: g.parentOptionId,
+        childFieldId: g.childFieldId,
+        childOptionId,
+        createdAt: new Date(0).toISOString(),
+      });
+  return out;
+}
 
 export const createFieldOptionDependencySchema = z
   .object({
@@ -248,8 +282,8 @@ export const createFieldOptionDependencySchema = z
     childOptionId: uuidSchema,
   })
   .refine((v) => v.parentOptionId !== v.childOptionId, {
-    message: 'an option cannot depend on itself',
     path: ['childOptionId'],
+    error: 'an option cannot depend on itself',
   });
 export type CreateFieldOptionDependencyInput = z.infer<typeof createFieldOptionDependencySchema>;
 
@@ -280,7 +314,7 @@ export const statusOptionResponseSchema = z.object({
   value: z.string(),
   label: z.string(),
   color: z.string().nullable(),
-  position: z.number().int(),
+  position: z.int(),
   isDefault: z.boolean(),
   isActive: z.boolean(),
   /**
@@ -294,7 +328,7 @@ export const statusOptionResponseSchema = z.object({
    * `isDefault` on a scoped status means "the status a contact gets when it enters that stage without a valid one".
    */
   stageOptionId: uuidSchema.nullable(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type StatusOptionResponse = z.infer<typeof statusOptionResponseSchema>;
 
@@ -308,7 +342,7 @@ export const createStatusOptionSchema = z.object({
     .regex(/^[a-z][a-z0-9_]*$/, 'value must be snake_case, starting with a letter'),
   label: z.string().min(1).max(255),
   color: z.string().max(32).optional(),
-  position: z.number().int().optional(),
+  position: z.int().optional(),
   isDefault: z.boolean().default(false),
   /** Only on the `lifecycle_stage` group of `contacts` (422 STATUS_OPTION_FLAG_INVALID elsewhere, or when both are set). */
   isWon: z.boolean().default(false),
@@ -332,7 +366,7 @@ export const updateStatusOptionSchema = z.object({
   isLost: z.boolean().optional(),
   /** Absent keeps the scope, null makes the status valid in every stage. Scope changes are not applied to contacts already holding it. */
   stageOptionId: uuidSchema.nullish(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateStatusOptionInput = z.infer<typeof updateStatusOptionSchema>;
 
@@ -363,9 +397,9 @@ export const statusOptionUsageResponseSchema = z.object({
     z.object({
       id: uuidSchema,
       value: z.string(),
-      count: z.number().int(),
+      count: z.int(),
       /** Segments whose rules use this stage or status: they match nothing once it is deleted. */
-      segments: z.number().int().optional(),
+      segments: z.int().optional(),
     }),
   ),
 });
@@ -389,9 +423,9 @@ export const fieldUsageResponseSchema = z.object({
     z.object({
       id: uuidSchema,
       key: z.string(),
-      count: z.number().int(),
+      count: z.int(),
       /** Segments whose rules use this property: they match nothing once it is deleted. */
-      segments: z.number().int().optional(),
+      segments: z.int().optional(),
     }),
   ),
 });

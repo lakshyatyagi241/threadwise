@@ -57,23 +57,23 @@ export const campaignSummarySchema = z.object({
   name: z.string(),
   status: z.string(),
   /** First message sent; null before any send. */
-  sentAt: z.string().datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
   window: z.object({
-    days: z.number().int(),
-    from: z.string().datetime().nullable(),
-    to: z.string().datetime().nullable(),
+    days: z.int(),
+    from: z.iso.datetime().nullable(),
+    to: z.iso.datetime().nullable(),
   }),
   people: z.object({
     /** Recipients a message left for. */
-    messaged: z.number().int(),
-    delivered: z.number().int(),
-    read: z.number().int(),
-    failed: z.number().int(),
+    messaged: z.int(),
+    delivered: z.int(),
+    read: z.int(),
+    failed: z.int(),
     /** Recipients we could not match to a contact, so "wrote back" and "filled a form" cannot be counted for them. */
-    notTrackable: z.number().int(),
+    notTrackable: z.int(),
   }),
   cameBack: z.object({
-    count: z.number().int(),
+    count: z.int(),
     /** Percent of messaged, one decimal. */
     pctOfMessaged: z.number(),
     pctOfDelivered: z.number(),
@@ -83,19 +83,19 @@ export const campaignSummarySchema = z.object({
   /** Null when the viewer may not read form submissions. */
   filledForm: z
     .object({
-      count: z.number().int(),
+      count: z.int(),
       pctOfMessaged: z.number(),
       /** Of those who filled a form, how many had also written back. */
-      alsoWroteBack: z.number().int(),
-      viaWebForm: z.number().int(),
-      viaWhatsappForm: z.number().int(),
+      alsoWroteBack: z.int(),
+      viaWebForm: z.int(),
+      viaWhatsappForm: z.int(),
       /** The forms that were counted (all of them when none was picked). */
       formsCounted: z.array(summaryFormRefSchema).max(50),
       allForms: z.boolean(),
     })
     .nullable(),
   /** Daily count of people who wrote back, from the first send, so the screen can draw one quiet line. */
-  cameBackByDay: z.array(z.object({ day: z.string(), count: z.number().int() })).max(31),
+  cameBackByDay: z.array(z.object({ day: z.string(), count: z.int() })).max(31),
   caveats: z.array(z.enum(SUMMARY_CAVEATS)),
 });
 export type CampaignSummary = z.infer<typeof campaignSummarySchema>;
@@ -106,7 +106,7 @@ export const campaignSummaryPeopleQuerySchema = z.object({
   cameBackDays: summaryWindowSchema.default(SUMMARY_WINDOW_DEFAULT),
   formIds: campaignSummaryQuerySchema.shape.formIds,
   cursor: z.string().max(200).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type CampaignSummaryPeopleQuery = z.infer<typeof campaignSummaryPeopleQuerySchema>;
 
@@ -116,7 +116,7 @@ export const summaryPersonSchema = z.object({
   name: z.string().nullable(),
   phone: z.string().nullable(),
   /** When they wrote back / filled the form / (not reached) when the send failed. */
-  at: z.string().datetime().nullable(),
+  at: z.iso.datetime().nullable(),
   /** For filled_form: which form. */
   formName: z.string().nullable(),
 });
@@ -125,7 +125,7 @@ export type SummaryPerson = z.infer<typeof summaryPersonSchema>;
 export const campaignSummaryPeopleSchema = z.object({
   data: z.array(summaryPersonSchema),
   nextCursor: z.string().nullable(),
-  total: z.number().int(),
+  total: z.int(),
 });
 export type CampaignSummaryPeople = z.infer<typeof campaignSummaryPeopleSchema>;
 

@@ -123,6 +123,21 @@ function unstorable(v: unknown): boolean {
 
 const TEXT_KEYS = ['text', 'message', 'body', 'caption', 'content', 'value', 'title'];
 const URL_KEYS = ['url', 'link', 'image', 'video', 'audio', 'document', 'file', 'media', 'src'];
+
+/** The kind of a placeholder customer turn: the query's own type when it names a kind the app has, else text. */
+const PLACEHOLDER_KINDS = [
+  'image',
+  'video',
+  'audio',
+  'voice',
+  'document',
+  'sticker',
+  'reaction',
+  'contact',
+  'location',
+];
+const placeholderKind = (queryType: string): string =>
+  PLACEHOLDER_KINDS.includes(queryType.toLowerCase()) ? queryType.toLowerCase() : 'text';
 const blank = (v: unknown): boolean =>
   v === null || v === undefined || (typeof v === 'string' && v.trim() === '');
 const httpUrl = (v: unknown): boolean => typeof v === 'string' && /^https?:\/\//i.test(v.trim());
@@ -382,7 +397,12 @@ export async function oracleChat(
       isObj(doc.user_query_object) &&
       Object.keys(doc.user_query_object).length > 0
     )
-      cb = { dir: 'in', body: '(message content not available)', kind: 'text' };
+      // the placeholder keeps the turn's own kind when the query says one (a reaction, a contact, an image without its file), else text
+      cb = {
+        dir: 'in',
+        body: '(message content not available)',
+        kind: placeholderKind(text(doc.user_query_object.type)),
+      };
     if (cb.dir === null || cb.empty) {
       q('EMPTY_MESSAGE');
       continue;
@@ -533,8 +553,11 @@ export async function oracleChat(
       if (v && (live === null || v.ms > live.ms)) live = v;
     }
     const st = live?.status ?? newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
+    // a chat Waboo's inbox never listed (no session, no status on any turn) loads closed, when the dump has sessions at all
     const status: 'open' | 'closed' =
-      o.threadStatus === 'closed' || st === 'closed' ? 'closed' : 'open';
+      o.threadStatus === 'closed' || st === 'closed' || (st === null && o.sessionStatus.size > 0)
+        ? 'closed'
+        : 'open';
     const ag = newestWith((r) => r.agentId !== null);
     let assigneeId: number | null = null;
     if (ag && o.assignAgents && o.hasUsers) assigneeId = o.userId(ag.agentId!) ?? null;

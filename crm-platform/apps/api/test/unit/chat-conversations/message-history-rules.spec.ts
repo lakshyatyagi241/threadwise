@@ -17,7 +17,10 @@ import {
   recipientTimeline,
   resolveWindow,
   safeZone,
+  sourceFilterValues,
   typeFilterParts,
+  chartZone,
+  volumeSeriesFrom,
 } from '../../../src/modules/chat-conversations/message-history-rules';
 import {
   historyCsvLine,
@@ -206,7 +209,16 @@ describe('the KPI cards', () => {
 
 describe('the type filter', () => {
   it('maps the automated sources to themselves and the rest to message kinds', () => {
-    expect(typeFilterParts('broadcast')).toEqual({ entity: 'broadcast', source: 'broadcast' });
+    // A campaign and a broadcast are one thing to the person: either one matches the rows of both.
+    expect(typeFilterParts('campaign')).toEqual({
+      entities: ['campaign', 'broadcast'],
+      sources: ['campaign', 'broadcast'],
+    });
+    expect(typeFilterParts('broadcast')).toEqual(typeFilterParts('campaign'));
+    expect(typeFilterParts('scheduled')).toEqual({
+      entities: ['scheduled'],
+      sources: ['scheduled'],
+    });
     expect(typeFilterParts('auto_reply')).toEqual({ source: 'auto_reply' });
     expect(typeFilterParts('audio').kinds).toEqual(['audio', 'voice']);
     expect(typeFilterParts('document').kinds).toEqual(['document', 'sticker']);
@@ -331,5 +343,114 @@ describe('the export file', () => {
     expect(sel.narrow).toEqual({ dir: 'fail', source: ['flow'], q: 'x' });
     expect(() => selectionOfStored({})).toThrow();
     expect(() => selectionOfStored(null)).toThrow();
+  });
+});
+
+describe('where the volume chart starts', () => {
+  const windowAt = (f: Parameters<typeof resolveWindow>[0], now: Date = NOW) => {
+    const w = resolveWindow(f, now);
+    if ('problem' in w) throw new Error('unexpected');
+    return w;
+  };
+
+  it('a 7 day preset draws 7 whole daily bars: the first one starts at local midnight of the 6th day back', () => {
+    const f = { range: '7d' as const };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f), NOW, 'UTC')).toEqual(
+      new Date('2026-10-07T00:00:00.000Z'),
+    );
+  });
+
+  it('a 30 day preset (and no filter) starts on the 29th day back, at midnight', () => {
+    expect(volumeSeriesFrom({}, 'daily', windowAt({}), NOW, 'UTC')).toEqual(
+      new Date('2026-09-14T00:00:00.000Z'),
+    );
+    const f = { range: '90d' as const };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f), NOW, 'UTC')).toEqual(
+      new Date('2026-07-16T00:00:00.000Z'),
+    );
+  });
+
+  it('starts at midnight in the viewer zone, not at the same clock time of the 6th day back', () => {
+    // 27 Oct 08:30 in Kolkata (UTC+5:30): the 21 Oct bar starts at 21 Oct 00:00 IST.
+    const now = new Date('2026-10-27T03:00:00.000Z');
+    const f = { range: '7d' as const };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f, now), now, 'Asia/Kolkata')).toEqual(
+      new Date('2026-10-20T18:30:00.000Z'),
+    );
+  });
+
+  it('follows a clock change inside the window: London fall-back (25 Oct) and spring-forward (29 Mar)', () => {
+    // 27 Oct 23:30 GMT: 21 Oct is still BST, so its midnight is 20 Oct 23:00 UTC, not 22 Oct.
+    const back = new Date('2026-10-27T23:30:00.000Z');
+    const f = { range: '7d' as const };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f, back), back, 'Europe/London')).toEqual(
+      new Date('2026-10-20T23:00:00.000Z'),
+    );
+    // 31 Mar 00:30 BST: 25 Mar is still GMT, so its midnight is 25 Mar 00:00 UTC, not 24 Mar 23:30.
+    const forward = new Date('2026-03-30T23:30:00.000Z');
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f, forward), forward, 'Europe/London')).toEqual(
+      new Date('2026-03-25T00:00:00.000Z'),
+    );
+  });
+
+  it('follows the US clock change: 2 Nov 23:30 EST starts the 7 day bars on 27 Oct at 00:00 EDT', () => {
+    const now = new Date('2026-11-03T04:30:00.000Z');
+    const f = { range: '7d' as const };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f, now), now, 'America/New_York')).toEqual(
+      new Date('2026-10-27T04:00:00.000Z'),
+    );
+  });
+
+  it('a picked pair keeps the start of its window: whole UTC days already', () => {
+    const f = { from: '2026-10-01', to: '2026-10-03' };
+    expect(volumeSeriesFrom(f, 'daily', windowAt(f), NOW, 'UTC')).toEqual(
+      new Date('2026-10-01T00:00:00.000Z'),
+    );
+  });
+
+  it('the 24 hour preset keeps its window start, and so do weekly bars', () => {
+    const day = { range: '24h' as const };
+    expect(volumeSeriesFrom(day, 'daily', windowAt(day), NOW, 'UTC')).toEqual(windowAt(day).from);
+    const week = { range: '7d' as const };
+    expect(volumeSeriesFrom(week, 'weekly', windowAt(week), NOW, 'UTC')).toEqual(
+      windowAt(week).from,
+    );
+  });
+
+  it('hourly bars cover the last 24 hours of the window', () => {
+    const f = { range: '7d' as const };
+    const w = windowAt(f);
+    expect(volumeSeriesFrom(f, 'hourly', w, NOW, 'UTC')).toEqual(new Date(w.to.getTime() - DAY));
+  });
+});
+
+describe('chartZone', () => {
+  it('buckets a chosen from/to pair by UTC days, whatever zone the viewer is in', () => {
+    expect(chartZone({ from: '2026-10-20', to: '2026-10-26', tz: 'Asia/Kolkata' })).toBe('UTC');
+    expect(chartZone({ to: '2026-10-26', tz: 'Asia/Kolkata' })).toBe('UTC');
+  });
+  it('keeps the viewer zone for a preset range, and falls back to UTC for an unknown one', () => {
+    expect(chartZone({ tz: 'Asia/Kolkata' })).toBe('Asia/Kolkata');
+    expect(chartZone({ tz: 'Not/AZone' })).toBe('UTC');
+  });
+});
+
+describe('the Sent by filter', () => {
+  it('treats a campaign, a broadcast and a broadcast test send as one source', () => {
+    for (const one of ['campaign', 'broadcast', 'broadcast_test']) {
+      expect(sourceFilterValues([one]).sort()).toEqual(['broadcast', 'broadcast_test', 'campaign']);
+    }
+    expect(sourceFilterValues(['flow', 'campaign']).sort()).toEqual([
+      'broadcast',
+      'broadcast_test',
+      'campaign',
+      'flow',
+    ]);
+  });
+
+  it('leaves every other source as it is', () => {
+    expect(sourceFilterValues(['flow', 'api'])).toEqual(['flow', 'api']);
+    expect(sourceFilterValues([])).toEqual([]);
+    expect(sourceFilterValues(['scheduled'])).toEqual(['scheduled']);
   });
 });

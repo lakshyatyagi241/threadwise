@@ -20,7 +20,8 @@ vi.mock('next/link', () => ({
   ),
 }));
 vi.mock('../api/widgets', () => ({ useWebBots: () => state.list }));
-vi.mock('@tanstack/react-query', () => ({
+vi.mock('@tanstack/react-query', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@tanstack/react-query')>()),
   useQuery: () => ({ data: { builderMode: state.mode } }),
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({

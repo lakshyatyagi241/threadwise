@@ -41,7 +41,7 @@ import { SESSIONS_PER_PAGE } from './security/session-page';
 const okSchema = z.object({ ok: z.literal(true) });
 const avatarSchema = z.object({ avatarUrl: z.string() });
 const changePasswordResponseSchema = z.object({
-  revokedOtherSessions: z.number().int().nonnegative(),
+  revokedOtherSessions: z.int().nonnegative(),
 });
 
 export const keys = {

@@ -41,12 +41,19 @@ export function isNonPublicAddress(address: string): boolean {
   );
 }
 
-/** Throws UnsafeProviderUrlError unless `raw` is an https address on a host whose every resolved address is public. */
-export async function assertPublicUrl(raw: string, options: PublicUrlOptions = {}): Promise<void> {
+/**
+ * Throws UnsafeProviderUrlError unless `raw` is an https address on a host whose every resolved address is public. Returns the address the
+ * check approved (the first one of the answer), or null when no check ran (development only). A caller that connects connects to THAT
+ * address and to no other: a second lookup is a second answer from a name that may be rebinding (#1272).
+ */
+export async function resolvePublicUrl(
+  raw: string,
+  options: PublicUrlOptions = {},
+): Promise<string | null> {
   const dev = options.allowDevHosts === true && process.env.NODE_ENV !== 'production';
   const verdict = checkProviderBaseUrl(raw, { allowDevLoopback: dev });
   if (!verdict.ok) throw new UnsafeProviderUrlError(verdict.reason);
-  if (verdict.devLoopback || dev) return; // development only: a stand-in on the developer's own machine
+  if (verdict.devLoopback || dev) return null; // development only: a stand-in on the developer's own machine
   const addresses = await (options.resolve ?? defaultResolve)(verdict.host).catch(() => {
     throw new UnsafeProviderUrlError('The host name does not resolve');
   });
@@ -54,4 +61,10 @@ export async function assertPublicUrl(raw: string, options: PublicUrlOptions = {
   if (addresses.some(isNonPublicAddress)) {
     throw new UnsafeProviderUrlError('The host name resolves to a private or reserved address');
   }
+  return addresses[0]!;
+}
+
+/** Throws UnsafeProviderUrlError unless `raw` is an https address on a host whose every resolved address is public. */
+export async function assertPublicUrl(raw: string, options: PublicUrlOptions = {}): Promise<void> {
+  await resolvePublicUrl(raw, options);
 }

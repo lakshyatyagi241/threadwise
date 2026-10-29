@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Este link está pausado ou expirado.",
       "ROW_VERSION_CONFLICT": "Isso foi alterado em outro lugar. Recarregue e tente novamente.",
       "VALIDATION_FAILED": "Verifique os campos destacados e tente novamente.",
-      "PLAN_FEATURE_LOCKED": "Faça upgrade do seu plano para usar este recurso."
+      "PLAN_FEATURE_LOCKED": "Faça upgrade do seu plano para usar este recurso.",
+      "WFL_FORM_SYNC_FAILED": "Não foi possível ler os formulários da Meta."
     },
     "forms": {
       "heading": "Formulários do WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Ainda não há formulários",
-        "description": "Crie um formulário e depois envie-o a partir de uma etapa de formulário do WhatsApp em um fluxo."
+        "description": "Crie um formulário e depois envie-o a partir de uma etapa de formulário do WhatsApp em um fluxo.",
+        "noMatch": "Nenhum formulário corresponde a “{q}”."
       },
       "table": {
         "form": "Formulário",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "Salvo.",
-        "published": "Publicado no WhatsApp."
+        "published": "Publicado no WhatsApp.",
+        "connectHint": "Os formulários só são publicados por uma conexão direta com a WhatsApp Cloud API. Peça a um administrador para conectar uma em Canais → WhatsApp.",
+        "connectLink": "Abrir canais do WhatsApp"
       },
       "builder": {
         "back": "Voltar para formulários",
@@ -143,6 +147,14 @@
           "contact": "Contato",
           "phone": "Telefone"
         }
+      },
+      "sync": {
+        "cta": "Sincronizar com a Meta",
+        "syncing": "Sincronizando…",
+        "done": "Sincronizado com a Meta: {checked} verificados, {updated} atualizados, {missing} não encontrados na Meta, {metaOnly} só na Meta."
+      },
+      "search": {
+        "placeholder": "Buscar formulários"
       }
     },
     "links": {

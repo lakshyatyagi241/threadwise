@@ -98,7 +98,7 @@ export const billingApi = {
   syncSubscription: (id: string) =>
     operatorFetch(`/billing/subscriptions/${id}/sync`, {
       method: 'POST',
-      schema: z.object({ outcome: z.string() }).passthrough(),
+      schema: z.looseObject({ outcome: z.string() }),
     }),
   refundOrder: (id: string, body: RefundRequest) =>
     operatorFetch(`/billing/orders/${id}/refund`, {

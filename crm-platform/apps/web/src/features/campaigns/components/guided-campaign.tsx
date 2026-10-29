@@ -8,7 +8,7 @@ import {
   type WizardDraftResponse,
   type WizardSender,
 } from '@crm/contracts';
-import { Alert, Button, ConfirmDialog, Field, Select, useToast } from '@crm/ui';
+import { Alert, Button, ConfirmDialog, Field, Input, Select, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { isUsableProperty, useContactFields } from '@/features/contacts-attributes-tags';
 import { useUnsavedGuard } from '@/features/segments/components/use-unsaved-guard';
@@ -43,7 +43,7 @@ import { MAPPING_CODES, stepIssues, type IssueCode, type StepIssue } from '../wi
 import type { LaunchFailure } from '../wizard/lib/launch-errors';
 import { defaultTimeZone, launchKind } from '../wizard/lib/schedule';
 import type { WizardAction, WizardView } from '../wizard/lib/state';
-import { previewModelOf } from '../wizard/lib/templates';
+import { previewModelWithExamples } from '../wizard/lib/templates';
 import { BuilderHeader } from './builder/header';
 import { CostPanel } from './builder/cost-panel';
 import { LivePreview } from './builder/live-preview';
@@ -67,13 +67,6 @@ const STATE_ISSUES: readonly IssueCode[] = [
   'balance_unavailable',
 ];
 
-/** The wallet check's own issues (the same codes the Review step blocks on). */
-const BALANCE_CODES: readonly IssueCode[] = [
-  'insufficient_balance',
-  'checking_balance',
-  'balance_unavailable',
-];
-
 /** The wizard view each builder step stands for (what `draft.step` records as the furthest reached). */
 const VIEW_OF: Record<WizardStep, WizardView> = {
   setup: 1,
@@ -89,6 +82,50 @@ const STEP_OF_VIEW: Record<WizardView, WizardStep> = {
   3: 'compose',
   4: 'schedule',
 };
+
+/** The templates whose name or language holds every word typed; the chosen one always stays in the list. */
+function matchingTemplates<T extends { id: string; name: string; language: string }>(
+  list: readonly T[],
+  query: string,
+  selectedId: string | undefined,
+): T[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [...list];
+  return list.filter(
+    (x) =>
+      x.id === selectedId ||
+      words.every((w) => `${x.name} ${x.language}`.toLowerCase().includes(w)),
+  );
+}
+
+function TemplateSearch({
+  value,
+  onChange,
+  label,
+  shown,
+  empty,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  label: string;
+  shown: number;
+  empty: string;
+}) {
+  return (
+    <div className="mb-1.5">
+      <Input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={label}
+        aria-label={label}
+      />
+      {value.trim() !== '' && shown === 0 ? (
+        <p className="mt-1 text-[12px] text-muted-foreground">{empty}</p>
+      ) : null}
+    </div>
+  );
+}
 
 const isSequencePath = (path: string) => path.startsWith('templateSequence.');
 
@@ -128,6 +165,7 @@ export function GuidedCampaign({
 }) {
   const t = useTranslations('campaigns.builder');
   const tg = useTranslations('campaigns.builder.guided');
+  const tsave = useTranslations('campaigns.wizard.save');
   const tw = useTranslations('campaigns.wizard');
   const ti = useTranslations('campaigns.wizard.issues');
   const { toast } = useToast();
@@ -185,6 +223,8 @@ export function GuidedCampaign({
     [templates.data, sender],
   );
   const template = usable.find((x) => x.id === draft.templateId) ?? null;
+  const [tplQuery, setTplQuery] = useState('');
+  const [tplQueryB, setTplQueryB] = useState('');
   useEffect(() => {
     if (templates.data && draft.templateId && !usable.some((x) => x.id === draft.templateId))
       dispatch({ type: 'template', template: null });
@@ -243,11 +283,8 @@ export function GuidedCampaign({
           ...v3.filter((i) => MAPPING_CODES.includes(i.code) && !isSequencePath(i.path)),
         ];
       case 'recipients':
-        // Who is picked, and whether the wallet covers them: the Review step's own balance rule.
-        return [
-          ...v2,
-          ...v3.filter((i) => BALANCE_CODES.includes(i.code) && !v2.some((x) => x.code === i.code)),
-        ];
+        // Who is picked. Whether the wallet covers them is the Review step's rule: a low balance does not stop Schedule or Review.
+        return v2;
       case 'schedule':
         // The mapping of the sequence's templates sits under the sequence card, so its problems are this step's.
         return [...v4, ...v3.filter((i) => isSequencePath(i.path))];
@@ -377,6 +414,7 @@ export function GuidedCampaign({
       <div className="sticky top-14 z-30 bg-background">
         <BuilderHeader
           editing={false}
+          saved={w.id !== null && !w.unsaved}
           backHref="/campaigns"
           busy={launch.busy}
           canDraft={w.id !== null || draft.name.trim() !== ''}
@@ -445,6 +483,7 @@ export function GuidedCampaign({
                       <SetupFields
                         name={draft.name}
                         onName={(name) => act({ type: 'name', name })}
+                        nameError={w.status === 'nameTaken' ? tsave('nameTaken') : undefined}
                         senderKey={senderKey}
                         onSender={pickSender}
                         senders={senders}
@@ -488,6 +527,13 @@ export function GuidedCampaign({
                                   : undefined
                             }
                           >
+                            <TemplateSearch
+                              value={tplQuery}
+                              onChange={setTplQuery}
+                              label={tg('searchTemplates')}
+                              shown={matchingTemplates(usable, tplQuery, template?.id).length}
+                              empty={tg('noTemplateMatch')}
+                            />
                             <Select
                               id="camp-template"
                               value={template?.id ?? ''}
@@ -500,13 +546,11 @@ export function GuidedCampaign({
                               }
                             >
                               <option value="">{tg('pickTemplate')}</option>
-                              {usable
-                                .filter((x) => x.id !== draft.templateId)
-                                .map((x) => (
-                                  <option key={x.id} value={x.id}>
-                                    {x.name} · {x.language}
-                                  </option>
-                                ))}
+                              {matchingTemplates(usable, tplQuery, template?.id).map((x) => (
+                                <option key={x.id} value={x.id}>
+                                  {x.name} · {x.language}
+                                </option>
+                              ))}
                             </Select>
                           </Field>
                         </div>
@@ -541,6 +585,13 @@ export function GuidedCampaign({
                                 : undefined
                             }
                           >
+                            <TemplateSearch
+                              value={tplQueryB}
+                              onChange={setTplQueryB}
+                              label={tg('searchTemplates')}
+                              shown={matchingTemplates(usable, tplQueryB, templateB?.id).length}
+                              empty={tg('noTemplateMatch')}
+                            />
                             <Select
                               id="camp-template-b"
                               value={templateB?.id ?? ''}
@@ -553,7 +604,7 @@ export function GuidedCampaign({
                               }
                             >
                               <option value="">{tg('pickTemplate')}</option>
-                              {usable.map((x) => (
+                              {matchingTemplates(usable, tplQueryB, templateB?.id).map((x) => (
                                 <option key={x.id} value={x.id}>
                                   {x.name} · {x.language}
                                 </option>
@@ -712,8 +763,8 @@ export function GuidedCampaign({
             recipients={recipients ?? 0}
             step={at + 1}
             stepCount={WIZARD_STEPS.length}
-            model={template ? previewModelOf(template) : null}
-            modelB={templateB ? previewModelOf(templateB) : null}
+            model={template ? previewModelWithExamples(template) : null}
+            modelB={templateB ? previewModelWithExamples(templateB) : null}
             pinned
           >
             <CountPanel

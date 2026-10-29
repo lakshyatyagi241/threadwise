@@ -106,7 +106,11 @@
         "failed": "Fallida",
         "rolled_back": "Revertida"
       },
-      "by": "por {author}"
+      "by": "por {author}",
+      "raisedIst": "Creado {time} IST",
+      "noProgress": "Sin avance desde hace {minutes} minutos. Puede que la compilación o la versión se hayan detenido.",
+      "noChangesAlert": "Las últimas versiones no indican sus pull requests. Es probable que deploy-main.sh del servidor de compilación o ci-entry.sh del host estén desactualizados: instale las versiones actuales (deploy/build-server/README.md).",
+      "moreChanges": "{count} cambios más"
     }
   }
 }

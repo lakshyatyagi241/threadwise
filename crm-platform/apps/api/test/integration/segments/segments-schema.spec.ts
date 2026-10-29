@@ -805,32 +805,39 @@ describe('segments: schema, isolation and rule SQL', () => {
       };
 
       it('a count that finishes is exact and leaves the statement timeout as it was', async () => {
-        const { counted, after } = await withTx(async (tx) => {
+        const { counted, before, after } = await withTx(async (tx) => {
           const compiled = compileRules(orgA, group('and', cond('name', 'contains', 'a')), rc);
+          const read = async () =>
+            (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`)).rows[0] as {
+              v: string;
+            };
+          const before = await read();
           const counted = await countWithTimeout(tx, segmentContactsWhere(orgA, compiled.where));
-          const after = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
-            .rows[0] as { v: string };
-          return { counted, after: after.v };
+          return { counted, before: before.v, after: (await read()).v };
         });
         expect(counted).toEqual({ count: 3, approximate: false });
-        expect(after).toBe('0');
+        expect(after).toBe(before);
       });
 
       it('a count that is too slow is cancelled, answers approximately, and leaves the transaction usable', async () => {
         const result = await withTx(async (tx) => {
           const slow = sql`${segmentContactsWhere(orgA, sql`true`)} AND pg_sleep(0.3) IS NOT NULL`;
+          const read = async () =>
+            (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`)).rows[0] as {
+              v: string;
+            };
+          const before = await read();
           const noFallback = await countWithTimeout(tx, slow, { timeoutMs: 50 });
           const withFallback = await countWithTimeout(tx, slow, { timeoutMs: 50, fallback: 1234 });
           const next = (await tx.execute(sql`SELECT 1 AS ok`)).rows[0] as { ok: number };
-          const setting = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
-            .rows[0] as { v: string };
-          return { noFallback, withFallback, next, setting: setting.v };
+          const setting = await read();
+          return { noFallback, withFallback, next, before: before.v, setting: setting.v };
         });
         expect(result.noFallback.approximate).toBe(true);
         expect(result.noFallback.count).toBeGreaterThanOrEqual(0);
         expect(result.withFallback).toEqual({ count: 1234, approximate: true });
         expect(result.next.ok).toBe(1);
-        expect(result.setting).toBe('0');
+        expect(result.setting).toBe(result.before);
       });
     });
   });

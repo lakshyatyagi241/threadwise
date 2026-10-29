@@ -8,8 +8,9 @@
 /** Width in px of the checkbox column; the first cell sticks right after it (`sm:start-12` is the same 48px). */
 export const SELECT_W = 48;
 
+// A cell with an open row menu rises above the sticky header (z-30): the menu's panel is inside the cell, so it cannot outrank the header on its own.
 const SURFACE =
-  'bg-background group-hover:bg-muted group-data-[active=true]:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
+  'has-[[role=menu]]:z-40 bg-background group-hover:bg-muted group-data-[active=true]:bg-muted group-data-[selected=true]:bg-[color-mix(in_srgb,var(--brand)_8%,var(--background))]';
 
 export const STICKY_SELECT = `sm:sticky sm:start-0 sm:z-10 ${SURFACE}`;
 export const STICKY_SELECT_HEAD = 'sm:start-0 sm:z-30 bg-muted';

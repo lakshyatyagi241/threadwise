@@ -118,11 +118,11 @@
       "moreActions": "その他の操作",
       "modifyColumns": "列を変更",
       "resetColumns": "既定に戻す",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "列を検索",
+      "columnsSelectAll": "すべて選択",
+      "dragToReorder": "ドラッグして列の順序を変更",
+      "removeColumn": "{name} を削除",
+      "columnsSave": "保存",
       "colContactName": "連絡先名",
       "colPhone": "電話番号",
       "colEmailId": "メールアドレス",
@@ -297,7 +297,8 @@
       "allTeams": "すべてのチーム",
       "teamFormer": "以前のチーム",
       "unhideColumn": "列を再表示",
-      "resizeColumn": "ドラッグして「{column}」の幅を変更、ダブルクリックでリセット"
+      "resizeColumn": "ドラッグして「{column}」の幅を変更、ダブルクリックでリセット",
+      "pqlNoKey": "このワークスペースでは英語検索がまだ設定されていません。管理者に、AIキーで OpenRouter のキーを追加してもらってください。"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -376,11 +377,11 @@
       "title": "敬称",
       "titleNone": "-",
       "titles": {
-        "mr": "Mr",
-        "mrs": "Mrs",
-        "miss": "Miss",
-        "ms": "Ms",
-        "dr": "Dr"
+        "mr": "ミスター",
+        "mrs": "ミセス",
+        "miss": "ミス",
+        "ms": "ミズ",
+        "dr": "ドクター"
       },
       "firstName": "名",
       "firstNamePlaceholder": "名を入力",
@@ -447,7 +448,8 @@
         "number": "数値を入力してください。",
         "integer": "整数を入力してください。",
         "email": "有効なメールアドレスを入力してください。",
-        "url": "http:// または https:// で始まる完全なリンクを入力してください。"
+        "url": "http:// または https:// で始まる完全なリンクを入力してください。",
+        "phone": "選択した国に合う有効な電話番号を入力してください。"
       },
       "readOnlyField": "読み取り専用",
       "yes": "はい",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "新しいグループ名",
       "groupRequiredHint": "インポートされるすべての連絡先がこの1つのグループに参加します。上でマッピングしない限り、ファイル内のグループ列は無視されます。",
       "customProperties": "カスタムプロパティ",
-      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。"
+      "customPropertiesHint": "ヘッダーがプロパティ名の列（またはエクスポートが書き出す attr:key）が、そのプロパティに値を入れます。空白のセルは、連絡先が既に持っている値をそのまま残します。",
+      "propertyFormat": {
+        "checkbox": "yes または no と入力します。true、false、y、n、1、0、x、on、off も使えます。",
+        "multiselect": "選択肢のキーはカンマ、セミコロン、縦棒で区切ります(例: vip, new_leads)。表示名ではなくキーを入力してください。大文字と小文字は区別しません。"
+      }
     },
     "detail": {
       "back": "すべての連絡先",
@@ -1345,7 +1351,10 @@
       "save": "保存してルールを開く",
       "created": "セグメント「{name}」を作成しました。下でルールを調整してください。",
       "forbidden": "セグメントを作成する権限がありません。",
-      "failed": "セグメントを作成できませんでした。もう一度お試しください。"
+      "failed": "セグメントを作成できませんでした。もう一度お試しください。",
+      "specific": "特定のユーザー",
+      "specificHint": "選択したユーザーとチーム、自分、そしてすべてのセグメントを編集できるユーザーだけに公開されます。",
+      "shareRequired": "共有するユーザーまたはチームを少なくとも1つ選んでください。"
     },
     "bulkUpdate": {
       "title": "{count, plural, other {#件の連絡先}}を更新",
@@ -1372,7 +1381,8 @@
         "setValue": "値を設定",
         "willClear": "{count, plural, other {選択したすべての#件の連絡先}}で空になります。",
         "requiredNoClear": "必須プロパティはクリアできません。",
-        "problemEmpty": "値を入力するか、「クリア」を選択してください。"
+        "problemEmpty": "値を入力するか、「クリア」を選択してください。",
+        "parentFirst": "先に {parent} を更新し、そのあとこのプロパティを更新してください。選択肢はその値に依存します。"
       },
       "titleAll": "一致するすべての連絡先を更新",
       "hintAll": "現在のフィルターに一致するすべての連絡先に同じ値を設定します。「変更しない」のままの項目は変更されません。",
@@ -1414,10 +1424,15 @@
         "by": "インポートした人"
       },
       "exports": {
-        "title": "エクスポート",
-        "hint": "Hub からの連絡先エクスポート（新しい順）。各ファイルは30日間保存され、あなたとエクスポート権限を持つチームメンバーが再ダウンロードできます。",
+        "title": "エクスポート履歴",
+        "hint": "Hub からのエクスポートを新しい順に、それぞれの取得元とともに表示します。各ファイルは30日間保存され、エクスポート権限のあるメンバーが再ダウンロードできます。",
         "empty": "エクスポートはまだありません。",
         "by": "実行者",
+        "source": "取得元",
+        "sources": {
+          "contacts": "連絡先",
+          "campaigns": "キャンペーン"
+        },
         "rows": "連絡先",
         "selection": "対象範囲",
         "unknown": "不明",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "メッセージアプリで開く"
+      },
+      "reason": {
+        "not_linked": "この番号は WhatsApp Business アカウントに紐づいていないため、テンプレートを送信できません。",
+        "paused": "WhatsApp により一時停止されています。停止が終わると再び送信できます。",
+        "media_header": "画像・動画・ドキュメントのヘッダーがあるため、ここからはまだ送信できません。",
+        "header_variable": "ヘッダーに変数があるため、ここからはまだ入力できません。",
+        "dynamic_button": "変数を含むボタンのリンクがあるため、ここからはまだ入力できません。",
+        "authentication": "ワンタイムパスワードのテンプレートはシステムが送信するため、ここからは送信できません。",
+        "named_variables": "名前付き変数を使用しているため、ここからはまだ入力できません。"
       }
     },
     "views": {

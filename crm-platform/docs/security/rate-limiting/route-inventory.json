@@ -23,9 +23,9 @@
     }
   },
   "summary": {
-    "routes": 2058,
-    "public": 220,
-    "withThrottle": 76,
+    "routes": 2094,
+    "public": 223,
+    "withThrottle": 79,
     "skippedByDesign": 64,
     "byClass": {
       "credential": {
@@ -34,9 +34,9 @@
         "undeclared": 12
       },
       "public-write": {
-        "routes": 70,
+        "routes": 73,
         "declared": 41,
-        "undeclared": 29
+        "undeclared": 32
       },
       "webhook": {
         "routes": 31,
@@ -49,9 +49,9 @@
         "undeclared": 50
       },
       "costly": {
-        "routes": 136,
-        "declared": 8,
-        "undeclared": 128
+        "routes": 140,
+        "declared": 9,
+        "undeclared": 131
       }
     }
   },
@@ -1513,6 +1513,17 @@
       "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
     },
     {
+      "key": "POST /v2/api-library/apis/test",
+      "class": "other",
+      "public": false,
+      "bodySchema": "testApiLibraryApiSchema",
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/api-library/api-library.controller.ts"
+    },
+    {
       "key": "POST /v2/audit-log/exports",
       "class": "costly",
       "public": false,
@@ -1522,15 +1533,6 @@
       "effective": "6/60s by actor",
       "severityIfUnlimited": "Medium",
       "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
-    },
-    {
-      "key": "POST /v2/auth/clerk/session",
-      "class": "public-write",
-      "public": true,
-      "bodySchema": "clerkSessionSchema",
-      "limiter": "none",
-      "severityIfUnlimited": "High",
-      "file": "apps/api/src/modules/auth/auth.controller.ts"
     },
     {
       "key": "POST /v2/auth/find-workspaces",
@@ -2088,6 +2090,23 @@
       "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
     },
     {
+      "key": "POST /v2/contacts/:contactId/files/upload",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-files/contact-files.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/consent",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkConsentContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
       "key": "POST /v2/contacts/bulk/delete",
       "class": "costly",
       "public": false,
@@ -2270,6 +2289,16 @@
       "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts"
     },
     {
+      "key": "POST /v2/flows/upload-media/from-url",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts"
+    },
+    {
       "key": "POST /v2/forms/:id/submissions/export",
       "class": "costly",
       "public": false,
@@ -2285,6 +2314,16 @@
       "bodySchema": "broadcastAssistantSchema",
       "limiter": "none",
       "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts"
+    },
+    {
+      "key": "POST /v2/growth/propensity/recompute",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "6/3600s by actor",
+      "effective": "6/3600s by actor",
+      "severityIfUnlimited": "Info",
       "file": "apps/api/src/modules/growth-pilot/growth.controller.ts"
     },
     {
@@ -3196,7 +3235,7 @@
       "key": "POST /v2/tasks/bulk/complete",
       "class": "costly",
       "public": false,
-      "bodySchema": "bulkTaskIdsSchema",
+      "bodySchema": "bulkTaskTransitionSchema",
       "limiter": "none",
       "severityIfUnlimited": "Medium",
       "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
@@ -3214,7 +3253,7 @@
       "key": "POST /v2/tasks/bulk/reopen",
       "class": "costly",
       "public": false,
-      "bodySchema": "bulkTaskIdsSchema",
+      "bodySchema": "bulkTaskTransitionSchema",
       "limiter": "none",
       "severityIfUnlimited": "Medium",
       "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
@@ -3320,6 +3359,14 @@
       "file": "apps/api/src/modules/channel-viber/webhook.controller.ts"
     },
     {
+      "key": "POST /v2/waba/numbers/:id/profile/logo",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-connections.controller.ts"
+    },
+    {
       "key": "POST /v2/webhooks/channels/:channelUuid",
       "class": "webhook",
       "public": true,
@@ -3386,7 +3433,23 @@
       "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts"
     },
     {
+      "key": "POST /widget/:token/api/end",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
       "key": "POST /widget/:token/api/feedback",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/location",
       "class": "public-write",
       "public": true,
       "limiter": "none",
@@ -3402,7 +3465,23 @@
       "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
     },
     {
+      "key": "POST /widget/:token/api/rating",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
       "key": "POST /widget/:token/api/restart",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/start",
       "class": "public-write",
       "public": true,
       "limiter": "none",

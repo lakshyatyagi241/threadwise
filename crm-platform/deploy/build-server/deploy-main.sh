@@ -51,14 +51,37 @@ report() {  # report <state> <step> [message]
 
 # Tells production which pull requests this release carries (number, title, author), so the release history says what was deployed. It
 # reads the first-parent history since the last released commit (the tip alone when that is unknown): a squash commit is one PR with its
-# author, a merge commit takes its title from the body and its author from the merged branch. Never stops the deploy.
+# author, a merge commit takes its title from the body and its author from the merged branch. Each also carries what the PR changes
+# (its description) and when it was raised: from the GitHub API when $CONF/github_token exists (read-only; the repo is private), else the
+# commit's own text and no raised time. Never stops the deploy.
+#   Said in the log (like `report` does) instead of swallowed: when this fails the console's Changes column is simply empty and nothing says
+#   why. The usual cause is a host whose /opt/desk/ci-entry.sh predates the `changes` action: that file is not synced by the pipeline (it is
+#   the forced command of the CI key), an administrator installs it with deploy/hostinger/ship.sh.
+changes_failed() {
+  echo "$(date -Is) could not record what ${TAG:-this release} carries on production; the console's Changes column stays empty (is /opt/desk/ci-entry.sh the current version? see deploy/build-server/README.md)" >> "$LOGS/webhook.log"
+}
+
 report_changes() {  # report_changes <last released commit or empty>
   [ -n "${ATTEMPT:-}" ] || return 0
-  python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || true
-import json, re, subprocess, sys
+  GH_TOKEN_FILE="$CONF/github_token" GH_SLUG=$(printf '%s' "$REPO_URL" | sed 's#.*github\.com[:/]##; s#\.git$##') python3 - "${1:-}" <<'PY' 2>/dev/null | ssh_prod "changes $ATTEMPT" >/dev/null 2>&1 || changes_failed
+import json, os, re, subprocess, sys, urllib.request
 last = sys.argv[1]
 def git(*a):
     return subprocess.run(["git", *a], capture_output=True, text=True, check=True).stdout
+def github(pr):
+    # (description, raised-at) of a PR, or (None, None) without a token or when the call fails
+    try:
+        tok = open(os.environ["GH_TOKEN_FILE"]).read().strip()
+        req = urllib.request.Request(f"https://api.github.com/repos/{os.environ['GH_SLUG']}/pulls/{pr}",
+                                     headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json"})
+        d = json.load(urllib.request.urlopen(req, timeout=15))
+        return (d.get("body") or None), d.get("created_at")
+    except Exception:
+        return None, None
+def clean(t):
+    # commit trailers are not a description
+    keep = [l for l in t.splitlines() if not re.match(r"(Co-authored-by|Signed-off-by):|.*Generated with", l, re.I)]
+    return "\n".join(keep).strip() or None
 rng = [f"{last}..HEAD"] if last else ["-1", "HEAD"]
 out = []
 for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).split():
@@ -67,16 +90,21 @@ for sha in git("log", "--first-parent", "--max-count=30", "--format=%H", *rng).s
         author = git("log", "-1", "--format=%an", parents[1]).strip()
         body = [l for l in git("log", "-1", "--format=%b", sha).splitlines() if l.strip()]
         title = body[0] if body else git("log", "-1", "--format=%s", sha).strip()
+        text = clean("\n".join(body[1:]))
         m = re.match(r"Merge pull request #(\d+)", git("log", "-1", "--format=%s", sha))
         pr = int(m.group(1)) if m else None
     else:
         author = git("log", "-1", "--format=%an", sha).strip()
         title = git("log", "-1", "--format=%s", sha).strip()
+        text = clean(git("log", "-1", "--format=%b", sha))
         m = re.search(r"\(#(\d+)\)\s*$", title)
         pr = int(m.group(1)) if m else None
         if m:
             title = title[: m.start()].rstrip()
-    out.append({"pr": pr, "title": title[:200], "author": author[:100]})
+    body, raised = github(pr) if pr else (None, None)
+    body = body or text
+    out.append({"pr": pr, "title": title[:200], "author": author[:100],
+                "body": body[:800] if body else None, "createdAt": raised})
 print(json.dumps(out[:20]))
 PY
 }
@@ -139,27 +167,27 @@ run_once() {
   return 1
 }
 
-while true; do
-  rm -f "$STATE/pending"
-  # One id per run; production records the release history under it (the build's steps and the release's steps share it).
-  ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
-  ( run_once ); rc=$?
-  TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
-  if [ "$rc" = 0 ]; then status ok; else
-    status failed; notify failed "$TAG" "$(elapsed)" "see $LOG on the build server"; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
-    # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
-    cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
-    case "$cur" in building|shipping)
-      [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
-        | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
-    esac
-  fi
-  # keep the last two local builds and trim the build cache so the disk does not fill
-  docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
-  docker builder prune -f --filter until=96h >/dev/null 2>&1 || true
-  [ -e "$STATE/pending" ] || break
-  FORCE=0
-done
+# One release per process. This used to be a loop that ran every queued push inside the same bash process; bash keeps the functions it read
+# at start-up, so a script installed while a deploy was running was ignored for as long as pushes kept arriving (each deploy lands a push
+# during the next build): the Changes column of the console stayed empty for weeks because the running loop predated `report_changes`.
+# Now the tail below re-executes the file when a push is waiting, so every release runs the script as it is on disk.
+rm -f "$STATE/pending"
+# One id per run; production records the release history under it (the build's steps and the release's steps share it).
+ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
+( run_once ); rc=$?
+TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
+if [ "$rc" = 0 ]; then status ok; else
+  status failed; notify failed "$TAG" "$(elapsed)" "see $LOG on the build server"; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
+  # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
+  cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
+  case "$cur" in building|shipping)
+    [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
+      | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
+  esac
+fi
+# keep the last two local builds and trim the build cache so the disk does not fill
+docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
+docker builder prune -f --filter until=96h >/dev/null 2>&1 || true
 # Release the lock, then look once more: a push that failed to get the lock has already set the flag (see above).
 exec 9>&-
 if [ -e "$STATE/pending" ]; then exec "$0"; fi

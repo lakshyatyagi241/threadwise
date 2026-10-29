@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "kosong = tanpa batas",
           "maxUsesHint": "Untuk semua pelanggan.",
           "perUser": "Batas per pengguna",
-          "perUserHint": "Jumlah penukaran yang diizinkan untuk setiap pelanggan.",
+          "perUserHint": "Jumlah penukaran yang diizinkan untuk setiap pelanggan, di semua ruang kerja.",
           "firstPurchaseTitle": "Hanya pembelian pertama",
-          "firstPurchaseHint": "Hanya workspace yang belum pernah melakukan pesanan berbayar",
+          "firstPurchaseHint": "Hanya pembeli yang belum pernah membayar pesanan di ruang kerja mana pun",
           "stackableTitle": "Dapat digabung dengan kupon lain",
           "stackableHint": "Memungkinkan pembeli memakainya bersama kode aktif lain saat checkout"
         }

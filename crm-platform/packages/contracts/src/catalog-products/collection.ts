@@ -27,14 +27,14 @@ export const collectionResponseSchema = z.object({
   slug: z.string().nullable(),
   description: z.string().nullable(),
   isActive: z.boolean(),
-  productCount: z.number().int(),
+  productCount: z.int(),
   /** The id of the product set on Meta once pushed (TW-CAT product sets), else null. */
   metaSetId: z.string().nullable(),
   /** The members that still exist, in the stored order. */
   products: z.array(collectionMemberSchema),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type CollectionResponse = z.infer<typeof collectionResponseSchema>;
 
@@ -48,7 +48,7 @@ export const collectionFieldsSchema = z.object({
 export const createCollectionSchema = collectionFieldsSchema;
 export type CreateCollectionInput = z.infer<typeof createCollectionSchema>;
 export const updateCollectionSchema = collectionFieldsSchema.extend({
-  rowVersion: z.number().int().min(1).optional(),
+  rowVersion: z.int().min(1).optional(),
 });
 export type UpdateCollectionInput = z.infer<typeof updateCollectionSchema>;
 
@@ -64,6 +64,6 @@ export const listCollectionsResponseSchema = z.object({
       priceDisplay: z.string(),
     }),
   ),
-  totalProducts: z.number().int(),
+  totalProducts: z.int(),
 });
 export type ListCollectionsResponse = z.infer<typeof listCollectionsResponseSchema>;

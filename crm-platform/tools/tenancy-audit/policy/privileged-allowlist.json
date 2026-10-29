@@ -98,6 +98,11 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/broadcasts/broadcast-orphan-sweeper.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects broadcasts across tenants whose dispatch job was lost; per-row work (reopen, setStatus, outbox) is scoped by org_id and id inside the privileged tx; it never sends a message, it only clears the job id for the due queueing or marks the broadcast failed",
+    "reviewedOn": "2026-10-27"
+  },
   "modules/broadcasts/broadcast-resume.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; per-row work runs inside the privileged tx with explicit org_id predicates (weaker than txAs, no bug)",

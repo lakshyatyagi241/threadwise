@@ -27,9 +27,9 @@ export const mailSignatureResponseSchema = z.object({
   bodyHtml: z.string(),
   bodyText: z.string(),
   isDefault: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type MailSignatureResponse = z.infer<typeof mailSignatureResponseSchema>;
 
@@ -61,8 +61,8 @@ export const createMailSignatureSchema = z
     ...body,
   })
   .refine((v) => (v.scope === 'mailbox') === (v.mailboxId !== undefined), {
-    message: 'mailboxId is required for a mailbox signature and not allowed for a user signature',
     path: ['mailboxId'],
+    error: 'mailboxId is required for a mailbox signature and not allowed for a user signature',
   });
 export type CreateMailSignatureInput = z.infer<typeof createMailSignatureSchema>;
 
@@ -71,6 +71,6 @@ export const updateMailSignatureSchema = z.object({
   bodyHtml: z.string().max(MAIL_SIGNATURE_HTML_MAX).optional(),
   bodyText: z.string().max(MAIL_SIGNATURE_TEXT_MAX).optional(),
   isDefault: z.boolean().optional(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type UpdateMailSignatureInput = z.infer<typeof updateMailSignatureSchema>;

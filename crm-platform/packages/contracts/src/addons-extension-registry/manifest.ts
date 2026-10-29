@@ -153,13 +153,8 @@ function normaliseRoutes(raw: unknown): string[] {
 
 /** What the file may contain. Everything but `slug` is optional (TW-ADD-004 data). */
 export const extensionManifestFileSchema = z
-  .object({
-    schema_version: z
-      .number()
-      .int()
-      .min(1)
-      .max(MANIFEST_SCHEMA_VERSION)
-      .default(MANIFEST_SCHEMA_VERSION),
+  .looseObject({
+    schema_version: z.int().min(1).max(MANIFEST_SCHEMA_VERSION).default(MANIFEST_SCHEMA_VERSION),
     slug: extensionSlugSchema,
     name: str(128).optional(),
     version: str(32).optional(),
@@ -173,7 +168,6 @@ export const extensionManifestFileSchema = z
     routes: z.unknown().optional(),
     migrate: z.boolean().optional(),
   })
-  .passthrough()
   .transform((m) => {
     const name = m.name || m.slug;
     return {

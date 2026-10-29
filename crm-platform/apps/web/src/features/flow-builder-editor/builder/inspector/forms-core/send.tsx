@@ -1,11 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import type { ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
+import { FLB_WA_LIMITS } from '@crm/contracts';
+import { FlowEditorContext } from '../../../lib/flow-editor-context';
 import { Check, Field, Notice, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { acceptFor, str, withCurrent } from './helpers';
 import { InfoBox, Link, UploadBox, UploadedFile, uploadFile, V } from './parts';
+import { RichTextField } from '../rich-text-field';
 import { MediaPreview, MessagePreview, TemplatePreview } from './previews';
 
 /** The media kinds the upload prompt names. */
@@ -13,16 +16,20 @@ const CHOOSE_KINDS = ['image', 'video', 'document', 'audio'];
 
 const v = (chunks: ReactNode) => <V>{chunks}</V>;
 
-export function MessageForm({ data: d, set }: FormProps) {
+export function MessageForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
+  const { whatsapp } = useContext(FlowEditorContext);
   return (
     <>
       <MessagePreview d={d} />
       <Field label={t('messageLabel')} hint={t.rich('messageHint', { v })}>
-        <TextArea
+        <RichTextField
           value={d.text}
+          label={t('messageLabel')}
           placeholder={t('messagePlaceholder')}
           rows={6}
+          max={whatsapp ? FLB_WA_LIMITS.text : undefined}
+          nodes={env.nodes}
           onChange={(v) => set('text', v)}
         />
       </Field>
@@ -47,8 +54,27 @@ export function TemplateForm({ data: d, set, setMany, env }: FormProps) {
   // Picking stamps both the name (what the runtime sends) and the template id, like Reference.
   const pick = (name: string) => {
     const hit = templates.find((tpl) => tpl.name === name);
-    setMany({ tpl: name, tplId: hit ? hit.id : null });
+    setMany({ tpl: name, tplId: hit ? hit.id : null, tplVars: {}, tplMedia: '' });
   };
+  const chosen = templates.find((tpl) => tpl.name === str(d.tpl));
+  const variables = chosen?.variables ?? [];
+  const fills = (d.tplVars && typeof d.tplVars === 'object' ? d.tplVars : {}) as Record<
+    string,
+    string
+  >;
+  const setFill = (id: string, value: string) => {
+    const next = { ...fills, [id]: value };
+    if (value === '') delete next[id];
+    set('tplVars', next);
+  };
+  // A header that is a picture, video or file needs a file to send: the template's own sample, or the one set here.
+  const attachment = str(chosen?.attachmentType).toLowerCase();
+  const needsMedia = ['image', 'photo', 'video', 'document'].includes(attachment);
+  const mediaKind = attachment === 'photo' ? 'image' : attachment;
+  const ownFile = /^https?:\/\//i.test(str(chosen?.attachmentFile))
+    ? str(chosen?.attachmentFile)
+    : '';
+  const tp = useTranslations('flb.builder.formsCore.parts');
   return (
     <>
       <TemplatePreview d={d} templates={templates} />
@@ -64,6 +90,53 @@ export function TemplateForm({ data: d, set, setMany, env }: FormProps) {
         <div className="mt-1 font-mono text-[10.5px] text-muted-foreground">
           template_id = {str(d.tplId)}
         </div>
+      ) : null}
+      {variables.length > 0 ? (
+        <Field label={t('templateFills')} hint={t('templateFillsHint')}>
+          <div className="space-y-2">
+            {variables.map((x) => {
+              const id = `${x.section}:${x.slot}`;
+              return (
+                <div key={id} className="flex items-center gap-2">
+                  <span className="shrink-0 font-mono text-[12.5px]">{`{{${x.slot}}}`}</span>
+                  <div className="min-w-0 flex-1">
+                    <TextInput
+                      value={fills[id] ?? ''}
+                      placeholder={x.field}
+                      aria-label={`{{${x.slot}}}`}
+                      onChange={(value) => setFill(id, value)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Field>
+      ) : null}
+      {needsMedia ? (
+        <Field label={t('templateHeaderMedia')} hint={t('templateHeaderMediaHint')}>
+          <UploadBox
+            accept={acceptFor(mediaKind)}
+            label={
+              d.tplMedia
+                ? t('replaceFile')
+                : t(`chooseKind.${mediaKind === 'photo' ? 'image' : (mediaKind as 'image')}`)
+            }
+            onFile={(file) =>
+              uploadFile(tp, env, file, mediaKind as 'image', (res) => set('tplMedia', res.url))
+            }
+          />
+          <TextInput
+            value={d.tplMedia}
+            placeholder={ownFile || 'https://'}
+            onChange={(value) => set('tplMedia', value)}
+          />
+          {!ownFile && !str(d.tplMedia).trim() ? (
+            <p role="alert" className="mt-1 text-[12px] font-medium text-danger">
+              {t('templateHeaderMediaMissing')}
+            </p>
+          ) : null}
+        </Field>
       ) : null}
       <Field hint={t('statusExitsHint')}>
         <Check checked={d.statusExits === true} onChange={(on) => set('statusExits', on)}>
@@ -94,7 +167,10 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('kind', v)}
         />
       </Field>
-      <Field label={t('upload')} hint={t('uploadHint', { mb: 50 })}>
+      <Field
+        label={t('upload')}
+        hint={`${t('uploadHint', { mb: 50 })} ${t(`acceptedFormats.${CHOOSE_KINDS.includes(kind) ? kind : 'image'}`)}`}
+      >
         <UploadBox
           accept={acceptFor(kind)}
           label={
@@ -115,18 +191,13 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('url', v)}
         />
       </Field>
-      <Field label={t('filename')}>
-        <TextInput
-          value={d.filename}
-          placeholder="catalogue.pdf"
-          onChange={(v) => set('filename', v)}
-        />
-      </Field>
       <Field label={t('caption')}>
-        <TextArea
+        <RichTextField
           value={d.caption}
+          label={t('caption')}
           placeholder={t('captionPlaceholder')}
           rows={3}
+          nodes={env.nodes}
           onChange={(v) => set('caption', v)}
         />
       </Field>
@@ -134,7 +205,7 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
   );
 }
 
-export function NotifyNumberForm({ data: d, set }: FormProps) {
+export function NotifyNumberForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
   const isMedia = !!d.kind && d.kind !== 'text';
   const src = d.source === 'custom' ? 'custom' : 'mirror';
@@ -180,9 +251,11 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           </Field>
           {!isMedia ? (
             <Field label={t('notifyMessage')} hint={t('notifyMessageHint')}>
-              <TextArea
+              <RichTextField
                 value={d.text}
+                label={t('notifyMessage')}
                 placeholder={t('notifyMessagePlaceholder')}
+                nodes={env.nodes}
                 onChange={(v) => set('text', v)}
               />
             </Field>
@@ -207,10 +280,12 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           ) : null}
           {isMedia ? (
             <Field label={t('caption')}>
-              <TextArea
+              <RichTextField
                 value={d.caption}
+                label={t('caption')}
                 placeholder={t('captionPlaceholder')}
                 rows={3}
+                nodes={env.nodes}
                 onChange={(v) => set('caption', v)}
               />
             </Field>

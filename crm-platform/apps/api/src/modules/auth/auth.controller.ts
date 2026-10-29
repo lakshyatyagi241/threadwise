@@ -17,7 +17,6 @@ import {
   type SwitchWorkspaceRequest,
 } from '@crm/contracts';
 import { Public, ActorKinds } from '../../common/decorators';
-import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AccountService } from './account/account.service';
 import { SecurityPolicyService } from './platform/security-policy.service';
@@ -31,13 +30,8 @@ import { Throttle } from '../platform-infrastructure';
 
 const partnerLoginSchema = z.object({
   orgSlug: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(1),
-});
-
-const clerkSessionSchema = z.object({
-  orgSlug: z.string().min(1),
-  clerkToken: z.string().min(1),
 });
 
 @ApiTags('auth')
@@ -142,17 +136,6 @@ export class AuthController {
   })
   async partnerLogin(@Body(zodPipe(partnerLoginSchema)) body: z.infer<typeof partnerLoginSchema>) {
     return this.auth.loginPartnerAgent(body.orgSlug, body.email, body.password, clientMeta());
-  }
-
-  @Public()
-  @Post('clerk/session')
-  @ApiOperation({
-    summary: 'Exchange a verified Clerk session token for a session (existing users only)',
-  })
-  async clerkSession(@Body(zodPipe(clerkSessionSchema)) body: z.infer<typeof clerkSessionSchema>) {
-    // Not configured (placeholder key): this door does not exist.
-    if (!this.auth.clerkConfigured()) throw AppError.notFound('Route');
-    return this.auth.loginViaClerk(body.orgSlug, body.clerkToken, clientMeta());
   }
 
   @Public()

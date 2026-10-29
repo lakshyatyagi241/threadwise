@@ -10,7 +10,7 @@ import { Avatar } from './parts';
 
 const SERIES = [
   { key: 'sent', bar: 'bg-brand', dot: 'bg-brand' },
-  { key: 'received', bar: 'bg-primary', dot: 'bg-primary' },
+  { key: 'received', bar: 'bg-success', dot: 'bg-success' },
   { key: 'failed', bar: 'bg-danger', dot: 'bg-danger' },
 ] as const;
 
@@ -94,7 +94,10 @@ export function VolumeChart({
             <div
               key={p.at}
               className="group relative flex h-full min-w-0 flex-1 flex-col justify-end"
-              title={`${bucketLabel(p.at, bucket, days, locale, tz)}: ${total}`}
+              title={[
+                `${bucketLabel(p.at, bucket, days, locale, tz)}: ${formatCount(total, locale)}`,
+                ...SERIES.map((s) => `${t(`series.${s.key}`)}: ${formatCount(p[s.key], locale)}`),
+              ].join('\n')}
             >
               <div
                 className="flex w-full flex-col-reverse overflow-hidden rounded-t-sm"
@@ -105,6 +108,7 @@ export function VolumeChart({
                   return v === 0 ? null : (
                     <div
                       key={s.key}
+                      title={`${bucketLabel(p.at, bucket, days, locale, tz)} · ${t(`series.${s.key}`)}: ${formatCount(v, locale)}`}
                       className={s.bar}
                       style={{ height: `${(v / total) * 100}%` }}
                     />
@@ -158,7 +162,7 @@ export function DirectionDonut({ insights }: { insights: MessageHistoryInsights 
   let offset = 0;
   const color = {
     sent: 'var(--brand)',
-    received: 'var(--primary)',
+    received: 'var(--success)',
     failed: 'var(--danger)',
   } as const;
   return (
@@ -292,7 +296,7 @@ export function TopConversations({
         </Link>
       </div>
       {top.length === 0 ? (
-        <div className="rounded-md border border-dashed border-border p-6 text-center text-xs italic text-muted-foreground">
+        <div className="rounded-md border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
           {t('topEmpty')}
         </div>
       ) : (

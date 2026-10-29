@@ -67,7 +67,7 @@ const textOrNull = (max: number) =>
     .nullish()
     .transform((v) => (v ? v : null));
 
-const optionOrNull = <T extends z.ZodTypeAny>(schema: T) =>
+const optionOrNull = <T extends z.ZodType>(schema: T) =>
   schema.nullish().transform((v) => (v ?? null) as z.infer<T> | null);
 
 /** A stored picture, as the page is told about it: an id and a version to build the address from (`.../assets/<org>/<id>?v=<v>`). */
@@ -139,8 +139,8 @@ export const bookingPageThemeSchema = z.object({
   logo: bookingPageAssetRefSchema.nullable(),
   cover: bookingPageAssetRefSchema.nullable(),
   /** Null until the first save. */
-  rowVersion: z.number().int().nullable(),
-  updatedAt: z.string().datetime().nullable(),
+  rowVersion: z.int().nullable(),
+  updatedAt: z.iso.datetime().nullable(),
 });
 export type BookingPageTheme = z.infer<typeof bookingPageThemeSchema>;
 
@@ -164,11 +164,11 @@ export const bookingPageSettingsResponseSchema = z.object({
   /** False on plans without white-label branding: the "Powered by" line stays on. */
   canRemovePoweredBy: z.boolean(),
   limits: z.object({
-    pageTitle: z.number().int(),
-    welcomeText: z.number().int(),
-    buttonLabel: z.number().int(),
-    logoBytes: z.number().int(),
-    coverBytes: z.number().int(),
+    pageTitle: z.int(),
+    welcomeText: z.int(),
+    buttonLabel: z.int(),
+    logoBytes: z.int(),
+    coverBytes: z.int(),
   }),
 });
 export type BookingPageSettingsResponse = z.infer<typeof bookingPageSettingsResponseSchema>;
@@ -193,7 +193,7 @@ export const updateBookingPageThemeSchema = z.object({
   showPoweredBy: optionOrNull(z.boolean()),
   showLanguageSwitch: optionOrNull(z.boolean()),
   useWorkspaceBrand: z.boolean().default(true),
-  rowVersion: z.number().int().min(1).nullable(),
+  rowVersion: z.int().min(1).nullable(),
 });
 export type UpdateBookingPageThemeInput = z.infer<typeof updateBookingPageThemeSchema>;
 

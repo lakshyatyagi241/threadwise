@@ -123,6 +123,7 @@ export class WizardCsvService {
             digits: l.digits,
             name: l.name,
             reason: l.reason,
+            consentGranted: l.consentGranted,
           })),
         );
       }
@@ -231,7 +232,7 @@ export class WizardCsvService {
     for (;;) {
       const res = await tx.execute(sql`
         SELECT contacts.id FROM contacts
-        WHERE contacts.org_id = ${orgId} AND ${csvContactsWhere(orgId, up.id)} AND contacts.id > ${after}::bigint
+        WHERE contacts.org_id = ${orgId} AND ${csvContactsWhere(orgId, up.id, true)} AND contacts.id > ${after}::bigint
         ORDER BY contacts.id LIMIT ${CHUNK_GRANTS}`);
       const ids = (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
       if (ids.length === 0) break;
@@ -291,10 +292,11 @@ export class WizardCsvService {
     uploadId: number,
     afterLine: number,
     limit: number,
+    consentedOnly = false,
   ): Promise<Array<{ line: number; phone: string; name: string | null }>> {
     const res = await tx.execute(sql`
       SELECT r.line, r.phone, r.name FROM camp_wizard_csv_rows r
-      WHERE ${csvNewRowsWhere(orgId, uploadId)} AND r.line > ${afterLine}
+      WHERE ${csvNewRowsWhere(orgId, uploadId, consentedOnly)} AND r.line > ${afterLine}
       ORDER BY r.line LIMIT ${limit}`);
     return (res.rows as Array<{ line: number; phone: string; name: string | null }>).map((r) => ({
       line: Number(r.line),
@@ -341,13 +343,17 @@ export class WizardCsvService {
         ELSE 'new' END`;
     const preview = (
       await tx.execute(sql`
-        SELECT r.line, r.phone, r.name, ${status} AS status FROM camp_wizard_csv_rows r
+        SELECT r.line, r.phone, r.name, ${status} AS status,
+               (r.line IN (${owned})) AS is_contact, (r.line IN (${optedOut})) AS is_opted_out
+        FROM camp_wizard_csv_rows r
         WHERE r.org_id = ${orgId} AND r.upload_id = ${id} AND r.kind = 'valid' ORDER BY r.line LIMIT ${PREVIEW_ROWS}`)
     ).rows as Array<{
       line: number;
       phone: string;
       name: string | null;
       status: 'new' | 'existing' | 'optedOut';
+      is_contact: boolean;
+      is_opted_out: boolean;
     }>;
     const issues = (
       await tx.execute(sql`
@@ -374,6 +380,8 @@ export class WizardCsvService {
         phone: r.phone,
         name: r.name,
         status: r.status,
+        contact: r.is_contact ? 'existing' : 'new',
+        optedOut: r.is_opted_out,
       })),
       issues: issues.map((r) => ({
         line: Number(r.line),

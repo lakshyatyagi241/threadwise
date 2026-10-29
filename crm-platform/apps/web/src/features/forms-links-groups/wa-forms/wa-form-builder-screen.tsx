@@ -1,7 +1,9 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useState } from 'react';
+import { failureNotice, type WaFormNotice } from './wa-form-notice';
 import type {
   SaveWaFormInput,
   WaForm,
@@ -20,7 +22,12 @@ import {
 } from '@crm/contracts';
 import { Alert, Button, Card, Checkbox, Field, Input, Select, Spinner, Textarea } from '@crm/ui';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
-import { useSaveWaForm, usePublishWaForm, useWaForm } from '../api/wa-forms-hooks';
+import {
+  usePreviewWaForm,
+  usePublishWaForm,
+  useSaveWaForm,
+  useWaForm,
+} from '../api/wa-forms-hooks';
 import { useErrorText } from '../components/use-error-text';
 
 function randomFieldId(): string {
@@ -31,11 +38,52 @@ function randomScreenId(): string {
   return `scr_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/** Splits the typed text into the choices: separated by commas (also the Arabic and full-width ones) or new lines, trimmed, blanks dropped. */
+export function parseOptions(text: string): string[] {
+  return text
+    .split(/[,،，、\r\n]/)
+    .map((o) => o.trim())
+    .filter(Boolean);
+}
+
+/**
+ * The choices of a dropdown / radio / checkbox field. It keeps what was typed, so a comma (or the space after it) is not eaten while the
+ * next option is being typed; the field gets the parsed list on every change.
+ */
+function OptionsInput({
+  options,
+  onChange,
+  placeholder,
+}: {
+  options: string[];
+  onChange: (options: string[]) => void;
+  placeholder: string;
+}) {
+  const [text, setText] = useState(options.join(', '));
+  // another edit changed the list (not this box): show it
+  if (options.join('|') !== parseOptions(text).join('|')) setText(options.join(', '));
+  return (
+    <Input
+      value={text}
+      onChange={(e) => {
+        setText(e.target.value);
+        onChange(parseOptions(e.target.value));
+      }}
+      placeholder={placeholder}
+    />
+  );
+}
+
+type FormNotice = WaFormNotice | null;
+
 /** `/wa-forms/[id]` (Reference form builder): basics + a screen/field editor. Editing a published form drops it to draft — server-enforced. */
 export function WaFormBuilderScreen({ id }: { id: string }) {
   const t = useTranslations('forms-links-groups.forms');
   const errorText = useErrorText();
   const form = useWaForm(id);
+  // Kept here, not in the form: a save remounts the form (keyed by rowVersion), and a notice or a test link must survive that.
+  const [notice, setNotice] = useState<FormNotice>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   if (form.isPending) {
     return (
@@ -59,15 +107,34 @@ export function WaFormBuilderScreen({ id }: { id: string }) {
       key={`${form.data.id}:${form.data.rowVersion}`}
       id={id}
       initial={form.data}
+      notice={notice}
+      onNotice={setNotice}
+      previewUrl={previewUrl}
+      onPreviewUrl={setPreviewUrl}
     />
   );
 }
 
-function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
+function WaFormBuilderForm({
+  id,
+  initial,
+  notice,
+  onNotice,
+  previewUrl,
+  onPreviewUrl,
+}: {
+  id: string;
+  initial: WaForm;
+  notice: FormNotice;
+  onNotice: (n: FormNotice) => void;
+  previewUrl: string | null;
+  onPreviewUrl: (url: string | null) => void;
+}) {
   const t = useTranslations('forms-links-groups.forms');
   const errorText = useErrorText();
   const save = useSaveWaForm(id);
   const publish = usePublishWaForm(id);
+  const preview = usePreviewWaForm(id);
   const feed = usePickerFeed();
 
   const [title, setTitle] = useState(initial.title);
@@ -76,7 +143,7 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
   const [sendButtonLabel, setSendButtonLabel] = useState(initial.sendButtonLabel);
   const [thankYouNote, setThankYouNote] = useState(initial.thankYouNote ?? '');
   const [definition, setDefinition] = useState<WaFormDefinition>(initial.definition);
-  const [notice, setNotice] = useState<{ tone: 'success' | 'danger'; text: string } | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const input = (): SaveWaFormInput => ({
     title,
@@ -92,21 +159,49 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
 
   // Save/publish update the query cache (see the hooks); the parent remounts this component on the new
   // (id, rowVersion) key, which is how the fresh server state (including the drop-to-draft on edit) shows up.
-  const onSave = () =>
-    save.mutate(input(), {
-      onSuccess: () => setNotice({ tone: 'success', text: t('notice.saved') }),
-      onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-    });
+  // The chained calls use mutateAsync: a callback given to mutate() is dropped when this component unmounts, and
+  // that would stop the publish or the test right after the save.
+  const onSave = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      onNotice({ tone: 'success', text: t('notice.saved') });
+    } catch (err) {
+      onNotice(failureNotice(err, errorText(err).text));
+    }
+  };
 
-  const onPublish = () =>
-    save.mutate(input(), {
-      onSuccess: () =>
-        publish.mutate(undefined, {
-          onSuccess: () => setNotice({ tone: 'success', text: t('notice.published') }),
-          onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-        }),
-      onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
-    });
+  const onPublish = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      await publish.mutateAsync();
+      onNotice({ tone: 'success', text: t('notice.published') });
+    } catch (err) {
+      onNotice(failureNotice(err, errorText(err).text));
+    }
+  };
+
+  // Meta's own preview of the form as saved: the draft is saved first, so what is tried is what is on the screen.
+  const onTest = async () => {
+    try {
+      await save.mutateAsync(input());
+      onPreviewUrl(null);
+      const r = await preview.mutateAsync();
+      onNotice(null);
+      onPreviewUrl(r.url);
+    } catch (err) {
+      onNotice(failureNotice(err, errorText(err).text));
+    }
+  };
+
+  const copyFlowId = () => {
+    if (!initial.metaFlowId) return;
+    void navigator.clipboard
+      ?.writeText(initial.metaFlowId)
+      .then(() => setCopied(true))
+      .catch(() => undefined);
+  };
 
   const addScreen = () =>
     setDefinition((d) => ({
@@ -115,6 +210,15 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
       // persisted definition_json would then have two screens sharing one id).
       screens: [...d.screens, { id: randomScreenId(), fields: [] }],
     }));
+
+  const moveScreen = (screenIndex: number, dir: -1 | 1) =>
+    setDefinition((d) => {
+      const j = screenIndex + dir;
+      if (j < 0 || j >= d.screens.length) return d;
+      const screens = [...d.screens];
+      [screens[screenIndex], screens[j]] = [screens[j]!, screens[screenIndex]!];
+      return { screens };
+    });
 
   const removeScreen = (screenIndex: number) =>
     setDefinition((d) => ({ screens: d.screens.filter((_, i) => i !== screenIndex) }));
@@ -181,10 +285,28 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
           >
             {t(`status.${initial.status}`)}
           </span>
+          {initial.metaFlowId && (
+            <p className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <span>{t('builder.flowId')}</span>
+              <code className="rounded bg-muted px-1.5 py-0.5 font-mono" dir="ltr">
+                {initial.metaFlowId}
+              </code>
+              <button type="button" className="text-primary hover:underline" onClick={copyFlowId}>
+                {copied ? t('builder.copied') : t('builder.copyFlowId')}
+              </button>
+            </p>
+          )}
         </div>
         <div className="flex gap-2">
           <Button variant="secondary" disabled={save.isPending} onClick={onSave}>
             {save.isPending ? t('builder.saving') : t('builder.saveDraft')}
+          </Button>
+          <Button
+            variant="secondary"
+            disabled={save.isPending || preview.isPending || publish.isPending}
+            onClick={onTest}
+          >
+            {preview.isPending ? t('builder.testing') : t('builder.testForm')}
           </Button>
           <Button disabled={save.isPending || publish.isPending} onClick={onPublish}>
             {publish.isPending ? t('builder.publishing') : t('builder.savePublish')}
@@ -195,6 +317,28 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
       {notice && (
         <Alert tone={notice.tone} className="mt-4">
           {notice.text}
+          {notice.connect && (
+            <>
+              {' '}
+              {t('notice.connectHint')}{' '}
+              <Link href="/channels/whatsapp" className="font-semibold underline">
+                {t('notice.connectLink')}
+              </Link>
+            </>
+          )}
+        </Alert>
+      )}
+      {previewUrl && (
+        <Alert tone="success" className="mt-4">
+          {t('builder.previewReady')}{' '}
+          <a
+            href={previewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium underline"
+          >
+            {t('builder.openPreview')}
+          </a>
         </Alert>
       )}
 
@@ -255,13 +399,33 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                 {t('builder.screenN', { n: screenIndex + 1 })}
               </h3>
               {definition.screens.length > 1 && (
-                <button
-                  type="button"
-                  className="text-xs text-danger hover:underline"
-                  onClick={() => removeScreen(screenIndex)}
-                >
-                  {t('builder.removeScreen')}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    className="rounded border px-2 py-1 text-xs disabled:opacity-40"
+                    aria-label={t('builder.moveScreenUp', { n: screenIndex + 1 })}
+                    disabled={screenIndex === 0}
+                    onClick={() => moveScreen(screenIndex, -1)}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    className="rounded border px-2 py-1 text-xs disabled:opacity-40"
+                    aria-label={t('builder.moveScreenDown', { n: screenIndex + 1 })}
+                    disabled={screenIndex === definition.screens.length - 1}
+                    onClick={() => moveScreen(screenIndex, 1)}
+                  >
+                    ↓
+                  </button>
+                  <button
+                    type="button"
+                    className="text-xs text-danger hover:underline"
+                    onClick={() => removeScreen(screenIndex)}
+                  >
+                    {t('builder.removeScreen')}
+                  </button>
+                </div>
               )}
             </div>
 
@@ -329,22 +493,19 @@ function WaFormBuilderForm({ id, initial }: { id: string; initial: WaForm }) {
                   </div>
                   {WA_FORM_CHOICE_FIELD_KINDS.includes(field.kind) && (
                     <Field label={t('builder.options')} className="mt-2">
-                      <Input
-                        value={(field.options ?? []).join(', ')}
-                        onChange={(e) =>
-                          updateField(screenIndex, fieldIndex, {
-                            options: e.target.value
-                              .split(',')
-                              .map((o) => o.trim())
-                              .filter(Boolean),
-                          })
-                        }
+                      <OptionsInput
+                        options={field.options ?? []}
+                        onChange={(options) => updateField(screenIndex, fieldIndex, { options })}
                         placeholder={t('builder.optionsPlaceholder')}
                       />
                     </Field>
                   )}
                   {field.kind !== 'heading' && (
-                    <Field label={t('builder.mapsTo')} hint={t('builder.mapsToHint')} className="mt-2">
+                    <Field
+                      label={t('builder.mapsTo')}
+                      hint={t('builder.mapsToHint')}
+                      className="mt-2"
+                    >
                       <Select
                         value={field.mapsTo ?? ''}
                         onChange={(e) =>

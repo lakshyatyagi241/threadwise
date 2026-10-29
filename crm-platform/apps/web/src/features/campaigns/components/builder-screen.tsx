@@ -179,6 +179,8 @@ function Builder({
         },
   );
   const [step, setStep] = useState<WizardStep>('setup');
+  // The furthest step opened with Next. A new campaign cannot jump past it from the stepper; an edit has been through them all.
+  const [furthest, setFurthest] = useState(id ? WIZARD_STEPS.length - 1 : 0);
   const [mode, setMode] = useState<RecipientMode>(() => initialRecipientMode(stored));
   const [aiOpen, setAiOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -262,7 +264,9 @@ function Builder({
 
   const sampleCsv = async () => {
     try {
-      const { blob, filename } = await download('/campaigns/sample-csv');
+      const { blob, filename } = await download(
+        emailChannel ? '/campaigns/sample-csv?channel=email' : '/campaigns/sample-csv',
+      );
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -299,12 +303,14 @@ function Builder({
         ? `${form.sendDate} ${form.sendTime} · ${form.timezone}`
         : t('review.recurring', { every: t(`delivery.repeats.${form.repeatInterval}`) });
 
-  // A step can be opened when nothing before it is missing.
+  // A step can be opened when it has been reached with Next and nothing before it is missing.
   const reachable = (s: WizardStep) =>
+    WIZARD_STEPS.indexOf(s) <= furthest &&
     WIZARD_STEPS.slice(0, WIZARD_STEPS.indexOf(s)).every((x) => stepProblems(form, x).length === 0);
   const go = (s: WizardStep) => {
     setBlocked([]);
     setStep(s);
+    setFurthest((n) => Math.max(n, WIZARD_STEPS.indexOf(s)));
   };
   const next = () => {
     const fix = stepProblems(form, step);
@@ -317,6 +323,7 @@ function Builder({
   return (
     <div className="min-h-full">
       <BuilderHeader
+        email={engine === 'email'}
         editing={editing}
         backHref={id ? `/campaigns/${id}` : '/campaigns'}
         busy={busy}
@@ -478,7 +485,7 @@ function Builder({
         onApply={(copy) => {
           patch({});
           setForm((f) => applyAiCopy(f, copy));
-          setStep('compose');
+          go('compose');
           toast(t('ai.applied'), 'success');
         }}
       />

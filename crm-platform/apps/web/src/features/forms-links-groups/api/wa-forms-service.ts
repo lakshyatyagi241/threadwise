@@ -1,7 +1,9 @@
 import {
   waFormListSchema,
+  waFormPreviewSchema,
   waFormSchema,
   waFormSubmissionListSchema,
+  waFormSyncResponseSchema,
   type SaveWaFormInput,
   type WaFormListQuery,
   type WaFormSubmissionListQuery,
@@ -19,8 +21,12 @@ export const waFormsApi = {
     apiFetch(base, { method: 'POST', body: input, schema: waFormSchema, idempotencyKey }),
   update: (id: string, input: SaveWaFormInput) =>
     apiFetch(`${base}/${id}`, { method: 'PATCH', body: input, schema: waFormSchema }),
+  /** Sync with Meta: the forms' statuses are made the ones Meta reports. */
+  sync: () => apiFetch(`${base}/sync`, { method: 'POST', schema: waFormSyncResponseSchema }),
   publish: (id: string) =>
     apiFetch(`${base}/${id}/publish`, { method: 'POST', schema: waFormSchema }),
+  preview: (id: string) =>
+    apiFetch(`${base}/${id}/preview`, { method: 'POST', schema: waFormPreviewSchema }),
   duplicate: (id: string) =>
     apiFetch(`${base}/${id}/duplicate`, { method: 'POST', schema: waFormSchema }),
   remove: (id: string) => apiFetch(`${base}/${id}`, { method: 'DELETE' }),

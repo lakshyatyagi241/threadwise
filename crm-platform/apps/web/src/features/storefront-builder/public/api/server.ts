@@ -10,7 +10,7 @@ import {
 } from '@crm/contracts';
 import { headers } from 'next/headers';
 import { cache } from 'react';
-import type { ZodType, ZodTypeDef } from 'zod';
+import type { ZodType } from 'zod';
 import { apiBase } from '@/lib/auth/server';
 import { upstreamFetch } from '@/lib/auth/upstream';
 
@@ -23,10 +23,7 @@ async function clientHeaders(): Promise<Record<string, string>> {
 }
 
 /** The parsed body, or null when the API says the shop, product or order does not exist (or the shop is disabled). */
-async function getPublic<T>(
-  path: string,
-  schema: ZodType<T, ZodTypeDef, unknown>,
-): Promise<T | null> {
+async function getPublic<T>(path: string, schema: ZodType<T, unknown>): Promise<T | null> {
   const res = await upstreamFetch(`${base()}${path}`, {
     cache: 'no-store',
     headers: await clientHeaders(),

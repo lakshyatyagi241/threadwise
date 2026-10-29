@@ -10,7 +10,7 @@ const ids = (mode: Parameters<typeof filterPalette>[0], q = '') =>
 describe('palette (TW-FLB-016)', () => {
   it('a WhatsApp flow lists the 35 Reference nodes plus Ask for file / location and the workflow additions, in Reference group order, Template / List / Sequence / MySQL / Google included', () => {
     const groups = filterPalette('chat', '', tf);
-    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(46); // 44 + API (from library) + Answer from FAQ
+    expect(groups.reduce((a, [, items]) => a + items.length, 0)).toBe(45); // 43 + API (from library) + Answer from FAQ (the old Chatbot hand-over is hidden)
     expect(groups.map(([g]) => g)).toEqual([
       'Start',
       'Send',
@@ -35,6 +35,9 @@ describe('palette (TW-FLB-016)', () => {
     ])
       expect(all).toContain(id);
     expect(all).not.toContain('cf_say');
+    // The AI assistant step answers with an AI agent; the old Chatbot hand-over is no longer offered.
+    expect(all).toContain('ai');
+    expect(all).not.toContain('chatbot');
   });
 
   it('a call flow shows the eight call nodes plus Trigger, Condition, Wait, Webhook, Run code and End only', () => {
@@ -91,6 +94,12 @@ describe('palette (TW-FLB-016)', () => {
     expect(ids('chat', 'answer from faq')).toEqual(['faq']);
   });
 
+  it('"API (from library)" is offered on a website bot too, not only on WhatsApp', () => {
+    expect(ids('web')).toContain('api_library');
+    expect(ids('chat')).toContain('api_library');
+    expect(ids('web', 'saved api')).toEqual(['api_library']);
+  });
+
   it('legacy (hidden) Instagram nodes are never offered', () => {
     const all = ids('instagram');
     for (const id of ['ig_send_dm', 'ig_quick', 'ig_ai', 'ig_ask']) expect(all).not.toContain(id);
@@ -114,6 +123,6 @@ describe('palette (TW-FLB-016)', () => {
   it('QUIRK: the query is not trimmed, a padded query matches nothing', () => {
     expect(ids('chat', 'sheet')).toEqual(['google_sheets', 'sheet_check', 'sheet_contact']);
     expect(ids('chat', '  sheet  ')).toEqual([]);
-    expect(ids('chat', ' ').length).toBe(46); // every description holds a space
+    expect(ids('chat', ' ').length).toBe(45); // every description holds a space
   });
 });

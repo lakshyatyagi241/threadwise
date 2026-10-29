@@ -46,10 +46,10 @@ export const taskResponseSchema = z.object({
   notes: z.string().nullable(),
   priority: taskPrioritySchema,
   status: taskStatusSchema,
-  dueAt: z.string().datetime().nullable(),
-  doneAt: z.string().datetime().nullable(),
+  dueAt: z.iso.datetime().nullable(),
+  doneAt: z.iso.datetime().nullable(),
   /** The last due reminder; cleared when the task is reopened or its due date changes. */
-  remindedAt: z.string().datetime().nullable(),
+  remindedAt: z.iso.datetime().nullable(),
   bucket: taskBucketSchema.nullable(),
   /** Open and past due. */
   overdue: z.boolean(),
@@ -65,9 +65,9 @@ export const taskResponseSchema = z.object({
   source: taskSourceSchema,
   /** `follow_up`: a contact's next follow-up (BL-291). */
   kind: taskKindSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type TaskResponse = z.infer<typeof taskResponseSchema>;
 
@@ -78,7 +78,7 @@ export const taskPageResponseSchema = z.object({
 export type TaskPageResponse = z.infer<typeof taskPageResponseSchema>;
 
 /** A due date is a full timestamp with an offset, never a bare date read as midnight. */
-const dueAt = z.string().datetime({ offset: true });
+const dueAt = z.iso.datetime({ offset: true });
 
 export const createTaskSchema = z.object({
   title: z.string().trim().min(1).max(TASK_TITLE_MAX),
@@ -113,7 +113,7 @@ export const updateTaskSchema = z.object({
   taskTypeId: uuidSchema.nullish(),
   /** The completed date and time of a done task; only when the Task activity allows editing it. */
   doneAt: dueAt.optional(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
 
@@ -130,7 +130,7 @@ export type TaskLinksInput = z.infer<typeof taskLinksSchema>;
 
 /** Complete and reopen are idempotent; `rowVersion` is optional (last write wins without it). */
 export const taskTransitionSchema = z.object({
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
   /** Completing only: the outcome to record with it (an active one). Absent keeps what the task has; ignored when reopening. */
   outcomeId: uuidSchema.nullish(),
 });
@@ -163,7 +163,7 @@ const taskFilterShape = {
 };
 
 export const listTasksQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   /** `open` (default), `done` or `all`. */
   status: z.enum(['open', 'done', 'all']).default('open'),
@@ -191,14 +191,14 @@ export type TaskCountsQuery = z.infer<typeof taskCountsQuerySchema>;
 
 /** Tab badges. The buckets partition the OPEN tasks inside the filter; `open` is their sum. */
 export const taskCountsResponseSchema = z.object({
-  overdue: z.number().int(),
-  today: z.number().int(),
-  upcoming: z.number().int(),
-  noDate: z.number().int(),
-  open: z.number().int(),
-  done: z.number().int(),
+  overdue: z.int(),
+  today: z.int(),
+  upcoming: z.int(),
+  noDate: z.int(),
+  open: z.int(),
+  done: z.int(),
   /** The caller's own open and overdue tasks inside their record scope, whatever the filter (the "My tasks" badge). */
-  mine: z.object({ open: z.number().int(), overdue: z.number().int() }),
+  mine: z.object({ open: z.int(), overdue: z.int() }),
 });
 export type TaskCountsResponse = z.infer<typeof taskCountsResponseSchema>;
 

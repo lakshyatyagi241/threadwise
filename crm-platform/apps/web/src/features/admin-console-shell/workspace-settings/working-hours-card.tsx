@@ -87,7 +87,7 @@ function HoursForm({ hours }: { hours: BusinessHours }) {
         <div className="space-y-1">
           <h2 className="font-serif text-xl">{t('title')}</h2>
           <p className="text-xs text-muted-foreground">{t('note', { timezone: hours.timezone })}</p>
-          {locked && <p className="text-xs italic text-muted-foreground">{t('ownerOnly')}</p>}
+          {locked && <p className="text-xs text-muted-foreground">{t('ownerOnly')}</p>}
         </div>
         {saved && <Alert tone="success">{t('saved')}</Alert>}
         {save.isError && <Alert tone="danger">{t('saveFailed')}</Alert>}

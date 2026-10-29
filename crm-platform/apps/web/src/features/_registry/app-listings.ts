@@ -8,6 +8,7 @@
 export const APP_LISTING_BY_FEATURE: Readonly<Record<string, string>> = {
   appointment_booking: 'appointments',
   form_builder: 'forms',
+  products_services: 'products-services',
   email_channel: 'email',
   lead_scoring: 'lead-scoring',
   ai_crm_copilot: 'ai-crm-copilot',

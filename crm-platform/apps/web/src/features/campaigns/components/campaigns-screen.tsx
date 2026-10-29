@@ -232,7 +232,9 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && <NewCampaignButton label={t('newCampaign')} />}
+              {canCreate && (
+                <NewCampaignButton label={t('newCampaign')} chooserLabel={t('newCampaignAny')} />
+              )}
             </div>
           </div>
 
@@ -269,6 +271,14 @@ export function CampaignsScreen() {
               tone="warning"
             />
           </div>
+          <p className="mb-3 text-[11px] text-muted-foreground" data-testid="campaigns-tiles-note">
+            {t('tile.note', {
+              range:
+                state.range === 'custom'
+                  ? `${state.from || '…'} – ${state.to || '…'}`
+                  : t(`range.${state.range}`),
+            })}
+          </p>
 
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-background px-4 py-3 shadow-sm">
             <div className="flex flex-wrap items-center gap-2">

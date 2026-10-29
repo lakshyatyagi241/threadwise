@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const AUDIT_LOG_EXPORT_JOB = 'audit-log.export';
 
 export const auditLogExportJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  exportUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  exportUuid: z.guid(),
 });
 export type AuditLogExportJob = z.infer<typeof auditLogExportJobSchema>;
 

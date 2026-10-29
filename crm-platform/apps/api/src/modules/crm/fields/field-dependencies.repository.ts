@@ -249,6 +249,93 @@ export class FieldDependenciesRepository {
       );
   }
 
+  /**
+   * A cheap stamp of the workspace's option pairs: how many there are and the highest id. It changes whenever a pair is added or
+   * removed (a replaced cascade inserts new rows, so the highest id moves), which is all the list's ETag needs. One table, no joins.
+   */
+  async optionPairStamp(tx: Tx, orgId: number): Promise<{ count: number; last: number }> {
+    const [row] = await tx
+      .select({
+        count: sql<number>`count(*)::int`,
+        last: sql<number>`coalesce(max(${fieldOptionDependencies.id}), 0)`,
+      })
+      .from(fieldOptionDependencies)
+      .where(eq(fieldOptionDependencies.orgId, orgId));
+    return { count: Number(row?.count ?? 0), last: Number(row?.last ?? 0) };
+  }
+
+  /**
+   * The option pairs of one module grouped by parent option and child field: one entry per group with the child option uuids, not one
+   * per pair (250 groups instead of 52,500 pairs). The pairs table is grouped on its own, one scan with no joins; the options of the
+   * workspace (hundreds, not tens of thousands) are read once to turn ids into uuids and to find each option's field and module.
+   */
+  async listOptionPairGroupsByModule(
+    tx: Tx,
+    orgId: number,
+    moduleKey: string,
+  ): Promise<
+    Array<{
+      parentFieldId: string;
+      parentOptionId: string;
+      childFieldId: string;
+      childOptionIds: string[];
+    }>
+  > {
+    const [pairs, options] = await Promise.all([
+      tx.execute(sql`
+        SELECT parent_option_id AS "parent", array_agg(child_option_id ORDER BY child_option_id) AS "children"
+          FROM field_option_dependencies
+         WHERE org_id = ${orgId}
+         GROUP BY parent_option_id
+         ORDER BY parent_option_id`),
+      tx.execute(sql`
+        SELECT o.id AS "id", o.uuid AS "uuid", f.uuid AS "fieldUuid", f.module_key AS "moduleKey"
+          FROM field_options o
+          JOIN fields f ON f.org_id = o.org_id AND f.id = o.field_id
+         WHERE o.org_id = ${orgId}`),
+    ]);
+    // bigint[] arrives as strings, so key everything by String(id)
+    const byId = new Map(
+      (
+        options.rows as unknown as Array<{
+          id: number;
+          uuid: string;
+          fieldUuid: string;
+          moduleKey: string;
+        }>
+      ).map((o) => [String(o.id), o]),
+    );
+    const out: Array<{
+      parentFieldId: string;
+      parentOptionId: string;
+      childFieldId: string;
+      childOptionIds: string[];
+    }> = [];
+    for (const row of pairs.rows as unknown as Array<{
+      parent: number;
+      children: Array<number | string>;
+    }>) {
+      const parent = byId.get(String(row.parent));
+      if (!parent || parent.moduleKey !== moduleKey) continue;
+      const byChildField = new Map<string, string[]>();
+      for (const childId of row.children) {
+        const child = byId.get(String(childId));
+        if (!child) continue;
+        const list = byChildField.get(child.fieldUuid) ?? [];
+        list.push(child.uuid);
+        byChildField.set(child.fieldUuid, list);
+      }
+      for (const [childFieldId, childOptionIds] of byChildField)
+        out.push({
+          parentFieldId: parent.fieldUuid,
+          parentOptionId: parent.uuid,
+          childFieldId,
+          childOptionIds,
+        });
+    }
+    return out;
+  }
+
   /** Every option-level pair of the fields of one module, for the properties screen and the contact form. */
   async listOptionDependenciesByModule(
     tx: Tx,

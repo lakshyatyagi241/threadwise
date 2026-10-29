@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "此链接已暂停或已过期。",
       "ROW_VERSION_CONFLICT": "该内容已在别处被修改。请刷新后重试。",
       "VALIDATION_FAILED": "请检查高亮显示的字段后重试。",
-      "PLAN_FEATURE_LOCKED": "请升级您的套餐以使用此功能。"
+      "PLAN_FEATURE_LOCKED": "请升级您的套餐以使用此功能。",
+      "WFL_FORM_SYNC_FAILED": "无法从 Meta 读取表单。"
     },
     "forms": {
       "heading": "WhatsApp 表单",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "暂无表单",
-        "description": "创建一个表单，然后通过流程中的 WhatsApp 表单节点发送。"
+        "description": "创建一个表单，然后通过流程中的 WhatsApp 表单节点发送。",
+        "noMatch": "没有与“{q}”匹配的表单。"
       },
       "table": {
         "form": "表单",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "已保存。",
-        "published": "已发布到 WhatsApp。"
+        "published": "已发布到 WhatsApp。",
+        "connectHint": "表单只能通过直连的 WhatsApp Cloud API 发布。请让管理员在“渠道 → WhatsApp”中连接一个号码。",
+        "connectLink": "打开 WhatsApp 渠道"
       },
       "builder": {
         "back": "返回表单列表",
@@ -143,6 +147,14 @@
           "contact": "联系人",
           "phone": "电话"
         }
+      },
+      "sync": {
+        "cta": "与 Meta 同步",
+        "syncing": "同步中…",
+        "done": "已与 Meta 同步：检查 {checked} 个，更新 {updated} 个，Meta 中找不到 {missing} 个，仅存在于 Meta {metaOnly} 个。"
+      },
+      "search": {
+        "placeholder": "搜索表单"
       }
     },
     "links": {

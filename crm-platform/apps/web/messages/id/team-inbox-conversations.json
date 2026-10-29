@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Dibuka lagi {time}",
       "erased": "Kontak yang dihapus",
-      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi dan teks pesan. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
+      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
       "erasedTitle": "Kontak yang dihapus"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Berasal dari iklan atau tautan",
       "sentIn": "Dikirim dalam {lang}. Tampilkan teks yang Anda tulis",
       "translatedFrom": "Diterjemahkan dari {lang}. Tampilkan yang asli",
+      "translationFailed": "Dikirim tanpa terjemahan. Terjemahan gagal, jadi teks Anda dikirim sesuai yang Anda tulis.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaksi {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Selesai",
           "closed": "Ditutup",
           "spam": "Spam"
-        }
+        },
+        "created": "Dimulai {date}",
+        "showMore": "Tampilkan {count} lagi",
+        "showLess": "Tampilkan lebih sedikit"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Tidak resmi",
       "officialFull": "Resmi (WhatsApp Cloud API)",
       "unofficialFull": "Tidak resmi (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Utas sebelumnya",
+      "began": "Dimulai {date}",
+      "showMore": "Tampilkan {count} lagi",
+      "showLess": "Tampilkan lebih sedikit",
+      "loading": "Memuat…",
+      "failed": "Utas ini tidak dapat dimuat.",
+      "unknown": "Pengirim tidak dikenal",
+      "openThread": "Buka utas"
     }
   }
 }

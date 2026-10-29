@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta allows one edit in 24 hours and ten in 30 days on an approved template. Try again later.",
       "ROW_VERSION_CONFLICT": "Someone changed this template while you were editing. Reload to see the latest version, then apply your change again.",
       "VALIDATION_FAILED": "Some fields are not valid. Check the fields below.",
-      "INTERNAL": "The server failed to handle this request. Try again shortly."
+      "INTERNAL": "The server failed to handle this request. Try again shortly.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Preview",
@@ -367,14 +374,19 @@
           "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons.",
           "flowIdRequired": "Enter the Flow ID.",
           "flowIdInvalid": "The Flow ID is a number.",
+          "flowIdNotMeta": "This form is not a Meta Flow yet (its Flow ID is not a number). Open WhatsApp Forms, Save & publish it, then pick it here.",
           "screenRequired": "Enter the screen ID.",
           "catalogAlone": "A catalog button cannot be combined with other buttons."
         },
         "catalogHint": "Opens your WhatsApp catalog. The button says “View catalog” and must be the only button.",
-        "flowId": "WhatsApp Flow ID",
-        "flowIdHint": "The numeric ID of a published WhatsApp Flow, from Meta's Flows manager.",
-        "screen": "Opening screen",
-        "screenHint": "The ID of the screen the form opens on, for example WELCOME."
+        "flowPick": "WhatsApp Form",
+        "flowPickHint": "Pick one of your published WhatsApp Forms. The button opens it inside WhatsApp.",
+        "flowChoose": "Choose a WhatsApp Form",
+        "flowLoading": "Loading forms…",
+        "flowNone": "You have no published WhatsApp Forms yet.",
+        "flowNoneLink": "Create and publish one",
+        "flowNotOnMeta": "{title} (publish it to Meta first)",
+        "flowById": "Flow {id}"
       },
       "result": {
         "metaRefused": "Saved, but Meta refused the template.",
@@ -406,6 +418,7 @@
         "format": "Cards show",
         "formatImage": "Pictures",
         "formatVideo": "Videos",
+        "limits": "Image up to 5 MB, video up to 16 MB.",
         "count": "{used}/{max} cards",
         "add": "Add card",
         "needTwo": "A carousel needs at least {min} cards.",
@@ -418,7 +431,9 @@
         "buttons": "Buttons",
         "buttonText": "Button text",
         "buttonUrl": "Website URL",
-        "buttonPhone": "Phone number"
+        "buttonPhone": "Phone number",
+        "moveUp": "Move card {n} up",
+        "moveDown": "Move card {n} down"
       },
       "offer": {
         "title": "Limited time offer",
@@ -523,6 +538,21 @@
         "noKey": "This workspace has no API key yet. Create an API key first, then use this cURL.",
         "keysUnknown": "Could not check your API keys. Open the Developers page to create or review a key, then use this cURL.",
         "createKey": "Create an API key"
+      },
+      "stats": {
+        "title": "How this template did",
+        "hint": "Counted from the messages sent with it",
+        "loading": "Loading numbers",
+        "error": "The numbers could not be loaded.",
+        "none": "Nothing has been sent with this template yet.",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "read": "Read",
+        "replied": "Replied",
+        "failed": "Failed",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# message} other {# messages}} sent with this template, {queued} still waiting",
+        "lastSent": "last sent {when}"
       }
     },
     "ai": {
@@ -552,7 +582,7 @@
       "tone": "Tone",
       "pickTone": "Select tone",
       "language": "Language",
-      "languageHint": "The draft is written in the language of the form.",
+      "languageHint": "Pick any language Meta accepts. The draft is written in it, and the template takes it.",
       "notes": "Custom prompt",
       "notesNote": "optional / max 2000",
       "notesPlaceholder": "Anything specific you want included: variables, links, must-have phrasing, what to avoid…",

@@ -297,7 +297,17 @@
         "removeRow": "Rimuovi questa domanda"
       },
       "reading": "Lettura in corso…",
-      "failed": "Non è stato possibile leggerlo."
+      "failed": "Non è stato possibile leggerlo.",
+      "view": "Visualizza",
+      "viewNamed": "Visualizza {label}",
+      "viewClose": "Chiudi",
+      "viewLoading": "Caricamento",
+      "viewFailed": "Impossibile caricare questa voce. Riprova.",
+      "viewQuestion": "Domanda",
+      "viewAnswer": "Risposta",
+      "viewNotReadYet": "Questa pagina è ancora in lettura. Il suo testo comparirà qui quando sarà pronta.",
+      "viewNoText": "Questa voce non ha testo.",
+      "viewTruncated": "Qui viene mostrata solo la prima parte; l'agente legge la voce per intero."
     }
   }
 }

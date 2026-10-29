@@ -19,6 +19,20 @@ paths = [
   # Examples in documentation: truncated tokens and sample curl commands.
   '''^docs/api-testing\.md$''',
   '''^crm-platform/docs/api/''',
+  # SAST baseline: detection patterns that use Stripe-shaped placeholder strings (sk_live_1234..., sk_live_SUPER...), not keys.
+  '''^crm-platform/tools/sast-report/baseline\.json$''',
+  # Specs in src that feed fake keys and JWTs to the error sanitizer to prove they are redacted.
+  '''^crm-platform/apps/api/src/.*\.spec\.ts$''',
+  # Shell health probe: a curl Host header, no credential.
+  '''^crm-platform/script-testing/chat-alerts/traefik-proof\.sh$''',
+  # Rehearsal of alert receivers: fixed test bodies (0123...), not credentials.
+  '''^crm-platform/tools/event-loop-audit/rehearse-alert-receivers\.mjs$''',
+  # Column-name dump of the database schema (names and types, no values).
+  '''^crm-platform/docs/db/column-analysis/''',
+  # Persona design doc: table prose that uses the word "key" in SQL column descriptions.
+  '''^crm-platform/docs/specs/persona-profiles\.md$''',
+  # UI copy: translated strings, including placeholder text shown in an input (for example tokenPlaceholder).
+  '''^crm-platform/apps/web/messages/[^/]+/viber\.json$''',
 ]
 regexes = [
   # The development placeholder for CREDENTIALS_ENCRYPTION_KEY (base64 of "dev-only-32-byte-key-do-not-use!"). The API refuses to

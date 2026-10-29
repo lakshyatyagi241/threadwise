@@ -51,6 +51,15 @@ export function addNode(s: CanvasState, type: string, x: number, y: number): OpR
   return { ok: true, state: { ...s, nodes: [...s.nodes, node] }, id };
 }
 
+/**
+ * The nodes of a brand-new flow: just its Trigger, as START, top left of the canvas. The Trigger is where the channel (WhatsApp,
+ * Instagram, Facebook) and the number are chosen, so it is there from the start instead of waiting to be found in the palette.
+ */
+export function newCanvasNodes(): FlowNode[] {
+  const r = addNode({ nodes: [], edges: [] }, 'trigger', 80, 60);
+  return r.ok ? r.state.nodes : [];
+}
+
 /** Pins a node as START (only one; pinning the current start unpins it). */
 export function pinStart(s: CanvasState, id: string): CanvasState {
   return { ...s, nodes: s.nodes.map((n) => ({ ...n, isStart: n.id === id ? !n.isStart : false })) };
@@ -90,8 +99,8 @@ export function deleteEdge(s: CanvasState, id: string): CanvasState {
 }
 
 /**
- * Connect an output port to a node. A self connection is ignored; an identical (source, handle, target) edge replaces
- * itself; the same handle may fan out to several targets; there is no cycle check (Reference has none).
+ * Connect an output port to a node. A self connection is ignored. A port has one target: the runtime follows only the
+ * first edge out of a port, so a new connection from it replaces the edge it had. There is no cycle check (Reference has none).
  */
 export function connect(
   s: CanvasState,
@@ -100,7 +109,7 @@ export function connect(
 ): CanvasState {
   if (!from.nodeId || !targetId || from.nodeId === targetId) return s;
   const filtered = s.edges.filter(
-    (e) => !(e.source === from.nodeId && e.sourceHandle === from.handleId && e.target === targetId),
+    (e) => !(e.source === from.nodeId && e.sourceHandle === from.handleId),
   );
   const edge: FlowEdge = {
     id: flbNewEdgeId(),

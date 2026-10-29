@@ -7,8 +7,8 @@ import { z } from 'zod';
 export const PRIVACY_EXPORT_JOB = 'privacy.export';
 
 export const privacyExportJobSchema = z.object({
-  orgId: z.number().int().positive(),
-  exportUuid: z.string().uuid(),
+  orgId: z.int().positive(),
+  exportUuid: z.guid(),
 });
 export type PrivacyExportJob = z.infer<typeof privacyExportJobSchema>;
 

@@ -38,8 +38,8 @@ const inboundSchema = z.object({
     .optional(),
   replyToProviderMessageId: z.string().optional(),
   reactionEmoji: z.string().optional(),
-  meta: z.record(z.unknown()).optional(),
-  providerTimestamp: z.string().datetime(),
+  meta: z.record(z.string(), z.unknown()).optional(),
+  providerTimestamp: z.iso.datetime(),
   title: z.string().optional(),
   contactIdentity: z
     .object({ kind: z.literal('email'), value: z.string(), name: z.string().optional() })
@@ -61,7 +61,7 @@ const inboundSchema = z.object({
 const receiptSchema = z.object({
   providerMessageId: z.string(),
   status: receiptStatusSchema,
-  at: z.string().datetime(),
+  at: z.iso.datetime(),
   errorCode: z.string().optional(),
   errorMessage: z.string().optional(),
 });
@@ -69,14 +69,14 @@ const receiptSchema = z.object({
 export const channelIngestJobSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('inbound'),
-    orgId: z.number().int().positive(),
-    channelUuid: z.string().uuid(),
+    orgId: z.int().positive(),
+    channelUuid: z.guid(),
     message: inboundSchema,
   }),
   z.object({
     type: z.literal('receipt'),
-    orgId: z.number().int().positive(),
-    channelUuid: z.string().uuid(),
+    orgId: z.int().positive(),
+    channelUuid: z.guid(),
     receipt: receiptSchema,
   }),
 ]);

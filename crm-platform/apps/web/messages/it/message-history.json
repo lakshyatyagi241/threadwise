@@ -47,7 +47,10 @@
       "download": "Scarica",
       "rows": "{n} messaggi",
       "keptUntil": "conservata fino al {when} ({days} giorni)",
-      "fromEmail": "Dalla tua email"
+      "fromEmail": "Dalla tua email",
+      "hint": "Esporta CSV usa i filtri e le date scelti in questa pagina. Il file viene creato in background e ti scriviamo quando è pronto.",
+      "empty": "Nessuna esportazione per ora. Premi Esporta CSV per ottenere come file i messaggi che vedi qui.",
+      "loading": "Caricamento delle esportazioni"
     },
     "kpi": {
       "label": "Dati chiave",

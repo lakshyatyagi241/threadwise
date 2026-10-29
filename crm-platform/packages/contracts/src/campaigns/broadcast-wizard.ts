@@ -16,12 +16,14 @@ import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
 import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
+import { WIZARD_NAME_MAX } from './wizard-limits';
 import {
   isIanaTimeZone,
   recurrenceRuleSchema,
   zonedTimeToUtc,
   type RecurrenceRule,
 } from './recurrence';
+import { patchOf } from '../common/patch';
 
 /**
  * The "Create broadcast" wizard (an addition beyond Reference's `wa-campaigns` builder): four steps (template, audience, review,
@@ -38,7 +40,7 @@ export type WizardStep = (typeof WIZARD_STEPS)[number];
 /** 1-based, as the stepper numbers them. */
 export const WIZARD_STEP_COUNT = WIZARD_STEPS.length;
 
-export const WIZARD_NAME_MAX = 191;
+export { WIZARD_NAME_MAX };
 /** Groups and segments a single broadcast may name. */
 export const WIZARD_SOURCES_MAX = 100;
 /** Test numbers per send. */
@@ -74,10 +76,10 @@ export const WIZARD_CONTACT_PAGE_SIZES = [25, 50, 100] as const;
 export const wizardCsvRefSchema = z.object({
   id: uuidSchema,
   fileName: z.string().trim().max(255),
-  valid: z.number().int().min(0),
-  duplicate: z.number().int().min(0),
-  invalid: z.number().int().min(0),
-  optedOut: z.number().int().min(0),
+  valid: z.int().min(0),
+  duplicate: z.int().min(0),
+  invalid: z.int().min(0),
+  optedOut: z.int().min(0),
 });
 export type WizardCsvRef = z.infer<typeof wizardCsvRefSchema>;
 
@@ -257,11 +259,11 @@ export const pacingOutOfRange = (
 };
 
 export const wizardPacingSchema = z.object({
-  throttleMinSec: z.number().int().min(0).max(3600).nullish(),
-  throttleMaxSec: z.number().int().min(0).max(3600).nullish(),
-  batchSize: z.number().int().min(1).max(10_000).nullish(),
-  batchPauseMin: z.number().int().min(0).max(1440).nullish(),
-  dailyLimit: z.number().int().min(1).max(100_000).nullish(),
+  throttleMinSec: z.int().min(0).max(3600).nullish(),
+  throttleMaxSec: z.int().min(0).max(3600).nullish(),
+  batchSize: z.int().min(1).max(10_000).nullish(),
+  batchPauseMin: z.int().min(0).max(1440).nullish(),
+  dailyLimit: z.int().min(1).max(100_000).nullish(),
   windowStart: timeOfDay.nullish(),
   windowEnd: timeOfDay.nullish(),
 });
@@ -291,7 +293,7 @@ export const WIZARD_FOLLOW_UP_WAIT_MAX = 10_080;
 
 export const wizardFollowUpSchema = z.object({
   trigger: z.enum(WIZARD_FOLLOW_UP_TRIGGERS),
-  waitMinutes: z.number().int().min(WIZARD_FOLLOW_UP_WAIT_MIN).max(WIZARD_FOLLOW_UP_WAIT_MAX),
+  waitMinutes: z.int().min(WIZARD_FOLLOW_UP_WAIT_MIN).max(WIZARD_FOLLOW_UP_WAIT_MAX),
   /** What the step does: send an approved template, or start a flow for the recipient. The id stays null while the draft is incomplete. */
   action: z.discriminatedUnion('kind', [
     z.object({ kind: z.literal('template'), templateId: uuidSchema.nullable() }),
@@ -318,7 +320,12 @@ export type WizardSequenceTemplate = z.infer<typeof wizardSequenceTemplateSchema
 
 export const wizardDraftSchema = z.object({
   /** Step 1. */
-  name: z.string().trim().max(WIZARD_NAME_MAX).default(''),
+  // The default goes last: a transform after it hides it from `patchOf`, and every patch would then carry `name: ''`.
+  name: z
+    .string()
+    .trim()
+    .transform((s) => s.slice(0, WIZARD_NAME_MAX))
+    .default(''),
   templateId: uuidSchema.nullable().default(null),
   /** The WhatsApp number it is sent from, as the broadcast composer keys it: `<engine>:<uuid>` (`waba:...`). Required to launch. */
   senderKey: senderKeySchema.nullable().default(null),
@@ -330,7 +337,7 @@ export const wizardDraftSchema = z.object({
   /** Share weights of the ticked numbers by key; a missing or non-positive weight counts as 1. The audience is split by them. */
   senderShare: senderShareSchema.default({}),
   /** Step 2. */
-  audience: wizardAudienceSchema.default({}),
+  audience: wizardAudienceSchema.prefault({}),
   /** Step 3. Keys are the template's placeholders. */
   variables: wizardVariablesSchema.default({}),
   /** Step 4. */
@@ -342,7 +349,7 @@ export const wizardDraftSchema = z.object({
    * `trackLinks` wraps links to count clicks; `retryFailed` retries a temporary failure. All are carried to every run of a recurring series.
    */
   abTesting: z.boolean().default(false),
-  abSplit: z.number().int().min(0).max(100).default(50),
+  abSplit: z.int().min(0).max(100).default(50),
   templateIdB: uuidSchema.nullable().default(null),
   variablesB: wizardVariablesSchema.default({}),
   /** The templates after `templateId` in a recurring broadcast, used by the runs in turn (see {@link wizardSequenceTemplateSchema}). */
@@ -358,17 +365,17 @@ export const wizardDraftSchema = z.object({
   /** Follow-up steps after the campaign message, in order (see {@link wizardFollowUpSchema}). Carried to every run of a recurring series. */
   followUps: z.array(wizardFollowUpSchema).max(WIZARD_FOLLOW_UP_MAX).default([]),
   /** The furthest step the person reached (1 to 4), so a resumed draft opens where they stopped. */
-  step: z.number().int().min(1).max(WIZARD_STEP_COUNT).default(1),
+  step: z.int().min(1).max(WIZARD_STEP_COUNT).default(1),
 });
 export type WizardDraft = z.infer<typeof wizardDraftSchema>;
 export const EMPTY_WIZARD_DRAFT: WizardDraft = wizardDraftSchema.parse({});
 
 /** Saving a draft takes whatever is filled in so far. */
-export const saveWizardDraftSchema = wizardDraftSchema.partial();
+export const saveWizardDraftSchema = patchOf(wizardDraftSchema);
 export type SaveWizardDraftInput = z.infer<typeof saveWizardDraftSchema>;
 
 export const updateWizardDraftSchema = saveWizardDraftSchema.extend({
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateWizardDraftInput = z.infer<typeof updateWizardDraftSchema>;
 
@@ -378,9 +385,9 @@ export const wizardDraftResponseSchema = z.object({
   id: uuidSchema,
   status: z.enum(CAMPAIGN_STATUSES),
   draft: wizardDraftSchema,
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type WizardDraftResponse = z.infer<typeof wizardDraftResponseSchema>;
 
@@ -393,7 +400,7 @@ export const wizardTemplateSlotSchema = z.object({
   slot: wizardSlotKeySchema,
   section: z.enum(['header', 'body', 'button']),
   /** The number in `{{n}}`, or the button's position. */
-  position: z.number().int(),
+  position: z.int(),
   /** The merge key the template itself names for this placeholder (a default for the mapping). */
   key: z.string(),
   example: z.string().nullable(),
@@ -409,7 +416,7 @@ export const wizardTemplateSchema = z.object({
   header: z.string().nullable(),
   body: z.string(),
   footer: z.string().nullable(),
-  buttons: z.array(z.record(z.unknown())),
+  buttons: z.array(z.record(z.string(), z.unknown())),
   attachmentType: z.string().nullable(),
   attachmentUrl: z.string().nullable(),
   /** The WhatsApp number it is sent from. */
@@ -429,14 +436,14 @@ export const wizardGroupSourceSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   color: z.string().nullable(),
-  memberCount: z.number().int(),
+  memberCount: z.int(),
 });
 export const wizardSegmentSourceSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   color: z.string().nullable(),
   /** The last count we have (segments count themselves); null when none was computed yet. */
-  memberCount: z.number().int().nullable(),
+  memberCount: z.int().nullable(),
 });
 export const wizardAudienceSourcesSchema = z.object({
   groups: z.array(wizardGroupSourceSchema),
@@ -452,24 +459,24 @@ export type WizardAudienceCountRequest = z.infer<typeof wizardAudienceCountReque
 export const wizardCountryCountSchema = z.object({
   /** ISO 3166-1 alpha-2; null when the number's prefix is unknown. */
   country: z.string().nullable(),
-  count: z.number().int(),
+  count: z.int(),
 });
 export type WizardCountryCount = z.infer<typeof wizardCountryCountSchema>;
 
 /** What the audience comes to, by the same rules the send applies. */
 export const wizardAudienceCountSchema = z.object({
   /** Contacts the groups, segments and rules select. */
-  matching: z.number().int(),
+  matching: z.int(),
   /** Of those, never messaged: they opted out. */
-  optedOut: z.number().int(),
+  optedOut: z.int(),
   /** Of those, never messaged: no usable WhatsApp number. */
-  invalidNumber: z.number().int(),
+  invalidNumber: z.int(),
   /** Of those, never messaged: the workspace requires a recorded consent and there is none. 0 while that switch is off. */
-  noConsent: z.number().int().default(0),
+  noConsent: z.int().default(0),
   /** Who will be messaged: matching minus the three above. */
-  recipients: z.number().int(),
+  recipients: z.int(),
   /** Of the recipients, numbers from the CSV that are not contacts yet (they are created when the broadcast is launched). */
-  newContacts: z.number().int().default(0),
+  newContacts: z.int().default(0),
   /** The database could not count in time: the numbers are the planner's estimate. */
   approximate: z.boolean(),
   /** Recipients by destination country, largest first (what the price follows). */
@@ -488,8 +495,8 @@ export const wizardContactsQuerySchema = z.object({
   search: z.string().trim().max(100).nullish(),
   /** Conditions, evaluated by the segments rule engine on the server. */
   rules: segmentRulesSchema.nullish(),
-  page: z.number().int().min(1).max(100_000).default(1),
-  perPage: z.number().int().min(1).max(100).default(25),
+  page: z.int().min(1).max(100_000).default(1),
+  perPage: z.int().min(1).max(100).default(25),
 });
 export type WizardContactsQuery = z.infer<typeof wizardContactsQuerySchema>;
 
@@ -509,11 +516,11 @@ export type WizardContactRow = z.infer<typeof wizardContactRowSchema>;
 export const wizardContactsPageSchema = z.object({
   data: z.array(wizardContactRowSchema),
   /** Contacts matching the search and the conditions. */
-  total: z.number().int(),
+  total: z.int(),
   /** The total is the planner's estimate (the count did not finish in time). */
   approximate: z.boolean(),
-  page: z.number().int(),
-  perPage: z.number().int(),
+  page: z.int(),
+  perPage: z.int(),
 });
 export type WizardContactsPage = z.infer<typeof wizardContactsPageSchema>;
 
@@ -538,38 +545,42 @@ export const wizardCsvReportSchema = z.object({
   /** The stored upload: what `audience.csv.id` carries. */
   id: uuidSchema,
   fileName: z.string(),
-  totalRows: z.number().int(),
+  totalRows: z.int(),
   /** Different numbers that passed the check (opted-out ones included). */
-  valid: z.number().int(),
+  valid: z.int(),
   /** Rows repeating a number already in the file (the first row is kept). */
-  duplicate: z.number().int(),
+  duplicate: z.int(),
   /** Rows without a number, or with one that is not a number WhatsApp can reach. */
-  invalid: z.number().int(),
+  invalid: z.int(),
   /** Of the valid numbers, those of contacts who opted out: never messaged. */
-  optedOut: z.number().int(),
+  optedOut: z.int(),
   /** Of the valid numbers, those that are contacts already (matched by phone). */
-  existing: z.number().int(),
+  existing: z.int(),
   /** Of the valid numbers, those that become contacts at launch. */
-  newContacts: z.number().int(),
+  newContacts: z.int(),
   /** The first valid rows. */
   preview: z.array(
     z.object({
-      line: z.number().int(),
+      line: z.int(),
       phone: z.string(),
       name: z.string().nullable(),
       status: z.enum(['new', 'existing', 'optedOut']),
+      /** Whether the number is a contact already, whatever its consent (`status` hides this for an opted-out one). */
+      contact: z.enum(['new', 'existing']),
+      /** Whether that contact has opted out (a number that is not a contact yet has not). */
+      optedOut: z.boolean(),
     }),
   ),
   /** The first rejected rows (the whole list is the download). */
   issues: z.array(
     z.object({
-      line: z.number().int(),
+      line: z.int(),
       value: z.string(),
       reason: z.enum(WIZARD_CSV_REJECT_REASONS),
     }),
   ),
-  issuesTotal: z.number().int(),
-  expiresAt: z.string().datetime().nullable(),
+  issuesTotal: z.int(),
+  expiresAt: z.iso.datetime().nullable(),
   /** The person who uploaded the file confirmed they hold consent for its numbers (BL-170): they are granted when the broadcast launches. */
   consentConfirmed: z.boolean(),
   /** The version of the notice they stated the file's contacts agreed under, when they gave one. */
@@ -587,35 +598,35 @@ export type WizardCreditCheckRequest = z.infer<typeof wizardCreditCheckRequestSc
 
 export const wizardCreditLineSchema = z.object({
   country: z.string().nullable(),
-  messages: z.number().int(),
+  messages: z.int(),
   /** One message to this country in this template's category, in the workspace's billing currency (hundredths). */
-  unitPriceMinor: z.number().int(),
+  unitPriceMinor: z.int(),
   /** What the wallet is charged for this country now (the plan's allowance already taken off). */
-  subtotalMinor: z.number().int(),
+  subtotalMinor: z.int(),
   /** The message count at the unit price, whatever the plan covers: what these messages cost. */
-  fullSubtotalMinor: z.number().int(),
+  fullSubtotalMinor: z.int(),
 });
 
 export const wizardCreditCheckSchema = z.object({
   currency: z.string(),
-  balanceMinor: z.number().int(),
+  balanceMinor: z.int(),
   /** `plan`: the plan's monthly messages are free and the wallet pays beyond them. `wallet`: every delivered message is charged. */
   billingMode: z.enum(['plan', 'wallet']),
   category: z.enum(WIZARD_TEMPLATE_CATEGORIES),
-  recipients: z.number().int(),
+  recipients: z.int(),
   /** Messages the wallet is charged for (the rest are covered by the plan's allowance). */
-  chargeableMessages: z.number().int(),
+  chargeableMessages: z.int(),
   /** What the wallet is charged now: the full cost less the part the plan's allowance covers. */
-  estimatedCostMinor: z.number().int(),
+  estimatedCostMinor: z.int(),
   /** Every message at its price, independent of the plan (shown beside what is charged now). */
-  fullCostMinor: z.number().int(),
+  fullCostMinor: z.int(),
   /** The workspace is owned by the platform: its sends are never billed, so the wallet and the plan's allowance play no part. */
   platformOwned: z.boolean(),
   lines: z.array(wizardCreditLineSchema),
   /** The wallet's own launch rule says this send may start. Sending is blocked when false. */
   sufficient: z.boolean(),
   /** How much more the wallet needs; 0 when sufficient. */
-  shortfallMinor: z.number().int(),
+  shortfallMinor: z.int(),
   /** Where to add credit. */
   topupUrl: z.string(),
 });
@@ -626,7 +637,7 @@ export const wizardVariablePreviewRequestSchema = z.object({
   audience: wizardAudienceSchema,
   variables: wizardVariablesSchema,
   /** How many real contacts to resolve the message for. */
-  limit: z.number().int().min(1).max(WIZARD_SAMPLE_MAX).default(3),
+  limit: z.int().min(1).max(WIZARD_SAMPLE_MAX).default(3),
 });
 export type WizardVariablePreviewRequest = z.infer<typeof wizardVariablePreviewRequestSchema>;
 
@@ -636,7 +647,7 @@ export const wizardSampleMessageSchema = z.object({
   body: z.string(),
   footer: z.string().nullable(),
   /** The value each placeholder took for this contact. */
-  values: z.record(z.string()),
+  values: z.record(z.string(), z.string()),
   /** Placeholders that came out empty for this contact (no value and no fallback). */
   empty: z.array(wizardSlotKeySchema),
 });
@@ -670,10 +681,10 @@ export const wizardTestResultSchema = z.object({
   errorCode: z.string().nullable(),
   errorMessage: z.string().nullable(),
   /** What the wallet was charged for it (0 until delivery is reported, and when the plan covers it). */
-  chargedMinor: z.number().int(),
+  chargedMinor: z.int(),
   /** BL-191: a test of a marketing template held for the workspace's quiet hours goes out at this instant (status `held`). */
-  heldUntil: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  heldUntil: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type WizardTestResult = z.infer<typeof wizardTestResultSchema>;
 
@@ -715,7 +726,7 @@ export function parseTestRecipients(raw: string): {
 
 export const wizardLaunchRequestSchema = z.object({
   /** The draft as the person last saw it: a launch of a draft that changed elsewhere is refused (409). */
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type WizardLaunchRequest = z.infer<typeof wizardLaunchRequestSchema>;
 
@@ -729,8 +740,8 @@ export const wizardLaunchResultSchema = z.object({
   kind: z.enum(['campaign', 'series']),
   status: z.string(),
   /** When the first run is due; null for "now" (it is queued). */
-  firstRunAt: z.string().datetime().nullable(),
-  recipients: z.number().int(),
+  firstRunAt: z.iso.datetime().nullable(),
+  recipients: z.int(),
   message: z.string(),
 });
 export type WizardLaunchResult = z.infer<typeof wizardLaunchResultSchema>;
@@ -741,36 +752,36 @@ export const wizardRetrySummarySchema = z.object({
   enabled: z.boolean(),
   endDate: z.string().nullable(),
   /** Messages waiting for their next retry. */
-  pending: z.number().int(),
-  nextRetryAt: z.string().datetime().nullable(),
+  pending: z.int(),
+  nextRetryAt: z.iso.datetime().nullable(),
   /** Messages that failed for frequency capping and were delivered by a retry. */
-  recovered: z.number().int(),
+  recovered: z.int(),
   /** Messages that were retried until the end date and never went through. */
-  exhausted: z.number().int(),
+  exhausted: z.int(),
 });
 export type WizardRetrySummary = z.infer<typeof wizardRetrySummarySchema>;
 
 /** What one follow-up step did for a run, counted over its recipients. `waiting` are recipients the step still has ahead of it. */
 export const wizardFollowUpStepSummarySchema = z.object({
-  step: z.number().int().min(1).max(WIZARD_FOLLOW_UP_MAX),
-  waiting: z.number().int(),
+  step: z.int().min(1).max(WIZARD_FOLLOW_UP_MAX),
+  waiting: z.int(),
   /** A template message was sent (delivered and read count the ones that got that far). */
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  read: z.number().int(),
-  flowsStarted: z.number().int(),
+  sent: z.int(),
+  delivered: z.int(),
+  read: z.int(),
+  flowsStarted: z.int(),
   /** The condition was not met when it was checked (a "not read" step whose recipient read), so the sequence ended there. */
-  skipped: z.number().int(),
+  skipped: z.int(),
   /** A "replied" or "read" step whose watch time ran out. */
-  lapsed: z.number().int(),
-  failed: z.number().int(),
+  lapsed: z.int(),
+  failed: z.int(),
 });
 export type WizardFollowUpStepSummary = z.infer<typeof wizardFollowUpStepSummarySchema>;
 
 export const wizardRunSchema = z.object({
   id: uuidSchema,
-  occurrence: z.number().int(),
-  runAt: z.string().datetime().nullable(),
+  occurrence: z.int(),
+  runAt: z.iso.datetime().nullable(),
   status: z.enum(CAMPAIGN_STATUSES),
   counts: campaignCountsSchema,
   retries: wizardRetrySummarySchema,
@@ -792,18 +803,18 @@ export const wizardBroadcastSchema = z.object({
   templateId: uuidSchema.nullable(),
   templateName: z.string().nullable(),
   /** How many templates the broadcast sends in turn (1 without a sequence). */
-  templateCount: z.number().int().min(1).default(1),
+  templateCount: z.int().min(1).default(1),
   /** The next time something is sent: a scheduled run, or the series' next occurrence. */
-  nextRunAt: z.string().datetime().nullable(),
-  lastRunAt: z.string().datetime().nullable(),
+  nextRunAt: z.iso.datetime().nullable(),
+  lastRunAt: z.iso.datetime().nullable(),
   /** Runs started so far (a series has one per occurrence; a campaign has one). */
-  runs: z.number().int(),
-  recipients: z.number().int(),
+  runs: z.int(),
+  recipients: z.int(),
   retries: wizardRetrySummarySchema,
   schedule: wizardScheduleSchema,
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type WizardBroadcast = z.infer<typeof wizardBroadcastSchema>;
 
@@ -817,7 +828,7 @@ export const wizardBroadcastDetailSchema = wizardBroadcastSchema.extend({
 export type WizardBroadcastDetail = z.infer<typeof wizardBroadcastDetailSchema>;
 
 export const listWizardBroadcastsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
   cursor: z.string().min(1).max(512).optional(),
   status: z.string().trim().max(32).optional(),
   /** `recurring` lists the series only; `now` and `scheduled` the one-off campaigns of that kind. Missing: both. */
@@ -832,7 +843,7 @@ export const wizardBroadcastListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WizardBroadcastList = z.infer<typeof wizardBroadcastListSchema>;
@@ -863,20 +874,20 @@ export const wizardHistoryRowSchema = z.object({
   /** The series a recurring run belongs to. */
   seriesId: uuidSchema.nullable(),
   /** 1-based position among the series' runs. */
-  occurrence: z.number().int().nullable(),
+  occurrence: z.int().nullable(),
   counts: campaignCountsSchema,
   /** When it was due (scheduled and recurring). */
-  runAt: z.string().datetime().nullable(),
-  startedAt: z.string().datetime().nullable(),
-  finishedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  runAt: z.iso.datetime().nullable(),
+  startedAt: z.iso.datetime().nullable(),
+  finishedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type WizardHistoryRow = z.infer<typeof wizardHistoryRowSchema>;
 
 export const listWizardHistoryQuerySchema = z
   .object({
     scope: z.enum(WIZARD_HISTORY_SCOPES).default('history'),
-    limit: z.coerce.number().int().min(1).max(100).default(25),
+    limit: z.coerce.number().int().min(1).max(100).prefault(25),
     cursor: z.string().min(1).max(512).optional(),
     type: z.enum(WIZARD_SCHEDULE_MODES).optional(),
     status: z.enum(CAMPAIGN_STATUSES).optional(),
@@ -886,7 +897,7 @@ export const listWizardHistoryQuerySchema = z
     tz: zone.default('UTC'),
     q: z.string().trim().max(120).optional(),
   })
-  .refine((v) => !v.from || !v.to || v.from <= v.to, { message: 'from is after to', path: ['to'] });
+  .refine((v) => !v.from || !v.to || v.from <= v.to, { path: ['to'], error: 'from is after to' });
 export type ListWizardHistoryQuery = z.infer<typeof listWizardHistoryQuerySchema>;
 
 export const wizardHistoryListSchema = z.object({
@@ -894,7 +905,7 @@ export const wizardHistoryListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WizardHistoryList = z.infer<typeof wizardHistoryListSchema>;
@@ -912,7 +923,7 @@ export const wizardDeleteResponseSchema = z.object({
   id: uuidSchema,
   kind: z.enum(['campaign', 'series']),
   /** Runs removed with it (1 for a one-off broadcast). */
-  runs: z.number().int(),
+  runs: z.int(),
   message: z.string(),
 });
 export type WizardDeleteResponse = z.infer<typeof wizardDeleteResponseSchema>;
@@ -920,9 +931,9 @@ export type WizardDeleteResponse = z.infer<typeof wizardDeleteResponseSchema>;
 /** "Retry failed" on a launched broadcast: the failed recipients go back in the queue (a series: those of every finished run). */
 export const wizardRetryFailedResponseSchema = wizardControlResponseSchema.extend({
   /** Recipients put back in the queue. */
-  recipients: z.number().int(),
+  recipients: z.int(),
   /** Runs they belong to (always 1 for a one-off broadcast). */
-  runs: z.number().int(),
+  runs: z.int(),
 });
 export type WizardRetryFailedResponse = z.infer<typeof wizardRetryFailedResponseSchema>;
 

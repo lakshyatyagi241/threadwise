@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {ลบ # งานแล้ว.} other {ลบ # งานแล้ว.}}",
       "deleteTitle": "ลบงานที่เลือกใช่ไหม",
       "deleteMessage": "{count, plural, one {# งานจะถูกลบสำหรับทุกคน ไม่สามารถย้อนกลับได้} other {# งานจะถูกลบสำหรับทุกคน ไม่สามารถย้อนกลับได้}}",
-      "keep": "เก็บไว้"
+      "keep": "เก็บไว้",
+      "reopen": "เปิดอีกครั้ง",
+      "completeWithOutcome": "เสร็จสิ้นพร้อมผลลัพธ์งาน",
+      "reopenWithOutcome": "เปิดอีกครั้งพร้อมผลลัพธ์งาน",
+      "pickOutcome": "ผลลัพธ์งาน",
+      "reopened": "{count, plural, other {เปิดงาน # รายการอีกครั้งแล้ว}}"
     },
     "quick": {
       "label": "เพิ่มงาน",

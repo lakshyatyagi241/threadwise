@@ -35,10 +35,10 @@ export const apiKeyResponseSchema = z.object({
   status: apiKeyStatusSchema,
   /** The scopes the key may use. Every key has at least one; an empty list would grant nothing. */
   scopes: z.array(apiScopeSchema),
-  lastUsedAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
-  revokedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  lastUsedAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
+  revokedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type ApiKeyResponse = z.infer<typeof apiKeyResponseSchema>;
 
@@ -57,7 +57,7 @@ export const listApiKeysResponseSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type ListApiKeysResponse = z.infer<typeof listApiKeysResponseSchema>;

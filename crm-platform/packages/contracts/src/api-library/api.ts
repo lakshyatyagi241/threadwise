@@ -20,9 +20,9 @@ export const apiLibraryItemSchema = z.object({
   url: z.string(),
   payloadType: apiLibraryPayloadTypeSchema,
   hasFunction: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type ApiLibraryItem = z.infer<typeof apiLibraryItemSchema>;
 
@@ -74,22 +74,15 @@ export const apiLibraryUsageItemSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   published: z.boolean(),
-  /** How many nodes of that flow call this API. */
-  nodeCount: z.number().int(),
+  /** How many nodes of the flow's draft call this API. */
+  nodeCount: z.int(),
+  /** How many nodes of its published copy (what runs) call it: above 0 with a `nodeCount` of 0 means only the published copy still does. */
+  publishedNodeCount: z.int(),
 });
 export type ApiLibraryUsageItem = z.infer<typeof apiLibraryUsageItemSchema>;
 
 export const apiLibraryUsageResponseSchema = z.object({ data: z.array(apiLibraryUsageItemSchema) });
 export type ApiLibraryUsageResponse = z.infer<typeof apiLibraryUsageResponseSchema>;
-
-/** `?force=true` deletes an API that flows still use (their node then leaves by its `error` port). */
-export const deleteApiLibraryApiQuerySchema = z.object({
-  force: z
-    .enum(['true', 'false'])
-    .default('false')
-    .transform((v) => v === 'true'),
-});
-export type DeleteApiLibraryApiQuery = z.infer<typeof deleteApiLibraryApiQuerySchema>;
 
 /** A contact property a response field can be saved into (visible, writable: the contact's own text fields and the active custom ones). */
 export const apiLibraryContactPropertySchema = z.object({
@@ -98,6 +91,8 @@ export const apiLibraryContactPropertySchema = z.object({
   /** The property's type (`text`, `email`, `integer`, `decimal`, ...): the form warns when a text answer goes into a number. */
   type: z.string(),
   kind: z.enum(['system', 'custom']),
+  /** A contact detail a variable can read but an answer cannot be saved into (the phone, the owner, the opt-out, ...). */
+  readOnly: z.boolean().optional(),
 });
 export type ApiLibraryContactProperty = z.infer<typeof apiLibraryContactPropertySchema>;
 

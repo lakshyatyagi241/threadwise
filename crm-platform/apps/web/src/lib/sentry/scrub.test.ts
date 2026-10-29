@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scrubEvent, scrubUrl } from './scrub';
+import { createThrottle, scrubEvent, scrubLog, scrubText, scrubUrl, throttleKey } from './scrub';
 
 describe('scrubUrl', () => {
   it.each([
@@ -106,5 +106,57 @@ describe('scrubEvent', () => {
 
   it('copes with an event that has none of these', () => {
     expect(scrubEvent({})).toEqual({});
+  });
+});
+
+describe('createThrottle (an API outage fails every open tab the same way)', () => {
+  it('lets the first `limit` of one key through per window, refuses the rest, then starts fresh', () => {
+    let t = 0;
+    const allow = createThrottle(2, 1000, () => t);
+    expect([1, 2, 3, 4].map(() => allow('fetch failed'))).toEqual([true, true, false, false]);
+    expect(allow('another error')).toBe(true);
+    t = 1000;
+    expect(allow('fetch failed')).toBe(true);
+  });
+
+  it('stays bounded when every key is different', () => {
+    let t = 0;
+    const allow = createThrottle(1, 1000, () => t, 3);
+    for (const k of ['a', 'b', 'c', 'd', 'e']) expect(allow(k)).toBe(true);
+    t = 5000;
+    expect(allow('a')).toBe(true);
+  });
+
+  it('keys an event by exception type and the start of its text', () => {
+    expect(
+      throttleKey({ exception: { values: [{ type: 'TypeError', value: 'fetch failed' }] } }),
+    ).toBe('TypeError:fetch failed');
+    expect(throttleKey({})).toBe(':');
+  });
+});
+
+describe('text scrub (console messages and error text)', () => {
+  it('masks a bearer-link token and a credential parameter inside a sentence', () => {
+    expect(scrubText('load /q/AbC123tok failed; retry /b/manage/m_42?token=zz&page=2')).toBe(
+      'load /q/[secret] failed; retry /b/manage/[secret]?token=[secret]&page=2',
+    );
+    expect(scrubText('nothing to hide here')).toBe('nothing to hide here');
+  });
+
+  it('cleans the message, exception text, breadcrumb text and log line of an event', () => {
+    const event = scrubEvent({
+      message: 'open /i/inv_9f8e7d',
+      exception: { values: [{ value: 'GET /reset-password/abc failed' }, {}] },
+      breadcrumbs: [{ message: 'visited /q/tok1' }, {}],
+    });
+    expect(event.message).toBe('open /i/[secret]');
+    expect(event.exception?.values?.[0]?.value).toBe('GET /reset-password/[secret] failed');
+    expect(event.breadcrumbs?.[0]?.message).toBe('visited /q/[secret]');
+    expect(
+      scrubLog({ message: 'bad /q/tok2', attributes: { url: '/i/x1', n: 2, o: { a: 1 } } }),
+    ).toEqual({
+      message: 'bad /q/[secret]',
+      attributes: { url: '/i/[secret]', n: 2, o: { a: 1 } },
+    });
   });
 });

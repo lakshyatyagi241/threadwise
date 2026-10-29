@@ -12,11 +12,11 @@ import { z } from 'zod';
  *   - replied:   sent messages (not failed) that the contact answered, i.e. the next message in the thread is theirs.
  */
 export const contactMessageStatsSchema = z.object({
-  sent: z.number().int().nonnegative(),
-  delivered: z.number().int().nonnegative(),
-  seen: z.number().int().nonnegative(),
-  received: z.number().int().nonnegative(),
-  failed: z.number().int().nonnegative(),
-  replied: z.number().int().nonnegative(),
+  sent: z.int().nonnegative(),
+  delivered: z.int().nonnegative(),
+  seen: z.int().nonnegative(),
+  received: z.int().nonnegative(),
+  failed: z.int().nonnegative(),
+  replied: z.int().nonnegative(),
 });
 export type ContactMessageStats = z.infer<typeof contactMessageStatsSchema>;

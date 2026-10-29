@@ -8,7 +8,7 @@ import { uuidSchema } from '../common/ids';
 // --- templates ---------------------------------------------------------------------------------------------------------------
 
 /** Reference accepts a JSON string where an array is expected (form posts); a string that does not decode stays a string and fails the type. */
-const jsonLike = (inner: z.ZodTypeAny) =>
+const jsonLike = <T extends z.ZodType>(inner: T) =>
   z.preprocess((v) => {
     if (typeof v !== 'string') return v;
     try {
@@ -30,7 +30,13 @@ const rawQuickRepliesSchema = jsonLike(z.array(z.unknown()));
 const coordinate = (min: number, max: number) =>
   z.preprocess(
     blankToUndefined,
-    z.coerce.number({ invalid_type_error: 'Must be a number.' }).min(min).max(max).optional(),
+    z.coerce
+      .number({
+        error: (issue) => (issue.input === undefined ? undefined : 'Must be a number.'),
+      })
+      .min(min)
+      .max(max)
+      .optional(),
   );
 
 const templateFields = {
@@ -115,17 +121,21 @@ export const v1TemplateSchema = z.object({
     .nullable(),
   body: z.string(),
   footer: z.string().nullable(),
-  buttons: z.array(z.record(z.unknown())),
+  buttons: z.array(z.record(z.string(), z.unknown())),
   carousel_data: z.unknown().nullable(),
   attachment_type: z.enum(['image', 'video', 'audio', 'document', 'location']).nullable(),
   status: z.string(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
 });
 export type V1Template = z.infer<typeof v1TemplateSchema>;
 
 /** A value of `body` in a template send, always text (Reference refuses numbers and booleans). */
-const sendValue = z.string({ invalid_type_error: 'Must be a string.' }).max(1024);
+const sendValue = z
+  .string({
+    error: (issue) => (issue.input === undefined ? undefined : 'Must be a string.'),
+  })
+  .max(1024);
 
 /**
  * `POST /templates/{id}/send` (JSON or multipart). `body` is a list or a 1-indexed map; the map is sorted by number and re-indexed to a
@@ -135,17 +145,17 @@ export const v1SendTemplateSchema = z.object({
   to: z.string().trim().min(1, 'Required.').max(32),
   body: z.preprocess(
     blankToUndefined,
-    jsonLike(z.union([z.array(sendValue), z.record(sendValue)])).optional(),
+    jsonLike(z.union([z.array(sendValue), z.record(z.string(), sendValue)])).optional(),
   ),
   header_text: z.preprocess(blankToUndefined, z.string().max(1024).optional()),
-  header_media_url: z.preprocess(blankToUndefined, z.string().url().max(2048).optional()),
+  header_media_url: z.preprocess(blankToUndefined, z.url().max(2048).optional()),
   header_filename: z.preprocess(blankToUndefined, z.string().max(255).optional()),
   buttons: z.preprocess(
     blankToUndefined,
     jsonLike(
       z.array(
         z.object({
-          index: z.coerce.number().int().min(0).default(0),
+          index: z.coerce.number().int().min(0).prefault(0),
           sub_type: z.string().max(32).default('url'),
           value: z.string().max(2048).default(''),
         }),
@@ -176,9 +186,9 @@ export const v1FlowSchema = z.object({
   trigger: z.string().nullable(),
   status: z.enum(V1_FLOW_STATUSES),
   category: z.string().nullable(),
-  subscribers_count: z.number().int(),
-  created_at: z.string().datetime(),
-  updated_at: z.string().datetime(),
+  subscribers_count: z.int(),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
 });
 export type V1Flow = z.infer<typeof v1FlowSchema>;
 
@@ -201,7 +211,7 @@ export const v1EnrollResultSchema = z.object({
   contact_id: uuidSchema,
   subscriber_id: uuidSchema,
   status: z.enum(['active', 'paused', 'completed', 'failed']),
-  enrolled_at: z.string().datetime().nullable(),
+  enrolled_at: z.iso.datetime().nullable(),
   failure_reason: z.string().nullable(),
 });
 export type V1EnrollResult = z.infer<typeof v1EnrollResultSchema>;
@@ -238,8 +248,8 @@ export const v1SubscriberSchema = z.object({
   contact_name: z.string(),
   contact_phone: z.string(),
   status: z.enum(['active', 'paused', 'completed', 'failed']),
-  enrolled_at: z.string().datetime().nullable(),
-  failed_at: z.string().datetime().nullable(),
+  enrolled_at: z.iso.datetime().nullable(),
+  failed_at: z.iso.datetime().nullable(),
   failure_reason: z.string().nullable(),
 });
 export type V1Subscriber = z.infer<typeof v1SubscriberSchema>;

@@ -6,78 +6,78 @@ import { z } from 'zod';
  */
 export const dashWidgetsSchema = z.object({
   contacts: z.object({
-    total: z.number().int(),
-    subscribed: z.number().int(),
-    blocked: z.number().int(),
+    total: z.int(),
+    subscribed: z.int(),
+    blocked: z.int(),
     /** Percent change of the total against the contacts that existed before the window, one decimal. */
     deltaPct: z.number(),
   }),
   campaigns: z.object({
-    running: z.number().int(),
-    scheduled: z.number().int(),
-    paused: z.number().int(),
-    total: z.number().int(),
+    running: z.int(),
+    scheduled: z.int(),
+    paused: z.int(),
+    total: z.int(),
     recent: z.array(
       z.object({
-        uuid: z.string().uuid(),
+        uuid: z.guid(),
         name: z.string().nullable(),
         status: z.string(),
         template: z.string().nullable(),
         category: z.string().nullable(),
-        done: z.number().int(),
-        total: z.number().int(),
-        pct: z.number().int(),
+        done: z.int(),
+        total: z.int(),
+        pct: z.int(),
       }),
     ),
   }),
   devices: z.object({
-    total: z.number().int(),
-    online: z.number().int(),
+    total: z.int(),
+    online: z.int(),
     /** True when the platform's unofficial-engine switch is off: the card then carries no devices and the page hides it. */
     unofficialDisabled: z.boolean().optional(),
     /** The plan's device limit, or Reference's 6 when the plan is unlimited. */
-    slotCap: z.number().int(),
+    slotCap: z.int(),
     rows: z.array(
       z.object({
-        uuid: z.string().uuid(),
+        uuid: z.guid(),
         label: z.string(),
         phone: z.string().nullable(),
         region: z.string().nullable(),
         state: z.enum(['online', 'connecting', 'offline']),
-        sent24h: z.number().int(),
+        sent24h: z.int(),
         deliveryPct: z.number(),
       }),
     ),
   }),
   templates: z.object({
-    count: z.number().int(),
+    count: z.int(),
     rows: z.array(
       z.object({
-        uuid: z.string().uuid(),
+        uuid: z.guid(),
         name: z.string(),
         language: z.string().nullable(),
         category: z.string().nullable(),
         type: z.string().nullable(),
         status: z.string(),
-        sent: z.number().int(),
-        delivered: z.number().int(),
-        read: z.number().int(),
+        sent: z.int(),
+        delivered: z.int(),
+        read: z.int(),
         /** Read share of sends, one decimal; null with no sends. Reference labelled this CTR. */
         readRatePct: z.number().nullable(),
-        performance: z.number().int(),
+        performance: z.int(),
       }),
     ),
   }),
   inbox: z.object({
-    unread: z.number().int(),
+    unread: z.int(),
     oldestUnreadAt: z.string().nullable(),
     recent: z.array(
       z.object({
-        uuid: z.string().uuid(),
+        uuid: z.guid(),
         title: z.string(),
         at: z.string().nullable(),
         preview: z.string(),
-        unread: z.number().int(),
+        unread: z.int(),
       }),
     ),
   }),
@@ -86,15 +86,15 @@ export const dashWidgetsSchema = z.object({
     .object({
       currency: z.string(),
       openValueMinor: z.string(),
-      openDeals: z.number().int(),
+      openDeals: z.int(),
       wonThisMonthMinor: z.string(),
-      winRatePct: z.number().int(),
+      winRatePct: z.int(),
     })
     .nullable(),
   /** Null until a workspace has linked an Instagram account (TW-DASH-008): the band does not render. */
   instagram: z
     .object({
-      accountsCount: z.number().int(),
+      accountsCount: z.int(),
       accounts: z.array(
         z.object({
           handle: z.string(),
@@ -102,42 +102,42 @@ export const dashWidgetsSchema = z.object({
           status: z.string(),
         }),
       ),
-      needsReply: z.number().int(),
-      open: z.number().int(),
-      unread: z.number().int(),
-      dmsIn7d: z.number().int(),
-      dmsOut7d: z.number().int(),
+      needsReply: z.int(),
+      open: z.int(),
+      unread: z.int(),
+      dmsIn7d: z.int(),
+      dmsOut7d: z.int(),
       /** round(min(100, out / in * 100)), 0 with no inbound. */
-      replyRatePct: z.number().int(),
-      followers: z.number().int(),
+      replyRatePct: z.int(),
+      followers: z.int(),
     })
     .nullable(),
   /** Flow Copilot counters and the six latest flows (TW-DASH-017). Ignores the range. */
   flows: z.object({
-    total: z.number().int(),
-    active: z.number().int(),
-    subscribers: z.number().int(),
+    total: z.int(),
+    active: z.int(),
+    subscribers: z.int(),
     recent: z.array(
       z.object({
-        uuid: z.string().uuid(),
+        uuid: z.guid(),
         name: z.string(),
         active: z.boolean(),
         trigger: z.string(),
-        steps: z.number().int(),
-        subscribers: z.number().int(),
+        steps: z.int(),
+        subscribers: z.int(),
       }),
     ),
   }),
   /** Connection state read per workspace from the integration tables (TW-DASH-020). */
   integrations: z.object({
-    connected: z.number().int(),
-    total: z.number().int(),
+    connected: z.int(),
+    total: z.int(),
     rows: z.array(
       z.object({
         code: z.enum(['woocommerce', 'shopify', 'google_sheets', 'meta_catalog']),
         connected: z.boolean(),
         /** Events in the last 7 days for WooCommerce; null for the others. */
-        events7d: z.number().int().nullable(),
+        events7d: z.int().nullable(),
       }),
     ),
   }),

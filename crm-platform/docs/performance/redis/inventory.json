@@ -18,9 +18,9 @@
   "clients": [
     {
       "file": "apps/api/src/infra/redis/redis.module.ts",
-      "line": 30,
+      "line": 28,
       "kind": "new",
-      "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
+      "options": "url, { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
     },
     {
       "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
@@ -30,7 +30,7 @@
     },
     {
       "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
-      "line": 629,
+      "line": 677,
       "kind": "duplicate",
       "options": ""
     },
@@ -1005,8 +1005,8 @@
         "delay": 2000,
         "jitter": 0.5
       },
-      "consumers": null,
-      "concurrencyPerWorker": null
+      "consumers": 1,
+      "concurrencyPerWorker": 1
     },
     {
       "queue": "calendar-ics-refresh",
@@ -2739,22 +2739,22 @@
       "commands": ["get", "set"],
       "writes": [
         {
-          "line": 514,
+          "line": 515,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 613,
+          "line": 614,
           "cmd": "set",
           "ttl": "EX 31 * 24 * 3600"
         },
         {
-          "line": 645,
+          "line": 646,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 671,
+          "line": 672,
           "cmd": "set",
           "ttl": "EX 7 * 24 * 3600"
         }
@@ -2783,7 +2783,7 @@
       "commands": ["set"],
       "writes": [
         {
-          "line": 86,
+          "line": 115,
           "cmd": "set",
           "ttl": "EX IP_UNIQUE_SECONDS"
         }
@@ -3233,37 +3233,37 @@
       "commands": ["del", "get", "getdelbuffer", "set"],
       "writes": [
         {
-          "line": 382,
+          "line": 423,
           "cmd": "set",
           "ttl": "EX WORKER_ALIVE_S"
         },
         {
-          "line": 484,
+          "line": 532,
           "cmd": "set",
           "ttl": "EX QR_TTL_S"
         },
         {
-          "line": 492,
+          "line": 540,
           "cmd": "set",
           "ttl": "EX CODE_TTL_S"
         },
         {
-          "line": 500,
+          "line": 548,
           "cmd": "set",
           "ttl": "EX 300"
         },
         {
-          "line": 648,
+          "line": 696,
           "cmd": "set",
           "ttl": "EX 60"
         },
         {
-          "line": 651,
+          "line": 699,
           "cmd": "set",
           "ttl": "EX 60"
         },
         {
-          "line": 740,
+          "line": 788,
           "cmd": "set",
           "ttl": "EX 60"
         }
@@ -3339,7 +3339,7 @@
       "commands": ["set"],
       "writes": [
         {
-          "line": 138,
+          "line": 144,
           "cmd": "set",
           "ttl": "PX seconds * 1000"
         }
@@ -4061,7 +4061,7 @@
     },
     {
       "file": "apps/api/src/modules/auth/sessions/session.service.ts",
-      "line": 643,
+      "line": 644,
       "cmd": "set"
     },
     {

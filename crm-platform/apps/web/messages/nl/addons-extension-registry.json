@@ -85,7 +85,13 @@
         "title": "{name} verwijderen?",
         "body": "Deze add-on verwijderen? Workspaces die hem hebben gekocht behouden hem tot hij verloopt.",
         "confirm": "Verwijderen",
-        "inUse": "{count, plural, one {# workspace bezit deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.} other {# workspaces bezitten deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.}}"
+        "inUse": "{count, plural, one {# workspace bezit deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.} other {# workspaces bezitten deze add-on, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit; eigenaren behouden hem tot hij afloopt.}}",
+        "errors": {
+          "refused": "Deze add-on heeft aankopen, ook beëindigde, dus hij kan niet worden verwijderd. Schakel hem in plaats daarvan uit.",
+          "forbidden": "Alleen een superbeheerder kan add-ons verwijderen.",
+          "notFound": "Deze add-on bestaat niet meer.",
+          "failed": "De add-on kon niet worden verwijderd."
+        }
       },
       "errors": {
         "generic": "De add-on kon niet worden opgeslagen.",

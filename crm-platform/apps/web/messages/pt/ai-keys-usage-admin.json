@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Uma chave tem pelo menos 8 caracteres."
-      }
+      },
+      "readOnly": "Você pode ver as chaves de IA do espaço de trabalho, mas não pode adicioná-las, ativá-las nem removê-las. Peça a um administrador a permissão para gerenciar chaves de IA."
     }
   }
 }

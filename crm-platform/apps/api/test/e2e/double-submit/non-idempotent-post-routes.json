@@ -57,7 +57,6 @@
   "POST /v2/assignment/rules/reorder",
   "POST /v2/assignment/test",
   "POST /v2/attributes/resolve",
-  "POST /v2/auth/clerk/session",
   "POST /v2/auth/find-workspaces",
   "POST /v2/auth/forgot-password",
   "POST /v2/auth/impersonation/redeem",

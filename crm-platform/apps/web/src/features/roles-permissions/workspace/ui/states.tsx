@@ -3,23 +3,18 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { Alert, Button } from '@crm/ui';
 import { LockIcon } from '../../ui/icons';
 import { isForbidden, wsError } from '../lib/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { PageLoader } from '@/components/page-loader';
 
 const NS = 'roles-permissions-workspace.common';
 
 export function LoadingBlock() {
   const t = useTranslations(NS);
   return (
-    <div
-      className="flex min-h-64 items-center justify-center gap-2 text-muted-foreground"
-      role="status"
-    >
-      <Spinner label={t('loading')} />
-      <span className="text-sm">{t('loading')}</span>
-    </div>
+    <PageLoader label={t('loading')} size={110} className="grid min-h-64 place-items-center" />
   );
 }
 

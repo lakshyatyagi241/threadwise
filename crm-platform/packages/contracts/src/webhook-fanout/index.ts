@@ -8,7 +8,7 @@ import { uuidSchema } from '../common/ids';
 export * from './errors';
 
 const nameSchema = z.string().trim().min(1).max(80);
-const urlSchema = z.string().trim().url().max(2000);
+const urlSchema = z.string().trim().pipe(z.url().max(2000));
 const headerNameSchema = z
   .string()
   .trim()
@@ -16,6 +16,13 @@ const headerNameSchema = z
   .max(80)
   .regex(/^[A-Za-z0-9-]+$/, 'Header names use letters, digits and dashes');
 const fieldSchema = z.string().trim().min(1).max(80);
+/** A Meta phone number id: digits only (not the display number). */
+const phoneNumberIdSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(40)
+  .regex(/^\d+$/, 'A phone number id is digits only');
 
 export const webhookTargetItemSchema = z.object({
   id: uuidSchema,
@@ -28,17 +35,19 @@ export const webhookTargetItemSchema = z.object({
   authHeaderLast4: z.string().nullable(),
   /** Empty = every field. */
   fieldFilter: z.array(z.string()),
-  timeoutMs: z.number().int(),
-  maxAttempts: z.number().int(),
-  successCount: z.number().int(),
-  failureCount: z.number().int(),
-  lastStatus: z.number().int().nullable(),
+  /** Empty = every phone number. */
+  phoneNumberIdFilter: z.array(z.string()),
+  timeoutMs: z.int(),
+  maxAttempts: z.int(),
+  successCount: z.int(),
+  failureCount: z.int(),
+  lastStatus: z.int().nullable(),
   lastError: z.string().nullable(),
   lastSuccessAt: z.string().nullable(),
   lastFailureAt: z.string().nullable(),
   /** Failed deliveries still waiting for a replay. */
-  pendingFailures: z.number().int(),
-  rowVersion: z.number().int(),
+  pendingFailures: z.int(),
+  rowVersion: z.int(),
   updatedAt: z.string(),
 });
 export type WebhookTargetItem = z.infer<typeof webhookTargetItemSchema>;
@@ -54,17 +63,18 @@ export const createWebhookTargetSchema = z
     authHeaderName: headerNameSchema.optional(),
     authHeaderValue: z.string().min(1).max(500).optional(),
     fieldFilter: z.array(fieldSchema).max(50).default([]),
-    timeoutMs: z.number().int().min(1000).max(30000).default(10000),
-    maxAttempts: z.number().int().min(1).max(10).default(5),
+    phoneNumberIdFilter: z.array(phoneNumberIdSchema).max(100).default([]),
+    timeoutMs: z.int().min(1000).max(30000).default(10000),
+    maxAttempts: z.int().min(1).max(10).default(5),
   })
   .refine((v) => Boolean(v.authHeaderName) === Boolean(v.authHeaderValue), {
-    message: 'A header needs both a name and a value',
     path: ['authHeaderValue'],
+    error: 'A header needs both a name and a value',
   });
 export type CreateWebhookTargetInput = z.infer<typeof createWebhookTargetSchema>;
 
 export const updateWebhookTargetSchema = z.object({
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
   name: nameSchema.optional(),
   url: urlSchema.optional(),
   isActive: z.boolean().optional(),
@@ -73,8 +83,9 @@ export const updateWebhookTargetSchema = z.object({
   authHeaderValue: z.string().min(1).max(500).optional(),
   removeAuthHeader: z.boolean().optional(),
   fieldFilter: z.array(fieldSchema).max(50).optional(),
-  timeoutMs: z.number().int().min(1000).max(30000).optional(),
-  maxAttempts: z.number().int().min(1).max(10).optional(),
+  phoneNumberIdFilter: z.array(phoneNumberIdSchema).max(100).optional(),
+  timeoutMs: z.int().min(1000).max(30000).optional(),
+  maxAttempts: z.int().min(1).max(10).optional(),
 });
 export type UpdateWebhookTargetInput = z.infer<typeof updateWebhookTargetSchema>;
 
@@ -82,10 +93,10 @@ export const webhookFailureItemSchema = z.object({
   id: uuidSchema,
   targetId: uuidSchema,
   targetName: z.string(),
-  attempts: z.number().int(),
-  statusCode: z.number().int().nullable(),
+  attempts: z.int(),
+  statusCode: z.int().nullable(),
   error: z.string().nullable(),
-  bodyBytes: z.number().int(),
+  bodyBytes: z.int(),
   createdAt: z.string(),
   replayedAt: z.string().nullable(),
 });
@@ -93,7 +104,7 @@ export type WebhookFailureItem = z.infer<typeof webhookFailureItemSchema>;
 
 export const webhookFailuresQuerySchema = z.object({
   targetId: uuidSchema.optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(50),
+  limit: z.coerce.number().int().min(1).max(100).prefault(50),
 });
 export type WebhookFailuresQuery = z.infer<typeof webhookFailuresQuerySchema>;
 
@@ -103,8 +114,8 @@ export type WebhookFailuresResponse = z.infer<typeof webhookFailuresResponseSche
 /** Result of a test send or a replay: what the target answered, within the target's own timeout. */
 export const webhookDeliveryResultSchema = z.object({
   ok: z.boolean(),
-  statusCode: z.number().int().nullable(),
+  statusCode: z.int().nullable(),
   error: z.string().nullable(),
-  latencyMs: z.number().int(),
+  latencyMs: z.int(),
 });
 export type WebhookDeliveryResult = z.infer<typeof webhookDeliveryResultSchema>;

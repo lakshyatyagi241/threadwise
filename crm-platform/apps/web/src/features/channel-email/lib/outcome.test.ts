@@ -16,10 +16,16 @@ describe('the ?email= outcome the OAuth callback brings back', () => {
 
   it('is a success only for connected; refusals warn, failures are errors', () => {
     expect(outcomeView('connected').tone).toBe('success');
-    for (const o of ['denied', 'limit', 'not_configured'] as const) {
+    for (const o of ['denied', 'limit', 'not_configured', 'not_enabled', 'not_allowed'] as const) {
       expect(outcomeView(o).tone).toBe('warning');
     }
-    for (const o of ['missing_scope', 'wrong_account', 'failed'] as const) {
+    for (const o of [
+      'missing_scope',
+      'wrong_account',
+      'no_address',
+      'no_refresh_token',
+      'failed',
+    ] as const) {
       expect(outcomeView(o).tone).toBe('danger');
     }
   });

@@ -361,7 +361,7 @@ export function ProductForm({
                 ))}
               </ul>
               {form.galleryUrls.length === 0 && (
-                <p className="text-[11.5px] italic text-muted-foreground">{t('galleryEmpty')}</p>
+                <p className="text-[11.5px] text-muted-foreground">{t('galleryEmpty')}</p>
               )}
               {fieldError('gallery') && (
                 <p role="alert" className="mt-2 text-xs text-danger">

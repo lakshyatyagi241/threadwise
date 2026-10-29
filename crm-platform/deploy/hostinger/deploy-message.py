@@ -21,10 +21,22 @@ DETAIL_CAP = int(os.environ.get("DEPLOY_MSG_DETAIL_PRS", "9"))
 EVENTS = {
     "started": ("🚀", "Deploy in progress"), "progress": ("🚀", "Deploy in progress"),
     "live": ("✅", "Release live"), "succeeded": ("✅", "Release live"),
-    "unchanged": ("⚠️", "Deploy finished but the live version did not change"),
+    "unchanged": ("⚠️", "Release finished, but the live version did not change"),
     "failed": ("⚠️", "Release failed or rolled back"), "skipped": ("⚠️", "Release skipped"),
 }
 _t0 = time.time()
+IST = 19800  # Indian Standard Time, UTC+5:30: the zone the team reads these messages in
+
+
+def stamp(t=None):
+    """"26 Oct 2026, 10:55 IST"."""
+    return time.strftime("%d %b %Y, %H:%M", time.gmtime((time.time() if t is None else t) + IST)) + " IST"
+
+
+def took(secs):
+    """267 -> "4 min 27 s"; 51 -> "51 s"."""
+    s = int(secs)
+    return f"{s // 60} min {s % 60} s" if s >= 90 else f"{s} s"
 # DB-driven events: the head line is the note (built by the watcher); "stuck" builds the head from the minutes in `seconds`.
 HEADLINE = {"dbfailed": "❌", "stuck": "⚠️"}
 
@@ -60,7 +72,7 @@ def token():
 
 
 def get(path, ttl=TTL):
-    """GET with cache (1h, by path), 6 s timeout, size cap and an overall deadline. Raises on any failure."""
+    """GET with cache (1h, by path), 6 s timeout, one retry on a timeout/5xx/429, size cap and an overall deadline. Raises on any failure."""
     cf = os.path.join(STATE, "cache-" + re.sub(r"[^A-Za-z0-9.]", "_", path)[-150:] + ".json")
     try:
         if time.time() - os.path.getmtime(cf) < ttl:
@@ -73,8 +85,24 @@ def get(path, ttl=TTL):
     if time.time() - _t0 > DEADLINE:
         raise RuntimeError("deadline")
     req = urllib.request.Request(API + path, headers={"Authorization": "Bearer " + t, "Accept": "application/vnd.github+json", "User-Agent": "desk-release-watch"})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        raw = r.read(MAXBYTES + 1)
+    raw, last = None, None
+    for attempt in range(2):  # one slow or dropped call (a 6 s timeout, a 5xx, a 429) is usually gone a second later; a 4xx is not retried
+        if attempt:
+            if time.time() - _t0 + 1 > DEADLINE:
+                break
+            time.sleep(1)
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+                raw = r.read(MAXBYTES + 1)
+            break
+        except urllib.error.HTTPError as e:
+            if e.code < 500 and e.code != 429:
+                raise
+            last = e
+        except OSError as e:  # TimeoutError and URLError are OSErrors
+            last = e
+    if raw is None:
+        raise last
     if len(raw) > MAXBYTES:
         raise RuntimeError("too big")
     data = json.loads(raw)
@@ -138,8 +166,8 @@ def build(ev, prev, new, secs, note):
     link = f"{WEB}/commit/{new}" if sha_ok(new) else ""
     tail = []
     if secs and str(secs).isdigit() and int(secs) > 0:
-        tail.append(f"Took {secs}s")
-    tail.append(time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()))
+        tail.append(f"Took {took(secs)}")
+    tail.append(stamp())
     plain = head + [ver + (f" {link}" if link else "")]
     if note:
         plain.append(clean(note, 200))
@@ -185,7 +213,7 @@ def group(shas, mins):
         except Exception:
             nums.append(x[:7])
     more = f" (+{len(shas) - 8} more)" if len(shas) > 8 else ""
-    return f"⚠️ *{len(shas)} builds are stuck*: {' '.join(nums)}{more}\nNone of them was shipped (stuck at build for up to {mins} min).\n" + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    return f"⚠️ *{len(shas)} builds are stuck*: {' '.join(nums)}{more}\nNone of them was shipped (stuck at build for up to {mins} min).\n" + stamp()
 
 
 def machine(ev, prev, new, secs):
@@ -221,7 +249,7 @@ def stall(live, min_age, last_start_epoch):
         subj = [clean((x.get("commit", {}).get("message") or "").split("\n")[0], 70) for x in commits[-3:]][::-1]
         mins = int((time.time() - t) / 60)
         text = (f"⚠️ *Deploy stalled*: main has {ahead} commit(s) that are not live. The oldest has waited {mins} min and no new release has gone live.\n"
-                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}`  Oldest waiting since {time.strftime('%H:%M UTC', time.gmtime(t))}\n"
+                f"Live: `{live[:9]}`  Newest on main: `{head.get('sha', '')[:9]}`  Oldest waiting since {stamp(t)}\n"
                 + "\n".join(f"• {x}" for x in subj if x)
                 + "\nMerging does not deploy by itself: the build server must receive the GitHub push and start the release. "
                   "Check its webhook service, its deploy log and its disk, and GitHub Settings > Webhooks > Recent deliveries.")
@@ -241,7 +269,7 @@ def bridge_message(prev, new):
     label = re.sub(r"[^A-Za-z0-9 ./_-]", "", os.environ.get("DESK_ANNOUNCE_LABEL", "Chat alert bridge"))[:40] or "Chat alert bridge"
     head = f"🔧 *{label} updated*"
     ver = f"Version: `{new9 or 'unknown'}`" + (f" (was `{prev9}`)" if prev9 else "") + (f" {WEB}/commit/{new9}" if sha_ok(new9) else "")
-    tail = ("The alert bridge was restarted; open incidents held in its memory were cleared. " if label == "Chat alert bridge" else "") + time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    tail = ("The alert bridge was restarted; open incidents held in its memory were cleared. " if label == "Chat alert bridge" else "") + stamp()
     try:
         if not sha_ok(new):
             raise RuntimeError("no sha")

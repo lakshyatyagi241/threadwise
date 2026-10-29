@@ -368,7 +368,7 @@ export function InvitationsDialog({
               })}
               {inv.channel && ` · #${inv.channel.name}`}
             </div>
-            {inv.note && <p className="mt-1 text-xs italic">“{inv.note}”</p>}
+            {inv.note && <p className="mt-1 text-xs">“{inv.note}”</p>}
             {inv.decidedAt && inv.status !== 'pending' && (
               <div className="mt-1 text-xs text-muted-foreground">
                 {t('decidedBy', {

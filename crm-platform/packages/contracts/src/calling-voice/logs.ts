@@ -66,8 +66,8 @@ export const callLogListQuerySchema = z.object({
   q: z.string().trim().max(80).optional(),
   /** Only calls that reached the log this way (`whatsapp` or one of the call log entry sources). Absent: all of them. */
   source: callLogSourceSchema.optional(),
-  page: z.coerce.number().int().min(1).max(100000).default(1),
-  pageSize: z.coerce.number().int().min(1).max(CALL_LOG_MAX_PAGE_SIZE).default(CALL_LOG_PAGE_SIZE),
+  page: z.coerce.number().int().min(1).max(100000).prefault(1),
+  pageSize: z.coerce.number().int().min(1).max(CALL_LOG_MAX_PAGE_SIZE).prefault(CALL_LOG_PAGE_SIZE),
 });
 export type CallLogListQuery = z.infer<typeof callLogListQuerySchema>;
 
@@ -87,7 +87,7 @@ export const callLogRowSchema = z.object({
   handlerId: uuidSchema.nullable(),
   handlerName: z.string().nullable(),
   startedAt: z.string().nullable(),
-  durationSec: z.number().int().nonnegative(),
+  durationSec: z.int().nonnegative(),
   endReason: z.string().nullable(),
   hasRecording: z.boolean(),
   /** How the call reached the log. Absent (an older server) means `whatsapp`. */
@@ -104,31 +104,31 @@ export type CallLogRow = z.infer<typeof callLogRowSchema>;
 
 /** Reference's four cards: the whole workspace, whatever the filters say (its "sidebar totals"). */
 export const callLogWorkspaceKpisSchema = z.object({
-  total: z.number().int().nonnegative(),
-  last24h: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
+  last24h: z.int().nonnegative(),
   /** Whole minutes talked in the last 24 hours (Reference: `sum(duration) / 60`, truncated). */
-  minutes24h: z.number().int().nonnegative(),
-  completed: z.number().int().nonnegative(),
+  minutes24h: z.int().nonnegative(),
+  completed: z.int().nonnegative(),
   /** `failed` and `no-answer`, as Reference counted them. */
-  failed: z.number().int().nonnegative(),
+  failed: z.int().nonnegative(),
 });
 
 /** What the filters select: the cards this port adds under Reference's four. */
 export const callLogSelectionKpisSchema = z.object({
-  total: z.number().int().nonnegative(),
-  answered: z.number().int().nonnegative(),
-  missed: z.number().int().nonnegative(),
+  total: z.int().nonnegative(),
+  answered: z.int().nonnegative(),
+  missed: z.int().nonnegative(),
   /** Average length of the answered calls, in seconds; 0 when none was answered. */
-  avgDurationSec: z.number().int().nonnegative(),
-  totalMinutes: z.number().int().nonnegative(),
+  avgDurationSec: z.int().nonnegative(),
+  totalMinutes: z.int().nonnegative(),
 });
 export type CallLogSelectionKpis = z.infer<typeof callLogSelectionKpisSchema>;
 
 export const callLogListSchema = z.object({
   rows: z.array(callLogRowSchema),
-  page: z.number().int().min(1),
-  pageSize: z.number().int().min(1),
-  total: z.number().int().nonnegative(),
+  page: z.int().min(1),
+  pageSize: z.int().min(1),
+  total: z.int().nonnegative(),
   kpis: z.object({
     workspace: callLogWorkspaceKpisSchema,
     selection: callLogSelectionKpisSchema,
@@ -173,7 +173,7 @@ export const callLogDetailSchema = z.object({
   recording: z.object({
     available: z.boolean(),
     mime: z.string().nullable(),
-    sizeBytes: z.number().int().nonnegative().nullable(),
+    sizeBytes: z.int().nonnegative().nullable(),
     /** The consent evidence, the retention clock, the legal hold and, once removed, when and why (BL-144). */
     lifecycle: callRecordingLifecycleSchema,
   }),
@@ -204,32 +204,32 @@ export const callAnalyticsSchema = z.object({
   to: day,
   tz: z.string(),
   totals: z.object({
-    total: z.number().int().nonnegative(),
-    answered: z.number().int().nonnegative(),
-    missed: z.number().int().nonnegative(),
+    total: z.int().nonnegative(),
+    answered: z.int().nonnegative(),
+    missed: z.int().nonnegative(),
     /** Answered calls as a share of all finished calls, 0 to 1. */
     answeredRate: z.number().min(0).max(1),
     /** Average length of an answered call, in seconds. */
-    avgHandleSec: z.number().int().nonnegative(),
-    totalMinutes: z.number().int().nonnegative(),
+    avgHandleSec: z.int().nonnegative(),
+    totalMinutes: z.int().nonnegative(),
   }),
   /** One entry per day of the range, empty days included. */
   series: z.array(
     z.object({
       day,
-      total: z.number().int().nonnegative(),
-      answered: z.number().int().nonnegative(),
-      missed: z.number().int().nonnegative(),
+      total: z.int().nonnegative(),
+      answered: z.int().nonnegative(),
+      missed: z.int().nonnegative(),
     }),
   ),
   byAgent: z.array(
     z.object({
       agentId: uuidSchema.nullable(),
       name: z.string().nullable(),
-      calls: z.number().int().nonnegative(),
-      answered: z.number().int().nonnegative(),
-      avgHandleSec: z.number().int().nonnegative(),
-      totalMinutes: z.number().int().nonnegative(),
+      calls: z.int().nonnegative(),
+      answered: z.int().nonnegative(),
+      avgHandleSec: z.int().nonnegative(),
+      totalMinutes: z.int().nonnegative(),
     }),
   ),
   /** The calls of the range by how they reached the log; only the sources with a call. Absent on an older server. */
@@ -237,18 +237,18 @@ export const callAnalyticsSchema = z.object({
     .array(
       z.object({
         source: callLogSourceSchema,
-        calls: z.number().int().nonnegative(),
-        answered: z.number().int().nonnegative(),
-        missed: z.number().int().nonnegative(),
+        calls: z.int().nonnegative(),
+        answered: z.int().nonnegative(),
+        missed: z.int().nonnegative(),
       }),
     )
     .optional(),
   /** Calls started in each hour of each weekday (0 = Sunday, 0 to 23): only the cells with a call. */
   heatmap: z.array(
     z.object({
-      weekday: z.number().int().min(0).max(6),
-      hour: z.number().int().min(0).max(23),
-      calls: z.number().int().positive(),
+      weekday: z.int().min(0).max(6),
+      hour: z.int().min(0).max(23),
+      calls: z.int().positive(),
     }),
   ),
 });

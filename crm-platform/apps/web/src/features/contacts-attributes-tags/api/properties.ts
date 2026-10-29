@@ -4,7 +4,8 @@ import { keepPreviousData, useQuery, useQueries, type QueryClient } from '@tanst
 import { z } from 'zod';
 import {
   fieldDependencyResponseSchema,
-  fieldOptionDependencyResponseSchema,
+  expandOptionPairGroups,
+  fieldOptionDependencyGroupsResponseSchema,
   fieldOptionResponseSchema,
   fieldSectionResponseSchema,
   fieldUsageResponseSchema,
@@ -173,11 +174,12 @@ export function useFieldOptionDependencies(moduleKey: PropertyModule = 'contacts
     enabled,
     queryKey: moduleKey === 'contacts' ? OPTION_DEPENDENCIES : [...OPTION_DEPENDENCIES, moduleKey],
     queryFn: ({ signal }) =>
-      apiFetch('/fields/option-dependencies', {
+      // Grouped by parent option (a tenth of the flat list for a big workspace), then expanded here: the callers work on flat pairs.
+      apiFetch('/fields/option-dependencies/grouped', {
         query: { moduleKey },
-        schema: z.array(fieldOptionDependencyResponseSchema),
+        schema: fieldOptionDependencyGroupsResponseSchema,
         signal,
-      }),
+      }).then(expandOptionPairGroups),
     staleTime: 60_000,
   });
 }

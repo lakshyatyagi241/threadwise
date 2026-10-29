@@ -11,11 +11,16 @@ import { dealsApi } from '../api/service';
 import type { ContactRef, Deal, Pipeline } from '../api/schemas';
 import { currencyChoices, toMajorInput, toMinor } from '../lib/money';
 import { fieldErrors } from '../lib/errors';
+import { isPastCloseDate, todayInput } from '../lib/close-date';
 import { ContactPicker } from './contact-picker';
 import { useErrorText } from './parts';
 
 export interface DealFormModalProps {
   pipeline: Pipeline;
+  /** More than one pipeline: the form then offers the choice (the first is `pipeline`). Left out, the deal goes into `pipeline`. */
+  pipelines?: readonly Pipeline[];
+  /** The deal is made for this contact, from the contact's own page: it is filled in and cannot be changed here. */
+  lockedContact?: ContactRef | null;
   /** The stage the new deal starts in (the "+" of a column), else the first one. */
   stageId?: string;
   onClose: () => void;
@@ -25,18 +30,27 @@ export interface DealFormModalProps {
 type FormField = 'title' | 'value' | 'currency' | 'stage' | 'owner' | 'company' | 'close' | 'form';
 
 /** "New deal" (TW-DEAL-009). Mount it only while it is open: it starts empty every time. */
-export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFormModalProps) {
+export function DealFormModal({
+  pipeline: firstPipeline,
+  pipelines,
+  lockedContact = null,
+  stageId,
+  onClose,
+  onCreated,
+}: DealFormModalProps) {
   const t = useTranslations('deals-pipelines.form');
   const canPickCompany = useCanPickCompany();
   const session = useSession();
   const members = useMembers();
   const errorText = useErrorText();
+  const [pipelineId, setPipelineId] = useState(firstPipeline.id);
+  const pipeline = (pipelines ?? [firstPipeline]).find((p) => p.id === pipelineId) ?? firstPipeline;
   const [title, setTitle] = useState('');
   const [value, setValue] = useState('');
   const [currency, setCurrency] = useState(pipeline.currency);
   const [stage, setStage] = useState(stageId ?? pipeline.stages[0]?.id ?? '');
   const [owner, setOwner] = useState(session.user.id);
-  const [contact, setContact] = useState<ContactRef | null>(null);
+  const [contact, setContact] = useState<ContactRef | null>(lockedContact);
   const [company, setCompany] = useState<CompanyRef | null>(null);
   const [close, setClose] = useState('');
   const [errors, setErrors] = useState<Partial<Record<FormField, string>>>({});
@@ -46,6 +60,7 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
     const next: Partial<Record<FormField, string>> = {};
     const minor = toMinor(value, currency);
     if (title.trim() === '') next.title = t('errors.titleRequired');
+    if (close !== '' && isPastCloseDate(close)) next.close = t('errors.closePast');
     if (Number.isNaN(minor)) next.value = t('errors.valueInvalid');
     else if (minor > 9_999_999_999) next.value = t('errors.valueTooLarge');
     const parsed = createDealSchema.safeParse({
@@ -133,6 +148,27 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
             onChange={(e) => setTitle(e.target.value)}
           />
         </Field>
+        {pipelines && pipelines.length > 1 && (
+          <Field label={t('pipeline')} htmlFor="deal-pipeline" className="sm:col-span-2">
+            <Select
+              id="deal-pipeline"
+              value={pipelineId}
+              onChange={(e) => {
+                const next = pipelines.find((p) => p.id === e.target.value);
+                if (!next) return;
+                setPipelineId(next.id);
+                setStage(next.stages[0]?.id ?? '');
+                setCurrency(next.currency);
+              }}
+            >
+              {pipelines.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        )}
         <Field label={t('value')} htmlFor="deal-value" error={errors.value}>
           <Input
             id="deal-value"
@@ -177,7 +213,12 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
           hint={t('contactHint')}
           className="sm:col-span-2"
         >
-          <ContactPicker id="deal-contact" value={contact} onChange={setContact} />
+          <ContactPicker
+            id="deal-contact"
+            value={contact}
+            disabled={lockedContact !== null}
+            onChange={setContact}
+          />
         </Field>
         {canPickCompany && (
           <Field
@@ -198,11 +239,19 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
             />
           </Field>
         )}
-        <Field label={t('expectedClose')} htmlFor="deal-close" className="sm:col-span-2">
+        <Field
+          label={t('expectedClose')}
+          htmlFor="deal-close"
+          error={errors.close}
+          hint={t('expectedCloseHint')}
+          className="sm:col-span-2"
+        >
           <Input
             id="deal-close"
             type="date"
+            min={todayInput()}
             value={close}
+            invalid={!!errors.close}
             onChange={(e) => setClose(e.target.value)}
           />
         </Field>

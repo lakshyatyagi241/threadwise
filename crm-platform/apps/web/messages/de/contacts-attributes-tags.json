@@ -41,7 +41,7 @@
       "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weise ihn dir zuerst selbst zu, um eine Nachricht zu senden."
     },
     "list": {
-      "title": "Contact Hub",
+      "title": "Kontakt-Hub",
       "subtitle": "Verwalten Sie alle Ihre Kontakte nahtlos an einem Ort für Vertrieb, Support und mehr",
       "dedupe": "Duplikate entfernen",
       "exportAll": "Alle exportieren",
@@ -66,7 +66,7 @@
       "sort": "Sortierung",
       "perPage": "Zeilen pro Seite",
       "perPageOption": "{count} pro Seite",
-      "viewToggle": "Layout",
+      "viewToggle": "Ansicht",
       "listView": "Listenansicht",
       "banner": {
         "pageSelected": "Alle {count} Kontakte auf dieser Seite sind ausgewählt.",
@@ -98,7 +98,7 @@
       "unnamed": "Kein Name",
       "colGroups": "Gruppen",
       "colTags": "Tags",
-      "colMemo": "Memo",
+      "colMemo": "Notiz",
       "colDateOfBirth": "Geburtsdatum",
       "colMinor": "Minderjährig",
       "minorBadge": "Minderjährig",
@@ -118,11 +118,11 @@
       "moreActions": "Weitere Aktionen",
       "modifyColumns": "Spalten anpassen",
       "resetColumns": "Auf Standard zurücksetzen",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Spalten durchsuchen",
+      "columnsSelectAll": "Alle auswählen",
+      "dragToReorder": "Zum Sortieren der Spalten ziehen",
+      "removeColumn": "{name} entfernen",
+      "columnsSave": "Speichern",
       "colContactName": "Kontaktname",
       "colPhone": "Telefonnummer",
       "colEmailId": "E-Mail-Adresse",
@@ -297,7 +297,8 @@
       "allTeams": "Alle Teams",
       "teamFormer": "Früheres Team",
       "unhideColumn": "Spalte einblenden",
-      "resizeColumn": "Ziehen, um {column} anzupassen; Doppelklick setzt zurück"
+      "resizeColumn": "Ziehen, um {column} anzupassen; Doppelklick setzt zurück",
+      "pqlNoKey": "Die englische Suche ist für diesen Workspace noch nicht eingerichtet. Bitten Sie eine Administratorin oder einen Administrator, unter KI-Schlüssel einen OpenRouter-Schlüssel hinzuzufügen."
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -396,7 +397,7 @@
       "languagePlaceholder": "Englisch",
       "source": "Quelle",
       "sourcePlaceholder": "z. B. Website-Formular",
-      "memo": "Memo",
+      "memo": "Notiz",
       "memoPlaceholder": "Notizen zu diesem Kontakt",
       "address": "Adresse",
       "addressPlaceholder": "Adresse eingeben",
@@ -447,7 +448,8 @@
         "number": "Geben Sie eine Zahl ein.",
         "integer": "Geben Sie eine ganze Zahl ein.",
         "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
-        "url": "Geben Sie einen vollständigen Link ein, der mit http:// oder https:// beginnt."
+        "url": "Geben Sie einen vollständigen Link ein, der mit http:// oder https:// beginnt.",
+        "phone": "Geben Sie eine gültige Telefonnummer für das gewählte Land ein."
       },
       "readOnlyField": "Schreibgeschützt",
       "yes": "Ja",
@@ -584,7 +586,7 @@
         "tags": "Tags",
         "title": "Anrede",
         "address": "Adresse",
-        "memo": "Memo",
+        "memo": "Notiz",
         "status": "Status",
         "source": "Quelle",
         "consent": "Marketing-Einverständnis (ja / nein)",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Name der neuen Gruppe",
       "groupRequiredHint": "Jeder importierte Kontakt wird dieser einen Gruppe hinzugefügt. Die Gruppenspalte der Datei wird ignoriert, sofern Sie sie nicht oben zuordnen.",
       "customProperties": "Benutzerdefinierte Eigenschaften",
-      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat."
+      "customPropertiesHint": "Eine Spalte, deren Kopfzeile der Name der Eigenschaft ist (oder attr:key, wie der Export ihn schreibt), füllt diese Eigenschaft. Eine leere Zelle behält den Wert, den der Kontakt bereits hat.",
+      "propertyFormat": {
+        "checkbox": "yes oder no eintragen. Auch zulässig: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Trenne die Schlüssel der Optionen mit Komma, Semikolon oder Pipe, zum Beispiel vip, new_leads. Verwende den Schlüssel, nicht die Bezeichnung. Groß- und Kleinschreibung spielt keine Rolle."
+      }
     },
     "detail": {
       "back": "Alle Kontakte",
@@ -1178,7 +1184,7 @@
         "url": "Link (URL)",
         "email": "E-Mail",
         "phone": "Telefon",
-        "select": "Dropdown",
+        "select": "Auswahlliste",
         "multiselect": "Mehrfachauswahl",
         "lookup": "Nachschlagen",
         "rating": "Bewertung",
@@ -1345,7 +1351,10 @@
       "save": "Speichern und Regeln öffnen",
       "created": "Das Segment „{name}“ wurde erstellt. Verfeinern Sie unten seine Regeln.",
       "forbidden": "Sie haben keine Berechtigung, Segmente zu erstellen.",
-      "failed": "Das Segment konnte nicht erstellt werden. Versuchen Sie es erneut."
+      "failed": "Das Segment konnte nicht erstellt werden. Versuchen Sie es erneut.",
+      "specific": "Bestimmte Personen",
+      "specificHint": "Nur die Personen und Teams, die Sie auswählen, sowie Sie selbst und Personen, die alle Segmente bearbeiten dürfen.",
+      "shareRequired": "Wählen Sie mindestens eine Person oder ein Team zum Teilen aus."
     },
     "bulkUpdate": {
       "title": "{count, plural, one {# Kontakt} other {# Kontakte}} aktualisieren",
@@ -1372,7 +1381,8 @@
         "setValue": "Wert festlegen",
         "willClear": "Wird für {count, plural, one {den ausgewählten Kontakt} other {alle # ausgewählten Kontakte}} geleert.",
         "requiredNoClear": "Eine Pflichteigenschaft kann nicht geleert werden.",
-        "problemEmpty": "Geben Sie einen Wert ein oder wählen Sie Leeren."
+        "problemEmpty": "Geben Sie einen Wert ein oder wählen Sie Leeren.",
+        "parentFirst": "Aktualisieren Sie zuerst {parent}, dann diese Eigenschaft: Ihre Auswahlmöglichkeiten hängen davon ab."
       },
       "titleAll": "Alle passenden Kontakte aktualisieren",
       "hintAll": "Setzt dieselben Werte bei jedem Kontakt, der den aktuellen Filtern entspricht. Felder auf „Beibehalten“ bleiben unverändert.",
@@ -1414,10 +1424,15 @@
         "by": "Importiert von"
       },
       "exports": {
-        "title": "Exporte",
-        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
+        "title": "Exportverlauf",
+        "hint": "Exporte aus dem Hub, die neuesten zuerst, mit Angabe der Quelle. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
         "empty": "Noch keine Exporte.",
         "by": "Von",
+        "source": "Quelle",
+        "sources": {
+          "contacts": "Kontakte",
+          "campaigns": "Kampagnen"
+        },
         "rows": "Kontakte",
         "selection": "Umfang",
         "unknown": "Unbekannt",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "In Ihrer Nachrichten-App öffnen"
+      },
+      "reason": {
+        "not_linked": "Diese Nummer ist mit keinem WhatsApp-Business-Konto verknüpft, daher kann keine Vorlage gesendet werden.",
+        "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
+        "media_header": "Hat einen Kopfbereich mit Bild, Video oder Dokument, der von hier aus noch nicht gesendet werden kann.",
+        "header_variable": "Enthält eine Variable im Kopfbereich, die hier noch nicht ausgefüllt werden kann.",
+        "dynamic_button": "Hat einen Button-Link mit einer Variable, die hier noch nicht ausgefüllt werden kann.",
+        "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet, nicht von hier.",
+        "named_variables": "Verwendet benannte Variablen, die hier noch nicht ausgefüllt werden können."
       }
     },
     "views": {

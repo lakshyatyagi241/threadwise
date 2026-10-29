@@ -38,11 +38,13 @@
         "target": "Target",
         "active": "Active",
         "fields": "Fields",
+        "numbers": "Phone numbers",
         "deliveries": "Deliveries",
         "last": "Last delivery",
         "actions": "Actions"
       },
       "allFields": "All fields",
+      "allNumbers": "All numbers",
       "success": "{count, number} ok",
       "failure": "{count, number} failed attempts",
       "failureHint": "Attempts that errored, including ones that later succeeded on retry. Deliveries that gave up are listed under Failed deliveries.",
@@ -93,7 +95,11 @@
       "fieldFilter": "Field filter",
       "fieldFilterHint": "Leave empty to forward every field. Type a field and press Enter, for example messages or message_template_status_update.",
       "fieldFilterPlaceholder": "Add a field",
+      "phoneFilter": "Phone number filter",
+      "phoneFilterHint": "Leave empty to forward every number. Type a Meta phone number id (digits only, not the display number) and press Enter. A webhook that names several numbers is forwarded whole when one of them is listed.",
+      "phoneFilterPlaceholder": "Add a phone number id",
       "fieldRemove": "Remove {field}",
+      "phoneRemove": "Remove {phone}",
       "timeout": "Timeout (seconds)",
       "timeoutHint": "1 to 30",
       "maxAttempts": "Max attempts",
@@ -110,7 +116,8 @@
         "headerValueRequired": "A header needs both a name and a value.",
         "headerNameRequired": "Enter the header name too.",
         "timeout": "Enter a whole number from 1 to 30.",
-        "maxAttempts": "Enter a whole number from 1 to 10."
+        "maxAttempts": "Enter a whole number from 1 to 10.",
+        "phoneNumberIdInvalid": "Phone number ids are digits only."
       }
     },
     "failures": {

@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta разрешает одно изменение за 24 часа и десять за 30 дней для одобренного шаблона. Повторите попытку позже.",
       "ROW_VERSION_CONFLICT": "Пока вы редактировали, этот шаблон изменил другой пользователь. Перезагрузите страницу, чтобы увидеть последнюю версию, и внесите изменения заново.",
       "VALIDATION_FAILED": "Некоторые поля заполнены неверно. Проверьте поля ниже.",
-      "INTERNAL": "Сервер не смог обработать запрос. Повторите попытку позже."
+      "INTERNAL": "Сервер не смог обработать запрос. Повторите попытку позже.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Предпросмотр",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Введите ID Flow.",
           "flowIdInvalid": "ID Flow — это число.",
           "screenRequired": "Введите ID экрана.",
-          "catalogAlone": "Кнопку каталога нельзя сочетать с другими кнопками."
+          "catalogAlone": "Кнопку каталога нельзя сочетать с другими кнопками.",
+          "flowIdNotMeta": "Эта форма ещё не является Flow в Meta (её Flow ID не число). Откройте формы WhatsApp, сохраните и опубликуйте её, затем выберите здесь."
         },
         "catalogHint": "Открывает ваш каталог WhatsApp. На кнопке написано «Посмотреть каталог», и она должна быть единственной.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "Числовой ID опубликованного WhatsApp Flow из менеджера Flows в Meta.",
-        "screen": "Начальный экран",
-        "screenHint": "ID экрана, на котором открывается форма, например WELCOME."
+        "flowPick": "Форма WhatsApp",
+        "flowPickHint": "Выберите одну из опубликованных форм WhatsApp. Кнопка откроет её внутри WhatsApp.",
+        "flowChoose": "Выберите форму WhatsApp",
+        "flowLoading": "Загрузка форм…",
+        "flowNone": "У вас пока нет опубликованных форм WhatsApp.",
+        "flowNoneLink": "Создайте и опубликуйте форму",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (сначала опубликуйте в Meta)"
       },
       "result": {
         "metaRefused": "Сохранено, но Meta отклонила шаблон.",
@@ -413,6 +425,7 @@
         "format": "В карточках",
         "formatImage": "Картинки",
         "formatVideo": "Видео",
+        "limits": "Изображение до 5 МБ, видео до 16 МБ.",
         "count": "{used}/{max} карточек",
         "add": "Добавить карточку",
         "needTwo": "Для карусели нужно не менее {min} карточек.",
@@ -425,7 +438,9 @@
         "buttons": "Кнопки",
         "buttonText": "Текст кнопки",
         "buttonUrl": "Адрес сайта",
-        "buttonPhone": "Номер телефона"
+        "buttonPhone": "Номер телефона",
+        "moveUp": "Переместить карточку {n} выше",
+        "moveDown": "Переместить карточку {n} ниже"
       },
       "offer": {
         "title": "Предложение с ограниченным сроком",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Рекламные формулировки не разрешены в этой категории.",
         "TAG_CONTENT_MISMATCH": "Категория не соответствует содержимому (например, рекламный текст в шаблоне UTILITY).",
         "SCAM": "Meta пометила шаблон как потенциальное мошенничество. Проверьте утверждения и формулировки."
+      },
+      "stats": {
+        "title": "Результаты этого шаблона",
+        "hint": "Считается по сообщениям, отправленным с ним",
+        "loading": "Загрузка данных",
+        "error": "Не удалось загрузить данные.",
+        "none": "С этим шаблоном пока ничего не отправлено.",
+        "sent": "Отправлено",
+        "delivered": "Доставлено",
+        "read": "Прочитано",
+        "replied": "Ответили",
+        "failed": "Ошибки",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# сообщение} few {# сообщения} many {# сообщений} other {# сообщения}} отправлено с этим шаблоном, {queued} ещё в очереди",
+        "lastSent": "последняя отправка {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Тон",
       "pickTone": "Выберите тон",
       "language": "Язык",
-      "languageHint": "Черновик пишется на языке формы.",
+      "languageHint": "Выберите любой язык, который принимает Meta. Черновик пишется на нём, и шаблон получает этот язык.",
       "notes": "Свой запрос",
       "notesNote": "необязательно / макс. 2000",
       "notesPlaceholder": "Всё, что нужно учесть: переменные, ссылки, обязательные формулировки, чего избегать…",

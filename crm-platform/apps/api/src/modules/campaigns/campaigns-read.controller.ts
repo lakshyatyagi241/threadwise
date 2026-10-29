@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Param, ParseUUIDPipe, Query } from '@nestjs/common';
+import { Controller, Get, Header, Param, ParseUUIDPipe, Query, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   broadcastComposeQuerySchema,
@@ -15,7 +15,12 @@ import {
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { CampaignsReadService } from './campaigns-read.service';
-import { SAMPLE_CSV, SAMPLE_CSV_FILE } from './campaign-rules';
+import {
+  SAMPLE_CSV,
+  SAMPLE_CSV_FILE,
+  SAMPLE_EMAIL_CSV,
+  SAMPLE_EMAIL_CSV_FILE,
+} from './campaign-rules';
 import { CampaignSummaryService } from './summary/campaign-summary.service';
 
 /** What the campaign screens read (TW-CAMP-001, 002, 004, 010, 019). */
@@ -49,10 +54,19 @@ export class CampaignsReadController {
   @Get('sample-csv')
   @RequirePermission('camp.campaigns.read')
   @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', `attachment; filename="${SAMPLE_CSV_FILE}"`)
-  @ApiOperation({ summary: 'A sample recipients CSV: name, country_code, phone' })
-  sampleCsv(): string {
-    return SAMPLE_CSV;
+  @ApiOperation({
+    summary: 'A sample recipients CSV: name, country_code, phone (channel=email: name, email)',
+  })
+  sampleCsv(
+    @Query('channel') channel: string | undefined,
+    @Res({ passthrough: true }) res: { setHeader(name: string, value: string): void },
+  ): string {
+    const email = channel === 'email';
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${email ? SAMPLE_EMAIL_CSV_FILE : SAMPLE_CSV_FILE}"`,
+    );
+    return email ? SAMPLE_EMAIL_CSV : SAMPLE_CSV;
   }
 
   // Declared before `:id` so "summary" is never read as a campaign id.

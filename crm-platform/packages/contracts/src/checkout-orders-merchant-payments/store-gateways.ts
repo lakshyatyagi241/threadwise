@@ -84,10 +84,10 @@ export const storeGatewaySchema = z.object({
   webhookUrl: z.string(),
   /** Copied from the shop's own Razorpay keys by the data migration, not yet re-saved here. */
   migratedFromStorefront: z.boolean(),
-  sortOrder: z.number().int(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  sortOrder: z.int(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type StoreGateway = z.infer<typeof storeGatewaySchema>;
 export const storeGatewayListResponseSchema = pageResponseSchema(storeGatewaySchema);
@@ -113,8 +113,8 @@ export const saveStoreGatewaySchema = z.object({
   active: z.boolean().optional(),
   credentials: z.record(z.string().max(80), z.string().max(4000)).optional(),
   clear: z.array(z.string().max(80)).max(40).optional(),
-  sortOrder: z.number().int().min(0).max(10_000).optional(),
-  rowVersion: z.number().int().positive().optional(),
+  sortOrder: z.int().min(0).max(10_000).optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type SaveStoreGatewayInput = z.infer<typeof saveStoreGatewaySchema>;
 

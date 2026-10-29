@@ -131,7 +131,7 @@ export function KpiStrip({
             label={t('cost')}
             value={
               s.cost.length === 0 ? (
-                '—'
+                formatMinor(0, null, locale)
               ) : (
                 <span className="flex flex-col gap-0.5 text-lg leading-tight">
                   {s.cost.map((c) => (

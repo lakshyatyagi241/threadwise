@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { DeviceRuntimeService } from '../../../src/modules/node-bridge-runtime/runtime/device-runtime.service';
 import {
   DeviceSession,
   type Clock,
@@ -483,5 +484,266 @@ describe('a replaced socket is deaf (no ghost events)', () => {
     await flush();
     expect(x.ended).toBe(0);
     expect(old.ended).toBe(true);
+  });
+});
+
+describe('idle unloading (V-02)', () => {
+  const IDLE = 60 * 60_000;
+  const SYNC = 2 * 60_000;
+  const MIN = 60_000;
+
+  it('is never offered before the first open, or while a QR is showing', async () => {
+    const x = setup();
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+    await x.session.start();
+    await flush();
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'qr', qr: 'QR-1' });
+    await flush();
+    await x.clock.advance(3 * IDLE);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+  });
+
+  it('an open number quiet for the idle time can be unloaded: the socket is closed, the lease kept, late events from it ignored', async () => {
+    const x = setup();
+    await opened(x);
+    await x.clock.advance(IDLE - MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+    await x.clock.advance(MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(true);
+    const old = x.factory.last;
+    const reports = x.reports.length;
+    x.session.unload();
+    expect(old.ended).toBe(true);
+    expect(x.session.isUnloaded).toBe(true);
+    expect(x.session.isReady).toBe(false);
+    expect(x.ended).toBe(0); // not "ended for good": the runtime keeps the device
+    old.emit({ type: 'close', code: 428 });
+    await flush();
+    await x.clock.advance(5 * MIN);
+    expect(x.factory.sockets).toHaveLength(1);
+    expect(x.reports).toHaveLength(reports);
+  });
+
+  it('the watchdog does not reopen an unloaded session', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await x.session.tick();
+    expect(x.factory.sockets).toHaveLength(1);
+  });
+
+  it('a message in resets the idle time', async () => {
+    const x = setup();
+    await opened(x);
+    await x.clock.advance(50 * MIN);
+    x.factory.last.emit({ type: 'message', normalized: {} as never });
+    await flush();
+    await x.clock.advance(20 * MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+    await x.clock.advance(40 * MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(true);
+  });
+
+  it('a wake for held messages reconnects without a status change, and goes back to sleep after the short time if nothing came', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await x.clock.advance(15 * MIN);
+    expect(x.session.unloadedFor()).toBe(15 * MIN);
+    const statuses = x.statuses();
+    await x.session.wake('sync');
+    await flush();
+    expect(x.factory.sockets).toHaveLength(2);
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    await flush();
+    expect(x.session.isReady).toBe(true);
+    expect(x.statuses()).toEqual(statuses); // no "connecting", no "open": the screens saw a connected number all along
+    await x.clock.advance(SYNC - 1);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+    await x.clock.advance(1);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(true);
+  });
+
+  it('a message found by the wake keeps the number up for the whole idle time', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await x.session.wake('sync');
+    await flush();
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    x.factory.last.emit({ type: 'message', normalized: {} as never });
+    await flush();
+    await x.clock.advance(10 * MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+  });
+
+  it('a send to an unloaded number wakes it and goes out once the socket is open', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    const sent = x.session.send(
+      { type: 'text', to: '919800000000', body: 'hi' } as never,
+      {} as never,
+    );
+    await flush();
+    expect(x.factory.sockets).toHaveLength(2);
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    await expect(sent).resolves.toEqual({ providerMessageId: 'wamid.unit' });
+    expect(x.session.isUnloaded).toBe(false);
+  });
+
+  it('unlinking an unloaded number wakes it first, so the phone is told too', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    const out = x.session.logout();
+    await flush();
+    expect(x.factory.sockets).toHaveLength(2);
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    await out;
+    expect(x.factory.last.loggedOut).toBe(true);
+    expect(x.factory.deleted).toBe(1);
+    expect(x.ended).toBe(1);
+  });
+
+  it('a receipt for a message we sent counts as use', async () => {
+    const x = setup();
+    await opened(x);
+    await x.clock.advance(50 * MIN);
+    x.factory.last.emit({ type: 'receipt', receipt: {} as never });
+    await flush();
+    await x.clock.advance(20 * MIN);
+    expect(x.session.canUnload(IDLE, SYNC)).toBe(false);
+  });
+
+  it('a send that arrives while a wake is still connecting waits as long as a wake does, not the 8 s of a reconnect', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await x.session.wake('sync');
+    await flush();
+    let state = 'pending';
+    const sent = x.session.send(
+      { type: 'text', to: '919800000000', body: 'hi' } as never,
+      {} as never,
+    );
+    void sent.then(
+      () => (state = 'sent'),
+      () => (state = 'refused'),
+    );
+    await x.clock.advance(10_000);
+    await new Promise((r) => setTimeout(r, 300));
+    expect(state).toBe('pending');
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    await sent;
+    expect(state).toBe('sent');
+  });
+
+  it('a wake that cannot build its socket reports the normal statuses when it gets through', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    const before = x.statuses();
+    x.factory.failNext = 1;
+    await x.session.wake('sync');
+    await x.clock.advance(5_000);
+    await flush();
+    expect(x.factory.sockets).toHaveLength(2);
+    x.factory.last.emit({ type: 'connecting' });
+    x.factory.last.emit({ type: 'open', linkedId: MINE });
+    await flush();
+    expect(x.statuses().slice(before.length)).toEqual(['connecting:25', 'open:100']);
+  });
+
+  it('a wake that fails is an ordinary drop: it reports Reconnecting and tries again', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await x.session.wake('sync');
+    await flush();
+    x.factory.last.emit({ type: 'connecting' }); // quiet: not reported
+    x.factory.last.emit({ type: 'close', code: 428 });
+    await flush();
+    while (x.factory.sockets.length < 3) await x.clock.advance(500);
+    x.factory.last.emit({ type: 'connecting' });
+    await flush();
+    expect(x.statuses().at(-1)).toMatch(/^reconnecting:/);
+  });
+});
+
+describe('the runtime pass over idle sessions (V-02)', () => {
+  const MIN = 60_000;
+  /** The runtime's idle step alone, without its database and Redis: it only reads two settings and drives the session. */
+  const runtime = (idleMin: number, wakeMin: number, wakes = { left: 100 }) => {
+    const rt = Object.create(DeviceRuntimeService.prototype) as DeviceRuntimeService;
+    rt.idleUnloadMs = idleMin * MIN;
+    rt.idleWakeMs = wakeMin * MIN;
+    return (s: DeviceSession) =>
+      (
+        rt as unknown as { idleStep(s: DeviceSession, w: { left: number }): Promise<void> }
+      ).idleStep(s, wakes);
+  };
+
+  it('off (0): an open number is left alone, however long it is quiet', async () => {
+    const x = setup();
+    await opened(x);
+    await x.clock.advance(48 * 60 * MIN);
+    await runtime(0, 15)(x.session);
+    expect(x.session.isUnloaded).toBe(false);
+    expect(x.factory.last.ended).toBe(false);
+  });
+
+  it('off after being on: a number left unloaded is woken on the next pass', async () => {
+    const x = setup();
+    await opened(x);
+    x.session.unload();
+    await runtime(0, 15)(x.session);
+    expect(x.session.isUnloaded).toBe(false);
+    expect(x.factory.sockets).toHaveLength(2);
+  });
+
+  it('wakes are limited per pass: the numbers over the budget wait for the next pass', async () => {
+    const a = setup();
+    const b = setup();
+    for (const x of [a, b]) {
+      await opened(x);
+      x.session.unload();
+      await x.clock.advance(15 * MIN);
+    }
+    const budget = { left: 1 };
+    const step = runtime(60, 15, budget);
+    await step(a.session);
+    await step(b.session);
+    expect(a.session.isUnloaded).toBe(false);
+    expect(b.session.isUnloaded).toBe(true);
+    budget.left = 1; // the next pass
+    await step(b.session);
+    expect(b.session.isUnloaded).toBe(false);
+  });
+
+  it('on: unloads after the idle time, stays unloaded until the wake interval, then wakes for held messages', async () => {
+    const x = setup();
+    await opened(x);
+    const step = runtime(60, 15);
+    await x.clock.advance(59 * MIN);
+    await step(x.session);
+    expect(x.session.isUnloaded).toBe(false);
+    await x.clock.advance(MIN);
+    await step(x.session);
+    expect(x.session.isUnloaded).toBe(true);
+    await x.clock.advance(14 * MIN);
+    await step(x.session);
+    expect(x.session.isUnloaded).toBe(true);
+    expect(x.factory.sockets).toHaveLength(1);
+    await x.clock.advance(MIN);
+    await step(x.session);
+    expect(x.session.isUnloaded).toBe(false);
+    expect(x.factory.sockets).toHaveLength(2);
   });
 });

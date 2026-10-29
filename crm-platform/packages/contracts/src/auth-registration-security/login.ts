@@ -10,7 +10,7 @@ import { emailSchema } from '../common/ids';
 export const tokenPairSchema = z.object({
   accessToken: z.string(),
   refreshToken: z.string(),
-  expiresIn: z.number().int().positive(),
+  expiresIn: z.int().positive(),
 });
 export type TokenPair = z.infer<typeof tokenPairSchema>;
 
@@ -39,7 +39,7 @@ export const passwordSchema = z.string().min(PASSWORD_CONTRACT_MIN).max(256);
  * the person types, instead of a number copied into the page.
  */
 export const passwordPolicyHintSchema = z.object({
-  minLength: z.number().int().min(8).max(128),
+  minLength: z.int().min(8).max(128),
   /** Both an upper-case and a lower-case letter. */
   requireMixedCase: z.boolean(),
   requireNumber: z.boolean(),
@@ -101,7 +101,7 @@ export const mfaRequiredSchema = z.object({
   status: z.literal('mfa_required'),
   /** Single-use, expires in expiresInSeconds. Not a token pair. */
   challengeToken: z.string(),
-  expiresInSeconds: z.number().int().positive(),
+  expiresInSeconds: z.int().positive(),
   /** The person has a passkey: the client may offer "Use a passkey" next to the code field. */
   passkey: z.boolean().optional(),
 });
@@ -116,7 +116,7 @@ export const workspaceChoiceSchema = z.object({
   name: z.string(),
   /** Name of the person's role there, when they hold one. */
   role: z.string().nullable(),
-  memberCount: z.number().int().nonnegative(),
+  memberCount: z.int().nonnegative(),
 });
 export type WorkspaceChoice = z.infer<typeof workspaceChoiceSchema>;
 
@@ -124,7 +124,7 @@ export const workspaceRequiredSchema = z.object({
   status: z.literal('workspace_required'),
   /** Single-use, expires in expiresInSeconds. Not a token pair. */
   selectionToken: z.string(),
-  expiresInSeconds: z.number().int().positive(),
+  expiresInSeconds: z.int().positive(),
   workspaces: z.array(workspaceChoiceSchema).min(2),
 });
 export type WorkspaceRequired = z.infer<typeof workspaceRequiredSchema>;
@@ -162,7 +162,7 @@ export const mfaLoginRequestSchema = z
     webauthn: z.record(z.string(), z.unknown()).optional(),
   })
   .refine((v) => [v.code, v.recoveryCode, v.webauthn].filter(Boolean).length === 1, {
-    message: 'send exactly one of code, recoveryCode or webauthn',
+    error: 'send exactly one of code, recoveryCode or webauthn',
   });
 export type MfaLoginRequest = z.infer<typeof mfaLoginRequestSchema>;
 

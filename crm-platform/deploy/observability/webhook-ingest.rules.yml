@@ -36,10 +36,24 @@ groups:
             / (max by (service, pool) (crm_db_pool_max) > 0) >= 0.9
           and max by (service, pool) (crm_db_pool_connections{state="idle"}) == 0
         for: 2m
-        labels: { severity: warning }
+        labels: { severity: warning, owner: vedant }
         annotations:
           summary: 'The {{ $labels.pool }} DB pool of {{ $labels.service }} is at its maximum with no idle connection'
           description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+          runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolsaturated'
+
+      # D-07: how long a caller waits for a pool connection (crm_db_pool_acquire_seconds, packages/db onAcquire). The sheet target is a p95
+      # under 5 ms. Needs a steady stream of checkouts (over 0.2/s) so an idle pool's one slow connect cannot trigger it.
+      - alert: DbPoolAcquireSlow
+        expr: |
+          histogram_quantile(0.95, sum by (service, pool, le) (rate(crm_db_pool_acquire_seconds_bucket[10m]))) > 0.005
+          and on (service, pool) sum by (service, pool) (rate(crm_db_pool_acquire_seconds_count[10m])) > 0.2
+        for: 15m
+        labels: { severity: warning, owner: vedant }
+        annotations:
+          summary: 'Checking a connection out of the {{ $labels.pool }} DB pool of {{ $labels.service }} has a p95 of {{ $value | humanizeDuration }}'
+          description: 'Callers queue for a connection before their first query starts (target p95 under 5 ms). DbPoolSaturated and DbPoolExhausted fire later, when the pool is full for minutes.'
+          runbook: 'docs/runbooks/db-and-route-alerts.md#dbpoolacquireslow'
 
       - alert: WabaIngestBacklogGrowing
         expr: max(crm_queue_jobs_pending{queue="waba-ingest", state="waiting"}) > 5000

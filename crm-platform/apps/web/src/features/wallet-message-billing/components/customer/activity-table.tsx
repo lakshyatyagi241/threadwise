@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { WalletTransaction } from '@crm/contracts';
 import { cn } from '@crm/ui';
@@ -7,6 +8,35 @@ import { formatDateTime } from '@/lib/format-datetime';
 import { humanizeSource } from '../../lib/billing-variant';
 import { TONE_CLASS, directionTone, formatAmount, formatMovement } from '../../lib/money';
 import { TypePill } from './type-pill';
+
+/**
+ * "Download invoice" for an entry that has one: a top-up paid through an order opens the order's invoice, a top-up migrated from the
+ * old system opens the invoice that system issued (kept as it was).
+ */
+export function InvoiceLink({
+  orderId,
+  legacyId,
+}: {
+  orderId: string | null | undefined;
+  legacyId?: string | null;
+}) {
+  const t = useTranslations('wallet-message-billing.activity');
+  const href = orderId
+    ? `/billing/orders/${orderId}/invoice`
+    : legacyId
+      ? `/billing/wallet/invoice/${legacyId}`
+      : null;
+  if (!href) return null;
+  return (
+    <Link
+      className="mt-0.5 inline-block text-xs underline"
+      href={href}
+      data-testid="wallet-invoice-link"
+    >
+      {t('invoice')}
+    </Link>
+  );
+}
 
 export const formatWhen = (iso: string, locale: string, timeZone?: string): string =>
   formatDateTime(iso, locale, timeZone);
@@ -56,6 +86,7 @@ export function ActivityTable({
                     {t('reason')}: {r.note}
                   </div>
                 )}
+                <InvoiceLink orderId={r.invoiceOrderId} legacyId={r.legacyInvoiceId} />
               </td>
               <td className="px-2 py-2">
                 <TypePill type={r.type} />

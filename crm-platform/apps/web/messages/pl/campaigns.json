@@ -17,18 +17,19 @@
       "refresh": "Odśwież",
       "newCampaign": "Nowa kampania",
       "tile": {
-        "sent": "Wysłane",
+        "sent": "Wysłane wiadomości",
         "delivered": "Dostarczone",
         "read": "Odczytane",
-        "failed": "Nieudane",
-        "processing": "W toku",
-        "campaigns": "{count, plural, one {# kampania} few {# kampanie} many {# kampanii} other {# kampanii}}",
+        "failed": "Nieudane wiadomości",
+        "processing": "Kampanie w trakcie wysyłki",
+        "campaigns": "z {count, plural, one {# kampanii} few {# kampanii} many {# kampanii} other {# kampanii}}",
         "inFlight": "w trakcie wysyłki",
         "awaiting": "oczekuje",
-        "queued": "{count} w kolejce",
+        "queued": "{count} zaplanowanych do startu",
         "deliveredRate": "{rate}% dostarczenia",
         "readRate": "{rate}% wskaźnik odczytu",
-        "failedCampaigns": "{count} nieudanych kampanii"
+        "failedCampaigns": "{count, plural, one {# kampania oznaczona} few {# kampanie oznaczone} many {# kampanii oznaczonych} other {# kampanii oznaczonych}} jako nieudane",
+        "note": "Wysłane, Dostarczone, Przeczytane i Nieudane liczą wiadomości, a nieudana wiadomość nie wlicza się do Wysłanych. Mniejszy wiersz pod każdą liczbą liczy kampanie. Wszystko dotyczy zakresu dat wybranego poniżej: {range}."
       },
       "range": {
         "all": "Cały czas",
@@ -174,7 +175,8 @@
         "status": "Status",
         "schedule": "Harmonogram",
         "actions": "Akcje"
-      }
+      },
+      "newCampaignAny": "Nowa kampania"
     },
     "builder": {
       "loadError": "Nie udało się załadować tej kampanii.",
@@ -314,7 +316,22 @@
         "previousTitle": "Poprzednie wysyłki",
         "previousHint": "Dodaj osoby, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko te, które przeczytały, odpowiedziały lub kliknęły.",
         "previousEstimate": "{count, plural, one {Maksymalnie # osoba z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} few {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} many {Maksymalnie # osób z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).} other {Maksymalnie # osoby z poprzednich wysyłek (szacunek: osoba w dwóch wysyłkach jest liczona dwa razy).}}",
-        "previousEditHint": "Twój wcześniejszy wybór poprzednich wysyłek nie jest pokazywany podczas edycji: ta kampania przechowuje już swoich odbiorców jako kontakty. Wybierz ponownie, aby dodać więcej osób."
+        "previousEditHint": "Twój wcześniejszy wybór poprzednich wysyłek nie jest pokazywany podczas edycji: ta kampania przechowuje już swoich odbiorców jako kontakty. Wybierz ponownie, aby dodać więcej osób.",
+        "emails": "E-maile ręcznie",
+        "emailsHint": "Jeden w wierszu, albo rozdzielone przecinkiem lub średnikiem.",
+        "emailsPlaceholder": "Jeden adres e-mail w wierszu",
+        "emailsCount": "Adresów: {count}",
+        "emailCsvHint": "Kolumny: imię, e-mail. Każda inna kolumna staje się zmienną, której można użyć w wiadomości.",
+        "emailModes": {
+          "csv": {
+            "title": "Prześlij CSV",
+            "hint": "Zaimportuj adresy e-mail dla tej kampanii."
+          },
+          "manual": {
+            "title": "E-maile ręcznie",
+            "hint": "Wklej jeden adres e-mail w wierszu."
+          }
+        }
       },
       "message": {
         "title": "Wiadomość",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
       "draftChip": "Szkic / niezapisane",
+      "draftSavedChip": "Szkic · zapisany",
       "steps": {
         "label": "Kroki kampanii",
         "required": "wymagane",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Szablon",
         "pickTemplate": "— Wybierz szablon —",
+        "searchTemplates": "Szukaj szablonów według nazwy lub języka",
+        "noTemplateMatch": "Żaden szablon nie pasuje do wyszukiwania.",
         "templateHint": "Tylko zatwierdzone szablony wybranego numeru. Jego zmienne uzupełnisz poniżej.",
         "noTemplates": "Ten numer nie ma jeszcze zatwierdzonych szablonów. Utwórz szablon i poczekaj na jego zatwierdzenie.",
         "deliveryTitle": "Wysyłka",
@@ -725,7 +745,11 @@
         "balanceShort": "Saldo jest za małe: brakuje {shortfall}.",
         "balanceLowFull": "Saldo jest niższe niż pełny koszt {full}: Twój plan pokrywa go teraz, ale nie po jego wyczerpaniu.",
         "chargedNowLabel": "Pobrano teraz z Twojego portfela"
-      }
+      },
+      "kickerEmail": "Kampanie e-mail / Nowa",
+      "kickerEditEmail": "Kampanie e-mail / Edycja",
+      "titleEmail": "Utwórz nowy e-mail",
+      "titleEditEmail": "Edytuj swój e-mail"
     },
     "detail": {
       "notFound": "Nie znaleziono tej kampanii.",
@@ -1126,7 +1150,8 @@
         "saved": "Zapisano wersję roboczą",
         "saving": "Zapisywanie...",
         "failed": "Nie udało się zapisać",
-        "retry": "Ponów"
+        "retry": "Ponów",
+        "nameTaken": "Kampania o tej samej nazwie już istnieje"
       },
       "errors": {
         "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Zaznacz numery, z których ma iść wysyłka, i przypisz każdemu udział. Odbiorcy są dzieleni według tych udziałów, a każdy kontakt dostaje wiadomość tylko z jednego numeru. Pusty udział lub 0 liczy się jako 1.",
         "shareWeight": "Udział",
         "shareWeightLabel": "Udział numeru {name}",
-        "shareKeepOne": "Co najmniej jeden numer musi pozostać zaznaczony."
+        "shareKeepOne": "Co najmniej jeden numer musi pozostać zaznaczony.",
+        "nameTaken": "Kampania o tej samej nazwie już istnieje"
       },
       "audience": {
         "selectionTitle": "Wybrane w Centrum kontaktów",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Podgląd prawidłowych numerów w pliku",
         "csvLine": "Wiersz",
         "csvName": "Nazwa",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Nowy kontakt",
           "existing": "Istniejący kontakt",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Wyślij do poprzednich wysyłek",
         "previousHint": "Ponownie dotrzyj do osób, do których trafiły wcześniejsze broadcasty i kampanie, opcjonalnie tylko tych, które przeczytały, nie przeczytały, odpowiedziały lub kliknęły.",
         "chipPrevious": "{count, plural, one {# wcześniejsza wysyłka} few {# wcześniejsze wysyłki} many {# wcześniejszych wysyłek} other {# wcześniejszej wysyłki}} ({outcome})",
-        "filterNoConditions": "Dodaj warunek, aby zobaczyć, ilu kontaktów pasuje."
+        "filterNoConditions": "Dodaj warunek, aby zobaczyć, ilu kontaktów pasuje.",
+        "csvConsentCol": "Zgoda",
+        "csvContactCol": "Kontakt",
+        "csvConsent": {
+          "optedIn": "Zapisany",
+          "optedOut": "Wypisany"
+        },
+        "clearAudience": "Wyczyść odbiorców"
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",
@@ -1597,7 +1629,7 @@
         "retries": "Ponawianie",
         "retriesOn": "Włączone, do {date}",
         "retriesOff": "Wyłączone",
-        "recurringNote": "Każde uruchomienie trafia do odbiorców w stanie z danego momentu, więc liczba odbiorców może się zmieniać."
+        "recurringNote": "Teraz nic nie jest wysyłane. Pierwsze uruchomienie zacznie się o podanej wyżej godzinie, a potem każde uruchomienie pojawi się w Historii jako osobny wiersz. Do tego czasu znajdziesz tę kampanię w sekcji Cykliczne. Każde uruchomienie trafia do odbiorców w stanie z tamtej chwili, więc liczba odbiorców może się zmienić."
       },
       "status": {
         "back": "Wróć do kampanii",
@@ -1811,7 +1843,8 @@
         "add": "Dodaj szablon",
         "count": "{used} z {max} szablonów",
         "limitReached": "Osiągnięto limit: {max} szablonów.",
-        "variablesTitle": "Zmienne szablonu {position}: {name}"
+        "variablesTitle": "Zmienne szablonu {position}: {name}",
+        "variablesLater": "{count, plural, one {# zmienna pobiera} few {# zmienne pobierają} many {# zmiennych pobiera} other {# zmiennej pobiera}} wartość z przypisania, a nie z tego podglądu."
       }
     },
     "history": {

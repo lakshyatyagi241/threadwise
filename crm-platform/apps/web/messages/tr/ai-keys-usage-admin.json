@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Bir anahtar en az 8 karakterdir."
-      }
+      },
+      "readOnly": "Çalışma alanının yapay zekâ anahtarlarını görebilirsiniz, ancak ekleyemez, açıp kapatamaz veya kaldıramazsınız. Bir yöneticiden yapay zekâ anahtarlarını yönetme izni isteyin."
     }
   }
 }

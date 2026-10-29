@@ -16,8 +16,8 @@
       "failed": "失败",
       "source": {
         "test": "测试",
-        "flow": "流程",
-        "automation": "自动化"
+        "flow": "简易流程",
+        "automation": "高级流程"
       },
       "errorKind": {
         "blocked": "地址已被拦截",
@@ -91,7 +91,6 @@
       "title": "删除 API",
       "message": "确定要删除 {name} 吗？此操作无法撤销。",
       "delete": "删除",
-      "deleteAnyway": "仍然删除",
       "done": "已删除 {name}。",
       "checking": "正在检查哪些流程在使用它...",
       "usageFailed": "无法检查哪些流程在使用此 API。如果有流程在使用，删除后该步骤将从其错误端口离开。",
@@ -99,7 +98,9 @@
       "published": "已发布",
       "draft": "草稿",
       "nodes": "{count, plural, other {# 个步骤}}",
-      "forceNote": "如果仍然删除，这些步骤将停止工作，并从其错误端口离开。其日志会保留。"
+      "blocked": "只要还有流程在使用此 API，就无法删除。请先从这些流程中移除它的步骤，或在其中改选其他 API，然后再在此处删除。",
+      "publishedCopy": "已发布的版本仍在调用它",
+      "republish": "请去掉此步骤后重新发布流程，然后再删除该 API。"
     },
     "logs": {
       "title": "API 日志",
@@ -114,7 +115,8 @@
         "source": "来源",
         "result": "结果",
         "statusCode": "状态码",
-        "duration": "耗时"
+        "duration": "耗时",
+        "bot": "机器人"
       },
       "openLog": "打开 {when} 的运行记录",
       "drawerTitle": "日志：{name}",
@@ -139,7 +141,9 @@
         "to": "结束",
         "clear": "清除筛选",
         "deletedApi": "{name}（已删除）",
-        "searchTooLong": "搜索最多可以输入 {max} 个字符。请缩短后再搜索。"
+        "searchTooLong": "搜索最多可以输入 {max} 个字符。请缩短后再搜索。",
+        "bot": "机器人",
+        "allBots": "所有机器人"
       },
       "detail": {
         "title": "API 日志详情",
@@ -171,7 +175,10 @@
         "user": "运行者（用户 ID）",
         "noContext": "未涉及任何流程或联系人。"
       },
-      "unsaved": "未保存"
+      "unsaved": "未保存",
+      "export": "导出 CSV",
+      "exporting": "正在导出…",
+      "noBot": "—"
     },
     "variables": {
       "insertFor": "将变量插入 {label}",
@@ -322,7 +329,10 @@
       "functionHint": "在发送前用 JavaScript 重构负载。可选。",
       "urlHint": "使用 '{ }' 按钮可在地址中插入变量。",
       "payloadHint": "正文中发送的内容。使用 '{ }' 按钮可在值中插入变量。",
-      "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。"
+      "plainHttpWarning": "此地址以 http:// 开头，因此标头中的密码或密钥将以未加密的方式传输。如果服务器支持，请使用 https://。",
+      "importSkipped": "粘贴的命令还会发送一个文件（{names}）。此处无法导入文件，因此已略过。其余内容均已填入。",
+      "importForm": "粘贴的命令以网页表单（a=1&b=2）的形式发送数据。此 API 发送 JSON 或 multipart form-data，因此表单字段已转换为 JSON 对象。请确认您调用的 API 接受 JSON。",
+      "payloadTypedHint": "要发送真正的数字或是/否，请不加引号书写变量：{example}。"
     },
     "test": {
       "title": "响应",

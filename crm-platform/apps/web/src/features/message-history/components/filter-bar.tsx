@@ -3,15 +3,20 @@
 import { useEffect, useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
-  MESSAGE_HISTORY_SOURCES,
   MESSAGE_HISTORY_STATUSES,
-  MESSAGE_HISTORY_TYPES,
   type MessageHistorySource,
   type MessageHistorySummary,
 } from '@crm/contracts';
 import { Button, Input, Select, cn } from '@crm/ui';
 import { formatCount } from '../lib/format';
-import { SCOPE_KEYS, isNarrowed, type HistoryState, type ScopeKey } from '../lib/filters';
+import {
+  SCOPE_KEYS,
+  isNarrowed,
+  sourceOptions,
+  typeOptions,
+  type HistoryState,
+  type ScopeKey,
+} from '../lib/filters';
 import { CrossIcon, SearchIcon } from './parts';
 
 export interface ChannelOption {
@@ -129,7 +134,7 @@ export function FilterBar({ state, summary, channels, onChange, onClear }: Props
           className="h-9 w-auto min-w-[140px]"
         >
           <option value="">{t('allTypes')}</option>
-          {MESSAGE_HISTORY_TYPES.map((x) => (
+          {typeOptions(state.type).map((x) => (
             <option key={x} value={x}>
               {type(x)}
             </option>
@@ -159,7 +164,7 @@ export function FilterBar({ state, summary, channels, onChange, onClear }: Props
           </summary>
           <fieldset className="absolute end-0 z-20 mt-1 w-56 space-y-1.5 rounded-md border border-border bg-background p-3 shadow-lg">
             <legend className="sr-only">{t('sources')}</legend>
-            {MESSAGE_HISTORY_SOURCES.map((s) => (
+            {sourceOptions(state.source).map((s) => (
               <label key={s} className="flex items-center gap-2 text-sm">
                 <input
                   type="checkbox"

@@ -1,0 +1,52 @@
+# A second Redis for the cache and state keys (Sheet 3 D-15). Optional and additive: nothing here runs unless this file is named, and the
+# release flow (ci-entry.sh, which uses docker-compose.yml alone) never starts or stops it.
+#
+#   docker compose -f docker-compose.yml -f redis-cache.compose.yml --env-file .env up -d redis-cache
+#   then, in .env:  REDIS_CACHE_URL=redis://redis-cache:6379   and release (or recreate the api slot, api-hooks and the worker)
+#
+# Why. One Redis held the BullMQ queues and every cache, rate-limit, idempotency and lock key. The queue Redis must run noeviction
+# (evicting a BullMQ key loses a job), so when anything filled it, every write was refused and workers stopped taking jobs. With this
+# server the app's cache and state keys (REDIS_CLIENT) go here and BullMQ and socket.io stay on `redis`: a full cache can no longer take
+# the queues down.
+#
+# Settings and why.
+#   maxmemory 128mb, volatile-lru  the app gives every cache and state key a TTL (tools/redis-audit), so this evicts only keys that
+#                                  expire anyway, oldest-used first, instead of refusing writes. A key with no TTL is never evicted.
+#   no appendonly, no snapshots    the keys here are rebuilt or short-lived. A restart empties it: rate-limit counters and idempotency /
+#                                  replay keys start again, so a request or webhook replayed in the minutes after a restart is not
+#                                  recognised as a repeat (handlers that matter are idempotent on their own, see docs/runbooks/redis-cache-split.md).
+#                                  Skipping the append-only file also avoids its write cost (about a quarter of peak write throughput).
+#   mem_limit 192m                 headroom over maxmemory for fragmentation and buffers.
+#
+# Memory on the shared host: +192m. Size maxmemory from the cache's real use first: runbook, "Sizing".
+x-redis-cache-logging: &redis-cache-logging
+  driver: json-file
+  options:
+    max-size: 20m
+    max-file: '5'
+
+services:
+  redis-cache:
+    image: redis:7-alpine
+    restart: unless-stopped
+    mem_limit: 192m
+    cpus: 0.5
+    pids_limit: 128
+    logging: *redis-cache-logging
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'no',
+        '--save',
+        '',
+        '--maxmemory',
+        '128mb',
+        '--maxmemory-policy',
+        'volatile-lru',
+      ]
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5

@@ -99,6 +99,7 @@
       "triggerGroup": "স্বয়ংক্রিয় · গ্রুপে যোগ দিলে",
       "triggerManual": "ম্যানুয়ালি এনরোল",
       "triggerKeyword": "কীওয়ার্ড",
+      "triggerAny": "যেকোনো বার্তা",
       "active": "সক্রিয়",
       "done": "সম্পন্ন",
       "failed": "ব্যর্থ",
@@ -130,7 +131,10 @@
         "reEngagement": "ব্যক্তিগত অফার বা খোঁজখবর দিয়ে নিষ্ক্রিয় কন্টাক্টদের আবার সক্রিয় করে।",
         "lead": "বিক্রয় দলের কাছে পাঠানোর আগে শিক্ষামূলক বার্তা দিয়ে নতুন লিডদের লালন করে।",
         "event": "লঞ্চ, সেল বা মৌসুমি সময়ের ঘিরে সময়সীমাবদ্ধ ব্রডকাস্ট।",
-        "default": "ফ্লো এডিটরে তৈরি একটি স্বয়ংক্রিয় WhatsApp যাত্রা।"
+        "default": "ফ্লো এডিটরে তৈরি একটি স্বয়ংক্রিয় WhatsApp যাত্রা।",
+        "defaultWeb": "ফ্লো এডিটরে তৈরি ওয়েবসাইট চ্যাট বট।",
+        "defaultCall": "ফ্লো এডিটরে তৈরি স্বয়ংক্রিয় কল।",
+        "defaultOther": "ফ্লো এডিটরে তৈরি স্বয়ংক্রিয় কথোপকথন।"
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "{flows, plural, one {# টি ফ্লো} other {# টি ফ্লো}}-তে {steps, plural, one {# টি ধাপ} other {# টি ধাপ}} ইমপোর্ট হয়েছে। দেখে নিন, তারপর সংরক্ষণ করুন।",
         "invalidJson": "ফাইলটি বৈধ JSON নয়।",
         "saved": "“{name}” সংরক্ষিত হয়েছে",
+        "nodeSaved": "নোড সফলভাবে আপডেট হয়েছে!",
         "saveFailed": "সংরক্ষণ ব্যর্থ: {error}",
         "publishedToast": "প্রকাশিত",
         "publishFailed": "প্রকাশ ব্যর্থ: {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "নিয়ম সরান",
           "variablePlaceholder": "ভেরিয়েবলের নাম (যেমন plan)",
+          "keyLabel": "কী",
+          "valueLabel": "মান",
+          "pickProperty": "একটি কন্টাক্ট প্রপার্টি বেছে নিন",
           "pickVariable": "পরীক্ষা করার ভেরিয়েবল বেছে নিন।",
           "comparePlaceholder": "তুলনা করুন…",
           "joinerAnd": "AND",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "ডকুমেন্ট (PDF রিপোর্ট ইত্যাদি)",
           "upload": "আপলোড",
           "uploadHint": "সর্বোচ্চ {mb} MB। আমরা ফাইলটি হোস্ট করি এবং ফ্লোকে একটি পাবলিক URL দিই।",
+          "acceptedFormats": {
+            "image": "গ্রহণযোগ্য ফরম্যাট: JPG, PNG.",
+            "video": "গ্রহণযোগ্য ফরম্যাট: MP4, 3GP.",
+            "audio": "গ্রহণযোগ্য ফরম্যাট: MP3, AAC, AMR, OGG.",
+            "document": "গ্রহণযোগ্য ফরম্যাট: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "ফাইল বদলান",
           "chooseKind": {
             "image": "ছবি বেছে নিন (অথবা এখানে টেনে আনুন)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "@ ছাড়া লিখুন। লিংক হবে ig.me/m/yourbrand — ট্যাপ করলে আপনার অ্যাকাউন্টে DM খুলবে।",
           "igMessage": "WhatsApp বার্তা",
           "igMessageHint": "Instagram লিংকসহ গ্রাহককে WhatsApp-এ পাঠানো হয়। '{{'variables'}}' সমর্থিত।",
-          "igMessagePlaceholder": "Instagram-এ আমাদের সঙ্গে চালিয়ে যান 👇"
+          "igMessagePlaceholder": "Instagram-এ আমাদের সঙ্গে চালিয়ে যান 👇",
+          "templateFills": "প্রতিটি নম্বরে কী বসবে",
+          "templateFillsHint": "টেমপ্লেটের প্রতিটি নম্বর-এর জন্য লেখা টাইপ করুন, অথবা / চেপে যোগাযোগের কোনো তথ্য বা ফ্লো ভেরিয়েবল বসান। খালি রাখলে টেমপ্লেটের নিজের মান ব্যবহার হবে।",
+          "templateHeaderMedia": "হেডার ফাইল",
+          "templateHeaderMediaHint": "এই টেমপ্লেটের হেডারের ছবি, ভিডিও বা ফাইল। টেমপ্লেটের নিজস্ব ফাইল না থাকলে এটি দরকার।",
+          "templateHeaderMediaMissing": "হেডার ফাইল যোগ করুন: এই টেমপ্লেটে কোনো ফাইল নেই, ফাইল ছাড়া WhatsApp এটি পাঠাবে না।"
         },
         "sequence": {
           "info": "প্রতিটি উত্তর ক্রম অনুযায়ী গ্রাহকের কাছে পাঠানো হয়। একটি নোডে টেক্সট, ছবি, ভিডিও, অডিও ও ডকুমেন্ট একসঙ্গে মেশান — প্রোডাক্ট কার্ড বা অনবোর্ডিং কিটের জন্য আদর্শ।",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "গ্রাহককে উত্তর পাঠান",
           "variable": "উত্তর এই নামে সংরক্ষণ করুন",
           "variableHint": "পরের ধাপগুলো এই নামে উত্তর পড়ে, যেমন faq.answer।"
+        },
+        "workflow": {
+          "listLoading": "তালিকা লোড হচ্ছে…",
+          "listPick": "— একটি তালিকা বেছে নিন —",
+          "listFallback": "তালিকা",
+          "listNotLoaded": "তালিকা {id} (লোড হয়নি)",
+          "segmentLoading": "সেগমেন্ট লোড হচ্ছে…",
+          "segmentPick": "— একটি সেগমেন্ট বেছে নিন —",
+          "segmentFallback": "সেগমেন্ট",
+          "segmentNotLoaded": "সেগমেন্ট {id} (লোড হয়নি)",
+          "updateIntroSub": "কন্টাক্টের ফিল্ডগুলো থাকে <link>/contacts</link>-এ। ফোন নম্বর এখানে বদলানো যায় না।",
+          "updateIntro": "এই কন্টাক্টের <b>একটি ফিল্ড</b> সেট করে। ব্যবহার করুন <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono>, অথবা আপনার কাস্টম ফিল্ডের যেকোনো একটির কী। পরের নোডগুলো নতুন মানটি দেখতে পায়।",
+          "fieldLabel": "ফিল্ড",
+          "fieldHint": "ফিল্ডের কী, যেমন শহর বা ইমেইল।",
+          "newValueLabel": "নতুন মান",
+          "newValueHint": "যেকোনো লেখা বা {example}। ফিল্ড খালি করতে ফাঁকা রাখুন (নাম খালি করা যায় না)।",
+          "listIntroSub": "<link>/contacts/groups</link>-এ তালিকা পরিচালনা করুন।",
+          "listIntro": "এই কন্টাক্টকে একটি <b>তালিকায়</b> রাখে, অথবা সেখান থেকে বের করে দেয়। যে তালিকা ফ্লো বদলায়, সেটি “তালিকায় যোগ দেওয়া / তালিকা ছাড়া” ফ্লো চালু করে না, তাই কোনো ফ্লো নিজের ওপরেই লুপ তৈরি করতে পারে না।",
+          "actionLabel": "অ্যাকশন",
+          "actionAdd": "কন্টাক্টকে তালিকায় যোগ করুন",
+          "actionRemove": "কন্টাক্টকে তালিকা থেকে সরান",
+          "listLabel": "তালিকা",
+          "inListIntro": "এই কন্টাক্ট একটি <b>তালিকায়</b> আছে কি না, তার ওপর ভিত্তি করে শাখা ভাগ হয়: থাকলে <mono>yes</mono>, না থাকলে বা তালিকাটি না থাকলে <mono>no</mono>।",
+          "segmentIntroSub": "<link>/segments</link>-এ সেগমেন্ট তৈরি করুন।",
+          "segmentIntro": "এই কন্টাক্ট এই মুহূর্তে একটি <b>সেগমেন্টের</b> সঙ্গে মেলে কি না, তার ওপর ভিত্তি করে শাখা ভাগ হয়: <mono>yes</mono> বা <mono>no</mono>।",
+          "segmentLabel": "সেগমেন্ট",
+          "waSessionIntro": "গ্রাহক শেষ <b>২৪ ঘণ্টার</b> মধ্যে লিখে থাকলে <mono>yes</mono>, তখন সাধারণ বার্তা এখনও পাঠানো যায়; উইন্ডো বন্ধ হয়ে গেলে <mono>no</mono>, তখন শুধু অনুমোদিত টেমপ্লেট পৌঁছাতে পারে।",
+          "windowLabel": "উইন্ডো (ঘণ্টা)",
+          "windowHint": "WhatsApp-এর উইন্ডো ২৪ ঘণ্টার। আরও কঠোর হতে চাইলে ছোট সময় দিন।",
+          "spreadsheetLabel": "স্প্রেডশিট",
+          "spreadsheetHint": "আপনার সংযুক্ত Google অ্যাকাউন্ট থেকে একটি শিট বেছে নিন।",
+          "tabLabel": "ট্যাব (ঐচ্ছিক)",
+          "tabHint": "ফাঁকা রাখলে প্রথম ট্যাব ব্যবহার হবে।",
+          "matchColumnLabel": "সারি খুঁজুন যেখানে কলাম",
+          "matchColumnHint": "যে কলামে খোঁজা হবে, তার শিরোনাম।",
+          "matchValueLabel": "এর সমান",
+          "matchValueHint": "সাধারণত {example}।",
+          "sheetCheckIntro": "একটি Google শিটে সারি খুঁজে তার একটি ঘর যাচাই করে: ঘরটি শর্ত মিললে <mono>yes</mono>; শর্ত না মিললে, কোনো সারি না মিললে, বা Google পড়া না গেলে <mono>no</mono>।",
+          "checkColumnLabel": "যাচাই করার কলাম",
+          "testLabel": "শর্ত",
+          "valueLabel": "মান",
+          "sheetContactIntro": "একটি Google শিটে সারি খুঁজে ঘরের মান <b>এই কন্টাক্টে</b> কপি করে: প্রতিটি ফিল্ডের জন্য একটি কলাম। যে কন্টাক্টের সঙ্গে ফ্লো কথা বলছে, সেটি আপডেট করে; নতুন সারি থেকে কন্টাক্ট তৈরি করে না।",
+          "copyColumnsLabel": "এই কলামগুলো কপি করুন",
+          "copyColumnsHint": "শিটের কলামের শিরোনাম → কন্টাক্ট ফিল্ডের কী।",
+          "columnHeaderPlaceholder": "কলামের শিরোনাম",
+          "addColumn": "কলাম যোগ করুন",
+          "op": {
+            "equals": "সমান",
+            "not_equals": "সমান নয়",
+            "contains": "ধারণ করে",
+            "not_contains": "ধারণ করে না",
+            "starts_with": "দিয়ে শুরু হয়",
+            "ends_with": "দিয়ে শেষ হয়",
+            "greater_than": "এর চেয়ে বড়",
+            "less_than": "এর চেয়ে ছোট",
+            "is_set": "একটি মান আছে",
+            "is_not_set": "ফাঁকা",
+            "is_empty": "খালি",
+            "is_not_empty": "খালি নয়"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "এই রানের কন্টাক্টের জন্য <b>API Library</b>-তে সংরক্ষিত একটি এপিআই চালায়। এপিআই 2xx উত্তর দিলে <mono>success</mono> দিয়ে বের হয়, অন্য যেকোনো ক্ষেত্রে <mono>error</mono> দিয়ে বের হয়।",
+          "apiLabel": "এপিআই",
+          "loadFailed": "আপনার সংরক্ষিত এপিআইগুলো লোড করা যায়নি।",
+          "manageApis": "এপিআই পরিচালনা করুন",
+          "refreshList": "তালিকা রিফ্রেশ করুন",
+          "loading": "এপিআই লোড হচ্ছে…",
+          "pickApi": "— একটি এপিআই বেছে নিন —",
+          "noApis": "এখনও কোনো সংরক্ষিত এপিআই নেই",
+          "loadingName": "লোড হচ্ছে…",
+          "savedApiName": "সংরক্ষিত এপিআই",
+          "notFound": "{name} (পাওয়া যায়নি)",
+          "variablesLabel": "ভেরিয়েবল",
+          "variablesHint": "মান ফাঁকা রাখলে প্রথমে রানের একই নামের ভেরিয়েবল, তারপর কন্টাক্টের প্রপার্টি, এবং সবশেষে ডিফল্ট মান ব্যবহার হবে। মানে {example} ব্যবহার করা যাবে।",
+          "defaultPlaceholder": "ডিফল্ট: {value}",
+          "saveLabel": "উত্তর এখানে সংরক্ষণ করুন",
+          "saveHint": "পরের নোডগুলো উত্তরটি <mono>{variable}</mono> হিসেবে, ফিল্ড <mono>{field}</mono> হিসেবে এবং স্ট্যাটাস <mono>{status}</mono> হিসেবে পড়ে।",
+          "exposes": "এই এপিআই আরও <mono>{list}</mono> প্রদান করে।"
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "চ্যাটবট",
-          "description": "আরেকটি চ্যাটবট ট্রিগার করুন"
+          "description": "চ্যাট AI এজেন্টের কাছে হস্তান্তর করুন"
         },
         "whatsapp_shop": {
           "label": "WhatsApp শপ",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\"-এ কোনো ইনকামিং সংযোগ নেই — এতে কিছুই যুক্ত হয় না।",
+        "buttonNoExit": "\"{node}\": \"{button}\" বোতামটি কোনো ধাপে যায় না।",
         "notConnected": "\"{node}\" কোনো কিছুর সাথে সংযুক্ত নয়।",
         "wrongChannel": "\"{node}\" {channel}-এ কাজ করে না — এটি মুছুন বা Trigger নোডে চ্যানেল আবার বদলান।",
         "noSenderInstagram": "Trigger নোডে কোনো Instagram অ্যাকাউন্ট নির্বাচন করা নেই — Trigger ধাপে একটি বেছে নিন।",

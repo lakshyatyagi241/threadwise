@@ -1,0 +1,201 @@
+/* The customer journey (explainer.tsx): the six steps beside a drawn app screen with a moving cursor. */
+.vx {
+  display: grid;
+  gap: 28px;
+  max-width: 1180px;
+  margin: 0 auto;
+  text-align: left;
+}
+@media (min-width: 1000px) {
+  .vx {
+    grid-template-columns: 330px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+}
+.vx-main {
+  order: -1;
+  min-width: 0;
+}
+@media (min-width: 1000px) {
+  .vx-main {
+    order: 0;
+  }
+}
+.vx-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.vx-steps li {
+  border-left: 3px solid var(--gx-line);
+}
+.vx-steps li.on {
+  border-left-color: var(--gx-blue);
+}
+.vx-steps button {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 14px 8px 14px 18px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.vx-n {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: var(--gx-blue);
+  font-weight: 700;
+  font-size: 13px;
+  display: grid;
+  place-items: center;
+}
+.vx-steps li.on .vx-n {
+  background: var(--gx-blue);
+  color: #fff;
+}
+.vx-steps b {
+  display: block;
+  font-size: 16.5px;
+  color: #8a8c99;
+  letter-spacing: -0.01em;
+}
+.vx-steps li.on b,
+.vx-steps button:hover b {
+  color: var(--gx-ink);
+}
+.vx-steps i {
+  display: none;
+  margin-top: 6px;
+  font-style: normal;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--gx-text);
+}
+.vx-steps li.on i {
+  display: block;
+}
+.vx-frame {
+  box-shadow:
+    0 0 0 8px rgba(11, 16, 32, 0.06),
+    0 50px 100px rgba(40, 20, 170, 0.22);
+}
+.vx-stage {
+  position: relative;
+}
+.vx-stage .gx-mockwrap {
+  aspect-ratio: 16 / 9;
+}
+.vx-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(78%, 82%);
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s;
+  filter: drop-shadow(0 3px 5px rgba(20, 22, 43, 0.35));
+}
+.vx-cursor svg {
+  display: block;
+}
+.vx-cursor i {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 30px;
+  height: 30px;
+  margin: -12px 0 0 -10px;
+  border-radius: 50%;
+  border: 2px solid var(--gx-blue);
+  opacity: 0;
+}
+.vx-cursor.click i {
+  animation: vx-click 0.6s ease-out;
+}
+@keyframes vx-click {
+  from {
+    opacity: 0.9;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+.vx-sample {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8b8ea3;
+}
+.vx-ctl {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.vx-play {
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: 50%;
+  border: 1.5px solid #0e0e0c;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  color: #0e0e0c;
+}
+.vx-play:hover {
+  background: #0e0e0c;
+  color: #fff;
+}
+.vx-prog {
+  flex: 1;
+  height: 6px;
+  border-radius: 99px;
+  background: #e3e4ee;
+  overflow: hidden;
+}
+.vx-prog s {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--gx-blue);
+  text-decoration: none;
+  animation-name: vx-seg;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes vx-seg {
+  to {
+    width: 100%;
+  }
+}
+.vx-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gx-mute);
+}
+@media (prefers-reduced-motion: reduce) {
+  .vx-cursor {
+    transition: none;
+  }
+  .vx-cursor.click i {
+    animation: none;
+  }
+}

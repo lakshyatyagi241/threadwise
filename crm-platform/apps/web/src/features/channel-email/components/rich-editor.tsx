@@ -7,6 +7,7 @@ import {
   useState,
   type ClipboardEvent,
   type KeyboardEvent,
+  type ReactNode,
   type Ref,
 } from 'react';
 import { useTranslations } from 'next-intl';
@@ -47,6 +48,7 @@ export function RichEditor({
   testId = 'email-rich-editor',
   handleRef,
   className,
+  toolbarExtra,
 }: {
   initialHtml: string;
   /** Changing it loads `initialHtml` again (after a send, a new conversation, a switch from plain text). */
@@ -63,6 +65,8 @@ export function RichEditor({
   testId?: string;
   handleRef?: Ref<RichEditorHandle>;
   className?: string;
+  /** Controls added at the end of the button row (the composer puts Attach there). */
+  toolbarExtra?: ReactNode;
 }) {
   const t = useTranslations('email.composer.editor');
   const box = useRef<HTMLDivElement>(null);
@@ -154,74 +158,116 @@ export function RichEditor({
   };
 
   const tool =
-    'flex h-7 min-w-7 items-center justify-center rounded px-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
+    'flex h-7 min-w-7 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50';
   // Buttons must not take the selection away from the text.
   const keep = (e: { preventDefault: () => void }) => e.preventDefault();
 
-  return (
-    <div className={cn('min-w-0 flex-1', className)}>
-      <div
-        role="toolbar"
-        aria-label={t('toolbar')}
-        data-testid="email-editor-toolbar"
-        className="mb-1 flex flex-wrap items-center gap-0.5"
+  // The formatting buttons sit under the box as one tidy bar, like the tool row of the other channels' composer.
+  const sep = <span aria-hidden="true" className="mx-1 h-4 w-px shrink-0 bg-border" />;
+  const toolbar = (
+    <div
+      role="toolbar"
+      aria-label={t('toolbar')}
+      data-testid="email-editor-toolbar"
+      className="mt-1.5 flex flex-wrap items-center gap-0.5"
+    >
+      {BUTTONS.slice(0, 3).map((b) => (
+        <button
+          key={b.id}
+          type="button"
+          disabled={disabled}
+          title={t(b.label)}
+          aria-label={t(b.label)}
+          data-testid={`email-editor-${b.id}`}
+          onMouseDown={keep}
+          onClick={() => run(b.command)}
+          className={cn(
+            tool,
+            b.id === 'bold' && 'font-bold',
+            b.id === 'italic' && 'italic',
+            b.id === 'underline' && 'underline',
+          )}
+        >
+          {b.glyph}
+        </button>
+      ))}
+      {sep}
+      {BUTTONS.slice(3).map((b) => (
+        <button
+          key={b.id}
+          type="button"
+          disabled={disabled}
+          title={t(b.label)}
+          aria-label={t(b.label)}
+          data-testid={`email-editor-${b.id}`}
+          onMouseDown={keep}
+          onClick={() => run(b.command)}
+          className={tool}
+        >
+          {b.glyph}
+        </button>
+      ))}
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('quote')}
+        aria-label={t('quote')}
+        data-testid="email-editor-quote"
+        onMouseDown={keep}
+        onClick={() => run('formatBlock', 'blockquote')}
+        className={tool}
       >
-        {BUTTONS.map((b) => (
-          <button
-            key={b.id}
-            type="button"
-            disabled={disabled}
-            title={t(b.label)}
-            aria-label={t(b.label)}
-            data-testid={`email-editor-${b.id}`}
-            onMouseDown={keep}
-            onClick={() => run(b.command)}
-            className={cn(tool, b.id === 'italic' && 'italic', b.id === 'underline' && 'underline')}
-          >
-            {b.glyph}
-          </button>
-        ))}
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('quote')}
-          aria-label={t('quote')}
-          data-testid="email-editor-quote"
-          onMouseDown={keep}
-          onClick={() => run('formatBlock', 'blockquote')}
-          className={tool}
+        “
+      </button>
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('link')}
+        aria-label={t('link')}
+        aria-expanded={linkOpen}
+        data-testid="email-editor-link"
+        onMouseDown={keep}
+        onClick={() => {
+          remember();
+          setLinkOpen((v) => !v);
+        }}
+        className={tool}
+      >
+        <svg
+          viewBox="0 0 16 16"
+          className="size-3.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
         >
-          “
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('link')}
-          aria-label={t('link')}
-          aria-expanded={linkOpen}
-          data-testid="email-editor-link"
-          onMouseDown={keep}
-          onClick={() => {
-            remember();
-            setLinkOpen((v) => !v);
-          }}
-          className={tool}
-        >
-          🔗
-        </button>
-        <button
-          type="button"
-          disabled={disabled}
-          title={t('clear')}
-          aria-label={t('clear')}
-          data-testid="email-editor-clear"
-          onMouseDown={keep}
-          onClick={() => run('removeFormat')}
-          className={tool}
-        >
-          Tx
-        </button>
-      </div>
+          <path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        disabled={disabled}
+        title={t('clear')}
+        aria-label={t('clear')}
+        data-testid="email-editor-clear"
+        onMouseDown={keep}
+        onClick={() => run('removeFormat')}
+        className={tool}
+      >
+        Tx
+      </button>
+      {toolbarExtra && (
+        <>
+          {sep}
+          {toolbarExtra}
+        </>
+      )}
+    </div>
+  );
+  const linkBar = (
+    <>
       {linkOpen && (
         <div className="mb-1 flex flex-wrap items-center gap-1.5 text-xs">
           <input
@@ -260,6 +306,10 @@ export function RichEditor({
           )}
         </div>
       )}
+    </>
+  );
+  return (
+    <div className={cn('min-w-0 flex-1', className)}>
       <div
         ref={box}
         role="textbox"
@@ -280,13 +330,15 @@ export function RichEditor({
         onPaste={onPaste}
         onKeyDown={onKey}
         className={cn(
-          'max-h-60 min-h-20 w-full overflow-y-auto rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary',
+          'max-h-60 min-h-10 w-full overflow-y-auto rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary',
           'empty:before:text-muted-foreground empty:before:content-[attr(data-placeholder)]',
           '[&_blockquote]:ms-1 [&_blockquote]:border-s-4 [&_blockquote]:border-border [&_blockquote]:ps-3 [&_blockquote]:text-muted-foreground',
           '[&_ul]:ms-5 [&_ul]:list-disc [&_ol]:ms-5 [&_ol]:list-decimal [&_a]:text-primary [&_a]:underline',
           disabled && 'cursor-not-allowed bg-muted opacity-70',
         )}
       />
+      {linkBar}
+      {toolbar}
     </div>
   );
 }

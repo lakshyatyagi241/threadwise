@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-22T15:04:21.790Z",
-  "commit": "a4361531c9d8ce68d1f9d5f2178faa5a8cc20859",
+  "recordedAt": "2026-10-26T17:36:50.372Z",
+  "commit": "241f475f3ea1e24fd97a27cee1faac2bcf27c5d7",
   "note": "Snapshot of the @Public routes accepted by a human on recordedAt. Routes under auth/, platform/auth, account and realtime were read individually in the 2026-10-09 analysis; the rest were recorded as found. A NEW public route fails the audit until someone reviews it and re-records this file (pnpm audit:auth -- --update-baseline).",
   "publicRoutes": [
     "GET /api/whatsapp-message-settings",
@@ -22,7 +22,6 @@
     "GET /r/:token",
     "GET /ready",
     "POST /v2/account/email-change/confirm",
-    "POST /v2/auth/clerk/session",
     "POST /v2/auth/find-workspaces",
     "POST /v2/auth/forgot-password",
     "POST /v2/auth/impersonation/redeem",
@@ -166,12 +165,15 @@
     "GET /widget-legacy/output.js",
     "GET /widget/:token",
     "GET /widget/:token/api/config",
+    "POST /widget/:token/api/end",
     "POST /widget/:token/api/feedback",
     "GET /widget/:token/api/history",
+    "POST /widget/:token/api/location",
     "GET /widget/:token/api/media/:id",
     "POST /widget/:token/api/message",
     "POST /widget/:token/api/rating",
     "POST /widget/:token/api/restart",
+    "POST /widget/:token/api/start",
     "POST /widget/:token/api/upload",
     "GET /widget/:token/chat"
   ]

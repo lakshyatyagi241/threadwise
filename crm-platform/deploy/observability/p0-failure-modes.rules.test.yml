@@ -25,6 +25,11 @@ tests:
         values: '5000x24'
       - series: 'crm_redis_memory_max_bytes{service="web"}'
         values: '0x24'
+      # the cache Redis at 99%: by design, alerts nothing
+      - series: 'crm_redis_memory_used_bytes{service="worker",redis="cache"}'
+        values: '990x24'
+      - series: 'crm_redis_memory_max_bytes{service="worker",redis="cache"}'
+        values: '1000x24'
       - series: 'crm_db_pool_waiting{service="api",pool="primary"}'
         values: '0x4 3x20'
       - series: 'crm_db_pool_waiting{service="api",pool="replica"}'
@@ -85,10 +90,22 @@ tests:
               summary: 'Redis memory above 90% of maxmemory for 5 min'
               description: 'At maxmemory Redis evicts or rejects writes; BullMQ jobs can be lost or enqueue can fail.'
               runbook: 'docs/runbooks/p0-failure-modes.md#redismemorynearmax'
+      # D-15: over 70% for 15 minutes warns; the 50% queue Redis, the unlimited one and the 99% cache Redis stay quiet
+      - eval_time: 12m
+        alertname: RedisMemoryHigh
+        exp_alerts: [] # under the 15 m hold
+      - eval_time: 20m
+        alertname: RedisMemoryHigh
+        exp_alerts:
+          - exp_labels: { severity: warning, owner: vedant, service: api }
+            exp_annotations:
+              summary: 'Redis memory above 70% of maxmemory for 15 min'
+              description: 'The queue Redis refuses writes at maxmemory (noeviction). Finished-job history is trimmed automatically from here; a growing backlog or a key without a TTL is the usual cause.'
+              runbook: 'docs/runbooks/redis-cache-split.md#redismemoryhigh'
       - eval_time: 12m
         alertname: DbPoolExhausted
         exp_alerts:
-          - exp_labels: { severity: critical, service: api, pool: primary }
+          - exp_labels: { severity: critical, owner: vedant, service: api, pool: primary }
             exp_annotations:
               summary: 'Callers have waited for a primary Postgres connection for 3 min on api'
               description: 'The client pool is exhausted: requests queue behind it and time out. Either Postgres is slow or connections leak.'
@@ -129,8 +146,52 @@ tests:
       - eval_time: 12m
         alertname: ApiHighErrorRate
         exp_alerts:
-          - exp_labels: { severity: critical, service: api }
+          - exp_labels: { severity: critical, owner: vedant, service: api }
             exp_annotations:
               summary: 'More than 5% of api requests answer 5xx'
               description: 'Ignored below 0.1 request/s so a single failure on an idle service does not page.'
               runbook: 'docs/runbooks/p0-failure-modes.md#apihigherrorrate'
+
+  # D-05: p95 per route over 120 ms, only for routes with at least 50 requests in 15 minutes
+  - interval: 1m
+    input_series:
+      # /v2/slow: 100 requests a minute, half under 100 ms, the rest between 100 and 250 ms -> p95 ~ 235 ms
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/slow",le="0.1"}'
+        values: '0+50x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/slow",le="0.25"}'
+        values: '0+100x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/slow",le="+Inf"}'
+        values: '0+100x40'
+      - series: 'crm_http_request_duration_seconds_count{service="api",route="/v2/slow"}'
+        values: '0+100x40'
+      # /v2/rare: as slow, but one request a minute (15 in the window): too few to page on
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/rare",le="0.1"}'
+        values: '0x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/rare",le="0.25"}'
+        values: '0+1x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/rare",le="+Inf"}'
+        values: '0+1x40'
+      - series: 'crm_http_request_duration_seconds_count{service="api",route="/v2/rare"}'
+        values: '0+1x40'
+      # /v2/fast: 100 requests a minute, all under 100 ms
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/fast",le="0.1"}'
+        values: '0+100x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/fast",le="0.25"}'
+        values: '0+100x40'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/fast",le="+Inf"}'
+        values: '0+100x40'
+      - series: 'crm_http_request_duration_seconds_count{service="api",route="/v2/fast"}'
+        values: '0+100x40'
+    alert_rule_test:
+      - eval_time: 30m
+        alertname: RouteLatencyP95High
+        exp_alerts:
+          - exp_labels: { severity: warning, owner: vedant, service: api, route: /v2/slow }
+            exp_annotations:
+              summary: 'p95 of /v2/slow on api is over 120 ms'
+              description: 'Over the last 15 minutes, with at least 50 requests. Look at the slow-query card for the same time and at DbPoolSaturated before blaming the route.'
+              runbook: 'docs/runbooks/db-and-route-alerts.md#routelatencyp95high'
+      # true since about minute 1, so still pending (not firing) before for: 10m has passed
+      - eval_time: 8m
+        alertname: RouteLatencyP95High
+        exp_alerts: []

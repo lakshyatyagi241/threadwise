@@ -7,9 +7,9 @@ import { z } from 'zod';
  */
 
 export const storeCountsSchema = z.object({
-  products: z.number().int().min(0),
-  orders: z.number().int().min(0),
-  customers: z.number().int().min(0),
+  products: z.int().min(0),
+  orders: z.int().min(0),
+  customers: z.int().min(0),
 });
 export type StoreCountsView = z.infer<typeof storeCountsSchema>;
 

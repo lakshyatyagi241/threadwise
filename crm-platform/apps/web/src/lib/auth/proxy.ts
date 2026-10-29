@@ -12,6 +12,8 @@ const FORWARD_REQUEST = [
   'idempotency-key',
   'x-request-id',
   'if-match',
+  // A conditional GET: the API answers 304 from a cheap stamp (the field option-pair list), the browser reuses its copy.
+  'if-none-match',
   'accept-language',
   'user-agent',
   'x-forwarded-for',
@@ -25,6 +27,10 @@ const FORWARD_RESPONSE = [
   'x-request-id',
   'etag',
   'retry-after',
+  // The request throttle's quota (TW-INFRA-010): the browser sees what is left of a limit, not only the wait after a refusal.
+  'x-ratelimit-limit',
+  'x-ratelimit-remaining',
+  'x-ratelimit-reset',
   'cache-control',
   'x-content-type-options',
   // Uploaded brand files (SVG) are served with a sandboxing policy that must reach the browser.
@@ -51,7 +57,6 @@ const TOKEN_ISSUING = new Set([
   'auth/signup/set-password',
   'auth/workspaces/switch',
   'auth/partner/login',
-  'auth/clerk/session',
   'auth/logout',
   // The act-as token of an operator impersonation: only /impersonate (a route handler) may receive it.
   'auth/impersonation/redeem',

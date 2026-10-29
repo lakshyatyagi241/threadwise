@@ -93,7 +93,7 @@ export interface LscInsight {
 export const lscSuggestionsQuerySchema = z.object({
   status: z.enum(LSC_SUGGESTION_STATUSES).default('pending'),
   cursor: z.string().min(1).max(512).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type LscSuggestionsQuery = z.infer<typeof lscSuggestionsQuerySchema>;
 
@@ -104,7 +104,7 @@ export interface LscSuggestionsResponse {
 
 export const lscSuggestionDecisionSchema = z.object({
   action: z.enum(['accept', 'dismiss']),
-  ids: z.array(z.string().uuid()).min(1).max(100),
+  ids: z.array(z.guid()).min(1).max(100),
 });
 export type LscSuggestionDecisionInput = z.infer<typeof lscSuggestionDecisionSchema>;
 

@@ -46,7 +46,7 @@ const amount = z
   .string()
   .trim()
   .regex(/^\d{1,12}(\.\d{1,4})?$/, 'a positive decimal such as "100.50"');
-const when = z.union([calendarDaySchema, z.string().datetime({ offset: true })]);
+const when = z.union([calendarDaySchema, z.iso.datetime({ offset: true })]);
 
 /** Record money received against an issued invoice. */
 export const recordPaymentSchema = z.object({
@@ -95,7 +95,7 @@ export const paymentResponseSchema = z.object({
   currency: z.string(),
   method: paymentMethodSchema,
   source: paymentSourceSchema,
-  paidAt: z.string().datetime(),
+  paidAt: z.iso.datetime(),
   reference: z.string().nullable(),
   note: z.string().nullable(),
   receiptNumber: z.string().nullable(),
@@ -108,7 +108,7 @@ export const paymentResponseSchema = z.object({
   /** On a payment: what can still be refunded. */
   refundable: z.string(),
   recordedBy: z.object({ id: uuidSchema, name: z.string() }).nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type PaymentResponse = z.infer<typeof paymentResponseSchema>;
 
@@ -136,7 +136,7 @@ export const paymentOutcomeSchema = z.object({
 export type PaymentOutcome = z.infer<typeof paymentOutcomeSchema>;
 
 export const listPaymentsQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
   invoiceId: uuidSchema.optional(),
@@ -166,7 +166,7 @@ export const paymentReceiptSchema = z.object({
   amount: z.string(),
   currency: z.string(),
   method: paymentMethodSchema,
-  paidAt: z.string().datetime(),
+  paidAt: z.iso.datetime(),
   reference: z.string().nullable(),
   seller: z.object({
     name: z.string().nullable(),
@@ -188,23 +188,23 @@ export type PaymentReceipt = z.infer<typeof paymentReceiptSchema>;
 /** KPI cards: money collected in a window, and what is open and what is overdue, per currency (never summed across currencies). */
 export const paymentSummaryQuerySchema = z.object({
   /** Collected window in days; default 30. */
-  days: z.coerce.number().int().min(1).max(366).default(30),
+  days: z.coerce.number().int().min(1).max(366).prefault(30),
 });
 export type PaymentSummaryQuery = z.infer<typeof paymentSummaryQuerySchema>;
 
 export const paymentSummaryResponseSchema = z.object({
-  days: z.number().int(),
+  days: z.int(),
   collected: z.array(moneyTotalSchema),
   refunded: z.array(moneyTotalSchema),
-  outstanding: z.array(moneyTotalSchema.extend({ invoices: z.number().int() })),
-  overdue: z.array(moneyTotalSchema.extend({ invoices: z.number().int() })),
+  outstanding: z.array(moneyTotalSchema.extend({ invoices: z.int() })),
+  overdue: z.array(moneyTotalSchema.extend({ invoices: z.int() })),
 });
 export type PaymentSummaryResponse = z.infer<typeof paymentSummaryResponseSchema>;
 
 export const agingBucketRowSchema = z.object({
   bucket: agingBucketSchema,
   amount: z.string(),
-  invoices: z.number().int(),
+  invoices: z.int(),
 });
 
 export const agingResponseSchema = z.object({
@@ -215,7 +215,7 @@ export const agingResponseSchema = z.object({
     z.object({
       currency: z.string(),
       total: z.string(),
-      invoices: z.number().int(),
+      invoices: z.int(),
       buckets: z.array(agingBucketRowSchema),
     }),
   ),
@@ -235,7 +235,7 @@ export type AgingQuery = z.infer<typeof agingQuerySchema>;
 
 /** Outstanding per contact (who owes what), biggest debt first within a currency. */
 export const outstandingQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(200).default(50),
+  limit: z.coerce.number().int().min(1).max(200).prefault(50),
   cursor: z.string().min(1).max(512).optional(),
   currency: z
     .string()
@@ -254,7 +254,7 @@ export const outstandingRowSchema = z.object({
   currency: z.string(),
   outstanding: z.string(),
   overdue: z.string(),
-  invoices: z.number().int(),
+  invoices: z.int(),
   oldestDueDate: z.string().nullable(),
 });
 export const outstandingResponseSchema = z.object({

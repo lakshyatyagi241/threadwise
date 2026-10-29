@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Klucz ma co najmniej 8 znaków."
-      }
+      },
+      "readOnly": "Widzisz klucze AI obszaru roboczego, ale nie możesz ich dodawać, włączać ani usuwać. Poproś administratora o uprawnienie do zarządzania kluczami AI."
     }
   }
 }

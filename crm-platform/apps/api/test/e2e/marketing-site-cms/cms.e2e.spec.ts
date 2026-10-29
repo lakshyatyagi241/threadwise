@@ -421,7 +421,7 @@ describe('legal pages (TW-CMS-013, 033..036)', () => {
     expect(res.status).toBe(200);
     expect(res.body.data.map((p: { slug: string }) => p.slug)).toEqual([...LEGAL_SLUGS]);
     expect(res.body.data.map((p: { sections: unknown[] }) => p.sections.length)).toEqual([
-      9, 7, 5, 5, 6,
+      9, 8, 5, 5, 6,
     ]);
     expect(res.body.data.every((p: { isPublished: boolean }) => p.isPublished)).toBe(true);
     // Idempotent: a second seed creates nothing and never overwrites an edit.

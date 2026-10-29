@@ -1,3 +1,5 @@
+import { showTransitionLoader } from './transition-loader';
+
 /**
  * Ends the session (the BFF revokes it server-side and clears the cookies),
  * then does a full navigation to the sign-in page so no client cache of the
@@ -6,6 +8,7 @@
  * the operator console's own sign-out route.
  */
 export async function signOut(to = '/login', endpoint = '/api/auth/logout'): Promise<void> {
+  showTransitionLoader();
   try {
     await fetch(endpoint, {
       signal: AbortSignal.timeout(5000),

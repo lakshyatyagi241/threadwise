@@ -1,6 +1,6 @@
 {
   "generatedFrom": "apps/api/src",
-  "queueCount": 51,
+  "queueCount": 52,
   "queues": [
     {
       "queue": "outbox",
@@ -1055,6 +1055,29 @@
       "purpose": "Writes the Meetings row of every existing booking that has a contact and none yet (BL-281). Runs once per worker start; a repeat finds nothing to do."
     },
     {
+      "queue": "owning-team-backfill",
+      "constant": "OWNING_TEAM_BACKFILL",
+      "class": "maintenance",
+      "priority": "P3",
+      "waitSloMsP95": 60000,
+      "workload": "owning-team",
+      "jobKind": "db",
+      "dependency": "postgres",
+      "consumerFiles": [
+        "apps/api/src/modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts"
+      ],
+      "concurrencyPerWorker": 1,
+      "limiter": null,
+      "attempts": 5,
+      "backoff": "exp 2s jitter .5",
+      "inboundProtected": false,
+      "producerFiles": [
+        "apps/api/src/modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts"
+      ],
+      "scheduled": false,
+      "purpose": "Stamps `owning_team_id` (the owner's primary team) on the contacts, companies, deals and tasks that existed before the column did, in small batches (BL-382). Runs once per Redis; a repeat finds nothing to do."
+    },
+    {
       "queue": "calendar-ics-refresh",
       "constant": "CALENDAR_ICS_REFRESH",
       "class": "maintenance",
@@ -1174,6 +1197,11 @@
   ],
   "sweepers": [
     {
+      "file": "apps/api/src/infra/queue/queue-guard.service.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
       "file": "apps/api/src/modules/analytics/rollup/rollup.worker.ts",
       "kind": "Interval",
       "spec": "30_000"
@@ -1232,6 +1260,11 @@
       "file": "apps/api/src/modules/broadcasts/broadcast-due.service.ts",
       "kind": "Interval",
       "spec": "3_000"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/broadcast-orphan-sweeper.service.ts",
+      "kind": "Interval",
+      "spec": "5 * 60_000"
     },
     {
       "file": "apps/api/src/modules/broadcasts/broadcast-resume.service.ts",
@@ -1344,6 +1377,11 @@
       "spec": "'35 3 * * *'"
     },
     {
+      "file": "apps/api/src/modules/crm/contact-assignment/assignment-run-sweep.service.ts",
+      "kind": "Cron",
+      "spec": "'23 3 * * *'"
+    },
+    {
       "file": "apps/api/src/modules/crm/invoicing/invoice-overdue-sweep.service.ts",
       "kind": "Interval",
       "spec": "600_000"
@@ -1389,16 +1427,6 @@
       "spec": "60_000"
     },
     {
-      "file": "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts",
-      "kind": "Interval",
-      "spec": "5000"
-    },
-    {
-      "file": "apps/api/src/modules/faq-knowledge/faq-retention.service.ts",
-      "kind": "Cron",
-      "spec": "'17 3 * * *'"
-    },
-    {
       "file": "apps/api/src/modules/flow-runtime-engine/runtime/flow-run-retention.service.ts",
       "kind": "Cron",
       "spec": "'41 3 * * *'"
@@ -1437,6 +1465,11 @@
       "file": "apps/api/src/modules/growth-pilot/growth-sweeper.ts",
       "kind": "Cron",
       "spec": "'37 2 * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/knowledge-base/kb-embed.worker.ts",
+      "kind": "Interval",
+      "spec": "5000"
     },
     {
       "file": "apps/api/src/modules/lead-scoring/lead-chat-digest.sweeper.ts",
@@ -1534,9 +1567,24 @@
       "spec": "TICK_MS"
     },
     {
+      "file": "apps/api/src/modules/platform-payment-gateways/paygw-worker.module.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/paygw-worker.module.ts",
+      "kind": "Interval",
+      "spec": "TICK_MS"
+    },
+    {
       "file": "apps/api/src/modules/platform-support-desk/support-sla-scan.service.ts",
       "kind": "Cron",
       "spec": "'*/5 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-hold-maintenance.service.ts",
+      "kind": "Cron",
+      "spec": "'* * * * *'"
     },
     {
       "file": "apps/api/src/modules/privacy/requests/privacy-maintenance.service.ts",
@@ -1575,6 +1623,16 @@
     },
     {
       "file": "apps/api/src/modules/team-inbox-conversations/inbox-snooze-wake.service.ts",
+      "kind": "Interval",
+      "spec": "30_000"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/away.consumer.ts",
+      "kind": "Interval",
+      "spec": "60_000"
+    },
+    {
+      "file": "apps/api/src/modules/team-inbox-routing-sla/queue-timers-sweep.service.ts",
       "kind": "Interval",
       "spec": "30_000"
     },
@@ -1637,6 +1695,11 @@
       "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/storage-purge.service.ts",
       "kind": "Cron",
       "spec": "'*/10 * * * *'"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts",
+      "kind": "Cron",
+      "spec": "'23 3 * * *'"
     },
     {
       "file": "apps/api/src/workers/outbox-drain.service.ts",

@@ -63,6 +63,15 @@ describe('card copy', () => {
     expect(en(purposeOf(null))).toBe('Automated WhatsApp journey built in the flow editor.');
   });
 
+  it('a flow that is not WhatsApp does not claim to be a WhatsApp journey', () => {
+    expect(en(purposeOf(null, 'web'))).toBe('Website chat bot built in the flow editor.');
+    expect(en(purposeOf(null, 'call'))).toBe('Automated call built in the flow editor.');
+    expect(en(purposeOf(null, 'instagram'))).toBe(
+      'Automated conversation built in the flow editor.',
+    );
+    expect(en(purposeOf('welcome', 'web'))).toMatch(/new subscribers/);
+  });
+
   it('relative times read like Reference "Edited 5 minutes ago"', () => {
     const now = Date.parse('2026-10-02T12:00:00Z');
     const ago = (ms: number) => new Date(now - ms).toISOString();

@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES } from '@crm/contracts';
+import { getRuntimeMonitor, type Counter } from '@crm/observability';
 import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
 import { BillingModeService } from '../bsp-billing-engine';
 import { AppError } from '../../common/errors/app-error';
@@ -12,10 +13,13 @@ import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
 import { UsageBillingService } from './usage-billing.service';
-import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
-import { cacheMetrics, cacheSize } from '@crm/observability';
-
-const cache = cacheMetrics('wallet_send_ok');
+import {
+  isChargedLaunch,
+  launchVerdict,
+  monthStart,
+  planIsActive,
+  type LaunchFacts,
+} from './wallet-rules';
 
 export interface LaunchRequest {
   orgId: number;
@@ -42,10 +46,15 @@ export interface SendRequest {
   category?: string | null;
 }
 
-/** An `ok` verdict is reused this long: the balance only moves when a delivery settles, so a loop does not re-read it per recipient. */
-const SEND_OK_TTL_MS = 3_000;
+/**
+ * How long a send's hold lasts when its delivery report never comes (a message accepted by the provider and then lost). Reports
+ * normally arrive within minutes; a hold that outlives its delivery only makes the balance look smaller until it lapses.
+ */
+export const WALLET_HOLD_TTL_SECONDS = 10 * 60;
 
 const EMPTY_MESSAGE = 'Your message wallet is empty. Top up to start sending.';
+const INSUFFICIENT_MESSAGE =
+  "Your wallet balance doesn't cover this send. Top up to start sending.";
 
 /**
  * The launch-time wallet precheck for bulk sends (TW-WALLET-013). Because charging happens after delivery, an empty wallet could
@@ -53,14 +62,27 @@ const EMPTY_MESSAGE = 'Your message wallet is empty. Top up to start sending.';
  * create a single row.
  *
  * Kept from Reference: platform-owned workspaces pass; a workspace still inside its plan's free monthly messages passes with an empty
- * wallet; a refusal is written to the workspace's wallet log; a failure to LOOK UP any of this lets the send through (fail open,
- * logged as a warning) because a billing read must never be the reason a legitimate send stops.
+ * wallet; a refusal is written to the workspace's wallet log. A failure to LOOK UP the wallet fails differently by kind: a single send
+ * lets through (fail open, logged) because a billing read must not stop a one-off message; a bulk launch is refused with a retryable
+ * 503, since it would otherwise run unchecked (#1067).
  * Changed: Reference computed an estimate and never compared it (a wallet of 1 credit launched 50,000 recipients). Here the balance
  * must cover `launchCoveragePercent` of the estimated cost (platform setting, default 100; 0 restores "block only when empty").
  */
 @Injectable()
 export class WalletGateService {
   private readonly logger = new Logger(WalletGateService.name);
+  private unchecked?: Counter;
+
+  /** Counts a bulk launch refused because the wallet balance could not be read. Nothing is counted before the monitor starts. */
+  private countUncheckedRefusal(source: string): void {
+    const monitor = getRuntimeMonitor();
+    if (!monitor) return;
+    this.unchecked ??= monitor.metrics.counter(
+      'crm_wallet_launch_unchecked_refusals_total',
+      'Bulk launches refused because the wallet balance could not be read, by source',
+    );
+    this.unchecked.inc(1, { source });
+  }
 
   constructor(
     private readonly db: DatabaseService,
@@ -74,40 +96,65 @@ export class WalletGateService {
     private readonly usage: UsageBillingService,
   ) {}
 
-  private readonly sendOk = new Map<string, number>();
-  private readonly sizeGauge = cacheSize('wallet_send_ok', () => this.sendOk.size);
-
   /**
    * The per-message check of a bulk run, called before EVERY recipient (the launch gate alone lets a long run, or several campaigns
    * started on the same balance, keep sending after the wallet is spent). Same rules as the launch gate for one message: platform
-   * workspaces, a free price and the plan's free allowance pass; otherwise the balance must cover this message's price.
-   * Throws 422 `WALLET_EMPTY`; a failure to look anything up lets the send through, like the launch gate.
+   * workspaces, a free price and the plan's free allowance pass without a hold. On the balance path the message's price is held
+   * (`holdMinor`) before the send is allowed, so concurrent sends queue on the wallet row and cannot all pass one balance (#1066).
+   * Throws 422 `WALLET_EMPTY`; a failure to look anything up, or to take the hold, lets the send through, like the launch gate.
    */
   async assertCanSend(req: SendRequest): Promise<void> {
-    const country = req.to ? countryOfPhone(req.to) : null;
-    const key = `${req.orgId}|${country ?? ''}|${req.category ?? ''}`;
-    const until = this.sendOk.get(key);
-    if (until !== undefined && until > Date.now()) {
-      cache.hit();
+    const launch: LaunchRequest = {
+      orgId: req.orgId,
+      source: req.source,
+      recipients: 1,
+      ...(req.to ? { phones: [req.to] } : {}),
+      category: req.category ?? null,
+      silent: true,
+      freeAllowed: true,
+    };
+    let judged: Awaited<ReturnType<WalletGateService['evaluate']>>;
+    try {
+      judged = await this.evaluate(launch);
+    } catch (err) {
+      this.logger.warn(
+        { err, orgId: req.orgId },
+        '[WALLET] send precheck failed, the send is allowed',
+      );
       return;
     }
-    cache.miss();
+    if (!judged) return;
+    if (!judged.verdict.ok) this.refuse(judged.verdict.reason, judged);
+    if (!judged.charged || judged.estimateMinor === null || judged.estimateMinor <= 0) return;
+
+    const estimateMinor = judged.estimateMinor;
+    let held: number | null;
     try {
-      await this.assertCanLaunch({
-        orgId: req.orgId,
-        source: req.source,
-        recipients: 1,
-        ...(req.to ? { phones: [req.to] } : {}),
-        category: req.category ?? null,
-        silent: true,
-        freeAllowed: true,
-      });
+      held = await this.db.retry.txAs({ orgId: req.orgId, userId: null }, (tx) =>
+        this.repo.holdMinor(tx, req.orgId, judged.currency, estimateMinor, WALLET_HOLD_TTL_SECONDS),
+      );
     } catch (err) {
-      this.sendOk.delete(key);
-      throw err;
+      this.logger.warn({ err, orgId: req.orgId }, '[WALLET] send hold failed, the send is allowed');
+      return;
     }
-    this.sendOk.set(key, Date.now() + SEND_OK_TTL_MS);
-    if (this.sendOk.size > 500) this.sendOk.clear();
+    if (held === null) this.refuse('insufficient', judged);
+  }
+
+  /** Throws 422 `WALLET_EMPTY` for a refused send, with the shortfall in `details`. */
+  private refuse(
+    reason: 'empty' | 'insufficient',
+    judged: { balanceMinor: number; estimateMinor: number | null },
+  ): never {
+    throw new AppError(
+      ERROR_CODES.WALLET_EMPTY,
+      reason === 'empty' ? EMPTY_MESSAGE : INSUFFICIENT_MESSAGE,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [
+        { path: 'reason', message: reason },
+        { path: 'balanceMinor', message: String(judged.balanceMinor) },
+        { path: 'estimateMinor', message: String(judged.estimateMinor ?? 0) },
+      ],
+    );
   }
 
   /** Throws 422 `WALLET_EMPTY` (with the shortfall in `details`) when the launch must not start; resolves otherwise. */
@@ -120,18 +167,23 @@ export class WalletGateService {
       if (!judged) return;
       ({ verdict, balanceMinor, estimateMinor } = judged);
     } catch (err) {
+      // A bulk launch must not go ahead unchecked (owner decision, #1067): the caller gets a retryable 503 and tries again.
       this.logger.warn(
         { err, orgId: req.orgId },
-        '[WALLET] launch precheck failed, the send is allowed',
+        '[WALLET] launch precheck failed, the launch is refused',
       );
-      return;
+      this.countUncheckedRefusal(req.source);
+      throw new AppError(
+        ERROR_CODES.SERVICE_UNAVAILABLE,
+        'Your wallet could not be checked just now. Try again in a moment.',
+        HttpStatus.SERVICE_UNAVAILABLE,
+        undefined,
+        true,
+      );
     }
     if (verdict.ok) return;
 
-    const message =
-      verdict.reason === 'empty'
-        ? EMPTY_MESSAGE
-        : "Your wallet balance doesn't cover this send. Top up to start sending.";
+    const message = verdict.reason === 'empty' ? EMPTY_MESSAGE : INSUFFICIENT_MESSAGE;
     if (!req.silent)
       await this.db
         .txAs({ orgId: req.orgId, userId: null }, (tx) =>
@@ -184,6 +236,8 @@ export class WalletGateService {
     balanceMinor: number;
     estimateMinor: number | null;
     currency: string;
+    /** Whether the send is paid from the wallet (a hold is needed) rather than passing free. */
+    charged: boolean;
   } | null> {
     const entitlements = await this.plans.forOrg(req.orgId);
     if (!entitlements) return null;
@@ -242,7 +296,7 @@ export class WalletGateService {
       }
     }
 
-    const verdict = launchVerdict({
+    const launchFacts: LaunchFacts = {
       platformOwned: entitlements.platformOwned,
       payPerMessage: facts.payPerMessage,
       planActive: planIsActive(entitlements, now),
@@ -253,8 +307,14 @@ export class WalletGateService {
       estimateMinor,
       coveragePercent: s.launchCoveragePercent,
       freeAllowed: req.freeAllowed === true,
-    });
-    return { verdict, balanceMinor, estimateMinor, currency: facts.currency };
+    };
+    return {
+      verdict: launchVerdict(launchFacts),
+      balanceMinor,
+      estimateMinor,
+      currency: facts.currency,
+      charged: isChargedLaunch(launchFacts),
+    };
   }
 
   /**

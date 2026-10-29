@@ -1037,6 +1037,24 @@ export async function cutover(o: CutoverOptions): Promise<number> {
         });
         say(`  DONE  3 connected ${tail(n.ext)}: connection and channel`);
       }
+      // the app lists and sends a template only from the number it belongs to (wa_templates.provider_config_id). The load leaves it NULL
+      // because no number is connected then. Only a single connected number can take them: with several, the templates' own number is
+      // not known from the dump, so they stay unlinked and the owner links them.
+      const withCfg = numbers.filter((n) => n.cfg);
+      if (withCfg.length === 1) {
+        const only = withCfg[0]!;
+        const cfgId = only.cfg!.id;
+        await withTenant(worker.db, { orgId }, (tx) =>
+          tx.execute(
+            sql`UPDATE wa_templates SET provider_config_id = ${cfgId} WHERE org_id = ${orgId} AND provider_config_id IS NULL`,
+          ),
+        );
+        say(`  DONE  3 templates linked to the connected number ${tail(only.ext)}`);
+      } else if (withCfg.length > 1) {
+        say(
+          `  NOTE  3 templates left unlinked: ${withCfg.length} numbers are connected, the templates' own number is not in the dump`,
+        );
+      }
       await logStep(worker.db, o.client, 'mark_connected', 'done', { numbers: numbers.length });
       // 4. flows, LAST (flow-state refuses while a channel is connected unless told it is the cutover)
       await flowState({

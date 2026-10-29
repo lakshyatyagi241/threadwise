@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wordt weer open {time}",
       "erased": "Gewiste contacten",
-      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon en zonder berichttekst. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
+      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
       "erasedTitle": "Gewist contact"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Afkomstig van een advertentie of link",
       "sentIn": "Verzonden in {lang}. Toon de tekst die je schreef",
       "translatedFrom": "Vertaald uit {lang}. Toon het origineel",
+      "translationFailed": "Verzonden zonder vertaling. De vertaling is mislukt, dus je tekst is verstuurd zoals je hem typte.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reactie {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Opgelost",
           "closed": "Gesloten",
           "spam": "Spam"
-        }
+        },
+        "created": "Begonnen op {date}",
+        "showMore": "Toon er {count} meer",
+        "showLess": "Toon minder"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Onofficieel",
       "officialFull": "Officieel (WhatsApp Cloud API)",
       "unofficialFull": "Onofficieel (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Eerdere threads",
+      "began": "Begonnen op {date}",
+      "showMore": "Toon er {count} meer",
+      "showLess": "Toon minder",
+      "loading": "Laden…",
+      "failed": "Deze thread kon niet worden geladen.",
+      "unknown": "Onbekende afzender",
+      "openThread": "Thread openen"
     }
   }
 }

@@ -228,3 +228,23 @@ describe('secret-looking names', () => {
     expect(apiLibraryIsSensitiveName(n)).toBe(false),
   );
 });
+
+describe('a payload with a value written without quotes', () => {
+  it('passes the save rules when its variable is declared, and fails when it is not', () => {
+    const def = (variables: Array<{ name: string; defaultValue: string }>) =>
+      createApiLibraryApiSchema.safeParse({
+        name: 'Orders',
+        method: 'POST',
+        url: 'https://api.example.com/orders',
+        payloadType: 'application/json',
+        variables: variables.map((v) => ({ ...v, source: 'contact' })),
+        headers: [],
+        body: { price: '\u0001{{price}}' },
+        functionCode: null,
+        mapping: [],
+        responseVariables: [],
+      });
+    expect(def([{ name: 'price', defaultValue: '19.99' }]).success).toBe(true);
+    expect(def([]).success).toBe(false);
+  });
+});

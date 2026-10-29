@@ -10,7 +10,7 @@ import { pageResponseSchema } from '../common/pagination';
 
 export const listStoreGroupsQuerySchema = z.object({
   q: z.string().trim().max(120).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(30),
+  limit: z.coerce.number().int().min(1).max(100).prefault(30),
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListStoreGroupsQuery = z.infer<typeof listStoreGroupsQuerySchema>;
@@ -20,11 +20,11 @@ export const storeGroupSchema = z.object({
   /** The WhatsApp group id (`...@g.us`). */
   jid: z.string(),
   subject: z.string().nullable(),
-  size: z.number().int(),
+  size: z.int(),
   devicePhone: z.string().nullable(),
   groupCode: z.string().nullable(),
-  syncedAt: z.string().datetime().nullable(),
-  rowVersion: z.number().int(),
+  syncedAt: z.iso.datetime().nullable(),
+  rowVersion: z.int(),
 });
 export type StoreGroup = z.infer<typeof storeGroupSchema>;
 
@@ -33,8 +33,8 @@ export type StoreGroupListResponse = z.infer<typeof storeGroupListResponseSchema
 
 /** The cards above the table: groups, how many have a code, and the number the wa.me ordering link points at. */
 export const storeGroupSummarySchema = z.object({
-  total: z.number().int(),
-  coded: z.number().int(),
+  total: z.int(),
+  coded: z.int(),
   /** Digits of the first device of the workspace; null when there is none. */
   botNumber: z.string().nullable(),
 });
@@ -48,6 +48,6 @@ export const setStoreGroupCodeSchema = z.object({
     .max(48)
     .regex(/^[A-Za-z0-9._-]*$/, 'Letters, numbers, dots, dashes and underscores only')
     .nullish(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type SetStoreGroupCodeInput = z.infer<typeof setStoreGroupCodeSchema>;

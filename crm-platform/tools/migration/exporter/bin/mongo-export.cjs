@@ -12,7 +12,7 @@
  *
  *   --limit N               smoke export of N documents (recorded; a later full export re-exports)
  *   --force                 re-export even when the file and its record already match
- *   --tolerance N           accept a source count up to N documents above the exported number (a live collection moves)
+ *   --tolerance N           accept a source count up to N documents away from the exported number, either way (a live collection moves between the count and the read)
  *   --max-gb G              stop (exit 5) when one collection passes G gigabytes
  *   --no-manifest           do not write manifest.json
  *   --remote-dir D          --to-ssh only; must be /opt/desk/migration/dumps or a folder below it
@@ -524,7 +524,9 @@ async function exportCollection(cfg, sink, name, o) {
 
   if (st.count !== null && !limit) {
     if (st.count !== st.docs) {
-      if (st.count - st.docs >= 0 && st.count - st.docs <= o.tolerance) console.log(`${name}: count ${st.docs} vs source ${st.count}: within tolerance (${o.tolerance})`);
+      // the count is taken before the read: documents written in between show up as more exported than counted, and deleted ones as fewer.
+      // The stream itself was checked above (its end marker matches every document), so only the drift is in question.
+      if (Math.abs(st.count - st.docs) <= o.tolerance) console.log(`${name}: count ${st.docs} vs source ${st.count}: within tolerance (${o.tolerance})`);
       else {
         await out.abort();
         console.log(`${name}: COUNT MISMATCH: wrote ${st.docs}, source countDocuments() says ${st.count}`);

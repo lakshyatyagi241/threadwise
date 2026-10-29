@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Revient {time}",
       "erased": "Contacts effacés",
-      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles ni le texte des messages. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
+      "erasedHint": "Ces contacts ont été effacés ; leurs conversations ont été conservées sans leurs informations personnelles. Les heures indiquent le dernier message, car la date d'effacement n'est pas enregistrée.",
       "erasedTitle": "Contact effacé"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Provient d’une publicité ou d’un lien",
       "sentIn": "Envoyé en {lang}. Afficher le texte que vous avez rédigé",
       "translatedFrom": "Traduit depuis {lang}. Afficher l’original",
+      "translationFailed": "Envoyé sans traduction. La traduction a échoué, votre texte a donc été envoyé tel que vous l'avez écrit.",
       "bot": "Bot",
       "broadcast": "Diffusion",
       "reacted": "Réaction {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Résolue",
           "closed": "Fermée",
           "spam": "Spam"
-        }
+        },
+        "created": "Commencée le {date}",
+        "showMore": "Afficher {count} de plus",
+        "showLess": "Afficher moins"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Non officiel",
       "officialFull": "Officiel (API WhatsApp Cloud)",
       "unofficialFull": "Non officiel (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Fils précédents",
+      "began": "Commencé le {date}",
+      "showMore": "Afficher {count} de plus",
+      "showLess": "Afficher moins",
+      "loading": "Chargement…",
+      "failed": "Impossible de charger ce fil.",
+      "unknown": "Expéditeur inconnu",
+      "openThread": "Ouvrir le fil"
     }
   }
 }

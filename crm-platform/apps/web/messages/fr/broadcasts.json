@@ -158,7 +158,11 @@
       "contactsDenied": "Vous n’avez pas accès à la liste de contacts. Choisissez des contacts via des groupes ou des étiquettes.",
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "colEmail": "E-mail",
-      "noEmail": "Aucune adresse e-mail"
+      "noEmail": "Aucune adresse e-mail",
+      "contactsHeading": "Contacts",
+      "matchTitle": "Correspondre aux groupes, étiquettes et segments choisis",
+      "matchAny": "L'un d'eux",
+      "matchAll": "Tous"
     },
     "overrides": {
       "title": "Renseigner cet envoi",

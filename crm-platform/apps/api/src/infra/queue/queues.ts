@@ -164,6 +164,17 @@ const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
   [QUEUES.WEBHOOK_INGEST]: INBOUND_RETRY,
 };
 
+/**
+ * How many entries of each queue's BullMQ event stream (`bull:<queue>:events`) are kept. BullMQ writes about four entries per job (added,
+ * waiting, active, completed) into a stream that is trimmed at 10,000 by default, and only a `QueueEvents` reader consumes it: nothing in
+ * this code base does (the metrics come from the worker's own events and `crm_queue_job_duration_seconds`). A busy queue held about 0.55 MB
+ * of it for nothing, 28 MB over the 51 queues of a 192 MB Redis. 100 keeps the last few jobs readable by hand. Every process that builds a
+ * `Queue` for a name must pass the same value, because the queue constructor writes it back to the queue's meta (a `Queue` without the
+ * option puts 10,000 back): there is one registration site, `queue.module.ts`.
+ */
+export const QUEUE_EVENTS_MAX_LEN = 100;
+export const QUEUE_STREAMS = { events: { maxLen: QUEUE_EVENTS_MAX_LEN } } as const;
+
 /** The default job options of one queue. A queue-level setting replaces the module-level one whole, so this spreads the defaults. */
 export function jobOptionsFor(queue: QueueName): JobsOptions {
   return { ...DEFAULT_JOB_OPTIONS, ...QUEUE_JOB_OPTIONS[queue] };

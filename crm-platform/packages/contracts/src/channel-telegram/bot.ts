@@ -36,15 +36,15 @@ export const botResponseSchema = z.object({
   username: z.string().nullable(),
   name: z.string().nullable(),
   active: z.boolean(),
-  connectedAt: z.string().datetime().nullable(),
-  lastInboundAt: z.string().datetime().nullable(),
+  connectedAt: z.iso.datetime().nullable(),
+  lastInboundAt: z.iso.datetime().nullable(),
   /** Why the webhook or the last send failed; null when healthy. */
   lastError: z.string().nullable(),
   hasPaymentToken: z.boolean(),
   paymentProvider: z.string().nullable(),
   /** The address Telegram pushes to for this bot (always https). */
   webhookUrl: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type BotResponse = z.infer<typeof botResponseSchema>;
 

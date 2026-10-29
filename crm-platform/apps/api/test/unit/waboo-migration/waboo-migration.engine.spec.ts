@@ -6,6 +6,7 @@ import {
   createWabooMigrationRunSchema,
   deriveClientKey,
   verdictOf,
+  type WabooMigrationStep,
 } from '@crm/contracts';
 import type { Runner, RunOutcome } from '../../../src/modules/waboo-migration/runner';
 import {
@@ -32,6 +33,7 @@ import {
   type BatchStatus,
   type LatestDry,
   type RunMode,
+  type StepEvent,
 } from '../../../src/modules/waboo-migration/waboo-migration.rules';
 
 const NOW = new Date('2026-10-13T12:00:00Z');
@@ -525,6 +527,178 @@ describe('recovery sweep on worker start', () => {
     expect((await recover(d, delayFor)).requeued).toBe(1);
     expect((await recover(d, delayFor)).requeued).toBe(0);
     expect(s.added).toHaveLength(1);
+  });
+});
+
+describe('resuming a remote run after a worker restart', () => {
+  const T0 = new Date('2026-10-13T11:00:00Z');
+  const T1 = new Date('2026-10-13T11:20:00Z');
+  const savedSteps: WabooMigrationStep[] = [
+    {
+      name: 'export',
+      status: 'done',
+      startedAt: T0.toISOString(),
+      finishedAt: T1.toISOString(),
+      counts: { documents: 40 },
+      message: null,
+    },
+    {
+      name: 'preflight',
+      status: 'running',
+      startedAt: T1.toISOString(),
+      finishedAt: null,
+      counts: {},
+      message: null,
+    },
+  ];
+  const step = (name: string, status: StepEvent['status'], counts = {}): StepEvent => ({
+    event: 'step',
+    name,
+    status,
+    counts,
+    message: null,
+  });
+  const okReport = {
+    event: 'report' as const,
+    green: true,
+    unaccounted: 0,
+    integrityErrors: 0,
+    alarms: 0,
+    orgId: null,
+    summary: '',
+  };
+  /** a run that is already 'running' in the store, its saved steps, and a runner that replays `events` then completes */
+  function resumeWorld(events: StepEvent[], steps: WabooMigrationStep[]) {
+    let status = 'running';
+    let begun = 0;
+    const saved: WabooMigrationStep[][] = [];
+    const finished: Finish[] = [];
+    const store: ExecStore = {
+      peek: async () => ({
+        id: 1,
+        uuid: 'r1',
+        sourceClient: 'acme',
+        sourceDb: 'acme',
+        mode: 'dry',
+        skipWhatsapp: false,
+        status,
+        steps,
+      }),
+      latestDry: async () => null,
+      block: async () => undefined,
+      begin: async () => {
+        begun++;
+        return null;
+      },
+      saveSteps: async (_id, s) => {
+        saved.push(s);
+      },
+      finish: async (_id, f) => {
+        finished.push(f);
+        status = f.status;
+      },
+    };
+    const runner: Runner = {
+      async run(_args, onEvent): Promise<RunOutcome> {
+        for (const ev of events) await onEvent(ev);
+        return { exitCode: 0, timedOut: false, stderrTail: '', report: okReport };
+      },
+    };
+    return { store, runner, saved, finished, begun: () => begun };
+  }
+
+  it('follows the run again: the replayed steps the store already has keep their first times, and the run completes', async () => {
+    const w = resumeWorld(
+      [
+        step('export', 'done', { documents: 40 }), // replayed: the store already has it
+        step('preflight', 'running'), // replayed: the store already has it
+        step('preflight', 'done'), // new: applied at the resume time
+      ],
+      savedSteps,
+    );
+    const out = await executeRun(
+      { store: w.store, runner: w.runner, timeoutMin: 90, now: () => NOW, resume: true },
+      'r1',
+    );
+    expect(out).toBe('completed');
+    expect(w.begun()).toBe(0);
+    const last = w.saved.at(-1)!;
+    expect(last).toHaveLength(2);
+    expect(last.find((s) => s.name === 'export')).toEqual(savedSteps[0]);
+    expect(last.find((s) => s.name === 'preflight')).toMatchObject({
+      status: 'done',
+      startedAt: T1.toISOString(),
+      finishedAt: NOW.toISOString(),
+    });
+  });
+
+  it('a run that no longer exists is skipped, resume or not', async () => {
+    const w = resumeWorld([], []);
+    const store: ExecStore = { ...w.store, peek: async () => null };
+    expect(await executeRun({ store, runner: w.runner, timeoutMin: 90, resume: true }, 'r1')).toBe(
+      'skipped',
+    );
+  });
+
+  it('the local runner never resumes a running run (its pipeline died with the worker)', async () => {
+    const w = resumeWorld([step('export', 'done', { documents: 40 })], savedSteps);
+    expect(
+      await executeRun({ store: w.store, runner: w.runner, timeoutMin: 90, now: () => NOW }, 'r1'),
+    ).toBe('skipped');
+    expect(w.finished).toHaveLength(0);
+    expect(w.saved).toHaveLength(0);
+  });
+
+  it('the sweep keeps a remote run an agent still follows and re-enqueues it, instead of failing it', async () => {
+    const seenKeep: string[][] = [];
+    const added: Array<{ kind: string; uuid: string; delay: number }> = [];
+    const store: SweepStore = {
+      resumableRemote: async () => ['r1'],
+      failStale: async (_t, keep) => {
+        seenKeep.push(keep);
+        return 0;
+      },
+      failOrphanedRemote: async (keep) => {
+        seenKeep.push(keep);
+        return 1;
+      },
+      pendingRuns: async () => [],
+      pendingBatches: async () => [],
+    };
+    const jobs: JobEnqueuer = {
+      ensure: async (kind, uuid, delay) => {
+        added.push({ kind, uuid, delay });
+        return true;
+      },
+    };
+    const out = await recover(
+      { store, jobs, now: () => NOW, timeoutMs: 1, remote: true },
+      delayFor,
+    );
+    expect(seenKeep).toEqual([['r1'], ['r1']]);
+    expect(out).toEqual({ failed: 1, requeued: 1 });
+    expect(added).toEqual([{ kind: 'migrate', uuid: 'r1', delay: 0 }]);
+  });
+
+  it('a local runner never asks the store for followed runs: the sweep is as before', async () => {
+    let asked = false;
+    const seenKeep: string[][] = [];
+    const store: SweepStore = {
+      resumableRemote: async () => {
+        asked = true;
+        return ['r1'];
+      },
+      failStale: async (_t, keep) => {
+        seenKeep.push(keep);
+        return 0;
+      },
+      pendingRuns: async () => [],
+      pendingBatches: async () => [],
+    };
+    const jobs: JobEnqueuer = { ensure: async () => false };
+    await recover({ store, jobs, now: () => NOW, timeoutMs: 1, remote: false }, delayFor);
+    expect(asked).toBe(false);
+    expect(seenKeep).toEqual([[]]);
   });
 });
 

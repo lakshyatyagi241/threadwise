@@ -13,6 +13,9 @@ const LIFECYCLE_FIELDS = {
   modified_time: 'col:updated_at',
   is_deleted: 'drop:soft-delete flag; deleted rows are excluded and counted',
   deleted_time: 'drop:soft-delete timestamp (empty string on live rows)',
+  created_by:
+    'drop:the Waboo user who made the stage or status; status_options has no creator column',
+  updated_by: 'drop:the Waboo user who last changed it; status_options has no editor column',
   position: 'col:position',
   label: 'col:label (and the value, slugified)',
   name: 'col:label fallback',
@@ -153,9 +156,15 @@ export const groups: HandlerSpec = {
   update: {},
   tables: {
     contact_groups: {
-      columns: [c('name', 'text'), c('note', 'text'), c('color', 'text'), ...TS_COLS],
+      columns: [
+        c('name', 'text'),
+        c('note', 'text'),
+        c('color', 'text'),
+        c('created_by', 'bigint'),
+        ...TS_COLS,
+      ],
       fp: ['name'],
-      constants: { created_by: null, row_version: 1 },
+      constants: { row_version: 1 },
     },
   },
   fields: {
@@ -166,8 +175,11 @@ export const groups: HandlerSpec = {
     modified_time: 'col:updated_at',
     deleted_time: 'drop:soft-delete timestamp; deleted lists are excluded and counted',
     is_deleted: 'drop:soft-delete flag',
-    created_by: 'drop:a Waboo user; contact_groups.created_by is a users FK (users are phase 2)',
-    user_id: 'drop:a Waboo user; contact_groups.created_by is a users FK (users are phase 2)',
+    // Waboo writes the creator's DISPLAY NAME into created_by ("AHMAD SHAIKH") and the creator's id into user_id, so the id is read from user_id
+    // (created_by is only tried as an id for a list some other tool wrote)
+    created_by:
+      "col:created_by (the migrated creator: from user_id; created_by itself is the creator's display name)",
+    user_id: "col:created_by (the migrated creator's id; created_by in Waboo is the display name)",
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
     if (isDeleted(doc))
@@ -180,6 +192,16 @@ export const groups: HandlerSpec = {
         reason: 'list name is empty or longer than 191 characters',
       };
     const t = times(doc, ctx.fallbackAt);
+    // the creator is a migrated user when the Waboo id resolves; otherwise NULL (the list stays, the creator is not shown).
+    // Waboo keeps the id in user_id and the creator's display name in created_by (MarketingList/List.py add_marketing_list), so
+    // user_id is tried first; a created_by that is itself an id of a migrated user is the fallback.
+    const creator =
+      (doc.user_id !== undefined && doc.user_id !== null
+        ? ctx.ref('user', doc.user_id)
+        : undefined) ??
+      (doc.created_by !== undefined && doc.created_by !== null
+        ? ctx.ref('user', doc.created_by)
+        : undefined);
     return {
       kind: 'rows',
       soft: t.soft,
@@ -187,7 +209,14 @@ export const groups: HandlerSpec = {
         {
           table: 'contact_groups',
           sub: '',
-          row: { name, note: null, color: null, created_at: t.created, updated_at: t.updated },
+          row: {
+            name,
+            note: null,
+            color: null,
+            created_by: creator?.id ?? null,
+            created_at: t.created,
+            updated_at: t.updated,
+          },
         },
       ],
     };

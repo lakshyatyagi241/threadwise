@@ -79,6 +79,7 @@ const past = {
   preview: 'Thanks, the refund came through',
   status: 'resolved' as const,
   lastMessageAt: '2026-09-20T09:30:00.000Z',
+  createdAt: '2026-09-20T09:00:00.000Z',
 };
 const note = (
   id: string,

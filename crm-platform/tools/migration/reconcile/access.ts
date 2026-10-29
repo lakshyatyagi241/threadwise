@@ -291,11 +291,20 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   const additionalIds = new Set(
     userRows.filter((t) => isAdditional(t.email)).map((t) => Number(t.id)),
   );
+  // the Waboo admins are Owners by the owner's decision of 2026-10-21 (transform/users.ts ADMIN_IS_OWNER): not an unexplained holder
+  const adminDecisionIds = new Set(
+    [...oracle.users.values()]
+      .filter((u) => u.role.kind === 'preset' && u.role.preset === 'admin')
+      .map((u) => userByUuid.get(u.uuid)?.id)
+      .filter((id): id is string | number => id !== undefined)
+      .map((id) => Number(id)),
+  );
   const holders = userRoleRows.filter(
     (r) =>
       ownerRole &&
       Number(r.role_id) === Number(ownerRole.id) &&
-      !additionalIds.has(Number(r.user_id)),
+      !additionalIds.has(Number(r.user_id)) &&
+      !adminDecisionIds.has(Number(r.user_id)),
   );
   const ownerRow = ownerUuid ? userByUuid.get(ownerUuid) : undefined;
   if (a.access.ownerEmail) {

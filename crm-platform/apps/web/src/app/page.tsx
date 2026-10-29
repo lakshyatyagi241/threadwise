@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { loadSiteContent } from '@/features/marketing-site-cms/public/load';
-import { pageMetadata } from '@/features/marketing-site-cms/site/page-meta';
-import { SiteFrame } from '@/features/marketing-site-cms/site/site-frame';
-import { SitePage } from '@/features/marketing-site-cms/site/site-page';
+import { GetaFrame } from '@/features/marketing-site-cms/geta/frame';
+import { pageMeta } from '@/features/marketing-site-cms/geta/seo';
+import { HomePage } from '@/features/marketing-site-cms/geta/pages/home';
 import {
   ShopHome,
   pageParam,
@@ -36,7 +36,14 @@ async function shopForRequestHost(): Promise<string | null> {
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const slug = await shopForRequestHost();
-  return slug ? shopHomeMetadata(slug, pageParam((await searchParams).page)) : pageMetadata('home');
+  return slug
+    ? shopHomeMetadata(slug, pageParam((await searchParams).page))
+    : pageMeta({
+        path: '/',
+        title: 'Geta.ai: one platform for leads, chats and follow-ups',
+        description:
+          'Capture leads, reply on WhatsApp, web, Instagram and email, and follow up from one place. Automation and AI where they help. Turn on only what you need.',
+      });
 }
 
 /**
@@ -55,8 +62,8 @@ export default async function Home({ searchParams }: Props) {
   const content = await loadSiteContent();
   if (!content.homepageEnabled) redirect('/login');
   return (
-    <SiteFrame content={content} current="/">
-      <SitePage page="home" content={content} />
-    </SiteFrame>
+    <GetaFrame>
+      <HomePage />
+    </GetaFrame>
   );
 }

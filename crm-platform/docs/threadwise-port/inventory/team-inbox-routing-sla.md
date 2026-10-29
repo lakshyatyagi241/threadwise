@@ -895,6 +895,7 @@ Connections: **TIB1** (conversation columns, queue poll host, kanban, bulk toolb
 - **Priority:** P1
 - **Effort:** S
 - **Depends on:** TW-TIB2-028
+- **Port status (breach notification):** wired. `SlaNotificationConsumer` (`apps/api/src/modules/notifications/sla-notification.consumer.ts`) subscribes to the outbox event `conversation.sla_breached` that the SLA sweep emits (`team-inbox-routing-sla/sla-sweep.service.ts`) and writes one bell row per responsible person. The consumer is registered in `notifications-worker.module.ts`. The `Status` above records the Reference app, which is removed; the realtime message is not covered by this note.
 - **Summary:** Reference contains an SLA-breach notification method, a broadcast event and a notification preference for it, but nothing calls or dispatches them; breaches are silent apart from the flag and timeline entry.
 - **Actors & access:** none (unreachable).
 - **UX & screens:** the workspace notification preferences list "SLA breached" with in-app, email and Slack defaulted on (NOTIF domain), yet no such notification is ever created.

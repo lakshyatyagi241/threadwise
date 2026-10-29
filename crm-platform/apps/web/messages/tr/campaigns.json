@@ -17,18 +17,19 @@
       "refresh": "Yenile",
       "newCampaign": "Yeni kampanya",
       "tile": {
-        "sent": "Gönderildi",
+        "sent": "Gönderilen mesajlar",
         "delivered": "İletildi",
         "read": "Okundu",
-        "failed": "Başarısız",
-        "processing": "İşleniyor",
-        "campaigns": "{count} kampanya",
+        "failed": "Başarısız mesajlar",
+        "processing": "Gönderimdeki kampanyalar",
+        "campaigns": "{count, plural, one {# kampanyadan} other {# kampanyadan}}",
         "inFlight": "yolda",
         "awaiting": "bekliyor",
-        "queued": "{count} kuyrukta",
+        "queued": "{count} başlamak üzere planlandı",
         "deliveredRate": "{rate}% iletim",
         "readRate": "{rate}% okunma oranı",
-        "failedCampaigns": "{count} başarısız kampanya"
+        "failedCampaigns": "{count, plural, one {# kampanya} other {# kampanya}} başarısız işaretlendi",
+        "note": "Gönderilen, Teslim edilen, Okunan ve Başarısız mesajları sayar; başarısız bir mesaj Gönderilen'e dahil edilmez. Her sayının altındaki küçük satır kampanyaları sayar. Hepsi aşağıda seçilen tarih aralığına uyar: {range}."
       },
       "range": {
         "all": "Tüm zamanlar",
@@ -174,7 +175,8 @@
         "status": "Durum",
         "schedule": "Zamanlama",
         "actions": "İşlemler"
-      }
+      },
+      "newCampaignAny": "Yeni kampanya"
     },
     "builder": {
       "loadError": "Bu kampanya yüklenemedi.",
@@ -314,7 +316,22 @@
         "previousTitle": "Önceki gönderimler",
         "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri ekleyin; isterseniz yalnızca okuyan, yanıtlayan veya tıklayanları seçin.",
         "previousEstimate": "{count, plural, one {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).} other {Önceki gönderimlerden en fazla # kişi (tahmindir: iki gönderimde yer alan biri iki kez sayılır).}}",
-        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin."
+        "previousEditHint": "Düzenlerken önceki gönderim seçiminiz gösterilmez: bu kampanya alıcılarını zaten kişi olarak tutuyor. Daha fazla kişi eklemek için yeniden seçin.",
+        "emails": "Elle e-postalar",
+        "emailsHint": "Her satıra bir tane, ya da virgül veya noktalı virgülle ayırın.",
+        "emailsPlaceholder": "Her satıra bir e-posta adresi",
+        "emailsCount": "{count} adres",
+        "emailCsvHint": "Sütunlar: ad, e-posta. Diğer her sütun, mesajda kullanabileceğiniz bir değişkene dönüşür.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV yükle",
+            "hint": "Bu kampanya için e-posta adreslerini içe aktarın."
+          },
+          "manual": {
+            "title": "Elle e-postalar",
+            "hint": "Her satıra bir e-posta adresi yapıştırın."
+          }
+        }
       },
       "message": {
         "title": "Mesaj",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
+      "draftSavedChip": "Taslak · kaydedildi",
       "steps": {
         "label": "Kampanya adımları",
         "required": "zorunlu",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Şablon",
         "pickTemplate": "— Şablon seçin —",
+        "searchTemplates": "Şablonları ada veya dile göre ara",
+        "noTemplateMatch": "Aramanızla eşleşen şablon yok.",
         "templateHint": "Yalnızca seçilen numaranın onaylı şablonları. Değişkenleri aşağıda doldurulur.",
         "noTemplates": "Bu numaranın henüz onaylı şablonu yok. Bir şablon oluşturun ve onaylanmasını bekleyin.",
         "deliveryTitle": "Gönderim",
@@ -725,7 +745,11 @@
         "balanceShort": "Bakiye yeterli değil: {shortfall} daha gerekiyor.",
         "balanceLowFull": "Bakiye, {full} tutarındaki tam maliyetin altında: planınız şimdilik karşılıyor, ancak plan bittiğinde karşılamayacak.",
         "chargedNowLabel": "Şimdi cüzdanınızdan tahsil edilen"
-      }
+      },
+      "kickerEmail": "E-posta kampanyaları / Yeni",
+      "kickerEditEmail": "E-posta kampanyaları / Düzenle",
+      "titleEmail": "Yeni e-posta oluştur",
+      "titleEditEmail": "E-postanı düzenle"
     },
     "detail": {
       "notFound": "Bu kampanya bulunamadı.",
@@ -1126,7 +1150,8 @@
         "saved": "Taslak kaydedildi",
         "saving": "Kaydediliyor...",
         "failed": "Kaydedilemedi",
-        "retry": "Yeniden dene"
+        "retry": "Yeniden dene",
+        "nameTaken": "Aynı ada sahip bir kampanya zaten var"
       },
       "errors": {
         "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Gönderilecek numaraları işaretleyin ve her birine bir pay verin. Kitle bu paylara göre bölünür ve her kişiye mesaj yalnızca tek bir numaradan gönderilir. Boş veya 0 olan pay 1 sayılır.",
         "shareWeight": "Pay",
         "shareWeightLabel": "{name} payı",
-        "shareKeepOne": "En az bir numara işaretli kalmalı."
+        "shareKeepOne": "En az bir numara işaretli kalmalı.",
+        "nameTaken": "Aynı ada sahip bir kampanya zaten var"
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Dosyadaki geçerli numaraların önizlemesi",
         "csvLine": "Satır",
         "csvName": "Ad",
-        "csvStatus": "Durum",
         "csvRow": {
           "new": "Yeni kişi",
           "existing": "Mevcut kişi",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Önceki gönderimlere gönder",
         "previousHint": "Önceki toplu mesaj ve kampanyaların gönderildiği kişileri yeniden hedefleyin; isterseniz yalnızca okuyan, okumayan, yanıtlayan veya tıklayanları seçin.",
         "chipPrevious": "{count, plural, one {# önceki gönderim} other {# önceki gönderim}} ({outcome})",
-        "filterNoConditions": "Kaç kişinin eşleştiğini görmek için bir koşul ekleyin."
+        "filterNoConditions": "Kaç kişinin eşleştiğini görmek için bir koşul ekleyin.",
+        "csvConsentCol": "Onay",
+        "csvContactCol": "Kişi",
+        "csvConsent": {
+          "optedIn": "Abone",
+          "optedOut": "Abonelikten çıktı"
+        },
+        "clearAudience": "Kitleyi temizle"
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",
@@ -1597,7 +1629,7 @@
         "retries": "Yeniden denemeler",
         "retriesOn": "Açık, {date} tarihine kadar",
         "retriesOff": "Kapalı",
-        "recurringNote": "Her çalıştırma o andaki kitleye gider, bu yüzden alıcı sayısı değişebilir."
+        "recurringNote": "Şimdi hiçbir şey gönderilmez. İlk çalıştırma yukarıdaki saatte başlar ve ardından her çalıştırma Geçmiş'te kendi satırı olarak görünür. O zamana kadar bu kampanyayı Yinelenenler'de bulabilirsiniz. Her çalıştırma, o andaki hedef kitleye gider; bu yüzden alıcı sayısı değişebilir."
       },
       "status": {
         "back": "Kampanyalara dön",
@@ -1811,7 +1843,8 @@
         "add": "Şablon ekle",
         "count": "{used} / {max} şablon",
         "limitReached": "Sınıra ulaşıldı: {max} şablon.",
-        "variablesTitle": "{position}. şablonun değişkenleri: {name}"
+        "variablesTitle": "{position}. şablonun değişkenleri: {name}",
+        "variablesLater": "{count, plural, one {# değişken} other {# değişken}} değerini bu önizlemeden değil, eşlemeden alır."
       }
     },
     "history": {

@@ -193,9 +193,9 @@
           "unlimitedPlaceholder": "blank = unlimited",
           "maxUsesHint": "Across all customers.",
           "perUser": "Per-user limit",
-          "perUserHint": "Number of redemptions allowed for each customer.",
+          "perUserHint": "Number of redemptions allowed for each customer, across all workspaces.",
           "firstPurchaseTitle": "First purchase only",
-          "firstPurchaseHint": "Only workspaces that have not placed a paid order",
+          "firstPurchaseHint": "Only buyers who have not paid for an order in any workspace",
           "stackableTitle": "Can be combined with other coupons",
           "stackableHint": "Lets shoppers use it alongside another active code at checkout"
         }

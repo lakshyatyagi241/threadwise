@@ -25,10 +25,10 @@ const config = makeConfig({
   },
 });
 
-const render = (page: 'login' | 'register' | 'forgot', variant?: number) =>
+const render = (page: 'login' | 'register' | 'forgot') =>
   renderGuest(
     createElement(AuthShell, {
-      ...frameProps(config, page, variant),
+      ...frameProps(config, page),
       page,
       header: { title: 'Title' },
       children: createElement('form'),
@@ -42,16 +42,9 @@ describe('frameProps', () => {
     expect(frameProps(config, 'forgot').extra).toMatchObject({ footer: 'Forgot footer line' });
   });
 
-  it('lets one page override the admin design without touching the rest', () => {
-    expect(frameProps(config, 'forgot', 3).variant).toBe(3);
-    expect(frameProps(config, 'forgot').variant).toBe(1);
-  });
-
-  it('shows the footer and hero the admin saved on the Forgot tab on the real page (design 1)', () => {
+  it('shows the footer the admin saved on the Forgot tab on the real page', () => {
     const html = render('forgot');
     expect(html).toContain('Forgot footer line');
-    expect(html).toContain('Forgot hero title');
-    expect(html).toContain('Forgot hero text');
     expect(html).not.toContain('Login footer');
   });
 

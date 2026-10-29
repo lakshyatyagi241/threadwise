@@ -30,6 +30,8 @@ export interface ConversationMessageStore {
   saveInbound(orgId: number, message: StoredMessage, outcome: InboundOutcome): Promise<void>;
   /** Stores the agent's original and the delivered language on a translated reply. */
   saveOutbound(orgId: number, message: StoredMessage, outcome: OutboundOutcome): Promise<void>;
+  /** Records that translation was wanted and failed, so the text was sent as typed (#1278). */
+  markOutboundFailed(orgId: number, message: StoredMessage): Promise<void>;
 }
 
 export const CONVERSATION_MESSAGE_STORE = Symbol('CONVERSATION_MESSAGE_STORE');
@@ -117,7 +119,17 @@ export class PgConversationMessageStore implements ConversationMessageStore {
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
         UPDATE messages
-        SET translated_body = ${o.original}, detected_language = ${o.language}, is_translated = true
+        SET translated_body = ${o.original}, detected_language = ${o.language}, is_translated = true,
+            translation_status = NULL
+        WHERE org_id = ${orgId} AND id = ${m.id}
+      `),
+    );
+  }
+
+  async markOutboundFailed(orgId: number, m: StoredMessage): Promise<void> {
+    await this.db.txAs({ orgId, userId: null }, (tx) =>
+      tx.execute(sql`
+        UPDATE messages SET translation_status = 'skipped_failed'
         WHERE org_id = ${orgId} AND id = ${m.id}
       `),
     );

@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "{time}에 다시 열림",
       "erased": "삭제된 연락처",
-      "erasedHint": "이 연락처는 삭제되었으며, 대화는 사람의 정보와 메시지 내용 없이 보관됩니다. 삭제 날짜는 기록되지 않으므로 시간은 마지막 메시지를 나타냅니다.",
+      "erasedHint": "이 연락처는 삭제되었으며, 대화는 사람의 정보 없이 보관됩니다. 삭제 날짜는 기록되지 않으므로 시간은 마지막 메시지를 나타냅니다.",
       "erasedTitle": "삭제된 연락처"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "광고 또는 링크에서 유입됨",
       "sentIn": "{lang}(으)로 발송됨. 작성한 텍스트 보기",
       "translatedFrom": "{lang}에서 번역됨. 원문 보기",
+      "translationFailed": "번역 없이 전송됨. 번역에 실패하여 입력하신 대로 전송되었습니다.",
       "bot": "봇",
       "broadcast": "대량 발송",
       "reacted": "반응 {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "완료",
           "closed": "종료됨",
           "spam": "스팸"
-        }
+        },
+        "created": "시작일 {date}",
+        "showMore": "{count}개 더 보기",
+        "showLess": "간단히 보기"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "비공식",
       "officialFull": "공식 (WhatsApp Cloud API)",
       "unofficialFull": "비공식 (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "이전 스레드",
+      "began": "시작일 {date}",
+      "showMore": "{count}개 더 보기",
+      "showLess": "간단히 보기",
+      "loading": "불러오는 중…",
+      "failed": "이 스레드를 불러오지 못했습니다.",
+      "unknown": "알 수 없는 발신자",
+      "openThread": "스레드 열기"
     }
   }
 }

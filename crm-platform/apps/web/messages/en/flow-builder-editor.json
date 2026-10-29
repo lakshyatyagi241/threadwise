@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · on group join",
       "triggerManual": "Manual enroll",
       "triggerKeyword": "Keyword",
+      "triggerAny": "Any message",
       "active": "active",
       "done": "done",
       "failed": "failed",
@@ -130,7 +131,10 @@
         "reEngagement": "Re-activates dormant contacts with a personalised offer or check-in.",
         "lead": "Nurtures new leads with educational touches before handing to sales.",
         "event": "Time-boxed broadcast around a launch, sale, or seasonal moment.",
-        "default": "Automated WhatsApp journey built in the flow editor."
+        "default": "Automated WhatsApp journey built in the flow editor.",
+        "defaultWeb": "Website chat bot built in the flow editor.",
+        "defaultCall": "Automated call built in the flow editor.",
+        "defaultOther": "Automated conversation built in the flow editor."
       }
     },
     "featured": {
@@ -663,6 +667,7 @@
         "imported": "Imported {steps, plural, one {# step} other {# steps}} in {flows, plural, one {# flow} other {# flows}}. Check them, then Save.",
         "invalidJson": "That file is not valid JSON.",
         "saved": "Saved \"{name}\"",
+        "nodeSaved": "Node updated successfully!",
         "saveFailed": "Save failed: {error}",
         "publishedToast": "Published",
         "publishFailed": "Publish failed: {error}",
@@ -1118,6 +1123,9 @@
           },
           "removeRule": "Remove rule",
           "variablePlaceholder": "Variable name (e.g. plan)",
+          "keyLabel": "Key",
+          "valueLabel": "Value",
+          "pickProperty": "Choose a contact property",
           "pickVariable": "Pick the variable to test.",
           "comparePlaceholder": "Compare against…",
           "joinerAnd": "AND",
@@ -1308,6 +1316,12 @@
           "kindDocumentReport": "Document (PDF report, etc.)",
           "upload": "Upload",
           "uploadHint": "Up to {mb} MB. We host the file and give the flow a public URL.",
+          "acceptedFormats": {
+            "image": "Accepted: JPG, PNG.",
+            "video": "Accepted: MP4, 3GP.",
+            "audio": "Accepted: MP3, AAC, AMR, OGG.",
+            "document": "Accepted: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Replace file",
           "chooseKind": {
             "image": "Choose image (or drag here)",
@@ -1338,7 +1352,12 @@
           "igUsernameHint": "Without the @. The link becomes ig.me/m/yourbrand — tapping it opens a DM to your account.",
           "igMessage": "WhatsApp message",
           "igMessageHint": "Sent to the customer on WhatsApp with the Instagram link. Supports '{{'variables'}}'.",
-          "igMessagePlaceholder": "Continue with us on Instagram 👇"
+          "igMessagePlaceholder": "Continue with us on Instagram 👇",
+          "templateFills": "What fills each number",
+          "templateFillsHint": "Type the text for each number of the template, or press / to insert a contact detail or a flow variable. Leave one empty to use what the template says.",
+          "templateHeaderMedia": "Header file",
+          "templateHeaderMediaHint": "The picture, video or file in this template's header. Needed when the template has no file of its own.",
+          "templateHeaderMediaMissing": "Add the header file: this template has none, and WhatsApp will not send it without one."
         },
         "sequence": {
           "info": "Each reply is sent in order to the customer. Combine text, images, video, audio, and documents in one node — perfect for product cards or onboarding kits.",
@@ -1920,6 +1939,85 @@
           "sendAnswer": "Send the answer to the customer",
           "variable": "Save the answer as",
           "variableHint": "Later steps read the answer from this name, for example faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Loading lists…",
+          "listPick": "— pick list —",
+          "listFallback": "List",
+          "listNotLoaded": "List {id} (not loaded)",
+          "segmentLoading": "Loading segments…",
+          "segmentPick": "— pick segment —",
+          "segmentFallback": "Segment",
+          "segmentNotLoaded": "Segment {id} (not loaded)",
+          "updateIntroSub": "Contact fields live at <link>/contacts</link>. The phone number cannot be changed here.",
+          "updateIntro": "Sets <b>one field</b> of this contact. Use <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> or the key of one of your custom fields. Later nodes see the new value.",
+          "fieldLabel": "Field",
+          "fieldHint": "The field key, for example city or email.",
+          "newValueLabel": "New value",
+          "newValueHint": "Any text or {example}. Leave blank to clear the field (a name cannot be cleared).",
+          "listIntroSub": "Manage lists at <link>/contacts/groups</link>.",
+          "listIntro": "Puts this contact in a <b>list</b>, or takes them out of it. A list a flow changes does not start the “joins / leaves a list” flows, so a flow cannot loop on itself.",
+          "actionLabel": "Action",
+          "actionAdd": "Add the contact to the list",
+          "actionRemove": "Remove the contact from the list",
+          "listLabel": "List",
+          "inListIntro": "Branches on whether this contact is in a <b>list</b>: <mono>yes</mono> when they are, <mono>no</mono> when they are not (or the list is gone).",
+          "segmentIntroSub": "Build segments at <link>/segments</link>.",
+          "segmentIntro": "Branches on whether this contact matches a <b>segment</b> right now: <mono>yes</mono> or <mono>no</mono>.",
+          "segmentLabel": "Segment",
+          "waSessionIntro": "<mono>yes</mono> when the customer wrote to you within the last <b>24 hours</b>, so a plain message can still be sent; <mono>no</mono> when the window has closed and only an approved template can reach them.",
+          "windowLabel": "Window (hours)",
+          "windowHint": "WhatsApp's window is 24 hours. Use a shorter one to be stricter.",
+          "spreadsheetLabel": "Spreadsheet",
+          "spreadsheetHint": "Pick a sheet from your connected Google account.",
+          "tabLabel": "Tab (optional)",
+          "tabHint": "Blank = the first tab.",
+          "matchColumnLabel": "Find the row where column",
+          "matchColumnHint": "The header of the column to look in.",
+          "matchValueLabel": "equals",
+          "matchValueHint": "Usually {example}.",
+          "sheetCheckIntro": "Looks up a row in a Google Sheet and checks one of its cells: <mono>yes</mono> when the cell meets the test, <mono>no</mono> when it does not, when no row matches, or when Google cannot be read.",
+          "checkColumnLabel": "Check column",
+          "testLabel": "Test",
+          "valueLabel": "Value",
+          "sheetContactIntro": "Looks up a row in a Google Sheet and copies cells into <b>this contact</b>: one column per field. It updates the contact the flow is talking to; it does not create contacts from new rows.",
+          "copyColumnsLabel": "Copy these columns",
+          "copyColumnsHint": "Sheet column header → contact field key.",
+          "columnHeaderPlaceholder": "Column header",
+          "addColumn": "Add column",
+          "op": {
+            "equals": "equals",
+            "not_equals": "does not equal",
+            "contains": "contains",
+            "not_contains": "does not contain",
+            "starts_with": "starts with",
+            "ends_with": "ends with",
+            "greater_than": "is greater than",
+            "less_than": "is less than",
+            "is_set": "has a value",
+            "is_not_set": "is blank",
+            "is_empty": "is empty",
+            "is_not_empty": "is not empty"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Runs an API you saved in the <b>API Library</b> for the contact of this run. It leaves by <mono>success</mono> when the API answers 2xx, and by <mono>error</mono> for anything else.",
+          "apiLabel": "API",
+          "loadFailed": "Your saved APIs could not be loaded.",
+          "manageApis": "Manage APIs",
+          "refreshList": "Refresh list",
+          "loading": "Loading APIs…",
+          "pickApi": "— pick an API —",
+          "noApis": "No saved APIs yet",
+          "loadingName": "Loading…",
+          "savedApiName": "Saved API",
+          "notFound": "{name} (not found)",
+          "variablesLabel": "Variables",
+          "variablesHint": "Leave a value empty to use the run's variable of that name, then the contact's property, then the default. Values can use {example}.",
+          "defaultPlaceholder": "Default: {value}",
+          "saveLabel": "Save response to",
+          "saveHint": "Later nodes read the answer as <mono>{variable}</mono>, a field as <mono>{field}</mono> and the status as <mono>{status}</mono>.",
+          "exposes": "This API also exposes <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -2168,7 +2266,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Trigger another chatbot"
+          "description": "Hand the chat to an AI agent"
         },
         "whatsapp_shop": {
           "label": "WhatsApp Shop",
@@ -2195,8 +2293,8 @@
           "description": "Create + send a Meet link"
         },
         "wa_form": {
-          "label": "WhatsApp form",
-          "description": "Send a published Meta form"
+          "label": "WhatsApp Flow (form)",
+          "description": "Send a published WhatsApp Flow (Meta form)"
         },
         "api_library": {
           "label": "API (from library)",
@@ -2493,6 +2591,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" has no incoming connection — nothing leads into it.",
+        "buttonNoExit": "\"{node}\": the button \"{button}\" does not lead to any step.",
         "notConnected": "\"{node}\" is not connected to anything.",
         "wrongChannel": "\"{node}\" does not work on {channel} — delete it or switch the channel back on the Trigger node.",
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",

@@ -109,7 +109,8 @@
       "amount": "رقم",
       "balance": "بیلنس",
       "noDescription": "والٹ حرکت",
-      "reason": "وجہ"
+      "reason": "وجہ",
+      "invoice": "انوائس ڈاؤن لوڈ کریں"
     },
     "pricingPanel": {
       "title": "پیغام کی قیمتیں",
@@ -1038,6 +1039,11 @@
       "enrichment": "رابطے کی تلاش",
       "chat_message": "چیٹ پیغام",
       "webbot_message": "ویب سائٹ چیٹ بوٹ پیغام"
+    },
+    "legacyInvoice": {
+      "title": "انوائس",
+      "back": "اسٹیٹمنٹ پر واپس جائیں",
+      "print": "پرنٹ کریں یا PDF کے طور پر محفوظ کریں"
     }
   }
 }

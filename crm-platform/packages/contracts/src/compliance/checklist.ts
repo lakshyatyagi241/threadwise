@@ -80,7 +80,7 @@ export const checklistItemSchema = z.object({
    * (counts, days, never a person's data).
    */
   detail: z.string(),
-  params: z.record(z.union([z.string(), z.number()])),
+  params: z.record(z.string(), z.union([z.string(), z.number()])),
   /** Where in the app the person can act (a path), or null. */
   href: z.string().nullable(),
 });
@@ -90,6 +90,6 @@ export const complianceChecklistSchema = z.object({
   generatedAt: z.string(),
   regimes: z.array(complianceRegimeSchema),
   items: z.array(checklistItemSchema),
-  summary: z.object({ built: z.number().int(), partial: z.number().int(), open: z.number().int() }),
+  summary: z.object({ built: z.int(), partial: z.int(), open: z.int() }),
 });
 export type ComplianceChecklist = z.infer<typeof complianceChecklistSchema>;

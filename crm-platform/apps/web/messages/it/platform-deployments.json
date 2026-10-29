@@ -106,7 +106,11 @@
         "failed": "Fallita",
         "rolled_back": "Ripristinata"
       },
-      "by": "di {author}"
+      "by": "di {author}",
+      "raisedIst": "Aperta {time} IST",
+      "noProgress": "Nessun avanzamento da {minutes} minuti. La build o il rilascio potrebbe essersi fermato.",
+      "noChangesAlert": "Gli ultimi rilasci non elencano le proprie pull request. Probabilmente deploy-main.sh sul server di build o ci-entry.sh sull'host è obsoleto: installa le versioni attuali (deploy/build-server/README.md).",
+      "moreChanges": "altre {count} modifiche"
     }
   }
 }

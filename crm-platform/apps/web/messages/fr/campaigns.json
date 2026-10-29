@@ -17,18 +17,19 @@
       "refresh": "Actualiser",
       "newCampaign": "Nouvelle campagne",
       "tile": {
-        "sent": "Envoyés",
+        "sent": "Messages envoyés",
         "delivered": "Distribués",
         "read": "Lus",
-        "failed": "Échoués",
-        "processing": "En cours de traitement",
-        "campaigns": "{count} campagnes",
+        "failed": "Messages en échec",
+        "processing": "Campagnes en cours d'envoi",
+        "campaigns": "sur {count, plural, one {# campagne} other {# campagnes}}",
         "inFlight": "en transit",
         "awaiting": "en attente",
-        "queued": "{count} en file d'attente",
+        "queued": "{count} programmées pour démarrer",
         "deliveredRate": "{rate} % de livraison",
         "readRate": "{rate} % de lecture",
-        "failedCampaigns": "{count} campagnes en échec"
+        "failedCampaigns": "{count, plural, one {# campagne marquée} other {# campagnes marquées}} en échec",
+        "note": "Envoyés, Distribués, Lus et En échec comptent des messages, et un message en échec n'est pas compté dans Envoyés. La petite ligne sous chaque nombre compte des campagnes. Tout suit la période choisie ci-dessous : {range}."
       },
       "range": {
         "all": "Toute la période",
@@ -174,7 +175,8 @@
         "status": "Statut",
         "schedule": "Planification",
         "actions": "Actions"
-      }
+      },
+      "newCampaignAny": "Nouvelle campagne"
     },
     "builder": {
       "loadError": "Impossible de charger cette campagne.",
@@ -314,7 +316,22 @@
         "previousTitle": "Envois précédents",
         "previousHint": "Ajoutez les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, répondu ou cliqué.",
         "previousEstimate": "{count, plural, one {Jusqu'à # personne issue des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} many {Jusqu'à # de personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).} other {Jusqu'à # personnes issues des envois précédents (estimation : une personne présente dans deux envois est comptée deux fois).}}",
-        "previousEditHint": "Votre choix précédent d'envois n'est pas affiché lors de la modification : cette campagne conserve déjà ses destinataires sous forme de contacts. Choisissez à nouveau pour ajouter d'autres personnes."
+        "previousEditHint": "Votre choix précédent d'envois n'est pas affiché lors de la modification : cette campagne conserve déjà ses destinataires sous forme de contacts. Choisissez à nouveau pour ajouter d'autres personnes.",
+        "emails": "E-mails saisis à la main",
+        "emailsHint": "Un par ligne, ou séparés par une virgule ou un point-virgule.",
+        "emailsPlaceholder": "Une adresse e-mail par ligne",
+        "emailsCount": "{count} adresses",
+        "emailCsvHint": "Colonnes : nom, e-mail. Toute autre colonne devient une variable utilisable dans le message.",
+        "emailModes": {
+          "csv": {
+            "title": "Importer un CSV",
+            "hint": "Importez les adresses e-mail de cette campagne."
+          },
+          "manual": {
+            "title": "E-mails saisis à la main",
+            "hint": "Collez une adresse e-mail par ligne."
+          }
+        }
       },
       "message": {
         "title": "Message",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "draftChip": "Brouillon / non enregistré",
+      "draftSavedChip": "Brouillon · enregistré",
       "steps": {
         "label": "Étapes de la campagne",
         "required": "obligatoire",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Modèle",
         "pickTemplate": "— Sélectionner un modèle —",
+        "searchTemplates": "Rechercher des modèles par nom ou langue",
+        "noTemplateMatch": "Aucun modèle ne correspond à votre recherche.",
         "templateHint": "Uniquement les modèles approuvés du numéro choisi. Ses variables sont à renseigner ci-dessous.",
         "noTemplates": "Ce numéro n’a encore aucun modèle approuvé. Créez-en un et attendez son approbation.",
         "deliveryTitle": "Envoi",
@@ -725,7 +745,11 @@
         "balanceShort": "Le solde est insuffisant : il vous manque {shortfall}.",
         "balanceLowFull": "Le solde est inférieur au coût total de {full} : votre forfait le couvre pour l’instant, mais plus une fois le forfait épuisé.",
         "chargedNowLabel": "Débité maintenant de votre portefeuille"
-      }
+      },
+      "kickerEmail": "Campagnes e-mail / Nouvelle",
+      "kickerEditEmail": "Campagnes e-mail / Modifier",
+      "titleEmail": "Créer un nouvel e-mail",
+      "titleEditEmail": "Modifier votre e-mail"
     },
     "detail": {
       "notFound": "Cette campagne est introuvable.",
@@ -1126,7 +1150,8 @@
         "saved": "Brouillon enregistré",
         "saving": "Enregistrement...",
         "failed": "Enregistrement impossible",
-        "retry": "Réessayer"
+        "retry": "Réessayer",
+        "nameTaken": "Une campagne portant le même nom existe déjà"
       },
       "errors": {
         "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Cochez les numéros d'envoi et donnez une part à chacun. L'audience est répartie selon ces parts et chaque contact reçoit le message depuis un seul numéro. Une part vide ou 0 compte pour 1.",
         "shareWeight": "Part",
         "shareWeightLabel": "Part de {name}",
-        "shareKeepOne": "Au moins un numéro doit rester coché."
+        "shareKeepOne": "Au moins un numéro doit rester coché.",
+        "nameTaken": "Une campagne portant le même nom existe déjà"
       },
       "audience": {
         "selectionTitle": "Choisi dans le Hub de contacts",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Aperçu des numéros valides du fichier",
         "csvLine": "Ligne",
         "csvName": "Nom",
-        "csvStatus": "Statut",
         "csvRow": {
           "new": "Nouveau contact",
           "existing": "Contact existant",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Envoyer aux envois précédents",
         "previousHint": "Ciblez à nouveau les personnes à qui des diffusions et campagnes antérieures ont été envoyées, éventuellement seulement celles qui ont lu, n'ont pas lu, ont répondu ou ont cliqué.",
         "chipPrevious": "{count, plural, one {# envoi antérieur} many {# d'envois antérieurs} other {# envois antérieurs}} ({outcome})",
-        "filterNoConditions": "Ajoutez une condition pour voir combien de contacts correspondent."
+        "filterNoConditions": "Ajoutez une condition pour voir combien de contacts correspondent.",
+        "csvConsentCol": "Consentement",
+        "csvContactCol": "Contact",
+        "csvConsent": {
+          "optedIn": "Inscrit",
+          "optedOut": "Désinscrit"
+        },
+        "clearAudience": "Vider l'audience"
       },
       "review": {
         "intro": "Vérifiez le coût, indiquez par quoi chaque variable du modèle est remplie et examinez la diffusion.",
@@ -1597,7 +1629,7 @@
         "retries": "Nouvelles tentatives",
         "retriesOn": "Activées, jusqu’au {date}",
         "retriesOff": "Désactivées",
-        "recurringNote": "Chaque exécution va à l’audience telle qu’elle est à ce moment-là ; le nombre de destinataires peut donc changer."
+        "recurringNote": "Rien n'est envoyé maintenant. La première exécution démarre à l'heure indiquée ci-dessus, puis chaque exécution apparaît dans l'Historique sur sa propre ligne. D'ici là, retrouvez cette campagne dans Récurrentes. Chaque exécution part vers l'audience telle qu'elle est à ce moment-là, donc le nombre de destinataires peut changer."
       },
       "status": {
         "back": "Retour aux campagnes",
@@ -1811,7 +1843,8 @@
         "add": "Ajouter un modèle",
         "count": "{used} modèles sur {max}",
         "limitReached": "Limite atteinte : {max} modèles.",
-        "variablesTitle": "Variables du modèle {position} : {name}"
+        "variablesTitle": "Variables du modèle {position} : {name}",
+        "variablesLater": "{count, plural, one {# variable prend} other {# variables prennent}} sa valeur dans l'association, pas dans cet aperçu."
       }
     },
     "history": {

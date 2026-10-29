@@ -1,4 +1,5 @@
-import { scrubEvent } from './scrub';
+import * as Sentry from '@sentry/nextjs';
+import { createThrottle, scrubEvent, scrubLog, throttleKey } from './scrub';
 
 /**
  * Settings shared by the browser, Node and edge entry points. Errors are always on once a DSN is present. Tracing is off unless
@@ -22,7 +23,20 @@ export function sentryOptions() {
     // Said as 0, not left out: with no rate the SDK still sends a transaction per request.
     tracesSampleRate: num(process.env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE),
     sendDefaultPii: false,
-    beforeSend: scrubEvent,
+    // A `console.error` is a caught failure someone chose to print, so it is an issue; a `console.warn` is a searchable Sentry log.
+    // Both go through the same scrub as an error report before they leave.
+    integrations: [
+      Sentry.captureConsoleIntegration({ levels: ['error'] }),
+      Sentry.consoleLoggingIntegration({ levels: ['warn'] }),
+    ],
+    beforeSend: (event: Sentry.ErrorEvent) =>
+      allowEvent(throttleKey(event)) ? scrubEvent(event) : null,
     beforeSendTransaction: scrubEvent,
+    beforeSendLog: (log: Sentry.Log) => (allowLog(String(log.message)) ? scrubLog(log) : null),
   };
 }
+
+// One table per runtime (browser tab, Node process, edge isolate): an API outage fails every poll the same way, and 5 reports a
+// minute of one error say what 5,000 would.
+const allowEvent = createThrottle(5);
+const allowLog = createThrottle(60);

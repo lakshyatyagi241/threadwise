@@ -118,11 +118,11 @@
       "moreActions": "Thêm thao tác",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
-      "searchColumns": "Search columns",
-      "columnsSelectAll": "Select All",
-      "dragToReorder": "Drag to re-order columns",
-      "removeColumn": "Remove {name}",
-      "columnsSave": "Save",
+      "searchColumns": "Tìm cột",
+      "columnsSelectAll": "Chọn tất cả",
+      "dragToReorder": "Kéo để sắp xếp lại cột",
+      "removeColumn": "Xóa {name}",
+      "columnsSave": "Lưu",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -297,7 +297,8 @@
       "allTeams": "Tất cả nhóm",
       "teamFormer": "Nhóm cũ",
       "unhideColumn": "Hiện cột",
-      "resizeColumn": "Kéo để đổi độ rộng {column}; nhấp đúp để đặt lại"
+      "resizeColumn": "Kéo để đổi độ rộng {column}; nhấp đúp để đặt lại",
+      "pqlNoKey": "Tìm kiếm tiếng Anh chưa được thiết lập cho không gian làm việc này. Hãy nhờ quản trị viên thêm khóa OpenRouter trong Khóa AI."
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -447,7 +448,8 @@
         "number": "Hãy nhập một số.",
         "integer": "Hãy nhập một số nguyên.",
         "email": "Hãy nhập địa chỉ email hợp lệ.",
-        "url": "Hãy nhập liên kết đầy đủ bắt đầu bằng http:// hoặc https://."
+        "url": "Hãy nhập liên kết đầy đủ bắt đầu bằng http:// hoặc https://.",
+        "phone": "Nhập số điện thoại hợp lệ cho quốc gia đã chọn."
       },
       "readOnlyField": "Chỉ đọc",
       "yes": "Có",
@@ -675,7 +677,11 @@
       "groupNewPlaceholder": "Tên nhóm mới",
       "groupRequiredHint": "Mọi liên hệ được nhập đều vào nhóm này. Cột nhóm riêng của tệp sẽ bị bỏ qua trừ khi bạn ánh xạ nó ở trên.",
       "customProperties": "Thuộc tính tùy chỉnh",
-      "customPropertiesHint": "Cột có tiêu đề là tên thuộc tính, hoặc attr:key như tệp xuất ghi, sẽ điền vào thuộc tính đó. Ô trống giữ nguyên giá trị mà liên hệ đã có."
+      "customPropertiesHint": "Cột có tiêu đề là tên thuộc tính, hoặc attr:key như tệp xuất ghi, sẽ điền vào thuộc tính đó. Ô trống giữ nguyên giá trị mà liên hệ đã có.",
+      "propertyFormat": {
+        "checkbox": "Nhập yes hoặc no. Cũng chấp nhận: true, false, y, n, 1, 0, x, on, off.",
+        "multiselect": "Ngăn cách các khóa tùy chọn bằng dấu phẩy, dấu chấm phẩy hoặc gạch đứng, ví dụ vip, new_leads. Nhập khóa, không nhập nhãn. Không phân biệt chữ hoa và chữ thường."
+      }
     },
     "detail": {
       "back": "Tất cả liên hệ",
@@ -1345,7 +1351,10 @@
       "save": "Lưu và mở quy tắc",
       "created": "Đã tạo phân khúc \"{name}\". Hãy tinh chỉnh quy tắc bên dưới.",
       "forbidden": "Bạn không có quyền tạo phân khúc.",
-      "failed": "Không thể tạo phân khúc. Hãy thử lại."
+      "failed": "Không thể tạo phân khúc. Hãy thử lại.",
+      "specific": "Người cụ thể",
+      "specificHint": "Chỉ những người và nhóm bạn chọn, cùng bạn và những người có thể chỉnh sửa mọi phân khúc.",
+      "shareRequired": "Chọn ít nhất một người hoặc nhóm để chia sẻ."
     },
     "bulkUpdate": {
       "title": "Cập nhật {count, plural, other {# liên hệ}}",
@@ -1372,7 +1381,8 @@
         "setValue": "Đặt giá trị",
         "willClear": "Sẽ được làm trống trên {count, plural, =1 {liên hệ đã chọn} other {tất cả # liên hệ đã chọn}}.",
         "requiredNoClear": "Không thể xóa giá trị của thuộc tính bắt buộc.",
-        "problemEmpty": "Nhập giá trị, hoặc chọn Xóa giá trị."
+        "problemEmpty": "Nhập giá trị, hoặc chọn Xóa giá trị.",
+        "parentFirst": "Hãy cập nhật {parent} trước, rồi đến thuộc tính này: các lựa chọn của nó phụ thuộc vào thuộc tính đó."
       },
       "titleAll": "Cập nhật tất cả liên hệ phù hợp",
       "hintAll": "Đặt cùng một giá trị cho mọi liên hệ khớp với bộ lọc hiện tại. Các trường để ở Giữ nguyên sẽ không bị thay đổi.",
@@ -1414,10 +1424,15 @@
         "by": "Người nhập"
       },
       "exports": {
-        "title": "Lần xuất",
-        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
+        "title": "Lịch sử xuất dữ liệu",
+        "hint": "Các lần xuất từ Hub, mới nhất trước, kèm nguồn của từng lần. Mỗi tệp được giữ 30 ngày để bạn và đồng đội có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
+        "source": "Nguồn",
+        "sources": {
+          "contacts": "Liên hệ",
+          "campaigns": "Chiến dịch"
+        },
         "rows": "Liên hệ",
         "selection": "Phạm vi",
         "unknown": "Không xác định",
@@ -1482,6 +1497,15 @@
       },
       "openApp": {
         "sms": "Mở trong ứng dụng tin nhắn"
+      },
+      "reason": {
+        "not_linked": "Số này chưa liên kết với tài khoản WhatsApp Business nên không thể gửi mẫu nào.",
+        "paused": "WhatsApp đã tạm dừng. Có thể gửi lại khi hết thời gian tạm dừng.",
+        "media_header": "Có tiêu đề là ảnh, video hoặc tài liệu, hiện chưa thể gửi từ đây.",
+        "header_variable": "Tiêu đề có biến, hiện chưa thể điền từ đây.",
+        "dynamic_button": "Nút có liên kết chứa biến, hiện chưa thể điền từ đây.",
+        "authentication": "Mẫu mật khẩu dùng một lần do hệ thống gửi, không gửi từ đây.",
+        "named_variables": "Dùng biến có tên, hiện chưa thể điền từ đây."
       }
     },
     "views": {

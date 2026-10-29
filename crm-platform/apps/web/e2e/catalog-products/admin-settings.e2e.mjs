@@ -10,7 +10,7 @@ import { chromium } from '@playwright/test';
 
 const WEB = process.env.WEB ?? 'http://localhost:3108';
 const EMAIL = process.env.OPERATOR_EMAIL ?? 'operator@example.test';
-const PASSWORD = process.env.OPERATOR_PASSWORD ?? 'Passw0rd!';
+const PASSWORD = process.env.OPERATOR_PASSWORD ?? process.env.DEV_SEED_PASSWORD;
 const SECRET = process.env.OPERATOR_TOTP_SECRET;
 const SHOTS = process.env.SHOTS ?? '/tmp/cat-e2e-shots';
 mkdirSync(SHOTS, { recursive: true });

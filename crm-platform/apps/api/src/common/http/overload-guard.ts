@@ -1,8 +1,9 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { ERROR_CODES } from '@crm/contracts';
+import { PROBE_PATH } from './http-drain';
 
-/** Paths a probe or the platform calls: never shed, so a busy API still answers "alive" and "ready" (and is not restarted for being busy). */
-const EXEMPT = /^\/(health|ready|metrics)(\/|$|\?)/;
+/** Probe paths are never shed, so a busy API still answers "alive" and "ready" (and is not restarted for being busy). */
+const EXEMPT = PROBE_PATH;
 
 /**
  * Load shedding (QA 54): at most `max` requests are in flight; the next one is refused at once with 503 and `Retry-After`, instead of joining

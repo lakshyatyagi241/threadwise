@@ -51,33 +51,30 @@ const propertyKeySchema = z
   .string()
   .regex(/^[a-z][a-z0-9_]{0,63}$/, 'must be a contact property key such as "budget"');
 
-export const leadFieldMappingSchema = z
-  .object({
-    name: payloadPathSchema.optional(),
-    firstName: payloadPathSchema.optional(),
-    lastName: payloadPathSchema.optional(),
-    email: payloadPathSchema.optional(),
-    phone: payloadPathSchema.optional(),
-    /** Contact property key -> payload path. Only active contact properties are accepted. */
-    customFields: z
-      .record(propertyKeySchema, payloadPathSchema)
-      .refine((v) => Object.keys(v).length <= 40, {
-        message: 'at most 40 custom fields',
-      })
-      .optional(),
-    /** Where each attribution value lives in the payload; anything unmapped is looked for under its own name (`campaign`, `utm_campaign`). */
-    attribution: z
-      .object({
-        platform: payloadPathSchema.optional(),
-        campaign: payloadPathSchema.optional(),
-        adset: payloadPathSchema.optional(),
-        ad: payloadPathSchema.optional(),
-        form: payloadPathSchema.optional(),
-      })
-      .strict()
-      .optional(),
-  })
-  .strict();
+export const leadFieldMappingSchema = z.strictObject({
+  name: payloadPathSchema.optional(),
+  firstName: payloadPathSchema.optional(),
+  lastName: payloadPathSchema.optional(),
+  email: payloadPathSchema.optional(),
+  phone: payloadPathSchema.optional(),
+  /** Contact property key -> payload path. Only active contact properties are accepted. */
+  customFields: z
+    .record(propertyKeySchema, payloadPathSchema)
+    .refine((v) => Object.keys(v).length <= 40, {
+      error: 'at most 40 custom fields',
+    })
+    .optional(),
+  /** Where each attribution value lives in the payload; anything unmapped is looked for under its own name (`campaign`, `utm_campaign`). */
+  attribution: z
+    .strictObject({
+      platform: payloadPathSchema.optional(),
+      campaign: payloadPathSchema.optional(),
+      adset: payloadPathSchema.optional(),
+      ad: payloadPathSchema.optional(),
+      form: payloadPathSchema.optional(),
+    })
+    .optional(),
+});
 export type LeadFieldMapping = z.infer<typeof leadFieldMappingSchema>;
 
 export const LEAD_OWNER_MODES = ['unassigned', 'fixed', 'round_robin'] as const;
@@ -158,7 +155,7 @@ export const leadSourceDefaultsSchema = z.object({
   deal: leadDealRuleSchema.default({ enabled: false, title: '{{name}} ({{source}})' }),
   notify: leadNotifyRuleSchema.default({ owner: true, userIds: [] }),
   /** An automatic first message to a new lead (BL-014, L-16). Off by default. */
-  speedToLead: speedToLeadSchema.default({}),
+  speedToLead: speedToLeadSchema.prefault({}),
 });
 export type LeadSourceDefaults = z.infer<typeof leadSourceDefaultsSchema>;
 
@@ -176,9 +173,8 @@ export const createLeadSourceSchema = z.object({
   /** Where the sender's own id for a lead lives in the payload (`lead.id`). Without it a hash of the body is the id. */
   externalIdPath: payloadPathSchema.nullish(),
   mapping: leadFieldMappingSchema.default({}),
-  defaults: leadSourceDefaultsSchema.default({}),
+  defaults: leadSourceDefaultsSchema.prefault({}),
   rawRetentionDays: z
-    .number()
     .int()
     .min(1)
     .max(LEAD_RAW_RETENTION_MAX_DAYS)
@@ -188,7 +184,7 @@ export type CreateLeadSourceInput = z.infer<typeof createLeadSourceSchema>;
 
 export const updateLeadSourceSchema = z.object({
   /** The optimistic lock: the `rowVersion` the editor loaded. */
-  rowVersion: z.number().int().min(1),
+  rowVersion: z.int().min(1),
   name: leadSourceNameSchema.optional(),
   status: leadSourceStatusSchema.optional(),
   providerKey: z.string().trim().min(1).max(60).nullish(),
@@ -197,7 +193,7 @@ export const updateLeadSourceSchema = z.object({
   externalIdPath: payloadPathSchema.nullish(),
   mapping: leadFieldMappingSchema.optional(),
   defaults: leadSourceDefaultsSchema.optional(),
-  rawRetentionDays: z.number().int().min(1).max(LEAD_RAW_RETENTION_MAX_DAYS).optional(),
+  rawRetentionDays: z.int().min(1).max(LEAD_RAW_RETENTION_MAX_DAYS).optional(),
 });
 export type UpdateLeadSourceInput = z.infer<typeof updateLeadSourceSchema>;
 
@@ -209,19 +205,19 @@ export const leadSourceResponseSchema = z.object({
   status: leadSourceStatusSchema,
   /** The last characters of the URL token, "ends in ####". The token itself is never returned again. */
   tokenHint: z.string().nullable(),
-  tokenRotatedAt: z.string().datetime().nullable(),
+  tokenRotatedAt: z.iso.datetime().nullable(),
   /** Whether a shared secret is set. The secret is never returned. */
   hasSecret: z.boolean(),
   externalIdPath: z.string().nullable(),
   mapping: leadFieldMappingSchema,
   defaults: leadSourceDefaultsSchema,
-  rawRetentionDays: z.number().int(),
-  lastEventAt: z.string().datetime().nullable(),
+  rawRetentionDays: z.int(),
+  lastEventAt: z.iso.datetime().nullable(),
   /** Events that are `needs_review` or `failed`: the "Needs attention" badge. */
-  needsAttention: z.number().int().min(0),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  needsAttention: z.int().min(0),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type LeadSourceResponse = z.infer<typeof leadSourceResponseSchema>;
 
@@ -260,13 +256,13 @@ export const leadSourceSecretsResponseSchema = z.object({
 });
 export type LeadSourceSecretsResponse = z.infer<typeof leadSourceSecretsResponseSchema>;
 
-export const createLeadSourceResponseSchema = leadSourceResponseSchema.merge(
-  leadSourceSecretsResponseSchema,
+export const createLeadSourceResponseSchema = leadSourceResponseSchema.extend(
+  leadSourceSecretsResponseSchema.shape,
 );
 export type CreateLeadSourceResponse = z.infer<typeof createLeadSourceResponseSchema>;
 
-export const rotateLeadSourceTokenResponseSchema = leadSourceResponseSchema.merge(
-  leadSourceSecretsResponseSchema,
+export const rotateLeadSourceTokenResponseSchema = leadSourceResponseSchema.extend(
+  leadSourceSecretsResponseSchema.shape,
 );
 export type RotateLeadSourceTokenResponse = z.infer<typeof rotateLeadSourceTokenResponseSchema>;
 
@@ -274,8 +270,10 @@ export type RotateLeadSourceTokenResponse = z.infer<typeof rotateLeadSourceToken
 
 /** A JSON object a sender could post. Bounded: it is only ever shown back and mapped, never stored by the preview. */
 export const leadPayloadSchema = z
-  .record(z.unknown())
-  .refine((v) => JSON.stringify(v).length <= 64 * 1024, { message: 'payload is too large' });
+  .record(z.string(), z.unknown())
+  .refine((v) => JSON.stringify(v).length <= 64 * 1024, {
+    error: 'payload is too large',
+  });
 
 export const previewLeadMappingSchema = z.object({
   /** An unsaved draft of the mapping; omit to preview the saved one. */
@@ -304,7 +302,7 @@ export const leadMappingPreviewResponseSchema = z.object({
     /** E.164 after the source's default country code is applied; null when it cannot be read as a number. */
     phone: z.string().nullable(),
   }),
-  customFields: z.record(z.unknown()),
+  customFields: z.record(z.string(), z.unknown()),
   attribution: z.object({
     platform: z.string().nullable(),
     campaign: z.string().nullable(),

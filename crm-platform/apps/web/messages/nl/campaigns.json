@@ -17,18 +17,19 @@
       "refresh": "Vernieuwen",
       "newCampaign": "Nieuwe campagne",
       "tile": {
-        "sent": "Verzonden",
+        "sent": "Verzonden berichten",
         "delivered": "Afgeleverd",
         "read": "Gelezen",
-        "failed": "Mislukt",
-        "processing": "Wordt verwerkt",
-        "campaigns": "{count} campagnes",
+        "failed": "Mislukte berichten",
+        "processing": "Campagnes in verzending",
+        "campaigns": "uit {count, plural, one {# campagne} other {# campagnes}}",
         "inFlight": "onderweg",
         "awaiting": "wachtend",
-        "queued": "{count} in wachtrij",
+        "queued": "{count} gepland om te starten",
         "deliveredRate": "{rate}% bezorgd",
         "readRate": "{rate}% leespercentage",
-        "failedCampaigns": "{count} mislukte campagnes"
+        "failedCampaigns": "{count, plural, one {# campagne} other {# campagnes}} als mislukt gemarkeerd",
+        "note": "Verzonden, Afgeleverd, Gelezen en Mislukt tellen berichten, en een mislukt bericht telt niet mee bij Verzonden. De kleinere regel onder elk getal telt campagnes. Alles volgt het hieronder gekozen datumbereik: {range}."
       },
       "range": {
         "all": "Alle tijd",
@@ -174,7 +175,8 @@
         "status": "Status",
         "schedule": "Planning",
         "actions": "Acties"
-      }
+      },
+      "newCampaignAny": "Nieuwe campagne"
     },
     "builder": {
       "loadError": "Deze campagne kon niet worden geladen.",
@@ -314,7 +316,22 @@
         "previousTitle": "Eerdere verzendingen",
         "previousHint": "Voeg de mensen toe naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, erop antwoordde of klikte.",
         "previousEstimate": "{count, plural, one {Maximaal # persoon uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).} other {Maximaal # personen uit de eerdere verzendingen (een schatting: iemand in twee verzendingen wordt dubbel geteld).}}",
-        "previousEditHint": "Je eerdere keuze van verzendingen wordt niet getoond bij bewerken: deze campagne bevat haar ontvangers al als contacten. Kies opnieuw om meer mensen toe te voegen."
+        "previousEditHint": "Je eerdere keuze van verzendingen wordt niet getoond bij bewerken: deze campagne bevat haar ontvangers al als contacten. Kies opnieuw om meer mensen toe te voegen.",
+        "emails": "E-mails handmatig",
+        "emailsHint": "Eén per regel, of gescheiden door een komma of puntkomma.",
+        "emailsPlaceholder": "Eén e-mailadres per regel",
+        "emailsCount": "{count} adressen",
+        "emailCsvHint": "Kolommen: naam, e-mail. Elke andere kolom wordt een variabele die je in het bericht kunt gebruiken.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV uploaden",
+            "hint": "Importeer de e-mailadressen voor deze campagne."
+          },
+          "manual": {
+            "title": "E-mails handmatig",
+            "hint": "Plak één e-mailadres per regel."
+          }
+        }
       },
       "message": {
         "title": "Bericht",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "draftChip": "Concept / niet opgeslagen",
+      "draftSavedChip": "Concept · opgeslagen",
       "steps": {
         "label": "Campagnestappen",
         "required": "verplicht",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Sjabloon",
         "pickTemplate": "— Kies een sjabloon —",
+        "searchTemplates": "Zoek sjablonen op naam of taal",
+        "noTemplateMatch": "Geen sjabloon komt overeen met je zoekopdracht.",
         "templateHint": "Alleen goedgekeurde sjablonen van het gekozen nummer. De variabelen vul je hieronder in.",
         "noTemplates": "Dit nummer heeft nog geen goedgekeurde sjablonen. Maak er een aan en wacht op de goedkeuring.",
         "deliveryTitle": "Verzending",
@@ -725,7 +745,11 @@
         "balanceShort": "Het saldo is niet genoeg: je hebt nog {shortfall} nodig.",
         "balanceLowFull": "Het saldo is lager dan de volledige kosten van {full}: je abonnement dekt het nu, maar niet meer zodra het abonnement afloopt.",
         "chargedNowLabel": "Nu van je portemonnee afgeschreven"
-      }
+      },
+      "kickerEmail": "E-mailcampagnes / Nieuw",
+      "kickerEditEmail": "E-mailcampagnes / Bewerken",
+      "titleEmail": "Nieuwe e-mail maken",
+      "titleEditEmail": "Bewerk je e-mail"
     },
     "detail": {
       "notFound": "Die campagne is niet gevonden.",
@@ -1126,7 +1150,8 @@
         "saved": "Concept opgeslagen",
         "saving": "Opslaan...",
         "failed": "Kon niet opslaan",
-        "retry": "Opnieuw proberen"
+        "retry": "Opnieuw proberen",
+        "nameTaken": "Er bestaat al een campagne met dezelfde naam"
       },
       "errors": {
         "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Vink de nummers aan waarmee je verzendt en geef elk een aandeel. De doelgroep wordt volgens die aandelen verdeeld en elk contact krijgt het bericht van slechts één nummer. Een leeg aandeel of 0 telt als 1.",
         "shareWeight": "Aandeel",
         "shareWeightLabel": "Aandeel van {name}",
-        "shareKeepOne": "Minstens één nummer blijft aangevinkt."
+        "shareKeepOne": "Minstens één nummer blijft aangevinkt.",
+        "nameTaken": "Er bestaat al een campagne met dezelfde naam"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Voorbeeld van de geldige nummers in het bestand",
         "csvLine": "Regel",
         "csvName": "Naam",
-        "csvStatus": "Status",
         "csvRow": {
           "new": "Nieuw contact",
           "existing": "Bestaand contact",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Verzenden naar eerdere verzendingen",
         "previousHint": "Bereik opnieuw de mensen naar wie eerdere broadcasts en campagnes zijn gegaan, eventueel alleen wie het las, niet las, erop antwoordde of klikte.",
         "chipPrevious": "{count, plural, one {# eerdere verzending} other {# eerdere verzendingen}} ({outcome})",
-        "filterNoConditions": "Voeg een voorwaarde toe om te zien hoeveel contacten overeenkomen."
+        "filterNoConditions": "Voeg een voorwaarde toe om te zien hoeveel contacten overeenkomen.",
+        "csvConsentCol": "Toestemming",
+        "csvContactCol": "Contact",
+        "csvConsent": {
+          "optedIn": "Aangemeld",
+          "optedOut": "Afgemeld"
+        },
+        "clearAudience": "Doelgroep wissen"
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",
@@ -1597,7 +1629,7 @@
         "retries": "Nieuwe pogingen",
         "retriesOn": "Aan, tot {date}",
         "retriesOff": "Uit",
-        "recurringNote": "Elke uitvoering gaat naar de doelgroep zoals die op dat moment is, dus het aantal ontvangers kan veranderen."
+        "recurringNote": "Er wordt nu niets verzonden. De eerste run begint op het hierboven genoemde tijdstip en elke run verschijnt daarna in de Geschiedenis als een eigen rij. Tot die tijd vindt u deze campagne onder Terugkerend. Elke run gaat naar het publiek zoals het dan is, dus het aantal ontvangers kan veranderen."
       },
       "status": {
         "back": "Terug naar campagnes",
@@ -1811,7 +1843,8 @@
         "add": "Een sjabloon toevoegen",
         "count": "{used} van {max} sjablonen",
         "limitReached": "Limiet bereikt: {max} sjablonen.",
-        "variablesTitle": "Variabelen van sjabloon {position}: {name}"
+        "variablesTitle": "Variabelen van sjabloon {position}: {name}",
+        "variablesLater": "{count, plural, one {# variabele krijgt} other {# variabelen krijgen}} de waarde uit de koppeling, niet uit deze voorbeeldweergave."
       }
     },
     "history": {

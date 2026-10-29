@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Questo link è in pausa o scaduto.",
       "ROW_VERSION_CONFLICT": "Questo elemento è stato modificato altrove. Ricarica e riprova.",
       "VALIDATION_FAILED": "Controlla i campi evidenziati e riprova.",
-      "PLAN_FEATURE_LOCKED": "Esegui l'upgrade del piano per usare questa funzionalità."
+      "PLAN_FEATURE_LOCKED": "Esegui l'upgrade del piano per usare questa funzionalità.",
+      "WFL_FORM_SYNC_FAILED": "Impossibile leggere i moduli da Meta."
     },
     "forms": {
       "heading": "Moduli WhatsApp",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Ancora nessun modulo",
-        "description": "Crea un modulo, poi invialo da un passaggio modulo WhatsApp all'interno di un flusso."
+        "description": "Crea un modulo, poi invialo da un passaggio modulo WhatsApp all'interno di un flusso.",
+        "noMatch": "Nessun modulo corrisponde a «{q}»."
       },
       "table": {
         "form": "Modulo",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "Salvato.",
-        "published": "Pubblicato su WhatsApp."
+        "published": "Pubblicato su WhatsApp.",
+        "connectHint": "I moduli si pubblicano solo con una connessione diretta a WhatsApp Cloud API. Chiedi a un amministratore di collegarne una in Canali → WhatsApp.",
+        "connectLink": "Apri i canali WhatsApp"
       },
       "builder": {
         "back": "Torna ai moduli",
@@ -143,6 +147,14 @@
           "contact": "Contatto",
           "phone": "Telefono"
         }
+      },
+      "sync": {
+        "cta": "Sincronizza con Meta",
+        "syncing": "Sincronizzazione…",
+        "done": "Sincronizzato con Meta: {checked} controllati, {updated} aggiornati, {missing} non trovati in Meta, {metaOnly} solo in Meta."
+      },
+      "search": {
+        "placeholder": "Cerca moduli"
       }
     },
     "links": {

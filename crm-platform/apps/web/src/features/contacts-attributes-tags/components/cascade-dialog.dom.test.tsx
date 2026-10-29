@@ -213,6 +213,17 @@ describe('CascadeDialog', () => {
     expect(tick('south', 'mumbai').checked).toBe(false);
   });
 
+  it('closing the dialog from the editor leaves it on the list for the next time', async () => {
+    await mount();
+    await act(async () => byText('Add dependent field')!.click());
+    expect(document.querySelector('form')).not.toBeNull();
+    await act(async () =>
+      document.querySelector<HTMLButtonElement>('button[aria-label="Close"]')!.click(),
+    );
+    expect(document.querySelector('form')).toBeNull();
+    expect(byText('Add dependent field')).toBeDefined();
+  });
+
   it('a cascade child cannot be picked twice: it is no longer offered as a new dependent property', async () => {
     const link: FieldDependencyResponse = {
       id: 'l1',

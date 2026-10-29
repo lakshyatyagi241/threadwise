@@ -6,6 +6,7 @@ import {
   type TeamAnalyticsResponse,
 } from '@crm/contracts';
 import { presenceFor } from '../../common/agent-status';
+import { TtlCache } from '../../common/cache/ttl-cache';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -31,6 +32,12 @@ const oneDecimal = (v: unknown): number | null =>
  */
 @Injectable()
 export class TeamAnalyticsService {
+  /**
+   * The workspace's zone as Postgres knows it. `pg_timezone_names` is a view that reads the zone files: about 40 ms a call on the perf
+   * data set, more than the report's own queries, and a workspace's zone almost never changes (the same reasoning as `orgTimezone`).
+   */
+  private readonly zones = new TtlCache<string>(60_000, 2_000);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly entitlements: PlanEntitlementService,
@@ -55,12 +62,14 @@ export class TeamAnalyticsService {
 
       // Day, week (Monday) and month starts in the workspace's zone; an unknown zone name reads as UTC.
       const unit = range === 'today' ? 'day' : range;
-      const sinceRes = await tx.execute(sql`
-        WITH z AS (
+      const zone = await this.zones.get(String(orgId), async () => {
+        const res = await tx.execute(sql`
           SELECT COALESCE((SELECT name FROM pg_timezone_names WHERE name = o.settings ->> 'timezone'), 'UTC') AS name
-          FROM organizations o WHERE o.id = ${orgId}
-        )
-        SELECT date_trunc(${unit}::text, now() AT TIME ZONE z.name) AT TIME ZONE z.name AS since FROM z`);
+          FROM organizations o WHERE o.id = ${orgId}`);
+        return String((res.rows[0] as Raw | undefined)?.name ?? 'UTC');
+      });
+      const sinceRes = await tx.execute(sql`
+        SELECT date_trunc(${unit}::text, now() AT TIME ZONE ${zone}::text) AT TIME ZONE ${zone}::text AS since`);
       const since = new Date((sinceRes.rows[0] as Raw).since as string);
 
       const replies = await tx.execute(sql`

@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Reabre em {time}",
       "erased": "Contatos apagados",
-      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa nem o texto das mensagens. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
+      "erasedHint": "Estes contatos foram apagados, e as conversas foram mantidas sem os dados da pessoa. Os horários mostram a última mensagem, porque a data da exclusão não é registrada.",
       "erasedTitle": "Contato apagado"
     },
     "status": {
@@ -219,6 +219,7 @@
       "referral": "Veio de um anúncio ou link",
       "sentIn": "Enviada em {lang}. Mostrar o texto que você escreveu",
       "translatedFrom": "Traduzida de {lang}. Mostrar o original",
+      "translationFailed": "Enviado sem tradução. A tradução falhou, então seu texto foi enviado como você o escreveu.",
       "bot": "Bot",
       "broadcast": "Transmissão",
       "reacted": "Reação {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Resolvida",
           "closed": "Fechada",
           "spam": "Spam"
-        }
+        },
+        "created": "Iniciada em {date}",
+        "showMore": "Mostrar mais {count}",
+        "showLess": "Mostrar menos"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Não oficial",
       "officialFull": "Oficial (API do WhatsApp Cloud)",
       "unofficialFull": "Não oficial (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Conversas anteriores",
+      "began": "Iniciada em {date}",
+      "showMore": "Mostrar mais {count}",
+      "showLess": "Mostrar menos",
+      "loading": "Carregando…",
+      "failed": "Não foi possível carregar esta conversa.",
+      "unknown": "Remetente desconhecido",
+      "openThread": "Abrir conversa"
     }
   }
 }

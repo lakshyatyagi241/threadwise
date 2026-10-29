@@ -483,7 +483,13 @@ function TimelineTab({ conversationId }: { conversationId: string }) {
   );
 }
 
-/** The customer's other conversations (Reference's "past conversations"): a click opens that thread here. */
+/** How many of the customer's other conversations show at first; the rest open with "Show more". */
+const PAST_SHOWN = 5;
+
+/**
+ * The customer's other conversations (Reference's "past conversations"): a click opens that thread here. A mail thread is told by its
+ * subject, the day it began and its status, one thread to a row, so a customer with many threads stays easy to scan.
+ */
 function PastConversations({
   items,
   nowMs,
@@ -496,28 +502,67 @@ function PastConversations({
   const t = useTranslations('team-inbox-conversations.panel.past');
   const locale = useLocale();
   const timeZone = useTimeZone();
+  const [all, setAll] = useState(false);
   if (items.length === 0) return null;
+  const shown = all ? items : items.slice(0, PAST_SHOWN);
+  const day = (iso: string) =>
+    new Intl.DateTimeFormat(locale, {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      timeZone,
+    }).format(new Date(iso));
   return (
     <div data-testid="inbox-past">
-      <ul className="space-y-1">
-        {items.map((p) => (
-          <li key={p.id}>
-            <button
-              type="button"
-              onClick={() => onOpen(p.id)}
-              className="flex w-full items-start gap-2 rounded-md border border-border p-2 text-start hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <ChannelTag kind={p.channel.kind} name={p.channel.name} className="mt-0.5" />
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm">{p.preview ?? t('noMessages')}</span>
-                <span className="block text-[11px] text-muted-foreground">
-                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale, timeZone)}
+      <ul className="space-y-1.5">
+        {shown.map((p) => {
+          const mail = p.channel.kind === 'email';
+          return (
+            <li key={p.id}>
+              <button
+                type="button"
+                onClick={() => onOpen(p.id)}
+                data-testid={mail ? 'inbox-past-mail' : undefined}
+                className="flex w-full items-start gap-2 rounded-md border border-border p-2 text-start hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <ChannelTag kind={p.channel.kind} name={p.channel.name} className="mt-0.5" />
+                <span className="min-w-0 flex-1">
+                  <span className={cn('block truncate text-sm', mail && 'font-medium')}>
+                    {mail ? p.title : (p.preview ?? t('noMessages'))}
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">
+                    {mail
+                      ? t('created', { date: day(p.createdAt) })
+                      : `${t(`status.${p.status}`)} · ${listTime(p.lastMessageAt, nowMs, locale, timeZone)}`}
+                  </span>
                 </span>
-              </span>
-            </button>
-          </li>
-        ))}
+                {mail && (
+                  <span
+                    className={cn(
+                      'shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium',
+                      p.status === 'open'
+                        ? 'bg-primary/10 text-primary'
+                        : 'bg-muted text-muted-foreground',
+                    )}
+                  >
+                    {t(`status.${p.status}`)}
+                  </span>
+                )}
+              </button>
+            </li>
+          );
+        })}
       </ul>
+      {items.length > PAST_SHOWN && (
+        <button
+          type="button"
+          data-testid="inbox-past-more"
+          onClick={() => setAll((v) => !v)}
+          className="mt-2 w-full rounded-md py-1 text-center text-xs font-medium text-primary hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          {all ? t('showLess') : t('showMore', { count: items.length - PAST_SHOWN })}
+        </button>
+      )}
     </div>
   );
 }

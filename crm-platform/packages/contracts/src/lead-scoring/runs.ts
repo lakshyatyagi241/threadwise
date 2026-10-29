@@ -7,10 +7,10 @@ export type LscRunTrigger = (typeof LSC_RUN_TRIGGERS)[number];
 
 export const lscRunsQuerySchema = z.object({
   /** Only the runs of one contact (its uuid). */
-  contactId: z.string().uuid().optional(),
+  contactId: z.guid().optional(),
   status: z.enum(LSC_RUN_STATUSES).optional(),
   cursor: z.string().min(1).max(512).optional(),
-  limit: z.coerce.number().int().min(1).max(100).default(25),
+  limit: z.coerce.number().int().min(1).max(100).prefault(25),
 });
 export type LscRunsQuery = z.infer<typeof lscRunsQuerySchema>;
 

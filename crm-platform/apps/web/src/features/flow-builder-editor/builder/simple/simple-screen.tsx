@@ -102,6 +102,8 @@ const str = (v: unknown): string => (typeof v === 'string' ? v : v == null ? '' 
 const QUIET_DISABLED =
   'disabled:opacity-100 disabled:border-border disabled:bg-muted disabled:text-muted-foreground';
 
+const AUTOSAVE_MS = 1500;
+
 export function SimpleScreen({
   flowId: initialFlowId,
   channel = 'chat',
@@ -280,6 +282,7 @@ function Editor({
   const queuedSave = useRef<Promise<FlowDetail> | null>(null);
   const inFlight = useRef(0);
   const failToast = useRef<number | null>(null);
+  const failedAtEdit = useRef(-1);
   // Every saved flow has FAQs beside Build (for a person who may read AI agents' knowledge); a website chat or WhatsApp bot also has Customize and Deploy.
   const canFaqs = useCan('aiag.training.read');
   const canEditFaqs = useCan('aiag.training.update');
@@ -571,9 +574,28 @@ function Editor({
     closeAndSave.current = () => {
       setActiveId(null);
       if (!dirtyRef.current || !canEditFlow) return;
-      persist().catch(saveFailed);
+      persist()
+        .then(() => toast(t('nodeSaved'), 'success'))
+        .catch(saveFailed);
     };
   });
+
+  // A saved flow keeps itself saved: a moment after the last change (a step added or moved, an answer's next step, the name) the draft
+  // goes to the server, so the page has no Save button to press. A flow not saved yet is created by Save or Publish.
+  useEffect(() => {
+    // After a failed save the next try waits for the next edit, so a refusal does not repeat itself every moment.
+    if (!dirty || !flowId || !canEditFlow || busy || failedAtEdit.current === editSeq.current)
+      return;
+    const timer = window.setTimeout(() => {
+      const at = editSeq.current;
+      persist().catch((e) => {
+        failedAtEdit.current = at;
+        saveFailed(e);
+      });
+    }, AUTOSAVE_MS);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- persist and saveFailed read refs, so a new render must not restart the wait
+  }, [dirty, doc, name, flowId, canEditFlow, busy]);
 
   useEffect(() => {
     if (!activeId) return;
@@ -742,15 +764,17 @@ function Editor({
             >
               {tTool('test')}
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
-              className={QUIET_DISABLED}
-              onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
-            >
-              {t('save')}
-            </Button>
+            {onCustomizeTab || !flowId ? (
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={busy || !(onCustomizeTab ? customizeDirty : dirty)}
+                className={QUIET_DISABLED}
+                onClick={() => (onCustomizeTab ? customizeSave.current?.() : void onSave())}
+              >
+                {t('save')}
+              </Button>
+            ) : null}
             <Button
               variant={published && !unpublished && !dirty ? 'secondary' : 'brand'}
               size="sm"
@@ -1096,7 +1120,7 @@ function Editor({
                   ctx={ctx}
                   channel={channel}
                   set={setTrigger}
-                  bad={showProblems && found.some((p) => p.stepId === null)}
+                  bad={showProblems && found.some((p) => p.onTrigger)}
                 />
               ) : null}
 
@@ -1189,6 +1213,7 @@ function Editor({
                                     doc={doc}
                                     stepId={s.id}
                                     value={s.goto ?? null}
+                                    noSelf
                                     onChange={(target) => setGoto(s.id, target)}
                                   />
                                 </div>
@@ -1816,7 +1841,7 @@ function StepCard(p: {
                   >
                     <span className="min-w-0 flex-1 truncate">{e.title}</span>
                     {e.target ? (
-                      <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-mono text-[10.5px] font-normal italic">
+                      <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-mono text-[10.5px] font-normal">
                         {t('stage', { stage: e.target })}
                       </span>
                     ) : null}

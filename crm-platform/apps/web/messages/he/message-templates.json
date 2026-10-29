@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta מאפשרת עריכה אחת ב-24 שעות ועשר ב-30 ימים בתבנית מאושרת. נסו שוב מאוחר יותר.",
       "ROW_VERSION_CONFLICT": "מישהו שינה את התבנית הזו בזמן שערכת. טען מחדש כדי לראות את הגרסה האחרונה, ולאחר מכן החל את השינוי שלך שוב.",
       "VALIDATION_FAILED": "חלק מהשדות אינם תקינים. בדוק את השדות שלמטה.",
-      "INTERNAL": "השרת לא הצליח לטפל בבקשה. נסה שוב בעוד רגע."
+      "INTERNAL": "השרת לא הצליח לטפל בבקשה. נסה שוב בעוד רגע.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "תצוגה מקדימה",
@@ -375,13 +382,18 @@
           "flowIdRequired": "הזינו את מזהה ה-Flow.",
           "flowIdInvalid": "מזהה ה-Flow הוא מספר.",
           "screenRequired": "הזינו את מזהה המסך.",
-          "catalogAlone": "לא ניתן לשלב כפתור קטלוג עם כפתורים אחרים."
+          "catalogAlone": "לא ניתן לשלב כפתור קטלוג עם כפתורים אחרים.",
+          "flowIdNotMeta": "הטופס הזה עדיין אינו Flow של Meta (מזהה ה-Flow שלו אינו מספר). פתחו את טפסי WhatsApp, שמרו ופרסמו אותו ואז בחרו אותו כאן."
         },
         "catalogHint": "פותח את קטלוג ה-WhatsApp שלך. על הכפתור כתוב „הצגת הקטלוג” והוא חייב להיות הכפתור היחיד.",
-        "flowId": "מזהה WhatsApp Flow",
-        "flowIdHint": "המזהה המספרי של WhatsApp Flow שפורסם, ממנהל ה-Flows של Meta.",
-        "screen": "מסך פתיחה",
-        "screenHint": "מזהה המסך שבו נפתח הטופס, למשל WELCOME."
+        "flowPick": "טופס WhatsApp",
+        "flowPickHint": "בחרו אחד מטפסי ה-WhatsApp שפרסמתם. הכפתור פותח אותו בתוך WhatsApp.",
+        "flowChoose": "בחרו טופס WhatsApp",
+        "flowLoading": "טוען טפסים…",
+        "flowNone": "עדיין אין לכם טפסי WhatsApp שפורסמו.",
+        "flowNoneLink": "צרו ופרסמו טופס",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (יש לפרסם אותו ב-Meta קודם)"
       },
       "result": {
         "metaRefused": "נשמר, אך Meta דחתה את התבנית.",
@@ -413,6 +425,7 @@
         "format": "הכרטיסים מציגים",
         "formatImage": "תמונות",
         "formatVideo": "סרטונים",
+        "limits": "תמונה עד 5 MB, וידאו עד 16 MB.",
         "count": "{used}/{max} כרטיסים",
         "add": "הוספת כרטיס",
         "needTwo": "קרוסלה דורשת לפחות {min} כרטיסים.",
@@ -425,7 +438,9 @@
         "buttons": "כפתורים",
         "buttonText": "טקסט הכפתור",
         "buttonUrl": "כתובת האתר",
-        "buttonPhone": "מספר טלפון"
+        "buttonPhone": "מספר טלפון",
+        "moveUp": "העברת כרטיס {n} למעלה",
+        "moveDown": "העברת כרטיס {n} למטה"
       },
       "offer": {
         "title": "מבצע לזמן מוגבל",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "ניסוח שיווקי אינו מותר בקטגוריה זו.",
         "TAG_CONTENT_MISMATCH": "הקטגוריה אינה תואמת לתוכן (למשל טקסט שיווקי בתבנית UTILITY).",
         "SCAM": "Meta סימנה את התבנית כהונאה אפשרית. בדקו את הטענות והניסוח."
+      },
+      "stats": {
+        "title": "הביצועים של התבנית הזו",
+        "hint": "נספר מההודעות שנשלחו בעזרתה",
+        "loading": "טוען נתונים",
+        "error": "לא ניתן היה לטעון את הנתונים.",
+        "none": "עוד לא נשלח דבר עם התבנית הזו.",
+        "sent": "נשלחו",
+        "delivered": "נמסרו",
+        "read": "נקראו",
+        "replied": "נענו",
+        "failed": "נכשלו",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {הודעה אחת נשלחה} other {# הודעות נשלחו}} עם התבנית הזו, {queued} עדיין ממתינות",
+        "lastSent": "נשלחה לאחרונה {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "טון",
       "pickTone": "בחירת טון",
       "language": "שפה",
-      "languageHint": "הטיוטה נכתבת בשפת הטופס.",
+      "languageHint": "בחרו כל שפה ש-Meta מקבלת. הטיוטה נכתבת בה והתבנית מאמצת אותה.",
       "notes": "הנחיה מותאמת אישית",
       "notesNote": "אופציונלי / עד 2000",
       "notesPlaceholder": "כל דבר ספציפי שברצונכם לכלול: משתנים, קישורים, ניסוחים חובה, מה להימנע ממנו…",

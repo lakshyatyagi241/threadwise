@@ -6,9 +6,9 @@ import { z } from 'zod';
  */
 const schema = z.object({
   /** The live-rate source (TW-CPN-023): a JSON document with a `rates` map of units per 1 USD. Reference hard-coded this URL. */
-  CPN_FX_RATES_URL: z.string().url().default('https://open.er-api.com/v6/latest/USD'),
+  CPN_FX_RATES_URL: z.url().default('https://open.er-api.com/v6/latest/USD'),
   /** Reference waited 12 seconds before giving up. */
-  CPN_FX_TIMEOUT_MS: z.coerce.number().int().min(500).max(60_000).default(12_000),
+  CPN_FX_TIMEOUT_MS: z.coerce.number().int().min(500).max(60_000).prefault(12_000),
 });
 
 export type CpnConfig = z.output<typeof schema>;

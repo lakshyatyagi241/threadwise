@@ -173,6 +173,7 @@
         "members": "Участники",
         "permissions": "Разрешения",
         "lastEdited": "Последнее изменение",
+        "lastEditedBy": "автор: {name}",
         "actions": "Действия"
       },
       "row": {

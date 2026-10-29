@@ -27,15 +27,17 @@ function build(
   m: StoredMessage | null,
   opts: { enabled?: boolean; result?: DetectedTranslation } = {},
 ) {
-  const saved: { inbound: InboundOutcome[]; outbound: OutboundOutcome[] } = {
+  const saved: { inbound: InboundOutcome[]; outbound: OutboundOutcome[]; failed: number } = {
     inbound: [],
     outbound: [],
+    failed: 0,
   };
   const store: ConversationMessageStore = {
     load: async () => m,
     idOfUuid: async (_o, uuid) => (uuid === 'known' ? 1 : null),
     saveInbound: async (_o, _m, outcome) => void saved.inbound.push(outcome),
     saveOutbound: async (_o, _m, outcome) => void saved.outbound.push(outcome),
+    markOutboundFailed: async () => void (saved.failed += 1),
   };
   let configReads = 0;
   const db = {
@@ -128,6 +130,17 @@ describe('translateOutboundMessage', () => {
       isTranslated: true,
     });
     expect(saved.outbound).toHaveLength(1);
+  });
+
+  it('marks the message when translation was wanted and failed, and does not when it succeeded (#1278)', async () => {
+    const failed = build(out(), { result: { language: null, text: null } });
+    expect((await failed.svc.translateOutboundMessage(5, 1))?.failed).toBe(true);
+    expect(failed.saved.failed).toBe(1);
+    expect(failed.saved.outbound).toHaveLength(0);
+
+    const ok = build(out(), { result: { language: 'en', text: 'Su pedido' } });
+    await ok.svc.translateOutboundMessage(5, 1);
+    expect(ok.saved.failed).toBe(0);
   });
 
   it('never translates a template or a forward, and stores nothing', async () => {

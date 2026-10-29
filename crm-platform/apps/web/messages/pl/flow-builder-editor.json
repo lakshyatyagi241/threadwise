@@ -99,6 +99,7 @@
       "triggerGroup": "Auto · po dołączeniu do grupy",
       "triggerManual": "Ręczne zapisanie",
       "triggerKeyword": "Słowo kluczowe",
+      "triggerAny": "Dowolna wiadomość",
       "active": "aktywny",
       "done": "gotowe",
       "failed": "nieudany",
@@ -130,7 +131,10 @@
         "reEngagement": "Reaktywuje uśpionych kontakty spersonalizowaną ofertą lub odezwaniem się.",
         "lead": "Pielęgnuje nowe leady edukacyjnymi wiadomościami, zanim przekaże je sprzedaży.",
         "event": "Ograniczona czasowo wiadomość masowa wokół premiery, wyprzedaży lub sezonowej okazji.",
-        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów."
+        "default": "Zautomatyzowana ścieżka WhatsApp zbudowana w edytorze przepływów.",
+        "defaultWeb": "Czatbot na stronę internetową utworzony w edytorze przepływów.",
+        "defaultCall": "Automatyczne połączenie utworzone w edytorze przepływów.",
+        "defaultOther": "Automatyczna rozmowa utworzona w edytorze przepływów."
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "Zaimportowano {steps, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}} w {flows, plural, one {# przepływie} few {# przepływach} many {# przepływach} other {# przepływu}}. Sprawdź je, a następnie zapisz.",
         "invalidJson": "Ten plik nie jest prawidłowym JSON-em.",
         "saved": "Zapisano „{name}”",
+        "nodeSaved": "Węzeł został zaktualizowany!",
         "saveFailed": "Zapisywanie nie powiodło się: {error}",
         "publishedToast": "Opublikowano",
         "publishFailed": "Publikowanie nie powiodło się: {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "Usuń regułę",
           "variablePlaceholder": "Nazwa zmiennej (np. plan)",
+          "keyLabel": "Klucz",
+          "valueLabel": "Wartość",
+          "pickProperty": "Wybierz właściwość kontaktu",
           "pickVariable": "Wybierz zmienną do sprawdzenia.",
           "comparePlaceholder": "Porównaj z…",
           "joinerAnd": "ORAZ",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "Dokument (raport PDF itp.)",
           "upload": "Prześlij",
           "uploadHint": "Do {mb} MB. Hostujemy plik i dajemy przepływowi publiczny URL.",
+          "acceptedFormats": {
+            "image": "Akceptowane formaty: JPG, PNG.",
+            "video": "Akceptowane formaty: MP4, 3GP.",
+            "audio": "Akceptowane formaty: MP3, AAC, AMR, OGG.",
+            "document": "Akceptowane formaty: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Zastąp plik",
           "chooseKind": {
             "image": "Wybierz obraz (lub przeciągnij tutaj)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "Bez @. Link będzie miał postać ig.me/m/twojamarka — kliknięcie otwiera DM do Twojego konta.",
           "igMessage": "Wiadomość WhatsApp",
           "igMessageHint": "Wysyłana klientowi na WhatsApp z linkiem do Instagrama. Obsługuje '{{'zmienne'}}'.",
-          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇"
+          "igMessagePlaceholder": "Kontynuuj z nami na Instagramie 👇",
+          "templateFills": "Czym wypełnić każdy numer",
+          "templateFillsHint": "Wpisz tekst dla każdego numeru szablonu albo naciśnij /, aby wstawić dane kontaktu lub zmienną przepływu. Zostaw puste, aby użyć wartości z szablonu.",
+          "templateHeaderMedia": "Plik nagłówka",
+          "templateHeaderMediaHint": "Obraz, film lub plik w nagłówku tego szablonu. Potrzebny, gdy szablon nie ma własnego pliku.",
+          "templateHeaderMediaMissing": "Dodaj plik nagłówka: ten szablon go nie ma, a WhatsApp nie wyśle go bez pliku."
         },
         "sequence": {
           "info": "Każda odpowiedź jest wysyłana klientowi po kolei. Połącz tekst, obrazy, wideo, audio i dokumenty w jednym węźle — idealne do kart produktów lub zestawów powitalnych.",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "Wyślij odpowiedź klientowi",
           "variable": "Zapisz odpowiedź jako",
           "variableHint": "Kolejne kroki odczytują odpowiedź pod tą nazwą, na przykład faq.answer."
+        },
+        "workflow": {
+          "listLoading": "Ładowanie list…",
+          "listPick": "— wybierz listę —",
+          "listFallback": "Lista",
+          "listNotLoaded": "Lista {id} (nie wczytano)",
+          "segmentLoading": "Ładowanie segmentów…",
+          "segmentPick": "— wybierz segment —",
+          "segmentFallback": "Segment kontaktów",
+          "segmentNotLoaded": "Segment {id} (nie wczytano)",
+          "updateIntroSub": "Pola kontaktu znajdziesz w <link>/contacts</link>. Numeru telefonu nie można tu zmienić.",
+          "updateIntro": "Ustawia <b>jedno pole</b> tego kontaktu. Użyj <mono>name</mono>, <mono>first_name</mono>, <mono>last_name</mono>, <mono>email</mono>, <mono>title</mono>, <mono>language</mono>, <mono>address</mono> albo klucza jednego z własnych pól niestandardowych. Kolejne węzły zobaczą nową wartość.",
+          "fieldLabel": "Pole",
+          "fieldHint": "Klucz pola, na przykład miasto lub email.",
+          "newValueLabel": "Nowa wartość",
+          "newValueHint": "Dowolny tekst lub {example}. Zostaw puste, aby wyczyścić pole (imienia nie można wyczyścić).",
+          "listIntroSub": "Listy zarządzasz w <link>/contacts/groups</link>.",
+          "listIntro": "Dodaje ten kontakt do <b>listy</b> albo usuwa go z niej. Zmiana listy wykonana przez przepływ nie uruchamia przepływów „dołączenie do listy” ani „opuszczenie listy”, więc przepływ nie może zapętlić się sam.",
+          "actionLabel": "Akcja",
+          "actionAdd": "Dodaj kontakt do listy",
+          "actionRemove": "Usuń kontakt z listy",
+          "listLabel": "Lista",
+          "inListIntro": "Dzieli przepływ zależnie od tego, czy kontakt jest na <b>liście</b>: <mono>yes</mono>, gdy jest, <mono>no</mono>, gdy nie jest (albo lista została usunięta).",
+          "segmentIntroSub": "Segmenty tworzysz w <link>/segments</link>.",
+          "segmentIntro": "Dzieli przepływ zależnie od tego, czy kontakt w tej chwili pasuje do <b>segmentu</b>: <mono>yes</mono> albo <mono>no</mono>.",
+          "segmentLabel": "Segment kontaktów",
+          "waSessionIntro": "<mono>yes</mono>, gdy klient napisał w ciągu ostatnich <b>24 godzin</b>, więc zwykłą wiadomość nadal można wysłać; <mono>no</mono>, gdy okno się zamknęło i dotrzeć do klienta może tylko zatwierdzony szablon.",
+          "windowLabel": "Okno (godziny)",
+          "windowHint": "Okno WhatsApp wynosi 24 godziny. Wpisz krótsze, aby zachować większą ostrożność.",
+          "spreadsheetLabel": "Arkusz",
+          "spreadsheetHint": "Wybierz arkusz z połączonego konta Google.",
+          "tabLabel": "Karta (opcjonalnie)",
+          "tabHint": "Puste = pierwsza karta.",
+          "matchColumnLabel": "Znajdź wiersz, w którym kolumna",
+          "matchColumnHint": "Nagłówek kolumny, w której szukać.",
+          "matchValueLabel": "jest równa",
+          "matchValueHint": "Zwykle {example}.",
+          "sheetCheckIntro": "Wyszukuje wiersz w arkuszu Google i sprawdza jedną z jego komórek: <mono>yes</mono>, gdy komórka spełnia warunek, <mono>no</mono>, gdy go nie spełnia, gdy żaden wiersz nie pasuje albo gdy nie uda się odczytać danych z Google.",
+          "checkColumnLabel": "Kolumna do sprawdzenia",
+          "testLabel": "Warunek",
+          "valueLabel": "Wartość",
+          "sheetContactIntro": "Wyszukuje wiersz w arkuszu Google i kopiuje komórki do <b>tego kontaktu</b>: jedna kolumna na jedno pole. Aktualizuje kontakt, z którym rozmawia przepływ; nie tworzy kontaktów z nowych wierszy.",
+          "copyColumnsLabel": "Kopiuj te kolumny",
+          "copyColumnsHint": "Nagłówek kolumny w arkuszu → klucz pola kontaktu.",
+          "columnHeaderPlaceholder": "Nagłówek kolumny",
+          "addColumn": "Dodaj kolumnę",
+          "op": {
+            "equals": "jest równe",
+            "not_equals": "nie jest równe",
+            "contains": "zawiera",
+            "not_contains": "nie zawiera",
+            "starts_with": "zaczyna się od",
+            "ends_with": "kończy się na",
+            "greater_than": "jest większe niż",
+            "less_than": "jest mniejsze niż",
+            "is_set": "ma wartość",
+            "is_not_set": "nie ma wartości",
+            "is_empty": "jest puste",
+            "is_not_empty": "nie jest puste"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "Uruchamia API zapisane w <b>API Library</b> dla kontaktu z tego przebiegu. Przepływ wychodzi przez <mono>success</mono>, gdy API odpowie 2xx, a przez <mono>error</mono> w każdym innym przypadku.",
+          "apiLabel": "Interfejs API",
+          "loadFailed": "Nie udało się wczytać zapisanych API.",
+          "manageApis": "Zarządzaj API",
+          "refreshList": "Odśwież listę",
+          "loading": "Wczytywanie API…",
+          "pickApi": "— wybierz API —",
+          "noApis": "Brak zapisanych API",
+          "loadingName": "Wczytywanie…",
+          "savedApiName": "Zapisane API",
+          "notFound": "{name} (nie znaleziono)",
+          "variablesLabel": "Zmienne",
+          "variablesHint": "Zostaw wartość pustą, aby użyć zmiennej o tej nazwie z przebiegu, potem właściwości kontaktu, a na końcu wartości domyślnej. Wartości mogą zawierać {example}.",
+          "defaultPlaceholder": "Domyślnie: {value}",
+          "saveLabel": "Zapisz odpowiedź w",
+          "saveHint": "Kolejne węzły odczytają odpowiedź jako <mono>{variable}</mono>, pole jako <mono>{field}</mono>, a status jako <mono>{status}</mono>.",
+          "exposes": "Ten API udostępnia także <mono>{list}</mono>."
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "Chatbot",
-          "description": "Uruchom inny chatbot"
+          "description": "Przekaż czat agentowi AI"
         },
         "whatsapp_shop": {
           "label": "Sklep WhatsApp",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "„{node}” nie ma połączenia wejściowego — nic do niego nie prowadzi.",
+        "buttonNoExit": "„{node}”: przycisk „{button}” nie prowadzi do żadnego kroku.",
         "notConnected": "„{node}” nie jest z niczym połączony.",
         "wrongChannel": "„{node}” nie działa na {channel} — usuń go lub ponownie włącz kanał we węźle Wyzwalacz.",
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",

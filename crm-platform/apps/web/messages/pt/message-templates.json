@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "A Meta permite uma edição a cada 24 horas e dez a cada 30 dias em um modelo aprovado. Tente novamente mais tarde.",
       "ROW_VERSION_CONFLICT": "Outra pessoa alterou este modelo enquanto você editava. Recarregue para ver a versão mais recente e aplique sua alteração novamente.",
       "VALIDATION_FAILED": "Alguns campos são inválidos. Verifique os campos abaixo.",
-      "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes."
+      "INTERNAL": "O servidor não conseguiu processar esta solicitação. Tente novamente em instantes.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Pré-visualização",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Informe o ID do Flow.",
           "flowIdInvalid": "O ID do Flow é um número.",
           "screenRequired": "Informe o ID da tela.",
-          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões."
+          "catalogAlone": "Um botão de catálogo não pode ser combinado com outros botões.",
+          "flowIdNotMeta": "Este formulário ainda não é um Flow da Meta (o ID do Flow não é um número). Abra Formulários do WhatsApp, salve e publique, e depois escolha aqui."
         },
         "catalogHint": "Abre o seu catálogo do WhatsApp. O botão diz “Ver catálogo” e deve ser o único botão.",
-        "flowId": "ID do WhatsApp Flow",
-        "flowIdHint": "O ID numérico de um WhatsApp Flow publicado, no gerenciador de Flows da Meta.",
-        "screen": "Tela inicial",
-        "screenHint": "O ID da tela em que o formulário abre, por exemplo WELCOME."
+        "flowPick": "Formulário do WhatsApp",
+        "flowPickHint": "Escolha um dos seus formulários do WhatsApp publicados. O botão o abre dentro do WhatsApp.",
+        "flowChoose": "Escolha um formulário do WhatsApp",
+        "flowLoading": "Carregando formulários…",
+        "flowNone": "Você ainda não tem formulários do WhatsApp publicados.",
+        "flowNoneLink": "Crie e publique um",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publique primeiro na Meta)"
       },
       "result": {
         "metaRefused": "Salvo, mas a Meta recusou o modelo.",
@@ -413,6 +425,7 @@
         "format": "Os cartões mostram",
         "formatImage": "Imagens",
         "formatVideo": "Vídeos",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB.",
         "count": "{used}/{max} cartões",
         "add": "Adicionar cartão",
         "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",
@@ -425,7 +438,9 @@
         "buttons": "Botões",
         "buttonText": "Texto do botão",
         "buttonUrl": "URL do site",
-        "buttonPhone": "Número de telefone"
+        "buttonPhone": "Número de telefone",
+        "moveUp": "Mover o cartão {n} para cima",
+        "moveDown": "Mover o cartão {n} para baixo"
       },
       "offer": {
         "title": "Oferta por tempo limitado",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Linguagem de marketing não permitida nesta categoria.",
         "TAG_CONTENT_MISMATCH": "A categoria não corresponde ao conteúdo (ex.: texto promocional em um modelo UTILITY).",
         "SCAM": "A Meta sinalizou o modelo como possível golpe. Revise as alegações e a linguagem."
+      },
+      "stats": {
+        "title": "Desempenho deste modelo",
+        "hint": "Contado a partir das mensagens enviadas com ele",
+        "loading": "Carregando números",
+        "error": "Não foi possível carregar os números.",
+        "none": "Nada foi enviado com este modelo ainda.",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "replied": "Respondidas",
+        "failed": "Falhas",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# mensagem enviada} other {# mensagens enviadas}} com este modelo, {queued} aguardando",
+        "lastSent": "último envio {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Tom",
       "pickTone": "Selecione o tom",
       "language": "Idioma",
-      "languageHint": "O rascunho é escrito no idioma do formulário.",
+      "languageHint": "Escolha qualquer idioma que a Meta aceite. O rascunho é escrito nele e o modelo o adota.",
       "notes": "Prompt personalizado",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Algo específico que você queira incluir: variáveis, links, frases obrigatórias, o que evitar…",

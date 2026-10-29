@@ -263,7 +263,11 @@ export function prepareChat(messages: readonly ChatMessage[], ctx: ChatContext):
     n += 1;
     const id = `m${n}`;
     ids.set(id, m.uuid);
-    const masked = clip(maskPii(body, ctx), inbound ? MAX_MESSAGE_CHARS : 200);
+    // The transcript sits between <chat> tags in the prompt; a message that writes its own tag would end the block early (#1273).
+    const masked = clip(
+      maskPii(body, ctx).replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+      inbound ? MAX_MESSAGE_CHARS : 200,
+    );
     lines.push(inbound ? `[${id}] C: ${masked}` : `T: ${masked}`);
     if (throughAt === null || m.at > throughAt) throughAt = m.at;
     if (inbound) {

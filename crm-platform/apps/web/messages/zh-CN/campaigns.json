@@ -17,18 +17,19 @@
       "refresh": "刷新",
       "newCampaign": "新建营销活动",
       "tile": {
-        "sent": "已发送",
+        "sent": "已发送消息",
         "delivered": "已送达",
         "read": "已读",
-        "failed": "失败",
-        "processing": "处理中",
-        "campaigns": "{count} 个营销活动",
+        "failed": "失败消息",
+        "processing": "发送中的活动",
+        "campaigns": "来自 {count, plural, other {#个活动}}",
         "inFlight": "发送中",
         "awaiting": "等待中",
-        "queued": "{count} 条排队中",
+        "queued": "{count} 个已排期待开始",
         "deliveredRate": "送达率 {rate}%",
         "readRate": "已读率 {rate}%",
-        "failedCampaigns": "{count} 个营销活动失败"
+        "failedCampaigns": "{count, plural, other {#个活动}}被标记为失败",
+        "note": "已发送、已送达、已读和失败统计的是消息，失败的消息不计入已发送。每个数字下方的小字统计的是活动。全部数据都遵循下方选择的日期范围：{range}。"
       },
       "range": {
         "all": "全部时间",
@@ -174,7 +175,8 @@
         "status": "状态",
         "schedule": "排期",
         "actions": "操作"
-      }
+      },
+      "newCampaignAny": "新建活动"
     },
     "builder": {
       "loadError": "无法加载此营销活动。",
@@ -314,7 +316,22 @@
         "previousTitle": "以往发送",
         "previousHint": "添加以往群发和活动的收件人，也可以只选择已读、已回复或点击过的人。",
         "previousEstimate": "{count, plural, other {来自以往发送的最多 # 人（估算值：同时在两次发送中的人会被重复计算）。}}",
-        "previousEditHint": "编辑时不会显示您之前选择的以往发送：此活动已将收件人保存为联系人。如需添加更多人，请重新选择。"
+        "previousEditHint": "编辑时不会显示您之前选择的以往发送：此活动已将收件人保存为联系人。如需添加更多人，请重新选择。",
+        "emails": "手动输入邮箱",
+        "emailsHint": "每行一个，或用逗号、分号分隔。",
+        "emailsPlaceholder": "每行一个邮箱地址",
+        "emailsCount": "{count} 个地址",
+        "emailCsvHint": "列：姓名、邮箱。其他任何列都会成为可在消息中使用的变量。",
+        "emailModes": {
+          "csv": {
+            "title": "上传 CSV",
+            "hint": "导入此活动的邮箱地址。"
+          },
+          "manual": {
+            "title": "手动输入邮箱",
+            "hint": "每行粘贴一个邮箱地址。"
+          }
+        }
       },
       "message": {
         "title": "消息",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
       "draftChip": "草稿 / 未保存",
+      "draftSavedChip": "草稿 · 已保存",
       "steps": {
         "label": "营销活动步骤",
         "required": "必填",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "模板",
         "pickTemplate": "— 选择模板 —",
+        "searchTemplates": "按名称或语言搜索模板",
+        "noTemplateMatch": "没有与搜索匹配的模板。",
         "templateHint": "仅显示所选号码已通过审核的模板。其变量请在下方填写。",
         "noTemplates": "此号码还没有已通过审核的模板。请创建一个并等待审核通过。",
         "deliveryTitle": "发送",
@@ -725,7 +745,11 @@
         "balanceShort": "余额不足：还需 {shortfall}。",
         "balanceLowFull": "余额低于全部费用 {full}：目前套餐可以覆盖，但套餐用完后将无法覆盖。",
         "chargedNowLabel": "现从您的钱包扣款"
-      }
+      },
+      "kickerEmail": "邮件活动 / 新建",
+      "kickerEditEmail": "邮件活动 / 编辑",
+      "titleEmail": "创建新邮件",
+      "titleEditEmail": "编辑您的邮件"
     },
     "detail": {
       "notFound": "未找到该营销活动。",
@@ -1126,7 +1150,8 @@
         "saved": "草稿已保存",
         "saving": "正在保存...",
         "failed": "无法保存",
-        "retry": "重试"
+        "retry": "重试",
+        "nameTaken": "已存在同名活动"
       },
       "errors": {
         "network": "无法连接到服务器。请检查网络连接后重试。",
@@ -1226,7 +1251,8 @@
         "shareHint": "勾选要发送的号码，并为每个号码设置份额。受众按份额拆分，每位联系人只会收到来自一个号码的消息。份额为空或为 0 时按 1 计算。",
         "shareWeight": "份额",
         "shareWeightLabel": "{name} 的份额",
-        "shareKeepOne": "至少保留一个号码处于勾选状态。"
+        "shareKeepOne": "至少保留一个号码处于勾选状态。",
+        "nameTaken": "已存在同名活动"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "文件中有效号码的预览",
         "csvLine": "行",
         "csvName": "名称",
-        "csvStatus": "状态",
         "csvRow": {
           "new": "新联系人",
           "existing": "现有联系人",
@@ -1376,7 +1401,14 @@
         "modePrevious": "发送给以往发送的收件人",
         "previousHint": "重新触达以往群发和活动的收件人，也可以只选择已读、未读、已回复或点击过的人。",
         "chipPrevious": "{count, plural, other {# 个以往发送}}（{outcome}）",
-        "filterNoConditions": "添加一个条件，即可查看符合条件的联系人数量。"
+        "filterNoConditions": "添加一个条件，即可查看符合条件的联系人数量。",
+        "csvConsentCol": "同意状态",
+        "csvContactCol": "联系人",
+        "csvConsent": {
+          "optedIn": "已订阅",
+          "optedOut": "已退订"
+        },
+        "clearAudience": "清除受众"
       },
       "review": {
         "intro": "核对费用，告诉我们每个模板变量的填充内容，并检查群发。",
@@ -1597,7 +1629,7 @@
         "retries": "重试",
         "retriesOn": "开启，直至 {date}",
         "retriesOff": "关闭",
-        "recurringNote": "每次运行都会发给当时的受众，因此收件人数量可能会变化。"
+        "recurringNote": "现在不会发送任何消息。第一次运行在上面的时间开始，之后每次运行都会作为单独一行出现在历史记录中。在此之前，可在“定期”中找到此活动。每次运行都会发送给当时的受众，因此收件人数量可能变化。"
       },
       "status": {
         "back": "返回营销活动",
@@ -1811,7 +1843,8 @@
         "add": "添加模板",
         "count": "第 {used} 个，共 {max} 个模板",
         "limitReached": "已达上限：最多 {max} 个模板。",
-        "variablesTitle": "模板 {position} 的变量：{name}"
+        "variablesTitle": "模板 {position} 的变量：{name}",
+        "variablesLater": "{count, plural, other {#个变量}}的值来自映射，而不是此预览。"
       }
     },
     "history": {

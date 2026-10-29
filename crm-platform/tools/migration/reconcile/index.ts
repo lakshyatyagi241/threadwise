@@ -10,6 +10,7 @@ import { ctxOf, IdMap, rowUuid } from '../load/engine';
 import { ORG_COLLECTION } from '../load/org';
 import { prepareAccess } from '../load/access';
 import { verifyAccess } from './access';
+import { tupleDiff } from './set-diff';
 import { verifyAutomations } from './automation';
 import { verifyChat } from './chat';
 import { verifyCampaigns } from './campaigns';
@@ -32,6 +33,7 @@ import { CONTACT_FIELDS, propertyKeyOf, REJECT_MARKER } from '../transform/conta
 import { isBuiltInKey } from '../transform/fields';
 import { buildIndex } from '../transform/source-index';
 import type { HandlerSpec, Outcome, Row, TableSpec } from '../transform/types';
+import { mediaAsCopied } from './media-copy';
 import {
   docKeysWith,
   isDeleted,
@@ -1036,25 +1038,24 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         ).map((r) => `${r.f}\u0000${r.v}`),
       );
       const wantO = oracleOptionDeps(fieldDocs!, optionDocs!, odeps!, opts);
-      const gotO = new Set(
-        (
-          (
-            await withTenant(db, { orgId }, (tx) =>
-              tx.execute(sql`SELECT pf.key AS pf, po.value AS pv, cf.key AS cf, co.value AS cv FROM field_option_dependencies d
+      // Postgres compares: the full list is ~50,000 rows, and shipping them here took ~2 s a run (slow-query alert). Skipped when the step did not run.
+      if (stepRan('field_option_deps')) {
+        const diff = await withTenant(db, { orgId }, (tx) =>
+          tupleDiff(
+            tx,
+            wantO,
+            sql`SELECT pf.key AS pf, po.value AS pv, cf.key AS cf, co.value AS cv FROM field_option_dependencies d
           JOIN field_options po ON po.org_id = d.org_id AND po.id = d.parent_option_id JOIN fields pf ON pf.org_id = po.org_id AND pf.id = po.field_id
           JOIN field_options co ON co.org_id = d.org_id AND co.id = d.child_option_id JOIN fields cf ON cf.org_id = co.org_id AND cf.id = co.field_id
-          WHERE d.org_id = ${orgId}`),
-            )
-          ).rows as Array<{ pf: string; pv: string; cf: string; cv: string }>
-        ).map((r) => `${r.pf}\u0000${r.pv}\u0000${r.cf}\u0000${r.cv}`),
-      );
-      if (
-        stepRan('field_option_deps') &&
-        ([...wantO].some((x) => !gotO.has(x)) || [...gotO].some((x) => !wantO.has(x)))
-      )
-        alarm(
-          'ORACLE_MISMATCH: field_option_dependencies differ from the independent dependency list',
+          WHERE d.org_id = ${orgId}`,
+            ['pf', 'pv', 'cf', 'cv'],
+          ),
         );
+        if (diff.missing + diff.unexpected > 0)
+          alarm(
+            `ORACLE_MISMATCH: field_option_dependencies differ from the independent dependency list (${diff.missing} missing, ${diff.unexpected} unexpected)`,
+          );
+      }
     }
 
     // 3d2. roles, grants, users and their per-user rows against the independent oracle; NO-ADMIN over the whole organization
@@ -1135,6 +1136,8 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         items: faqItems,
         allowExtraRows: Boolean(opts.allowExtraRows),
         alarm,
+        readMs: walletHistory ? Date.parse(walletHistory.asOf) : null,
+        warnings,
       });
     if (anyRan('automation_flows', 'automation_nodes'))
       await verifyAutomations({
@@ -1287,6 +1290,34 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           base.counts = {};
         }
         const now = await withTenant(db, { orgId }, (tx) => digest(tx, orgId, [...known]));
+        // the app's analytics trigger writes one an_events row for each counted message the import inserts at or after the feed cut-over,
+        // and the rollups from them: the app's own rows, expected, as long as the count matches the counted messages
+        const FEED_CUTOVER = '2026-10-21T07:13:06.165671Z';
+        const FEED_TABLES = new Set(['an_events', 'an_rollup_day', 'an_rollup_hour']);
+        const feedOk = await withTenant(db, { orgId }, async (tx) => {
+          const counted = Number(
+            (
+              (
+                await tx.execute(sql`SELECT count(*)::int AS n FROM messages WHERE org_id = ${orgId} AND deleted_at IS NULL
+                  AND created_at >= ${FEED_CUTOVER}::timestamptz AND kind NOT IN ('system', 'reaction')
+                  AND NOT (COALESCE(meta->>'source', '') = 'broadcast' AND meta->>'broadcast_id' IS NOT NULL)
+                  AND NOT (COALESCE(meta->>'source', '') = 'campaign' AND (meta->>'campaign_id' IS NOT NULL OR COALESCE(provider_message_id, '') LIKE 'campaign:%'))`)
+              ).rows[0] as { n: number }
+            ).n,
+          );
+          const events = Number(
+            // net: a message deleted or soft-deleted after the import writes a -1 event (2030_msg_feed_deletes), so the sum is what is still
+            // shown. A status change (k2 set) moves one message between statuses and adds nothing to the count, so it is left out.
+            (
+              (
+                await tx.execute(
+                  sql`SELECT COALESCE(sum(qty), 0)::int AS n FROM an_events WHERE org_id = ${orgId} AND type = 7 AND k2 IS NULL`,
+                )
+              ).rows[0] as { n: number }
+            ).n,
+          );
+          return events === counted;
+        });
         for (const table of new Set([...Object.keys(base.counts), ...Object.keys(now)])) {
           const was = [...(base.counts[table] ?? [])];
           const is = [...(now[table] ?? [])];
@@ -1301,9 +1332,29 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             alarm(
               `BASELINE_CHANGED: ${table}: ${gone} row(s) that provisioning created were changed or deleted`,
             );
-          if (left.length > 0)
+          // passages the application's worker wrote for the migrated FAQ entries after the live balance was read: activity, not findings
+          const appAfter =
+            left.length > 0 && table === 'ai_training_chunks' && walletHistory
+              ? await withTenant(db, { orgId }, async (tx) =>
+                  Number(
+                    (
+                      (
+                        await tx.execute(sql`
+                          SELECT count(*) FILTER (WHERE created_at > ${new Date(walletHistory.asOf).toISOString()}::timestamptz)::int AS n
+                          FROM ai_training_chunks WHERE org_id = ${orgId}`)
+                      ).rows[0] as { n: number }
+                    ).n,
+                  ),
+                )
+              : 0;
+          const app = Math.min(appAfter, left.length);
+          if (app > 0)
+            warnings.push(
+              `APP ROWS: ${table}: ${app} row(s) were written by the application after the live balance was read (counted as activity, not findings)`,
+            );
+          if (left.length - app > 0 && !(feedOk && FEED_TABLES.has(table)))
             alarm(
-              `EXTRA_ROWS: ${table}: ${left.length} row(s) were added that this migration does not create${gone > 0 ? ' (or changed)' : ''}`,
+              `EXTRA_ROWS: ${table}: ${left.length - app} row(s) were added that this migration does not create${gone > 0 ? ' (or changed)' : ''}`,
             );
         }
       }
@@ -1650,10 +1701,13 @@ async function verifyChunk(
         continue;
       v.sample.compared++;
       roll.rows++;
+      // a flow's media links point at the copy the files step made (reconcile/media-copy.ts): the same file, not a difference
+      const got: Record<string, unknown> =
+        table === 'flows' ? { ...t, flow_data: mediaAsCopied(l.row.flow_data, t.flow_data) } : t;
       roll.s.push(`${l.uuid}:${rowHash(compareCols, types, l.row)}`);
-      roll.t.push(`${l.uuid}:${rowHash(compareCols, types, t)}`);
+      roll.t.push(`${l.uuid}:${rowHash(compareCols, types, got)}`);
       const diff = compareCols.filter(
-        (c) => norm(l.row[c], types.get(c)!) !== norm(t[c], types.get(c)!),
+        (c) => norm(l.row[c], types.get(c)!) !== norm(got[c], types.get(c)!),
       );
       for (const [c, want0] of Object.entries(ts.constants ?? {})) {
         const want = c === 'row_version' && v.bumped.has(l.uuid) ? v.bumped.get(l.uuid) : want0;
@@ -1771,7 +1825,11 @@ async function checkOrg(
       // core-load moves the organization to the plan built from the Waboo plan (a hidden plan this tool made); that is not drift
       const closedPlan =
         String(o.plan) !== String(want.plan) &&
-        (await tx.execute(sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`)).rows.length > 0;
+        (
+          await tx.execute(
+            sql`SELECT 1 FROM plans WHERE slug = ${o.plan} AND detail LIKE 'Created by the Waboo migration%'`,
+          )
+        ).rows.length > 0;
       for (const k of ['slug', 'name', 'status', 'plan'] as const) {
         if (k === 'plan' && closedPlan) continue;
         if (String(o[k]) !== String(want[k]))
@@ -1783,7 +1841,15 @@ async function checkOrg(
     // timezone is set at provisioning from --timezone (like signup) and is the owner's to change afterwards
     const { ownerUserId, timezone: _tz, ...rest } = o.settings as Record<string, unknown>;
     // core-load adds the Waboo business facts (plan code, provider, subscription id ...) under legacy.waboo; only the marker is compared
-    const legacyOnly = { ...rest, legacy: { waboo: { client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {}).client } } };
+    const legacyOnly = {
+      ...rest,
+      legacy: {
+        waboo: {
+          client: ((rest.legacy as { waboo?: { client?: string } } | undefined)?.waboo ?? {})
+            .client,
+        },
+      },
+    };
     if (stable(legacyOnly) !== stable({ legacy: { waboo: { client } } }))
       alarm(
         'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker, ownerUserId and timezone)',

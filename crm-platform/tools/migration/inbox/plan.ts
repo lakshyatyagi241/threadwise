@@ -469,7 +469,17 @@ export async function buildChatPlan(a: PlanInput): Promise<ChatPlan> {
     let status: 'open' | 'closed' = 'open';
     if (settings.threadStatus === 'closed') status = 'closed';
     else if (statusRaw === 'closed') status = 'closed';
-    else if (statusRaw !== 'open')
+    // A chat with no visitor_logs session and no status on any turn is one Waboo's inbox never listed (it lists only sessions): in a
+    // workspace whose dump has sessions it loads closed, so it does not sit among the open chats (and the Unassigned count) the
+    // agents work through. It stays in All, searchable, and a new message from the customer opens it again.
+    else if (statusRaw === null && sessionStatus.size > 0) {
+      status = 'closed';
+      softs.push({
+        code: 'NO_STATUS_CONV',
+        reason:
+          "no visitor_logs session and no turn names a status: Waboo's inbox never listed this chat; imported closed",
+      });
+    } else if (statusRaw !== 'open')
       softs.push({
         code: 'NO_STATUS_CONV',
         reason: statusRaw

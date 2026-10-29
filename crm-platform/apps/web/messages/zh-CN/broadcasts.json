@@ -158,7 +158,11 @@
       "contactsDenied": "您没有联系人列表的访问权限。请通过分组或标签选择联系人。",
       "unofficialDisabled": "您的工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
       "colEmail": "电子邮件",
-      "noEmail": "没有邮箱地址"
+      "noEmail": "没有邮箱地址",
+      "contactsHeading": "联系人",
+      "matchTitle": "与所选分组、标签和分段匹配",
+      "matchAny": "任一",
+      "matchAll": "全部"
     },
     "overrides": {
       "title": "填写本次发送内容",

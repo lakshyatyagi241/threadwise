@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta mengizinkan satu edit dalam 24 jam dan sepuluh dalam 30 hari untuk template yang disetujui. Coba lagi nanti.",
       "ROW_VERSION_CONFLICT": "Templat ini diubah orang lain saat Anda mengedit. Muat ulang untuk melihat versi terbaru, lalu terapkan perubahan Anda lagi.",
       "VALIDATION_FAILED": "Beberapa kolom tidak valid. Periksa kolom di bawah.",
-      "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi."
+      "INTERNAL": "Server gagal memproses permintaan ini. Coba lagi sebentar lagi.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Pratinjau",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Masukkan ID Flow.",
           "flowIdInvalid": "ID Flow berupa angka.",
           "screenRequired": "Masukkan ID layar.",
-          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain."
+          "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain.",
+          "flowIdNotMeta": "Formulir ini belum menjadi Flow Meta (Flow ID-nya bukan angka). Buka Formulir WhatsApp, simpan dan publikasikan, lalu pilih di sini."
         },
         "catalogHint": "Membuka katalog WhatsApp Anda. Tombol bertuliskan “Lihat katalog” dan harus menjadi satu-satunya tombol.",
-        "flowId": "ID WhatsApp Flow",
-        "flowIdHint": "ID numerik WhatsApp Flow yang sudah dipublikasikan, dari pengelola Flows Meta.",
-        "screen": "Layar pembuka",
-        "screenHint": "ID layar tempat formulir dibuka, misalnya WELCOME."
+        "flowPick": "Formulir WhatsApp",
+        "flowPickHint": "Pilih salah satu formulir WhatsApp Anda yang sudah dipublikasikan. Tombol membukanya di dalam WhatsApp.",
+        "flowChoose": "Pilih formulir WhatsApp",
+        "flowLoading": "Memuat formulir…",
+        "flowNone": "Anda belum punya formulir WhatsApp yang dipublikasikan.",
+        "flowNoneLink": "Buat dan publikasikan satu",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (publikasikan ke Meta dulu)"
       },
       "result": {
         "metaRefused": "Tersimpan, tetapi Meta menolak templat.",
@@ -413,6 +425,7 @@
         "format": "Kartu menampilkan",
         "formatImage": "Gambar",
         "formatVideo": "Video",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB.",
         "count": "{used}/{max} kartu",
         "add": "Tambah kartu",
         "needTwo": "Carousel memerlukan minimal {min} kartu.",
@@ -425,7 +438,9 @@
         "buttons": "Tombol",
         "buttonText": "Teks tombol",
         "buttonUrl": "URL situs web",
-        "buttonPhone": "Nomor telepon"
+        "buttonPhone": "Nomor telepon",
+        "moveUp": "Naikkan kartu {n}",
+        "moveDown": "Turunkan kartu {n}"
       },
       "offer": {
         "title": "Penawaran waktu terbatas",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Bahasa pemasaran tidak diizinkan dalam kategori ini.",
         "TAG_CONTENT_MISMATCH": "Kategori tidak sesuai dengan konten (mis. teks promosi dalam template UTILITY).",
         "SCAM": "Meta menandai template ini sebagai potensi penipuan. Tinjau klaim dan bahasanya."
+      },
+      "stats": {
+        "title": "Kinerja templat ini",
+        "hint": "Dihitung dari pesan yang dikirim dengannya",
+        "loading": "Memuat angka",
+        "error": "Angka tidak dapat dimuat.",
+        "none": "Belum ada yang dikirim dengan templat ini.",
+        "sent": "Terkirim",
+        "delivered": "Diterima",
+        "read": "Dibaca",
+        "replied": "Dibalas",
+        "failed": "Gagal",
+        "percent": "{value}%",
+        "footer": "{total} pesan dikirim dengan templat ini, {queued} masih menunggu",
+        "lastSent": "terakhir dikirim {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Nada",
       "pickTone": "Pilih nada",
       "language": "Bahasa",
-      "languageHint": "Draf ditulis dalam bahasa formulir.",
+      "languageHint": "Pilih bahasa apa pun yang diterima Meta. Draf ditulis dalam bahasa itu, dan templat memakainya.",
       "notes": "Prompt kustom",
       "notesNote": "opsional / maks. 2000",
       "notesPlaceholder": "Hal spesifik yang ingin disertakan: variabel, tautan, frasa wajib, hal yang harus dihindari…",

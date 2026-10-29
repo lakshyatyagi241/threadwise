@@ -367,6 +367,7 @@
         "WebhookRateHigh",
         "WebhookLatencyHigh",
         "DbPoolSaturated",
+        "DbPoolAcquireSlow",
         "WabaIngestBacklogGrowing"
       ],
       "runbook": "docs/runbooks/p0-failure-modes.md#webhookflood",
@@ -378,9 +379,61 @@
       "p0": false,
       "failureMode": "Slow queries and Google Chat alert delivery (watcher down, bridge failing, dead-man heartbeat missing)",
       "severity": "warning",
-      "alerts": ["Watchdog", "SlowQueryBurst", "SlowQueryWatcherDown", "ChatBridgeDeliveryFailing", "ChatBridgeNoWatchdog"],
+      "alerts": [
+        "Watchdog",
+        "SlowQueryBurst",
+        "SlowQueryWatcherDown",
+        "ChatBridgeDeliveryFailing",
+        "ChatBridgeNoWatchdog"
+      ],
       "runbook": "docs/runbooks/google-chat-alerts.md",
       "status": "tested-promtool"
+    },
+    {
+      "id": "db-statement-slow",
+      "p0": false,
+      "failureMode": "A SQL statement averages 120 ms or more per call over 5 minutes (Sheet 3 D-04)",
+      "severity": "warning",
+      "alerts": ["SlowQueryMeanOver120ms"],
+      "runbook": "docs/runbooks/db-and-route-alerts.md#slowquerymeanover120ms",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "route-p95-slow",
+      "p0": false,
+      "failureMode": "A route's p95 is over 120 ms, counting routes with at least 50 requests in 15 minutes (Sheet 3 D-05)",
+      "severity": "warning",
+      "alerts": ["RouteLatencyP95High"],
+      "runbook": "docs/runbooks/db-and-route-alerts.md#routelatencyp95high",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "queue-job-failed",
+      "p0": false,
+      "failureMode": "A queue job used up its attempts and failed for good (Sheet 3 D-14)",
+      "severity": "warning",
+      "alerts": ["QueueJobFailed"],
+      "runbook": "docs/performance/queue-capacity/queue-observability-runbook.md#queuejobfailed",
+      "status": "tested-promtool"
+    },
+    {
+      "id": "redis-memory-high",
+      "p0": false,
+      "failureMode": "The queue Redis is over 70% of maxmemory (Sheet 3 D-15); it refuses writes at maxmemory",
+      "severity": "warning",
+      "alerts": ["RedisMemoryHigh"],
+      "runbook": "docs/runbooks/redis-cache-split.md#redismemoryhigh",
+      "status": "tested-promtool"
     }
-  ]
+  ],
+  "alertOwners": {
+    "SlowQueryMeanOver120ms": "vedant",
+    "RouteLatencyP95High": "vedant",
+    "ApiHighErrorRate": "vedant",
+    "DbPoolSaturated": "vedant",
+    "DbPoolAcquireSlow": "vedant",
+    "DbPoolExhausted": "vedant",
+    "QueueJobFailed": "vedant",
+    "RedisMemoryHigh": "vedant"
+  }
 }

@@ -17,18 +17,19 @@
       "refresh": "새로고침",
       "newCampaign": "새 캠페인",
       "tile": {
-        "sent": "발송됨",
+        "sent": "발송된 메시지",
         "delivered": "전달됨",
         "read": "읽음",
-        "failed": "실패",
-        "processing": "처리 중",
-        "campaigns": "캠페인 {count}개",
+        "failed": "실패한 메시지",
+        "processing": "발송 중인 캠페인",
+        "campaigns": "{count, plural, other {캠페인 #개}} 기준",
         "inFlight": "전송 중",
         "awaiting": "대기 중",
-        "queued": "대기 {count}건",
+        "queued": "시작 예정 {count}개",
         "deliveredRate": "전달률 {rate}%",
         "readRate": "읽음률 {rate}%",
-        "failedCampaigns": "실패한 캠페인 {count}건"
+        "failedCampaigns": "{count, plural, other {캠페인 #개}} 실패로 표시됨",
+        "note": "발송, 전달, 읽음, 실패는 메시지 수이며 실패한 메시지는 발송에 포함되지 않습니다. 각 숫자 아래의 작은 줄은 캠페인 수입니다. 모두 아래에서 선택한 기간({range})을 따릅니다."
       },
       "range": {
         "all": "전체 기간",
@@ -174,7 +175,8 @@
         "status": "상태",
         "schedule": "예약",
         "actions": "작업"
-      }
+      },
+      "newCampaignAny": "새 캠페인"
     },
     "builder": {
       "loadError": "이 캠페인을 불러올 수 없습니다.",
@@ -314,7 +316,22 @@
         "previousTitle": "이전 발송",
         "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 추가하세요. 읽었거나 답장했거나 클릭한 사람만 선택할 수도 있습니다.",
         "previousEstimate": "{count, plural, other {이전 발송에서 최대 #명 (추정치: 두 발송에 모두 포함된 사람은 두 번 계산됩니다).}}",
-        "previousEditHint": "수정할 때는 이전에 선택한 발송이 표시되지 않습니다. 이 캠페인은 이미 수신자를 연락처로 보유하고 있습니다. 더 추가하려면 다시 선택하세요."
+        "previousEditHint": "수정할 때는 이전에 선택한 발송이 표시되지 않습니다. 이 캠페인은 이미 수신자를 연락처로 보유하고 있습니다. 더 추가하려면 다시 선택하세요.",
+        "emails": "이메일 직접 입력",
+        "emailsHint": "한 줄에 하나씩, 또는 쉼표나 세미콜론으로 구분하세요.",
+        "emailsPlaceholder": "한 줄에 이메일 주소 하나",
+        "emailsCount": "주소 {count}개",
+        "emailCsvHint": "열: 이름, 이메일. 다른 열은 메시지에서 쓸 수 있는 변수가 됩니다.",
+        "emailModes": {
+          "csv": {
+            "title": "CSV 업로드",
+            "hint": "이 캠페인의 이메일 주소를 가져옵니다."
+          },
+          "manual": {
+            "title": "이메일 직접 입력",
+            "hint": "한 줄에 이메일 주소 하나씩 붙여넣으세요."
+          }
+        }
       },
       "message": {
         "title": "메시지",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "개인 WhatsApp 번호(비공식 API)를 통한 발송은 이 워크스페이스에서 사용할 수 없습니다. 공식 WhatsApp Business API 번호를 선택하세요.",
       "draftChip": "초안 / 저장되지 않음",
+      "draftSavedChip": "임시 저장 · 저장됨",
       "steps": {
         "label": "캠페인 단계",
         "required": "필수",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "템플릿",
         "pickTemplate": "— 템플릿 선택 —",
+        "searchTemplates": "이름 또는 언어로 템플릿 검색",
+        "noTemplateMatch": "검색과 일치하는 템플릿이 없습니다.",
         "templateHint": "선택한 번호의 승인된 템플릿만 표시됩니다. 변수는 아래에서 입력하세요.",
         "noTemplates": "이 번호에는 승인된 템플릿이 아직 없습니다. 템플릿을 만들고 승인을 기다리세요.",
         "deliveryTitle": "발송",
@@ -725,7 +745,11 @@
         "balanceShort": "잔액이 부족합니다. {shortfall}이(가) 더 필요합니다.",
         "balanceLowFull": "잔액이 전체 비용 {full}보다 적습니다. 현재는 요금제로 충당되지만 요금제를 모두 소진하면 충당되지 않습니다.",
         "chargedNowLabel": "지금 지갑에서 차감"
-      }
+      },
+      "kickerEmail": "이메일 캠페인 / 새로 만들기",
+      "kickerEditEmail": "이메일 캠페인 / 수정",
+      "titleEmail": "새 이메일 만들기",
+      "titleEditEmail": "이메일 수정"
     },
     "detail": {
       "notFound": "해당 캠페인을 찾을 수 없습니다.",
@@ -1126,7 +1150,8 @@
         "saved": "초안 저장됨",
         "saving": "저장 중...",
         "failed": "저장할 수 없습니다",
-        "retry": "재시도"
+        "retry": "재시도",
+        "nameTaken": "같은 이름의 캠페인이 이미 있습니다"
       },
       "errors": {
         "network": "서버에 연결할 수 없습니다. 연결 상태를 확인한 후 다시 시도하세요.",
@@ -1226,7 +1251,8 @@
         "shareHint": "발송할 번호를 선택하고 각각에 비율을 지정하세요. 대상 그룹은 이 비율대로 나뉘며 각 연락처는 한 번호에서만 메시지를 받습니다. 비율이 비어 있거나 0이면 1로 계산됩니다.",
         "shareWeight": "비율",
         "shareWeightLabel": "{name}의 비율",
-        "shareKeepOne": "번호를 하나 이상 선택한 상태로 두세요."
+        "shareKeepOne": "번호를 하나 이상 선택한 상태로 두세요.",
+        "nameTaken": "같은 이름의 캠페인이 이미 있습니다"
       },
       "audience": {
         "selectionTitle": "연락처 허브에서 선택됨",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "파일의 유효한 번호 미리보기",
         "csvLine": "행",
         "csvName": "이름",
-        "csvStatus": "상태",
         "csvRow": {
           "new": "신규 연락처",
           "existing": "기존 연락처",
@@ -1376,7 +1401,14 @@
         "modePrevious": "이전 발송 대상에게 보내기",
         "previousHint": "이전 브로드캐스트와 캠페인을 받은 사람을 다시 대상으로 지정하세요. 읽었거나, 읽지 않았거나, 답장했거나, 클릭한 사람만 선택할 수도 있습니다.",
         "chipPrevious": "{count, plural, other {이전 발송 #개}} ({outcome})",
-        "filterNoConditions": "조건을 추가하면 일치하는 연락처 수를 볼 수 있습니다."
+        "filterNoConditions": "조건을 추가하면 일치하는 연락처 수를 볼 수 있습니다.",
+        "csvConsentCol": "동의",
+        "csvContactCol": "연락처",
+        "csvConsent": {
+          "optedIn": "수신 동의",
+          "optedOut": "수신 거부"
+        },
+        "clearAudience": "대상 지우기"
       },
       "review": {
         "intro": "비용을 확인하고, 각 템플릿 변수를 무엇으로 채울지 알려 주시고, 브로드캐스트를 검토하세요.",
@@ -1597,7 +1629,7 @@
         "retries": "재시도",
         "retriesOn": "켜짐, {date}까지",
         "retriesOff": "꺼짐",
-        "recurringNote": "매번 그 시점의 대상에게 발송되므로 수신자 수가 달라질 수 있습니다."
+        "recurringNote": "지금은 아무것도 발송되지 않습니다. 첫 실행은 위 시간에 시작되며, 이후 각 실행은 기록에 별도의 행으로 표시됩니다. 그때까지는 '반복'에서 이 캠페인을 확인할 수 있습니다. 각 실행은 그 시점의 대상에게 발송되므로 수신자 수가 달라질 수 있습니다."
       },
       "status": {
         "back": "캠페인으로 돌아가기",
@@ -1811,7 +1843,8 @@
         "add": "템플릿 추가",
         "count": "템플릿 {used}/{max}개",
         "limitReached": "한도 도달: 템플릿 {max}개.",
-        "variablesTitle": "템플릿 {position}의 변수: {name}"
+        "variablesTitle": "템플릿 {position}의 변수: {name}",
+        "variablesLater": "{count, plural, other {변수 #개}}의 값은 이 미리보기가 아니라 매핑에서 채워집니다."
       }
     },
     "history": {

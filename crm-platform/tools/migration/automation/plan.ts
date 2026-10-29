@@ -210,6 +210,8 @@ export async function buildAutomationPlan(a: PlanInput): Promise<AutomationPlan>
       trigger_config: trig.config ?? null,
       provider: 'waba',
       flow_type: 'chat',
+      // a Waboo automation is a graph the Advanced builder edits; the loader writes it, the column default would make it 'simple'
+      builder: 'advanced',
       // SAFETY: never live. The API default for is_active is TRUE: overridden here, checked by reconcile.
       is_published: false,
       is_active: false,

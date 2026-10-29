@@ -15,6 +15,7 @@ Message history is one list of everything that went out and came in: messages fr
 ## Read the screen
 
 - The **cards** at the top count the whole period, not only what is on screen: total messages (and how that compares with the period before), sent, received, failed, the average time to a first reply, how many were delivered and read, and the delivery rate. If you may see the wallet, a **Cost** card adds up what the messages cost, per currency.
+- Point at a bar of the volume chart to read the day with its Sent, Received and Failed counts; point at one colour of the bar for that status alone. A custom date range is drawn by whole days (UTC), from the first day to the last day you chose, no further. The **Cost** card shows 0.00 when no message of the period was charged.
 - The **charts** show messages over time (daily, hourly or weekly), the split between sent, received and failed, the mix of message types and the most active conversations. They follow the filters you choose.
 - The **table** lists the messages, newest first. Select **Load more** to go further back.
 - The **Source** column says where each message came from: **Inbox**, **Contact** (a single send from a contact's page), **API**, **Automation** (a flow or an auto-reply), **AI assistant**, **Broadcast**, **Campaign**, **Scheduled** or **Broadcast Test Send**.

@@ -101,6 +101,29 @@ describe('attachJobMetrics', () => {
   let monitor: RuntimeMonitor | undefined;
   afterEach(() => monitor?.stop());
 
+  it('has both outcome series at 0 as soon as the worker is attached, so the first failure is an increase', () => {
+    monitor = new RuntimeMonitor({ service: 'worker', intervalMs: 60_000 });
+    attachJobMetrics(fakeWorker('mail-sync'), monitor);
+    const out = monitor.render();
+    expect(out).toMatch(/crm_queue_jobs_total\{[^}]*queue="mail-sync",outcome="failed"\} 0/);
+    expect(out).toMatch(/crm_queue_jobs_total\{[^}]*queue="mail-sync",outcome="completed"\} 0/);
+  });
+
+  it('counts a failure once it is final: an attempt that will be retried (no finishedOn) is not a failed job', () => {
+    monitor = new RuntimeMonitor({ service: 'worker', intervalMs: 60_000 });
+    const worker = fakeWorker('mail-sync');
+    attachJobMetrics(worker, monitor);
+    // BullMQ emits `failed` for every attempt; only the last one carries finishedOn
+    worker.emit('failed', { timestamp: T0, processedOn: T0 + 10 }, new Error('attempt 1'));
+    expect(monitor.render()).toMatch(/queue="mail-sync",outcome="failed"\} 0/);
+    worker.emit(
+      'failed',
+      { timestamp: T0, processedOn: T0 + 10, finishedOn: T0 + 20, attemptsStarted: 3 },
+      new Error('final'),
+    );
+    expect(monitor.render()).toMatch(/queue="mail-sync",outcome="failed"\} 1/);
+  });
+
   it('records wait, duration and outcome by queue name', () => {
     monitor = new RuntimeMonitor({ service: 'worker', intervalMs: 60_000 });
     const worker = fakeWorker('waba-ingest');

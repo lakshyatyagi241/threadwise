@@ -47,8 +47,8 @@ export const saveConsentNoticeSchema = z
     channels: z.array(intakeChannelSchema).max(3).default([]),
   })
   .refine((v) => !v.enabled || v.text !== '', {
-    message: 'Write the wording the person agrees to before switching the consent line on.',
     path: ['text'],
+    error: 'Write the wording the person agrees to before switching the consent line on.',
   });
 export type SaveConsentNoticeInput = z.infer<typeof saveConsentNoticeSchema>;
 
@@ -61,7 +61,7 @@ export const consentNoticeSchema = z.object({
   url: z.string().nullable(),
   termsUrl: z.string().nullable(),
   channels: z.array(intakeChannelSchema),
-  version: z.number().int().min(0),
+  version: z.int().min(0),
   updatedAt: z.string().nullable(),
 });
 export type ConsentNotice = z.infer<typeof consentNoticeSchema>;
@@ -69,7 +69,7 @@ export type ConsentNotice = z.infer<typeof consentNoticeSchema>;
 /** What a public page gets: only an enabled notice, nothing else. */
 export const publicConsentNoticeSchema = z.object({
   text: z.string(),
-  version: z.number().int().min(1),
+  version: z.int().min(1),
   url: z.string().nullable(),
   /** Optional so an older client that does not know it keeps parsing. */
   termsUrl: z.string().nullable().optional(),

@@ -9,7 +9,7 @@ NOTIFY = f"{ROOT}/deploy/build-server/notify-chat.sh"
 TOKEN = "ghp_SECRETTOKENVALUE1234567890"
 A, B = "a" * 40, "b" * 40
 results, hits, chat_posts = [], [], []
-MODE = {"fail": None, "delay": 0}  # fail: 500 | slow
+MODE = {"fail": None, "delay": 0}  # fail: 500 | slow | once
 
 
 def sha(n): return f"{n:040x}"
@@ -29,6 +29,7 @@ class Api(http.server.BaseHTTPRequestHandler):
         hits.append((self.path, self.headers.get("Authorization")))
         if MODE["delay"]: time.sleep(MODE["delay"])
         if MODE["fail"] == "500": return self._send(500, {"message": "boom"})
+        if MODE["fail"] == "once": MODE["fail"] = None; return self._send(500, {"message": "blip"})  # one failed call, then the API works again
         if MODE["fail"] == "slow": time.sleep(9)
         if self.headers.get("Authorization") != "Bearer " + TOKEN: return self._send(401, {})
         if self.path.startswith("/repos/o/r/commits?"): return self._send(200, FIX.get("bridge_commits", []))
@@ -89,7 +90,9 @@ FIX.update(compare=[commit(sha(1), "fix x", "alice"), commit(sha(2), "Merge pull
 out, _ = run("live", A, B, "88")
 check("merge commit: PR number, title, URL", '#12 "Fix the thing"' in out and "https://github.com/o/r/pull/12" in out, out)
 check("merge commit: author and merger differ", "Author: @alice" in out and "Deployed by: @bob" in out, out)
-check("live title and versions", out.startswith("✅ *Release live*") and "`bbbbbbbbb` (was `aaaaaaaaa`)" in out and "/commit/bbbbbbbbb" in out and "Took 88s" in out and "UTC" in out, out)
+check("live title and versions", out.startswith("✅ *Release live*") and "`bbbbbbbbb` (was `aaaaaaaaa`)" in out and "/commit/bbbbbbbbb" in out and "Took 88 s" in out and " IST" in out and "UTC" not in out, out)
+out2, _ = run("live", A, B, "267")
+check("a long release shows minutes and seconds, and the time is Indian Standard Time", "Took 4 min 27 s" in out2 and re.search(r"\d\d \w{3} \d{4}, \d\d:\d\d IST", out2) is not None, out2)
 check("only needed API calls (no call for branch commit)", sum(bool(re.search(r"/commits/\w+/pulls$", h[0])) for h in hits) == 1 and sum(bool(re.search(r"/pulls/\d+$", h[0])) for h in hits) == 1, str(hits))
 n = len(hits); out2, _ = run("live", A, B, "88", fresh=False)
 check("second run served from 1h cache", len(hits) == 0 and out2.split("\n")[1:4] == out.split("\n")[1:4], str(len(hits)))
@@ -112,7 +115,7 @@ check("direct push: subject, author, no PR", "hotfix: bump timeout" in out and "
 
 # 5 unchanged
 out, _ = run("unchanged", B, B, "40", "Rolled back.")
-check("unchanged variant", out.startswith("⚠️ *Deploy finished but the live version did not change*") and "Rolled back." in out, out)
+check("unchanged variant", out.startswith("⚠️ *Release finished, but the live version did not change*") and "Rolled back." in out, out)
 
 # 6 fallbacks
 FIX.update(compare=[commit(sha(3), "Add feature (#34)", "carol")], pulls={sha(3): [pr(34, "Add feature", "carol", "carol")]})
@@ -122,7 +125,11 @@ for name, env, mode in [("API 500", {}, "500"), ("missing token", {"GITHUB_TOKEN
     check(f"fallback on {name}", "PR details unavailable" in out and "/commit/bbbbbbbbb" in out and "Version: `bbbbbbbbb`" in out and TOKEN not in out + err, out)
 MODE["fail"] = "slow"; t = time.time()
 out, _ = run("live", A, B, "5"); el = time.time() - t
-check("fallback on API timeout (bounded ~6s)", "PR details unavailable" in out and el < 12, f"{el:.1f}s")
+check("fallback on API timeout (two tries, still bounded)", "PR details unavailable" in out and el < 20, f"{el:.1f}s")
+MODE["fail"] = None
+MODE["fail"] = "once"
+out, _ = run("live", A, B, "5")
+check("one failed GitHub call is retried: the PR details still arrive", "PR details unavailable" not in out and "#34" in out, out)
 MODE["fail"] = None
 
 # 7 injection

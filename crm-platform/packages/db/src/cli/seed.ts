@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { hash } from '@node-rs/argon2';
 import { config as loadEnv } from 'dotenv';
 import { Client } from 'pg';
+import { devSeedPassword, seedRefusal } from './seed-guard';
 
 loadEnv({ path: resolve(__dirname, '../../../../.env') });
 loadEnv({ path: resolve(process.cwd(), '.env') });
@@ -14,11 +15,11 @@ loadEnv({ path: resolve(process.cwd(), '.env') });
  * the first must not be able to see — seeding one tenant makes it impossible to
  * tell working RLS from absent RLS.
  *
- * Passwords here are well-known and weak by design. The CLI refuses to run
- * against NODE_ENV=production.
+ * The password is generated for each run and printed once. The CLI runs only
+ * with ALLOW_DEV_SEED=1, never in production, and only against a local database.
  */
 
-const DEMO_PASSWORD = 'Passw0rd!';
+const DEMO_PASSWORD = devSeedPassword();
 
 interface SeedOrg {
   slug: string;
@@ -32,8 +33,12 @@ const ORGS: SeedOrg[] = [
 ];
 
 async function main(): Promise<void> {
-  if (process.env.NODE_ENV === 'production') {
-    console.error('refusing to seed with NODE_ENV=production');
+  const refusal = seedRefusal(
+    process.env,
+    process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL ?? '',
+  );
+  if (refusal) {
+    console.error(refusal);
     process.exit(1);
   }
   // Seeding writes across tenants, so it runs as the owner like migrations do.
@@ -127,10 +132,8 @@ async function main(): Promise<void> {
       );
 
       // --- users -----------------------------------------------------------
-      // password_hash set so the seeded staff admin can also sign in with
-      // DEMO_PASSWORD via the password flow, not just Clerk. auth_subject
-      // starts null and still gets linked on that user's first Clerk login —
-      // matched by (org_id, email), same row, same role, no re-provisioning.
+      // password_hash set so the seeded staff admin can sign in with
+      // DEMO_PASSWORD via the password flow.
       const { rows: userRows } = await client.query<{ id: number }>(
         `INSERT INTO users (org_id, email, full_name, password_hash)
          VALUES ($1, $2, 'Demo Admin', $3)
@@ -204,8 +207,7 @@ async function main(): Promise<void> {
 
     await client.query('COMMIT');
     console.log(
-      `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug}). ` +
-        'Clerk also works and links this same row on first sign-in.',
+      `\ndone. Staff login: ${ORGS[0]!.adminEmail} / ${DEMO_PASSWORD} (org: ${ORGS[0]!.slug}).`,
     );
     console.log(
       `     Agent login (password, unchanged): agent@${ORGS[0]!.slug}.test / ${DEMO_PASSWORD}`,

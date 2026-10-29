@@ -40,6 +40,8 @@ const REENTRY_AFTER_QUIET: ReadonlySet<FlowRunSource> = new Set(['away', 'out_of
 export const KINDS_OF_PROVIDER: Readonly<Record<string, readonly string[]>> = {
   baileys: ['whatsapp_qr'],
   waba: ['whatsapp_cloud'],
+  instagram: ['instagram'],
+  facebook: ['facebook'],
   telegram: ['telegram'],
   line: ['line'],
   viber: ['viber'],
@@ -330,7 +332,9 @@ export class FlowLaunchService {
     input: LaunchInput,
   ): Promise<boolean> {
     if (sub.status === 'failed') return true;
-    if (input.retry) return true;
+    // A retry relaunches only a failed subscriber, and that case returned above. Anything else (a racing second retry finds the first one's
+    // `active`, the row is locked) must not relaunch it (#1175).
+    if (input.retry) return false;
     if (sub.status === 'paused') return false;
     if (!REENTRY_BY_REF.has(input.source) && !REENTRY_AFTER_QUIET.has(input.source)) return false;
     if (sub.lastRunId === null) return false;

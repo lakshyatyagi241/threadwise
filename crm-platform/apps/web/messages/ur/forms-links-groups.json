@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "یہ لنک روکا ہوا ہے یا اس کی مدت ختم ہو چکی ہے۔",
       "ROW_VERSION_CONFLICT": "اسے کسی اور جگہ تبدیل کیا گیا ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ کوشش کریں۔",
       "VALIDATION_FAILED": "نشان زدہ خانوں کو چیک کریں اور دوبارہ کوشش کریں۔",
-      "PLAN_FEATURE_LOCKED": "اس خصوصیت کو استعمال کرنے کے لیے اپنا پلان اپ گریڈ کریں۔"
+      "PLAN_FEATURE_LOCKED": "اس خصوصیت کو استعمال کرنے کے لیے اپنا پلان اپ گریڈ کریں۔",
+      "WFL_FORM_SYNC_FAILED": "Meta سے فارم نہیں پڑھے جا سکے۔"
     },
     "forms": {
       "heading": "WhatsApp فارمز",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "ابھی تک کوئی فارم نہیں",
-        "description": "ایک فارم بنائیں، پھر اسے کسی فلو میں WhatsApp فارم کے مرحلے سے بھیجیں۔"
+        "description": "ایک فارم بنائیں، پھر اسے کسی فلو میں WhatsApp فارم کے مرحلے سے بھیجیں۔",
+        "noMatch": "“{q}” سے کوئی فارم میل نہیں کھاتا۔"
       },
       "table": {
         "form": "فارم",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "محفوظ ہو گیا۔",
-        "published": "WhatsApp پر شائع ہو گیا۔"
+        "published": "WhatsApp پر شائع ہو گیا۔",
+        "connectHint": "فارمز صرف براہ راست WhatsApp Cloud API کنکشن کے ذریعے شائع ہوتے ہیں۔ کسی منتظم سے چینلز ← WhatsApp میں ایک کنکشن جوڑنے کو کہیں۔",
+        "connectLink": "WhatsApp چینلز کھولیں"
       },
       "builder": {
         "back": "فارمز پر واپس جائیں",
@@ -143,6 +147,14 @@
           "contact": "رابطہ",
           "phone": "فون"
         }
+      },
+      "sync": {
+        "cta": "Meta کے ساتھ سنک کریں",
+        "syncing": "سنک ہو رہا ہے…",
+        "done": "Meta کے ساتھ سنک ہو گیا: {checked} جانچے گئے، {updated} اپ ڈیٹ ہوئے، Meta میں نہ ملنے والے {missing}، صرف Meta میں {metaOnly}۔"
+      },
+      "search": {
+        "placeholder": "فارم تلاش کریں"
       }
     },
     "links": {

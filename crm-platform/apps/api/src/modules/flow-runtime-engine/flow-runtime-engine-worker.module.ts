@@ -24,6 +24,7 @@ import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
 import { HandoffReturnConsumer } from './triggers/handoff-return.consumer';
 import { RoutingFlowConsumer } from './triggers/routing-flow.consumer';
 import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
+import { FlowTakeoverConsumer } from './triggers/takeover.consumer';
 
 /**
  * What only the worker runs: the step processor, the sweeper, the listener for inbound messages and the consumer of domain events.
@@ -52,6 +53,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowTriggerEventsConsumer,
     RoutingFlowConsumer,
     HandoffReturnConsumer,
+    FlowTakeoverConsumer,
     LeadFlowConsumer,
     FlowScheduleSweeper,
     CommerceResume,

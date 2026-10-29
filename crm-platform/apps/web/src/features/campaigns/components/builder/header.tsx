@@ -12,14 +12,20 @@ import { SparkIcon } from './parts';
  */
 export function BuilderHeader({
   editing,
+  saved = false,
   backHref,
   busy,
   canDraft,
   onAi,
   onDraft,
   actions,
+  email = false,
 }: {
+  /** The campaign goes out as an email, so the bar says email instead of WhatsApp. */
+  email?: boolean;
   editing: boolean;
+  /** The draft has no unsaved change (the guided flow autosaves); left out, the chip stays "unsaved". */
+  saved?: boolean;
   backHref: string;
   busy: boolean;
   canDraft: boolean;
@@ -44,10 +50,10 @@ export function BuilderHeader({
           </Link>
           <div className="min-w-0">
             <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              {editing ? t('kickerEdit') : t('kicker')}
+              {t(`${editing ? 'kickerEdit' : 'kicker'}${email ? 'Email' : ''}`)}
             </div>
             <h1 className="truncate text-xl leading-tight">
-              {editing ? t('titleEdit') : t('title')}{' '}
+              {t(`${editing ? 'titleEdit' : 'title'}${email ? 'Email' : ''}`)}{' '}
               <span className="not-italic text-brand">{t('titleAccent')}</span>
             </h1>
           </div>
@@ -55,7 +61,7 @@ export function BuilderHeader({
         <div className="flex items-center gap-2">
           {!editing && (
             <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-mono text-[11px] font-medium text-muted-foreground">
-              {t('draftChip')}
+              {t(saved ? 'draftSavedChip' : 'draftChip')}
             </span>
           )}
           {onAi && (

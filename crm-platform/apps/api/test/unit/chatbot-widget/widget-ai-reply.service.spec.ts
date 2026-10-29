@@ -56,6 +56,11 @@ function build(s: Setup = {}) {
       asked.push(kind);
       if (s.walletEmpty) throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', 422);
     },
+    // The hold taken before the vendor call (AiChargeService.guardCall): refused the same way when the wallet is empty.
+    holdAiCall: async (_org: number) => {
+      asked.push('ai');
+      if (s.walletEmpty) throw new AppError(ERROR_CODES.WALLET_EMPTY, 'empty', 422);
+    },
     settle: async (input: Record<string, unknown>) => {
       settled.push(input);
       return { status: 'charged', chargedMinor: 1, shortfallMinor: 0, balanceAfterMinor: 9 };

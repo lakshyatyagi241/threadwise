@@ -63,6 +63,8 @@ export function toLogItem(row: LogRow): ApiLibraryLogItem {
     id: row.uuid,
     apiId: row.apiUuid,
     apiName: row.apiName,
+    botId: row.flowUuid,
+    botName: row.flowName,
     source: row.source,
     method: row.method,
     url: row.url,

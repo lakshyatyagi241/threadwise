@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Alert, Button, Spinner } from '@crm/ui';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useInvoice, useInvoiceSettings } from '../api/hooks';
 import { formatDateTime } from '../lib/dates';
 import { actionFacts } from '../lib/invoice-facts';
@@ -43,6 +44,7 @@ import { useInvoiceDialogs } from './use-invoice-dialogs';
  */
 export function InvoiceDetail({ id }: { id: string }) {
   const t = useTranslations('invoicing.detail');
+  const recurringInPlan = usePlanFeature('recurring_invoices');
   const locale = useLocale();
   const router = useRouter();
   const search = useSearchParams();
@@ -188,7 +190,16 @@ export function InvoiceDetail({ id }: { id: string }) {
               <NoteIcon /> {t('createCreditNote')}
             </Link>
           )}
-          {can.createRecurring && invoice.status !== 'void' && (
+          {can.createRecurring && invoice.status !== 'void' && !recurringInPlan && (
+            <span
+              title={t('makeRecurringNotInPlan')}
+              aria-disabled="true"
+              className="inline-flex h-10 cursor-not-allowed items-center gap-2 rounded-md border border-border px-4 text-sm font-medium text-muted-foreground/60"
+            >
+              <RefreshIcon /> {t('makeRecurring')}
+            </span>
+          )}
+          {can.createRecurring && invoice.status !== 'void' && recurringInPlan && (
             <Link
               href={`/recurring-invoices/new?fromInvoice=${invoice.id}`}
               className="inline-flex h-10 items-center gap-2 rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"

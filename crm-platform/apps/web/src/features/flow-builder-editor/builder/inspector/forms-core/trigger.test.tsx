@@ -4,6 +4,7 @@ import type { FlbBuilderContext } from '@crm/contracts';
 import { renderIntl } from '../../../test-utils/intl';
 import { EMPTY_CONTEXT } from '../../../api/hooks';
 import type { FormEnv, FormProps } from '../types';
+import { channelSwitchPatch } from './helpers';
 import { TriggerForm } from './trigger';
 
 function renderTrigger(data: Record<string, unknown>, ctx: Partial<FlbBuilderContext> = {}) {
@@ -50,5 +51,39 @@ describe('Away trigger notice with no Auto Reply page (row 235)', () => {
 
     expect(html).toContain('Each contact is enrolled once.');
     expect(html).not.toContain('/auto-reply');
+  });
+});
+
+describe('Comment to DM trigger has no runtime', () => {
+  it('is not offered on Instagram for a flow that does not use it', () => {
+    const html = renderTrigger({ kind: 'keyword', channel: 'instagram' });
+    expect(html).not.toContain('comment_to_dm');
+  });
+
+  it('stays in the list for a flow that already has it, so it can be seen and changed', () => {
+    const html = renderTrigger({ kind: 'comment_to_dm', channel: 'instagram', keywordRuleIds: [] });
+    expect(html).toContain('value="comment_to_dm"');
+  });
+});
+
+describe('switching the channel of the Trigger', () => {
+  it('clears the sender and keeps the kind when the kind exists on every channel', () => {
+    expect(channelSwitchPatch('keyword', 'facebook')).toEqual({
+      channel: 'facebook',
+      deviceId: '',
+    });
+  });
+
+  it('drops Instagram-only "On comment → DM" and its rules when leaving Instagram', () => {
+    expect(channelSwitchPatch('comment_to_dm', 'chat')).toEqual({
+      channel: 'chat',
+      deviceId: '',
+      kind: 'keyword',
+      keywordRuleIds: [],
+    });
+    expect(channelSwitchPatch('comment_to_dm', 'instagram')).toEqual({
+      channel: 'instagram',
+      deviceId: '',
+    });
   });
 });

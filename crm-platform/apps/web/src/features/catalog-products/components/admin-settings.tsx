@@ -135,7 +135,7 @@ function SettingsForm({ data, canEdit }: { data: CatalogSettingsResponse; canEdi
           <div className={`${KICKER} mb-2`}>{t('eyebrow')}</div>
           <h1 className="font-serif text-[28px] font-normal leading-none tracking-tight sm:text-[34px] lg:text-[40px]">
             {t('titleLead')}{' '}
-            <span className="italic text-brand dark:text-primary">{t('titleAccent')}</span>.
+            <span className="text-brand dark:text-primary">{t('titleAccent')}</span>.
           </h1>
           <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">
             {t.rich('intro', {

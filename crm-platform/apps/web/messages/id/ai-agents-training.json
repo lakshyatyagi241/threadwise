@@ -297,7 +297,17 @@
         "removeRow": "Hapus pertanyaan ini"
       },
       "reading": "Sedang membaca…",
-      "failed": "Ini tidak dapat dibaca."
+      "failed": "Ini tidak dapat dibaca.",
+      "view": "Lihat",
+      "viewNamed": "Lihat {label}",
+      "viewClose": "Tutup",
+      "viewLoading": "Memuat",
+      "viewFailed": "Entri ini tidak dapat dimuat. Coba lagi.",
+      "viewQuestion": "Pertanyaan",
+      "viewAnswer": "Jawaban",
+      "viewNotReadYet": "Halaman ini masih dibaca. Teksnya akan muncul di sini setelah siap.",
+      "viewNoText": "Entri ini tidak punya teks.",
+      "viewTruncated": "Di sini hanya bagian pertama yang ditampilkan; agen membaca seluruh entri."
     }
   }
 }

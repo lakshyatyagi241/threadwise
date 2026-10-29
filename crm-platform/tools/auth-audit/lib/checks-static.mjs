@@ -29,7 +29,6 @@ const F = {
   codes: `${A}/support/recovery-codes.ts`,
   totp: `${A}/support/totp.ts`,
   authService: `${A}/auth.service.ts`,
-  clerk: `${A}/clerk.service.ts`,
   authController: `${A}/auth.controller.ts`,
   accountController: `${A}/controllers/account.controller.ts`,
   headers: `${A}/middleware-security-headers.ts`,
@@ -94,7 +93,7 @@ export const STATIC_CHECKS = [
         summary:
           `${routes.length} HTTP routes across ${new Set(routes.map((r) => r.controller)).size} controllers; ${pub.length} are @Public (no bearer token needed), ` +
           `${routes.length - pub.length} sit behind the global JwtAuthGuard. ${authish ? pub.filter(authish).length : 0} public routes are authentication entry points. ` +
-          `Other entry points: WebSocket gateway (${ws.length ? 'present' : 'absent'}), API-key guard (customer API), Clerk token exchange, social OAuth callbacks. ` +
+          `Other entry points: WebSocket gateway (${ws.length ? 'present' : 'absent'}), API-key guard (customer API), social OAuth callbacks. ` +
           `GraphQL: ${noGraphql ? 'none in this codebase' : 'present, needs its own review'}. Routes with no ActorKinds narrowing: ${unguardedKinds}.`,
         evidence: pub
           .filter(authish)
@@ -543,7 +542,7 @@ export const STATIC_CHECKS = [
         ls.forEach((l, i) => {
           if (
             /\b(?:logger|this\.logger|console)\.(?:log|info|debug|warn|error)\(/.test(l) &&
-            /\b(?:password|passwd|accessToken|refreshToken|recoveryCode|clerkToken|authorization|secret|input\.code|otp)\b/i.test(
+            /\b(?:password|passwd|accessToken|refreshToken|recoveryCode|authorization|secret|input\.code|otp)\b/i.test(
               codeOnly(l),
             ) &&
             !/\berr\b|\[REDACTED\]/i.test(l)
@@ -1213,7 +1212,7 @@ export const STATIC_CHECKS = [
         status: review.length ? 'fail' : 'pass',
         severity: review.length ? 'high' : undefined,
         summary:
-          `Session-opening paths found: password (login.service), Clerk exchange, social sign-in, workspace switch, sign-up, invite. ` +
+          `Session-opening paths found: password (login.service), social sign-in, workspace switch, sign-up, invite. ` +
           callers
             .map(
               (c) =>
@@ -1648,41 +1647,6 @@ export const STATIC_CHECKS = [
       });
     },
   },
-  {
-    id: 'clerk-exchange',
-    run() {
-      if (!need(F.clerk, F.authService))
-        return missing('clerk-exchange', ['AUTH-063'], 'Clerk exchange', [F.clerk, F.authService]);
-      const verifiedCheck = /verification|status\s*===\s*'verified'/.test(read(F.clerk) ?? '');
-      const linksByEmail = grepFile(
-        F.authService,
-        /WHERE org_id = \$\{org\.id\} AND email = \$\{identity\.email\} AND auth_subject IS NULL/,
-        1,
-      );
-      const noCreate = !/INSERT INTO users/.test(read(F.authService) ?? '');
-      const mounted = grepFile(F.authController, /clerk\/session/, 1);
-      const envReq = grepFile(F.env, /CLERK_SECRET_KEY/, 1);
-      return result({
-        id: 'clerk-exchange',
-        controls: ['AUTH-063', 'AUTH-076', 'AUTH-078'],
-        title: 'Clerk token exchange links only to existing users and only on a verified email',
-        status: noCreate && verifiedCheck ? 'pass' : noCreate ? 'partial' : 'fail',
-        severity: noCreate && verifiedCheck ? undefined : noCreate ? 'medium' : 'critical',
-        summary:
-          `The earlier flaw (any Clerk identity auto-provisioned into any workspace) is fixed: the exchange no longer creates users (${noCreate ? 'confirmed' : 'STILL CREATES USERS'}). ` +
-          (linksByEmail.length
-            ? 'It still LINKS a Clerk identity to an existing local user by e-mail address (first use, auth_subject IS NULL). '
-            : '') +
-          `The code takes the primary e-mail from Clerk without checking that Clerk has VERIFIED it (${verifiedCheck ? 'a verification check exists' : 'no verification.status check'}): if the Clerk instance allows unverified e-mail addresses or an OAuth provider that does not verify them, someone could pre-register a victim's address in Clerk and take over the victim's local account the first time the exchange runs. ` +
-          `The endpoint is public and always mounted (${mounted.length ? 'yes' : 'no'}); CLERK_SECRET_KEY is mandatory in env validation even if Clerk is not used, and the dev placeholder makes verification fail closed.`,
-        evidence: [...linksByEmail, ...mounted, ...envReq],
-        recommendation:
-          'In ClerkService.verifySession require emailAddresses[].verification?.status === "verified" for the address you use; confirm the Clerk dashboard has "verify at sign-up" on; and if Clerk is not the production login, make CLERK_SECRET_KEY optional and return 404 for /auth/clerk/session when it is unset.',
-        confidence: 'static-heuristic',
-      });
-    },
-  },
-
   // -------------------------------------------------------------------------------------------------------------------
   // H. Machine credentials and OAuth
   // -------------------------------------------------------------------------------------------------------------------

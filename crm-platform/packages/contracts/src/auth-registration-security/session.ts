@@ -48,7 +48,7 @@ export const sessionResponseSchema = z.object({
   org: sessionOrgSchema,
   roles: z.array(z.object({ id: uuidSchema, name: z.string() })),
   /** Allowed permission keys and their record scope. Denied keys are absent. */
-  permissions: z.record(grantScopeSchema),
+  permissions: z.record(z.string(), grantScopeSchema),
   landing: landingSchema,
   flags: accountFlagsSchema,
   /** This session's id (uuid), for "this device" in the sessions list. */
@@ -154,7 +154,7 @@ export const onboardingResponseSchema = z.object({
    */
   billing: z.object({
     /** Credits one outbound message costs once the plan's messages run out. */
-    creditsPerMessage: z.number().int().min(1),
+    creditsPerMessage: z.int().min(1),
     /** The currency prices should be shown in: the workspace's, else the platform default. */
     displayCurrency: z.string().length(3),
     /** Where "Top up message credits" goes. */

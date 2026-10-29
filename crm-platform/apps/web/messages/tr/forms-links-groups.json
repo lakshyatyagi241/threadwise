@@ -14,7 +14,8 @@
       "WFL_LINK_NOT_LIVE": "Bu bağlantı duraklatılmış veya süresi dolmuş.",
       "ROW_VERSION_CONFLICT": "Bu öğe başka bir yerde değiştirildi. Sayfayı yenileyip tekrar deneyin.",
       "VALIDATION_FAILED": "Vurgulanan alanları kontrol edip tekrar deneyin.",
-      "PLAN_FEATURE_LOCKED": "Bu özelliği kullanmak için planınızı yükseltin."
+      "PLAN_FEATURE_LOCKED": "Bu özelliği kullanmak için planınızı yükseltin.",
+      "WFL_FORM_SYNC_FAILED": "Formlar Meta'dan okunamadı."
     },
     "forms": {
       "heading": "WhatsApp Formları",
@@ -35,7 +36,8 @@
       },
       "empty": {
         "title": "Henüz form yok",
-        "description": "Bir form oluşturun, ardından bir akıştaki WhatsApp Form adımından gönderin."
+        "description": "Bir form oluşturun, ardından bir akıştaki WhatsApp Form adımından gönderin.",
+        "noMatch": "“{q}” ile eşleşen form yok."
       },
       "table": {
         "form": "Form",
@@ -69,7 +71,9 @@
       },
       "notice": {
         "saved": "Kaydedildi.",
-        "published": "WhatsApp'ta yayınlandı."
+        "published": "WhatsApp'ta yayınlandı.",
+        "connectHint": "Formlar yalnızca doğrudan bir WhatsApp Cloud API bağlantısıyla yayımlanır. Kanallar → WhatsApp bölümünden bir bağlantı kurmasını bir yöneticiden isteyin.",
+        "connectLink": "WhatsApp kanallarını aç"
       },
       "builder": {
         "back": "Formlara dön",
@@ -143,6 +147,14 @@
           "contact": "Kişi",
           "phone": "Telefon"
         }
+      },
+      "sync": {
+        "cta": "Meta ile eşitle",
+        "syncing": "Eşitleniyor…",
+        "done": "Meta ile eşitlendi: {checked} kontrol edildi, {updated} güncellendi, Meta'da bulunamayan {missing}, yalnızca Meta'da olan {metaOnly}."
+      },
+      "search": {
+        "placeholder": "Formlarda ara"
       }
     },
     "links": {

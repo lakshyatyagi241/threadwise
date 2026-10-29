@@ -12,11 +12,11 @@ export const contactFileResponseSchema = z.object({
   id: uuidSchema,
   contactId: uuidSchema,
   fileName: z.string(),
-  fileSizeBytes: z.number().int().nullable(),
+  fileSizeBytes: z.int().nullable(),
   storageKey: z.string(),
   mimeType: z.string().nullable(),
   uploadedBy: uuidSchema.nullable(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type ContactFileResponse = z.infer<typeof contactFileResponseSchema>;
 
@@ -31,7 +31,7 @@ const safeFileName = z
   .min(1)
   .max(255)
   .refine((v) => !/[\\/]/.test(v) && v !== '.' && v !== '..' && !hasControlChar(v), {
-    message: 'must be a plain file name without path separators',
+    error: 'must be a plain file name without path separators',
   });
 const safeStorageKey = z
   .string()
@@ -44,12 +44,14 @@ const safeStorageKey = z
       !/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(v) &&
       !v.split('/').some((seg) => seg === '..' || seg === '.') &&
       !hasControlChar(v),
-    { message: 'must be a relative storage key without ".." segments, backslashes or a scheme' },
+    {
+      error: 'must be a relative storage key without ".." segments, backslashes or a scheme',
+    },
   );
 
 export const createContactFileSchema = z.object({
   fileName: safeFileName,
-  fileSizeBytes: z.number().int().positive().optional(),
+  fileSizeBytes: z.int().positive().optional(),
   storageKey: safeStorageKey,
   mimeType: z.string().max(255).optional(),
 });

@@ -244,6 +244,19 @@ const escapeLike = (s: string) => s.replace(/[\\%_]/g, (m) => `\\${m}`);
 /** Tenant-scoped access to `wa_templates`. Every method runs inside the caller's `DatabaseService.tx`. */
 @Injectable()
 export class TemplatesRepository {
+  /**
+   * True when a template of the workspace still names this stored file, as its header or in a carousel card. A copy shares its
+   * original's file, so the file stays while either of them uses it.
+   */
+  async headerKeyInUse(tx: Tx, orgId: number, key: string): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wa_templates t
+      WHERE t.org_id = ${orgId}
+        AND (t.header_media_key = ${key} OR position(${key} in t.carousel_data::text) > 0)
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
   async list(tx: Tx, orgId: number, f: ListFilter): Promise<TemplateRow[]> {
     const where = this.filters(orgId, f);
     const sort = f.sort ?? 'newest';
@@ -359,6 +372,51 @@ export class TemplatesRepository {
       SELECT ${SELECT} FROM ${FROM}
       WHERE t.org_id = ${orgId} AND t.uuid = ${uuid}::uuid ${lock ? sql`FOR UPDATE OF t` : sql``}`);
     return res.rows[0] ? toRow(res.rows[0]) : null;
+  }
+
+  /**
+   * How one template did, from the outbound messages stamped with its row id. `delivered` and `read` count a message by its status or its timestamp, so a provider that reports only one of them still counts. `replied`: the customer wrote back in
+   * the same conversation within 7 days.
+   */
+  async stats(
+    tx: Tx,
+    orgId: number,
+    templateId: number,
+  ): Promise<{
+    total: number;
+    sent: number;
+    delivered: number;
+    read: number;
+    failed: number;
+    queued: number;
+    replied: number;
+    lastSentAt: Date | null;
+  }> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS total,
+        count(*) FILTER (WHERE m.status IN ('sent', 'delivered', 'read'))::int AS sent,
+        count(*) FILTER (WHERE m.status IN ('delivered', 'read') OR m.delivered_at IS NOT NULL)::int AS delivered,
+        count(*) FILTER (WHERE m.status = 'read' OR m.read_at IS NOT NULL)::int AS read,
+        count(*) FILTER (WHERE m.status = 'failed')::int AS failed,
+        count(*) FILTER (WHERE m.status = 'queued')::int AS queued,
+        count(*) FILTER (WHERE EXISTS (
+          SELECT 1 FROM messages r
+          WHERE r.org_id = m.org_id AND r.conversation_id = m.conversation_id AND r.direction = 'in'
+            AND r.created_at > m.created_at AND r.created_at <= m.created_at + interval '7 days'))::int AS replied,
+        max(coalesce(m.sent_at, m.created_at)) FILTER (WHERE m.status <> 'queued') AS last_sent_at
+      FROM messages m
+      WHERE m.org_id = ${orgId} AND m.template_id = ${templateId} AND m.direction = 'out'`);
+    const r = res.rows[0] as Record<string, unknown>;
+    return {
+      total: Number(r.total),
+      sent: Number(r.sent),
+      delivered: Number(r.delivered),
+      read: Number(r.read),
+      failed: Number(r.failed),
+      queued: Number(r.queued),
+      replied: Number(r.replied),
+      lastSentAt: r.last_sent_at ? new Date(r.last_sent_at as string | Date) : null,
+    };
   }
 
   /** Several templates by uuid in one query (the thread draws the template of every message of a page); an unknown or foreign uuid is simply absent. */

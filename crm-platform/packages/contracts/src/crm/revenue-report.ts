@@ -86,8 +86,8 @@ const filterFields = {
 export const revenueReportQuerySchema = z
   .object(filterFields)
   .refine((q) => !q.from || !q.to || q.from <= q.to, {
-    message: 'from must not be after to',
     path: ['to'],
+    error: 'from must not be after to',
   });
 export type RevenueReportQuery = z.infer<typeof revenueReportQuerySchema>;
 
@@ -101,8 +101,8 @@ const periodMoneySchema = z.object({
 export type RevenuePeriodMoney = z.infer<typeof periodMoneySchema>;
 
 const periodCountSchema = z.object({
-  current: z.number().int(),
-  previous: z.number().int().nullable(),
+  current: z.int(),
+  previous: z.int().nullable(),
 });
 
 /**
@@ -145,7 +145,7 @@ export const revenueReportResponseSchema = z.object({
     /** `YYYY-MM-DD`, inclusive, in `timezone`. */
     fromDate: z.string(),
     toDate: z.string(),
-    days: z.number().int(),
+    days: z.int(),
     today: z.string(),
   }),
   comparison: z
@@ -170,7 +170,7 @@ export const revenueReportResponseSchema = z.object({
     receivables: z.object({
       outstanding: dealTotalsSchema,
       overdue: dealTotalsSchema,
-      invoices: z.number().int(),
+      invoices: z.int(),
     }),
     /** Everything ever collected inside the scope (Reference's "Collected (all)"). */
     collectedAllTime: dealTotalsSchema,
@@ -231,8 +231,8 @@ export const requestRevenueExportSchema = z
     csvKind: revenueCsvKindSchema.default('payments'),
   })
   .refine((q) => !q.from || !q.to || q.from <= q.to, {
-    message: 'from must not be after to',
     path: ['to'],
+    error: 'from must not be after to',
   });
 export type RequestRevenueExport = z.infer<typeof requestRevenueExportSchema>;
 
@@ -261,12 +261,12 @@ export const revenueExportSchema = z.object({
   format: revenueExportFormatSchema,
   csvKind: revenueCsvKindSchema.nullable(),
   status: revenueExportStatusSchema,
-  rowCount: z.number().int().nonnegative().nullable(),
-  fileBytes: z.number().int().nonnegative().nullable(),
+  rowCount: z.int().nonnegative().nullable(),
+  fileBytes: z.int().nonnegative().nullable(),
   error: z.string().nullable(),
-  requestedAt: z.string().datetime(),
-  completedAt: z.string().datetime().nullable(),
-  expiresAt: z.string().datetime().nullable(),
+  requestedAt: z.iso.datetime(),
+  completedAt: z.iso.datetime().nullable(),
+  expiresAt: z.iso.datetime().nullable(),
   emailedTo: z.string().nullable(),
   filters: revenueExportFiltersSchema,
 });

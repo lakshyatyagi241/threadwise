@@ -157,6 +157,40 @@ export const walletTransactions = pgTable(
   ],
 );
 
+/**
+ * 2042_wallet_legacy_invoices.sql: the invoice the old system's billing provider issued for a migrated top-up, as it rendered it.
+ * One row per provider invoice; a ledger row finds it by `meta.legacy.waboo.invoice` = `invoiceId`.
+ */
+export const walletLegacyInvoices = pgTable(
+  'wallet_legacy_invoices',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    invoiceId: text('invoice_id').notNull(),
+    invoiceNumber: text('invoice_number'),
+    invoiceDate: date('invoice_date'),
+    currency: text('currency'),
+    total: numeric('total', { precision: 14, scale: 4 }),
+    status: text('status'),
+    html: text('html').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('wallet_legacy_invoices_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('wallet_legacy_invoices_org_id_invoice_id_key').on(t.orgId, t.invoiceId),
+    foreignKey({
+      name: 'wallet_legacy_invoices_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('ck_wallet_legacy_invoices_html', sql`length(${t.html}) between 1 and 2000000`),
+  ],
+);
+
 export type WalletTransactionsRow = typeof walletTransactions.$inferSelect;
 export type NewWalletTransactionsRow = typeof walletTransactions.$inferInsert;
 
@@ -260,6 +294,34 @@ export const wallets = pgTable(
 
 export type WalletsRow = typeof wallets.$inferSelect;
 export type NewWalletsRow = typeof wallets.$inferInsert;
+
+/** A send allowed against the balance and not yet charged; see the wallet_holds migration. */
+export const walletHolds = pgTable(
+  'wallet_holds',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    unit: text('unit').notNull(),
+    amount: numeric('amount', { precision: 20, scale: 4 }).notNull(),
+    status: text('status').notNull().default('held'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    settledAt: timestamp('settled_at', { withTimezone: true }),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    foreignKey({
+      name: 'fk_wallet_holds_wallet',
+      columns: [t.orgId, t.unit],
+      foreignColumns: [wallets.orgId, wallets.unit],
+    }).onDelete('cascade'),
+    check('chk_wallet_holds_amount', sql.raw('amount > 0')),
+    check('chk_wallet_holds_status', sql.raw("status IN ('held', 'consumed', 'expired')")),
+  ],
+);
+
+export type WalletHoldsRow = typeof walletHolds.$inferSelect;
+export type NewWalletHoldsRow = typeof walletHolds.$inferInsert;
 
 export const usageChargeKeys = pgTable(
   'usage_charge_keys',

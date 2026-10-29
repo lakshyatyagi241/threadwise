@@ -1017,7 +1017,8 @@
       "amount": "Importe",
       "balance": "Saldo",
       "noDescription": "Movimiento del monedero",
-      "reason": "Motivo"
+      "reason": "Motivo",
+      "invoice": "Descargar factura"
     },
     "pricingPanel": {
       "title": "Precios de mensajes",
@@ -1038,6 +1039,11 @@
       "enrichment": "Consulta de contacto",
       "chat_message": "Mensaje de chat",
       "webbot_message": "Mensaje del chatbot web"
+    },
+    "legacyInvoice": {
+      "title": "Factura",
+      "back": "Volver al extracto",
+      "print": "Imprimir o guardar como PDF"
     }
   }
 }

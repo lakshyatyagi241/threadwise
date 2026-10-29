@@ -1,3 +1,5 @@
+import type { JobsOptions } from 'bullmq';
+
 /** The slice of a BullMQ `Queue<D>` that `addOrRevive` uses. Structural, so it is testable without Redis and keeps the job data type. */
 export interface ReviveQueue<D> {
   /** One round trip; `'unknown'` when no job has that id. */
@@ -22,7 +24,7 @@ export async function addOrRevive<D>(
   queue: ReviveQueue<D>,
   name: string,
   data: D,
-  { replaceStates = ['failed'], ...opts }: { jobId?: string; replaceStates?: string[] } = {},
+  { replaceStates = ['failed'], ...opts }: JobsOptions & { replaceStates?: string[] } = {},
 ): Promise<void> {
   if (opts.jobId !== undefined && replaceStates.includes(await queue.getJobState(opts.jobId))) {
     await (await queue.getJob(opts.jobId))?.remove();

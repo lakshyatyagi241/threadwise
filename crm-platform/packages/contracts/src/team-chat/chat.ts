@@ -26,13 +26,13 @@ export const tchatChannelResponseSchema = z.object({
   slug: z.string(),
   type: tchatChannelTypeSchema,
   description: z.string().nullable(),
-  lastMessageAt: z.string().datetime().nullable(),
+  lastMessageAt: z.iso.datetime().nullable(),
   /** Messages by other people newer than the caller's read pointer. */
-  unread: z.number().int().nonnegative(),
+  unread: z.int().nonnegative(),
   /** For a direct message: the other person, whose name is the channel title. */
   peer: z.object({ id: uuidSchema, name: z.string() }).nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type TchatChannelResponse = z.infer<typeof tchatChannelResponseSchema>;
 
@@ -94,7 +94,7 @@ export type AddTchatChannelMemberInput = z.infer<typeof addTchatChannelMemberSch
 
 export const tchatReactionSchema = z.object({
   emoji: z.string(),
-  count: z.number().int().positive(),
+  count: z.int().positive(),
   mine: z.boolean(),
 });
 export type TchatReaction = z.infer<typeof tchatReactionSchema>;
@@ -119,11 +119,11 @@ export const tchatMessageResponseSchema = z.object({
     })
     .nullable(),
   reactions: z.array(tchatReactionSchema),
-  pinnedAt: z.string().datetime().nullable(),
-  editedAt: z.string().datetime().nullable(),
+  pinnedAt: z.iso.datetime().nullable(),
+  editedAt: z.iso.datetime().nullable(),
   isMine: z.boolean(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
 });
 export type TchatMessageResponse = z.infer<typeof tchatMessageResponseSchema>;
 
@@ -147,7 +147,7 @@ export const tchatMessageListResponseSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type TchatMessageListResponse = z.infer<typeof tchatMessageListResponseSchema>;
@@ -164,7 +164,7 @@ export type PostTchatMessageInput = z.infer<typeof postTchatMessageSchema>;
 
 export const editTchatMessageSchema = z.object({
   body: z.string().trim().min(1).max(TCHAT_MESSAGE_MAX),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type EditTchatMessageInput = z.infer<typeof editTchatMessageSchema>;
 
@@ -194,7 +194,7 @@ export const tchatInvitationStatusSchema = z.enum(['pending', 'approved', 'decli
 export type TchatInvitationStatus = z.infer<typeof tchatInvitationStatusSchema>;
 
 export const createTchatInvitationSchema = z.object({
-  inviteeEmail: z.string().trim().toLowerCase().email().max(191),
+  inviteeEmail: z.string().trim().toLowerCase().pipe(z.email().max(191)),
   inviteeName: z.string().trim().max(191).nullish(),
   note: z.string().trim().max(500).nullish(),
   channelId: uuidSchema.nullish(),
@@ -211,10 +211,10 @@ export const tchatInvitationResponseSchema = z.object({
   status: tchatInvitationStatusSchema,
   note: z.string().nullable(),
   decidedByName: z.string().nullable(),
-  decidedAt: z.string().datetime().nullable(),
+  decidedAt: z.iso.datetime().nullable(),
   /** The person has no account in this workspace: approving records the decision but adds nobody. */
   needsAccount: z.boolean(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 });
 export type TchatInvitationResponse = z.infer<typeof tchatInvitationResponseSchema>;
 
@@ -222,7 +222,7 @@ export const tchatInvitationListResponseSchema = z.object({
   isAdmin: z.boolean(),
   data: z.array(tchatInvitationResponseSchema),
   /** Pending rows among everything the caller can see (the badge), not just the page. */
-  pendingCount: z.number().int().nonnegative(),
+  pendingCount: z.int().nonnegative(),
 });
 export type TchatInvitationListResponse = z.infer<typeof tchatInvitationListResponseSchema>;
 

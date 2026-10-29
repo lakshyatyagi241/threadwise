@@ -190,6 +190,14 @@ export class FlowsRepository {
     return (res.rows as Raw[]).map(toRow);
   }
 
+  /** The names that are `base` or `base 2`, `base 3`... (the pattern escapes nothing: `base` is a fixed placeholder). */
+  async namesLike(tx: Tx, orgId: number, base: string): Promise<string[]> {
+    const res = await tx.execute(sql`
+      SELECT flow_name FROM flows
+      WHERE org_id = ${orgId} AND (lower(flow_name) = lower(${base}) OR lower(flow_name) LIKE lower(${base}) || ' %')`);
+    return res.rows.map((r) => String((r as Raw).flow_name));
+  }
+
   async count(tx: Tx, orgId: number, filter: FlowFilter): Promise<number> {
     const res = await tx.execute(
       sql`SELECT count(*) AS n FROM flows f WHERE ${sql.join(conds(orgId, filter), sql` AND `)}`,
@@ -330,14 +338,21 @@ export class FlowsRepository {
       WHERE org_id = ${orgId} AND id = ${flowId}`);
   }
 
-  /** Every bot of the workspace, slim: what a step that starts another bot is checked against (id is the uuid the graph stores). */
+  /**
+   * The bots of the workspace that `ids` name, slim: what a step that starts another bot is checked against (id is the uuid the graph
+   * stores). Only the linked bots are read, so a save does not load every bot of the workspace (#1165).
+   */
   async linkTargets(
     tx: Tx,
     orgId: number,
+    ids: readonly string[],
   ): Promise<Array<{ id: string; flowType: string; isPublished: boolean }>> {
-    const res = await tx.execute(
-      sql`SELECT uuid, flow_type, is_published FROM flows WHERE org_id = ${orgId}`,
-    );
+    if (ids.length === 0) return [];
+    const json = JSON.stringify(ids);
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_type, is_published FROM flows
+       WHERE org_id = ${orgId}
+         AND uuid::text IN (SELECT x FROM json_array_elements_text(${json}::json) AS x)`);
     return (res.rows as Raw[]).map((r) => ({
       id: String(r.uuid),
       flowType: String(r.flow_type),
@@ -396,8 +411,8 @@ export class FlowsRepository {
    * The inbox channel (`channels.id`) a sender key points at, or null when that sender has no channel row (yet). A sender is
    * named `<engine>:<uuid>` after its engine's own table (devices, wa_provider_configs, ...); the runtime matches on
    * `channels`, so the save translates once: an unofficial device is the `whatsapp_qr` channel whose handle is its uuid, a
-   * WABA / Twilio number is the channel linked to its connection, any other engine a channel of that kind with the uuid as
-   * handle. The lookup is scoped by org, so another workspace's sender never resolves.
+   * WABA / Twilio number is the channel linked to its connection, an Instagram account or a Facebook Page the channel keyed by its engine / Meta id, any other engine a channel of that kind
+   * with the uuid as handle. The lookup is scoped by org, so another workspace's sender never resolves.
    */
   async resolveChannel(
     tx: Tx,
@@ -416,9 +431,21 @@ export class FlowsRepository {
               SELECT c.id FROM channels c
               JOIN wa_provider_configs w ON w.org_id = c.org_id AND w.id = c.waba_config_id
               WHERE c.org_id = ${orgId} AND w.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
-          : await tx.execute(
-              sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = ${engine} AND external_id = ${uuid} ORDER BY id LIMIT 1`,
-            );
+          : engine === 'instagram'
+            ? // The inbox channel of an Instagram account is keyed by the account's engine id, not by the row's uuid.
+              await tx.execute(sql`
+                SELECT c.id FROM channels c
+                JOIN workspace_ig_accounts a ON a.org_id = c.org_id AND a.instaflow_account_id = c.external_id
+                WHERE c.org_id = ${orgId} AND c.kind = 'instagram' AND a.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
+            : engine === 'facebook'
+              ? // The inbox channel of a Facebook Page is keyed by Meta's Page id, not by the row's uuid.
+                await tx.execute(sql`
+                  SELECT c.id FROM channels c
+                  JOIN facebook_pages p ON p.org_id = c.org_id AND p.page_id = c.external_id
+                  WHERE c.org_id = ${orgId} AND c.kind = 'facebook' AND p.uuid = ${uuid} ORDER BY c.id LIMIT 1`)
+              : await tx.execute(
+                  sql`SELECT id FROM channels WHERE org_id = ${orgId} AND kind = ${engine} AND external_id = ${uuid} ORDER BY id LIMIT 1`,
+                );
     const r = res.rows[0] as Raw | undefined;
     return r ? Number(r.id) : null;
   }

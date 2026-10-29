@@ -26,7 +26,13 @@ export async function uploadTemplateMedia(
     credentials: 'same-origin',
   });
   const text = await res.text();
-  const json: unknown = text ? JSON.parse(text) : undefined;
+  // A proxy answers a file that is too big, or a gateway failure, with a page rather than JSON: that must not throw a SyntaxError.
+  let json: unknown;
+  try {
+    json = text ? JSON.parse(text) : undefined;
+  } catch {
+    json = undefined;
+  }
   if (!res.ok) throw toApiError(res.status, json, res.headers.get('x-request-id'));
   return uploadTemplateMediaResultSchema.parse(json);
 }

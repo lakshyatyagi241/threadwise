@@ -158,7 +158,11 @@
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "colEmail": "Email",
-      "noEmail": "No email address"
+      "noEmail": "No email address",
+      "contactsHeading": "Contacts",
+      "matchTitle": "Match the picked groups, tags and segments",
+      "matchAny": "Any of them",
+      "matchAll": "All of them"
     },
     "overrides": {
       "title": "Fill in this send",

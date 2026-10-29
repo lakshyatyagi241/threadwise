@@ -56,6 +56,7 @@ import {
   RefreshIcon,
   SearchIcon,
 } from './icons';
+import { EarlierThreads } from './earlier-threads';
 import { MessageStream } from './message-stream';
 import { ThreadSearch } from './thread-search';
 import type { AiModelChoice } from './composer-toolbar';
@@ -64,6 +65,8 @@ import { Avatar, ChannelTag } from './parts';
 const UUID_KEY = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface ThreadPaneProps {
+  /** Moves the screen to another thread of the same customer (the closed cards above an email conversation). */
+  onOpenThread?: (id: string) => void;
   conversationId: string;
   detail: InboxConversationDetail | undefined;
   fetchedAt: number;
@@ -476,6 +479,10 @@ export function ThreadPane(props: ThreadPaneProps) {
           canReturn={props.handoff.canReturn}
           onPlaced={props.handoff.onPlaced}
         />
+      )}
+
+      {detail && detail.channel.kind === 'email' && props.onOpenThread && (
+        <EarlierThreads items={detail.pastConversations} onOpen={props.onOpenThread} />
       )}
 
       <MessageStream

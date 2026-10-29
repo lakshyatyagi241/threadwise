@@ -10,6 +10,7 @@ import {
   canRedo,
   canUndo,
   clampZoom,
+  newCanvasNodes,
   connect,
   connectionFocus,
   edgeFocus,
@@ -151,10 +152,24 @@ describe('connecting (TW-FLB-015 rule 3)', () => {
     expect(twice.edges[0]!.id).not.toBe(once.edges[0]!.id);
   });
 
-  it('the same handle may fan out to several targets; a `no` handle marks the edge', () => {
+  it('a port has one target: connecting it to another node replaces the old edge', () => {
     let r = connect(s, { nodeId: 'a', handleId: 'out' }, 'b');
     r = connect(r, { nodeId: 'a', handleId: 'out' }, 'c');
-    expect(r.edges.map((e) => e.target)).toEqual(['b', 'c']);
+    expect(r.edges.map((e) => e.target)).toEqual(['c']);
+  });
+
+  it('other ports and other nodes keep their edges', () => {
+    let r = connect(s, { nodeId: 'a', handleId: 'yes' }, 'b');
+    r = connect(r, { nodeId: 'a', handleId: 'no' }, 'c');
+    r = connect(r, { nodeId: 'b', handleId: 'out' }, 'c');
+    expect(r.edges.map((e) => [e.source, e.sourceHandle, e.target])).toEqual([
+      ['a', 'yes', 'b'],
+      ['a', 'no', 'c'],
+      ['b', 'out', 'c'],
+    ]);
+  });
+
+  it('a `no` handle marks the edge', () => {
     expect(connect(s, { nodeId: 'a', handleId: 'no' }, 'b').edges[0]!.kind).toBe('no');
     expect(connect(s, { nodeId: 'a', handleId: 'yes' }, 'b').edges[0]!.kind).toBeNull();
   });
@@ -349,5 +364,18 @@ describe('connection focus', () => {
   it('a wire that no longer exists has no focus', () => {
     expect(edgeFocus(edges, 'gone')).toBeNull();
     expect(edgeFocus(edges, null)).toBeNull();
+  });
+});
+
+describe('a new flow', () => {
+  it('starts with its Trigger on the canvas, as START, and a second Trigger is refused', () => {
+    const nodes = newCanvasNodes();
+    expect(nodes).toHaveLength(1);
+    expect(nodes[0]).toMatchObject({ type: 'trigger', isStart: true });
+    // The Trigger exists once, so the palette's Trigger cannot add another.
+    expect(addNode({ nodes, edges: [] }, 'trigger', 0, 0).ok).toBe(false);
+    // The next node added is an ordinary node, not START.
+    const next = addNode({ nodes, edges: [] }, 'message', 400, 60);
+    expect(next.ok && next.state.nodes.filter((n) => n.isStart)).toHaveLength(1);
   });
 });

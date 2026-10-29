@@ -155,7 +155,12 @@
       "deleted": "{count, plural, one {Usunięto # zadanie.} few {Usunięto # zadania.} many {Usunięto # zadań.} other {Usunięto # zadań.}}",
       "deleteTitle": "Usunąć zaznaczone zadania?",
       "deleteMessage": "{count, plural, one {# zadanie zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.} few {# zadania zostaną usunięte dla wszystkich. Tej operacji nie można cofnąć.} many {# zadań zostanie usuniętych dla wszystkich. Tej operacji nie można cofnąć.} other {# zadań zostanie usuniętych dla wszystkich. Tej operacji nie można cofnąć.}}",
-      "keep": "Zachowaj"
+      "keep": "Zachowaj",
+      "reopen": "Otwórz ponownie",
+      "completeWithOutcome": "Zakończ z wynikiem zadania",
+      "reopenWithOutcome": "Otwórz ponownie z wynikiem zadania",
+      "pickOutcome": "Wynik zadania",
+      "reopened": "{count, plural, one {# zadanie otwarte ponownie.} few {# zadania otwarte ponownie.} many {# zadań otwartych ponownie.} other {# zadania otwarte ponownie.}}"
     },
     "quick": {
       "label": "Dodaj zadanie",

@@ -55,7 +55,7 @@ export const dealStageRefSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   color: z.string(),
-  probability: z.number().int(),
+  probability: z.int(),
   kind: stageKindSchema,
 });
 export type DealStageRef = z.infer<typeof dealStageRefSchema>;
@@ -79,11 +79,11 @@ export const dealResponseSchema = z.object({
   lostReason: z.string().nullable(),
   lostReasonId: uuidSchema.nullable(),
   notes: z.string().nullable(),
-  wonAt: z.string().datetime().nullable(),
-  lostAt: z.string().datetime().nullable(),
-  rowVersion: z.number().int(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  wonAt: z.iso.datetime().nullable(),
+  lostAt: z.iso.datetime().nullable(),
+  rowVersion: z.int(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 });
 export type DealResponse = z.infer<typeof dealResponseSchema>;
 
@@ -130,7 +130,7 @@ export const updateDealSchema = z.object({
   companyId: uuidSchema.nullish(),
   expectedCloseDate: dealDateSchema.nullish(),
   notes: z.string().trim().max(DEAL_NOTES_MAX).nullish(),
-  rowVersion: z.number().int().positive(),
+  rowVersion: z.int().positive(),
 });
 export type UpdateDealInput = z.infer<typeof updateDealSchema>;
 
@@ -173,29 +173,29 @@ export const moveDealStageSchema = z
     lostReasonId: uuidSchema.optional(),
     lostReason: z.string().trim().min(1).max(191).optional(),
     /** Optional; when sent, a stale value is 409 ROW_VERSION_CONFLICT. */
-    rowVersion: z.number().int().positive().optional(),
+    rowVersion: z.int().positive().optional(),
   })
   .refine((v) => !(v.beforeDealId && v.afterDealId), {
-    message: 'give beforeDealId or afterDealId, not both',
     path: ['afterDealId'],
+    error: 'give beforeDealId or afterDealId, not both',
   });
 export type MoveDealStageInput = z.infer<typeof moveDealStageSchema>;
 
-export const markDealWonSchema = z.object({ rowVersion: z.number().int().positive().optional() });
+export const markDealWonSchema = z.object({ rowVersion: z.int().positive().optional() });
 export type MarkDealWonInput = z.infer<typeof markDealWonSchema>;
 
 export const markDealLostSchema = z.object({
   lostReasonId: uuidSchema.optional(),
   /** Free text; with `lostReasonId` the catalogue name wins. A workspace can require one of the two. */
   reason: z.string().trim().min(1).max(191).optional(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type MarkDealLostInput = z.infer<typeof markDealLostSchema>;
 
 export const reopenDealSchema = z.object({
   /** An open stage of the deal's pipeline; omit for its first open stage. */
   stageId: uuidSchema.optional(),
-  rowVersion: z.number().int().positive().optional(),
+  rowVersion: z.int().positive().optional(),
 });
 export type ReopenDealInput = z.infer<typeof reopenDealSchema>;
 
@@ -209,25 +209,25 @@ export const boardQuerySchema = z
     pipelineId: uuidSchema.optional(),
     ...dealFilterFields,
     /** Cards per column on the first page. */
-    limit: z.coerce.number().int().min(1).max(100).default(BOARD_PAGE_DEFAULT),
+    limit: z.coerce.number().int().min(1).max(100).prefault(BOARD_PAGE_DEFAULT),
     /** Report each column's total converted to this currency too (rates from the currency table). */
     convertTo: currencyCodeSchema.optional(),
   })
   .refine((q) => !(q.ownerId && q.unassigned), {
-    message: 'ownerId and unassigned cannot be combined',
     path: ['unassigned'],
+    error: 'ownerId and unassigned cannot be combined',
   });
 export type BoardQuery = z.infer<typeof boardQuerySchema>;
 
 export const boardStageQuerySchema = z
   .object({
     ...dealFilterFields,
-    limit: z.coerce.number().int().min(1).max(100).default(BOARD_PAGE_DEFAULT),
+    limit: z.coerce.number().int().min(1).max(100).prefault(BOARD_PAGE_DEFAULT),
     cursor: z.string().min(1).max(512).optional(),
   })
   .refine((q) => !(q.ownerId && q.unassigned), {
-    message: 'ownerId and unassigned cannot be combined',
     path: ['unassigned'],
+    error: 'ownerId and unassigned cannot be combined',
   });
 export type BoardStageQuery = z.infer<typeof boardStageQuerySchema>;
 
@@ -243,9 +243,9 @@ export const dealTotalsSchema = z.object({
 export type DealTotals = z.infer<typeof dealTotalsSchema>;
 
 export const boardStageResponseSchema = z.object({
-  stage: dealStageRefSchema.extend({ sortOrder: z.number().int() }),
+  stage: dealStageRefSchema.extend({ sortOrder: z.int() }),
   /** Deals in the column after the board filters. */
-  count: z.number().int(),
+  count: z.int(),
   /** Value of those deals. */
   total: dealTotalsSchema,
   /** Probability-weighted value of an OPEN column's deals (empty for won and lost columns). */
@@ -258,13 +258,13 @@ export type BoardStageResponse = z.infer<typeof boardStageResponseSchema>;
 
 /** The KPI strip. Filter-independent (a filter never changes the KPIs) and counts OPEN deals only for the forecast (D-04). */
 export const boardKpisSchema = z.object({
-  openCount: z.number().int(),
+  openCount: z.int(),
   openValue: dealTotalsSchema,
   forecast: dealTotalsSchema,
-  wonThisMonthCount: z.number().int(),
+  wonThisMonthCount: z.int(),
   wonThisMonthValue: dealTotalsSchema,
   /** Whole percent over won and lost deals of the pipeline, all time; 0 when none closed. */
-  winRate: z.number().int(),
+  winRate: z.int(),
 });
 export type BoardKpis = z.infer<typeof boardKpisSchema>;
 
@@ -292,9 +292,9 @@ export const contactDealsResponseSchema = z.object({
   /** Open first, then newest; at most 50. */
   deals: z.array(dealResponseSchema),
   rollup: z.object({
-    openCount: z.number().int(),
+    openCount: z.int(),
     openValue: z.array(moneyTotalSchema),
-    wonCount: z.number().int(),
+    wonCount: z.int(),
     wonValue: z.array(moneyTotalSchema),
   }),
 });

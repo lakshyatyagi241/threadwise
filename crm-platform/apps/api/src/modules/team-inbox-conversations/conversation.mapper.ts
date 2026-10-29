@@ -92,10 +92,12 @@ export function toPastConversation(row: InboxConversationRow): PastConversation 
   return {
     id: s.id,
     channel: s.channel,
-    title: s.title,
+    // The thread's own title: for a mail thread its subject, which tells the threads of one customer apart.
+    title: row.title,
     preview: s.preview,
     status: s.status,
     lastMessageAt: s.lastMessageAt,
+    createdAt: new Date(row.createdAt).toISOString(),
   };
 }
 

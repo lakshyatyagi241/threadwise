@@ -82,6 +82,24 @@ export function previewModelOf(t: WizardTemplate): PreviewModel {
   };
 }
 
+/** The message with each placeholder that has an example shown as that example (Meta's own sample); the rest stay as `{{n}}`. */
+export function previewModelWithExamples(t: WizardTemplate): PreviewModel {
+  const base = previewModelOf(t);
+  const fill = (text: string, section: 'header' | 'body') =>
+    t.slots
+      .filter((s) => s.section === section && s.example)
+      .reduce(
+        (out, s) =>
+          out.split(`{{${s.position}}}`).join(s.example!).split(`{{${s.key}}}`).join(s.example!),
+        text,
+      );
+  return {
+    ...base,
+    headerText: fill(base.headerText, 'header'),
+    body: fill(base.body, 'body'),
+  };
+}
+
 /** The same message with what a contact would read (the sample of step 3): values replace the placeholders. */
 export function previewModelWithText(
   t: WizardTemplate,

@@ -38,7 +38,7 @@ export const reminderPackStepSchema = z.object({
   stepKind: bookingReminderStepKindSchema,
   kind: bookingReminderKindSchema,
   /** Minutes before the start, after the end, or the fixed offset of an event step. A rebook counts days after the visit. */
-  offsetMinutes: z.number().int().nonnegative(),
+  offsetMinutes: z.int().nonnegative(),
   /** Whether the pack switches the step on (the after-visit and rebook steps of some packs ship OFF). */
   isActive: z.boolean(),
   channels: z.array(bookingReminderChannelSchema).min(1),
@@ -56,7 +56,7 @@ export type ReminderPackStep = z.infer<typeof reminderPackStepSchema>;
 export const reminderPackSchema = z.object({
   key: reminderPackKeySchema,
   /** Bumped when the content changes; a workspace that adopted an older version keeps its copy until it applies the pack again. */
-  version: z.number().int().positive(),
+  version: z.int().positive(),
   name: z.string(),
   description: z.string(),
   languages: z.array(reminderPackLanguageSchema),
@@ -86,7 +86,7 @@ export const reminderPackPreviewStepSchema = z.object({
     .object({
       id: uuidSchema,
       isActive: z.boolean(),
-      offsetMinutes: z.number().int(),
+      offsetMinutes: z.int(),
       hasOwnText: z.boolean(),
     })
     .nullable(),
@@ -122,11 +122,11 @@ export const reminderPackPreviewSchema = z.object({
     z.object({
       id: uuidSchema,
       stepKind: bookingReminderStepKindSchema,
-      offsetMinutes: z.number().int(),
+      offsetMinutes: z.int(),
     }),
   ),
-  timedSteps: z.number().int(),
-  timedStepsMax: z.number().int(),
+  timedSteps: z.int(),
+  timedStepsMax: z.int(),
   /** `cap_exceeded`: applying the pack would pass the limit of steps with a time; nothing can be applied until one is removed. */
   blocked: z.enum(['cap_exceeded']).nullable(),
   /** Some step would replace something the owner wrote or changed: the owner has to confirm it. */
@@ -157,8 +157,8 @@ export const reminderPackAdoptResultSchema = z.object({
       metaError: z.string().nullable(),
     }),
   ),
-  added: z.number().int(),
-  replaced: z.number().int(),
+  added: z.int(),
+  replaced: z.int(),
   /** What was left out because the plan does not include it (the buttons, the rebook step). Empty on a plan that has both. */
   withheld: z.array(reminderPackWithheldSchema).default([]),
 });
@@ -172,7 +172,7 @@ export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSche
  */
 export const reminderTestSendInputSchema = z.object({
   /** Another address to send the test to (a colleague, a mailbox that renders email differently); left out = the signed-in user's own. */
-  to: z.string().trim().toLowerCase().email().max(254).optional(),
+  to: z.string().trim().toLowerCase().pipe(z.email().max(254)).optional(),
 });
 export type ReminderTestSendInput = z.infer<typeof reminderTestSendInputSchema>;
 
@@ -189,8 +189,8 @@ export type ReminderTestSendResult = z.infer<typeof reminderTestSendResultSchema
 export const reminderReportQuerySchema = z.object({
   bookingTypeId: uuidSchema.optional(),
   /** Window of the step's due time; default the last 30 days. */
-  from: z.string().datetime().optional(),
-  to: z.string().datetime().optional(),
+  from: z.iso.datetime().optional(),
+  to: z.iso.datetime().optional(),
 });
 export type ReminderReportQuery = z.infer<typeof reminderReportQuerySchema>;
 
@@ -199,27 +199,27 @@ const rate = z.number().min(0).max(1).nullable();
 
 /** What customers did with the Confirm / Reschedule / Cancel buttons of a step (taps that did something, each button once per message). */
 export const reminderReportButtonsSchema = z.object({
-  confirmed: z.number().int(),
-  rescheduled: z.number().int(),
-  cancelled: z.number().int(),
+  confirmed: z.int(),
+  rescheduled: z.int(),
+  cancelled: z.int(),
 });
 export type ReminderReportButtons = z.infer<typeof reminderReportButtonsSchema>;
 
 export const reminderReportStepSchema = z.object({
   stepKind: bookingReminderStepKindSchema,
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  failed: z.number().int(),
-  skipped: z.number().int(),
+  sent: z.int(),
+  delivered: z.int(),
+  failed: z.int(),
+  skipped: z.int(),
   /** Of the steps that were sent: how many went on a later channel than the first one the step tried (the email fallback). */
-  fallbackUsed: z.number().int().default(0),
+  fallbackUsed: z.int().default(0),
   /**
    * Button taps of the step. `null` when the workspace's plan does not include `appointment_confirm_buttons` (the API does not count what
    * the plan does not have), and for older servers.
    */
   buttons: reminderReportButtonsSchema.nullable().default(null),
   /** Why steps were skipped: reason code to count. */
-  skippedReasons: z.record(z.string(), z.number().int()),
+  skippedReasons: z.record(z.string(), z.int()),
   /** Of the bookings this step was sent for: how many later confirmed, cancelled or became no-shows. */
   confirmationRate: rate,
   cancelRate: rate,
@@ -230,7 +230,7 @@ export type ReminderReportStep = z.infer<typeof reminderReportStepSchema>;
 export const reminderReportTypeSchema = z.object({
   bookingTypeId: uuidSchema,
   bookingTypeName: z.string(),
-  appointments: z.number().int(),
+  appointments: z.int(),
   confirmationRate: rate,
   cancelRate: rate,
   noShowRate: rate,
@@ -239,8 +239,8 @@ export const reminderReportTypeSchema = z.object({
 export type ReminderReportType = z.infer<typeof reminderReportTypeSchema>;
 
 export const reminderReportSchema = z.object({
-  from: z.string().datetime(),
-  to: z.string().datetime(),
+  from: z.iso.datetime(),
+  to: z.iso.datetime(),
   /** Whether the plan includes the buttons, so the screen shows the buttons column or a locked note. */
   buttonsIncluded: z.boolean().default(false),
   data: z.array(reminderReportTypeSchema),

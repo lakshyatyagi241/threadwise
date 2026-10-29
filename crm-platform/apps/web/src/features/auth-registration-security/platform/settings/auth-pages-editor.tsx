@@ -49,7 +49,6 @@ import { TabBar } from '../ui/tab-bar';
 import { ErrorBlock, LoadingBlock } from '../ui/state';
 import { useToast } from '../ui/toast';
 import { useUnsavedGuard } from '../ui/use-unsaved-guard';
-import { DesignPicker } from './design-picker';
 import { PreviewForm } from './preview-form';
 import { PreviewFonts } from './preview-fonts';
 import { PreviewFrame, type PreviewDevice } from './preview-frame';
@@ -215,8 +214,6 @@ function AuthPagesForm({ data, fontClass }: { data: AuthPagesResponse; fontClass
 
   const pageTabs = PAGES.map((p) => ({ id: p, label: t(`pages.${p}`) }));
 
-  const showcaseNote = draft.variant !== 1;
-
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-5">
       <PageHeader
@@ -256,18 +253,6 @@ function AuthPagesForm({ data, fontClass }: { data: AuthPagesResponse; fontClass
           <p>{t('errors.unexpected')}</p>
         </Alert>
       )}
-
-      <Card>
-        <DesignPicker
-          value={draft.variant}
-          onChange={(v) => {
-            setDraft((d) => ({ ...d, variant: v }));
-            clearError('variant');
-          }}
-          disabled={dis}
-          error={errors.variant}
-        />
-      </Card>
 
       <div
         className={cn(
@@ -313,7 +298,6 @@ function AuthPagesForm({ data, fontClass }: { data: AuthPagesResponse; fontClass
               </h2>
               <p className="text-xs text-muted-foreground">
                 {t('preview.note', { page: t(`pages.${page}`) })}
-                {showcaseNote ? ` ${t('preview.showcaseNote')}` : ''}
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -369,7 +353,6 @@ function AuthPagesForm({ data, fontClass }: { data: AuthPagesResponse; fontClass
             */}
             <PreviewFonts fontClass={fontClass}>
               <AuthShell
-                variant={draft.variant}
                 page={page}
                 content={resolvePreviewContent(page, draft.pages[page], data.defaults)}
                 extra={resolvePreviewExtra(draft.extra[page])}

@@ -209,7 +209,8 @@
         "type": "النوع",
         "members": "الأعضاء",
         "permissions": "الصلاحيات",
-        "lastEdited": "آخر تعديل",
+        "lastEdited": "آخر تعديل في",
+        "lastEditedBy": "بواسطة {name}",
         "actions": "الإجراءات"
       },
       "row": {

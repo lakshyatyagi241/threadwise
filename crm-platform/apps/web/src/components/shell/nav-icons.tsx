@@ -482,15 +482,15 @@ export function PanelIcon({ className = 'size-5' }: { className?: string }) {
   );
 }
 
-/** Our own mark: a rounded tile with a speech bubble, in the brand colour. */
+/** Our own mark: the Geta "G" in a speech bubble. */
 export function BrandMark({ className = 'size-8' }: { className?: string }) {
+  // Geta's "G" speech-bubble logo (a transparent PNG in /public/images), drawn at the size the old square mark had.
   return (
-    <svg viewBox="0 0 32 32" aria-hidden="true" className={`shrink-0 ${className}`}>
-      <rect width="32" height="32" rx="8" fill="var(--brand)" />
-      <path
-        d="M7.5 12A4.5 4.5 0 0 1 12 7.5h8a4.5 4.5 0 0 1 4.5 4.5v5.5a4.5 4.5 0 0 1-4.5 4.5h-5.2l-4.6 3.6a.6.6 0 0 1-1-.5V22A4.5 4.5 0 0 1 7.5 17.5V12Z"
-        fill="var(--brand-foreground)"
-      />
-    </svg>
+    <img
+      src="/images/geta-logo.png"
+      alt=""
+      aria-hidden="true"
+      className={`shrink-0 object-contain ${className}`}
+    />
   );
 }

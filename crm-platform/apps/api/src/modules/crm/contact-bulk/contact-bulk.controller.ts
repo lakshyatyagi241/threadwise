@@ -10,9 +10,11 @@ import {
   HttpStatus,
   Post,
   Query,
+  Res,
   StreamableFile,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import {
   bulkConsentContactsSchema,
   bulkDeleteContactsSchema,
@@ -146,9 +148,9 @@ export class ContactBulkController {
   @RequirePermission('contacts.consent.manage')
   @ApiOperation({
     summary:
-      'Record marketing consent for one channel on contacts (ids, or everything matching a filter)',
+      'Record marketing consent for one or more channels on contacts (ids, or everything matching a filter)',
     description:
-      "Each contact gets the single edit's consent event (manual source, the note of how they agreed). A grant needs a note (422 at the body). Contacts outside the caller update scope or not found are listed in `failed`; the rest still run. `changed` counts the events recorded.",
+      "Each contact gets the single edit's consent event for every channel in `channels` (manual source, the note of how they agreed). A grant needs a note (422 at the body). Contacts outside the caller update scope or not found are listed in `failed`; the rest still run. `changed` counts the contacts that got at least one event recorded.",
   })
   async consent(
     @Body(zodPipe(bulkConsentContactsSchema)) body: BulkConsentContactsInput,
@@ -175,7 +177,6 @@ export class ContactBulkController {
   @Get('exports/:id/download')
   @RequirePermission('record.contacts.export')
   @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="contacts-export.csv"')
   @ApiOperation({
     summary: 'Download a saved export again',
     description:
@@ -184,8 +185,11 @@ export class ContactBulkController {
   async downloadExport(
     @Param('id', ParseUUIDPipe) id: string,
     @GrantedScope('record.contacts.export') scope: RecordScope,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const { csv } = await this.bulk.downloadExport(id, scope);
+    const { csv, fileName } = await this.bulk.downloadExport(id, scope);
+    // A campaign's recipients are saved here too, so the name comes from the saved file.
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
     return new StreamableFile(csv);
   }
 

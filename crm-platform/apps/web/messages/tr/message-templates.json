@@ -39,7 +39,14 @@
       "TPL_EDIT_LIMIT": "Meta, onaylı bir şablonda 24 saatte bir ve 30 günde on düzenlemeye izin verir. Daha sonra tekrar deneyin.",
       "ROW_VERSION_CONFLICT": "Düzenlerken bu şablonu biri değiştirdi. En son sürümü görmek için yenileyin, ardından değişikliğinizi yeniden uygulayın.",
       "VALIDATION_FAILED": "Bazı alanlar geçerli değil. Aşağıdaki alanları kontrol edin.",
-      "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin."
+      "INTERNAL": "Sunucu bu isteği işleyemedi. Kısa süre sonra tekrar deneyin.",
+      "uploadTooLarge": "This {kind} is too big. WhatsApp accepts a {kind} up to {max} MB.",
+      "uploadRejected": "This file was not accepted: whatever its name says, its content is not a valid {formats} file.",
+      "uploadRefused": "The file could not be uploaded.",
+      "uploadNetwork": "The upload did not finish. Check your connection and try the file again.",
+      "uploadTooLargeAny": "This file is too big. Pictures can be up to 5 MB, videos up to 16 MB and PDFs up to 10 MB.",
+      "uploadRateLimited": "Too many uploads right now: the WhatsApp provider is limiting file uploads. Wait a minute, then upload the file again.",
+      "uploadProviderDown": "The WhatsApp provider is not answering right now, so the file was not uploaded. Try again in a few minutes."
     },
     "preview": {
       "title": "Önizleme",
@@ -375,13 +382,18 @@
           "flowIdRequired": "Flow kimliğini girin.",
           "flowIdInvalid": "Flow kimliği bir sayıdır.",
           "screenRequired": "Ekran kimliğini girin.",
-          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz."
+          "catalogAlone": "Katalog düğmesi başka düğmelerle birlikte kullanılamaz.",
+          "flowIdNotMeta": "Bu form henüz bir Meta Flow değil (Flow ID'si bir sayı değil). WhatsApp Formları'nı açıp kaydedin ve yayınlayın, sonra burada seçin."
         },
         "catalogHint": "WhatsApp kataloğunuzu açar. Düğmede “Kataloğu görüntüle” yazar ve tek düğme olmalıdır.",
-        "flowId": "WhatsApp Flow kimliği",
-        "flowIdHint": "Meta’nın Flows yöneticisinden yayımlanmış bir WhatsApp Flow’un sayısal kimliği.",
-        "screen": "Açılış ekranı",
-        "screenHint": "Formun açıldığı ekranın kimliği, örneğin WELCOME."
+        "flowPick": "WhatsApp Formu",
+        "flowPickHint": "Yayımlanmış WhatsApp formlarınızdan birini seçin. Düğme formu WhatsApp içinde açar.",
+        "flowChoose": "Bir WhatsApp formu seçin",
+        "flowLoading": "Formlar yükleniyor…",
+        "flowNone": "Henüz yayımlanmış bir WhatsApp formunuz yok.",
+        "flowNoneLink": "Bir tane oluşturun ve yayımlayın",
+        "flowById": "Flow {id}",
+        "flowNotOnMeta": "{title} (önce Meta'da yayınlayın)"
       },
       "result": {
         "metaRefused": "Kaydedildi, ancak Meta şablonu reddetti.",
@@ -413,6 +425,7 @@
         "format": "Kartlar şunu gösterir",
         "formatImage": "Resimler",
         "formatVideo": "Videolar",
+        "limits": "Görsel en fazla 5 MB, video en fazla 16 MB.",
         "count": "{used}/{max} kart",
         "add": "Kart ekle",
         "needTwo": "Bir karusel için en az {min} kart gerekir.",
@@ -425,7 +438,9 @@
         "buttons": "Düğmeler",
         "buttonText": "Düğme metni",
         "buttonUrl": "Web sitesi URL'si",
-        "buttonPhone": "Telefon numarası"
+        "buttonPhone": "Telefon numarası",
+        "moveUp": "{n}. kartı yukarı taşı",
+        "moveDown": "{n}. kartı aşağı taşı"
       },
       "offer": {
         "title": "Sınırlı süreli teklif",
@@ -548,6 +563,21 @@
         "PROMOTIONAL": "Bu kategoride pazarlama dili kullanılamaz.",
         "TAG_CONTENT_MISMATCH": "Kategori içerikle uyuşmuyor (ör. UTILITY şablonunda promosyon metni).",
         "SCAM": "Meta şablonu olası dolandırıcılık olarak işaretledi. İddiaları ve dili gözden geçirin."
+      },
+      "stats": {
+        "title": "Bu şablonun performansı",
+        "hint": "Şablonla gönderilen mesajlardan sayılır",
+        "loading": "Rakamlar yükleniyor",
+        "error": "Rakamlar yüklenemedi.",
+        "none": "Bu şablonla henüz bir şey gönderilmedi.",
+        "sent": "Gönderilen",
+        "delivered": "Teslim edilen",
+        "read": "Okunan",
+        "replied": "Yanıtlanan",
+        "failed": "Başarısız",
+        "percent": "%{value}",
+        "footer": "Bu şablonla {total} mesaj gönderildi, {queued} beklemede",
+        "lastSent": "son gönderim {when}"
       }
     },
     "ai": {
@@ -577,7 +607,7 @@
       "tone": "Ton",
       "pickTone": "Ton seçin",
       "language": "Dil",
-      "languageHint": "Taslak, formun dilinde yazılır.",
+      "languageHint": "Meta'nın kabul ettiği herhangi bir dili seçin. Taslak bu dilde yazılır ve şablon bu dili alır.",
       "notes": "Özel istem",
       "notesNote": "isteğe bağlı / en fazla 2000",
       "notesPlaceholder": "Eklenmesini istediğiniz her şey: değişkenler, bağlantılar, mutlaka geçmesi gereken ifadeler, kaçınılacaklar…",

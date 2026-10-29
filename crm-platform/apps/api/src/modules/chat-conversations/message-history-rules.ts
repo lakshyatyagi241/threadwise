@@ -104,17 +104,37 @@ export const likeEscape = (s: string): string => s.replace(/[\\%_]/g, (c) => `\\
 
 // --- the type pill and the type filter ---------------------------------------------------------------------------------------
 
-/** What the Type filter means in terms of the columns: an automated source, or the kinds of message it is made of. */
+/**
+ * The sources a "Sent by" filter matches. A campaign, a broadcast and a broadcast test send are one thing to the person (the filter
+ * offers only Campaign), so naming any of them matches all three; the other sources match themselves.
+ */
+export function sourceFilterValues(sources: readonly string[]): string[] {
+  const out = new Set(sources);
+  if (['campaign', 'broadcast', 'broadcast_test'].some((x) => out.has(x))) {
+    out.add('campaign');
+    out.add('broadcast');
+    out.add('broadcast_test');
+  }
+  return [...out];
+}
+
+/**
+ * What the Type filter means in terms of the columns: an automated source, or the kinds of message it is made of. A campaign and a
+ * broadcast are one thing to the person (the filter offers only Campaign), so `campaign` (and the old `broadcast` link) matches the rows
+ * of both; a scheduled message stays its own source.
+ */
 export function typeFilterParts(t: MessageHistoryType): {
-  entity?: 'broadcast' | 'campaign' | 'scheduled';
+  entities?: Array<'broadcast' | 'campaign' | 'scheduled'>;
+  sources?: string[];
   source?: string;
   kinds?: string[];
 } {
   switch (t) {
     case 'broadcast':
     case 'campaign':
+      return { entities: ['campaign', 'broadcast'], sources: ['campaign', 'broadcast'] };
     case 'scheduled':
-      return { entity: t, source: t };
+      return { entities: ['scheduled'], sources: ['scheduled'] };
     case 'auto_reply':
       return { source: 'auto_reply' };
     case 'image':
@@ -196,6 +216,72 @@ export type VolumeBucket = 'hourly' | 'daily' | 'weekly';
 /** The `date_trunc` unit of a bucket. Weeks start on Monday (Postgres), as Reference's did. */
 export const bucketUnit = (b: VolumeBucket): 'hour' | 'day' | 'week' =>
   b === 'hourly' ? 'hour' : b === 'weekly' ? 'week' : 'day';
+
+/**
+ * Where the volume series starts. A daily chart of a preset of N days (7d, 30d, 90d) starts at midnight of the Nth day in the viewer's
+ * zone, so every bar is a whole day: the preset itself is a rolling span, which would leave the first bar partial. The 24 hour preset,
+ * weekly bars and a picked pair (whole UTC days already) keep the window's start. Hourly bars are the last 24 hours of the window.
+ */
+export function volumeSeriesFrom(
+  f: Pick<MessageHistoryFilters, 'range' | 'from' | 'to'>,
+  bucket: VolumeBucket,
+  window: HistoryWindow,
+  now: Date,
+  tz: string,
+): Date {
+  // Reference's hourly view is the last 24 hours, whatever the range.
+  if (bucket === 'hourly')
+    return new Date(Math.max(window.from.getTime(), window.to.getTime() - DAY_MS));
+  if (bucket !== 'daily' || f.from !== undefined || f.to !== undefined) return window.from;
+  const days = MESSAGE_HISTORY_RANGE_DAYS[f.range ?? '30d'];
+  return days > 1 ? localMidnightDaysBack(now, tz, days - 1) : window.from;
+}
+
+/** The wall clock of an instant in a zone, read as if it were UTC (ms). */
+const wallClock = (instant: Date, tz: string): number => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: tz,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  }).formatToParts(instant);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    Number(parts.find((p) => p.type === type)?.value);
+  return Date.UTC(
+    part('year'),
+    part('month') - 1,
+    part('day'),
+    part('hour'),
+    part('minute'),
+    part('second'),
+  );
+};
+
+/** How far a zone is ahead of UTC at an instant, in ms. */
+const offsetAt = (instant: Date, tz: string): number =>
+  wallClock(instant, tz) - Math.floor(instant.getTime() / 1000) * 1000;
+
+/**
+ * The instant of local midnight, `back` calendar days before the day `now` falls on in `tz`. Subtracting 24 hour spans would be an hour
+ * off across a clock change, so the offset is read twice: once at the midnight read as UTC, then at the guess it gives.
+ */
+function localMidnightDaysBack(now: Date, tz: string, back: number): Date {
+  const day = addDays(dayOf(new Date(wallClock(now, tz))), -back);
+  const midnight = dayStart(day).getTime();
+  const guess = midnight - offsetAt(new Date(midnight), tz);
+  return new Date(midnight - offsetAt(new Date(guess), tz));
+}
+
+/**
+ * The zone the volume chart buckets by. A chosen from/to pair is whole UTC days (see `resolveWindow`), so it is bucketed by UTC days too:
+ * in the viewer's zone the last day of the pair spills into one more bucket (20 to 26 Oct drawn as 20 to 27 Oct).
+ */
+export const chartZone = (f: { from?: string; to?: string; tz?: string }): string =>
+  f.from !== undefined || f.to !== undefined ? 'UTC' : safeZone(f.tz);
 
 /** A zone name Postgres will accept: anything `Intl` knows, else UTC. */
 export function safeZone(tz: string | undefined): string {

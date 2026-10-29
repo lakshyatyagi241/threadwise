@@ -37,6 +37,8 @@ export function feedAfterRead(
   now: string,
 ): NotificationListResponse | undefined {
   if (!feed) return feed;
+  // Clear all deleted the rows: the other tab's list is empty now, not a list of read rows that no longer exist.
+  if (payload.cleared) return { ...feed, data: [], meta: { unread: payload.unread } };
   const ids = payload.notificationIds === 'all' ? null : new Set(payload.notificationIds);
   let changed = feed.meta.unread !== payload.unread;
   const data = feed.data.map((n) => {

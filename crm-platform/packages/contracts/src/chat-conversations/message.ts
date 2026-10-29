@@ -61,7 +61,7 @@ export const messageMediaSchema = z.object({
   /** Authenticated stream url, valid for minutes. Fetch it with the session; do not store it. */
   url: z.string(),
   mime: z.string(),
-  sizeBytes: z.number().int().nonnegative().nullable(),
+  sizeBytes: z.int().nonnegative().nullable(),
   name: z.string().nullable(),
 });
 export type MessageMedia = z.infer<typeof messageMediaSchema>;
@@ -115,7 +115,7 @@ export const messageTemplateSchema = z.object({
   templateId: uuidSchema.nullable(),
   name: z.string(),
   language: z.string().nullable(),
-  variables: z.record(z.string()),
+  variables: z.record(z.string(), z.string()),
   preview: messageTemplatePreviewSchema.optional(),
 });
 export type MessageTemplate = z.infer<typeof messageTemplateSchema>;
@@ -204,12 +204,12 @@ export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
  * `readBy` those who read it, `failed` those it could not reach; `billable` and `free` split the members Meta has reported on.
  */
 export const messageGroupDeliverySchema = z.object({
-  members: z.number().int().nonnegative().optional(),
-  deliveredTo: z.number().int().nonnegative(),
-  readBy: z.number().int().nonnegative().optional(),
-  failed: z.number().int().nonnegative().optional(),
-  billable: z.number().int().nonnegative(),
-  free: z.number().int().nonnegative(),
+  members: z.int().nonnegative().optional(),
+  deliveredTo: z.int().nonnegative(),
+  readBy: z.int().nonnegative().optional(),
+  failed: z.int().nonnegative().optional(),
+  billable: z.int().nonnegative(),
+  free: z.int().nonnegative(),
 });
 export type MessageGroupDelivery = z.infer<typeof messageGroupDeliverySchema>;
 
@@ -272,7 +272,7 @@ export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;
 export const messageResponseSchema = z.object({
   id: uuidSchema,
   conversationId: uuidSchema,
-  seq: z.number().int().positive(),
+  seq: z.int().positive(),
   direction: messageDirectionSchema,
   kind: messageKindSchema,
   sender: messageSenderSchema,
@@ -335,16 +335,18 @@ export const messageResponseSchema = z.object({
   isTranslated: z.boolean(),
   translatedBody: z.string().nullable(),
   detectedLanguage: z.string().nullable(),
+  /** Set when translation was wanted but failed: the agent's text went out as typed, so the thread shows a notice (#1278). */
+  translationStatus: z.enum(['skipped_failed']).nullable().optional(),
   starred: z.boolean(),
   pinned: z.boolean(),
-  editedAt: z.string().datetime().nullable(),
-  deletedAt: z.string().datetime().nullable(),
+  editedAt: z.iso.datetime().nullable(),
+  deletedAt: z.iso.datetime().nullable(),
   /** When the channel says it happened (inbound) or accepted it (outbound). */
-  providerAt: z.string().datetime().nullable(),
-  sentAt: z.string().datetime().nullable(),
-  deliveredAt: z.string().datetime().nullable(),
-  readAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
+  providerAt: z.iso.datetime().nullable(),
+  sentAt: z.iso.datetime().nullable(),
+  deliveredAt: z.iso.datetime().nullable(),
+  readAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
 });
 export type MessageResponse = z.infer<typeof messageResponseSchema>;
 
@@ -356,13 +358,13 @@ export type MessageResponse = z.infer<typeof messageResponseSchema>;
  */
 export const listMessagesQuerySchema = z
   .object({
-    limit: z.coerce.number().int().min(1).max(100).default(50),
+    limit: z.coerce.number().int().min(1).max(100).prefault(50),
     before: z.coerce.number().int().positive().optional(),
     afterSeq: z.coerce.number().int().nonnegative().optional(),
   })
   .refine((q) => q.before === undefined || q.afterSeq === undefined, {
-    message: 'Use before or afterSeq, not both',
     path: ['afterSeq'],
+    error: 'Use before or afterSeq, not both',
   });
 export type ListMessagesQuery = z.infer<typeof listMessagesQuerySchema>;
 
@@ -374,7 +376,7 @@ export const messageListResponseSchema = z.object({
     hasMoreBefore: z.boolean(),
     /** There are newer messages than the last one returned (an `afterSeq` read that hit `limit`). */
     hasMoreAfter: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type MessageListResponse = z.infer<typeof messageListResponseSchema>;
@@ -441,7 +443,10 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
         z.object({
           name: z.string().trim().min(1).max(200),
           phones: z.array(z.string().trim().min(3).max(32)).max(5).default([]),
-          emails: z.array(z.string().trim().email().max(254)).max(5).default([]),
+          emails: z
+            .array(z.string().trim().pipe(z.email().max(254)))
+            .max(5)
+            .default([]),
           org: z.string().trim().max(200).optional(),
         }),
       )
@@ -498,8 +503,7 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
           url: z
             .string()
             .trim()
-            .url()
-            .max(2000)
+            .pipe(z.url().max(2000))
             .refine((u) => /^https?:\/\//i.test(u), 'Use an http or https link'),
         }),
       ])
@@ -510,7 +514,7 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
           i.sections.reduce((n, x) => n + x.rows.length, 0) > LIST_ROWS_MAX
         ) {
           ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: 'custom',
             message: 'A list holds at most 10 rows in total',
             path: ['sections'],
           });
@@ -521,7 +525,7 @@ export const sendMessageSchema = z.discriminatedUnion('kind', [
     ...sendBase,
     kind: z.literal('template'),
     templateId: uuidSchema,
-    variables: z.record(z.string().max(1024)).default({}),
+    variables: z.record(z.string(), z.string().max(1024)).default({}),
   }),
 ]);
 export type SendMessageInput = z.infer<typeof sendMessageSchema>;
@@ -539,9 +543,9 @@ export const conversationNoteSchema = z.object({
   /** Users mentioned with `@`, as user ids. */
   mentions: z.array(uuidSchema),
   isPinned: z.boolean(),
-  editedAt: z.string().datetime().nullable(),
-  createdAt: z.string().datetime(),
-  rowVersion: z.number().int(),
+  editedAt: z.iso.datetime().nullable(),
+  createdAt: z.iso.datetime(),
+  rowVersion: z.int(),
 });
 export type ConversationNote = z.infer<typeof conversationNoteSchema>;
 

@@ -85,7 +85,13 @@
         "title": "¿Eliminar {name}?",
         "body": "¿Eliminar este complemento? Los espacios de trabajo que lo compraron lo conservan hasta que caduque.",
         "confirm": "Eliminar",
-        "inUse": "{count, plural, one {# espacio de trabajo tiene este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.} many {# espacios de trabajo tienen este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.} other {# espacios de trabajo tienen este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.}}"
+        "inUse": "{count, plural, one {# espacio de trabajo tiene este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.} many {# espacios de trabajo tienen este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.} other {# espacios de trabajo tienen este complemento, por lo que no se puede eliminar. Desactívalo; los propietarios lo conservan hasta que termine.}}",
+        "errors": {
+          "refused": "Este complemento tiene compras, incluidas las finalizadas, así que no se puede eliminar. Desactívalo en su lugar.",
+          "forbidden": "Solo un superadministrador puede eliminar complementos.",
+          "notFound": "Este complemento ya no existe.",
+          "failed": "No se pudo eliminar el complemento."
+        }
       },
       "errors": {
         "generic": "No se pudo guardar el complemento.",

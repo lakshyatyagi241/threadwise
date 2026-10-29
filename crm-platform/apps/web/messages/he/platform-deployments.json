@@ -106,7 +106,11 @@
         "failed": "נכשל",
         "rolled_back": "הוחזר"
       },
-      "by": "מאת {author}"
+      "by": "מאת {author}",
+      "raisedIst": "נוצרה {time} IST",
+      "noProgress": "אין התקדמות כבר {minutes} דקות. ייתכן שהבנייה או השחרור נעצרו.",
+      "noChangesAlert": "הגרסאות האחרונות אינן מציגות את ה-pull requests שלהן. ככל הנראה deploy-main.sh בשרת הבנייה או ci-entry.sh במארח מיושנים: התקינו את הגרסאות הנוכחיות (deploy/build-server/README.md).",
+      "moreChanges": "עוד {count} שינויים"
     }
   }
 }

@@ -2457,19 +2457,6 @@
   "note": "write: needs a valid body per route and changes data, not run"
  },
  {
-  "route": "POST /v2/auth/clerk/session",
-  "method": "POST",
-  "url": "/v2/auth/clerk/session",
-  "module": "auth",
-  "public": true,
-  "class": "B",
-  "budgetMs": 150,
-  "p95": null,
-  "p50": null,
-  "status": null,
-  "note": "write: needs a valid body per route and changes data, not run"
- },
- {
   "route": "POST /v2/auth/refresh",
   "method": "POST",
   "url": "/v2/auth/refresh",

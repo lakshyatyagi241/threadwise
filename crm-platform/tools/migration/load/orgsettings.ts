@@ -224,6 +224,54 @@ export interface SettingsResult {
   routingRule: 'created' | 'exists' | 'no-agents' | 'off';
 }
 
+/** The migrated contact columns that hold a marketing subscription, and the consent channel each one is (consent ledger, channel names). */
+export const SUBSCRIPTION_CHANNELS = [
+  { channel: 'whatsapp', column: 'whatsapp_subscription_status' },
+  { channel: 'sms', column: 'sms_subscription_status' },
+  { channel: 'email', column: 'email_subscription_status' },
+] as const;
+
+/**
+ * The marketing subscriptions of the migrated contacts as the consent ledger holds them: one `granted` event per contact and channel whose
+ * Waboo status is a yes, and the state that follows. A "no" writes nothing: Waboo does not say the contact ever opted in and then withdrew,
+ * so a withdrawn event would record an opt-out that may never have happened. A contact with no status also gets nothing ("No consent
+ * recorded"): consent is never invented. The Subscription card and the send paths read the ledger, not the contact columns. Idempotent:
+ * the event key is per contact and channel, and the state is written once per contact and channel.
+ */
+export async function marketingConsent(
+  ownerDb: Database,
+  orgId: number,
+): Promise<{ events: number; states: number }> {
+  return withPrivileged(ownerDb, async (tx) => {
+    for (const { channel, column } of SUBSCRIPTION_CHANNELS) {
+      await tx.execute(sql`
+        INSERT INTO contact_consent_events (org_id, contact_id, channel, purpose, action, source, evidence, occurred_at, idempotency_key)
+        SELECT c.org_id, c.id, ${channel}, 'marketing',
+               'granted',
+               'import', jsonb_build_object('status', c.${sql.raw(column)}), c.created_at, ${`migration:marketing:${channel}:`} || c.uuid::text
+          FROM contacts c
+         WHERE c.org_id = ${orgId} AND c.${sql.raw(column)} = 'subscribed'
+        ON CONFLICT (org_id, idempotency_key) DO NOTHING`);
+    }
+    await tx.execute(sql`
+      INSERT INTO contact_consent_state (org_id, contact_id, channel, purpose, state, last_event_id, last_occurred_at, updated_at)
+      SELECT e.org_id, e.contact_id, e.channel, e.purpose, e.action, e.id, e.occurred_at, now()
+        FROM contact_consent_events e
+       WHERE e.org_id = ${orgId} AND e.idempotency_key LIKE 'migration:marketing:%' AND e.contact_id IS NOT NULL
+      ON CONFLICT (org_id, contact_id, channel, purpose) DO NOTHING`);
+    const n = (
+      await tx.execute(sql`
+      SELECT (SELECT count(*)::int FROM contact_consent_events WHERE org_id = ${orgId} AND idempotency_key LIKE 'migration:marketing:%') AS events,
+             (SELECT count(*)::int FROM contact_consent_state s WHERE s.org_id = ${orgId} AND s.last_event_id IN
+               (SELECT id FROM contact_consent_events WHERE org_id = ${orgId} AND idempotency_key LIKE 'migration:marketing:%')) AS states`)
+    ).rows[0] as {
+      events: number;
+      states: number;
+    };
+    return { events: Number(n.events), states: Number(n.states) };
+  });
+}
+
 /** Writes the plan for one organization (owner connection, one transaction). Never overwrites what a person already has in use. */
 export async function applySettings(
   ownerDb: Database,

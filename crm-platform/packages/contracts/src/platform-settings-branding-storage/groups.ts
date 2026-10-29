@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 const text = (max: number) => z.string().trim().max(max).default('');
 /** http(s) only: these end up in public `href`/`src`/iframe attributes, where `javascript:` would run. */
-const anyUrl = z.string().url();
+const anyUrl = z.url();
 const httpUrl = (max: number) =>
   z
     .string()
@@ -30,7 +30,7 @@ const assetUrl = (max: number) =>
     ])
     .default('');
 const email = (max: number) =>
-  z.union([z.literal(''), z.string().trim().email().max(max)]).default('');
+  z.union([z.literal(''), z.string().trim().pipe(z.email().max(max))]).default('');
 const flag = (on: boolean) => z.boolean().default(on);
 const hex = z.union([z.literal(''), z.string().regex(/^#[0-9A-Fa-f]{3,8}$/)]).default('');
 const hex6 = z.union([z.literal(''), z.string().regex(/^#[0-9A-Fa-f]{6}$/)]).default('');
@@ -42,9 +42,9 @@ const clamped = (min: number, max: number, dflt: number) =>
         typeof v === 'number' && Number.isFinite(v)
           ? Math.min(max, Math.max(min, Math.round(v)))
           : v,
-      z.number().int().min(min).max(max),
+      z.int().min(min).max(max),
     )
-    .default(dflt);
+    .prefault(dflt);
 
 /** True for an IANA zone name the runtime knows ("Asia/Kolkata", "UTC"). */
 export function isValidTimezone(tz: string): boolean {
@@ -141,8 +141,8 @@ export const generalSettingsSchema = z.object({
 // --- TW-SET-010, 013, 014, 015 ----------------------------------------------------------------
 export const brandingSettingsSchema = z.object({
   faviconUrl: assetUrl(500),
-  logos: logoMap.default({}),
-  colors: colorMap.default({}),
+  logos: logoMap.prefault({}),
+  colors: colorMap.prefault({}),
   fontScale: clamped(80, 130, 100),
   uiOpacity: clamped(55, 100, 100),
   dashboardLayout: z.enum(['topbar', 'sidebar']).default('topbar'),
@@ -190,7 +190,7 @@ export const MAILERS = [
 export const mailSettingsSchema = z.object({
   mailer: z.enum(MAILERS).default('smtp'),
   host: text(200),
-  port: z.number().int().min(1).max(65535).default(587),
+  port: z.int().min(1).max(65535).default(587),
   username: text(200),
   encryption: z.enum(['tls', 'ssl', 'starttls', '']).default('tls'),
   fromName: text(120),

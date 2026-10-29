@@ -17,18 +17,19 @@
       "refresh": "Aggiorna",
       "newCampaign": "Nuova campagna",
       "tile": {
-        "sent": "Inviati",
+        "sent": "Messaggi inviati",
         "delivered": "Consegnati",
         "read": "Letti",
-        "failed": "Non riusciti",
-        "processing": "In elaborazione",
-        "campaigns": "{count} campagne",
+        "failed": "Messaggi falliti",
+        "processing": "Campagne in invio",
+        "campaigns": "da {count, plural, one {# campagna} other {# campagne}}",
         "inFlight": "in corso",
         "awaiting": "in attesa",
-        "queued": "{count} in coda",
+        "queued": "{count} programmate per iniziare",
         "deliveredRate": "{rate}% consegnati",
         "readRate": "{rate}% letti",
-        "failedCampaigns": "{count} campagne non riuscite"
+        "failedCampaigns": "{count, plural, one {# campagna segnata} other {# campagne segnate}} come fallita",
+        "note": "Inviati, Consegnati, Letti e Falliti contano messaggi, e un messaggio fallito non è contato in Inviati. La riga più piccola sotto ogni numero conta campagne. Tutto segue l'intervallo di date scelto sotto: {range}."
       },
       "range": {
         "all": "Sempre",
@@ -174,7 +175,8 @@
         "status": "Stato",
         "schedule": "Pianificazione",
         "actions": "Azioni"
-      }
+      },
+      "newCampaignAny": "Nuova campagna"
     },
     "builder": {
       "loadError": "Impossibile caricare questa campagna.",
@@ -314,7 +316,22 @@
         "previousTitle": "Invii precedenti",
         "previousHint": "Aggiungi le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, risposto o cliccato.",
         "previousEstimate": "{count, plural, one {Fino a # persona dagli invii precedenti (una stima: chi è in due invii viene contato due volte).} other {Fino a # persone dagli invii precedenti (una stima: chi è in due invii viene contato due volte).}}",
-        "previousEditHint": "La tua scelta precedente di invii non viene mostrata in modifica: questa campagna conserva già i suoi destinatari come contatti. Scegli di nuovo per aggiungere altre persone."
+        "previousEditHint": "La tua scelta precedente di invii non viene mostrata in modifica: questa campagna conserva già i suoi destinatari come contatti. Scegli di nuovo per aggiungere altre persone.",
+        "emails": "E-mail manuali",
+        "emailsHint": "Una per riga, oppure separate da virgola o punto e virgola.",
+        "emailsPlaceholder": "Un indirizzo e-mail per riga",
+        "emailsCount": "{count} indirizzi",
+        "emailCsvHint": "Colonne: nome, e-mail. Ogni altra colonna diventa una variabile utilizzabile nel messaggio.",
+        "emailModes": {
+          "csv": {
+            "title": "Carica CSV",
+            "hint": "Importa gli indirizzi e-mail per questa campagna."
+          },
+          "manual": {
+            "title": "E-mail manuali",
+            "hint": "Incolla un indirizzo e-mail per riga."
+          }
+        }
       },
       "message": {
         "title": "Messaggio",
@@ -431,6 +448,7 @@
       },
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
       "draftChip": "Bozza / non salvata",
+      "draftSavedChip": "Bozza · salvata",
       "steps": {
         "label": "Passaggi della campagna",
         "required": "obbligatorio",
@@ -706,6 +724,8 @@
       "guided": {
         "template": "Modello",
         "pickTemplate": "— Seleziona un modello —",
+        "searchTemplates": "Cerca modelli per nome o lingua",
+        "noTemplateMatch": "Nessun modello corrisponde alla ricerca.",
         "templateHint": "Solo i modelli approvati del numero scelto. Le sue variabili si compilano qui sotto.",
         "noTemplates": "Questo numero non ha ancora modelli approvati. Creane uno e attendi l’approvazione.",
         "deliveryTitle": "Invio",
@@ -725,7 +745,11 @@
         "balanceShort": "Il saldo non è sufficiente: mancano {shortfall}.",
         "balanceLowFull": "Il saldo è inferiore al costo totale di {full}: il tuo piano lo copre ora, ma non quando il piano si esaurirà.",
         "chargedNowLabel": "Addebitato ora sul tuo wallet"
-      }
+      },
+      "kickerEmail": "Campagne email / Nuova",
+      "kickerEditEmail": "Campagne email / Modifica",
+      "titleEmail": "Crea una nuova email",
+      "titleEditEmail": "Modifica la tua email"
     },
     "detail": {
       "notFound": "Campagna non trovata.",
@@ -1126,7 +1150,8 @@
         "saved": "Bozza salvata",
         "saving": "Salvataggio...",
         "failed": "Impossibile salvare",
-        "retry": "Riprova"
+        "retry": "Riprova",
+        "nameTaken": "Esiste già una campagna con lo stesso nome"
       },
       "errors": {
         "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -1226,7 +1251,8 @@
         "shareHint": "Seleziona i numeri da cui inviare e assegna una quota a ciascuno. Il pubblico viene diviso in base a queste quote e ogni contatto riceve il messaggio da un solo numero. Una quota vuota o 0 vale 1.",
         "shareWeight": "Quota",
         "shareWeightLabel": "Quota di {name}",
-        "shareKeepOne": "Almeno un numero deve restare selezionato."
+        "shareKeepOne": "Almeno un numero deve restare selezionato.",
+        "nameTaken": "Esiste già una campagna con lo stesso nome"
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",
@@ -1356,7 +1382,6 @@
         "csvPreviewCaption": "Anteprima dei numeri validi nel file",
         "csvLine": "Riga",
         "csvName": "Nome",
-        "csvStatus": "Stato",
         "csvRow": {
           "new": "Nuovo contatto",
           "existing": "Contatto esistente",
@@ -1376,7 +1401,14 @@
         "modePrevious": "Invia agli invii precedenti",
         "previousHint": "Raggiungi di nuovo le persone a cui sono arrivati broadcast e campagne precedenti, eventualmente solo chi ha letto, non ha letto, ha risposto o ha cliccato.",
         "chipPrevious": "{count, plural, one {# invio precedente} other {# invii precedenti}} ({outcome})",
-        "filterNoConditions": "Aggiungi una condizione per vedere quanti contatti corrispondono."
+        "filterNoConditions": "Aggiungi una condizione per vedere quanti contatti corrispondono.",
+        "csvConsentCol": "Consenso",
+        "csvContactCol": "Contatto",
+        "csvConsent": {
+          "optedIn": "Iscritto",
+          "optedOut": "Disiscritto"
+        },
+        "clearAudience": "Svuota il pubblico"
       },
       "review": {
         "intro": "Controlla il costo, indicaci con cosa viene compilata ogni variabile del template e rivedi il broadcast.",
@@ -1597,7 +1629,7 @@
         "retries": "Nuovi tentativi",
         "retriesOn": "Attivi, fino al {date}",
         "retriesOff": "Disattivati",
-        "recurringNote": "Ogni esecuzione va al pubblico così com'è in quel momento, quindi il numero di destinatari può cambiare."
+        "recurringNote": "Ora non viene inviato nulla. La prima esecuzione parte all'ora indicata sopra e ogni esecuzione compare poi nella Cronologia come riga a sé. Fino ad allora, trova questa campagna in Ricorrenti. Ogni esecuzione va al pubblico com'è in quel momento, quindi il numero di destinatari può cambiare."
       },
       "status": {
         "back": "Torna alle campagne",
@@ -1811,7 +1843,8 @@
         "add": "Aggiungi un modello",
         "count": "{used} di {max} modelli",
         "limitReached": "Limite raggiunto: {max} modelli.",
-        "variablesTitle": "Variabili del modello {position}: {name}"
+        "variablesTitle": "Variabili del modello {position}: {name}",
+        "variablesLater": "{count, plural, one {# variabile prende} other {# variabili prendono}} il valore dall'associazione, non da questa anteprima."
       }
     },
     "history": {

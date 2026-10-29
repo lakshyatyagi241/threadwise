@@ -26,24 +26,24 @@ export type DashSummaryQuery = z.infer<typeof dashSummaryQuerySchema>;
 
 /** Counts of one window under the Reference definitions: delivered includes `sent`; read is `read_at` or status read. */
 export const dashTotalsSchema = z.object({
-  sent: z.number().int(),
-  delivered: z.number().int(),
-  failed: z.number().int(),
-  read: z.number().int(),
+  sent: z.int(),
+  delivered: z.int(),
+  failed: z.int(),
+  read: z.int(),
   /** sent - delivered - failed, never below 0. */
-  queued: z.number().int(),
+  queued: z.int(),
   /** Inbound messages. */
-  replies: z.number().int(),
+  replies: z.int(),
   /** Distinct conversations with an inbound message (the "engaged" funnel stage). */
-  repliers: z.number().int(),
+  repliers: z.int(),
   /** Distinct conversations (the contact proxy) with an outbound message in the window. */
-  contactsMessaged: z.number().int(),
+  contactsMessaged: z.int(),
   /** Distinct conversations with an outbound message in the delivered set (delivered, read, sent). */
-  contactsDelivered: z.number().int(),
+  contactsDelivered: z.int(),
   /** Distinct conversations with an inbound message; equals `repliers`. May exceed `contactsMessaged` (replied without being messaged in this window). */
-  contactsReplied: z.number().int(),
+  contactsReplied: z.int(),
   /** Distinct conversations with at least one flow run that finished (`flow_runs.status = 'completed'`) with `ended_at` in the window. */
-  contactsGoalCompleted: z.number().int(),
+  contactsGoalCompleted: z.int(),
   /** Percent, one decimal. */
   deliverability: z.number(),
   readRate: z.number(),
@@ -65,27 +65,27 @@ export const dashFunnelSchema = z.object({
   stages: z.array(
     z.object({
       key: z.enum(['sent', 'delivered', 'replied', 'engaged']),
-      count: z.number().int(),
+      count: z.int(),
       /** Share of the first stage, percent, one decimal (may pass 100 for replied). */
       pct: z.number(),
       /** Lost against the stage before it (replied is measured from delivered, engaged from replied). */
-      drop: z.number().int(),
+      drop: z.int(),
     }),
   ),
   /** The last stage's share. */
   endToEnd: z.number(),
   /** Contact-based funnel (the Engagement funnel card): contacts messaged, delivered to, replied, and goal completed (a flow finished). Percentages are of `messaged`. */
   contacts: z.object({
-    messaged: z.number().int(),
-    delivered: z.number().int(),
-    replied: z.number().int(),
+    messaged: z.int(),
+    delivered: z.int(),
+    replied: z.int(),
     /** Contacts whose flow finished in the window (a completed flow run). */
-    goalCompleted: z.number().int(),
+    goalCompleted: z.int(),
   }),
   /** Conversation activity under the funnel; `repliesPerContact` is replies / responding contacts, one decimal, null when nobody replied. */
   activity: z.object({
-    inbound: z.number().int(),
-    respondingContacts: z.number().int(),
+    inbound: z.int(),
+    respondingContacts: z.int(),
     repliesPerContact: z.number().nullable(),
   }),
   /** Contacts replied / contacts messaged, percent, one decimal, capped at 100. */
@@ -105,7 +105,7 @@ export const dashSummaryResponseSchema = z.object({
   /** Percentage points. */
   readRateDeltaPp: z.number(),
   /** 20 hourly outbound counts, oldest first. */
-  sparkline: z.array(z.number().int()).length(20),
+  sparkline: z.array(z.int()).length(20),
   funnel: dashFunnelSchema,
 });
 export type DashSummaryResponse = z.infer<typeof dashSummaryResponseSchema>;
@@ -116,12 +116,12 @@ export const dashThroughputResponseSchema = z.object({
   bucket: z.enum(['hour', 'day']),
   /** ISO instant of each bucket's start. */
   starts: z.array(z.string()),
-  sent: z.array(z.number().int()),
-  delivered: z.array(z.number().int()),
-  failed: z.array(z.number().int()),
+  sent: z.array(z.int()),
+  delivered: z.array(z.int()),
+  failed: z.array(z.int()),
   /** Busiest of the 24 hourly slots before now. */
-  peak: z.object({ start: z.string(), count: z.number().int() }).nullable(),
-  avgPerHour: z.number().int(),
+  peak: z.object({ start: z.string(), count: z.int() }).nullable(),
+  avgPerHour: z.int(),
 });
 export type DashThroughputResponse = z.infer<typeof dashThroughputResponseSchema>;
 
@@ -153,7 +153,7 @@ export const ANALYTICS_MAX_DAYS = 366;
 export const analyticsResponseSchema = z.object({
   range: z.enum(ANALYTICS_RANGES),
   window: dashWindowSchema.extend({
-    days: z.number().int(),
+    days: z.int(),
     fromDate: z.string(),
     toDate: z.string(),
   }),
@@ -174,34 +174,34 @@ export const analyticsResponseSchema = z.object({
   }),
   daily: z.object({
     dates: z.array(z.string()),
-    sent: z.array(z.number().int()),
-    delivered: z.array(z.number().int()),
-    failed: z.array(z.number().int()),
-    queued: z.array(z.number().int()),
+    sent: z.array(z.int()),
+    delivered: z.array(z.int()),
+    failed: z.array(z.int()),
+    queued: z.array(z.int()),
   }),
   funnel: dashFunnelSchema,
   /** Outbound by type (sent = count, and how many of those were delivered); zero buckets omitted. */
   types: z.array(
     z.object({
       key: z.enum(['text', 'template', 'media', 'interactive', 'location']),
-      count: z.number().int(),
-      delivered: z.number().int(),
+      count: z.int(),
+      delivered: z.int(),
     }),
   ),
   /** 7 rows (Sunday = 0) of 24 hourly message counts, both directions, in the workspace zone. */
-  heatmap: z.array(z.array(z.number().int()).length(24)).length(7),
+  heatmap: z.array(z.array(z.int()).length(24)).length(7),
   /**
    * Conversations with activity in the window (a message, or a resolve / close), by state: the old analytics' "Conversation Status"
    * tiles. Resolved and closed are the two finished statuses the inbox offers (Resolve, Close), so each has its own tile.
    */
   conversations: z
     .object({
-      total: z.number().int(),
-      open: z.number().int(),
-      resolved: z.number().int(),
-      closed: z.number().int(),
-      assigned: z.number().int(),
-      unassigned: z.number().int(),
+      total: z.int(),
+      open: z.int(),
+      resolved: z.int(),
+      closed: z.int(),
+      assigned: z.int(),
+      unassigned: z.int(),
     })
     .optional(),
 });

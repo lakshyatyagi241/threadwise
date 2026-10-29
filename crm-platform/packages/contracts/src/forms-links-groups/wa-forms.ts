@@ -132,12 +132,12 @@ export const waFormDefinitionSchema = z.object({
 export type WaFormDefinition = z.infer<typeof waFormDefinitionSchema>;
 
 export const waFormSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   title: z.string(),
   purpose: z.string().nullable(),
   slug: z.string(),
   audienceType: waFormAudienceTypeSchema,
-  submissionCap: z.number().int(),
+  submissionCap: z.int(),
   capReachedNote: z.string().nullable(),
   sendButtonLabel: z.string(),
   thankYouNote: z.string().nullable(),
@@ -145,28 +145,49 @@ export const waFormSchema = z.object({
   status: waFormStatusSchema,
   /** `status === 'published' && metaFlowId` is set — the same rule the flow-builder picker uses. */
   isLive: z.boolean(),
+  /** Meta's id of the Flow (what a template's Form button points at); null until the form was sent to Meta by Test form or Publish. */
+  metaFlowId: z.string().nullable().default(null),
   publishedAt: z.string().nullable(),
   publishError: z.string().nullable(),
-  fieldsCount: z.number().int(),
-  submissionCount: z.number().int(),
+  fieldsCount: z.int(),
+  submissionCount: z.int(),
   createdAt: z.string(),
-  rowVersion: z.number().int(),
+  rowVersion: z.int(),
 });
 export type WaForm = z.infer<typeof waFormSchema>;
 
+/** `POST /v2/wa-forms/:id/preview`: Meta's own preview of the saved form, to try it before publishing. */
+export const waFormPreviewSchema = z.object({ url: z.string().url(), flowId: z.string() });
+export type WaFormPreview = z.infer<typeof waFormPreviewSchema>;
+
 export const waFormStatsSchema = z.object({
-  all: z.number().int(),
-  published: z.number().int(),
-  draft: z.number().int(),
-  submissions: z.number().int(),
+  all: z.int(),
+  published: z.int(),
+  draft: z.int(),
+  submissions: z.int(),
 });
 export type WaFormStats = z.infer<typeof waFormStatsSchema>;
 
 export const waFormListQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  limit: z.coerce.number().int().min(1).max(100).prefault(20),
   cursor: z.string().min(1).max(200).optional(),
+  /** Part of the title (without case); the counters above the list stay the whole workspace's. */
+  q: z.string().trim().max(100).optional(),
 });
 export type WaFormListQuery = z.infer<typeof waFormListQuerySchema>;
+
+/** `POST /v2/wa-forms/sync`: what Meta's list of Flows did to the forms here. */
+export const waFormSyncResponseSchema = z.object({
+  /** Forms that are linked to a Meta Flow and were looked up. */
+  checked: z.int().nonnegative(),
+  /** Of those, how many changed their status (or lost a publish error) to match Meta. */
+  updated: z.int().nonnegative(),
+  /** Linked forms whose Flow Meta no longer lists (deleted there). */
+  missing: z.int().nonnegative(),
+  /** Flows on the account that no form here is linked to (made in Meta, or by another tool); they are left alone. */
+  metaOnly: z.int().nonnegative(),
+});
+export type WaFormSyncResponse = z.infer<typeof waFormSyncResponseSchema>;
 
 export const waFormListSchema = z.object({
   items: z.array(waFormSchema),
@@ -174,7 +195,7 @@ export const waFormListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WaFormList = z.infer<typeof waFormListSchema>;
@@ -187,29 +208,33 @@ export const saveWaFormInputSchema = z.object({
   title: z.string().trim().min(1).max(WA_FORM_TITLE_MAX),
   purpose: z.string().trim().max(WA_FORM_PURPOSE_MAX).optional(),
   audienceType: waFormAudienceTypeSchema,
-  submissionCap: z.number().int().min(0).max(WA_FORM_SUBMISSION_CAP_MAX).default(0),
+  submissionCap: z.int().min(0).max(WA_FORM_SUBMISSION_CAP_MAX).default(0),
   capReachedNote: z.string().trim().max(WA_FORM_CAP_REACHED_NOTE_MAX).optional(),
   sendButtonLabel: z.string().trim().min(1).max(WA_FORM_SEND_BUTTON_LABEL_MAX).default('Send'),
   thankYouNote: z.string().trim().max(WA_FORM_THANK_YOU_NOTE_MAX).optional(),
   definition: waFormDefinitionSchema,
-  rowVersion: z.number().int().optional(),
+  rowVersion: z.int().optional(),
 });
 export type SaveWaFormInput = z.infer<typeof saveWaFormInputSchema>;
 
 /** `GET /v2/wa-forms/picker`: consumed by the flow builder's `wa_form` node — keep this shape stable. */
 export const waFormPickerItemSchema = z.object({
-  id: z.string().uuid(),
+  id: z.guid(),
   title: z.string(),
   status: waFormStatusSchema,
   isPublished: z.boolean(),
+  /** Meta's id of the published Flow (what a template's Form button points at); null until the form is published. */
+  metaFlowId: z.string().nullable().default(null),
+  /** The screen the Flow opens on: the first one (a template's Form button needs it). */
+  firstScreenId: z.string().default('A'),
 });
 export type WaFormPickerItem = z.infer<typeof waFormPickerItemSchema>;
 export const waFormPickerListSchema = z.object({ forms: z.array(waFormPickerItemSchema) });
 export type WaFormPickerList = z.infer<typeof waFormPickerListSchema>;
 
 export const waFormSubmissionSchema = z.object({
-  id: z.string().uuid(),
-  contactId: z.string().uuid().nullable(),
+  id: z.guid(),
+  contactId: z.guid().nullable(),
   contactName: z.string().nullable(),
   contactPhone: z.string().nullable(),
   /** `{fieldId: value}`, already flattened (multi-value answers joined with ", "). */
@@ -219,7 +244,7 @@ export const waFormSubmissionSchema = z.object({
 });
 export type WaFormSubmission = z.infer<typeof waFormSubmissionSchema>;
 
-export const waFormSubmissionListQuerySchema = waFormListQuerySchema;
+export const waFormSubmissionListQuerySchema = waFormListQuerySchema.omit({ q: true });
 export type WaFormSubmissionListQuery = z.infer<typeof waFormSubmissionListQuerySchema>;
 
 export const waFormSubmissionListSchema = z.object({
@@ -230,7 +255,7 @@ export const waFormSubmissionListSchema = z.object({
   page: z.object({
     nextCursor: z.string().nullable(),
     hasMore: z.boolean(),
-    limit: z.number().int(),
+    limit: z.int(),
   }),
 });
 export type WaFormSubmissionList = z.infer<typeof waFormSubmissionListSchema>;

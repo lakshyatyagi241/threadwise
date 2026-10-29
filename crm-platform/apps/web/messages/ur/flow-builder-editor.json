@@ -99,6 +99,7 @@
       "triggerGroup": "خودکار · گروپ میں شامل ہونے پر",
       "triggerManual": "دستی اندراج",
       "triggerKeyword": "کلیدی لفظ",
+      "triggerAny": "کوئی بھی پیغام",
       "active": "فعال",
       "done": "مکمل",
       "failed": "ناکام",
@@ -130,7 +131,10 @@
         "reEngagement": "ذاتی آفر یا چیک اِن کے ساتھ غیر فعال رابطوں کو دوبارہ فعال کرتا ہے۔",
         "lead": "سیلز کے حوالے کرنے سے پہلے تعلیمی پیغامات سے نئے لیڈز کی پرورش کرتا ہے۔",
         "event": "لانچ، سیل یا موسمی موقع کے گرد محدود وقت کا براڈکاسٹ۔",
-        "default": "فلو ایڈیٹر میں بنایا گیا خودکار WhatsApp سفر۔"
+        "default": "فلو ایڈیٹر میں بنایا گیا خودکار WhatsApp سفر۔",
+        "defaultWeb": "فلو ایڈیٹر میں بنایا گیا ویب سائٹ چیٹ بوٹ۔",
+        "defaultCall": "فلو ایڈیٹر میں بنائی گئی خودکار کال۔",
+        "defaultOther": "فلو ایڈیٹر میں بنائی گئی خودکار گفتگو۔"
       }
     },
     "featured": {
@@ -645,6 +649,7 @@
         "imported": "{flows, plural, one {# فلو} other {# فلوز}} میں {steps, plural, one {# قدم} other {# قدم}} درآمد ہوئے۔ جانچ لیں، پھر محفوظ کریں۔",
         "invalidJson": "وہ فائل درست JSON نہیں ہے۔",
         "saved": "\"{name}\" محفوظ ہو گیا",
+        "nodeSaved": "نوڈ کامیابی سے اپ ڈیٹ ہو گیا!",
         "saveFailed": "محفوظ کرنا ناکام: {error}",
         "publishedToast": "شائع ہو گیا",
         "publishFailed": "اشاعت ناکام: {error}",
@@ -1088,6 +1093,9 @@
           },
           "removeRule": "قاعدہ ہٹائیں",
           "variablePlaceholder": "متغیر کا نام (مثلاً plan)",
+          "keyLabel": "کلید",
+          "valueLabel": "قدر",
+          "pickProperty": "رابطے کی خصوصیت منتخب کریں",
           "pickVariable": "جانچنے کے لیے متغیر منتخب کریں۔",
           "comparePlaceholder": "اس سے موازنہ کریں…",
           "joinerAnd": "AND",
@@ -1278,6 +1286,12 @@
           "kindDocumentReport": "دستاویز (PDF رپورٹ وغیرہ)",
           "upload": "اپلوڈ",
           "uploadHint": "زیادہ سے زیادہ {mb} MB۔ ہم فائل ہوسٹ کرتے ہیں اور فلو کو عوامی URL دیتے ہیں۔",
+          "acceptedFormats": {
+            "image": "قبول شدہ فارمیٹس: JPG, PNG.",
+            "video": "قبول شدہ فارمیٹس: MP4, 3GP.",
+            "audio": "قبول شدہ فارمیٹس: MP3, AAC, AMR, OGG.",
+            "document": "قبول شدہ فارمیٹس: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "فائل بدلیں",
           "chooseKind": {
             "image": "تصویر منتخب کریں (یا یہاں گھسیٹیں)",
@@ -1308,7 +1322,12 @@
           "igUsernameHint": "@ کے بغیر۔ لنک ig.me/m/yourbrand بن جاتا ہے — ٹیپ کرنے پر آپ کے اکاؤنٹ کو ڈائریکٹ میسج کھلتا ہے۔",
           "igMessage": "واٹس ایپ پیغام",
           "igMessageHint": "انسٹاگرام لنک کے ساتھ صارف کو واٹس ایپ پر بھیجا جاتا ہے۔ '{{'variables'}}' سپورٹ ہوتے ہیں۔",
-          "igMessagePlaceholder": "انسٹاگرام پر ہمارے ساتھ جاری رکھیں 👇"
+          "igMessagePlaceholder": "انسٹاگرام پر ہمارے ساتھ جاری رکھیں 👇",
+          "templateFills": "ہر نمبر میں کیا بھرے",
+          "templateFillsHint": "ٹیمپلیٹ کے ہر نمبر کے لیے متن لکھیں، یا / دبا کر رابطے کی کوئی تفصیل یا فلو ویری ایبل ڈالیں۔ خالی چھوڑیں تو ٹیمپلیٹ کی اپنی قدر استعمال ہوگی۔",
+          "templateHeaderMedia": "ہیڈر فائل",
+          "templateHeaderMediaHint": "اس ٹیمپلیٹ کے ہیڈر کی تصویر، ویڈیو یا فائل۔ تب ضروری ہے جب ٹیمپلیٹ کی اپنی کوئی فائل نہ ہو۔",
+          "templateHeaderMediaMissing": "ہیڈر فائل شامل کریں: اس ٹیمپلیٹ میں کوئی فائل نہیں، اور اس کے بغیر WhatsApp اسے نہیں بھیجے گا۔"
         },
         "sequence": {
           "info": "ہر جواب ترتیب سے صارف کو بھیجا جاتا ہے۔ ایک نوڈ میں متن، تصاویر، ویڈیو، آڈیو، اور دستاویزات ملائیں — پروڈکٹ کارڈز یا آن بورڈنگ کٹس کے لیے بہترین۔",
@@ -1890,6 +1909,85 @@
           "sendAnswer": "جواب صارف کو بھیجیں",
           "variable": "جواب اس نام سے محفوظ کریں",
           "variableHint": "بعد کے مراحل جواب اسی نام سے پڑھتے ہیں، مثلاً faq.answer۔"
+        },
+        "workflow": {
+          "listLoading": "فہرستیں لوڈ ہو رہی ہیں…",
+          "listPick": "— فہرست منتخب کریں —",
+          "listFallback": "فہرست",
+          "listNotLoaded": "فہرست {id} (لوڈ نہیں ہوئی)",
+          "segmentLoading": "سیگمنٹس لوڈ ہو رہے ہیں…",
+          "segmentPick": "— سیگمنٹ منتخب کریں —",
+          "segmentFallback": "سیگمنٹ",
+          "segmentNotLoaded": "سیگمنٹ {id} (لوڈ نہیں ہوا)",
+          "updateIntroSub": "رابطے کے فیلڈز <link>/contacts</link> پر موجود ہیں۔ فون نمبر یہاں تبدیل نہیں ہو سکتا۔",
+          "updateIntro": "اس رابطے کا <b>ایک فیلڈ</b> سیٹ کرتا ہے۔ <mono>name</mono>، <mono>first_name</mono>، <mono>last_name</mono>، <mono>email</mono>، <mono>title</mono>، <mono>language</mono>، <mono>address</mono> یا اپنے کسی حسبِ ضرورت فیلڈ کی کلید استعمال کریں۔ بعد کے نوڈز نئی قدر دیکھیں گے۔",
+          "fieldLabel": "فیلڈ",
+          "fieldHint": "فیلڈ کی کلید، مثلاً شہر یا ای میل۔",
+          "newValueLabel": "نئی قدر",
+          "newValueHint": "کوئی بھی متن یا {example}۔ فیلڈ خالی کرنے کے لیے خالی چھوڑ دیں (نام خالی نہیں کیا جا سکتا)۔",
+          "listIntroSub": "فہرستوں کا انتظام <link>/contacts/groups</link> پر کریں۔",
+          "listIntro": "یہ رابطہ کسی <b>فہرست</b> میں ڈالتا ہے، یا اسے اس سے نکالتا ہے۔ وہ فہرست جسے کوئی فلو بدلے، “فہرست میں شامل ہونے / اس سے نکلنے” والے فلوز شروع نہیں کرتی، اس لیے کوئی فلو خود کو لوپ میں نہیں ڈال سکتا۔",
+          "actionLabel": "عمل",
+          "actionAdd": "رابطے کو فہرست میں شامل کریں",
+          "actionRemove": "رابطے کو فہرست سے نکالیں",
+          "listLabel": "فہرست",
+          "inListIntro": "یہ جانچتا ہے کہ آیا یہ رابطہ کسی <b>فہرست</b> میں ہے: اگر ہے تو <mono>yes</mono>، اگر نہیں ہے (یا فہرست موجود نہیں) تو <mono>no</mono>۔",
+          "segmentIntroSub": "سیگمنٹ <link>/segments</link> پر بنائیں۔",
+          "segmentIntro": "یہ جانچتا ہے کہ آیا یہ رابطہ ابھی کسی <b>سیگمنٹ</b> سے میل کھاتا ہے: <mono>yes</mono> یا <mono>no</mono>۔",
+          "segmentLabel": "سیگمنٹ",
+          "waSessionIntro": "<mono>yes</mono> جب گاہک نے پچھلے <b>24 گھنٹوں</b> میں آپ کو لکھا ہو، تاکہ سادہ پیغام اب بھی بھیجا جا سکے؛ <mono>no</mono> جب یہ مدت ختم ہو چکی ہو اور صرف منظور شدہ ٹیمپلیٹ ہی ان تک پہنچ سکتا ہو۔",
+          "windowLabel": "وقفہ (گھنٹے)",
+          "windowHint": "WhatsApp کا وقفہ 24 گھنٹے ہے۔ سخت شرط کے لیے چھوٹا وقفہ استعمال کریں۔",
+          "spreadsheetLabel": "اسپریڈ شیٹ",
+          "spreadsheetHint": "اپنے منسلک Google اکاؤنٹ سے ایک شیٹ منتخب کریں۔",
+          "tabLabel": "ٹیب (اختیاری)",
+          "tabHint": "خالی = پہلا ٹیب۔",
+          "matchColumnLabel": "وہ قطار تلاش کریں جہاں کالم",
+          "matchColumnHint": "اس کالم کا عنوان جس میں تلاش کرنا ہے۔",
+          "matchValueLabel": "برابر ہو",
+          "matchValueHint": "عموماً {example}۔",
+          "sheetCheckIntro": "Google شیٹ میں ایک قطار تلاش کرتا ہے اور اس کے کسی ایک خانے کی جانچ کرتا ہے: <mono>yes</mono> جب خانہ جانچ پر پورا اترے، <mono>no</mono> جب ایسا نہ ہو، جب کوئی قطار نہ ملے، یا جب Google کو پڑھا نہ جا سکے۔",
+          "checkColumnLabel": "جانچ کا کالم",
+          "testLabel": "جانچ",
+          "valueLabel": "قدر",
+          "sheetContactIntro": "Google شیٹ میں ایک قطار تلاش کرتا ہے اور خانے <b>اس رابطے</b> میں نقل کرتا ہے: ہر فیلڈ کے لیے ایک کالم۔ یہ اس رابطے کو اپڈیٹ کرتا ہے جس سے فلو بات کر رہا ہو؛ یہ نئی قطاروں سے رابطے نہیں بناتا۔",
+          "copyColumnsLabel": "یہ کالم نقل کریں",
+          "copyColumnsHint": "شیٹ کے کالم کا عنوان → رابطے کی فیلڈ کی کلید۔",
+          "columnHeaderPlaceholder": "کالم کا عنوان",
+          "addColumn": "کالم شامل کریں",
+          "op": {
+            "equals": "برابر ہو",
+            "not_equals": "برابر نہ ہو",
+            "contains": "پر مشتمل ہو",
+            "not_contains": "پر مشتمل نہ ہو",
+            "starts_with": "سے شروع ہو",
+            "ends_with": "پر ختم ہو",
+            "greater_than": "سے بڑا ہو",
+            "less_than": "سے چھوٹا ہو",
+            "is_set": "کوئی قدر رکھتا ہو",
+            "is_not_set": "خالی ہو",
+            "is_empty": "خالی ہو",
+            "is_not_empty": "خالی نہ ہو"
+          }
+        },
+        "apiLibrary": {
+          "introNotice": "یہ <b>API Library</b> میں محفوظ کردہ ایک اے پی آئی چلاتا ہے، اس رن کے رابطے کے لیے۔ اے پی آئی کے 2xx جواب دینے پر یہ <mono>success</mono> سے نکلتا ہے، اور باقی ہر صورت میں <mono>error</mono> سے۔",
+          "apiLabel": "اے پی آئی",
+          "loadFailed": "آپ کی محفوظ کردہ اے پی آئی لوڈ نہیں ہو سکیں۔",
+          "manageApis": "اے پی آئی کا انتظام کریں",
+          "refreshList": "فہرست تازہ کریں",
+          "loading": "اے پی آئی لوڈ ہو رہی ہیں…",
+          "pickApi": "— ایک اے پی آئی منتخب کریں —",
+          "noApis": "ابھی تک کوئی محفوظ اے پی آئی نہیں",
+          "loadingName": "لوڈ ہو رہا ہے…",
+          "savedApiName": "محفوظ کردہ اے پی آئی",
+          "notFound": "{name} (نہیں ملا)",
+          "variablesLabel": "متغیرات",
+          "variablesHint": "کوئی قدر خالی چھوڑیں تو اس نام کا رن کا متغیر استعمال ہوگا، پھر رابطے کی خاصیت، پھر ڈیفالٹ۔ قدروں میں {example} استعمال ہو سکتا ہے۔",
+          "defaultPlaceholder": "ڈیفالٹ: {value}",
+          "saveLabel": "جواب یہاں محفوظ کریں",
+          "saveHint": "بعد کے نوڈز جواب کو <mono>{variable}</mono> کے طور پر، فیلڈ کو <mono>{field}</mono> کے طور پر، اور اسٹیٹس کو <mono>{status}</mono> کے طور پر پڑھتے ہیں۔",
+          "exposes": "یہ اے پی آئی <mono>{list}</mono> بھی ظاہر کرتی ہے۔"
         }
       },
       "attrPicker": {
@@ -2169,7 +2267,7 @@
         },
         "chatbot": {
           "label": "چیٹ بوٹ",
-          "description": "کوئی اور چیٹ بوٹ شروع کریں"
+          "description": "چیٹ کو AI ایجنٹ کے حوالے کریں"
         },
         "whatsapp_shop": {
           "label": "واٹس ایپ شاپ",
@@ -2494,6 +2592,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” میں کوئی آنے والا کنکشن نہیں — اس تک کچھ نہیں جاتا۔",
+        "buttonNoExit": "\"{node}\": بٹن \"{button}\" کسی بھی مرحلے تک نہیں لے جاتا۔",
         "notConnected": "“{node}” کسی سے منسلک نہیں ہے۔",
         "wrongChannel": "“{node}” {channel} پر کام نہیں کرتا — اسے حذف کریں، یا ٹرِگر نوڈ پر چینل واپس تبدیل کریں۔",
         "noSenderInstagram": "ٹرِگر نوڈ کے لیے کوئی Instagram اکاؤنٹ منتخب نہیں — ٹرِگر مرحلے پر ایک منتخب کریں۔",

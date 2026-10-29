@@ -88,6 +88,18 @@ test('watcher: running query + statement delta + dedup + missing extension', asy
   t = 2000; await w.poll(); assert.equal(sent.length, 2); // same calls, deduped
   ext = false; t = 200000; await w.poll(); assert.match(m.render(), /pg_stat_statements_available 0/);
 });
+test('watcher: statements on the migration tool schema (migration.*) are skipped, ordinary slow statements still alert', async () => {
+  const sent = []; const m = createMetrics(); let t = 0; let calls = 10;
+  const mig = 'DELETE FROM migration.id_map WHERE target_org_id = org OR source_client = current_setting($5)';
+  const row = (queryid, rolname, q) => ({ queryid, datname: 'crm', rolname, calls, total_exec_time: calls * 900, mean_exec_time: 900, max_exec_time: 2000, rows: 5, query: q });
+  const query = async (sql) => (sql.includes('backend_type') ? { rows: [] } : { rows: [row('1', 'crm', mig), row('2', 'r', 'select * from contacts where a = $1')] });
+  const w = createWatcher({ query, metrics: m, send: async (c, msg) => sent.push([c, msg]), now: () => t, env: { SLOW_COOLDOWN_SECONDS: '60' } });
+  await w.poll(); calls = 12; t = 1000; await w.poll();
+  const text = JSON.stringify(sent);
+  assert.ok(text.includes('contacts'), 'an ordinary slow statement still alerts');
+  assert.ok(!text.includes('migration.id_map'), 'the migration tool bookkeeping is skipped');
+  assert.match(m.render(), /kind="excluded"/);
+});
 test('watcher: rate limit then digest', async () => {
   const sent = []; const m = createMetrics(); let t = 0;
   const rows = Array.from({ length: 15 }, (_, i) => ({ secs: 9, datname: 'd', usename: 'u', application_name: '', query: `select c${i} from t` }));
@@ -214,7 +226,7 @@ test('team flow: auth 401 without or with a wrong token, token never echoed', as
 test('team flow: claim, conflict 409, renew, release, thread replies', async () => {
   const t = await teamRig();
   assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).j.status, 'claimed');
-  assert.match(t.posts[0].t, /^\uD83D\uDC40 vedant is working on this \(claimed \d\d:\d\d UTC\)$/); assert.equal(t.posts[0].k, 'thr-1'); assert.equal(t.posts[0].c, 'slowquery');
+  assert.match(t.posts[0].t, /^\uD83D\uDC40 vedant is working on this \(claimed \d\d:\d\d IST\)$/); assert.equal(t.posts[0].k, 'thr-1'); assert.equal(t.posts[0].c, 'slowquery');
   const c = await t.call(`/incidents/${t.id}/claim`, { who: 'asha' }); assert.equal(c.s, 409); assert.equal(c.j.owner, 'vedant');
   const n = t.posts.length; assert.equal((await t.call(`/incidents/${t.id}/claim`, { who: 'vedant' })).s, 200); assert.equal(t.posts.length, n); // renew is silent
   assert.equal((await t.call(`/incidents/${t.id}/release-claim`, { who: 'asha' })).s, 409);
@@ -248,7 +260,7 @@ test('team flow: PR url allow-list, query strip, pr post, RESOLVED names PR and 
   assert.equal((await t.call(`/incidents/${t.id}/pr`, { who: 'asha', url: U, summary: 's' })).s, 409);
   const r = await t.call(`/incidents/${t.id}/pr`, { who: 'vedant', url: `${U}?token=SECRET#x`, number: 901, summary: 'add index <b>' });
   assert.equal(r.j.status, 'pr_raised'); assert.equal(r.j.prUrl, U);
-  assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d UTC: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
+  assert.match(t.posts.at(-1).t, /^\uD83D\uDD27 PR #901 raised by vedant at \d\d:\d\d IST: add index <b> https:\/\/github.com\/lakshyatyagi241\/threadwise\/pull\/901$/);
   assert.ok(t.posts.at(-1).card.includes('&lt;b>') && !t.posts.at(-1).card.includes('SECRET'));
   t.tick(5 * 3600e3); assert.equal((await t.call(`/incidents/${t.id}`)).j.status, 'pr_raised'); // a PR never expires
   await t.resolver.setRelease('abc1234', [901]); await t.resolver.statementRecovered('st:1'); await t.resolver.settle();
@@ -309,7 +321,7 @@ test('loop: deploy failure opens one incident (deduped), exposes kind, takes a P
   const spec = { attemptedSha: 'bbbbbbb1', liveSha: 'aaaaaaa1', prs: [5, 6], mergers: ['@bob'], durationSeconds: 90 };
   await r.openDeployFailure(spec); await r.openDeployFailure(spec); await r.settle();
   const inc = r.listFull().filter((i) => i.kind === 'deploy_failure'); assert.equal(inc.length, 1);
-  assert.equal(posts.filter((p) => /Deploy failed or was refused: needs a human or a fix PR/.test(p.t)).length, 1);
+  assert.equal(posts.filter((p) => /Release did not go live: a person or a fix is needed/.test(p.t)).length, 1);
   assert.match(posts.at(-1).t, /PRs: #5 #6\nMerged by: @bob/); assert.equal(posts.at(-1).c, 'deploy');
   await r.claim(inc[0].id, 'asha'); await r.raisePr(inc[0].id, 'asha', { url: 'https://github.com/lakshyatyagi241/threadwise/pull/80', number: 80, summary: 'fix build' });
   await r.setRelease('ccccccc1', [80]); await r.settle();

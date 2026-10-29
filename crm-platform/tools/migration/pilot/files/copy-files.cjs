@@ -65,7 +65,10 @@ const refuse = (m) => {
 const sha256 = (b) => crypto.createHash('sha256').update(b).digest('hex');
 const hmac = (k, d) => crypto.createHmac('sha256', k).update(d).digest();
 const enc = (s) =>
-  encodeURIComponent(s).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  encodeURIComponent(s).replace(
+    /[!'()*]/g,
+    (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
+  );
 
 // ---------- output: counts, hosts and codes only -------------------------------------------------------------------------------------
 const scrub = (s) =>
@@ -178,7 +181,8 @@ async function download(rawUrl, cfg, hooks = {}) {
   const deadline = Date.now() + cfg.timeoutMs * 2;
   for (let hop = 0; hop <= 3; hop++) {
     const host = u.hostname.toLowerCase();
-    if (host !== origin || !cfg.allowedHosts.includes(host)) throw new CopyError('HOST_NOT_ALLOWED');
+    if (host !== origin || !cfg.allowedHosts.includes(host))
+      throw new CopyError('HOST_NOT_ALLOWED');
     if (u.protocol !== 'https:' && !(hooks.allowHttp && u.protocol === 'http:'))
       throw new CopyError('NOT_HTTPS');
     if (!hooks.allowAnyPort && u.port && u.port !== '443') throw new CopyError('HOST_NOT_ALLOWED');
@@ -191,7 +195,9 @@ async function download(rawUrl, cfg, hooks = {}) {
     try {
       res = await requestOnce(u, headers, cfg, hooks);
     } catch (e) {
-      throw e instanceof CopyError ? e : new CopyError(/timeout/i.test(e.message) ? 'TIMEOUT' : 'NETWORK');
+      throw e instanceof CopyError
+        ? e
+        : new CopyError(/timeout/i.test(e.message) ? 'TIMEOUT' : 'NETWORK');
     }
     const st = res.statusCode;
     if (st >= 300 && st < 400 && res.headers.location) {
@@ -212,7 +218,8 @@ async function download(rawUrl, cfg, hooks = {}) {
       res.resume();
       throw new CopyError(`HTTP_${st}`);
     }
-    const declared = res.headers['content-length'] === undefined ? null : Number(res.headers['content-length']);
+    const declared =
+      res.headers['content-length'] === undefined ? null : Number(res.headers['content-length']);
     if (declared !== null && declared > max) {
       res.destroy();
       throw new CopyError('TOO_LARGE');
@@ -220,7 +227,10 @@ async function download(rawUrl, cfg, hooks = {}) {
     const chunks = [];
     let got = 0;
     await new Promise((ok, bad) => {
-      const killer = setTimeout(() => res.destroy(new CopyError('TIMEOUT')), Math.max(1, deadline - Date.now()));
+      const killer = setTimeout(
+        () => res.destroy(new CopyError('TIMEOUT')),
+        Math.max(1, deadline - Date.now()),
+      );
       res.on('data', (c) => {
         got += c.length;
         if (got > max) return res.destroy(new CopyError('TOO_LARGE'));
@@ -233,10 +243,18 @@ async function download(rawUrl, cfg, hooks = {}) {
         if (!res.complete) bad(new CopyError('SIZE_MISMATCH'));
       });
     }).catch((e) => {
-      throw e instanceof CopyError ? e : new CopyError(declared !== null && got < declared ? 'SIZE_MISMATCH' : 'NETWORK');
+      throw e instanceof CopyError
+        ? e
+        : new CopyError(declared !== null && got < declared ? 'SIZE_MISMATCH' : 'NETWORK');
     });
     if (declared !== null && declared !== got) throw new CopyError('SIZE_MISMATCH');
-    return { buf: Buffer.concat(chunks), contentType: String(res.headers['content-type'] || '').split(';')[0].trim().toLowerCase() };
+    return {
+      buf: Buffer.concat(chunks),
+      contentType: String(res.headers['content-type'] || '')
+        .split(';')[0]
+        .trim()
+        .toLowerCase(),
+    };
   }
   throw new CopyError('TOO_MANY_REDIRECTS');
 }
@@ -244,8 +262,15 @@ async function download(rawUrl, cfg, hooks = {}) {
 // ---------- S3 (SigV4, same signing as apps/api .../object-storage.probe.ts) ----------------------------------------------------------
 function s3FromEnv(env, kinds) {
   const need = ['S3_ENDPOINT', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_REGION'];
-  const buckets = { messages: 'S3_BUCKET_MEDIA', flows: 'S3_BUCKET_MEDIA', widgets: 'S3_BUCKET_MEDIA', contact_files: 'S3_BUCKET_DOCUMENTS' };
-  const missing = [...need, ...kinds.map((k) => buckets[k])].filter((k) => !env[k] || !env[k].trim());
+  const buckets = {
+    messages: 'S3_BUCKET_MEDIA',
+    flows: 'S3_BUCKET_MEDIA',
+    widgets: 'S3_BUCKET_MEDIA',
+    contact_files: 'S3_BUCKET_DOCUMENTS',
+  };
+  const missing = [...need, ...kinds.map((k) => buckets[k])].filter(
+    (k) => !env[k] || !env[k].trim(),
+  );
   if (missing.length)
     refuse(
       `STORAGE_NOT_CONFIGURED: ${missing.join(', ')} not set (without object storage the app falls back to local disk; this tool will not)`,
@@ -261,7 +286,12 @@ function s3FromEnv(env, kinds) {
     id: env.S3_ACCESS_KEY_ID.trim(),
     secret: env.S3_SECRET_ACCESS_KEY.trim(),
     pathStyle: String(env.S3_FORCE_PATH_STYLE ?? 'true') !== 'false',
-    bucket: { messages: env[buckets.messages], flows: env[buckets.messages], widgets: env[buckets.messages], contact_files: env[buckets.contact_files] },
+    bucket: {
+      messages: env[buckets.messages],
+      flows: env[buckets.messages],
+      widgets: env[buckets.messages],
+      contact_files: env[buckets.contact_files],
+    },
   };
 }
 
@@ -273,7 +303,14 @@ function s3Sign(s3, bucket, method, key, body = Buffer.alloc(0), now = new Date(
   const day = amz.slice(0, 8);
   const ph = sha256(body);
   const sh = 'host;x-amz-content-sha256;x-amz-date';
-  const canon = [method, p, '', `host:${host}\nx-amz-content-sha256:${ph}\nx-amz-date:${amz}\n`, sh, ph].join('\n');
+  const canon = [
+    method,
+    p,
+    '',
+    `host:${host}\nx-amz-content-sha256:${ph}\nx-amz-date:${amz}\n`,
+    sh,
+    ph,
+  ].join('\n');
   const scope = `${day}/${s3.region}/s3/aws4_request`;
   const toSign = ['AWS4-HMAC-SHA256', amz, scope, sha256(canon)].join('\n');
   const sk = hmac(hmac(hmac(hmac(`AWS4${s3.secret}`, day), s3.region), 's3'), 'aws4_request');
@@ -306,7 +343,11 @@ async function s3Put(s3, bucket, key, body, contentType) {
 /** { size, sha256|null } or null when the object is missing. */
 async function s3Stat(s3, bucket, key, withHash) {
   const r = s3Sign(s3, bucket, withHash ? 'GET' : 'HEAD', key);
-  const res = await fetch(r.url, { method: withHash ? 'GET' : 'HEAD', headers: r.headers, signal: AbortSignal.timeout(60_000) });
+  const res = await fetch(r.url, {
+    method: withHash ? 'GET' : 'HEAD',
+    headers: r.headers,
+    signal: AbortSignal.timeout(60_000),
+  });
   if (res.status === 404) return null;
   if (!res.ok) throw new CopyError(`HTTP_${res.status}`);
   if (!withHash) return { size: Number(res.headers.get('content-length')), sha256: null };
@@ -332,7 +373,10 @@ function loadConfig(file) {
     maxFileMB: Number(c.maxFileMB) > 0 ? Number(c.maxFileMB) : 50,
     timeoutMs: Number(c.timeoutMs) > 0 ? Number(c.timeoutMs) : 60_000,
     // public https origin of the R2 media bucket (custom domain or r2.dev): a flow sends its media by link, so the rewritten step needs a public URL
-    flowMediaBase: typeof c.flowMediaPublicBase === 'string' ? c.flowMediaPublicBase.trim().replace(/\/+$/, '') : '',
+    flowMediaBase:
+      typeof c.flowMediaPublicBase === 'string'
+        ? c.flowMediaPublicBase.trim().replace(/\/+$/, '')
+        : '',
   };
 }
 
@@ -341,7 +385,11 @@ function urlId(raw) {
   try {
     const u = new URL(raw);
     if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
-    return { host: u.hostname.toLowerCase(), path: u.pathname, key: sha256(`${u.hostname.toLowerCase()}${u.pathname}`) };
+    return {
+      host: u.hostname.toLowerCase(),
+      path: u.pathname,
+      key: sha256(`${u.hostname.toLowerCase()}${u.pathname}`),
+    };
   } catch {
     return null;
   }
@@ -358,7 +406,8 @@ const strip = (raw) => {
 function loadRegistry(file) {
   const out = { rows: 0, withSource: 0, deleted: 0, byKey: new Map() };
   if (!file) return out;
-  const num = (v) => (v && typeof v === 'object' ? Number(v.$numberLong ?? v.$numberInt ?? NaN) : Number(v));
+  const num = (v) =>
+    v && typeof v === 'object' ? Number(v.$numberLong ?? v.$numberInt ?? NaN) : Number(v);
   for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
     if (!line.trim()) continue;
     let d;
@@ -373,7 +422,10 @@ function loadRegistry(file) {
     if (!id) continue;
     out.withSource++;
     const size = num(d.file_size);
-    out.byKey.set(id.key, { size: Number.isFinite(size) ? size : null, ct: d.content_type || d.mime_type || null });
+    out.byKey.set(id.key, {
+      size: Number.isFinite(size) ? size : null,
+      ct: d.content_type || d.mime_type || null,
+    });
   }
   return out;
 }
@@ -396,7 +448,9 @@ const appendState = (file, e) => file && fs.appendFileSync(file, JSON.stringify(
 
 // ---------- database -----------------------------------------------------------------------------------------------------------------
 function pgParse(url) {
-  const p = require.resolve('pg-connection-string', { paths: [path.dirname(require.resolve('pg'))] });
+  const p = require.resolve('pg-connection-string', {
+    paths: [path.dirname(require.resolve('pg'))],
+  });
   return require(p).parse(url);
 }
 function assertTargetAllowed(url, flags) {
@@ -409,18 +463,38 @@ function assertTargetAllowed(url, flags) {
   for (const k of ['host', 'hostaddr', 'service', 'socket', 'unix_socket', 'sslrootcert'])
     if (u.searchParams.has(k)) refuse(`refusing a database URL with a ?${k}= override`);
   const o = u.searchParams.get('options');
-  if (o !== null && /host/i.test(o)) refuse('refusing a database URL whose ?options= mentions a host');
-  const eff = String(pgParse(url).host ?? '').replace(/^\[|\]$/g, '').toLowerCase();
+  if (o !== null && /host/i.test(o))
+    refuse('refusing a database URL whose ?options= mentions a host');
+  const eff = String(pgParse(url).host ?? '')
+    .replace(/^\[|\]$/g, '')
+    .toLowerCase();
   const host = u.hostname.replace(/^\[|\]$/g, '').toLowerCase();
-  if (!eff || !host || eff.startsWith('/') || eff !== host) refuse('refusing a database URL with an unclear host');
+  if (!eff || !host || eff.startsWith('/') || eff !== host)
+    refuse('refusing a database URL with an unclear host');
   const dbName = decodeURIComponent(u.pathname.replace(/^\//, ''));
   const loop = host === 'localhost' || host === '::1' || /^127\./.test(host);
-  const docker = ['crm-postgres', 'crm-platform-postgres', 'host.docker.internal', ...String(flags['allow-docker-host'] ?? '').split(','), ...String(process.env.MIGRATION_ALLOW_DOCKER_HOSTS ?? '').split(',')]
+  const docker = [
+    'crm-postgres',
+    'crm-platform-postgres',
+    'host.docker.internal',
+    ...String(flags['allow-docker-host'] ?? '').split(','),
+    ...String(process.env.MIGRATION_ALLOW_DOCKER_HOSTS ?? '').split(','),
+  ]
     .map((x) => x.trim().toLowerCase())
     .filter(Boolean);
-  if (!loop && !docker.includes(host) && !String(flags['allow-target-host'] ?? '').toLowerCase().split(',').includes(host))
-    refuse(`refusing to run against ${host}: not localhost / a known docker name (--allow-docker-host ${host} for a compose service)`);
-  if (flags['confirm-db-name'] !== dbName) refuse(`--confirm-db-name must be exactly the database name (${dbName})`);
+  if (
+    !loop &&
+    !docker.includes(host) &&
+    !String(flags['allow-target-host'] ?? '')
+      .toLowerCase()
+      .split(',')
+      .includes(host)
+  )
+    refuse(
+      `refusing to run against ${host}: not localhost / a known docker name (--allow-docker-host ${host} for a compose service)`,
+    );
+  if (flags['confirm-db-name'] !== dbName)
+    refuse(`--confirm-db-name must be exactly the database name (${dbName})`);
 }
 
 async function connect(flags) {
@@ -428,9 +502,17 @@ async function connect(flags) {
   if (!url) refuse('TARGET_DATABASE_URL (the crm_worker_user login) is not set');
   assertTargetAllowed(url, flags);
   const { Client } = require('pg');
-  const db = new Client({ connectionString: url, application_name: 'waboo-files-copy', connectionTimeoutMillis: 10_000 });
+  const db = new Client({
+    connectionString: url,
+    application_name: 'waboo-files-copy',
+    connectionTimeoutMillis: 10_000,
+  });
   await db.connect();
-  const me = (await db.query('SELECT r.rolsuper, r.rolbypassrls FROM pg_roles r WHERE r.rolname = current_user')).rows[0];
+  const me = (
+    await db.query(
+      'SELECT r.rolsuper, r.rolbypassrls FROM pg_roles r WHERE r.rolname = current_user',
+    )
+  ).rows[0];
   if (me.rolsuper || me.rolbypassrls) {
     await db.end();
     refuse('this login bypasses row-level security: use the crm_worker_user login');
@@ -456,8 +538,16 @@ async function findOrg(db, slug) {
   await db.query('BEGIN READ ONLY');
   try {
     await db.query(`SELECT set_config('app.privileged', 'on', true)`);
-    const r = await db.query('SELECT id, uuid::text AS uuid FROM organizations WHERE lower(slug) = $1', [slug.toLowerCase()]);
-    if (r.rows.length !== 1) refuse(r.rows.length ? `more than one organization matches "${slug}"` : `no organization with slug "${slug}"`);
+    const r = await db.query(
+      'SELECT id, uuid::text AS uuid FROM organizations WHERE lower(slug) = $1',
+      [slug.toLowerCase()],
+    );
+    if (r.rows.length !== 1)
+      refuse(
+        r.rows.length
+          ? `more than one organization matches "${slug}"`
+          : `no organization with slug "${slug}"`,
+      );
     return r.rows[0];
   } finally {
     await db.query('ROLLBACK');
@@ -477,7 +567,10 @@ function jsonUrls(v, hosts, out = new Set()) {
 function jsonReplace(v, from, to, cnt = { n: 0 }) {
   if (typeof v === 'string') return v === from ? (cnt.n++, to) : v;
   if (Array.isArray(v)) return v.map((x) => jsonReplace(x, from, to, cnt));
-  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, jsonReplace(x, from, to, cnt)]));
+  if (v && typeof v === 'object')
+    return Object.fromEntries(
+      Object.entries(v).map(([k, x]) => [k, jsonReplace(x, from, to, cnt)]),
+    );
   return v;
 }
 
@@ -514,12 +607,34 @@ async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
         );
         m.rows.push(...foreign.rows);
       }
-      const c = rekey ? { rows: [] } : await db.query(`SELECT id, storage_key AS url FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`, [org.id]);
+      const c = rekey
+        ? { rows: [] }
+        : await db.query(
+            `SELECT id, storage_key AS url FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`,
+            [org.id],
+          );
       // media steps of converted flows hold the Waboo address inside flow_data
-      const f = rekey ? { rows: [] } : await db.query(`SELECT id, flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id]);
-      const flowRefs = f.rows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)].map((url) => ({ kind: 'flows', id: r.id, url, match: url })));
+      const f = rekey
+        ? { rows: [] }
+        : await db.query(
+            `SELECT id, flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`,
+            [org.id],
+          );
+      const flowRefs = f.rows.flatMap((r) =>
+        [...jsonUrls(r.flow_data, cfg.allowedHosts)].map((url) => ({
+          kind: 'flows',
+          id: r.id,
+          url,
+          match: url,
+        })),
+      );
       // chat widgets: the launcher image, the body background image (text columns) and the launcher avatar (inside the launcher jsonb)
-      const w = rekey ? { rows: [] } : await db.query(`SELECT id, button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id]);
+      const w = rekey
+        ? { rows: [] }
+        : await db.query(
+            `SELECT id, button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`,
+            [org.id],
+          );
       const onWaboo = (u) => typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host);
       const widgetRefs = w.rows.flatMap((r) =>
         [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar]
@@ -530,7 +645,13 @@ async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
       return [
         ...flowRefs,
         ...widgetRefs,
-        ...m.rows.map((r) => ({ kind: 'messages', id: r.id, created_at: r.created_at, url: r.url, match: r.match ?? r.url })),
+        ...m.rows.map((r) => ({
+          kind: 'messages',
+          id: r.id,
+          created_at: r.created_at,
+          url: r.url,
+          match: r.match ?? r.url,
+        })),
         ...c.rows.map((r) => ({ kind: 'contact_files', id: r.id, url: r.url })),
       ];
     },
@@ -563,24 +684,45 @@ function safeName(p) {
     n = path.posix.basename(p);
   }
   // the app serves a key only when every segment is lower-case [a-z0-9][a-z0-9._-]* (isSafeMediaKey): lower-case it, start with a letter or digit
-  n = n.toLowerCase().replace(/[^a-z0-9._-]+/g, '_').replace(/^[^a-z0-9]+/, '').slice(0, 100);
+  n = n
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, '_')
+    .replace(/^[^a-z0-9]+/, '')
+    .slice(0, 100);
   return n || 'file';
 }
 // messages: the app's ChatMediaStore.ownsKey() accepts only `chat/<org id>/...`; contact_files: `<area>/<org id>/` (contact-files.service.ts:73-75)
-const keyPrefix = (org, g) => (g.kind === 'messages' ? `chat/${org.id}/waboo` : g.kind === 'flows' ? `flow-media/${org.id}/waboo` : g.kind === 'widgets' ? `widget-media/${org.id}/waboo` : `contact-files/${org.id}/waboo`);
-const targetKeyOf = (org, g) => `${keyPrefix(org, g)}/${g.id.key.slice(0, 16)}/${safeName(g.id.path)}`;
+const keyPrefix = (org, g) =>
+  g.kind === 'messages'
+    ? `chat/${org.id}/waboo`
+    : g.kind === 'flows'
+      ? `flow-media/${org.id}/waboo`
+      : g.kind === 'widgets'
+        ? `widget-media/${org.id}/waboo`
+        : `contact-files/${org.id}/waboo`;
+const targetKeyOf = (org, g) =>
+  `${keyPrefix(org, g)}/${g.id.key.slice(0, 16)}/${safeName(g.id.path)}`;
 const fullKey = (prefix, k) => (prefix ? `${prefix}/${k}` : k);
 
 async function applyFlowRows(db, org, g, done, publicUrl) {
   return tenant(db, org.id, async () => {
     let changed = 0;
     for (const r of g.refs) {
-      const row = (await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND id = $2 FOR UPDATE`, [org.id, r.id])).rows[0];
+      const row = (
+        await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND id = $2 FOR UPDATE`, [
+          org.id,
+          r.id,
+        ])
+      ).rows[0];
       if (!row) continue;
       const cnt = { n: 0 };
       const next = jsonReplace(row.flow_data, r.url, publicUrl, cnt);
       if (cnt.n === 0) continue;
-      await db.query(`UPDATE flows SET flow_data = $3::jsonb WHERE org_id = $1 AND id = $2`, [org.id, r.id, JSON.stringify(next)]);
+      await db.query(`UPDATE flows SET flow_data = $3::jsonb WHERE org_id = $1 AND id = $2`, [
+        org.id,
+        r.id,
+        JSON.stringify(next),
+      ]);
       changed++;
     }
     return changed;
@@ -606,8 +748,10 @@ async function applyWidgetRows(db, org, g, publicUrl) {
 }
 
 async function applyRows(db, org, g, done, cfg = {}) {
-  if (g.kind === 'widgets') return applyWidgetRows(db, org, g, `${cfg.flowMediaBase}/${done.objectKey}`);
-  if (g.kind === 'flows') return applyFlowRows(db, org, g, done, `${cfg.flowMediaBase}/${done.objectKey}`);
+  if (g.kind === 'widgets')
+    return applyWidgetRows(db, org, g, `${cfg.flowMediaBase}/${done.objectKey}`);
+  if (g.kind === 'flows')
+    return applyFlowRows(db, org, g, done, `${cfg.flowMediaBase}/${done.objectKey}`);
   return tenant(db, org.id, async () => {
     let changed = 0;
     for (const r of g.refs) {
@@ -619,7 +763,19 @@ async function applyRows(db, org, g, done, cfg = {}) {
                       meta = jsonb_set(COALESCE(meta, '{}'::jsonb), '{legacy}',
                                (COALESCE(meta->'legacy', '{}'::jsonb) - 'mediaUrl') || jsonb_build_object('sourceUrl', $9::text, 'filesCopiedAt', $10::text))
                 WHERE org_id = $1 AND id = $2 AND created_at = $3::timestamptz AND (meta->'legacy'->>'mediaUrl' = $11 OR media_key = $11)`,
-              [org.id, r.id, r.created_at, done.targetKey, done.mime, done.bytes, safeName(g.id.path), done.sha256, strip(g.url), new Date().toISOString(), r.match ?? r.url],
+              [
+                org.id,
+                r.id,
+                r.created_at,
+                done.targetKey,
+                done.mime,
+                done.bytes,
+                safeName(g.id.path),
+                done.sha256,
+                strip(g.url),
+                new Date().toISOString(),
+                r.match ?? r.url,
+              ],
             )
           : await db.query(
               `UPDATE contact_files SET storage_key = $4, mime_type = COALESCE(mime_type, $5), file_size_bytes = $6
@@ -634,12 +790,25 @@ async function applyRows(db, org, g, done, cfg = {}) {
 
 // ---------- phases -------------------------------------------------------------------------------------------------------------------
 const tally = (m, k) => m.set(k, (m.get(k) || 0) + 1);
-const lines = (m) => [...m.entries()].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}=${v}`).join('  ') || '(none)';
+const lines = (m) =>
+  [...m.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, v]) => `${k}=${v}`)
+    .join('  ') || '(none)';
 const SIGNED = /([?&])(x-amz-signature|signature|sig|token|expires|x-amz-expires|se|sv)=/i;
 
 function plan(groups, notUrl, cfg, reg, state, byTable) {
-  const hosts = new Map(), exts = new Map(), mimes = new Map();
-  let bytes = 0, known = 0, signed = 0, authHdr = 0, blocked = 0, done = 0, refsN = 0, mismatchedExt = 0;
+  const hosts = new Map(),
+    exts = new Map(),
+    mimes = new Map();
+  let bytes = 0,
+    known = 0,
+    signed = 0,
+    authHdr = 0,
+    blocked = 0,
+    done = 0,
+    refsN = 0,
+    mismatchedExt = 0;
   const referenced = new Set();
   for (const g of groups) {
     refsN += g.refs.length;
@@ -649,26 +818,44 @@ function plan(groups, notUrl, cfg, reg, state, byTable) {
     referenced.add(g.id.key);
     if (r) {
       tally(mimes, r.ct || '(null)');
-      if (r.size !== null) (bytes += r.size, known++);
+      if (r.size !== null) ((bytes += r.size), known++);
     }
     signed += g.refs.filter((x) => SIGNED.test(x.url)).length;
     if (cfg.authHeaders[g.id.host]) authHdr++;
     if (!cfg.allowedHosts.includes(g.id.host)) blocked++;
     if (state.get(g.k)?.status === 'done') done++;
-    if (r && r.ct && MIME_BY_EXT[extOf(g.id.path)] && !String(r.ct).startsWith(MIME_BY_EXT[extOf(g.id.path)].split('/')[0])) mismatchedExt++;
+    if (
+      r &&
+      r.ct &&
+      MIME_BY_EXT[extOf(g.id.path)] &&
+      !String(r.ct).startsWith(MIME_BY_EXT[extOf(g.id.path)].split('/')[0])
+    )
+      mismatchedExt++;
   }
-  say(`rows referencing a URL: messages=${byTable.messages || 0} contact_files=${byTable.contact_files || 0}  (not a URL: ${notUrl})`);
-  say(`distinct files (per table): ${groups.length}   duplicate references: ${refsN - groups.length}`);
+  say(
+    `rows referencing a URL: messages=${byTable.messages || 0} contact_files=${byTable.contact_files || 0}  (not a URL: ${notUrl})`,
+  );
+  say(
+    `distinct files (per table): ${groups.length}   duplicate references: ${refsN - groups.length}`,
+  );
   say(`by host: ${lines(hosts)}`);
   say(`by extension: ${lines(exts)}`);
-  say(`by registry content type: ${lines(mimes)}${mismatchedExt ? `   (registry type disagrees with extension: ${mismatchedExt})` : ''}`);
-  say(`bytes known from registry: ${bytes} (${(bytes / 1e9).toFixed(3)} GB) for ${known} of ${groups.length} files`);
-  say(`need auth: ${signed} rows carry a signature/token in the query, ${authHdr} files are on a host with a configured auth header`);
+  say(
+    `by registry content type: ${lines(mimes)}${mismatchedExt ? `   (registry type disagrees with extension: ${mismatchedExt})` : ''}`,
+  );
+  say(
+    `bytes known from registry: ${bytes} (${(bytes / 1e9).toFixed(3)} GB) for ${known} of ${groups.length} files`,
+  );
+  say(
+    `need auth: ${signed} rows carry a signature/token in the query, ${authHdr} files are on a host with a configured auth header`,
+  );
   say(`host not in allow-list (would fail HOST_NOT_ALLOWED): ${blocked}`);
   say(`already copied per state file: ${done}`);
   if (reg.rows) {
     const unref = [...reg.byKey.keys()].filter((k) => !referenced.has(k)).length;
-    say(`attachments registry: rows=${reg.rows} with-source=${reg.withSource} soft-deleted=${reg.deleted} not-referenced-by-a-migrated-row (UNREFERENCED_NOT_COPIED)=${unref}`);
+    say(
+      `attachments registry: rows=${reg.rows} with-source=${reg.withSource} soft-deleted=${reg.deleted} not-referenced-by-a-migrated-row (UNREFERENCED_NOT_COPIED)=${unref}`,
+    );
   }
   say('file_manager: 1 folder marker per client, no target table: nothing to copy');
 }
@@ -681,13 +868,27 @@ async function runCopy(ctx) {
   const delay = Number(flags['delay-ms'] || 200);
   const prefix = (flags['base-folder'] || '').replace(/^\/+|\/+$/g, '');
   const queue = [...groups];
-  const stats = { copied: 0, resumed: 0, failed: 0, deferred: 0, rows: 0, bytes: 0, rowsUnchanged: 0 };
+  const stats = {
+    copied: 0,
+    resumed: 0,
+    failed: 0,
+    deferred: 0,
+    rows: 0,
+    bytes: 0,
+    rowsUnchanged: 0,
+  };
   const reasons = new Map();
   let attempted = 0;
   const fail = (g, code) => {
     stats.failed++;
     tally(reasons, code);
-    appendState(flags.state, { k: g.k, status: 'failed', reason: code, host: g.id.host, at: new Date().toISOString() });
+    appendState(flags.state, {
+      k: g.k,
+      status: 'failed',
+      reason: code,
+      host: g.id.host,
+      at: new Date().toISOString(),
+    });
   };
   // ONE pg client is shared by all workers: interleaved BEGIN/COMMIT drop the per-transaction org setting, so row-level security
   // silently matched nothing for some rows (seen with --concurrency 3). Downloads and uploads stay parallel; row writes are serialised.
@@ -702,20 +903,47 @@ async function runCopy(ctx) {
     // A state entry only counts when it was written for THIS organization and THIS storage: the state file outlives a rolled-back
     // migration and a change of bucket, and a "done" for another organization's key or another bucket leaves the object where the app
     // will never look (the row then points at a key of an organization that is not this one: a 404 for the person).
-    if (done && done.status === 'done' && !(done.targetKey === targetKeyOf(org, g) && done.bucket === s3.bucket[g.kind] && done.endpoint === s3.endpoint)) done = undefined;
+    if (
+      done &&
+      done.status === 'done' &&
+      !(
+        done.targetKey === targetKeyOf(org, g) &&
+        done.bucket === s3.bucket[g.kind] &&
+        done.endpoint === s3.endpoint
+      )
+    )
+      done = undefined;
     if (!(done && done.status === 'done')) {
       if (attempted >= maxFiles || stats.bytes >= maxBytes) return void stats.deferred++;
       attempted++;
       try {
         const exp = reg.byKey.get(g.id.key);
         const { buf, contentType } = await download(g.url, cfg, hooks);
-        if (exp && exp.size !== null && exp.size !== buf.length) throw new CopyError('SIZE_MISMATCH');
-        if (WEB_TYPE.test(contentType) && !/^(html?|xml|json)$/.test(extOf(g.id.path))) throw new CopyError('NOT_A_FILE');
+        if (exp && exp.size !== null && exp.size !== buf.length)
+          throw new CopyError('SIZE_MISMATCH');
+        if (WEB_TYPE.test(contentType) && !/^(html?|xml|json)$/.test(extOf(g.id.path)))
+          throw new CopyError('NOT_A_FILE');
         const mime =
-          contentType && contentType !== 'application/octet-stream' ? contentType : exp?.ct || MIME_BY_EXT[extOf(g.id.path)] || 'application/octet-stream';
+          contentType && contentType !== 'application/octet-stream'
+            ? contentType
+            : exp?.ct || MIME_BY_EXT[extOf(g.id.path)] || 'application/octet-stream';
         const targetKey = targetKeyOf(org, g);
         await s3Put(s3, s3.bucket[g.kind], fullKey(prefix, targetKey), buf, mime);
-        done = { k: g.k, status: 'done', kind: g.kind, bucket: s3.bucket[g.kind], endpoint: s3.endpoint, targetKey, objectKey: fullKey(prefix, targetKey), bytes: buf.length, sha256: sha256(buf), mime, sourceUrl: strip(g.url), host: g.id.host, at: new Date().toISOString() };
+        done = {
+          k: g.k,
+          status: 'done',
+          kind: g.kind,
+          bucket: s3.bucket[g.kind],
+          endpoint: s3.endpoint,
+          targetKey,
+          objectKey: fullKey(prefix, targetKey),
+          bytes: buf.length,
+          sha256: sha256(buf),
+          mime,
+          sourceUrl: strip(g.url),
+          host: g.id.host,
+          at: new Date().toISOString(),
+        };
         appendState(flags.state, done);
         state.set(g.k, done);
         stats.copied++;
@@ -742,8 +970,12 @@ async function runCopy(ctx) {
       }
     }),
   );
-  say(`copied=${stats.copied} resumed-from-state=${stats.resumed} failed=${stats.failed} deferred-by-limit=${stats.deferred}`);
-  say(`rows updated=${stats.rows} rows already changed/not matching=${stats.rowsUnchanged}  bytes copied=${stats.bytes}`);
+  say(
+    `copied=${stats.copied} resumed-from-state=${stats.resumed} failed=${stats.failed} deferred-by-limit=${stats.deferred}`,
+  );
+  say(
+    `rows updated=${stats.rows} rows already changed/not matching=${stats.rowsUnchanged}  bytes copied=${stats.bytes}`,
+  );
   say(`failures by reason: ${lines(reasons)}`);
   return stats.failed ? 1 : 0;
 }
@@ -756,25 +988,50 @@ async function runVerify(ctx) {
     db,
     org.id,
     async () => [
-      (await db.query(`SELECT media_key AS key, media_size AS size, media_sha256 AS sha, kind FROM messages WHERE org_id = $1 AND media_key LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows,
-      (await db.query(`SELECT storage_key AS key, file_size_bytes AS size FROM contact_files WHERE org_id = $1 AND storage_key LIKE $2`, [org.id, `contact-files/${org.id}/waboo/%`])).rows,
-      (await db.query(
-        `SELECT 'messages' AS t, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url FROM messages
+      (
+        await db.query(
+          `SELECT media_key AS key, media_size AS size, media_sha256 AS sha, kind FROM messages WHERE org_id = $1 AND media_key LIKE $2`,
+          [org.id, `chat/${org.id}/waboo/%`],
+        )
+      ).rows,
+      (
+        await db.query(
+          `SELECT storage_key AS key, file_size_bytes AS size FROM contact_files WHERE org_id = $1 AND storage_key LIKE $2`,
+          [org.id, `contact-files/${org.id}/waboo/%`],
+        )
+      ).rows,
+      (
+        await db.query(
+          `SELECT 'messages' AS t, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url FROM messages
           WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://') AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'
          UNION ALL SELECT 'contact_files', storage_key FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`,
-        [org.id],
-      )).rows,
+          [org.id],
+        )
+      ).rows,
       // media-kind messages (a header image of a button message included) that have neither a stored object nor a URL to copy it from:
       // nothing can ever serve them, so they are listed as a problem instead of passing unnoticed
-      (await db.query(
-        `SELECT kind, count(*)::int AS n FROM messages
+      (
+        await db.query(
+          `SELECT kind, count(*)::int AS n FROM messages
           WHERE org_id = $1 AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND media_key IS NULL
             AND COALESCE(meta->'legacy'->>'mediaUrl', '') !~* '^https?://' AND meta->'legacy' IS NOT NULL AND meta->'legacy'->>'src' = 'waboo'
+            -- flagged by the parser (inbox/parse.ts flagMediaWithoutFile): Waboo's dump has no file, so there is nothing to copy; a known gap, not a failure
+            AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) = false
           GROUP BY kind`,
-        [org.id],
-      )).rows,
-      (await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id])).rows,
-      (await db.query(`SELECT button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`, [org.id])).rows,
+          [org.id],
+        )
+      ).rows,
+      (
+        await db.query(`SELECT flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [
+          org.id,
+        ])
+      ).rows,
+      (
+        await db.query(
+          `SELECT button_image_url, body_bg_image_url, launcher FROM chatbot_widgets WHERE org_id = $1`,
+          [org.id],
+        )
+      ).rows,
     ],
     true,
   );
@@ -782,7 +1039,15 @@ async function runVerify(ctx) {
   const foreignKeys = await tenant(
     db,
     org.id,
-    async () => Number((await db.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key LIKE 'chat/%/waboo/%' AND media_key NOT LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows[0].n),
+    async () =>
+      Number(
+        (
+          await db.query(
+            `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key LIKE 'chat/%/waboo/%' AND media_key NOT LIKE $2`,
+            [org.id, `chat/${org.id}/waboo/%`],
+          )
+        ).rows[0].n,
+      ),
     true,
   );
   // flows: any link still on a Waboo host is a leftover; a link under the R2 public base must exist in the bucket
@@ -790,14 +1055,16 @@ async function runVerify(ctx) {
   for (const u of flowUrls) left.push({ t: 'flows', url: u });
   for (const r of widgetRows)
     for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
-      if (typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host)) left.push({ t: 'widgets', url: u });
+      if (typeof u === 'string' && cfg.allowedHosts.includes(urlId(u)?.host))
+        left.push({ t: 'widgets', url: u });
   const base = cfg.flowMediaBase;
   const flowObjects = new Set();
   if (base)
     for (const r of flowRows) {
       const walk = (v) => {
         if (typeof v === 'string') {
-          if (v.startsWith(`${base}/`) && /\/flow-media\/\d+\/waboo\//.test(v)) flowObjects.add(v.slice(base.length + 1));
+          if (v.startsWith(`${base}/`) && /\/flow-media\/\d+\/waboo\//.test(v))
+            flowObjects.add(v.slice(base.length + 1));
         } else if (Array.isArray(v)) v.forEach(walk);
         else if (v && typeof v === 'object') Object.values(v).forEach(walk);
       };
@@ -805,13 +1072,32 @@ async function runVerify(ctx) {
     }
   for (const r of widgetRows)
     for (const u of [r.button_image_url, r.body_bg_image_url, r.launcher && r.launcher.avatar])
-      if (base && typeof u === 'string' && u.startsWith(`${base}/`) && /\/widget-media\/\d+\/waboo\//.test(u)) flowObjects.add(u.slice(base.length + 1));
-  const shaByKey = new Map([...state.values()].filter((e) => e.status === 'done').map((e) => [e.targetKey, e.sha256]));
+      if (
+        base &&
+        typeof u === 'string' &&
+        u.startsWith(`${base}/`) &&
+        /\/widget-media\/\d+\/waboo\//.test(u)
+      )
+        flowObjects.add(u.slice(base.length + 1));
+  const shaByKey = new Map(
+    [...state.values()].filter((e) => e.status === 'done').map((e) => [e.targetKey, e.sha256]),
+  );
   const jobs = [
     ...msgs.map((r) => ({ bucket: s3.bucket.messages, ...r })),
-    ...cfs.map((r) => ({ bucket: s3.bucket.contact_files, ...r, sha: shaByKey.get(r.key) || null })),
+    ...cfs.map((r) => ({
+      bucket: s3.bucket.contact_files,
+      ...r,
+      sha: shaByKey.get(r.key) || null,
+    })),
     // the object key already carries the base folder (the public URL is origin + object key)
-    ...[...flowObjects].map((k) => ({ bucket: s3.bucket.flows, key: k, size: null, sha: null, kind: 'flows', raw: true })),
+    ...[...flowObjects].map((k) => ({
+      bucket: s3.bucket.flows,
+      key: k,
+      size: null,
+      sha: null,
+      kind: 'flows',
+      raw: true,
+    })),
   ];
   const bad = new Map();
   const byKind = new Map();
@@ -825,7 +1111,12 @@ async function runVerify(ctx) {
       while (q.length) {
         const j = q.shift();
         try {
-          const st = await s3Stat(s3, j.bucket, j.raw ? j.key : fullKey(prefix, j.key), !head && Boolean(j.sha));
+          const st = await s3Stat(
+            s3,
+            j.bucket,
+            j.raw ? j.key : fullKey(prefix, j.key),
+            !head && Boolean(j.sha),
+          );
           if (!st) tally(bad, 'OBJECT_MISSING');
           else if (j.size !== null && Number(j.size) !== st.size) tally(bad, 'SIZE_MISMATCH');
           else if (j.sha && st.sha256 && st.sha256 !== j.sha) tally(bad, 'SHA256_MISMATCH');
@@ -836,10 +1127,32 @@ async function runVerify(ctx) {
     }),
   );
   const pointing = new Map();
-  for (const r of left) tally(pointing, `${r.t}@${urlId(r.url)?.host ?? '(not a URL)'}${cfg.allowedHosts.includes(urlId(r.url)?.host) ? ' [waboo host]' : ''}`);
+  for (const r of left)
+    tally(
+      pointing,
+      `${r.t}@${urlId(r.url)?.host ?? '(not a URL)'}${cfg.allowedHosts.includes(urlId(r.url)?.host) ? ' [waboo host]' : ''}`,
+    );
   const failedByReason = new Map();
   for (const e of state.values()) if (e.status === 'failed') tally(failedByReason, e.reason);
-  say(`objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`);
+  // media the dump has no file for (flagged by the parser): nothing to copy, reported as a known gap rather than a failure
+  const knownGaps = await tenant(
+    db,
+    org.id,
+    async () =>
+      Number(
+        (
+          await db.query(
+            `SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key IS NULL AND COALESCE((meta->'legacy'->>'contentUnavailable')::boolean, false) AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker')`,
+            [org.id],
+          )
+        ).rows[0].n,
+      ),
+    true,
+  );
+  say(
+    `objects checked=${jobs.length} (${head ? 'size only' : 'size + sha256 where known'}) problems: ${lines(bad)}`,
+  );
+  say(`known gaps, no file in Waboo's dump (not copied, not a failure): ${knownGaps}`);
   say(`stored message files by kind: ${lines(byKind)}`);
   say(`rows still pointing at a URL: ${left.length}  by table@host: ${lines(pointing)}`);
   say(`last recorded failure per file (state): ${lines(failedByReason)}`);
@@ -847,7 +1160,24 @@ async function runVerify(ctx) {
 }
 
 // ---------- CLI ----------------------------------------------------------------------------------------------------------------------
-const FLAGS = new Set(['org-slug', 'confirm-db-name', 'confirm-org-slug', 'config', 'attachments', 'state', 'apply', 'max-files', 'max-gb', 'concurrency', 'delay-ms', 'base-folder', 'head-only', 'rekey', 'allow-docker-host', 'allow-target-host']);
+const FLAGS = new Set([
+  'org-slug',
+  'confirm-db-name',
+  'confirm-org-slug',
+  'config',
+  'attachments',
+  'state',
+  'apply',
+  'max-files',
+  'max-gb',
+  'concurrency',
+  'delay-ms',
+  'base-folder',
+  'head-only',
+  'rekey',
+  'allow-docker-host',
+  'allow-target-host',
+]);
 function parseFlags(argv) {
   const f = {};
   for (let i = 0; i < argv.length; i++) {
@@ -856,7 +1186,14 @@ function parseFlags(argv) {
     const eq = a.indexOf('=');
     const k = eq > 0 ? a.slice(2, eq) : a.slice(2);
     if (!FLAGS.has(k)) refuse(`unknown flag --${k.slice(0, 40)}`);
-    f[k] = eq > 0 ? a.slice(eq + 1) : ['apply', 'head-only', 'rekey'].includes(k) ? true : argv[i + 1] !== undefined && !argv[i + 1].startsWith('--') ? argv[++i] : '';
+    f[k] =
+      eq > 0
+        ? a.slice(eq + 1)
+        : ['apply', 'head-only', 'rekey'].includes(k)
+          ? true
+          : argv[i + 1] !== undefined && !argv[i + 1].startsWith('--')
+            ? argv[++i]
+            : '';
   }
   return f;
 }
@@ -865,12 +1202,16 @@ async function main(argv, hooks = {}) {
   const cmd = argv[0] && !argv[0].startsWith('--') ? argv[0] : 'plan';
   if (!['plan', 'copy', 'verify'].includes(cmd)) refuse('command is plan | copy | verify');
   const flags = parseFlags(argv[0] && !argv[0].startsWith('--') ? argv.slice(1) : argv);
-  for (const k of ['org-slug', 'confirm-db-name', 'config']) if (!flags[k]) refuse(`--${k} is required`);
+  for (const k of ['org-slug', 'confirm-db-name', 'config'])
+    if (!flags[k]) refuse(`--${k} is required`);
   const apply = cmd === 'copy' && flags.apply === true;
   if (apply) {
-    if (String(flags['confirm-org-slug']).toLowerCase() !== String(flags['org-slug']).toLowerCase()) refuse('--confirm-org-slug must equal --org-slug');
-    const mf = Number(flags['max-files']), mg = Number(flags['max-gb']);
-    if (!(mf > 0) || !(mg > 0)) refuse('--max-files and --max-gb are required (positive numbers) with --apply');
+    if (String(flags['confirm-org-slug']).toLowerCase() !== String(flags['org-slug']).toLowerCase())
+      refuse('--confirm-org-slug must equal --org-slug');
+    const mf = Number(flags['max-files']),
+      mg = Number(flags['max-gb']);
+    if (!(mf > 0) || !(mg > 0))
+      refuse('--max-files and --max-gb are required (positive numbers) with --apply');
     if (!flags.state) refuse('--state <file> is required with --apply (resume and report)');
   }
   const cfg = loadConfig(flags.config);
@@ -885,11 +1226,21 @@ async function main(argv, hooks = {}) {
     for (const r of refs) byTable[r.kind] = (byTable[r.kind] || 0) + 1;
     if (cmd === 'plan' || (cmd === 'copy' && !apply)) {
       plan(groups, notUrl, cfg, reg, state, byTable);
-      say(cmd === 'copy' ? 'dry run: nothing was downloaded, uploaded or written (add --apply with the limits)' : '');
+      say(
+        cmd === 'copy'
+          ? 'dry run: nothing was downloaded, uploaded or written (add --apply with the limits)'
+          : '',
+      );
       return 0;
     }
-    if (apply && (byTable.flows || byTable.widgets) && !/^https:\/\//.test(cfg.flowMediaBase)) refuse('config.flowMediaPublicBase (the public https origin of the R2 media bucket) is required: converted flows and chat widgets show their images by link');
-    const kinds = cmd === 'verify' ? ['messages', 'contact_files', 'flows'] : [...new Set(groups.map((g) => g.kind))];
+    if (apply && (byTable.flows || byTable.widgets) && !/^https:\/\//.test(cfg.flowMediaBase))
+      refuse(
+        'config.flowMediaPublicBase (the public https origin of the R2 media bucket) is required: converted flows and chat widgets show their images by link',
+      );
+    const kinds =
+      cmd === 'verify'
+        ? ['messages', 'contact_files', 'flows']
+        : [...new Set(groups.map((g) => g.kind))];
     const s3 = s3FromEnv(process.env, kinds.length ? kinds : ['messages']);
     const ctx = { db, org, groups, cfg, reg, state, s3, flags, hooks };
     return cmd === 'verify' ? await runVerify(ctx) : await runCopy(ctx);
@@ -898,7 +1249,20 @@ async function main(argv, hooks = {}) {
   }
 }
 
-module.exports = { main, jsonUrls, jsonReplace, download, isPrivateIp, s3Sign, s3FromEnv, urlId, safeName, targetKeyOf, setOut: (f) => (OUT = f), scrub };
+module.exports = {
+  main,
+  jsonUrls,
+  jsonReplace,
+  download,
+  isPrivateIp,
+  s3Sign,
+  s3FromEnv,
+  urlId,
+  safeName,
+  targetKeyOf,
+  setOut: (f) => (OUT = f),
+  scrub,
+};
 
 if (require.main === module) {
   main(process.argv.slice(2)).then(

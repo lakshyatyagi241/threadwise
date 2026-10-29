@@ -22,9 +22,9 @@ const viewNounForms = z.object({
 export const personaViewSchema = z.object({
   key: z.string(),
   /** The persona version this view was resolved from (the one the workspace follows, or is pinned to). */
-  version: z.number().int().positive(),
+  version: z.int().positive(),
   /** Bumped by every change to the workspace's persona row: the cache key. */
-  rev: z.number().int().positive(),
+  rev: z.int().positive(),
   /** One-seat simplification. In phase 0 this is only an explicit "on"; the seat count that drives `auto` arrives with onboarding. */
   solo: z.boolean(),
   /** The workspace turned on "Show more modules". */

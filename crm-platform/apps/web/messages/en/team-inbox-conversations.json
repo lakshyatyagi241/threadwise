@@ -62,7 +62,7 @@
       "archived": "Archived",
       "backToInbox": "Back to the inbox",
       "erased": "Erased contacts",
-      "erasedHint": "These contacts were erased, and their conversations were kept without their details or message text. Times show the last message, because the erase date is not recorded.",
+      "erasedHint": "These contacts were erased, and their conversations were kept without their details. Times show the last message, because the erase date is not recorded.",
       "erasedTitle": "Erased contact",
       "loading": "Loading conversations",
       "retry": "Try again",
@@ -219,6 +219,7 @@
       "referral": "Came from an ad or link",
       "sentIn": "Sent in {lang}. Show the text you wrote",
       "translatedFrom": "Translated from {lang}. Show the original",
+      "translationFailed": "Sent untranslated. The translation failed, so your text went out as you typed it.",
       "bot": "Bot",
       "broadcast": "Broadcast",
       "reacted": "Reaction {emoji}",
@@ -620,7 +621,10 @@
           "resolved": "Resolved",
           "closed": "Closed",
           "spam": "Spam"
-        }
+        },
+        "created": "Began {date}",
+        "showMore": "Show {count} more",
+        "showLess": "Show less"
       }
     },
     "simulator": {
@@ -1148,6 +1152,16 @@
       "unofficial": "Unofficial",
       "officialFull": "Official (WhatsApp Cloud API)",
       "unofficialFull": "Unofficial (QR / Baileys)"
+    },
+    "earlier": {
+      "title": "Earlier threads",
+      "began": "Began {date}",
+      "showMore": "Show {count} more",
+      "showLess": "Show less",
+      "loading": "Loading…",
+      "failed": "Could not load this thread.",
+      "unknown": "Unknown sender",
+      "openThread": "Open thread"
     }
   }
 }

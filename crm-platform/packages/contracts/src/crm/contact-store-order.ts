@@ -9,15 +9,15 @@ export const contactStoreOrderSchema = z.object({
   /** The order's uuid (`wa_orders.uuid`). */
   id: uuidSchema,
   /** The number the buyer was shown ("Store order #12"). */
-  orderNo: z.number().int().positive(),
+  orderNo: z.int().positive(),
   source: z.string(),
   status: z.string(),
   paymentMethod: z.string(),
   currency: z.string(),
   /** Major units of `currency`, as text (money is never a JS number). */
   total: z.string(),
-  itemCount: z.number().int().nonnegative(),
-  placedAt: z.string().datetime(),
+  itemCount: z.int().nonnegative(),
+  placedAt: z.iso.datetime(),
   salesOrder: z.object({ id: uuidSchema, number: z.string() }).nullable(),
   invoice: z
     .object({
@@ -38,6 +38,6 @@ export type ContactStoreOrdersResponse = z.infer<typeof contactStoreOrdersRespon
 
 /** `GET /v2/contacts/:contactId/store-orders`: newest first, at most `limit` (default 20, cap 50). */
 export const listContactStoreOrdersQuerySchema = z.object({
-  limit: z.coerce.number().int().min(1).max(50).default(20),
+  limit: z.coerce.number().int().min(1).max(50).prefault(20),
 });
 export type ListContactStoreOrdersQuery = z.infer<typeof listContactStoreOrdersQuerySchema>;

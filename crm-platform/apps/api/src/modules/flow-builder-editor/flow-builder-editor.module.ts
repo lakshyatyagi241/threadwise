@@ -4,10 +4,12 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.port';
 import { FLOW_MEDIA_STORE } from '../../infra/providers/flow-builder-editor/flow-media.port';
 import { HttpFlowAiAdapter } from '../../infra/providers/flow-builder-editor/http-flow-ai.adapter';
-import { LocalFlowMediaAdapter } from '../../infra/providers/flow-builder-editor/local-flow-media.adapter';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { FlowRuntimeEngineModule } from '../flow-runtime-engine';
-import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+import {
+  PlatformSettingsModule,
+  StorageFlowMediaStore,
+} from '../platform-settings-branding-storage';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { BuilderContextService } from './builder-context.service';
@@ -68,7 +70,7 @@ import { MapsLinkService } from './maps-link.service';
     GetaPublishSettingsService,
     GetaPublishSyncService,
     { provide: FLOW_AI_PORT, useClass: HttpFlowAiAdapter },
-    { provide: FLOW_MEDIA_STORE, useClass: LocalFlowMediaAdapter },
+    { provide: FLOW_MEDIA_STORE, useExisting: StorageFlowMediaStore },
   ],
   exports: [FlowsRepository, FlowReaderService, GetaPublishRepository, GetaPublishSettingsService],
 })

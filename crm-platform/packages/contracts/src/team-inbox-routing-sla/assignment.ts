@@ -32,14 +32,14 @@ export type AssignmentStrategy = z.infer<typeof assignmentStrategySchema>;
  */
 export const assignConversationSchema = z
   .object({
-    rowVersion: z.number().int().positive(),
+    rowVersion: z.int().positive(),
     userId: uuidSchema.nullable().optional(),
     teamId: uuidSchema.nullable().optional(),
     strategy: assignmentStrategySchema.default('manual'),
   })
   .refine((v) => v.userId !== undefined || v.teamId !== undefined, {
-    message: 'Name a user, a team, or null to clear one',
     path: ['userId'],
+    error: 'Name a user, a team, or null to clear one',
   });
 export type AssignConversationInput = z.infer<typeof assignConversationSchema>;
 
@@ -55,7 +55,7 @@ export const inboxAssigneeSchema = z.object({
   email: z.string(),
   availability: agentAvailabilitySchema,
   /** Open and pending conversations assigned to this person right now (a live count, not a stored counter). */
-  openConversations: z.number().int().nonnegative(),
+  openConversations: z.int().nonnegative(),
   /** The caller: the picker offers "Assign to me" for this one. */
   isMe: z.boolean(),
   /**
@@ -70,7 +70,7 @@ export const inboxAssigneeTeamSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   color: z.string().nullable(),
-  memberCount: z.number().int().nonnegative(),
+  memberCount: z.int().nonnegative(),
   /** The strategy the team will use once routing exists (Phase 3). Until then every assignment to a team is manual. */
   assignmentStrategy: z.string(),
 });

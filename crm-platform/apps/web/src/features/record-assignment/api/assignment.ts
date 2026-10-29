@@ -140,7 +140,7 @@ export interface RecordHit {
 }
 
 const dealHitsSchema = z.object({
-  data: z.array(z.object({ id: z.string(), title: z.string() }).passthrough()),
+  data: z.array(z.looseObject({ id: z.string(), title: z.string() })),
 });
 
 /** Real records to test a rule on: the same typeahead endpoints the pickers of each module use. */

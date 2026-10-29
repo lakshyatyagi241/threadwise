@@ -6,6 +6,8 @@ import {
   type WaFormList,
   type WaFormListQuery,
   type WaFormPickerList,
+  type WaFormPreview,
+  type WaFormSyncResponse,
   type WaFormSubmissionList,
   type WaFormSubmissionListQuery,
 } from '@crm/contracts';
@@ -75,7 +77,7 @@ export class WaFormsService {
     const cursor = query.cursor ? decodeCursor(query.cursor) : undefined;
     return this.db.tx(async (tx) => {
       const [rows, stats] = await Promise.all([
-        this.repo.list(tx, ctx.orgId, query.limit, cursor),
+        this.repo.list(tx, ctx.orgId, query.limit, cursor, query.q),
         this.repo.stats(tx, ctx.orgId),
       ]);
       const { items, page } = buildPage(
@@ -83,6 +85,71 @@ export class WaFormsService {
         query.limit,
       );
       return { items: items.map(toWaFormResponse), stats, page };
+    });
+  }
+
+  /**
+   * Sync with Meta: reads the Flows of every connected Meta WhatsApp Business Account and makes each linked form's status the one Meta
+   * reports (published, draft, or paused for a deprecated, blocked or throttled Flow). A Flow Meta lists that no form here is linked to
+   * is counted and left alone: importing it would mean reading its JSON back into the builder, and publishing over it would replace it.
+   */
+  async syncWithMeta(): Promise<WaFormSyncResponse> {
+    const ctx = RequestContextStore.require();
+    const configIds = await this.db.tx((tx) => this.repo.wabaProviderConfigIds(tx, ctx.orgId));
+    const known = new Map<string, string>();
+    const accounts = new Set<string>();
+    try {
+      for (const configId of configIds) {
+        const r = await this.db.tx((tx) =>
+          this.connections.resolveConnection(tx, ctx.orgId, { id: configId }),
+        );
+        const conn = r?.conn;
+        if (
+          !conn ||
+          conn.registry ||
+          conn.provider !== 'meta' ||
+          !conn.wabaId ||
+          !conn.accessToken ||
+          accounts.has(conn.wabaId)
+        )
+          continue;
+        accounts.add(conn.wabaId);
+        for (const f of await this.flows.listFlows(conn)) known.set(f.id, f.status.toUpperCase());
+      }
+    } catch (err) {
+      this.logger.warn({ orgId: ctx.orgId, err: String(err) }, 'wa_form sync failed');
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_SYNC_FAILED,
+        err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err),
+        422,
+      );
+    }
+    if (accounts.size === 0) {
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_NO_WABA_CREDENTIALS,
+        'No connected WhatsApp Cloud API number has usable credentials.',
+        422,
+      );
+    }
+    return this.db.tx(async (tx) => {
+      const linked = await this.repo.linkedToMeta(tx, ctx.orgId);
+      let updated = 0;
+      let missing = 0;
+      for (const f of linked) {
+        const meta = known.get(f.metaFlowId);
+        if (meta === undefined) {
+          missing += 1;
+          continue;
+        }
+        const status = statusFromMeta(meta);
+        if (status !== f.status || (status === 'published' && f.publishError !== null)) {
+          await this.repo.setStatusFromMeta(tx, ctx.orgId, f.id, status);
+          updated += 1;
+        }
+      }
+      const linkedIds = new Set(linked.map((f) => f.metaFlowId));
+      const metaOnly = [...known.keys()].filter((id) => !linkedIds.has(id)).length;
+      return { checked: linked.length, updated, missing, metaOnly };
     });
   }
 
@@ -166,12 +233,15 @@ export class WaFormsService {
   }
 
   /** TW-WFL-004: resolve WABA creds, create-or-reuse the Meta Flow, upload the JSON, ensure the encryption key, publish. */
-  async publish(uuid: string): Promise<WaForm> {
-    const ctx = RequestContextStore.require();
+  /**
+   * The form and the direct Meta connection its Flow lives on (or will be made on). A retry of an already-provisioned form keeps the
+   * connection that owns its Flow id.
+   */
+  private async flowTarget(orgId: number, uuid: string) {
     const { form, candidateConfigIds } = await this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+      const row = await this.repo.findByUuid(tx, orgId, uuid);
       if (!row) throw AppError.notFound('Form', uuid);
-      const ids = await this.repo.wabaProviderConfigIds(tx, ctx.orgId);
+      const ids = await this.repo.wabaProviderConfigIds(tx, orgId);
       return { form: row, candidateConfigIds: ids };
     });
 
@@ -201,7 +271,7 @@ export class WaFormsService {
     let resolved: { configId: number; conn: WabaConnection } | null = null;
     for (const configId of orderedConfigIds) {
       const r = await this.db.tx((tx) =>
-        this.connections.resolveConnection(tx, ctx.orgId, { id: configId }),
+        this.connections.resolveConnection(tx, orgId, { id: configId }),
       );
       if (isUsableMetaConnection(r?.conn)) {
         resolved = { configId, conn: r.conn };
@@ -215,6 +285,63 @@ export class WaFormsService {
         422,
       );
     }
+
+    return { form, resolved };
+  }
+
+  /**
+   * Sends the saved form to Meta as a draft Flow (made if missing, its definition uploaded) and returns Meta's preview of it, so the
+   * form can be tried before it is published. Nothing is published and the form stays a draft here.
+   */
+  async preview(uuid: string): Promise<WaFormPreview> {
+    const ctx = RequestContextStore.require();
+    const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
+    const flowJson = buildMetaFlowJson(
+      normalizeDefinition(form.definition_json),
+      form.send_button_label,
+    );
+    const category = mapAudienceToMetaCategory(normalizeAudienceType(form.audience_type));
+    try {
+      const { flowId } = await this.flows.ensureFlow(resolved.conn, form.meta_flow_id, {
+        name: form.title,
+        categories: [category],
+      });
+      if (flowId !== form.meta_flow_id) {
+        await this.db.tx((tx) =>
+          this.repo.saveFlowId(tx, ctx.orgId, form.id, flowId, resolved.configId),
+        );
+      }
+      const { validationErrors } = await this.flows.uploadFlowJson(resolved.conn, flowId, flowJson);
+      if (validationErrors.length > 0) {
+        const first = validationErrors[0]!;
+        throw new AppError(
+          WFL_ERROR_CODES.WFL_FORM_META_VALIDATION_FAILED,
+          first.line != null ? `${first.message} (line ${first.line})` : first.message,
+          422,
+        );
+      }
+      const url = await this.flows.previewUrl(resolved.conn, flowId);
+      if (!url) {
+        throw new AppError(
+          WFL_ERROR_CODES.WFL_FORM_PREVIEW_FAILED,
+          'Meta did not give a preview for this form.',
+          422,
+        );
+      }
+      return { url, flowId };
+    } catch (err) {
+      if (err instanceof AppError) throw err;
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_PREVIEW_FAILED,
+        err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err),
+        422,
+      );
+    }
+  }
+
+  async publish(uuid: string): Promise<WaForm> {
+    const ctx = RequestContextStore.require();
+    const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
 
     const flowJson = buildMetaFlowJson(
       normalizeDefinition(form.definition_json),
@@ -343,6 +470,13 @@ export class WaFormsService {
       const form = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!form) throw AppError.notFound('Form', uuid);
       const rows = await this.repo.submissionsForExport(tx, ctx.orgId, form.id);
+      // The export carries names, phone numbers and answers: it is a read of personal data, recorded like the forms-builder export (#1166).
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: form.id,
+        action: 'export',
+        delta: { submissions: { old: null, new: rows.length } },
+      });
       const labels = fieldLabelsOf(form.definition_json);
       const fieldIds = Object.keys(labels);
       const header = ['Submitted', 'Contact', 'Phone', ...fieldIds.map((id) => labels[id])];
@@ -360,6 +494,13 @@ export class WaFormsService {
       return { filename: `${form.slug}-submissions.csv`, csv: buildCsv(header, body) };
     });
   }
+}
+
+/** Meta's Flow status as a form's status: DRAFT is a draft, PUBLISHED published, DEPRECATED / BLOCKED / THROTTLED paused. */
+export function statusFromMeta(meta: string): 'draft' | 'published' | 'paused' {
+  if (meta === 'PUBLISHED') return 'published';
+  if (meta === 'DRAFT') return 'draft';
+  return 'paused';
 }
 
 function slugify(title: string): string {

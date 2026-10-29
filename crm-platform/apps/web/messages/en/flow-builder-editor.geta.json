@@ -14,7 +14,7 @@
         "retrying": "Retrying…",
         "reasonLabel": "Reason",
         "failedNote": "The flow is still published here. Retry continues from the step that failed.",
-        "notConfigured": "Published here; set up Geta publishing in settings to push it live.",
+        "notConfigured": "Your flow is published and live. Pushing it to the Geta console as well is optional: set it up in settings if you use Geta.",
         "openSettings": "Open settings",
         "dismiss": "Dismiss"
       },

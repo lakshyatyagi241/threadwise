@@ -1,2 +1,16 @@
 # Fingerprints of findings that are reviewed and accepted (gitleaks format: commit:file:rule:line).
 # Empty on purpose. A real secret is rotated first, then listed here only if it must stay in history.
+
+# Reference app history (the licensed Laravel source, removed from the tree; commits 05997de4c and 5d1733181). Reviewed 2026-10-28:
+# not credentials. The hits are a placeholder URL in API docs, JavaScript identifiers, and French/Portuguese UI strings with "key".
+# Kept in history on purpose (owner decision). No rotation needed.
+05997de4c0fa17e51644fc6d90f3e743ad0fb850:reference/Documentation/pages/developer-guide/rest-api.html:curl-auth-header:87
+05997de4c0fa17e51644fc6d90f3e743ad0fb850:reference/app/public/js/api-docs.js:curl-auth-header:301
+05997de4c0fa17e51644fc6d90f3e743ad0fb850:reference/app/resources/views/user/developers/index.blade.php:curl-auth-header:255
+5d17331818e53217665ec507f393ec1d45dc7b08:wadesk-reference/Documentation/pages/developer-guide/rest-api.html:curl-auth-header:87
+05997de4c0fa17e51644fc6d90f3e743ad0fb850:reference/app/lang/fr.json:generic-api-key:398
+05997de4c0fa17e51644fc6d90f3e743ad0fb850:reference/app/lang/pt.json:generic-api-key:459
+5d17331818e53217665ec507f393ec1d45dc7b08:wadesk-reference/WaDesk/public/js/api-docs.js:curl-auth-header:301
+5d17331818e53217665ec507f393ec1d45dc7b08:wadesk-reference/WaDesk/resources/views/user/developers/index.blade.php:curl-auth-header:255
+5d17331818e53217665ec507f393ec1d45dc7b08:wadesk-reference/WaDesk/lang/fr.json:generic-api-key:398
+5d17331818e53217665ec507f393ec1d45dc7b08:wadesk-reference/WaDesk/lang/pt.json:generic-api-key:459

@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useFlb } from '../../lib/msg';
+import { searchEmoji } from '../../lib/emoji-data';
 import { attrEntries, filterAttrs } from '../inspector/attr-picker';
 import { TextArea } from '../inspector/kit';
 
@@ -85,13 +86,17 @@ export function PromptBox({
   onChange,
   placeholder,
   rows = 2,
+  maxLength,
 }: {
   value: unknown;
   onChange: (v: string) => void;
   placeholder?: string;
   rows?: number;
+  /** A hard stop (a WhatsApp flow's limit for the text). */
+  maxLength?: number;
 }) {
   const t = useTranslations('flb.builder.askMedia.toolbar');
+  const tm = useTranslations('flb.builder.messageTools');
   const tf = useFlb();
   const box = useRef<HTMLDivElement>(null);
   const [tool, setTool] = useState<Tool>(null);
@@ -100,6 +105,27 @@ export function PromptBox({
   const feed = usePickerFeed();
   const entries = useMemo(() => attrEntries(feed.data, tf), [feed.data, tf]);
   const matches = useMemo(() => filterAttrs(entries, query).slice(0, 40), [entries, query]);
+  const emojis = useMemo(() => searchEmoji(tool === 'emoji' ? query : ''), [tool, query]);
+
+  // A press outside the box (or Escape) closes whichever menu is open. Capture phase: the canvas and its cards stop the events a
+  // bubbling listener would wait for.
+  useEffect(() => {
+    if (!tool) return;
+    const onDown = (e: Event) => {
+      if (!box.current?.contains(e.target as Node)) setTool(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setTool(null);
+    };
+    document.addEventListener('mousedown', onDown, true);
+    document.addEventListener('pointerdown', onDown, true);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown, true);
+      document.removeEventListener('pointerdown', onDown, true);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [tool]);
 
   const area = () => box.current?.querySelector('textarea') ?? null;
   const apply = (fn: (s: number, e: number) => { text: string; start: number; end: number }) => {
@@ -117,6 +143,24 @@ export function PromptBox({
     });
   };
 
+  /** Ctrl/Cmd+B bold, Ctrl/Cmd+I italic, Ctrl/Cmd+Shift+X strike, as in the message box. */
+  const onShortcut = (e: React.KeyboardEvent) => {
+    if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
+    const key = e.key.toLowerCase();
+    const id =
+      !e.shiftKey && key === 'b'
+        ? 'bold'
+        : !e.shiftKey && key === 'i'
+          ? 'italic'
+          : e.shiftKey && key === 'x'
+            ? 'strike'
+            : null;
+    const mark = FORMAT_MARKS.find((m) => m.id === id);
+    if (!mark) return;
+    e.preventDefault();
+    apply((s, en) => wrapSelection(text, s, en, mark.open, mark.close));
+  };
+
   const toggle = (next: Exclude<Tool, null>) => {
     setTool((cur) => (cur === next ? null : next));
     setQuery('');
@@ -124,6 +168,7 @@ export function PromptBox({
 
   const pop = (children: ReactNode) => (
     <div
+      data-flb-popup=""
       className="absolute bottom-full start-0 z-30 mb-1 rounded-lg border border-border bg-background p-1.5 shadow-lg"
       onPointerDown={(e) => e.stopPropagation()}
     >
@@ -132,8 +177,15 @@ export function PromptBox({
   );
 
   return (
-    <div ref={box} className="relative" data-testid="ask-prompt-box">
-      <TextArea value={text} placeholder={placeholder} rows={rows} compact onChange={onChange} />
+    <div ref={box} className="relative" data-testid="ask-prompt-box" onKeyDown={onShortcut}>
+      <TextArea
+        value={text}
+        placeholder={placeholder}
+        rows={rows}
+        compact
+        maxLength={maxLength}
+        onChange={onChange}
+      />
       <div
         role="toolbar"
         aria-label={t('label')}
@@ -208,17 +260,33 @@ export function PromptBox({
         : null}
       {tool === 'emoji'
         ? pop(
-            <div className="grid w-[200px] grid-cols-8 gap-0.5" data-testid="ask-emoji-menu">
-              {EMOJIS.map((em) => (
-                <button
-                  key={em}
-                  type="button"
-                  onClick={() => apply((s, e) => insertAt(text, s, e, em))}
-                  className="grid h-6 w-6 place-items-center rounded text-[14px] hover:bg-muted"
-                >
-                  {em}
-                </button>
-              ))}
+            <div className="w-[260px]" data-testid="ask-emoji-menu">
+              <input
+                autoFocus
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={tm('emojiSearch')}
+                aria-label={tm('emojiSearch')}
+                className="mb-1 w-full rounded-md border border-border bg-background px-2 py-1 text-[11.5px] outline-none focus:border-brand"
+              />
+              <div className="grid max-h-[170px] grid-cols-8 gap-0.5 overflow-y-auto">
+                {emojis.map((em) => (
+                  <button
+                    key={em.emoji}
+                    type="button"
+                    title={em.words.split(' ')[0]}
+                    aria-label={em.words.split(' ')[0]}
+                    onClick={() => apply((s, e) => insertAt(text, s, e, em.emoji))}
+                    className="grid h-7 w-7 place-items-center rounded text-[16px] hover:bg-muted"
+                  >
+                    {em.emoji}
+                  </button>
+                ))}
+              </div>
+              {emojis.length === 0 ? (
+                <div className="px-2 py-1 text-[11px] text-muted-foreground">{tm('emojiNone')}</div>
+              ) : null}
             </div>,
           )
         : null}

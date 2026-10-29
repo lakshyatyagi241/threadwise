@@ -6,6 +6,7 @@ import {
   type LintTemplateResult,
   type SubmitTemplateInput,
   type TemplateCounts,
+  type TemplateStats,
   type TemplateCountsQuery,
   type ListTemplatesQuery,
   type ListTemplatesResponse,
@@ -191,6 +192,17 @@ export class TemplatesService {
       from: w.from === null ? null : new Date(w.from),
       to: w.to === null ? null : new Date(w.to),
     };
+  }
+
+  /** How one template did: what was sent with it and how far each message got. Another workspace's template is not found. */
+  async stats(uuid: string): Promise<TemplateStats> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.findByUuid(tx, orgId, uuid);
+      if (!row) throw this.notFound();
+      const { lastSentAt, ...counts } = await this.repo.stats(tx, orgId, row.id);
+      return { ...counts, lastSentAt: lastSentAt ? lastSentAt.toISOString() : null };
+    });
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
@@ -657,6 +669,11 @@ export class TemplatesService {
    */
   private async releaseHeaderCopy(orgId: number, key: string): Promise<void> {
     if (!isTemplateMediaKey(orgId, key)) return;
+    // A copy shares its original's file: the file stays while any template of the workspace still names it (a failed check keeps it).
+    const inUse = await this.db
+      .tx((tx) => this.repo.headerKeyInUse(tx, orgId, key))
+      .catch(() => true);
+    if (inUse) return;
     await this.storage
       .remove(key)
       .catch((err: unknown) =>

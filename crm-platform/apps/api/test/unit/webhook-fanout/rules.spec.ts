@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   forwardJobId,
   matchesFilter,
+  matchesPhoneNumberFilter,
 } from '../../../src/modules/webhook-fanout/webhook-fanout.rules';
 import { isPrivateAddress, targetUrlProblem } from '../../../src/modules/webhook-fanout/url-guard';
 
@@ -14,6 +15,21 @@ describe('matchesFilter', () => {
     expect(matchesFilter(['messages'], ['messages', 'account_update'])).toBe(true);
     expect(matchesFilter(['messages'], ['account_update'])).toBe(false);
     expect(matchesFilter(['messages'], [])).toBe(false);
+  });
+});
+
+describe('matchesPhoneNumberFilter', () => {
+  it('takes every number when the filter is empty or missing', () => {
+    expect(matchesPhoneNumberFilter(null, ['111'])).toBe(true);
+    expect(matchesPhoneNumberFilter([], [])).toBe(true);
+  });
+  it('needs at least one listed number otherwise', () => {
+    expect(matchesPhoneNumberFilter(['111'], ['111'])).toBe(true);
+    expect(matchesPhoneNumberFilter(['111'], ['222', '111'])).toBe(true);
+    expect(matchesPhoneNumberFilter(['111'], ['222'])).toBe(false);
+  });
+  it('skips a body that names no number when numbers were asked for', () => {
+    expect(matchesPhoneNumberFilter(['111'], [])).toBe(false);
   });
 });
 
