@@ -281,7 +281,8 @@
         "split": "Anteil Variante A {a} %",
         "splitHint": "Variante B erhält den restlichen Empfängerkreis. Inhalt der Variante B im Schritt „Verfassen“ festlegen.",
         "pickSender": "— Absender auswählen —",
-        "notVerified": "Noch nicht verifiziert: Der geführte Ablauf ist verfügbar, sobald die Nummer verifiziert ist."
+        "notVerified": "Noch nicht verifiziert: Der geführte Ablauf ist verfügbar, sobald die Nummer verifiziert ist.",
+        "typeFromTemplate": "Sie kommen von einer Vorlage, daher sendet diese Kampagne genau diese Vorlage. Eine eigene Nachricht oder ein Flow wird unter Kampagnen > Erstellen angelegt."
       },
       "audience": {
         "title": "Zielgruppe",

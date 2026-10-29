@@ -281,7 +281,8 @@
         "split": "Varyant A payı {a}%",
         "splitHint": "Varyant B kalan kitleye gönderilir. Varyant B içeriğini Oluştur adımında ayarlayın.",
         "pickSender": "— Gönderici seçin —",
-        "notVerified": "Henüz doğrulanmadı: yönlendirmeli akış, numara doğrulandıktan sonra kullanılabilir."
+        "notVerified": "Henüz doğrulanmadı: yönlendirmeli akış, numara doğrulandıktan sonra kullanılabilir.",
+        "typeFromTemplate": "Bir şablondan geldiniz, bu yüzden bu kampanya o şablonu gönderir. Özel mesaj veya akış, Kampanyalar > Oluştur bölümünden hazırlanır."
       },
       "audience": {
         "title": "Kitle",

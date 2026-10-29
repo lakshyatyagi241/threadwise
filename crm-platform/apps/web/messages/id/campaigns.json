@@ -281,7 +281,8 @@
         "split": "Varian A {a}%",
         "splitHint": "Varian B menerima sisa audiens. Atur konten Varian B pada langkah Susun.",
         "pickSender": "— Pilih pengirim —",
-        "notVerified": "Belum diverifikasi: alur terpandu tersedia setelah nomor diverifikasi."
+        "notVerified": "Belum diverifikasi: alur terpandu tersedia setelah nomor diverifikasi.",
+        "typeFromTemplate": "Anda datang dari templat, jadi kampanye ini mengirim templat itu. Pesan kustom atau alur dibuat dari Kampanye > Buat."
       },
       "audience": {
         "title": "Audiens",

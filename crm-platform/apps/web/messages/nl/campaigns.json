@@ -281,7 +281,8 @@
         "split": "Variant A-verdeling {a}%",
         "splitHint": "Variant B krijgt het resterende publiek. Stel de inhoud van Variant B in bij de stap Opstellen.",
         "pickSender": "— Kies een afzender —",
-        "notVerified": "Nog niet geverifieerd: de begeleide flow is beschikbaar zodra het nummer is geverifieerd."
+        "notVerified": "Nog niet geverifieerd: de begeleide flow is beschikbaar zodra het nummer is geverifieerd.",
+        "typeFromTemplate": "Je komt van een sjabloon, dus deze campagne verstuurt dat sjabloon. Een eigen bericht of flow maak je via Campagnes > Maken."
       },
       "audience": {
         "title": "Doelgroep",

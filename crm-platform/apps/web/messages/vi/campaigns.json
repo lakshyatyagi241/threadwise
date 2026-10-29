@@ -281,7 +281,8 @@
         "split": "Biến thể A chiếm {a}%",
         "splitHint": "Biến thể B nhận phần đối tượng còn lại. Đặt nội dung Biến thể B ở bước Soạn.",
         "pickSender": "— Chọn người gửi —",
-        "notVerified": "Chưa xác minh: luồng hướng dẫn sẽ khả dụng sau khi số được xác minh."
+        "notVerified": "Chưa xác minh: luồng hướng dẫn sẽ khả dụng sau khi số được xác minh.",
+        "typeFromTemplate": "Bạn đến từ một mẫu, nên chiến dịch này gửi đúng mẫu đó. Tin nhắn tùy chỉnh hoặc luồng được tạo từ Chiến dịch > Tạo."
       },
       "audience": {
         "title": "Đối tượng",

@@ -374,7 +374,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             )}
             {isApproved && (
               <Link
-                href="/campaigns/create"
+                href={`/campaigns/create?template=${tpl.id}`}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium text-brand hover:bg-muted"
               >
                 <SendIcon className="size-3.5" />

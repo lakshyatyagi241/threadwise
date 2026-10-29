@@ -281,7 +281,8 @@
         "split": "Wariant A: {a}%",
         "splitHint": "Wariant B otrzymuje pozostałych odbiorców. Ustaw treść wariantu B w kroku Tworzenie.",
         "pickSender": "— wybierz nadawcę —",
-        "notVerified": "Jeszcze nie zweryfikowano: przewodnik będzie dostępny po zweryfikowaniu numeru."
+        "notVerified": "Jeszcze nie zweryfikowano: przewodnik będzie dostępny po zweryfikowaniu numeru.",
+        "typeFromTemplate": "Przychodzisz z szablonu, więc ta kampania wyśle ten szablon. Własną wiadomość lub przepływ utworzysz w Kampanie > Utwórz."
       },
       "audience": {
         "title": "Odbiorcy",
