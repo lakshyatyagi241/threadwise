@@ -1039,6 +1039,11 @@
       "enrichment": "Sprawdzenie kontaktu",
       "chat_message": "Wiadomość czatu",
       "webbot_message": "Wiadomość chatbota na stronie"
+    },
+    "legacyInvoice": {
+      "title": "Faktura",
+      "back": "Wróć do zestawienia",
+      "print": "Drukuj lub zapisz jako PDF"
     }
   }
 }

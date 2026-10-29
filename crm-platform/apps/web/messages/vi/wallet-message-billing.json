@@ -1039,6 +1039,11 @@
       "enrichment": "Tra cứu liên hệ",
       "chat_message": "Tin nhắn trò chuyện",
       "webbot_message": "Tin nhắn chatbot trên website"
+    },
+    "legacyInvoice": {
+      "title": "Hóa đơn",
+      "back": "Quay lại sao kê",
+      "print": "In hoặc lưu thành PDF"
     }
   }
 }

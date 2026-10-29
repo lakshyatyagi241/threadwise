@@ -3,6 +3,7 @@ import {
   ERROR_CODES,
   creditPackageListSchema,
   creditPackageSchema,
+  walletLegacyInvoiceSchema,
   walletSnapshotSchema,
 } from '@crm/contracts';
 import {
@@ -115,6 +116,69 @@ describe('credit packages', () => {
     expect((await ops('delete', `/packages/${created.id}`)).status).toBe(404);
     const logs = await ops('get', '/logs?scope=platform&event=platform.package.saved');
     expect(logs.body.data.length).toBeGreaterThan(0);
+  });
+});
+
+describe('the invoice of a migrated top-up', () => {
+  const INVOICE = '3500650000008567084';
+  const html = '<html><body><h1>Invoice INV-000123</h1><script>alert(1)</script></body></html>';
+
+  it('the wallet row names the stored invoice, the workspace opens it, and another workspace cannot', async () => {
+    const mine = await newTenant(h, 'inv1');
+    const other = await newTenant(h, 'inv2');
+    const { db, ledger } = services(h);
+    await db.txAs({ orgId: mine.orgId, userId: null }, (tx) =>
+      ledger.post(tx, {
+        orgId: mine.orgId,
+        unit: 'USD',
+        type: 'topup',
+        direction: 'in',
+        amountMinor: 200000,
+        idempotencyKey: `legacy-inv:${mine.orgId}`,
+        source: 'waboo_purchase',
+        description: `Credits purchased (invoice ${INVOICE})`,
+        meta: { legacy: { waboo: { invoice: INVOICE } } },
+      }),
+    );
+    await fund(h, mine.orgId, 100); // a top-up with no invoice stored
+    const before = await h.api.as(mine.admin).get('/v2/wallet/ledger');
+    expect(
+      before.body.data.every((r: { legacyInvoiceId?: string | null }) => !r.legacyInvoiceId),
+    ).toBe(true);
+
+    await h.owner.query(
+      `INSERT INTO wallet_legacy_invoices (org_id, invoice_id, invoice_number, invoice_date, currency, total, status, html)
+       VALUES ($1, $2, 'INV-000123', '2026-10-15', 'INR', 2000, 'paid', $3)`,
+      [mine.orgId, INVOICE, html],
+    );
+    const ledgerRes = await h.api.as(mine.admin).get('/v2/wallet/ledger');
+    const withInvoice = ledgerRes.body.data.filter(
+      (r: { legacyInvoiceId?: string | null }) => r.legacyInvoiceId,
+    );
+    expect(withInvoice).toHaveLength(1);
+    const id = withInvoice[0].legacyInvoiceId as string;
+
+    const opened = await h.api.as(mine.admin).get(`/v2/wallet/legacy-invoices/${id}`);
+    expect(opened.status).toBe(200);
+    expect(walletLegacyInvoiceSchema.parse(opened.body)).toMatchObject({
+      id,
+      number: 'INV-000123',
+      date: '2026-10-15',
+      currency: 'INR',
+      status: 'paid',
+      html,
+    });
+    // the other workspace sees it as not found (row-level security), and an unknown id is the same
+    expect((await h.api.as(other.admin).get(`/v2/wallet/legacy-invoices/${id}`)).status).toBe(404);
+    expect(
+      (
+        await h.api
+          .as(mine.admin)
+          .get('/v2/wallet/legacy-invoices/00000000-0000-4000-8000-000000000000')
+      ).status,
+    ).toBe(404);
+    expect((await h.api.as(mine.admin).get('/v2/wallet/legacy-invoices/nope')).status).toBe(422);
+    await h.owner.query(`DELETE FROM wallet_legacy_invoices WHERE org_id = $1`, [mine.orgId]);
   });
 });
 

@@ -27,6 +27,7 @@ import {
   statementResponseSchema,
   syncMetaResultSchema,
   walletLedgerResponseSchema,
+  walletLegacyInvoiceSchema,
   walletLogListSchema,
   walletSettingsSchema,
   walletSummarySchema,
@@ -53,6 +54,7 @@ import { toExpenseApiQuery, type ExpenseFilters } from './lib/expense-filters';
 export const KEYS = {
   summary: ['wallet', 'summary'] as const,
   ledger: (cursor: string | undefined) => ['wallet', 'ledger', cursor ?? 'first'] as const,
+  legacyInvoice: (id: string) => ['wallet', 'legacy-invoice', id] as const,
   statement: (filters: StatementFilters, cursor: string | undefined) =>
     ['wallet', 'statement', filters, cursor ?? 'first'] as const,
   expenses: (filters: ExpenseFilters, timeZone: string, cursor: string | undefined) =>
@@ -90,6 +92,9 @@ export const customerApi = {
       schema: walletLedgerResponseSchema,
       signal,
     }),
+  /** The invoice the old system issued for a migrated top-up. */
+  legacyInvoice: (id: string, signal?: AbortSignal) =>
+    apiFetch(`/wallet/legacy-invoices/${id}`, { schema: walletLegacyInvoiceSchema, signal }),
   statement: (
     filters: StatementFilters,
     cursor: string | undefined,

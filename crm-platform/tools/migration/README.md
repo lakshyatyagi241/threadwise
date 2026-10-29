@@ -1022,6 +1022,25 @@ node pilot/staging/cycle.cjs wallet-history --client rhythm --apply    # the wra
 # direct: $CLI wallet-history --client rhythm --org-slug <slug> [--apply --confirm-org-slug <slug>]
 ```
 
+## Top-up invoices (`invoices-fetch`, `wallet-invoices`)
+
+Waboo keeps only the billing provider's (Zoho Subscriptions) invoice id on a top-up or purchase (`reseller_credit_logs` / `credits_expenses`, carried as `meta.legacy.waboo.invoice` on the ledger row) and fetches the invoice when the person clicks Download Invoice. The dump holds none, so a migrated top-up showed no invoice. Two operator commands bring them over; neither is part of `run` or `migrate`.
+
+1. `invoices-fetch --client <c>` reads the ids from `dumps/<c>/core.json` (`walletEvents[].invoice`, plain numbers only), asks the provider for each (`GET /invoices/<id>?include=html`) and writes `dumps/<c>/zoho_invoices.json`.
+2. `wallet-invoices --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]` loads that file into `wallet_legacy_invoices`. DRY RUN by default; it says how many top-up invoices the wallet rows name, how many the file has and which are missing. The wallet and the statement then show **Download invoice** on those rows, which opens the invoice in a sandboxed frame.
+
+```
+ZOHO_ACCESS_TOKEN=... ZOHO_ORGANIZATION_ID=... $CLI invoices-fetch --client ontime
+$CLI wallet-invoices --client ontime --org-slug <slug>                                   # dry run
+$CLI wallet-invoices --client ontime --org-slug <slug> --apply --confirm-org-slug <slug>
+```
+
+- **The token is the operator's.** `ZOHO_ACCESS_TOKEN` (a read-only token with the invoices read scope; it lives about an hour) and `ZOHO_ORGANIZATION_ID` come from the environment. They are never read from the Waboo database, never logged and never written to the output file. `ZOHO_BILLING_API` (default `https://www.zohoapis.com/billing/v1`, for another data centre use its `zohoapis.in` / `.eu` ... base) must be an https zohoapis host or the command refuses to start, so the token cannot be sent anywhere else.
+- **Read-only at the provider.** One GET per invoice, 300 ms apart, a rate limit (429) waits and retries. A refused token stops the run and keeps what was fetched; a second run only asks for what the file does not have yet. An invoice the provider does not know (404) or that has no HTML is reported, not loaded.
+- **Not an order.** A migrated top-up gets no made-up order (it would count as new revenue and invent a tax breakdown): the invoice is kept as the provider rendered it, in its own table, one row per provider invoice, row-level security as everywhere. It is HTML that came from outside, so it is only ever shown in a frame with every sandbox restriction on.
+- **Idempotent.** The same file again changes nothing; a changed invoice is updated.
+- Tests: `test/invoices-fetch.pure.spec.ts` (ids, the response, where the token may go, retries, resume, a refused token, the file) and `apps/api/test/e2e/wallet-message-billing/extras.e2e.spec.ts` (the wallet row, the endpoint, another workspace).
+
 ## Safety rules
 
 - **No double debit.** `usage_charges` rows carry `credits = 0`, `revenue_minor = 0`, `status free`, `wallet_tx_id NULL`, `currency NULL`; only `wallet_transactions` moves money, and only from `credit_logs`. Reconcile alarms `CHARGE_WITH_MONEY` on any migrated charge with money or a wallet link.

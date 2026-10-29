@@ -30,6 +30,8 @@ export interface LedgerRow {
   createdAt: Date;
   /** The purchase (order) this entry came from, when it has an invoice to download; null for every other entry. */
   invoiceOrderId?: string | null;
+  /** The stored invoice of a migrated top-up (`wallet_legacy_invoices.uuid`), or null. */
+  legacyInvoiceId?: string | null;
 }
 
 /**
@@ -293,13 +295,16 @@ interface RawLedger {
   actor_label: string | null;
   created_at: Date;
   invoice_order_id?: string | null;
+  legacy_invoice_id?: string | null;
 }
 
 /** `invoice_order_id`: the order a top-up was paid through (its invoice is the order's), else null. */
 export const LEDGER_COLUMNS = sql`id, uuid, type, direction, amount::text AS amount, balance_after::text AS balance_after, source,
   description, note, actor_type, actor_label, created_at,
   (SELECT o.uuid::text FROM orders o WHERE o.org_id = wallet_transactions.org_id AND wallet_transactions.subject_type = 'order'
-     AND o.id = wallet_transactions.subject_id) AS invoice_order_id`;
+     AND o.id = wallet_transactions.subject_id) AS invoice_order_id,
+  (SELECT i.uuid::text FROM wallet_legacy_invoices i WHERE i.org_id = wallet_transactions.org_id
+     AND i.invoice_id = wallet_transactions.meta #>> '{legacy,waboo,invoice}') AS legacy_invoice_id`;
 
 export function toLedger(r: RawLedger): LedgerRow {
   return {
@@ -318,5 +323,6 @@ export function toLedger(r: RawLedger): LedgerRow {
     actorLabel: r.actor_label,
     createdAt: new Date(r.created_at),
     invoiceOrderId: r.invoice_order_id ?? null,
+    legacyInvoiceId: r.legacy_invoice_id ?? null,
   };
 }

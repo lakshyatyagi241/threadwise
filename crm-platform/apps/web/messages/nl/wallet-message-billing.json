@@ -1039,6 +1039,11 @@
       "enrichment": "Contactopzoeking",
       "chat_message": "Chatbericht",
       "webbot_message": "Websitechatbot-bericht"
+    },
+    "legacyInvoice": {
+      "title": "Factuur",
+      "back": "Terug naar het overzicht",
+      "print": "Afdrukken of opslaan als PDF"
     }
   }
 }

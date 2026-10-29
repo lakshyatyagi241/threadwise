@@ -1039,6 +1039,11 @@
       "enrichment": "연락처 조회",
       "chat_message": "채팅 메시지",
       "webbot_message": "웹사이트 챗봇 메시지"
+    },
+    "legacyInvoice": {
+      "title": "인보이스",
+      "back": "명세서로 돌아가기",
+      "print": "인쇄 또는 PDF로 저장"
     }
   }
 }

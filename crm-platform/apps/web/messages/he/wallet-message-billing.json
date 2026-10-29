@@ -1039,6 +1039,11 @@
       "enrichment": "חיפוש איש קשר",
       "chat_message": "הודעת צ'אט",
       "webbot_message": "הודעת צ'אטבוט באתר"
+    },
+    "legacyInvoice": {
+      "title": "חשבונית",
+      "back": "חזרה לדף החשבון",
+      "print": "הדפסה או שמירה כ-PDF"
     }
   }
 }
