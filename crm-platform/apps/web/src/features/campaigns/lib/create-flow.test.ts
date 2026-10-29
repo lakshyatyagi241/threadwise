@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createPath, draftParam, flowFor, senderParam } from './create-flow';
+import { createPath, draftParam, flowFor, senderParam, templateParam } from './create-flow';
 
 const ID = '3f2b8c1e-0000-4000-8000-000000000001';
 const senders = [
@@ -21,6 +21,18 @@ describe('create flow', () => {
     expect(createPath()).toBe('/campaigns/create');
     expect(createPath({ sender: `waba:${ID}` })).toBe(`/campaigns/create?sender=waba%3A${ID}`);
     expect(createPath({ draft: ID, sender: 'x:y' })).toBe(`/campaigns/create?draft=${ID}`);
+  });
+
+  it('keeps the template a campaign is made for, but never next to a draft', () => {
+    expect(createPath({ template: ID })).toBe(`/campaigns/create?template=${ID}`);
+    expect(createPath({ sender: `waba:${ID}`, template: ID })).toBe(
+      `/campaigns/create?sender=waba%3A${ID}&template=${ID}`,
+    );
+    expect(createPath({ draft: ID, template: ID })).toBe(`/campaigns/create?draft=${ID}`);
+    expect(templateParam(ID)).toBe(ID);
+    expect(templateParam([ID, 'x'])).toBe(ID);
+    expect(templateParam('not-an-id')).toBe('');
+    expect(templateParam(undefined)).toBe('');
   });
 
   it('reads back only well-formed parameters', () => {

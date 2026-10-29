@@ -29,11 +29,14 @@ const Frame = ({ children }: { children: React.ReactNode }) => (
 export function CreateScreen({
   sender,
   draft,
+  template = '',
 }: {
   /** The `?sender=` of the address (a well-formed key, or empty). */
   sender: string;
   /** The `?draft=` of the address (an id, or empty): a guided draft to resume. */
   draft: string;
+  /** The `?template=` of the address (an id, or empty): the template this campaign is made for; its type is then fixed to "template". */
+  template?: string;
 }) {
   const t = useTranslations('campaigns.create');
   const canCreate = useCan('camp.campaigns.create');
@@ -74,7 +77,7 @@ export function CreateScreen({
   const open = (key: string, name: string) => {
     setState({ key, draft: '', name });
     if (typeof window !== 'undefined')
-      window.history.replaceState(window.history.state, '', createPath({ sender: key }));
+      window.history.replaceState(window.history.state, '', createPath({ sender: key, template }));
   };
   const guidedKeys = new Set(senders.filter((s) => s.guided).map((s) => s.key));
   const initial =
@@ -111,6 +114,7 @@ export function CreateScreen({
       key={`classic-${key}`}
       initialSenderKey={key}
       initialName={state.name}
+      initialTemplateId={template}
       guidedKeys={guidedKeys}
       onGuided={open}
     />

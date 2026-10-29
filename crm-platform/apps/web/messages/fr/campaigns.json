@@ -281,7 +281,8 @@
         "split": "Répartition de la variante A : {a} %",
         "splitHint": "La variante B reçoit le reste de l'audience. Définissez son contenu à l'étape Rédaction.",
         "pickSender": "— Sélectionner un expéditeur —",
-        "notVerified": "Pas encore vérifié : le parcours guidé est disponible une fois le numéro vérifié."
+        "notVerified": "Pas encore vérifié : le parcours guidé est disponible une fois le numéro vérifié.",
+        "typeFromTemplate": "Vous venez d’un modèle : cette campagne envoie donc ce modèle. Un message personnalisé ou un flux se crée depuis Campagnes > Créer."
       },
       "audience": {
         "title": "Audience",

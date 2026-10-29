@@ -281,7 +281,8 @@
         "split": "Reparto de la variante A: {a}%",
         "splitHint": "La variante B recibe el resto de la audiencia. Define el contenido de la variante B en el paso de redacción.",
         "pickSender": "— Selecciona un remitente —",
-        "notVerified": "Aún no verificado: el flujo guiado estará disponible cuando el número esté verificado."
+        "notVerified": "Aún no verificado: el flujo guiado estará disponible cuando el número esté verificado.",
+        "typeFromTemplate": "Vienes de una plantilla, así que esta campaña envía esa plantilla. Un mensaje personalizado o un flujo se crea desde Campañas > Crear."
       },
       "audience": {
         "title": "Audiencia",

@@ -78,6 +78,7 @@ export function BuilderScreen({
   id,
   initialSenderKey,
   initialName,
+  initialTemplateId,
   guidedKeys,
   onGuided,
 }: {
@@ -86,6 +87,8 @@ export function BuilderScreen({
   initialSenderKey?: string;
   /** A name typed before the switch from the guided flow comes along. */
   initialName?: string;
+  /** The template a new campaign is made for ("Use in a broadcast" on a template): the type is fixed to "template" and it is picked. */
+  initialTemplateId?: string;
   /** Numbers the guided flow can send from (verified Meta numbers). With `onGuided`, picking one reshapes the sections for that flow. */
   guidedKeys?: ReadonlySet<string>;
   onGuided?: (senderKey: string, name: string) => void;
@@ -123,6 +126,7 @@ export function BuilderScreen({
       zone={zone}
       initialSenderKey={initialSenderKey}
       initialName={initialName}
+      initialTemplateId={initialTemplateId}
       guidedKeys={guidedKeys}
       onGuided={onGuided}
     />
@@ -136,6 +140,7 @@ function Builder({
   zone,
   initialSenderKey,
   initialName,
+  initialTemplateId,
   guidedKeys,
   onGuided,
 }: {
@@ -145,6 +150,7 @@ function Builder({
   zone: string;
   initialSenderKey: string | undefined;
   initialName: string | undefined;
+  initialTemplateId: string | undefined;
   guidedKeys: ReadonlySet<string> | undefined;
   onGuided: ((senderKey: string, name: string) => void) | undefined;
 }) {
@@ -171,7 +177,8 @@ function Builder({
       ? fromConfig(config, zone)
       : {
           ...EMPTY_FORM,
-          type: 'custom',
+          type: initialTemplateId ? 'template' : 'custom',
+          templateId: initialTemplateId ?? '',
           name: initialName ?? '',
           senderKey: initialSenderKey ?? '',
           timezone: zone,
@@ -364,6 +371,7 @@ function Builder({
                   notVerified={notVerified}
                   hidden={hidden}
                   loading={sendersLoading}
+                  templateOnly={!id && Boolean(initialTemplateId)}
                 />
               )}
               {step === 'compose' && (

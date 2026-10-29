@@ -281,7 +281,8 @@
         "split": "Variante A {a}%",
         "splitHint": "La variante B riceve il resto del pubblico. Imposta il contenuto della variante B nel passaggio Componi.",
         "pickSender": "— Seleziona un mittente —",
-        "notVerified": "Non ancora verificato: il percorso guidato è disponibile dopo la verifica del numero."
+        "notVerified": "Non ancora verificato: il percorso guidato è disponibile dopo la verifica del numero.",
+        "typeFromTemplate": "Arrivi da un modello, quindi questa campagna invia quel modello. Un messaggio personalizzato o un flusso si crea da Campagne > Crea."
       },
       "audience": {
         "title": "Pubblico",
