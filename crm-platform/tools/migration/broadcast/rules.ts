@@ -29,6 +29,19 @@ export function moneyString(v: unknown): string | null {
   return null;
 }
 
+/**
+ * An exact decimal amount ("979.581") in hundredths of the currency, rounded half up ("979.58" -> 97958, "0.005" -> 1). Null for a
+ * missing, negative or unreadable amount. Decimal text, never a float, so 1.005 does not become 100.49999.
+ */
+export function minorOf(text: string | null): number | null {
+  if (text === null || !/^\d+(\.\d+)?$/.test(text)) return null;
+  const [whole = '0', frac = ''] = text.split('.');
+  const cents = Number(whole) * 100 + Number((frac + '00').slice(0, 2));
+  const up = frac.length > 2 && frac.charCodeAt(2) >= 53 ? 1 : 0;
+  const n = cents + up;
+  return Number.isSafeInteger(n) ? n : null;
+}
+
 /** A date as the dump spells it. A string with no zone ("2026-06-12T10:00:00") is read as UTC, never in the machine's own zone. */
 export function utcDate(v: unknown): Date | null {
   if (typeof v === 'string') {

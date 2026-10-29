@@ -226,7 +226,12 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*, cost.cost_minor, cost.cost_currency
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*,
+         -- A campaign migrated from the old system has no charge rows; it shows what the old system billed, less what it refunded.
+         CASE WHEN cost.cost_minor = 0 AND c.legacy_billed_minor IS NOT NULL
+              THEN greatest(c.legacy_billed_minor - coalesce(c.legacy_refunded_minor, 0), 0)
+              ELSE cost.cost_minor END AS cost_minor,
+         cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
