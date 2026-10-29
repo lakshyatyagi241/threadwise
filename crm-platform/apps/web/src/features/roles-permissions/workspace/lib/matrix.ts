@@ -130,11 +130,11 @@ export function sameDraft(a: GrantDraft, b: GrantDraft): boolean {
 }
 
 /**
- * Keys whose records have a creator but no owner or team (campaigns): they offer only "Global records" (`all`) and
+ * Keys whose records have a creator but no owner or team (campaigns, templates): they offer only "Global records" (`all`) and
  * "Restricted access" (`own`: the records the person created).
  */
 export function isCreatorScoped(key: string): boolean {
-  return key.startsWith('camp.campaigns.');
+  return key.startsWith('camp.campaigns.') || key.startsWith('tpl.templates.');
 }
 
 /** Every record scope, widest first, as the matrix lists them. */

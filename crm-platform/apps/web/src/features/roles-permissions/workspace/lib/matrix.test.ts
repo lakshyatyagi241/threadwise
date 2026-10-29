@@ -117,6 +117,7 @@ describe('scopeOptions', () => {
   it('offers campaign keys only global and own, keeping a stored team scope visible', () => {
     expect(scopeOptions(true, 'all', 'camp.campaigns.read')).toEqual(['all', 'own']);
     expect(scopeOptions(true, 'team', 'camp.campaigns.read')).toEqual(['all', 'team', 'own']);
+    expect(scopeOptions(true, 'all', 'tpl.templates.delete')).toEqual(['all', 'own']);
     expect(scopeOptions(true, 'all', 'record.contacts.read')).toEqual([
       'all',
       'team_and_below',
