@@ -606,7 +606,7 @@
       "tone": "Tono",
       "pickTone": "Seleziona il tono",
       "language": "Lingua",
-      "languageHint": "La bozza viene scritta nella lingua del modulo.",
+      "languageHint": "Scegli qualsiasi lingua accettata da Meta. La bozza è scritta in essa e il modello la adotta.",
       "notes": "Prompt personalizzato",
       "notesNote": "facoltativo / max 2000",
       "notesPlaceholder": "Tutto ciò che vuoi includere: variabili, link, formulazioni obbligatorie, cosa evitare…",

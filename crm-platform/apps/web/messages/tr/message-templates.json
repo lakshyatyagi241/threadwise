@@ -606,7 +606,7 @@
       "tone": "Ton",
       "pickTone": "Ton seçin",
       "language": "Dil",
-      "languageHint": "Taslak, formun dilinde yazılır.",
+      "languageHint": "Meta'nın kabul ettiği herhangi bir dili seçin. Taslak bu dilde yazılır ve şablon bu dili alır.",
       "notes": "Özel istem",
       "notesNote": "isteğe bağlı / en fazla 2000",
       "notesPlaceholder": "Eklenmesini istediğiniz her şey: değişkenler, bağlantılar, mutlaka geçmesi gereken ifadeler, kaçınılacaklar…",

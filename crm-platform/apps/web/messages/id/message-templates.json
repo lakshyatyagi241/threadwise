@@ -606,7 +606,7 @@
       "tone": "Nada",
       "pickTone": "Pilih nada",
       "language": "Bahasa",
-      "languageHint": "Draf ditulis dalam bahasa formulir.",
+      "languageHint": "Pilih bahasa apa pun yang diterima Meta. Draf ditulis dalam bahasa itu, dan templat memakainya.",
       "notes": "Prompt kustom",
       "notesNote": "opsional / maks. 2000",
       "notesPlaceholder": "Hal spesifik yang ingin disertakan: variabel, tautan, frasa wajib, hal yang harus dihindari…",

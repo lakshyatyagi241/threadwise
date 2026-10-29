@@ -606,7 +606,7 @@
       "tone": "Ton",
       "pickTone": "Sélectionner un ton",
       "language": "Langue",
-      "languageHint": "Le brouillon est rédigé dans la langue du formulaire.",
+      "languageHint": "Choisissez n'importe quelle langue acceptée par Meta. Le brouillon est écrit dans cette langue et le modèle l'adopte.",
       "notes": "Instructions personnalisées",
       "notesNote": "facultatif / 2000 max.",
       "notesPlaceholder": "Tout élément précis à inclure : variables, liens, formulations obligatoires, ce qu'il faut éviter…",

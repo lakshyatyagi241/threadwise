@@ -606,7 +606,7 @@
       "tone": "Giọng điệu",
       "pickTone": "Chọn giọng điệu",
       "language": "Ngôn ngữ",
-      "languageHint": "Bản nháp được viết bằng ngôn ngữ của biểu mẫu.",
+      "languageHint": "Chọn bất kỳ ngôn ngữ nào Meta chấp nhận. Bản nháp được viết bằng ngôn ngữ đó và mẫu tin dùng ngôn ngữ này.",
       "notes": "Yêu cầu tùy chỉnh",
       "notesNote": "tùy chọn / tối đa 2000",
       "notesPlaceholder": "Bất kỳ điều gì bạn muốn đưa vào: biến, liên kết, cách diễn đạt bắt buộc, điều cần tránh…",
