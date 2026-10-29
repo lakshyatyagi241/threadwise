@@ -535,6 +535,13 @@ Rules (load/update.ts):
 10. The verifier accepts `row_version` = the recorded `written_version` on a row the tool updated (any other version is a later edit and is
     an alarm, as before). Its independent oracle did not change: the expected final state is the same, `update` makes the target reach it.
 
+## Template header files and quality (Tirupati Bank, Ontime)
+
+A migrated media template showed an empty picture and "Quality pending". Two separate causes:
+
+- **The header file.** The dump holds only Meta's copy of the header file (`components[HEADER].example.header_handle`, a signed `scontent.whatsapp.net` link). Earlier loads dropped it (`HEADER_SAMPLE_NOT_KEPT`). The `templates` step now keeps it as `wa_templates.header_sample_url` (https only), exactly as the app's own Meta sync does, so the template shows its file at once. The `files` step (`pilot/files/copy-files.cjs`) then copies the file into our storage under `template-media/<org id>/waboo/<hash>/<name>` and sets `header_media_key`, which the template detail serves with a fresh link (the Meta link expires). The config's `allowedHosts` must list `scontent.whatsapp.net`. Templates loaded before this are given the link by `template-headers --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]` (one column, only where it is empty, DRY RUN first); then run the files step. The dump is checked: for Tirupati every link answered 200 two days after the export. Carousel cards keep their own `headerHandle` and are not copied. `test/template-header.pure.spec.ts`.
+- **The quality.** The dump has no quality rating: Waboo reads it from Meta when it lists templates. The `template-quality` step (`cycle.cjs template-quality`, `pilot/templates/quality.cjs`) reads the ratings from Meta with the workspace's WhatsApp credentials and writes them; until it has run for the workspace every template is `UNKNOWN`, which the app labels "Quality pending". It needs the number's credentials, so it is an operator step.
+
 ## Who created a contact list (`groups`)
 
 Waboo writes the creator's DISPLAY NAME into a list's `created_by` ("AHMAD SHAIKH") and the creator's id into `user_id` (`MarketingList/List.py`). `groups` reads the creator from `user_id` (through `id_map`, as every other user reference), and only then tries `created_by` as an id; a list whose creator does not resolve keeps `created_by` empty and loads. Before this, `created_by` (a name) never resolved, so every migrated list showed no creator. Lists already loaded are corrected by update mode: `update --client <c> --steps groups` (dry run first). `test/groups-creator.pure.spec.ts`.

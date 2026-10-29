@@ -29,6 +29,7 @@
  *   wallet-history --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (the full wallet statement: daily WhatsApp charges and reverts, AI charges, top-ups, purchases, chained to the live balance; replaces the one-opening-balance ledger)
  *   invoices-fetch --client <c>    (the invoices of the wallet top-ups, fetched from Waboo's billing provider with YOUR read-only token: ZOHO_ACCESS_TOKEN + ZOHO_ORGANIZATION_ID; writes dumps/<c>/zoho_invoices.json; reads and changes nothing else)
  *   wallet-invoices --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (loads those invoices so a migrated top-up offers Download invoice; DRY RUN by default)
+ *   template-headers --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (gives templates loaded earlier the Meta link of their media header file; then the files step copies it; DRY RUN by default)
  *   chat-buttons --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (gives loaded bot messages their buttons: Visit our website, Call now ...; reads only the database)
  *   chat-delivery --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (moves loaded outbound messages from sent to delivered / read / failed from the billing log; forward only; DRY RUN by default)
  *   chat-status  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (closes loaded conversations that Waboo has closed: the status of the newest visitor_logs session)
@@ -80,6 +81,7 @@ import { chatButtons } from './load/chatbuttons';
 import { walletHistory } from './load/wallethistory';
 import { InvoiceFetchError, invoicesFetch } from './invoices/zoho';
 import { walletInvoices } from './load/walletinvoices';
+import { templateHeaders } from './load/templateheaders';
 import { campaignLink } from './load/campaignlink';
 import { runClient, RunLockedError } from './load/run';
 import { formatSteps, StepsError } from './load/steps';
@@ -692,6 +694,29 @@ async function main(): Promise<number> {
         orgSlug: slug,
         ownerUrl: need('MIGRATION_DATABASE_URL'),
         dumpsDir,
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'template-headers': {
+      // wa_templates.header_sample_url for templates an earlier load wrote without it (see load/templateheaders.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('template-headers --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await templateHeaders({
+        client: clients[0]!,
+        orgSlug: slug,
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
         apply,
         log: (l) => console.log(l),
       });
