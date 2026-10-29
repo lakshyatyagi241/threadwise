@@ -4,7 +4,7 @@ import {
   type ContactViewResponse,
 } from '@crm/contracts';
 import { DEFAULT_FILTERS, type ContactFilters, type PageSize } from '../api/contacts';
-import { filtersToSearch, parseFilters } from './filters';
+import { filtersToSearch, hasActiveFilter, parseFilters } from './filters';
 
 /**
  * Saved views of the Contact Hub (Reference's "views" tabs). A view stores the list filters as the URL parameters they are written as
@@ -101,6 +101,14 @@ export function filtersOfView(
 /** The default filters ("All contacts") at the person's own page size. */
 export function defaultFiltersOf(defaultLimit: PageSize): ContactFilters {
   return { ...DEFAULT_FILTERS, limit: defaultLimit };
+}
+
+/**
+ * Whether a list with these filters has nothing left of what a saved view applied: no chip is on (the search text is not a chip). Taking
+ * the last chip off, or "Clear all", then leaves the view for All contacts instead of showing an open view with nothing in it.
+ */
+export function leavesViewWhen(next: ContactFilters): boolean {
+  return !hasActiveFilter({ ...next, q: '' });
 }
 
 /** Adds, replaces or removes `view=` on a `?a=b` search string. */

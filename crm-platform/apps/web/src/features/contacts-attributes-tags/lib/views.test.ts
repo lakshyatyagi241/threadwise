@@ -3,6 +3,7 @@ import type { ContactViewResponse } from '@crm/contracts';
 import { DEFAULT_FILTERS } from '../api/contacts';
 import { filtersToSearch, parseFilters } from './filters';
 import {
+  leavesViewWhen,
   composeViewFilter,
   defaultFiltersOf,
   filtersOfView,
@@ -197,5 +198,16 @@ describe('view name check', () => {
     expect(viewNameProblem('abc')).toBeNull();
     expect(viewNameProblem('x'.repeat(50))).toBeNull();
     expect(viewNameProblem('x'.repeat(51))).toBe('nameLong');
+  });
+});
+
+describe('leavesViewWhen (the last chip off an open view)', () => {
+  it('is true when no filter is left, whatever the search text says', () => {
+    expect(leavesViewWhen({ ...DEFAULT_FILTERS })).toBe(true);
+    expect(leavesViewWhen({ ...DEFAULT_FILTERS, q: 'ana' })).toBe(true);
+  });
+  it('is false while a chip is still on', () => {
+    expect(leavesViewWhen({ ...DEFAULT_FILTERS, tag: 'vip' })).toBe(false);
+    expect(leavesViewWhen({ ...DEFAULT_FILTERS, rules: '{"op":"and"}' })).toBe(false);
   });
 });
