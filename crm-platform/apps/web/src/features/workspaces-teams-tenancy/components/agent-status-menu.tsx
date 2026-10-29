@@ -9,6 +9,7 @@ import { useMyAvailability } from '../api/hooks';
 import { formatDay } from '../lib/leave';
 import { nextManualStatus, showsOutsideHoursNotice, statusView } from '../lib/agent-status';
 import { MyLeaveDialog, useMyLeave } from './my-leave-row';
+import { WspProviders } from './parts';
 import { WorkingHoursDialog } from './working-hours-dialog';
 
 const DOT = {
@@ -193,9 +194,38 @@ export function AgentStatusMenu({ variant }: { variant: 'topbar' | 'inbox' }) {
       </Popover>
 
       {/* Outside the popover: closing the menu must not close the dialogs it opened. */}
-      {hoursOpen && <WorkingHoursDialog memberId="me" open onClose={() => setHoursOpen(false)} />}
-      {leaveOpen && <MyLeaveDialog open onClose={() => setLeaveOpen(false)} />}
+      <StatusDialogs
+        hoursOpen={hoursOpen}
+        leaveOpen={leaveOpen}
+        onCloseHours={() => setHoursOpen(false)}
+        onCloseLeave={() => setLeaveOpen(false)}
+      />
     </div>
+  );
+}
+
+/**
+ * The two dialogs the menu opens. The pill lives in the global top bar, ABOVE the page, so it has no toast host of its own on a page
+ * that does not bring one (Templates, Contacts ...): the dialogs toast "saved", and without a host that is an error that takes the whole
+ * page down ("Something went wrong"). They bring their own.
+ */
+export function StatusDialogs({
+  hoursOpen,
+  leaveOpen,
+  onCloseHours,
+  onCloseLeave,
+}: {
+  hoursOpen: boolean;
+  leaveOpen: boolean;
+  onCloseHours: () => void;
+  onCloseLeave: () => void;
+}) {
+  if (!hoursOpen && !leaveOpen) return null;
+  return (
+    <WspProviders>
+      {hoursOpen && <WorkingHoursDialog memberId="me" open onClose={onCloseHours} />}
+      {leaveOpen && <MyLeaveDialog open onClose={onCloseLeave} />}
+    </WspProviders>
   );
 }
 
