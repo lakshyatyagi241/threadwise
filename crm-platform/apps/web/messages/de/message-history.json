@@ -160,7 +160,7 @@
       "ai": "KI-Assistent",
       "api": "API",
       "broadcast": "Massenversand",
-      "broadcast_test": "Test-Versand der Massennachricht",
+      "broadcast_test": "Test-Versand der Kampagne",
       "campaign": "Kampagne",
       "scheduled": "Geplant",
       "other": "Sonstige"
@@ -241,7 +241,7 @@
         "ai": "KI-Assistent",
         "api": "API",
         "broadcast": "Massenversand",
-        "broadcast_test": "Test-Versand der Massennachricht",
+        "broadcast_test": "Test-Versand der Kampagne",
         "campaign": "Kampagne",
         "scheduled": "Geplante Nachricht",
         "other": "Sonstige"

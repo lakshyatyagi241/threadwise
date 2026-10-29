@@ -160,7 +160,7 @@
       "ai": "Assistente de IA",
       "api": "API",
       "broadcast": "Transmissão",
-      "broadcast_test": "Envio de teste de transmissão",
+      "broadcast_test": "Envio de teste da campanha",
       "campaign": "Campanha",
       "scheduled": "Agendada",
       "other": "Outro"
@@ -241,7 +241,7 @@
         "ai": "Assistente de IA",
         "api": "API",
         "broadcast": "Transmissão",
-        "broadcast_test": "Envio de teste de transmissão",
+        "broadcast_test": "Envio de teste da campanha",
         "campaign": "Campanha",
         "scheduled": "Mensagem agendada",
         "other": "Outro"

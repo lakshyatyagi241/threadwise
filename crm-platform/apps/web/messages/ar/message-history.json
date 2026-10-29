@@ -160,7 +160,7 @@
       "ai": "مساعد الذكاء الاصطناعي",
       "api": "API",
       "broadcast": "بث",
-      "broadcast_test": "اختبار إرسال البث",
+      "broadcast_test": "اختبار إرسال الحملة",
       "campaign": "حملة",
       "scheduled": "مجدولة",
       "other": "أخرى"
@@ -241,7 +241,7 @@
         "ai": "مساعد الذكاء الاصطناعي",
         "api": "API",
         "broadcast": "بث",
-        "broadcast_test": "اختبار إرسال البث",
+        "broadcast_test": "اختبار إرسال الحملة",
         "campaign": "حملة",
         "scheduled": "رسالة مجدولة",
         "other": "أخرى"

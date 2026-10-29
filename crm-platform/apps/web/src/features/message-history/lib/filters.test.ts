@@ -145,7 +145,7 @@ describe('narrowing and the period', () => {
     expect(parseState(new URLSearchParams('type=broadcast')).type).toBe('campaign');
   });
 
-  it('offers one Campaign source (no Broadcast, no Broadcast Test Send, no Scheduled); older links still work', () => {
+  it('offers one Campaign source (no Broadcast, no Campaign Test Send, no Scheduled); older links still work', () => {
     expect(OFFERED_SOURCES).toContain('campaign');
     for (const x of ['broadcast', 'broadcast_test', 'scheduled'] as const)
       expect(OFFERED_SOURCES).not.toContain(x);

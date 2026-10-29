@@ -160,7 +160,7 @@
       "ai": "AI assistant",
       "api": "API",
       "broadcast": "Broadcast",
-      "broadcast_test": "Broadcast Test Send",
+      "broadcast_test": "Campaign Test Send",
       "campaign": "Campaign",
       "scheduled": "Scheduled",
       "other": "Other"
@@ -241,7 +241,7 @@
         "ai": "AI assistant",
         "api": "API",
         "broadcast": "Broadcast",
-        "broadcast_test": "Broadcast Test Send",
+        "broadcast_test": "Campaign Test Send",
         "campaign": "Campaign",
         "scheduled": "Scheduled message",
         "other": "Other"

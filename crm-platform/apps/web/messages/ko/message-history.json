@@ -160,7 +160,7 @@
       "ai": "AI 어시스턴트",
       "api": "API",
       "broadcast": "단체 발송",
-      "broadcast_test": "브로드캐스트 테스트 발송",
+      "broadcast_test": "캠페인 테스트 발송",
       "campaign": "캠페인",
       "scheduled": "예약",
       "other": "기타"
@@ -241,7 +241,7 @@
         "ai": "AI 어시스턴트",
         "api": "API",
         "broadcast": "단체 발송",
-        "broadcast_test": "브로드캐스트 테스트 발송",
+        "broadcast_test": "캠페인 테스트 발송",
         "campaign": "캠페인",
         "scheduled": "예약 메시지",
         "other": "기타"
