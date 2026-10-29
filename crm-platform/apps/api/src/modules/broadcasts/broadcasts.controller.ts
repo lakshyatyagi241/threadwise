@@ -13,7 +13,7 @@ export class BroadcastsController {
   @Post()
   @Idempotent()
   @HttpCode(HttpStatus.CREATED)
-  @RequirePermission('bcast.broadcasts.create')
+  @RequirePermission('camp.campaigns.create')
   @ApiOperation({
     summary: 'Create a broadcast (now or scheduled), one row per picked sender',
     description:

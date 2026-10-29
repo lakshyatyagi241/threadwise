@@ -190,7 +190,7 @@ describe('TW-BCAST-040: delete', () => {
       (await h.owner.query(`SELECT 1 FROM broadcasts WHERE id = $1`, [theirs.id])).rows,
     ).toHaveLength(1);
     const mine = await broadcast(t, { status: 'failed' });
-    const m = await api.member(t, 'viewer', [['bcast.broadcasts.read']]);
+    const m = await api.member(t, 'viewer', [['camp.campaigns.read']]);
     expect(
       (await api.http().delete(`/v2/broadcasts/${mine.uuid}`).set(bearer(m.token))).status,
     ).toBe(403);
@@ -287,7 +287,7 @@ describe('TW-BCAST-038: retry the failed recipients', () => {
     expect((await req(t, 'post', `/v2/broadcasts/${theirs.uuid}/retry-failed`)).status).toBe(404);
     expect((await statuses(theirs.id))[0]!.status).toBe('failed');
     const mine = await broadcast(t);
-    const m = await api.member(t, 'viewer', [['bcast.broadcasts.read']]);
+    const m = await api.member(t, 'viewer', [['camp.campaigns.read']]);
     expect(
       (
         await api
@@ -482,7 +482,7 @@ describe('TW-BCAST-037: CSV export', () => {
     const theirs = await broadcast(other);
     expect((await req(t, 'get', `/v2/broadcasts/${theirs.uuid}/export`)).status).toBe(404);
     const mine = await broadcast(t);
-    const m = await api.member(t, 'viewer', [['bcast.broadcasts.read']]);
+    const m = await api.member(t, 'viewer', [['camp.campaigns.read']]);
     expect(
       (await api.http().get(`/v2/broadcasts/${mine.uuid}/export`).set(bearer(m.token))).status,
     ).toBe(403);

@@ -90,7 +90,7 @@ export class PreviousSendsService {
     // Broadcasts are listed to people who may read broadcasts (their names and numbers are that screen's); campaigns to everyone here.
     const ctx = RequestContextStore.require();
     const mayBroadcasts = Boolean(
-      ctx.grants && this.rbac.can(ctx.grants, 'bcast.broadcasts.read').allowed,
+      ctx.grants && this.rbac.can(ctx.grants, 'camp.campaigns.read').allowed,
     );
     const b = BROADCAST_OUTCOME;
     const broadcasts = !mayBroadcasts

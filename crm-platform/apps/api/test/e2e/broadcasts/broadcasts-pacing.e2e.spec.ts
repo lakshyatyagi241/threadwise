@@ -317,7 +317,7 @@ describe('TW-BCAST-022: pause and resume by hand', () => {
 
     const other = await arrange('m2b', 1);
     expect((await post(other.t.admin, b.uuid)).status).toBe(404);
-    const viewer = await api.member(a.t, 'viewer', [['bcast.broadcasts.read']]);
+    const viewer = await api.member(a.t, 'viewer', [['camp.campaigns.read']]);
     expect((await post(viewer.token, b.uuid)).status).toBe(403);
   });
 

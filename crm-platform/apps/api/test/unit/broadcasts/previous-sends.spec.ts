@@ -70,7 +70,7 @@ describe('the picker of previous sends', () => {
   it('lists broadcasts only to a person who may read broadcasts; campaigns to everyone here', async () => {
     const yes = await run(true);
     expect(yes.execute).toHaveBeenCalledTimes(2);
-    expect(yes.rbac.can).toHaveBeenCalledWith(expect.anything(), 'bcast.broadcasts.read');
+    expect(yes.rbac.can).toHaveBeenCalledWith(expect.anything(), 'camp.campaigns.read');
     const no = await run(false);
     expect(no.execute).toHaveBeenCalledTimes(1);
   });

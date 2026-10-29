@@ -437,7 +437,7 @@ describe('TW-BCAST-012 and 009: refusals', () => {
     expect(res.body.code).toBe('PLAN_LIMIT_REACHED');
   });
 
-  it('needs the bcast.broadcasts.create permission', async () => {
+  it('needs the camp.campaigns.create permission', async () => {
     const member = await api.member(t, 'viewer', []);
     const res = await api
       .http()
