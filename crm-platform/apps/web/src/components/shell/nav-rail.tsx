@@ -221,7 +221,7 @@ export function NavRail({
     // The rail is fixed to the viewport (sticky would stop following once the page is taller than its wrapper); the wrapper only
     // keeps its width in the layout so the page content starts beside it.
     <div className="hidden w-[4.5rem] shrink-0 md:block">
-      <aside className="fixed inset-y-0 start-0 z-30 flex w-[4.5rem] flex-col border-e border-nav-border bg-nav text-nav-foreground">
+      <aside className="fixed inset-y-0 start-0 z-[45] flex w-[4.5rem] flex-col border-e border-nav-border bg-nav text-nav-foreground">
         <div className="flex h-14 shrink-0 items-center justify-center border-b border-nav-border">
           <PanelBrand collapsed />
         </div>
