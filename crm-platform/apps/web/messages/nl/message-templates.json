@@ -266,7 +266,8 @@
         "name": "Naam van het sjabloon",
         "nameHint": "Alleen a-z, 0-9 en _, maximaal 60 tekens.",
         "nameTaken": "Deze naam is al in gebruik voor deze taal op dit nummer.",
-        "language": "Taal"
+        "language": "Taal",
+        "categoryLocked": "Meta staat niet toe dat de categorie van een goedgekeurde sjabloon wordt gewijzigd."
       },
       "auth": {
         "title": "Eenmalige toegangscode",

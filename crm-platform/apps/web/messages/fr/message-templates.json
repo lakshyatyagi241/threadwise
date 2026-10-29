@@ -266,7 +266,8 @@
         "name": "Nom du modèle",
         "nameHint": "a-z, 0-9 et _ uniquement, 60 caractères maximum.",
         "nameTaken": "Ce nom est déjà utilisé pour cette langue sur ce numéro.",
-        "language": "Langue"
+        "language": "Langue",
+        "categoryLocked": "Meta ne permet pas de modifier la catégorie d’un modèle approuvé."
       },
       "auth": {
         "title": "Code à usage unique",

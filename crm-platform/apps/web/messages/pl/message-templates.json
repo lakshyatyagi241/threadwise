@@ -266,7 +266,8 @@
         "name": "Nazwa szablonu",
         "nameHint": "Tylko litery a–z, cyfry 0–9 i _, do 60 znaków.",
         "nameTaken": "Ta nazwa jest już używana dla tego języka w tym numerze.",
-        "language": "Język"
+        "language": "Język",
+        "categoryLocked": "Meta nie pozwala zmienić kategorii zatwierdzonego szablonu."
       },
       "auth": {
         "title": "Jednorazowy kod dostępu",

@@ -266,7 +266,8 @@
         "name": "Nome del template",
         "nameHint": "Solo a-z, 0-9 e _, fino a 60 caratteri.",
         "nameTaken": "Questo nome è già usato per questa lingua su questo numero.",
-        "language": "Lingua"
+        "language": "Lingua",
+        "categoryLocked": "Meta non consente di cambiare la categoria di un modello approvato."
       },
       "auth": {
         "title": "Password monouso",

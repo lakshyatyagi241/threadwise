@@ -4,6 +4,7 @@ import {
   STATUSES,
   canDuplicate,
   canEdit,
+  categoryLocked,
   isLive,
   statusGroupOf,
   canRefresh,
@@ -93,5 +94,18 @@ describe('status model', () => {
     expect(canRefresh('draft', null)).toBe(false);
     expect(canRefresh('draft', 'meta-1')).toBe(true);
     expect(canRefresh('pending', null)).toBe(true);
+  });
+});
+
+describe('the category of a template Meta holds', () => {
+  it('is fixed once Meta approved it, and open on a paused, rejected, draft or pending one', () => {
+    expect(categoryLocked('approved', 'M1')).toBe(true);
+    expect(categoryLocked('paused', 'M1')).toBe(false);
+    expect(categoryLocked('rejected', 'M1')).toBe(false);
+    expect(categoryLocked('draft', null)).toBe(false);
+    expect(categoryLocked('pending', null)).toBe(false);
+  });
+  it('is open for an approved row Meta does not hold (no Meta id)', () => {
+    expect(categoryLocked('approved', null)).toBe(false);
   });
 });

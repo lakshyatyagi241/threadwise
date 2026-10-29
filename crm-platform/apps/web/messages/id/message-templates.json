@@ -266,7 +266,8 @@
         "name": "Nama templat",
         "nameHint": "Hanya a-z, 0-9, dan _, maksimal 60 karakter.",
         "nameTaken": "Nama ini sudah dipakai untuk bahasa ini di nomor ini.",
-        "language": "Bahasa"
+        "language": "Bahasa",
+        "categoryLocked": "Meta tidak mengizinkan perubahan kategori templat yang sudah disetujui."
       },
       "auth": {
         "title": "Kode sandi sekali pakai",

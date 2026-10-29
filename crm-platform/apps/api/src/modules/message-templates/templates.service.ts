@@ -402,6 +402,20 @@ export class TemplatesService {
           { path: 'name', message: 'Create a new template to use another name or language.' },
         ]);
 
+      // Meta does not let the category of an approved template change (a paused or rejected one may): refuse it here, whatever the client sent.
+      if (
+        statusOf(current) === 'approved' &&
+        current.metaTemplateId &&
+        current.metaCategory &&
+        prepared.metaCategory.toUpperCase() !== current.metaCategory.toUpperCase()
+      )
+        throw AppError.validation('The category of an approved template cannot change', [
+          {
+            path: 'metaCategory',
+            message: 'Meta does not allow changing the category of an approved template.',
+          },
+        ]);
+
       // The same media type keeps the handle already stored unless a new one came with the form.
       const sameMedia = prepared.attachmentType === (current.attachmentType ?? null);
       const handle = prepared.headerHandle ?? (sameMedia ? current.attachmentFile : null);

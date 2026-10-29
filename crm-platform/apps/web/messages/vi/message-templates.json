@@ -266,7 +266,8 @@
         "name": "Tên mẫu",
         "nameHint": "Chỉ a-z, 0-9 và _, tối đa 60 ký tự.",
         "nameTaken": "Tên này đã được dùng cho ngôn ngữ này trên số này.",
-        "language": "Ngôn ngữ"
+        "language": "Ngôn ngữ",
+        "categoryLocked": "Meta không cho phép đổi danh mục của mẫu đã được duyệt."
       },
       "auth": {
         "title": "Mã xác minh dùng một lần",

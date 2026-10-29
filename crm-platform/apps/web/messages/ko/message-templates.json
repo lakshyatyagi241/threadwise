@@ -266,7 +266,8 @@
         "name": "템플릿 이름",
         "nameHint": "a-z, 0-9, _만 사용할 수 있으며 최대 60자입니다.",
         "nameTaken": "이 번호에서 이 언어로 이미 사용 중인 이름입니다.",
-        "language": "언어"
+        "language": "언어",
+        "categoryLocked": "Meta는 승인된 템플릿의 카테고리를 변경할 수 없도록 합니다."
       },
       "auth": {
         "title": "일회용 인증 코드",

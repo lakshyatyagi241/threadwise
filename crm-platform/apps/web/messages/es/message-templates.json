@@ -266,7 +266,8 @@
         "name": "Nombre de la plantilla",
         "nameHint": "Solo a-z, 0-9 y _, hasta 60 caracteres.",
         "nameTaken": "Este nombre ya se usa para este idioma en este número.",
-        "language": "Idioma"
+        "language": "Idioma",
+        "categoryLocked": "Meta no permite cambiar la categoría de una plantilla aprobada."
       },
       "auth": {
         "title": "Código de un solo uso",

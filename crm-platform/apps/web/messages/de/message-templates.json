@@ -266,7 +266,8 @@
         "name": "Vorlagenname",
         "nameHint": "Nur a–z, 0–9 und _, bis zu 60 Zeichen.",
         "nameTaken": "Dieser Name ist für diese Sprache bei dieser Nummer bereits vergeben.",
-        "language": "Sprache"
+        "language": "Sprache",
+        "categoryLocked": "Meta erlaubt es nicht, die Kategorie einer genehmigten Vorlage zu ändern."
       },
       "auth": {
         "title": "Einmal-Code",
