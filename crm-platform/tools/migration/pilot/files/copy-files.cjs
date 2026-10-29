@@ -266,6 +266,7 @@ function s3FromEnv(env, kinds) {
     messages: 'S3_BUCKET_MEDIA',
     flows: 'S3_BUCKET_MEDIA',
     widgets: 'S3_BUCKET_MEDIA',
+    templates: 'S3_BUCKET_MEDIA',
     contact_files: 'S3_BUCKET_DOCUMENTS',
   };
   const missing = [...need, ...kinds.map((k) => buckets[k])].filter(
@@ -290,6 +291,7 @@ function s3FromEnv(env, kinds) {
       messages: env[buckets.messages],
       flows: env[buckets.messages],
       widgets: env[buckets.messages],
+      templates: env[buckets.messages],
       contact_files: env[buckets.contact_files],
     },
   };
@@ -642,9 +644,19 @@ async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
           .filter((u, i, a) => a.indexOf(u) === i)
           .map((url) => ({ kind: 'widgets', id: r.id, url, match: url })),
       );
+      // template headers: the Meta copy of the header file (header_sample_url) of a media template whose file is not in our storage yet
+      const tpl = rekey
+        ? { rows: [] }
+        : await db.query(
+            `SELECT id, header_sample_url AS url FROM wa_templates
+              WHERE org_id = $1 AND header_media_key IS NULL AND attachment_type IN ('image', 'video', 'document')
+                AND header_sample_url ~* '^https?://'`,
+            [org.id],
+          );
       return [
         ...flowRefs,
         ...widgetRefs,
+        ...tpl.rows.map((r) => ({ kind: 'templates', id: r.id, url: r.url, match: r.url })),
         ...m.rows.map((r) => ({
           kind: 'messages',
           id: r.id,
@@ -699,7 +711,9 @@ const keyPrefix = (org, g) =>
       ? `flow-media/${org.id}/waboo`
       : g.kind === 'widgets'
         ? `widget-media/${org.id}/waboo`
-        : `contact-files/${org.id}/waboo`;
+        : g.kind === 'templates'
+          ? `template-media/${org.id}/waboo`
+          : `contact-files/${org.id}/waboo`;
 const targetKeyOf = (org, g) =>
   `${keyPrefix(org, g)}/${g.id.key.slice(0, 16)}/${safeName(g.id.path)}`;
 const fullKey = (prefix, k) => (prefix ? `${prefix}/${k}` : k);
@@ -752,6 +766,20 @@ async function applyRows(db, org, g, done, cfg = {}) {
     return applyWidgetRows(db, org, g, `${cfg.flowMediaBase}/${done.objectKey}`);
   if (g.kind === 'flows')
     return applyFlowRows(db, org, g, done, `${cfg.flowMediaBase}/${done.objectKey}`);
+  if (g.kind === 'templates')
+    return tenant(db, org.id, async () => {
+      let changed = 0;
+      for (const r of g.refs) {
+        // header_sample_url stays (the app's own sync keeps it too); header_media_key is the copy the template detail serves
+        const res = await db.query(
+          `UPDATE wa_templates SET header_media_key = $4
+            WHERE org_id = $1 AND id = $2 AND header_sample_url = $3 AND header_media_key IS NULL`,
+          [org.id, r.id, r.url, done.targetKey],
+        );
+        changed += res.rowCount;
+      }
+      return changed;
+    });
   return tenant(db, org.id, async () => {
     let changed = 0;
     for (const r of g.refs) {
@@ -833,7 +861,7 @@ function plan(groups, notUrl, cfg, reg, state, byTable) {
       mismatchedExt++;
   }
   say(
-    `rows referencing a URL: messages=${byTable.messages || 0} contact_files=${byTable.contact_files || 0}  (not a URL: ${notUrl})`,
+    `rows referencing a URL: messages=${byTable.messages || 0} contact_files=${byTable.contact_files || 0} templates=${byTable.templates || 0}  (not a URL: ${notUrl})`,
   );
   say(
     `distinct files (per table): ${groups.length}   duplicate references: ${refsN - groups.length}`,
