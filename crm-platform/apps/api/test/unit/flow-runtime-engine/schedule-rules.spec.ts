@@ -165,9 +165,13 @@ describe('trigger settings from the editor', () => {
       valueKind: 'zero',
       config: { segmentId: 's1' },
     });
+    // "Contact updated" carries the property it watches; empty means any change.
     expect(flbExtractTrigger(node({ kind: 'contact_updated' }))).toMatchObject({
       valueKind: 'zero',
-      config: null,
+      config: { updatedField: '' },
     });
+    expect(
+      flbExtractTrigger(node({ kind: 'contact_updated', updatedField: ' {{order_id}} ' })),
+    ).toMatchObject({ valueKind: 'zero', config: { updatedField: 'order_id' } });
   });
 });

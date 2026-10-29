@@ -1376,7 +1376,9 @@
             "schedule": "Zamanlama: belirli bir tarih ve saatte",
             "shopify_event": "Ticaret: bir Shopify mağaza olayı",
             "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı",
-            "segment_leave": "Kitle: kişi bir segmentten ayrıldığında"
+            "segment_leave": "Kitle: kişi bir segmentten ayrıldığında",
+            "webhook": "Entegrasyon: harici bir sistem webhook'a veri gönderir",
+            "google_sheet": "Entegrasyon: Google Sheets'e yeni bir satır eklenir"
           },
           "tagsLoading": "Etiketler yükleniyor…",
           "tagPick": "— etiket seçin —",
@@ -1475,6 +1477,30 @@
             "updatedField": "Yalnızca bu özellik değiştiğinde",
             "updatedFieldHint": "Her değişiklikte başlatmak için “Herhangi bir özellik” seçili kalsın. Hangi özelliğin değiştiğini belirtmeyen düzenlemeler (bazı içe aktarmalar ve toplu işlemler), tek bir özelliği izleyen akışı başlatmaz.",
             "updatedAny": "Herhangi bir özellik"
+          },
+          "outside": {
+            "saveFirst": "Önce akışı kaydedin. Webhook adresi kaydedilmiş akışa aittir.",
+            "addressLabel": "Webhook adresi",
+            "addressHint": "Diğer sisteminiz bu adrese JSON gövdeli bir POST gönderir. Her akışın kendi adresi vardır.",
+            "loading": "Adres yükleniyor…",
+            "unavailable": "Adres yüklenemedi. Akışları görüntüleme yetkinizi kontrol edip tekrar deneyin.",
+            "copy": "Kopyala",
+            "copied": "Webhook adresi kopyalandı",
+            "notLive": "Bu adres akışı yalnızca yayınlandığında ve etkin olduğunda başlatır. O zamana kadar “bulunamadı” yanıtı verir.",
+            "sampleLabel": "Dene",
+            "mapping": "Kişi, gövdedeki \"phone\" alanıyla (telefon yoksa \"email\" ile) bulunur ve yeniyse oluşturulur; \"name\" yeni kişide saklanır. Gövdedeki her alan {fieldToken} olarak kullanabileceğiniz bir değişken olur, örneğin {orderToken}; customer.city gibi iç içe bir alan {cityToken} olur. Yeniden denenen bir gönderim akışı iki kez başlatmasın diye Idempotency-Key başlığı (veya X-Delivery-Id) gönderin; olmazsa aynı gövde aynı gönderim sayılır. Gövde en fazla 64 KB olabilir.",
+            "secret": "Bu adrese sahip herkes akışı başlatabilir. Yalnızca bunu yapması gereken sistemle paylaşın, herkese açık yerde paylaşmayın.",
+            "sheetLabel": "Elektronik tablo",
+            "tabLabel": "Sekme adı",
+            "tabHint": "İlk sekme için boş bırakın.",
+            "phoneColumn": "Telefon sütunu",
+            "phoneColumnHint": "Kişinin telefon numarasını içeren sütunun başlığı. Boş bırakılırsa Phone, Mobile ve WhatsApp başlıkları denenir.",
+            "emailColumn": "E-posta sütunu (isteğe bağlı)",
+            "nameColumn": "Ad sütunu (isteğe bağlı)",
+            "intervalLabel": "Yeni satırları şu aralıkla kontrol et",
+            "intervalHint": "Google satır eklendiğinde sinyal göndermez, bu yüzden tablo bu zamanlamaya göre kontrol edilir.",
+            "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+            "sheetNote": "Yalnızca bu akışı yayınladıktan sonra eklenen satırlar akışı başlatır; tabloda zaten bulunan satırlar başlatmaz. Kişi telefon (veya e-posta) sütunundan bulunur ya da oluşturulur ve her sütun başlığının adını taşıyan bir değişken olur, örneğin {topicToken}. Telefonu veya e-postası olmayan satır atlanır. Google hesabının Sheets izniyle bağlı olması gerekir."
           }
         }
       },
@@ -2537,7 +2563,9 @@
         "schedule": "zamanlamaya göre",
         "shopify_event": "Shopify etkinliğinde",
         "woocommerce_event": "WooCommerce etkinliğinde",
-        "segment_leave": "segmentten ayrılınca"
+        "segment_leave": "segmentten ayrılınca",
+        "webhook": "webhook ile",
+        "google_sheet": "yeni satırda"
       },
       "ports": {
         "manual": "manuel",

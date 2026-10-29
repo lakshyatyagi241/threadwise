@@ -1808,7 +1808,9 @@
             "schedule": "Programmazione: a una data e ora",
             "shopify_event": "Commercio: un evento dello store Shopify",
             "woocommerce_event": "Commercio: un evento dello store WooCommerce",
-            "segment_leave": "Pubblico: quando un contatto esce da un segmento"
+            "segment_leave": "Pubblico: quando un contatto esce da un segmento",
+            "webhook": "Integrazione: un sistema esterno invia dati a un webhook",
+            "google_sheet": "Integrazione: viene aggiunta una nuova riga a un Google Sheet"
           },
           "tagsLoading": "Caricamento tag…",
           "tagPick": "— scegli tag —",
@@ -1907,6 +1909,30 @@
             "updatedField": "Solo quando questa proprietà cambia",
             "updatedFieldHint": "Lascia «Qualsiasi proprietà» per avviare a ogni modifica. Le modifiche che non indicano quale proprietà è cambiata (alcune importazioni e azioni di massa) non avviano un flusso che osserva una proprietà.",
             "updatedAny": "Qualsiasi proprietà"
+          },
+          "outside": {
+            "saveFirst": "Salva prima il flusso. L’indirizzo del webhook appartiene al flusso salvato.",
+            "addressLabel": "Indirizzo del webhook",
+            "addressHint": "Il tuo altro sistema invia una richiesta POST con un corpo JSON a questo indirizzo. Ogni flusso ha il proprio.",
+            "loading": "Caricamento dell’indirizzo…",
+            "unavailable": "Impossibile caricare l’indirizzo. Verifica di poter visualizzare i flussi, poi riprova.",
+            "copy": "Copia",
+            "copied": "Indirizzo del webhook copiato",
+            "notLive": "Questo indirizzo avvia il flusso solo quando è pubblicato e attivo. Fino ad allora risponde “non trovato”.",
+            "sampleLabel": "Prova",
+            "mapping": "Il contatto viene individuato dal campo \"phone\" del corpo (o da \"email\" se manca il telefono) e creato se è nuovo; \"name\" viene salvato su un nuovo contatto. Ogni campo del corpo diventa una variabile utilizzabile come {fieldToken}, ad esempio {orderToken}; un campo annidato come customer.city diventa {cityToken}. Invia un’intestazione Idempotency-Key (o X-Delivery-Id) in modo che un nuovo invio non avvii il flusso due volte; senza, un corpo identico conta come lo stesso invio. I corpi sono limitati a 64 KB.",
+            "secret": "Chiunque abbia questo indirizzo può avviare il flusso. Condividilo solo con il sistema autorizzato e non pubblicarlo.",
+            "sheetLabel": "Foglio di calcolo",
+            "tabLabel": "Nome della scheda",
+            "tabHint": "Lascia vuoto per la prima scheda.",
+            "phoneColumn": "Colonna del telefono",
+            "phoneColumnHint": "L’intestazione della colonna che contiene il numero di telefono del contatto. Se vuota, si provano le intestazioni Phone, Mobile e WhatsApp.",
+            "emailColumn": "Colonna email (facoltativa)",
+            "nameColumn": "Colonna nome (facoltativa)",
+            "intervalLabel": "Controlla le nuove righe ogni",
+            "intervalHint": "Google non invia alcun segnale quando viene aggiunta una riga, quindi il foglio viene controllato con questa frequenza.",
+            "minutes": "{count, plural, one {# minuto} other {# minuti}}",
+            "sheetNote": "Solo le righe aggiunte dopo la pubblicazione di questo flusso lo avviano; quelle già presenti nel foglio mai. Il contatto viene trovato o creato dalla colonna del telefono (o dell’email) e ogni colonna diventa una variabile con il nome della sua intestazione, ad esempio {topicToken}. Una riga senza telefono né email viene ignorata. Richiede un account Google collegato con il permesso Sheets."
           }
         }
       },
@@ -2395,7 +2421,9 @@
         "schedule": "su pianificazione",
         "shopify_event": "all'evento Shopify",
         "woocommerce_event": "all'evento WooCommerce",
-        "segment_leave": "all'uscita dal segmento"
+        "segment_leave": "all'uscita dal segmento",
+        "webhook": "su webhook",
+        "google_sheet": "su nuova riga"
       },
       "ports": {
         "manual": "manuale",

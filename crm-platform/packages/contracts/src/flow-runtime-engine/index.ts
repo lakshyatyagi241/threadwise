@@ -35,6 +35,8 @@ export const FLOW_TRIGGER_KINDS = [
   'schedule',
   'shopify_event',
   'woocommerce_event',
+  'webhook',
+  'google_sheet',
 ] as const;
 export type FlowTriggerKind = (typeof FLOW_TRIGGER_KINDS)[number];
 
@@ -69,6 +71,8 @@ export const FLOW_RUN_SOURCES = [
   'date_field_match',
   'schedule',
   'ecom_event',
+  'flow_webhook',
+  'sheet_row',
   'manual',
   'api',
   'routing',
@@ -571,3 +575,21 @@ export const retryManyResultSchema = z.object({
   ),
 });
 export type RetryManyResult = z.infer<typeof retryManyResultSchema>;
+
+// --- the Webhook trigger (an outside system starts a flow) --------------------------------------------------------------------
+
+/** The most a flow-hook body may hold. The JSON parser reads it before any code of the route runs, so the cap is a body-limit class. */
+export const FLOW_HOOK_MAX_BODY_BYTES = 65_536;
+/** The header a sender may name its delivery with; a repeat of the same value starts nothing. Without it the body's hash names it. */
+export const FLOW_HOOK_DELIVERY_HEADERS = ['idempotency-key', 'x-delivery-id'] as const;
+
+/** `GET /flow-runtime/flows/:id/webhook`: where an outside system posts to start this flow. The token is the credential. */
+export const flowWebhookInfoSchema = z.object({
+  /** `/v2/public/flow-hooks/<flow>/<token>`, always present. */
+  path: z.string(),
+  /** The full address when the server knows its public address; null otherwise (the form then shows the path). */
+  url: z.string().nullable(),
+  /** True when the flow can start from it now: published, active, with a Webhook trigger. The address works only then. */
+  live: z.boolean(),
+});
+export type FlowWebhookInfo = z.infer<typeof flowWebhookInfoSchema>;

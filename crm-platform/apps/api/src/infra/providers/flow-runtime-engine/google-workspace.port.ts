@@ -81,6 +81,12 @@ export interface SheetRead {
   limit: number;
 }
 
+export interface SheetGridRead {
+  sheetId: string;
+  /** Empty means the first tab. */
+  tabName: string;
+}
+
 export interface DocGenerate {
   templateId: string;
   newTitle: string;
@@ -117,6 +123,11 @@ export interface GoogleWorkspacePort {
   appendSheetRows(orgId: number, req: SheetAppendRows): Promise<void>;
   /** Rows (header to cell) whose `matchColumn` equals `matchValue`; every row when no column is given. */
   readSheetRows(orgId: number, req: SheetRead): Promise<Array<Record<string, string>>>;
+  /**
+   * Everything in the tab as the sheet shows it: row 1 (the headers) first, rows in order, a blank row in the middle as `[]`, trailing
+   * blank rows left off. For the Google Sheet trigger, which counts rows to find the new ones.
+   */
+  readSheetGrid(orgId: number, req: SheetGridRead): Promise<string[][]>;
   /**
    * Copies the template, fills its `{{placeholders}}`, optionally shares it by link. The copy is the result: a placeholder fill or a share
    * that fails afterwards is reported in `warnings` and does not lose the link (Reference carried on past both).

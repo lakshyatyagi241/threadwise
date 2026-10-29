@@ -5,306 +5,188 @@
     "contacts_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "record.contacts.create"
-      ],
-      "read": [
-        "record.contacts.read"
-      ],
-      "update": [
-        "record.contacts.update"
-      ],
-      "delete": [
-        "record.contacts.delete"
-      ]
+      "create": ["record.contacts.create"],
+      "read": ["record.contacts.read"],
+      "update": ["record.contacts.update"],
+      "delete": ["record.contacts.delete"]
     },
     "deal_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "record.deals.create"
-      ],
-      "read": [
-        "record.deals.read"
-      ],
-      "update": [
-        "record.deals.update"
-      ],
-      "delete": [
-        "record.deals.delete"
-      ]
+      "create": ["record.deals.create"],
+      "read": ["record.deals.read"],
+      "update": ["record.deals.update"],
+      "delete": ["record.deals.delete"]
     },
     "marketing_list_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "record.contact-groups.create"
-      ],
-      "read": [
-        "record.contact-groups.read"
-      ],
-      "update": [
-        "record.contact-groups.update"
-      ],
-      "delete": [
-        "record.contact-groups.delete"
-      ]
+      "create": ["record.contact-groups.create"],
+      "read": ["record.contact-groups.read"],
+      "update": ["record.contact-groups.update"],
+      "delete": ["record.contact-groups.delete"]
     },
     "segments_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "record.segments.create"
-      ],
-      "read": [
-        "record.segments.read"
-      ],
-      "update": [
-        "record.segments.update"
-      ],
-      "delete": [
-        "record.segments.delete"
-      ]
+      "create": ["record.segments.create"],
+      "read": ["record.segments.read"],
+      "update": ["record.segments.update"],
+      "delete": ["record.segments.delete"]
     },
     "task_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "record.tasks.create"
-      ],
-      "read": [
-        "record.tasks.read"
-      ],
-      "update": [
-        "record.tasks.update"
-      ],
-      "delete": [
-        "record.tasks.delete"
-      ]
+      "create": ["record.tasks.create"],
+      "read": ["record.tasks.read"],
+      "update": ["record.tasks.update"],
+      "delete": ["record.tasks.delete"]
     },
     "automation_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "flb.flows.create"
-      ],
-      "read": [
-        "flb.flows.read"
-      ],
-      "update": [
-        "flb.flows.update"
-      ],
-      "delete": [
-        "flb.flows.delete"
-      ]
+      "create": ["flb.flows.create"],
+      "read": ["flb.flows.read"],
+      "update": ["flb.flows.update"],
+      "delete": ["flb.flows.delete"]
     },
     "whatsapp_broadcast_crud": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "camp.campaigns.create"
-      ],
-      "read": [
-        "camp.campaigns.read",
-        "bcast.broadcasts.read"
-      ],
-      "update": [
-        "camp.campaigns.update"
-      ],
-      "delete": [
-        "camp.campaigns.delete"
-      ]
+      "create": ["camp.campaigns.create"],
+      "read": ["camp.campaigns.read"],
+      "update": ["camp.campaigns.update"],
+      "delete": ["camp.campaigns.delete"]
     },
     "whatsapp_template": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "create": [
-        "tpl.templates.create"
-      ],
-      "read": [
-        "tpl.templates.read"
-      ],
+      "create": ["tpl.templates.create"],
+      "read": ["tpl.templates.read"],
       "update": [],
-      "delete": [
-        "tpl.templates.delete"
-      ],
+      "delete": ["tpl.templates.delete"],
       "note": "WaDesk has no template update key"
     },
     "analytics": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "dash.analytics.read",
-        "dash.dashboard.read"
-      ]
+      "use": ["dash.analytics.read", "dash.dashboard.read"]
     },
     "agent_summary": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "dash.analytics.read",
-        "dash.dashboard.read"
-      ]
+      "use": ["dash.analytics.read", "dash.dashboard.read"]
     },
     "bot_summary": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "dash.analytics.read",
-        "dash.dashboard.read"
-      ]
+      "use": ["dash.analytics.read", "dash.dashboard.read"]
     },
     "conversation_summary": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "dash.analytics.read",
-        "dash.dashboard.read"
-      ]
+      "use": ["dash.analytics.read", "dash.dashboard.read"]
     },
     "whatsapp_insights": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "dash.analytics.read",
-        "dash.dashboard.read"
-      ]
+      "use": ["dash.analytics.read", "dash.dashboard.read"]
     },
     "conversation_inbox": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.read",
-        "inbox.conversation.reply"
-      ]
+      "use": ["inbox.conversation.read", "inbox.conversation.reply"]
     },
     "can_view_all_chats_tab": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.read"
-      ],
+      "use": ["inbox.conversation.read"],
       "scope": "all"
     },
     "can_assign_conversations": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.assign"
-      ]
+      "use": ["inbox.conversation.assign"]
     },
     "can_close_conversation": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.resolve"
-      ]
+      "use": ["inbox.conversation.resolve"]
     },
     "live_chat_agent": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.assign_self"
-      ]
+      "use": ["inbox.conversation.assign_self"]
     },
     "send_files": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.reply"
-      ]
+      "use": ["inbox.conversation.reply"]
     },
     "user_queries": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.conversation.reply"
-      ]
+      "use": ["inbox.conversation.reply"]
     },
     "manage_conversation_labels": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.tag.manage"
-      ]
+      "use": ["inbox.tag.manage"]
     },
     "manage_canned_responses": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.savedreply.manage"
-      ]
+      "use": ["inbox.savedreply.manage"]
     },
     "quick_replies": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.savedreply.manage"
-      ]
+      "use": ["inbox.savedreply.manage"]
     },
     "chat_assignment": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.routing.manage"
-      ]
+      "use": ["inbox.routing.manage"]
     },
     "auto_assignment_rules": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.routing.manage"
-      ]
+      "use": ["inbox.routing.manage"]
     },
     "chat_settings": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.settings.read"
-      ]
+      "use": ["inbox.settings.read"]
     },
     "inactivity_timeouts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.settings.read"
-      ]
+      "use": ["inbox.settings.read"]
     },
     "user_consent": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.settings.read"
-      ]
+      "use": ["inbox.settings.read"]
     },
     "manage_business_hours": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "inbox.settings.read",
-        "inbox.routing.manage"
-      ]
+      "use": ["inbox.settings.read", "inbox.routing.manage"]
     },
     "search_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.read"
-      ]
+      "use": ["record.contacts.read"]
     },
     "can_apply_filters": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.read"
-      ]
+      "use": ["record.contacts.read"]
     },
     "contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.read"
-      ]
+      "use": ["record.contacts.read"]
     },
     "contacts_views": {
       "status": "REVIEWED",
@@ -318,164 +200,117 @@
     "import_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.import"
-      ]
+      "use": ["record.contacts.import"]
     },
     "export_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.export"
-      ]
+      "use": ["record.contacts.export"]
     },
     "export_segment_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.export"
-      ]
+      "use": ["record.contacts.export"]
     },
     "export_contacts_from_list": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.export"
-      ]
+      "use": ["record.contacts.export"]
     },
     "export_history": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.export"
-      ]
+      "use": ["record.contacts.export"]
     },
     "bulk_update_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "assign_contact": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "bulk_assign_contact": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "unassign_contact": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "bulk_unassign_contacts": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "bulk_add_tags": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "remove_tags": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.update"
-      ]
+      "use": ["record.contacts.update"]
     },
     "bulk_delete": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contacts.delete"
-      ]
+      "use": ["record.contacts.delete"]
     },
     "add_contacts_to_list": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contact-groups.update"
-      ]
+      "use": ["record.contact-groups.update"]
     },
     "remove_contacts_from_list": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contact-groups.update"
-      ]
+      "use": ["record.contact-groups.update"]
     },
     "import_contact_to_list": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contact-groups.update"
-      ]
+      "use": ["record.contact-groups.update"]
     },
     "marketing_list": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.contact-groups.read"
-      ]
+      "use": ["record.contact-groups.read"]
     },
     "segments": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.segments.read"
-      ]
+      "use": ["record.segments.read"]
     },
     "task": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.tasks.read"
-      ]
+      "use": ["record.tasks.read"]
     },
     "deal": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.deals.read"
-      ]
+      "use": ["record.deals.read"]
     },
     "deal_management": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.deals.read"
-      ]
+      "use": ["record.deals.read"]
     },
     "companies": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.companies.read"
-      ]
+      "use": ["record.companies.read"]
     },
     "manage_company_properties": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "record.company-properties.read",
-        "record.company-properties.update"
-      ]
+      "use": ["record.company-properties.read", "record.company-properties.update"]
     },
     "manage_contact_properties": {
       "status": "REVIEWED",
@@ -490,103 +325,72 @@
     "bot_builder": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "flow_builder": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "manage_bot": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "bot_settings": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "customize": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "automation": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "whatsapp_flows": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.read"
-      ]
+      "use": ["flb.flows.read"]
     },
     "create_bot": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.create"
-      ]
+      "use": ["flb.flows.create"]
     },
     "delete_bot": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.delete"
-      ]
+      "use": ["flb.flows.delete"]
     },
     "deploy_bot": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flb.flows.publish"
-      ]
+      "use": ["flb.flows.publish"]
     },
     "look_and_feel": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "wgt.widgets.read",
-        "wgt.widgets.update"
-      ]
+      "use": ["wgt.widgets.read", "wgt.widgets.update"]
     },
     "callout": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "wgt.widgets.read",
-        "wgt.widgets.update"
-      ]
+      "use": ["wgt.widgets.read", "wgt.widgets.update"]
     },
     "link_and_qr_code": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "wgt.widgets.read",
-        "wgt.widgets.update"
-      ]
+      "use": ["wgt.widgets.read", "wgt.widgets.update"]
     },
     "enabled_devices": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "wa.devices.read"
-      ]
+      "use": ["wa.devices.read"]
     },
     "manage_bot_knowledgebase": {
       "status": "REVIEWED",
@@ -601,33 +405,22 @@
     "smart_ai": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "aiag.responder.manage"
-      ]
+      "use": ["aiag.responder.manage"]
     },
     "faq_builder": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "faq.entries.read",
-        "faq.entries.create",
-        "faq.entries.update",
-        "faq.entries.delete"
-      ]
+      "use": ["faq.entries.read", "faq.entries.create", "faq.entries.update", "faq.entries.delete"]
     },
     "auto_replies": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "faq.entries.read"
-      ]
+      "use": ["faq.entries.read"]
     },
     "automation_settings": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "flr.runs.read"
-      ]
+      "use": ["flr.runs.read"]
     },
     "api_library": {
       "status": "REVIEWED",
@@ -643,88 +436,62 @@
     "webhook": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "webhooks.read"
-      ]
+      "use": ["webhooks.read"]
     },
     "webhooks": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "webhooks.read"
-      ]
+      "use": ["webhooks.read"]
     },
     "apps": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "market.apps.read"
-      ]
+      "use": ["market.apps.read"]
     },
     "whatsapp_broadcast": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "camp.campaigns.read"
-      ]
+      "use": ["camp.campaigns.read"]
     },
     "broadcast": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "camp.campaigns.read"
-      ]
+      "use": ["camp.campaigns.read"]
     },
     "manage_profile_whatsapp": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "waba.numbers.read"
-      ]
+      "use": ["waba.numbers.read"]
     },
     "manage_roles": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "admin.role.manage"
-      ]
+      "use": ["admin.role.manage"]
     },
     "manage_users": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "admin.user.manage"
-      ]
+      "use": ["admin.user.manage"]
     },
     "users_and_permissions": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "admin.user.manage"
-      ]
+      "use": ["admin.user.manage"]
     },
     "api_keys": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "api.keys.read",
-        "api.keys.create",
-        "api.keys.revoke"
-      ]
+      "use": ["api.keys.read", "api.keys.create", "api.keys.revoke"]
     },
     "add_credits_to_wallet": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "billing.wallet.topup"
-      ]
+      "use": ["billing.wallet.topup"]
     },
     "subscriptions": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "plan.subscription.manage"
-      ]
+      "use": ["plan.subscription.manage"]
     },
     "file_manager": {
       "status": "REVIEWED",
@@ -747,9 +514,7 @@
     "task_outcome": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [
-        "settings.task_outcomes.manage"
-      ],
+      "use": ["settings.task_outcomes.manage"],
       "note": "Settings > Task outcomes (migration 20270126090100)"
     },
     "data_management": {
@@ -795,18 +560,10 @@
       "area": "contacts",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.contacts.read"
-        ],
-        "create": [
-          "record.contacts.create"
-        ],
-        "update": [
-          "record.contacts.update"
-        ],
-        "delete": [
-          "record.contacts.delete"
-        ]
+        "read": ["record.contacts.read"],
+        "create": ["record.contacts.create"],
+        "update": ["record.contacts.update"],
+        "delete": ["record.contacts.delete"]
       }
     },
     {
@@ -814,18 +571,10 @@
       "area": "contact properties",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.contact-properties.read"
-        ],
-        "create": [
-          "record.contact-properties.create"
-        ],
-        "update": [
-          "record.contact-properties.update"
-        ],
-        "delete": [
-          "record.contact-properties.delete"
-        ]
+        "read": ["record.contact-properties.read"],
+        "create": ["record.contact-properties.create"],
+        "update": ["record.contact-properties.update"],
+        "delete": ["record.contact-properties.delete"]
       }
     },
     {
@@ -833,18 +582,10 @@
       "area": "contact groups",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.contact-groups.read"
-        ],
-        "create": [
-          "record.contact-groups.create"
-        ],
-        "update": [
-          "record.contact-groups.update"
-        ],
-        "delete": [
-          "record.contact-groups.delete"
-        ]
+        "read": ["record.contact-groups.read"],
+        "create": ["record.contact-groups.create"],
+        "update": ["record.contact-groups.update"],
+        "delete": ["record.contact-groups.delete"]
       }
     },
     {
@@ -852,18 +593,10 @@
       "area": "segments",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.segments.read"
-        ],
-        "create": [
-          "record.segments.create"
-        ],
-        "update": [
-          "record.segments.update"
-        ],
-        "delete": [
-          "record.segments.delete"
-        ]
+        "read": ["record.segments.read"],
+        "create": ["record.segments.create"],
+        "update": ["record.segments.update"],
+        "delete": ["record.segments.delete"]
       }
     },
     {
@@ -871,18 +604,10 @@
       "area": "deals",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.deals.read"
-        ],
-        "create": [
-          "record.deals.create"
-        ],
-        "update": [
-          "record.deals.update"
-        ],
-        "delete": [
-          "record.deals.delete"
-        ]
+        "read": ["record.deals.read"],
+        "create": ["record.deals.create"],
+        "update": ["record.deals.update"],
+        "delete": ["record.deals.delete"]
       }
     },
     {
@@ -890,18 +615,10 @@
       "area": "companies",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "record.companies.read"
-        ],
-        "create": [
-          "record.companies.create"
-        ],
-        "update": [
-          "record.companies.update"
-        ],
-        "delete": [
-          "record.companies.delete"
-        ]
+        "read": ["record.companies.read"],
+        "create": ["record.companies.create"],
+        "update": ["record.companies.update"],
+        "delete": ["record.companies.delete"]
       }
     },
     {
@@ -909,10 +626,7 @@
       "area": "team inbox",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "inbox.conversation.read",
-          "inbox.conversation.reply"
-        ]
+        "use": ["inbox.conversation.read", "inbox.conversation.reply"]
       }
     },
     {
@@ -920,15 +634,9 @@
       "area": "WhatsApp broadcasts (SMS and email broadcasts have no module in crm-platform: NONE)",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "bcast.broadcasts.read"
-        ],
-        "create": [
-          "bcast.broadcasts.create"
-        ],
-        "delete": [
-          "bcast.broadcasts.delete"
-        ]
+        "read": ["camp.campaigns.read"],
+        "create": ["camp.campaigns.create"],
+        "delete": ["camp.campaigns.delete"]
       }
     },
     {
@@ -936,18 +644,10 @@
       "area": "bot builder",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "flb.flows.read"
-        ],
-        "create": [
-          "flb.flows.create"
-        ],
-        "update": [
-          "flb.flows.update"
-        ],
-        "delete": [
-          "flb.flows.delete"
-        ]
+        "read": ["flb.flows.read"],
+        "create": ["flb.flows.create"],
+        "update": ["flb.flows.update"],
+        "delete": ["flb.flows.delete"]
       }
     },
     {
@@ -955,18 +655,10 @@
       "area": "chat widgets",
       "status": "UNREVIEWED",
       "suggest": {
-        "read": [
-          "wgt.widgets.read"
-        ],
-        "create": [
-          "wgt.widgets.create"
-        ],
-        "update": [
-          "wgt.widgets.update"
-        ],
-        "delete": [
-          "wgt.widgets.delete"
-        ]
+        "read": ["wgt.widgets.read"],
+        "create": ["wgt.widgets.create"],
+        "update": ["wgt.widgets.update"],
+        "delete": ["wgt.widgets.delete"]
       }
     },
     {
@@ -974,10 +666,7 @@
       "area": "members (ADMIN-CLASS: withheld unless approved)",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "admin.user.manage",
-          "org.member.invite"
-        ]
+        "use": ["admin.user.manage", "org.member.invite"]
       }
     },
     {
@@ -985,9 +674,7 @@
       "area": "roles (ADMIN-CLASS: withheld unless approved)",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "admin.role.manage"
-        ]
+        "use": ["admin.role.manage"]
       }
     },
     {
@@ -995,9 +682,7 @@
       "area": "billing (ADMIN-CLASS: withheld unless approved)",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "billing.wallet.read"
-        ]
+        "use": ["billing.wallet.read"]
       }
     },
     {
@@ -1005,9 +690,7 @@
       "area": "dashboard",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "dash.dashboard.read"
-        ]
+        "use": ["dash.dashboard.read"]
       }
     },
     {
@@ -1015,9 +698,7 @@
       "area": "analytics",
       "status": "UNREVIEWED",
       "suggest": {
-        "use": [
-          "dash.analytics.read"
-        ]
+        "use": ["dash.analytics.read"]
       }
     }
   ]

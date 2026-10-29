@@ -256,6 +256,10 @@
         "team": "我团队的记录",
         "team_and_below": "我的团队及下级团队"
       },
+      "creatorScope": {
+        "all": "全局记录",
+        "own": "受限访问(仅自己的记录)"
+      },
       "scopeLegend": "每种记录范围涵盖的内容",
       "scopeHelp": {
         "all": "工作区中的所有记录。",

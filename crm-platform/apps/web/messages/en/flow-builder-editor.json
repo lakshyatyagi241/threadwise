@@ -1406,7 +1406,9 @@
             "date_field_match": "Schedule: relative to a date on the contact (birthday…)",
             "schedule": "Schedule: at a date and time",
             "shopify_event": "Commerce: a Shopify store event",
-            "woocommerce_event": "Commerce: a WooCommerce store event"
+            "woocommerce_event": "Commerce: a WooCommerce store event",
+            "webhook": "Integration: an outside system posts to a webhook",
+            "google_sheet": "Integration: a new row is added to a Google Sheet"
           },
           "tagsLoading": "Loading tags…",
           "tagPick": "— pick tag —",
@@ -1505,6 +1507,30 @@
             "updatedField": "Only when this property changes",
             "updatedFieldHint": "Leave on “Any property” to start on every change. Edits that do not say which property changed (some imports and bulk actions) do not start a flow that watches one property.",
             "updatedAny": "Any property"
+          },
+          "outside": {
+            "saveFirst": "Save the flow first. The webhook address belongs to the saved flow.",
+            "addressLabel": "Webhook address",
+            "addressHint": "Your other system sends a POST with a JSON body to this address. Each flow has its own.",
+            "loading": "Loading the address…",
+            "unavailable": "The address could not be loaded. Check that you may view flows, then try again.",
+            "copy": "Copy",
+            "copied": "Webhook address copied",
+            "notLive": "This address only starts the flow once it is published and active. Until then it answers “not found”.",
+            "sampleLabel": "Try it",
+            "mapping": "The contact is found by the \"phone\" field of the body (or \"email\" when there is no phone) and created when it is new; \"name\" is kept on a new contact. Every field of the body becomes a variable you can use as {fieldToken}, for example {orderToken}; a nested field such as customer.city becomes {cityToken}. Send an Idempotency-Key header (or X-Delivery-Id) so a retried post does not start the flow twice; without it, an identical body counts as the same post. Bodies are limited to 64 KB.",
+            "secret": "Anyone with this address can start the flow. Share it only with the system that should, and do not post it in public.",
+            "sheetLabel": "Spreadsheet",
+            "tabLabel": "Tab name",
+            "tabHint": "Leave empty for the first tab.",
+            "phoneColumn": "Phone column",
+            "phoneColumnHint": "The header of the column that holds the contact's phone number. Empty tries the headers Phone, Mobile and WhatsApp.",
+            "emailColumn": "Email column (optional)",
+            "nameColumn": "Name column (optional)",
+            "intervalLabel": "Check for new rows every",
+            "intervalHint": "Google sends no signal when a row is added, so the sheet is checked on this schedule.",
+            "minutes": "{count, plural, one {# minute} other {# minutes}}",
+            "sheetNote": "Only rows added after you publish this flow start it; the rows already in the sheet never do. The contact is found or created from the phone (or email) column, and every column becomes a variable named after its header, for example {topicToken}. A row with no phone or email is skipped. Needs the Google account connected with the Sheets permission."
           }
         }
       },
@@ -2536,7 +2562,9 @@
         "date_field_match": "on date match",
         "schedule": "on schedule",
         "shopify_event": "on Shopify event",
-        "woocommerce_event": "on WooCommerce event"
+        "woocommerce_event": "on WooCommerce event",
+        "webhook": "on webhook",
+        "google_sheet": "on new sheet row"
       },
       "ports": {
         "manual": "manual",

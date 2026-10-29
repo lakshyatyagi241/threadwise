@@ -18,6 +18,8 @@ import { FlowSender } from './runtime/flow-sender.service';
 import { FlowLaunchService } from './runtime/launch.service';
 import { RunRepository } from './runtime/run.repository';
 import { SubscriberRepository } from './runtime/subscriber.repository';
+import { FlowHookController } from './triggers/flow-hook.controller';
+import { FlowHookService } from './triggers/flow-hook.service';
 import { FlowTriggerService } from './triggers/trigger.service';
 import { FLOW_NODE_EXECUTORS } from './runtime/node-executors';
 import { ActionNodes } from './runtime/nodes/actions/actions-nodes';
@@ -65,7 +67,12 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     CommerceNodesModule,
     IntegrationNodesModule,
   ],
-  controllers: [FlowRuntimeController, FlowRuntimePublicController, OrderingFlowController],
+  controllers: [
+    FlowRuntimeController,
+    FlowRuntimePublicController,
+    OrderingFlowController,
+    FlowHookController,
+  ],
   providers: [
     CryptoService,
     ApiKeyGuard,
@@ -81,6 +88,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
     FlowEngine,
     FlowLaunchService,
     FlowTriggerService,
+    FlowHookService,
     FlowRuntimeService,
     CampaignFlowStarterImpl,
     {

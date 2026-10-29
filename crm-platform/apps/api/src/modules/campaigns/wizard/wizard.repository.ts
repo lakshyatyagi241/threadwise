@@ -4,6 +4,7 @@ import type { Tx } from '@crm/db';
 import type { WizardFollowUpStepSummary } from '@crm/contracts';
 import type { CampaignOptionColumns } from './wizard-blank';
 import { memberTeamIdsSql } from '../../../kernel/rbac/scope';
+import { campaignScopeSql, type CampaignScopeKey } from '../campaign-scope';
 
 /** The SQL of the broadcast wizard: templates, audience sources, the wizard columns of a campaign, series, retries and test sends. */
 
@@ -29,6 +30,7 @@ export interface TemplateListRow {
   parameterFormat: string | null;
   attachmentType: string | null;
   attachmentFile: string | null;
+  headerMediaKey: string | null;
   metaTemplateId: string | null;
   metaStatus: string | null;
   pausedUntil: Date | null;
@@ -241,7 +243,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       ${this.approvedFrom(orgId, defaultEngine)}
@@ -290,7 +292,7 @@ export class WizardRepository {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
-             t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
+             t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
       FROM wa_templates t
@@ -317,6 +319,7 @@ export class WizardRepository {
       parameterFormat: str(r.parameter_format),
       attachmentType: str(r.attachment_type),
       attachmentFile: str(r.attachment_file),
+      headerMediaKey: str(r.header_media_key),
       metaTemplateId: str(r.meta_template_id),
       metaStatus: str(r.meta_status),
       pausedUntil: when(r.paused_until),
@@ -400,9 +403,10 @@ export class WizardRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
+    scope?: CampaignScopeKey,
   ): Promise<WizardCampaignRow | undefined> {
     const res = await tx.execute(
-      sql`${CAMPAIGN_SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid AND c.wizard IS NOT NULL`,
+      sql`${CAMPAIGN_SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid AND c.wizard IS NOT NULL${scope ? campaignScopeSql(scope) : sql``}`,
     );
     const r = res.rows[0] as Raw | undefined;
     return r ? toCampaign(r) : undefined;
@@ -417,11 +421,16 @@ export class WizardRepository {
   }
 
   /** The draft row locked, so two saves or a save and a launch take turns. */
-  async lockCampaign(tx: Tx, orgId: number, uuid: string): Promise<WizardCampaignRow | undefined> {
+  async lockCampaign(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    scope?: CampaignScopeKey,
+  ): Promise<WizardCampaignRow | undefined> {
     await tx.execute(
-      sql`SELECT 1 FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid AND wizard IS NOT NULL FOR UPDATE`,
+      sql`SELECT 1 FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid AND wizard IS NOT NULL${scope ? campaignScopeSql(scope, null) : sql``} FOR UPDATE`,
     );
-    return this.campaignByUuid(tx, orgId, uuid);
+    return this.campaignByUuid(tx, orgId, uuid, scope);
   }
 
   /** Writes what the wizard owns on a campaign row. `retryUntil` and the others are written as given (null clears). */
@@ -526,9 +535,14 @@ export class WizardRepository {
     return Number((res.rows[0] as { id: number | string }).id);
   }
 
-  async seriesByUuid(tx: Tx, orgId: number, uuid: string): Promise<SeriesRow | undefined> {
+  async seriesByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    scope?: CampaignScopeKey,
+  ): Promise<SeriesRow | undefined> {
     const res = await tx.execute(
-      sql`${SERIES_SELECT} WHERE s.org_id = ${orgId} AND s.uuid = ${uuid}::uuid`,
+      sql`${SERIES_SELECT} WHERE s.org_id = ${orgId} AND s.uuid = ${uuid}::uuid${scope ? campaignScopeSql(scope, 's') : sql``}`,
     );
     const r = res.rows[0] as Raw | undefined;
     return r ? toSeries(r) : undefined;
@@ -688,7 +702,7 @@ export class WizardRepository {
     const sortAt = scheduled ? sql`c.run_at` : sql`coalesce(c.last_run_at, c.created_at)`;
     const kind = sql`(CASE WHEN c.series_id IS NOT NULL THEN 'recurring' ELSE c.schedule_type END)`;
     const where = [
-      sql`c.org_id = ${orgId}`,
+      sql`c.org_id = ${orgId}${campaignScopeSql('camp.campaigns.read')}`,
       scheduled
         ? sql`c.wizard IS NOT NULL AND c.series_id IS NULL AND c.status = 'scheduled' AND c.run_at IS NOT NULL`
         : sql`c.status NOT IN ('draft', 'scheduled')`,

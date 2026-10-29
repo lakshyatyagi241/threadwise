@@ -406,7 +406,7 @@ describe('who may see what', () => {
   });
 
   it('needs camp.campaigns.read', async () => {
-    const nobody = await api.member(w.t, 'nobody', [['bcast.broadcasts.read']]);
+    const nobody = await api.member(w.t, 'nobody', [['tpl.templates.read']]);
     expect((await summary(nobody.token, w.camp.uuid)).status).toBe(403);
     expect((await people(nobody.token, w.camp.uuid, 'kind=came_back')).status).toBe(403);
     expect((await get(nobody.token, '/v2/campaigns/summary/forms')).status).toBe(403);

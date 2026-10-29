@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { optionLabel } from '@/lib/option-label';
 import { Button, Checkbox, Input, Popover, Select, Spinner, Textarea } from '@crm/ui';
 import { CONSENT_CHANNELS, type ConsentAction, type ConsentChannel } from '@crm/contracts';
 import { useGroups } from '../api/groups';
@@ -123,8 +124,8 @@ function GroupPicker({
           disabled={groups.isPending}
         >
           {list.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
+            <option key={g.id} value={g.id} title={g.name}>
+              {optionLabel(g.name)}
             </option>
           ))}
         </Select>

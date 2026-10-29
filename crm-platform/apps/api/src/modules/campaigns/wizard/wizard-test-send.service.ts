@@ -192,7 +192,7 @@ export class WizardTestSendService {
   /** The draft, its template, the sender it would go from and a sample contact to resolve the variables for. Throws what the person can fix. */
   async prepare(orgId: number, draftId: string) {
     return this.db.tx(async (tx) => {
-      const row = await this.repo.campaignByUuid(tx, orgId, draftId);
+      const row = await this.repo.campaignByUuid(tx, orgId, draftId, 'camp.campaigns.test');
       if (!row) throw AppError.notFound('Broadcast draft', draftId);
       const draft = draftOf(row);
       const template = draft.templateId
@@ -266,6 +266,22 @@ export class WizardTestSendService {
     });
     const tpl = await this.db.tx((tx) => this.templates.findById(tx, orgId, template.id));
     if (!tpl) throw AppError.notFound('Template');
+
+    // A header file that cannot be linked would leave the header out and Meta would refuse the message (#132012) with no reason.
+    const kind = (tpl.attachmentType ?? '').toLowerCase();
+    if (tpl.headerMediaKey && ['image', 'video', 'document'].includes(kind)) {
+      const links = await this.templates.mediaUrls([tpl.headerMediaKey]);
+      if (
+        !links.has(tpl.headerMediaKey) &&
+        !(tpl.attachmentFile && /^https?:\/\//i.test(tpl.attachmentFile))
+      ) {
+        throw new AppError(
+          ERROR_CODES.CAMP_TEMPLATE_NOT_ALLOWED,
+          'The header file of this template has no public link: header media needs cloud object storage.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
+    }
 
     const resolved = resolveMapping(slots, draft.variables, mergeCtx);
     const rendered = fillText(template.body, 'body', slots, resolved.values) ?? '';
@@ -393,7 +409,7 @@ export class WizardTestSendService {
   async log(uuid: string): Promise<WizardTestLog> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const row = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.test');
       if (!row) throw AppError.notFound('Broadcast draft', uuid);
       const rows = await this.repo.testSends(tx, orgId, row.id, 50);
       const charged = await this.repo.chargesOf(

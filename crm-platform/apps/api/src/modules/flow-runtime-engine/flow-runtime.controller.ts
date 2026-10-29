@@ -33,6 +33,7 @@ import {
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { FlowRuntimeService } from './flow-runtime.service';
+import { FlowHookService } from './triggers/flow-hook.service';
 
 /**
  * Running flows, as the workspace sees it (FLR, TW-FLR-008, 051 to 058): enrol contacts, who is in a flow, pause, resume and retry,
@@ -43,7 +44,21 @@ import { FlowRuntimeService } from './flow-runtime.service';
 @ActorKinds('user')
 @Controller({ path: 'flow-runtime', version: '2' })
 export class FlowRuntimeController {
-  constructor(private readonly svc: FlowRuntimeService) {}
+  constructor(
+    private readonly svc: FlowRuntimeService,
+    private readonly hooks: FlowHookService,
+  ) {}
+
+  @Get('flows/:id/webhook')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: 'The address an outside system posts to, to start this flow (its Webhook trigger)',
+    description:
+      "Carries the flow's secret token: shown only to staff who may read flows, never logged. Works only while the flow is published and active.",
+  })
+  webhook(@Param('id', ParseUUIDPipe) id: string) {
+    return this.hooks.info(id);
+  }
 
   @Get('flows')
   @RequirePermission('flr.runs.read')

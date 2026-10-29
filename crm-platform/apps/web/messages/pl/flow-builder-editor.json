@@ -1376,7 +1376,9 @@
             "schedule": "Harmonogram: o określonej dacie i godzinie",
             "shopify_event": "Handel: zdarzenie sklepu Shopify",
             "woocommerce_event": "Handel: zdarzenie sklepu WooCommerce",
-            "segment_leave": "Odbiorcy: gdy kontakt opuści segment"
+            "segment_leave": "Odbiorcy: gdy kontakt opuści segment",
+            "webhook": "Integracja: zewnętrzny system wysyła dane do webhooka",
+            "google_sheet": "Integracja: do arkusza Google Sheets dodano nowy wiersz"
           },
           "tagsLoading": "Wczytywanie tagów…",
           "tagPick": "— wybierz tag —",
@@ -1475,6 +1477,30 @@
             "updatedField": "Tylko gdy ta właściwość się zmieni",
             "updatedFieldHint": "Zostaw „Dowolna właściwość”, by startować przy każdej zmianie. Edycje, które nie wskazują, która właściwość się zmieniła (niektóre importy i akcje zbiorcze), nie uruchamiają przepływu śledzącego jedną właściwość.",
             "updatedAny": "Dowolna właściwość"
+          },
+          "outside": {
+            "saveFirst": "Najpierw zapisz przepływ. Adres webhooka należy do zapisanego przepływu.",
+            "addressLabel": "Adres webhooka",
+            "addressHint": "Twój drugi system wysyła na ten adres żądanie POST z treścią JSON. Każdy przepływ ma własny adres.",
+            "loading": "Ładowanie adresu…",
+            "unavailable": "Nie udało się wczytać adresu. Sprawdź, czy masz uprawnienia do przeglądania przepływów, i spróbuj ponownie.",
+            "copy": "Kopiuj",
+            "copied": "Skopiowano adres webhooka",
+            "notLive": "Ten adres uruchamia przepływ dopiero po jego opublikowaniu i aktywacji. Wcześniej odpowiada „nie znaleziono”.",
+            "sampleLabel": "Wypróbuj",
+            "mapping": "Kontakt jest wyszukiwany po polu „phone” w treści żądania (lub „email”, gdy nie ma telefonu) i tworzony, jeśli jest nowy; „name” zapisuje się przy nowym kontakcie. Każde pole treści staje się zmienną, której możesz użyć jako {fieldToken}, na przykład {orderToken}; pole zagnieżdżone, takie jak customer.city, staje się {cityToken}. Wyślij nagłówek Idempotency-Key (lub X-Delivery-Id), aby ponowione żądanie nie uruchomiło przepływu dwa razy; bez niego identyczna treść jest traktowana jako to samo żądanie. Treść jest ograniczona do 64 KB.",
+            "secret": "Każdy, kto zna ten adres, może uruchomić przepływ. Udostępniaj go tylko systemowi, który ma do tego prawo, i nie publikuj go publicznie.",
+            "sheetLabel": "Arkusz",
+            "tabLabel": "Nazwa karty",
+            "tabHint": "Pozostaw puste, aby użyć pierwszej karty.",
+            "phoneColumn": "Kolumna telefonu",
+            "phoneColumnHint": "Nagłówek kolumny z numerem telefonu kontaktu. Gdy pole jest puste, próbowane są nagłówki Phone, Mobile i WhatsApp.",
+            "emailColumn": "Kolumna e-mail (opcjonalnie)",
+            "nameColumn": "Kolumna z nazwą (opcjonalnie)",
+            "intervalLabel": "Sprawdzaj nowe wiersze co",
+            "intervalHint": "Google nie wysyła sygnału po dodaniu wiersza, dlatego arkusz jest sprawdzany według tego harmonogramu.",
+            "minutes": "{count, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}",
+            "sheetNote": "Przepływ uruchamiają tylko wiersze dodane po opublikowaniu tego przepływu; wiersze już obecne w arkuszu nigdy go nie uruchamiają. Kontakt jest wyszukiwany lub tworzony na podstawie kolumny telefonu (lub e-mail), a każda kolumna staje się zmienną o nazwie nagłówka, na przykład {topicToken}. Wiersz bez telefonu i e-maila jest pomijany. Wymaga połączonego konta Google z uprawnieniem do Sheets."
           }
         }
       },
@@ -2537,7 +2563,9 @@
         "schedule": "według harmonogramu",
         "shopify_event": "po zdarzeniu Shopify",
         "woocommerce_event": "po zdarzeniu WooCommerce",
-        "segment_leave": "po opuszczeniu segmentu"
+        "segment_leave": "po opuszczeniu segmentu",
+        "webhook": "po webhooku",
+        "google_sheet": "po nowym wierszu"
       },
       "ports": {
         "manual": "ręcznie",

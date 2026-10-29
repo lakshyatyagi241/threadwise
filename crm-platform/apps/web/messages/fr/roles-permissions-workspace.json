@@ -256,6 +256,10 @@
         "team": "Enregistrements de mon équipe",
         "team_and_below": "Mon équipe et sous-équipes"
       },
+      "creatorScope": {
+        "all": "Enregistrements globaux",
+        "own": "Accès restreint (les siens uniquement)"
+      },
       "scopeLegend": "Ce que couvre chaque portée des enregistrements",
       "scopeHelp": {
         "all": "Tous les enregistrements de l’espace de travail.",

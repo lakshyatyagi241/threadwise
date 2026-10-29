@@ -1808,7 +1808,9 @@
             "schedule": "Planning: op een datum en tijd",
             "shopify_event": "Commerce: een Shopify-winkelevent",
             "woocommerce_event": "Commerce: een WooCommerce-winkelevent",
-            "segment_leave": "Doelgroep: wanneer een contact een segment verlaat"
+            "segment_leave": "Doelgroep: wanneer een contact een segment verlaat",
+            "webhook": "Integratie: een extern systeem post naar een webhook",
+            "google_sheet": "Integratie: er wordt een nieuwe rij toegevoegd aan een Google Sheet"
           },
           "tagsLoading": "Tags laden…",
           "tagPick": "— kies tag —",
@@ -1907,6 +1909,30 @@
             "updatedField": "Alleen als deze eigenschap verandert",
             "updatedFieldHint": "Laat “Elke eigenschap” staan om bij elke wijziging te starten. Bewerkingen die niet aangeven welke eigenschap veranderde (sommige importen en bulkacties) starten geen flow die één eigenschap volgt.",
             "updatedAny": "Elke eigenschap"
+          },
+          "outside": {
+            "saveFirst": "Sla eerst de flow op. Het webhookadres hoort bij de opgeslagen flow.",
+            "addressLabel": "Webhookadres",
+            "addressHint": "Je andere systeem stuurt een POST met een JSON-body naar dit adres. Elke flow heeft een eigen adres.",
+            "loading": "Adres laden…",
+            "unavailable": "Het adres kon niet worden geladen. Controleer of je flows mag bekijken en probeer het opnieuw.",
+            "copy": "Kopiëren",
+            "copied": "Webhookadres gekopieerd",
+            "notLive": "Dit adres start de flow pas zodra die is gepubliceerd en actief. Tot die tijd antwoordt het met „niet gevonden”.",
+            "sampleLabel": "Uitproberen",
+            "mapping": "Het contact wordt gevonden via het veld „phone” van de body (of „email” als er geen telefoonnummer is) en aangemaakt als het nieuw is; „name” wordt bewaard bij een nieuw contact. Elk veld van de body wordt een variabele die je kunt gebruiken als {fieldToken}, bijvoorbeeld {orderToken}; een genest veld zoals customer.city wordt {cityToken}. Stuur een Idempotency-Key-header (of X-Delivery-Id) mee zodat een herhaalde post de flow niet twee keer start; zonder header geldt een identieke body als dezelfde post. Bodies zijn beperkt tot 64 KB.",
+            "secret": "Iedereen met dit adres kan de flow starten. Deel het alleen met het systeem dat dat moet kunnen en plaats het nooit openbaar.",
+            "sheetLabel": "Spreadsheet",
+            "tabLabel": "Tabbladnaam",
+            "tabHint": "Laat leeg voor het eerste tabblad.",
+            "phoneColumn": "Telefoonkolom",
+            "phoneColumnHint": "De koptekst van de kolom met het telefoonnummer van het contact. Leeg proberen we de koppen Phone, Mobile en WhatsApp.",
+            "emailColumn": "E-mailkolom (optioneel)",
+            "nameColumn": "Naamkolom (optioneel)",
+            "intervalLabel": "Controleer op nieuwe rijen elke",
+            "intervalHint": "Google stuurt geen signaal als er een rij wordt toegevoegd, dus de sheet wordt volgens dit schema gecontroleerd.",
+            "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+            "sheetNote": "Alleen rijen die zijn toegevoegd nadat je deze flow publiceert, starten de flow; rijen die al in de sheet staan nooit. Het contact wordt gevonden of aangemaakt via de telefoonkolom (of e-mailkolom) en elke kolom wordt een variabele met de naam van de koptekst, bijvoorbeeld {topicToken}. Een rij zonder telefoonnummer of e-mailadres wordt overgeslagen. Hiervoor moet het Google-account zijn gekoppeld met de Sheets-machtiging."
           }
         }
       },
@@ -2395,7 +2421,9 @@
         "schedule": "op schema",
         "shopify_event": "bij Shopify-gebeurtenis",
         "woocommerce_event": "bij WooCommerce-gebeurtenis",
-        "segment_leave": "bij verlaten segment"
+        "segment_leave": "bij verlaten segment",
+        "webhook": "bij webhook",
+        "google_sheet": "bij nieuwe rij"
       },
       "ports": {
         "manual": "handmatig",

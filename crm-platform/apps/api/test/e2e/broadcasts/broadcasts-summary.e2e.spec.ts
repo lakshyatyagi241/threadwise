@@ -116,10 +116,7 @@ describe('GET /v2/broadcasts/:id/summary', () => {
 
   it('follows the broadcast permissions and the form permission', async () => {
     const w = await world();
-    const campaignsOnly = await api.member(w.t, 'camponly', [['camp.campaigns.read']]);
-    expect((await get(campaignsOnly.token, `/v2/broadcasts/${w.b.uuid}/summary`)).status).toBe(403);
-
-    const viewer = await api.member(w.t, 'bviewer', [['bcast.broadcasts.read']]);
+    const viewer = await api.member(w.t, 'bviewer', [['camp.campaigns.read']]);
     const s = campaignSummarySchema.parse(
       (await get(viewer.token, `/v2/broadcasts/${w.b.uuid}/summary`)).body,
     );
