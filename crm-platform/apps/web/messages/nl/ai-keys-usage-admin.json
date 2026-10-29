@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Een sleutel bestaat uit minstens 8 tekens."
-      }
+      },
+      "readOnly": "U kunt de AI-sleutels van de werkruimte zien, maar niet toevoegen, in- of uitschakelen of verwijderen. Vraag een beheerder om de toestemming om AI-sleutels te beheren."
     }
   }
 }
