@@ -21,6 +21,7 @@ The wallet screen shows your message balance and how it has moved in the last 30
 4. Select **Full statement** to open [the statement](/billing/wallet/statement).
 5. On the statement, choose a type, a from and to date, or words to search for, then select **Apply**. **Reset** clears them.
 6. Select **Export CSV** to download the rows that match the filters.
+7. A top-up you paid for online shows **Download invoice** under its description, on the wallet screen and on the statement. It opens the invoice of that purchase, ready to print or save as a PDF. For a top-up brought over from the old platform it is the invoice that platform issued.
 
 > To see what each charge was for, such as the template of a WhatsApp message, an SMS, an email, a call or an AI request, open **Expenses** from the wallet screen. See [Expenses](help:message-expenses).
 
@@ -40,5 +41,6 @@ Seeing the balance needs the permission to view the wallet balance. The statemen
 ## If something looks wrong
 
 - **The balance is not what you expect.** Recent activity can take a moment to arrive. Reload the page; the balance also updates on its own when a message is charged.
+- **A top-up has no Download invoice.** Top-ups paid through the checkout have one, and so do top-ups brought over from the old platform once their invoices have been loaded. Money added by an operator has no invoice here.
 - **No rows match.** Clear the filters with **Reset**.
 - **The export failed.** Try again with a narrower date range.

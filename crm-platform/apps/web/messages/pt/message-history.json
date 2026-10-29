@@ -47,7 +47,10 @@
       "download": "Baixar",
       "rows": "{n} mensagens",
       "keptUntil": "mantida até {when} ({days} dias)",
-      "fromEmail": "Do seu e-mail"
+      "fromEmail": "Do seu e-mail",
+      "hint": "Exportar CSV usa os filtros e as datas escolhidos nesta página. O arquivo é gerado em segundo plano e enviamos um e-mail quando estiver pronto.",
+      "empty": "Ainda não há exportações. Clique em Exportar CSV para receber como arquivo as mensagens que você vê aqui.",
+      "loading": "Carregando exportações"
     },
     "kpi": {
       "label": "Números principais",
@@ -157,7 +160,7 @@
       "ai": "Assistente de IA",
       "api": "API",
       "broadcast": "Transmissão",
-      "broadcast_test": "Envio de teste de transmissão",
+      "broadcast_test": "Envio de teste da campanha",
       "campaign": "Campanha",
       "scheduled": "Agendada",
       "other": "Outro"
@@ -238,7 +241,7 @@
         "ai": "Assistente de IA",
         "api": "API",
         "broadcast": "Transmissão",
-        "broadcast_test": "Envio de teste de transmissão",
+        "broadcast_test": "Envio de teste da campanha",
         "campaign": "Campanha",
         "scheduled": "Mensagem agendada",
         "other": "Outro"

@@ -17,18 +17,19 @@
       "refresh": "Actualizar",
       "newCampaign": "Nueva campaña",
       "tile": {
-        "sent": "Enviados",
+        "sent": "Mensajes enviados",
         "delivered": "Entregados",
         "read": "Leídos",
-        "failed": "Fallidos",
-        "processing": "En proceso",
-        "campaigns": "{count} campañas",
+        "failed": "Mensajes fallidos",
+        "processing": "Campañas enviando",
+        "campaigns": "de {count, plural, one {# campaña} other {# campañas}}",
         "inFlight": "en curso",
         "awaiting": "en espera",
-        "queued": "{count} en cola",
+        "queued": "{count} programadas para empezar",
         "deliveredRate": "{rate}% entregados",
         "readRate": "{rate}% de lectura",
-        "failedCampaigns": "{count} campañas fallidas"
+        "failedCampaigns": "{count, plural, one {# campaña marcada} other {# campañas marcadas}} como fallida",
+        "note": "Enviados, Entregados, Leídos y Fallidos cuentan mensajes, y un mensaje fallido no se cuenta en Enviados. La línea pequeña bajo cada número cuenta campañas. Todo sigue el rango de fechas elegido abajo: {range}."
       },
       "range": {
         "all": "Todo el tiempo",
@@ -280,7 +281,8 @@
         "split": "Reparto de la variante A: {a}%",
         "splitHint": "La variante B recibe el resto de la audiencia. Define el contenido de la variante B en el paso de redacción.",
         "pickSender": "— Selecciona un remitente —",
-        "notVerified": "Aún no verificado: el flujo guiado estará disponible cuando el número esté verificado."
+        "notVerified": "Aún no verificado: el flujo guiado estará disponible cuando el número esté verificado.",
+        "typeFromTemplate": "Vienes de una plantilla, así que esta campaña envía esa plantilla. Un mensaje personalizado o un flujo se crea desde Campañas > Crear."
       },
       "audience": {
         "title": "Audiencia",
@@ -1628,7 +1630,7 @@
         "retries": "Reintentos",
         "retriesOn": "Activados, hasta el {date}",
         "retriesOff": "Desactivados",
-        "recurringNote": "Cada ejecución llega a la audiencia tal como esté en ese momento, así que el número de destinatarios puede cambiar."
+        "recurringNote": "Ahora no se envía nada. La primera ejecución empieza a la hora indicada arriba y cada ejecución aparece después en el Historial como una fila propia. Hasta entonces, encuentra esta campaña en Recurrentes. Cada ejecución va a la audiencia tal como es en ese momento, así que el número de destinatarios puede cambiar."
       },
       "status": {
         "back": "Volver a campañas",
@@ -1842,7 +1844,8 @@
         "add": "Añadir una plantilla",
         "count": "{used} de {max} plantillas",
         "limitReached": "Límite alcanzado: {max} plantillas.",
-        "variablesTitle": "Variables de la plantilla {position}: {name}"
+        "variablesTitle": "Variables de la plantilla {position}: {name}",
+        "variablesLater": "{count, plural, one {# variable toma} other {# variables toman}} su valor de la asignación, no de esta vista previa."
       }
     },
     "history": {

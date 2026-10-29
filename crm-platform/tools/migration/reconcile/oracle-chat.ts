@@ -553,8 +553,11 @@ export async function oracleChat(
       if (v && (live === null || v.ms > live.ms)) live = v;
     }
     const st = live?.status ?? newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
+    // a chat Waboo's inbox never listed (no session, no status on any turn) loads closed, when the dump has sessions at all
     const status: 'open' | 'closed' =
-      o.threadStatus === 'closed' || st === 'closed' ? 'closed' : 'open';
+      o.threadStatus === 'closed' || st === 'closed' || (st === null && o.sessionStatus.size > 0)
+        ? 'closed'
+        : 'open';
     const ag = newestWith((r) => r.agentId !== null);
     let assigneeId: number | null = null;
     if (ag && o.assignAgents && o.hasUsers) assigneeId = o.userId(ag.agentId!) ?? null;

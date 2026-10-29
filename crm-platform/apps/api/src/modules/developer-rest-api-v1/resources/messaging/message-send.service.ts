@@ -202,6 +202,7 @@ export class MessageSendService {
         clientMessageId: randomUUID(),
         content,
         sender: { kind: 'bot' },
+        origin: 'api',
       });
       return queued.message.id;
     } catch (err) {

@@ -25,12 +25,22 @@ Rules:
 4. Keep tone, language, and intent consistent with the brief.
 5. Output ONLY the JSON object. No explanation. No code fences.`;
 
+/** A Meta language code as the model reads it best: its English name beside the code ("Hindi (hi)"). */
+export function languageForPrompt(code: string): string {
+  try {
+    const name = new Intl.DisplayNames(['en'], { type: 'language' }).of(code.replace('_', '-'));
+    return name && name !== code ? `${name} (${code})` : code;
+  } catch {
+    return code;
+  }
+}
+
 /** The brief as the model reads it: one line per field the person filled in. */
 export function templateBriefLines(i: TplAiGenerateInput): string[] {
   const lines = [
     `Business name: ${i.businessName}`,
     `Template category (Meta review path): ${i.metaCategory.toLowerCase()}`,
-    `Language: ${i.language}`,
+    `Language: ${languageForPrompt(i.language)}`,
   ];
   if (i.industry) lines.push(`Industry: ${i.industry}`);
   if (i.occasion) lines.push(`Occasion: ${i.occasion}`);

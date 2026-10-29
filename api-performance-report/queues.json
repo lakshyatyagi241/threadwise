@@ -1,0 +1,1044 @@
+{
+ "redis PING": {
+  "n": 2000,
+  "min": 0.037,
+  "p50": 0.051,
+  "p95": 0.077,
+  "p99": 0.127,
+  "max": 1.08,
+  "mean": 0.057
+ },
+ "redis SET 100B": {
+  "n": 2000,
+  "min": 0.014,
+  "p50": 0.047,
+  "p95": 0.066,
+  "p99": 0.106,
+  "max": 3.141,
+  "mean": 0.05
+ },
+ "redis GET 100B": {
+  "n": 2000,
+  "min": 0.032,
+  "p50": 0.042,
+  "p95": 0.051,
+  "p99": 0.083,
+  "max": 1.206,
+  "mean": 0.045
+ },
+ "redis GET 100KB": {
+  "n": 1000,
+  "min": 0.082,
+  "p50": 0.145,
+  "p95": 0.22,
+  "p99": 0.664,
+  "max": 1.816,
+  "mean": 0.145
+ },
+ "redis EVAL (lua incr)": {
+  "n": 1000,
+  "min": 0.04,
+  "p50": 0.045,
+  "p95": 0.065,
+  "p99": 0.092,
+  "max": 2.042,
+  "mean": 0.05
+ },
+ "redis pipeline 50 SET": {
+  "n": 500,
+  "min": 0.113,
+  "p50": 0.124,
+  "p95": 0.182,
+  "p99": 2.259,
+  "max": 3.041,
+  "mean": 0.164
+ },
+ "redisInfo": {
+  "redis_version": "7.0.15",
+  "used_memory_human": "8.47M",
+  "connected_clients": "202",
+  "maxmemory_policy": "noeviction",
+  "instantaneous_ops_per_sec": "16052",
+  "total_commands_processed": "498032",
+  "keyspace_hits": "287414",
+  "keyspace_misses": "84730"
+ },
+ "bullmq noop": {
+  "jobs": 1000,
+  "concurrency": 8,
+  "simulatedWorkMs": 0,
+  "enqueueMs": {
+   "n": 1000,
+   "min": 0.064,
+   "p50": 0.166,
+   "p95": 0.47,
+   "p99": 1.647,
+   "max": 4.249,
+   "mean": 0.222
+  },
+  "queueWaitMs": {
+   "n": 1000,
+   "min": 0,
+   "p50": 0,
+   "p95": 1,
+   "p99": 1,
+   "max": 4,
+   "mean": 0.127
+  },
+  "processingMs": {
+   "n": 1000,
+   "min": 0,
+   "p50": 0,
+   "p95": 1,
+   "p99": 4,
+   "max": 6,
+   "mean": 0.516
+  },
+  "endToEndMs": {
+   "n": 1000,
+   "min": 0,
+   "p50": 1,
+   "p95": 2,
+   "p99": 5,
+   "max": 6,
+   "mean": 0.643
+  },
+  "totalSec": 0.22,
+  "jobsPerSec": 4485.5,
+  "addBulk500Ms": 15.8
+ },
+ "bullmq 20ms-work": {
+  "jobs": 1000,
+  "concurrency": 8,
+  "simulatedWorkMs": 20,
+  "enqueueMs": {
+   "n": 1000,
+   "min": 0.074,
+   "p50": 0.086,
+   "p95": 0.169,
+   "p99": 0.324,
+   "max": 1.266,
+   "mean": 0.104
+  },
+  "queueWaitMs": {
+   "n": 1000,
+   "min": 0,
+   "p50": 1244,
+   "p95": 2385,
+   "p99": 2486,
+   "max": 2506,
+   "mean": 1246.775
+  },
+  "processingMs": {
+   "n": 1000,
+   "min": 19,
+   "p50": 21,
+   "p95": 22,
+   "p99": 25,
+   "max": 31,
+   "mean": 21.033
+  },
+  "endToEndMs": {
+   "n": 1000,
+   "min": 20,
+   "p50": 1266,
+   "p95": 2406,
+   "p99": 2507,
+   "max": 2526,
+   "mean": 1267.808
+  },
+  "totalSec": 2.63,
+  "jobsPerSec": 380.1,
+  "addBulk500Ms": 14.7
+ },
+ "bullmq 20ms-work-c1": {
+  "jobs": 200,
+  "concurrency": 1,
+  "simulatedWorkMs": 20,
+  "enqueueMs": {
+   "n": 200,
+   "min": 0.074,
+   "p50": 0.081,
+   "p95": 0.143,
+   "p99": 0.367,
+   "max": 2.163,
+   "mean": 0.102
+  },
+  "queueWaitMs": {
+   "n": 200,
+   "min": 0,
+   "p50": 2044,
+   "p95": 3914,
+   "p99": 4079,
+   "max": 4123,
+   "mean": 2057.855
+  },
+  "processingMs": {
+   "n": 200,
+   "min": 19,
+   "p50": 21,
+   "p95": 21,
+   "p99": 24,
+   "max": 27,
+   "mean": 20.815
+  },
+  "endToEndMs": {
+   "n": 200,
+   "min": 21,
+   "p50": 2064,
+   "p95": 3935,
+   "p99": 4102,
+   "max": 4143,
+   "mean": 2078.67
+  },
+  "totalSec": 4.16,
+  "jobsPerSec": 48,
+  "addBulk500Ms": 22.5
+ },
+ "realQueues": [
+  {
+   "name": "campaign",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "ig-pull",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "con-import",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "bcast-dispatch",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "storage-quota",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "flow-run",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "msg-log-export",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 1,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 1,
+   "waitMs": {
+    "n": 1,
+    "min": 2,
+    "p50": 2,
+    "p95": 2,
+    "p99": 2,
+    "max": 2,
+    "mean": 2
+   },
+   "procMs": {
+    "n": 1,
+    "min": 86,
+    "p50": 86,
+    "p95": 86,
+    "p99": 86,
+    "max": 86,
+    "mean": 86
+   },
+   "repeatables": 0
+  },
+  {
+   "name": "calendar-backfill",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "segment-actions",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "outbox",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "consent-export",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 2,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 2,
+   "waitMs": {
+    "n": 2,
+    "min": 1,
+    "p50": 1,
+    "p95": 2,
+    "p99": 2,
+    "max": 2,
+    "mean": 1.5
+   },
+   "procMs": {
+    "n": 2,
+    "min": 15,
+    "p50": 15,
+    "p95": 27,
+    "p99": 27,
+    "max": 27,
+    "mean": 21
+   },
+   "repeatables": 0
+  },
+  {
+   "name": "counter-flush",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "lsc-score",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "partition-maintenance",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "line-broadcast",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "calendar-ics-refresh",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "webhook-retry",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "mkt-inbound",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "webhook-forward",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "wab-migrate",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "fb-broadcast",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "meta-lead-sweep",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "message-dispatch",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "calendar-reconcile",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "webhook-deliver",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "tpl-sweep",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "calling-readiness",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "pinnacle-credit-line",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "mkt-pull",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "revenue-report-export",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "meeting-mirror-backfill",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "owning-team-backfill",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 4,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 4,
+   "waitMs": {
+    "n": 4,
+    "min": 1,
+    "p50": 22,
+    "p95": 31,
+    "p99": 31,
+    "max": 31,
+    "mean": 20.5
+   },
+   "procMs": {
+    "n": 4,
+    "min": 4,
+    "p50": 5,
+    "p95": 24,
+    "p99": 24,
+    "max": 24,
+    "mean": 10
+   },
+   "repeatables": 0
+  },
+  {
+   "name": "sched-run",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "ecom-webhook",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "billing-posting",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "audit-log-export",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 1,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 1,
+   "waitMs": {
+    "n": 1,
+    "min": 1,
+    "p50": 1,
+    "p95": 1,
+    "p99": 1,
+    "max": 1,
+    "mean": 1
+   },
+   "procMs": {
+    "n": 1,
+    "min": 153,
+    "p50": 153,
+    "p95": 153,
+    "p99": 153,
+    "max": 153,
+    "mean": 153
+   },
+   "repeatables": 0
+  },
+  {
+   "name": "telephony-ingest",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "lead-sync",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "webhook-ingest",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "mail-sync",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "media-fetch",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "tg-broadcast",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "privacy-export",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "wechat-broadcast",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "ecom-import",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "fb-backfill",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "bulk-jobs",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "sla-sweep",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "waba-ingest",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "viber-broadcast",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "web-push",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  },
+  {
+   "name": "meta-leadgen",
+   "counts": {
+    "wait": 0,
+    "active": 0,
+    "delayed": 0,
+    "completed": 0,
+    "failed": 0,
+    "paused": 0
+   },
+   "sampled": 0,
+   "waitMs": null,
+   "procMs": null,
+   "repeatables": 0
+  }
+ ]
+}

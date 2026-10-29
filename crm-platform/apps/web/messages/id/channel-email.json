@@ -135,7 +135,11 @@
       "limit": "Batas kotak surat paket Anda telah tercapai, sehingga kotak surat ini tidak terhubung.",
       "not_configured": "Proses masuk untuk penyedia ini belum diatur untuk platform ini. Tanyakan kepada administrator platform.",
       "wrong_account": "Anda masuk dengan akun berbeda dari kotak surat yang sedang dihubungkan kembali. Masuk dengan alamat yang sama.",
-      "failed": "Terjadi kesalahan saat menghubungkan kotak surat. Coba lagi."
+      "failed": "Terjadi kesalahan saat menghubungkan kotak surat. Coba lagi.",
+      "not_enabled": "Email tidak termasuk dalam paket ruang kerja Anda, jadi tidak ada yang terhubung. Minta administrator untuk mengaktifkannya.",
+      "not_allowed": "Anda tidak diizinkan menghubungkan jenis kotak surat ini. Minta akses ke administrator atau gunakan kotak surat bersama.",
+      "no_address": "Penyedia tidak membagikan alamat email kotak surat, jadi tidak ada yang terhubung. Hubungkan lagi dan izinkan akses ke alamat email.",
+      "no_refresh_token": "Penyedia tidak mengizinkan kotak surat ini tetap masuk, jadi tidak ada yang terhubung. Hapus akses aplikasi ini di pengaturan akun Google atau Microsoft Anda, lalu hubungkan lagi."
     },
     "errors": {
       "notConfigured": "Proses masuk untuk penyedia ini belum diatur untuk platform ini. Tanyakan kepada administrator platform.",

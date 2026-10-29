@@ -121,6 +121,17 @@ export class GoogleConsentService {
   // --- Google's redirect (public) --------------------------------------------------------------------------------------
 
   /**
+   * True when `state` is a Google-account consent state signed by this app. The mailbox callback uses it to hand a redirect over that
+   * Google sent to the wrong registered address (one OAuth client, or the mailbox address saved as the account's), instead of dropping the
+   * admin on the mailbox page with nothing connected. An expired state is still ours (signature and purpose matched), so `callback` can
+   * answer it with the expired outcome instead of the mailbox flow failing it.
+   */
+  ownsState(state: string | undefined): boolean {
+    const checked = verifyState(state ?? '', this.stateKey, Date.now());
+    return checked.ok || checked.reason === 'expired';
+  }
+
+  /**
    * Verifies the state, claims its record once, trades the code for tokens, checks what Google granted, and parks the result. Ends in a
    * redirect: to the confirmation page when there is something to confirm, otherwise back where the admin came from with the outcome.
    */
@@ -185,12 +196,13 @@ export class GoogleConsentService {
       }
       const missing = googleMissingScopes(grant.scope, req.capabilities as GoogleCapability[]);
       if (missing.length > 0) {
-        // A short grant is kept for confirmation when it is the stored account's (a working superset) or when it still covers at least one
-        // capability: Google lets the person untick scopes and withholds restricted ones from an unverified app, and capabilities are only
-        // ever granted whole, so the rest works and the confirm page says what is missing. Only a grant that covers nothing is withdrawn.
+        // A short grant is kept for confirmation when it is the stored account's (a working superset), or when nothing is stored yet and it
+        // still covers at least one capability (Google lets the person untick scopes and withholds restricted ones from an unverified app;
+        // capabilities are only ever granted whole, so the confirm page says what is missing). A different account never replaces a stored
+        // one with less, and a grant that covers nothing is withdrawn.
         const sameAccount = prior !== null && prior.accountSub === account.sub;
         const usable = googleCapabilitiesOf(grant.scope).length > 0;
-        if (!sameAccount && !usable) {
+        if (!sameAccount && (prior !== null || !usable)) {
           if (prior === null || prior.accountSub !== null) await withdraw();
           await reject();
           return done('missing_scope');

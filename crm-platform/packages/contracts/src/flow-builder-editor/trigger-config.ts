@@ -85,6 +85,11 @@ export interface FlbStoreEventConfig {
   productId: string;
 }
 
+export interface FlbContactUpdatedConfig {
+  /** The contact property the flow watches: it starts only when this one changed. Empty means any change (the way it always was). */
+  updatedField: string;
+}
+
 /** The Webhook trigger keeps no settings: its address and token come from the flow's id and the server's secret. */
 export type FlbWebhookConfig = Record<string, never>;
 
@@ -105,6 +110,7 @@ export interface FlbGoogleSheetConfig {
 }
 
 export type FlbTriggerConfig =
+  | FlbContactUpdatedConfig
   | FlbWebhookConfig
   | FlbGoogleSheetConfig
   | FlbSegmentJoinConfig
@@ -145,6 +151,8 @@ export function flbTriggerConfig(
   d: Record<string, unknown>,
 ): FlbTriggerConfig | null {
   switch (kind) {
+    case 'contact_updated':
+      return { updatedField: cleanField(d.updatedField) };
     case 'segment_join':
     case 'segment_leave':
       return { segmentId: text(d.segmentId) };

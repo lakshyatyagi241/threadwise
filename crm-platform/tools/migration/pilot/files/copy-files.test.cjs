@@ -306,3 +306,16 @@ test('flows: media urls on a Waboo host are found inside flow_data and replaced 
   assert.equal(next.nodes[1].data.text, 'https://other.test/x.png');
   assert.equal(data.nodes[0].data.url.startsWith('https://files.waboo.test'), true);
 });
+
+test('template header files get a key the app owns: template-media/<org id>/waboo/...', () => {
+  const org = { id: 112 };
+  const g = { kind: 'templates', id: { key: 'templatehash0000000001', path: '/v/t61/x/Header Image.JPG' } };
+  const key = lib.targetKeyOf(org, g);
+  assert.equal(key, 'template-media/112/waboo/templatehash0000/header_image.jpg');
+  // what apps/api message-templates/template-media.ts isTemplateMediaKey accepts: the workspace's own template-media folder
+  assert.ok(key.startsWith(`template-media/${org.id}/`));
+  assert.ok(lib.s3FromEnv(
+    { S3_ENDPOINT: 'https://s3.example.com', S3_ACCESS_KEY_ID: 'k', S3_SECRET_ACCESS_KEY: 's', S3_REGION: 'auto', S3_BUCKET_MEDIA: 'media' },
+    ['templates'],
+  ).bucket.templates === 'media');
+});

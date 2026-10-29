@@ -58,6 +58,35 @@ describe('pre-save validation (TW-FLB-018)', () => {
     expect(r.items).toEqual(['"Send message" has no incoming connection — nothing leads into it.']);
   });
 
+  it('a Quick replies button that leads nowhere is flagged, with the button named', () => {
+    const buttons = node('b', 'buttons', { options: ['Yes', 'No'] });
+    const r = flbValidateGraph(
+      [node('t', 'trigger'), buttons, node('m', 'message')],
+      [
+        { source: 't', target: 'b' },
+        { source: 'b', target: 'm', sourceHandle: 'p0' },
+      ],
+      ctx,
+    );
+    expect(r.ok).toBe(false);
+    expect(r.items).toEqual(['"Quick replies": the button "No" does not lead to any step.']);
+    expect(r.badNodeIds).toEqual(['b']);
+  });
+
+  it('a button that starts another flow or hands over to a person needs no exit', () => {
+    const buttons = node('b', 'buttons', {
+      options: ['Yes', 'No'],
+      optionActions: { '0': { type: 'flow', flow: 'abc' } },
+      handoffs: { '1': { team: 'sales', message: '' } },
+    });
+    const r = flbValidateGraph(
+      [node('t', 'trigger'), buttons],
+      [{ source: 't', target: 'b' }],
+      ctx,
+    );
+    expect(r.ok).toBe(true);
+  });
+
   it('a leaf with no outgoing edge is fine, and the trigger and start node are exempt', () => {
     const r = flbValidateGraph(
       [node('t', 'trigger'), node('m', 'message')],

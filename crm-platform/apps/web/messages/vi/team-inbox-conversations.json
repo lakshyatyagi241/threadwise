@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Mở lại lúc {time}",
       "erased": "Liên hệ đã xóa",
-      "erasedHint": "Các liên hệ này đã bị xóa, còn cuộc trò chuyện được giữ lại mà không có thông tin cá nhân và nội dung tin nhắn. Thời gian hiển thị tin nhắn cuối vì ngày xóa không được ghi lại.",
+      "erasedHint": "Các liên hệ này đã bị xóa, còn cuộc trò chuyện được giữ lại mà không có thông tin cá nhân. Thời gian hiển thị tin nhắn cuối vì ngày xóa không được ghi lại.",
       "erasedTitle": "Liên hệ đã xóa"
     },
     "status": {

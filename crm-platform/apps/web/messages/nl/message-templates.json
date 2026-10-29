@@ -266,7 +266,8 @@
         "name": "Naam van het sjabloon",
         "nameHint": "Alleen a-z, 0-9 en _, maximaal 60 tekens.",
         "nameTaken": "Deze naam is al in gebruik voor deze taal op dit nummer.",
-        "language": "Taal"
+        "language": "Taal",
+        "categoryLocked": "Meta staat niet toe dat de categorie van een goedgekeurde sjabloon wordt gewijzigd."
       },
       "auth": {
         "title": "Eenmalige toegangscode",
@@ -425,6 +426,7 @@
         "format": "Kaarten tonen",
         "formatImage": "Afbeeldingen",
         "formatVideo": "Video's",
+        "limits": "Afbeelding tot 5 MB, video tot 16 MB.",
         "count": "{used}/{max} kaarten",
         "add": "Kaart toevoegen",
         "needTwo": "Een carrousel heeft minstens {min} kaarten nodig.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Marketingtaal is niet toegestaan in deze categorie.",
         "TAG_CONTENT_MISMATCH": "Categorie komt niet overeen met de inhoud (bijv. promotionele tekst in een UTILITY-sjabloon).",
         "SCAM": "Meta heeft het sjabloon gemarkeerd als mogelijke oplichting. Controleer beweringen en taalgebruik."
+      },
+      "stats": {
+        "title": "Resultaten van deze sjabloon",
+        "hint": "Geteld uit de berichten die ermee zijn verzonden",
+        "loading": "Cijfers laden",
+        "error": "De cijfers konden niet worden geladen.",
+        "none": "Met deze sjabloon is nog niets verzonden.",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "read": "Gelezen",
+        "replied": "Beantwoord",
+        "failed": "Mislukt",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# bericht} other {# berichten}} verzonden met deze sjabloon, {queued} wachten nog",
+        "lastSent": "laatst verzonden {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Toon",
       "pickTone": "Kies een toon",
       "language": "Taal",
-      "languageHint": "Het concept wordt geschreven in de taal van het formulier.",
+      "languageHint": "Kies een taal die Meta accepteert. Het concept wordt erin geschreven en de sjabloon neemt die taal over.",
       "notes": "Eigen instructie",
       "notesNote": "optioneel / max. 2000",
       "notesPlaceholder": "Alles wat u specifiek wilt opnemen: variabelen, links, verplichte formuleringen, wat vermeden moet worden…",

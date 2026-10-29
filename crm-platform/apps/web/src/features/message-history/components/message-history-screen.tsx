@@ -33,7 +33,7 @@ import { ExportPanel } from './export-panel';
 import { FilterBar } from './filter-bar';
 import { HistoryTable } from './history-table';
 import { KpiStrip } from './kpi-strip';
-import { DownloadIcon, useErrorText } from './parts';
+import { useErrorText } from './parts';
 
 /** The zone the times are shown in: the person's own, else the workspace's (the session's effective zone), else UTC. */
 function useDisplayZone(): string {
@@ -156,16 +156,6 @@ export function MessageHistoryScreen() {
             ))}
             <option value="custom">{t('range.custom')}</option>
           </Select>
-          {canExport && (
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={exporter.isPending}
-              onClick={() => void requestExport()}
-            >
-              {exporter.isPending ? <Spinner /> : <DownloadIcon />} {t('exports.request')}
-            </Button>
-          )}
         </div>
       </header>
 
@@ -208,7 +198,14 @@ export function MessageHistoryScreen() {
         {t('retention', { hot: MESSAGE_LOG_HOT_DAYS, days: MESSAGE_LOG_RETENTION_DAYS })}
       </p>
 
-      {canExport && <ExportPanel highlight={fromEmail} tz={tz} />}
+      {canExport && (
+        <ExportPanel
+          highlight={fromEmail}
+          tz={tz}
+          requesting={exporter.isPending}
+          onRequest={() => void requestExport()}
+        />
+      )}
 
       {(summary.isError || insights.isError) && (
         <Alert tone="danger">

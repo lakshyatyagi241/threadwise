@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Usuń regułę",
           "variablePlaceholder": "Nazwa zmiennej (np. plan)",
+          "keyLabel": "Klucz",
+          "valueLabel": "Wartość",
+          "pickProperty": "Wybierz właściwość kontaktu",
           "pickVariable": "Wybierz zmienną do sprawdzenia.",
           "comparePlaceholder": "Porównaj z…",
           "joinerAnd": "ORAZ",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokument (raport PDF itp.)",
           "upload": "Prześlij",
           "uploadHint": "Do {mb} MB. Hostujemy plik i dajemy przepływowi publiczny URL.",
+          "acceptedFormats": {
+            "image": "Akceptowane formaty: JPG, PNG.",
+            "video": "Akceptowane formaty: MP4, 3GP.",
+            "audio": "Akceptowane formaty: MP3, AAC, AMR, OGG.",
+            "document": "Akceptowane formaty: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Zastąp plik",
           "chooseKind": {
             "image": "Wybierz obraz (lub przeciągnij tutaj)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Puste = dowolny produkt w zamówieniu.",
             "storeNote": "Klient jest dopasowywany do zapisanego kontaktu po numerze telefonu; dla zamówienia nikt nie jest tworzony. Zdarzeń „Dodano do koszyka” i „produkt obejrzany” nie ma, ponieważ sklep ich nie raportuje.",
             "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia.",
-            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie."
+            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie.",
+            "updatedField": "Tylko gdy ta właściwość się zmieni",
+            "updatedFieldHint": "Zostaw „Dowolna właściwość”, by startować przy każdej zmianie. Edycje, które nie wskazują, która właściwość się zmieniła (niektóre importy i akcje zbiorcze), nie uruchamiają przepływu śledzącego jedną właściwość.",
+            "updatedAny": "Dowolna właściwość"
           },
           "outside": {
             "saveFirst": "Najpierw zapisz przepływ. Adres webhooka należy do zapisanego przepływu.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "„{node}” nie ma połączenia wejściowego — nic do niego nie prowadzi.",
+        "buttonNoExit": "„{node}”: przycisk „{button}” nie prowadzi do żadnego kroku.",
         "notConnected": "„{node}” nie jest z niczym połączony.",
         "wrongChannel": "„{node}” nie działa na {channel} — usuń go lub ponownie włącz kanał we węźle Wyzwalacz.",
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",

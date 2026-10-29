@@ -122,6 +122,7 @@ const state = vi.hoisted(() => ({
   feed: { rows: [] as unknown[], pending: false, error: false },
   replace: vi.fn(),
   exportRequests: 0,
+  noExports: false,
   detail: null as unknown,
 }));
 
@@ -179,23 +180,25 @@ vi.mock('../api/history', () => ({
   useHistoryExports: () => ({
     isPending: false,
     data: {
-      data: [
-        {
-          id: U,
-          kind: 'messages',
-          status: 'ready',
-          from: '2026-10-01',
-          to: '2026-10-13',
-          messageStatus: null,
-          rowCount: 42,
-          fileBytes: 100,
-          error: null,
-          requestedAt: '2026-10-13T10:00:00.000Z',
-          completedAt: '2026-10-13T10:01:00.000Z',
-          expiresAt: '2026-10-20T10:01:00.000Z',
-          emailedTo: 'a@b.test',
-        },
-      ],
+      data: state.noExports
+        ? []
+        : [
+            {
+              id: U,
+              kind: 'messages',
+              status: 'ready',
+              from: '2026-10-01',
+              to: '2026-10-13',
+              messageStatus: null,
+              rowCount: 42,
+              fileBytes: 100,
+              error: null,
+              requestedAt: '2026-10-13T10:00:00.000Z',
+              completedAt: '2026-10-13T10:01:00.000Z',
+              expiresAt: '2026-10-20T10:01:00.000Z',
+              emailedTo: 'a@b.test',
+            },
+          ],
     },
   }),
   useRequestHistoryExport: () => ({
@@ -282,7 +285,7 @@ describe('Message History (en)', () => {
     expect(text()).toContain('Load more');
   });
 
-  it('the Source column says where each row came from: flows and auto replies are Automation, a contact send is Contact, a test send is Broadcast Test Send', () => {
+  it('the Source column says where each row came from: a flow is Flow, an auto reply is Auto-reply, a contact send is Contact, a test send is Campaign Test Send', () => {
     state.feed = {
       rows: [
         row({ id: `m:${U}`, source: 'flow', direction: 'out', status: 'sent' }),
@@ -323,7 +326,7 @@ describe('Message History (en)', () => {
     const cells = [...host.querySelectorAll('[data-testid="history-source"]')].map(
       (c) => c.textContent,
     );
-    expect(cells).toEqual(['Automation', 'Automation', 'Contact', 'Broadcast Test Send']);
+    expect(cells).toEqual(['Flow', 'Auto-reply', 'Contact', 'Campaign Test Send']);
     const testRow = host.querySelector('[data-id^="t:"]');
     expect(testRow?.textContent).toContain('welcome_tpl');
   });
@@ -368,21 +371,31 @@ describe('Message History (en)', () => {
     expect(drawer.textContent).toContain('events older than 90 days');
   });
 
-  it('offers the export only to a person who may export, and lists the exports with a download', () => {
+  it('offers the export only to a person who may export, inside the exports list, and lists the exports with a download', () => {
     show('en');
-    expect(text()).toContain('Export CSV');
-    expect(host.querySelector('[data-testid="history-exports"]')?.textContent).toContain(
-      '42 messages',
-    );
-    expect(host.querySelector('[data-testid="history-exports"]')?.textContent).toContain(
-      'Download',
-    );
+    const panel = host.querySelector('[data-testid="history-exports"]');
+    // The request button lives in the exports list, not at the top of the page.
+    expect(panel?.textContent).toContain('Export CSV');
+    expect(host.querySelector('header')?.textContent).not.toContain('Export CSV');
+    expect(panel?.textContent).toContain('42 messages');
+    expect(panel?.textContent).toContain('Download');
     act(() => root.unmount());
     root = createRoot(host);
     state.perms = new Set();
     show('en');
     expect(text()).not.toContain('Export CSV');
     expect(host.querySelector('[data-testid="history-exports"]')).toBeNull();
+  });
+
+  it('still offers the export, with a hint, before there is any export to list', () => {
+    state.noExports = true;
+    show('en');
+    const panel = host.querySelector('[data-testid="history-exports"]');
+    expect(panel?.textContent).toContain('Export CSV');
+    expect(panel?.querySelector('[data-testid="history-exports-empty"]')?.textContent).toContain(
+      'No exports yet',
+    );
+    state.noExports = false;
   });
 
   it('says which period is empty, and says so differently when a filter is the reason', () => {

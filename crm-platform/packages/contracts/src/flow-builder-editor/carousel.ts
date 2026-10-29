@@ -99,6 +99,10 @@ export function flbImageUrl(raw: unknown): string | null {
   }
 }
 
+/** An address people type without its scheme: `www.` and a name, or a name under a common top-level domain, with an optional port and path. */
+const SCHEMELESS_WEB =
+  /^(www\.[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}|[a-z0-9-]+(\.[a-z0-9-]+)*\.(com|in|org|net|io|co|app|dev|ai|me|info|biz|edu|gov|us|uk|ae|shop|store|online|site|xyz))(:\d+)?(\/\S*)?$/i;
+
 /**
  * The address a website chat button opens, or null when the value is not one the window may open (a script, a file, a wrong shape).
  * The runtime sends it and the test chat draws it, so both use this one rule.
@@ -114,6 +118,10 @@ export function webLinkUrl(type: string, value: string): string | null {
     const mail = v.replace(/^mailto:/i, '');
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? `mailto:${mail}` : null;
   }
-  if (type === 'url' || type === 'visit') return /^https?:\/\/\S+$/i.test(v) ? v : null;
+  if (type === 'url' || type === 'visit') {
+    if (/^https?:\/\/\S+$/i.test(v)) return v;
+    // An address typed without its scheme ("www.shop.in", "shop.in/offers") is the common way people write a link: https is assumed.
+    return SCHEMELESS_WEB.test(v) ? `https://${v}` : null;
+  }
   return null;
 }

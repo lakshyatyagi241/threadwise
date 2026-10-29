@@ -47,7 +47,10 @@
       "download": "Descargar",
       "rows": "{n} mensajes",
       "keptUntil": "se conserva hasta el {when} ({days} días)",
-      "fromEmail": "Desde tu correo"
+      "fromEmail": "Desde tu correo",
+      "hint": "Exportar CSV usa los filtros y fechas elegidos en esta página. El archivo se genera en segundo plano y te enviamos un correo cuando esté listo.",
+      "empty": "Aún no hay exportaciones. Pulsa Exportar CSV para obtener como archivo los mensajes que ves aquí.",
+      "loading": "Cargando exportaciones"
     },
     "kpi": {
       "label": "Cifras clave",
@@ -157,7 +160,7 @@
       "ai": "Asistente de IA",
       "api": "API",
       "broadcast": "Difusión",
-      "broadcast_test": "Envío de prueba de difusión",
+      "broadcast_test": "Envío de prueba de campaña",
       "campaign": "Campaña",
       "scheduled": "Programado",
       "other": "Otro"
@@ -238,7 +241,7 @@
         "ai": "Asistente de IA",
         "api": "API",
         "broadcast": "Difusión",
-        "broadcast_test": "Envío de prueba de difusión",
+        "broadcast_test": "Envío de prueba de campaña",
         "campaign": "Campaña",
         "scheduled": "Mensaje programado",
         "other": "Otro"

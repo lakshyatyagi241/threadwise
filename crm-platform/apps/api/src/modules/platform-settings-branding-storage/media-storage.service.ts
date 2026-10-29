@@ -180,7 +180,8 @@ export class MediaStorageService {
       return fetch(req.url, {
         method: 'PUT',
         headers: { ...req.headers, 'content-type': contentType },
-        body,
+        // fetch's BodyInit wants an ArrayBuffer-backed view; a Buffer is typed over ArrayBufferLike
+        body: new Uint8Array(body),
         redirect: 'manual',
         signal: AbortSignal.timeout(30_000),
       });

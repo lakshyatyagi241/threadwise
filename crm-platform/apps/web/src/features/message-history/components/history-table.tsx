@@ -6,14 +6,9 @@ import type { MessageHistoryRow, MessageHistorySource } from '@crm/contracts';
 import { dayLabel, timeLabel } from '../lib/format';
 import { Avatar, DirectionMark, EyeIcon, StatusMark, TypePill, rowName } from './parts';
 
-/**
- * The word the Source column shows. A flow and an auto reply are both automation to the person reading the table; the Source filter
- * still lists them apart.
- */
-export function sourceLabelKey(
-  source: MessageHistorySource,
-): 'automation' | Exclude<MessageHistorySource, 'flow' | 'auto_reply'> {
-  return source === 'flow' || source === 'auto_reply' ? 'automation' : source;
+/** The word the Source column shows: the source's own name, so a flow reads Flow and an auto reply reads Auto-reply (as in the Sent by filter). */
+export function sourceLabelKey(source: MessageHistorySource): MessageHistorySource {
+  return source;
 }
 
 /** Reference's "Open" eye: a campaign, broadcast or scheduled row goes to that screen, everything else to the conversation. */

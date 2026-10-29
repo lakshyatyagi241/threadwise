@@ -47,7 +47,10 @@
       "download": "ダウンロード",
       "rows": "{n} 件のメッセージ",
       "keptUntil": "{when} まで保存（{days} 日間）",
-      "fromEmail": "あなたのメールから"
+      "fromEmail": "あなたのメールから",
+      "hint": "CSVエクスポートは、このページで選んだフィルターと日付を使います。ファイルはバックグラウンドで作成され、準備ができたらメールでお知らせします。",
+      "empty": "エクスポートはまだありません。「CSVをエクスポート」を押すと、ここに表示されているメッセージをファイルで取得できます。",
+      "loading": "エクスポートを読み込み中"
     },
     "kpi": {
       "label": "主要指標",
@@ -157,7 +160,7 @@
       "ai": "AIアシスタント",
       "api": "API",
       "broadcast": "一斉配信",
-      "broadcast_test": "一斉配信のテスト送信",
+      "broadcast_test": "キャンペーンのテスト送信",
       "campaign": "キャンペーン",
       "scheduled": "予約",
       "other": "その他"
@@ -238,7 +241,7 @@
         "ai": "AIアシスタント",
         "api": "API",
         "broadcast": "一斉配信",
-        "broadcast_test": "一斉配信のテスト送信",
+        "broadcast_test": "キャンペーンのテスト送信",
         "campaign": "キャンペーン",
         "scheduled": "予約メッセージ",
         "other": "その他"

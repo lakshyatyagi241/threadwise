@@ -17,18 +17,19 @@
       "refresh": "Làm mới",
       "newCampaign": "Chiến dịch mới",
       "tile": {
-        "sent": "Đã gửi",
+        "sent": "Tin nhắn đã gửi",
         "delivered": "Đã nhận",
         "read": "Đã đọc",
-        "failed": "Thất bại",
-        "processing": "Đang xử lý",
-        "campaigns": "{count} chiến dịch",
+        "failed": "Tin nhắn thất bại",
+        "processing": "Chiến dịch đang gửi",
+        "campaigns": "từ {count, plural, other {# chiến dịch}}",
         "inFlight": "đang gửi",
         "awaiting": "đang chờ",
-        "queued": "{count} đang chờ",
+        "queued": "{count} đã lên lịch bắt đầu",
         "deliveredRate": "{rate}% giao thành công",
         "readRate": "tỷ lệ đọc {rate}%",
-        "failedCampaigns": "{count} chiến dịch thất bại"
+        "failedCampaigns": "{count, plural, other {# chiến dịch}} bị đánh dấu thất bại",
+        "note": "Đã gửi, Đã nhận, Đã đọc và Thất bại đếm tin nhắn, và tin nhắn thất bại không tính vào Đã gửi. Dòng nhỏ dưới mỗi số đếm chiến dịch. Tất cả theo khoảng ngày chọn bên dưới: {range}."
       },
       "range": {
         "all": "Mọi lúc",
@@ -280,7 +281,8 @@
         "split": "Biến thể A chiếm {a}%",
         "splitHint": "Biến thể B nhận phần đối tượng còn lại. Đặt nội dung Biến thể B ở bước Soạn.",
         "pickSender": "— Chọn người gửi —",
-        "notVerified": "Chưa xác minh: luồng hướng dẫn sẽ khả dụng sau khi số được xác minh."
+        "notVerified": "Chưa xác minh: luồng hướng dẫn sẽ khả dụng sau khi số được xác minh.",
+        "typeFromTemplate": "Bạn đến từ một mẫu, nên chiến dịch này gửi đúng mẫu đó. Tin nhắn tùy chỉnh hoặc luồng được tạo từ Chiến dịch > Tạo."
       },
       "audience": {
         "title": "Đối tượng",
@@ -1628,7 +1630,7 @@
         "retries": "Thử lại",
         "retriesOn": "Bật, đến {date}",
         "retriesOff": "Tắt",
-        "recurringNote": "Mỗi lần chạy gửi tới đối tượng tại thời điểm đó, nên số người nhận có thể thay đổi."
+        "recurringNote": "Bây giờ chưa gửi gì. Lần chạy đầu tiên bắt đầu vào thời điểm ở trên, sau đó mỗi lần chạy sẽ xuất hiện trong Lịch sử thành một dòng riêng. Cho đến lúc đó, bạn có thể tìm chiến dịch này trong Lặp lại. Mỗi lần chạy gửi đến đối tượng ở thời điểm đó, nên số người nhận có thể thay đổi."
       },
       "status": {
         "back": "Quay lại chiến dịch",
@@ -1842,7 +1844,8 @@
         "add": "Thêm một mẫu",
         "count": "{used}/{max} mẫu",
         "limitReached": "Đã đạt giới hạn: {max} mẫu.",
-        "variablesTitle": "Biến của mẫu {position}: {name}"
+        "variablesTitle": "Biến của mẫu {position}: {name}",
+        "variablesLater": "{count, plural, other {# biến}} lấy giá trị từ phần gán, không phải từ bản xem trước này."
       }
     },
     "history": {

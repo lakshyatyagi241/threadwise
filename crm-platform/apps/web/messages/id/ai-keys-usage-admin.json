@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Kunci minimal 8 karakter."
-      }
+      },
+      "readOnly": "Anda dapat melihat kunci AI ruang kerja, tetapi tidak dapat menambah, mengaktifkan, atau menghapusnya. Minta izin mengelola kunci AI kepada administrator."
     }
   }
 }

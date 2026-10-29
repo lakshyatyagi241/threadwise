@@ -4,6 +4,7 @@
  */
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   boolean,
   check,
   date,
@@ -142,6 +143,8 @@ export const campWizardCsvRows = pgTable(
     digits: text('digits'),
     name: text('name'),
     reason: text('reason'),
+    // What the row's marketing-consent cell said: true = yes, false = no / blank / unknown, NULL = the file has no consent column.
+    consentGranted: boolean('consent_granted'),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.uploadId, t.line] }),
@@ -221,6 +224,10 @@ export const wpcampaigns = pgTable(
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     /** The broadcast wizard's `{ draft, launch? }`; null on a campaign the classic builder made. */
     wizard: jsonb('wizard'),
+    // What a campaign migrated from the old system was billed and refunded, in hundredths of the wallet currency (NULL for a campaign
+    // made here). The cost shown falls back to these when the campaign has no usage charges of its own (migration 2041).
+    legacyBilledMinor: bigint('legacy_billed_minor', { mode: 'number' }),
+    legacyRefundedMinor: bigint('legacy_refunded_minor', { mode: 'number' }),
     seriesId: idColumn('series_id'),
     occurrenceNo: integer('occurrence_no'),
     runAt: timestamp('run_at', { withTimezone: true }),
@@ -279,6 +286,10 @@ export const wpcampaigns = pgTable(
       foreignColumns: [campSeries.orgId, campSeries.id],
     }).onDelete('set null'),
     check('ck_wpcampaigns_wizard_series', sql`(series_id IS NULL) = (occurrence_no IS NULL)`),
+    check(
+      'ck_wpcampaigns_legacy_cost',
+      sql`(legacy_billed_minor IS NULL OR legacy_billed_minor >= 0) AND (legacy_refunded_minor IS NULL OR legacy_refunded_minor >= 0)`,
+    ),
     uniqueIndex('uq_wpcampaigns_series_occurrence')
       .on(t.orgId, t.seriesId, t.occurrenceNo)
       .where(sql`series_id IS NOT NULL`),

@@ -22,7 +22,7 @@ import { templatesForSenders } from '../lib/templates';
 import { TemplatePicker, type TemplatesQuery } from './template-picker';
 import { TemplatePreview } from './template-preview';
 
-/** The language the wizard writes a drafted template in (the wizard picks no language of its own). */
+/** The language the wizard's "Build with AI" dialog starts on (the person can pick another one in it). */
 export const AI_TEMPLATE_LANGUAGE = 'en_US';
 
 /** The connection uuid of a `waba:<uuid>` sender key, which the new-template form takes as the number to start on. */
@@ -94,8 +94,8 @@ export function StepTemplate({
   const [aiOpen, setAiOpen] = useState(false);
   // "Build with AI" (TW-TPL-016): the draft goes to the new-template form in this tab, which fills itself from it; the template must
   // then pass Meta's review before this list offers it. The wizard's own draft autosaves, so coming back resumes this campaign.
-  const sendDraftToTemplates = (draft: TplAiDraft) => {
-    stashAiDraft({ draft, language: AI_TEMPLATE_LANGUAGE, metaCategory: 'MARKETING' });
+  const sendDraftToTemplates = (draft: TplAiDraft, language: string) => {
+    stashAiDraft({ draft, language, metaCategory: 'MARKETING' });
     router.push(newTemplateHref(senderKey));
   };
   const nameIssue = issueFor(issues, 'name');

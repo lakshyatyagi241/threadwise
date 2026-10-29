@@ -1,0 +1,272 @@
+/* About and Careers (pages/company.tsx). */
+.ab-facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 0 auto;
+  max-width: 820px;
+}
+.ab-facts > div {
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--gx-line);
+  background: linear-gradient(180deg, #fff, #f8fafc);
+  text-align: center;
+}
+.ab-facts dt {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gx-mute);
+}
+.ab-facts dd {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 650;
+  color: var(--gx-ink);
+}
+.ab-statement {
+  max-width: 800px;
+  margin: 40px auto 0;
+  text-align: center;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  color: var(--gx-ink);
+}
+
+/* the story, as a line with the years on it */
+.ab-tl {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 720px;
+  position: relative;
+}
+.ab-tl::before {
+  content: '';
+  position: absolute;
+  left: 31px;
+  top: 8px;
+  bottom: 60px;
+  width: 2px;
+  background: linear-gradient(180deg, #c7d2fe, #e5e7eb);
+}
+.ab-tl li {
+  position: relative;
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+  padding: 0 0 28px;
+}
+.ab-tl li:last-child {
+  padding-bottom: 0;
+}
+.ab-yr {
+  flex: none;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #c7d2fe;
+  color: var(--gx-blue);
+  font-weight: 750;
+  font-size: 15px;
+  position: relative;
+  z-index: 1;
+}
+.ab-tl p {
+  margin: 0;
+  padding: 18px 22px;
+  flex: 1;
+  border-radius: 16px;
+  border: 1px solid var(--gx-line);
+  background: #fff;
+  font-size: 15.5px;
+}
+
+/* people */
+.ab-leader {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto 36px;
+  padding: 26px;
+  border-radius: 24px;
+  border: 1px solid var(--gx-line);
+  background: #fff;
+}
+.ab-leader img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 20px;
+  background: #e2e8f0;
+}
+.ab-leader h3 {
+  font-weight: 700;
+  margin: 6px 0 2px;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  color: var(--gx-ink);
+}
+.ab-leader b {
+  display: block;
+  font-size: 14.5px;
+  color: var(--gx-blue);
+}
+.ab-leader p {
+  margin: 12px 0 8px;
+  font-size: 15.5px;
+}
+.ab-leader i {
+  font-style: normal;
+  font-size: 13.5px;
+  color: var(--gx-mute);
+}
+.ab-team {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.ab-team-2 {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 860px;
+  margin: 0 auto;
+}
+.ab-person {
+  padding: 14px 14px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--gx-line);
+  background: #fff;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
+}
+.ab-person:hover {
+  box-shadow: 0 14px 34px rgba(15, 17, 23, 0.09);
+  transform: translateY(-2px);
+}
+.ab-person img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 14px;
+  background: #e2e8f0;
+}
+.ab-person h3 {
+  font-weight: 700;
+  margin: 14px 4px 2px;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--gx-ink);
+}
+.ab-person b {
+  display: block;
+  margin: 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gx-blue);
+}
+.ab-person p {
+  margin: 8px 4px 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--gx-mute);
+}
+
+/* the careers nudge and the open-roles box */
+.ab-join {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: 26px;
+  background:
+    radial-gradient(50% 120% at 100% 0%, rgba(99, 102, 241, 0.35), transparent 70%),
+    linear-gradient(160deg, #080d22 0%, #0c1238 70%, #141a6b 140%);
+  color: #fff;
+}
+.ab-join h2 {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 30px);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.ab-join p {
+  margin: 8px 0 0;
+  max-width: 560px;
+  color: #cbd5e1;
+}
+.ab-roles {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 40px);
+  text-align: center;
+  display: grid;
+  gap: 18px;
+  justify-items: center;
+  border-radius: 24px;
+  border: 1px solid var(--gx-line);
+  background: #fff;
+}
+.ab-roles p {
+  margin: 0;
+  font-size: 16px;
+}
+.ab-roles span {
+  font-size: 13.5px;
+  color: var(--gx-mute);
+}
+
+@media (max-width: 1000px) {
+  .ab-team {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .ab-facts {
+    grid-template-columns: 1fr;
+  }
+  .ab-leader {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .ab-leader img {
+    max-width: 240px;
+  }
+  .ab-join {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ab-tl::before {
+    left: 23px;
+  }
+  .ab-yr {
+    width: 48px;
+    height: 48px;
+    font-size: 13px;
+  }
+  .ab-tl li {
+    gap: 14px;
+  }
+  .ab-tl p {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 520px) {
+  .ab-team,
+  .ab-team-2 {
+    grid-template-columns: 1fr;
+  }
+}

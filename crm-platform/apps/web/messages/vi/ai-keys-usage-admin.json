@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "Khóa có ít nhất 8 ký tự."
-      }
+      },
+      "readOnly": "Bạn có thể xem các khóa AI của không gian làm việc nhưng không thể thêm, bật/tắt hay xóa chúng. Hãy nhờ quản trị viên cấp quyền quản lý khóa AI."
     }
   }
 }

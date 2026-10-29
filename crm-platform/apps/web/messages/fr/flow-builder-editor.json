@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Supprimer la règle",
           "variablePlaceholder": "Nom de la variable (p. ex. plan)",
+          "keyLabel": "Clé",
+          "valueLabel": "Valeur",
+          "pickProperty": "Choisir une propriété du contact",
           "pickVariable": "Choisissez la variable à tester.",
           "comparePlaceholder": "Comparer à…",
           "joinerAnd": "ET",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Document (rapport PDF, etc.)",
           "upload": "Téléverser",
           "uploadHint": "Jusqu’à {mb} Mo. Nous hébergeons le fichier et donnons au flux une URL publique.",
+          "acceptedFormats": {
+            "image": "Formats acceptés: JPG, PNG.",
+            "video": "Formats acceptés: MP4, 3GP.",
+            "audio": "Formats acceptés: MP3, AAC, AMR, OGG.",
+            "document": "Formats acceptés: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Remplacer le fichier",
           "chooseKind": {
             "image": "Choisir une image (ou la déposer ici)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Vide = n'importe quel produit de la commande.",
             "storeNote": "Le client est associé à un contact enregistré par son numéro de téléphone ; aucun contact n'est créé pour une commande. « Ajouté au panier » et « produit consulté » ne sont pas proposés : la boutique ne les transmet pas.",
             "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas.",
-            "segmentLeaveHint": "S'exécute une fois chaque fois qu'un contact qui se trouvait dans ce segment est constaté en dehors après avoir été mis à jour, étiqueté ou listé. Le départ d'un contact n'est détecté que si le flux l'a d'abord vu dans le segment."
+            "segmentLeaveHint": "S'exécute une fois chaque fois qu'un contact qui se trouvait dans ce segment est constaté en dehors après avoir été mis à jour, étiqueté ou listé. Le départ d'un contact n'est détecté que si le flux l'a d'abord vu dans le segment.",
+            "updatedField": "Seulement quand cette propriété change",
+            "updatedFieldHint": "Laissez « N’importe quelle propriété » pour démarrer à chaque modification. Les modifications qui n’indiquent pas quelle propriété a changé (certains imports et actions groupées) ne démarrent pas un flux qui surveille une propriété.",
+            "updatedAny": "N’importe quelle propriété"
           },
           "outside": {
             "saveFirst": "Enregistrez d’abord le flux. L’adresse du webhook appartient au flux enregistré.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "« {node} » n’a aucune connexion entrante : rien ne mène vers lui.",
+        "buttonNoExit": "« {node} » : le bouton « {button} » ne mène à aucune étape.",
         "notConnected": "« {node} » n’est relié à rien.",
         "wrongChannel": "« {node} » ne fonctionne pas sur {channel} : supprimez-le ou réactivez le canal sur le nœud Déclencheur.",
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",

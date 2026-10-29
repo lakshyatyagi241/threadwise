@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Riapre {time}",
       "erased": "Contatti cancellati",
-      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona né il testo dei messaggi. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
+      "erasedHint": "Questi contatti sono stati cancellati e le loro conversazioni sono state conservate senza i dati della persona. Gli orari mostrano l'ultimo messaggio, perché la data della cancellazione non viene registrata.",
       "erasedTitle": "Contatto cancellato"
     },
     "status": {

@@ -27,6 +27,9 @@
  *   chat-reparse --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (re-read the saved bot payloads of messages loaded with an empty body)
  *   chat-relink  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (contact_id of loaded conversations that have none, by the planner's rule)
  *   wallet-history --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (the full wallet statement: daily WhatsApp charges and reverts, AI charges, top-ups, purchases, chained to the live balance; replaces the one-opening-balance ledger)
+ *   invoices-fetch --client <c>    (the invoices of the wallet top-ups, fetched from Waboo's billing provider with YOUR read-only token: ZOHO_ACCESS_TOKEN + ZOHO_ORGANIZATION_ID; writes dumps/<c>/zoho_invoices.json; reads and changes nothing else)
+ *   wallet-invoices --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (loads those invoices so a migrated top-up offers Download invoice; DRY RUN by default)
+ *   template-headers --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (gives templates loaded earlier the Meta link of their media header file; then the files step copies it; DRY RUN by default)
  *   chat-buttons --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (gives loaded bot messages their buttons: Visit our website, Call now ...; reads only the database)
  *   chat-delivery --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (moves loaded outbound messages from sent to delivered / read / failed from the billing log; forward only; DRY RUN by default)
  *   chat-status  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (closes loaded conversations that Waboo has closed: the status of the newest visitor_logs session)
@@ -76,6 +79,9 @@ import { chatDelivery } from './load/chatdelivery';
 import { chatStatus } from './load/chatstatus';
 import { chatButtons } from './load/chatbuttons';
 import { walletHistory } from './load/wallethistory';
+import { InvoiceFetchError, invoicesFetch } from './invoices/zoho';
+import { walletInvoices } from './load/walletinvoices';
+import { templateHeaders } from './load/templateheaders';
 import { campaignLink } from './load/campaignlink';
 import { runClient, RunLockedError } from './load/run';
 import { formatSteps, StepsError } from './load/steps';
@@ -414,7 +420,8 @@ async function main(): Promise<number> {
       if (clients.length !== 1) return usage();
       const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
       if (!slug) return usage();
-      const str = (n: string): string | undefined => (typeof flags.get(n) === 'string' ? String(flags.get(n)) : undefined);
+      const str = (n: string): string | undefined =>
+        typeof flags.get(n) === 'string' ? String(flags.get(n)) : undefined;
       const apply = flags.has('apply');
       const back = flags.has('rollback');
       const mode = back ? (apply ? 'rollback' : 'rollback-dry') : apply ? 'apply' : 'dry';
@@ -423,7 +430,10 @@ async function main(): Promise<number> {
         assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !writes }),
       );
       console.log(
-        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !writes }),
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', {
+          ...guard,
+          dryRun: !writes,
+        }),
       );
       const epoch = Number(str('backup-epoch'));
       const code = await cutover({
@@ -441,7 +451,10 @@ async function main(): Promise<number> {
         webhookBase: str('webhook-base'),
         reconcilePath: resolve(outDir, clients[0]!, 'reconcile.md'),
         maxReportAgeHours: Number(str('max-report-age-hours') ?? 48),
-        backup: str('backup-file') && Number.isFinite(epoch) && epoch > 0 ? { name: str('backup-file')!, atMs: epoch * 1000 } : null,
+        backup:
+          str('backup-file') && Number.isFinite(epoch) && epoch > 0
+            ? { name: str('backup-file')!, atMs: epoch * 1000 }
+            : null,
         log: (l) => console.log(l),
       });
       return code;
@@ -641,6 +654,69 @@ async function main(): Promise<number> {
         ownerUrl: need('MIGRATION_DATABASE_URL'),
         source,
         dumpsDir,
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'invoices-fetch': {
+      // the provider's invoices of the wallet top-ups (see invoices/zoho.ts): outbound HTTPS to a zohoapis host with the operator's token only
+      if (clients.length !== 1) return usage();
+      try {
+        await invoicesFetch({
+          client: clients[0]!,
+          dumpsDir,
+          env: process.env,
+          log: (l) => console.log(l),
+        });
+      } catch (e) {
+        if (!(e instanceof InvoiceFetchError)) throw e;
+        console.error(e.message);
+        return 2;
+      }
+      return 0;
+    }
+    case 'wallet-invoices': {
+      // zoho_invoices.json -> wallet_legacy_invoices (see load/walletinvoices.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('wallet-invoices --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await walletInvoices({
+        client: clients[0]!,
+        orgSlug: slug,
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        dumpsDir,
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'template-headers': {
+      // wa_templates.header_sample_url for templates an earlier load wrote without it (see load/templateheaders.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('template-headers --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await templateHeaders({
+        client: clients[0]!,
+        orgSlug: slug,
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
         apply,
         log: (l) => console.log(l),
       });

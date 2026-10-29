@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Remover regra",
           "variablePlaceholder": "Nome da variável (ex.: plano)",
+          "keyLabel": "Chave",
+          "valueLabel": "Valor",
+          "pickProperty": "Escolha uma propriedade do contato",
           "pickVariable": "Escolha a variável a testar.",
           "comparePlaceholder": "Comparar com…",
           "joinerAnd": "E",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Documento (relatório em PDF etc.)",
           "upload": "Enviar",
           "uploadHint": "Até {mb} MB. Nós hospedamos o arquivo e damos ao fluxo uma URL pública.",
+          "acceptedFormats": {
+            "image": "Formatos aceitos: JPG, PNG.",
+            "video": "Formatos aceitos: MP4, 3GP.",
+            "audio": "Formatos aceitos: MP3, AAC, AMR, OGG.",
+            "document": "Formatos aceitos: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Substituir arquivo",
           "chooseKind": {
             "image": "Escolha a imagem (ou arraste aqui)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Em branco = qualquer produto do pedido.",
             "storeNote": "O cliente é associado a um contato salvo pelo número de telefone; ninguém é criado por causa de um pedido. “Adicionado ao carrinho” e “produto visualizado” não são oferecidos: a loja não informa esses eventos.",
             "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia.",
-            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes."
+            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes.",
+            "updatedField": "Somente quando esta propriedade mudar",
+            "updatedFieldHint": "Deixe em “Qualquer propriedade” para iniciar a cada mudança. Edições que não dizem qual propriedade mudou (algumas importações e ações em massa) não iniciam um fluxo que observa uma propriedade.",
+            "updatedAny": "Qualquer propriedade"
           },
           "outside": {
             "saveFirst": "Salve o fluxo primeiro. O endereço do webhook pertence ao fluxo salvo.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” não tem conexão de entrada — nada leva até ele.",
+        "buttonNoExit": "\"{node}\": o botão \"{button}\" não leva a nenhuma etapa.",
         "notConnected": "“{node}” não está conectado a nada.",
         "wrongChannel": "“{node}” não funciona em {channel} — exclua-o ou reative o canal no nó Gatilho.",
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",

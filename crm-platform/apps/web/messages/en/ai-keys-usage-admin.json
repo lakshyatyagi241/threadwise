@@ -216,7 +216,8 @@
       },
       "errors": {
         "tooShort": "A key is at least 8 characters."
-      }
+      },
+      "readOnly": "You can see the workspace's AI keys but you cannot add, switch or remove them. Ask an administrator for the permission to manage AI keys."
     }
   }
 }

@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Kuralı kaldır",
           "variablePlaceholder": "Değişken adı (örn. plan)",
+          "keyLabel": "Anahtar",
+          "valueLabel": "Değer",
+          "pickProperty": "Bir kişi özelliği seçin",
           "pickVariable": "Test edilecek değişkeni seçin.",
           "comparePlaceholder": "Karşılaştırılacak değer…",
           "joinerAnd": "VE",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Belge (PDF raporu vb.)",
           "upload": "Yükle",
           "uploadHint": "En fazla {mb} MB. Dosyayı biz barındırır ve akışa herkese açık bir URL veririz.",
+          "acceptedFormats": {
+            "image": "Kabul edilen biçimler: JPG, PNG.",
+            "video": "Kabul edilen biçimler: MP4, 3GP.",
+            "audio": "Kabul edilen biçimler: MP3, AAC, AMR, OGG.",
+            "document": "Kabul edilen biçimler: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Dosyayı değiştir",
           "chooseKind": {
             "image": "Görsel seçin (veya buraya sürükleyin)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Boş = siparişteki herhangi bir ürün.",
             "storeNote": "Müşteri, telefon numarasına göre kayıtlı bir kişiyle eşleştirilir; sipariş için kimse oluşturulmaz. “Sepete eklendi” ve “ürün görüntülendi” sunulmaz: mağaza bunları bildirmez.",
             "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz.",
-            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir."
+            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir.",
+            "updatedField": "Yalnızca bu özellik değiştiğinde",
+            "updatedFieldHint": "Her değişiklikte başlatmak için “Herhangi bir özellik” seçili kalsın. Hangi özelliğin değiştiğini belirtmeyen düzenlemeler (bazı içe aktarmalar ve toplu işlemler), tek bir özelliği izleyen akışı başlatmaz.",
+            "updatedAny": "Herhangi bir özellik"
           },
           "outside": {
             "saveFirst": "Önce akışı kaydedin. Webhook adresi kaydedilmiş akışa aittir.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" girişinde bağlantı yok — buraya hiçbir şey bağlı değil.",
+        "buttonNoExit": "\"{node}\": \"{button}\" düğmesi hiçbir adıma gitmiyor.",
         "notConnected": "\"{node}\" hiçbir şeye bağlı değil.",
         "wrongChannel": "\"{node}\" {channel} üzerinde çalışmaz — silin veya Tetikleyici düğümünde kanalı yeniden açın.",
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",

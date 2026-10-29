@@ -266,7 +266,8 @@
         "name": "Nom du modèle",
         "nameHint": "a-z, 0-9 et _ uniquement, 60 caractères maximum.",
         "nameTaken": "Ce nom est déjà utilisé pour cette langue sur ce numéro.",
-        "language": "Langue"
+        "language": "Langue",
+        "categoryLocked": "Meta ne permet pas de modifier la catégorie d’un modèle approuvé."
       },
       "auth": {
         "title": "Code à usage unique",
@@ -425,6 +426,7 @@
         "format": "Les cartes affichent",
         "formatImage": "Des images",
         "formatVideo": "Des vidéos",
+        "limits": "Image jusqu’à 5 Mo, vidéo jusqu’à 16 Mo.",
         "count": "{used}/{max} cartes",
         "add": "Ajouter une carte",
         "needTwo": "Un carrousel nécessite au moins {min} cartes.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Langage marketing non autorisé dans cette catégorie.",
         "TAG_CONTENT_MISMATCH": "La catégorie ne correspond pas au contenu (p. ex. texte promotionnel dans un modèle UTILITY).",
         "SCAM": "Meta a signalé le modèle comme une arnaque potentielle. Vérifiez les affirmations et le langage."
+      },
+      "stats": {
+        "title": "Résultats de ce modèle",
+        "hint": "Calculé à partir des messages envoyés avec lui",
+        "loading": "Chargement des chiffres",
+        "error": "Impossible de charger les chiffres.",
+        "none": "Rien n'a encore été envoyé avec ce modèle.",
+        "sent": "Envoyés",
+        "delivered": "Distribués",
+        "read": "Lus",
+        "replied": "Réponses",
+        "failed": "Échecs",
+        "percent": "{value} %",
+        "footer": "{total, plural, one {# message envoyé} other {# messages envoyés}} avec ce modèle, {queued} en attente",
+        "lastSent": "dernier envoi {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Ton",
       "pickTone": "Sélectionner un ton",
       "language": "Langue",
-      "languageHint": "Le brouillon est rédigé dans la langue du formulaire.",
+      "languageHint": "Choisissez n'importe quelle langue acceptée par Meta. Le brouillon est écrit dans cette langue et le modèle l'adopte.",
       "notes": "Instructions personnalisées",
       "notesNote": "facultatif / 2000 max.",
       "notesPlaceholder": "Tout élément précis à inclure : variables, liens, formulations obligatoires, ce qu'il faut éviter…",

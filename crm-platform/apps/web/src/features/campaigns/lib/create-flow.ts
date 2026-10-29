@@ -18,11 +18,14 @@ export function flowFor(senders: readonly SenderLike[], senderKey: string): Crea
   return senders.some((s) => s.key === senderKey && s.guided) ? 'wizard' : 'classic';
 }
 
-/** The screen's address with the number (`?sender=`) or the guided draft (`?draft=`) it is on. */
-export function createPath(o: { sender?: string | null; draft?: string | null } = {}): string {
+/** The screen's address with the number (`?sender=`) or the guided draft (`?draft=`) it is on, and the template it was opened for (`?template=`). */
+export function createPath(
+  o: { sender?: string | null; draft?: string | null; template?: string | null } = {},
+): string {
   const q = new URLSearchParams();
   if (o.draft) q.set('draft', o.draft);
   else if (o.sender) q.set('sender', o.sender);
+  if (o.template && !o.draft) q.set('template', o.template);
   const s = q.toString();
   return s === '' ? CREATE_PATH : `${CREATE_PATH}?${s}`;
 }
@@ -34,6 +37,12 @@ export function senderParam(v: string | string[] | undefined): string {
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+/** The `?template=` of an address, only when it is an id: the template a campaign is being made for ("Use in a broadcast"). */
+export function templateParam(v: string | string[] | undefined): string {
+  const s = Array.isArray(v) ? v[0] : v;
+  return s && UUID.test(s) ? s : '';
+}
+
 /** The `?draft=` of an address, only when it is an id. */
 export function draftParam(v: string | string[] | undefined): string {
   const s = Array.isArray(v) ? v[0] : v;

@@ -143,6 +143,21 @@ describe('the pre-save check lists the same problems as the contracts, in the ca
       ],
     ],
     [
+      'a button that leads nowhere',
+      [
+        [
+          node('t', 'trigger', { data: {} }),
+          node('b', 'buttons', { data: { options: ['Yes', 'No'] } }),
+          node('m', 'message'),
+        ],
+        [
+          { source: 't', target: 'b' },
+          { source: 'b', target: 'm', sourceHandle: 'p0' },
+        ],
+        { mode: 'chat', senderAvailable: true },
+      ],
+    ],
+    [
       'no sender on instagram',
       [[node('t', 'trigger', { data: {} })], [], { mode: 'instagram', senderAvailable: true }],
     ],

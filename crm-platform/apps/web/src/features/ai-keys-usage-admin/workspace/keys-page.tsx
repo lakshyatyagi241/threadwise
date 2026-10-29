@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { apiFetch } from '@/lib/api/client';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { errorKind } from '../lib/errors';
 import { ErrorBlock, LoadingBlock } from '../shared/state';
 import { AI_KEYS } from './api';
@@ -42,6 +43,8 @@ export function WorkspaceKeysPage() {
   const [apiKey, setApiKey] = useState('');
   const [tooShort, setTooShort] = useState(false);
   const [removing, setRemoving] = useState<WorkspaceAiKeyItem | null>(null);
+  // Saving, switching and removing need `aiadm.keys.manage`; with only `aiadm.keys.read` the keys are listed and nothing can be changed.
+  const canManage = useCan('aiadm.keys.manage');
 
   const q = useQuery({
     queryKey: AI_KEYS.keys,
@@ -123,47 +126,53 @@ export function WorkspaceKeysPage() {
             {q.data.byokAllowed ? t('allowed') : t('notAllowed')}
           </Alert>
 
-          <Card>
-            <form onSubmit={submit} className="space-y-4" noValidate>
-              <h2 className="font-semibold">{t('add')}</h2>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label={t('provider')} htmlFor="own-provider">
-                  <Select
-                    id="own-provider"
-                    value={provider}
-                    onChange={(e) => setProvider(e.target.value as AiProviderSlug)}
+          {canManage ? (
+            <Card>
+              <form onSubmit={submit} className="space-y-4" noValidate>
+                <h2 className="font-semibold">{t('add')}</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label={t('provider')} htmlFor="own-provider">
+                    <Select
+                      id="own-provider"
+                      value={provider}
+                      onChange={(e) => setProvider(e.target.value as AiProviderSlug)}
+                    >
+                      {AI_PROVIDERS.map((p) => (
+                        <option key={p.slug} value={p.slug}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                  <Field
+                    label={t('apiKey')}
+                    htmlFor="own-key"
+                    hint={t('apiKeyHint')}
+                    error={tooShort ? t('errors.tooShort') : undefined}
                   >
-                    {AI_PROVIDERS.map((p) => (
-                      <option key={p.slug} value={p.slug}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-                <Field
-                  label={t('apiKey')}
-                  htmlFor="own-key"
-                  hint={t('apiKeyHint')}
-                  error={tooShort ? t('errors.tooShort') : undefined}
-                >
-                  <PasswordInput
-                    id="own-key"
-                    autoComplete="off"
-                    value={apiKey}
-                    maxLength={1024}
-                    invalid={tooShort}
-                    onChange={(e) => {
-                      setTooShort(false);
-                      setApiKey(e.target.value);
-                    }}
-                  />
-                </Field>
-              </div>
-              <Button type="submit" disabled={save.isPending || apiKey.trim() === ''}>
-                {save.isPending ? t('saving') : existing ? t('replace') : t('save')}
-              </Button>
-            </form>
-          </Card>
+                    <PasswordInput
+                      id="own-key"
+                      autoComplete="off"
+                      value={apiKey}
+                      maxLength={1024}
+                      invalid={tooShort}
+                      onChange={(e) => {
+                        setTooShort(false);
+                        setApiKey(e.target.value);
+                      }}
+                    />
+                  </Field>
+                </div>
+                <Button type="submit" disabled={save.isPending || apiKey.trim() === ''}>
+                  {save.isPending ? t('saving') : existing ? t('replace') : t('save')}
+                </Button>
+              </form>
+            </Card>
+          ) : (
+            <Alert tone="info" data-testid="keys-read-only">
+              {t('readOnly')}
+            </Alert>
+          )}
 
           {q.data.data.length === 0 ? (
             <p className="text-sm text-muted-foreground">{t('empty')}</p>
@@ -199,12 +208,14 @@ export function WorkspaceKeysPage() {
                         <Switch
                           checked={key.isActive}
                           label={key.isActive ? t('turnOff') : t('turnOn')}
-                          disabled={toggle.isPending}
+                          disabled={toggle.isPending || !canManage}
                           onCheckedChange={(isActive) => toggle.mutate({ key, isActive })}
                         />
-                        <Button variant="ghost" size="sm" onClick={() => setRemoving(key)}>
-                          {t('remove')}
-                        </Button>
+                        {canManage && (
+                          <Button variant="ghost" size="sm" onClick={() => setRemoving(key)}>
+                            {t('remove')}
+                          </Button>
+                        )}
                       </div>
                     </Card>
                   </li>

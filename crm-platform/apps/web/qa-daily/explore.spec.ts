@@ -267,6 +267,13 @@ for (const r of routes) {
           `${name} ${w}x${h}`,
         );
     }
+    // QA_PROOF=1 (re-check of a fixed bug): keep a picture of the page as it is now, the "after" screenshot for the sheet
+    if (process.env.QA_PROOF === '1') {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page
+        .screenshot({ path: join(OUT, `${slug}.proof.jpg`), type: 'jpeg', quality: 70 })
+        .catch(() => undefined);
+    }
     await ctx.close();
   });
 }

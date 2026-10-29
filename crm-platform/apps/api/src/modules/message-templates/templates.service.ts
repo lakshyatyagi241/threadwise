@@ -6,6 +6,7 @@ import {
   type LintTemplateResult,
   type SubmitTemplateInput,
   type TemplateCounts,
+  type TemplateStats,
   type TemplateCountsQuery,
   type ListTemplatesQuery,
   type ListTemplatesResponse,
@@ -191,6 +192,17 @@ export class TemplatesService {
       from: w.from === null ? null : new Date(w.from),
       to: w.to === null ? null : new Date(w.to),
     };
+  }
+
+  /** How one template did: what was sent with it and how far each message got. Another workspace's template is not found. */
+  async stats(uuid: string): Promise<TemplateStats> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const row = await this.repo.findByUuid(tx, orgId, uuid);
+      if (!row) throw this.notFound();
+      const { lastSentAt, ...counts } = await this.repo.stats(tx, orgId, row.id);
+      return { ...counts, lastSentAt: lastSentAt ? lastSentAt.toISOString() : null };
+    });
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
@@ -388,6 +400,20 @@ export class TemplatesService {
       )
         throw AppError.validation('The name and the language of a live template cannot change', [
           { path: 'name', message: 'Create a new template to use another name or language.' },
+        ]);
+
+      // Meta does not let the category of an approved template change (a paused or rejected one may): refuse it here, whatever the client sent.
+      if (
+        statusOf(current) === 'approved' &&
+        current.metaTemplateId &&
+        current.metaCategory &&
+        prepared.metaCategory.toUpperCase() !== current.metaCategory.toUpperCase()
+      )
+        throw AppError.validation('The category of an approved template cannot change', [
+          {
+            path: 'metaCategory',
+            message: 'Meta does not allow changing the category of an approved template.',
+          },
         ]);
 
       // The same media type keeps the handle already stored unless a new one came with the form.

@@ -175,8 +175,11 @@ export const groups: HandlerSpec = {
     modified_time: 'col:updated_at',
     deleted_time: 'drop:soft-delete timestamp; deleted lists are excluded and counted',
     is_deleted: 'drop:soft-delete flag',
-    created_by: 'col:created_by (the migrated user, when the id resolves)',
-    user_id: 'drop:the same user as created_by under another name',
+    // Waboo writes the creator's DISPLAY NAME into created_by ("AHMAD SHAIKH") and the creator's id into user_id, so the id is read from user_id
+    // (created_by is only tried as an id for a list some other tool wrote)
+    created_by:
+      "col:created_by (the migrated creator: from user_id; created_by itself is the creator's display name)",
+    user_id: "col:created_by (the migrated creator's id; created_by in Waboo is the display name)",
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
     if (isDeleted(doc))
@@ -189,11 +192,16 @@ export const groups: HandlerSpec = {
         reason: 'list name is empty or longer than 191 characters',
       };
     const t = times(doc, ctx.fallbackAt);
-    // the creator is a migrated user when the Waboo id resolves; otherwise NULL (the list stays, the creator is not shown)
+    // the creator is a migrated user when the Waboo id resolves; otherwise NULL (the list stays, the creator is not shown).
+    // Waboo keeps the id in user_id and the creator's display name in created_by (MarketingList/List.py add_marketing_list), so
+    // user_id is tried first; a created_by that is itself an id of a migrated user is the fallback.
     const creator =
-      doc.created_by !== undefined && doc.created_by !== null
+      (doc.user_id !== undefined && doc.user_id !== null
+        ? ctx.ref('user', doc.user_id)
+        : undefined) ??
+      (doc.created_by !== undefined && doc.created_by !== null
         ? ctx.ref('user', doc.created_by)
-        : undefined;
+        : undefined);
     return {
       kind: 'rows',
       soft: t.soft,

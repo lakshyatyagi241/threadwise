@@ -1,4 +1,5 @@
-import { cutText, isDeleted, str, type Doc } from '../util';
+import type { Source } from '../extract/source';
+import { badText, cutText, docKeys, isDeleted, str, type Doc } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { Ctx, HandlerSpec, Outcome, Soft } from './types';
 
@@ -138,6 +139,7 @@ export const templates: HandlerSpec = {
         c('meta_category', 'text'),
         c('template_type', 'text'),
         c('attachment_type', 'text'),
+        c('header_sample_url', 'text'),
         c('language', 'text'),
         c('parameter_format', 'text'),
         c('status', 'text'),
@@ -151,7 +153,14 @@ export const templates: HandlerSpec = {
       // the template-quality step (pilot/templates/quality.cjs) writes the Meta rating, and with it updated_at and row_version: its own
       // step output is the check for those columns
       // provider_config_id is written by the cutover, when the number the templates belong to is connected (load/cutover.ts step 3)
-      skipCompare: ['quality_score', 'updated_at', 'row_version', 'provider_config_id'],
+      // header_media_key is written by the files step, which copies the header file named by header_sample_url into our storage
+      skipCompare: [
+        'quality_score',
+        'updated_at',
+        'row_version',
+        'provider_config_id',
+        'header_media_key',
+      ],
       constants: { row_version: 1 },
     },
   },
@@ -197,6 +206,7 @@ export const templates: HandlerSpec = {
     let bodyEx: unknown;
     let footer: string | null = null;
     let attachment: string | null = null;
+    let headerSample: string | null = null;
     let buttons: unknown[] = [];
     let carousel: unknown = null;
     let codeMinutes: number | null = null;
@@ -209,8 +219,14 @@ export const templates: HandlerSpec = {
           if (format === 'TEXT') {
             header = str(comp.text) ?? null;
             headerEx = comp.example;
-          } else if (MEDIA.has(format)) attachment = format.toLowerCase();
-          else throw new Unsupported(`header format "${format}" is not one WaDesk has`);
+          } else if (MEDIA.has(format)) {
+            attachment = format.toLowerCase();
+            // Meta's copy of the header file (the example handle), as the app's own template sync keeps it: it shows the header at once,
+            // and the files step copies it into our storage (header_media_key) because the link is short-lived
+            const handles = asDoc(comp.example).header_handle;
+            const h = Array.isArray(handles) ? str(handles[0]) : null;
+            if (attachment !== 'location' && h && /^https:\/\//i.test(h)) headerSample = h;
+          } else throw new Unsupported(`header format "${format}" is not one WaDesk has`);
         } else if (type === 'BODY') {
           body = str(comp.text) ?? null;
           bodyEx = comp.example;
@@ -256,8 +272,9 @@ export const templates: HandlerSpec = {
     if (attachment && attachment !== 'location')
       soft.push({
         code: 'HEADER_SAMPLE_NOT_KEPT',
-        reason:
-          'the media header example is a short-lived Meta link and was not kept; the template keeps its Meta id',
+        reason: headerSample
+          ? 'the media header example is a short-lived Meta link: kept as header_sample_url; the files step copies the file into our storage'
+          : 'the media header example is a short-lived Meta link and was not kept (it is not an https address); the template keeps its Meta id',
       });
     const createdBy = doc.created_by as Doc | null | undefined;
     const user =
@@ -295,6 +312,7 @@ export const templates: HandlerSpec = {
                   ? 'media'
                   : 'standard',
             attachment_type: attachment,
+            header_sample_url: headerSample,
             language,
             parameter_format: named ? 'NAMED' : 'POSITIONAL',
             status,
@@ -310,3 +328,34 @@ export const templates: HandlerSpec = {
     };
   },
 };
+
+/**
+ * The Meta copy of a template's media header file (the example handle) when the document has one an https address names: what the
+ * transform keeps as `header_sample_url`. Shared by the transform and by `template-headers` (templates loaded before it kept it).
+ */
+export function headerSampleOf(doc: Doc): string | null {
+  if (!Array.isArray(doc.components)) return null;
+  for (const comp of doc.components as Doc[]) {
+    if ((str(comp?.type) ?? '').toUpperCase() !== 'HEADER') continue;
+    const format = (str(comp.format) ?? '').toUpperCase();
+    if (format !== 'IMAGE' && format !== 'VIDEO' && format !== 'DOCUMENT') return null;
+    const handles = asDoc(comp.example).header_handle;
+    const h = Array.isArray(handles) ? str(handles[0]) : null;
+    return h && /^https:\/\//i.test(h) ? h : null;
+  }
+  return null;
+}
+
+/** The dump's templates that have a header link, by every key the document answers to. */
+export async function headerLinks(source: Source, client: string): Promise<Map<string, string>> {
+  const out = new Map<string, string>();
+  if (!source.collections(client).includes('broadcast_templates')) return out;
+  for await (const d of source.read(client, 'broadcast_templates')) {
+    const doc = d as Doc;
+    if (badText(doc)) continue;
+    const url = headerSampleOf(doc);
+    if (!url) continue;
+    for (const k of docKeys(doc)) out.set(k.key, url);
+  }
+  return out;
+}

@@ -167,7 +167,10 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('kind', v)}
         />
       </Field>
-      <Field label={t('upload')} hint={t('uploadHint', { mb: 50 })}>
+      <Field
+        label={t('upload')}
+        hint={`${t('uploadHint', { mb: 50 })} ${t(`acceptedFormats.${CHOOSE_KINDS.includes(kind) ? kind : 'image'}`)}`}
+      >
         <UploadBox
           accept={acceptFor(kind)}
           label={
@@ -188,13 +191,6 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
           onChange={(v) => set('url', v)}
         />
       </Field>
-      <Field label={t('filename')}>
-        <TextInput
-          value={d.filename}
-          placeholder="catalogue.pdf"
-          onChange={(v) => set('filename', v)}
-        />
-      </Field>
       <Field label={t('caption')}>
         <RichTextField
           value={d.caption}
@@ -209,7 +205,7 @@ export function MediaForm({ data: d, set, setMany, env }: FormProps) {
   );
 }
 
-export function NotifyNumberForm({ data: d, set }: FormProps) {
+export function NotifyNumberForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.send');
   const isMedia = !!d.kind && d.kind !== 'text';
   const src = d.source === 'custom' ? 'custom' : 'mirror';
@@ -255,9 +251,11 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           </Field>
           {!isMedia ? (
             <Field label={t('notifyMessage')} hint={t('notifyMessageHint')}>
-              <TextArea
+              <RichTextField
                 value={d.text}
+                label={t('notifyMessage')}
                 placeholder={t('notifyMessagePlaceholder')}
+                nodes={env.nodes}
                 onChange={(v) => set('text', v)}
               />
             </Field>
@@ -282,10 +280,12 @@ export function NotifyNumberForm({ data: d, set }: FormProps) {
           ) : null}
           {isMedia ? (
             <Field label={t('caption')}>
-              <TextArea
+              <RichTextField
                 value={d.caption}
+                label={t('caption')}
                 placeholder={t('captionPlaceholder')}
                 rows={3}
+                nodes={env.nodes}
                 onChange={(v) => set('caption', v)}
               />
             </Field>

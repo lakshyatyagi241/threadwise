@@ -2,6 +2,7 @@ import {
   FLB_NODE_TYPES,
   flbNodeInMode,
   flbAiNodeProblem,
+  flbDeadButtons,
   flbReadLocation,
   flbValidateGraph,
   type FlbValidationContext,
@@ -55,10 +56,13 @@ export function validateGraph(
         outgoing.has(n.id)
           ? 'contracts.validation.noIncoming'
           : 'contracts.validation.notConnected',
-        {
-          node: nodeLabelMsg(n.type),
-        },
+        { node: nodeLabelMsg(n.type) },
       ),
+    );
+  }
+  for (const d of flbDeadButtons(nodes, edges)) {
+    items.push(
+      msg('contracts.validation.buttonNoExit', { node: nodeLabelMsg(d.type), button: d.label }),
     );
   }
   for (const n of nodes) {

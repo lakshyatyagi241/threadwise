@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Dibuka lagi {time}",
       "erased": "Kontak yang dihapus",
-      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi dan teks pesan. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
+      "erasedHint": "Kontak ini telah dihapus, dan percakapannya disimpan tanpa data pribadi. Waktu menampilkan pesan terakhir, karena tanggal penghapusan tidak dicatat.",
       "erasedTitle": "Kontak yang dihapus"
     },
     "status": {

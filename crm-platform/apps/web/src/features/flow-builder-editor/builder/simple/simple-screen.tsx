@@ -1120,7 +1120,7 @@ function Editor({
                   ctx={ctx}
                   channel={channel}
                   set={setTrigger}
-                  bad={showProblems && found.some((p) => p.stepId === null)}
+                  bad={showProblems && found.some((p) => p.onTrigger)}
                 />
               ) : null}
 
@@ -1213,6 +1213,7 @@ function Editor({
                                     doc={doc}
                                     stepId={s.id}
                                     value={s.goto ?? null}
+                                    noSelf
                                     onChange={(target) => setGoto(s.id, target)}
                                   />
                                 </div>

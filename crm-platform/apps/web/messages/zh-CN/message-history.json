@@ -47,7 +47,10 @@
       "download": "下载",
       "rows": "{n} 条消息",
       "keptUntil": "保留至 {when}（{days} 天）",
-      "fromEmail": "来自您的邮箱"
+      "fromEmail": "来自您的邮箱",
+      "hint": "导出 CSV 会使用本页选择的筛选条件和日期。文件在后台生成，准备好后我们会发邮件通知您。",
+      "empty": "还没有导出。点击“导出 CSV”，即可把此处显示的消息保存为文件。",
+      "loading": "正在加载导出"
     },
     "kpi": {
       "label": "关键数据",
@@ -157,7 +160,7 @@
       "ai": "AI 助手",
       "api": "API",
       "broadcast": "群发",
-      "broadcast_test": "广播测试发送",
+      "broadcast_test": "营销活动测试发送",
       "campaign": "营销活动",
       "scheduled": "定时",
       "other": "其他"
@@ -238,7 +241,7 @@
         "ai": "AI 助手",
         "api": "API",
         "broadcast": "群发",
-        "broadcast_test": "广播测试发送",
+        "broadcast_test": "营销活动测试发送",
         "campaign": "营销活动",
         "scheduled": "定时消息",
         "other": "其他"

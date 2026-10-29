@@ -333,6 +333,7 @@ export const NAV_RESOURCES: NavLink[] = [
 
 export const NAV_COMPANY: NavLink[] = [
   { label: 'About', href: '/about' },
+  { label: 'Careers', href: '/careers' },
   { label: 'Security', href: '/security' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -370,24 +371,6 @@ export const SECURITY_POINTS: Array<{ title: string; text: string; icon: IconNam
   },
 ];
 
-export const ABOUT_VALUES: Array<{ title: string; text: string; icon: IconName }> = [
-  {
-    title: 'Conversations first',
-    text: 'Customers already talk in chat. We build tools that meet them there.',
-    icon: 'chat',
-  },
-  {
-    title: 'One system, not ten tabs',
-    text: 'Inbox, automation, campaigns and CRM belong together.',
-    icon: 'layers',
-  },
-  {
-    title: 'Plain and honest',
-    text: 'Clear limits, clear permissions and clear documentation.',
-    icon: 'check',
-  },
-];
-
 export const PRICING_FAQ: Faq[] = [
   {
     q: 'Can I change plans later?',
@@ -413,10 +396,12 @@ export const PRICING_FAQ: Faq[] = [
 
 /** Every static public page, for sitemap.xml. */
 export const SITEMAP_PAGES = [
-  ...['/platform', '/features', '/pricing', '/get-started', '/about', '/security'].map((loc) => ({
-    loc,
-    priority: '0.8',
-  })),
+  ...['/platform', '/features', '/pricing', '/get-started', '/about', '/careers', '/security'].map(
+    (loc) => ({
+      loc,
+      priority: '0.8',
+    }),
+  ),
   ...ALL_PRODUCTS.map((p) => ({ loc: hrefOf(p), priority: '0.8' })),
   { loc: '/products/channels', priority: '0.8' },
   { loc: '/delete-account', priority: '0.4' },

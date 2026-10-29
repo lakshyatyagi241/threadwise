@@ -47,7 +47,10 @@
       "download": "Herunterladen",
       "rows": "{n} Nachrichten",
       "keptUntil": "aufbewahrt bis {when} ({days} Tage)",
-      "fromEmail": "Aus Ihrer E-Mail"
+      "fromEmail": "Aus Ihrer E-Mail",
+      "hint": "CSV exportieren nutzt die auf dieser Seite gewählten Filter und Daten. Die Datei wird im Hintergrund erstellt, und wir senden Ihnen eine E-Mail, sobald sie fertig ist.",
+      "empty": "Noch keine Exporte. Klicken Sie auf CSV exportieren, um die hier angezeigten Nachrichten als Datei zu erhalten.",
+      "loading": "Exporte werden geladen"
     },
     "kpi": {
       "label": "Kennzahlen",
@@ -157,7 +160,7 @@
       "ai": "KI-Assistent",
       "api": "API",
       "broadcast": "Massenversand",
-      "broadcast_test": "Test-Versand der Massennachricht",
+      "broadcast_test": "Test-Versand der Kampagne",
       "campaign": "Kampagne",
       "scheduled": "Geplant",
       "other": "Sonstige"
@@ -238,7 +241,7 @@
         "ai": "KI-Assistent",
         "api": "API",
         "broadcast": "Massenversand",
-        "broadcast_test": "Test-Versand der Massennachricht",
+        "broadcast_test": "Test-Versand der Kampagne",
         "campaign": "Kampagne",
         "scheduled": "Geplante Nachricht",
         "other": "Sonstige"

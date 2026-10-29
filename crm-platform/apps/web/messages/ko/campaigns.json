@@ -17,18 +17,19 @@
       "refresh": "새로고침",
       "newCampaign": "새 캠페인",
       "tile": {
-        "sent": "발송됨",
+        "sent": "발송된 메시지",
         "delivered": "전달됨",
         "read": "읽음",
-        "failed": "실패",
-        "processing": "처리 중",
-        "campaigns": "캠페인 {count}개",
+        "failed": "실패한 메시지",
+        "processing": "발송 중인 캠페인",
+        "campaigns": "{count, plural, other {캠페인 #개}} 기준",
         "inFlight": "전송 중",
         "awaiting": "대기 중",
-        "queued": "대기 {count}건",
+        "queued": "시작 예정 {count}개",
         "deliveredRate": "전달률 {rate}%",
         "readRate": "읽음률 {rate}%",
-        "failedCampaigns": "실패한 캠페인 {count}건"
+        "failedCampaigns": "{count, plural, other {캠페인 #개}} 실패로 표시됨",
+        "note": "발송, 전달, 읽음, 실패는 메시지 수이며 실패한 메시지는 발송에 포함되지 않습니다. 각 숫자 아래의 작은 줄은 캠페인 수입니다. 모두 아래에서 선택한 기간({range})을 따릅니다."
       },
       "range": {
         "all": "전체 기간",
@@ -280,7 +281,8 @@
         "split": "변형 A 비율 {a}%",
         "splitHint": "변형 B는 나머지 수신자에게 발송됩니다. 변형 B 내용은 작성 단계에서 설정하세요.",
         "pickSender": "— 발신자 선택 —",
-        "notVerified": "아직 인증되지 않았습니다. 번호가 인증되면 안내형 흐름을 사용할 수 있습니다."
+        "notVerified": "아직 인증되지 않았습니다. 번호가 인증되면 안내형 흐름을 사용할 수 있습니다.",
+        "typeFromTemplate": "템플릿에서 오셨으므로 이 캠페인은 해당 템플릿을 보냅니다. 맞춤 메시지나 플로우는 캠페인 > 만들기에서 만드세요."
       },
       "audience": {
         "title": "대상",
@@ -1628,7 +1630,7 @@
         "retries": "재시도",
         "retriesOn": "켜짐, {date}까지",
         "retriesOff": "꺼짐",
-        "recurringNote": "매번 그 시점의 대상에게 발송되므로 수신자 수가 달라질 수 있습니다."
+        "recurringNote": "지금은 아무것도 발송되지 않습니다. 첫 실행은 위 시간에 시작되며, 이후 각 실행은 기록에 별도의 행으로 표시됩니다. 그때까지는 '반복'에서 이 캠페인을 확인할 수 있습니다. 각 실행은 그 시점의 대상에게 발송되므로 수신자 수가 달라질 수 있습니다."
       },
       "status": {
         "back": "캠페인으로 돌아가기",
@@ -1842,7 +1844,8 @@
         "add": "템플릿 추가",
         "count": "템플릿 {used}/{max}개",
         "limitReached": "한도 도달: 템플릿 {max}개.",
-        "variablesTitle": "템플릿 {position}의 변수: {name}"
+        "variablesTitle": "템플릿 {position}의 변수: {name}",
+        "variablesLater": "{count, plural, other {변수 #개}}의 값은 이 미리보기가 아니라 매핑에서 채워집니다."
       }
     },
     "history": {

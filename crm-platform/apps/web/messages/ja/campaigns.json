@@ -17,18 +17,19 @@
       "refresh": "更新",
       "newCampaign": "新規キャンペーン",
       "tile": {
-        "sent": "送信済み",
+        "sent": "送信メッセージ",
         "delivered": "配信済み",
         "read": "既読",
-        "failed": "失敗",
-        "processing": "処理中",
-        "campaigns": "{count}件のキャンペーン",
+        "failed": "失敗メッセージ",
+        "processing": "送信中のキャンペーン",
+        "campaigns": "{count, plural, other {#件のキャンペーン}}から",
         "inFlight": "送信中",
         "awaiting": "待機中",
-        "queued": "{count}件待機中",
+        "queued": "開始予定 {count}件",
         "deliveredRate": "配信率 {rate}%",
         "readRate": "既読率 {rate}%",
-        "failedCampaigns": "失敗したキャンペーン {count}件"
+        "failedCampaigns": "{count, plural, other {#件のキャンペーン}}が失敗",
+        "note": "送信・配信・既読・失敗はメッセージ数で、失敗したメッセージは送信に含まれません。各数字の下の小さい行はキャンペーン数です。すべて下で選んだ期間（{range}）に従います。"
       },
       "range": {
         "all": "全期間",
@@ -280,7 +281,8 @@
         "split": "パターンA 配分 {a}%",
         "splitHint": "パターンBには残りの宛先が割り当てられます。パターンBの内容は作成ステップで設定してください。",
         "pickSender": "— 送信元を選択 —",
-        "notVerified": "未認証です。番号が認証されるとガイド付きフローを利用できます。"
+        "notVerified": "未認証です。番号が認証されるとガイド付きフローを利用できます。",
+        "typeFromTemplate": "テンプレートから来たため、このキャンペーンはそのテンプレートを送信します。カスタムメッセージやフローは「キャンペーン > 作成」から作成してください。"
       },
       "audience": {
         "title": "対象",
@@ -1628,7 +1630,7 @@
         "retries": "再試行",
         "retriesOn": "オン、{date}まで",
         "retriesOff": "オフ",
-        "recurringNote": "実行のたびにその時点の対象に送信されるため、受信者数は変わることがあります。"
+        "recurringNote": "今は何も送信されません。最初の実行は上の時刻に始まり、その後は実行ごとに履歴へ1行ずつ表示されます。それまでは「定期」でこのキャンペーンを確認できます。各実行はその時点のオーディエンスに送られるため、受信者数は変わることがあります。"
       },
       "status": {
         "back": "キャンペーンに戻る",
@@ -1842,7 +1844,8 @@
         "add": "テンプレートを追加",
         "count": "{used} / {max} 件のテンプレート",
         "limitReached": "上限に達しました：テンプレートは{max}件までです。",
-        "variablesTitle": "テンプレート{position}の変数：{name}"
+        "variablesTitle": "テンプレート{position}の変数：{name}",
+        "variablesLater": "{count, plural, other {#個の変数}}の値は、このプレビューではなくマッピングから入ります。"
       }
     },
     "history": {

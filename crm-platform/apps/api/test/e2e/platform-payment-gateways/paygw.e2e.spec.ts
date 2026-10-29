@@ -773,6 +773,10 @@ describe('checkout, return, webhook and fulfilment (TW-PAYGW-009, 011, 026..028,
     expect(ledger.rows).toHaveLength(1);
     expect(ledger.rows[0].idempotency_key).toBe(`order:${o.uuid}`);
     expect(await outboxCount(Number(o.id), 'paygw.order.paid')).toBe(1);
+    // the wallet's activity names the order, so the row can offer its invoice
+    const activity = await api().get('/v2/wallet/ledger').set(bearer(buyer.token));
+    expect(activity.status).toBe(200);
+    expect(activity.body.data).toEqual([expect.objectContaining({ invoiceOrderId: o.uuid })]);
     // the plan is untouched by a wallet order
     expect(
       (await h.owner.query(`SELECT plan FROM organizations WHERE id = $1`, [buyer.orgId])).rows[0]

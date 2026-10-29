@@ -1093,6 +1093,9 @@
           },
           "removeRule": "규칙 제거",
           "variablePlaceholder": "변수 이름(예: plan)",
+          "keyLabel": "키",
+          "valueLabel": "값",
+          "pickProperty": "연락처 속성 선택",
           "pickVariable": "테스트할 변수를 선택하세요.",
           "comparePlaceholder": "비교 대상…",
           "joinerAnd": "AND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "문서(PDF 보고서 등)",
           "upload": "업로드",
           "uploadHint": "최대 {mb}MB. 파일을 호스팅하고 플로우에 공개 URL을 제공합니다.",
+          "acceptedFormats": {
+            "image": "지원 형식: JPG, PNG.",
+            "video": "지원 형식: MP4, 3GP.",
+            "audio": "지원 형식: MP3, AAC, AMR, OGG.",
+            "document": "지원 형식: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "파일 교체",
           "chooseKind": {
             "image": "이미지 선택(또는 여기로 끌어놓기)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "비워 두면 주문의 모든 상품에 해당합니다.",
             "storeNote": "고객은 전화번호로 저장된 연락처와 매칭됩니다. 주문으로 새 연락처가 만들어지지는 않습니다. “장바구니 담기”와 “상품 조회”는 제공되지 않습니다. 스토어에서 해당 이벤트를 전달하지 않기 때문입니다.",
             "updatedNote": "사람이 직접 또는 가져오기로 연락처를 변경할 때마다 실행됩니다. 다른 플로우가 한 변경으로는 시작되지 않습니다.",
-            "segmentLeaveHint": "이 세그먼트 안에 있던 연락처가 업데이트, 태그 지정 또는 목록 추가 후 세그먼트 밖에 있는 것으로 확인될 때마다 한 번 실행됩니다. 연락처가 나간 것은 플로우가 먼저 세그먼트 안에 있는 것을 확인한 경우에만 감지됩니다."
+            "segmentLeaveHint": "이 세그먼트 안에 있던 연락처가 업데이트, 태그 지정 또는 목록 추가 후 세그먼트 밖에 있는 것으로 확인될 때마다 한 번 실행됩니다. 연락처가 나간 것은 플로우가 먼저 세그먼트 안에 있는 것을 확인한 경우에만 감지됩니다.",
+            "updatedField": "이 속성이 바뀔 때만",
+            "updatedFieldHint": "모든 변경에서 시작하려면 “모든 속성”으로 두세요. 어떤 속성이 바뀌었는지 알려 주지 않는 수정(일부 가져오기와 일괄 작업)은 한 속성을 지켜보는 플로우를 시작하지 않습니다.",
+            "updatedAny": "모든 속성"
           },
           "outside": {
             "saveFirst": "먼저 플로우를 저장하세요. 웹훅 주소는 저장된 플로우에 속합니다.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "“{node}”에 들어오는 연결이 없습니다 — 이 노드로 이어지는 것이 없습니다.",
+        "buttonNoExit": "\"{node}\": \"{button}\" 버튼이 어떤 단계로도 이어지지 않습니다.",
         "notConnected": "“{node}”이(가) 아무 것에도 연결되어 있지 않습니다.",
         "wrongChannel": "“{node}”은(는) {channel}에서 작동하지 않습니다 — 삭제하거나 트리거 노드에서 채널을 다시 설정하세요.",
         "noSenderInstagram": "트리거 노드에 Instagram 계정이 선택되어 있지 않습니다 — 트리거 단계에서 계정을 선택하세요.",

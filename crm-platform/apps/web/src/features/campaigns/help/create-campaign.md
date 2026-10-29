@@ -131,7 +131,7 @@ A test of a marketing template to a number whose local time is inside your quiet
 
 - **Send now** sends right away, once.
 - **Schedule campaign** sends once at the date and time you pick, in the time zone you choose (your workspace's by default). The date must be in the future.
-- **Recurring campaign** sends again and again on a rule: daily, weekly (pick the weekdays) or monthly, every N days, weeks or months, ending never, on a date or after a number of runs. A sentence under the heading says what the rule does, and **Next runs** lists the first five. Each run goes to the audience as it is at that time. On the 31st, shorter months use their last day.
+- **Recurring campaign** sends again and again on a rule: daily, weekly (pick the weekdays) or monthly, every N days, weeks or months, ending never, on a date or after a number of runs. A sentence under the heading says what the rule does, and **Next runs** lists the first five. Nothing is sent when you start it: the first run begins at the first time on the rule, and until then the campaign is listed under **Recurring**. Every run then appears in **History** as its own row. Each run goes to the audience as it is at that time. On the 31st, shorter months use their last day.
 
 ## Retries
 

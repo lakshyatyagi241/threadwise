@@ -17,18 +17,19 @@
       "refresh": "Aktualisieren",
       "newCampaign": "Neue Kampagne",
       "tile": {
-        "sent": "Gesendet",
+        "sent": "Gesendete Nachrichten",
         "delivered": "Zugestellt",
         "read": "Gelesen",
-        "failed": "Fehlgeschlagen",
-        "processing": "In Bearbeitung",
-        "campaigns": "{count} Kampagnen",
+        "failed": "Fehlgeschlagene Nachrichten",
+        "processing": "Kampagnen im Versand",
+        "campaigns": "aus {count, plural, one {# Kampagne} other {# Kampagnen}}",
         "inFlight": "unterwegs",
         "awaiting": "wartet",
-        "queued": "{count} in Warteschlange",
+        "queued": "{count} zum Start geplant",
         "deliveredRate": "{rate} % Zustellung",
         "readRate": "{rate} % Lesequote",
-        "failedCampaigns": "{count} fehlgeschlagene Kampagnen"
+        "failedCampaigns": "{count, plural, one {# Kampagne} other {# Kampagnen}} als fehlgeschlagen markiert",
+        "note": "Gesendet, Zugestellt, Gelesen und Fehlgeschlagen zählen Nachrichten, und eine fehlgeschlagene Nachricht zählt nicht zu Gesendet. Die kleinere Zeile unter jeder Zahl zählt Kampagnen. Alles folgt dem unten gewählten Zeitraum: {range}."
       },
       "range": {
         "all": "Gesamte Zeit",
@@ -280,7 +281,8 @@
         "split": "Anteil Variante A {a} %",
         "splitHint": "Variante B erhält den restlichen Empfängerkreis. Inhalt der Variante B im Schritt „Verfassen“ festlegen.",
         "pickSender": "— Absender auswählen —",
-        "notVerified": "Noch nicht verifiziert: Der geführte Ablauf ist verfügbar, sobald die Nummer verifiziert ist."
+        "notVerified": "Noch nicht verifiziert: Der geführte Ablauf ist verfügbar, sobald die Nummer verifiziert ist.",
+        "typeFromTemplate": "Sie kommen von einer Vorlage, daher sendet diese Kampagne genau diese Vorlage. Eine eigene Nachricht oder ein Flow wird unter Kampagnen > Erstellen angelegt."
       },
       "audience": {
         "title": "Zielgruppe",
@@ -1628,7 +1630,7 @@
         "retries": "Wiederholungen",
         "retriesOn": "Ein, bis {date}",
         "retriesOff": "Aus",
-        "recurringNote": "Jeder Durchlauf geht an die Zielgruppe in ihrem jeweiligen Zustand, daher kann sich die Zahl der Empfänger ändern."
+        "recurringNote": "Jetzt wird nichts gesendet. Der erste Lauf beginnt zur oben genannten Zeit, danach erscheint jeder Lauf im Verlauf als eigene Zeile. Bis dahin finden Sie diese Kampagne unter Wiederkehrend. Jeder Lauf geht an die Zielgruppe, wie sie zu dieser Zeit ist, daher kann sich die Zahl der Empfänger ändern."
       },
       "status": {
         "back": "Zurück zu Kampagnen",
@@ -1842,7 +1844,8 @@
         "add": "Vorlage hinzufügen",
         "count": "{used} von {max} Vorlagen",
         "limitReached": "Limit erreicht: {max} Vorlagen.",
-        "variablesTitle": "Variablen der Vorlage {position}: {name}"
+        "variablesTitle": "Variablen der Vorlage {position}: {name}",
+        "variablesLater": "{count, plural, one {# Variable erhält} other {# Variablen erhalten}} den Wert aus der Zuordnung, nicht aus dieser Vorschau."
       }
     },
     "history": {

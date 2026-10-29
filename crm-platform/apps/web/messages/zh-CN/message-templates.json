@@ -266,7 +266,8 @@
         "name": "模板名称",
         "nameHint": "仅限 a-z、0-9 和下划线,最多 60 个字符。",
         "nameTaken": "此号码上该语言已使用此名称。",
-        "language": "语言"
+        "language": "语言",
+        "categoryLocked": "Meta 不允许更改已通过审核模板的类别。"
       },
       "auth": {
         "title": "一次性验证码",
@@ -425,6 +426,7 @@
         "format": "卡片显示",
         "formatImage": "图片",
         "formatVideo": "视频",
+        "limits": "图片最大 5 MB,视频最大 16 MB。",
         "count": "{used}/{max} 张卡片",
         "add": "添加卡片",
         "needTwo": "轮播至少需要 {min} 张卡片。",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "此类别不允许使用营销用语。",
         "TAG_CONTENT_MISMATCH": "类别与内容不符（例如在 UTILITY 模板中使用促销文案）。",
         "SCAM": "Meta 将此模板标记为潜在诈骗。请检查声明和措辞。"
+      },
+      "stats": {
+        "title": "此模板的效果",
+        "hint": "根据用此模板发送的消息统计",
+        "loading": "正在加载数据",
+        "error": "无法加载数据。",
+        "none": "此模板还没有发送过任何消息。",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "read": "已读",
+        "replied": "已回复",
+        "failed": "失败",
+        "percent": "{value}%",
+        "footer": "此模板已发送 {total} 条消息，{queued} 条仍在等待",
+        "lastSent": "最近发送 {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "语气",
       "pickTone": "选择语气",
       "language": "语言",
-      "languageHint": "草稿将使用表单所用的语言撰写。",
+      "languageHint": "可选择 Meta 支持的任意语言。草稿将用该语言撰写，模板也采用该语言。",
       "notes": "自定义提示",
       "notesNote": "选填 / 最多 2000 字",
       "notesPlaceholder": "您希望包含的具体内容：变量、链接、必须使用的措辞、需要避免的内容…",

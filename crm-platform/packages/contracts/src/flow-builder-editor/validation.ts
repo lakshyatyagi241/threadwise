@@ -1,6 +1,7 @@
 import {
   FLOW_TYPE_LABELS,
   flbNodeInMode,
+  flbPortsFor,
   FLB_NODE_TYPES,
   type FlowType,
   type FlbNodeData,
@@ -16,6 +17,8 @@ import { flbAiNodeProblem } from './ai-node';
  *  - a node nothing leads into is broken: "has no incoming connection" when it has outgoing edges, else "is not connected
  *    to anything". The start node and the Trigger are exempt, and a leaf with no outgoing edge is fine (a flow may end on
  *    any node)
+ *  - a button (a Quick replies or List option, a carousel button) that leads nowhere is broken: "button ... does not lead to
+ *    any step" (not a Reference rule). A button that hands the customer to a person or starts another flow is exempt
  *  - a node whose type does not run on the flow's channel is flagged (hidden / unknown types are left alone)
  *  - the Trigger must name a sender, but only when the workspace has one to pick (with none connected a draft must still
  *    save). Reference looks in the Instagram list for an Instagram flow, the Facebook list for a Facebook flow and the
@@ -40,6 +43,8 @@ export interface FlbValidationNode {
 export interface FlbValidationEdge {
   source: string;
   target: string;
+  /** The output port the edge leaves by (`p0`, `p1` for buttons). Without it an edge counts for the whole node. */
+  sourceHandle?: string | null;
 }
 
 export interface FlbValidationResult {
@@ -68,6 +73,38 @@ const MODE_WORD: Partial<Record<FlowType, string>> = {
   web: 'Website chat',
 };
 
+/** The nodes whose options are buttons the customer taps, each leaving by its own port. */
+const BUTTON_NODES: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel', 'ig_quick']);
+
+/** A button that hands the customer to a person (`handoffs`) or starts another flow (`optionActions`) needs no exit. */
+function flbButtonDoesSomething(data: FlbNodeData | null | undefined, port: string): boolean {
+  const i = port.slice(1);
+  const rec = (v: unknown): Record<string, unknown> =>
+    v !== null && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {};
+  if (rec(data?.handoffs)[i] !== undefined) return true;
+  return rec(rec(data?.optionActions)[i]).type === 'flow';
+}
+
+/** Every button that leads nowhere: no edge leaves its port, and it neither hands over to a person nor starts a flow. */
+export function flbDeadButtons(
+  nodes: readonly FlbValidationNode[],
+  edges: readonly FlbValidationEdge[],
+): Array<{ nodeId: string; type: string; label: string }> {
+  const leaving = new Set<string>();
+  for (const e of edges)
+    if (e?.source && e.target) leaving.add(`${e.source}\u0000${e.sourceHandle ?? ''}`);
+  const dead: Array<{ nodeId: string; type: string; label: string }> = [];
+  for (const n of nodes) {
+    if (!BUTTON_NODES.has(n.type)) continue;
+    for (const port of flbPortsFor(n)) {
+      if (!/^p\d+$/.test(port.id) || leaving.has(`${n.id}\u0000${port.id}`)) continue;
+      if (flbButtonDoesSomething(n.data, port.id)) continue;
+      dead.push({ nodeId: n.id, type: n.type, label: port.label });
+    }
+  }
+  return dead;
+}
+
 export function flbValidateGraph(
   nodes: readonly FlbValidationNode[],
   edges: readonly FlbValidationEdge[],
@@ -95,6 +132,13 @@ export function flbValidateGraph(
       outgoing.has(n.id)
         ? `"${label}" has no incoming connection — nothing leads into it.`
         : `"${label}" is not connected to anything.`,
+    );
+  }
+
+  for (const d of flbDeadButtons(nodes, edges)) {
+    bad.add(d.nodeId);
+    items.push(
+      `"${FLB_NODE_TYPES[d.type]?.label ?? d.type}": the button "${d.label}" does not lead to any step.`,
     );
   }
 

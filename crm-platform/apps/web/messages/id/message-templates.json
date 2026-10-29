@@ -266,7 +266,8 @@
         "name": "Nama templat",
         "nameHint": "Hanya a-z, 0-9, dan _, maksimal 60 karakter.",
         "nameTaken": "Nama ini sudah dipakai untuk bahasa ini di nomor ini.",
-        "language": "Bahasa"
+        "language": "Bahasa",
+        "categoryLocked": "Meta tidak mengizinkan perubahan kategori templat yang sudah disetujui."
       },
       "auth": {
         "title": "Kode sandi sekali pakai",
@@ -425,6 +426,7 @@
         "format": "Kartu menampilkan",
         "formatImage": "Gambar",
         "formatVideo": "Video",
+        "limits": "Gambar hingga 5 MB, video hingga 16 MB.",
         "count": "{used}/{max} kartu",
         "add": "Tambah kartu",
         "needTwo": "Carousel memerlukan minimal {min} kartu.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Bahasa pemasaran tidak diizinkan dalam kategori ini.",
         "TAG_CONTENT_MISMATCH": "Kategori tidak sesuai dengan konten (mis. teks promosi dalam template UTILITY).",
         "SCAM": "Meta menandai template ini sebagai potensi penipuan. Tinjau klaim dan bahasanya."
+      },
+      "stats": {
+        "title": "Kinerja templat ini",
+        "hint": "Dihitung dari pesan yang dikirim dengannya",
+        "loading": "Memuat angka",
+        "error": "Angka tidak dapat dimuat.",
+        "none": "Belum ada yang dikirim dengan templat ini.",
+        "sent": "Terkirim",
+        "delivered": "Diterima",
+        "read": "Dibaca",
+        "replied": "Dibalas",
+        "failed": "Gagal",
+        "percent": "{value}%",
+        "footer": "{total} pesan dikirim dengan templat ini, {queued} masih menunggu",
+        "lastSent": "terakhir dikirim {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Nada",
       "pickTone": "Pilih nada",
       "language": "Bahasa",
-      "languageHint": "Draf ditulis dalam bahasa formulir.",
+      "languageHint": "Pilih bahasa apa pun yang diterima Meta. Draf ditulis dalam bahasa itu, dan templat memakainya.",
       "notes": "Prompt kustom",
       "notesNote": "opsional / maks. 2000",
       "notesPlaceholder": "Hal spesifik yang ingin disertakan: variabel, tautan, frasa wajib, hal yang harus dihindari…",

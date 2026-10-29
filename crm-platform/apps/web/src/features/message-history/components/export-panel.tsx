@@ -25,7 +25,19 @@ function saveBlob(fileName: string, blob: Blob): void {
  * so each export shows Preparing, Ready with a Download, Failed with the reason, or Expired. The list refreshes by itself while one is
  * being prepared. The page that the "ready" email links to is this one.
  */
-export function ExportPanel({ highlight, tz }: { highlight: string; tz: string }) {
+export function ExportPanel({
+  highlight,
+  tz,
+  requesting,
+  onRequest,
+}: {
+  highlight: string;
+  tz: string;
+  /** A request is being sent. */
+  requesting: boolean;
+  /** Asks for a new export of the filters and dates chosen on the screen. */
+  onRequest: () => void;
+}) {
   const t = useTranslations('message-history.exports');
   const locale = useLocale();
   const errorText = useErrorText();
@@ -33,7 +45,6 @@ export function ExportPanel({ highlight, tz }: { highlight: string; tz: string }
   const q = useHistoryExports(true);
   const [busy, setBusy] = useState<string | null>(null);
   const items = q.data?.data ?? [];
-  if (q.isPending || items.length === 0) return null;
 
   const download = async (e: MessageLogExport) => {
     setBusy(e.id);
@@ -53,9 +64,26 @@ export function ExportPanel({ highlight, tz }: { highlight: string; tz: string }
       data-testid="history-exports"
       className="rounded-md border border-border bg-background"
     >
-      <h2 className="border-b border-border px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-        {t('title')}
-      </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-2.5">
+        <div>
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            {t('title')}
+          </h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">{t('hint')}</p>
+        </div>
+        <Button variant="secondary" size="sm" disabled={requesting} onClick={onRequest}>
+          {requesting ? <Spinner /> : <DownloadIcon />} {t('request')}
+        </Button>
+      </div>
+      {q.isPending ? (
+        <div className="flex justify-center p-4">
+          <Spinner label={t('loading')} />
+        </div>
+      ) : items.length === 0 ? (
+        <p className="px-4 py-3 text-sm text-muted-foreground" data-testid="history-exports-empty">
+          {t('empty')}
+        </p>
+      ) : null}
       <ul className="divide-y divide-border">
         {items.slice(0, 5).map((e) => (
           <li

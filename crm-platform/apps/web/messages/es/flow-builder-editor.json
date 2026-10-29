@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Quitar regla",
           "variablePlaceholder": "Nombre de la variable (p. ej., plan)",
+          "keyLabel": "Clave",
+          "valueLabel": "Valor",
+          "pickProperty": "Elige una propiedad del contacto",
           "pickVariable": "Elige la variable a comprobar.",
           "comparePlaceholder": "Comparar con…",
           "joinerAnd": "Y",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Documento (informe PDF, etc.)",
           "upload": "Subir",
           "uploadHint": "Hasta {mb} MB. Alojamos el archivo y damos al flujo una URL pública.",
+          "acceptedFormats": {
+            "image": "Formatos admitidos: JPG, PNG.",
+            "video": "Formatos admitidos: MP4, 3GP.",
+            "audio": "Formatos admitidos: MP3, AAC, AMR, OGG.",
+            "document": "Formatos admitidos: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Reemplazar archivo",
           "chooseKind": {
             "image": "Elige una imagen (o arrástrala aquí)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Vacío = cualquier producto del pedido.",
             "storeNote": "El cliente se asocia a un contacto guardado por su número de teléfono; no se crea nadie por un pedido. “Añadido al carrito” y “producto visto” no se ofrecen porque la tienda no los informa.",
             "updatedNote": "Se activa cada vez que una persona o una importación cambia un contacto. Un cambio hecho por otro flujo no lo inicia.",
-            "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero."
+            "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero.",
+            "updatedField": "Solo cuando cambie esta propiedad",
+            "updatedFieldHint": "Déjalo en «Cualquier propiedad» para iniciar en cada cambio. Las ediciones que no indican qué propiedad cambió (algunas importaciones y acciones masivas) no inician un flujo que vigila una propiedad.",
+            "updatedAny": "Cualquier propiedad"
           },
           "outside": {
             "saveFirst": "Guarda primero el flujo. La dirección del webhook pertenece al flujo guardado.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "«{node}» no tiene ninguna conexión de entrada: nada conduce a él.",
+        "buttonNoExit": "«{node}»: el botón «{button}» no lleva a ningún paso.",
         "notConnected": "«{node}» no está conectado a nada.",
         "wrongChannel": "«{node}» no funciona en {channel}: elimínalo o vuelve a activar el canal en el nodo Disparador.",
         "noSenderInstagram": "El nodo Disparador no tiene ninguna cuenta de Instagram seleccionada: elige una en el paso Disparador.",

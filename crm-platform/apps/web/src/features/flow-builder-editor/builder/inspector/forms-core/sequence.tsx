@@ -1,11 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { AddButton, RowCard, TextArea } from '../kit';
+import { AddButton, RowCard } from '../kit';
 import { controlClass } from '../kit';
 import type { FormProps } from '../types';
 import { acceptFor, asArray, asRecord, moveItem, patchItem, str } from './helpers';
 import { CardHeader, InfoBox, UploadBox, UploadedFile, uploadFile } from './parts';
+import { RichTextField } from '../rich-text-field';
 import { SequencePreview } from './previews';
 
 type Reply = Record<string, unknown>;
@@ -56,9 +57,11 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
             </CardHeader>
             <div className="space-y-2 p-3">
               {kind === 'text' ? (
-                <TextArea
+                <RichTextField
                   value={r.text}
+                  label={t(`kind.${kind}`)}
                   rows={3}
+                  nodes={env.nodes}
                   placeholder={t('textPlaceholder')}
                   onChange={(v) => setReply(i, { text: v })}
                 />
@@ -89,12 +92,13 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
                     placeholder={t('pasteUrl')}
                     className={`${controlClass} font-mono !text-[11.5px]`}
                   />
-                  <input
-                    type="text"
-                    value={str(r.caption)}
-                    onChange={(e) => setReply(i, { caption: e.target.value })}
+                  <RichTextField
+                    value={r.caption}
+                    label={t('captionOptional')}
+                    rows={2}
+                    nodes={env.nodes}
                     placeholder={t('captionOptional')}
-                    className={controlClass}
+                    onChange={(v) => setReply(i, { caption: v })}
                   />
                 </>
               )}
@@ -110,9 +114,7 @@ export function SequenceForm({ data: d, set, env }: FormProps) {
         ))}
       </div>
       {replies.length === 0 ? (
-        <div className="mt-2 text-center text-[11.5px] text-muted-foreground">
-          {t('empty')}
-        </div>
+        <div className="mt-2 text-center text-[11.5px] text-muted-foreground">{t('empty')}</div>
       ) : null}
     </>
   );

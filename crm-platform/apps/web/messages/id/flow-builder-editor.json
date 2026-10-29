@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Hapus aturan",
           "variablePlaceholder": "Nama variabel (mis. plan)",
+          "keyLabel": "Kunci",
+          "valueLabel": "Nilai",
+          "pickProperty": "Pilih properti kontak",
           "pickVariable": "Pilih variabel yang akan diuji.",
           "comparePlaceholder": "Bandingkan dengan…",
           "joinerAnd": "DAN",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokumen (laporan PDF, dll.)",
           "upload": "Unggah",
           "uploadHint": "Maks. {mb} MB. Kami menyimpan berkas dan memberi alur URL publik.",
+          "acceptedFormats": {
+            "image": "Format yang diterima: JPG, PNG.",
+            "video": "Format yang diterima: MP4, 3GP.",
+            "audio": "Format yang diterima: MP3, AAC, AMR, OGG.",
+            "document": "Format yang diterima: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Ganti berkas",
           "chooseKind": {
             "image": "Pilih gambar (atau seret ke sini)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Kosong = produk apa pun dalam pesanan.",
             "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
             "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya.",
-            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen."
+            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen.",
+            "updatedField": "Hanya saat properti ini berubah",
+            "updatedFieldHint": "Biarkan “Properti apa saja” agar dimulai pada setiap perubahan. Pengeditan yang tidak menyebut properti mana yang berubah (beberapa impor dan aksi massal) tidak memulai alur yang memantau satu properti.",
+            "updatedAny": "Properti apa saja"
           },
           "outside": {
             "saveFirst": "Simpan alur terlebih dahulu. Alamat webhook milik alur yang sudah disimpan.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" tidak memiliki koneksi masuk — tidak ada yang mengarah ke sana.",
+        "buttonNoExit": "\"{node}\": tombol \"{button}\" tidak mengarah ke langkah mana pun.",
         "notConnected": "\"{node}\" tidak terhubung ke apa pun.",
         "wrongChannel": "\"{node}\" tidak berfungsi pada {channel} — hapus atau ubah kembali kanal di node Pemicu.",
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",

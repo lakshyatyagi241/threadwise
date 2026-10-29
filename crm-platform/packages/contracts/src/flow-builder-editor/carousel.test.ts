@@ -19,4 +19,15 @@ describe('webLinkUrl (a website chat button address, as the runtime and the test
     expect(webLinkUrl('url', 'javascript:alert(1)')).toBeNull();
     expect(webLinkUrl('url', '')).toBeNull();
   });
+
+  it('takes an address typed without its scheme as an https page, and nothing that is not an address', () => {
+    expect(webLinkUrl('url', 'www.shop.in')).toBe('https://www.shop.in');
+    expect(webLinkUrl('url', ' shop.in/offers?x=1 ')).toBe('https://shop.in/offers?x=1');
+    expect(webLinkUrl('visit', 'Example.COM')).toBe('https://Example.COM');
+    expect(webLinkUrl('url', 'localhost:3000')).toBeNull();
+    expect(webLinkUrl('url', 'report.pdf')).toBeNull();
+    expect(webLinkUrl('url', 'call me on monday')).toBeNull();
+    expect(webLinkUrl('url', 'www.')).toBeNull();
+    expect(webLinkUrl('url', 'data:text/html,hi.com')).toBeNull();
+  });
 });

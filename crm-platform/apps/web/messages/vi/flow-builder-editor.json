@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Xóa điều kiện",
           "variablePlaceholder": "Tên biến (vd. plan)",
+          "keyLabel": "Khóa",
+          "valueLabel": "Giá trị",
+          "pickProperty": "Chọn thuộc tính liên hệ",
           "pickVariable": "Chọn biến để kiểm tra.",
           "comparePlaceholder": "So sánh với…",
           "joinerAnd": "VÀ",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Tài liệu (báo cáo PDF, v.v.)",
           "upload": "Tải lên",
           "uploadHint": "Tối đa {mb} MB. Chúng tôi lưu trữ tệp và cấp cho luồng một URL công khai.",
+          "acceptedFormats": {
+            "image": "Định dạng chấp nhận: JPG, PNG.",
+            "video": "Định dạng chấp nhận: MP4, 3GP.",
+            "audio": "Định dạng chấp nhận: MP3, AAC, AMR, OGG.",
+            "document": "Định dạng chấp nhận: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Thay tệp",
           "chooseKind": {
             "image": "Chọn ảnh (hoặc kéo vào đây)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Để trống = bất kỳ sản phẩm nào trong đơn hàng.",
             "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
             "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt.",
-            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó."
+            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó.",
+            "updatedField": "Chỉ khi thuộc tính này thay đổi",
+            "updatedFieldHint": "Để “Bất kỳ thuộc tính” thì sẽ chạy ở mọi thay đổi. Các chỉnh sửa không nói rõ thuộc tính nào thay đổi (một số lần nhập và thao tác hàng loạt) sẽ không chạy luồng theo dõi một thuộc tính.",
+            "updatedAny": "Bất kỳ thuộc tính"
           },
           "outside": {
             "saveFirst": "Hãy lưu luồng trước. Địa chỉ webhook thuộc về luồng đã lưu.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" không có kết nối đầu vào — không có gì dẫn đến nó.",
+        "buttonNoExit": "\"{node}\": nút \"{button}\" không dẫn đến bước nào.",
         "notConnected": "\"{node}\" chưa được kết nối với bất kỳ thứ gì.",
         "wrongChannel": "\"{node}\" không hoạt động trên {channel} — hãy xóa hoặc bật lại kênh ở nút Kích hoạt.",
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",

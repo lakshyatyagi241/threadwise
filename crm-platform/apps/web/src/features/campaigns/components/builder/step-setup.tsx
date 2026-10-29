@@ -20,6 +20,7 @@ export function StepSetup({
   notVerified,
   hidden,
   loading,
+  templateOnly,
 }: {
   form: BuilderForm;
   patch: (p: Partial<BuilderForm>) => void;
@@ -34,9 +35,13 @@ export function StepSetup({
   hidden?: readonly SenderHidden[] | undefined;
   /** The numbers (or the platform switch) are still loading: a skeleton, not an empty list. */
   loading?: boolean | undefined;
+  /** Opened from a template's "Use in a broadcast": the campaign sends that template, so a custom message and a flow are shown but off. */
+  templateOnly?: boolean | undefined;
 }) {
   const t = useTranslations('campaigns.builder');
-  const offered = kindsFor(engine);
+  const offered = templateOnly
+    ? kindsFor(engine).filter((k) => k === 'template')
+    : kindsFor(engine);
 
   return (
     <StepCard index="01" title={t('setup.title')} tag={t('steps.required')}>
@@ -77,6 +82,7 @@ export function StepSetup({
           }
           offered={offered}
           onSelect={(type) => patch({ type })}
+          blockedReason={templateOnly ? t('setup.typeFromTemplate') : undefined}
         />
       )}
 

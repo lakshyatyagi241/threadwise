@@ -47,7 +47,10 @@
       "download": "İndir",
       "rows": "{n} mesaj",
       "keptUntil": "{when} tarihine kadar saklanır ({days} gün)",
-      "fromEmail": "E-postanızdan"
+      "fromEmail": "E-postanızdan",
+      "hint": "CSV dışa aktar, bu sayfada seçilen filtreleri ve tarihleri kullanır. Dosya arka planda hazırlanır ve hazır olduğunda size e-posta göndeririz.",
+      "empty": "Henüz dışa aktarma yok. Burada gördüğünüz mesajları dosya olarak almak için CSV dışa aktar düğmesine basın.",
+      "loading": "Dışa aktarmalar yükleniyor"
     },
     "kpi": {
       "label": "Temel göstergeler",
@@ -157,7 +160,7 @@
       "ai": "Yapay zekâ asistanı",
       "api": "API",
       "broadcast": "Toplu gönderim",
-      "broadcast_test": "Yayın test gönderimi",
+      "broadcast_test": "Kampanya test gönderimi",
       "campaign": "Kampanya",
       "scheduled": "Zamanlanmış",
       "other": "Diğer"
@@ -238,7 +241,7 @@
         "ai": "Yapay zekâ asistanı",
         "api": "API",
         "broadcast": "Toplu gönderim",
-        "broadcast_test": "Yayın test gönderimi",
+        "broadcast_test": "Kampanya test gönderimi",
         "campaign": "Kampanya",
         "scheduled": "Zamanlanmış mesaj",
         "other": "Diğer"

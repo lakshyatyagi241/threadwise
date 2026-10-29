@@ -1525,6 +1525,9 @@
           },
           "removeRule": "Rimuovi regola",
           "variablePlaceholder": "Nome della variabile (ad es. plan)",
+          "keyLabel": "Chiave",
+          "valueLabel": "Valore",
+          "pickProperty": "Scegli una proprietà del contatto",
           "pickVariable": "Scegli la variabile da verificare.",
           "comparePlaceholder": "Confronta con…",
           "joinerAnd": "E",
@@ -1715,6 +1718,12 @@
           "kindDocumentReport": "Documento (report PDF, ecc.)",
           "upload": "Carica",
           "uploadHint": "Fino a {mb} MB. Ospitiamo noi il file e diamo al flow un URL pubblico.",
+          "acceptedFormats": {
+            "image": "Formati accettati: JPG, PNG.",
+            "video": "Formati accettati: MP4, 3GP.",
+            "audio": "Formati accettati: MP3, AAC, AMR, OGG.",
+            "document": "Formati accettati: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Sostituisci file",
           "chooseKind": {
             "image": "Scegli un’immagine (o trascinala qui)",
@@ -1896,7 +1905,10 @@
             "productIdHint": "Vuoto = qualsiasi prodotto dell'ordine.",
             "storeNote": "Il cliente viene associato a un contatto salvato tramite numero di telefono; per un ordine non viene creato nessuno. \"Aggiunto al carrello\" e \"prodotto visualizzato\" non sono disponibili: lo store non li segnala.",
             "updatedNote": "Si attiva ogni volta che una persona o un'importazione modifica un contatto. Una modifica fatta da un altro flusso non lo avvia.",
-            "segmentLeaveHint": "Viene eseguito una volta ogni volta che un contatto che era dentro questo segmento risulta fuori dopo essere stato aggiornato, taggato o inserito in un elenco. L'uscita di un contatto viene rilevata solo se il flusso lo aveva visto prima all'interno."
+            "segmentLeaveHint": "Viene eseguito una volta ogni volta che un contatto che era dentro questo segmento risulta fuori dopo essere stato aggiornato, taggato o inserito in un elenco. L'uscita di un contatto viene rilevata solo se il flusso lo aveva visto prima all'interno.",
+            "updatedField": "Solo quando questa proprietà cambia",
+            "updatedFieldHint": "Lascia «Qualsiasi proprietà» per avviare a ogni modifica. Le modifiche che non indicano quale proprietà è cambiata (alcune importazioni e azioni di massa) non avviano un flusso che osserva una proprietà.",
+            "updatedAny": "Qualsiasi proprietà"
           },
           "outside": {
             "saveFirst": "Salva prima il flusso. L’indirizzo del webhook appartiene al flusso salvato.",
@@ -2469,6 +2481,7 @@
       },
       "validation": {
         "noIncoming": "«{node}» non ha connessioni in entrata — nulla vi conduce.",
+        "buttonNoExit": "«{node}»: il pulsante «{button}» non porta a nessun passaggio.",
         "notConnected": "«{node}» non è collegato a nulla.",
         "wrongChannel": "«{node}» non funziona su {channel} — eliminalo oppure riattiva il canale nel nodo Trigger.",
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",

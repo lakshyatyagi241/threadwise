@@ -17,18 +17,19 @@
       "refresh": "Aggiorna",
       "newCampaign": "Nuova campagna",
       "tile": {
-        "sent": "Inviati",
+        "sent": "Messaggi inviati",
         "delivered": "Consegnati",
         "read": "Letti",
-        "failed": "Non riusciti",
-        "processing": "In elaborazione",
-        "campaigns": "{count} campagne",
+        "failed": "Messaggi falliti",
+        "processing": "Campagne in invio",
+        "campaigns": "da {count, plural, one {# campagna} other {# campagne}}",
         "inFlight": "in corso",
         "awaiting": "in attesa",
-        "queued": "{count} in coda",
+        "queued": "{count} programmate per iniziare",
         "deliveredRate": "{rate}% consegnati",
         "readRate": "{rate}% letti",
-        "failedCampaigns": "{count} campagne non riuscite"
+        "failedCampaigns": "{count, plural, one {# campagna segnata} other {# campagne segnate}} come fallita",
+        "note": "Inviati, Consegnati, Letti e Falliti contano messaggi, e un messaggio fallito non è contato in Inviati. La riga più piccola sotto ogni numero conta campagne. Tutto segue l'intervallo di date scelto sotto: {range}."
       },
       "range": {
         "all": "Sempre",
@@ -280,7 +281,8 @@
         "split": "Variante A {a}%",
         "splitHint": "La variante B riceve il resto del pubblico. Imposta il contenuto della variante B nel passaggio Componi.",
         "pickSender": "— Seleziona un mittente —",
-        "notVerified": "Non ancora verificato: il percorso guidato è disponibile dopo la verifica del numero."
+        "notVerified": "Non ancora verificato: il percorso guidato è disponibile dopo la verifica del numero.",
+        "typeFromTemplate": "Arrivi da un modello, quindi questa campagna invia quel modello. Un messaggio personalizzato o un flusso si crea da Campagne > Crea."
       },
       "audience": {
         "title": "Pubblico",
@@ -1628,7 +1630,7 @@
         "retries": "Nuovi tentativi",
         "retriesOn": "Attivi, fino al {date}",
         "retriesOff": "Disattivati",
-        "recurringNote": "Ogni esecuzione va al pubblico così com'è in quel momento, quindi il numero di destinatari può cambiare."
+        "recurringNote": "Ora non viene inviato nulla. La prima esecuzione parte all'ora indicata sopra e ogni esecuzione compare poi nella Cronologia come riga a sé. Fino ad allora, trova questa campagna in Ricorrenti. Ogni esecuzione va al pubblico com'è in quel momento, quindi il numero di destinatari può cambiare."
       },
       "status": {
         "back": "Torna alle campagne",
@@ -1842,7 +1844,8 @@
         "add": "Aggiungi un modello",
         "count": "{used} di {max} modelli",
         "limitReached": "Limite raggiunto: {max} modelli.",
-        "variablesTitle": "Variabili del modello {position}: {name}"
+        "variablesTitle": "Variabili del modello {position}: {name}",
+        "variablesLater": "{count, plural, one {# variabile prende} other {# variabili prendono}} il valore dall'associazione, non da questa anteprima."
       }
     },
     "history": {

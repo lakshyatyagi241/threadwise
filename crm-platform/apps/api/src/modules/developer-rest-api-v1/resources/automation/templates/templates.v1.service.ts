@@ -364,6 +364,7 @@ export class V1TemplatesService {
         components: components as Record<string, unknown>[],
       },
       sender: { kind: 'bot' },
+      origin: 'api',
     });
     return {
       message_id: sent.message.id,

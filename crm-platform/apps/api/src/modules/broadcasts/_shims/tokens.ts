@@ -53,6 +53,8 @@ export interface TemplateRecord {
   templateType: string;
   attachmentType: string | null;
   attachmentFile: string | null;
+  /** Object-storage key of the header file the user uploaded; `attachmentFile` is Meta's handle for it. */
+  headerMediaKey: string | null;
   metaTemplateId: string | null;
   metaStatus: string | null;
   pausedUntil: Date | null;
@@ -65,6 +67,11 @@ export interface TemplateDirectory {
   findById(tx: Tx, orgId: number, id: number): Promise<TemplateRecord | undefined>;
   /** Public URL of stored media; null when the storage layer cannot say (the media check is then skipped). */
   mediaUrl(path: string): string | null;
+  /**
+   * Links the template media a message carries: an absolute URL stays as it is, a stored key becomes a link Meta can fetch (cloud
+   * object storage). A key with no public link (local disk) is left out of the map. Read once per send, then hand it to `mediaUrl`.
+   */
+  mediaUrls(paths: readonly string[]): Promise<Map<string, string>>;
   /** The platform switch `waba_templates_v2_enabled`. */
   wabaTemplatesV2Enabled(tx: Tx): Promise<boolean>;
 }

@@ -266,7 +266,8 @@
         "name": "Nome do modelo",
         "nameHint": "Somente a-z, 0-9 e _, até 60 caracteres.",
         "nameTaken": "Este nome já é usado para este idioma neste número.",
-        "language": "Idioma"
+        "language": "Idioma",
+        "categoryLocked": "A Meta não permite alterar a categoria de um modelo aprovado."
       },
       "auth": {
         "title": "Senha de uso único",
@@ -425,6 +426,7 @@
         "format": "Os cartões mostram",
         "formatImage": "Imagens",
         "formatVideo": "Vídeos",
+        "limits": "Imagem até 5 MB, vídeo até 16 MB.",
         "count": "{used}/{max} cartões",
         "add": "Adicionar cartão",
         "needTwo": "Um carrossel precisa de pelo menos {min} cartões.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Linguagem de marketing não permitida nesta categoria.",
         "TAG_CONTENT_MISMATCH": "A categoria não corresponde ao conteúdo (ex.: texto promocional em um modelo UTILITY).",
         "SCAM": "A Meta sinalizou o modelo como possível golpe. Revise as alegações e a linguagem."
+      },
+      "stats": {
+        "title": "Desempenho deste modelo",
+        "hint": "Contado a partir das mensagens enviadas com ele",
+        "loading": "Carregando números",
+        "error": "Não foi possível carregar os números.",
+        "none": "Nada foi enviado com este modelo ainda.",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "read": "Lidas",
+        "replied": "Respondidas",
+        "failed": "Falhas",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# mensagem enviada} other {# mensagens enviadas}} com este modelo, {queued} aguardando",
+        "lastSent": "último envio {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Tom",
       "pickTone": "Selecione o tom",
       "language": "Idioma",
-      "languageHint": "O rascunho é escrito no idioma do formulário.",
+      "languageHint": "Escolha qualquer idioma que a Meta aceite. O rascunho é escrito nele e o modelo o adota.",
       "notes": "Prompt personalizado",
       "notesNote": "opcional / máx. 2000",
       "notesPlaceholder": "Algo específico que você queira incluir: variáveis, links, frases obrigatórias, o que evitar…",

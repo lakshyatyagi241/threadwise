@@ -213,7 +213,7 @@ describe('TW-MAIL-020: connect Google', () => {
     const noRefresh = await connectMailbox(rig, t, rig.fake.account('p2@acme.test'), {
       refresh: false,
     });
-    expect(outcomeOf(noRefresh)).toBe('failed');
+    expect(outcomeOf(noRefresh)).toBe('no_refresh_token');
     expect(await rowsOf(t.orgId)).toHaveLength(0);
     expect(await list(t)).toMatchObject({ used: 0 });
   });
@@ -442,7 +442,7 @@ describe('TW-MAIL-030: permissions, plan gate, isolation', () => {
         .get(CALLBACK)
         .query({ code, state: stateFor(a.orgId, a.adminUserId) })
         .redirects(0);
-      expect(cb.headers.location).toBe(`${WEB}/email?email=failed`);
+      expect(cb.headers.location).toBe(`${WEB}/email?email=not_enabled`);
       expect((await rowsOf(a.orgId)).some((r) => r.address === 'late@acme.test')).toBe(false);
     } finally {
       await setMailPlan(rig.p, a.orgId, { feature: true, mailboxes: 2 });

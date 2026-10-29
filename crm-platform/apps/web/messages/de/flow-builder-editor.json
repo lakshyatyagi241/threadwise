@@ -1093,6 +1093,9 @@
           },
           "removeRule": "Regel entfernen",
           "variablePlaceholder": "Variablenname (z. B. plan)",
+          "keyLabel": "Schlüssel",
+          "valueLabel": "Wert",
+          "pickProperty": "Kontakteigenschaft auswählen",
           "pickVariable": "Wählen Sie die zu prüfende Variable.",
           "comparePlaceholder": "Vergleichen mit ...",
           "joinerAnd": "UND",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "Dokument (PDF-Bericht usw.)",
           "upload": "Hochladen",
           "uploadHint": "Bis zu {mb} MB. Wir hosten die Datei und geben dem Flow eine öffentliche URL.",
+          "acceptedFormats": {
+            "image": "Zulässige Formate: JPG, PNG.",
+            "video": "Zulässige Formate: MP4, 3GP.",
+            "audio": "Zulässige Formate: MP3, AAC, AMR, OGG.",
+            "document": "Zulässige Formate: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Datei ersetzen",
           "chooseKind": {
             "image": "Bild auswählen (oder hierher ziehen)",
@@ -1464,7 +1473,10 @@
             "productIdHint": "Leer = jedes Produkt in der Bestellung.",
             "storeNote": "Der Kunde wird anhand der Telefonnummer einem gespeicherten Kontakt zugeordnet; für eine Bestellung wird niemand angelegt. „In den Warenkorb gelegt“ und „Produkt angesehen“ werden nicht angeboten, da der Shop diese nicht meldet.",
             "updatedNote": "Wird bei jeder Änderung eines Kontakts durch eine Person oder einen Import ausgelöst. Eine Änderung durch einen anderen Flow startet ihn nicht.",
-            "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat."
+            "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat.",
+            "updatedField": "Nur wenn sich diese Eigenschaft ändert",
+            "updatedFieldHint": "Bei „Beliebige Eigenschaft“ startet der Flow bei jeder Änderung. Änderungen, die nicht angeben, welche Eigenschaft sich geändert hat (einige Importe und Massenaktionen), starten keinen Flow, der eine Eigenschaft beobachtet.",
+            "updatedAny": "Beliebige Eigenschaft"
           },
           "outside": {
             "saveFirst": "Speichern Sie zuerst den Flow. Die Webhook-Adresse gehört zum gespeicherten Flow.",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "„{node}“ hat keine eingehende Verbindung, es führt also nichts hierher.",
+        "buttonNoExit": "„{node}“: Die Schaltfläche „{button}“ führt zu keinem Schritt.",
         "notConnected": "„{node}“ ist mit nichts verbunden.",
         "wrongChannel": "„{node}“ funktioniert nicht auf {channel}. Löschen Sie es oder aktivieren Sie den Kanal im Auslöser-Knoten wieder.",
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",

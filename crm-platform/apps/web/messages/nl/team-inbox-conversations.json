@@ -155,7 +155,7 @@
       },
       "unsnoozesAt": "Wordt weer open {time}",
       "erased": "Gewiste contacten",
-      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon en zonder berichttekst. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
+      "erasedHint": "Deze contacten zijn gewist en hun gesprekken zijn bewaard zonder de gegevens van de persoon. De tijden tonen het laatste bericht, omdat de wisdatum niet wordt vastgelegd.",
       "erasedTitle": "Gewist contact"
     },
     "status": {

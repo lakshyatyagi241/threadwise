@@ -144,7 +144,8 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('cta', 'Call to action', 'Engage', 'Send a CTA button', ['chat', 'web']),
   def('location', 'Location', 'Engage', 'Send a map pin'),
   def('poll', 'Poll', 'Engage', 'Send a poll'),
-  def('chatbot', 'Chatbot', 'Engage', 'Hand the chat to an AI agent'),
+  // Superseded by the AI assistant step (AI group), which answers with an AI agent too: still runs on existing flows, no longer offered.
+  def('chatbot', 'Chatbot', 'Engage', 'Hand the chat to an AI agent', CHAT, { hidden: true }),
   def('whatsapp_shop', 'WhatsApp Shop', 'Commerce', 'Open WhatsApp catalog'),
   def('woocommerce', 'WooCommerce', 'Commerce', 'Send WooCommerce product'),
   def('shopify', 'Shopify', 'Commerce', 'Send Shopify product'),

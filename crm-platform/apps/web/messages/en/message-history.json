@@ -1,7 +1,11 @@
 {
   "message-history": {
-    "common": { "dismiss": "Dismiss" },
-    "nav": { "history": "History" },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "nav": {
+      "history": "History"
+    },
     "crumb": "Campaigns / Message history",
     "title": "Message history",
     "loading": "Loading messages…",
@@ -14,11 +18,18 @@
       "30d": "Last 30 days",
       "90d": "Last 90 days",
       "custom": "Custom dates",
-      "short": { "24h": "24h", "7d": "7d", "30d": "30d", "90d": "90d" },
+      "short": {
+        "24h": "24h",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
       "from": "From",
       "to": "To",
       "apply": "Apply dates",
-      "problem": { "order": "The first date must not be after the last." }
+      "problem": {
+        "order": "The first date must not be after the last."
+      }
     },
     "exports": {
       "title": "CSV exports",
@@ -36,7 +47,10 @@
       "download": "Download",
       "rows": "{n} messages",
       "keptUntil": "kept until {when} ({days} days)",
-      "fromEmail": "From your email"
+      "fromEmail": "From your email",
+      "hint": "Export CSV uses the filters and dates chosen on this page. The file is built in the background and we email you when it is ready.",
+      "empty": "No exports yet. Press Export CSV to get the messages you see here as a file.",
+      "loading": "Loading exports"
     },
     "kpi": {
       "label": "Key figures",
@@ -65,10 +79,18 @@
       "volume": "Volume",
       "volumeTitle": "Messages over time",
       "bucketLabel": "Group by",
-      "bucket": { "daily": "Daily", "hourly": "Hourly", "weekly": "Weekly" },
+      "bucket": {
+        "daily": "Daily",
+        "hourly": "Hourly",
+        "weekly": "Weekly"
+      },
       "volumeAria": "Messages over time: {sent} sent, {received} received, {failed} failed",
       "when": "When",
-      "series": { "sent": "Sent", "received": "Received", "failed": "Failed" },
+      "series": {
+        "sent": "Sent",
+        "received": "Received",
+        "failed": "Failed"
+      },
       "direction": "Direction split",
       "directionTitle": "Sent vs received",
       "directionAria": "{total} messages, split into sent, received and failed",
@@ -85,7 +107,12 @@
       "search": "Search messages",
       "searchPlaceholder": "Search by text, contact, phone or message id…",
       "directionLabel": "Direction",
-      "dir": { "all": "All", "out": "Sent", "in": "Received", "fail": "Failed" },
+      "dir": {
+        "all": "All",
+        "out": "Sent",
+        "in": "Received",
+        "fail": "Failed"
+      },
       "channel": "Channel",
       "allChannels": "All channels",
       "type": "Type",
@@ -133,12 +160,16 @@
       "ai": "AI assistant",
       "api": "API",
       "broadcast": "Broadcast",
-      "broadcast_test": "Broadcast Test Send",
+      "broadcast_test": "Campaign Test Send",
       "campaign": "Campaign",
       "scheduled": "Scheduled",
       "other": "Other"
     },
-    "direction": { "in": "Incoming", "out": "Outgoing", "failed": "Failed" },
+    "direction": {
+      "in": "Incoming",
+      "out": "Outgoing",
+      "failed": "Failed"
+    },
     "table": {
       "col": {
         "when": "When",
@@ -188,7 +219,10 @@
       "unknown": "Unknown contact",
       "masked": "This number is hidden because you cannot open this contact.",
       "direction": "Direction",
-      "directionValue": { "in": "Incoming", "out": "Outgoing" },
+      "directionValue": {
+        "in": "Incoming",
+        "out": "Outgoing"
+      },
       "status": "Status",
       "type": "Type",
       "when": "When",
@@ -207,7 +241,7 @@
         "ai": "AI assistant",
         "api": "API",
         "broadcast": "Broadcast",
-        "broadcast_test": "Broadcast Test Send",
+        "broadcast_test": "Campaign Test Send",
         "campaign": "Campaign",
         "scheduled": "Scheduled message",
         "other": "Other"

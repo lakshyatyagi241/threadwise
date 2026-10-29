@@ -38,6 +38,7 @@ import {
   CloseIcon,
 } from './icons';
 import { MessageBubble } from './wa-bubble';
+import { TemplateStatsCard } from './template-stats-card';
 import { useErrorText, type ErrorText } from './use-error-text';
 
 const CARD = 'rounded-2xl border border-border bg-background shadow-sm';
@@ -373,7 +374,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             )}
             {isApproved && (
               <Link
-                href="/campaigns/create"
+                href={`/campaigns/create?template=${tpl.id}`}
                 className="flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium text-brand hover:bg-muted"
               >
                 <SendIcon className="size-3.5" />
@@ -551,6 +552,8 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
               <MessageBubble model={previewOfSummary(tpl)} className="max-w-sm text-[13px]" />
             </div>
           </div>
+
+          <TemplateStatsCard id={tpl.id} enabled={tpl.status !== 'draft'} />
 
           <div className={cn(CARD, 'overflow-hidden')}>
             <div className="border-b border-border px-5 py-3">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Alert, Button, Field, Input, Modal, Select, Spinner, Textarea } from '@crm/ui';
 import type { TplAiDraft } from '@crm/contracts';
@@ -15,7 +15,7 @@ import {
   AI_TONES,
   isAiProvider,
 } from '../lib/ai-draft';
-import { languageName } from '../lib/languages';
+import { languageOptions } from '../lib/languages';
 import { SparkIcon } from './icons';
 
 interface Brief {
@@ -41,8 +41,9 @@ const EMPTY: Brief = {
 
 /**
  * "Build with AI" for a WhatsApp template (TW-TPL-016): a brief in a dialog, a template draft out. The template form opens it in
- * place; the guided campaign wizard opens the same dialog and carries the draft to the new-template form. The language and category
- * are the caller's (read-only here). The model list is the workspace's (the platform's enabled providers plus any it added its own
+ * place; the guided campaign wizard opens the same dialog and carries the draft to the new-template form. The category is the
+ * caller's (read-only here); the language starts as the caller's and can be changed here to any language Meta accepts, and the draft
+ * comes back with the language it was written in so the template takes it. The model list is the workspace's (the platform's enabled providers plus any it added its own
  * key for). Nothing is saved here and nothing is submitted to Meta.
  */
 export function TemplateAiModal({
@@ -55,10 +56,11 @@ export function TemplateAiModal({
 }: {
   open: boolean;
   onClose: () => void;
-  /** A Meta language code such as `en_US`; the draft is written in it. */
+  /** A Meta language code such as `en_US`: where the language choice starts; the draft is written in the one picked. */
   language: string;
   metaCategory: 'MARKETING' | 'UTILITY';
-  onDraft: (draft: TplAiDraft) => void;
+  /** The draft, and the Meta language code it is written in. */
+  onDraft: (draft: TplAiDraft, language: string) => void;
   /** An extra line under the intro (the wizard says the template still has to pass Meta's review). */
   note?: string | undefined;
 }) {
@@ -67,6 +69,12 @@ export function TemplateAiModal({
   const models = useAiModels(open);
   const options = (models.data ?? []).filter((m) => isAiProvider(m.provider));
   const [brief, setBrief] = useState<Brief>(EMPTY);
+  const [lang, setLang] = useState(language);
+  // Each time the dialog opens it starts on the caller's language.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset the choice when the dialog opens
+    if (open) setLang(language);
+  }, [open, language]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [businessMissing, setBusinessMissing] = useState(false);
@@ -88,7 +96,7 @@ export function TemplateAiModal({
         provider: chosen.provider,
         model: chosen.value,
         metaCategory,
-        language,
+        language: lang,
         businessName: brief.businessName.trim(),
         industry: brief.industry ? t(`industries.${brief.industry}`) : undefined,
         occasion: brief.occasion ? t(`occasions.${brief.occasion}`) : undefined,
@@ -97,7 +105,7 @@ export function TemplateAiModal({
         tone: brief.tone ? t(`tones.${brief.tone}`) : undefined,
         customPrompt: brief.customPrompt.trim() || undefined,
       });
-      onDraft(res.template);
+      onDraft(res.template, lang);
       onClose();
     } catch (e) {
       const kind = aiErrorKind(e);
@@ -240,12 +248,18 @@ export function TemplateAiModal({
           set({ tone }),
         )}
         <Field label={t('language')} htmlFor="tpl-ai-language" hint={t('languageHint')}>
-          <Input
+          <Select
             id="tpl-ai-language"
-            readOnly
             dir="ltr"
-            value={`${languageName(language, locale)} (${language})`}
-          />
+            value={lang}
+            onChange={(e) => setLang(e.target.value)}
+          >
+            {languageOptions(locale, lang).map((o) => (
+              <option key={o.code} value={o.code}>
+                {o.label}
+              </option>
+            ))}
+          </Select>
         </Field>
         <div className="sm:col-span-2">
           <Field label={t('notes')} htmlFor="tpl-ai-notes" hint={t('notesNote')}>

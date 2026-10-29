@@ -17,6 +17,11 @@ export interface KbConfig {
   /** Off: agents read their whole knowledge base as before (no search). Never shown to workspace users. */
   engineEnabled: boolean;
   embeddingModel: string;
+  /**
+   * The stored model when it left the allow-list and `embeddingModel` is the default instead. Its vectors are then re-queued with the
+   * default, which costs an embedding call per passage, so the housekeeping says so.
+   */
+  replacedModel?: string;
 }
 
 /** The search's platform settings in one place: every reader (retriever, embedder, worker) goes through here. */
@@ -36,10 +41,12 @@ export class KbConfigService {
   async get(): Promise<KbConfig> {
     const doc = (await this.store.get<KbConfigDoc>(KB_CONFIG_KEY)) ?? {};
     const known = KB_EMBEDDING_MODELS.some((m) => m.id === doc.embeddingModel);
+    const replacedModel = !known && doc.embeddingModel ? doc.embeddingModel : undefined;
     return {
       engineEnabled: doc.engineEnabled ?? true,
       // A stored model that left the allow-list falls back to the default rather than breaking every search.
       embeddingModel: known ? (doc.embeddingModel as string) : KB_DEFAULT_EMBEDDING_MODEL,
+      ...(replacedModel ? { replacedModel } : {}),
     };
   }
 

@@ -342,7 +342,7 @@ export class CampaignSummaryRepository {
 
   // ------------------------------------------------------------------------------------------------------------ the forms
 
-  /** The forms of the workspace by uuid: web forms and WhatsApp forms, newest first. */
+  /** The forms of the workspace by uuid: web forms and the published WhatsApp forms (a draft has no answers to count), newest first. */
   async formsOf(
     tx: Tx,
     orgId: number,
@@ -359,7 +359,7 @@ export class CampaignSummaryRepository {
     }
     if (kinds.whatsapp) {
       const res = await tx.execute(
-        sql`SELECT id, uuid, title AS name FROM wa_forms WHERE org_id = ${orgId} ORDER BY id DESC LIMIT ${limit}`,
+        sql`SELECT id, uuid, title AS name FROM wa_forms WHERE org_id = ${orgId} AND status = 'published' ORDER BY id DESC LIMIT ${limit}`,
       );
       for (const r of res.rows as Array<{ id: number | string; uuid: string; name: string }>)
         out.push({ id: Number(r.id), uuid: r.uuid, kind: 'whatsapp', name: r.name });

@@ -128,7 +128,7 @@ export function TermsBody() {
         <P>
           We employ the use of cookies. By accessing Geta.ai, you agreed to use cookies in agreement
           with the Geta Website And APP&rsquo;s{' '}
-          <Link href="/company/privacy" style={{ color: '#3D52D5', fontWeight: 600 }}>
+          <Link href="/legal/privacy" style={{ color: '#3D52D5', fontWeight: 600 }}>
             Privacy Policy
           </Link>
           .
@@ -337,7 +337,7 @@ export function TermsBody() {
       <Section title="Your Privacy">
         <P>
           Please read our{' '}
-          <Link href="/company/privacy" style={{ color: '#3D52D5', fontWeight: 600 }}>
+          <Link href="/legal/privacy" style={{ color: '#3D52D5', fontWeight: 600 }}>
             Privacy Policy
           </Link>
           .

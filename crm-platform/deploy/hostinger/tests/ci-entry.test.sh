@@ -61,6 +61,7 @@ tag() { grep '^IMAGE_TAG=' "$WORK/.env" | cut -d= -f2; }
 slot() { cat "$WORK/.slot" 2>/dev/null || echo none; }
 route() { grep -oE 'desk-api-(blue|green):3000' "$TRAEFIK_DYN" 2>/dev/null | head -1 || true; }
 has() { grep -q -- "$1" "$STUB_LOG"; }
+not() { ! "$@"; }
 hasnt() { ! grep -q -- "$1" "$STUB_LOG"; }
 line_of() { grep -n -- "$1" "$STUB_LOG" | head -1 | cut -d: -f1; }
 check() { # check "name" cmd...
@@ -87,6 +88,10 @@ check "the blue slot starts before the worker is restarted" test "$(line_of 'up 
 check "the public check runs" has "curl -fsSk"
 check "the legacy containers are stopped after the switch" has "stop -t 30 desk-api-1 desk-web-1"
 check "shared services are only started, never recreated" has "up -d --no-recreate postgres redis"
+# Starting backup/offsite WITH their dependencies converges Postgres too, and recreates it whenever its definition differs: a database restart on a release.
+check "backup is started without its dependencies, so Postgres is not recreated" has "up -d --no-deps backup"
+check "offsite is started without its dependencies" has "up -d --no-deps offsite"
+check "no compose up names backup or offsite with dependencies" not has "up -d backup"
 
 echo "release: second release, blue is live, so green becomes live"
 unset_stubs; new_dir blue bbbbbbb; release ccccccc
@@ -102,6 +107,7 @@ check "exits 0" test "$(code)" = 0
 check "api-hooks is started on the new tag" grep -q '^HOOKS_TAG=ccccccc' "$WORK/.env"
 check "api-hooks starts after the idle slot and before the traffic switch" test "$(line_of 'up -d --no-deps api-green')" -lt "$(line_of 'up -d --no-deps api-hooks')" -a "$(line_of 'up -d --no-deps api-hooks')" -lt "$(line_of 'curl -fsSk')"
 check "the routing sends /v2/public/webhooks to api-hooks" grep -q 'desk-api-hooks:3000' "$TRAEFIK_DYN"
+check "the routing sends the web-form embed loader to the API, not the web app" grep -q 'PathPrefix(`/form-embed`)' "$TRAEFIK_DYN"
 check "the slot API is the fallback while api-hooks is unhealthy" grep -q 'fallback: desk-api$' "$TRAEFIK_DYN"
 check "the live slot is still found when the hooks service is in the routing file" test "$(route)" = "desk-api-green:3000"
 

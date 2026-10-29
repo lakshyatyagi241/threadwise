@@ -1093,6 +1093,9 @@
           },
           "removeRule": "移除规则",
           "variablePlaceholder": "变量名（例如 plan）",
+          "keyLabel": "键",
+          "valueLabel": "值",
+          "pickProperty": "选择联系人属性",
           "pickVariable": "选择要测试的变量。",
           "comparePlaceholder": "比较对象…",
           "joinerAnd": "且",
@@ -1283,6 +1286,12 @@
           "kindDocumentReport": "文档（PDF 报告等）",
           "upload": "上传",
           "uploadHint": "最大 {mb} MB。我们托管该文件，并为流程提供公开 URL。",
+          "acceptedFormats": {
+            "image": "支持的格式: JPG, PNG.",
+            "video": "支持的格式: MP4, 3GP.",
+            "audio": "支持的格式: MP3, AAC, AMR, OGG.",
+            "document": "支持的格式: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "替换文件",
           "chooseKind": {
             "image": "选择图片（或拖到此处）",
@@ -1464,7 +1473,10 @@
             "productIdHint": "留空 = 订单中的任意商品。",
             "storeNote": "客户按电话号码匹配已保存的联系人；订单不会创建新联系人。“加入购物车”和“查看商品”不提供：店铺不会上报这些事件。",
             "updatedNote": "每次由人工或导入操作更改联系人时都会触发。其他流程所做的更改不会触发此流程。",
-            "segmentLeaveHint": "每当原本在此细分内的联系人在更新、打标签或列出后被发现已不在其中时，运行一次。只有流程之前见到该联系人在细分内，才会发现其离开。"
+            "segmentLeaveHint": "每当原本在此细分内的联系人在更新、打标签或列出后被发现已不在其中时，运行一次。只有流程之前见到该联系人在细分内，才会发现其离开。",
+            "updatedField": "仅当此属性发生变化时",
+            "updatedFieldHint": "保持“任意属性”则每次变更都会启动。未说明哪个属性变化的编辑（部分导入和批量操作）不会启动监视单个属性的流程。",
+            "updatedAny": "任意属性"
           },
           "outside": {
             "saveFirst": "请先保存流程。webhook 地址属于已保存的流程。",
@@ -2611,6 +2623,7 @@
       },
       "validation": {
         "noIncoming": "\"{node}\" 没有传入连接 — 没有任何内容指向它。",
+        "buttonNoExit": "“{node}”：按钮“{button}”没有连接到任何步骤。",
         "notConnected": "\"{node}\" 未连接到任何内容。",
         "wrongChannel": "\"{node}\" 无法用于 {channel} — 请删除它，或在触发器节点中重新启用该渠道。",
         "noSenderInstagram": "触发器节点未选择 Instagram 账户 — 请在触发步骤中选择一个。",

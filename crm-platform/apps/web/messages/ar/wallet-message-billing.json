@@ -109,7 +109,8 @@
       "amount": "المبلغ",
       "balance": "الرصيد",
       "noDescription": "حركة المحفظة",
-      "reason": "السبب"
+      "reason": "السبب",
+      "invoice": "تنزيل الفاتورة"
     },
     "pricingPanel": {
       "title": "تسعير الرسائل",
@@ -1038,6 +1039,11 @@
       "enrichment": "البحث عن جهة اتصال",
       "chat_message": "رسالة دردشة",
       "webbot_message": "رسالة روبوت الدردشة للموقع"
+    },
+    "legacyInvoice": {
+      "title": "الفاتورة",
+      "back": "العودة إلى كشف الحساب",
+      "print": "طباعة أو حفظ بصيغة PDF"
     }
   }
 }

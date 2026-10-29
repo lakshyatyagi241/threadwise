@@ -1525,6 +1525,9 @@
           },
           "removeRule": "Regel verwijderen",
           "variablePlaceholder": "Variabelenaam (bijv. plan)",
+          "keyLabel": "Sleutel",
+          "valueLabel": "Waarde",
+          "pickProperty": "Kies een contacteigenschap",
           "pickVariable": "Kies de variabele om te testen.",
           "comparePlaceholder": "Vergelijken met…",
           "joinerAnd": "EN",
@@ -1715,6 +1718,12 @@
           "kindDocumentReport": "Document (pdf-rapport, enz.)",
           "upload": "Uploaden",
           "uploadHint": "Tot {mb} MB. Wij hosten het bestand en geven de flow een openbare URL.",
+          "acceptedFormats": {
+            "image": "Toegestane formaten: JPG, PNG.",
+            "video": "Toegestane formaten: MP4, 3GP.",
+            "audio": "Toegestane formaten: MP3, AAC, AMR, OGG.",
+            "document": "Toegestane formaten: PDF, DOC, DOCX, XLS, XLSX."
+          },
           "replaceFile": "Bestand vervangen",
           "chooseKind": {
             "image": "Kies afbeelding (of sleep hierheen)",
@@ -1896,7 +1905,10 @@
             "productIdHint": "Leeg = elk product in de bestelling.",
             "storeNote": "De klant wordt via het telefoonnummer gekoppeld aan een opgeslagen contact; voor een bestelling wordt niemand aangemaakt. „Toegevoegd aan winkelwagen” en „product bekeken” worden niet aangeboden: de winkel meldt deze niet.",
             "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet.",
-            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien."
+            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien.",
+            "updatedField": "Alleen als deze eigenschap verandert",
+            "updatedFieldHint": "Laat “Elke eigenschap” staan om bij elke wijziging te starten. Bewerkingen die niet aangeven welke eigenschap veranderde (sommige importen en bulkacties) starten geen flow die één eigenschap volgt.",
+            "updatedAny": "Elke eigenschap"
           },
           "outside": {
             "saveFirst": "Sla eerst de flow op. Het webhookadres hoort bij de opgeslagen flow.",
@@ -2469,6 +2481,7 @@
       },
       "validation": {
         "noIncoming": "“{node}” heeft geen inkomende verbinding — er leidt niets naartoe.",
+        "buttonNoExit": "\"{node}\": de knop \"{button}\" leidt naar geen enkele stap.",
         "notConnected": "“{node}” is met niets verbonden.",
         "wrongChannel": "“{node}” werkt niet op {channel} — verwijder hem of zet het kanaal weer aan in de Trigger-node.",
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",

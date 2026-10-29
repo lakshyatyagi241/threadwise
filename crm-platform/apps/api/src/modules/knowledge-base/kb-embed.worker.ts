@@ -73,7 +73,13 @@ export class KbEmbedWorker {
 
   /** Re-queues vectors of an older model and rows that gave up. Returns how many. */
   async healStale(): Promise<number> {
-    const { embeddingModel } = await this.config.getFresh();
+    const { embeddingModel, replacedModel } = await this.config.getFresh();
+    if (replacedModel) {
+      this.logger.warn(
+        { replacedModel, embeddingModel },
+        'stored knowledge embedding model is not on the allow-list: vectors made with it are re-queued with the default',
+      );
+    }
     const n = await this.db.privileged((tx) => this.repo.markStale(tx, embeddingModel));
     if (n > 0) this.logger.log({ n, embeddingModel }, 'knowledge vectors re-queued');
     return n;

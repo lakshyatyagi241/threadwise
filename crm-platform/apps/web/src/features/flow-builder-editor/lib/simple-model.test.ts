@@ -331,6 +331,26 @@ describe('checks', () => {
     ]);
   });
 
+  it('outlines the trigger card only for what is fixed on it: the keywords and the number, not a flow with no step yet', () => {
+    const doc = emptyDoc();
+    const flagged = (d: typeof doc) =>
+      problems(d, { senderRequired: true }).map((p) => [p.onTrigger === true, en(p.message)]);
+    expect(flagged(doc)).toEqual([
+      [true, 'The trigger needs at least one keyword (or choose any message).'],
+      [true, 'Pick the WhatsApp number this flow runs on.'],
+      [false, 'Add a first step: it is what the customer receives.'],
+    ]);
+    // Keywords and number fixed, still no step: nothing on the trigger card is wrong any more.
+    const fixed = {
+      ...doc,
+      trigger: {
+        ...doc.trigger,
+        data: { ...doc.trigger.data, keywords: 'hi', deviceId: 'waba:1' },
+      },
+    };
+    expect(problems(fixed, { senderRequired: true }).some((p) => p.onTrigger)).toBe(false);
+  });
+
   it('asks for a header file when the chosen template has a picture header with no file of its own', () => {
     const templates = [
       { name: 'promo', attachmentType: 'image', attachmentFile: 'meta-handle-123' },

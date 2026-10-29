@@ -266,7 +266,8 @@
         "name": "Tên mẫu",
         "nameHint": "Chỉ a-z, 0-9 và _, tối đa 60 ký tự.",
         "nameTaken": "Tên này đã được dùng cho ngôn ngữ này trên số này.",
-        "language": "Ngôn ngữ"
+        "language": "Ngôn ngữ",
+        "categoryLocked": "Meta không cho phép đổi danh mục của mẫu đã được duyệt."
       },
       "auth": {
         "title": "Mã xác minh dùng một lần",
@@ -425,6 +426,7 @@
         "format": "Thẻ hiển thị",
         "formatImage": "Hình ảnh",
         "formatVideo": "Video",
+        "limits": "Hình ảnh tối đa 5 MB, video tối đa 16 MB.",
         "count": "{used}/{max} thẻ",
         "add": "Thêm thẻ",
         "needTwo": "Băng chuyền cần ít nhất {min} thẻ.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Ngôn từ quảng cáo không được phép trong danh mục này.",
         "TAG_CONTENT_MISMATCH": "Danh mục không khớp với nội dung (ví dụ: nội dung khuyến mãi trong mẫu tin UTILITY).",
         "SCAM": "Meta gắn cờ mẫu tin này có khả năng lừa đảo. Hãy xem lại các tuyên bố và ngôn từ."
+      },
+      "stats": {
+        "title": "Hiệu quả của mẫu này",
+        "hint": "Tính từ các tin nhắn đã gửi bằng mẫu",
+        "loading": "Đang tải số liệu",
+        "error": "Không tải được số liệu.",
+        "none": "Chưa có tin nhắn nào được gửi bằng mẫu này.",
+        "sent": "Đã gửi",
+        "delivered": "Đã nhận",
+        "read": "Đã đọc",
+        "replied": "Đã trả lời",
+        "failed": "Thất bại",
+        "percent": "{value}%",
+        "footer": "{total} tin nhắn đã gửi bằng mẫu này, {queued} đang chờ",
+        "lastSent": "gửi lần cuối {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Giọng điệu",
       "pickTone": "Chọn giọng điệu",
       "language": "Ngôn ngữ",
-      "languageHint": "Bản nháp được viết bằng ngôn ngữ của biểu mẫu.",
+      "languageHint": "Chọn bất kỳ ngôn ngữ nào Meta chấp nhận. Bản nháp được viết bằng ngôn ngữ đó và mẫu tin dùng ngôn ngữ này.",
       "notes": "Yêu cầu tùy chỉnh",
       "notesNote": "tùy chọn / tối đa 2000",
       "notesPlaceholder": "Bất kỳ điều gì bạn muốn đưa vào: biến, liên kết, cách diễn đạt bắt buộc, điều cần tránh…",

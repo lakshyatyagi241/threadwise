@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { ReactNode } from 'react';
 import type { Faq } from './data/products';
 import { Icon, type IconName } from './icons';
+import './tint.css';
 
 export const Wrap = ({ children }: { children: ReactNode }) => (
   <div className="gx-wrap">{children}</div>

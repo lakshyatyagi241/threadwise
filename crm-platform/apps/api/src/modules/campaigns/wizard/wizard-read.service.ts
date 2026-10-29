@@ -16,6 +16,7 @@ import {
   PreviousSendsService,
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
+  templateMediaPaths,
   templateRefusals,
   type SenderDirectory,
   type TemplateDirectory,
@@ -50,7 +51,7 @@ export class WizardReadService {
     private readonly previousSends: PreviousSendsService,
   ) {}
 
-  toTemplate(r: TemplateListRow): WizardTemplate {
+  toTemplate(r: TemplateListRow, links: ReadonlyMap<string, string> = new Map()): WizardTemplate {
     return {
       id: r.uuid,
       name: r.name,
@@ -61,7 +62,9 @@ export class WizardReadService {
       footer: r.footer,
       buttons: Array.isArray(r.buttons) ? (r.buttons as Array<Record<string, unknown>>) : [],
       attachmentType: r.attachmentType,
-      attachmentUrl: r.attachmentFile ? this.templates.mediaUrl(r.attachmentFile) : null,
+      attachmentUrl:
+        (r.headerMediaKey ? links.get(r.headerMediaKey) : undefined) ??
+        (r.attachmentFile ? this.templates.mediaUrl(r.attachmentFile) : null),
       senderLabel: r.senderLabel,
       connectionId: r.configUuid,
       slots: templateSlots({
@@ -98,7 +101,9 @@ export class WizardReadService {
             { wabaTemplatesV2: v2 },
           ).length === 0,
       );
-      return { data: usable.map((r) => this.toTemplate(r)) };
+      // The preview shows the file the template was approved with: a stored key needs a link the browser can open.
+      const links = await this.templates.mediaUrls(usable.flatMap((r) => templateMediaPaths(r)));
+      return { data: usable.map((r) => this.toTemplate(r, links)) };
     });
   }
 

@@ -6,6 +6,7 @@ import {
   templateCountsSchema,
   templateDetailSchema,
   templateGalleryResponseSchema,
+  templateStatsSchema,
   templateSubmitResultSchema,
   tplAiGenerateResponseSchema,
   wabaConnectionListSchema,
@@ -31,6 +32,8 @@ export const templatesApi = {
       schema: templateGalleryResponseSchema,
       signal,
     }),
+  stats: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/${id}/stats`, { schema: templateStatsSchema, signal }),
   get: (id: string, signal?: AbortSignal) =>
     apiFetch(`${base}/${id}`, { schema: templateDetailSchema, signal }),
   create: (input: CreateTemplateInput, idempotencyKey?: string) =>

@@ -266,7 +266,8 @@
         "name": "Nazwa szablonu",
         "nameHint": "Tylko litery a–z, cyfry 0–9 i _, do 60 znaków.",
         "nameTaken": "Ta nazwa jest już używana dla tego języka w tym numerze.",
-        "language": "Język"
+        "language": "Język",
+        "categoryLocked": "Meta nie pozwala zmienić kategorii zatwierdzonego szablonu."
       },
       "auth": {
         "title": "Jednorazowy kod dostępu",
@@ -425,6 +426,7 @@
         "format": "Karty pokazują",
         "formatImage": "Obrazy",
         "formatVideo": "Wideo",
+        "limits": "Obraz do 5 MB, wideo do 16 MB.",
         "count": "{used}/{max} kart",
         "add": "Dodaj kartę",
         "needTwo": "Karuzela wymaga co najmniej {min} kart.",
@@ -562,6 +564,21 @@
         "PROMOTIONAL": "Język marketingowy jest niedozwolony w tej kategorii.",
         "TAG_CONTENT_MISMATCH": "Kategoria nie pasuje do treści (np. treść promocyjna w szablonie UTILITY).",
         "SCAM": "Meta oznaczyła szablon jako potencjalne oszustwo. Sprawdź twierdzenia i język."
+      },
+      "stats": {
+        "title": "Wyniki tego szablonu",
+        "hint": "Liczone z wiadomości wysłanych za jego pomocą",
+        "loading": "Wczytywanie liczb",
+        "error": "Nie udało się wczytać liczb.",
+        "none": "Za pomocą tego szablonu nic jeszcze nie wysłano.",
+        "sent": "Wysłane",
+        "delivered": "Dostarczone",
+        "read": "Przeczytane",
+        "replied": "Z odpowiedzią",
+        "failed": "Nieudane",
+        "percent": "{value}%",
+        "footer": "{total, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}} wysłano tym szablonem, {queued} czeka",
+        "lastSent": "ostatnio wysłano {when}"
       }
     },
     "ai": {
@@ -591,7 +608,7 @@
       "tone": "Ton",
       "pickTone": "Wybierz ton",
       "language": "Język",
-      "languageHint": "Szkic jest pisany w języku formularza.",
+      "languageHint": "Wybierz dowolny język akceptowany przez Meta. Wersja robocza powstaje w nim, a szablon go przyjmuje.",
       "notes": "Własna instrukcja",
       "notesNote": "opcjonalnie / maks. 2000",
       "notesPlaceholder": "Wszystko, co ma się znaleźć w treści: zmienne, linki, obowiązkowe sformułowania, czego unikać…",

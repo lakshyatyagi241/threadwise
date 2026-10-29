@@ -1,5 +1,6 @@
 'use client';
 
+import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   FLB_SCHEDULE_AUDIENCES,
@@ -13,6 +14,7 @@ import type { ReactNode } from 'react';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { flowTypeLabel } from '../../../lib/contract-text';
 import { useFlb } from '../../../lib/msg';
+import { savePropertyOptions } from '../../../lib/property-options';
 import { Field, Notice, SelectInput, TextInput, type Opt } from '../kit';
 import type { FormProps } from '../types';
 import {
@@ -77,6 +79,7 @@ export function TriggerForm(props: FormProps) {
   const t = useTranslations('flb.builder.formsCore.trigger');
   const th = useTranslations('flb.builder.formsCore.helpers');
   const fieldMatchOps = useFieldMatchOperators();
+  const feed = usePickerFeed();
   const locale = useLocale();
   const tf = useFlb();
   const { ctx, loading } = env;
@@ -226,6 +229,7 @@ export function TriggerForm(props: FormProps) {
         <ConditionGroupEditor
           tree={fieldMatchTree(d)}
           ops={fieldMatchOps}
+          properties={savePropertyOptions(feed.data, '')}
           onChange={(next) => set('conditionGroup', next)}
         />
       ) : null}
@@ -379,7 +383,24 @@ export function TriggerForm(props: FormProps) {
       {kind === 'webhook' ? <WebhookTriggerFields env={env} /> : null}
       {kind === 'google_sheet' ? <GoogleSheetTriggerFields {...props} /> : null}
 
-      {kind === 'contact_updated' ? <Notice>{t('ext.updatedNote')}</Notice> : null}
+      {kind === 'contact_updated' ? (
+        <>
+          <Field label={t('ext.updatedField')} hint={t('ext.updatedFieldHint')}>
+            <SelectInput
+              value={str(d.updatedField)}
+              options={[
+                { v: '', l: t('ext.updatedAny') },
+                ...savePropertyOptions(feed.data, str(d.updatedField)).map((x) => ({
+                  v: x.key,
+                  l: x.name,
+                })),
+              ]}
+              onChange={(v) => set('updatedField', v)}
+            />
+          </Field>
+          <Notice>{t('ext.updatedNote')}</Notice>
+        </>
+      ) : null}
 
       {kind === 'comment_to_dm' ? (
         <Field label={t('rulesLabel')} hint={t('rulesHint')}>
