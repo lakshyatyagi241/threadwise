@@ -284,7 +284,7 @@ function MessageEditor({ step, doc, set }: EditorProps) {
 
 const MEDIA_KINDS = ['image', 'video', 'audio', 'document'] as const;
 
-function MediaEditor({ step, set }: EditorProps) {
+function MediaEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const kind = str(step.data.kind) || 'image';
   return (
@@ -321,10 +321,14 @@ function MediaEditor({ step, set }: EditorProps) {
       ) : null}
       {kind !== 'audio' ? (
         <Field label={t('media.caption')}>
-          <Textarea
+          {/* The same box as the message step: formatting, emoji and the variable menu (a caption may be 1024 characters on WhatsApp). */}
+          <MessageField
             rows={3}
+            label={t('media.caption')}
             value={str(step.data.caption)}
-            onChange={(e) => set({ caption: e.target.value })}
+            max={LIMITS.body}
+            variables={flowVariables(doc)}
+            onChange={(caption) => set({ caption })}
           />
         </Field>
       ) : null}
