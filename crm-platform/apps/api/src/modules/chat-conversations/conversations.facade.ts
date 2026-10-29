@@ -154,8 +154,11 @@ export interface EnqueueOutboundInput {
   replyToMessageId?: string;
   /** Who wrote it. Defaults to the caller (`agent`). */
   sender?: { kind: 'agent' | 'bot'; userId?: number | null; agentId?: number | null };
-  /** Where a person sent it from (`contact`: a contact's drawer). Stored as `meta.source` for the Source column of Message History. */
-  origin?: 'contact';
+  /**
+   * Where it was sent from (`contact`: a contact's drawer; `api`: the public REST API). Stored as `meta.source` for the Source column
+   * of Message History, and as the wallet's source for the charge. Without it a bot message reads "Other".
+   */
+  origin?: 'contact' | 'api';
 }
 
 export interface EnqueueOutboundResult {
