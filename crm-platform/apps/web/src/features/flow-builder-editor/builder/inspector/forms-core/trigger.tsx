@@ -30,6 +30,7 @@ import {
 import { Link, LinkedText } from './parts';
 import { ConditionGroupEditor } from './logic';
 import { useFieldMatchOperators } from '../forms-channels/workflow';
+import { GoogleSheetTriggerFields, WebhookTriggerFields } from './outside-triggers';
 
 /** The rule tree the editor shows: the saved groups, or the one field, operator and value a flow saved before groups existed. */
 function fieldMatchTree(d: Record<string, unknown>): FlbCondGroup {
@@ -67,9 +68,12 @@ const KIND_OPTIONS = [
   'schedule',
   'shopify_event',
   'woocommerce_event',
+  'webhook',
+  'google_sheet',
 ];
 
-export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
+export function TriggerForm(props: FormProps) {
+  const { data: d, set, setMany, env } = props;
   const t = useTranslations('flb.builder.formsCore.trigger');
   const th = useTranslations('flb.builder.formsCore.helpers');
   const fieldMatchOps = useFieldMatchOperators();
@@ -371,6 +375,9 @@ export function TriggerForm({ data: d, set, setMany, env }: FormProps) {
           <Notice>{t('ext.storeNote')}</Notice>
         </>
       ) : null}
+
+      {kind === 'webhook' ? <WebhookTriggerFields env={env} /> : null}
+      {kind === 'google_sheet' ? <GoogleSheetTriggerFields {...props} /> : null}
 
       {kind === 'contact_updated' ? <Notice>{t('ext.updatedNote')}</Notice> : null}
 

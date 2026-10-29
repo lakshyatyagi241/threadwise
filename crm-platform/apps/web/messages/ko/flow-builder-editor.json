@@ -1367,7 +1367,9 @@
             "schedule": "예약: 특정 날짜와 시간",
             "shopify_event": "커머스: Shopify 스토어 이벤트",
             "woocommerce_event": "커머스: WooCommerce 스토어 이벤트",
-            "segment_leave": "오디언스: 연락처가 세그먼트에서 나갈 때"
+            "segment_leave": "오디언스: 연락처가 세그먼트에서 나갈 때",
+            "webhook": "연동: 외부 시스템이 웹훅으로 데이터를 전송",
+            "google_sheet": "연동: Google Sheets에 새 행이 추가됨"
           },
           "tagsLoading": "태그를 불러오는 중…",
           "tagPick": "— 태그 선택 —",
@@ -1463,6 +1465,30 @@
             "storeNote": "고객은 전화번호로 저장된 연락처와 매칭됩니다. 주문으로 새 연락처가 만들어지지는 않습니다. “장바구니 담기”와 “상품 조회”는 제공되지 않습니다. 스토어에서 해당 이벤트를 전달하지 않기 때문입니다.",
             "updatedNote": "사람이 직접 또는 가져오기로 연락처를 변경할 때마다 실행됩니다. 다른 플로우가 한 변경으로는 시작되지 않습니다.",
             "segmentLeaveHint": "이 세그먼트 안에 있던 연락처가 업데이트, 태그 지정 또는 목록 추가 후 세그먼트 밖에 있는 것으로 확인될 때마다 한 번 실행됩니다. 연락처가 나간 것은 플로우가 먼저 세그먼트 안에 있는 것을 확인한 경우에만 감지됩니다."
+          },
+          "outside": {
+            "saveFirst": "먼저 플로우를 저장하세요. 웹훅 주소는 저장된 플로우에 속합니다.",
+            "addressLabel": "웹훅 주소",
+            "addressHint": "다른 시스템이 이 주소로 JSON 본문이 담긴 POST 요청을 보냅니다. 플로우마다 고유한 주소가 있습니다.",
+            "loading": "주소를 불러오는 중…",
+            "unavailable": "주소를 불러올 수 없습니다. 플로우를 볼 수 있는 권한이 있는지 확인한 후 다시 시도하세요.",
+            "copy": "복사",
+            "copied": "웹훅 주소를 복사했습니다",
+            "notLive": "이 주소는 플로우가 게시되어 활성 상태일 때만 플로우를 시작합니다. 그 전에는 “찾을 수 없음”으로 응답합니다.",
+            "sampleLabel": "테스트",
+            "mapping": "연락처는 본문의 “phone” 필드(전화번호가 없으면 “email”)로 찾으며, 새 연락처이면 생성됩니다. 새 연락처에는 “name”이 저장됩니다. 본문의 모든 필드는 {fieldToken} 형식의 변수로 사용할 수 있습니다. 예: {orderToken}. customer.city 같은 중첩 필드는 {cityToken}가 됩니다. 재시도된 요청이 플로우를 두 번 시작하지 않도록 Idempotency-Key 헤더(또는 X-Delivery-Id)를 보내세요. 없으면 동일한 본문은 같은 요청으로 간주됩니다. 본문은 64 KB로 제한됩니다.",
+            "secret": "이 주소를 아는 사람은 누구나 플로우를 시작할 수 있습니다. 필요한 시스템에만 공유하고 공개된 곳에 게시하지 마세요.",
+            "sheetLabel": "스프레드시트",
+            "tabLabel": "탭 이름",
+            "tabHint": "비워 두면 첫 번째 탭을 사용합니다.",
+            "phoneColumn": "전화번호 열",
+            "phoneColumnHint": "연락처의 전화번호가 들어 있는 열의 헤더입니다. 비워 두면 Phone, Mobile, WhatsApp 헤더를 차례로 시도합니다.",
+            "emailColumn": "이메일 열(선택)",
+            "nameColumn": "이름 열(선택)",
+            "intervalLabel": "새 행 확인 주기",
+            "intervalHint": "Google은 행이 추가되어도 알림을 보내지 않으므로, 이 주기에 따라 시트를 확인합니다.",
+            "minutes": "{count, plural, other {#분}}",
+            "sheetNote": "이 플로우를 게시한 이후에 추가된 행만 플로우를 시작하며, 시트에 이미 있는 행은 시작하지 않습니다. 연락처는 전화번호(또는 이메일) 열로 찾거나 생성되고, 모든 열은 헤더 이름의 변수가 됩니다. 예: {topicToken}. 전화번호나 이메일이 없는 행은 건너뜁니다. Sheets 권한이 있는 Google 계정이 연결되어 있어야 합니다."
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "일정 시",
         "shopify_event": "Shopify 이벤트 발생 시",
         "woocommerce_event": "WooCommerce 이벤트 발생 시",
-        "segment_leave": "세그먼트 이탈 시"
+        "segment_leave": "세그먼트 이탈 시",
+        "webhook": "웹훅 수신 시",
+        "google_sheet": "새 시트 행 추가 시"
       },
       "ports": {
         "manual": "수동",

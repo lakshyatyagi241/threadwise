@@ -1367,7 +1367,9 @@
             "schedule": "Zeitplan: zu einem Datum und einer Uhrzeit",
             "shopify_event": "Handel: ein Ereignis im Shopify-Shop",
             "woocommerce_event": "Handel: ein Ereignis im WooCommerce-Shop",
-            "segment_leave": "Zielgruppe: wenn ein Kontakt ein Segment verlässt"
+            "segment_leave": "Zielgruppe: wenn ein Kontakt ein Segment verlässt",
+            "webhook": "Integration: Ein externes System sendet Daten an einen Webhook",
+            "google_sheet": "Integration: In Google Sheets wird eine neue Zeile hinzugefügt"
           },
           "tagsLoading": "Tags werden geladen ...",
           "tagPick": "— Tag auswählen —",
@@ -1463,6 +1465,30 @@
             "storeNote": "Der Kunde wird anhand der Telefonnummer einem gespeicherten Kontakt zugeordnet; für eine Bestellung wird niemand angelegt. „In den Warenkorb gelegt“ und „Produkt angesehen“ werden nicht angeboten, da der Shop diese nicht meldet.",
             "updatedNote": "Wird bei jeder Änderung eines Kontakts durch eine Person oder einen Import ausgelöst. Eine Änderung durch einen anderen Flow startet ihn nicht.",
             "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat."
+          },
+          "outside": {
+            "saveFirst": "Speichern Sie zuerst den Flow. Die Webhook-Adresse gehört zum gespeicherten Flow.",
+            "addressLabel": "Webhook-Adresse",
+            "addressHint": "Ihr anderes System sendet einen POST mit JSON-Body an diese Adresse. Jeder Flow hat seine eigene.",
+            "loading": "Adresse wird geladen…",
+            "unavailable": "Die Adresse konnte nicht geladen werden. Prüfen Sie, ob Sie Flows ansehen dürfen, und versuchen Sie es erneut.",
+            "copy": "Kopieren",
+            "copied": "Webhook-Adresse kopiert",
+            "notLive": "Diese Adresse startet den Flow erst, wenn er veröffentlicht und aktiv ist. Bis dahin antwortet sie mit „nicht gefunden“.",
+            "sampleLabel": "Ausprobieren",
+            "mapping": "Der Kontakt wird über das Feld „phone“ im Body gefunden (oder über „email“, wenn keine Telefonnummer vorhanden ist) und neu angelegt, falls er noch nicht existiert; „name“ wird bei einem neuen Kontakt übernommen. Jedes Feld des Body wird zu einer Variable, die Sie als {fieldToken} verwenden können, zum Beispiel {orderToken}; ein verschachteltes Feld wie customer.city wird zu {cityToken}. Senden Sie einen Idempotency-Key-Header (oder X-Delivery-Id), damit ein erneuter Versand den Flow nicht zweimal startet; ohne ihn zählt ein identischer Body als derselbe Aufruf. Bodys sind auf 64 KB begrenzt.",
+            "secret": "Jeder mit dieser Adresse kann den Flow starten. Geben Sie sie nur an das vorgesehene System weiter und veröffentlichen Sie sie nicht öffentlich.",
+            "sheetLabel": "Tabelle",
+            "tabLabel": "Tabellenblattname",
+            "tabHint": "Leer lassen für das erste Tabellenblatt.",
+            "phoneColumn": "Telefonspalte",
+            "phoneColumnHint": "Die Überschrift der Spalte mit der Telefonnummer des Kontakts. Bei leerem Feld werden die Überschriften Phone, Mobile und WhatsApp probiert.",
+            "emailColumn": "E-Mail-Spalte (optional)",
+            "nameColumn": "Namensspalte (optional)",
+            "intervalLabel": "Auf neue Zeilen prüfen alle",
+            "intervalHint": "Google sendet kein Signal, wenn eine Zeile hinzugefügt wird, daher wird die Tabelle in diesem Intervall geprüft.",
+            "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+            "sheetNote": "Nur Zeilen, die nach der Veröffentlichung dieses Flows hinzugefügt werden, starten ihn; bereits vorhandene Zeilen nie. Der Kontakt wird anhand der Telefon- (oder E-Mail-)Spalte gefunden oder angelegt, und jede Spalte wird zu einer Variable mit dem Namen ihrer Überschrift, zum Beispiel {topicToken}. Eine Zeile ohne Telefonnummer oder E-Mail wird übersprungen. Erfordert ein verbundenes Google-Konto mit der Sheets-Berechtigung."
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "nach Zeitplan",
         "shopify_event": "bei Shopify-Ereignis",
         "woocommerce_event": "bei WooCommerce-Ereignis",
-        "segment_leave": "beim Verlassen des Segments"
+        "segment_leave": "beim Verlassen des Segments",
+        "webhook": "bei Webhook",
+        "google_sheet": "bei neuer Zeile"
       },
       "ports": {
         "manual": "manuell",

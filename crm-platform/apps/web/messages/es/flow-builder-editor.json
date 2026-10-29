@@ -1367,7 +1367,9 @@
             "schedule": "Programación: en una fecha y hora",
             "shopify_event": "Comercio: un evento de la tienda Shopify",
             "woocommerce_event": "Comercio: un evento de la tienda WooCommerce",
-            "segment_leave": "Audiencia: cuando un contacto sale de un segmento"
+            "segment_leave": "Audiencia: cuando un contacto sale de un segmento",
+            "webhook": "Integración: un sistema externo envía datos a un webhook",
+            "google_sheet": "Integración: se añade una fila nueva a una hoja de Google Sheets"
           },
           "tagsLoading": "Cargando etiquetas…",
           "tagPick": "— elige una etiqueta —",
@@ -1463,6 +1465,30 @@
             "storeNote": "El cliente se asocia a un contacto guardado por su número de teléfono; no se crea nadie por un pedido. “Añadido al carrito” y “producto visto” no se ofrecen porque la tienda no los informa.",
             "updatedNote": "Se activa cada vez que una persona o una importación cambia un contacto. Un cambio hecho por otro flujo no lo inicia.",
             "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero."
+          },
+          "outside": {
+            "saveFirst": "Guarda primero el flujo. La dirección del webhook pertenece al flujo guardado.",
+            "addressLabel": "Dirección del webhook",
+            "addressHint": "Tu otro sistema envía un POST con un cuerpo JSON a esta dirección. Cada flujo tiene la suya.",
+            "loading": "Cargando la dirección…",
+            "unavailable": "No se pudo cargar la dirección. Comprueba que tienes permiso para ver flujos e inténtalo de nuevo.",
+            "copy": "Copiar",
+            "copied": "Dirección del webhook copiada",
+            "notLive": "Esta dirección solo inicia el flujo cuando está publicado y activo. Hasta entonces responde “no encontrado”.",
+            "sampleLabel": "Probar",
+            "mapping": "El contacto se busca por el campo “phone” del cuerpo (o por “email” si no hay teléfono) y se crea si es nuevo; “name” se guarda en un contacto nuevo. Cada campo del cuerpo se convierte en una variable que puedes usar como {fieldToken}, por ejemplo {orderToken}; un campo anidado como customer.city pasa a ser {cityToken}. Envía una cabecera Idempotency-Key (o X-Delivery-Id) para que un reenvío no inicie el flujo dos veces; sin ella, un cuerpo idéntico cuenta como el mismo envío. Los cuerpos están limitados a 64 KB.",
+            "secret": "Cualquiera que tenga esta dirección puede iniciar el flujo. Compártela solo con el sistema que debe usarla y no la publiques.",
+            "sheetLabel": "Hoja de cálculo",
+            "tabLabel": "Nombre de la pestaña",
+            "tabHint": "Déjalo vacío para usar la primera pestaña.",
+            "phoneColumn": "Columna de teléfono",
+            "phoneColumnHint": "El encabezado de la columna con el número de teléfono del contacto. Si está vacío, se prueban los encabezados Phone, Mobile y WhatsApp.",
+            "emailColumn": "Columna de correo electrónico (opcional)",
+            "nameColumn": "Columna de nombre (opcional)",
+            "intervalLabel": "Buscar filas nuevas cada",
+            "intervalHint": "Google no envía ninguna señal cuando se añade una fila, así que la hoja se revisa con esta frecuencia.",
+            "minutes": "{count, plural, one {# minuto} other {# minutos}}",
+            "sheetNote": "Solo las filas añadidas después de publicar este flujo lo inician; las que ya están en la hoja nunca lo hacen. El contacto se busca o se crea a partir de la columna de teléfono (o de correo), y cada columna se convierte en una variable con el nombre de su encabezado, por ejemplo {topicToken}. Se omite una fila sin teléfono ni correo. Requiere la cuenta de Google conectada con el permiso de Sheets."
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "según programación",
         "shopify_event": "al ocurrir un evento de Shopify",
         "woocommerce_event": "al ocurrir un evento de WooCommerce",
-        "segment_leave": "al salir del segmento"
+        "segment_leave": "al salir del segmento",
+        "webhook": "por webhook",
+        "google_sheet": "por fila nueva"
       },
       "ports": {
         "manual": "manual",

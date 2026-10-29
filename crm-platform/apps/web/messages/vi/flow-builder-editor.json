@@ -1367,7 +1367,9 @@
             "schedule": "Lịch: vào một ngày và giờ",
             "shopify_event": "Thương mại: một sự kiện cửa hàng Shopify",
             "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce",
-            "segment_leave": "Đối tượng: khi liên hệ rời khỏi phân khúc"
+            "segment_leave": "Đối tượng: khi liên hệ rời khỏi phân khúc",
+            "webhook": "Tích hợp: hệ thống bên ngoài gửi dữ liệu tới webhook",
+            "google_sheet": "Tích hợp: có hàng mới được thêm vào Google Sheets"
           },
           "tagsLoading": "Đang tải thẻ…",
           "tagPick": "— chọn thẻ —",
@@ -1463,6 +1465,30 @@
             "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
             "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt.",
             "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó."
+          },
+          "outside": {
+            "saveFirst": "Hãy lưu luồng trước. Địa chỉ webhook thuộc về luồng đã lưu.",
+            "addressLabel": "Địa chỉ webhook",
+            "addressHint": "Hệ thống khác của bạn gửi một yêu cầu POST với nội dung JSON tới địa chỉ này. Mỗi luồng có địa chỉ riêng.",
+            "loading": "Đang tải địa chỉ…",
+            "unavailable": "Không tải được địa chỉ. Hãy kiểm tra bạn có quyền xem luồng rồi thử lại.",
+            "copy": "Sao chép",
+            "copied": "Đã sao chép địa chỉ webhook",
+            "notLive": "Địa chỉ này chỉ khởi chạy luồng khi luồng đã được xuất bản và đang hoạt động. Trước đó nó trả về “không tìm thấy”.",
+            "sampleLabel": "Thử ngay",
+            "mapping": "Liên hệ được tìm theo trường \"phone\" trong nội dung (hoặc \"email\" khi không có phone) và được tạo mới nếu chưa có; \"name\" được lưu cho liên hệ mới. Mỗi trường trong nội dung trở thành một biến bạn có thể dùng dưới dạng {fieldToken}, ví dụ {orderToken}; trường lồng nhau như customer.city trở thành {cityToken}. Hãy gửi header Idempotency-Key (hoặc X-Delivery-Id) để một yêu cầu gửi lại không khởi chạy luồng hai lần; nếu không có, nội dung giống hệt nhau được coi là cùng một yêu cầu. Nội dung giới hạn 64 KB.",
+            "secret": "Bất kỳ ai có địa chỉ này đều có thể khởi chạy luồng. Chỉ chia sẻ cho hệ thống cần dùng và đừng đăng công khai.",
+            "sheetLabel": "Bảng tính",
+            "tabLabel": "Tên tab",
+            "tabHint": "Để trống để dùng tab đầu tiên.",
+            "phoneColumn": "Cột số điện thoại",
+            "phoneColumnHint": "Tiêu đề của cột chứa số điện thoại của liên hệ. Nếu để trống, hệ thống thử các tiêu đề Phone, Mobile và WhatsApp.",
+            "emailColumn": "Cột email (không bắt buộc)",
+            "nameColumn": "Cột tên (không bắt buộc)",
+            "intervalLabel": "Kiểm tra hàng mới mỗi",
+            "intervalHint": "Google không gửi tín hiệu khi có hàng mới, nên bảng tính được kiểm tra theo lịch này.",
+            "minutes": "{count, plural, other {# phút}}",
+            "sheetNote": "Chỉ những hàng được thêm sau khi bạn xuất bản luồng này mới khởi chạy luồng; các hàng đã có trong bảng tính thì không bao giờ. Liên hệ được tìm hoặc tạo từ cột số điện thoại (hoặc email), và mỗi cột trở thành một biến đặt theo tiêu đề của nó, ví dụ {topicToken}. Hàng không có số điện thoại hoặc email sẽ bị bỏ qua. Cần kết nối tài khoản Google với quyền Sheets."
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "theo lịch",
         "shopify_event": "khi có sự kiện Shopify",
         "woocommerce_event": "khi có sự kiện WooCommerce",
-        "segment_leave": "khi rời phân khúc"
+        "segment_leave": "khi rời phân khúc",
+        "webhook": "khi có webhook",
+        "google_sheet": "khi có hàng mới"
       },
       "ports": {
         "manual": "thủ công",

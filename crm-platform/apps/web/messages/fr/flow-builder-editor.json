@@ -1367,7 +1367,9 @@
             "schedule": "Programmation : à une date et une heure",
             "shopify_event": "Commerce : un événement de boutique Shopify",
             "woocommerce_event": "Commerce : un événement de boutique WooCommerce",
-            "segment_leave": "Audience : quand un contact quitte un segment"
+            "segment_leave": "Audience : quand un contact quitte un segment",
+            "webhook": "Intégration : un système externe envoie des données à un webhook",
+            "google_sheet": "Intégration : une nouvelle ligne est ajoutée à une feuille Google Sheets"
           },
           "tagsLoading": "Chargement des étiquettes…",
           "tagPick": "— choisir une étiquette —",
@@ -1463,6 +1465,30 @@
             "storeNote": "Le client est associé à un contact enregistré par son numéro de téléphone ; aucun contact n'est créé pour une commande. « Ajouté au panier » et « produit consulté » ne sont pas proposés : la boutique ne les transmet pas.",
             "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas.",
             "segmentLeaveHint": "S'exécute une fois chaque fois qu'un contact qui se trouvait dans ce segment est constaté en dehors après avoir été mis à jour, étiqueté ou listé. Le départ d'un contact n'est détecté que si le flux l'a d'abord vu dans le segment."
+          },
+          "outside": {
+            "saveFirst": "Enregistrez d’abord le flux. L’adresse du webhook appartient au flux enregistré.",
+            "addressLabel": "Adresse du webhook",
+            "addressHint": "Votre autre système envoie un POST avec un corps JSON à cette adresse. Chaque flux a la sienne.",
+            "loading": "Chargement de l’adresse…",
+            "unavailable": "Impossible de charger l’adresse. Vérifiez que vous pouvez consulter les flux, puis réessayez.",
+            "copy": "Copier",
+            "copied": "Adresse du webhook copiée",
+            "notLive": "Cette adresse ne démarre le flux qu’une fois celui-ci publié et actif. D’ici là, elle répond « introuvable ».",
+            "sampleLabel": "Essayer",
+            "mapping": "Le contact est retrouvé grâce au champ « phone » du corps (ou « email » s’il n’y a pas de téléphone) et créé s’il est nouveau ; « name » est conservé pour un nouveau contact. Chaque champ du corps devient une variable utilisable sous la forme {fieldToken}, par exemple {orderToken} ; un champ imbriqué comme customer.city devient {cityToken}. Envoyez un en-tête Idempotency-Key (ou X-Delivery-Id) pour qu’un nouvel envoi ne démarre pas le flux deux fois ; sans lui, un corps identique compte comme le même envoi. Les corps sont limités à 64 KB.",
+            "secret": "Toute personne disposant de cette adresse peut démarrer le flux. Ne la partagez qu’avec le système concerné et ne la publiez pas.",
+            "sheetLabel": "Feuille de calcul",
+            "tabLabel": "Nom de l’onglet",
+            "tabHint": "Laissez vide pour utiliser le premier onglet.",
+            "phoneColumn": "Colonne du téléphone",
+            "phoneColumnHint": "L’en-tête de la colonne contenant le numéro de téléphone du contact. Si vide, les en-têtes Phone, Mobile et WhatsApp sont essayés.",
+            "emailColumn": "Colonne de l’e-mail (facultatif)",
+            "nameColumn": "Colonne du nom (facultatif)",
+            "intervalLabel": "Vérifier les nouvelles lignes toutes les",
+            "intervalHint": "Google n’envoie aucun signal lors de l’ajout d’une ligne ; la feuille est donc vérifiée selon cette fréquence.",
+            "minutes": "{count, plural, one {# minute} many {# minutes} other {# minutes}}",
+            "sheetNote": "Seules les lignes ajoutées après la publication de ce flux le démarrent ; les lignes déjà présentes dans la feuille ne le font jamais. Le contact est retrouvé ou créé à partir de la colonne du téléphone (ou de l’e-mail), et chaque colonne devient une variable portant le nom de son en-tête, par exemple {topicToken}. Une ligne sans téléphone ni e-mail est ignorée. Nécessite le compte Google connecté avec l’autorisation Sheets."
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "selon le planning",
         "shopify_event": "à un événement Shopify",
         "woocommerce_event": "à un événement WooCommerce",
-        "segment_leave": "à la sortie du segment"
+        "segment_leave": "à la sortie du segment",
+        "webhook": "sur webhook",
+        "google_sheet": "sur nouvelle ligne"
       },
       "ports": {
         "manual": "manuel",

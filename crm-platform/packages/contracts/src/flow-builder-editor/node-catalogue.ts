@@ -747,6 +747,8 @@ export const FLB_TRIGGER_KINDS = [
   'schedule',
   'shopify_event',
   'woocommerce_event',
+  'webhook',
+  'google_sheet',
 ] as const;
 export type FlbTriggerKind = (typeof FLB_TRIGGER_KINDS)[number];
 
@@ -772,6 +774,8 @@ export const FLB_TRIGGER_PORT_LABELS: Record<string, string> = {
   schedule: 'on schedule',
   shopify_event: 'on Shopify event',
   woocommerce_event: 'on WooCommerce event',
+  webhook: 'on webhook',
+  google_sheet: 'on new sheet row',
 };
 
 // --- ports ------------------------------------------------------------------------------------------------------------

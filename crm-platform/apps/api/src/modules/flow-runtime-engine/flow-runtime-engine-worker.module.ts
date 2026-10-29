@@ -20,6 +20,7 @@ import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { GoogleFormPollService } from './runtime/nodes/integrations/google-form-poll.service';
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
+import { SheetTriggerSweeper } from './triggers/sheet-trigger.sweeper';
 import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
 import { HandoffReturnConsumer } from './triggers/handoff-return.consumer';
 import { RoutingFlowConsumer } from './triggers/routing-flow.consumer';
@@ -56,6 +57,7 @@ import { FlowTakeoverConsumer } from './triggers/takeover.consumer';
     FlowTakeoverConsumer,
     LeadFlowConsumer,
     FlowScheduleSweeper,
+    SheetTriggerSweeper,
     CommerceResume,
     TemplateStatusResume,
     CatalogCartResume,

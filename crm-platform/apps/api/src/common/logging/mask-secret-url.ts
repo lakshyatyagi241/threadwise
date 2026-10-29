@@ -13,6 +13,8 @@ const PATH_SECRETS = [
   /(\/(?:telegram|line|viber|wechat)\/inbound\/)[^/?#\s]+/i,
   /(\/(?:shopify|woocommerce)\/webhook\/)[^/?#\s]+/i,
   /(\/public\/lead-hooks\/)[^/?#\s]+/i,
+  // A flow's webhook address: `/public/flow-hooks/<flow uuid>/<token>`; the token is the credential.
+  /(\/public\/flow-hooks\/[0-9a-f-]{36}\/)[^/?#\s]+/i,
   // Bearer links sent to customers (invoice, proposal, booking management): the token in the path is the only credential.
   /(\/public\/(?:invoices|sales-docs|booking-manage)\/)[^/?#\s]+/i,
   // The payment return address carries its token as `?o=<token>` (E8).

@@ -131,6 +131,7 @@ const failingGoogle = (): GoogleWorkspacePort => {
     appendSheetRow: no,
     appendSheetRows: no,
     readSheetRows: no,
+    readSheetGrid: no,
     generateDoc: no,
     formResponderUrl: no,
     formResponses: no,
@@ -527,6 +528,7 @@ function fakeGoogle() {
       log.reads.push(r);
       return r.matchValue === 'CUST-1' ? [{ Name: 'Ana', Phone: '555' }] : [];
     },
+    readSheetGrid: async () => [],
     generateDoc: async (_o, r) => {
       log.docs.push(r);
       return { url: 'https://docs.google.com/document/d/abc/edit', warnings: [] };

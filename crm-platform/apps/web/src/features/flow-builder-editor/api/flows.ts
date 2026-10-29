@@ -7,6 +7,7 @@ import {
   flowExportSchema,
   flowsOverviewSchema,
   flbGoogleFilesResponseSchema,
+  flowWebhookInfoSchema,
   googleAccountSummarySchema,
   listFlowsResponseSchema,
   flbResolveMapsResponseSchema,
@@ -80,6 +81,9 @@ export const flowsApi = {
       schema: googleAccountSummarySchema,
       signal,
     }),
+  /** The address an outside system posts to, to start this (saved) flow. */
+  flowWebhook: (flowId: string, signal?: AbortSignal) =>
+    apiFetch(`/flow-runtime/flows/${flowId}/webhook`, { schema: flowWebhookInfoSchema, signal }),
   googleFiles: (kind: 'sheets' | 'docs' | 'forms', signal?: AbortSignal) =>
     apiFetch(`/flows/builder-context/google/${kind}`, {
       schema: flbGoogleFilesResponseSchema,

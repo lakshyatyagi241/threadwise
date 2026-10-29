@@ -1367,7 +1367,9 @@
             "schedule": "定时：在指定日期和时间",
             "shopify_event": "电商：Shopify 店铺事件",
             "woocommerce_event": "电商：WooCommerce 店铺事件",
-            "segment_leave": "受众：联系人离开细分时"
+            "segment_leave": "受众：联系人离开细分时",
+            "webhook": "集成：外部系统向 webhook 发送数据",
+            "google_sheet": "集成：Google Sheets 中新增一行"
           },
           "tagsLoading": "正在加载标签…",
           "tagPick": "— 选择标签 —",
@@ -1463,6 +1465,30 @@
             "storeNote": "客户按电话号码匹配已保存的联系人；订单不会创建新联系人。“加入购物车”和“查看商品”不提供：店铺不会上报这些事件。",
             "updatedNote": "每次由人工或导入操作更改联系人时都会触发。其他流程所做的更改不会触发此流程。",
             "segmentLeaveHint": "每当原本在此细分内的联系人在更新、打标签或列出后被发现已不在其中时，运行一次。只有流程之前见到该联系人在细分内，才会发现其离开。"
+          },
+          "outside": {
+            "saveFirst": "请先保存流程。webhook 地址属于已保存的流程。",
+            "addressLabel": "Webhook 地址",
+            "addressHint": "你的其他系统向此地址发送带有 JSON 正文的 POST 请求。每个流程都有自己的地址。",
+            "loading": "正在加载地址…",
+            "unavailable": "无法加载地址。请确认你有查看流程的权限，然后重试。",
+            "copy": "复制",
+            "copied": "已复制 webhook 地址",
+            "notLive": "只有流程发布并启用后，此地址才会触发流程。在此之前它会返回“未找到”。",
+            "sampleLabel": "试一试",
+            "mapping": "系统通过正文中的 \"phone\" 字段查找联系人（没有 phone 时使用 \"email\"），若是新联系人则自动创建；\"name\" 会保存到新联系人。正文中的每个字段都会成为变量，可用 {fieldToken} 引用，例如 {orderToken}；嵌套字段如 customer.city 会变为 {cityToken}。请发送 Idempotency-Key 请求头（或 X-Delivery-Id），避免重试的请求触发两次流程；若没有，内容完全相同的正文将视为同一次请求。正文大小上限为 64 KB。",
+            "secret": "任何拿到此地址的人都可以触发该流程。请只分享给需要的系统，不要公开发布。",
+            "sheetLabel": "电子表格",
+            "tabLabel": "工作表名称",
+            "tabHint": "留空则使用第一个工作表。",
+            "phoneColumn": "电话列",
+            "phoneColumnHint": "存放联系人电话号码的列标题。留空时会尝试 Phone、Mobile 和 WhatsApp 标题。",
+            "emailColumn": "邮箱列（可选）",
+            "nameColumn": "姓名列（可选）",
+            "intervalLabel": "检查新行的间隔",
+            "intervalHint": "Google 不会在新增行时发出通知，因此会按此时间表检查表格。",
+            "minutes": "{count, plural, other {# 分钟}}",
+            "sheetNote": "只有在你发布此流程之后新增的行才会触发流程；表格中已有的行不会触发。系统会根据电话（或邮箱）列查找或创建联系人，每一列都会成为以其标题命名的变量，例如 {topicToken}。没有电话或邮箱的行会被跳过。需要已连接并授予 Sheets 权限的 Google 账号。"
           }
         }
       },
@@ -2525,7 +2551,9 @@
         "schedule": "按计划",
         "shopify_event": "Shopify 事件触发时",
         "woocommerce_event": "WooCommerce 事件触发时",
-        "segment_leave": "离开细分时"
+        "segment_leave": "离开细分时",
+        "webhook": "收到 Webhook 时",
+        "google_sheet": "新增表格行时"
       },
       "ports": {
         "manual": "手动",

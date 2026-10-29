@@ -7,6 +7,7 @@ import { ContactsService, SegmentsService } from '../../crm';
 import { evalRule, evaluateConditionTree } from '../runtime/condition';
 import { liveTrigger } from '../runtime/live-graph';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
+import type { ExternalPerson } from './external-payload';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
 import { FLOW_MAX_TRIGGER_HOPS, TRIGGER_HOPS_VAR } from './trigger-hops';
@@ -374,6 +375,60 @@ export class FlowTriggerService {
       undefined,
       hops,
     );
+  }
+
+  // --- outside triggers (a webhook post, a new sheet row) -------------------------------------------------------------------
+
+  /**
+   * Someone an outside system named (a webhook body, a sheet row) starts ONE flow. The contact is found by phone, then by email, or
+   * made (plan cap and number rules are the contacts module's); no usable phone or email starts nothing. The run's reason is
+   * `ref`, which the caller makes unique per delivery or row, so the same person runs the flow again for the next one. The
+   * payload's fields are the run's variables.
+   */
+  async onExternalEvent(
+    orgId: number,
+    flowId: number,
+    source: 'flow_webhook' | 'sheet_row',
+    ref: string,
+    person: ExternalPerson,
+    variables: Record<string, unknown>,
+  ): Promise<'started' | 'not_started' | 'no_contact' | 'plan_limit'> {
+    const found = await this.findOrCreateByPerson(orgId, person, source);
+    if (found === 'plan_limit') return 'plan_limit';
+    const contactId = found;
+    if (contactId === null) return 'no_contact';
+    const started = await this.startFlows(orgId, [flowId], contactId, source, ref, variables);
+    return started > 0 ? 'started' : 'not_started';
+  }
+
+  private async findOrCreateByPerson(
+    orgId: number,
+    person: ExternalPerson,
+    source: 'flow_webhook' | 'sheet_row',
+  ): Promise<number | null | 'plan_limit'> {
+    const origin = source === 'flow_webhook' ? 'webhook' : 'google_sheet';
+    const attempts: Array<{ kind: 'phone' | 'email'; value: string }> = [];
+    if (person.phone) attempts.push({ kind: 'phone', value: person.phone });
+    if (person.email) attempts.push({ kind: 'email', value: person.email });
+    for (const a of attempts) {
+      try {
+        const out = await this.db.txAs({ orgId }, (tx) =>
+          this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+            ...a,
+            name: person.name,
+            source: origin,
+          }),
+        );
+        if (out.outcome === 'found' || out.outcome === 'created') return out.contactId;
+        if (out.outcome === 'quota_reached') return 'plan_limit';
+      } catch (err) {
+        this.logger.warn(
+          { orgId, source, err: (err as Error).message },
+          '[FLR] contact for an outside trigger failed',
+        );
+      }
+    }
+    return null;
   }
 
   // --- inbound-condition triggers ---------------------------------------------------------------------------------------------

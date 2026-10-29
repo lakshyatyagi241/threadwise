@@ -82,6 +82,16 @@ export function useGoogleFiles(kind: 'sheets' | 'docs' | 'forms') {
  * Whether the workspace's Google account is usable, and which permissions it covers (no account details): the Google steps warn from
  * it. Fails quietly for a role that cannot read it, so the steps show no notice rather than an error.
  */
+export function useFlowWebhook(flowId: string | null) {
+  return useQuery({
+    queryKey: ['flb', 'webhook', flowId],
+    queryFn: ({ signal }) => flowsApi.flowWebhook(flowId as string, signal),
+    enabled: flowId !== null,
+    retry: false,
+    staleTime: 30_000,
+  });
+}
+
 export function useGoogleSummary() {
   return useQuery({
     queryKey: ['flb', 'google', 'status'],

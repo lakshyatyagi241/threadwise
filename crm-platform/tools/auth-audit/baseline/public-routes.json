@@ -109,6 +109,7 @@
     "POST /v2/public/invoices/:token/pay",
     "GET /v2/public/invoices/:token/pdf",
     "GET /v2/public/invoices/:token/print",
+    "POST /v2/public/flow-hooks/:flowUuid/:token",
     "POST /v2/public/lead-hooks/:token",
     "GET /v2/public/manifest.webmanifest",
     "GET /v2/public/marketplace",
