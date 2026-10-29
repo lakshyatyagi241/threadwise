@@ -2,7 +2,6 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
-  currencyExponent,
   minorToMajor,
   type BillingSubscription,
   type CancelSubscriptionResponse,
@@ -12,6 +11,7 @@ import {
   type SubscriptionListResponse,
   type SyncSubscriptionResponse,
 } from '@crm/contracts';
+import { currencyExponent } from '@crm/tax';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
