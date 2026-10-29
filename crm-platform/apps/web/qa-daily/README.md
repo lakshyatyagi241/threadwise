@@ -17,13 +17,13 @@
 
 Sheet statuses: Open, In progress, Fix PR open, Fixed (merged, awaiting verification), Verified, Needs human.
 
-## Elephant and Goldfish (egm plugin)
+## Elephant and Goldfish (official egm plugin)
 
-Every piece of work Claude does here has an **elephant** (the agent with full context that does it: the fixer, the spec-maintainer) and
-**goldfish** reviewers (`review.mjs`: fresh Claude sessions with the egm lens prompts, no conversation, only the task and `git diff`).
-A fix needs the failing check to pass on a fresh build AND the goldfish to approve; a blocking finding goes back to the elephant once, then a
-person decides. New journeys get the same review (production safety, flakiness, scope) before their PR merges. Needs the plugin:
-`claude plugin marketplace add google/elephant-goldfish-model && claude plugin install egm@egm` (the lens files are read from it).
+Every piece of work Claude does here has an **elephant** (the agent with full context that does it: the fixer, the spec-maintainer) and an
+independent **goldfish** review. `review.mjs` only writes the change up as a document and runs the plugin's own `/egm:egm-review`
+(`Step: uninterrupted`) on it; the plugin's reviewer agents and synthesizer do the reviewing and write the report. A fix needs the failing
+check to pass on a fresh build AND no blocking finding; a blocking finding goes back to the fixer once, then a person decides.
+Needs the plugin: `claude plugin marketplace add google/elephant-goldfish-model && claude plugin install egm@egm`.
 
 ## Guards on automatic merge (fix.mjs)
 

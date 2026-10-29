@@ -7,7 +7,7 @@ import { extname, join } from 'node:path';
 
 const P0 = new Set(['auth', 'contacts', 'inbox', 'campaigns', 'forms', 'billing']);
 const ENV_PROBLEM =
-  /net::ERR_|ECONNREFUSED|ENOTFOUND|ETIMEDOUT|ECONNRESET|sign-in .*answered 5\d\d|Is the stack up/i;
+  /browserType\.launch|Executable doesn't exist|net::ERR_|ECONNREFUSED|ENOTFOUND|ETIMEDOUT|ECONNRESET|sign-in .*answered 5\d\d|Is the stack up/i;
 const HTTP_5XX = /->\s*5\d\d|HTTP 5\d\d|app misbehaved underneath|status (of )?5\d\d/i;
 const TIMEOUT = /Timeout \d+ms exceeded|timed out/i;
 const FIX = {
