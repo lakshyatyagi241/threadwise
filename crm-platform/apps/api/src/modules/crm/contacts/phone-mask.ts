@@ -29,10 +29,10 @@ export function maskValue(value: unknown, visible = 4): unknown {
   if (Array.isArray(value)) return value.map((v) => maskValue(v, visible));
   const text = typeof value === 'number' ? String(value) : value;
   if (typeof text !== 'string' || text.trim() === '') return value;
-  const total = (text.match(/[A-Za-z0-9]/g) ?? []).length;
+  const total = (text.match(/[\p{L}\p{N}]/gu) ?? []).length;
   const hide = total <= visible ? total : total - visible;
   let seen = 0;
-  return text.replace(/[A-Za-z0-9]/g, (ch) => (++seen <= hide ? 'x' : ch));
+  return text.replace(/[\p{L}\p{N}]/gu, (ch) => (++seen <= hide ? 'x' : ch));
 }
 
 export function maskPhone(e164: string, visible = 4): string {

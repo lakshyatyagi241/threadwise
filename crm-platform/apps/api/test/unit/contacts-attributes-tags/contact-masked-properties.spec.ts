@@ -12,6 +12,11 @@ describe('maskValue', () => {
     expect(maskValue('ABCDE1234F')).toBe('xxxxxx234F');
   });
 
+  it('masks non-English letters too', () => {
+    expect(maskValue('أحمد علي 1234')).toBe('xxxx xxx 1234');
+    expect(maskValue('José 5678')).toBe('xxxx 5678');
+  });
+
   it('masks a short value whole', () => {
     expect(maskValue('abc')).toBe('xxx');
     expect(maskValue('1234')).toBe('xxxx');
