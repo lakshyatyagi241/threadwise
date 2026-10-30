@@ -296,8 +296,8 @@
         "tag": "kitle",
         "modes": {
           "audience": {
-            "title": "Kişi grupları",
-            "hint": "Kayıtlı segmentleri ve etiketleri kullanın."
+            "title": "Kişiler, gruplar ve segmentler",
+            "hint": "Kişileri seçin veya gruplara, etiketlere ve segmentlere göre filtreleyin."
           },
           "csv": {
             "title": "CSV yükle",

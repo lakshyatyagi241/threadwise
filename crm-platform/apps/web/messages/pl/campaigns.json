@@ -296,8 +296,8 @@
         "tag": "odbiorcy",
         "modes": {
           "audience": {
-            "title": "Grupy kontaktów",
-            "hint": "Użyj zapisanych segmentów i tagów."
+            "title": "Kontakty, grupy i segmenty",
+            "hint": "Wybierz kontakty lub filtruj według grup, tagów i segmentów."
           },
           "csv": {
             "title": "Prześlij CSV",
