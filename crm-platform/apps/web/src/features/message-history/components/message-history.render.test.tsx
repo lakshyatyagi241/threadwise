@@ -371,31 +371,20 @@ describe('Message History (en)', () => {
     expect(drawer.textContent).toContain('events older than 90 days');
   });
 
-  it('offers the export only to a person who may export, inside the exports list, and lists the exports with a download', () => {
+  it('offers the export request only to a person who may export, and keeps the list of exports in Settings', () => {
     show('en');
-    const panel = host.querySelector('[data-testid="history-exports"]');
-    // The request button lives in the exports list, not at the top of the page.
-    expect(panel?.textContent).toContain('Export CSV');
+    const bar = host.querySelector('[data-testid="history-export-request"]');
+    expect(bar?.textContent).toContain('Export CSV');
+    expect(bar?.textContent).toContain('Settings > Export history');
     expect(host.querySelector('header')?.textContent).not.toContain('Export CSV');
-    expect(panel?.textContent).toContain('42 messages');
-    expect(panel?.textContent).toContain('Download');
+    // The list (Preparing / Ready / Download) is no longer on this page.
+    expect(host.querySelector('[data-testid="history-exports"]')).toBeNull();
     act(() => root.unmount());
     root = createRoot(host);
     state.perms = new Set();
     show('en');
     expect(text()).not.toContain('Export CSV');
-    expect(host.querySelector('[data-testid="history-exports"]')).toBeNull();
-  });
-
-  it('still offers the export, with a hint, before there is any export to list', () => {
-    state.noExports = true;
-    show('en');
-    const panel = host.querySelector('[data-testid="history-exports"]');
-    expect(panel?.textContent).toContain('Export CSV');
-    expect(panel?.querySelector('[data-testid="history-exports-empty"]')?.textContent).toContain(
-      'No exports yet',
-    );
-    state.noExports = false;
+    expect(host.querySelector('[data-testid="history-export-request"]')).toBeNull();
   });
 
   it('says which period is empty, and says so differently when a filter is the reason', () => {

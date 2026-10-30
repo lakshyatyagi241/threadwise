@@ -20,6 +20,8 @@ This page lists the contact files your workspace has imported and the exports it
 4. Select **Import contacts** to start a new import from here.
 5. Under **Exports**, see who exported, when, how many contacts, and whether it was the ticked contacts or everything matching. Select **Download** on a row to get that file again.
 
+6. If you may export the message delivery log, **Message history exports** lists the CSV files asked for on Message History, with their status and a **Download** button. Selecting **Export CSV** on Message History brings you here.
+
 > An import that is still running refreshes by itself. An exported file is kept for 30 days: the person who exported it, and anyone who may export all contacts, can download it again from this page. Older exports, and files past 30 days, show only the record that they were taken.
 
 ## Options and settings

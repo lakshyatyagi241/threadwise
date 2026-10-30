@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Button, Spinner, cn, useToast } from '@crm/ui';
 import type { ContactImportJob } from '@crm/contracts';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { ExportPanel } from '@/features/message-history/components/export-panel';
 import { downloadRejects, downloadSavedExport } from '../api/import-export';
 import { useExportHistory, useImportJobs } from '../api/history';
 import { downloadBlob } from '../lib/download';
@@ -21,6 +23,7 @@ export function ImportExportScreen() {
   const t = useTranslations('contacts-attributes-tags.history');
   const canImport = useCan('record.contacts.import');
   const canExport = useCan('record.contacts.export');
+  const canExportHistory = useCan('inbox.logs.export');
   const [importOpen, setImportOpen] = useState(false);
   return (
     <section className="space-y-6">
@@ -33,8 +36,32 @@ export function ImportExportScreen() {
       </header>
       {canImport && <Imports />}
       {canExport && <Exports />}
+      {canExportHistory && <MessageHistoryExports />}
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
     </section>
+  );
+}
+
+/** The CSV exports asked for on Message History: built in the background, downloaded from here (the "ready" email links here too). */
+function MessageHistoryExports() {
+  const t = useTranslations('message-history.exports');
+  const search = useSearchParams();
+  const { effectiveTimezone } = useSession();
+  const tz = useMemo(() => {
+    try {
+      new Intl.DateTimeFormat('en', { timeZone: effectiveTimezone });
+      return effectiveTimezone || 'UTC';
+    } catch {
+      return 'UTC';
+    }
+  }, [effectiveTimezone]);
+  return (
+    <ExportPanel
+      highlight={search.get('export') ?? ''}
+      tz={tz}
+      title={t('settingsTitle')}
+      hint={t('hintSettings')}
+    />
   );
 }
 

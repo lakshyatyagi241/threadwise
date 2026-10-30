@@ -50,7 +50,10 @@
       "fromEmail": "Từ email của bạn",
       "hint": "Xuất CSV dùng các bộ lọc và ngày đã chọn trên trang này. Tệp được tạo ở nền và chúng tôi gửi email khi sẵn sàng.",
       "empty": "Chưa có bản xuất nào. Nhấn Xuất CSV để nhận các tin nhắn bạn thấy ở đây dưới dạng tệp.",
-      "loading": "Đang tải các bản xuất"
+      "loading": "Đang tải các bản xuất",
+      "hintHere": "Xuất CSV dùng bộ lọc và ngày đã chọn trên trang này. Tệp được tạo ngầm; bạn sẽ được chuyển đến Cài đặt > Lịch sử xuất để tải về.",
+      "settingsTitle": "Bản xuất lịch sử tin nhắn",
+      "hintSettings": "Các bản xuất được yêu cầu từ Lịch sử tin nhắn. Tệp được tạo ngầm và chúng tôi gửi email khi sẵn sàng."
     },
     "kpi": {
       "label": "Chỉ số chính",
