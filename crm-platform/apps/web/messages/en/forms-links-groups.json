@@ -141,7 +141,9 @@
         "date": "Date",
         "dropdown": "Dropdown",
         "radio_buttons": "Radio buttons",
-        "checkbox": "Checkboxes"
+        "checkbox": "Checkboxes",
+        "photo": "Photo upload",
+        "document": "Document upload"
       },
       "submissions": {
         "heading": "Submissions",

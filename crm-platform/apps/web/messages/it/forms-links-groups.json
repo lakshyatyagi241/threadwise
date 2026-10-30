@@ -132,7 +132,9 @@
         "date": "Data",
         "dropdown": "Menu a discesa",
         "radio_buttons": "Pulsanti di opzione",
-        "checkbox": "Caselle di controllo"
+        "checkbox": "Caselle di controllo",
+        "photo": "Caricamento foto",
+        "document": "Caricamento documento"
       },
       "submissions": {
         "heading": "Invii",

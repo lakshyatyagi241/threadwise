@@ -132,7 +132,9 @@
         "date": "تاریخ",
         "dropdown": "ڈراپ ڈاؤن",
         "radio_buttons": "ریڈیو بٹنز",
-        "checkbox": "چیک باکسز"
+        "checkbox": "چیک باکسز",
+        "photo": "تصویر اپ لوڈ",
+        "document": "دستاویز اپ لوڈ"
       },
       "submissions": {
         "heading": "جوابات",

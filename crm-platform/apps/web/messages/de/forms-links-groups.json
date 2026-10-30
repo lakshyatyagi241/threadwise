@@ -132,7 +132,9 @@
         "date": "Datum",
         "dropdown": "Dropdown",
         "radio_buttons": "Optionsfelder",
-        "checkbox": "Kontrollkästchen"
+        "checkbox": "Kontrollkästchen",
+        "photo": "Foto-Upload",
+        "document": "Dokument-Upload"
       },
       "submissions": {
         "heading": "Einreichungen",

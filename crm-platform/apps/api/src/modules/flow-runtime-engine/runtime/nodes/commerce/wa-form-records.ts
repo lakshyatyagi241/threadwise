@@ -158,7 +158,7 @@ export function flattenAnswer(v: unknown): string {
   }
   if (typeof v === 'object') {
     const o = v as Record<string, unknown>;
-    for (const k of ['title', 'name', 'label', 'value', 'text', 'id']) {
+    for (const k of ['title', 'file_name', 'name', 'label', 'value', 'text', 'id']) {
       const x = o[k];
       if (x !== undefined && x !== null && typeof x !== 'object') return String(x);
     }
@@ -169,4 +169,34 @@ export function flattenAnswer(v: unknown): string {
     }
   }
   return String(v);
+}
+
+/** One file entry in a form response: Meta's `{file_name, mime_type, sha256, id}` (id = Cloud API media id), or ours once stored. */
+export interface FormFileEntry {
+  file_name?: string;
+  mime_type?: string;
+  sha256?: string;
+  id?: string;
+  /** Set once the file is copied into the media store. */
+  key?: string;
+  size?: number;
+  /** Set when the copy failed; the entry is kept so the submission says which file is missing. */
+  failed?: true;
+}
+
+const isFileEntry = (v: unknown): v is FormFileEntry =>
+  v !== null &&
+  typeof v === 'object' &&
+  !Array.isArray(v) &&
+  typeof (v as FormFileEntry).id === 'string' &&
+  typeof (v as FormFileEntry).mime_type === 'string' &&
+  typeof (v as FormFileEntry).file_name === 'string';
+
+/** Answers whose value is a list of Meta file entries (a Photo or Document picker): field id -> entries. */
+export function fileAnswersOf(answers: Record<string, unknown>): Record<string, FormFileEntry[]> {
+  const out: Record<string, FormFileEntry[]> = {};
+  for (const [k, v] of Object.entries(answers)) {
+    if (Array.isArray(v) && v.length > 0 && v.every(isFileEntry)) out[k] = v as FormFileEntry[];
+  }
+  return out;
 }

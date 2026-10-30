@@ -132,7 +132,9 @@
         "date": "তারিখ",
         "dropdown": "ড্রপডাউন",
         "radio_buttons": "রেডিও বাটন",
-        "checkbox": "চেকবক্স"
+        "checkbox": "চেকবক্স",
+        "photo": "ছবি আপলোড",
+        "document": "নথি আপলোড"
       },
       "submissions": {
         "heading": "জমা",

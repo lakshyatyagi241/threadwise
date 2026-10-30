@@ -132,7 +132,9 @@
         "date": "日期",
         "dropdown": "下拉菜单",
         "radio_buttons": "单选按钮",
-        "checkbox": "复选框"
+        "checkbox": "复选框",
+        "photo": "上传照片",
+        "document": "上传文档"
       },
       "submissions": {
         "heading": "提交记录",

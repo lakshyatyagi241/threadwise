@@ -132,7 +132,9 @@
         "date": "Fecha",
         "dropdown": "Lista desplegable",
         "radio_buttons": "Botones de opción",
-        "checkbox": "Casillas de verificación"
+        "checkbox": "Casillas de verificación",
+        "photo": "Subir foto",
+        "document": "Subir documento"
       },
       "submissions": {
         "heading": "Respuestas",

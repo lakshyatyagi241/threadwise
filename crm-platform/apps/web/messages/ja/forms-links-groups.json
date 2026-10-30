@@ -132,7 +132,9 @@
         "date": "日付",
         "dropdown": "ドロップダウン",
         "radio_buttons": "ラジオボタン",
-        "checkbox": "チェックボックス"
+        "checkbox": "チェックボックス",
+        "photo": "写真のアップロード",
+        "document": "書類のアップロード"
       },
       "submissions": {
         "heading": "回答",

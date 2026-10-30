@@ -132,7 +132,9 @@
         "date": "Дата",
         "dropdown": "Раскрывающийся список",
         "radio_buttons": "Переключатели",
-        "checkbox": "Флажки"
+        "checkbox": "Флажки",
+        "photo": "Загрузка фото",
+        "document": "Загрузка документа"
       },
       "submissions": {
         "heading": "Ответы",
