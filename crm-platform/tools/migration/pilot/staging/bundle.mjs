@@ -156,7 +156,9 @@ const ck = esbuild.buildSync({
 }).outputFiles[0].text;
 const ckMod = { exports: {} };
 new Function('module', 'exports', 'require', ck)(ckMod, ckMod.exports, require);
-const MIG_DIR = join(REPO, 'packages/db/migrations');
+// BUNDLE_MIGRATIONS_DIR: the migrations of the app that is DEPLOYED (refresh-runner.sh exports them from the deployed commit). The preflight
+// refuses a bundle whose list differs from the deployed app's, and main is often a migration ahead of the deployment.
+const MIG_DIR = process.env.BUNDLE_MIGRATIONS_DIR || join(REPO, 'packages/db/migrations');
 const migrations = readdirSync(MIG_DIR)
   .filter((f) => f.endsWith('.sql'))
   .sort()
