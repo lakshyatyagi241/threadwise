@@ -115,6 +115,12 @@ export interface PaymentDriver {
    * a redirect parameter alone is never proof of payment.
    */
   confirmReturn(params: Record<string, string>, order: DriverOrder): Promise<PaymentResult>;
+  /**
+   * Ask the provider what became of OUR payment, with no buyer return and no notification: `paid` only when the provider itself says it
+   * collected exactly the order's amount. pending = not paid (yet); null = cannot tell (no such call, or it failed). The top-up
+   * reconciler asks this about an order whose webhook and browser return both never arrived.
+   */
+  lookupPayment?(order: DriverOrder): Promise<PaymentResult | null>;
   /** Authenticate a provider notification. false = reject. Constant-time comparisons only. */
   verifyWebhook(rawBody: Buffer, headers: Record<string, string | undefined>): Promise<boolean>;
   /** The payment a verified notification announces, or null when it is some other event. */

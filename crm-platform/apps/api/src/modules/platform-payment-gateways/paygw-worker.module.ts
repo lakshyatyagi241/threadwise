@@ -4,6 +4,7 @@ import { PlatformPaymentGatewaysModule } from './paygw.module';
 import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { AddonRedundancyService } from './addon-redundancy.service';
 import { RefundReconcilerService } from './refund-reconciler.service';
+import { TopupReconcilerService } from './topup-reconciler.service';
 import { SubscriptionNotificationsConsumer } from './subscription-notifications.consumer';
 import { SubscriptionReconcilerService } from './subscription-reconciler.service';
 
@@ -81,6 +82,29 @@ export class RefundReconcileScheduler {
   }
 }
 
+/** Credits paid wallet top-ups whose webhook and browser return were both lost (see TopupReconcilerService), on the same clock. */
+@Injectable()
+export class TopupReconcileScheduler {
+  private readonly logger = new Logger(TopupReconcileScheduler.name);
+  private running = false;
+
+  constructor(private readonly reconciler: TopupReconcilerService) {}
+
+  @Interval(TICK_MS)
+  async tick(): Promise<void> {
+    if (this.running) return;
+    this.running = true;
+    try {
+      const tally = await this.reconciler.sweep();
+      if (Object.keys(tally).length > 0) this.logger.log({ tally }, '[PAYGW] top-up sweep');
+    } catch (err) {
+      this.logger.error({ err }, '[PAYGW] top-up sweep failed');
+    } finally {
+      this.running = false;
+    }
+  }
+}
+
 /** Imported ONLY by WorkersModule: the HTTP app never runs the sweep. */
 @Module({
   imports: [PlatformPaymentGatewaysModule],
@@ -88,6 +112,7 @@ export class RefundReconcileScheduler {
     SubscriptionReconcileScheduler,
     AddonRedundancyScheduler,
     RefundReconcileScheduler,
+    TopupReconcileScheduler,
     NotificationsRepository,
     NotificationPublisher,
     SubscriptionNotificationsConsumer,
