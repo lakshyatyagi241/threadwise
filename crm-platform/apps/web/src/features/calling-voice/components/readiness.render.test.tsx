@@ -36,11 +36,21 @@ import { ReadinessCard } from './readiness-card';
 const PASSES =
   /(_ok|_added|_on)$|^(connected|cloud_api_only|limit_test_number|recording_off|recording_configured)$/;
 const NUMBER = '4f0c1f6e-5b0b-4a52-9d0a-0c4a1d0a6b11';
+// Reading and merging the message files is the slow part of a render here: load each locale once, not once per row.
+const messagesByLocale = new Map<string, ReturnType<typeof loadMessages>>();
+const messagesFor = (locale: string) => {
+  let messages = messagesByLocale.get(locale);
+  if (!messages) {
+    messages = loadMessages(locale);
+    messagesByLocale.set(locale, messages);
+  }
+  return messages;
+};
 const html = (el: ReactElement, locale = 'en') =>
   renderToStaticMarkup(
     <NextIntlClientProvider
       locale={locale}
-      messages={loadMessages(locale)}
+      messages={messagesFor(locale)}
       timeZone="UTC"
       onError={(e) => {
         throw e;
@@ -171,5 +181,5 @@ describe('the readiness card', () => {
         ).not.toContain('calling-voice.readiness');
       }
     }
-  });
+  }, 60_000); // 21 locales x every check code x every reason render in full: about 9 s here, so the default 5 s is too tight.
 });
