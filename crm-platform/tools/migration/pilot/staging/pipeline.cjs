@@ -95,8 +95,11 @@ function ensureConfig() {
   );
   const coreFile = path.join(dataDir, `${client}-core.json`);
   const openFile = path.join(dataDir, `${client}-credit-opening.json`);
-  if (r.status !== 0 || !fs.existsSync(coreFile))
-    return `could not read the workspace from geta_core (core-opening exit ${r.status})`;
+  if (r.status !== 0 || !fs.existsSync(coreFile)) {
+    // core-opening says why on its last stderr line (no answer / VPN, workspace not found, credits missing); show it, not only the exit code
+    const why = (r.stderr || '').trim().split('\n').filter(Boolean).pop();
+    return `could not read the workspace from geta_core (core-opening exit ${r.status}${why ? `: ${why.slice(0, 200)}` : r.error ? `: ${String(r.error.message).slice(0, 200)}` : ''})`;
+  }
   let orgName = name;
   if (!orgName) {
     try {
