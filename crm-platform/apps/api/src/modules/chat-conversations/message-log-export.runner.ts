@@ -238,7 +238,7 @@ export class MessageLogExportRunner {
       const history = row.kind === 'messages';
       const what = history ? 'message history' : 'message log';
       const link = history
-        ? `${this.webUrl}/message-history?export=${row.uuid}`
+        ? `${this.webUrl}/import-export?export=${row.uuid}`
         : `${this.webUrl}/inbox/message-logs?export=${row.uuid}`;
       const range = `${row.rangeFrom} to ${row.rangeTo}`;
       const summary =

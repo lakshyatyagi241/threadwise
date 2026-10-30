@@ -50,7 +50,10 @@
       "fromEmail": "Z Twojego e-maila",
       "hint": "Eksport CSV używa filtrów i dat wybranych na tej stronie. Plik powstaje w tle, a my wyślemy e-mail, gdy będzie gotowy.",
       "empty": "Brak eksportów. Kliknij Eksportuj CSV, aby otrzymać widoczne tu wiadomości jako plik.",
-      "loading": "Wczytywanie eksportów"
+      "loading": "Wczytywanie eksportów",
+      "hintHere": "Eksport CSV używa filtrów i dat wybranych na tej stronie. Plik powstaje w tle; do pobrania zostaniesz przeniesiony do Ustawienia > Historia eksportów.",
+      "settingsTitle": "Eksporty historii wiadomości",
+      "hintSettings": "Eksporty zamówione w Historii wiadomości. Plik powstaje w tle, a gdy będzie gotowy, wyślemy e-mail."
     },
     "kpi": {
       "label": "Kluczowe wskaźniki",

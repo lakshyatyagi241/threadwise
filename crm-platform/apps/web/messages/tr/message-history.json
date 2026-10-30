@@ -50,7 +50,10 @@
       "fromEmail": "E-postanızdan",
       "hint": "CSV dışa aktar, bu sayfada seçilen filtreleri ve tarihleri kullanır. Dosya arka planda hazırlanır ve hazır olduğunda size e-posta göndeririz.",
       "empty": "Henüz dışa aktarma yok. Burada gördüğünüz mesajları dosya olarak almak için CSV dışa aktar düğmesine basın.",
-      "loading": "Dışa aktarmalar yükleniyor"
+      "loading": "Dışa aktarmalar yükleniyor",
+      "hintHere": "CSV dışa aktarma, bu sayfada seçilen filtreleri ve tarihleri kullanır. Dosya arka planda hazırlanır; indirmek için Ayarlar > Dışa aktarma geçmişi sayfasına yönlendirilirsiniz.",
+      "settingsTitle": "Mesaj geçmişi dışa aktarmaları",
+      "hintSettings": "Mesaj Geçmişi'nden istenen dışa aktarmalar. Dosya arka planda hazırlanır, hazır olunca size e-posta göndeririz."
     },
     "kpi": {
       "label": "Temel göstergeler",

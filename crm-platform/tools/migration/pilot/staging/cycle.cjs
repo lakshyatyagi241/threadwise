@@ -33,7 +33,7 @@
  *                    [--channel-id bot=phoneid,... | --channel-map-file <real numbers, from wa-numbers.cjs>] [--db <waboo db>]
  *   loaded-check     read-only: refuses (exit 2) when --client already has migration.run_log rows on staging
  *   migrate --catch-up   re-run for an ALREADY-loaded client whose live data moved on: forced export, core-snapshot (geta_core read right after the export),
- *                    ship, preflight, dry, backup, load (new rows; credits group skipped), update (edits), files, core-load, wallet-sync, wallet-history,
+ *                    ship, preflight, dry, backup, load (new rows; credits group skipped), update (edits), files, core-load, wallet-sync, wallet-history, wallet-invoices,
  *                    usage-append (new billing-log charges + token rows only), reconcile, report. Never flow-state, never a 2nd wallet opening.
  *   (every command prints "timing: <command> <s>s"; load also prints a per-step table)
  *
@@ -946,6 +946,60 @@ async function cmdWalletHistory(srv, cfg, flags = {}) {
   return r.code === 0 ? 0 : 1;
 }
 
+/**
+ * The billing provider's (Zoho) read-only settings: a root-only file on the server, never in git and never on a command line. It is sourced
+ * by the shell on the server and its variables are handed to the container by NAME only (`-e NAME`), so no value is ever in a process list.
+ */
+const ZOHO_ENV_FILE = process.env.CYCLE_ZOHO_ENV || '/opt/waboo-runner/config/zoho.env';
+const ZOHO_VARS = [
+  'ZOHO_CLIENT_ID',
+  'ZOHO_CLIENT_SECRET',
+  'ZOHO_REFRESH_TOKEN',
+  'ZOHO_ACCESS_TOKEN',
+  'ZOHO_ORGANIZATION_ID',
+  'ZOHO_BILLING_API',
+  'ZOHO_ACCOUNTS_URL',
+];
+
+/**
+ * wallet-invoices: the invoices of the wallet top-ups. `invoices-fetch` asks Zoho (read-only) for each invoice the top-ups name and writes
+ * dumps/<client>/zoho_invoices.json (the one folder this mounts writable); `wallet-invoices` then loads them so a migrated top-up offers
+ * Download invoice. An invoice is a convenience, so a missing Zoho file or a Zoho refusal is reported loudly with the command to run again,
+ * and does not stop the migration; a failure to LOAD them does. Dry run of the load unless --apply (the migrate chain applies).
+ */
+async function cmdWalletInvoices(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const again = `node pilot/staging/cycle.cjs wallet-invoices --client ${cfg.client} --apply`;
+  const has = await remote(srv, `test -r ${shq(ZOHO_ENV_FILE)}`, {});
+  if (has.code !== 0) {
+    console.log(
+      `wallet-invoices: SKIPPED, no Zoho settings file (${ZOHO_ENV_FILE}) on the server: the invoices are NOT loaded. Add it, then run: ${again}`,
+    );
+    return 0;
+  }
+  const fetchCmd = `set -a; . ${shq(ZOHO_ENV_FILE)}; set +a; ${containerRun(
+    srv,
+    migrateInner(['invoices-fetch', '--client', cfg.client]),
+    { mounts: [`${srv.mig}/dumps/${cfg.client}:/mig/dumps/${cfg.client}`], env: ZOHO_VARS },
+  )}`;
+  const f = await runShown(srv, fetchCmd, 'invoices-fetch', `invoices-fetch-${cfg.client}.txt`);
+  if (f.code !== 0) {
+    console.log(
+      `wallet-invoices: WARNING, the invoices could not be fetched from Zoho (see invoices-fetch-${cfg.client}.txt): they are NOT loaded. Fix it, then run: ${again}`,
+    );
+    return 0;
+  }
+  const a = ['wallet-invoices', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(
+    srv,
+    containerRun(srv, migrateInner(a)),
+    flags.apply ? 'wallet-invoices (APPLY)' : 'wallet-invoices (dry run)',
+    `wallet-invoices-${cfg.client}.txt`,
+  );
+  return r.code === 0 ? 0 : 1;
+}
+
 /** Give the bot messages an earlier load wrote without their buttons (Visit our website, Call now ...) the meta.sentInteractive the inbox draws them from. Reads only the database. Dry run unless --apply. */
 /**
  * chat-delivery: gives the loaded outbound messages the delivery state Waboo had (delivered / read / failed) from its billing log. The chat history
@@ -1296,6 +1350,7 @@ const MIG_STEPS = [
   'core-load',
   'wallet-sync',
   'wallet-history',
+  'wallet-invoices',
   'usage-append',
   'flow-state',
   'reconcile',
@@ -1630,7 +1685,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       ].join(',');
       flags = { ...flags, 'force-export': true, 'with-dry-run': true, 'skip-steps': skip };
       console.log(
-        'migrate: CATCH-UP of an already-loaded client: forced export, core-snapshot, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, wallet-history, usage-append',
+        'migrate: CATCH-UP of an already-loaded client: forced export, core-snapshot, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, wallet-history, wallet-invoices, usage-append',
       );
     }
     if (!shared.memChecked) {
@@ -1652,6 +1707,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
+      (s !== 'wallet-invoices' || cfg.coreFile) && // the invoice ids are the ones the top-ups of core.json name
       // flow-state is NOT part of a migration: a live flow is enrolled by the app's worker as soon as it is published, and with no WhatsApp
       // number connected those enrolments fail and stay failed, so a later cutover could never reach those contacts. The WhatsApp cutover
       // arms the flows as its last step, once the number is connected (load/cutover.ts), so the flows stay drafts until then.
@@ -1718,6 +1774,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
     'wallet-history': () => cmdWalletHistory(srv, cfg, { ...flags, apply: true }),
+    'wallet-invoices': () => cmdWalletInvoices(srv, cfg, { ...flags, apply: true }),
     'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
     'chat-buttons': () => cmdChatButtons(srv, cfg, { ...flags, apply: true }),
     'chat-delivery': () => cmdChatDelivery(srv, cfg, { ...flags, apply: true }),
@@ -2065,6 +2122,7 @@ const COMMANDS = [
   'flow-state',
   'wallet-sync',
   'wallet-history',
+  'wallet-invoices',
   'usage-charges-append',
   'update',
   'files-plan',
@@ -2119,6 +2177,7 @@ async function main(argv) {
     'core-load': () => cmdCoreLoad(srv, cfg, flags),
     'wallet-sync': () => cmdWalletSync(srv, cfg, flags),
     'wallet-history': () => cmdWalletHistory(srv, cfg, flags),
+    'wallet-invoices': () => cmdWalletInvoices(srv, cfg, flags),
     'usage-charges-append': () => cmdUsageAppend(srv, cfg, flags),
     'files-plan': () => cmdFiles(srv, cfg, 'plan'),
     'files-copy': () => cmdFiles(srv, cfg, 'copy', flags),

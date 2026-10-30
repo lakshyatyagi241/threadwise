@@ -29,11 +29,10 @@ import {
 } from '../lib/filters';
 import { DetailDrawer } from './detail-drawer';
 import { DirectionDonut, TopConversations, TypeMixChart, VolumeChart } from './charts';
-import { ExportPanel } from './export-panel';
 import { FilterBar } from './filter-bar';
 import { HistoryTable } from './history-table';
 import { KpiStrip } from './kpi-strip';
-import { useErrorText } from './parts';
+import { DownloadIcon, useErrorText } from './parts';
 
 /** The zone the times are shown in: the person's own, else the workspace's (the session's effective zone), else UTC. */
 function useDisplayZone(): string {
@@ -69,7 +68,6 @@ export function MessageHistoryScreen() {
   const canExport = useCan('inbox.logs.export');
 
   const state = useMemo(() => parseState(new URLSearchParams(search.toString())), [search]);
-  const fromEmail = search.get('export') ?? '';
   const go = useCallback(
     (patch: Partial<HistoryState>) => {
       // A change of filter starts the list again; opening a row or switching the chart bucket keeps the rest.
@@ -105,6 +103,8 @@ export function MessageHistoryScreen() {
           : t('exports.requested'),
         'success',
       );
+      // The list of exports and their download live in Settings > Export history.
+      router.push(`/import-export?export=${created.id}`);
     } catch (err) {
       toast(errorText(err), 'danger');
     }
@@ -199,12 +199,21 @@ export function MessageHistoryScreen() {
       </p>
 
       {canExport && (
-        <ExportPanel
-          highlight={fromEmail}
-          tz={tz}
-          requesting={exporter.isPending}
-          onRequest={() => void requestExport()}
-        />
+        <section
+          aria-label={t('exports.title')}
+          data-testid="history-export-request"
+          className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border bg-background px-4 py-2.5"
+        >
+          <p className="text-xs text-muted-foreground">{t('exports.hintHere')}</p>
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={exporter.isPending}
+            onClick={() => void requestExport()}
+          >
+            {exporter.isPending ? <Spinner /> : <DownloadIcon />} {t('exports.request')}
+          </Button>
+        </section>
       )}
 
       {(summary.isError || insights.isError) && (
