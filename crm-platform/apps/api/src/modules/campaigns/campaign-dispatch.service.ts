@@ -11,6 +11,7 @@ import { AppError } from '../../common/errors/app-error';
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate, ConsentPolicyService, purposeOfCategory } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
+import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import { wakeDelayMs } from '../compliance-center';
 import { CampaignJobs } from './campaign-jobs';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
@@ -93,6 +94,16 @@ const RECORD_ATTEMPTS = 3;
 const RECORD_RETRY_MS = 250;
 /** The counters on the campaign are refreshed this often while a run is going, so the list page moves. */
 const COUNTER_EVERY = 25;
+/**
+ * Official WhatsApp sends in flight at once from one run. A send is mostly waiting (Meta's answer, the database), so one at a time
+ * tops out near 12 a second however fast the number may go; the per-number limiter still holds the whole number to its own rate.
+ */
+const SEND_CONCURRENCY = 16;
+/** With sends in flight, whether the campaign is still `running` is read about this often, not before every recipient. */
+const LIVE_CHECK_MS = 1_000;
+/** A send the platform's own limiter handed back (nothing reached Meta) is tried again this many times, a second at most apart. */
+const HELD_RETRIES = 40;
+const HELD_WAIT_MAX_MS = 1_000;
 /** While resting, the locks and the campaign's own "alive" mark are renewed this often. */
 const HEARTBEAT_MS = 20_000;
 
@@ -617,118 +628,211 @@ export class CampaignDispatchService {
       ? await this.sendWindow.policy(orgId).catch(() => undefined)
       : undefined;
 
-    batches: for (;;) {
-      const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(
-          t,
-          orgId,
-          c.id,
-          c.retryFailed ? maxAttempts : 0,
-          BATCH,
-          o.catchUp === true,
-          heldIds,
-          o.lane ?? null,
-        ),
-      );
-      if (batch.length === 0) break;
+    // Sends in flight at once: one per recipient for engines that pace themselves with a gap, up to SEND_CONCURRENCY for the Cloud API.
+    // A daily limit is counted as sends finish, so it keeps one at a time to stop exactly on the limit.
+    const wide =
+      o.sender.engine === 'waba' && !randomDelay && !o.warm && dailyLimit === 0
+        ? SEND_CONCURRENCY
+        : 1;
+    const inFlight = new Set<Promise<void>>();
+    // Recipients whose send was refused before it left (the number's cap, an empty wallet): they go back to the queue with the rest.
+    const unsent: ClaimedRecipient[] = [];
+    let failure: unknown = null;
+    let stopNow = false;
+    let liveAt = 0;
+    const drain = async () => {
+      while (inFlight.size > 0) await Promise.race(inFlight);
+    };
+    // Raised only after the recipients that did not go out are released, so a failed send does not strand the others.
+    const rethrow = () => {
+      if (failure !== null) throw failure;
+    };
+    const settle = async (
+      r: ClaimedRecipient,
+      outcome: boolean | 'wallet' | { throttledMs: number },
+    ) => {
+      if (typeof outcome === 'object') {
+        // An empty wallet outranks the number's cap: the campaign pauses for a top-up instead of waiting out the cap.
+        if (stop !== 'wallet') stop = 'rate';
+        rateWaitMs = Math.max(rateWaitMs, outcome.throttledMs);
+        unsent.push(r);
+        stopNow = true;
+        return;
+      }
+      if (outcome === 'wallet') {
+        stop = 'wallet';
+        unsent.push(r);
+        stopNow = true;
+        return;
+      }
+      if (outcome) sent.n++;
+      if (++sinceCounters >= COUNTER_EVERY) {
+        sinceCounters = 0;
+        await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
+      }
+    };
 
-      // One statement for the slice: whose local time is inside the workspace's quiet hours.
-      const windows = o.marketing
-        ? await this.sendWindow.checkMany(
+    try {
+      batches: for (;;) {
+        const batch = await this.db.txAs({ orgId }, (t) =>
+          this.repo.claim(
+            t,
             orgId,
-            'message',
-            batch.map((x) => x.contactId),
-            { policy: windowPolicy },
-          )
-        : null;
+            c.id,
+            c.retryFailed ? maxAttempts : 0,
+            BATCH,
+            o.catchUp === true,
+            heldIds,
+            o.lane ?? null,
+          ),
+        );
+        if (batch.length === 0) break;
 
-      for (const [i, r] of batch.entries()) {
-        const putBack = (rest: readonly ClaimedRecipient[]) =>
-          this.db.txAs({ orgId }, async (t) => {
-            for (const x of rest)
+        // One statement for the slice: whose local time is inside the workspace's quiet hours.
+        const windows = o.marketing
+          ? await this.sendWindow.checkMany(
+              orgId,
+              'message',
+              batch.map((x) => x.contactId),
+              { policy: windowPolicy },
+            )
+          : null;
+
+        for (const [i, r] of batch.entries()) {
+          // Waits for the sends already in flight, so nothing is put back that is still going out.
+          const putBack = async (rest: readonly ClaimedRecipient[]) => {
+            await drain();
+            const back = [...unsent.splice(0), ...rest];
+            await this.db.txAs({ orgId }, async (t) => {
+              for (const x of back)
+                await this.repo.release(t, orgId, x.id, x.attempts > 0 ? 'failed' : 'queued');
+            });
+            rethrow();
+          };
+
+          // A send in flight was refused before it left (the number's cap, an empty wallet): put the rest of the slice back and stop.
+          if (stopNow) {
+            await putBack(batch.slice(i));
+            break batches;
+          }
+
+          // The operator cancelled or paused, or the end date passed: put the rest of the slice back and stop.
+          const nowMs = this.runtime.now().getTime();
+          const checkLive = wide === 1 || nowMs - liveAt >= LIVE_CHECK_MS;
+          if (checkLive) liveAt = nowMs;
+          const live = checkLive
+            ? await this.db.txAs({ orgId }, (t) => this.repo.liveStatus(t, orgId, c.id))
+            : 'running';
+          // The catch-up of a recurring campaign runs while the campaign waits for its next date (or has finished its last).
+          const alive = o.catchUp
+            ? live === 'running' || live === 'scheduled' || live === 'completed'
+            : live === 'running';
+          if (!alive) {
+            halted = true;
+            await putBack(batch.slice(i));
+            break batches;
+          }
+          if (o.deadline && o.deadline.getTime() <= this.runtime.now().getTime()) {
+            expired = true;
+            await putBack(batch.slice(i));
+            break batches;
+          }
+          if (
+            c.windowStart &&
+            c.windowEnd &&
+            !withinSendWindow(this.runtime.now(), zone, c.windowStart, c.windowEnd)
+          ) {
+            stop = 'window';
+            await putBack(batch.slice(i));
+            break batches;
+          }
+          if (dailyLimit > 0 && sent.n >= dailyLimit) {
+            stop = 'cap';
+            await putBack(batch.slice(i));
+            break batches;
+          }
+
+          // Held, not denied: back to the queue with the instant it may go; the rest of the audience carries on.
+          const hold = windows?.held.get(r.contactId);
+          if (hold) {
+            await this.db.txAs({ orgId }, (t) => this.repo.hold(t, orgId, r.id, hold));
+            heldIds.push(r.id);
+            heldCount++;
+            const at = new Date(hold.until);
+            if (quietUntil === null || at.getTime() < quietUntil.getTime()) quietUntil = at;
+            continue;
+          }
+
+          // The gap before every recipient after the first. Official engines need none: Meta and Twilio limit themselves.
+          if (paceIdx > 0) {
+            let gap: number;
+            if (randomDelay) gap = (tMin + this.runtime.random() * (tMax - tMin)) * 1000;
+            else if (official) gap = 0;
+            else gap = nextGapMs(o.pacing, null, this.runtime.random);
+            if (!official && batchOn && batchGapMin > 0 && paceIdx % batchSize === 0) {
+              gap += batchCooldownMs(
+                { ...o.pacing, batchGapMinutes: batchGapMin },
+                this.runtime.random,
+              );
+            }
+            // A warming number's own gap is a floor, whatever the campaign's pacing says.
+            if (o.warm) gap = Math.max(gap, nextGapMs(o.pacing, o.warm, this.runtime.random));
+            await this.rest(gap, o.locks, orgId, c.id);
+          }
+          paceIdx++;
+
+          if (wide > 1) {
+            while (inFlight.size >= wide) await Promise.race(inFlight);
+            if (stopNow) {
+              await putBack(batch.slice(i));
+              break batches;
+            }
+            const send = async () => {
+              try {
+                await settle(r, await this.sendOne(o, r, sent.n));
+              } catch (err) {
+                failure ??= err;
+                stopNow = true;
+              }
+            };
+            const p: Promise<void> = send().then(() => {
+              inFlight.delete(p);
+            });
+            inFlight.add(p);
+            continue;
+          }
+
+          const outcome = await this.sendOne(o, r, sent.n);
+          if (typeof outcome === 'object') {
+            // The sender's own cap is spent: this recipient and the rest go back, and the campaign continues when a slot frees.
+            stop = 'rate';
+            rateWaitMs = outcome.throttledMs;
+            await putBack(batch.slice(i));
+            break batches;
+          }
+          if (outcome === 'wallet') {
+            // The wallet cannot pay for the next message: this recipient and the rest go back, the campaign pauses (a top-up and Resume continue it).
+            stop = 'wallet';
+            await putBack(batch.slice(i));
+            break batches;
+          }
+          await settle(r, outcome);
+        }
+        // The slice is done only when every send in it has finished; one that was refused before it left ends the run here.
+        await drain();
+        if (unsent.length > 0) {
+          const back = unsent.splice(0);
+          await this.db.txAs({ orgId }, async (t) => {
+            for (const x of back)
               await this.repo.release(t, orgId, x.id, x.attempts > 0 ? 'failed' : 'queued');
           });
-
-        // The operator cancelled or paused, or the end date passed: put the rest of the slice back and stop.
-        const live = await this.db.txAs({ orgId }, (t) => this.repo.liveStatus(t, orgId, c.id));
-        // The catch-up of a recurring campaign runs while the campaign waits for its next date (or has finished its last).
-        const alive = o.catchUp
-          ? live === 'running' || live === 'scheduled' || live === 'completed'
-          : live === 'running';
-        if (!alive) {
-          halted = true;
-          await putBack(batch.slice(i));
-          break batches;
         }
-        if (o.deadline && o.deadline.getTime() <= this.runtime.now().getTime()) {
-          expired = true;
-          await putBack(batch.slice(i));
-          break batches;
-        }
-        if (
-          c.windowStart &&
-          c.windowEnd &&
-          !withinSendWindow(this.runtime.now(), zone, c.windowStart, c.windowEnd)
-        ) {
-          stop = 'window';
-          await putBack(batch.slice(i));
-          break batches;
-        }
-        if (dailyLimit > 0 && sent.n >= dailyLimit) {
-          stop = 'cap';
-          await putBack(batch.slice(i));
-          break batches;
-        }
-
-        // Held, not denied: back to the queue with the instant it may go; the rest of the audience carries on.
-        const hold = windows?.held.get(r.contactId);
-        if (hold) {
-          await this.db.txAs({ orgId }, (t) => this.repo.hold(t, orgId, r.id, hold));
-          heldIds.push(r.id);
-          heldCount++;
-          const at = new Date(hold.until);
-          if (quietUntil === null || at.getTime() < quietUntil.getTime()) quietUntil = at;
-          continue;
-        }
-
-        // The gap before every recipient after the first. Official engines need none: Meta and Twilio limit themselves.
-        if (paceIdx > 0) {
-          let gap: number;
-          if (randomDelay) gap = (tMin + this.runtime.random() * (tMax - tMin)) * 1000;
-          else if (official) gap = 0;
-          else gap = nextGapMs(o.pacing, null, this.runtime.random);
-          if (!official && batchOn && batchGapMin > 0 && paceIdx % batchSize === 0) {
-            gap += batchCooldownMs(
-              { ...o.pacing, batchGapMinutes: batchGapMin },
-              this.runtime.random,
-            );
-          }
-          // A warming number's own gap is a floor, whatever the campaign's pacing says.
-          if (o.warm) gap = Math.max(gap, nextGapMs(o.pacing, o.warm, this.runtime.random));
-          await this.rest(gap, o.locks, orgId, c.id);
-        }
-        paceIdx++;
-
-        const outcome = await this.sendOne(o, r, sent.n);
-        if (typeof outcome === 'object') {
-          // The sender's own cap is spent: this recipient and the rest go back, and the campaign continues when a slot frees.
-          stop = 'rate';
-          rateWaitMs = outcome.throttledMs;
-          await putBack(batch.slice(i));
-          break batches;
-        }
-        if (outcome === 'wallet') {
-          // The wallet cannot pay for the next message: this recipient and the rest go back, the campaign pauses (a top-up and Resume continue it).
-          stop = 'wallet';
-          await putBack(batch.slice(i));
-          break batches;
-        }
-        if (outcome) sent.n++;
-        if (++sinceCounters >= COUNTER_EVERY) {
-          sinceCounters = 0;
-          await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
-        }
+        rethrow();
+        if (stopNow) break batches;
       }
+    } finally {
+      // Whatever ends the run, sends already in flight finish first: they write their own result and the run must not be over before then.
+      await Promise.allSettled([...inFlight]);
     }
 
     // Everyone who could go has gone: with only held recipients left the campaign sleeps until the first of them opens.
@@ -844,6 +948,24 @@ export class CampaignDispatchService {
       if (!allowed) return 'wallet';
     }
 
+    // A send the platform's own limiter hands back never reached Meta, so it is safe to wait and try again; after HELD_RETRIES it goes
+    // back to the queue like any throttled recipient instead of being marked failed.
+    const whenHeld = async <T>(send: () => Promise<T>): Promise<T> => {
+      for (let n = 0; ; n++) {
+        try {
+          return await send();
+        } catch (err) {
+          if (!(err instanceof WabaApiError && err.heldLocally) || n >= HELD_RETRIES) throw err;
+          await this.rest(
+            Math.min(Math.max(err.retryAfterMs ?? 0, 50), HELD_WAIT_MAX_MS),
+            o.locks,
+            orgId,
+            c.id,
+          );
+        }
+      }
+    };
+
     let providerMessageId: string | null;
     try {
       if (isTemplate) {
@@ -852,13 +974,15 @@ export class CampaignDispatchService {
           o.sender.engine === 'waba'
             ? await this.components(o, content, tpl, r, to, ctx)
             : undefined;
-        const res = await o.opened.send({
-          to,
-          templateName: components ? components.name : tpl.templateName,
-          language: tpl.language,
-          clientReference: `camp-${c.id}-${r.contactId}`,
-          ...(components ? { components: components.components } : {}),
-        });
+        const res = await whenHeld(() =>
+          o.opened.send({
+            to,
+            templateName: components ? components.name : tpl.templateName,
+            language: tpl.language,
+            clientReference: `camp-${c.id}-${r.contactId}`,
+            ...(components ? { components: components.components } : {}),
+          }),
+        );
         providerMessageId = res.providerMessageId;
       } else {
         if (!o.opened.sendText) {
@@ -869,32 +993,40 @@ export class CampaignDispatchService {
           );
           return true;
         }
-        const res = await o.opened.sendText(
-          mail
-            ? {
-                to,
-                text,
-                clientReference: `camp-${c.id}-${r.contactId}`,
-                // The Header field is the subject of a mail, and the campaign's name when it is blank.
-                header: cleanSubject(fill(subjectSource(content.header, c.name))),
-                footer: null,
-              }
-            : {
-                to,
-                text,
-                clientReference: `camp-${c.id}-${r.contactId}`,
-                header: fill(content.header),
-                footer: fill(content.footer),
-                buttons: this.resolveButtons(content.buttons, content.variableMap, pull),
-                quickReplies: this.resolveButtons(content.quickReplies, content.variableMap, pull),
-                media: content.media,
-              },
+        const res = await whenHeld(() =>
+          o.opened.sendText!(
+            mail
+              ? {
+                  to,
+                  text,
+                  clientReference: `camp-${c.id}-${r.contactId}`,
+                  // The Header field is the subject of a mail, and the campaign's name when it is blank.
+                  header: cleanSubject(fill(subjectSource(content.header, c.name))),
+                  footer: null,
+                }
+              : {
+                  to,
+                  text,
+                  clientReference: `camp-${c.id}-${r.contactId}`,
+                  header: fill(content.header),
+                  footer: fill(content.footer),
+                  buttons: this.resolveButtons(content.buttons, content.variableMap, pull),
+                  quickReplies: this.resolveButtons(
+                    content.quickReplies,
+                    content.variableMap,
+                    pull,
+                  ),
+                  media: content.media,
+                },
+          ),
         );
         providerMessageId = res.providerMessageId;
       }
     } catch (err) {
       // The engine (SMS, email) found the wallet unable to pay for this message before sending it: the same stop as the check above.
       if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY) return 'wallet';
+      if (err instanceof WabaApiError && err.heldLocally)
+        return { throttledMs: err.retryAfterMs ?? 1_000 };
       if (err instanceof SenderThrottled) return { throttledMs: err.retryAfterMs };
       if (err instanceof SenderRefused) {
         await permanent(err.message);
