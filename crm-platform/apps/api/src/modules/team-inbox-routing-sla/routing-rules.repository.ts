@@ -34,6 +34,23 @@ function decode(cursor: string): { sort: number; id: number } | null {
 }
 
 /** Every `routing_rules` query. Each takes the caller's tenant transaction. `position` is the rule's place in the whole priority order. */
+/**
+ * Takes a transaction-scoped lock per agent before their open-conversation count is read. The count and the assignment that follows
+ * are two steps; without this two inbound messages at once both read "one below the limit" and both assign (legacy #15583). Locks are
+ * taken in id order so two callers with overlapping candidates cannot deadlock, and they release at commit, after the assignment.
+ */
+export async function lockAgentCapacity(
+  tx: Tx,
+  orgId: number,
+  userIds: readonly number[],
+): Promise<void> {
+  for (const id of [...new Set(userIds)].sort((a, b) => a - b)) {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`chat-cap:${orgId}:${id}`}, 0))`,
+    );
+  }
+}
+
 @Injectable()
 export class RoutingRulesRepository {
   private readonly ranked = (orgId: number): SQL => sql`
@@ -536,6 +553,7 @@ export class RoutingRulesRepository {
     statuses: ReadonlyMap<number, { routable: boolean }>,
   ): Promise<Array<{ id: number; uuid: string; open: number }>> {
     if (userIds.length === 0) return [];
+    await lockAgentCapacity(tx, orgId, userIds);
     const res = await tx.execute(sql`
       SELECT m.id, m.uuid, m.open FROM (
         SELECT u.id, u.uuid, p.chat_limit,

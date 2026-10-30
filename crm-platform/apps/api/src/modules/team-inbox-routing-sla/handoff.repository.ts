@@ -7,7 +7,7 @@ import type {
   QueueUnclaimedAction,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
-import { CUSTOMER_LANGUAGE } from './routing-rules.repository';
+import { CUSTOMER_LANGUAGE, lockAgentCapacity } from './routing-rules.repository';
 
 type Raw = Record<string, unknown>;
 const rowsOf = (res: unknown): Raw[] => (res as { rows: Raw[] }).rows;
@@ -241,6 +241,7 @@ export class HandoffRepository {
     userIds: readonly number[],
   ): Promise<Map<number, { open: number; limit: number | null }>> {
     if (userIds.length === 0) return new Map();
+    await lockAgentCapacity(tx, orgId, userIds);
     const res = await tx.execute(sql`
       SELECT u.id, p.chat_limit,
              (SELECT count(*)::int FROM conversations c
