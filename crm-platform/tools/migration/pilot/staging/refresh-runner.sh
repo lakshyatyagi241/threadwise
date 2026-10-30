@@ -21,8 +21,22 @@ RUNNER_TOOL_DIR="${RUNNER_TOOL_DIR:-/opt/waboo-runner/crm-platform/tools/migrati
 SSH=(ssh -i "$SSH_KEY" -o BatchMode=yes "$RUNNER_USER@$RUNNER_HOST")
 
 cd "$TOOL"
+# The preflight refuses a bundle whose migration list differs from the DEPLOYED app's (/app/migrations of the desk-api image), and main is
+# often a migration ahead of the deployment. So the bundle embeds the migrations of the deployed commit (the image tag), the code is main's.
+REPO="$(cd "$TOOL/../.." && pwd)"
+deployed="$("${SSH[@]}" "cd /opt/desk && docker compose --env-file .env ps --format '{{.Image}}' worker" 2>/dev/null | grep -oE 'desk-api:[0-9a-f]{7,40}' | head -1 | cut -d: -f2 || true)"
+migdir=""
+if [ -n "$deployed" ] && git -C "$REPO" cat-file -e "$deployed^{commit}" 2>/dev/null; then
+  migdir="$(mktemp -d -t mig-deployed.XXXXXX)"
+  git -C "$REPO" archive "$deployed" -- packages/db/migrations | tar -x -C "$migdir"
+  export BUNDLE_MIGRATIONS_DIR="$migdir/packages/db/migrations"
+  echo "== the bundle embeds the migrations of the deployed app ($deployed): $(ls "$BUNDLE_MIGRATIONS_DIR" | wc -l) files"
+else
+  echo "warning: could not read the deployed commit (${deployed:-none}); the bundle embeds this checkout's migrations (the preflight refuses it if the deployment is behind)"
+fi
 echo "== building the bundle from $(git rev-parse --short HEAD)"
 node pilot/staging/bundle.mjs
+[ -z "$migdir" ] || rm -rf "$migdir"
 
 sha="$(git rev-parse HEAD)"
 dirty="$(git status --porcelain -- . | head -1 || true)"
