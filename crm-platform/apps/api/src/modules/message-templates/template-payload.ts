@@ -137,7 +137,14 @@ function buttonOf(b: TemplateButton): Record<string, unknown> {
   } else if (type === 'PHONE_NUMBER') out.phone_number = b.phone_number;
   else if (type === 'COPY_CODE') out.example = Array.isArray(b.example) ? b.example[0] : b.example;
   else if (type === 'FLOW') {
-    for (const k of ['flow_id', 'flow_action', 'navigate_screen'] as const)
+    // The linter accepts a Flow named by `flow_name` or sent inline as `flow_json` instead of a numeric id: Meta needs whichever one is set.
+    for (const k of [
+      'flow_id',
+      'flow_name',
+      'flow_json',
+      'flow_action',
+      'navigate_screen',
+    ] as const)
       if (b[k] !== undefined) out[k] = b[k];
   }
   return out;
