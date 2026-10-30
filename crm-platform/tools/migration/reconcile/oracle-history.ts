@@ -7,6 +7,12 @@
  * reverted_at is refused-at-send, worth nothing); one row per AI charge; one row per top-up / removal / purchase of core.json
  * walletEvents; an opening row = live balance minus everything else, one second before the first row. Only what happened up to the
  * moment the live balance was read counts. Amounts are exact decimals at four fraction digits, half away from zero.
+ *
+ * When everything above adds up to MORE than the live balance (the opening would be below zero: the logs do not reach back to the start of
+ * the wallet), there is no opening row. Instead, for every reseller top-up whose `prev` (the balance Waboo itself recorded just before it)
+ * is a number, one row `unitemised:<event id>` 1 ms before the top-up makes the running balance equal that `prev`; a last row
+ * `unitemised:end` (1 ms after the last row) makes the chain end at the live balance. Without any `prev`, or with a last difference over
+ * 1,000.00, the wallet is refused and no row is produced.
  */
 export interface OracleHistoryInput {
   client: string;
@@ -178,7 +184,48 @@ export function oracleHistory(i: OracleHistoryInput): {
 
   out.sort((a, b) => a.atMs - b.atMs || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
   const net = out.reduce((s, r) => s + r.amount, 0n);
-  const opening = target - net;
+  let opening = target - net;
+  let walk = out;
+  if (opening < 0n) {
+    const prev = new Map<string, bigint>();
+    for (const e of i.events)
+      if (e.src === 'reseller' && typeof e.prev === 'number') {
+        const v = fourDigits(e.prev);
+        if (v !== null) prev.set(`${p}reseller:${text(e.id)}`, v);
+      }
+    if (out.some((r) => prev.has(r.key))) {
+      const made: Array<Omit<OracleHistoryRow, 'balanceAfter'>> = [];
+      let run = 0n;
+      for (const r of out) {
+        const want = prev.get(r.key);
+        if (want !== undefined && want !== run) {
+          const adj = want - run;
+          made.push({
+            key: `${p}unitemised:${r.key.slice(`${p}reseller:`.length)}`,
+            atMs: r.atMs - 1,
+            type: adj < 0n ? 'spend' : 'admin_adjust',
+            amount: adj,
+          });
+          run = want;
+        }
+        made.push(r);
+        run += r.amount;
+      }
+      const tail = target - run;
+      const limit = 10_000_000n;
+      if (tail <= limit && tail >= -limit) {
+        if (tail !== 0n)
+          made.push({
+            key: `${p}unitemised:end`,
+            atMs: (out[out.length - 1]?.atMs ?? asOfMs) + 1,
+            type: tail < 0n ? 'spend' : 'admin_adjust',
+            amount: tail,
+          });
+        walk = made;
+        opening = 0n;
+      }
+    }
+  }
   const rows: OracleHistoryRow[] = [];
   let bal = 0n;
   if (opening > 0n) {
@@ -191,7 +238,7 @@ export function oracleHistory(i: OracleHistoryInput): {
       balanceAfter: bal,
     });
   }
-  for (const r of out) {
+  for (const r of walk) {
     bal += r.amount;
     rows.push({ ...r, balanceAfter: bal });
   }

@@ -89,6 +89,8 @@ export interface HistoryPlan {
   /** reseller checkpoints whose logged balance differs from the chain by more than 1.00 */
   checkpointMisses: Array<{ id: string; at: string; logged: string; chain: string }>;
   checkpoints: number;
+  /** ledger rows entered for usage the logs do not itemise (see anchorOnLoggedBalances); 0 for a workspace whose logs reach back to its start */
+  unitemisedRows: number;
   /** the lowest balance_after of the chain, and how many rows end below zero (Waboo lets a wallet overdraw by a few messages) */
   lowest: bigint;
   belowZero: number;
@@ -121,7 +123,12 @@ const dayIn = (ms: number, tz: string): string => {
   let f = formatters.get(tz);
   if (f === undefined) {
     try {
-      f = new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit' });
+      f = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
     } catch {
       f = null;
     }
@@ -140,7 +147,13 @@ interface Group {
   atMs: number;
 }
 
-const add = (m: Map<string, Group>, day: string, cat: string, minor: bigint, atMs: number): void => {
+const add = (
+  m: Map<string, Group>,
+  day: string,
+  cat: string,
+  minor: bigint,
+  atMs: number,
+): void => {
   const k = `${day}:${cat}`;
   const g = m.get(k) ?? { day, cat, minor: 0n, n: 0, atMs: 0 };
   g.minor += minor;
@@ -148,6 +161,84 @@ const add = (m: Map<string, Group>, day: string, cat: string, minor: bigint, atM
   if (atMs > g.atMs) g.atMs = atMs;
   m.set(k, g);
 };
+
+/** A unitemised usage that is larger than this at the END of the chain (after the last top-up) means the logs do not belong to the balance. */
+export const MAX_UNITEMISED_TAIL = 10_000_000n;
+
+/**
+ * The movements the logs itemise add up to MORE than the live balance, so the wallet would have started below zero: the logs do not reach
+ * back to its start (Waboo keeps its message charges only from some date on; Tirupati: charges from 2026-08-25, top-ups since 2025-03), and
+ * the usage before that is itemised nowhere. Waboo does log its OWN balance before every reseller top-up (`prev`). The usage between two of
+ * those snapshots that no log itemises is the difference: ONE row ahead of the top-up (1 ms before it), and a last one if the chain still
+ * misses the live balance after the final entry. Every real row stays, the chain starts at zero and equals Waboo's own recorded balance
+ * before each top-up. null when there is no recorded balance to anchor on, or the tail is too large to be usage: then the logs do not
+ * belong to the balance and nothing is written. Mirrored independently by reconcile/oracle-history.ts.
+ */
+function anchorOnLoggedBalances(
+  rows: Omit<HistoryRow, 'balanceAfter'>[],
+  prevOf: Map<string, number>,
+  i: HistoryInput,
+  prefix: string,
+): Omit<HistoryRow, 'balanceAfter'>[] | null {
+  if (!rows.some((r) => prevOf.has(r.key))) return null;
+  const mk = (
+    id: string,
+    atMs: number,
+    minor: bigint,
+    recorded: bigint | null,
+    before: bigint,
+  ): Omit<HistoryRow, 'balanceAfter'> => {
+    const key = `${prefix}unitemised:${id}`;
+    return {
+      key,
+      uuid: uuidv5(`${i.client}|wallet_history|${key}`),
+      atMs,
+      type: minor < 0n ? 'spend' : 'admin_adjust',
+      minor,
+      description:
+        minor < 0n
+          ? "Usage not itemised in Waboo's logs"
+          : 'Balance Waboo recorded that its logs do not itemise',
+      note:
+        recorded !== null
+          ? `Waboo recorded a balance of ${text4(recorded)} just before this top-up; the logged charges and top-ups account for ${text4(before)}. The difference is usage its charge logs do not itemise (they start later)`
+          : `The logged charges and top-ups end at ${text4(before)}, the live balance is ${text4(before + minor)}: the difference is not itemised in Waboo's logs`,
+      source: 'waboo_migration',
+      actorType: 'platform_operator',
+      meta: {
+        legacy: {
+          waboo: {
+            unitemised: {
+              recordedBalanceBefore: recorded === null ? null : text4(recorded),
+              loggedChainBefore: text4(before),
+            },
+          },
+        },
+      },
+    };
+  };
+  const out: Omit<HistoryRow, 'balanceAfter'>[] = [];
+  let bal = 0n;
+  for (const r of rows) {
+    const logged = prevOf.get(r.key);
+    if (logged !== undefined) {
+      const want = to4(logged)!;
+      const adj = want - bal;
+      if (adj !== 0n) {
+        out.push(mk(r.key.slice(`${prefix}reseller:`.length), r.atMs - 1, adj, want, bal));
+        bal += adj;
+      }
+    }
+    out.push(r);
+    bal += r.minor;
+  }
+  const tail = i.targetMinor - bal;
+  if (tail !== 0n) {
+    if (tail > MAX_UNITEMISED_TAIL || tail < -MAX_UNITEMISED_TAIL) return null;
+    out.push(mk('end', (rows[rows.length - 1]?.atMs ?? i.asOfMs) + 1, tail, null, bal));
+  }
+  return out;
+}
 
 export function planHistory(i: HistoryInput): HistoryPlan {
   const stats: HistoryPlan['stats'] = {
@@ -353,7 +444,21 @@ export function planHistory(i: HistoryInput): HistoryPlan {
     a.atMs !== b.atMs ? a.atMs - b.atMs : a.key < b.key ? -1 : a.key > b.key ? 1 : 0,
   );
   const sum = rows.reduce((s, r) => s + r.minor, 0n);
-  const opening = i.targetMinor - sum;
+  let opening = i.targetMinor - sum;
+  const prevOf = new Map<string, number>();
+  for (const e of i.events)
+    if (e.src === 'reseller' && typeof e.prev === 'number')
+      prevOf.set(`${prefix}reseller:${e.id}`, e.prev);
+  let walk = rows;
+  let anchored = false;
+  if (opening < 0n) {
+    const a = anchorOnLoggedBalances(rows, prevOf, i, prefix);
+    if (a) {
+      walk = a;
+      anchored = true;
+      opening = 0n;
+    }
+  }
   if (opening < 0n)
     throw new HistoryError(
       `HISTORY_OPENING_NEGATIVE: the logs add up to ${text4(sum)} but the live balance is ${text4(i.targetMinor)}, so the wallet would have started at ${text4(opening)}. The logs and the balance do not belong together (a missing top-up, or a log from another workspace). Nothing was written`,
@@ -386,20 +491,17 @@ export function planHistory(i: HistoryInput): HistoryPlan {
   let checkpoints = 0;
   let lowest = bal;
   let belowZero = 0;
-  const prevOf = new Map<string, number>();
-  for (const e of i.events)
-    if (e.src === 'reseller' && typeof e.prev === 'number') prevOf.set(`${prefix}reseller:${e.id}`, e.prev);
   fine.sort((a, b) => a.atMs - b.atMs);
   let fi = 0;
   let fineBal = opening;
-  for (const r of rows) {
+  for (const r of walk) {
     const logged = prevOf.get(r.key);
     if (logged !== undefined) {
       checkpoints++;
       while (fi < fine.length && fine[fi]!.atMs < r.atMs) fineBal += fine[fi++]!.minor;
       const lm = to4(logged)!;
       const diff = lm > fineBal ? lm - fineBal : fineBal - lm;
-      if (diff > 10_000n)
+      if (diff > 10_000n && !anchored)
         checkpointMisses.push({
           id: r.key.slice(prefix.length),
           at: new Date(r.atMs).toISOString(),
@@ -414,7 +516,10 @@ export function planHistory(i: HistoryInput): HistoryPlan {
       const lead = out
         .slice(Math.max(0, out.length - 5))
         .concat([{ ...r, balanceAfter: bal }])
-        .map((x) => `${new Date(x.atMs).toISOString().slice(0, 16)} ${x.description} ${text4(x.minor)} -> ${text4(x.balanceAfter)}`)
+        .map(
+          (x) =>
+            `${new Date(x.atMs).toISOString().slice(0, 16)} ${x.description} ${text4(x.minor)} -> ${text4(x.balanceAfter)}`,
+        )
         .join(' | ');
       throw new HistoryError(
         `HISTORY_NEGATIVE: the balance would fall to ${text4(bal)} at ${new Date(r.atMs).toISOString()} on "${r.description}" (opening ${text4(opening)}), deeper than any overdraft. The logs do not reproduce a valid wallet. Rows before it: ${lead}. Nothing was written`,
@@ -423,11 +528,24 @@ export function planHistory(i: HistoryInput): HistoryPlan {
     out.push({ ...r, balanceAfter: bal });
   }
   if (bal !== i.targetMinor)
-    throw new HistoryError(`HISTORY_CHAIN: internal error, the chain ends at ${text4(bal)} not ${text4(i.targetMinor)}`);
+    throw new HistoryError(
+      `HISTORY_CHAIN: internal error, the chain ends at ${text4(bal)} not ${text4(i.targetMinor)}`,
+    );
 
   const fingerprint = createHash('sha256')
     .update(JSON.stringify(out.map((r) => [r.key, r.atMs, r.minor.toString(), r.type])))
     .digest('hex')
     .slice(0, 16);
-  return { rows: out, openingMinor: opening, stats, checkpointMisses, checkpoints, lowest, belowZero, fingerprint };
+  const unitemisedRows = out.filter((r) => r.key.startsWith(`${prefix}unitemised:`)).length;
+  return {
+    rows: out,
+    openingMinor: opening,
+    stats,
+    checkpointMisses,
+    checkpoints,
+    unitemisedRows,
+    lowest,
+    belowZero,
+    fingerprint,
+  };
 }
