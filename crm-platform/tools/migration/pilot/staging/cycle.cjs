@@ -735,9 +735,10 @@ function waExportArgs(client, db) {
 }
 
 /**
- * template-quality: the rating of each migrated template as Meta has it now (Waboo never stored it). The runner reads the WABA token into
- * memory and asks Meta, read-only (pilot/templates/quality.cjs); only names, languages and ratings go to the server, and the server writes
- * the ones that differ (pilot/templates/apply-quality.cjs). A Meta refusal does not stop the migration: the templates keep Unknown until a
+ * template-quality: the rating of each migrated template as Meta has it now (Waboo never stored it), and the fresh header link of each media
+ * template (Waboo's own link expired long ago; the files step, which runs after this one, then stores the file). The runner reads the WABA
+ * token into memory and asks Meta, read-only (pilot/templates/quality.cjs); only names, languages, ratings and header links go to the
+ * server, and the server writes the ones that differ (pilot/templates/apply-quality.cjs). A Meta refusal does not stop the migration: the templates keep Unknown until a
  * Refresh. Runs for every client, number or not: no WhatsApp number is connected here.
  */
 async function cmdTemplateQuality(srv, cfg, db) {

@@ -2,8 +2,10 @@
 'use strict';
 /**
  * Server side of the template-quality step (cycle.cjs template-quality). Writes the ratings the runner read from Meta (quality.cjs) into
- * the workspace's migrated templates: a template is touched only when it exists and its rating differs. The input holds names, languages
- * and ratings, no secrets. Runs in the desk-api image (it has `pg`) with the app's worker login, not a superuser.
+ * the workspace's migrated templates: a template is touched only when it exists and its rating differs. Also renews the header sample
+ * link of a media template Meta gave one for, but only where the template has no stored file yet and its saved link is empty or one of
+ * Meta's own CDN links (an expired one): the media copy (the files step) then stores the file. The input holds names, languages, ratings
+ * and header links, no secrets. Runs in the desk-api image (it has `pg`) with the app's worker login, not a superuser.
  *
  *   node apply-quality.cjs --org-slug <slug> --client <waboo client> --input <file> [--apply]
  *
@@ -35,6 +37,7 @@ async function main(argv) {
   const rows = (Array.isArray(input.rows) ? input.rows : []).filter(
     (r) => r && typeof r.name === 'string' && typeof r.language === 'string' && LEVELS.has(r.quality),
   );
+  const links = rows.filter((r) => typeof r.headerUrl === 'string' && /^https:\/\//.test(r.headerUrl));
 
   const { Client } = require('pg');
   const db = new Client({
@@ -53,6 +56,7 @@ async function main(argv) {
     await db.query('BEGIN');
     let changed = 0;
     let matched = 0;
+    let headers = 0;
     try {
       // organizations is under FORCE row-level security: the lookup runs privileged, as the credential import's does
       await db.query(`SELECT set_config('app.privileged', 'on', true)`);
@@ -80,13 +84,23 @@ async function main(argv) {
         );
         matched += seen.rows[0].n;
       }
+      for (const r of links) {
+        const res = await db.query(
+          `UPDATE wa_templates SET header_sample_url = $3
+             WHERE org_id = $1 AND template_name = $2 AND language = $4 AND header_media_key IS NULL
+               AND header_sample_url IS DISTINCT FROM $3
+               AND (coalesce(header_sample_url, '') = '' OR header_sample_url ~* '^https://[^/]*(whatsapp\\.net|fbcdn\\.net)/')`,
+          [orgId, r.name, r.headerUrl, r.language],
+        );
+        headers += res.rowCount;
+      }
       await db.query(a.apply ? 'COMMIT' : 'ROLLBACK');
     } catch (e) {
       await db.query('ROLLBACK').catch(() => undefined);
       throw e;
     }
     console.log(
-      `template-quality: ${rows.length} rating(s) read, ${matched} migrated template(s) matched, ${changed} rating(s) ${a.apply ? 'written' : 'would change (dry run, nothing written)'}`,
+      `template-quality: ${rows.length} rating(s) read, ${matched} migrated template(s) matched, ${changed} rating(s) ${a.apply ? 'written' : 'would change (dry run, nothing written)'}; ${links.length} header link(s) from Meta, ${headers} ${a.apply ? 'renewed' : 'would be renewed'}`,
     );
   } finally {
     await db.end().catch(() => undefined);

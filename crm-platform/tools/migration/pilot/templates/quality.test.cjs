@@ -1,7 +1,13 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { normalizeQuality, wabaCredentials, fetchQualities, parseWabaOutput } = require('./quality.cjs');
+const {
+  normalizeQuality,
+  headerLinkOf,
+  wabaCredentials,
+  fetchQualities,
+  parseWabaOutput,
+} = require('./quality.cjs');
 
 test('a rating is stored as Meta words it, uppercase; anything else is UNKNOWN', () => {
   assert.equal(normalizeQuality('GREEN'), 'GREEN');
@@ -48,9 +54,11 @@ test('paging follows paging.next and the token travels only in the header', asyn
   };
   const rows = await fetchQualities({ wabaId: '1', accessToken: 'SECRET' }, fake);
   assert.deepEqual(rows, [
-    { name: 'a', language: 'en', quality: 'GREEN' },
-    { name: 'b', language: 'en_GB', quality: 'UNKNOWN' },
+    { name: 'a', language: 'en', quality: 'GREEN', headerUrl: null },
+    { name: 'b', language: 'en_GB', quality: 'UNKNOWN', headerUrl: null },
   ]);
+  // the header link is asked for in the same call
+  assert.ok(seen[0].url.includes('fields=name,language,quality_score,components'));
   assert.equal(seen.length, 2);
   assert.ok(seen.every((s) => s.auth === 'Bearer SECRET'));
   assert.ok(seen.every((s) => !s.url.includes('SECRET')));
@@ -69,4 +77,35 @@ test('the marker is found after the shell prompt the query output starts with', 
   assert.equal(docs.length, 1);
   assert.equal(docs[0].is_active, true);
   assert.throws(() => parseWabaOutput('no marker here\n'), /no WhatsApp document list/);
+});
+
+test('the header sample link is the media header link on Meta\'s CDN, https only; nothing else', () => {
+  const link = 'https://scontent.whatsapp.net/v/t61.29466-34/abc/h.jpg?oh=x&oe=6a0f1c2b';
+  const comps = (header) => [{ type: 'BODY', text: 'hi' }, ...(header ? [header] : [])];
+  assert.equal(
+    headerLinkOf(comps({ type: 'HEADER', format: 'IMAGE', example: { header_handle: [link] } })),
+    link,
+  );
+  assert.equal(
+    headerLinkOf(
+      comps({ type: 'HEADER', format: 'VIDEO', example: { header_handle: ['https://video.xx.fbcdn.net/v/t42/v.mp4?oe=1'] } }),
+    ),
+    'https://video.xx.fbcdn.net/v/t42/v.mp4?oe=1',
+  );
+  assert.equal(headerLinkOf(comps(null)), null); // no header at all
+  assert.equal(headerLinkOf(comps({ type: 'HEADER', format: 'TEXT', text: 'Hello' })), null); // a text header has no sample link
+  for (const bad of [
+    'http://scontent.whatsapp.net/v/x.jpg', // not https
+    'https://evil.example/whatsapp.net/x.jpg', // not on Meta's CDN
+    'https://scontent.whatsapp.net.evil.example/x.jpg',
+    'https://user:pw@scontent.whatsapp.net/x.jpg',
+    '4::aW1hZ2UvanBlZw==:ARB', // an upload handle, not a link
+    'not a url',
+  ])
+    assert.equal(
+      headerLinkOf(comps({ type: 'HEADER', format: 'IMAGE', example: { header_handle: [bad] } })),
+      null,
+      bad,
+    );
+  assert.equal(headerLinkOf(undefined), null);
 });
