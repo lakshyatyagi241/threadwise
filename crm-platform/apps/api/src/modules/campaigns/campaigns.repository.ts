@@ -412,7 +412,7 @@ export class CampaignsRepository {
     id: number,
   ): Promise<{ uuid: string; name: string } | undefined> {
     const res = await tx.execute(
-      sql`SELECT uuid, name FROM wpcampaigns WHERE org_id = ${orgId} AND id = ${id}`,
+      sql`SELECT uuid, campaign_name AS name FROM wpcampaigns WHERE org_id = ${orgId} AND id = ${id}`,
     );
     const r = res.rows[0] as Raw | undefined;
     return r ? { uuid: String(r.uuid), name: String(r.name) } : undefined;

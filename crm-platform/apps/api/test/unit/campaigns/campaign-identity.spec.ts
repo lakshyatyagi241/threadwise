@@ -39,6 +39,8 @@ describe('CampaignsRepository.identityOf', () => {
     await new CampaignsRepository().identityOf(tx, 1, 7);
     expect(statements).toHaveLength(1);
     expect(statements[0]).toMatch(/FROM wpcampaigns WHERE org_id = \$1 AND id = \$2$/);
+    // The column is campaign_name; a bare `name` fails on every receipt in production (#1491 shipped that).
+    expect(statements[0]).toMatch(/^SELECT uuid, campaign_name AS name FROM/);
     expect(statements[0]).not.toMatch(/wp_campaign_contacts|usage_charges|JOIN/i);
   });
 });
