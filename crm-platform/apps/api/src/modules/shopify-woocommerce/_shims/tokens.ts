@@ -143,7 +143,8 @@ export type HandOffOutcome =
         | 'plan_has_no_invoicing'
         | 'no_mirrored_order'
         | 'plan_limit_reached'
-        | 'nothing_to_invoice';
+        | 'nothing_to_invoice'
+        | 'sales_order_cancelled';
     };
 
 /**
