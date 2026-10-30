@@ -1,7 +1,18 @@
 import type { ContactResponse } from '@crm/contracts';
 import { shownSubscriptionLabel } from '../../contact-consent/consent-intake.rules';
 import type { ContactChip, ContactRow } from './contacts.repository';
-import { maskPhone } from './phone-mask';
+import { maskPhone, maskValue } from './phone-mask';
+
+/** The custom fields with the values of the masked keys masked; the same object when nothing is masked. */
+export function maskedFields(
+  data: Record<string, unknown>,
+  maskedKeys?: ReadonlySet<string>,
+): Record<string, unknown> {
+  if (!maskedKeys || maskedKeys.size === 0) return data;
+  const out = { ...data };
+  for (const key of maskedKeys) if (key in out) out[key] = maskValue(out[key]);
+  return out;
+}
 
 /**
  * Row -> API shape.
@@ -21,7 +32,13 @@ import { maskPhone } from './phone-mask';
  */
 export function toContactResponse(
   row: ContactRow,
-  opts?: { groups?: ContactChip[]; tags?: ContactChip[]; canRevealPhone?: boolean },
+  opts?: {
+    groups?: ContactChip[];
+    tags?: ContactChip[];
+    canRevealPhone?: boolean;
+    /** Keys of custom properties flagged masked, for a caller without the reveal grant: their values go out masked. */
+    maskedKeys?: ReadonlySet<string>;
+  },
 ): ContactResponse {
   const chip = (c: ContactChip) => ({ id: c.uuid, name: c.name, color: c.color });
   // The WhatsApp label needs both consent booleans. A projection that omits them fails here instead of showing a wrong label.
@@ -73,7 +90,7 @@ export function toContactResponse(
           assigneeId: row.nextFollowUp.assigneeId,
         }
       : null,
-    customFields: row.data ?? {},
+    customFields: maskedFields(row.data ?? {}, opts?.maskedKeys),
     source: row.source,
     timezone: row.timezone,
     timezoneSource:

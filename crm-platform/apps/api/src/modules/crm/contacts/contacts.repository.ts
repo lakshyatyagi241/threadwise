@@ -829,6 +829,14 @@ export class ContactsRepository {
     return this.loadEditableProperties(tx, orgId, keys);
   }
 
+  /** Keys of the active contact properties flagged masked: their values go out masked to a caller without the reveal grant. */
+  async maskedPropertyKeys(tx: Tx, orgId: number): Promise<Set<string>> {
+    const res = await tx.execute(
+      sql`SELECT key FROM fields WHERE org_id = ${orgId} AND module_key = 'contacts' AND is_masked = true AND is_active = true`,
+    );
+    return new Set((res.rows as Array<{ key: string }>).map((r) => r.key));
+  }
+
   /** Every custom property a contact import can fill: the same rules as a bulk edit (see `editableProperties`). */
   async importableProperties(tx: Tx, orgId: number): Promise<PropertyDef[]> {
     return [...(await this.loadEditableProperties(tx, orgId)).values()];
