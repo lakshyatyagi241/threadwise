@@ -18,7 +18,12 @@ const OFF = {
 
 describe('the away rules in the form', () => {
   it('round-trip and validate: off sends null, a bad limit blocks the save', () => {
-    const f = formFromTimers(OFF, { returnUnanswered: true, autoOfflineMinutes: 45 });
+    const f = formFromTimers(OFF, {
+      returnUnanswered: true,
+      autoOfflineMinutes: 45,
+      unansweredReturnMinutes: 20,
+      idleCloseMinutes: 120,
+    });
     expect(toAwayInput(f)).toEqual({ returnUnanswered: true, autoOfflineMinutes: 45 });
     expect(toAwayInput({ ...f, autoOffline: false })).toEqual({
       returnUnanswered: true,

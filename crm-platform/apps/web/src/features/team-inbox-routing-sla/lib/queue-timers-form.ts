@@ -86,7 +86,10 @@ export function toQueueInput(f: QueueForm): QueueTimers {
   };
 }
 
-export function toAwayInput(f: QueueForm): AwayRules {
+/** The two away rules this section edits; the chat idle rules are not on this screen, so they are left out and the server keeps them. */
+export function toAwayInput(
+  f: QueueForm,
+): Pick<AwayRules, 'returnUnanswered' | 'autoOfflineMinutes'> {
   return {
     returnUnanswered: f.returnAway,
     autoOfflineMinutes: f.autoOffline ? Number(f.autoOfflineMinutes) : null,
