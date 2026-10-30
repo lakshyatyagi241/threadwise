@@ -477,7 +477,8 @@ export class WaFormsService {
               name,
               mime,
             });
-            return `/v2/media/${token}`;
+            // The web app reaches the API under /api (as the inbox's media links do); a bare /v2 path is a 404 on the web origin.
+            return `/api/v2/media/${token}`;
           }),
         ),
         fieldLabels: fieldLabelsOf(form.definition_json),

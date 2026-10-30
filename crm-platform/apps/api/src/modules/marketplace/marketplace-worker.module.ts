@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { MarketplaceModule } from './marketplace.module';
 import { InboundProcessor, InboundSweepService } from './inbound.worker';
 import { PullProcessor, PullSweepService } from './pull.worker';
@@ -8,7 +9,7 @@ import { MarketSubscriptionNotificationsConsumer } from './subscription-notifica
 
 /** The pull connectors' schedule and job, the delivery-row retention sweep, and the paid-app subscription sweep. Imported ONLY by WorkersModule: the HTTP app must never run them. */
 @Module({
-  imports: [MarketplaceModule],
+  imports: [MarketplaceModule, PlansCoreModule],
   providers: [
     PullSweepService,
     PullProcessor,
