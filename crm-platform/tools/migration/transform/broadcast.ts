@@ -13,7 +13,7 @@ import {
   utcDate,
 } from '../broadcast/rules';
 import { iso, primaryKey, str, type Doc } from '../util';
-import { c, times } from './common';
+import { c, FREE_TIER, times } from './common';
 import { phoneOf } from './contacts';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Row, Soft } from './types';
 
@@ -117,6 +117,8 @@ export const RECIPIENT_FIELDS: FieldMap = {
   reverted_at: `drop:${NOT_PRESENT}; refund time, credits step`,
   refund_run_id: `drop:${NOT_PRESENT}; refund run, credits step`,
   interakt_reponse_time: 'drop:telemetry of the Waboo sender',
+  free_tier_period: FREE_TIER,
+  free_tier_released: FREE_TIER,
   phone_number_id:
     'drop:the Meta id of the sending phone number; the number is linked by the channel map (the provider config), not copied onto a recipient',
   meta_pricing:

@@ -10,7 +10,7 @@ import {
   windowOf,
 } from '../credits/rules';
 import { bool, primaryKey, str, toDate, type Doc } from '../util';
-import { c } from './common';
+import { c, FREE_TIER } from './common';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Soft } from './types';
 
 /**
@@ -116,6 +116,8 @@ export const USAGE_FIELDS: FieldMap = {
   retry_enabled: NO_BILL,
   max_retries: NO_BILL,
   interakt_reponse_time: NO_BILL,
+  free_tier_period: FREE_TIER,
+  free_tier_released: FREE_TIER,
   phone_number_id: NO_BILL,
   meta_pricing:
     "drop:Meta's price breakdown of the send; the amount and cost are kept in the charge's meta",

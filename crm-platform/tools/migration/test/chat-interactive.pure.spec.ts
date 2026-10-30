@@ -128,6 +128,7 @@ describe('oracle follows the same rules, written independently', () => {
       botToExt: new Map([['b1', '123']]),
       keepDeletedContactChats: false,
       threadStatus: 'waboo',
+      sessionStatus: new Map(),
       assignAgents: false,
       windowHours: 24,
       referenceAt: '2026-10-09T00:00:00.000Z',

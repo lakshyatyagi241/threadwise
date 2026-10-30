@@ -96,7 +96,12 @@ describe('(i) full run -> reconcile passes with unaccounted 0', () => {
     expect(row('contact_tag')).toMatchObject({ migrated: 1, quarantined: 1 });
     expect(row('marketing_list')).toMatchObject({ migrated: 2, excluded: 1 });
     expect(row('contact_notes')).toMatchObject({ migrated: 2, quarantined: 1, excluded: 1 });
-    expect(row('broadcast_templates')).toMatchObject({ disposition: 'EXCLUDE', excluded: 3 });
+    // templates are migrated now (wa_templates): the three documents of the fixture all load
+    expect(row('broadcast_templates')).toMatchObject({
+      disposition: 'MIGRATE',
+      migrated: 3,
+      excluded: 0,
+    });
     expect(row('project')).toMatchObject({ disposition: 'EXCLUDE', excluded: 1 });
     expect(row('contact_properties_fields')).toMatchObject({ read: 14, migrated: 7, excluded: 7 });
     const q = r.nonMigrated.map((n) => `${n.collection}:${n.code}`);
@@ -198,12 +203,19 @@ describe('(i) full run -> reconcile passes with unaccounted 0', () => {
       };
       expect(org.roles).toBe(5);
       // project / project_configuration / workspace_settings are not imported: the settings hold only the marker
-      expect(org.settings).toEqual({ legacy: { waboo: { client: 'acme' } } });
+      // the Waboo marker, plus what the app itself writes (the owner's id and the workspace timezone): nothing else is imported from Waboo's settings
+      expect(org.settings).toMatchObject({ legacy: { waboo: { client: 'acme' } } });
+      expect(Object.keys(org.settings as object).sort()).toEqual([
+        'legacy',
+        'ownerUserId',
+        'timezone',
+      ]);
       expect(
         await d
           .execute(sql`SELECT count(*)::int AS n FROM wa_templates`)
           .then((x) => (x.rows[0] as { n: number }).n),
-      ).toBe(0);
+        // templates are migrated now: the fixture's three (acme) plus one (the second client)
+      ).toBe(4);
       // display-id counter is at or above the highest imported id
       const maxId = Number(
         (
@@ -466,6 +478,7 @@ describe('(v) RLS: the loader cannot write a row into the wrong org', () => {
           lifecycle_stage: 'new',
           data: {},
           is_unsubscribed: false,
+          email_confirmed: false,
           created_at: '2026-01-01T00:00:00Z',
           updated_at: '2026-01-01T00:00:00Z',
         },

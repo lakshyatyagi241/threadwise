@@ -2,6 +2,13 @@ import { Oid, plain, scrub, setOwn, toDate, type Doc } from '../util';
 import type { ColSpec, Soft } from './types';
 
 export const c = (name: string, pg: ColSpec['pg']): ColSpec => ({ name, pg });
+/**
+ * Waboo's free-tier bookkeeping on a billing row (`free_tier_period`: the month YYYY-MM of the free-tier bucket the send fell in;
+ * `free_tier_released`: its reserved slot was given back). A label only: the row's `amount` is what Waboo charged, and the credits step
+ * keeps that; WaDesk has no free-tier concept, so nothing here has a column to go to.
+ */
+export const FREE_TIER =
+  "drop:Waboo's free-tier label (month of the bucket / slot released); what was charged is `amount`, kept by the credits step";
 export const TS_COLS: ColSpec[] = [c('created_at', 'timestamptz'), c('updated_at', 'timestamptz')];
 
 const firstPresent = (doc: Doc, keys: string[]): { key: string; value: unknown } | null => {

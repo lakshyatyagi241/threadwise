@@ -5,7 +5,7 @@ import { coverage } from '../extract/coverage';
 import { readManifest, verifyDump } from '../extract/manifest';
 import type { Source } from '../extract/source';
 import { connect, schemaReady, sql, withPrivileged, withTenant, type Database } from '../load/db';
-import { digest, orgTables, quarantineDigest, type Baseline } from '../load/baseline';
+import { BULK_TABLES, digest, orgTables, quarantineDigest, type Baseline } from '../load/baseline';
 import { ctxOf, IdMap, rowUuid } from '../load/engine';
 import { ORG_COLLECTION } from '../load/org';
 import { prepareAccess } from '../load/access';
@@ -17,6 +17,7 @@ import { verifyCampaigns } from './campaigns';
 import { readHistoryMarker, verifyCredits } from './credits';
 import { verifyFaq } from './faq';
 import { verifyFlows } from './flows';
+import { verifyWalletInvoices } from './invoices';
 import { verifyLeads } from './leads';
 import { stepsNotRun } from '../load/steps';
 import { resolveFlows, type FlowOptions, type FlowSettings } from '../flows/config';
@@ -1128,6 +1129,10 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         notPresent,
       });
     }
+    // the invoices of the wallet top-ups come from the wallet-invoices step (a cycle step after the load, not a load step): the table is judged
+    // against the fetched file whenever the wallet was brought across
+    if (anyRan('credit_wallet'))
+      await verifyWalletInvoices({ db, orgId, client, dumpsDir, alarm, warnings });
     if (ctx.flows && anyRan('faq_knowledge'))
       await verifyFaq({
         db,
@@ -1280,7 +1285,9 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       } else {
         const known = new Set(await withTenant(db, { orgId }, (tx) => orgTables(tx)));
         const bad = Object.entries(base.counts).filter(
-          ([t, v]) => (t !== 'organizations' && !known.has(t)) || !Array.isArray(v),
+          // a table that became step-owned after this organization was created (BULK_TABLES) is still in its record: not damage
+          ([t, v]) =>
+            (t !== 'organizations' && !known.has(t) && !BULK_TABLES.has(t)) || !Array.isArray(v),
         );
         if (bad.length > 0) {
           // the record itself was overwritten (a table that does not exist, or a value that is not a list of row digests)
