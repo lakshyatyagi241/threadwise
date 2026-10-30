@@ -34,6 +34,14 @@ describe('coercePropertyValue', () => {
     expect(ok(def('decimal'), '1.25')).toBe(1.25);
     expect(bad(def('currency'), Number.NaN)).toBe(true);
   });
+  it('a phone number sent as a whole number is kept as text; other numbers are still refused', () => {
+    expect(ok(def('phone'), 919876543210)).toBe('919876543210');
+    expect(ok(def('phone'), ' +91 98765 43210 ')).toBe('+91 98765 43210');
+    expect(bad(def('phone'), 12.5)).toBe(true);
+    expect(bad(def('phone'), -5)).toBe(true);
+    expect(bad(def('phone'), true)).toBe(true);
+  });
+
   it('checkbox takes a boolean or its text form', () => {
     expect(ok(def('checkbox'), true)).toBe(true);
     expect(ok(def('boolean'), 'false')).toBe(false);
