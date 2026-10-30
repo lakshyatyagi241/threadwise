@@ -4,7 +4,6 @@ import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   PAYGW_ADMIN_PAGE_SIZE,
-  currencyExponent,
   type AdminMoney,
   type AdminOrdersQuery,
   type AdminOrdersResponse,
@@ -26,6 +25,7 @@ import {
   type PaygwOrderStatus,
   type Trend,
 } from '@crm/contracts';
+import { currencyExponent } from '@crm/tax';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
