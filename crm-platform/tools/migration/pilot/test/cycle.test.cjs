@@ -21,7 +21,7 @@ fs.writeFileSync(path.join(root, '.env'), 'DOMAIN=desk.wabo.ai\nSECRET_THING=hun
 const serverEnv = path.join(base, 'server.env');
 fs.writeFileSync(
   serverEnv,
-  'SERVER_HOST=stage.invalid\nSERVER_USER=root\nSSH_KEY=./k.pem\nSERVER_APP_DIR=/opt/desk\n',
+  'SERVER_HOST=stage.invalid\nSERVER_USER=root\nSSH_KEY=./k.pem\nSERVER_APP_DIR=/opt/desk\nFLOW_MEDIA_PUBLIC_BASE=https://media.example.invalid\n',
 );
 const clients = path.join(base, 'clients');
 fs.mkdirSync(clients);
@@ -387,7 +387,8 @@ test('migrate: full chain, exporter flags, reuse of a fresh export, timings.json
     ],
   ]);
   assert.ok(!r.stdout.includes('boss@example.com'), 'exporter output is masked');
-  const order = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'files', 'flow-state', 'reconcile', 'report', 'complete'];
+  // flow-state is not a migration step (the cutover arms the flows); template-quality and chat-delivery run in every migrate
+  const order = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'template-quality', 'chat-delivery', 'files', 'reconcile', 'report', 'complete'];
   assert.deepEqual([...r.stdout.matchAll(/^migrate: ([\w-]+) ok/gm)].map((m) => m[1]), order);
   const inners = dockerCalls().map(innerOf);
   const idx = (re) => inners.findIndex((x) => re.test(x));
@@ -768,4 +769,48 @@ test('wa-numbers buildMap: pairs by chatbot_id, falls back to the single number,
   assert.deepEqual(r.unresolved, ['a']);
   r = buildMap({ botids: ['a'], docs: [doc('a', '1068225693034592'), doc('a', '1068225693034599')] }, 'Org'); // two live numbers
   assert.deepEqual(r.unresolved, ['a']);
+});
+
+test('mediaBaseOf: the client config wins, else the runner-wide default; only a plain https origin', () => {
+  const srv = { flowMediaPublicBase: 'https://pub-default.r2.dev/' };
+  assert.equal(lib.mediaBaseOf(srv, {}), 'https://pub-default.r2.dev');
+  assert.equal(lib.mediaBaseOf(srv, { flowMediaPublicBase: '' }), 'https://pub-default.r2.dev');
+  assert.equal(
+    lib.mediaBaseOf(srv, { flowMediaPublicBase: ' https://media.acme.test ' }),
+    'https://media.acme.test',
+  );
+  assert.equal(lib.mediaBaseOf({}, {}), '');
+  for (const bad of [
+    'http://media.acme.test',
+    'https://media.acme.test/folder',
+    'https://media.acme.test:8443',
+    'https://user:pw@media.acme.test',
+    'https://media.acme.test/?x=1',
+    'not a url',
+  ])
+    assert.throws(() => lib.mediaBaseOf({}, { flowMediaPublicBase: bad }), /flowMediaPublicBase/, bad);
+});
+
+test('migrate stops before the export when no public address of the media bucket is set', () => {
+  reset();
+  const noBase = path.join(base, 'server-nobase.env');
+  fs.writeFileSync(
+    noBase,
+    'SERVER_HOST=stage.invalid\nSERVER_USER=root\nSSH_KEY=./k.pem\nSERVER_APP_DIR=/opt/desk\n',
+  );
+  const r = cycle([...MIG, '--with-dry-run', '--steps', 'access,fields'], {
+    ...M_ENV,
+    STAGING_SERVER_ENV: noBase,
+  });
+  assert.notEqual(r.status, 0);
+  assert.match(r.stdout + r.stderr, /FLOW_MEDIA_PUBLIC_BASE/);
+  assert.equal(dockerCalls().length, 0, 'nothing ran on the server');
+  // "files": "off" skips the media copy, so it needs no address
+  writeCfg({ files: 'off' });
+  const ok = cycle([...MIG, '--skip-export', '--with-dry-run', '--steps', 'access,fields'], {
+    ...M_ENV,
+    STAGING_SERVER_ENV: noBase,
+  });
+  writeCfg();
+  assert.doesNotMatch(ok.stdout + ok.stderr, /FLOW_MEDIA_PUBLIC_BASE/);
 });
