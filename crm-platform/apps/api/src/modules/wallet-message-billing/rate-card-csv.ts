@@ -90,9 +90,14 @@ function indexOfAny(header: string[], names: string[]): number {
 
 /** "0.7846" -> micros; blank or not a number -> undefined (the caller keeps the stored cost). */
 function cost(cell: string | undefined): number | undefined {
-  const t = (cell ?? '').trim().replace(/^[^\d.]+/, '');
+  const raw = (cell ?? '').trim();
+  // A negative cost is refused, not stored as a positive one (issue #1533): stripping the sign would invert it.
+  if (raw.includes('-')) return undefined;
+  const t = raw.replace(/^[^\d.]+/, '');
   if (t === '') return undefined;
-  const m = majorToMicros(t);
+  // A comma decimal ("12,5") is not a thousands-grouped amount: refused, not read as 125.
+  if (t.includes(',') && !/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(t)) return undefined;
+  const m = majorToMicros(t.replace(/,/g, ''));
   return m === null ? undefined : m;
 }
 
