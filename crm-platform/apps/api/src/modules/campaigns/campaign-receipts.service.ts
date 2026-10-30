@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import type { DeliveryReceipt } from '../broadcasts';
@@ -8,6 +9,11 @@ import { isNewer } from './campaign-rules';
 import { followUpStatusIsNewer } from './wizard/wizard-follow-up-rules';
 import { CampaignsRepository } from './campaigns.repository';
 
+/** The shortest time between two roll-ups of one campaign's counters from delivery receipts. */
+const RECOUNT_EVERY_MS = 1_000;
+/** The trailing roll-up never fires sooner than this after the receipt that armed it. */
+const TRAILING_MIN_MS = 500;
+
 /**
  * Applies a delivery report to the campaign recipient it is about (TW-CAMP-021). One state machine for every source (the Cloud
  * API webhook, the Twilio callback, the Baileys adapter, the Node bridge): a recipient only moves forward, `read` never goes back to
@@ -16,6 +22,11 @@ import { CampaignsRepository } from './campaigns.repository';
  */
 @Injectable()
 export class CampaignReceiptsService {
+  private readonly logger = new Logger(CampaignReceiptsService.name);
+  /** When each campaign's counters were last rolled up by this process, and the trailing roll-up waiting for a quiet moment. */
+  private readonly lastRecount = new Map<number, number>();
+  private readonly trailing = new Set<number>();
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: CampaignsRepository,
@@ -87,7 +98,7 @@ export class CampaignReceiptsService {
             },
           );
         }
-        await this.repo.recount(tx, orgId, campaignId);
+        await this.recountSoon(tx, orgId, campaignId);
         return true;
       }),
     );
@@ -101,6 +112,44 @@ export class CampaignReceiptsService {
       );
     }
     return true;
+  }
+
+  /**
+   * Rolls the recipient rows up into the campaign's counters, at most once a second per campaign. The roll-up reads every recipient
+   * and writes the one campaign row, so doing it for each of the three receipts of every message makes a send cost more the bigger it
+   * is and lines every receipt up behind that row. A receipt inside the second leaves one trailing roll-up so the last counts land.
+   * shortcut: the debounce lives in this process; counters read by a screen are rolled up again on read (campaigns-read), so a restart
+   * only delays them by that read.
+   */
+  private async recountSoon(tx: Tx, orgId: number, campaignId: number): Promise<void> {
+    const now = Date.now();
+    if (this.lastRecount.size > 1_000) {
+      for (const [id, at] of this.lastRecount) if (now - at > 60_000) this.lastRecount.delete(id);
+    }
+    const last = this.lastRecount.get(campaignId) ?? 0;
+    if (now - last >= RECOUNT_EVERY_MS) {
+      this.lastRecount.set(campaignId, now);
+      await this.repo.recount(tx, orgId, campaignId);
+      return;
+    }
+    if (this.trailing.has(campaignId)) return;
+    this.trailing.add(campaignId);
+    setTimeout(
+      () => {
+        this.trailing.delete(campaignId);
+        this.lastRecount.set(campaignId, Date.now());
+        asSystem(orgId, () =>
+          this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, campaignId)),
+        ).catch((err) =>
+          this.logger.warn(
+            { orgId, campaignId, err: String(err) },
+            '[CAMP] trailing roll-up failed',
+          ),
+        );
+      },
+      // The receipt that armed this is still inside its transaction: wait long enough for it to commit so the roll-up sees it.
+      Math.max(RECOUNT_EVERY_MS - (now - last), TRAILING_MIN_MS),
+    ).unref();
   }
 
   /**
