@@ -443,3 +443,19 @@ describe('a rights erasure under a hold', () => {
     await p.api.as(a.admin).post(`/v2/privacy/legal-holds/${h.body.id}/release`).send({});
   });
 });
+
+describe('the response-SLA change audit row (issue #1516)', () => {
+  it('records the SLA it replaced as the old value, not null', async () => {
+    expect(
+      (await p.api.as(a.admin).patch('/v2/privacy/settings').send({ slaDays: 20 })).status,
+    ).toBe(200);
+    expect(
+      (await p.api.as(a.admin).patch('/v2/privacy/settings').send({ slaDays: 45 })).status,
+    ).toBe(200);
+    const rows = await q(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'privacy_settings' AND delta ? 'slaDays' ORDER BY id DESC LIMIT 1`,
+      [a.orgId],
+    );
+    expect(rows[0]).toMatchObject({ delta: { slaDays: { old: 20, new: 45 } } });
+  });
+});

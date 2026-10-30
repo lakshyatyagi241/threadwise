@@ -595,9 +595,10 @@ export class PrivacyRequestsService {
   async updateSettings(input: PrivacyRequestsSettings): Promise<PrivacyRequestsSettings> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      const previousSla = (await this.repo.slaDays(tx, ctx.orgId)) ?? PRIVACY_DEFAULT_SLA_DAYS;
       await this.repo.saveSla(tx, ctx.orgId, input.slaDays, ctx.userId);
       const delta: Record<string, { old: unknown; new: unknown }> = {
-        slaDays: { old: null, new: input.slaDays },
+        slaDays: { old: previousSla, new: input.slaDays },
       };
       if (input.legalHoldRequesterNotice !== undefined) {
         await this.repo.saveHoldNotice(
