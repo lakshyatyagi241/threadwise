@@ -139,7 +139,9 @@
       "not_enabled": "L'e-mail non è inclusa nel piano del tuo spazio di lavoro, quindi non è stato collegato nulla. Chiedi a un amministratore di attivarla.",
       "not_allowed": "Non hai il permesso di collegare questo tipo di casella. Chiedi l'accesso a un amministratore o usa una casella condivisa.",
       "no_address": "Il provider non ha condiviso l'indirizzo e-mail della casella, quindi non è stato collegato nulla. Collega di nuovo e consenti l'accesso all'indirizzo e-mail.",
-      "no_refresh_token": "Il provider non ha permesso a questa casella di restare connessa, quindi non è stato collegato nulla. Rimuovi l'accesso di questa app nelle impostazioni del tuo account Google o Microsoft, poi collega di nuovo."
+      "no_refresh_token": "Il provider non ha permesso a questa casella di restare connessa, quindi non è stato collegato nulla. Rimuovi l'accesso di questa app nelle impostazioni del tuo account Google o Microsoft, poi collega di nuovo.",
+      "expired": "Il link di accesso è scaduto o è già stato usato. Collega di nuovo dall'inizio.",
+      "provider_refused": "Google ha rifiutato la richiesta. Chiedi all'amministratore della piattaforma di verificare che l'API Gmail sia abilitata nel progetto Google e che questo account possa accedere (un'app in test accetta solo gli utenti di test elencati)."
     },
     "errors": {
       "notConfigured": "L'accesso per questo provider non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma.",

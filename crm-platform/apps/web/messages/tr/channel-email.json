@@ -139,7 +139,9 @@
       "not_enabled": "E-posta çalışma alanınızın planına dahil değil, bu yüzden hiçbir şey bağlanmadı. Bir yöneticiden açmasını isteyin.",
       "not_allowed": "Bu tür bir posta kutusunu bağlama izniniz yok. Bir yöneticiden erişim isteyin veya paylaşılan bir posta kutusu kullanın.",
       "no_address": "Sağlayıcı posta kutusunun e-posta adresini paylaşmadı, bu yüzden hiçbir şey bağlanmadı. Yeniden bağlanın ve e-posta adresine erişime izin verin.",
-      "no_refresh_token": "Sağlayıcı bu posta kutusunun oturumda kalmasına izin vermedi, bu yüzden hiçbir şey bağlanmadı. Google veya Microsoft hesap ayarlarınızdan bu uygulamanın erişimini kaldırın, sonra yeniden bağlanın."
+      "no_refresh_token": "Sağlayıcı bu posta kutusunun oturumda kalmasına izin vermedi, bu yüzden hiçbir şey bağlanmadı. Google veya Microsoft hesap ayarlarınızdan bu uygulamanın erişimini kaldırın, sonra yeniden bağlanın.",
+      "expired": "Oturum açma bağlantısının süresi doldu veya zaten kullanıldı. Baştan yeniden bağlanın.",
+      "provider_refused": "Google isteği reddetti. Platform yöneticinizden Google projesinde Gmail API'sinin etkin olduğunu ve bu hesabın oturum açabildiğini (test aşamasındaki uygulama yalnızca listelenen test kullanıcılarını kabul eder) kontrol etmesini isteyin."
     },
     "errors": {
       "notConfigured": "Bu sağlayıcı için oturum açma bu platformda henüz ayarlanmadı. Platform yöneticisine sorun.",

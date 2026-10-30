@@ -236,6 +236,10 @@ export const MAIL_CONNECT_OUTCOMES = [
   'no_address',
   /** The provider gave no refresh token, so the mailbox could not stay signed in. */
   'no_refresh_token',
+  /** The sign-in took too long (the link is good for ten minutes), was used twice, or was started in another session. */
+  'expired',
+  /** The provider refused the platform's request (the Gmail API not enabled for its project, an app still in testing, a refused client). */
+  'provider_refused',
   'failed',
 ] as const;
 export type MailConnectOutcome = (typeof MAIL_CONNECT_OUTCOMES)[number];
