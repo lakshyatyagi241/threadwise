@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type RazorpayWebhookResponse } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -107,9 +108,22 @@ export class PaymentWebhookService {
         this.logger.warn(`[STOREFRONT-PAY] order ${orderId} does not belong to shop ${shop.id}`);
         return { ok: true as const, order: null, rejected: 'order_not_in_shop' as const };
       }
-      // A replay: already settled, nothing to do.
-      if (order.status === 'paid') return { ok: true as const, order: order.id };
+      const paymentEntity = obj(obj(payload.payment).entity);
+      const payment = {
+        id: typeof paymentEntity.id === 'string' ? paymentEntity.id : null,
+        amount: Number.isFinite(Number(entity.amount)) ? Number(entity.amount) : null,
+        currency: String(entity.currency ?? '').toUpperCase(),
+      };
+      // A replay of the capture that settled the order: nothing to do. A different capture on a paid order is money taken twice.
+      if (order.status === 'paid') {
+        const settled = await this.settledPaymentId(tx, orgId, order.id);
+        if (payment.id !== null && payment.id !== settled) {
+          await this.recordUnmatched(tx, orgId, order, 'second_capture', payment);
+        }
+        return { ok: true as const, order: order.id };
+      }
       if (order.status === 'cancelled') {
+        await this.recordUnmatched(tx, orgId, order, 'order_cancelled', payment);
         return { ok: true as const, order: null, rejected: 'order_cancelled' as const };
       }
       // Full amount and same currency, or it is not this order's payment.
@@ -121,10 +135,10 @@ export class PaymentWebhookService {
         currency !== (order.currencyCode || 'INR').toUpperCase()
       ) {
         this.logger.warn(`[STOREFRONT-PAY] amount/currency mismatch on order ${orderId}`);
+        await this.recordUnmatched(tx, orgId, order, 'amount_mismatch', payment);
         return { ok: true as const, order: null, rejected: 'amount_mismatch' as const };
       }
 
-      const paymentEntity = obj(obj(payload.payment).entity);
       await this.orders.markPaid(tx, orgId, order.id, {
         paymentLink: typeof entity.short_url === 'string' ? entity.short_url : null,
         meta: {
@@ -161,6 +175,52 @@ export class PaymentWebhookService {
         },
       });
       return { ok: true as const, order: order.id };
+    });
+  }
+
+  /** The payment id that settled the order (written by `markPaid`), or null. */
+  private async settledPaymentId(tx: Tx, orgId: number, orderId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT meta_json->>'razorpay_payment' AS id FROM wa_orders WHERE org_id = ${orgId} AND id = ${orderId}`,
+    );
+    return ((res.rows[0] as { id: string | null } | undefined)?.id ?? null) as string | null;
+  }
+
+  /**
+   * A captured payment that did not settle its order is money the buyer paid with no record for staff. Nothing moves; the audit row
+   * and the outbox event (`store.payment_unmatched`) say which capture it was and why it was not applied.
+   */
+  private async recordUnmatched(
+    tx: Tx,
+    orgId: number,
+    order: { id: number; uuid: string; storefrontId: number | null; totalMinor: number },
+    reason: 'order_cancelled' | 'amount_mismatch' | 'second_capture',
+    payment: { id: string | null; amount: number | null; currency: string },
+  ): Promise<void> {
+    this.logger.warn(`[STOREFRONT-PAY] capture not applied to order ${order.id}: ${reason}`);
+    const base = RequestContextStore.require();
+    await RequestContextStore.run(
+      { ...base, orgId, actorType: 'system', actorId: null, userId: null },
+      () =>
+        this.audit.record(tx, {
+          module: 'wa_orders',
+          recordId: order.id,
+          action: 'update',
+          delta: { payment_unmatched: { old: null, new: reason } },
+        }),
+    );
+    await this.outbox.emit(tx, {
+      orgId,
+      aggregateModule: 'wa_orders',
+      aggregateId: order.id,
+      eventType: 'store.payment_unmatched',
+      payload: {
+        orderId: order.uuid,
+        reason,
+        razorpayPayment: payment.id,
+        amountMinor: payment.amount,
+        currencyCode: payment.currency,
+      },
     });
   }
 }

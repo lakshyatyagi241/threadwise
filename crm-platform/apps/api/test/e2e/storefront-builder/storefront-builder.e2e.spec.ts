@@ -1237,6 +1237,42 @@ describe('razorpay webhook', () => {
     expect(await status(orderNo)).toBe('new');
   });
 
+  it('a capture that does not settle its order is recorded for staff, and a link on a paid order is refused (issue #1525)', async () => {
+    const { orderNo, shopId, m } = await paidSetup('wh6');
+    const mismatch = await hook(event({ orderNo, shopId, amount: 4999 }));
+    expect(mismatch.body).toEqual({ ok: true, order: null, rejected: 'amount_mismatch' });
+    expect(await api.events(m.t.orgId, 'store.payment_unmatched')).toEqual([
+      expect.objectContaining({ reason: 'amount_mismatch', razorpayPayment: 'pay_1' }),
+    ]);
+    const audit = await h.owner.query(
+      `SELECT delta FROM audit_log WHERE org_id = $1 AND module = 'wa_orders' AND record_id = $2 AND delta ? 'payment_unmatched'`,
+      [m.t.orgId, orderNo],
+    );
+    expect(audit.rows).toHaveLength(1);
+
+    // the order is paid by its own capture; a second capture with another payment id is recorded, not applied
+    expect((await hook(event({ orderNo, shopId }))).body).toEqual({ ok: true, order: orderNo });
+    const second = JSON.parse(JSON.stringify(event({ orderNo, shopId })));
+    second.payload.payment.entity.id = 'pay_2';
+    expect((await hook(second)).body).toEqual({ ok: true, order: orderNo });
+    expect(await api.events(m.t.orgId, 'store.payment_unmatched')).toHaveLength(2);
+    // a replay of the settling capture records nothing
+    expect((await hook(event({ orderNo, shopId }))).body).toEqual({ ok: true, order: orderNo });
+    expect(await api.events(m.t.orgId, 'store.payment_unmatched')).toHaveLength(2);
+  });
+
+  it('no new payment link is created for a paid order (issue #1525)', async () => {
+    const { orderNo, shopId, m } = await paidSetup('wh8');
+    expect((await hook(event({ orderNo, shopId }))).body).toEqual({ ok: true, order: orderNo });
+    const uuid = (await orderRow(orderNo)).uuid as string;
+    const res = await api
+      .as(m.t.admin)
+      .post(`/v2/store/orders/${uuid}/generate-payment-link`)
+      .send({});
+    expect(res.status).toBe(409);
+    expect(res.body.code).toBe('CONFLICT');
+  });
+
   it('a cancelled order is refused; an order of another shop (even of another workspace) is refused', async () => {
     const { orderNo, shopId } = await paidSetup('wh4');
     await h.owner.query(`UPDATE wa_orders SET status='cancelled' WHERE id=$1`, [orderNo]);

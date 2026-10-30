@@ -240,6 +240,14 @@ export class StoreOrdersService {
     const { order, gateway, shop } = await this.db.tx(async (tx) => {
       const o = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!o) throw AppError.notFound('Order', uuid);
+      // A link on a paid or cancelled order would let the buyer pay for it again (issue #1525).
+      if (o.status === 'paid' || o.status === 'cancelled') {
+        throw new AppError(
+          ERROR_CODES.CONFLICT,
+          'This order is already paid or cancelled, so a new payment link is not created.',
+          HttpStatus.CONFLICT,
+        );
+      }
       const g = await this.gateways.resolve(ctx.orgId, o.storefrontId, { slug: input.gateway, tx });
       const s = o.storefrontId
         ? await this.shops.findById(tx, ctx.orgId, o.storefrontId)
