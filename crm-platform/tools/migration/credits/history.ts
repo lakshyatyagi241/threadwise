@@ -489,7 +489,6 @@ export function planHistory(i: HistoryInput): HistoryPlan {
   }
   const checkpointMisses: HistoryPlan['checkpointMisses'] = [];
   let checkpoints = 0;
-  let lowest = bal;
   let belowZero = 0;
   fine.sort((a, b) => a.atMs - b.atMs);
   let fi = 0;
@@ -510,7 +509,6 @@ export function planHistory(i: HistoryInput): HistoryPlan {
         });
     }
     bal += r.minor;
-    if (bal < lowest) lowest = bal;
     if (bal < 0n) belowZero++;
     if (bal < -MAX_OVERDRAFT) {
       const lead = out
@@ -536,6 +534,12 @@ export function planHistory(i: HistoryInput): HistoryPlan {
     .update(JSON.stringify(out.map((r) => [r.key, r.atMs, r.minor.toString(), r.type])))
     .digest('hex')
     .slice(0, 16);
+  // the lowest balance_after of the ROWS (the writer checks the ledger against it): without an opening row the chain starts at 0, which is
+  // not a row's balance
+  const lowest = out.reduce(
+    (m, r) => (r.balanceAfter < m ? r.balanceAfter : m),
+    out[0]?.balanceAfter ?? 0n,
+  );
   const unitemisedRows = out.filter((r) => r.key.startsWith(`${prefix}unitemised:`)).length;
   return {
     rows: out,
