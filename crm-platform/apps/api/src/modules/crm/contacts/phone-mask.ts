@@ -20,6 +20,21 @@
  * -, parentheses, dots) are preserved in place so the shape stays readable; only the
  * digits themselves move between 'x' and their original value.
  */
+/**
+ * Mask a custom property value flagged "masked": every letter and digit but the last `visible` is replaced by `x`, separators kept
+ * (`1234 5678 9012` -> `xxxx xxxx 9012`). A value no longer than `visible` is masked whole, so a short value shows nothing. A list is
+ * masked item by item and a number becomes masked text. `null`, blanks and booleans carry no secret and are returned as they are.
+ */
+export function maskValue(value: unknown, visible = 4): unknown {
+  if (Array.isArray(value)) return value.map((v) => maskValue(v, visible));
+  const text = typeof value === 'number' ? String(value) : value;
+  if (typeof text !== 'string' || text.trim() === '') return value;
+  const total = (text.match(/[A-Za-z0-9]/g) ?? []).length;
+  const hide = total <= visible ? total : total - visible;
+  let seen = 0;
+  return text.replace(/[A-Za-z0-9]/g, (ch) => (++seen <= hide ? 'x' : ch));
+}
+
 export function maskPhone(e164: string, visible = 4): string {
   const trimmed = (e164 ?? '').trim();
   if (trimmed === '') return '';

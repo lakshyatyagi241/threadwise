@@ -246,6 +246,15 @@ export class ContactsService {
     });
   }
 
+  /** The masked custom property keys for a caller who may not reveal them; nothing to look up for one who may. */
+  private async maskedKeysFor(
+    tx: Tx,
+    orgId: number,
+    canRevealPhone: boolean,
+  ): Promise<ReadonlySet<string> | undefined> {
+    return canRevealPhone ? undefined : this.repo.maskedPropertyKeys(tx, orgId);
+  }
+
   async list(
     query: ListContactsQuery,
     scope: RecordScope,
@@ -294,11 +303,13 @@ export class ContactsService {
       const tagChips = query.expand?.includes('tags')
         ? await this.repo.tagChips(tx, ctx.orgId, ids)
         : undefined;
+      const maskedKeys = await this.maskedKeysFor(tx, ctx.orgId, canRevealPhone);
       const data = items.map((row) =>
         toContactResponse(row, {
           groups: groupChips?.filter((c) => c.contactId === row.id),
           tags: tagChips?.filter((c) => c.contactId === row.id),
           canRevealPhone,
+          maskedKeys,
         }),
       );
 
@@ -362,7 +373,10 @@ export class ContactsService {
         });
       }
       const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
-      return toContactResponse(row, { canRevealPhone });
+      return toContactResponse(row, {
+        canRevealPhone,
+        maskedKeys: await this.maskedKeysFor(tx, ctx.orgId, canRevealPhone),
+      });
     });
   }
 
@@ -471,7 +485,10 @@ export class ContactsService {
               regranted
                 ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
                 : existing,
-              { canRevealPhone },
+              {
+                canRevealPhone,
+                maskedKeys: await this.maskedKeysFor(tx, ctx.orgId, canRevealPhone),
+              },
             ),
             created: false,
           };
@@ -611,7 +628,13 @@ export class ContactsService {
       });
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return { contact: toContactResponse(row!, { canRevealPhone }), created: true };
+      return {
+        contact: toContactResponse(row!, {
+          canRevealPhone,
+          maskedKeys: await this.maskedKeysFor(tx, ctx.orgId, canRevealPhone),
+        }),
+        created: true,
+      };
     });
   }
 
@@ -1585,7 +1608,10 @@ export class ContactsService {
         },
       });
 
-      return toContactResponse(after!, { canRevealPhone });
+      return toContactResponse(after!, {
+        canRevealPhone,
+        maskedKeys: await this.maskedKeysFor(tx, ctx.orgId, canRevealPhone),
+      });
     });
   }
 
