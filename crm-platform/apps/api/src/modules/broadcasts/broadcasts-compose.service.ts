@@ -128,7 +128,7 @@ export class BroadcastsComposeService {
           : sql`t.status IN ('approved', 'public')`;
       const tpl = await tx.execute(sql`
         SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type,
-               t.language, t.buttons, t.variable_map, t.attachment_type, t.attachment_file, t.header_media_key, t.twilio_content_sid, t.meta_template_id, t.provider_config_id, t.channel,
+               t.language, t.buttons, t.variable_map, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file, t.header_media_key, t.twilio_content_sid, t.meta_template_id, t.provider_config_id, t.channel,
                coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
         FROM wa_templates t
         LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id

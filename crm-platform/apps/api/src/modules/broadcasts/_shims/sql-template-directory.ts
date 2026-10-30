@@ -54,7 +54,8 @@ export class SqlTemplateDirectory implements TemplateDirectory {
   ): Promise<TemplateRecord | undefined> {
     const res = await tx.execute(sql`
       SELECT id, uuid, template_name, language, template_body, header, footer, header_location, parameter_format,
-             variable_map, buttons, carousel_data, template_type, attachment_type, attachment_file, header_media_key, meta_template_id,
+             variable_map, buttons, carousel_data, template_type, attachment_type,
+             COALESCE(NULLIF(attachment_file, ''), header_sample_url) AS attachment_file, header_media_key, meta_template_id,
              meta_status, paused_until, quality_score
       FROM wa_templates WHERE org_id = ${orgId} AND ${where}`);
     const r = res.rows[0] as unknown as Raw | undefined;
