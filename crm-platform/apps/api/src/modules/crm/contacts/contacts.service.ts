@@ -41,7 +41,12 @@ import { resolveContactFilter } from './contact-filter.resolver';
 import { stageEntryValues } from './contact-stage';
 import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits, FORM_FIELD_LIMITS, reservedTextPlan } from './form-field-limits';
-import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
+import {
+  applyPropertyPlan,
+  coercePropertyValue,
+  isClearValue,
+  planPropertyChanges,
+} from './contact-property-values';
 import {
   missingRequired,
   requiredPropertiesError,
@@ -1671,13 +1676,28 @@ export class ContactsService {
     if (defined.size === 0) return;
     const editable = await this.repo.editableProperties(tx, orgId, [...defined]);
     const blocked = [...defined].filter((k) => !editable.has(k));
-    if (blocked.length === 0) return;
-    throw new AppError(
-      ERROR_CODES.CON_PROPERTY_NOT_EDITABLE,
-      `Not an editable custom property: ${blocked.join(', ')}.`,
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      blocked.map((k) => ({ path: `customFields.${k}`, message: 'not an editable property' })),
-    );
+    if (blocked.length > 0) {
+      throw new AppError(
+        ERROR_CODES.CON_PROPERTY_NOT_EDITABLE,
+        `Not an editable custom property: ${blocked.join(', ')}.`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        blocked.map((k) => ({ path: `customFields.${k}`, message: 'not an editable property' })),
+      );
+    }
+    // A changed value must fit its property's type (a number property takes numbers, a date a date): the same rule a bulk edit applies.
+    // Only the keys this request changes are checked, so a contact that already holds an old odd value can still be saved.
+    const problems: Array<{ path: string; message: string }> = [];
+    for (const [key, def] of editable) {
+      if (isClearValue(incoming[key])) continue;
+      const r = coercePropertyValue(def, incoming[key]);
+      if (!r.ok) problems.push({ path: `customFields.${key}`, message: r.message });
+    }
+    if (problems.length > 0) {
+      throw AppError.validation(
+        `Invalid value for: ${problems.map((p) => p.path.replace('customFields.', '')).join(', ')}.`,
+        problems,
+      );
+    }
   }
 
   /** 422 CON_REQUIRED_PROPERTY_MISSING when properties the registry marks required have no value (honouring dependencies). */
