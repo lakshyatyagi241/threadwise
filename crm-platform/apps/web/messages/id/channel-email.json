@@ -139,7 +139,9 @@
       "not_enabled": "Email tidak termasuk dalam paket ruang kerja Anda, jadi tidak ada yang terhubung. Minta administrator untuk mengaktifkannya.",
       "not_allowed": "Anda tidak diizinkan menghubungkan jenis kotak surat ini. Minta akses ke administrator atau gunakan kotak surat bersama.",
       "no_address": "Penyedia tidak membagikan alamat email kotak surat, jadi tidak ada yang terhubung. Hubungkan lagi dan izinkan akses ke alamat email.",
-      "no_refresh_token": "Penyedia tidak mengizinkan kotak surat ini tetap masuk, jadi tidak ada yang terhubung. Hapus akses aplikasi ini di pengaturan akun Google atau Microsoft Anda, lalu hubungkan lagi."
+      "no_refresh_token": "Penyedia tidak mengizinkan kotak surat ini tetap masuk, jadi tidak ada yang terhubung. Hapus akses aplikasi ini di pengaturan akun Google atau Microsoft Anda, lalu hubungkan lagi.",
+      "expired": "Tautan masuk sudah kedaluwarsa atau sudah dipakai. Hubungkan lagi dari awal.",
+      "provider_refused": "Google menolak permintaan. Minta administrator platform memeriksa apakah Gmail API aktif di proyek Google dan apakah akun ini boleh masuk (aplikasi yang masih diuji hanya menerima pengguna uji yang terdaftar)."
     },
     "errors": {
       "notConfigured": "Proses masuk untuk penyedia ini belum diatur untuk platform ini. Tanyakan kepada administrator platform.",

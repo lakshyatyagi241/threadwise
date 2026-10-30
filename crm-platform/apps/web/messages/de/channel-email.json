@@ -139,7 +139,9 @@
       "not_enabled": "E-Mail ist im Tarif Ihres Arbeitsbereichs nicht enthalten, daher wurde nichts verbunden. Bitten Sie einen Administrator, es einzuschalten.",
       "not_allowed": "Sie dürfen diese Art von Postfach nicht verbinden. Bitten Sie einen Administrator um Zugriff oder nutzen Sie ein gemeinsames Postfach.",
       "no_address": "Der Anbieter hat die E-Mail-Adresse des Postfachs nicht weitergegeben, daher wurde nichts verbunden. Verbinden Sie erneut und erlauben Sie den Zugriff auf die E-Mail-Adresse.",
-      "no_refresh_token": "Der Anbieter hat nicht erlaubt, dass dieses Postfach angemeldet bleibt, daher wurde nichts verbunden. Entfernen Sie den Zugriff dieser App in den Einstellungen Ihres Google- oder Microsoft-Kontos und verbinden Sie erneut."
+      "no_refresh_token": "Der Anbieter hat nicht erlaubt, dass dieses Postfach angemeldet bleibt, daher wurde nichts verbunden. Entfernen Sie den Zugriff dieser App in den Einstellungen Ihres Google- oder Microsoft-Kontos und verbinden Sie erneut.",
+      "expired": "Der Anmeldelink ist abgelaufen oder wurde bereits verwendet. Verbinden Sie noch einmal von vorn.",
+      "provider_refused": "Google hat die Anfrage abgelehnt. Bitten Sie Ihren Plattform-Administrator zu prüfen, ob die Gmail API im Google-Projekt aktiviert ist und ob sich dieses Konto anmelden darf (eine App im Testmodus akzeptiert nur eingetragene Testnutzer)."
     },
     "errors": {
       "notConfigured": "Die Anmeldung für diesen Anbieter ist für diese Plattform noch nicht eingerichtet. Fragen Sie den Plattformadministrator.",

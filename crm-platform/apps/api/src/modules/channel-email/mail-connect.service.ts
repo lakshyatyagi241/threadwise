@@ -166,7 +166,8 @@ export class MailConnectService {
         { reason: checked.ok ? 'provider' : checked.reason },
         'mail callback with a bad state',
       );
-      return returnUrl(this.webUrl, DEFAULT_RETURN, 'failed');
+      // An old or reused link is the common case (the state is good for ten minutes): say so instead of "something went wrong".
+      return returnUrl(this.webUrl, DEFAULT_RETURN, checked.ok ? 'failed' : 'expired');
     }
     const { state } = checked;
     const done = (outcome: MailConnectOutcome) => returnUrl(this.webUrl, state.returnTo, outcome);
@@ -233,8 +234,21 @@ export class MailConnectService {
       }
       if (err instanceof MailDriverError && err.kind === 'not_configured')
         return done('not_configured');
+      // The reason a support person needs is in the log line below; the screen gets the nearest honest sentence.
+      if (err instanceof MailDriverError && err.kind === 'reauth') return done('expired');
+      if (
+        err instanceof MailDriverError &&
+        (err.kind === 'forbidden' || err.kind === 'missing_scope')
+      )
+        return done('provider_refused');
       this.logger.warn(
-        { orgId: state.orgId, provider: state.provider, err: (err as Error).message },
+        {
+          orgId: state.orgId,
+          provider: state.provider,
+          kind: err instanceof MailDriverError ? err.kind : undefined,
+          providerCode: err instanceof MailDriverError ? err.opts.providerCode : undefined,
+          err: (err as Error).message,
+        },
         'mail connect failed',
       );
       return done('failed');
