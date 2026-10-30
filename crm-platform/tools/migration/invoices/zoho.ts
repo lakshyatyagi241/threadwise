@@ -8,8 +8,9 @@ import { join } from 'node:path';
  * dump holds none. This reads the ids from dumps/<client>/core.json (`walletEvents[].invoice`), asks the provider for each one
  * (`GET /invoices/<id>?include=html`) and writes dumps/<client>/zoho_invoices.json, which `wallet-invoices` loads.
  *
- * The token is the OPERATOR's: ZOHO_ACCESS_TOKEN (a read-only token for the invoices scope; it lives about an hour) and
- * ZOHO_ORGANIZATION_ID, both from the environment. It is never read from the Waboo database, never logged and never written to the
+ * The token is the OPERATOR's: ZOHO_ACCESS_TOKEN (a read-only token for the invoices scope; it lives about an hour) or, instead of it,
+ * ZOHO_CLIENT_ID + ZOHO_CLIENT_SECRET + ZOHO_REFRESH_TOKEN (a read-only refresh token: a fresh access token is asked for at the start of
+ * every run), and ZOHO_ORGANIZATION_ID, all from the environment. It is never read from the Waboo database, never logged and never written to the
  * output file, and it is only ever sent to a zohoapis host (a wrong ZOHO_BILLING_API is refused, so the token cannot go elsewhere).
  * Read-only: nothing is created or changed at the provider. Resumable: an invoice already in the output file is not asked for again.
  */
@@ -235,14 +236,82 @@ export interface InvoicesFetchOptions {
   log: (line: string) => void;
 }
 
+const ACCOUNTS_HOST = /^accounts\.zoho\.(com|in|eu|com\.au|jp|ca|sa|com\.cn)$/;
+
+/** The login server the client secret may be sent to: https, an accounts.zoho.<region> host, nothing else in the URL. */
+export function accountsBaseOf(raw: string | undefined): string {
+  const base = (raw?.trim() || 'https://accounts.zoho.com').replace(/\/+$/, '');
+  let u: URL;
+  try {
+    u = new URL(base);
+  } catch {
+    throw new InvoiceFetchError('INVOICES_BAD_ACCOUNTS: ZOHO_ACCOUNTS_URL is not a URL');
+  }
+  if (
+    u.protocol !== 'https:' ||
+    !ACCOUNTS_HOST.test(u.hostname) ||
+    u.username ||
+    u.password ||
+    u.port ||
+    u.pathname !== '/'
+  )
+    throw new InvoiceFetchError(
+      'INVOICES_BAD_ACCOUNTS: ZOHO_ACCOUNTS_URL must be an https accounts.zoho host (the client secret is only sent there)',
+    );
+  return base;
+}
+
+/**
+ * The access token of a run: ZOHO_ACCESS_TOKEN when it is set, else one asked for with the refresh token (the secret and the refresh
+ * token go to the Zoho login server only, in the request body; neither is logged, and a refusal reports only Zoho's error code).
+ */
+export async function accessTokenOf(
+  env: Record<string, string | undefined>,
+  fetchFn: typeof fetch = fetch,
+): Promise<string> {
+  const direct = env.ZOHO_ACCESS_TOKEN?.trim();
+  if (direct) return direct;
+  const id = env.ZOHO_CLIENT_ID?.trim();
+  const secret = env.ZOHO_CLIENT_SECRET?.trim();
+  const refresh = env.ZOHO_REFRESH_TOKEN?.trim();
+  if (!id || !secret || !refresh)
+    throw new InvoiceFetchError(
+      'INVOICES_NO_TOKEN: set ZOHO_ACCESS_TOKEN, or ZOHO_CLIENT_ID + ZOHO_CLIENT_SECRET + ZOHO_REFRESH_TOKEN (a read-only Zoho Subscriptions token for invoices)',
+    );
+  const base = accountsBaseOf(env.ZOHO_ACCOUNTS_URL);
+  let res: Response;
+  try {
+    res = await fetchFn(`${base}/oauth/v2/token`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: id,
+        client_secret: secret,
+        refresh_token: refresh,
+      }),
+    });
+  } catch {
+    throw new InvoiceFetchError('INVOICES_TOKEN_NETWORK: the Zoho login server did not answer');
+  }
+  let body: { access_token?: unknown; error?: unknown } = {};
+  try {
+    body = (await res.json()) as typeof body;
+  } catch {
+    /* not JSON */
+  }
+  if (typeof body.access_token === 'string' && body.access_token) return body.access_token;
+  const why = typeof body.error === 'string' ? body.error.slice(0, 40) : `http ${res.status}`;
+  throw new InvoiceFetchError(
+    `INVOICES_TOKEN_REFUSED: Zoho would not give an access token (${why}). The refresh token may be revoked: make a new one in the Zoho API console (Self Client) and update ZOHO_REFRESH_TOKEN`,
+  );
+}
+
 /** The command: core.json -> ids -> provider -> dumps/<client>/zoho_invoices.json. */
 export async function invoicesFetch(o: InvoicesFetchOptions): Promise<FetchResult> {
-  const token = o.env.ZOHO_ACCESS_TOKEN?.trim();
   const organizationId = o.env.ZOHO_ORGANIZATION_ID?.trim();
-  if (!token || !organizationId)
-    throw new InvoiceFetchError(
-      'INVOICES_NO_TOKEN: set ZOHO_ACCESS_TOKEN (a read-only Zoho Subscriptions token for invoices) and ZOHO_ORGANIZATION_ID',
-    );
+  if (!organizationId) throw new InvoiceFetchError('INVOICES_NO_TOKEN: set ZOHO_ORGANIZATION_ID');
+  const token = await accessTokenOf(o.env, o.fetchFn);
   const api = apiBaseOf(o.env.ZOHO_BILLING_API);
   const dir = join(o.dumpsDir, o.client);
   let core: { walletEvents?: Array<{ invoice?: unknown }> };

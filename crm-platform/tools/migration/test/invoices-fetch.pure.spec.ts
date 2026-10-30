@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   InvoiceFetchError,
+  accessTokenOf,
+  accountsBaseOf,
   apiBaseOf,
   fetchInvoices,
   invoiceIdsOf,
@@ -233,5 +235,101 @@ describe('the command', () => {
     );
     expect(readInvoices(d, 'c1')).toMatchObject({ rejected: 4, invoices: [{ html: 'ok' }] });
     expect(() => readInvoices(d, 'nobody')).toThrow('WALLETINVOICES_NO_FILE');
+  });
+});
+
+describe('the access token of a run (refresh token)', () => {
+  const creds = {
+    ZOHO_CLIENT_ID: '1000.CLIENT',
+    ZOHO_CLIENT_SECRET: 'sec_client_secret',
+    ZOHO_REFRESH_TOKEN: '1000.refresh_secret',
+  };
+  const ok = (calls: Array<{ url: string; body: string }>) =>
+    (async (url: string, init?: RequestInit) => {
+      calls.push({ url, body: String(init?.body ?? '') });
+      return json(200, { access_token: 'minted_access', expires_in: 3600 });
+    }) as unknown as typeof fetch;
+
+  it('uses ZOHO_ACCESS_TOKEN as it is when it is set, and asks nobody', async () => {
+    const calls: Array<{ url: string; body: string }> = [];
+    expect(await accessTokenOf({ ...creds, ZOHO_ACCESS_TOKEN: ' direct ' }, ok(calls))).toBe(
+      'direct',
+    );
+    expect(calls).toEqual([]);
+  });
+
+  it('asks the Zoho login server for a token with the refresh token, in the body only', async () => {
+    const calls: Array<{ url: string; body: string }> = [];
+    expect(await accessTokenOf(creds, ok(calls))).toBe('minted_access');
+    expect(calls).toHaveLength(1);
+    expect(calls[0]!.url).toBe('https://accounts.zoho.com/oauth/v2/token');
+    const form = new URLSearchParams(calls[0]!.body);
+    expect(form.get('grant_type')).toBe('refresh_token');
+    expect(form.get('refresh_token')).toBe('1000.refresh_secret');
+    expect(form.get('client_id')).toBe('1000.CLIENT');
+    expect(form.get('client_secret')).toBe('sec_client_secret');
+  });
+
+  it('follows ZOHO_ACCOUNTS_URL for another region', async () => {
+    const calls: Array<{ url: string; body: string }> = [];
+    await accessTokenOf({ ...creds, ZOHO_ACCOUNTS_URL: 'https://accounts.zoho.in/' }, ok(calls));
+    expect(calls[0]!.url).toBe('https://accounts.zoho.in/oauth/v2/token');
+  });
+
+  it('never sends the secret to a host that is not a Zoho login server', () => {
+    for (const bad of [
+      'http://accounts.zoho.com',
+      'https://accounts.zoho.com.evil.test',
+      'https://evil.test/accounts.zoho.com',
+      'https://user:pw@accounts.zoho.com',
+      'https://accounts.zoho.com:8443',
+      'https://accounts.zoho.com/path',
+      'https://www.zohoapis.com',
+      'not a url',
+    ])
+      expect(() => accountsBaseOf(bad), bad).toThrow('INVOICES_BAD_ACCOUNTS');
+    expect(accountsBaseOf(undefined)).toBe('https://accounts.zoho.com');
+  });
+
+  it('says what is missing, and what Zoho refused, without repeating a secret', async () => {
+    await expect(accessTokenOf({ ZOHO_CLIENT_ID: 'x' })).rejects.toThrow('INVOICES_NO_TOKEN');
+    const refused = (async () => json(400, { error: 'invalid_code' })) as unknown as typeof fetch;
+    const err = (await accessTokenOf(creds, refused).catch((e: Error) => e)) as Error;
+    expect(err).toBeInstanceOf(InvoiceFetchError);
+    expect(err.message).toContain('INVOICES_TOKEN_REFUSED');
+    expect(err.message).toContain('invalid_code');
+    for (const s of Object.values(creds)) expect(err.message).not.toContain(s);
+    const down = (async () => {
+      throw new Error('ECONNRESET sec_client_secret');
+    }) as unknown as typeof fetch;
+    const net = (await accessTokenOf(creds, down).catch((e: Error) => e)) as Error;
+    expect(net.message).toContain('INVOICES_TOKEN_NETWORK');
+    expect(net.message).not.toContain('sec_client_secret');
+  });
+
+  it('invoicesFetch runs on the minted token and writes nothing of the credentials', async () => {
+    const d = mkdtempSync(join(tmpdir(), 'inv-'));
+    mkdirSync(join(d, 'c1'), { recursive: true });
+    writeFileSync(
+      join(d, 'c1', 'core.json'),
+      JSON.stringify({ walletEvents: [{ invoice: '3500650000008567084' }] }),
+    );
+    const auth: string[] = [];
+    const fetchFn = (async (url: string, init?: RequestInit) => {
+      if (String(url).includes('/oauth/v2/token'))
+        return json(200, { access_token: 'minted_access' });
+      auth.push(String((init?.headers as Record<string, string>).Authorization));
+      return json(200, body('3500650000008567084'));
+    }) as unknown as typeof fetch;
+    await invoicesFetch({
+      dumpsDir: d,
+      client: 'c1',
+      env: { ...creds, ZOHO_ORGANIZATION_ID: '60001' },
+      fetchFn,
+      log: () => undefined,
+    });
+    expect(auth).toEqual(['Zoho-oauthtoken minted_access']);
+    const raw = readFileSync(join(d, 'c1', 'zoho_invoices.json'), 'utf8');
+    for (const s of [...Object.values(creds), 'minted_access']) expect(raw).not.toContain(s);
   });
 });
