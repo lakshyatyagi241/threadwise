@@ -132,7 +132,9 @@
         "date": "Tarih",
         "dropdown": "Açılır liste",
         "radio_buttons": "Radyo düğmeleri",
-        "checkbox": "Onay kutuları"
+        "checkbox": "Onay kutuları",
+        "photo": "Fotoğraf yükleme",
+        "document": "Belge yükleme"
       },
       "submissions": {
         "heading": "Gönderimler",

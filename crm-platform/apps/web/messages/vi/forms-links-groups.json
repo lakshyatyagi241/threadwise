@@ -132,7 +132,9 @@
         "date": "Ngày",
         "dropdown": "Danh sách thả xuống",
         "radio_buttons": "Nút chọn một",
-        "checkbox": "Hộp kiểm"
+        "checkbox": "Hộp kiểm",
+        "photo": "Tải ảnh lên",
+        "document": "Tải tài liệu lên"
       },
       "submissions": {
         "heading": "Lượt gửi",

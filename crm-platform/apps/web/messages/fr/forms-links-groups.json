@@ -132,7 +132,9 @@
         "date": "Date",
         "dropdown": "Liste déroulante",
         "radio_buttons": "Boutons radio",
-        "checkbox": "Cases à cocher"
+        "checkbox": "Cases à cocher",
+        "photo": "Envoi de photo",
+        "document": "Envoi de document"
       },
       "submissions": {
         "heading": "Réponses",

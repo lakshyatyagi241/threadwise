@@ -132,7 +132,9 @@
         "date": "Tanggal",
         "dropdown": "Menu tarik-turun",
         "radio_buttons": "Tombol radio",
-        "checkbox": "Kotak centang"
+        "checkbox": "Kotak centang",
+        "photo": "Unggah foto",
+        "document": "Unggah dokumen"
       },
       "submissions": {
         "heading": "Pengisian",

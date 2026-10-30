@@ -132,7 +132,9 @@
         "date": "날짜",
         "dropdown": "드롭다운",
         "radio_buttons": "라디오 버튼",
-        "checkbox": "체크박스"
+        "checkbox": "체크박스",
+        "photo": "사진 업로드",
+        "document": "문서 업로드"
       },
       "submissions": {
         "heading": "응답",

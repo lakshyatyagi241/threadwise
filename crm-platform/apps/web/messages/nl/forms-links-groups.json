@@ -132,7 +132,9 @@
         "date": "Datum",
         "dropdown": "Vervolgkeuzelijst",
         "radio_buttons": "Keuzerondjes",
-        "checkbox": "Selectievakjes"
+        "checkbox": "Selectievakjes",
+        "photo": "Foto uploaden",
+        "document": "Document uploaden"
       },
       "submissions": {
         "heading": "Inzendingen",

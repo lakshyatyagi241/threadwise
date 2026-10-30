@@ -141,7 +141,9 @@
         "date": "تاريخ",
         "dropdown": "قائمة منسدلة",
         "radio_buttons": "اختيار واحد",
-        "checkbox": "خانات اختيار"
+        "checkbox": "خانات اختيار",
+        "photo": "رفع صورة",
+        "document": "رفع مستند"
       },
       "submissions": {
         "heading": "الإجابات",

@@ -39,9 +39,14 @@ export const WA_FORM_FIELD_KINDS = [
   'dropdown',
   'radio_buttons',
   'checkbox',
+  'photo',
+  'document',
 ] as const;
 export const waFormFieldKindSchema = z.enum(WA_FORM_FIELD_KINDS);
 export type WaFormFieldKind = z.infer<typeof waFormFieldKindSchema>;
+
+/** Kinds where the customer uploads a file. Meta allows one such picker per screen, never a photo and a document together. */
+export const WA_FORM_MEDIA_FIELD_KINDS: readonly WaFormFieldKind[] = ['photo', 'document'];
 
 /** Kinds that take an `options` list (the "choice inputs" palette group). */
 export const WA_FORM_CHOICE_FIELD_KINDS: readonly WaFormFieldKind[] = [
@@ -232,6 +237,15 @@ export type WaFormPickerItem = z.infer<typeof waFormPickerItemSchema>;
 export const waFormPickerListSchema = z.object({ forms: z.array(waFormPickerItemSchema) });
 export type WaFormPickerList = z.infer<typeof waFormPickerListSchema>;
 
+/** A file the customer attached to a form field; `url` is a short-lived link, null when the copy from WhatsApp failed. */
+export const waFormSubmissionFileSchema = z.object({
+  name: z.string(),
+  mime: z.string(),
+  size: z.int().nullable(),
+  url: z.string().nullable(),
+});
+export type WaFormSubmissionFile = z.infer<typeof waFormSubmissionFileSchema>;
+
 export const waFormSubmissionSchema = z.object({
   id: z.guid(),
   contactId: z.guid().nullable(),
@@ -239,6 +253,8 @@ export const waFormSubmissionSchema = z.object({
   contactPhone: z.string().nullable(),
   /** `{fieldId: value}`, already flattened (multi-value answers joined with ", "). */
   answers: z.record(z.string(), z.string()),
+  /** Photo and Document answers by field id (their `answers` text is the file names). */
+  files: z.record(z.string(), z.array(waFormSubmissionFileSchema)).default({}),
   submittedAt: z.string().nullable(),
   createdAt: z.string(),
 });

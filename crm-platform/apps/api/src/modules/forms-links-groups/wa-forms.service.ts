@@ -16,11 +16,13 @@ import { AppError } from '../../common/errors/app-error';
 import { buildPage, decodeCursor } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { buildCsv } from '../../common/csv';
+import { MediaTokenService } from '../../infra/providers/chat-conversations/media';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import type { WabaConnection } from '../../infra/providers/whatsapp-cloud-api-waba/waba-admin.port';
 import {
   buildMetaFlowJson,
   mapAudienceToMetaCategory,
+  mediaPickerProblems,
 } from '../../infra/providers/forms-links-groups/wa-form-flow-json';
 import {
   WA_FORM_FLOWS,
@@ -70,6 +72,7 @@ export class WaFormsService {
     private readonly outbox: OutboxService,
     @Inject(WABA_CONNECTIONS) private readonly connections: WabaConnectionsPort,
     @Inject(WA_FORM_FLOWS) private readonly flows: WaFormFlowsPort,
+    private readonly tokens: MediaTokenService,
   ) {}
 
   async list(query: WaFormListQuery): Promise<WaFormList> {
@@ -296,10 +299,10 @@ export class WaFormsService {
   async preview(uuid: string): Promise<WaFormPreview> {
     const ctx = RequestContextStore.require();
     const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
-    const flowJson = buildMetaFlowJson(
-      normalizeDefinition(form.definition_json),
-      form.send_button_label,
-    );
+    const definition = normalizeDefinition(form.definition_json);
+    const mediaProblems = mediaPickerProblems(definition);
+    if (mediaProblems.length > 0) throw AppError.validation(mediaProblems.join(' '));
+    const flowJson = buildMetaFlowJson(definition, form.send_button_label);
     const category = mapAudienceToMetaCategory(normalizeAudienceType(form.audience_type));
     try {
       const { flowId } = await this.flows.ensureFlow(resolved.conn, form.meta_flow_id, {
@@ -343,10 +346,10 @@ export class WaFormsService {
     const ctx = RequestContextStore.require();
     const { form, resolved } = await this.flowTarget(ctx.orgId, uuid);
 
-    const flowJson = buildMetaFlowJson(
-      normalizeDefinition(form.definition_json),
-      form.send_button_label,
-    );
+    const definition = normalizeDefinition(form.definition_json);
+    const mediaProblems = mediaPickerProblems(definition);
+    if (mediaProblems.length > 0) throw AppError.validation(mediaProblems.join(' '));
+    const flowJson = buildMetaFlowJson(definition, form.send_button_label);
     const category = mapAudienceToMetaCategory(normalizeAudienceType(form.audience_type));
 
     try {
@@ -455,7 +458,18 @@ export class WaFormsService {
         query.limit,
       );
       return {
-        items: items.map(toWaFormSubmissionResponse),
+        items: items.map((r) =>
+          toWaFormSubmissionResponse(r, (key, name, mime) => {
+            const token = this.tokens.sign({
+              key,
+              orgId: ctx.orgId,
+              userId: ctx.userId!,
+              name,
+              mime,
+            });
+            return `/v2/media/${token}`;
+          }),
+        ),
         fieldLabels: fieldLabelsOf(form.definition_json),
         metaFlowId: form.meta_flow_id,
         page,

@@ -92,3 +92,4 @@ export {
 export { PersonalGroupThreadReader } from './personal-group-thread.reader';
 export { CloudGroupThreadReader } from './cloud-group-thread.reader';
 export { DeviceGroupThreadTitleService } from './device-group-thread-title.service';
+export { FormFileFetcher, type FormFileRef } from './form-file-fetcher.service';

@@ -32,6 +32,7 @@ import { InboundIngestService } from './inbound-ingest.service';
 import { InboundTranslationListener } from './inbound-translation.listener';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { MediaFetchService } from './media-fetch.service';
+import { FormFileFetcher } from './form-file-fetcher.service';
 import { MessageDispatchService } from './message-dispatch.service';
 import { MESSAGE_LOG_FACADE } from './message-log.facade';
 import { MessageLogExportPublisher } from './message-log-export.publisher';
@@ -114,6 +115,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     OutboundService,
     MessageDispatchService,
     MediaFetchService,
+    FormFileFetcher,
     ConversationsService,
     EmailMessageAccess,
     EmailDeliveryService,
@@ -158,6 +160,8 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     MessageDispatchService,
     MediaFetchService,
     MediaFetchPublisher,
+    // Copies the files of a WhatsApp Form response into the media store (flow runtime's form resume).
+    FormFileFetcher,
   ],
 })
 export class ChatConversationsModule {}

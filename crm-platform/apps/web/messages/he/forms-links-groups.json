@@ -132,7 +132,9 @@
         "date": "תאריך",
         "dropdown": "רשימה נפתחת",
         "radio_buttons": "כפתורי בחירה",
-        "checkbox": "תיבות סימון"
+        "checkbox": "תיבות סימון",
+        "photo": "העלאת תמונה",
+        "document": "העלאת מסמך"
       },
       "submissions": {
         "heading": "מילויים",

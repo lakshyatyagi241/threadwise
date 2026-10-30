@@ -132,7 +132,9 @@
         "date": "तारीख़",
         "dropdown": "ड्रॉपडाउन",
         "radio_buttons": "रेडियो बटन",
-        "checkbox": "चेकबॉक्स"
+        "checkbox": "चेकबॉक्स",
+        "photo": "फ़ोटो अपलोड",
+        "document": "दस्तावेज़ अपलोड"
       },
       "submissions": {
         "heading": "जवाब",

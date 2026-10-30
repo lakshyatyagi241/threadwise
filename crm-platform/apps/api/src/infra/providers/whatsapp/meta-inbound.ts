@@ -305,7 +305,7 @@ function mapMessage(
           body: flowSummary(r.response_json) ?? clip(r.body, 1000) ?? 'Form submitted',
           ...withMeta({
             flowName: clip(r.name, 200) ?? null,
-            flowResponse: clip(r.response_json, 4000) ?? null,
+            flowResponse: clip(r.response_json, 16000) ?? null,
           }),
         };
       }

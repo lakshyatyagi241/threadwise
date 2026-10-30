@@ -132,7 +132,9 @@
         "date": "Data",
         "dropdown": "Lista rozwijana",
         "radio_buttons": "Przyciski opcji",
-        "checkbox": "Pola wyboru"
+        "checkbox": "Pola wyboru",
+        "photo": "Przesyłanie zdjęcia",
+        "document": "Przesyłanie dokumentu"
       },
       "submissions": {
         "heading": "Odpowiedzi",
