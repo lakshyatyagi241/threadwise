@@ -248,6 +248,15 @@ export function acmeBcast(): BcastDump {
       scheduledDt: '2026-05-15T08:30:00.000Z',
       refunded: 4,
       retryEnabled: true,
+      // Waboo's reserve-then-reconcile billing fields (dropped) and the completion moment (becomes completed_at)
+      extra: {
+        completed_time: D('2026-05-15T09:02:30.000Z'),
+        credits_reserved: true,
+        pending_jobs: 0,
+        recipients_actual: 40,
+        reconciled: true,
+        cost_actual: 12.5,
+      },
     }),
     // C2: completed, sent now; `sent` absent (7% on iskm); refunded_amount a double; a marketing list
     camp({
@@ -337,6 +346,8 @@ export function acmeBcast(): BcastDump {
       error: 'Phone number is not a WhatsApp user',
       phone: '+919812345677',
       amount: 0,
+      // the provider's own text and code win over the generic error; `reconcile` is a billing flag (dropped)
+      extra: { provider_error: '(#131000) Something went wrong', reconcile: true },
     }),
     // failed AND delivered: delivered is later -> delivered (STATUS_CONFLICT); failed is later -> failed
     rcp({

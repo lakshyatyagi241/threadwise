@@ -382,7 +382,11 @@ export async function oracleBroadcast(
     const created =
       firstDate(d, ['created_time', 'created_at']) ?? oidDate(d._id) ?? new Date(o.fallbackAt);
     const createdIso = created.toISOString();
-    const err = failed ? text(d.error) : '';
+    const err = failed
+      ? text(d.provider_error) !== ''
+        ? text(d.provider_error)
+        : text(d.error)
+      : '';
     const names = [text(d.first_name), text(d.last_name)].filter((x) => x !== '');
     const retries = wholeNumber(d.retry_count);
     recipients.set(k, {
@@ -445,6 +449,7 @@ export async function oracleBroadcast(
     if (hadSched && !schedAt) c.softs.push('BAD_DATE');
     const scheduled = !truthy(d.scheduled_now) && schedAt !== null;
     const sentOn = filled(d.sent_on) ? instant(d.sent_on) : null;
+    const doneOn = (filled(d.completed_time) ? instant(d.completed_time) : null) ?? sentOn;
     const created = firstDate(d, ['created_time', 'created_at']);
     const createdD = created ?? oidDate(d._id) ?? new Date(o.fallbackAt);
     if (!created && !oidDate(d._id)) c.softs.push('NO_DATE');
@@ -491,8 +496,8 @@ export async function oracleBroadcast(
       last_run_at: isoOf(sentOn),
       run_at: isoOf(sentOn ?? schedAt),
       completed_at: finished
-        ? status === 'completed' && sentOn
-          ? sentOn.toISOString()
+        ? status === 'completed' && doneOn
+          ? doneOn.toISOString()
           : updatedD.toISOString()
         : null,
       total_recipients: Math.max(waboo, g.rows),

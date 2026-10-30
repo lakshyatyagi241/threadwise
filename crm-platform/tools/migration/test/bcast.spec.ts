@@ -120,7 +120,7 @@ afterAll(async () => {
 });
 
 describe('registry, configuration and the pure rules', () => {
-  it('both collections are migrated by the broadcast steps, templates stay excluded, the order is campaigns before recipients', () => {
+  it('both collections are migrated by the broadcast steps, templates have their own step, the order is campaigns before recipients', () => {
     expect(resolve('broadcasting')).toMatchObject({
       disposition: 'MIGRATE',
       handler: 'campaigns',
@@ -131,7 +131,8 @@ describe('registry, configuration and the pure rules', () => {
       handler: 'recipients',
       targets: ['wp_campaign_contacts'],
     });
-    expect(resolve('broadcast_templates').disposition).toBe('EXCLUDE');
+    // the templates have their own step now (wa_templates); the broadcast steps leave them alone
+    expect(resolve('broadcast_templates').disposition).toBe('MIGRATE');
     const order = STEPS.map((s) => s.handler);
     expect(order.indexOf('campaigns')).toBeLessThan(order.indexOf('recipients'));
     expect(order.indexOf('recipients')).toBeLessThan(order.indexOf('inbox'));
@@ -351,9 +352,11 @@ describe('the load', () => {
       failed_count: 4,
       author: 'agent.one@example.test',
     });
+    // completed_time (the end of the send) wins over sent_on (its start); a campaign without it keeps sent_on
     expect(new Date(by('Diwali blast').completed_at).toISOString()).toBe(
-      '2026-05-15T09:00:00.000Z',
+      '2026-05-15T09:02:30.000Z',
     );
+    expect(new Date(by('Diwali blast').last_run_at).toISOString()).toBe('2026-05-15T09:00:00.000Z');
     expect(new Date(by('Diwali blast').updated_at).toISOString()).toBe('2026-05-15T09:30:00.000Z'); // Waboo's own, not now()
     expect(by('Weekend promo')).toMatchObject({
       schedule_type: 'now',
@@ -462,7 +465,9 @@ describe('the load', () => {
     expect(f.error_message).toBe(ERR_131049);
     expect(m('wamid.bc.failed2')).toMatchObject({
       status: 'failed',
-      error_code: null,
+      // provider_error ("(#131000) Something went wrong") is preferred over the generic error text, and carries the code
+      error_code: '131000',
+      error_message: '(#131000) Something went wrong',
       sent_at: null,
     });
     expect(m('wamid.bc.retry')).toMatchObject({
