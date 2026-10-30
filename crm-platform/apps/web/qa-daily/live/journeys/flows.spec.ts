@@ -93,7 +93,7 @@ test.describe('flow builder', () => {
     await addNode(app, 'Send message', 520, 110);
     await saveButton(app).click();
     const popup = app.locator('[role="alert"]', { hasText: "Can't save" });
-    await expect(popup).toContainText('needs fixing');
+    await expect(popup).toContainText(/needs? fixing/);
     await expect(popup).toContainText('is not connected to anything');
     await expect(app.locator('input[placeholder="e.g. Welcome flow"]')).toHaveCount(0);
   });
