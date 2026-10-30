@@ -87,7 +87,29 @@ function loadServer() {
     key: path.resolve(path.dirname(file), env.SSH_KEY),
     app,
     mig: `${app}/migration`,
+    // runner-wide default of the public address of the media bucket (see mediaBaseOf)
+    flowMediaPublicBase: env.FLOW_MEDIA_PUBLIC_BASE || '',
   };
+}
+
+/**
+ * The public https origin of the R2 media bucket: a converted flow or chat widget shows its images by link, and the media copy writes
+ * `<origin>/<object key>`. The client config's `flowMediaPublicBase` wins; otherwise the runner-wide `FLOW_MEDIA_PUBLIC_BASE` of server.env
+ * (one value for every workspace, since they all share the bucket). '' when neither is set; anything but a plain https origin is refused.
+ */
+function mediaBaseOf(srv, cfg) {
+  const own = typeof cfg.flowMediaPublicBase === 'string' ? cfg.flowMediaPublicBase.trim() : '';
+  const raw = own || srv.flowMediaPublicBase || '';
+  if (!raw) return '';
+  let u;
+  try {
+    u = new URL(raw);
+  } catch {
+    refuse(`flowMediaPublicBase "${raw}" is not a URL (expected an https origin such as https://media.example.com)`);
+  }
+  if (u.protocol !== 'https:' || u.username || u.password || u.port || u.pathname !== '/' || u.search || u.hash)
+    refuse(`flowMediaPublicBase "${raw}" must be a plain https origin such as https://media.example.com (no path, port, login or query)`);
+  return u.origin;
 }
 
 const PLACEHOLDER = /^$|<|>|PLACEHOLDER|CHANGE.?ME/i;
@@ -369,7 +391,7 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
         // the largest media file the copy downloads: the client config may raise it (maxFileMB, a positive number of MB); 50 by default
         maxFileMB: Number(cfg.maxFileMB) > 0 ? Number(cfg.maxFileMB) : 50,
         // the public https origin of the media bucket: converted flows and widgets show their images by link (copy-files.cjs refuses without it)
-        flowMediaPublicBase: typeof cfg.flowMediaPublicBase === 'string' ? cfg.flowMediaPublicBase : '',
+        flowMediaPublicBase: mediaBaseOf(srv, cfg),
         timeoutMs: 60000,
       }) + '\n',
     );
@@ -1669,6 +1691,11 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       refuse(`--stop-after must be one of ${MIG_STEPS.join(', ')}`);
     if (rec.db && !/^[A-Za-z0-9_+-]{1,128}$/.test(rec.db))
       refuse('--db is not a plausible database name');
+    // the media copy would refuse this only AFTER the export and the load: stop now, before anything is read or written
+    if (cfg.files !== 'off' && !mediaBaseOf(srv, cfg))
+      refuse(
+        'no public address for the media bucket: set FLOW_MEDIA_PUBLIC_BASE in the runner server.env (one value for every workspace) or "flowMediaPublicBase" in the client config, or "files": "off" to skip the media copy',
+      );
     if (flags['catch-up']) {
       if (flags.steps)
         refuse('--catch-up runs the fixed catch-up chain: do not combine it with --steps');
@@ -2215,6 +2242,7 @@ module.exports = {
   containerRun,
   migrateInner,
   teeTo,
+  mediaBaseOf,
   runArgs,
   reconcileArgs,
   maskPII,

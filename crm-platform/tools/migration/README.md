@@ -535,6 +535,12 @@ Rules (load/update.ts):
 10. The verifier accepts `row_version` = the recorded `written_version` on a row the tool updated (any other version is a later edit and is
     an alarm, as before). Its independent oracle did not change: the expected final state is the same, `update` makes the target reach it.
 
+## The media copy needs no per-workspace setup (`files`)
+
+The `files` step copies a workspace's media into the R2 bucket and rewrites converted flows and chat widgets to show their images by link, so it needs the **public https origin of the bucket** (`https://pub-….r2.dev` or a custom domain). Every workspace shares the bucket, so it is ONE runner-wide value: `FLOW_MEDIA_PUBLIC_BASE` in the runner's `server.env` (`/opt/waboo-runner/config/server.env`). A client config may override it with `"flowMediaPublicBase"`. `cycle.cjs migrate` checks it FIRST (before the export): no value, or anything but a plain https origin (no path, port, login or query), stops the run at once with the fix. `"files": "off"` in the client config skips the media copy and needs no address. Before this, the value was a hand-added line in each client config, so a workspace whose config was rebuilt (a new client, or after a cleanup) failed only at the `files` step, after the whole load.
+
+Expired Meta links are a known gap, not a failure: a template header file exists only as Meta's signed `scontent.whatsapp.net` link, which stops working at its `oe` time; the step records `LINK_EXPIRED` and goes on (the app's Meta sync renews the link once the number is connected).
+
 ## Template header files and quality (Tirupati Bank, Ontime)
 
 A migrated media template showed an empty picture and "Quality pending". Two separate causes:
