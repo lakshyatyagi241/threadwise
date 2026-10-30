@@ -2626,6 +2626,7 @@
         "buttonNoExit": "« {node} » : le bouton « {button} » ne mène à aucune étape.",
         "notConnected": "« {node} » n’est relié à rien.",
         "wrongChannel": "« {node} » ne fonctionne pas sur {channel} : supprimez-le ou réactivez le canal sur le nœud Déclencheur.",
+        "notBuilt": "« {node} » n'est pas encore disponible : le flux l'ignore à l'exécution. Supprimez-le.",
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",
         "noSenderFacebook": "Le nœud Déclencheur n’a aucune Page Facebook sélectionnée : choisissez-en une à l’étape Déclencheur.",
         "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur.",

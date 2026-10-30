@@ -2626,6 +2626,7 @@
         "buttonNoExit": "\"{node}\": nút \"{button}\" không dẫn đến bước nào.",
         "notConnected": "\"{node}\" chưa được kết nối với bất kỳ thứ gì.",
         "wrongChannel": "\"{node}\" không hoạt động trên {channel} — hãy xóa hoặc bật lại kênh ở nút Kích hoạt.",
+        "notBuilt": "\"{node}\" chưa khả dụng — luồng sẽ bỏ qua nó khi chạy. Hãy xóa nó.",
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",

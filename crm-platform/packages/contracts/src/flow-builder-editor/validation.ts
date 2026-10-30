@@ -3,6 +3,7 @@ import {
   flbNodeInMode,
   flbPortsFor,
   FLB_NODE_TYPES,
+  FLB_NODES_NOT_BUILT,
   type FlowType,
   type FlbNodeData,
 } from './node-catalogue';
@@ -150,6 +151,14 @@ export function flbValidateGraph(
     // QUIRK kept: any other channel reads "WhatsApp" in this sentence.
     items.push(
       `"${t.label}" does not work on ${MODE_WORD[ctx.mode] ?? 'WhatsApp'} — delete it or switch the channel back on the Trigger node.`,
+    );
+  }
+
+  for (const n of nodes) {
+    if (!FLB_NODES_NOT_BUILT.has(n.type)) continue;
+    bad.add(n.id);
+    items.push(
+      `"${FLB_NODE_TYPES[n.type]?.label ?? n.type}" is not available yet — the flow skips it when it runs. Delete it.`,
     );
   }
 

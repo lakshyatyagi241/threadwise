@@ -2625,6 +2625,7 @@
         "buttonNoExit": "\"{node}\": the button \"{button}\" does not lead to any step.",
         "notConnected": "\"{node}\" is not connected to anything.",
         "wrongChannel": "\"{node}\" does not work on {channel} — delete it or switch the channel back on the Trigger node.",
+        "notBuilt": "\"{node}\" is not available yet — the flow skips it when it runs. Delete it.",
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",

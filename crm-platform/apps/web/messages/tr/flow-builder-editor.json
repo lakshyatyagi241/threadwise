@@ -2626,6 +2626,7 @@
         "buttonNoExit": "\"{node}\": \"{button}\" düğmesi hiçbir adıma gitmiyor.",
         "notConnected": "\"{node}\" hiçbir şeye bağlı değil.",
         "wrongChannel": "\"{node}\" {channel} üzerinde çalışmaz — silin veya Tetikleyici düğümünde kanalı yeniden açın.",
+        "notBuilt": "\"{node}\" henüz kullanılamıyor — akış çalışırken onu atlar. Silin.",
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",

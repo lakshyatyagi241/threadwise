@@ -2626,6 +2626,7 @@
         "buttonNoExit": "«{node}»: el botón «{button}» no lleva a ningún paso.",
         "notConnected": "«{node}» no está conectado a nada.",
         "wrongChannel": "«{node}» no funciona en {channel}: elimínalo o vuelve a activar el canal en el nodo Disparador.",
+        "notBuilt": "\"{node}\" aún no está disponible: el flujo lo omite al ejecutarse. Elimínalo.",
         "noSenderInstagram": "El nodo Disparador no tiene ninguna cuenta de Instagram seleccionada: elige una en el paso Disparador.",
         "noSenderFacebook": "El nodo Disparador no tiene ninguna página de Facebook seleccionada: elige una en el paso Disparador.",
         "noSenderNumber": "El nodo Disparador no tiene ningún número seleccionado: elige uno en el paso Disparador.",

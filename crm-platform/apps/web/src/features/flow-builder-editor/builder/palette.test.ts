@@ -61,7 +61,7 @@ describe('palette (TW-FLB-016)', () => {
     );
   });
 
-  it('a Facebook flow lists the shared nodes and the five fb_* nodes, never the template or list nodes', () => {
+  it('a Facebook flow lists the shared nodes and the built fb_* nodes, never the template or list nodes', () => {
     const all = ids('facebook');
     expect(all).toEqual(
       expect.arrayContaining([
@@ -74,10 +74,6 @@ describe('palette (TW-FLB-016)', () => {
         'webhook',
         'ai',
         'end',
-        'fb_gallery',
-        'fb_products',
-        'fb_lead',
-        'fb_reply_comment',
         'fb_to_whatsapp',
       ]),
     );
@@ -98,6 +94,13 @@ describe('palette (TW-FLB-016)', () => {
     expect(ids('web')).toContain('api_library');
     expect(ids('chat')).toContain('api_library');
     expect(ids('web', 'saved api')).toEqual(['api_library']);
+  });
+
+  it('the social nodes the runtime cannot run yet are not offered', () => {
+    for (const id of ['ig_reply_comment', 'ig_products', 'ig_lead'])
+      expect(ids('instagram')).not.toContain(id);
+    for (const id of ['fb_gallery', 'fb_products', 'fb_lead', 'fb_reply_comment'])
+      expect(ids('facebook')).not.toContain(id);
   });
 
   it('legacy (hidden) Instagram nodes are never offered', () => {

@@ -2626,6 +2626,7 @@
         "buttonNoExit": "„{node}”: przycisk „{button}” nie prowadzi do żadnego kroku.",
         "notConnected": "„{node}” nie jest z niczym połączony.",
         "wrongChannel": "„{node}” nie działa na {channel} — usuń go lub ponownie włącz kanał we węźle Wyzwalacz.",
+        "notBuilt": "„{node}” nie jest jeszcze dostępny — przepływ pomija go podczas działania. Usuń go.",
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",
         "noSenderFacebook": "Węzeł Wyzwalacz nie ma wybranej strony Facebook — wybierz ją w kroku Wyzwalacz.",
         "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz.",
