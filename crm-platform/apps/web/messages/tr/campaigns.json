@@ -173,6 +173,7 @@
       "col": {
         "name": "Kampanya",
         "status": "Durum",
+        "recipients": "Alıcılar",
         "schedule": "Zamanlama",
         "actions": "İşlemler"
       },

@@ -173,6 +173,7 @@
       "col": {
         "name": "Kampania",
         "status": "Status",
+        "recipients": "Odbiorcy",
         "schedule": "Harmonogram",
         "actions": "Akcje"
       },

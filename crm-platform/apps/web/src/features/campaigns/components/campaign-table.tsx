@@ -85,6 +85,9 @@ export function CampaignTable({
               {t('col.status')}
             </th>
             <th scope="col" className={cn(TH, 'text-end')}>
+              {t('col.recipients')}
+            </th>
+            <th scope="col" className={cn(TH, 'text-end')}>
               {tc('sent')}
             </th>
             <th scope="col" className={cn(TH, 'text-end')}>
@@ -159,6 +162,7 @@ export function CampaignTable({
                     {tc(`status.${c.status}`)}
                   </span>
                 </td>
+                <td className={NUM}>{n.recipients.toLocaleString()}</td>
                 <td className={NUM}>{n.sent.toLocaleString()}</td>
                 <td className={NUM}>{n.delivered.toLocaleString()}</td>
                 <td className={NUM}>{n.read.toLocaleString()}</td>

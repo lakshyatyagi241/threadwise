@@ -173,6 +173,7 @@
       "col": {
         "name": "Kampagne",
         "status": "Status",
+        "recipients": "Empfänger",
         "schedule": "Zeitplan",
         "actions": "Aktionen"
       },

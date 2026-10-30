@@ -173,6 +173,7 @@
       "col": {
         "name": "Campagne",
         "status": "Status",
+        "recipients": "Ontvangers",
         "schedule": "Planning",
         "actions": "Acties"
       },

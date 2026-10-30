@@ -173,6 +173,7 @@
       "col": {
         "name": "Campanha",
         "status": "Status",
+        "recipients": "Destinatários",
         "schedule": "Agendamento",
         "actions": "Ações"
       },
