@@ -66,6 +66,7 @@ import {
   type TemplatePatch,
   type TemplateRow,
 } from './templates.repository';
+import type { TemplateScopeKey } from './template-scope';
 
 const MODULE = 'wa_templates';
 /** Statuses a template can still be edited in (TW-TPL-018, and Geta's "locked once approved"). */
@@ -133,6 +134,7 @@ export class TemplatesService {
     const rows = await this.db.tx(async (tx) => {
       const window = await this.createdWindowOf(tx, orgId, query);
       return this.repo.list(tx, orgId, {
+        scoped: true,
         limit: query.limit,
         cursor: query.cursor,
         status: query.status,
@@ -167,6 +169,7 @@ export class TemplatesService {
     return this.db.tx(async (tx) => {
       const window = await this.createdWindowOf(tx, orgId, query);
       return this.repo.counts(tx, orgId, {
+        scoped: true,
         status: query.status,
         statusGroup: query.statusGroup,
         category: query.category,
@@ -198,7 +201,7 @@ export class TemplatesService {
   async stats(uuid: string): Promise<TemplateStats> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, orgId, uuid);
+      const row = await this.repo.findByUuid(tx, orgId, uuid, false, 'tpl.templates.read');
       if (!row) throw this.notFound();
       const { lastSentAt, ...counts } = await this.repo.stats(tx, orgId, row.id);
       return { ...counts, lastSentAt: lastSentAt ? lastSentAt.toISOString() : null };
@@ -206,7 +209,7 @@ export class TemplatesService {
   }
 
   async get(uuid: string): Promise<TemplateDetail> {
-    return detailWithMedia(this.storage, await this.require(uuid));
+    return detailWithMedia(this.storage, await this.require(uuid, 'tpl.templates.read'));
   }
 
   /**
@@ -373,7 +376,7 @@ export class TemplatesService {
     for (const c of prepared.cards) this.assertOwnMedia(ctx.orgId, c.image ?? null);
 
     const { row, issues, edit, replacedKey, droppedCardKeys } = await this.db.tx(async (tx) => {
-      const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
+      const current = await this.repo.findByUuid(tx, ctx.orgId, uuid, true, 'tpl.templates.create');
       if (!current) throw this.notFound();
       if (!EDITABLE.has(statusOf(current)) || !BUILDABLE_TYPES.has(current.templateType))
         throw new AppError(
@@ -523,7 +526,7 @@ export class TemplatesService {
   /** Sends a saved template to Meta, or sends it again after a refusal (TW-TPL-025). A template already on Meta is left as it is. */
   async submit(uuid: string, input: SubmitTemplateInput = {}): Promise<TemplateSubmitResult> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.require(uuid);
+    const row = await this.require(uuid, 'tpl.templates.sync');
     if (row.metaTemplateId) return this.result(row, [], null);
     if (!BUILDABLE_TYPES.has(row.templateType))
       throw new AppError(
@@ -564,7 +567,7 @@ export class TemplatesService {
    */
   async remove(uuid: string): Promise<void> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.require(uuid);
+    const row = await this.require(uuid, 'tpl.templates.delete');
     await this.assertNotInUse(orgId, row.id);
 
     if (row.metaTemplateId && row.providerConfigId !== null) {
@@ -585,7 +588,7 @@ export class TemplatesService {
     }
 
     const storedHeader = await this.db.tx(async (tx) => {
-      const current = await this.repo.findByUuid(tx, orgId, uuid, true);
+      const current = await this.repo.findByUuid(tx, orgId, uuid, true, 'tpl.templates.delete');
       if (!current) return null;
       if ((await this.repo.activeBroadcasts(tx, orgId, current.id)) > 0) throw this.inUse();
       await this.repo.delete(tx, orgId, current.id);
@@ -917,9 +920,9 @@ export class TemplatesService {
     return (await this.db.tx((tx) => this.repo.findById(tx, orgId, row.id))) ?? row;
   }
 
-  private async require(uuid: string): Promise<TemplateRow> {
+  private async require(uuid: string, scope: TemplateScopeKey): Promise<TemplateRow> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
+    const row = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid, false, scope));
     if (!row) throw this.notFound();
     return row;
   }

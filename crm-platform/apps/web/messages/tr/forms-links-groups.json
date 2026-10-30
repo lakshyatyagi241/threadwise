@@ -8,6 +8,7 @@
       "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Formları kullanmak için bir WhatsApp Cloud API numarası bağlayın.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Bağlı WhatsApp Cloud API numaralarının hiçbirinde geçerli kimlik bilgisi yok.",
+      "WFL_FORM_PARTNER_NUMBER": "WhatsApp numaranız bir iş ortağı (ör. Interakt) üzerinden bağlı. WhatsApp formları yalnızca Meta ile doğrudan bağlantıyla yayımlanabilir; Kanallar → WhatsApp bölümünden bir numarayı doğrudan bağlayın.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta form tanımını reddetti.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Formları yayınlayabilmeniz için WhatsApp Business hesabınızın Meta doğrulamasından geçmesi gerekir.",
       "WFL_FORM_PUBLISH_FAILED": "Meta bu formu yayınlayamadı.",
@@ -132,7 +133,9 @@
         "date": "Tarih",
         "dropdown": "Açılır liste",
         "radio_buttons": "Radyo düğmeleri",
-        "checkbox": "Onay kutuları"
+        "checkbox": "Onay kutuları",
+        "photo": "Fotoğraf yükleme",
+        "document": "Belge yükleme"
       },
       "submissions": {
         "heading": "Gönderimler",

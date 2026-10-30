@@ -4,7 +4,19 @@
 import { mkdirSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { goldfishReview } from './review.mjs';
-import { REPO, DATE, git, sh, tryRun, log, readJson } from './lib.mjs';
+import {
+  REPO,
+  WORKTREES,
+  ensureEnv,
+  DATE,
+  PREFIX,
+  appRelative,
+  git,
+  sh,
+  tryRun,
+  log,
+  readJson,
+} from './lib.mjs';
 
 const STATE = join(process.env.QA_STATE_DIR ?? `${process.env.HOME}/.local/state/wadesk-qa`);
 const LAST = join(STATE, 'last-maintained-sha');
@@ -40,12 +52,14 @@ if (!changed.length) {
 }
 
 const branch = `qa-specs/${DATE}`;
-const wt = join(REPO, '.claude/worktrees', `qa-specs-${DATE}`);
+const wt = join(WORKTREES, `qa-specs-${DATE}`);
 try {
   tryRun('git', ['worktree', 'remove', '--force', wt], { cwd: REPO });
   git(REPO, 'worktree', 'add', '-q', '-B', branch, wt, head);
-  const web = join(wt, 'apps/web');
-  sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], { cwd: wt, stdio: 'ignore' });
+  const app = join(wt, PREFIX);
+  const web = join(app, 'apps/web');
+  ensureEnv(app);
+  sh('pnpm', ['install', '--frozen-lockfile', '--prefer-offline'], { cwd: app, stdio: 'ignore' });
 
   const prompt = `You are the SPEC-MAINTAINER agent of the daily QA pipeline for the Threadwise web app. Read CLAUDE.md, apps/web/qa-daily/live/qa.ts and the journeys in apps/web/qa-daily/live/journeys first.
 The product changed since the last run. Commits:
@@ -73,7 +87,7 @@ Do not commit or push. Finish with a 5-line summary.`;
       'Read Edit Write Grep Glob Bash(pnpm:*) Bash(bash qa-daily/stack.sh:*) Bash(source:*) Bash(git diff:*) Bash(git status:*) Bash(git log:*)',
     ],
     {
-      cwd: wt,
+      cwd: app,
       timeout: 60 * 60_000,
       env: { ...process.env, ANTHROPIC_API_KEY: undefined },
     },
@@ -82,7 +96,7 @@ Do not commit or push. Finish with a 5-line summary.`;
   const files = git(wt, 'status', '--porcelain')
     .split('\n')
     .filter(Boolean)
-    .map((l) => l.slice(3));
+    .map((l) => appRelative(l.slice(3)));
   if (!files.length) {
     writeFileSync(LAST, head);
     log('maintain: no journey change needed');
@@ -99,7 +113,7 @@ Do not commit or push. Finish with a 5-line summary.`;
     'bash',
     [
       '-c',
-      "export NODE_OPTIONS=--max-old-space-size=6144; pnpm --filter './packages/*' build && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up && . qa-daily/out/stack.env && HEADLESS=1 pnpm exec playwright test -c qa-daily/playwright.live.config.ts",
+      "export NODE_OPTIONS=--max-old-space-size=6144; (cd ../.. && pnpm --filter './packages/*' build) && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up && . qa-daily/out/stack.env && HEADLESS=1 pnpm exec playwright test -c qa-daily/playwright.live.config.ts",
     ],
     { cwd: web, timeout: 90 * 60_000 },
   );
@@ -107,7 +121,7 @@ Do not commit or push. Finish with a 5-line summary.`;
   if (!run.ok)
     throw new Error(`journey suite does not pass with the new specs:\n${run.out.slice(-600)}`);
   const gate = tryRun('bash', ['.claude/skills/pre-pr/scripts/gate.sh'], {
-    cwd: wt,
+    cwd: app,
     timeout: 60 * 60_000,
   });
   if (!gate.ok) throw new Error(`pre-pr gate failed:\n${gate.out.slice(-400)}`);

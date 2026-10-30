@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { campaignScopeSql } from '../campaign-scope';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { AGG, AGG_DELIVERED, AGG_READ, AGG_SENT } from '../campaigns.repository';
@@ -123,7 +124,7 @@ export class CampaignSummaryRepository {
   ): Promise<SummaryHeader | undefined> {
     const res = await tx.execute(
       source === 'campaign'
-        ? sql`SELECT id, campaign_name AS name, status FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`
+        ? sql`SELECT id, campaign_name AS name, status FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid${campaignScopeSql('camp.campaigns.read', null)}`
         : sql`SELECT id, name, status FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
     );
     const r = res.rows[0] as { id: number | string; name: string; status: string } | undefined;

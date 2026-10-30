@@ -19,6 +19,8 @@
  *                                  (credits: the CONFIRMED opening balance file is required for the wallet part; see README "Stage 2: credits")
  *   pricing-seed --client <c> [--compare-with <c2>] [--factor DEC] [--apply] [--skip-conflicts]
  *                                  operator command, DRY RUN by default: what credits_mapping_new would write to the GLOBAL message_rates
+ *   pricing-workspace --client <c> --org-slug <s> [--factor DEC] [--apply] [--verify] [--skip-conflicts]
+ *                                  operator command, DRY RUN by default: the workspace's own credits_mapping_new (price + margin) -> workspace_message_margins of that organization
  *   update    --client <c> --org-slug <s> [--steps contacts,tags,...] [--default-cc 91] [--batch N] [--skip-hash] [--apply --confirm-org-slug <s>]
  *                                  UPDATE MODE, DRY RUN by default: rows already migrated are brought in line with the current dump (changed columns only; see README "Update mode")
  *   kb-reingest --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]
@@ -59,6 +61,7 @@ import { CreditsConfigError, type CreditOptions } from './credits/config';
 import { FlowsConfigError, type FlowOptions, type FlowVersionPolicy } from './flows/config';
 import { automationProfile, formatAutomationProfile } from './extract/automation-profile';
 import { PricingError, pricingSeed } from './pricing/seed';
+import { WorkspacePricingError, workspacePricing } from './pricing/workspace-seed';
 import { createInterface } from 'node:readline';
 import { InboxConfigError, type InboxOptions } from './inbox/config';
 import { permissionCatalogue, writeCatalogue } from './extract/catalogue';
@@ -282,6 +285,37 @@ async function main(): Promise<number> {
             const rl = createInterface({ input: process.stdin, output: process.stdout });
             rl.question(
               `Type exactly this to write to the GLOBAL message_rates table: ${phrase}
+> `,
+              (a) => {
+                rl.close();
+                res(a);
+              },
+            );
+          }),
+      });
+      return 0;
+    }
+    case 'pricing-workspace': {
+      const orgSlug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      const ownerUrl = process.env.MIGRATION_DATABASE_URL;
+      if (clients.length !== 1 || !orgSlug) return usage();
+      if (!ownerUrl)
+        throw new WorkspacePricingError('set MIGRATION_DATABASE_URL (the owner connection)');
+      await workspacePricing({
+        source,
+        client: clients[0]!,
+        orgSlug,
+        factor: flags.get('factor') ? String(flags.get('factor')) : undefined,
+        apply: flags.has('apply'),
+        verify: flags.has('verify'),
+        skipConflicts: flags.has('skip-conflicts'),
+        ownerUrl,
+        guard,
+        confirm: (phrase) =>
+          new Promise<string>((res) => {
+            const rl = createInterface({ input: process.stdin, output: process.stdout });
+            rl.question(
+              `Type exactly this to write the workspace's margins: ${phrase}
 > `,
               (a) => {
                 rl.close();
@@ -837,7 +871,7 @@ main().then(
     process.exit(
       err instanceof RunLockedError
         ? 3
-        : err instanceof PricingError
+        : err instanceof PricingError || err instanceof WorkspacePricingError
           ? 5
           : err instanceof InboxConfigError ||
               err instanceof BroadcastConfigError ||

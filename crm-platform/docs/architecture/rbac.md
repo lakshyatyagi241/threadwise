@@ -22,13 +22,26 @@ Dotted, resource-first, action-last:
 
 ```
 record.contacts.read        record.contacts.update
-inbox.conversation.assign   broadcast.campaign.start
+inbox.conversation.assign   camp.campaigns.control
 billing.wallet.topup        admin.role.manage
 partner.agent.manage
 ```
 
 Custom modules auto-register `record.<module>.<action>` at creation, which is
 why the registry is global rather than per-tenant.
+
+## Campaign record scope
+
+`camp.campaigns.{read,update,delete,control,export,test}` carry a record scope that campaigns read as **Global** (`all`: every
+campaign of the workspace) or **Restricted** (`own`: only the campaigns the user created, `wpcampaigns.created_by`; the legacy
+`broadcasts.user_id`). A campaign has no owner or team, so a stored team scope reads as Restricted. The check is SQL, in
+`modules/campaigns/campaign-scope.ts`, added to every user-facing lookup (list and tab counts, detail, edit, delete, control,
+export, summary, wizard drafts and history, previous-sends); a campaign outside the scope is `404`, never `403`. Workers and
+webhooks run without grants and are not narrowed.
+
+`tpl.templates.{read,create,delete,sync}` work the same way on `wa_templates.user_id` (`create` is the edit scope), in
+`modules/message-templates/template-scope.ts`: the library list and tab counts, detail, stats, edit, delete, submit and refresh. The
+template pickers of the inbox, flows, campaigns and leads are not narrowed.
 
 ## Merge rules
 

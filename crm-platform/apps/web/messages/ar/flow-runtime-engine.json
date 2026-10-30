@@ -38,6 +38,8 @@
       "failed": "فشل"
     },
     "source": {
+      "flow_webhook": "ويب هوك",
+      "sheet_row": "صف الجدول",
       "keyword": "كلمة مفتاحية",
       "any_message": "أي رسالة",
       "tag_added": "إضافة وسم",

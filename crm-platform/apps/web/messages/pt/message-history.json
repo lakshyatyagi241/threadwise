@@ -50,7 +50,10 @@
       "fromEmail": "Do seu e-mail",
       "hint": "Exportar CSV usa os filtros e as datas escolhidos nesta página. O arquivo é gerado em segundo plano e enviamos um e-mail quando estiver pronto.",
       "empty": "Ainda não há exportações. Clique em Exportar CSV para receber como arquivo as mensagens que você vê aqui.",
-      "loading": "Carregando exportações"
+      "loading": "Carregando exportações",
+      "hintHere": "Exportar CSV usa os filtros e as datas escolhidos nesta página. O arquivo é gerado em segundo plano; você vai para Configurações > Histórico de exportações para baixá-lo.",
+      "settingsTitle": "Exportações do histórico de mensagens",
+      "hintSettings": "Exportações pedidas no Histórico de mensagens. O arquivo é gerado em segundo plano e enviamos um e-mail quando estiver pronto."
     },
     "kpi": {
       "label": "Números principais",

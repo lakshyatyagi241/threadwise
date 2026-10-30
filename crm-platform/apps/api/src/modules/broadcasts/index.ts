@@ -73,9 +73,10 @@ export {
   type TemplateRecord,
   type WalletGate,
   type WarmerGate,
+  PREVIEW_MEDIA_LINK_TTL_S,
 } from './_shims/tokens';
 export { readableTemplateBody, resolveBodyTokens } from './inbox-mirror-rules';
-export { buildRecipientVars } from './payload/template-vars';
+export { buildRecipientVars, templateMediaPaths } from './payload/template-vars';
 export {
   applyOverrides,
   sanitizeOverrides,

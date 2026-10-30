@@ -380,7 +380,7 @@
           "quickReplyVariable": "क्विक रिप्लाई में वेरिएबल नहीं हो सकता।",
           "urlExampleRequired": "URL वेरिएबल के लिए नमूना मान दें।",
           "quickReplyPosition": "क्विक रिप्लाई बटनों की शुरुआत या अंत में एक साथ होने चाहिए।",
-          "flowIdRequired": "Flow ID दर्ज करें।",
+          "flowIdRequired": "सूची से एक WhatsApp फ़ॉर्म चुनें।",
           "flowIdInvalid": "Flow ID एक संख्या है।",
           "screenRequired": "स्क्रीन की ID दर्ज करें।",
           "catalogAlone": "कैटलॉग बटन को दूसरे बटनों के साथ नहीं जोड़ा जा सकता।",

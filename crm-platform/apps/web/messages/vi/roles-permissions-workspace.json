@@ -256,6 +256,10 @@
         "team": "Bản ghi của nhóm tôi",
         "team_and_below": "Nhóm của tôi và nhóm con"
       },
+      "creatorScope": {
+        "all": "Bản ghi toàn cục",
+        "own": "Truy cập hạn chế (chỉ bản ghi của mình)"
+      },
       "scopeLegend": "Mỗi phạm vi bản ghi bao gồm những gì",
       "scopeHelp": {
         "all": "Mọi bản ghi trong không gian làm việc.",

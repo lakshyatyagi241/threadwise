@@ -1,0 +1,50 @@
+name: query-plans
+# Sheet: query-plan gate on pull requests (issue #1287). Migrates a throwaway Postgres 16, seeds the dev data, and runs QA task 42
+# (EXPLAIN on every critical query in tools/qa-suite/data/critical-queries.json). Non-blocking for now: the report is uploaded and the
+# job stays green so the team can read the plans for a week before the step is made blocking (remove continue-on-error then).
+on:
+  pull_request:
+    paths:
+      - 'packages/db/**'
+      - 'apps/api/src/**'
+      - 'tools/qa-suite/**'
+      - '.github/workflows/query-plans.yml'
+  workflow_dispatch:
+jobs:
+  query-plans:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: crm
+          POSTGRES_PASSWORD: crm
+          POSTGRES_DB: crm
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U crm -d crm" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgres://crm:crm@127.0.0.1:5432/crm
+      MIGRATION_DATABASE_URL: postgres://crm:crm@127.0.0.1:5432/crm
+      ALLOW_DEV_SEED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Migrate
+        run: pnpm db:migrate
+      - name: Seed dev data (plans on an empty table mean nothing)
+        run: pnpm db:seed
+      - name: Query plans (task 42)
+        continue-on-error: true
+        run: node tools/qa-suite/run.mjs 42
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: query-plans
+          path: reports/qa-suite
+          if-no-files-found: ignore

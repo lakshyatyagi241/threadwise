@@ -68,7 +68,7 @@ function MediaBlock({ model }: { model: PreviewModel }) {
 }
 
 /** A carousel's cards under the bubble: a row to swipe through, each card a picture or video, its text and its buttons. */
-function CardsStrip({ cards }: { cards: NonNullable<PreviewModel['cards']> }) {
+export function CardsStrip({ cards }: { cards: NonNullable<PreviewModel['cards']> }) {
   const t = useTranslations('message-templates.preview');
   return (
     <ul

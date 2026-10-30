@@ -8,6 +8,7 @@
       "generic": "Algo deu errado. Tente novamente.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Conecte um número do WhatsApp Cloud API para usar formulários.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Nenhum número do WhatsApp Cloud API conectado possui credenciais válidas.",
+      "WFL_FORM_PARTNER_NUMBER": "Seu número de WhatsApp está conectado por um parceiro (como a Interakt). Os formulários do WhatsApp só podem ser publicados com uma conexão direta com a Meta; conecte um número diretamente em Canais → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "A Meta rejeitou a definição do formulário.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Sua conta do WhatsApp Business precisa passar pela verificação da Meta antes de publicar formulários.",
       "WFL_FORM_PUBLISH_FAILED": "A Meta não conseguiu publicar este formulário.",
@@ -132,7 +133,9 @@
         "date": "Data",
         "dropdown": "Lista suspensa",
         "radio_buttons": "Botões de opção",
-        "checkbox": "Caixas de seleção"
+        "checkbox": "Caixas de seleção",
+        "photo": "Envio de foto",
+        "document": "Envio de documento"
       },
       "submissions": {
         "heading": "Envios",

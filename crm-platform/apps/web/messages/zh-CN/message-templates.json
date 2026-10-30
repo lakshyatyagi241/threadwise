@@ -380,7 +380,7 @@
           "quickReplyVariable": "快速回复不能包含变量。",
           "urlExampleRequired": "请为网址变量提供示例值。",
           "quickReplyPosition": "快速回复须集中放在按钮的开头或末尾。",
-          "flowIdRequired": "请输入 Flow ID。",
+          "flowIdRequired": "请从列表中选择一个 WhatsApp 表单。",
           "flowIdInvalid": "Flow ID 必须是数字。",
           "screenRequired": "请输入页面 ID。",
           "catalogAlone": "商品目录按钮不能与其他按钮组合使用。",

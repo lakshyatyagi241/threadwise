@@ -39,6 +39,7 @@
       "deleteFailed": "无法删除规则。",
       "businessHours": "营业时间",
       "recordNote": "此功能分配会话。如需将新的{contacts}、公司和{deals}分配给销售负责人，请参阅<link>记录分配规则</link>。",
+      "agentsNote": "谁会收到聊天取决于每个人的可用状态(顶部栏中的状态)和同时聊天数上限。上限请在<link>团队成员</link>中设置。",
       "subtitle": "选择由谁接收每个新会话。对大多数工作区来说开关就够了；只有需要更多控制时才添加规则。"
     },
     "rules": {

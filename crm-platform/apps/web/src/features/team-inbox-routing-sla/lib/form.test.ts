@@ -119,12 +119,25 @@ describe('the "only when" switch (H13)', () => {
   it('a saved rule opens with the switch and the cards it needs', () => {
     const saved = formFromRule(rule());
     expect(saved.onlyWhen).toBe(true);
-    expect(saved.added).toEqual(['channel', 'keywords']);
+    expect(saved.added).toEqual(['keywords']);
     const every = formFromRule(rule({ appliesToAll: true }));
     expect(every.onlyWhen).toBe(false);
-    expect(every.added).toEqual(['channel', 'keywords']);
+    expect(every.added).toEqual(['keywords']);
     const returning = rule({ conditions: { ...rule().conditions, contactKind: 'returning' } });
-    expect(addedOf(returning.conditions)).toEqual(['contactKind', 'channel', 'keywords']);
+    expect(addedOf(returning.conditions)).toEqual(['contactKind', 'keywords']);
+  });
+  it('the channel is asked for first: it is its own field, not a condition card, and a rule with only a channel needs no other condition', () => {
+    const onlyChannel = rule({
+      conditions: { ...rule().conditions, keywords: null, channelKinds: ['telegram'] },
+    });
+    const f = formFromRule(onlyChannel);
+    expect(f.added).toEqual([]);
+    expect(f.channelKinds).toEqual(['telegram']);
+    expect(f.onlyWhen).toBe(true);
+    // A rule that applies to every conversation never used the channels it kept, so the form does not show them as chosen.
+    expect(
+      formFromRule(rule({ appliesToAll: true, conditions: onlyChannel.conditions })).channelKinds,
+    ).toEqual([]);
   });
 });
 

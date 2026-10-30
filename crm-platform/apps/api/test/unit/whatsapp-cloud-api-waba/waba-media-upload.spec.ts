@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  RATE_LIMIT_RETRY_WAITS_MS,
   retryOnRateLimit,
   uploadMediaHandle,
 } from '../../../src/infra/providers/whatsapp-cloud-api-waba/waba-media-upload';
@@ -19,6 +20,11 @@ const throttled = () =>
   });
 
 describe('retryOnRateLimit', () => {
+  it('waits four times, about 27 seconds in all, before the throttle reaches the user', () => {
+    expect(RATE_LIMIT_RETRY_WAITS_MS).toHaveLength(4);
+    expect(RATE_LIMIT_RETRY_WAITS_MS.reduce((a, b) => a + b, 0)).toBe(27000);
+  });
+
   it('returns the first answer when nothing is throttled', async () => {
     let calls = 0;
     const out = await retryOnRateLimit(async () => ++calls, [0, 0]);

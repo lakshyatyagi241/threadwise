@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { optionLabel } from '@/lib/option-label';
 import {
   Alert,
   Button,
@@ -385,8 +386,8 @@ function GroupModal({ segment, onClose }: { segment: Segment; onClose: () => voi
           >
             {list.length === 0 && <option value="">{t('noGroups')}</option>}
             {list.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
+              <option key={g.id} value={g.id} title={g.name}>
+                {optionLabel(g.name)}
               </option>
             ))}
           </Select>

@@ -1376,7 +1376,9 @@
             "schedule": "Jadwal: pada tanggal dan waktu tertentu",
             "shopify_event": "Komersial: event toko Shopify",
             "woocommerce_event": "Komersial: event toko WooCommerce",
-            "segment_leave": "Audiens: saat kontak keluar dari segmen"
+            "segment_leave": "Audiens: saat kontak keluar dari segmen",
+            "webhook": "Integrasi: sistem luar mengirim data ke webhook",
+            "google_sheet": "Integrasi: baris baru ditambahkan di Google Sheet"
           },
           "tagsLoading": "Memuat tag…",
           "tagPick": "— pilih tag —",
@@ -1471,7 +1473,34 @@
             "productIdHint": "Kosong = produk apa pun dalam pesanan.",
             "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
             "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya.",
-            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen."
+            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen.",
+            "updatedField": "Hanya saat properti ini berubah",
+            "updatedFieldHint": "Biarkan “Properti apa saja” agar dimulai pada setiap perubahan. Pengeditan yang tidak menyebut properti mana yang berubah (beberapa impor dan aksi massal) tidak memulai alur yang memantau satu properti.",
+            "updatedAny": "Properti apa saja"
+          },
+          "outside": {
+            "saveFirst": "Simpan alur terlebih dahulu. Alamat webhook milik alur yang sudah disimpan.",
+            "addressLabel": "Alamat webhook",
+            "addressHint": "Sistem Anda yang lain mengirim POST dengan isi JSON ke alamat ini. Setiap alur punya alamat sendiri.",
+            "loading": "Memuat alamat…",
+            "unavailable": "Alamat tidak dapat dimuat. Pastikan Anda boleh melihat alur, lalu coba lagi.",
+            "copy": "Salin",
+            "copied": "Alamat webhook disalin",
+            "notLive": "Alamat ini baru menjalankan alur setelah alur dipublikasikan dan aktif. Sebelum itu, jawabannya “tidak ditemukan”.",
+            "sampleLabel": "Coba",
+            "mapping": "Kontak dicari lewat kolom \"phone\" pada isi permintaan (atau \"email\" jika tidak ada telepon) dan dibuat bila baru; \"name\" disimpan pada kontak baru. Setiap kolom pada isi permintaan menjadi variabel yang dapat dipakai sebagai {fieldToken}, misalnya {orderToken}; kolom bertingkat seperti customer.city menjadi {cityToken}. Kirim header Idempotency-Key (atau X-Delivery-Id) agar pengiriman ulang tidak menjalankan alur dua kali; tanpa itu, isi yang identik dianggap pengiriman yang sama. Ukuran isi dibatasi 64 KB.",
+            "secret": "Siapa pun yang memiliki alamat ini dapat menjalankan alur. Bagikan hanya kepada sistem yang berhak, dan jangan unggah secara publik.",
+            "sheetLabel": "Spreadsheet",
+            "tabLabel": "Nama tab",
+            "tabHint": "Kosongkan untuk tab pertama.",
+            "phoneColumn": "Kolom telepon",
+            "phoneColumnHint": "Judul kolom yang berisi nomor telepon kontak. Jika kosong, judul Phone, Mobile, dan WhatsApp akan dicoba.",
+            "emailColumn": "Kolom email (opsional)",
+            "nameColumn": "Kolom nama (opsional)",
+            "intervalLabel": "Periksa baris baru setiap",
+            "intervalHint": "Google tidak mengirim sinyal saat baris ditambahkan, jadi sheet diperiksa menurut jadwal ini.",
+            "minutes": "{count, plural, other {# menit}}",
+            "sheetNote": "Hanya baris yang ditambahkan setelah alur ini dipublikasikan yang menjalankannya; baris yang sudah ada di sheet tidak pernah. Kontak dicari atau dibuat dari kolom telepon (atau email), dan setiap kolom menjadi variabel bernama sesuai judulnya, misalnya {topicToken}. Baris tanpa telepon atau email dilewati. Memerlukan akun Google yang terhubung dengan izin Sheets."
           }
         }
       },
@@ -2534,7 +2563,9 @@
         "schedule": "sesuai jadwal",
         "shopify_event": "saat event Shopify",
         "woocommerce_event": "saat event WooCommerce",
-        "segment_leave": "saat keluar segmen"
+        "segment_leave": "saat keluar segmen",
+        "webhook": "saat webhook",
+        "google_sheet": "saat baris baru"
       },
       "ports": {
         "manual": "manual",
@@ -2595,6 +2626,7 @@
         "buttonNoExit": "\"{node}\": tombol \"{button}\" tidak mengarah ke langkah mana pun.",
         "notConnected": "\"{node}\" tidak terhubung ke apa pun.",
         "wrongChannel": "\"{node}\" tidak berfungsi pada {channel} — hapus atau ubah kembali kanal di node Pemicu.",
+        "notBuilt": "\"{node}\" belum tersedia — alur melewatinya saat berjalan. Hapus node ini.",
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
         "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",

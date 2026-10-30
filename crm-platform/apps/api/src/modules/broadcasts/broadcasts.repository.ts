@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { campaignScopeSql, type CampaignScopeKey } from '../campaigns/campaign-scope';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { hasGrantedConsentSql } from '../contact-consent';
@@ -206,9 +207,9 @@ export class BroadcastsRepository {
   }
 
   /** The row, locked, so a concurrent retry, delete or run waits for this decision. */
-  async lock(tx: Tx, orgId: number, uuid: string) {
+  async lock(tx: Tx, orgId: number, uuid: string, scope?: CampaignScopeKey) {
     const res = await tx.execute(sql`
-      SELECT id, status, provider FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
+      SELECT id, status, provider FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid${scope ? campaignScopeSql(scope, null, 'user_id') : sql``} FOR UPDATE`);
     const r = res.rows[0] as
       { id: number | string; status: string; provider: string | null } | undefined;
     return r ? { id: Number(r.id), status: r.status, provider: r.provider } : undefined;

@@ -122,7 +122,9 @@ export class WizardDraftsService {
 
   async get(uuid: string): Promise<WizardDraftResponse> {
     const { orgId } = RequestContextStore.require();
-    const row = await this.db.tx((tx) => this.repo.campaignByUuid(tx, orgId, uuid));
+    const row = await this.db.tx((tx) =>
+      this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.read'),
+    );
     if (!row) throw AppError.notFound('Broadcast draft', uuid);
     return draftResponse(row);
   }
@@ -131,7 +133,7 @@ export class WizardDraftsService {
     const { orgId } = RequestContextStore.require();
     const { rowVersion, ...patch } = input;
     const row = await this.db.tx(async (tx) => {
-      const locked = await this.repo.lockCampaign(tx, orgId, uuid);
+      const locked = await this.repo.lockCampaign(tx, orgId, uuid, 'camp.campaigns.update');
       if (!locked) throw AppError.notFound('Broadcast draft', uuid);
       if (locked.status !== 'draft') {
         throw new AppError(

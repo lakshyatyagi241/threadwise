@@ -4,6 +4,8 @@
 #   2. production run: verify yesterday's fixes, run the journeys + crawl, fill the sheet, fix + PR (+ merge when AUTOMERGE=1)
 # Staging is the same host as production today; set QA_STAGING_URL to a different host later and the same run covers it.
 set -uo pipefail
+# cron starts with a bare PATH; pnpm, claude and gh live in the user's own bin folders
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:/usr/local/bin:$PATH"
 cd "$(dirname "$0")/.."
 set -a; . "${QA_ENV_FILE:-$HOME/.config/wadesk-qa/env}"; set +a
 LOG="$HOME/.local/state/wadesk-qa/logs"; mkdir -p "$LOG"; exec >> "$LOG/$(date +%F).log" 2>&1
@@ -11,5 +13,5 @@ echo "=== $(date -Is) daily QA"
 git -C "$(git rev-parse --show-toplevel)" fetch -q origin main
 pnpm install --frozen-lockfile --prefer-offline >/dev/null 2>&1 || true
 [ "${QA_MAINTAIN:-1}" = "1" ] && node qa-daily/maintain.mjs
-node qa-daily/daily.mjs --target prod --fix --max-fix "${AUTOFIX_MAX:-3}"
+node qa-daily/daily.mjs --target "${QA_RUN_TARGET:-prod}" --fix --max-fix "${AUTOFIX_MAX:-3}" ${QA_NO_CRAWL:+--no-crawl}
 if [ -n "${QA_STAGING_URL:-}" ]; then QA_BASE_URL="$QA_STAGING_URL" node qa-daily/daily.mjs --target prod --no-crawl; fi

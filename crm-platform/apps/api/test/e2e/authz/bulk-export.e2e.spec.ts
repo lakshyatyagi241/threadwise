@@ -1057,7 +1057,7 @@ describe('AUTHZ-050 / AUTHZ-071 exports need the export grant, respect record sc
 
     for (const [path, mine, theirs, key, label] of [
       ['campaigns', aCamp, bCamp, 'camp.campaigns.export', 'AZEXC'],
-      ['broadcasts', aBc, bBc, 'bcast.broadcasts.export', 'AZEXB'],
+      ['broadcasts', aBc, bBc, 'camp.campaigns.export', 'AZEXB'],
     ] as const) {
       const exporter = await api.member(A, `ex-${path}`, [[key]]);
       const noGrant = await api.member(A, `exn-${path}`, []);

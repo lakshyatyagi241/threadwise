@@ -39,6 +39,7 @@
       "deleteFailed": "Không thể xóa quy tắc.",
       "businessHours": "Giờ làm việc",
       "recordNote": "Mục này phân công cuộc trò chuyện. Để giao {contacts}, công ty và {deals} mới cho người phụ trách bán hàng, xem <link>Quy tắc phân công bản ghi</link>.",
+      "agentsNote": "Ai nhận cuộc trò chuyện phụ thuộc vào trạng thái sẵn sàng của từng người (trạng thái ở thanh trên) và giới hạn số cuộc trò chuyện đồng thời. Đặt giới hạn trong <link>Thành viên nhóm</link>.",
       "subtitle": "Chọn người nhận từng chat mới. Các công tắc đã đủ cho hầu hết không gian làm việc; chỉ thêm quy tắc khi bạn cần kiểm soát nhiều hơn."
     },
     "rules": {

@@ -39,6 +39,7 @@
       "deleteFailed": "Impossibile eliminare la regola.",
       "businessHours": "Orario di lavoro",
       "recordNote": "Questa funzione assegna le conversazioni. Per assegnare i nuovi {contacts}, le aziende e le {deals} ai responsabili vendite, vedi <link>Regole di assegnazione dei record</link>.",
+      "agentsNote": "Chi riceve una chat dipende dalla disponibilità di ogni persona (lo stato nella barra superiore) e dal suo limite di chat simultanee. Imposta il limite in <link>Membri del team</link>.",
       "subtitle": "Scegli chi riceve ogni nuova conversazione. Gli interruttori bastano per la maggior parte degli spazi di lavoro; aggiungi regole solo se ti serve più controllo."
     },
     "rules": {

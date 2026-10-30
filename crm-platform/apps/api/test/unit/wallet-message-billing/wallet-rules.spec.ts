@@ -110,6 +110,21 @@ describe('decideSettlement (TW-WALLET-009, -010)', () => {
   // A plan workspace with 1,000 messages a month and none used yet.
   const plan = { payPerMessage: false, planActive: true, monthlyLimit: 1000, usedBefore: 0 };
 
+  it('is free, with nothing owed, when Meta says the message is not billable (a template inside the free service window)', () => {
+    expect(
+      decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 10_000, metaBillable: false }),
+    ).toEqual({ outcome: 'free', reason: 'rate_is_zero', shortfallMinor: 0 });
+  });
+
+  it('still charges when Meta says billable, or says nothing', () => {
+    expect(
+      decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 10_000, metaBillable: true }),
+    ).toMatchObject({ outcome: 'charge', chargedMinor: 1200 });
+    expect(decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 10_000 })).toMatchObject({
+      outcome: 'charge',
+    });
+  });
+
   it('charges the full price when the balance covers it', () => {
     expect(decideSettlement({ ...paid, priceMinor: 1200, balanceMinor: 10_000 })).toEqual({
       outcome: 'charge',

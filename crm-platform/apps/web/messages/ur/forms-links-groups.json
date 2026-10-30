@@ -8,6 +8,7 @@
       "generic": "کچھ غلط ہو گیا۔ براہِ کرم دوبارہ کوشش کریں۔",
       "WFL_FORM_ENGINE_NOT_ENABLED": "فارمز استعمال کرنے کے لیے ایک WhatsApp Cloud API نمبر منسلک کریں۔",
       "WFL_FORM_NO_WABA_CREDENTIALS": "کسی بھی منسلک WhatsApp Cloud API نمبر کے پاس درست کریڈینشلز موجود نہیں ہیں۔",
+      "WFL_FORM_PARTNER_NUMBER": "آپ کا واٹس ایپ نمبر کسی پارٹنر (جیسے Interakt) کے ذریعے منسلک ہے۔ واٹس ایپ فارمز صرف Meta سے براہِ راست کنکشن کے ذریعے شائع ہو سکتے ہیں، لہٰذا چینلز ← واٹس ایپ میں نمبر براہِ راست جوڑیں۔",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta نے اس فارم کی تعریف مسترد کر دی۔",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "فارمز شائع کرنے سے پہلے آپ کے WhatsApp Business اکاؤنٹ کو Meta کی تصدیق سے گزرنا ضروری ہے۔",
       "WFL_FORM_PUBLISH_FAILED": "Meta اس فارم کو شائع نہیں کر سکا۔",
@@ -132,7 +133,9 @@
         "date": "تاریخ",
         "dropdown": "ڈراپ ڈاؤن",
         "radio_buttons": "ریڈیو بٹنز",
-        "checkbox": "چیک باکسز"
+        "checkbox": "چیک باکسز",
+        "photo": "تصویر اپ لوڈ",
+        "document": "دستاویز اپ لوڈ"
       },
       "submissions": {
         "heading": "جوابات",

@@ -8,6 +8,7 @@
       "generic": "Er is iets misgegaan. Probeer het opnieuw.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Koppel een WhatsApp Cloud API-nummer om formulieren te gebruiken.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Geen gekoppeld WhatsApp Cloud API-nummer heeft geldige inloggegevens.",
+      "WFL_FORM_PARTNER_NUMBER": "Je WhatsApp-nummer is verbonden via een partner (zoals Interakt). WhatsApp-formulieren kunnen alleen worden gepubliceerd via een directe Meta-verbinding. Verbind een nummer rechtstreeks onder Kanalen → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta heeft de formulierdefinitie afgewezen.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Je WhatsApp Business-account moet de verificatie van Meta doorlopen voordat je formulieren kunt publiceren.",
       "WFL_FORM_PUBLISH_FAILED": "Meta kon dit formulier niet publiceren.",
@@ -132,7 +133,9 @@
         "date": "Datum",
         "dropdown": "Vervolgkeuzelijst",
         "radio_buttons": "Keuzerondjes",
-        "checkbox": "Selectievakjes"
+        "checkbox": "Selectievakjes",
+        "photo": "Foto uploaden",
+        "document": "Document uploaden"
       },
       "submissions": {
         "heading": "Inzendingen",

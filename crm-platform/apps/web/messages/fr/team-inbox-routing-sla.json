@@ -39,6 +39,7 @@
       "deleteFailed": "Impossible de supprimer la règle.",
       "businessHours": "Heures d'ouverture",
       "recordNote": "Cette page attribue les conversations. Pour attribuer les nouveaux {contacts}, entreprises et {deals} aux responsables commerciaux, consultez <link>Règles d'attribution des enregistrements</link>.",
+      "agentsNote": "La personne qui reçoit un chat dépend de sa disponibilité (le statut dans la barre du haut) et de sa limite de chats simultanés. Définissez la limite dans <link>Membres de l'équipe</link>.",
       "subtitle": "Choisissez qui reçoit chaque nouveau chat. Les commutateurs suffisent pour la plupart des espaces de travail ; n’ajoutez des règles que si vous avez besoin de plus de contrôle."
     },
     "rules": {

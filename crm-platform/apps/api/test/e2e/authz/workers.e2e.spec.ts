@@ -406,7 +406,7 @@ describe('AUTHZ-079 broadcast sender', () => {
       )
     ).rows[0].uuid as string;
     const contacts = await api.seedContacts(t, [{ name: 'Pol', phone: phone() }]);
-    const creator = await api.member(t, 'creator', [['bcast.broadcasts.create']]);
+    const creator = await api.member(t, 'creator', [['camp.campaigns.create']]);
     const res = await api
       .http()
       .post('/v2/broadcasts')

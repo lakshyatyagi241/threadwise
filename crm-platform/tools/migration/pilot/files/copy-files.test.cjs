@@ -86,6 +86,17 @@ test.after(() => (source.close(), s3srv.close()));
 let s3Port;
 test.beforeEach(() => ((srcHits = []), (objects = new Map()), (puts = []), (tamper = new Set())));
 
+test('metaLinkExpiry reads the oe expiry of a Meta CDN link only', () => {
+  const oe = (ms) => Math.floor(ms / 1000).toString(16);
+  const past = Date.parse('2026-10-10T06:20:15Z');
+  assert.equal(lib.metaLinkExpiry(`https://scontent.whatsapp.net/v/t61/h.jpg?oh=x&oe=${oe(past)}`), past);
+  assert.equal(lib.metaLinkExpiry(`https://scontent-bom1-1.xx.fbcdn.net/v/a.jpg?oe=${oe(past)}`), past);
+  assert.equal(lib.metaLinkExpiry(`https://assets.getalabs.com/a.jpg?oe=${oe(past)}`), null);
+  assert.equal(lib.metaLinkExpiry('https://scontent.whatsapp.net/v/t61/h.jpg?oh=x'), null);
+  assert.equal(lib.metaLinkExpiry('https://scontent.whatsapp.net/v/t61/h.jpg?oe=zz'), null);
+  assert.equal(lib.metaLinkExpiry('not a url'), null);
+});
+
 test('private / loopback / link-local / mapped addresses are refused', () => {
   for (const ip of ['127.0.0.1', '10.1.2.3', '172.16.0.1', '172.31.255.1', '192.168.1.1', '169.254.169.254', '100.64.0.1', '0.0.0.0', '::1', '::', 'fe80::1', 'fd00::1', '::ffff:10.0.0.1', '224.0.0.1'])
     assert.equal(lib.isPrivateIp(ip), true, ip);

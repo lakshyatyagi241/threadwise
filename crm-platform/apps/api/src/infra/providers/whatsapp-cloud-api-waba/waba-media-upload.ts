@@ -6,9 +6,11 @@ import type { MediaUpload } from './waba-template.port';
 
 /**
  * Waits before each retry of a throttled upload (Meta's code 4, "Application request limit reached", is transient: nothing was
- * stored, so the same request can simply be sent again). Two retries, then the throttle goes to the user.
+ * stored, so the same request can simply be sent again). Four retries over about 27 s (the platform app's quota is shared by every
+ * workspace and usually frees up within a minute), then the throttle goes to the user. Each wait is spread by up to 20% so several
+ * uploads that were throttled together do not all come back at the same moment.
  */
-export const RATE_LIMIT_RETRY_WAITS_MS: readonly number[] = [1000, 3000];
+export const RATE_LIMIT_RETRY_WAITS_MS: readonly number[] = [1000, 3000, 8000, 15000];
 
 /**
  * Runs `call`, and when Meta or the provider throttles it, waits and tries again. Any other failure is thrown at once, and so is a
@@ -29,7 +31,7 @@ export async function retryOnRateLimit<T>(
         classifySendError(e) !== 'rate_limited'
       )
         throw e;
-      await new Promise((resolve) => setTimeout(resolve, wait));
+      await new Promise((resolve) => setTimeout(resolve, wait * (0.8 + Math.random() * 0.4)));
     }
   }
 }

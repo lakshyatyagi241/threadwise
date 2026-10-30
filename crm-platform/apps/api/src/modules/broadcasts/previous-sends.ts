@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { campaignScopeSql } from '../campaigns/campaign-scope';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -62,14 +63,14 @@ export function previousSendContactsSql(
     parts.push(sql`
       SELECT bc.contact_id FROM broadcast_contacts bc
       JOIN broadcasts b ON b.org_id = bc.org_id AND b.id = bc.broadcast_id
-      WHERE bc.org_id = ${orgId} AND b.uuid IN (${uuidList(broadcasts)}) AND bc.contact_id IS NOT NULL
+      WHERE bc.org_id = ${orgId} AND b.uuid IN (${uuidList(broadcasts)})${campaignScopeSql('camp.campaigns.read', 'b', 'user_id')} AND bc.contact_id IS NOT NULL
         AND ${BROADCAST_OUTCOME[previous.outcome]}`);
   }
   if (campaigns.length > 0) {
     parts.push(sql`
       SELECT r.contact_id FROM wp_campaign_contacts r
       JOIN wpcampaigns c ON c.org_id = r.org_id AND c.id = r.campaign_id
-      WHERE r.org_id = ${orgId} AND c.uuid IN (${uuidList(campaigns)}) AND r.contact_id IS NOT NULL
+      WHERE r.org_id = ${orgId} AND c.uuid IN (${uuidList(campaigns)})${campaignScopeSql('camp.campaigns.read', 'c')} AND r.contact_id IS NOT NULL
         AND ${CAMPAIGN_OUTCOME[previous.outcome]}`);
   }
   return sql.join(parts, sql` UNION `);
@@ -90,7 +91,7 @@ export class PreviousSendsService {
     // Broadcasts are listed to people who may read broadcasts (their names and numbers are that screen's); campaigns to everyone here.
     const ctx = RequestContextStore.require();
     const mayBroadcasts = Boolean(
-      ctx.grants && this.rbac.can(ctx.grants, 'bcast.broadcasts.read').allowed,
+      ctx.grants && this.rbac.can(ctx.grants, 'camp.campaigns.read').allowed,
     );
     const b = BROADCAST_OUTCOME;
     const broadcasts = !mayBroadcasts
@@ -102,7 +103,7 @@ export class PreviousSendsService {
              count(bc.id) FILTER (WHERE ${b.read})::int AS read,
              count(bc.id) FILTER (WHERE ${b.failed})::int AS failed
       FROM broadcasts b LEFT JOIN broadcast_contacts bc ON bc.org_id = b.org_id AND bc.broadcast_id = b.id
-      WHERE b.org_id = ${orgId} AND b.status IN ('completed', 'completed_with_errors')
+      WHERE b.org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', 'b', 'user_id')} AND b.status IN ('completed', 'completed_with_errors')
       GROUP BY b.id, b.uuid, b.name, b.updated_at, b.created_at ORDER BY b.id DESC LIMIT ${OPTIONS_LIMIT}`);
     const c = CAMPAIGN_OUTCOME;
     const campaigns = await tx.execute(sql`
@@ -114,7 +115,7 @@ export class PreviousSendsService {
              count(r.id) FILTER (WHERE ${c.clicked})::int AS clicked,
              count(r.id) FILTER (WHERE ${c.failed})::int AS failed
       FROM wpcampaigns c LEFT JOIN wp_campaign_contacts r ON r.org_id = c.org_id AND r.campaign_id = c.id
-      WHERE c.org_id = ${orgId} AND c.status NOT IN ('draft', 'scheduled') AND c.total_recipients > 0
+      WHERE c.org_id = ${orgId}${campaignScopeSql('camp.campaigns.read', 'c')} AND c.status NOT IN ('draft', 'scheduled') AND c.total_recipients > 0
       GROUP BY c.id, c.uuid, c.campaign_name, c.last_run_at, c.created_at ORDER BY c.id DESC LIMIT ${OPTIONS_LIMIT}`);
 
     const rows: PreviousSendOption[] = [

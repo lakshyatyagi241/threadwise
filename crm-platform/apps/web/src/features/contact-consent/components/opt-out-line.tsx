@@ -8,7 +8,7 @@ import { useComposerConsent } from '../api/hooks';
 
 /** Who may read the composer settings: anyone who can compose a send (the same keys the API route accepts). Hooks never short-circuit. */
 function useCanCompose(): boolean {
-  const broadcast = useCan('bcast.broadcasts.create');
+  const broadcast = useCan('camp.campaigns.create');
   const campaign = useCan('camp.campaigns.create');
   const manage = useCan('settings.consent.manage');
   return broadcast || campaign || manage;

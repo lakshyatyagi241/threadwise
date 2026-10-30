@@ -167,6 +167,15 @@ export function AutoAssignmentScreen() {
               ),
             })}
           </p>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground" data-testid="agents-note">
+            {t.rich('agentsNote', {
+              link: (chunks) => (
+                <Link href="/settings/team" className="underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
         {canRead && (routing || slaInPlan) && (
           <Button variant="secondary" onClick={() => setHoursOpen(true)}>

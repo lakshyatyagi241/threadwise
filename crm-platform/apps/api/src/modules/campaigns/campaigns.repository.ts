@@ -4,6 +4,7 @@ import type { Tx } from '@crm/db';
 import type { PreviousSendsAudience } from '@crm/contracts';
 import { assemblePhone, previousSendContactsSql } from '../broadcasts';
 import { hasGrantedConsentSql } from '../contact-consent';
+import { campaignScopeSql, type CampaignScopeKey } from './campaign-scope';
 import { DUPLICATE_EMAIL, NO_EMAIL_ADDRESS } from './email-campaign-rules';
 
 /** `IN (...)` lists are chunked so a big audience never builds one giant statement. */
@@ -30,8 +31,11 @@ export const AGG_READ = `r.status IN ('read','responded') OR r.read_at IS NOT NU
  * message reached them (a STOP typed in the inbox, the contact screen, a consent change), which the row is never told about. Needs the
  * contact joined as `c` (a LEFT JOIN: a recipient with no contact has none).
  */
+const REACHED_AT_SQL = `coalesce(r.sent_at, r.delivered_at, r.read_at, r.responded_at, r.created_at)`;
 export const OPTED_OUT = sql.raw(
-  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND r.sent_at IS NOT NULL AND coalesce(c.unsubscribed_at, r.sent_at) >= r.sent_at))`,
+  // The send time is the first report the row has: a recipient whose status came from a delivery report before (or without) a stored
+  // sent time is still a recipient the message reached, the same rule that counts it under Sent.
+  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND (${AGG_SENT}) AND coalesce(c.unsubscribed_at, ${REACHED_AT_SQL}) >= ${REACHED_AT_SQL}))`,
 );
 export const AGG = sql.raw(`
   count(*) FILTER (WHERE ${AGG_SENT})::int AS a_sent,
@@ -378,9 +382,15 @@ export class CampaignsRepository {
     return res.rows.length > 0;
   }
 
-  async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<CampaignRow | undefined> {
+  /** `scope` narrows a restricted caller to the campaigns they created; a campaign outside it is simply not found. */
+  async findByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    scope?: CampaignScopeKey,
+  ): Promise<CampaignRow | undefined> {
     const res = await tx.execute(
-      sql`${SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid`,
+      sql`${SELECT} WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid${scope ? campaignScopeSql(scope) : sql``}`,
     );
     const r = res.rows[0] as Raw | undefined;
     return r ? toRow(r) : undefined;
@@ -397,9 +407,10 @@ export class CampaignsRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
+    scope?: CampaignScopeKey,
   ): Promise<{ id: number; status: string } | undefined> {
     const res = await tx.execute(sql`
-      SELECT id, status FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
+      SELECT id, status FROM wpcampaigns WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid${scope ? campaignScopeSql(scope, null) : sql``} FOR UPDATE`);
     const r = res.rows[0] as { id: number | string; status: string } | undefined;
     return r ? { id: Number(r.id), status: r.status } : undefined;
   }
@@ -530,11 +541,16 @@ export class CampaignsRepository {
     }
   }
 
-  async idsByUuid(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Map<string, number>> {
+  async idsByUuid(
+    tx: Tx,
+    orgId: number,
+    uuids: readonly string[],
+    scope?: CampaignScopeKey,
+  ): Promise<Map<string, number>> {
     const out = new Map<string, number>();
     for (const part of chunks(uuids)) {
       const res = await tx.execute(
-        sql`SELECT id, uuid FROM wpcampaigns WHERE org_id = ${orgId} AND uuid IN (${list(part, 'uuid')})`,
+        sql`SELECT id, uuid FROM wpcampaigns WHERE org_id = ${orgId} AND uuid IN (${list(part, 'uuid')})${scope ? campaignScopeSql(scope, null) : sql``}`,
       );
       for (const r of res.rows as Array<{ id: number | string; uuid: string }>)
         out.set(r.uuid, Number(r.id));
@@ -1051,7 +1067,9 @@ export class CampaignsRepository {
 
   /** All of the workspace's campaigns with their counts, newest first: the list filters and counts it in memory like Reference. */
   async listAll(tx: Tx, orgId: number): Promise<CampaignRow[]> {
-    const res = await tx.execute(sql`${SELECT} WHERE c.org_id = ${orgId} ORDER BY c.id DESC`);
+    const res = await tx.execute(
+      sql`${SELECT} WHERE c.org_id = ${orgId}${campaignScopeSql('camp.campaigns.read')} ORDER BY c.id DESC`,
+    );
     return (res.rows as Raw[]).map(toRow);
   }
 

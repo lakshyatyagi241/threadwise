@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
+import { isCreatorScopedKey } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope } from '@crm/contracts';
 import { Alert, Input, Select, cn } from '@crm/ui';
 import { usePlanFeature } from '@/lib/plan-features';
@@ -274,11 +275,15 @@ export function PermissionMatrix({
                                 }
                                 className="h-8 w-auto px-2 text-xs"
                               >
-                                {scopeOptions(hierarchyOffered, grant.recordScope).map((s) => (
-                                  <option key={s} value={s}>
-                                    {t(`scope.${s}`)}
-                                  </option>
-                                ))}
+                                {scopeOptions(hierarchyOffered, grant.recordScope, d.key).map(
+                                  (s) => (
+                                    <option key={s} value={s}>
+                                      {isCreatorScopedKey(d.key) && (s === 'all' || s === 'own')
+                                        ? t(`creatorScope.${s}`)
+                                        : t(`scope.${s}`)}
+                                    </option>
+                                  ),
+                                )}
                               </Select>
                             )}
                           </div>

@@ -722,9 +722,9 @@ export async function buildFlowPlan(a: PlanInput): Promise<FlowPlan> {
       trigger_config: trig.config ?? null,
       provider: 'waba',
       flow_type: 'chat',
-      // a Waboo flow is a graph the Advanced builder edits (the Simple builder refuses branches and merges); the loader writes it, the
-      // column default would make it 'simple'
-      builder: 'advanced',
+      // a Waboo chatbot opens in the Simple builder, as it did in Waboo (one that does not fit it says so there and offers Advanced);
+      // the loader writes it, so the choice is made here and not left to the column default
+      builder: 'simple',
       // SAFETY: an imported flow is never live. The API default for is_active is TRUE: it is overridden here and checked by reconcile.
       is_published: false,
       is_active: false,

@@ -38,6 +38,8 @@
       "failed": "Non riuscito"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Riga del foglio",
       "keyword": "Parola chiave",
       "any_message": "Qualsiasi messaggio",
       "tag_added": "Tag aggiunto",

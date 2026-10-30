@@ -15,6 +15,8 @@ import {
 } from '@crm/contracts';
 import { ConfirmDialog } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
 import { useFlb, useMsg, type Msg } from '../lib/msg';
 import { nodeLabel } from '../lib/contract-text';
@@ -59,42 +61,21 @@ import { Palette } from './palette';
 import { QuickAddMenu } from './quick-add';
 import { uploadFlowMedia } from '../lib/upload-media';
 import { TestPanel } from './simulator/test-panel';
+import { ShellHidden } from './shell-hidden';
 import { Toolbar } from './toolbar';
+import {
+  BuilderTabs,
+  WebBotPanels,
+  useBuilderTab,
+  whatsappDefaultsFrom,
+  widgetChannelOf,
+} from './web-bot-tabs';
 
 const NO_IDS: ReadonlySet<string> = new Set();
 const DEFAULT_VARS = [
   { name: 'name', desc: 'Contact name', default: '' },
   { name: 'phone', desc: 'Phone number', default: '' },
 ];
-
-/**
- * The builder is a full-screen layer over the app shell. Reference's builder page has no shell at all, so Tab never leaves the builder;
- * here the sidebar, header and banners sit under the layer, so they are taken out of the page (display none) while it is open: no
- * focus stops, no screen-reader reach, no layout change (the layer is fixed).
- */
-function ShellHidden() {
-  useEffect(() => {
-    const root = document.querySelector('[data-testid="flow-builder"]');
-    const hidden: Array<[HTMLElement, string]> = [];
-    let node: Element | null = root;
-    while (node && node.parentElement && node.parentElement !== document.body) {
-      const parent: Element = node.parentElement;
-      for (const sib of Array.from(parent.children)) {
-        if (
-          sib === node ||
-          !(sib instanceof HTMLElement) ||
-          sib.className.toString().includes('pointer-events-none')
-        )
-          continue;
-        hidden.push([sib, sib.style.display]);
-        sib.style.display = 'none';
-      }
-      node = parent;
-    }
-    return () => hidden.forEach(([e, d]) => (e.style.display = d));
-  }, []);
-  return null;
-}
 
 const errMessage = (e: unknown, fallback: string): string =>
   e instanceof ApiError ? e.message : ((e as Error)?.message ?? fallback);
@@ -176,6 +157,7 @@ function BuilderInner({
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
   const to = useTranslations('flb.builder.shell.overlays');
+  const tw = useTranslations('flb.builder.webBot');
   const tcm = useTranslations('flb.common');
   const tf = useFlb();
   const seed = useMemo<CanvasState>(
@@ -479,7 +461,22 @@ function BuilderInner({
     }
   };
 
+  // A website chat or WhatsApp bot also has Customize and Deploy beside Build, as in the Simple builder; the other channels have no widget.
+  const triggerNode = state.nodes.find((n) => n.type === 'trigger');
+  const widgetChannel = widgetChannelOf(mode, triggerNode);
+  const canEditFlow = useCan('flb.flows.update');
+  const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
+  const needsCustomizing = !!flowId && widgetChannel !== null && widgetQuery.data?.widget === null;
+  const [tab, setTab] = useBuilderTab(!!flowId, { faqs: false, web: widgetChannel !== null });
+  const shownTab = widgetChannel ? tab : 'build';
+  // The Customize tab keeps its own form; the page's Save follows it while that tab is open.
+  const customizeSave = useRef<(() => void) | null>(null);
+  const registerCustomizeSave = useCallback((fn: (() => void) | null) => {
+    customizeSave.current = fn;
+  }, []);
+
   const onSave = () => {
+    if (shownTab === 'customize' && customizeSave.current) return customizeSave.current();
     if (!runValidation()) return;
     if (flowId && name.trim()) void saveFlow(name.trim());
     else setSaveOpen(true);
@@ -528,10 +525,23 @@ function BuilderInner({
     setBusy(true);
     try {
       let id = flowId;
+      const savedNow = !id;
       if (!id) {
         // A never-saved graph is saved once and THAT row is published (Reference saved twice and published a second copy).
         const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
+      }
+      // A website chat or WhatsApp bot goes live with the widget its owner chose, so Customize has to be saved once first (as in the
+      // Simple builder). A flow saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
+      if (widgetChannel) {
+        const widget = savedNow
+          ? null
+          : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
+        if (!widget) {
+          setTab('customize');
+          toast(tw(widgetChannel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'));
+          return;
+        }
       }
       const pub = await flowsApi.publish(id);
       setRowVersion(pub.rowVersion);
@@ -614,7 +624,18 @@ function BuilderInner({
           }
         />
 
-        <div className="relative flex min-h-0 flex-1">
+        {widgetChannel ? (
+          <BuilderTabs
+            tab={shownTab}
+            onTab={setTab}
+            saved={!!flowId}
+            needsCustomizing={needsCustomizing}
+            faqs={false}
+            web
+          />
+        ) : null}
+
+        <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
           {sidebarOpen ? (
             <>
               <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
@@ -790,6 +811,19 @@ function BuilderInner({
             onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
           />
         </div>
+
+        {flowId && widgetChannel ? (
+          <WebBotPanels
+            tab={shownTab}
+            channel={widgetChannel}
+            whatsapp={whatsappDefaultsFrom(triggerNode, ctx.senders.chat)}
+            flowId={flowId}
+            flowName={name}
+            published={published}
+            canEdit={canEditFlow}
+            registerCustomizeSave={registerCustomizeSave}
+          />
+        ) : null}
 
         <ConfirmDialog
           open={confirmDeleteId !== null}

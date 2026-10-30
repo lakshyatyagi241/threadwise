@@ -139,7 +139,9 @@
       "not_enabled": "El correo no está incluido en el plan de tu espacio de trabajo, así que no se conectó nada. Pide a un administrador que lo active.",
       "not_allowed": "No tienes permiso para conectar este tipo de buzón. Pide acceso a un administrador o usa un buzón compartido.",
       "no_address": "El proveedor no compartió la dirección de correo del buzón, así que no se conectó nada. Conecta de nuevo y permite el acceso a la dirección de correo.",
-      "no_refresh_token": "El proveedor no permitió que este buzón siga con la sesión iniciada, así que no se conectó nada. Quita el acceso de esta aplicación en los ajustes de tu cuenta de Google o Microsoft y conecta de nuevo."
+      "no_refresh_token": "El proveedor no permitió que este buzón siga con la sesión iniciada, así que no se conectó nada. Quita el acceso de esta aplicación en los ajustes de tu cuenta de Google o Microsoft y conecta de nuevo.",
+      "expired": "El enlace de inicio de sesión caducó o ya se usó. Vuelve a conectar desde el principio.",
+      "provider_refused": "Google rechazó la solicitud. Pide al administrador de la plataforma que compruebe que la API de Gmail está habilitada en el proyecto de Google y que esta cuenta puede iniciar sesión (una app en pruebas solo acepta usuarios de prueba)."
     },
     "errors": {
       "notConfigured": "El inicio de sesión de este proveedor aún no está configurado en esta plataforma. Pregunta al administrador de la plataforma.",

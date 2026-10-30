@@ -305,7 +305,7 @@ function mapMessage(
           body: flowSummary(r.response_json) ?? clip(r.body, 1000) ?? 'Form submitted',
           ...withMeta({
             flowName: clip(r.name, 200) ?? null,
-            flowResponse: clip(r.response_json, 4000) ?? null,
+            flowResponse: clip(r.response_json, 16000) ?? null,
           }),
         };
       }
@@ -407,6 +407,9 @@ function mapStatus(s: Dict): NormalisedReceipt | Skip {
     status,
     at: timestampOf(s.timestamp),
   };
+  // Only an explicit boolean counts: a missing or malformed pricing object leaves the message to be charged by its template category.
+  const billable = dict(s.pricing).billable;
+  if (typeof billable === 'boolean') receipt.billable = billable;
   if (status === 'failed') {
     const e = dict(arr(s.errors)[0]);
     const code = typeof e.code === 'number' ? e.code : null;

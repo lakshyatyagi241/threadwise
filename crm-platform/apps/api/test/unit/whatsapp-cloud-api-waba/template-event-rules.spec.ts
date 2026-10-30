@@ -72,13 +72,20 @@ describe('status updates (TW-TPL-029 rule 4)', () => {
     expect(p.metaStatus).toBe('PAUSED');
   });
 
-  it('handles the states Reference never listed (FLAGGED, REINSTATED) without throwing', () => {
-    expect(
-      applyTemplateEvent('message_template_status_update', { event: 'FLAGGED' }, row(), NOW),
-    ).toMatchObject({ metaStatus: 'FLAGGED' });
+  it('FLAGGED is a warning: the template stays as it is on Meta, it is not turned into a disabled one', () => {
+    const p = applyTemplateEvent(
+      'message_template_status_update',
+      { event: 'FLAGGED' },
+      row(),
+      NOW,
+    )!;
+    expect(p).toEqual({ lastSyncedAt: NOW });
+  });
+
+  it('REINSTATED makes the template approved again, so it can be sent', () => {
     expect(
       applyTemplateEvent('message_template_status_update', { event: 'REINSTATED' }, row(), NOW),
-    ).toMatchObject({ metaStatus: 'REINSTATED' });
+    ).toMatchObject({ metaStatus: 'APPROVED', status: 'approved' });
   });
 
   it('ignores an event with no state', () => {

@@ -38,6 +38,8 @@
       "failed": "Ошибка"
     },
     "source": {
+      "flow_webhook": "Вебхук",
+      "sheet_row": "Строка таблицы",
       "keyword": "Ключевое слово",
       "any_message": "Любое сообщение",
       "tag_added": "Добавлена метка",

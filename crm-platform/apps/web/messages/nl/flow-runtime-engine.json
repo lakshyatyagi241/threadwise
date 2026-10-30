@@ -38,6 +38,8 @@
       "failed": "Mislukt"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Rij in spreadsheet",
       "keyword": "Trefwoord",
       "any_message": "Elk bericht",
       "tag_added": "Tag toegevoegd",

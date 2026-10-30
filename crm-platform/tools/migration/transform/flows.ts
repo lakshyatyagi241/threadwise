@@ -275,7 +275,7 @@ for (const k of [
 // --- the steps -------------------------------------------------------------------------------------------------------------------
 
 export const FLOW_CONSTANTS: Record<string, unknown> = {
-  // a Waboo automation is a graph the Advanced builder edits; the Simple builder refuses branches and merges
+  // a Waboo automation is a graph the Advanced builder edits; the Simple builder refuses branches and merges. A chatbot is not: see BOT_FLOW_CONSTANTS
   builder: 'advanced',
   user_id: null,
   flow_file_path: null,
@@ -285,6 +285,12 @@ export const FLOW_CONSTANTS: Record<string, unknown> = {
   instaflow_flow_id: null,
   row_version: 1,
 };
+
+/**
+ * A Waboo chatbot (a bot of the bot builder) opens in the Simple builder, as it did in Waboo; an automation opens in Advanced. A bot whose
+ * graph the Simple builder cannot show says so there and offers Open in Advanced, so nothing is out of reach.
+ */
+export const BOT_FLOW_CONSTANTS: Record<string, unknown> = { ...FLOW_CONSTANTS, builder: 'simple' };
 
 /** Documents the derived steps read from the plan: {id: botId}. */
 export const flowBots: HandlerSpec = {
@@ -324,7 +330,7 @@ export const flowBots: HandlerSpec = {
         c('created_at', 'timestamptz'),
         c('updated_at', 'timestamptz'),
       ],
-      constants: FLOW_CONSTANTS,
+      constants: BOT_FLOW_CONSTANTS,
       // the flow-state step arms the live flows (is_published, is_active, published_at) and its UPDATE moves updated_at and row_version: the
       // step's run record (migration.run_log _flows) is the check for those columns
       skipCompare: ['is_published', 'is_active', 'published_at', 'updated_at', 'row_version'],

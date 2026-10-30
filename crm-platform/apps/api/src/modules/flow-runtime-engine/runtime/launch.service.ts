@@ -33,6 +33,8 @@ const REENTRY_BY_REF: ReadonlySet<FlowRunSource> = new Set([
   'date_field_match',
   'schedule',
   'ecom_event',
+  'flow_webhook',
+  'sheet_row',
 ]);
 const REENTRY_AFTER_QUIET: ReadonlySet<FlowRunSource> = new Set(['away', 'out_of_hours']);
 

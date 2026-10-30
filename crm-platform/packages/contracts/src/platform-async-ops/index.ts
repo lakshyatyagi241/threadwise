@@ -50,5 +50,7 @@ export const wabaReplayResultSchema = z.object({
   replayed: z.int().nonnegative(),
   /** Jobs left alone: no longer failed (another operator got there first), or failed on purpose before using their attempts. */
   skipped: z.int().nonnegative(),
+  /** Jobs whose record or redrive threw (a database or programming error): not ineligible, and logged. */
+  errored: z.int().nonnegative(),
 });
 export type WabaReplayResult = z.infer<typeof wabaReplayResultSchema>;

@@ -380,7 +380,7 @@
           "quickReplyVariable": "Balasan cepat tidak boleh berisi variabel.",
           "urlExampleRequired": "Berikan nilai contoh untuk variabel URL.",
           "quickReplyPosition": "Balasan cepat harus berkumpul di awal atau akhir tombol.",
-          "flowIdRequired": "Masukkan ID Flow.",
+          "flowIdRequired": "Pilih Formulir WhatsApp dari daftar.",
           "flowIdInvalid": "ID Flow berupa angka.",
           "screenRequired": "Masukkan ID layar.",
           "catalogAlone": "Tombol katalog tidak dapat digabungkan dengan tombol lain.",

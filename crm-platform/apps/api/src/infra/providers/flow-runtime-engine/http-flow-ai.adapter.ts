@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FlowAiPort, FlowAiRequest, FlowAiResult } from './flow-ai.port';
-import { openAiOutputLimit } from '../openai-output-limit';
+import { openAiOutputLimit, openAiTemperature } from '../openai-output-limit';
 
 /** Reference's Node executor gave the Laravel endpoint 30 seconds; a vendor slower than that fails the node's turn. */
 const TIMEOUT_MS = 30_000;
@@ -78,7 +78,7 @@ export class HttpFlowAiAdapter implements FlowAiPort {
       {
         model: req.model,
         ...openAiOutputLimit(req.maxTokens, vendor.openAi && !override),
-        temperature: req.temperature,
+        ...openAiTemperature(req.model, req.temperature, vendor.openAi && !override),
         ...(req.json ? { response_format: { type: 'json_object' } } : {}),
         messages: [
           { role: 'system', content: req.systemPrompt },

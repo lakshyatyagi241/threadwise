@@ -183,7 +183,11 @@ export function lintTemplate(t: LintInput): LintIssue[] {
   if (t.templateType === 'carousel') {
     lintCarousel(t.cards ?? [], e);
     if (category !== 'MARKETING')
-      w('carousel_category', 'template', 'Meta reviews carousel templates as Marketing templates.');
+      e(
+        'carousel_category',
+        'template',
+        'A carousel template must be in the Marketing category; Meta does not allow it in any other.',
+      );
   }
 
   if (t.templateType === 'lto') lintOffer(t, category, e);
@@ -205,6 +209,30 @@ export function lintTemplate(t: LintInput): LintIssue[] {
       e('button_variable', 'buttons', 'Quick reply text cannot contain a variable.');
     if (type === 'URL' && countPlaceholders(b.url ?? '') > 1)
       e('url_variables', 'buttons', 'A URL button can have only one variable.');
+    // Meta: a URL button's variable is appended at the end of the address, and the address (and its example) is at most 2000 characters.
+    if (
+      type === 'URL' &&
+      countPlaceholders(b.url ?? '') === 1 &&
+      !/\{\{[^}]+\}\}$/.test((b.url ?? '').trim())
+    )
+      e(
+        'url_variable_position',
+        'buttons',
+        'The variable of a URL button must be at the very end of the address.',
+      );
+    if (type === 'URL' && (b.url ?? '').length > 2000)
+      e('url_long', 'buttons', 'A URL button address can have at most 2000 characters.');
+    if (type === 'PHONE_NUMBER' && (b.phone_number ?? '').length > 20)
+      e('phone_long', 'buttons', 'A phone number button can have at most 20 characters.');
+    if (type === 'COPY_CODE') {
+      const example = Array.isArray(b.example) ? b.example[0] : b.example;
+      if (typeof example === 'string' && example.length > 20)
+        e(
+          'copy_code_long',
+          'buttons',
+          'The example code of a copy-code button can have at most 20 characters.',
+        );
+    }
   }
   for (const [type, n] of Object.entries(counts))
     if (BUTTON_LIMIT[type] && n > BUTTON_LIMIT[type]!)

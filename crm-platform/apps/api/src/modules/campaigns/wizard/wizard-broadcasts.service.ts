@@ -141,7 +141,7 @@ export class WizardBroadcastsService {
   async get(uuid: string): Promise<WizardBroadcastDetail> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (series) {
         const children = await this.repo.seriesChildren(tx, orgId, series.id);
         return {
@@ -155,7 +155,7 @@ export class WizardBroadcastsService {
           ),
         };
       }
-      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
       return {
         ...(await this.campaignView(tx, orgId, c)),
@@ -173,12 +173,12 @@ export class WizardBroadcastsService {
     uuid: string,
   ): Promise<WizardBroadcast | null> {
     if (kind === 'series') {
-      const s = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const s = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       return s
         ? this.seriesView(tx, orgId, s, await this.repo.seriesChildren(tx, orgId, s.id))
         : null;
     }
-    const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+    const c = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.read');
     return c && c.status !== 'draft' ? this.campaignView(tx, orgId, c) : null;
   }
 
@@ -282,7 +282,7 @@ export class WizardBroadcastsService {
   async retryFailed(uuid: string): Promise<WizardRetryFailedResponse> {
     const { orgId } = RequestContextStore.require();
     const targets = await this.db.tx(async (tx) => {
-      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (series) {
         const out: Array<{ uuid: string }> = [];
         for (const c of await this.repo.seriesChildren(tx, orgId, series.id)) {
@@ -292,7 +292,7 @@ export class WizardBroadcastsService {
         }
         return { kind: 'series' as const, id: series.uuid, seriesStatus: series.status, runs: out };
       }
-      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
       return {
         kind: 'campaign' as const,
@@ -332,14 +332,14 @@ export class WizardBroadcastsService {
   async exportBroadcast(uuid: string): Promise<{ stream: Readable; fileName: string }> {
     const { orgId } = RequestContextStore.require();
     const found = await this.db.tx(async (tx) => {
-      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.export');
       if (series) {
         const runs = (await this.repo.seriesChildren(tx, orgId, series.id))
           .map((c) => ({ id: c.id, run: (c.occurrenceNo ?? 0) + 1 }))
           .sort((a, b) => a.run - b.run);
         return { series, runs };
       }
-      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.export');
       if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
       return { series: null, runs: [] };
     });
@@ -356,9 +356,9 @@ export class WizardBroadcastsService {
   async removeBroadcast(uuid: string): Promise<WizardDeleteResponse> {
     const { orgId } = RequestContextStore.require();
     const known = await this.db.tx(async (tx) => {
-      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.delete');
       if (series) return { kind: 'series' as const };
-      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid, 'camp.campaigns.delete');
       if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
       return { kind: 'campaign' as const };
     });
@@ -367,7 +367,7 @@ export class WizardBroadcastsService {
       return { id: uuid, kind: 'campaign', runs: 1, message: 'Broadcast deleted.' };
     }
     return this.db.tx(async (tx) => {
-      const s0 = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const s0 = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.delete');
       if (!s0) throw AppError.notFound('Broadcast', uuid);
       const s = (await this.repo.lockSeries(tx, orgId, s0.id)) ?? s0;
       // The runs' own rows too, so a worker cannot start one between the checks below and the delete.
@@ -432,9 +432,9 @@ export class WizardBroadcastsService {
     const { orgId } = RequestContextStore.require();
     const after: { enqueue?: { id: number; uuid: string } } = {};
     const out = await this.db.tx(async (tx) => {
-      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid, 'camp.campaigns.control');
       if (series) return this.controlSeries(tx, orgId, series, action);
-      const c = await this.repo.lockCampaign(tx, orgId, uuid);
+      const c = await this.repo.lockCampaign(tx, orgId, uuid, 'camp.campaigns.control');
       if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
       const res = await this.controlCampaign(tx, orgId, c, action);
       if (res.resumedRunning) after.enqueue = { id: c.id, uuid: c.uuid };

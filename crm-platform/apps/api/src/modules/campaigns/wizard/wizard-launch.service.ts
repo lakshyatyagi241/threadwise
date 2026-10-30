@@ -59,7 +59,7 @@ export class WizardLaunchService {
     const now = this.runtime.now();
 
     const out = await this.db.tx(async (tx) => {
-      const row = await this.repo.lockCampaign(tx, orgId, uuid);
+      const row = await this.repo.lockCampaign(tx, orgId, uuid, 'camp.campaigns.update');
       if (!row) throw AppError.notFound('Broadcast draft', uuid);
       if (row.status !== 'draft') {
         throw new AppError(

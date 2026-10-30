@@ -16,7 +16,12 @@ import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { TEMPLATE_DIRECTORY, type TemplateDirectory } from './_shims/tokens';
+import {
+  PREVIEW_MEDIA_LINK_TTL_S,
+  TEMPLATE_DIRECTORY,
+  type TemplateDirectory,
+} from './_shims/tokens';
+import { templateMediaPaths } from './payload/template-vars';
 import { assemblePhone } from './recipient-phone';
 
 const ENGINE_LABEL: Record<string, string> = {
@@ -63,6 +68,7 @@ interface TemplateRaw {
   variable_map: unknown;
   attachment_type: string | null;
   attachment_file: string | null;
+  header_media_key: string | null;
   twilio_content_sid: string | null;
   meta_template_id: string | null;
   provider_config_id: number | string | null;
@@ -122,7 +128,7 @@ export class BroadcastsComposeService {
           : sql`t.status IN ('approved', 'public')`;
       const tpl = await tx.execute(sql`
         SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type,
-               t.language, t.buttons, t.variable_map, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file, t.twilio_content_sid, t.meta_template_id, t.provider_config_id, t.channel,
+               t.language, t.buttons, t.variable_map, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file, t.header_media_key, t.twilio_content_sid, t.meta_template_id, t.provider_config_id, t.channel,
                coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
         FROM wa_templates t
         LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
@@ -145,6 +151,13 @@ export class BroadcastsComposeService {
         SELECT 1 FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'twilio' AND status = 'connected' LIMIT 1`);
       const hidden = await this.hiddenSenders(tx, orgId, unofficialOn);
 
+      const links = await this.templates.mediaUrls(
+        (tpl.rows as unknown as TemplateRaw[]).flatMap((r) =>
+          templateMediaPaths({ headerMediaKey: r.header_media_key }),
+        ),
+        PREVIEW_MEDIA_LINK_TTL_S,
+      );
+
       return {
         templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
           id: r.uuid,
@@ -159,7 +172,9 @@ export class BroadcastsComposeService {
           buttons: r.buttons ?? [],
           variableMap: r.variable_map ?? {},
           attachmentType: r.attachment_type,
-          attachmentUrl: r.attachment_file ? this.templates.mediaUrl(r.attachment_file) : null,
+          attachmentUrl:
+            (r.header_media_key ? links.get(r.header_media_key) : undefined) ??
+            (r.attachment_file ? this.templates.mediaUrl(r.attachment_file) : null),
           senderLabel: r.sender_label,
           twilioReady: Boolean(r.twilio_content_sid),
         })),

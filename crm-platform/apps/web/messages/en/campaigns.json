@@ -354,8 +354,8 @@
         "tag": "audience",
         "modes": {
           "audience": {
-            "title": "Contact groups",
-            "hint": "Use saved segments and tags."
+            "title": "Contacts, groups & segments",
+            "hint": "Pick contacts, or filter by groups, tags and segments."
           },
           "csv": {
             "title": "Upload CSV",

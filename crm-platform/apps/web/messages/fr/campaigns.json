@@ -296,8 +296,8 @@
         "tag": "audience",
         "modes": {
           "audience": {
-            "title": "Groupes de contacts",
-            "hint": "Utilisez les segments et étiquettes enregistrés."
+            "title": "Contacts, groupes et segments",
+            "hint": "Choisissez des contacts ou filtrez par groupes, étiquettes et segments."
           },
           "csv": {
             "title": "Importer un CSV",

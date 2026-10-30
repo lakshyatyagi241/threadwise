@@ -198,7 +198,7 @@ export class CampaignsReadService {
   async config(uuid: string): Promise<CampaignConfig> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!c) throw AppError.notFound('Campaign', uuid);
       const sender = await this.repo.senderLabel(tx, orgId, c.provider, c.deviceId);
       return toConfig(c, {
@@ -236,7 +236,7 @@ export class CampaignsReadService {
   async detail(uuid: string): Promise<CampaignDetail> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const found = await this.repo.findByUuid(tx, orgId, uuid);
+      const found = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!found) throw AppError.notFound('Campaign', uuid);
       // The stored counters are brought in line with the rows on every open (the KPI cards read them elsewhere).
       await this.repo.recount(tx, orgId, found.id);
@@ -334,7 +334,7 @@ export class CampaignsReadService {
   async live(uuid: string): Promise<CampaignLive> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const found = await this.repo.findByUuid(tx, orgId, uuid);
+      const found = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!found) throw AppError.notFound('Campaign', uuid);
       await this.repo.recount(tx, orgId, found.id);
       await this.reconcile(tx, orgId, found);
@@ -372,7 +372,7 @@ export class CampaignsReadService {
   async statistics(uuid: string): Promise<CampaignStatistics> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const found = await this.repo.findByUuid(tx, orgId, uuid);
+      const found = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!found) throw AppError.notFound('Campaign', uuid);
       await this.repo.recount(tx, orgId, found.id);
       await this.reconcile(tx, orgId, found);
@@ -418,7 +418,7 @@ export class CampaignsReadService {
   async recipients(uuid: string, q: ListRecipientsQuery): Promise<CampaignRecipientsResponse> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      const c = await this.repo.findByUuid(tx, orgId, uuid, 'camp.campaigns.read');
       if (!c) throw AppError.notFound('Campaign', uuid);
       const page = await this.repo.recipientsPage(tx, orgId, c.id, {
         status: q.status,

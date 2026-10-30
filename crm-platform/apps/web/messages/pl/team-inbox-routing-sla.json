@@ -39,6 +39,7 @@
       "deleteFailed": "Nie udało się usunąć reguły.",
       "businessHours": "Godziny pracy",
       "recordNote": "Tu przypisywane są rozmowy. Aby przypisywać nowe rekordy ({contacts}, firmy, {deals}) opiekunom sprzedaży, zobacz <link>Reguły przypisywania rekordów</link>.",
+      "agentsNote": "To, kto dostanie czat, zależy od dostępności każdej osoby (status na górnym pasku) i jej limitu jednoczesnych czatów. Limit ustawisz w <link>Członkowie zespołu</link>.",
       "subtitle": "Wybierz, kto dostaje każdy nowy czat. Przełączniki wystarczają w większości przestrzeni roboczych; reguły dodawaj tylko wtedy, gdy potrzebujesz większej kontroli."
     },
     "rules": {

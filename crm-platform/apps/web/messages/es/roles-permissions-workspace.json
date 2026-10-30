@@ -256,6 +256,10 @@
         "team": "Registros de mi equipo",
         "team_and_below": "Mi equipo y subequipos"
       },
+      "creatorScope": {
+        "all": "Registros globales",
+        "own": "Acceso restringido (solo los propios)"
+      },
       "scopeLegend": "Qué abarca cada alcance de registros",
       "scopeHelp": {
         "all": "Todos los registros del espacio de trabajo.",

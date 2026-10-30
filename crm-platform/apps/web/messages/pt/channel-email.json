@@ -139,7 +139,9 @@
       "not_enabled": "O e-mail não está incluído no plano do seu espaço de trabalho, então nada foi conectado. Peça a um administrador para ativá-lo.",
       "not_allowed": "Você não tem permissão para conectar este tipo de caixa de correio. Peça acesso a um administrador ou use uma caixa compartilhada.",
       "no_address": "O provedor não compartilhou o endereço de e-mail da caixa, então nada foi conectado. Conecte novamente e permita o acesso ao endereço de e-mail.",
-      "no_refresh_token": "O provedor não permitiu que esta caixa continuasse conectada, então nada foi conectado. Remova o acesso deste aplicativo nas configurações da sua conta Google ou Microsoft e conecte novamente."
+      "no_refresh_token": "O provedor não permitiu que esta caixa continuasse conectada, então nada foi conectado. Remova o acesso deste aplicativo nas configurações da sua conta Google ou Microsoft e conecte novamente.",
+      "expired": "O link de login expirou ou já foi usado. Conecte novamente desde o início.",
+      "provider_refused": "O Google recusou a solicitação. Peça ao administrador da plataforma para verificar se a API do Gmail está ativada no projeto do Google e se esta conta pode entrar (um app em teste só aceita usuários de teste listados)."
     },
     "errors": {
       "notConfigured": "O login deste provedor ainda não está configurado nesta plataforma. Fale com o administrador da plataforma.",

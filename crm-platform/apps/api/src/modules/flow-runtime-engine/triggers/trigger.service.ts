@@ -7,6 +7,7 @@ import { ContactsService, SegmentsService } from '../../crm';
 import { evalRule, evaluateConditionTree } from '../runtime/condition';
 import { liveTrigger } from '../runtime/live-graph';
 import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
+import type { ExternalPerson } from './external-payload';
 import { isOutsideBusinessHours } from './business-hours';
 import { matchKeywordFlow, type KeywordFlow } from './keyword-match';
 import { FLOW_MAX_TRIGGER_HOPS, TRIGGER_HOPS_VAR } from './trigger-hops';
@@ -36,6 +37,9 @@ export interface OrderPlaced {
  * "Live" is published AND active; the lookup is by the workspace of the event, never across workspaces (Reference matched flows in any
  * workspace the contact's owner belonged to).
  */
+/** A property key as a flow names it or as it is stored: "Order Id" and order_id are the same property. */
+export const normaliseFieldKey = (k: string): string => k.trim().toLowerCase().replace(/\s+/g, '_');
+
 @Injectable()
 export class FlowTriggerService {
   private readonly logger = new Logger(FlowTriggerService.name);
@@ -197,15 +201,29 @@ export class FlowTriggerService {
   async onContactChanged(
     orgId: number,
     contactId: number,
-    ev: { eventId: string; updated: boolean; viaFlow: boolean; hops?: number },
+    ev: {
+      eventId: string;
+      updated: boolean;
+      viaFlow: boolean;
+      /** The properties the write changed, as a flow's Trigger names them; empty when the writer did not say. */
+      fieldKeys?: readonly string[];
+      hops?: number;
+    },
   ): Promise<number> {
     const hops = ev.hops ?? 0;
     let started = 0;
     if (ev.updated && !ev.viaFlow) {
-      started += await this.enrolLive(
+      // A flow may watch one property: it starts only when that one is among the changed ones (a write that did not say which
+      // changed starts it not). A flow that watches none starts on any change, as it always did.
+      const changed = new Set((ev.fieldKeys ?? []).map(normaliseFieldKey));
+      const flowIds: number[] = [];
+      for (const f of await this.liveConfigured(orgId, 'contact_updated')) {
+        const watched = typeof f.config.updatedField === 'string' ? f.config.updatedField : '';
+        if (watched === '' || changed.has(normaliseFieldKey(watched))) flowIds.push(f.id);
+      }
+      started += await this.startFlows(
         orgId,
-        'contact_updated',
-        0,
+        flowIds,
         contactId,
         'contact_updated',
         `update:${ev.eventId}`,
@@ -374,6 +392,60 @@ export class FlowTriggerService {
       undefined,
       hops,
     );
+  }
+
+  // --- outside triggers (a webhook post, a new sheet row) -------------------------------------------------------------------
+
+  /**
+   * Someone an outside system named (a webhook body, a sheet row) starts ONE flow. The contact is found by phone, then by email, or
+   * made (plan cap and number rules are the contacts module's); no usable phone or email starts nothing. The run's reason is
+   * `ref`, which the caller makes unique per delivery or row, so the same person runs the flow again for the next one. The
+   * payload's fields are the run's variables.
+   */
+  async onExternalEvent(
+    orgId: number,
+    flowId: number,
+    source: 'flow_webhook' | 'sheet_row',
+    ref: string,
+    person: ExternalPerson,
+    variables: Record<string, unknown>,
+  ): Promise<'started' | 'not_started' | 'no_contact' | 'plan_limit'> {
+    const found = await this.findOrCreateByPerson(orgId, person, source);
+    if (found === 'plan_limit') return 'plan_limit';
+    const contactId = found;
+    if (contactId === null) return 'no_contact';
+    const started = await this.startFlows(orgId, [flowId], contactId, source, ref, variables);
+    return started > 0 ? 'started' : 'not_started';
+  }
+
+  private async findOrCreateByPerson(
+    orgId: number,
+    person: ExternalPerson,
+    source: 'flow_webhook' | 'sheet_row',
+  ): Promise<number | null | 'plan_limit'> {
+    const origin = source === 'flow_webhook' ? 'webhook' : 'google_sheet';
+    const attempts: Array<{ kind: 'phone' | 'email'; value: string }> = [];
+    if (person.phone) attempts.push({ kind: 'phone', value: person.phone });
+    if (person.email) attempts.push({ kind: 'email', value: person.email });
+    for (const a of attempts) {
+      try {
+        const out = await this.db.txAs({ orgId }, (tx) =>
+          this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+            ...a,
+            name: person.name,
+            source: origin,
+          }),
+        );
+        if (out.outcome === 'found' || out.outcome === 'created') return out.contactId;
+        if (out.outcome === 'quota_reached') return 'plan_limit';
+      } catch (err) {
+        this.logger.warn(
+          { orgId, source, err: (err as Error).message },
+          '[FLR] contact for an outside trigger failed',
+        );
+      }
+    }
+    return null;
   }
 
   // --- inbound-condition triggers ---------------------------------------------------------------------------------------------

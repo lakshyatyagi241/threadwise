@@ -94,7 +94,9 @@
       "custom_roles": "自定义角色与范围",
       "inbox_assignment_sticky": "智能路由: 联系人负责人和固定客服",
       "agent_status_bar": "状态栏：顶部栏和收件箱中的可用 / 离开控件",
-      "agent_status_automation": "自动化状态：个人工作时间和自动离开"
+      "agent_status_automation": "自动化状态：个人工作时间和自动离开",
+      "products_services": "产品和服务",
+      "recurring_invoices": "定期发票"
     },
     "limitGroups": {
       "messaging": "消息",

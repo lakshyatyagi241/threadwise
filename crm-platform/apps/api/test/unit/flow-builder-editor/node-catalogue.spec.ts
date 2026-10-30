@@ -38,7 +38,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
     ).toBe(false);
   });
 
-  it('a Facebook flow lists exactly the shared nodes (API from library left out: WhatsApp and website only) plus the five fb_ nodes', () => {
+  it('a Facebook flow lists exactly the shared nodes (API from library left out: WhatsApp and website only) plus the fb_ node that runs (the four the runtime cannot run yet are not offered)', () => {
     expect(ids('facebook').sort()).toEqual(
       [
         'trigger',
@@ -56,10 +56,6 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
         'list_member',
         'in_list',
         'in_segment',
-        'fb_gallery',
-        'fb_products',
-        'fb_lead',
-        'fb_reply_comment',
         'fb_to_whatsapp',
       ].sort(),
     );
@@ -96,15 +92,10 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
       expect(ids('instagram')).not.toContain(t);
       expect(FLB_NODE_TYPES[t]?.hidden).toBe(true);
     }
-    expect(ids('instagram')).toEqual(
-      expect.arrayContaining([
-        'ig_buttons',
-        'ig_reply_comment',
-        'ig_products',
-        'ig_lead',
-        'ig_to_whatsapp',
-      ]),
-    );
+    expect(ids('instagram')).toEqual(expect.arrayContaining(['ig_buttons', 'ig_to_whatsapp']));
+    // No executor yet: known to old flows, not offered for new ones.
+    for (const t of ['ig_reply_comment', 'ig_products', 'ig_lead'])
+      expect(ids('instagram')).not.toContain(t);
   });
 
   it('the Trigger and End run on every channel and the Trigger is a singleton', () => {

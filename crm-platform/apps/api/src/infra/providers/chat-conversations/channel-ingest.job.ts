@@ -64,6 +64,7 @@ const receiptSchema = z.object({
   at: z.iso.datetime(),
   errorCode: z.string().optional(),
   errorMessage: z.string().optional(),
+  billable: z.boolean().optional(),
 });
 
 export const channelIngestJobSchema = z.discriminatedUnion('type', [

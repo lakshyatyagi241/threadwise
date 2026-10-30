@@ -405,10 +405,13 @@ const cta: NodeExecutor = {
       if (t === 'copy') return `${label}:\n\`${value}\``;
       return `${label}: ${value}`;
     };
-    const urlAction = actions.find(
-      (a) =>
-        ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value)),
-    );
+    // The address a web-link action opens, or null (a call, a copy code, or text that is not a web address). One rule for every channel:
+    // a link typed as "www.shop.in" or with a space before it is still a link, so it stays a button instead of turning into text.
+    const linkOf = (a: Record<string, unknown>): string | null =>
+      ['url', 'visit'].includes(str(a.type) || 'url')
+        ? webLinkUrl('url', ctx.render(a.value))
+        : null;
+    const urlAction = actions.find((a) => linkOf(a) !== null);
     let msg: OutboundMessage;
     let moreLinks: Array<Record<string, unknown>> = [];
     if (ctx.run.channelKind === 'webchat') {
@@ -425,8 +428,7 @@ const cta: NodeExecutor = {
       if (links.length === 0 && !text) return advance;
       msg = { kind: 'text', body: text || links[0]!.label, ...(links.length ? { links } : {}) };
     } else if (urlAction) {
-      const isLink = (a: Record<string, unknown>) =>
-        ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value));
+      const isLink = (a: Record<string, unknown>) => linkOf(a) !== null;
       // WhatsApp's link message holds one button, so every further web link goes out as a button message of its own (a call, an email
       // or a copy code cannot be a button there and stays a line of text in the first message).
       moreLinks = actions.filter((a) => a !== urlAction && isLink(a)).slice(0, 2);
@@ -443,7 +445,7 @@ const cta: NodeExecutor = {
         ...(header ? { header } : {}),
         ...(footer ? { footer } : {}),
         text: str(urlAction.label) || 'Visit',
-        url: ctx.render(urlAction.value),
+        url: linkOf(urlAction)!,
       };
     } else {
       let text = '';
@@ -467,7 +469,7 @@ const cta: NodeExecutor = {
           kind: 'cta_url',
           body: label,
           text: label,
-          url: ctx.render(a.value),
+          url: linkOf(a)!,
         });
         if (!more.ok) {
           const stop = failed(more, 'skip', ctx);

@@ -79,7 +79,7 @@ export class ContactConsentController {
   }
 
   @Get('composer-config')
-  @RequirePermission('bcast.broadcasts.create', 'camp.campaigns.create', 'settings.consent.manage')
+  @RequirePermission('camp.campaigns.create', 'settings.consent.manage')
   @ApiOperation({
     summary: 'The opt-out line and the policy switch, for the broadcast and campaign composers',
   })

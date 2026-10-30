@@ -13,7 +13,7 @@ export class ConsentPurposesController {
   constructor(private readonly policy: ConsentPolicyService) {}
 
   @Get('purposes')
-  @RequirePermission('bcast.broadcasts.create', 'camp.campaigns.create', 'settings.consent.manage')
+  @RequirePermission('camp.campaigns.create', 'settings.consent.manage')
   @ApiOperation({
     summary: 'The purposes the platform contacts or processes people for',
     description:

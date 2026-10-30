@@ -139,7 +139,9 @@
       "not_enabled": "Email không nằm trong gói của không gian làm việc, nên chưa kết nối được gì. Hãy nhờ quản trị viên bật tính năng này.",
       "not_allowed": "Bạn không được phép kết nối loại hộp thư này. Hãy xin quản trị viên cấp quyền hoặc dùng hộp thư dùng chung.",
       "no_address": "Nhà cung cấp không chia sẻ địa chỉ email của hộp thư, nên chưa kết nối được gì. Hãy kết nối lại và cho phép truy cập địa chỉ email.",
-      "no_refresh_token": "Nhà cung cấp không cho phép hộp thư này giữ đăng nhập, nên chưa kết nối được gì. Hãy gỡ quyền truy cập của ứng dụng này trong cài đặt tài khoản Google hoặc Microsoft rồi kết nối lại."
+      "no_refresh_token": "Nhà cung cấp không cho phép hộp thư này giữ đăng nhập, nên chưa kết nối được gì. Hãy gỡ quyền truy cập của ứng dụng này trong cài đặt tài khoản Google hoặc Microsoft rồi kết nối lại.",
+      "expired": "Liên kết đăng nhập đã hết hạn hoặc đã được dùng. Hãy kết nối lại từ đầu.",
+      "provider_refused": "Google đã từ chối yêu cầu. Hãy nhờ quản trị viên nền tảng kiểm tra Gmail API đã được bật trong dự án Google và tài khoản này được phép đăng nhập (ứng dụng đang thử nghiệm chỉ nhận người dùng thử nghiệm trong danh sách)."
     },
     "errors": {
       "notConfigured": "Đăng nhập cho nhà cung cấp này chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",

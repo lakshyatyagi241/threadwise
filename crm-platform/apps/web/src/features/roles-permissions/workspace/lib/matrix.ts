@@ -1,4 +1,4 @@
-import { isTeamScope } from '@crm/contracts';
+import { isCreatorScopedKey, isTeamScope } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope, RoleGrant } from '@crm/contracts';
 
 /** A role's grants while editing: permission key -> effect and scope. A key that is absent is not granted. */
@@ -136,7 +136,14 @@ export const ALL_SCOPES: readonly RecordScope[] = ['all', 'team_and_below', 'tea
  * The scope options one row offers. `team_and_below` is left out when the workspace does not have the team hierarchy feature, unless the
  * row already holds it: a value the plan no longer offers stays visible (and is kept on save) instead of being changed silently.
  */
-export function scopeOptions(hierarchyOffered: boolean, current?: RecordScope): RecordScope[] {
+export function scopeOptions(
+  hierarchyOffered: boolean,
+  current?: RecordScope,
+  key?: string,
+): RecordScope[] {
+  if (key !== undefined && isCreatorScopedKey(key)) {
+    return ALL_SCOPES.filter((s) => s === 'all' || s === 'own' || s === current);
+  }
   return ALL_SCOPES.filter((s) => s !== 'team_and_below' || hierarchyOffered || current === s);
 }
 

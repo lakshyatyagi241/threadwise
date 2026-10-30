@@ -256,6 +256,10 @@
         "team": "Ekibimin kayıtları",
         "team_and_below": "Ekibim ve alt ekipler"
       },
+      "creatorScope": {
+        "all": "Genel kayıtlar",
+        "own": "Kısıtlı erişim (yalnızca kendi kayıtları)"
+      },
       "scopeLegend": "Her kayıt kapsamının neleri içerdiği",
       "scopeHelp": {
         "all": "Çalışma alanındaki tüm kayıtlar.",

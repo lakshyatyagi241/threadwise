@@ -373,7 +373,7 @@
           "quickReplyVariable": "A quick reply cannot contain a variable.",
           "urlExampleRequired": "Give a sample value for the URL variable.",
           "quickReplyPosition": "Quick replies must be together, at the start or the end of the buttons.",
-          "flowIdRequired": "Enter the Flow ID.",
+          "flowIdRequired": "Choose a WhatsApp Form from the list.",
           "flowIdInvalid": "The Flow ID is a number.",
           "flowIdNotMeta": "This form is not a Meta Flow yet (its Flow ID is not a number). Open WhatsApp Forms, Save & publish it, then pick it here.",
           "screenRequired": "Enter the screen ID.",

@@ -20,6 +20,10 @@ import { NotificationPublisher } from '../../../src/modules/notifications/notifi
 import { NotificationsRepository } from '../../../src/modules/notifications/notifications.repository';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 
+const ALL_FEATURES_ON: Record<string, boolean> = Object.fromEntries(
+  Object.values(NOTIFICATION_TYPE_PLAN_FEATURE).map((f) => [f as string, true]),
+);
+
 describe('the catalogue', () => {
   it('has an entry for every type a person can tune, and every group is used', () => {
     for (const type of NOTIFICATION_PREF_TYPES) {
@@ -372,7 +376,7 @@ describe('NotificationPreferencesService', () => {
       { bell: boolean | null; toast: boolean | null; sound: boolean | null; push: boolean | null }
     >,
     ws = true,
-    features: Record<string, boolean> = { waba_groups: true },
+    features: Record<string, boolean> = ALL_FEATURES_ON,
   ) {
     const applied: Array<[string, unknown]> = [];
     const audits: unknown[] = [];
@@ -419,9 +423,11 @@ describe('NotificationPreferencesService', () => {
   });
 
   it('leaves the WhatsApp Groups types out of the list when the plan lacks waba_groups (BL-099)', async () => {
-    const off = service(new Map(), true, { waba_groups: false });
+    const off = service(new Map(), true, { ...ALL_FEATURES_ON, waba_groups: false });
     const without = await RequestContextStore.run(ctx as never, () => off.svc.get());
-    const gated = Object.keys(NOTIFICATION_TYPE_PLAN_FEATURE);
+    const gated = Object.entries(NOTIFICATION_TYPE_PLAN_FEATURE)
+      .filter(([, feature]) => feature === 'waba_groups')
+      .map(([type]) => type);
     expect(gated.length).toBe(3);
     for (const type of gated) expect(without.items.map((i) => i.type)).not.toContain(type);
     expect(without.items.length).toBe(NOTIFICATION_PREF_TYPES.length - gated.length);
@@ -436,6 +442,50 @@ describe('NotificationPreferencesService', () => {
         sound: false,
         push: false,
       });
+    }
+  });
+
+  it.each([
+    [
+      'appointment_booking',
+      [
+        'appointment_calendar_drift',
+        'appointment_cancelled_by_customer',
+        'appointment_reminder_test',
+      ],
+    ],
+    ['sales_pipeline', ['task_assigned', 'task_due', 'task_completed', 'sales_doc_decided']],
+    ['inbox_sla', ['sla_breached']],
+    ['inbox_routing', ['member_leave_started', 'assignment_blocked_by_leave']],
+    ['team_chat', ['teamchat_mention', 'teamchat_message']],
+    [
+      'form_builder',
+      ['form_submission', 'form_needs_review', 'form_payment', 'form_payment_duplicate'],
+    ],
+  ])(
+    'leaves the %s types out of the list when the plan lacks it (BL-433)',
+    async (feature, types) => {
+      const off = service(new Map(), true, { ...ALL_FEATURES_ON, [feature]: false });
+      const res = await RequestContextStore.run(ctx as never, () => off.svc.get());
+      const listed = res.items.map((i) => i.type as string);
+      for (const type of types) expect(listed).not.toContain(type);
+      // Everything else stays: chats, wallet, devices and the other gated areas are untouched.
+      expect(listed).toContain('new_chat');
+      expect(listed).toContain('wallet_low_balance');
+      expect(res.items.length).toBe(NOTIFICATION_PREF_TYPES.length - types.length);
+    },
+  );
+
+  it('keeps the types every workspace has out of the plan map', () => {
+    for (const type of [
+      'new_chat',
+      'new_message',
+      'wallet_low_balance',
+      'device_connected',
+      'broadcast_completed',
+      'test',
+    ]) {
+      expect((NOTIFICATION_TYPE_PLAN_FEATURE as Record<string, string>)[type]).toBeUndefined();
     }
   });
 
@@ -517,5 +567,27 @@ describe('the test notification (the "Send a test notification" button)', () => 
     expect(pushTestResponseSchema.safeParse({ inApp: true, sent: -1, failed: 0 }).success).toBe(
       false,
     );
+  });
+});
+
+describe('the producers apply the same plan gate as the preferences list (BL-433)', () => {
+  const channels = (enabled: boolean, type: string) =>
+    new NotificationsRepository({ featureEnabled: async () => enabled } as never).channelsFor(
+      {} as never,
+      1,
+      { userId: 1, type, userPref: null, workspaceInapp: true } as never,
+    );
+
+  it('writes no row for a type whose plan feature the workspace lacks', async () => {
+    expect(await channels(false, 'appointment_cancelled_by_customer')).toEqual({
+      bell: false,
+      toast: false,
+      sound: false,
+      push: false,
+    });
+  });
+  it('keeps the row when the feature is on, and for a type no plan feature governs', async () => {
+    expect((await channels(true, 'appointment_cancelled_by_customer')).bell).toBe(true);
+    expect((await channels(false, 'new_chat')).bell).toBe(true);
   });
 });

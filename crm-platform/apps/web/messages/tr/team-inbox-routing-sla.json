@@ -39,6 +39,7 @@
       "deleteFailed": "Kural silinemedi.",
       "businessHours": "Çalışma saatleri",
       "recordNote": "Bu özellik konuşmaları atar. Yeni {contacts}, şirketleri ve {deals} satış sahiplerine atamak için <link>Kayıt atama kuralları</link> sayfasına bakın.",
+      "agentsNote": "Bir sohbeti kimin alacağı, her kişinin müsaitliğine (üst çubuktaki durum) ve eşzamanlı sohbet sınırına bağlıdır. Sınırı <link>Ekip üyeleri</link> bölümünden ayarlayın.",
       "subtitle": "Her yeni konuşmayı kimin alacağını seçin. Çoğu çalışma alanı için anahtarlar yeterlidir; kuralları yalnızca daha fazla denetim gerekirse ekleyin."
     },
     "rules": {

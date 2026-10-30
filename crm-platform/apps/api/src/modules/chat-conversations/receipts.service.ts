@@ -16,6 +16,7 @@ export type ReceiptJob = {
     at: string;
     errorCode?: string;
     errorMessage?: string;
+    billable?: boolean;
   };
 };
 
@@ -103,6 +104,7 @@ export class ReceiptsService {
             status: receipt.status,
             providerMessageId: receipt.providerMessageId,
             message,
+            billable: receipt.billable,
           });
       }
       return { outcome, message };
