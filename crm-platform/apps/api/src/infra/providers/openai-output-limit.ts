@@ -19,7 +19,11 @@ export function openAiTemperature(
   temperature: number,
   nativeOpenAi: boolean,
 ): { temperature?: number } {
+  return nativeOpenAi && hasFixedTemperature(model) ? {} : { temperature };
+}
+
+/** GPT-5 (but not `gpt-5-chat`) and the o-series: models that fix the temperature, and that spend part of the output limit on reasoning. */
+export function hasFixedTemperature(model: string): boolean {
   const name = model.trim().toLowerCase();
-  const fixed = /^(gpt-5|o[1-9])(?![a-z])/.test(name) && !name.startsWith('gpt-5-chat');
-  return nativeOpenAi && fixed ? {} : { temperature };
+  return /^(gpt-5|o[1-9])(?![a-z])/.test(name) && !name.startsWith('gpt-5-chat');
 }
