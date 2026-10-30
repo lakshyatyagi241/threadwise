@@ -69,6 +69,9 @@ type HeldMember = NonNullable<BroadcastJob['resume']>['audience'][number];
 const digits = (v: string): string => v.replace(/\D/g, '');
 const NO_AUDIENCE_OFFER = 'That segment has no contactable (opted-in) members.';
 const NO_AUDIENCE_WINBACK = 'No customers match this segment.';
+/** Win-back with two or more connected stores of one kind would message one store's customers with another store's offer (issue #1518). */
+const MULTI_STORE_WINBACK =
+  'Win-back is not available while more than one store of this kind is connected.';
 
 /**
  * The offer and win-back broadcasts (TW-ECOM-014, 015). The request checks the plan, the template and that the audience is not
@@ -150,6 +153,9 @@ export class BroadcastService {
       const store = await this.store(tx, orgId, kind, storeUuid);
       const templateId = await this.templates.idOf(tx, orgId, input.templateUuid);
       if (templateId === undefined) return { message: 'Template not found.' };
+      if ((await this.segments.connectedStores(tx, orgId, kind)) > 1) {
+        return { message: MULTI_STORE_WINBACK };
+      }
       const phones = await this.segments.lapsedPhones(tx, orgId, kind, {
         days: input.days,
         minOrders: input.minOrders,
