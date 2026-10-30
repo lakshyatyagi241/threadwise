@@ -38,6 +38,8 @@ export const BULK_TABLES = new Set([
   'ai_token_usage',
   'usage_charges',
   'usage_charge_keys',
+  // the invoices of the top-ups, loaded by the wallet-invoices step from the fetched Zoho file: verified by reconcile/invoices.ts
+  'wallet_legacy_invoices',
   // stage 2 flows and widgets: verified by reconcile/flows.ts against the independent oracle; flow_runs, flow_subscribers, flow_run_steps,
   // keyword_reply_logs, auto_reply_lookups, chatbot_widget_visitors and everything else stay in the baseline (empty)
   'flows',
