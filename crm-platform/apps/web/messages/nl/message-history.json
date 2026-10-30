@@ -50,7 +50,10 @@
       "fromEmail": "Uit je e-mail",
       "hint": "CSV exporteren gebruikt de filters en datums die op deze pagina zijn gekozen. Het bestand wordt op de achtergrond gemaakt en we mailen u zodra het klaar is.",
       "empty": "Nog geen exports. Kies CSV exporteren om de berichten die u hier ziet als bestand te krijgen.",
-      "loading": "Exports laden"
+      "loading": "Exports laden",
+      "hintHere": "CSV exporteren gebruikt de filters en datums die op deze pagina zijn gekozen. Het bestand wordt op de achtergrond gemaakt; je gaat naar Instellingen > Exportgeschiedenis om het te downloaden.",
+      "settingsTitle": "Exports van de berichtgeschiedenis",
+      "hintSettings": "Exports aangevraagd vanuit Berichtgeschiedenis. Het bestand wordt op de achtergrond gemaakt en we mailen je als het klaar is."
     },
     "kpi": {
       "label": "Kerncijfers",

@@ -48,8 +48,8 @@ The list of messages reaches back one year. The delivery steps of each message a
 ## Export to CSV
 
 1. Set the filters you want in the file.
-2. Select **Export CSV**. The file is prepared in the background, so you can leave the page.
-3. When it is ready we email you, and it appears under **CSV exports** with a **Download** button. The file is kept for 7 days.
+2. Select **Export CSV**. The file is prepared in the background, and you are taken to **Settings > Export history**.
+3. When it is ready we email you with a link to that page, where it appears under **Message history exports** with a **Download** button. The file is kept for 7 days.
 
 Exporting needs the **Export the message delivery log** permission and access to all conversations. Only one export is prepared at a time. The file contains customers' phone numbers and message text, so share it with care.
 

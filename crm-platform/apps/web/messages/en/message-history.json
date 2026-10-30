@@ -50,7 +50,10 @@
       "fromEmail": "From your email",
       "hint": "Export CSV uses the filters and dates chosen on this page. The file is built in the background and we email you when it is ready.",
       "empty": "No exports yet. Press Export CSV to get the messages you see here as a file.",
-      "loading": "Loading exports"
+      "loading": "Loading exports",
+      "hintHere": "Export CSV uses the filters and dates chosen on this page. The file is built in the background; you are taken to Settings > Export history to download it.",
+      "settingsTitle": "Message history exports",
+      "hintSettings": "Exports asked for on Message History. The file is built in the background and we email you when it is ready."
     },
     "kpi": {
       "label": "Key figures",

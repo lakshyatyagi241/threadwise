@@ -50,7 +50,10 @@
       "fromEmail": "Aus Ihrer E-Mail",
       "hint": "CSV exportieren nutzt die auf dieser Seite gewählten Filter und Daten. Die Datei wird im Hintergrund erstellt, und wir senden Ihnen eine E-Mail, sobald sie fertig ist.",
       "empty": "Noch keine Exporte. Klicken Sie auf CSV exportieren, um die hier angezeigten Nachrichten als Datei zu erhalten.",
-      "loading": "Exporte werden geladen"
+      "loading": "Exporte werden geladen",
+      "hintHere": "CSV exportieren nutzt die auf dieser Seite gewählten Filter und Daten. Die Datei wird im Hintergrund erstellt; zum Herunterladen gelangen Sie zu Einstellungen > Exportverlauf.",
+      "settingsTitle": "Exporte des Nachrichtenverlaufs",
+      "hintSettings": "Im Nachrichtenverlauf angeforderte Exporte. Die Datei wird im Hintergrund erstellt, und wir senden Ihnen eine E-Mail, sobald sie fertig ist."
     },
     "kpi": {
       "label": "Kennzahlen",

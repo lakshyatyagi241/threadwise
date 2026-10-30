@@ -50,7 +50,10 @@
       "fromEmail": "Dari email Anda",
       "hint": "Ekspor CSV memakai filter dan tanggal yang dipilih di halaman ini. File dibuat di latar belakang dan kami mengirim email saat sudah siap.",
       "empty": "Belum ada ekspor. Tekan Ekspor CSV untuk mendapatkan pesan yang Anda lihat di sini sebagai file.",
-      "loading": "Memuat ekspor"
+      "loading": "Memuat ekspor",
+      "hintHere": "Ekspor CSV memakai filter dan tanggal yang dipilih di halaman ini. File dibuat di latar belakang; Anda diarahkan ke Pengaturan > Riwayat ekspor untuk mengunduhnya.",
+      "settingsTitle": "Ekspor riwayat pesan",
+      "hintSettings": "Ekspor yang diminta dari Riwayat Pesan. File dibuat di latar belakang dan kami kirim email saat siap."
     },
     "kpi": {
       "label": "Angka utama",
