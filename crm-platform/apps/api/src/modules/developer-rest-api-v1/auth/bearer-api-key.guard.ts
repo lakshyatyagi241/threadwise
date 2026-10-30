@@ -10,7 +10,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { incrWithTtl } from '../../../infra/redis/counter';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
-import { ApiKeyAccessService } from '../../public-api';
+import { ApiKeyAccessService, LAST_USED_EVERY_SECONDS } from '../../public-api';
 import { SCOPE_PERMISSIONS, capGrantsToOwner, grantsForScopes } from './api-key-grants';
 import { API_SCOPE_KEY, scopeAllows } from './api-scope';
 import { keyPrefixOf, looksLikeRawKey, rawKeyMatches } from '../keys/api-key-secret';
@@ -29,9 +29,6 @@ interface BearerKeyRow {
 
 /** Failed authentications one address may make in a minute before it is refused outright (Reference had no limit at all). */
 export const AUTH_FAILURES_PER_MINUTE = 30;
-/** A key's `last_used_at` is written at most this often (Reference wrote it on every call, one hot row per busy key). */
-const LAST_USED_EVERY_SECONDS = 60;
-
 /**
  * Authentication for `/api/v1` (TW-API-005): the workspace key as `Authorization: Bearer <key>` or `X-Api-Key`.
  *
