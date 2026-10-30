@@ -179,6 +179,7 @@ export class ShopsService {
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!existing) throw AppError.notFound('Shop', uuid);
+      await this.assertNoFinancialOrders(tx, ctx.orgId, existing.id);
       const ordersDeleted = await this.orders.deleteByStorefront(tx, ctx.orgId, existing.id);
       await this.repo.deleteById(tx, ctx.orgId, existing.id);
       await this.audit.record(tx, {
@@ -199,6 +200,22 @@ export class ShopsService {
     });
   }
 
+  /** Paid, invoiced or sales-linked orders are the financial record: a delete or reset is refused rather than orphaning them. */
+  private async assertNoFinancialOrders(
+    tx: Tx,
+    orgId: number,
+    storefrontId: number | null,
+  ): Promise<void> {
+    const n = await this.orders.countFinancial(tx, orgId, storefrontId);
+    if (n > 0) {
+      throw new AppError(
+        ERROR_CODES.CONFLICT,
+        `${n} order(s) have an invoice, a sales order or a payment and cannot be deleted. Keep them, or void the documents first.`,
+        HttpStatus.CONFLICT,
+      );
+    }
+  }
+
   /** The all-store-data wipe: every order, every product (permanently) and every shop of the workspace. */
   async reset(input: ResetStoreInput): Promise<ResetStoreResponse> {
     const ctx = RequestContextStore.require();
@@ -210,6 +227,7 @@ export class ShopsService {
       );
     }
     return this.db.tx(async (tx) => {
+      await this.assertNoFinancialOrders(tx, ctx.orgId, null);
       const orders = await this.orders.deleteAll(tx, ctx.orgId);
       const products = await this.products.deleteAllProducts(tx, ctx.orgId);
       const shops = await this.repo.deleteAll(tx, ctx.orgId);
