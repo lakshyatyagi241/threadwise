@@ -61,7 +61,8 @@ export class CampaignReceiptsService {
           deliveredAt: receipt.status === 'delivered' ? at : null,
           readAt: receipt.status === 'read' ? at : null,
         });
-        const c = await this.repo.findById(tx, orgId, campaignId);
+        // Only the id and name are needed; the full campaign read aggregates every recipient, on every receipt.
+        const c = await this.repo.identityOf(tx, orgId, campaignId);
         // A repeat of the same status is accepted but is not news: no event.
         if (c && row.status !== receipt.status) {
           await this.events.deliveryReported(

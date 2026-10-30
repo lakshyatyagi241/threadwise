@@ -402,6 +402,22 @@ export class CampaignsRepository {
     return r ? toRow(r) : undefined;
   }
 
+  /**
+   * Just the public id and name. `findById` also aggregates every recipient and joins the charges, which grows with the campaign and
+   * is far too heavy for a caller on the per-receipt path that only needs these two.
+   */
+  async identityOf(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ uuid: string; name: string } | undefined> {
+    const res = await tx.execute(
+      sql`SELECT uuid, name FROM wpcampaigns WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const r = res.rows[0] as Raw | undefined;
+    return r ? { uuid: String(r.uuid), name: String(r.name) } : undefined;
+  }
+
   /** The row locked, so a concurrent edit, action or run waits for this decision. */
   async lock(
     tx: Tx,
