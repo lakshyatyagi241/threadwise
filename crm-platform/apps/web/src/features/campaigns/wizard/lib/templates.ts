@@ -53,6 +53,11 @@ const BUTTON_KINDS: Record<string, PreviewModel['buttons'][number]['kind']> = {
   QUICK_REPLY: 'quick_reply',
 };
 
+const buttonOf = (b: Record<string, unknown>) => ({
+  kind: BUTTON_KINDS[String(b['type'] ?? '').toUpperCase()] ?? 'quick_reply',
+  text: typeof b['text'] === 'string' ? b['text'] : '',
+});
+
 /** What the existing WhatsApp bubble draws, from a template as the wizard lists it. Placeholders stay as `{{n}}` (shown as pills). */
 export function previewModelOf(t: WizardTemplate): PreviewModel {
   const media =
@@ -74,9 +79,12 @@ export function previewModelOf(t: WizardTemplate): PreviewModel {
     headerImageUrl: media === 'image' && t.attachmentUrl ? t.attachmentUrl : null,
     body: t.body,
     footer: t.footer ?? '',
-    buttons: t.buttons.map((b) => ({
-      kind: BUTTON_KINDS[String(b['type'] ?? '').toUpperCase()] ?? 'quick_reply',
-      text: typeof b['text'] === 'string' ? b['text'] : '',
+    buttons: t.buttons.map(buttonOf),
+    cards: (t.cards ?? []).map((c) => ({
+      format: c.format,
+      imageUrl: c.imageUrl,
+      body: c.body,
+      buttons: c.buttons.map(buttonOf),
     })),
     expiry: null,
   };

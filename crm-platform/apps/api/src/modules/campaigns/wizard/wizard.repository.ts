@@ -27,6 +27,7 @@ export interface TemplateListRow {
   templateType: string;
   buttons: unknown;
   variableMap: unknown;
+  carouselData: unknown;
   parameterFormat: string | null;
   attachmentType: string | null;
   attachmentFile: string | null;
@@ -242,7 +243,7 @@ export class WizardRepository {
   ): Promise<TemplateListRow[]> {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
-             t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file,
+             t.template_type, t.buttons, t.variable_map, t.carousel_data, t.parameter_format, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file,
              t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
@@ -291,7 +292,7 @@ export class WizardRepository {
   async templateByUuid(tx: Tx, orgId: number, uuid: string): Promise<TemplateListRow | undefined> {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
-             t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file,
+             t.template_type, t.buttons, t.variable_map, t.carousel_data, t.parameter_format, t.attachment_type, COALESCE(NULLIF(t.attachment_file, ''), t.header_sample_url) AS attachment_file,
              t.header_media_key, t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
@@ -316,6 +317,7 @@ export class WizardRepository {
       templateType: String(r.template_type),
       buttons: r.buttons ?? [],
       variableMap: r.variable_map ?? {},
+      carouselData: r.carousel_data ?? null,
       parameterFormat: str(r.parameter_format),
       attachmentType: str(r.attachment_type),
       attachmentFile: str(r.attachment_file),

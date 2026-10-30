@@ -72,6 +72,31 @@ describe('preview model', () => {
     expect(previewModelOf(template({ category: 'authentication' })).auth).toBe(true);
     expect(previewModelOf(template()).headerKind).toBe('none');
   });
+  it("carries a carousel template's cards, with their image link and buttons", () => {
+    const m = previewModelOf(
+      template({
+        cards: [
+          {
+            format: 'image',
+            imageUrl: 'https://x.test/c1.png',
+            body: 'Card one',
+            buttons: [{ type: 'URL', text: 'Open' }],
+          },
+          { format: 'video', imageUrl: null, body: 'Card two', buttons: [] },
+        ],
+      }),
+    );
+    expect(m.cards).toEqual([
+      {
+        format: 'image',
+        imageUrl: 'https://x.test/c1.png',
+        body: 'Card one',
+        buttons: [{ kind: 'url', text: 'Open' }],
+      },
+      { format: 'video', imageUrl: null, body: 'Card two', buttons: [] },
+    ]);
+    expect(previewModelOf(template()).cards).toEqual([]);
+  });
   it('maps button types and tolerates odd ones', () => {
     const m = previewModelOf(
       template({
