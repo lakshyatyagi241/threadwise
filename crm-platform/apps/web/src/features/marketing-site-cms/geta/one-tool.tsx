@@ -5,13 +5,13 @@ import './adaptive.css';
 import './one-tool.css';
 
 /** The separate tools a small team usually stitches together; on the card they are all attached to one record. */
-const TOOLS: Array<{ t: string; icon: IconName }> = [
-  { t: 'Chatbot', icon: 'chat' },
-  { t: 'CRM', icon: 'contact' },
-  { t: 'WhatsApp', icon: 'whatsapp' },
-  { t: 'Forms', icon: 'form' },
-  { t: 'Sheets', icon: 'sheet' },
-  { t: 'Email', icon: 'mail' },
+const TOOLS: Array<{ t: string; icon: IconName; c: string }> = [
+  { t: 'Chatbot', c: '#3214db', icon: 'chat' },
+  { t: 'CRM', c: '#3214db', icon: 'contact' },
+  { t: 'WhatsApp', c: '#3214db', icon: 'whatsapp' },
+  { t: 'Forms', c: '#3214db', icon: 'form' },
+  { t: 'Sheets', c: '#3214db', icon: 'sheet' },
+  { t: 'Email', c: '#3214db', icon: 'mail' },
 ];
 
 const BARS = [46, 30, 74, 38, 58, 88, 22];
@@ -25,8 +25,7 @@ const ONE = [
 
 /**
  * "One platform instead of five tools": a product illustration, a customer record with the chatbot, CRM, WhatsApp, forms,
- * sheets and email all attached to it, with a weekly chart and a response-time gauge floating beside it. The figures are
- * sample data. Everything animates when the section is reached and settles on its final state without motion.
+ * sheets and email all connected into it, with this week's numbers on the record. The figures are sample data. Everything animates when the section is reached and settles on its final state without motion.
  */
 export function OneTool() {
   return (
@@ -36,74 +35,70 @@ export function OneTool() {
         role="img"
         aria-label="A customer record with the chatbot, CRM, WhatsApp, forms, sheets and email attached to it, beside a weekly message chart"
       >
-        <div className="ov" aria-hidden>
-          <div className="ov-a ov-rec-a">
-            <div className="ov-card ov-rec">
-              <div className="ov-title">Customer record</div>
-              <div className="ov-who">
-                <Portrait look="bun" className="ov-face" />
-                <div>
-                  <b>Aarav Mehta</b>
-                  <i>Admissions enquiry</i>
-                </div>
-              </div>
-              <div className="ov-rule" />
-              <div className="ov-k">All in one place</div>
-              <div className="ov-chips">
-                {TOOLS.map((x, i) => (
-                  <span key={x.t} className="ov-chip" style={{ ['--i' as string]: i }}>
-                    <Icon name={x.icon} />
-                    {x.t}
-                    <em>
-                      <Icon name="check" />
-                    </em>
-                  </span>
-                ))}
-              </div>
-              <div className="ov-btn">
-                <Icon name="chat" />
-                Reply from one inbox
-              </div>
-            </div>
-          </div>
-
-          <div className="ov-a ov-stat-a">
-            <div className="ov-card ov-stat">
-              <div className="ov-sk">Messages this week</div>
-              <div className="ov-sn">
-                <CountUp to={1284} />
-              </div>
-              <div className="ov-bars">
-                {BARS.map((h, i) => (
-                  <span key={DAYS[i]! + i} style={{ ['--h' as string]: `${h}%`, ['--i' as string]: i }}>
-                    <u />
-                    <i>{DAYS[i]}</i>
-                  </span>
-                ))}
-              </div>
-              <span className="ov-tag">+24%</span>
-            </div>
-          </div>
-
-          <div className="ov-a ov-gauge-a">
-            <div className="ov-card ov-gauge">
-              <svg viewBox="0 0 100 56" className="ov-arc" focusable="false">
-                <defs>
-                  <linearGradient id="ov-g" x1="0" x2="1">
-                    <stop offset="0" stopColor="#8b8ff5" />
-                    <stop offset="1" stopColor="#3b2fe0" />
-                  </linearGradient>
-                </defs>
-                <path d="M10 50A40 40 0 0 1 90 50" className="ov-arc-t" />
-                <path d="M10 50A40 40 0 0 1 90 50" className="ov-arc-p" />
-              </svg>
-              <span className="ov-bolt">
-                <Icon name="bolt" />
+        <div className="ox" aria-hidden>
+          <svg
+            className="ox-lines"
+            viewBox="0 0 100 80"
+            preserveAspectRatio="none"
+            focusable="false"
+          >
+            {TOOLS.map((x, i) => {
+              const left = i < 3;
+              const y = [18, 40, 62][i % 3]!;
+              return (
+                <path
+                  key={x.t}
+                  d={left ? `M24 ${y} C27 ${y} 27 40 30 40` : `M76 ${y} C73 ${y} 73 40 70 40`}
+                  style={{ ['--i' as string]: i, ['--c' as string]: x.c }}
+                />
+              );
+            })}
+          </svg>
+          {TOOLS.map((x, i) => (
+            <div
+              key={x.t}
+              className={`ox-tool ${i < 3 ? 'l' : 'r'} p${i % 3}`}
+              style={{ ['--i' as string]: i, ['--c' as string]: x.c }}
+            >
+              <span className="ox-ic">
+                <Icon name={x.icon} />
               </span>
-              <div className="ov-strip">
-                <span>Replied in time</span>
-                <b>92%</b>
+              {x.t}
+              <em />
+            </div>
+          ))}
+          <div className="ox-card">
+            <div className="ox-k">Customer record</div>
+            <div className="ox-who">
+              <Portrait look="bun" className="ox-face" />
+              <div>
+                <b>Aarav Mehta</b>
+                <i>Admissions enquiry</i>
               </div>
+            </div>
+            <div className="ox-stats">
+              <div>
+                <b>
+                  <CountUp to={1284} />
+                </b>
+                <i>messages this week</i>
+              </div>
+              <div>
+                <b>92%</b>
+                <i>replied in time</i>
+              </div>
+            </div>
+            <div className="ox-bars">
+              {BARS.map((h, i) => (
+                <u
+                  key={DAYS[i]! + i}
+                  style={{ ['--h' as string]: `${h}%`, ['--i' as string]: i }}
+                />
+              ))}
+            </div>
+            <div className="ox-btn">
+              <Icon name="chat" />
+              Reply from one inbox
             </div>
           </div>
         </div>

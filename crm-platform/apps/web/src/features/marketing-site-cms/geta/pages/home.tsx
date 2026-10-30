@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { AgentTabs } from '../agent-tabs';
 import { Bento } from '../bento';
+import { ScrollPanel } from '../scroll-panel';
+import { HeroGrid } from '../hero-grid';
 import { CopilotLayer } from '../copilot-layer';
 import { NICHES } from '../data/niches';
 import { CHANNELS, PRODUCTS } from '../data/products';
@@ -19,7 +21,6 @@ import {
   Assurances,
   Card,
   Cta,
-  CtaBand,
   FaqJsonLd,
   FaqList,
   OrgJsonLd,
@@ -34,6 +35,8 @@ export function HomePage() {
   return (
     <>
       <OrgJsonLd />
+      <ScrollPanel label="Why one platform" />
+      <HeroGrid />
       <header className="gx-hero">
         <Wrap>
           <div className="gx-hero-grid">
@@ -163,7 +166,11 @@ export function HomePage() {
               ))}
             </ul>
           </div>
-          <LayerStack products={PRODUCTS.length} capabilities={capabilities} channels={CHANNELS.length} />
+          <LayerStack
+            products={PRODUCTS.length}
+            capabilities={capabilities}
+            channels={CHANNELS.length}
+          />
         </div>
       </Section>
 
@@ -236,11 +243,6 @@ export function HomePage() {
         <FaqList items={HOME_FAQ} />
         <FaqJsonLd items={HOME_FAQ} />
       </Section>
-
-      <CtaBand
-        title="Sign up and put every conversation to work."
-        text="Connect your first channel today and put an AI agent and a CRM to work on your conversations."
-      />
     </>
   );
 }
