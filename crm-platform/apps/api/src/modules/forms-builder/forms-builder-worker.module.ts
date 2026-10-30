@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { NotificationPublisher, NotificationsRepository } from '../notifications';
 import { FormNotificationConsumer } from './form-notification.consumer';
 import { FormPaymentSweepService } from './form-payment-sweep.service';
@@ -11,6 +12,7 @@ import { FormRetentionSweepService } from './form-retention-sweep.service';
  * which the drain loop in that process fans events out to, and an API pod that also swept would multiply the polling load.
  */
 @Module({
+  imports: [PlansCoreModule],
   providers: [
     NotificationsRepository,
     NotificationPublisher,

@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastsModule } from '../broadcasts';
 import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
@@ -30,6 +31,9 @@ import { LeadSyncProcessor, LeadSyncSweepService } from './lead-sync.worker';
  */
 @Module({
   imports: [
+    // NotificationsRepository applies the plan gate of a notification type through PlanEntitlementService (optional, so a missing provider
+    // would silently skip the gate).
+    PlansCoreModule,
     LeadIngestModule,
     LeadPullModule,
     CrmModule,
