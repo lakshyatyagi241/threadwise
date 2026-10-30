@@ -15,7 +15,12 @@ const settings: HandoffSettings = {
   continuityDays: null,
   promptOwnerOnReassign: false,
   notifyQueue: true,
-  away: { returnUnanswered: false, autoOfflineMinutes: null },
+  away: {
+    returnUnanswered: false,
+    autoOfflineMinutes: null,
+    unansweredReturnMinutes: null,
+    idleCloseMinutes: null,
+  },
   queueTimers: {
     remindMinutes: null,
     overflowMinutes: null,
