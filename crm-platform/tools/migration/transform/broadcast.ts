@@ -48,7 +48,15 @@ export const CAMPAIGN_FIELDS: FieldMap = {
   scheduled_now: 'col:schedule_type',
   scheduled_date: 'col:send_date, send_time, timezone (UTC) when scheduled_now is false',
   scheduled_date_dt: 'col:send_date, send_time, timezone (UTC); preferred over scheduled_date',
-  sent_on: 'col:last_run_at, run_at, completed_at',
+  sent_on: 'col:last_run_at, run_at, and completed_at when the document has no completed_time',
+  completed_time:
+    'col:completed_at (the moment the send finished; sent_on, the start, when absent)',
+  // Waboo's reserve-then-reconcile billing of a campaign (credits held at launch, actual cost settled afterwards): money belongs to the credits step
+  credits_reserved: `drop:${NOT_PRESENT}; credit hold flag of Waboo's billing, credits step`,
+  cost_actual: `drop:${NOT_PRESENT}; money belongs to the credits step (the campaign's billed amount comes from its charge rows)`,
+  reconciled: `drop:${NOT_PRESENT}; billing settlement flag, credits step`,
+  pending_jobs: `drop:${NOT_PRESENT}; count of send jobs still queued: a migrated campaign never runs`,
+  recipients_actual: `drop:${NOT_PRESENT}; total_recipients is recomputed from the loaded recipient rows`,
   recipients: 'col:total_recipients (never below the number of loaded recipient rows)',
   sent: 'col:sent_count (recomputed from the loaded recipient rows; a different Waboo value is kept in quarantine COUNTER_MISMATCH)',
   delivered: 'col:delivered_count (recomputed from the recipient rows, see sent)',
@@ -100,7 +108,10 @@ export const RECIPIENT_FIELDS: FieldMap = {
   status:
     'col:status, sent_at, delivered_at, read_at, responded_at, updated_at (forward-only; failed rows keep no timestamp)',
   'status.sent': 'col:sent_at (the iskm quirk: a literal top-level key "status.sent")',
-  error: 'col:error_message, error_code (leading 3 to 6 digits)',
+  error: 'col:error_message, error_code (leading 3 to 6 digits), unless provider_error is present',
+  provider_error:
+    'col:error_message, error_code (leading 3 to 6 digits): the provider text, preferred over error',
+  reconcile: `drop:${NOT_PRESENT}; billing settlement flag of the send, credits step`,
   source:
     'col:(row kept only when source = broadcast with a broadcast_id; others are excluded NON_BROADCAST_SOURCE)',
   broadcast_id: 'col:campaign_id (id_map of the campaign)',
@@ -292,6 +303,7 @@ export const campaigns: HandlerSpec = {
     const sch = campaignSchedule(doc);
     soft.push(...sch.soft);
     const sentOn = utcDate(doc.sent_on);
+    const doneOn = utcDate(doc.completed_time) ?? sentOn;
     const agg = plan.agg.get(base) ?? zeroAgg();
     const waboo = Math.max(0, intOf(doc.recipients) ?? 0);
     const total = Math.max(waboo, agg.total);
@@ -393,7 +405,7 @@ export const campaigns: HandlerSpec = {
       timezone: sch.timezone,
       last_run_at: iso(sentOn),
       run_at: iso(sentOn ?? sch.instant),
-      completed_at: st.soft ? null : completed ? (iso(sentOn) ?? t.updated) : t.updated,
+      completed_at: st.soft ? null : completed ? (iso(doneOn) ?? t.updated) : t.updated,
       total_recipients: total,
       sent_count: agg.sent,
       failed_count: agg.failed,
@@ -535,7 +547,9 @@ export const recipients: HandlerSpec = {
     }
     const contactId = contactOf(doc, ctx, (e164 ?? rawDigits).replace(/\D/g, ''), soft);
     const failed = v.st.status === 'failed';
-    const err = failed ? errorParts(doc.error) : { message: null, code: null };
+    const err = failed
+      ? errorParts(str(doc.provider_error) ?? doc.error)
+      : { message: null, code: null };
     if (!failed && v.st.conflict && str(doc.error))
       soft.push({
         code: 'ERROR_DROPPED',
