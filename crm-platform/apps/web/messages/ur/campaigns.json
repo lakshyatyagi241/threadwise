@@ -173,6 +173,7 @@
       "col": {
         "name": "مہم",
         "status": "اسٹیٹس",
+        "recipients": "وصول کنندگان",
         "schedule": "شیڈول",
         "actions": "کارروائیاں"
       },

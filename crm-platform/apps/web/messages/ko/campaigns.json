@@ -173,6 +173,7 @@
       "col": {
         "name": "캠페인",
         "status": "상태",
+        "recipients": "수신자",
         "schedule": "예약",
         "actions": "작업"
       },

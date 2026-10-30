@@ -216,6 +216,7 @@
       "col": {
         "name": "Campaign",
         "status": "Status",
+        "recipients": "Recipients",
         "schedule": "Schedule",
         "actions": "Actions"
       },

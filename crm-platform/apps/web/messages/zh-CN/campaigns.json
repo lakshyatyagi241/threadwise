@@ -173,6 +173,7 @@
       "col": {
         "name": "活动",
         "status": "状态",
+        "recipients": "收件人",
         "schedule": "排期",
         "actions": "操作"
       },

@@ -173,6 +173,7 @@
       "col": {
         "name": "キャンペーン",
         "status": "ステータス",
+        "recipients": "宛先",
         "schedule": "スケジュール",
         "actions": "操作"
       },

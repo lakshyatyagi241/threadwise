@@ -173,6 +173,7 @@
       "col": {
         "name": "Chiến dịch",
         "status": "Trạng thái",
+        "recipients": "Người nhận",
         "schedule": "Lịch gửi",
         "actions": "Thao tác"
       },
