@@ -203,6 +203,10 @@ export async function walletHistory(o: WalletHistoryOptions): Promise<void> {
       o.log(
         `  history  the wallet overdrew: ${plan.belowZero} ledger row(s) end below zero, lowest ${text4(plan.lowest)} ${unit} (Waboo lets a wallet go a few messages into overdraft)`,
       );
+    if (plan.unitemisedRows > 0)
+      o.log(
+        `  history  the logs do not reach back to the start of the wallet: ${plan.unitemisedRows} row(s) "Usage not itemised in Waboo's logs" account for the usage between Waboo's own recorded balances (every real row is kept; the chain matches the balance Waboo recorded before each top-up)`,
+      );
     o.log(
       `  history  top-up checkpoints: ${plan.checkpoints - plan.checkpointMisses.length} of ${plan.checkpoints} match the balance Waboo logged before them (to 1.00)${
         plan.checkpointMisses.length > 0
