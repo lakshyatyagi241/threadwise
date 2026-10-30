@@ -8,6 +8,7 @@
       "generic": "Qualcosa è andato storto. Riprova.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Collega un numero WhatsApp Cloud API per usare i moduli.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Nessun numero WhatsApp Cloud API collegato dispone di credenziali valide.",
+      "WFL_FORM_PARTNER_NUMBER": "Il tuo numero WhatsApp è collegato tramite un partner (come Interakt). I moduli WhatsApp si possono pubblicare solo con una connessione diretta a Meta: collega un numero direttamente in Canali → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta ha rifiutato la definizione del modulo.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Il tuo account WhatsApp Business deve superare la verifica di Meta prima di poter pubblicare moduli.",
       "WFL_FORM_PUBLISH_FAILED": "Meta non è riuscita a pubblicare questo modulo.",

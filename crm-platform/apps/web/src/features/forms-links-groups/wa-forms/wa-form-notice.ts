@@ -13,6 +13,9 @@ export function failureNotice(err: unknown, text: string): WaFormNotice {
   return {
     tone: 'danger',
     text,
-    connect: err instanceof ApiError && err.code === WFL_ERROR_CODES.WFL_FORM_NO_WABA_CREDENTIALS,
+    connect:
+      err instanceof ApiError &&
+      (err.code === WFL_ERROR_CODES.WFL_FORM_NO_WABA_CREDENTIALS ||
+        err.code === WFL_ERROR_CODES.WFL_FORM_PARTNER_NUMBER),
   };
 }

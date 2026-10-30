@@ -8,6 +8,7 @@
       "generic": "Algo salió mal. Inténtalo de nuevo.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Conecta un número de WhatsApp Cloud API para usar formularios.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Ningún número de WhatsApp Cloud API conectado tiene credenciales válidas.",
+      "WFL_FORM_PARTNER_NUMBER": "Tu número de WhatsApp está conectado a través de un socio (como Interakt). Los formularios de WhatsApp solo se pueden publicar con una conexión directa a Meta; conecta un número directamente en Canales → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta rechazó la definición del formulario.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Tu cuenta de WhatsApp Business debe pasar la verificación de Meta antes de poder publicar formularios.",
       "WFL_FORM_PUBLISH_FAILED": "Meta no pudo publicar este formulario.",

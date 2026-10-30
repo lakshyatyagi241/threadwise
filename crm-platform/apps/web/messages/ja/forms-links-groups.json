@@ -8,6 +8,7 @@
       "generic": "問題が発生しました。もう一度お試しください。",
       "WFL_FORM_ENGINE_NOT_ENABLED": "フォームを使用するには、WhatsApp Cloud APIの番号を接続してください。",
       "WFL_FORM_NO_WABA_CREDENTIALS": "接続済みのWhatsApp Cloud API番号に有効な認証情報がありません。",
+      "WFL_FORM_PARTNER_NUMBER": "WhatsApp番号はパートナー(Interaktなど)経由で接続されています。WhatsAppフォームはMetaへの直接接続でのみ公開できるため、チャンネル → WhatsAppで番号を直接接続してください。",
       "WFL_FORM_META_VALIDATION_FAILED": "Metaがこのフォーム定義を拒否しました。",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "フォームを公開するには、WhatsApp BusinessアカウントがMetaの審査を通過している必要があります。",
       "WFL_FORM_PUBLISH_FAILED": "Metaはこのフォームを公開できませんでした。",

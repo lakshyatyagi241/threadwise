@@ -8,6 +8,7 @@
       "generic": "出了点问题，请重试。",
       "WFL_FORM_ENGINE_NOT_ENABLED": "请连接一个 WhatsApp Cloud API 号码以使用表单。",
       "WFL_FORM_NO_WABA_CREDENTIALS": "已连接的 WhatsApp Cloud API 号码均没有可用的凭据。",
+      "WFL_FORM_PARTNER_NUMBER": "您的 WhatsApp 号码是通过合作伙伴(如 Interakt)连接的。WhatsApp 表单只能通过与 Meta 的直接连接发布,请在“渠道 → WhatsApp”中直接连接号码。",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta 拒绝了该表单定义。",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "您的 WhatsApp 商业账号需要先通过 Meta 的验证才能发布表单。",
       "WFL_FORM_PUBLISH_FAILED": "Meta 无法发布此表单。",

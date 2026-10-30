@@ -8,6 +8,7 @@
       "generic": "משהו השתבש. נסו שוב.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "חברו מספר WhatsApp Cloud API כדי להשתמש בטפסים.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "לאף מספר WhatsApp Cloud API מחובר אין פרטי הרשאה תקפים.",
+      "WFL_FORM_PARTNER_NUMBER": "מספר הווטסאפ שלך מחובר דרך שותף (כמו Interakt). אפשר לפרסם טפסי וואטסאפ רק דרך חיבור ישיר ל-Meta, לכן חברו מספר ישירות תחת ערוצים ← וואטסאפ.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta דחתה את הגדרת הטופס.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "חשבון ה-WhatsApp Business שלכם צריך לעבור אימות מול Meta לפני שתוכלו לפרסם טפסים.",
       "WFL_FORM_PUBLISH_FAILED": "Meta לא הצליחה לפרסם את הטופס הזה.",

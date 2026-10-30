@@ -8,6 +8,7 @@
       "generic": "حدث خطأ ما. حاول مرة أخرى.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "قم بربط رقم واجهة WhatsApp Cloud API لاستخدام النماذج.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "لا يوجد رقم Cloud API متصل ببيانات اعتماد صالحة.",
+      "WFL_FORM_PARTNER_NUMBER": "رقم واتساب لديك متصل عبر شريك (مثل Interakt). لا يمكن نشر نماذج واتساب إلا عبر اتصال مباشر مع Meta، لذا اربط رقمًا مباشرةً من القنوات ← واتساب.",
       "WFL_FORM_META_VALIDATION_FAILED": "رفضت Meta تعريف النموذج.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "يجب أن يمر حساب واتساب للأعمال بعملية التحقق من Meta قبل نشر النماذج.",
       "WFL_FORM_PUBLISH_FAILED": "تعذّر على Meta نشر هذا النموذج.",
