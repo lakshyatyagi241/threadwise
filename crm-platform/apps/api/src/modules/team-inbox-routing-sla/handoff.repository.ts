@@ -28,7 +28,12 @@ export interface StoredQueueTimers {
 
 export interface StoredHandoffSettings {
   queueTimers: StoredQueueTimers;
-  away: { returnUnanswered: boolean; autoOfflineMinutes: number | null };
+  away: {
+    returnUnanswered: boolean;
+    autoOfflineMinutes: number | null;
+    unansweredReturnMinutes: number | null;
+    idleCloseMinutes: number | null;
+  };
   autoAssign: boolean;
   claimSetsOwner: boolean;
   ownerMode: OwnerMode;
@@ -88,7 +93,8 @@ export class HandoffRepository {
              s.handoff_prompt_owner_on_reassign, s.handoff_notify_queue, s.routing_keep_contact_agent,
              s.handoff_wq_remind_minutes, s.handoff_wq_overflow_minutes, s.handoff_wq_overflow_team_id, ot.uuid AS wq_overflow_team_uuid,
              s.handoff_wq_unclaimed_minutes, s.handoff_wq_unclaimed_action, s.handoff_wq_unclaimed_message,
-             s.handoff_return_on_away, s.handoff_auto_offline_min
+             s.handoff_return_on_away, s.handoff_auto_offline_min,
+             s.handoff_unanswered_return_min, s.handoff_idle_close_min
       FROM workspace_settings s
       LEFT JOIN teams ot ON ot.org_id = s.org_id AND ot.id = s.handoff_wq_overflow_team_id
       WHERE s.org_id = ${orgId}`);
@@ -97,6 +103,8 @@ export class HandoffRepository {
       away: {
         returnUnanswered: r ? r.handoff_return_on_away === true : false,
         autoOfflineMinutes: num(r?.handoff_auto_offline_min),
+        unansweredReturnMinutes: num(r?.handoff_unanswered_return_min),
+        idleCloseMinutes: num(r?.handoff_idle_close_min),
       },
       queueTimers: {
         remindMinutes: num(r?.handoff_wq_remind_minutes),
@@ -145,6 +153,10 @@ export class HandoffRepository {
       a.autoOfflineMinutes !== undefined
         ? sql`handoff_auto_offline_min = ${a.autoOfflineMinutes}`
         : null,
+      a.unansweredReturnMinutes !== undefined
+        ? sql`handoff_unanswered_return_min = ${a.unansweredReturnMinutes}`
+        : null,
+      a.idleCloseMinutes !== undefined ? sql`handoff_idle_close_min = ${a.idleCloseMinutes}` : null,
       q.remindMinutes !== undefined ? sql`handoff_wq_remind_minutes = ${q.remindMinutes}` : null,
       q.overflowMinutes !== undefined
         ? sql`handoff_wq_overflow_minutes = ${q.overflowMinutes}`

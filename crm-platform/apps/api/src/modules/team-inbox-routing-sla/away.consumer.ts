@@ -73,6 +73,8 @@ export class AwaySweep {
     try {
       const n = await this.away.sweepInactive();
       if (n > 0) this.logger.log({ offline: n }, 'inactive people set offline');
+      const idle = await this.away.sweepIdle();
+      if (idle.returned > 0 || idle.closed > 0) this.logger.log(idle, 'chat idle rules ran');
     } catch (err) {
       this.logger.error({ err }, 'inactivity sweep failed');
     } finally {

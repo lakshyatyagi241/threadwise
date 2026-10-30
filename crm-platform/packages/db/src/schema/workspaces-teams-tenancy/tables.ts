@@ -397,6 +397,9 @@ export const workspaceSettings = pgTable(
     /** Away rules (migration 20270326090000): both off by default. */
     handoffReturnOnAway: boolean('handoff_return_on_away').notNull().default(false),
     handoffAutoOfflineMin: integer('handoff_auto_offline_min'),
+    /** Chat idle rules (migration 2050): both off (null) by default. */
+    handoffUnansweredReturnMin: integer('handoff_unanswered_return_min'),
+    handoffIdleCloseMin: integer('handoff_idle_close_min'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
