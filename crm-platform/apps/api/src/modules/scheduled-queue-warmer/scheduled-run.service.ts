@@ -52,6 +52,17 @@ export type RunResult = 'skipped' | 'failed' | 'busy' | 'paused' | 'stopped' | '
 
 const BATCH = 50;
 const STALE_CLAIM_MINUTES = 10;
+/** The sent write after a provider accepted a message: tried this many times, backing off, before it is only logged. */
+const SENT_WRITE_ATTEMPTS = 3;
+const SENT_WRITE_BACKOFF_MS = 200;
+type SentReport = {
+  scheduledId: number;
+  provider: string | null;
+  category: string | null;
+  templateName: string | null;
+  subjectName: string;
+  phone: string;
+};
 const HEARTBEAT_MS = 20_000;
 /** When a run stopped by the emergency halt looks again. The halt has no known end, so it polls. */
 const HALT_RETRY_MS = 5 * 60_000;
@@ -306,6 +317,7 @@ export class ScheduledRunService {
             continue;
           }
 
+          let sent: { providerMessageId: string | null } | null = null;
           try {
             const contact =
               r.contact_id === null || !prepared.mergeBase
@@ -319,25 +331,10 @@ export class ScheduledRunService {
               spinOn ? (t) => spin(t, this.runtime.random) : undefined,
               `sched-${scheduledId}-${r.id}`,
             );
-            const sent = await opened.send(command, {
+            sent = await opened.send(command, {
               clientReference: `sched-${scheduledId}-${r.id}`,
               screen: { bulk: true, source: 'scheduled' },
             });
-            await this.db.tx((tx) =>
-              this.setRecipient(tx, orgId, Number(r.id), 'sent', {
-                providerMessageId: sent.providerMessageId,
-                report: {
-                  scheduledId,
-                  provider: row.provider,
-                  category: prepared.template?.category ?? null,
-                  templateName: prepared.template?.templateName ?? null,
-                  subjectName: row.schedule_name,
-                  phone: r.phone,
-                },
-              }),
-            );
-            counts.sent++;
-            if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
             // A send held back by the per-number limiter (queue too deep) is put back the same way, so it is sent later, never failed.
             if (
@@ -363,6 +360,21 @@ export class ScheduledRunService {
               this.setRecipient(tx, orgId, Number(r.id), 'failed', { error: reason }),
             );
             counts.failed++;
+          }
+
+          // The provider has accepted the message: only the bookkeeping can fail now, and a failed write must not turn a delivered
+          // message into a failed one (issue #1508). The write is retried; if it still fails it is logged, and the claim goes stale.
+          if (sent) {
+            await this.recordSent(orgId, Number(r.id), sent.providerMessageId, {
+              scheduledId,
+              provider: row.provider,
+              category: prepared.template?.category ?? null,
+              templateName: prepared.template?.templateName ?? null,
+              subjectName: row.schedule_name,
+              phone: r.phone,
+            });
+            counts.sent++;
+            if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           }
 
           processed++;
@@ -467,6 +479,32 @@ export class ScheduledRunService {
   }
 
   /** Recipient states only move up (pending, failed, sent), so a late write can never undo a later one (TW-NODE-035 rule 7). */
+  /** Writes a provider-accepted recipient as sent, retrying a database blip. Never throws: the send already happened. */
+  private async recordSent(
+    orgId: number,
+    id: number,
+    providerMessageId: string | null,
+    report: SentReport,
+  ): Promise<void> {
+    for (let attempt = 1; attempt <= SENT_WRITE_ATTEMPTS; attempt++) {
+      try {
+        await this.db.tx((tx) =>
+          this.setRecipient(tx, orgId, id, 'sent', { providerMessageId, report }),
+        );
+        return;
+      } catch (err) {
+        if (attempt === SENT_WRITE_ATTEMPTS) {
+          this.logger.error(
+            { orgId, id, providerMessageId, err: (err as Error).message },
+            '[SCHED] sent accepted by the provider but not recorded',
+          );
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, SENT_WRITE_BACKOFF_MS * attempt));
+      }
+    }
+  }
+
   private async setRecipient(
     tx: Parameters<Parameters<DatabaseService['tx']>[0]>[0],
     orgId: number,

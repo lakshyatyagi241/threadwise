@@ -256,6 +256,26 @@ describe('a one-off run (TW-NODE-031)', () => {
     expect(await row(id)).toMatchObject({ status: 'completed', total_sent: 2, total_failed: 1 });
   });
 
+  it('a database blip after the provider accepted a message does not mark it failed (issue #1508)', async () => {
+    const t = await arrange('blip');
+    const id = await schedule(t, 2);
+    const real = (runService as unknown as { setRecipient: (...a: unknown[]) => Promise<void> })
+      .setRecipient;
+    let blips = 1;
+    (runService as unknown as { setRecipient: (...a: unknown[]) => Promise<void> }).setRecipient =
+      async (...args: unknown[]) => {
+        if (args[3] === 'sent' && blips-- > 0) throw new Error('connection reset');
+        return real.apply(runService, args);
+      };
+    try {
+      await run(t, id);
+    } finally {
+      (runService as unknown as { setRecipient: unknown }).setRecipient = real;
+    }
+    expect((await contacts(id)).map((r) => r.status)).toEqual(['sent', 'sent']);
+    expect(await row(id)).toMatchObject({ status: 'completed', total_sent: 2, total_failed: 0 });
+  });
+
   it('every recipient failing makes the schedule failed', async () => {
     const t = await arrange('allfail');
     const id = await schedule(t, 2);
