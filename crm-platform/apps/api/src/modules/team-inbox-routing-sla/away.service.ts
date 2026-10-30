@@ -22,7 +22,11 @@ import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { channelOwnerSql } from '../../realtime';
 import { AuthKeys } from '../auth';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
-import { ConversationsRepository } from '../team-inbox-conversations';
+import {
+  ConversationEventsRepository,
+  ConversationsRepository,
+  InboxRealtimePublisher,
+} from '../team-inbox-conversations';
 import { AssignmentService, type AssignmentChange } from './assignment.service';
 import { HandoffRepository } from './handoff.repository';
 
@@ -31,7 +35,9 @@ const rowsOf = (r: unknown): Array<Record<string, unknown>> => (r as Rows).rows;
 const ms = (v: unknown): number => (v ? new Date(v as string).getTime() : 0);
 
 /** Why a person's chats are being returned (the trace and the logs carry it). */
-export type AwayReason = 'offline' | 'inactive' | 'leave';
+export type AwayReason = 'offline' | 'inactive' | 'leave' | 'timeout';
+
+const BATCH = 100;
 
 /**
  * The away rules (Auto-assignment > Waiting queue; Smart routing, both OFF by default):
@@ -42,6 +48,10 @@ export type AwayReason = 'offline' | 'inactive' | 'leave';
  *  - **Set inactive people Offline**: an Available person whose sessions show no activity for the chosen minutes is set Offline (audited,
  *    announced like their own switch). Activity is the latest of the session's last request (Redis) and its last use; a person with no live
  *    session counts from their last session use. Nobody is set Available again by the system: they switch back themselves.
+ *
+ *  - **Chat idle rules** (legacy #15590, #15593): `unansweredReturnMinutes` puts an open chat whose customer has waited that long with no
+ *    human reply back in the team's queue; `idleCloseMinutes` resolves an agent-held open chat with no message for that long. Both off by
+ *    default; each chat is re-read under its row lock before it is touched, so a reply that lands meanwhile wins.
  *
  * Gated like the rest of automatic assignment (`inbox_routing`): without it nothing runs, nothing is erased, and the saved settings come back
  * with the feature. Idempotent (a chat already back in the queue is no longer theirs), tenant-safe (each chat under its own tenant and row lock).
@@ -58,6 +68,8 @@ export class AwayService {
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly events: ConversationEventsRepository,
+    private readonly publisher: InboxRealtimePublisher,
   ) {}
 
   private async entitled(orgId: number): Promise<boolean> {
@@ -196,6 +208,148 @@ export class AwayService {
     });
     if (change) await this.assignment.afterCommit(orgId, change);
     return done;
+  }
+
+  // --- chat idle rules -------------------------------------------------------------------------------------------------------
+
+  /** One pass over the workspaces that chose an idle rule. Returns how many chats went back to the queue and how many were resolved. */
+  async sweepIdle(now: Date = new Date()): Promise<{ returned: number; closed: number }> {
+    const orgs = await this.db.privileged(async (tx) =>
+      rowsOf(
+        await tx.execute(sql`
+          SELECT org_id, handoff_unanswered_return_min AS r, handoff_idle_close_min AS c FROM workspace_settings
+          WHERE handoff_unanswered_return_min IS NOT NULL OR handoff_idle_close_min IS NOT NULL`),
+      ).map((r) => ({
+        orgId: Number(r.org_id),
+        returnMin: r.r === null ? null : Number(r.r),
+        closeMin: r.c === null ? null : Number(r.c),
+      })),
+    );
+    let returned = 0;
+    let closed = 0;
+    for (const { orgId, returnMin, closeMin } of orgs) {
+      try {
+        if (!(await this.entitled(orgId))) continue;
+        if (returnMin !== null) returned += await this.returnTimedOut(orgId, returnMin, now);
+        if (closeMin !== null) closed += await this.closeIdle(orgId, closeMin, now);
+      } catch (err) {
+        this.logger.error({ err, orgId }, 'chat idle rules failed for a workspace');
+      }
+    }
+    return { returned, closed };
+  }
+
+  private async returnTimedOut(orgId: number, minutes: number, now: Date): Promise<number> {
+    const cutoff = new Date(now.getTime() - minutes * 60_000).toISOString();
+    const rows = await this.db.txAs({ orgId }, async (tx) =>
+      rowsOf(
+        await tx.execute(sql`
+          SELECT c.uuid, c.assignee_user_id FROM conversations c
+          WHERE c.org_id = ${orgId} AND c.status = 'open' AND NOT c.archived AND c.assignee_user_id IS NOT NULL
+            AND c.waiting_since < ${cutoff}::timestamptz AND c.peer_key NOT LIKE 'g:%' AND ${channelOwnerSql('c')} IS NULL
+          ORDER BY c.waiting_since LIMIT ${BATCH}`),
+      ),
+    );
+    let returned = 0;
+    for (const r of rows) {
+      try {
+        const done = await RequestContextStore.run(
+          {
+            requestId: `idle-return-${r.uuid}`,
+            orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
+          () => this.returnOne(orgId, Number(r.assignee_user_id), String(r.uuid), 'timeout'),
+        );
+        if (done) returned += 1;
+      } catch (err) {
+        this.logger.error({ err, orgId }, 'returning a timed-out chat failed');
+      }
+    }
+    return returned;
+  }
+
+  private async closeIdle(orgId: number, minutes: number, now: Date): Promise<number> {
+    const cutoff = new Date(now.getTime() - minutes * 60_000).toISOString();
+    const uuids = await this.db.txAs({ orgId }, async (tx) =>
+      rowsOf(
+        await tx.execute(sql`
+          SELECT c.uuid FROM conversations c
+          WHERE c.org_id = ${orgId} AND c.status = 'open' AND NOT c.archived AND c.assignee_user_id IS NOT NULL
+            AND c.last_message_at < ${cutoff}::timestamptz AND c.peer_key NOT LIKE 'g:%' AND ${channelOwnerSql('c')} IS NULL
+          ORDER BY c.last_message_at LIMIT ${BATCH}`),
+      ).map((r) => String(r.uuid)),
+    );
+    let closed = 0;
+    for (const uuid of uuids) {
+      try {
+        const done = await RequestContextStore.run(
+          {
+            requestId: `idle-close-${uuid}`,
+            orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
+          () => this.closeOne(orgId, uuid, cutoff),
+        );
+        if (done) closed += 1;
+      } catch (err) {
+        this.logger.error({ err, orgId }, 'resolving an idle chat failed');
+      }
+    }
+    return closed;
+  }
+
+  /** Resolves one idle chat. Re-reads it under its row lock: a message that arrived since the list was read keeps the chat open. */
+  private async closeOne(orgId: number, uuid: string, cutoff: string): Promise<boolean> {
+    const row = await this.db.txAs({ orgId }, async (tx) => {
+      const locked = await this.conversations.lockByUuid(tx, orgId, uuid);
+      if (!locked || locked.status !== 'open' || locked.assigneeUserId === null) return null;
+      const idle = await tx.execute(
+        sql`SELECT 1 FROM conversations WHERE org_id = ${orgId} AND id = ${locked.id} AND last_message_at < ${cutoff}::timestamptz`,
+      );
+      if (rowsOf(idle).length === 0) return null;
+      await this.conversations.setStatus(tx, orgId, locked.id, {
+        status: 'resolved',
+        resolvedAt: 'now',
+        resolvedBy: null,
+        clearSnooze: false,
+      });
+      await this.events.append(tx, orgId, {
+        conversationId: locked.id,
+        type: 'resolved',
+        actorKind: 'system',
+        payload: { from: 'open', to: 'resolved', reason: 'idle_timeout' },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: 'conversations',
+        aggregateId: locked.id,
+        orgId,
+        eventType: 'conversation.resolved',
+        payload: { conversationId: uuid, status: 'resolved', from: 'open', resolvedBy: null },
+      });
+      await tx.execute(sql`
+        INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta)
+        VALUES (${orgId}, NULL, 'system', 'conversations', ${locked.id}, 'update',
+          ${JSON.stringify({ status: { old: 'open', new: 'resolved' }, reason: { old: null, new: 'idle_timeout' } })}::jsonb)`);
+      return await this.conversations.byUuid(tx, orgId, uuid);
+    });
+    if (!row) return false;
+    await this.publisher.conversationChanged(
+      orgId,
+      {
+        uuid,
+        rowVersion: row.rowVersion,
+        assigneeUserId: row.assigneeUserId,
+        assigneeTeamId: row.assigneeTeamId,
+        channelOwnerUserId: row.channelOwnerUserId,
+      },
+      ['status'],
+    );
+    return true;
   }
 
   // --- inactivity ------------------------------------------------------------------------------------------------------------

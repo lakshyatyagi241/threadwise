@@ -283,9 +283,15 @@ export type QueueTimers = z.infer<typeof queueTimersSchema>;
  * Available person Offline after that many minutes without activity (null = never).
  */
 export const AWAY_MAX_MINUTES = 1440;
+/** The longest idle time before an open chat is resolved (a week). */
+export const IDLE_CLOSE_MAX_MINUTES = 10080;
 export const awaySchema = z.object({
   returnUnanswered: z.boolean(),
   autoOfflineMinutes: z.int().min(1).max(AWAY_MAX_MINUTES).nullable(),
+  /** An open chat whose customer waited this many minutes with no human reply goes back to the team's queue (null = never). */
+  unansweredReturnMinutes: z.int().min(1).max(AWAY_MAX_MINUTES).nullable(),
+  /** An open chat with no message for this many minutes is resolved (null = never). */
+  idleCloseMinutes: z.int().min(1).max(IDLE_CLOSE_MAX_MINUTES).nullable(),
 });
 export type AwayRules = z.infer<typeof awaySchema>;
 
