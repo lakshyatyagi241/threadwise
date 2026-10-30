@@ -8,6 +8,7 @@
       "generic": "เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง",
       "WFL_FORM_ENGINE_NOT_ENABLED": "เชื่อมต่อหมายเลข WhatsApp Cloud API เพื่อใช้งานฟอร์ม",
       "WFL_FORM_NO_WABA_CREDENTIALS": "ไม่มีหมายเลข WhatsApp Cloud API ที่เชื่อมต่อแล้วมีข้อมูลรับรองที่ใช้งานได้",
+      "WFL_FORM_PARTNER_NUMBER": "หมายเลข WhatsApp ของคุณเชื่อมต่อผ่านพาร์ตเนอร์ (เช่น Interakt) ฟอร์ม WhatsApp เผยแพร่ได้เฉพาะเมื่อเชื่อมต่อกับ Meta โดยตรง โปรดเชื่อมต่อหมายเลขโดยตรงที่ ช่องทาง → WhatsApp",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta ปฏิเสธนิยามของฟอร์มนี้",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "บัญชี WhatsApp Business ของคุณต้องผ่านการยืนยันของ Meta ก่อนจึงจะเผยแพร่ฟอร์มได้",
       "WFL_FORM_PUBLISH_FAILED": "Meta ไม่สามารถเผยแพร่ฟอร์มนี้ได้",

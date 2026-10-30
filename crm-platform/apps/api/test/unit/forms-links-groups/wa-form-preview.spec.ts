@@ -27,7 +27,9 @@ describe('the preview address of a Flow', () => {
   });
 });
 
-function harness(over: { flowId?: string; preview?: string | null; errors?: unknown[] } = {}) {
+function harness(
+  over: { flowId?: string; preview?: string | null; errors?: unknown[]; conn?: object } = {},
+) {
   const form = {
     id: 7,
     uuid: 'u1',
@@ -63,7 +65,7 @@ function harness(over: { flowId?: string; preview?: string | null; errors?: unkn
   };
   const connections = {
     resolveConnection: async () => ({
-      conn: { wabaId: 'W1', accessToken: 't', provider: 'meta', registry: false },
+      conn: over.conn ?? { wabaId: 'W1', accessToken: 't', provider: 'meta', registry: false },
     }),
   };
   const service = new WaFormsService(
@@ -98,6 +100,20 @@ describe('Test form before publishing', () => {
     const h = harness({ preview: null });
     await expect(h.run(() => h.service.preview('u1'))).rejects.toMatchObject({
       code: WFL_ERROR_CODES.WFL_FORM_PREVIEW_FAILED,
+    });
+  });
+  it('names the partner route when the only number is on Interakt', async () => {
+    const h = harness({
+      conn: { wabaId: 'W1', accessToken: 't', provider: 'interakt', registry: false },
+    });
+    await expect(h.run(() => h.service.preview('u1'))).rejects.toMatchObject({
+      code: WFL_ERROR_CODES.WFL_FORM_PARTNER_NUMBER,
+    });
+  });
+  it('keeps the generic message when the number has no token', async () => {
+    const h = harness({ conn: { wabaId: 'W1', provider: 'meta', registry: false } });
+    await expect(h.run(() => h.service.preview('u1'))).rejects.toMatchObject({
+      code: WFL_ERROR_CODES.WFL_FORM_NO_WABA_CREDENTIALS,
     });
   });
 });

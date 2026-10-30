@@ -7,6 +7,8 @@ export const WFL_ERROR_CODES = {
   WFL_FORM_ENGINE_NOT_ENABLED: 'WFL_FORM_ENGINE_NOT_ENABLED',
   /** No connected WABA provider config has both an access token and a WABA id: publish cannot resolve credentials. */
   WFL_FORM_NO_WABA_CREDENTIALS: 'WFL_FORM_NO_WABA_CREDENTIALS',
+  /** Every connected number is on a partner route (Interakt or another provider): Flow management needs a direct Meta connection. */
+  WFL_FORM_PARTNER_NUMBER: 'WFL_FORM_PARTNER_NUMBER',
   /** Meta rejected the uploaded Flow JSON asset; `details` carries the first validation error Meta reported. */
   WFL_FORM_META_VALIDATION_FAILED: 'WFL_FORM_META_VALIDATION_FAILED',
   /** Meta refused to publish because the Business Account is blocked by its Integrity review (error 139000/4233020). */

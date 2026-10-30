@@ -8,6 +8,7 @@
       "generic": "Đã có lỗi xảy ra. Vui lòng thử lại.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Kết nối một số WhatsApp Cloud API để sử dụng biểu mẫu.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Không có số WhatsApp Cloud API nào đã kết nối có thông tin xác thực hợp lệ.",
+      "WFL_FORM_PARTNER_NUMBER": "Số WhatsApp của bạn được kết nối qua đối tác (như Interakt). Biểu mẫu WhatsApp chỉ có thể xuất bản qua kết nối trực tiếp với Meta, vì vậy hãy kết nối số trực tiếp tại Kênh → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta đã từ chối định nghĩa biểu mẫu này.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Tài khoản WhatsApp Business của bạn cần vượt qua xác minh của Meta trước khi có thể xuất bản biểu mẫu.",
       "WFL_FORM_PUBLISH_FAILED": "Meta không thể xuất bản biểu mẫu này.",

@@ -8,6 +8,7 @@
       "generic": "कुछ गड़बड़ हो गई। कृपया फिर से कोशिश करें।",
       "WFL_FORM_ENGINE_NOT_ENABLED": "फ़ॉर्म का उपयोग करने के लिए एक WhatsApp Cloud API नंबर कनेक्ट करें।",
       "WFL_FORM_NO_WABA_CREDENTIALS": "किसी भी कनेक्टेड WhatsApp Cloud API नंबर के पास मान्य क्रेडेंशियल नहीं हैं।",
+      "WFL_FORM_PARTNER_NUMBER": "आपका WhatsApp नंबर किसी पार्टनर (जैसे Interakt) के ज़रिए जुड़ा है। WhatsApp फ़ॉर्म केवल Meta के सीधे कनेक्शन से प्रकाशित हो सकते हैं, इसलिए चैनल → WhatsApp में कोई नंबर सीधे जोड़ें।",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta ने इस फ़ॉर्म परिभाषा को अस्वीकार कर दिया।",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "फ़ॉर्म प्रकाशित करने से पहले आपके WhatsApp Business खाते को Meta के सत्यापन से गुज़रना होगा।",
       "WFL_FORM_PUBLISH_FAILED": "Meta इस फ़ॉर्म को प्रकाशित नहीं कर सका।",

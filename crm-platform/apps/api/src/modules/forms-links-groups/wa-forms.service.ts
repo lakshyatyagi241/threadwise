@@ -272,14 +272,24 @@ export class WaFormsService {
         : candidateConfigIds;
 
     let resolved: { configId: number; conn: WabaConnection } | null = null;
+    let onPartnerRoute = false;
     for (const configId of orderedConfigIds) {
       const r = await this.db.tx((tx) =>
         this.connections.resolveConnection(tx, orgId, { id: configId }),
       );
+      const via: WabaConnection | null | undefined = r?.conn;
+      if (via && (via.registry || via.provider !== 'meta')) onPartnerRoute = true;
       if (isUsableMetaConnection(r?.conn)) {
         resolved = { configId, conn: r.conn };
         break;
       }
+    }
+    if (!resolved && onPartnerRoute) {
+      throw new AppError(
+        WFL_ERROR_CODES.WFL_FORM_PARTNER_NUMBER,
+        'The connected WhatsApp number is on a partner route; Forms need a direct Meta connection.',
+        422,
+      );
     }
     if (!resolved) {
       throw new AppError(
