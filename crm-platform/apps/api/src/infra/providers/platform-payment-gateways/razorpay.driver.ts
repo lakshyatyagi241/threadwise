@@ -439,6 +439,37 @@ export class RazorpayDriver implements PaymentDriver {
     }
   }
 
+  /** `GET /orders/:id/payments`: paid when a captured payment of exactly the order's amount and currency exists. */
+  async lookupPayment(order: DriverOrder): Promise<PaymentResult | null> {
+    if (!order.gatewayOrderId || !this.ctx.credentials.key_id || !this.ctx.credentials.key_secret)
+      return null;
+    try {
+      const res = await this.ctx.http(
+        `${API}/orders/${encodeURIComponent(order.gatewayOrderId)}/payments`,
+        { method: 'GET', headers: this.auth },
+      );
+      if (!isOk(res)) return null;
+      const items = asRecord(res.json).items;
+      if (!Array.isArray(items)) return null;
+      for (const raw of items) {
+        const p = asRecord(raw);
+        const id = str(p.id);
+        if (
+          id &&
+          p.status === 'captured' &&
+          typeof p.amount === 'number' &&
+          BigInt(p.amount) === order.amountMinor &&
+          str(p.currency)?.toUpperCase() === order.currency
+        ) {
+          return paid(id, { razorpay_order_id: order.gatewayOrderId, razorpay_payment_id: id });
+        }
+      }
+      return pending();
+    } catch {
+      return null;
+    }
+  }
+
   /** `GET /payments/:id/refunds`: every refund of the payment (newest first). null when the call fails. */
   async listPaymentRefunds(paymentId: string): Promise<ProviderRefund[] | null> {
     if (!this.ctx.credentials.key_id || !this.ctx.credentials.key_secret) return null;
