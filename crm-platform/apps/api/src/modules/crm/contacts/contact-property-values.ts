@@ -138,8 +138,17 @@ export function coercePropertyValue(def: PropertyDef, value: unknown): Coerced {
       }
       return good([...new Set(list as string[])]);
     }
+    case 'phone': {
+      // A number sent as a JSON number (a sheet or an API client) is still a phone number: it is kept as text.
+      const t =
+        typeof value === 'number' && Number.isSafeInteger(value) && value > 0
+          ? String(value)
+          : asText(value);
+      if (t === null) return bad('must be text');
+      return t.length > TEXT_MAX ? bad(`must be at most ${TEXT_MAX} characters`) : good(t);
+    }
     default: {
-      // text, phone, timezone, lookup: one line of text.
+      // text, timezone, lookup: one line of text.
       const t = asText(value);
       if (t === null) return bad('must be text');
       return t.length > TEXT_MAX ? bad(`must be at most ${TEXT_MAX} characters`) : good(t);
