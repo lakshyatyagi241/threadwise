@@ -246,6 +246,11 @@ describe('planHistory', () => {
     expect(p.openingMinor).toBe(0n);
     expect(p.rows.at(-1)!.balanceAfter).toBe(to4('62900')!);
     expect(p.unitemisedRows).toBeGreaterThan(0);
+    // the lowest balance is that of a row (the chain starts at zero, which is not a row): the loader checks the written ledger against it
+    expect(p.lowest).toBe(
+      p.rows.reduce((m, r) => (r.balanceAfter < m ? r.balanceAfter : m), p.rows[0]!.balanceAfter),
+    );
+    expect(p.lowest).toBeGreaterThan(0n);
     // the balance before each top-up is the one Waboo recorded
     for (const [id, , , prev] of tops) {
       const k = p.rows.findIndex((r) => r.key === `waboo:c1:reseller:${id}`);
