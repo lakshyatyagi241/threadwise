@@ -112,6 +112,10 @@ async function send<T>(
     req.signal?.removeEventListener('abort', onCallerAbort);
   }
 
+  // A request the caller cancelled (a screen asked again before the first answer came, or went away) can still resolve here with an
+  // empty body on Android instead of throwing. That is a cancellation, not a server answer to be read against a schema.
+  if (req.signal?.aborted) throw new ApiError(0, CLIENT_ERROR_CODES.ABORTED, 'Request cancelled');
+
   const json = parseJson(text);
 
   if (res.status === 401 && authenticated && token && mayRefresh) {

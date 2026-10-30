@@ -124,6 +124,21 @@ describe('apiFetch errors', () => {
     expect(await result).toMatchObject({ code: 'CLIENT_ABORTED' });
   });
 
+  it('reports a cancelled request as ABORTED even when Android still hands back an empty answer', async () => {
+    // The request is cancelled while its answer is on the way; the platform resolves it with an empty body instead of throwing.
+    const controller = new AbortController();
+    mockFetch(async () => {
+      controller.abort();
+      return jsonResponse(200, undefined);
+    });
+    const result = await apiFetch('/v2/things', {
+      schema: okSchema,
+      signal: controller.signal,
+    }).catch((x: unknown) => x);
+    expect(result).toMatchObject({ code: 'CLIENT_ABORTED' });
+    expect(result).not.toMatchObject({ code: 'CLIENT_CONTRACT_MISMATCH' });
+  });
+
   it('refuses an answer that does not match the contract', async () => {
     mockFetch(jsonResponse(200, { ok: 'yes' }));
     await expect(apiFetch('/v2/things', { schema: okSchema })).rejects.toMatchObject({

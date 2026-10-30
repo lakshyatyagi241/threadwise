@@ -1310,7 +1310,11 @@
       "validation": "Sebagian detail tidak valid. Periksa lalu coba lagi.",
       "withCode": "{{message}} (Kode: {{code}})",
       "contactOptedOut": "Kontak ini telah berhenti berlangganan pesan pemasaran, jadi pesan tidak dikirim.",
-      "consentRequired": "Ruang kerja ini mewajibkan persetujuan tercatat untuk pesan pemasaran dan kontak ini belum memilikinya, jadi pesan tidak dikirim."
+      "consentRequired": "Ruang kerja ini mewajibkan persetujuan tercatat untuk pesan pemasaran dan kontak ini belum memilikinya, jadi pesan tidak dikirim.",
+      "assignedToOther": "Obrolan ini ditugaskan ke agen lain, jadi hanya dia yang bisa membalas. Minta agar ditugaskan ke Anda terlebih dahulu.",
+      "resolved": "Percakapan ini sudah diselesaikan. Buka kembali untuk membalas.",
+      "erased": "Kontak ini sudah dihapus, jadi tidak ada yang bisa dikirim ke percakapan ini.",
+      "templatesUnavailable": "Templat belum tersedia di workspace ini."
     },
     "channel": {
       "whatsapp": "WhatsApp",

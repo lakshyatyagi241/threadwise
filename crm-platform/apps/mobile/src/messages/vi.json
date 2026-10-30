@@ -1310,7 +1310,11 @@
       "validation": "Một số thông tin không hợp lệ. Hãy kiểm tra và thử lại.",
       "withCode": "{{message}} (Mã: {{code}})",
       "contactOptedOut": "Liên hệ này đã hủy đăng ký tin nhắn tiếp thị nên tin nhắn không được gửi.",
-      "consentRequired": "Không gian làm việc này yêu cầu sự đồng ý được ghi lại cho tin nhắn tiếp thị và liên hệ này chưa có, nên tin nhắn không được gửi."
+      "consentRequired": "Không gian làm việc này yêu cầu sự đồng ý được ghi lại cho tin nhắn tiếp thị và liên hệ này chưa có, nên tin nhắn không được gửi.",
+      "assignedToOther": "Cuộc trò chuyện này đã giao cho nhân viên khác nên chỉ họ mới trả lời được. Hãy nhờ giao cho bạn trước.",
+      "resolved": "Cuộc trò chuyện này đã được giải quyết. Hãy mở lại để trả lời.",
+      "erased": "Liên hệ này đã bị xóa nên không thể gửi gì vào cuộc trò chuyện này.",
+      "templatesUnavailable": "Mẫu tin nhắn chưa khả dụng trong không gian làm việc này."
     },
     "channel": {
       "whatsapp": "WhatsApp",

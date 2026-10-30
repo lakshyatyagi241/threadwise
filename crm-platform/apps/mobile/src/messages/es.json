@@ -1354,7 +1354,11 @@
       "validation": "Algunos datos no son válidos. Revísalos e inténtalo de nuevo.",
       "withCode": "{{message}} (Código: {{code}})",
       "contactOptedOut": "Este contacto se dio de baja de los mensajes de marketing, por lo que el mensaje no se envió.",
-      "consentRequired": "Este espacio de trabajo exige un consentimiento registrado para mensajes de marketing y este contacto no lo tiene, por lo que el mensaje no se envió."
+      "consentRequired": "Este espacio de trabajo exige un consentimiento registrado para mensajes de marketing y este contacto no lo tiene, por lo que el mensaje no se envió.",
+      "assignedToOther": "Este chat está asignado a otro agente, así que solo él puede responder. Pide que te lo asignen primero.",
+      "resolved": "Esta conversación está resuelta. Reábrela para responder.",
+      "erased": "Este contacto fue eliminado, así que no se puede enviar nada a esta conversación.",
+      "templatesUnavailable": "Las plantillas todavía no están disponibles en este espacio de trabajo."
     },
     "channel": {
       "whatsapp": "WhatsApp",

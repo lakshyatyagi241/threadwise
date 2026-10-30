@@ -3,7 +3,10 @@ import type { TFunction } from 'i18next';
 import { isApiError } from '@/lib/api';
 import { messageForError } from '@/lib/api/error-message';
 
-/** The words for a failed send, chosen by the error `code` (never the server's text). Unknown codes get the app-wide message. */
+/**
+ * The words for a failed send, or a failed read of the template list, chosen by the error `code` (never the server's text). A code the app
+ * has no words for says which one it was; anything else gets the app-wide message.
+ */
 export function sendErrorMessage(error: unknown, t: TFunction): string {
   if (isApiError(error)) {
     switch (error.code) {
@@ -17,6 +20,15 @@ export function sendErrorMessage(error: unknown, t: TFunction): string {
         return t('inbox.errors.forbidden');
       case ERROR_CODES.CONVERSATION_NOT_FOUND:
         return t('inbox.errors.notFound');
+      // Refusals the server words clearly and the app must too: who may write into a chat, and in which state.
+      case ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER:
+        return t('inbox.errors.assignedToOther');
+      case ERROR_CODES.CONVERSATION_RESOLVED:
+        return t('inbox.errors.resolved');
+      case ERROR_CODES.CONVERSATION_ERASED:
+        return t('inbox.errors.erased');
+      case ERROR_CODES.INBOX_TEMPLATES_UNAVAILABLE:
+        return t('inbox.errors.templatesUnavailable');
       case ERROR_CODES.ROW_VERSION_CONFLICT:
         return t('inbox.thread.conflict');
       case ERROR_CODES.CONVERSATION_STATUS_INVALID:

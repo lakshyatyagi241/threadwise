@@ -180,6 +180,39 @@ describe('Choose Template (page 1)', () => {
   });
 });
 
+describe('Choose Template: why the list could not be read', () => {
+  const failWith = async (error: ApiError) => {
+    offer([option()]);
+    templatesCall.mockRejectedValue(error);
+    await renderApp(<TemplatePickerScreen />);
+  };
+
+  it('says a chat assigned to another agent cannot be written into, not that something went wrong', async () => {
+    await failWith(new ApiError(403, 'CONVERSATION_ASSIGNED_TO_OTHER', 'assigned'));
+    expect(
+      await screen.findByText(/assigned to another agent, so only they can reply/),
+    ).toBeTruthy();
+    expect(screen.queryByText(/Something went wrong/)).toBeNull();
+  });
+
+  it('says a resolved conversation has to be reopened first', async () => {
+    await failWith(new ApiError(422, 'CONVERSATION_RESOLVED', 'resolved'));
+    expect(await screen.findByText(/Reopen it to reply/)).toBeTruthy();
+  });
+
+  it('says the person may not do this', async () => {
+    await failWith(new ApiError(403, 'FORBIDDEN', 'no'));
+    expect(await screen.findByText("You don't have permission to do that.")).toBeTruthy();
+  });
+
+  it('names the code for an answer the app has no words for, so it can be read out', async () => {
+    await failWith(new ApiError(500, 'INTERNAL_ERROR', 'boom'));
+    expect(
+      await screen.findByText('Something went wrong. Please try again. (Code: INTERNAL_ERROR)'),
+    ).toBeTruthy();
+  });
+});
+
 describe('Set variables (page 2)', () => {
   const open = async (template = withVariable()) => {
     startTemplateDraft(CONVERSATION_ID, template);

@@ -1332,7 +1332,11 @@
       "validation": "Bazı bilgiler geçerli değil. Kontrol edip tekrar deneyin.",
       "withCode": "{{message}} (Kod: {{code}})",
       "contactOptedOut": "Bu kişi pazarlama iletilerinden çıktığı için ileti gönderilmedi.",
-      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi."
+      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış, bu yüzden yalnızca o yanıtlayabilir. Önce size atanmasını isteyin.",
+      "resolved": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "erased": "Bu kişi silindi, bu yüzden bu konuşmaya hiçbir şey gönderilemez.",
+      "templatesUnavailable": "Şablonlar bu çalışma alanında henüz kullanılamıyor."
     },
     "channel": {
       "whatsapp": "WhatsApp",

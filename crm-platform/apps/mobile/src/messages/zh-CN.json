@@ -1310,7 +1310,11 @@
       "validation": "部分信息无效，请检查后重试。",
       "withCode": "{{message}} (代码: {{code}})",
       "contactOptedOut": "该联系人已退订营销消息，因此消息未发送。",
-      "consentRequired": "此工作区要求营销消息必须有已记录的同意，而该联系人没有，因此消息未发送。"
+      "consentRequired": "此工作区要求营销消息必须有已记录的同意，而该联系人没有，因此消息未发送。",
+      "assignedToOther": "此聊天已分配给其他客服，只有对方可以回复。请先请求将其分配给您。",
+      "resolved": "此会话已解决。请重新打开后再回复。",
+      "erased": "该联系人已被清除，无法向此会话发送任何内容。",
+      "templatesUnavailable": "此工作区暂不支持模板。"
     },
     "channel": {
       "whatsapp": "WhatsApp",

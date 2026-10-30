@@ -1332,7 +1332,11 @@
       "validation": "Einige Angaben sind ungültig. Prüfe sie und versuche es erneut.",
       "withCode": "{{message}} (Fehlercode: {{code}})",
       "contactOptedOut": "Dieser Kontakt hat Marketing-Nachrichten abbestellt, daher wurde die Nachricht nicht gesendet.",
-      "consentRequired": "Dieser Arbeitsbereich verlangt eine dokumentierte Einwilligung für Marketing-Nachrichten und dieser Kontakt hat keine, daher wurde die Nachricht nicht gesendet."
+      "consentRequired": "Dieser Arbeitsbereich verlangt eine dokumentierte Einwilligung für Marketing-Nachrichten und dieser Kontakt hat keine, daher wurde die Nachricht nicht gesendet.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen, daher kann nur er antworten. Bitten Sie darum, ihn Ihnen zuzuweisen.",
+      "resolved": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
+      "erased": "Dieser Kontakt wurde gelöscht, daher kann nichts an diese Unterhaltung gesendet werden.",
+      "templatesUnavailable": "Vorlagen sind in diesem Workspace noch nicht verfügbar."
     },
     "channel": {
       "whatsapp": "WhatsApp",

@@ -9,12 +9,12 @@ import { Icon } from '@/components/ui/icon';
 import { SearchField } from '@/components/ui/search-field';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
-import { messageForError } from '@/lib/api/error-message';
 import { SEARCH_DEBOUNCE_MS, useDebounced } from '@/lib/hooks/use-debounced';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { clearTemplateDraft, startTemplateDraft } from './template-draft';
 import { categoryWord } from './template-model';
+import { sendErrorMessage } from './thread-errors';
 import { useInboxTemplates } from './use-inbox';
 
 /**
@@ -68,7 +68,7 @@ export function TemplatePickerScreen() {
         <ActivityIndicator accessibilityLabel={t('common.loading')} style={styles.pad} />
       ) : list.error ? (
         <View style={styles.pad}>
-          <Banner tone="danger" message={messageForError(list.error, t)} />
+          <Banner tone="danger" message={sendErrorMessage(list.error, t)} />
           <Button variant="link" label={t('common.retry')} onPress={() => void list.refetch()} />
         </View>
       ) : rows.length === 0 ? (

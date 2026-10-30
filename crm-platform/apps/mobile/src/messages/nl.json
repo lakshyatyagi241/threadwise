@@ -1332,7 +1332,11 @@
       "validation": "Sommige gegevens zijn ongeldig. Controleer ze en probeer het opnieuw.",
       "withCode": "{{message}} (Foutcode: {{code}})",
       "contactOptedOut": "Dit contact heeft zich afgemeld voor marketingberichten, dus het bericht is niet verzonden.",
-      "consentRequired": "Deze werkruimte vereist een vastgelegde toestemming voor marketingberichten en dit contact heeft die niet, dus het bericht is niet verzonden."
+      "consentRequired": "Deze werkruimte vereist een vastgelegde toestemming voor marketingberichten en dit contact heeft die niet, dus het bericht is niet verzonden.",
+      "assignedToOther": "Deze chat is toegewezen aan een andere medewerker, dus alleen die kan antwoorden. Vraag eerst om hem aan jou toe te wijzen.",
+      "resolved": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "erased": "Dit contact is gewist, dus er kan niets naar dit gesprek worden gestuurd.",
+      "templatesUnavailable": "Sjablonen zijn in deze workspace nog niet beschikbaar."
     },
     "channel": {
       "whatsapp": "WhatsApp",

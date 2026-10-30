@@ -24,6 +24,21 @@ describe('sendErrorMessage', () => {
     );
   });
 
+  it('says who may write into a chat, and in which state, instead of the app-wide message', () => {
+    expect(sendErrorMessage(refusal(403, ERROR_CODES.CONVERSATION_ASSIGNED_TO_OTHER), t)).toBe(
+      'inbox.errors.assignedToOther',
+    );
+    expect(sendErrorMessage(refusal(422, ERROR_CODES.CONVERSATION_RESOLVED), t)).toBe(
+      'inbox.errors.resolved',
+    );
+    expect(sendErrorMessage(refusal(422, ERROR_CODES.CONVERSATION_ERASED), t)).toBe(
+      'inbox.errors.erased',
+    );
+    expect(sendErrorMessage(refusal(503, ERROR_CODES.INBOX_TEMPLATES_UNAVAILABLE), t)).toBe(
+      'inbox.errors.templatesUnavailable',
+    );
+  });
+
   it('names invalid values instead of the app-wide message', () => {
     expect(sendErrorMessage(refusal(422, ERROR_CODES.VALIDATION_FAILED), t)).toBe(
       'inbox.errors.validation',

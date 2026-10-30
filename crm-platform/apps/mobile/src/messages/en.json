@@ -1332,7 +1332,11 @@
       "validation": "Some of the details are not valid. Check them and try again.",
       "withCode": "{{message}} (Code: {{code}})",
       "contactOptedOut": "This contact has unsubscribed from marketing messages, so the message was not sent.",
-      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent."
+      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent.",
+      "assignedToOther": "This chat is assigned to another agent, so only they can reply. Ask for it to be assigned to you first.",
+      "resolved": "This conversation is resolved. Reopen it to reply.",
+      "erased": "This contact was erased, so nothing can be sent to this conversation.",
+      "templatesUnavailable": "Templates are not available on this workspace yet."
     },
     "channel": {
       "whatsapp": "WhatsApp",

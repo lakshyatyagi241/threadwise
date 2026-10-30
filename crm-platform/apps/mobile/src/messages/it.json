@@ -1354,7 +1354,11 @@
       "validation": "Alcuni dati non sono validi. Controllali e riprova.",
       "withCode": "{{message}} (Codice: {{code}})",
       "contactOptedOut": "Questo contatto ha annullato l'iscrizione ai messaggi di marketing, quindi il messaggio non è stato inviato.",
-      "consentRequired": "Questo spazio di lavoro richiede un consenso registrato per i messaggi di marketing e questo contatto non ne ha, quindi il messaggio non è stato inviato."
+      "consentRequired": "Questo spazio di lavoro richiede un consenso registrato per i messaggi di marketing e questo contatto non ne ha, quindi il messaggio non è stato inviato.",
+      "assignedToOther": "Questa chat è assegnata a un altro agente, quindi solo lui può rispondere. Chiedi prima che sia assegnata a te.",
+      "resolved": "Questa conversazione è risolta. Riaprila per rispondere.",
+      "erased": "Questo contatto è stato cancellato, quindi non si può inviare nulla a questa conversazione.",
+      "templatesUnavailable": "I modelli non sono ancora disponibili in questo workspace."
     },
     "channel": {
       "whatsapp": "WhatsApp",

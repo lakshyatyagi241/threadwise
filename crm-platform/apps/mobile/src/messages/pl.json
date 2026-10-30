@@ -1376,7 +1376,11 @@
       "validation": "Niektóre dane są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
       "withCode": "{{message}} (Kod: {{code}})",
       "contactOptedOut": "Ten kontakt wypisał się z wiadomości marketingowych, więc wiadomość nie została wysłana.",
-      "consentRequired": "Ta przestrzeń robocza wymaga zarejestrowanej zgody na wiadomości marketingowe, a ten kontakt jej nie ma, więc wiadomość nie została wysłana."
+      "consentRequired": "Ta przestrzeń robocza wymaga zarejestrowanej zgody na wiadomości marketingowe, a ten kontakt jej nie ma, więc wiadomość nie została wysłana.",
+      "assignedToOther": "Ta rozmowa jest przypisana do innego agenta, więc tylko on może odpowiadać. Poproś najpierw o przypisanie jej do Ciebie.",
+      "resolved": "Ta rozmowa jest rozwiązana. Otwórz ją ponownie, aby odpowiedzieć.",
+      "erased": "Ten kontakt został usunięty, więc nic nie można wysłać do tej rozmowy.",
+      "templatesUnavailable": "Szablony nie są jeszcze dostępne w tej przestrzeni roboczej."
     },
     "channel": {
       "whatsapp": "WhatsApp",
