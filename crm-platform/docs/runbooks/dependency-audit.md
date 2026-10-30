@@ -35,7 +35,7 @@ package was already on 0.45.3 (the fixed line).
 | GHSA-5xrq-8626-4rwp (critical)                      | `vitest` 2.1.9              | Only when the Vitest UI server is listening; never run. Development only.                | 2026-12-31 |
 | GHSA-85c8-ppgw-ccpr, GHSA-5gmw-xhrv-c9v3 (critical) | `tinypool` 1.1.1 via vitest | Worker options must be attacker-controlled; the tests pass fixed ones. Development only. | 2026-12-31 |
 
-Way out for all three: move to `vitest` 3.2.6 or later in its own PR (major version; run the API, web and package suites).
+Way out for all three: move to `vitest` 4 in its own PR (major version; run the API, web and package suites). `vitest` 3.2.7 still resolves `tinypool` 1.1.1, so 3.2.x does not clear the two tinypool advisories.
 Development-only high findings that are listed but not blocking: `undici` 5.29.0 and `@fastify/busboy` (through `testcontainers`),
 `vite` 5.4.21 (through vitest), `braces` 3.0.3 (through `lint-staged`, no fixed release exists).
 
