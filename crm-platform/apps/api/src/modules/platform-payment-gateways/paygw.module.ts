@@ -20,6 +20,7 @@ import { PaymentConfirmationService } from './payment-confirmation.service';
 import { ProofService } from './proof.service';
 import { PlatformSubscriptionsService } from './platform-subscriptions.service';
 import { RefundReconcilerService } from './refund-reconciler.service';
+import { TopupReconcilerService } from './topup-reconciler.service';
 import { RefundService } from './refund.service';
 import { AddonRedundancyService } from './addon-redundancy.service';
 import { SubscriptionCancelService } from './subscription-cancel.service';
@@ -60,6 +61,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     PlatformSubscriptionsService,
     RefundService,
     RefundReconcilerService,
+    TopupReconcilerService,
     PaymentConfirmationService,
     ProofService,
     BuyerInvoiceService,
@@ -76,6 +78,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     SubscriptionReconcilerService,
     RefundService,
     RefundReconcilerService,
+    TopupReconcilerService,
   ],
 })
 export class PlatformPaymentGatewaysModule {}

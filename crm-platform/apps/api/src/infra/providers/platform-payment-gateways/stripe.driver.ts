@@ -85,6 +85,14 @@ export class StripeDriver implements PaymentDriver {
     }
   }
 
+  /** The checkout session we created is the proof: its paid state, reference and amount are checked exactly as on a buyer return. */
+  async lookupPayment(order: DriverOrder): Promise<PaymentResult | null> {
+    if (!order.gatewayOrderId) return null;
+    const r = await this.confirmReturn({ session_id: order.gatewayOrderId }, order);
+    // A failed lookup (HTTP error, exception) says nothing about the payment; only a clean paid/pending answer counts.
+    return r.status === 'failed' ? null : r;
+  }
+
   async confirmReturn(params: Record<string, string>, order: DriverOrder): Promise<PaymentResult> {
     if (params.cancelled) return failed(CANCELLED_BY_USER);
     const sessionId = params.session_id;
