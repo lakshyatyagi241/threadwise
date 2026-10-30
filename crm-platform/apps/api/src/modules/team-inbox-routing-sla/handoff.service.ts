@@ -485,7 +485,10 @@ export class HandoffService {
     if (
       aw &&
       !available.away &&
-      ((aw.returnUnanswered ?? false) === true || (aw.autoOfflineMinutes ?? null) !== null)
+      ((aw.returnUnanswered ?? false) === true ||
+        (aw.autoOfflineMinutes ?? null) !== null ||
+        (aw.unansweredReturnMinutes ?? null) !== null ||
+        (aw.idleCloseMinutes ?? null) !== null)
     )
       locked.push('away');
     if (locked.length > 0) {
@@ -581,7 +584,14 @@ export class HandoffService {
       continuityDays: available.continuityWindow ? s.continuityDays : null,
       promptOwnerOnReassign: s.promptOwnerOnReassign && available.promptOwnerOnReassign,
       notifyQueue: s.notifyQueue,
-      away: available.away ? { ...s.away } : { returnUnanswered: false, autoOfflineMinutes: null },
+      away: available.away
+        ? { ...s.away }
+        : {
+            returnUnanswered: false,
+            autoOfflineMinutes: null,
+            unansweredReturnMinutes: null,
+            idleCloseMinutes: null,
+          },
       // What is in effect: a plan without the timers runs none (what was saved comes back on upgrade), so the screen shows them off.
       queueTimers: available.queueTimers
         ? {

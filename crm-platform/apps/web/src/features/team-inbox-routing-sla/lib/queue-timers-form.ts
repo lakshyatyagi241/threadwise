@@ -30,7 +30,12 @@ export type QueueProblem =
   | 'finalMessage'
   | 'offlineMinutes';
 
-export const DEFAULT_AWAY: AwayRules = { returnUnanswered: false, autoOfflineMinutes: null };
+export const DEFAULT_AWAY: AwayRules = {
+  returnUnanswered: false,
+  autoOfflineMinutes: null,
+  unansweredReturnMinutes: null,
+  idleCloseMinutes: null,
+};
 
 const text = (n: number | null, fallback: string) => (n === null ? fallback : String(n));
 
