@@ -3,10 +3,21 @@ import type { PreviousSendsAudience } from '@crm/contracts';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import {
   PreviousSendsService,
-  previousSendContactsSql,
+  previousSendContactsSql as buildPreviousSendContactsSql,
 } from '../../../src/modules/broadcasts/previous-sends';
 
 const ID = '11111111-1111-4111-8111-111111111111';
+const CALLER = {
+  requestId: 'r',
+  orgId: 1,
+  actorType: 'user',
+  actorId: 1,
+  userId: 1,
+  grants: new Map(),
+} as const;
+/** The campaign record scope reads the caller's grants, so the builder only runs inside a request (BL-430). */
+const previousSendContactsSql = (...args: Parameters<typeof buildPreviousSendContactsSql>) =>
+  RequestContextStore.run(CALLER, () => buildPreviousSendContactsSql(...args));
 const text = (q: unknown): string =>
   JSON.stringify((q as { queryChunks: unknown }).queryChunks).replace(/\\n\s*/g, ' ');
 
