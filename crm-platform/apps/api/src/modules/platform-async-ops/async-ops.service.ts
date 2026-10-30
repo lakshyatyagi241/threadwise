@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bullmq';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Queue } from 'bullmq';
 import type {
@@ -38,6 +38,8 @@ const cut = (s: unknown): string | null =>
  */
 @Injectable()
 export class AsyncOpsService {
+  private readonly logger = new Logger(AsyncOpsService.name);
+
   constructor(
     private readonly store: AsyncOpsStore,
     @InjectQueue(QUEUES.WABA_INGEST) private readonly wabaIngest: Queue,
@@ -174,6 +176,7 @@ export class AsyncOpsService {
     const jobs = await queue.getFailed(0, limit - 1);
     let replayed = 0;
     let skipped = 0;
+    let errored = 0;
     const ids: string[] = [];
     for (const job of jobs) {
       try {
@@ -196,9 +199,15 @@ export class AsyncOpsService {
         ids.push(rec.uuid);
         // The record owns the work now; leaving the old job in the failed set would count it twice on the health page.
         await job.remove().catch(() => undefined);
-      } catch {
-        // No longer failed, or the record could not be written: not an error for the rest.
-        skipped += 1;
+      } catch (err) {
+        // The job could not be recorded or redriven: a failure of this job, not an ineligible one. Counted apart from `skipped`,
+        // and the first one is logged so an outage shows up in the logs as well as in the count.
+        errored += 1;
+        if (errored === 1)
+          this.logger.error(
+            `${queueName} replay failed for job ${job.id ?? ''}`,
+            err instanceof Error ? err.stack : String(err),
+          );
       }
     }
     await this.store.tx((tx) =>
@@ -207,9 +216,9 @@ export class AsyncOpsService {
         status: 'info',
         actorType: 'platform_operator',
         actorId: operatorId,
-        payload: { limit, replayed, skipped, failedOperations: ids.slice(0, 100) },
+        payload: { limit, replayed, skipped, errored, failedOperations: ids.slice(0, 100) },
       }),
     );
-    return { replayed, skipped };
+    return { replayed, skipped, errored };
   }
 }
