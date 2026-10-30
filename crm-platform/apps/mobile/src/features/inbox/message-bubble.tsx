@@ -6,6 +6,7 @@ import { StyleSheet, View } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { FormattedText } from './marked-text';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import {
@@ -102,7 +103,7 @@ export function Bubble({
               {kindLabel}
             </Text>
           ) : null}
-          {text ? <Text>{text}</Text> : null}
+          {text ? <FormattedText text={text} /> : null}
           {footer ? (
             <Text variant="caption" muted>
               {footer}

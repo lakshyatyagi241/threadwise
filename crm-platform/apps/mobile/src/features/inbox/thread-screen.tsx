@@ -39,6 +39,7 @@ import { BotBar } from './bot-bar';
 import { BotTab } from './bot-tab';
 import { ChoiceSheet } from './choice-sheet';
 import { Composer, type ComposerHandle } from './composer';
+import { dropEmptyMarks, tidyMarks } from './format-text';
 import { LabelsSheet } from './labels-sheet';
 import type { ComposerMode } from './note-toggle';
 import { TemplateBar } from './template-bar';
@@ -212,7 +213,8 @@ export function ThreadScreen() {
   };
 
   const onSend = () => {
-    const body = draft.trim();
+    // Bold pressed and nothing typed leaves an empty pair of marks at the end: it is not sent.
+    const body = dropEmptyMarks(tidyMarks(draft.trim()));
     if (!body) return;
     const clientMessageId = Crypto.randomUUID();
     setDraft('');

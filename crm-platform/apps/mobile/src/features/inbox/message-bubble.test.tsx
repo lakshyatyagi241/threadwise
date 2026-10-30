@@ -373,3 +373,17 @@ describe('MessageBubble: system lines', () => {
     expect(screen.queryByTestId('message-7')).toBeNull();
   });
 });
+
+describe('MessageBubble: formatting', () => {
+  it('shows *bold*, _italic_ and ~strike~ as formatted words without the marks', async () => {
+    await renderApp(
+      <MessageBubble message={message(1, { body: 'a *bold* and _slanted_ and ~gone~ word' })} />,
+    );
+    expect(screen.getByText('bold').props.style).toMatchObject({ fontFamily: 'Inter_700Bold' });
+    expect(screen.getByText('slanted').props.style).toMatchObject({ fontStyle: 'italic' });
+    expect(screen.getByText('gone').props.style).toMatchObject({
+      textDecorationLine: 'line-through',
+    });
+    expect(screen.queryByText(/\*/)).toBeNull();
+  });
+});

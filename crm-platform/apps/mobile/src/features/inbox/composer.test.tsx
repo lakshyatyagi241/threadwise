@@ -1,5 +1,6 @@
 import { act, fireEvent, screen } from '@testing-library/react-native';
 import { createRef, useState } from 'react';
+import { boldOf, seenOf, textOf } from '@/test/composer-text';
 import { renderApp } from '@/test/render';
 import { Composer, type ComposerHandle } from './composer';
 import { resetRecentEmoji } from './emoji';
@@ -41,6 +42,9 @@ function Harness({
 }
 
 const box = () => screen.getByLabelText('Message');
+const textIn = () => textOf(box().props.children);
+const visibleIn = () => seenOf(box().props.children);
+const boldIn = () => boldOf(box().props.children);
 /** The formatting row shows while the box has focus, so a test focuses it first. */
 const focus = async () => await fireEvent(box(), 'focus');
 const select = async (start: number, end = start) => {
@@ -82,43 +86,43 @@ describe('Composer: formatting buttons', () => {
     await renderApp(<Harness initial="say hello now" />);
     await select(4, 9);
     await press('Bold');
-    expect(box().props.value).toBe('say *hello* now');
+    expect(textIn()).toBe('say *hello* now');
     await press('Bold');
-    expect(box().props.value).toBe('say hello now');
+    expect(textIn()).toBe('say hello now');
   });
 
   it('writes italic and strikethrough marks, and widens a partly selected word to the whole word', async () => {
     await renderApp(<Harness initial="Hello wonderful world" />);
     await select(9, 12);
     await press('Italic');
-    expect(box().props.value).toBe('Hello _wonderful_ world');
+    expect(textIn()).toBe('Hello _wonderful_ world');
     await select(0, 5);
     await press('Strikethrough');
-    expect(box().props.value).toBe('~Hello~ _wonderful_ world');
+    expect(textIn()).toBe('~Hello~ _wonderful_ world');
   });
 
   it('puts a pair of marks at the caret when nothing is selected', async () => {
     await renderApp(<Harness initial="hi " />);
     await select(3);
     await press('Bold');
-    expect(box().props.value).toBe('hi **');
+    expect(textIn()).toBe('hi **');
   });
 
   it('underlines the selection with a combining line, as the web does', async () => {
     await renderApp(<Harness initial="say hi now" />);
     await select(4, 6);
     await press('Underline');
-    expect(box().props.value).toBe('say h̲i̲ now');
+    expect(textIn()).toBe('say h̲i̲ now');
   });
 
   it('makes bullets and numbers of the lines under the selection', async () => {
     await renderApp(<Harness initial={'one\ntwo\nthree'} />);
     await select(0, 7);
     await press('Bulleted list');
-    expect(box().props.value).toBe('- one\n- two\nthree');
+    expect(textIn()).toBe('- one\n- two\nthree');
     await select(0, 11);
     await press('Numbered list');
-    expect(box().props.value).toBe('1. one\n2. two\nthree');
+    expect(textIn()).toBe('1. one\n2. two\nthree');
   });
 
   it('shows the button as pressed while the caret is inside that formatting', async () => {
@@ -143,7 +147,7 @@ describe('Composer: formatting buttons', () => {
     await select(0, 4095);
     await press('Bold');
     // Two marks would make 4097 characters: the edit is dropped.
-    expect(box().props.value).toBe(full);
+    expect(textIn()).toBe(full);
     expect(seen).not.toHaveBeenCalled();
   });
 });
@@ -159,10 +163,10 @@ describe('Composer: emoji (opened from the "+" sheet through the handle)', () =>
     await openEmoji();
     expect(await screen.findByRole('header', { name: 'Emoji' })).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: '😀' }));
-    expect(box().props.value).toBe('hello😀 world');
+    expect(textIn()).toBe('hello😀 world');
     // A second one lands after the first, and the panel is still there.
     await fireEvent.press(screen.getByRole('button', { name: '😃' }));
-    expect(box().props.value).toBe('hello😀😃 world');
+    expect(textIn()).toBe('hello😀😃 world');
     expect(screen.getByRole('header', { name: 'Emoji' })).toBeTruthy();
   });
 
@@ -171,7 +175,7 @@ describe('Composer: emoji (opened from the "+" sheet through the handle)', () =>
     await select(4, 6);
     await openEmoji();
     await fireEvent.press(await screen.findByRole('button', { name: '😀' }));
-    expect(box().props.value).toBe('say 😀 now');
+    expect(textIn()).toBe('say 😀 now');
   });
 
   it('switches between the groups and lists the ones used last first', async () => {
@@ -180,7 +184,7 @@ describe('Composer: emoji (opened from the "+" sheet through the handle)', () =>
     expect(screen.queryByText('Recently used')).toBeNull();
     await fireEvent.press(await screen.findByRole('tab', { name: 'Gestures' }));
     await fireEvent.press(screen.getByRole('button', { name: '👍' }));
-    expect(box().props.value).toBe('👍');
+    expect(textIn()).toBe('👍');
     expect(screen.getByText('Recently used')).toBeTruthy();
     await fireEvent.press(screen.getByRole('tab', { name: 'Smileys' }));
     expect(screen.getByRole('button', { name: '😀' })).toBeTruthy();
@@ -239,6 +243,96 @@ describe('Composer: the bar', () => {
     expect(await screen.findByText('Messages can be up to 4096 characters.')).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Send' }).props.accessibilityState).toMatchObject({
       disabled: true,
+    });
+  });
+});
+
+describe('Composer: the marks are not shown in the box', () => {
+  it('draws no ** when Bold is pressed with nothing selected, though the pair is in the text', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    expect(textIn()).toBe('hi **');
+    expect(visibleIn()).toBe('hi ');
+  });
+
+  it('draws what is typed in that pair bold, and hides the marks round it', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    await fireEvent.changeText(box(), 'hi *x*');
+    expect(textIn()).toBe('hi *x*');
+    expect(visibleIn()).toBe('hi x');
+    expect(boldIn()).toEqual(['x']);
+  });
+
+  it('keeps what is typed after the pair bold, wherever the box put the caret', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    // Android puts the caret at the end when the text is redrawn, so the word arrives after the pair.
+    await fireEvent.changeText(box(), 'hi **w');
+    await fireEvent.changeText(box(), 'hi *w*o');
+    await fireEvent.changeText(box(), 'hi *wo*w');
+    expect(textIn()).toBe('hi *wow*');
+    expect(visibleIn()).toBe('hi wow');
+    expect(boldIn()).toEqual(['wow']);
+  });
+
+  it('ends the formatting when the same button is pressed again, and takes an empty pair out', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    await press('Bold');
+    expect(textIn()).toBe('hi ');
+    await fireEvent.changeText(box(), 'hi x');
+    expect(textIn()).toBe('hi x');
+  });
+
+  it('shows the button as on while the pair is on, and plain text after it ends', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    expect(screen.getByRole('button', { name: 'Bold' }).props.accessibilityState).toMatchObject({
+      selected: true,
+    });
+    await fireEvent.changeText(box(), 'hi **w');
+    await press('Bold');
+    await fireEvent.changeText(box(), 'hi *w* x');
+    expect(textIn()).toBe('hi *w* x');
+    expect(boldIn()).toEqual(['w']);
+  });
+
+  it('takes the empty pair out when the box loses focus', async () => {
+    await renderApp(<Harness initial="hi " />);
+    await select(3);
+    await press('Bold');
+    await fireEvent(box(), 'blur');
+    expect(textIn()).toBe('hi ');
+  });
+
+  it('draws selected words bold without showing the asterisks', async () => {
+    await renderApp(<Harness initial="say hello now" />);
+    await select(4, 9);
+    await press('Bold');
+    expect(textIn()).toBe('say *hello* now');
+    expect(visibleIn()).toBe('say hello now');
+    expect(boldIn()).toEqual(['hello']);
+  });
+
+  it('does not let an empty pair be sent', async () => {
+    await renderApp(<Harness initial="**" />);
+    expect(screen.getByRole('button', { name: 'Send' }).props.accessibilityState).toMatchObject({
+      disabled: true,
+    });
+  });
+});
+
+describe('Composer: sending what was typed with a button on', () => {
+  it('still offers to send a message that ends with an empty pair, which is not sent', async () => {
+    await renderApp(<Harness initial="hi **" />);
+    expect(screen.getByRole('button', { name: 'Send' }).props.accessibilityState).toMatchObject({
+      disabled: false,
     });
   });
 });

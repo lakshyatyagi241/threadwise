@@ -17,6 +17,7 @@ import {
   thread,
   withPermissions,
 } from '@/test/inbox-fixtures';
+import { textOf } from '@/test/composer-text';
 import { renderApp } from '@/test/render';
 import { RealtimeProvider } from '@/lib/realtime';
 import { fakeSocketFactory } from '@/test/fake-socket';
@@ -249,7 +250,7 @@ describe('ThreadScreen', () => {
     // The bubble is there before the server has answered, and the box is empty again.
     expect(await screen.findByText('See you at 5')).toBeTruthy();
     expect(screen.getByLabelText(/^Sent by you: See you at 5, .*, Sending$/)).toBeTruthy();
-    expect(screen.getByLabelText('Message').props.value).toBe('');
+    expect(textOf(screen.getByLabelText('Message').props.children)).toBe('');
     const [, clientMessageId, body] = sendCall.mock.calls[0] ?? [];
     expect(body).toBe('See you at 5');
     expect(clientMessageId).toMatch(/^[0-9a-f-]{36}$/);
@@ -300,7 +301,9 @@ describe('ThreadScreen', () => {
     await type('Hello again');
     await fireEvent.press(screen.getByRole('button', { name: 'Send' }));
     expect(await screen.findByText(words)).toBeTruthy();
-    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Hello again'));
+    await waitFor(() =>
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe('Hello again'),
+    );
     expect(screen.queryByLabelText(/^Sent by you: Hello again/)).toBeNull();
   });
 
@@ -1485,7 +1488,7 @@ describe('ThreadScreen: saved replies', () => {
     await fireEvent.press(await screen.findByRole('button', { name: 'Thanks' }));
     await waitFor(() => expect(fillCall).toHaveBeenCalledWith(THANKS.id, CONVERSATION_ID));
     await waitFor(() =>
-      expect(screen.getByLabelText('Message').props.value).toBe('Thank you Rohan!'),
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe('Thank you Rohan!'),
     );
     // The sheet closes, and nothing was sent.
     expect(screen.queryByRole('button', { name: 'Opening hours' })).toBeNull();
@@ -1506,7 +1509,9 @@ describe('ThreadScreen: saved replies', () => {
     await open();
     await fireEvent.press(await screen.findByRole('button', { name: 'Opening hours' }));
     await waitFor(() =>
-      expect(screen.getByLabelText('Message').props.value).toBe('Hello Rohan\nWe are open 9 to 6.'),
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe(
+        'Hello Rohan\nWe are open 9 to 6.',
+      ),
     );
   });
 
@@ -1719,7 +1724,9 @@ describe('ThreadScreen: private notes', () => {
     );
     expect(sendCall).not.toHaveBeenCalled();
     await waitFor(() =>
-      expect(screen.getByPlaceholderText('Write a note only your team sees').props.value).toBe(''),
+      expect(
+        textOf(screen.getByPlaceholderText('Write a note only your team sees').props.children),
+      ).toBe(''),
     );
     await fireEvent.press(screen.getByRole('button', REPLY_TAB));
     expect(await screen.findByLabelText('Message')).toBeTruthy();
@@ -1740,9 +1747,9 @@ describe('ThreadScreen: private notes', () => {
     );
     await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
     expect(await screen.findByText("Couldn't save the note. Try again.")).toBeTruthy();
-    expect(screen.getByPlaceholderText('Write a note only your team sees').props.value).toBe(
-      'Call tomorrow',
-    );
+    expect(
+      textOf(screen.getByPlaceholderText('Write a note only your team sees').props.children),
+    ).toBe('Call tomorrow');
   });
 
   it('lets a person write an internal note while the 24-hour window is closed, as on the web, and sends nothing to the customer', async () => {
@@ -2131,7 +2138,9 @@ describe('ThreadScreen: Smart AI Assistant', () => {
         text: 'hello   there',
       }),
     );
-    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Hello there.'));
+    await waitFor(() =>
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe('Hello there.'),
+    );
     expect(screen.queryByText('Condense')).toBeNull();
     expect(sendCall).not.toHaveBeenCalled();
   });
@@ -2157,7 +2166,9 @@ describe('ThreadScreen: Smart AI Assistant', () => {
         language: 'French',
       }),
     );
-    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Bonjour'));
+    await waitFor(() =>
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe('Bonjour'),
+    );
   });
 
   it('says so when no language matches', async () => {
@@ -2196,9 +2207,11 @@ describe('ThreadScreen: Smart AI Assistant', () => {
     await fireEvent.press(await sparkle());
     await choose(/^Condense/);
     expect(await screen.findByText('The AI could not change the text. Try again.')).toBeTruthy();
-    expect(screen.getByLabelText('Message').props.value).toBe('A very long message');
+    expect(textOf(screen.getByLabelText('Message').props.children)).toBe('A very long message');
     await choose(/^Condense/);
-    await waitFor(() => expect(screen.getByLabelText('Message').props.value).toBe('Short'));
+    await waitFor(() =>
+      expect(textOf(screen.getByLabelText('Message').props.children)).toBe('Short'),
+    );
     expect(rewriteCall).toHaveBeenCalledTimes(2);
   });
 

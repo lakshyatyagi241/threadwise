@@ -10,11 +10,16 @@ import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { EmojiSheet } from './emoji-sheet';
 import { FormatBar } from './format-bar';
+import { composerRuns } from './marked-text';
 import {
   activeFormats,
+  dropEmptyMarks,
+  followEdit,
+  isEmptyPair,
   toggleList,
   toggleMark,
   toggleUnderline,
+  type Armed,
   type Edit,
   type Mark,
 } from './format-text';
@@ -78,23 +83,61 @@ export function Composer({
   const [pending, setPending] = useState<Selection | undefined>();
   const [focused, setFocused] = useState(false);
   const [emojiOpen, setEmojiOpen] = useState(false);
+  // The pair of marks a formatting button put at the caret and that is still "on": what is typed right after it goes inside it (see
+  // `followEdit`). While it holds nothing it is drawn hidden; it is taken out again if the box loses focus with nothing typed in it.
+  const [armed, setArmed] = useState<Armed | null>(null);
   const max = note ? NOTE_BODY_MAX : MESSAGE_BODY_MAX;
-  const trimmed = value.trim();
+  const trimmed = dropEmptyMarks(value).trim();
   const tooLong = trimmed.length > max;
   const canSend = trimmed.length > 0 && !tooLong && !busy;
   const at = {
     start: Math.min(selection.start, value.length),
     end: Math.min(selection.end, value.length),
   };
-  const active = activeFormats(value, at.start, at.end);
+  const real = activeFormats(value, at.start, at.end);
+  const active = {
+    ...real,
+    bold: real.bold || armed?.mark === '*',
+    italic: real.italic || armed?.mark === '_',
+    strike: real.strike || armed?.mark === '~',
+  };
   // An edit that would push the text over the limit is dropped, as the web does.
   const apply = (edit: Edit) => {
     if (edit.text.length > max) return;
     onChange(edit.text);
+    // A pair put at the caret with nothing inside it (two characters longer, caret between them): it is now "on".
+    const born =
+      edit.start === edit.end &&
+      edit.text.length === value.length + 2 &&
+      isEmptyPair(edit.text.slice(edit.start - 1, edit.start + 1));
+    setArmed(
+      born
+        ? { start: edit.start - 1, end: edit.start + 1, mark: edit.text[edit.start - 1] as Mark }
+        : null,
+    );
     const next = { start: edit.start, end: edit.end };
     setSelection(next);
     setPending(next);
     input.current?.focus();
+  };
+  // Takes the pair out of the text when the box loses focus with nothing typed in it, and ends it either way.
+  const endArmed = () => {
+    if (
+      armed &&
+      armed.end - armed.start === 2 &&
+      isEmptyPair(value.slice(armed.start, armed.end))
+    ) {
+      onChange(value.slice(0, armed.start) + value.slice(armed.end));
+    }
+    setArmed(null);
+  };
+  // Pressing the same button again while it is "on" ends it: what is typed next is plain.
+  const pressMark = (mark: Mark) => {
+    if (armed && armed.mark === mark) {
+      endArmed();
+      return;
+    }
+    apply(toggleMark(value, at.start, at.end, mark));
   };
   const insertEmoji = (emoji: string) =>
     apply({
@@ -122,14 +165,6 @@ export function Composer({
         },
       ]}
     >
-      {!note && focused ? (
-        <FormatBar
-          active={active}
-          onMark={(mark: Mark) => apply(toggleMark(value, at.start, at.end, mark))}
-          onUnderline={() => apply(toggleUnderline(value, at.start, at.end))}
-          onList={(kind) => apply(toggleList(value, at.start, at.end, kind))}
-        />
-      ) : null}
       {tooLong ? (
         <Text variant="caption" danger accessibilityRole="alert">
           {note ? t('inbox.details.notes.tooLong', { max }) : t('inbox.composer.tooLong', { max })}
@@ -159,8 +194,11 @@ export function Composer({
               placeholder={
                 note ? t('inbox.composer.notePlaceholder') : t('inbox.composer.placeholder')
               }
-              value={value}
-              onChangeText={onChange}
+              onChangeText={(text) => {
+                const out = followEdit(value, text, armed);
+                setArmed(out.armed);
+                onChange(out.text);
+              }}
               inputRef={input}
               selection={pending}
               onSelectionChange={(e) => {
@@ -168,9 +206,18 @@ export function Composer({
                 setPending(undefined);
               }}
               onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
+              onBlur={() => {
+                setFocused(false);
+                endArmed();
+              }}
               multiline
-            />
+            >
+              {/* The words drawn as they will look (bold, italic, struck through); the marks stay in the text but are not visible.
+                  React Native takes the text of a styled input from its children, so there is no `value`. */}
+              {value === ''
+                ? undefined
+                : composerRuns(value, armed && armed.end - armed.start === 2 ? armed.start : null)}
+            </TextField>
           </View>
           {!note && onOpenAi ? (
             <Pressable
@@ -203,6 +250,15 @@ export function Composer({
           )}
         </Pressable>
       </View>
+      {/* Under the box, not over it: Android opens its own Cut / Copy / Paste bar above a selected word, and over the buttons it would take their taps. */}
+      {!note && focused ? (
+        <FormatBar
+          active={active}
+          onMark={pressMark}
+          onUnderline={() => apply(toggleUnderline(value, at.start, at.end))}
+          onList={(kind) => apply(toggleList(value, at.start, at.end, kind))}
+        />
+      ) : null}
       {!note ? (
         <EmojiSheet visible={emojiOpen} onPick={insertEmoji} onClose={() => setEmojiOpen(false)} />
       ) : null}
