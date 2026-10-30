@@ -52,6 +52,27 @@ export class WizardReadService {
     private readonly previousSends: PreviousSendsService,
   ) {}
 
+  /** A carousel's cards for the preview: each image as a link the browser can open (a stored key through `links`). */
+  private cardsOf(
+    r: TemplateListRow,
+    links: ReadonlyMap<string, string>,
+  ): NonNullable<WizardTemplate['cards']> {
+    if (r.templateType !== 'carousel' || !Array.isArray(r.carouselData)) return [];
+    return r.carouselData
+      .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
+      .map((c) => {
+        const image = typeof c.image === 'string' ? c.image : '';
+        const sample = typeof c.headerSampleUrl === 'string' ? c.headerSampleUrl : '';
+        const web = (v: string) => (/^https?:\/\//i.test(v) ? v : null);
+        return {
+          format: String(c.format ?? 'image').toLowerCase() === 'video' ? 'video' : 'image',
+          imageUrl: (image ? (links.get(image) ?? web(image)) : null) ?? web(sample),
+          body: typeof c.body === 'string' ? c.body : '',
+          buttons: Array.isArray(c.buttons) ? (c.buttons as Array<Record<string, unknown>>) : [],
+        };
+      });
+  }
+
   toTemplate(r: TemplateListRow, links: ReadonlyMap<string, string> = new Map()): WizardTemplate {
     return {
       id: r.uuid,
@@ -62,6 +83,7 @@ export class WizardReadService {
       body: r.body,
       footer: r.footer,
       buttons: Array.isArray(r.buttons) ? (r.buttons as Array<Record<string, unknown>>) : [],
+      cards: this.cardsOf(r, links),
       attachmentType: r.attachmentType,
       attachmentUrl:
         (r.headerMediaKey ? links.get(r.headerMediaKey) : undefined) ??

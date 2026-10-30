@@ -408,6 +408,14 @@ export const wizardTemplateSlotSchema = z.object({
 export type WizardTemplateSlot = z.infer<typeof wizardTemplateSlotSchema>;
 
 /** An approved template as the wizard lists it, with what the preview and the variable step need. */
+/** One card of a carousel template, as the preview draws it (the image link is ready to open, or null). */
+export const wizardTemplateCardSchema = z.object({
+  format: z.enum(['image', 'video']),
+  imageUrl: z.string().nullable(),
+  body: z.string(),
+  buttons: z.array(z.record(z.string(), z.unknown())),
+});
+
 export const wizardTemplateSchema = z.object({
   id: uuidSchema,
   name: z.string(),
@@ -417,6 +425,8 @@ export const wizardTemplateSchema = z.object({
   body: z.string(),
   footer: z.string().nullable(),
   buttons: z.array(z.record(z.string(), z.unknown())),
+  /** A carousel template's cards (left out for any other template). */
+  cards: z.array(wizardTemplateCardSchema).optional(),
   attachmentType: z.string().nullable(),
   attachmentUrl: z.string().nullable(),
   /** The WhatsApp number it is sent from. */
