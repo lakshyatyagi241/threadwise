@@ -121,6 +121,7 @@ export class WebhookPipelineService {
     if (String(d.shipment_status ?? '').toLowerCase() !== 'delivered') return;
     const cfg = await this.message.config(job.orgId, 'shopify', job.storeId, 'order/delivered');
     if (!cfg) return;
+    if (!(await this.firstDeliveryOf(job, d))) return;
     const orderId = String(d.order_id ?? '');
     const order = await this.db.txAs({ orgId: job.orgId }, (tx) =>
       this.mirrorRepo.orderByStoreId(tx, job.orgId, 'shopify', orderId),
@@ -136,6 +137,21 @@ export class WebhookPipelineService {
       fulfillments: [d],
     };
     await this.pseudo(job, 'order/delivered', data);
+  }
+
+  /** Once per shipment: a later fulfilment edit that repeats `delivered` must not send the customer the message again (issue #1521). */
+  private async firstDeliveryOf(
+    job: WebhookJob,
+    fulfilment: Record<string, unknown>,
+  ): Promise<boolean> {
+    if (fulfilment.id === undefined || fulfilment.id === null) return true;
+    const key = `ecom:shopify-delivered:${job.orgId}:${job.storeId}:${String(fulfilment.id)}`;
+    try {
+      return (await this.redis.set(key, '1', 'EX', STATUS_MEMORY_SECONDS, 'NX')) === 'OK';
+    } catch {
+      // Redis down: fail open for the customer's message, the delivery id guard still bounds repeats.
+      return true;
+    }
   }
 
   /**

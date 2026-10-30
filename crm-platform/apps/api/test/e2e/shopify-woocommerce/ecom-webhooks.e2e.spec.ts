@@ -449,6 +449,27 @@ describe('delivered, uninstall and the privacy webhooks (TW-ECOM-018, 021, 022)'
     expect(sentMessages[0]).toMatchObject({ to: '15550109999', params: ['Ada L', '#1001', ''] });
   });
 
+  it('sends Delivered once per shipment, even when a later fulfilment edit repeats delivered (issue #1521)', async () => {
+    const t = await api.signup('ewh17');
+    const s = await store(t, 'shopify');
+    await automation(
+      t,
+      'shopify',
+      s.id,
+      'order/delivered',
+      await template(t, 'Hi {{1}}, order {{2}} arrived, total {{3}}'),
+    );
+    await shopifyPost(s.secret, 'orders/create', order);
+    await runLogged(t, 'shopify', s.id, 'orders/create', order);
+    sentMessages.length = 0;
+    const fulfilment = { id: 9, order_id: 1001, shipment_status: 'delivered' };
+    await shopifyPost(s.secret, 'fulfillments/update', fulfilment);
+    await runLogged(t, 'shopify', s.id, 'fulfillments/update', fulfilment);
+    await shopifyPost(s.secret, 'fulfillments/update', fulfilment);
+    await runLogged(t, 'shopify', s.id, 'fulfillments/update', fulfilment);
+    expect(sentMessages).toHaveLength(1);
+  });
+
   it('does not fire Delivered for a shipment still in transit', async () => {
     const t = await api.signup('ewh13');
     const s = await store(t, 'shopify');
