@@ -2626,6 +2626,7 @@
         "buttonNoExit": "「{node}」: ボタン「{button}」はどのステップにもつながっていません。",
         "notConnected": "「{node}」はどこにも接続されていません。",
         "wrongChannel": "「{node}」は{channel}では動作しません。削除するか、トリガーノードでチャンネルを切り替えてください。",
+        "notBuilt": "「{node}」はまだ利用できません。フローの実行時にスキップされます。削除してください。",
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",

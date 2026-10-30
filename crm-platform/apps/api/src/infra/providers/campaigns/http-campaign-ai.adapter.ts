@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { hasFixedTemperature, openAiTemperature } from '../openai-output-limit';
 import type { CampaignAiPort, CampaignAiRequest, CampaignAiResult } from './campaign-ai.port';
 
 /** Laravel gave the vendor call the request's own time; a vendor slower than this fails the builder's "Build with AI". */
 const TIMEOUT_MS = 45_000;
+
+/** The output limit a reasoning model gets at least: its hidden reasoning is counted in it. */
+const REASONING_MIN_TOKENS = 6000;
 
 const num = (v: unknown): number => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
 
@@ -37,22 +41,27 @@ export class HttpCampaignAiAdapter implements CampaignAiPort {
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
-    if (!res.ok) throw new Error(`AI provider answered ${res.status}`);
+    if (!res.ok) {
+      const detail = (await res.text().catch(() => '')).slice(0, 300);
+      throw new Error(`AI provider answered ${res.status} ${detail}`.trim());
+    }
     return res.json();
   }
 
   private async openai(req: CampaignAiRequest): Promise<CampaignAiResult> {
-    const base = (
-      process.env.CAMP_AI_OPENAI_BASE_URL?.trim() || 'https://api.openai.com/v1'
-    ).replace(/\/+$/, '');
+    const override = process.env.CAMP_AI_OPENAI_BASE_URL?.trim();
+    const base = (override || 'https://api.openai.com/v1').replace(/\/+$/, '');
     const json = (await this.post(
       `${base}/chat/completions`,
       { authorization: `Bearer ${req.apiKey}` },
       {
         model: req.model,
-        // OpenAI's current models reject `max_tokens` and take `max_completion_tokens`.
-        max_completion_tokens: req.maxTokens,
-        temperature: req.temperature,
+        // OpenAI's current models reject `max_tokens` and take `max_completion_tokens`. GPT-5 and the o-series count their reasoning
+        // against it, so a 1600-token brief would come back empty: they get headroom, and no temperature (they reject any but the default).
+        max_completion_tokens: hasFixedTemperature(req.model)
+          ? Math.max(req.maxTokens, REASONING_MIN_TOKENS)
+          : req.maxTokens,
+        ...openAiTemperature(req.model, req.temperature, !override),
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: req.systemPrompt },

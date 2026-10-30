@@ -160,6 +160,9 @@ export class AdminBillingRepository {
       ORDER BY t.created_at DESC, t.oid DESC
       LIMIT ${f.limit} OFFSET ${f.offset}`);
     const rows = res.rows as Raw[];
+    // A page past the last row has no row to read the window count from, so count the filtered set on its own.
+    if (rows.length === 0 && f.offset > 0)
+      return { rows: [], total: await this.countOrders(tx, f) };
     return { rows: rows.map(toListRow), total: rows[0] ? Number(rows[0].total_rows) : 0 };
   }
 

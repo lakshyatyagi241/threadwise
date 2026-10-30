@@ -38,6 +38,8 @@
       "failed": "विफल"
     },
     "source": {
+      "flow_webhook": "वेबहुक",
+      "sheet_row": "शीट पंक्ति",
       "keyword": "कीवर्ड",
       "any_message": "कोई भी मैसेज",
       "tag_added": "टैग जुड़ा",

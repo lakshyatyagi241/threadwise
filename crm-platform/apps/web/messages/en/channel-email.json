@@ -139,7 +139,9 @@
       "not_enabled": "Email is not included in your workspace's plan, so nothing was connected. Ask an administrator to turn it on.",
       "not_allowed": "You are not allowed to connect this kind of mailbox. Ask an administrator for access, or use a shared mailbox.",
       "no_address": "The provider did not share the mailbox's email address, so nothing was connected. Connect again and allow access to the email address.",
-      "no_refresh_token": "The provider did not allow this mailbox to stay signed in, so nothing was connected. Remove this app's access in your Google or Microsoft account settings, then connect again."
+      "no_refresh_token": "The provider did not allow this mailbox to stay signed in, so nothing was connected. Remove this app's access in your Google or Microsoft account settings, then connect again.",
+      "expired": "The sign-in link expired or was already used. Connect again from the start.",
+      "provider_refused": "Google refused the request. Ask your platform administrator to check that the Gmail API is enabled for the Google project, and that this account is allowed to sign in (an app still in testing only accepts listed test users)."
     },
     "errors": {
       "notConfigured": "Sign-in for this provider is not set up for this platform yet. Ask your platform administrator.",

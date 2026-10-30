@@ -94,7 +94,9 @@
       "custom_roles": "Özel roller ve kapsamlar",
       "inbox_assignment_sticky": "Akıllı yönlendirme: kişi sahibi ve sabit temsilci",
       "agent_status_bar": "Durum çubuğu: üst çubukta ve Gelen Kutusu’nda Müsait / Uzakta denetimi",
-      "agent_status_automation": "Durumu otomatikleştir: kişisel çalışma saatleri ve otomatik Uzakta"
+      "agent_status_automation": "Durumu otomatikleştir: kişisel çalışma saatleri ve otomatik Uzakta",
+      "products_services": "Ürünler ve hizmetler",
+      "recurring_invoices": "Tekrarlayan faturalar"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",

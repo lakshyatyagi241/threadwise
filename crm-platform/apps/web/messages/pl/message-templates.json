@@ -380,7 +380,7 @@
           "quickReplyVariable": "Szybka odpowiedź nie może zawierać zmiennej.",
           "urlExampleRequired": "Podaj przykładową wartość dla zmiennej w adresie URL.",
           "quickReplyPosition": "Szybkie odpowiedzi muszą być razem, na początku lub na końcu przycisków.",
-          "flowIdRequired": "Wpisz ID Flow.",
+          "flowIdRequired": "Wybierz formularz WhatsApp z listy.",
           "flowIdInvalid": "ID Flow to liczba.",
           "screenRequired": "Wpisz ID ekranu.",
           "catalogAlone": "Przycisku katalogu nie można łączyć z innymi przyciskami.",

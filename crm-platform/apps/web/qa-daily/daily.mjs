@@ -118,6 +118,8 @@ for (const f of [join(OUT, DATE, 'bugs-live.json'), join(OUT, DATE, 'bugs.json')
 // 3. fix, PR, merge
 const fixed = [];
 if (flag('fix')) {
+  // a local run tested the stack it found; the fixer builds and starts its own on the same ports
+  if (target === 'local') tryRun('bash', ['qa-daily/stack.sh', 'down'], { cwd: WEB });
   const { bugs = [] } = await call('open', { limit: maxFix, env: target });
   for (const b of bugs) fixed.push(await fixBug(b));
   note('fix', { tried: bugs.length, results: fixed.map((f) => `${f.id}:${f.status}`) });

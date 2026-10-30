@@ -139,7 +139,9 @@
       "not_enabled": "E-mail zit niet in het abonnement van uw werkruimte, dus er is niets verbonden. Vraag een beheerder het aan te zetten.",
       "not_allowed": "U mag dit soort postvak niet verbinden. Vraag een beheerder om toegang of gebruik een gedeeld postvak.",
       "no_address": "De aanbieder heeft het e-mailadres van het postvak niet gedeeld, dus er is niets verbonden. Verbind opnieuw en sta toegang tot het e-mailadres toe.",
-      "no_refresh_token": "De aanbieder stond niet toe dat dit postvak ingelogd blijft, dus er is niets verbonden. Verwijder de toegang van deze app in de instellingen van uw Google- of Microsoft-account en verbind opnieuw."
+      "no_refresh_token": "De aanbieder stond niet toe dat dit postvak ingelogd blijft, dus er is niets verbonden. Verwijder de toegang van deze app in de instellingen van uw Google- of Microsoft-account en verbind opnieuw.",
+      "expired": "De inloglink is verlopen of al gebruikt. Verbind opnieuw vanaf het begin.",
+      "provider_refused": "Google heeft het verzoek geweigerd. Vraag je platformbeheerder te controleren of de Gmail API is ingeschakeld in het Google-project en of dit account mag inloggen (een app in testmodus accepteert alleen vermelde testgebruikers)."
     },
     "errors": {
       "notConfigured": "Aanmelden voor deze provider is nog niet ingesteld voor dit platform. Vraag het aan de platformbeheerder.",

@@ -8,6 +8,7 @@
       "generic": "Something went wrong. Please try again.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Connect a WhatsApp Cloud API number to use Forms.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "No connected WhatsApp Cloud API number has usable credentials.",
+      "WFL_FORM_PARTNER_NUMBER": "Your WhatsApp number is connected through a partner (such as Interakt). WhatsApp Forms can only be published through a direct Meta connection, so connect a number directly under Channels → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta rejected the form definition.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Your WhatsApp Business Account needs to pass Meta's verification before you can publish forms.",
       "WFL_FORM_PUBLISH_FAILED": "Meta could not publish this form.",
@@ -141,7 +142,9 @@
         "date": "Date",
         "dropdown": "Dropdown",
         "radio_buttons": "Radio buttons",
-        "checkbox": "Checkboxes"
+        "checkbox": "Checkboxes",
+        "photo": "Photo upload",
+        "document": "Document upload"
       },
       "submissions": {
         "heading": "Submissions",

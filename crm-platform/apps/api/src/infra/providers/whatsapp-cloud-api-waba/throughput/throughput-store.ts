@@ -346,7 +346,13 @@ export class ThroughputStore {
     gateMs = 0,
   ): Promise<void> {
     if (gateMs > 0) {
-      const ok = await this.redis.set(govKeys.eventGate(phoneNumberId, kind), '1', 'PX', gateMs, 'NX');
+      const ok = await this.redis.set(
+        govKeys.eventGate(phoneNumberId, kind),
+        '1',
+        'PX',
+        gateMs,
+        'NX',
+      );
       if (ok !== 'OK') return;
     }
     const key = govKeys.events(phoneNumberId);
@@ -410,7 +416,8 @@ export class ThroughputStore {
       const pen = (res[base + 6]?.[1] as Record<string, string> | undefined) ?? {};
       const f = Number(pen.f);
       const at = Number(pen.at);
-      const factor = pen.f && Number.isFinite(f) && Number.isFinite(at) ? recoveredFactor(f, now - at) : 1;
+      const factor =
+        pen.f && Number.isFinite(f) && Number.isFinite(at) ? recoveredFactor(f, now - at) : 1;
       out.set(pn, {
         mpsNow: Math.round((secs.slice(0, 10).reduce((a, b) => a + b, 0) / 10) * 10) / 10,
         peak1m: secs.reduce((a, b) => Math.max(a, b), 0),

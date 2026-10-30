@@ -3,7 +3,7 @@
 //   --target local (default)  uses the stack from qa-daily/stack.sh (--rebuild: build this checkout, restart the stack first)
 //   --target prod             runs against QA_BASE_URL / https://desk.wabo.ai with the QA_* credentials from the environment
 // Exit 0 = the bug no longer reproduces, 1 = it still does, 2 = could not run (site down, unknown bug).
-import { readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { OUT, WEB, DATE, readJson, tryRun, log, probe, targetConfig } from './lib.mjs';
 
@@ -54,7 +54,7 @@ export async function recheck(bug, { target = 'local' } = {}) {
         '-c',
         'qa-daily/playwright.live.config.ts',
         '-g',
-        `^${esc(bug.Test)}$`,
+        esc(bug.Test),
       ],
       {
         cwd: WEB,
@@ -74,6 +74,11 @@ export async function recheck(bug, { target = 'local' } = {}) {
         message = last.error?.message?.split('\n')[0] ?? '';
         const a = last.attachments?.find((x) => x.name === 'proof');
         if (a?.path) proof = a.path;
+        else if (a?.body) {
+          // an API-only journey inlines its proof card in the JSON report
+          proof = join(OUT, 'recheck', `${bug.ID}-proof.png`);
+          writeFileSync(proof, Buffer.from(a.body, 'base64'));
+        }
       });
     if (status === null)
       return {
@@ -114,7 +119,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       'bash',
       [
         '-c',
-        "export NODE_OPTIONS=--max-old-space-size=6144; bash qa-daily/stack.sh down; pnpm --filter './packages/*' build && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up",
+        "export NODE_OPTIONS=--max-old-space-size=6144; bash qa-daily/stack.sh down; (cd ../.. && pnpm --filter './packages/*' build) && pnpm --filter @crm/api build && pnpm --filter @crm/web build && bash qa-daily/stack.sh up",
       ],
       { cwd: WEB, stdio: 'inherit' },
     );

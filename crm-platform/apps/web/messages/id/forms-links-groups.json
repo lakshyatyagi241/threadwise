@@ -8,6 +8,7 @@
       "generic": "Terjadi kesalahan. Silakan coba lagi.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "Hubungkan nomor WhatsApp Cloud API untuk menggunakan Formulir.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "Tidak ada nomor WhatsApp Cloud API yang terhubung memiliki kredensial yang valid.",
+      "WFL_FORM_PARTNER_NUMBER": "Nomor WhatsApp Anda terhubung melalui mitra (seperti Interakt). Formulir WhatsApp hanya dapat dipublikasikan melalui koneksi langsung ke Meta, jadi hubungkan nomor secara langsung di Saluran → WhatsApp.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta menolak definisi formulir ini.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Akun WhatsApp Business Anda harus lolos verifikasi Meta sebelum dapat memublikasikan formulir.",
       "WFL_FORM_PUBLISH_FAILED": "Meta tidak dapat memublikasikan formulir ini.",
@@ -132,7 +133,9 @@
         "date": "Tanggal",
         "dropdown": "Menu tarik-turun",
         "radio_buttons": "Tombol radio",
-        "checkbox": "Kotak centang"
+        "checkbox": "Kotak centang",
+        "photo": "Unggah foto",
+        "document": "Unggah dokumen"
       },
       "submissions": {
         "heading": "Pengisian",

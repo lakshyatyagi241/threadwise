@@ -39,6 +39,7 @@
       "deleteFailed": "Aturan tidak dapat dihapus.",
       "businessHours": "Jam kerja",
       "recordNote": "Ini menugaskan percakapan. Untuk memberikan {contacts}, perusahaan, dan {deals} baru ke pemilik penjualan, lihat <link>Aturan penugasan data</link>.",
+      "agentsNote": "Siapa yang mendapat chat bergantung pada ketersediaan tiap orang (status di bilah atas) dan batas chat bersamaan mereka. Atur batasnya di <link>Anggota tim</link>.",
       "subtitle": "Pilih siapa yang mendapat setiap chat baru. Sakelar sudah cukup untuk sebagian besar ruang kerja; tambahkan aturan hanya jika Anda butuh kontrol lebih."
     },
     "rules": {

@@ -1,6 +1,10 @@
 import { flbDefaultNodeData } from '../../../packages/contracts/src/flow-builder-editor/node-catalogue';
 import type { FlowEdge, FlowNode } from '../../../packages/contracts/src/flow-builder-editor/graph';
 import { flbExtractTrigger } from '../../../packages/contracts/src/flow-builder-editor/trigger';
+import {
+  flbTriggerConfig,
+  type FlbGoogleSheetConfig,
+} from '../../../packages/contracts/src/flow-builder-editor/trigger-config';
 import { arr, obj, s } from '../flows/rules';
 import type { Soft } from '../transform/types';
 import { scrub, type Doc } from '../util';
@@ -61,9 +65,9 @@ export const MAPPING: MappingRow[] = [
   },
   {
     key: 'trigger|google|google_sheet_events',
-    target: 'trigger kind manual_enroll (placeholder)',
-    status: 'unsupported',
-    note: 'no "sheet row added or updated" trigger in WaDesk',
+    target: 'trigger kind google_sheet',
+    status: 'approximated',
+    note: 'sheet id, tab, phone column; WaDesk starts on NEW rows only (Waboo also on an updated row), through the workspace Google connection (the Waboo Google account is lost)',
   },
   {
     key: 'condition|contact|query',
@@ -483,6 +487,30 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
         built.set(n.id, { entry: id, from: outOf(id) });
         return;
       }
+      case 'trigger|google|google_sheet_events': {
+        const sheet = obj(n.data.googleSheet);
+        const config = flbTriggerConfig('google_sheet', {
+          sheetId: s(sheet.id),
+          tabName: s(n.data.googleSheetName) || s(obj(n.data.localValues).googleSheetName),
+          phoneColumn: s(n.data.mobile_contact_number),
+        }) as FlbGoogleSheetConfig;
+        bump('sheetTriggerApproximated');
+        if (!config.sheetId || !config.phoneColumn) bump('sheetTriggerIncomplete');
+        // the spreadsheet title is kept for whoever reconnects Google after cutover; the Waboo account is not
+        addNode(
+          id,
+          'trigger',
+          p.x,
+          p.y,
+          { kind: 'google_sheet', ...config },
+          {
+            ...waboo,
+            sheetName: s(sheet.name),
+          },
+        );
+        built.set(n.id, { entry: id, from: outOf(id) });
+        return;
+      }
       case 'condition|contact|query':
       case 'condition|google|google_sheet_query': {
         if (!fq) bump('filterMissing');
@@ -834,6 +862,16 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
     'SHEET_DETAILS_LOST',
     'Google account, action type and static values of the sheet step are lost',
     L('sheetDetailsLost'),
+  );
+  add(
+    'SHEET_TRIGGER_APPROXIMATED',
+    'the Google Sheet trigger starts on new rows only (Waboo also on an updated row) and reads the sheet through the workspace Google connection, which must be connected; the Waboo Google account is lost',
+    L('sheetTriggerApproximated'),
+  );
+  add(
+    'SHEET_TRIGGER_INCOMPLETE',
+    'the Google Sheet trigger has no sheet id or no phone column: it starts nothing until both are set',
+    L('sheetTriggerIncomplete'),
   );
   add(
     'LAYOUT_MISSING',

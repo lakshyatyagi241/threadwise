@@ -35,6 +35,21 @@ export function whatsappDefaultsFrom(
 /** The channels whose bots have a widget and so the Customize and Deploy tabs: website chat and WhatsApp. */
 export type WidgetChannel = 'web' | 'chat';
 
+/**
+ * The channel an Advanced flow has a widget for: a website chat bot always, a WhatsApp flow only while it starts from a keyword (the
+ * website button starts a chat with that word). A WhatsApp flow started by an event (a tag, a schedule, a webhook) has nothing to
+ * deploy, and the other channels have no widget.
+ */
+export function widgetChannelOf(
+  mode: string,
+  trigger: { data?: Record<string, unknown> | null } | undefined,
+): WidgetChannel | null {
+  if (mode === 'web') return 'web';
+  if (mode !== 'chat') return null;
+  const kind = trigger?.data?.kind;
+  return kind === undefined || kind === null || kind === '' || kind === 'keyword' ? 'chat' : null;
+}
+
 /** The pages of a builder: Build always, FAQs for every saved flow in the Simple builder, Customize and Deploy for a website or WhatsApp bot. */
 export type BuilderTab = 'build' | 'faqs' | 'customize' | 'deploy';
 

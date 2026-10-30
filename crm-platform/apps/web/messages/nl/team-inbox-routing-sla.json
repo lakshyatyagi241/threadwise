@@ -39,6 +39,7 @@
       "deleteFailed": "De regel kon niet worden verwijderd.",
       "businessHours": "Werktijden",
       "recordNote": "Dit wijst gesprekken toe. Om nieuwe {contacts}, bedrijven en {deals} aan verkoopeigenaren toe te wijzen, zie <link>Regels voor recordtoewijzing</link>.",
+      "agentsNote": "Wie een chat krijgt hangt af van de beschikbaarheid van iedereen (de status in de bovenbalk) en hun limiet voor gelijktijdige chats. Stel de limiet in bij <link>Teamleden</link>.",
       "subtitle": "Kies wie elke nieuwe chat krijgt. De schakelaars zijn voor de meeste werkruimtes genoeg; voeg alleen regels toe als je meer controle nodig hebt."
     },
     "rules": {

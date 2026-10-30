@@ -107,6 +107,19 @@ describe('pre-save validation (TW-FLB-018)', () => {
     ]);
   });
 
+  it('a social node the runtime cannot run yet is blocked, so a flow does not publish a step that does nothing', () => {
+    const r = flbValidateGraph(
+      [node('t', 'trigger', { channel: 'instagram' }), node('p', 'ig_products')],
+      [{ source: 't', target: 'p' }],
+      { mode: 'instagram', senderAvailable: false },
+    );
+    expect(r.ok).toBe(false);
+    expect(r.badNodeIds).toEqual(['p']);
+    expect(r.items).toEqual([
+      '"Send products" is not available yet — the flow skips it when it runs. Delete it.',
+    ]);
+  });
+
   it('any other channel names WhatsApp in the sentence (Reference quirk kept)', () => {
     const r = flbValidateGraph(
       [node('t', 'trigger'), node('c', 'cf_say')],

@@ -38,6 +38,8 @@
       "failed": "Thất bại"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "Dòng bảng tính",
       "keyword": "Từ khóa",
       "any_message": "Mọi tin nhắn",
       "tag_added": "Thêm thẻ",

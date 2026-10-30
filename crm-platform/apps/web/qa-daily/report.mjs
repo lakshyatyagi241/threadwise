@@ -70,13 +70,17 @@ export function toBugs(report, { env, date = new Date().toISOString().slice(0, 1
               ? 'journey-timeout'
               : 'journey-failed';
         const severity = flaky ? 'Low' : P0.has(area) || kind === 'http-5xx' ? 'High' : 'Medium';
-        const shot = (r.attachments ?? []).find(
-          (a) => a.path && /^image\//.test(a.contentType ?? ''),
+        // the proof card of an API-only journey is inlined (body) instead of saved (path): prefer it, it shows what was checked
+        const imgs = (r.attachments ?? []).filter(
+          (a) => /^image\//.test(a.contentType ?? '') && (a.path || a.body),
         );
+        const shot = imgs.find((a) => a.body) ?? imgs.at(-1);
         let screenshot = '';
         if (shot) {
-          screenshot = join(date, `${id}${extname(shot.path) || '.png'}`);
-          shots.push({ from: shot.path, to: screenshot });
+          screenshot = join(date, `${id}${shot.body ? '.png' : extname(shot.path) || '.png'}`);
+          shots.push(
+            shot.body ? { body: shot.body, to: screenshot } : { from: shot.path, to: screenshot },
+          );
         }
         bugs.set(id, {
           id,
@@ -116,7 +120,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     { env, date },
   );
   mkdirSync(out, { recursive: true });
-  for (const s of shots) if (existsSync(s.from)) copyFileSync(s.from, join(outRoot, s.to));
+  for (const s of shots) {
+    if (s.body) writeFileSync(join(outRoot, s.to), Buffer.from(s.body, 'base64'));
+    else if (existsSync(s.from)) copyFileSync(s.from, join(outRoot, s.to));
+  }
   writeFileSync(join(out, 'bugs.json'), JSON.stringify(bugs, null, 2));
   if (envProblems.length)
     writeFileSync(join(out, 'env-problems.json'), JSON.stringify(envProblems, null, 2));

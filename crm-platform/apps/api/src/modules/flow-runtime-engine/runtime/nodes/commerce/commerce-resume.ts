@@ -7,6 +7,7 @@ import {
 } from '@crm/contracts';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import {
+  FormFileFetcher,
   InboundMessageHooks,
   type InboundMessageListener,
   type InboundStoredEvent,
@@ -26,7 +27,13 @@ import {
 import { FlowEngine } from '../../engine.service';
 import { RunRepository } from '../../run.repository';
 import type { RunState } from '../../types';
-import { flattenAnswer, parseFormToken, WaFormRecords, type FieldMapping } from './wa-form-records';
+import {
+  fileAnswersOf,
+  flattenAnswer,
+  parseFormToken,
+  WaFormRecords,
+  type FieldMapping,
+} from './wa-form-records';
 
 const PRIVACY_MAP_FIELDS = new Set<string>(Object.keys(WA_FORM_PRIVACY_MAP_KIND));
 
@@ -58,6 +65,7 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     private readonly runs: RunRepository,
     private readonly engine: FlowEngine,
     private readonly forms: WaFormRecords,
+    private readonly formFiles: FormFileFetcher,
     private readonly contacts: ContactsService,
     private readonly minors: MinorDetectionService,
     private readonly privacy: ContactPrivacyService,
@@ -99,6 +107,8 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     const answers: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(payload)) if (k !== 'flow_token') answers[k] = v;
 
+    await this.keepFiles(e, answers);
+
     const recorded = await this.forms
       .record(e.orgId, {
         formId: parsed.formId,
@@ -135,6 +145,42 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
       flowToken: token,
     });
     return r === 'routed' || recorded;
+  }
+
+  /**
+   * The files a customer attached (Photo and Document pickers): copied from Meta into the media store, and each entry in `answers`
+   * rewritten to carry the stored key. Meta's media id lasts about 30 days, so it is not kept as the only reference. An entry whose
+   * copy failed stays, marked `failed`, so the submission shows which file is missing.
+   */
+  private async keepFiles(e: InboundStoredEvent, answers: Record<string, unknown>): Promise<void> {
+    const byField = fileAnswersOf(answers);
+    const flat = Object.entries(byField).flatMap(([field, list]) =>
+      list.map((f) => ({ field, f })),
+    );
+    if (flat.length === 0) return;
+    const stored = await this.formFiles
+      .fetchAll(
+        e.orgId,
+        e.channelId,
+        flat.map(({ f }) => ({
+          mediaId: f.id!,
+          mime: f.mime_type!,
+          name: f.file_name!,
+          sha256: f.sha256 ?? null,
+        })),
+        e.messageUuid,
+      )
+      .catch(() => flat.map(() => null));
+    flat.forEach(({ f }, i) => {
+      const s = stored[i];
+      if (s) {
+        f.key = s.key;
+        f.size = s.size;
+        f.mime_type = s.mime;
+        f.file_name = s.name;
+        f.sha256 = s.sha256;
+      } else f.failed = true;
+    });
   }
 
   /**

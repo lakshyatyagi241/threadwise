@@ -137,30 +137,64 @@ export function flattenFormAnswer(value: unknown): string {
   if (Array.isArray(value)) return value.map(flattenFormAnswer).join(', ');
   if (typeof value === 'object') {
     const v = value as Record<string, unknown>;
-    const picked = v.title ?? v.name ?? v.label ?? v.value ?? v.text ?? v.id;
+    const picked = v.title ?? v.file_name ?? v.name ?? v.label ?? v.value ?? v.text ?? v.id;
     return picked == null ? '' : String(picked);
   }
   return String(value);
 }
 
-export function toWaFormSubmissionResponse(row: {
-  uuid: string;
-  contact_uuid: string | null;
-  contact_name: string | null;
-  contact_phone: string | null;
-  caller_phone: string | null;
-  answers_json: Record<string, unknown> | null;
-  submitted_at: Date | null;
-  created_at_iso: string;
-}): WaFormSubmission {
+/** A Photo or Document answer as stored: a list of `{file_name, mime_type, key?, size?, failed?}`; null for any other answer. */
+function fileEntriesOf(v: unknown): Array<{
+  file_name: string;
+  mime_type: string;
+  key?: string;
+  size?: number;
+  failed?: boolean;
+}> | null {
+  if (!Array.isArray(v) || v.length === 0) return null;
+  const ok = v.every(
+    (e) =>
+      e &&
+      typeof e === 'object' &&
+      typeof e.file_name === 'string' &&
+      typeof e.mime_type === 'string',
+  );
+  return ok ? (v as never) : null;
+}
+
+export function toWaFormSubmissionResponse(
+  row: {
+    uuid: string;
+    contact_uuid: string | null;
+    contact_name: string | null;
+    contact_phone: string | null;
+    caller_phone: string | null;
+    answers_json: Record<string, unknown> | null;
+    submitted_at: Date | null;
+    created_at_iso: string;
+  },
+  link: (key: string, name: string, mime: string) => string = () => '',
+): WaFormSubmission {
   const answers: Record<string, string> = {};
-  for (const [k, v] of Object.entries(row.answers_json ?? {})) answers[k] = flattenFormAnswer(v);
+  const files: WaFormSubmission['files'] = {};
+  for (const [k, v] of Object.entries(row.answers_json ?? {})) {
+    answers[k] = flattenFormAnswer(v);
+    const list = fileEntriesOf(v);
+    if (list)
+      files[k] = list.map((f) => ({
+        name: f.file_name,
+        mime: f.mime_type,
+        size: typeof f.size === 'number' ? f.size : null,
+        url: f.key && !f.failed ? link(f.key, f.file_name, f.mime_type) : null,
+      }));
+  }
   return {
     id: row.uuid,
     contactId: row.contact_uuid,
     contactName: row.contact_name,
     contactPhone: row.contact_phone ?? row.caller_phone,
     answers,
+    files,
     submittedAt: row.submitted_at?.toISOString() ?? null,
     createdAt: row.created_at_iso,
   };

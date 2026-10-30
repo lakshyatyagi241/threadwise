@@ -293,6 +293,12 @@ describe('damage the verifier must catch', () => {
     ));
   it('changes the trigger kind', () =>
     damage('d7', `UPDATE flows SET trigger_kind = 'keyword' WHERE ${fl}`, /AUTOMATION_COLUMN/));
+  it('points the Google Sheet trigger at another sheet', () =>
+    damage(
+      'd7b',
+      `UPDATE flows SET trigger_config = jsonb_set(trigger_config, '{sheetId}', '"other-sheet"') WHERE flow_name = 'Sheet intake'`,
+      /trigger_config of the .* does not hold the sheet id/,
+    ));
   it('deletes a flow', () =>
     damage(
       'd8',

@@ -40,6 +40,14 @@ export type TemplateKind = 'standard' | 'carousel' | 'lto';
 /** The "Button type" choice on the form: it decides the shape of the template and which buttons can be added. */
 export const BUTTON_TYPES = ['none', 'buttons', 'lto', 'carousel', 'catalogue', 'flow'] as const;
 export type ButtonType = (typeof BUTTON_TYPES)[number];
+
+/**
+ * The button types the dropdown offers. Catalogue is not offered for a new template; a template that already has a catalog button
+ * (synced from Meta or saved earlier) still shows it, so it opens and saves as it is.
+ */
+export function buttonTypeOptions(current: ButtonType): readonly ButtonType[] {
+  return BUTTON_TYPES.filter((b) => b !== 'catalogue' || current === 'catalogue');
+}
 /** Meta's limit for the heading of a limited-time offer. */
 export const OFFER_TEXT_MAX = 16;
 

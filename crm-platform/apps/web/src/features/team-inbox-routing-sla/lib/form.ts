@@ -20,14 +20,7 @@ import { fromWire, parseRules, toWire } from '@/features/segments/lib/wire';
  * The conditions a rule can have, as the editor's "Add a condition" menu offers them. Only the ones in `RuleForm.added` are shown;
  * a rule starts with none (H13/H14). Contact details come last in the menu: they only match what is already saved on the contact.
  */
-export const CONDITION_KEYS = [
-  'contactKind',
-  'channel',
-  'keywords',
-  'language',
-  'hours',
-  'contact',
-] as const;
+export const CONDITION_KEYS = ['contactKind', 'keywords', 'language', 'hours', 'contact'] as const;
 export type ConditionKey = (typeof CONDITION_KEYS)[number];
 
 /** The rule form as the person edits it. Text fields stay text until save; the contact conditions are the segments builder's own tree. */
@@ -125,7 +118,6 @@ export function splitWords(text: string): string[] {
 export function addedOf(c: RoutingConditions): ConditionKey[] {
   const out: ConditionKey[] = [];
   if (c.contactKind !== 'any') out.push('contactKind');
-  if (c.channelKinds.length > 0) out.push('channel');
   if (c.keywords) out.push('keywords');
   if (c.languages.length > 0) out.push('language');
   if (c.businessHours !== 'any') out.push('hours');
@@ -141,11 +133,13 @@ export function formFromRule(rule: RoutingRule): RuleForm {
     description: rule.description,
     // A rule shows "Only for conversations that match" on unless it applies to every conversation. An old catch-all fallback
     // (no conditions, not flagged) is also "every conversation".
-    onlyWhen: !rule.appliesToAll && (added.length > 0 || !rule.isFallback),
+    onlyWhen:
+      !rule.appliesToAll && (added.length > 0 || c.channelKinds.length > 0 || !rule.isFallback),
     added,
     contactKind: c.contactKind,
     contact: fromWire(c.contact as SegmentGroup | null),
-    channelKinds: [...c.channelKinds],
+    // The channel is the first thing a rule asks for; a rule that applies to every conversation never used the ones it kept.
+    channelKinds: rule.appliesToAll ? [] : [...c.channelKinds],
     keywords: c.keywords ? c.keywords.words.join(', ') : '',
     keywordMode: c.keywords?.mode ?? 'any',
     languages: c.languages.join(', '),

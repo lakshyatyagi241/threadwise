@@ -8,6 +8,7 @@
       "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
       "WFL_FORM_ENGINE_NOT_ENABLED": "양식을 사용하려면 WhatsApp Cloud API 번호를 연결하세요.",
       "WFL_FORM_NO_WABA_CREDENTIALS": "연결된 WhatsApp Cloud API 번호 중 유효한 자격 증명이 있는 번호가 없습니다.",
+      "WFL_FORM_PARTNER_NUMBER": "WhatsApp 번호가 파트너(예: Interakt)를 통해 연결되어 있습니다. WhatsApp 양식은 Meta 직접 연결로만 게시할 수 있으므로 채널 → WhatsApp에서 번호를 직접 연결하세요.",
       "WFL_FORM_META_VALIDATION_FAILED": "Meta가 이 양식 정의를 거부했습니다.",
       "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "양식을 게시하려면 WhatsApp Business 계정이 Meta의 인증을 통과해야 합니다.",
       "WFL_FORM_PUBLISH_FAILED": "Meta가 이 양식을 게시할 수 없었습니다.",
@@ -132,7 +133,9 @@
         "date": "날짜",
         "dropdown": "드롭다운",
         "radio_buttons": "라디오 버튼",
-        "checkbox": "체크박스"
+        "checkbox": "체크박스",
+        "photo": "사진 업로드",
+        "document": "문서 업로드"
       },
       "submissions": {
         "heading": "응답",

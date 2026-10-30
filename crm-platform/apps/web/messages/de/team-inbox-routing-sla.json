@@ -39,6 +39,7 @@
       "deleteFailed": "Die Regel konnte nicht gelöscht werden.",
       "businessHours": "Geschäftszeiten",
       "recordNote": "Hier werden Unterhaltungen zugewiesen. Informationen zur Zuweisung neuer {contacts}, Firmen und {deals} an Vertriebsverantwortliche finden Sie unter <link>Regeln zur Datensatzzuweisung</link>.",
+      "agentsNote": "Wer einen Chat bekommt, hängt von der Verfügbarkeit jeder Person (Status in der oberen Leiste) und ihrem Limit gleichzeitiger Chats ab. Das Limit legen Sie unter <link>Teammitglieder</link> fest.",
       "subtitle": "Lege fest, wer jeden neuen Chat bekommt. Für die meisten Workspaces reichen die Schalter; lege Regeln nur an, wenn du mehr Kontrolle brauchst."
     },
     "rules": {

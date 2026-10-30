@@ -296,8 +296,8 @@
         "tag": "doelgroep",
         "modes": {
           "audience": {
-            "title": "Contactgroepen",
-            "hint": "Gebruik opgeslagen segmenten en tags."
+            "title": "Contacten, groepen & segmenten",
+            "hint": "Kies contacten of filter op groepen, tags en segmenten."
           },
           "csv": {
             "title": "CSV uploaden",

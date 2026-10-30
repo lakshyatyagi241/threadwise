@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import { AGENT_IGNORE } from '@/lib/agent-marks';
 import type { PreviewModel } from '../lib/form-model';
-import { FormattedText } from './message-bubble';
+import { CardsStrip, FormattedText } from './message-bubble';
 import {
   CheckIcon,
   CopyIcon,
@@ -147,6 +147,7 @@ export function MessageBubble({
           )}
         </ul>
       )}
+      {!model.auth && (model.cards?.length ?? 0) > 0 && <CardsStrip cards={model.cards!} />}
     </div>
   );
 }

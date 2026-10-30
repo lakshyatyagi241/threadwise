@@ -380,7 +380,7 @@
           "quickReplyVariable": "Nút trả lời nhanh không thể chứa biến.",
           "urlExampleRequired": "Nhập giá trị mẫu cho biến URL.",
           "quickReplyPosition": "Các nút trả lời nhanh phải nằm cùng nhau, ở đầu hoặc cuối danh sách nút.",
-          "flowIdRequired": "Nhập ID Flow.",
+          "flowIdRequired": "Chọn một Biểu mẫu WhatsApp từ danh sách.",
           "flowIdInvalid": "ID Flow là một số.",
           "screenRequired": "Nhập ID màn hình.",
           "catalogAlone": "Nút danh mục không thể kết hợp với các nút khác.",

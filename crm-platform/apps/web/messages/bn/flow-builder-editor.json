@@ -2626,6 +2626,7 @@
         "buttonNoExit": "\"{node}\": \"{button}\" বোতামটি কোনো ধাপে যায় না।",
         "notConnected": "\"{node}\" কোনো কিছুর সাথে সংযুক্ত নয়।",
         "wrongChannel": "\"{node}\" {channel}-এ কাজ করে না — এটি মুছুন বা Trigger নোডে চ্যানেল আবার বদলান।",
+        "notBuilt": "\"{node}\" এখনো উপলব্ধ নয় — ফ্লো চলার সময় এটি বাদ দেয়। এটি মুছে ফেলুন।",
         "noSenderInstagram": "Trigger নোডে কোনো Instagram অ্যাকাউন্ট নির্বাচন করা নেই — Trigger ধাপে একটি বেছে নিন।",
         "noSenderFacebook": "Trigger নোডে কোনো Facebook পেজ নির্বাচন করা নেই — Trigger ধাপে একটি বেছে নিন।",
         "noSenderNumber": "Trigger নোডে কোনো নম্বর নির্বাচন করা নেই — Trigger ধাপে একটি বেছে নিন।",

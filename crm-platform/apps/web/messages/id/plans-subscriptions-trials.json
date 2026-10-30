@@ -94,7 +94,9 @@
       "custom_roles": "Peran kustom dan cakupan",
       "inbox_assignment_sticky": "Perutean cerdas: pemilik kontak dan agen tetap",
       "agent_status_bar": "Bilah status: kontrol Tersedia / Tidak di tempat di bilah atas dan Kotak Masuk",
-      "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis"
+      "agent_status_automation": "Otomatiskan status: jam kerja pribadi dan Tidak di tempat otomatis",
+      "products_services": "Produk dan layanan",
+      "recurring_invoices": "Faktur berulang"
     },
     "limitGroups": {
       "messaging": "Pesan",

@@ -380,7 +380,7 @@
           "quickReplyVariable": "Быстрый ответ не может содержать переменную.",
           "urlExampleRequired": "Укажите пример значения для переменной в адресе.",
           "quickReplyPosition": "Быстрые ответы должны идти подряд, в начале или в конце списка кнопок.",
-          "flowIdRequired": "Введите ID Flow.",
+          "flowIdRequired": "Выберите форму WhatsApp из списка.",
           "flowIdInvalid": "ID Flow — это число.",
           "screenRequired": "Введите ID экрана.",
           "catalogAlone": "Кнопку каталога нельзя сочетать с другими кнопками.",

@@ -39,6 +39,7 @@
       "deleteFailed": "Não foi possível excluir a regra.",
       "businessHours": "Horário comercial",
       "recordNote": "Isto atribui conversas. Para atribuir novos {contacts}, empresas e {deals} aos responsáveis de vendas, veja <link>Regras de atribuição de registros</link>.",
+      "agentsNote": "Quem recebe uma conversa depende da disponibilidade de cada pessoa (o status na barra superior) e do limite de conversas simultâneas. Defina o limite em <link>Membros da equipe</link>.",
       "subtitle": "Escolha quem recebe cada chat novo. As chaves são suficientes para a maioria dos espaços de trabalho; adicione regras só se precisar de mais controle."
     },
     "rules": {

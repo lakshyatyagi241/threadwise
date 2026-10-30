@@ -95,15 +95,19 @@ export class NotificationPreferencesService {
     const items: NotificationPreferenceItem[] = [];
     // A person who just asked the owner to change a toggle expects to see it: this read is rare, so it skips the producers' short cache.
     this.workspace.forget(orgId);
-    const offered = new Map<string, boolean>();
+    // The plan lookups are independent: ask for every distinct feature at once, not one after another.
+    const features = [...new Set(Object.values(NOTIFICATION_TYPE_PLAN_FEATURE))];
+    const offered = new Map(
+      await Promise.all(
+        features.map(
+          async (feature) =>
+            [feature, await this.entitlements.featureEnabled(orgId, feature)] as const,
+        ),
+      ),
+    );
     for (const type of NOTIFICATION_PREF_TYPES) {
       const feature = NOTIFICATION_TYPE_PLAN_FEATURE[type];
-      if (feature) {
-        if (!offered.has(feature)) {
-          offered.set(feature, await this.entitlements.featureEnabled(orgId, feature));
-        }
-        if (!offered.get(feature)) continue;
-      }
+      if (feature && !offered.get(feature)) continue;
       const own = stored.get(type) ?? NONE;
       const workspaceInapp = await this.workspace.inappAllowed(orgId, type);
       const base = NOTIFICATION_CATALOG[type];

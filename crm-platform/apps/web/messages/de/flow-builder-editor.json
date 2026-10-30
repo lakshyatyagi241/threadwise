@@ -2626,6 +2626,7 @@
         "buttonNoExit": "„{node}“: Die Schaltfläche „{button}“ führt zu keinem Schritt.",
         "notConnected": "„{node}“ ist mit nichts verbunden.",
         "wrongChannel": "„{node}“ funktioniert nicht auf {channel}. Löschen Sie es oder aktivieren Sie den Kanal im Auslöser-Knoten wieder.",
+        "notBuilt": "„{node}“ ist noch nicht verfügbar – der Flow überspringt ihn bei der Ausführung. Löschen Sie ihn.",
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",

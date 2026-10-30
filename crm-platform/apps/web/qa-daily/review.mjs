@@ -97,24 +97,53 @@ export async function goldfishReview({ cwd, task, notes = '', kind = 'fix' }) {
       findings: [],
       report: '',
     };
-  const dir = join(OUT, 'review', `${Date.now()}`);
-  mkdirSync(dir, { recursive: true });
-  const doc = join(dir, 'change_record.md');
-  writeFileSync(doc, changeRecord({ cwd, task, notes, kind }));
-
-  // cwd is the artifact folder, so the plugin's drafts and reports land there and the code under review is never edited
-  const out = await run(dir, [
-    '-p',
-    `/egm:egm-review TargetFile=${doc} Step=uninterrupted. EGM artifact directory: ${dir}\n` +
-      `This is an unattended run: do not ask questions, do not pause at checkpoints, do not edit any file other than reports in the artifact directory. ` +
-      `The changed code is in ${cwd} (read-only for you); the diff is in the document. Write ${REPORT} and end with one line: VERDICT: approve or VERDICT: changes.`,
-    '--permission-mode',
-    'acceptEdits', // cwd is the artifact folder: the only place the plugin can write
-    '--max-turns',
-    '150',
-    '--allowedTools',
-    `Read Grep Glob Agent Bash(git diff:*) Bash(git status:*) Bash(git show:*) Bash(git log:*)`,
-  ]);
+  // The plugin must run its five reviewer stages in fresh contexts. A "single-reader review by the orchestrating agent" is the elephant
+  // judging itself, so it is refused: one retry with an explicit instruction, then the review counts as not done.
+  const STAGES = [
+    'zoom_out',
+    'comprehension',
+    'critic',
+    'intermediate_zoom_out',
+    'implementation_readiness',
+  ];
+  let dir = '';
+  let out = '';
+  let missing = STAGES;
+  for (let attempt = 1; attempt <= 2 && missing.length; attempt++) {
+    dir = join(OUT, 'review', `${Date.now()}`);
+    mkdirSync(dir, { recursive: true });
+    const doc = join(dir, 'change_record.md');
+    writeFileSync(doc, changeRecord({ cwd, task, notes, kind }));
+    // cwd is the artifact folder, so the plugin's drafts and reports land there and the code under review is never edited
+    out = await run(dir, [
+      '-p',
+      `/egm:egm-review TargetFile=${doc} Step=uninterrupted. EGM artifact directory: ${dir}\n` +
+        `This is an unattended run: do not ask questions, do not pause at checkpoints, do not edit any file other than reports in the artifact directory. ` +
+        `The changed code is in ${cwd} (read-only for you); the diff is in the document. Write ${REPORT} and end with one line: VERDICT: approve or VERDICT: changes.` +
+        (attempt > 1
+          ? `\nA previous run skipped the reviewer stages because the change was small. That is not allowed: run ALL five stages, each through its own reviewer subagent, however small the change.`
+          : ''),
+      '--permission-mode',
+      'acceptEdits', // cwd is the artifact folder: the only place the plugin can write
+      '--max-turns',
+      '150',
+      '--allowedTools',
+      `Read Grep Glob Agent Bash(git diff:*) Bash(git status:*) Bash(git show:*) Bash(git log:*)`,
+    ]);
+    missing = STAGES.filter((st) => !existsSync(join(dir, `${st}_report.md`)));
+  }
+  if (missing.length)
+    return {
+      approved: false,
+      blockers: [
+        {
+          severity: 'blocker',
+          issue: `the goldfish stages did not run (no report for: ${missing.join(', ')}); a single-reader review does not count`,
+        },
+      ],
+      findings: [],
+      report: '',
+    };
 
   const file = [
     join(dir, REPORT),

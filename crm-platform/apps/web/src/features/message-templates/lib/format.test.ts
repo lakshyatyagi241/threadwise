@@ -24,6 +24,20 @@ describe('template text', () => {
     });
   });
 
+  it('marks the whole word with every mark, the code block too, when part of a word is selected', () => {
+    const v = 'this is a test message';
+    const from = v.indexOf('test') + 1;
+    for (const [marker, shown] of [
+      ['*', '*test*'],
+      ['_', '_test_'],
+      ['~', '~test~'],
+      ['```', '```test```'],
+    ] as const)
+      expect(toggleSelection(v, from, from + 2, marker).value, marker).toBe(
+        `this is a ${shown} message`,
+      );
+  });
+
   it('removes a marker when the selection already includes it', () => {
     expect(toggleSelection('hello *world*', 6, 13, '*')).toEqual({
       value: 'hello world',

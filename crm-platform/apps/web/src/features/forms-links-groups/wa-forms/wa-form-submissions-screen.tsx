@@ -87,7 +87,30 @@ export function WaFormSubmissionsScreen({ id }: { id: string }) {
                     <td className="px-4 py-3">{s.contactPhone ?? '—'}</td>
                     {fieldIds.map((fid) => (
                       <td key={fid} className="px-4 py-3">
-                        {s.answers[fid] ?? ''}
+                        {s.files[fid] ? (
+                          <ul className="space-y-1">
+                            {s.files[fid]!.map((f, i) =>
+                              f.url ? (
+                                <li key={i}>
+                                  <a
+                                    href={f.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-primary underline"
+                                  >
+                                    {f.name}
+                                  </a>
+                                </li>
+                              ) : (
+                                <li key={i} className="text-muted-foreground">
+                                  {f.name}
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        ) : (
+                          (s.answers[fid] ?? '')
+                        )}
                       </td>
                     ))}
                   </tr>

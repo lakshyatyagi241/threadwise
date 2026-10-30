@@ -94,7 +94,9 @@
       "custom_roles": "Roles personalizados y alcances",
       "inbox_assignment_sticky": "Enrutamiento inteligente: propietario del contacto y agente fijo",
       "agent_status_bar": "Barra de estado: control Disponible / Ausente en la barra superior y la Bandeja",
-      "agent_status_automation": "Automatizar estado: horario laboral personal y Ausente automático"
+      "agent_status_automation": "Automatizar estado: horario laboral personal y Ausente automático",
+      "products_services": "Productos y servicios",
+      "recurring_invoices": "Facturas recurrentes"
     },
     "limitGroups": {
       "messaging": "Mensajería",

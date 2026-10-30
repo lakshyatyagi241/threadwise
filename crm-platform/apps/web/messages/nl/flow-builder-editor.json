@@ -2484,6 +2484,7 @@
         "buttonNoExit": "\"{node}\": de knop \"{button}\" leidt naar geen enkele stap.",
         "notConnected": "“{node}” is met niets verbonden.",
         "wrongChannel": "“{node}” werkt niet op {channel} — verwijder hem of zet het kanaal weer aan in de Trigger-node.",
+        "notBuilt": "\"{node}\" is nog niet beschikbaar — de flow slaat het over bij uitvoering. Verwijder het.",
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",

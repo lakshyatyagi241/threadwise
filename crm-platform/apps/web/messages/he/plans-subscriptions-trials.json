@@ -94,7 +94,9 @@
       "custom_roles": "תפקידים מותאמים וטווחים",
       "inbox_assignment_sticky": "ניתוב חכם: בעל איש הקשר והנציג הקבוע",
       "agent_status_bar": "סרגל סטטוס: פקד זמין / לא זמין בסרגל העליון ובתיבת הדואר",
-      "agent_status_automation": "אוטומציה של הסטטוס: שעות עבודה אישיות ו״לא זמין״ אוטומטי"
+      "agent_status_automation": "אוטומציה של הסטטוס: שעות עבודה אישיות ו״לא זמין״ אוטומטי",
+      "products_services": "מוצרים ושירותים",
+      "recurring_invoices": "חשבוניות חוזרות"
     },
     "limitGroups": {
       "messaging": "הודעות",

@@ -2626,6 +2626,7 @@
         "buttonNoExit": "\"{node}\": o botão \"{button}\" não leva a nenhuma etapa.",
         "notConnected": "“{node}” não está conectado a nada.",
         "wrongChannel": "“{node}” não funciona em {channel} — exclua-o ou reative o canal no nó Gatilho.",
+        "notBuilt": "\"{node}\" ainda não está disponível: o fluxo o ignora ao executar. Exclua-o.",
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",

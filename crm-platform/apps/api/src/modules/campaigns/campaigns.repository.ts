@@ -31,8 +31,11 @@ export const AGG_READ = `r.status IN ('read','responded') OR r.read_at IS NOT NU
  * message reached them (a STOP typed in the inbox, the contact screen, a consent change), which the row is never told about. Needs the
  * contact joined as `c` (a LEFT JOIN: a recipient with no contact has none).
  */
+const REACHED_AT_SQL = `coalesce(r.sent_at, r.delivered_at, r.read_at, r.responded_at, r.created_at)`;
 export const OPTED_OUT = sql.raw(
-  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND r.sent_at IS NOT NULL AND coalesce(c.unsubscribed_at, r.sent_at) >= r.sent_at))`,
+  // The send time is the first report the row has: a recipient whose status came from a delivery report before (or without) a stored
+  // sent time is still a recipient the message reached, the same rule that counts it under Sent.
+  `(r.is_unsubscribed OR r.status = 'unsubscribed' OR (c.is_unsubscribed AND (${AGG_SENT}) AND coalesce(c.unsubscribed_at, ${REACHED_AT_SQL}) >= ${REACHED_AT_SQL}))`,
 );
 export const AGG = sql.raw(`
   count(*) FILTER (WHERE ${AGG_SENT})::int AS a_sent,

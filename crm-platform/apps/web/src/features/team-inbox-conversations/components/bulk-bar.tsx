@@ -37,7 +37,7 @@ export interface BulkBarProps {
 
 /**
  * The bar that replaces the list's filters while conversations are selected: "N selected", select all in view, clear, and the actions
- * the caller may use (mark read or unread, resolve, close, reopen, spam or not spam, assign, priority, snooze or unsnooze, tag). The
+ * the caller may use (mark read or unread, resolve, reopen, spam or not spam, assign, priority, snooze or unsnooze, tag). The
  * labels follow what the picked conversations already are: when every one is spam the spam action reads "Mark as not spam", and so on
  * (`pickedState`). It only offers what the caller holds; the server checks every conversation again and answers each one's outcome.
  */
@@ -133,17 +133,6 @@ export function BulkBar(props: BulkBarProps) {
                 onClick={() => props.onRun({ type: 'status', status: 'resolved' })}
               >
                 {t('resolve')}
-              </Button>
-            )}
-            {state.canMoveTo('closed') && (
-              <Button
-                size="sm"
-                variant="secondary"
-                disabled={disabled}
-                data-testid="inbox-bulk-close"
-                onClick={() => props.onRun({ type: 'status', status: 'closed' })}
-              >
-                {t('close')}
               </Button>
             )}
             {/* Reopen sends status open to every picked conversation: it would un-spam or wake the spam and snoozed ones among them, and no

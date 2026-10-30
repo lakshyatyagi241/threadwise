@@ -21,6 +21,8 @@ function screenLetter(index: number): string {
   return `SCREEN_${out}`;
 }
 
+const MEDIA_MAX_FILES = 5;
+
 const CHOICE_KINDS: readonly WaFormFieldKind[] = ['dropdown', 'radio_buttons', 'checkbox'];
 
 function fieldComponent(field: {
@@ -38,6 +40,25 @@ function fieldComponent(field: {
       return { type: 'TextHeading', text: field.label };
     case 'paragraph':
       return { type: 'TextArea', ...base, 'helper-text': field.helperText };
+    case 'photo':
+      return {
+        type: 'PhotoPicker',
+        name: field.id,
+        label: field.label,
+        description: field.helperText,
+        'photo-source': 'camera_gallery',
+        'min-uploaded-photos': field.required ? 1 : 0,
+        'max-uploaded-photos': MEDIA_MAX_FILES,
+      };
+    case 'document':
+      return {
+        type: 'DocumentPicker',
+        name: field.id,
+        label: field.label,
+        description: field.helperText,
+        'min-uploaded-documents': field.required ? 1 : 0,
+        'max-uploaded-documents': MEDIA_MAX_FILES,
+      };
     case 'date':
       return { type: 'DatePicker', ...base, 'helper-text': field.helperText };
     case 'dropdown':
@@ -99,17 +120,24 @@ export function mapAudienceToMetaCategory(audienceType: WaFormAudienceType): str
 export function buildMetaFlowJson(definition: WaFormDefinition, sendButtonLabel: string): object {
   const screenIds = definition.screens.map((_, i) => screenLetter(i));
   const payloadSoFar: Record<string, string> = {};
+  // Media pickers cannot ride a navigate payload; the final screen reads them from the screen they were on.
+  const mediaRefs: Record<string, string> = {};
 
   const screens = definition.screens.map((screen, index) => {
     const isLast = index === definition.screens.length - 1;
     for (const field of screen.fields) {
-      if (field.kind !== 'heading') payloadSoFar[field.id] = `\${form.${field.id}}`;
+      if (field.kind === 'heading') continue;
+      if (field.kind === 'photo' || field.kind === 'document') {
+        mediaRefs[field.id] = `\${screen.${screenIds[index]}.form.${field.id}}`;
+        continue;
+      }
+      payloadSoFar[field.id] = `\${form.${field.id}}`;
     }
     const footer = {
       type: 'Footer',
       label: isLast ? sendButtonLabel : 'Next',
       'on-click-action': isLast
-        ? { name: 'complete', payload: { ...payloadSoFar } }
+        ? { name: 'complete', payload: { ...payloadSoFar, ...mediaRefs } }
         : {
             name: 'navigate',
             next: { type: 'screen', name: screenIds[index + 1] },
@@ -135,6 +163,19 @@ export function buildMetaFlowJson(definition: WaFormDefinition, sendButtonLabel:
   });
 
   return { version: FLOW_VERSION, screens };
+}
+
+/** A message per screen that holds more than one file picker or both kinds (Meta's rule); empty when the form is fine. */
+export function mediaPickerProblems(definition: WaFormDefinition): string[] {
+  const out: string[] = [];
+  definition.screens.forEach((screen, i) => {
+    const kinds = screen.fields.filter((f) => f.kind === 'photo' || f.kind === 'document');
+    if (kinds.length > 1)
+      out.push(
+        `Screen ${i + 1} has ${kinds.length} upload fields; WhatsApp allows one per screen.`,
+      );
+  });
+  return out;
 }
 
 export { CHOICE_KINDS as WA_FORM_CHOICE_KINDS_FOR_FLOW_JSON };

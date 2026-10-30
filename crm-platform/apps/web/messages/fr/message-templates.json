@@ -380,7 +380,7 @@
           "quickReplyVariable": "Une réponse rapide ne peut pas contenir de variable.",
           "urlExampleRequired": "Donnez une valeur exemple pour la variable de l’URL.",
           "quickReplyPosition": "Les réponses rapides doivent être regroupées, au début ou à la fin des boutons.",
-          "flowIdRequired": "Saisissez l’ID du Flow.",
+          "flowIdRequired": "Choisissez un formulaire WhatsApp dans la liste.",
           "flowIdInvalid": "L’ID du Flow est un nombre.",
           "screenRequired": "Saisissez l’ID de l’écran.",
           "catalogAlone": "Un bouton de catalogue ne peut pas être combiné avec d’autres boutons.",
