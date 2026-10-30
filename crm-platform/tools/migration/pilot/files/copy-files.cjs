@@ -383,6 +383,24 @@ function loadConfig(file) {
 }
 
 /** Normalised identity of a source URL: host + path (query and fragment are tokens or noise). null when it is not an http(s) URL. */
+/**
+ * When a Meta CDN link (scontent*.whatsapp.net / *.fbcdn.net) stops working: its `oe` parameter is the expiry as hex Unix seconds. Waboo
+ * keeps the template header link from its last sync with Meta, so it may be long past; such a link answers 403 whatever we do. null when
+ * the URL is not a Meta link or carries no readable expiry.
+ */
+function metaLinkExpiry(raw) {
+  let u;
+  try {
+    u = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (!/(^|\.)(whatsapp\.net|fbcdn\.net)$/i.test(u.hostname)) return null;
+  const oe = u.searchParams.get('oe');
+  if (!oe || !/^[0-9a-f]{1,12}$/i.test(oe)) return null;
+  return parseInt(oe, 16) * 1000;
+}
+
 function urlId(raw) {
   try {
     const u = new URL(raw);
@@ -900,6 +918,7 @@ async function runCopy(ctx) {
     copied: 0,
     resumed: 0,
     failed: 0,
+    expired: 0,
     deferred: 0,
     rows: 0,
     bytes: 0,
@@ -943,6 +962,21 @@ async function runCopy(ctx) {
       done = undefined;
     if (!(done && done.status === 'done')) {
       if (attempted >= maxFiles || stats.bytes >= maxBytes) return void stats.deferred++;
+      // an expired Meta link cannot be fetched by anyone: a known gap (the row keeps the link; the app's Meta template sync renews it once
+      // the workspace's WhatsApp number is connected), not a failure that stops the load
+      const expiry = metaLinkExpiry(g.url);
+      if (expiry !== null && expiry < Date.now()) {
+        stats.expired++;
+        appendState(flags.state, {
+          k: g.k,
+          status: 'expired',
+          reason: 'LINK_EXPIRED',
+          host: g.id.host,
+          expiredAt: new Date(expiry).toISOString(),
+          at: new Date().toISOString(),
+        });
+        return;
+      }
       attempted++;
       try {
         const exp = reg.byKey.get(g.id.key);
@@ -1005,6 +1039,7 @@ async function runCopy(ctx) {
     `rows updated=${stats.rows} rows already changed/not matching=${stats.rowsUnchanged}  bytes copied=${stats.bytes}`,
   );
   say(`failures by reason: ${lines(reasons)}`);
+  say(`expired Meta links (no one can fetch them; not copied, not a failure): ${stats.expired}`);
   return stats.failed ? 1 : 0;
 }
 
@@ -1283,6 +1318,7 @@ module.exports = {
   jsonReplace,
   download,
   isPrivateIp,
+  metaLinkExpiry,
   s3Sign,
   s3FromEnv,
   urlId,
