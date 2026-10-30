@@ -38,6 +38,8 @@
       "failed": "נכשל"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "שורה בגיליון",
       "keyword": "מילת מפתח",
       "any_message": "כל הודעה",
       "tag_added": "תג נוסף",

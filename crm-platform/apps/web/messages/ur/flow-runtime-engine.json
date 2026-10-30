@@ -325,6 +325,8 @@
       "failed": "ناکام"
     },
     "source": {
+      "flow_webhook": "ویب ہک",
+      "sheet_row": "شیٹ کی قطار",
       "keyword": "کی ورڈ",
       "any_message": "کوئی بھی پیغام",
       "tag_added": "ٹیگ لگایا گیا",

@@ -38,6 +38,8 @@
       "failed": "失败"
     },
     "source": {
+      "flow_webhook": "Webhook",
+      "sheet_row": "表格行",
       "keyword": "关键词",
       "any_message": "任意消息",
       "tag_added": "添加标签",

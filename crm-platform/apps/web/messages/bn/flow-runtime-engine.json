@@ -38,6 +38,8 @@
       "failed": "ব্যর্থ"
     },
     "source": {
+      "flow_webhook": "ওয়েবহুক",
+      "sheet_row": "শিটের সারি",
       "keyword": "কীওয়ার্ড",
       "any_message": "যেকোনো বার্তা",
       "tag_added": "ট্যাগ যোগ হয়েছে",

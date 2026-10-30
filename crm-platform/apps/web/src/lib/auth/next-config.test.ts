@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import nextConfig from '../../../next.config';
+import { LEGACY_REDIRECTS } from '../../features/marketing-site-cms/geta/data/redirects';
 
 type Rule = { source: string; headers: Array<{ key: string; value: string }> };
 
@@ -75,6 +76,9 @@ describe('next.config redirects: addresses bookmarks and old emails may still ca
   it('are temporary, so a later real page at one of these addresses is not shadowed in caches', async () => {
     const redirects = (await nextConfig.redirects?.()) ?? [];
     expect(redirects.length).toBeGreaterThanOrEqual(7);
-    for (const r of redirects) expect(r.permanent, r.source).toBe(false);
+    // The legacy geta.ai and WordPress addresses are permanent on purpose (search ranking moves across); see redirects.ts.
+    const local = redirects.filter((r) => !LEGACY_REDIRECTS.some((l) => l.source === r.source));
+    expect(local.length).toBeGreaterThanOrEqual(7);
+    for (const r of local) expect(r.permanent, r.source).toBe(false);
   });
 });

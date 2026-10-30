@@ -38,6 +38,8 @@
       "failed": "실패"
     },
     "source": {
+      "flow_webhook": "웹훅",
+      "sheet_row": "시트 행",
       "keyword": "키워드",
       "any_message": "모든 메시지",
       "tag_added": "태그 추가됨",
