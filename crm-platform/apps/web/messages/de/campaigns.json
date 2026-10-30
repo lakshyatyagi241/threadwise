@@ -296,8 +296,8 @@
         "tag": "Zielgruppe",
         "modes": {
           "audience": {
-            "title": "Kontaktgruppen",
-            "hint": "Gespeicherte Segmente und Tags verwenden."
+            "title": "Kontakte, Gruppen & Segmente",
+            "hint": "Kontakte wählen oder nach Gruppen, Tags und Segmenten filtern."
           },
           "csv": {
             "title": "CSV hochladen",

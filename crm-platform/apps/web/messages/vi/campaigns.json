@@ -296,8 +296,8 @@
         "tag": "đối tượng",
         "modes": {
           "audience": {
-            "title": "Nhóm liên hệ",
-            "hint": "Dùng phân đoạn và thẻ đã lưu."
+            "title": "Liên hệ, nhóm và phân khúc",
+            "hint": "Chọn liên hệ, hoặc lọc theo nhóm, thẻ và phân khúc."
           },
           "csv": {
             "title": "Tải lên CSV",

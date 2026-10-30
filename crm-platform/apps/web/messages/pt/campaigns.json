@@ -296,8 +296,8 @@
         "tag": "público",
         "modes": {
           "audience": {
-            "title": "Grupos de contatos",
-            "hint": "Use segmentos e tags salvos."
+            "title": "Contatos, grupos e segmentos",
+            "hint": "Escolha contatos ou filtre por grupos, tags e segmentos."
           },
           "csv": {
             "title": "Enviar CSV",

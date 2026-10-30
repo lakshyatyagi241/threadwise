@@ -296,8 +296,8 @@
         "tag": "audiens",
         "modes": {
           "audience": {
-            "title": "Grup kontak",
-            "hint": "Gunakan segmen dan tag yang tersimpan."
+            "title": "Kontak, grup & segmen",
+            "hint": "Pilih kontak, atau filter berdasarkan grup, tag, dan segmen."
           },
           "csv": {
             "title": "Unggah CSV",
