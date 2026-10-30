@@ -3,11 +3,16 @@
 /**
  * Template quality for a migrated workspace. Waboo never stored a template's quality (Meta rates it live), so the migration asks Meta
  * once per WABA: GET /{waba-id}/message_templates. Read-only: nothing is sent and no number is connected. The WABA id and access token
- * are read from Waboo into memory here; they are never printed or written. The output holds template names, languages and ratings only.
+ * are read from Waboo into memory here; they are never printed or written. The output holds template names, languages, ratings and the
+ * HEADER sample link Meta gives for a media template (a signed CDN link, fresh for about 30 days).
+ *
+ * The same call renews the header link: Waboo keeps only the link of its last sync with Meta, which has long expired for most templates,
+ * so a migrated template showed no header picture. The link goes into wa_templates.header_sample_url (apply-quality.cjs) and the media copy
+ * (the files step, which runs after this one) stores the file.
  *
  *   node pilot/templates/quality.cjs --client <c> --db <waboo database>      (run from tools/migration)
  *
- * Prints ONE JSON line: {"client","wabas","failedWabas","skipped","rows":[{"name","language","quality"}]}.
+ * Prints ONE JSON line: {"client","wabas","failedWabas","skipped","rows":[{"name","language","quality","headerUrl"}]}.
  * A WABA Meta refuses is counted in failedWabas and does not stop the run: its templates keep Unknown until a Refresh.
  */
 const path = require('node:path');
@@ -24,6 +29,25 @@ function normalizeQuality(q) {
   const u = typeof s === 'string' ? s.trim().toUpperCase() : '';
   const word = LEGACY[u] || u;
   return LEVELS.has(word) ? word : 'UNKNOWN';
+}
+
+/** Meta's CDN: the only hosts a template header link may point to (the media copy refuses any other host as well). */
+const META_CDN = /(^|\.)(whatsapp\.net|fbcdn\.net)$/i;
+
+/**
+ * The sample link of a template's media HEADER (`components[HEADER].example.header_handle[0]`), or null: no media header, no link, a link
+ * that is not https, or one that is not on Meta's CDN.
+ */
+function headerLinkOf(components) {
+  const h = Array.isArray(components) ? components.find((c) => c && c.type === 'HEADER') : null;
+  const link = h && h.example && Array.isArray(h.example.header_handle) ? h.example.header_handle[0] : null;
+  if (typeof link !== 'string') return null;
+  try {
+    const u = new URL(link);
+    return u.protocol === 'https:' && !u.username && !u.password && META_CDN.test(u.hostname) ? u.href : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -67,7 +91,7 @@ async function fetchQualities({ wabaId, accessToken }, fetchImpl = fetch) {
   const out = [];
   let url =
     `https://graph.facebook.com/${GRAPH}/${encodeURIComponent(wabaId)}/message_templates` +
-    '?fields=name,language,quality_score&limit=100';
+    '?fields=name,language,quality_score,components&limit=100';
   for (let page = 0; url && page < 200; page++) {
     const res = await fetchImpl(url, { headers: { Authorization: `Bearer ${accessToken}` } });
     if (!res.ok) throw new Error(`Meta answered ${res.status} for one WABA (its token or id is refused)`);
@@ -77,6 +101,7 @@ async function fetchQualities({ wabaId, accessToken }, fetchImpl = fetch) {
         name: String(t.name || ''),
         language: String(t.language || ''),
         quality: normalizeQuality(t.quality_score),
+        headerUrl: headerLinkOf(t.components),
       });
     url = body.paging && typeof body.paging.next === 'string' ? body.paging.next : null;
   }
@@ -137,7 +162,7 @@ async function main(argv) {
   );
 }
 
-module.exports = { normalizeQuality, wabaCredentials, fetchQualities, parseWabaOutput };
+module.exports = { normalizeQuality, headerLinkOf, wabaCredentials, fetchQualities, parseWabaOutput };
 
 if (require.main === module)
   main(process.argv.slice(2)).catch((e) => {
