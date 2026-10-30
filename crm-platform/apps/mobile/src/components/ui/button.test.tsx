@@ -30,13 +30,14 @@ describe('Button', () => {
       <>
         <Button label="primary" onPress={onPress} />
         <Button label="secondary" variant="secondary" onPress={onPress} />
+        <Button label="soft" variant="soft" onPress={onPress} />
         <Button label="link" variant="link" align="start" onPress={onPress} />
       </>,
     );
-    for (const name of ['primary', 'secondary', 'link']) {
+    for (const name of ['primary', 'secondary', 'soft', 'link']) {
       await fireEvent.press(screen.getByRole('button', { name }));
     }
-    expect(onPress).toHaveBeenCalledTimes(3);
+    expect(onPress).toHaveBeenCalledTimes(4);
   });
 
   it('fills a primary button with the action colour, the deep indigo in the light theme', async () => {
@@ -44,6 +45,13 @@ describe('Button', () => {
     const style = StyleSheet.flatten(screen.getByRole('button', { name: 'Save' }).props.style);
     expect(style.backgroundColor).toBe(palette.light.action);
     expect(palette.light.action).toBe(palette.light.logo);
+  });
+
+  it('fills a soft button with the quiet grey of the theme and no visible edge', async () => {
+    await render(<Button label="Continue" variant="soft" onPress={() => undefined} />);
+    const style = StyleSheet.flatten(screen.getByRole('button', { name: 'Continue' }).props.style);
+    expect(style.backgroundColor).toBe(palette.light.surfaceMuted);
+    expect(style.borderColor).toBe(palette.light.surfaceMuted);
   });
 
   it('does nothing while loading or disabled, and says so to screen readers', async () => {

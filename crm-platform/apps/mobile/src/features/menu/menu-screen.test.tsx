@@ -89,7 +89,6 @@ describe('MenuScreen', () => {
       'Contacts',
       'Notifications',
       'Tasks',
-      'Deals',
       'Manage profile',
       'Appearance',
       'Device permissions',
@@ -171,18 +170,9 @@ describe('MenuScreen', () => {
       expect(screen.queryByRole('button', { name: 'Social leads' })).toBeNull();
     });
 
-    it('opens the deals for a person who may read them, and explains when they may not', async () => {
+    it('does not list Deals, even for a person who may read them', async () => {
       await show({ ...session.permissions, 'record.deals.read': 'all' });
-      await press('Deals');
-      expect(mockNavigate).toHaveBeenCalledWith('/deals');
-    });
-
-    it('fades the Deals row for a person who may not read deals, and does not open them', async () => {
-      await show();
-      const row = screen.getByRole('button', { name: 'Deals' });
-      await fireEvent.press(row);
-      expect(mockNavigate).not.toHaveBeenCalled();
-      expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Deals' })).toBeNull();
     });
 
     it('opens a list under Dashboard and sends the dashboard to the view that was chosen', async () => {
@@ -244,10 +234,9 @@ describe('MenuScreen', () => {
   });
 
   describe('Account and Preferences', () => {
-    it('opens the notification preferences', async () => {
+    it('does not list the notification preferences', async () => {
       await show();
-      await press('Notification preferences');
-      expect(mockNavigate).toHaveBeenCalledWith('/notification-preferences');
+      expect(screen.queryByRole('button', { name: 'Notification preferences' })).toBeNull();
     });
 
     it('opens the profile', async () => {

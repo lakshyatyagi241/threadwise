@@ -27,4 +27,23 @@ chooses, for themselves only, whether it reaches the **bell** (the row exists an
 | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | The "Browser notifications" card (enable a device)    | it is Web Push for a browser; the app has no counterpart until the backend can send push to the phone (needs an owner step) |
 | The "This browser" switches (desktop alert and sound) | they are per-browser settings kept in the browser; a phone has none                                                         |
-| Pop-ups and sounds inside the app                     | the app does not show live pop-ups or play a ping yet, so the Pop-up and Sound switches only govern the web for now         |
+| Sounds inside the app                                 | the app does not play a ping yet, so the Sound switch only governs the web for now                                          |
+
+## Live alert (a chat message arrives while the app is open)
+
+`LiveAlertHost` (mounted in `src/app/(app)/_layout.tsx`, inside the realtime provider) drops a card down over any screen when the server
+sends `notification.created` for a chat message (`new_chat`, `new_message`, `conversation_assigned`, `chat_waiting`,
+`snooze_wake`). Ported from the web's live toast (`notifications-activity-audit/live`).
+
+- It never shows for a `silent` event, one the person's Pop-up preference turned off (`toast: false`), or the chat that is open.
+- It reads the newest unread rows to get the words (the event carries ids only), shows one card for 5 s, and a newer one replaces it.
+- Tapping it marks the row read and opens the chat; the cross sends it away. The bell's count is read again on every event.
+- Not built: the web's per-chat pacing and "N new notifications" summary, the ping, and the OS alert for a hidden app (needs push to the phone).
+
+## Hidden kinds
+
+The app shows only chats (new chat, new message, chat waiting, assigned, snoozed chat comes back, SLA breached) and tasks. The rest are left
+out by `lib/notifications/hidden.ts`: 16 single kinds (mention, email not delivered, leave, calendar, leads and forms, sales document,
+wallet, test) and the whole Billing and subscriptions, WhatsApp numbers, Broadcasts and campaigns, Team chat and WhatsApp groups sections.
+The list, the bell's dot and count, and the live alert all use that one rule. The server still creates and pushes them (and the web shows
+them): hiding a kind from phone push needs an API option to exclude types, which is outside `apps/mobile`.

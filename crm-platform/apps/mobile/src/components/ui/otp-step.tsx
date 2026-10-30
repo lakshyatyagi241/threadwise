@@ -8,12 +8,24 @@ import { FadeIn } from '@/components/ui/fade-in';
 import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
 import { spacing } from '@/lib/theme/tokens';
-import { formatClock } from './countdown';
-import { useCountdown } from './use-countdown';
-import type { SignUpStep, VerifyResult } from './use-sign-up';
+import { formatClock } from '@/lib/hooks/countdown';
+import { useCountdown } from '@/lib/hooks/use-countdown';
+
+/** What the code field should do after a try: leave the step (`done`), empty itself (`clear`) or keep what was typed (`keep`). */
+export type VerifyResult = 'done' | 'clear' | 'keep';
+
+/** What the code step needs to know about the code that was sent: the sign-up and the phone sign-in both fit this. */
+export interface OtpStepData {
+  /** "+91 •••• ••21", never the full number. */
+  maskedPhone: string;
+  codeLength: number;
+  /** Epoch milliseconds: when the code stops working, and when "resend" unlocks. */
+  expiresAt: number;
+  resendAt: number;
+}
 
 interface Props {
-  step: Extract<SignUpStep, { kind: 'otp' }>;
+  step: OtpStepData;
   pending: boolean;
   resending: boolean;
   /** A new code was just sent. */
@@ -30,8 +42,8 @@ const POP_ISOLATE = String.fromCharCode(0x2069);
 const isolate = (value: string): string => `${LEFT_TO_RIGHT_ISOLATE}${value}${POP_ISOLATE}`;
 
 /**
- * The code step of sign-up (TW-AUTH-006): the platform sent a one-time code to the person's WhatsApp, and nothing is created until
- * it is confirmed. Shows how long the code lives, when a new one can be asked for, and a way back to fix a wrong number.
+ * The code step of sign-up (TW-AUTH-006) and of signing in with a mobile number: the platform sent a one-time code to the person's
+ * number. Shows how long the code lives, when a new one can be asked for, and a way back to fix a wrong number.
  */
 export function OtpStep({
   step,

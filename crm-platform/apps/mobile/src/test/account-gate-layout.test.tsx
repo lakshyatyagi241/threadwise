@@ -23,6 +23,7 @@ jest.mock('@/lib/realtime', () => ({
     mockRealtime();
     return children;
   },
+  useRealtimeEvent: jest.fn(),
 }));
 
 const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });

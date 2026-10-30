@@ -46,6 +46,8 @@ export const AuthKeys = {
   mfaSetup: (orgId: number, subject: string) => `auth:mfa-setup:${orgId}:${subject}`,
   /** Staged sign-up awaiting its WhatsApp code. */
   signup: (challengeId: string) => `auth:signup:${challengeId}`,
+  /** A phone sign-in waiting for its code (real or decoy, so an unknown number looks the same). Opaque id: no number in the key. */
+  phoneLogin: (challengeId: string) => `auth:phone-login:${challengeId}`,
   /** The pre-account stage (name/email/phone + email-code hash) before password is set. Keyed by an opaque token, not the email — the email itself never appears in the key. */
   signupEmailStage: (token: string) => `auth:signup-email-stage:${token}`,
   /** Per-address sign-up code mail counter (start + resends), the email twin of `otpPhone`. Hashed: no address in the key. */
@@ -53,6 +55,12 @@ export const AuthKeys = {
     `auth:signup-email-sends:${sha256Hex(email.trim().toLowerCase()).slice(0, 24)}`,
   /** Per-number OTP send counter (cost-abuse guard). */
   otpPhone: (e164: string) => `auth:otp-phone:${sha256Hex(e164).slice(0, 24)}`,
+  /** A signed-in person's number waiting to be verified with a code: one per person, so a new request replaces the old one. */
+  phoneVerify: (orgId: number, userId: number) => `auth:phone-verify:${orgId}:${userId}`,
+  /** Codes asked for by one signed-in person to verify a number, across every number they try: a budget per person, not per number. */
+  phoneVerifySends: (orgId: number, userId: number) => `auth:phone-verify-sends:${orgId}:${userId}`,
+  /** Wrong phone sign-in codes per number, across challenges: a new code does not give back the guesses. Hashed: no number in the key. */
+  otpPhoneFails: (e164: string) => `auth:otp-phone-fails:${sha256Hex(e164).slice(0, 24)}`,
   /** Operator "send a test code" counter (5 per hour per operator). */
   otpTest: (operatorId: number) => `auth:otp-test:${operatorId}`,
   /** One worker at a time refreshes the pending OTP template status. */

@@ -10,7 +10,7 @@ import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
 import { spacing } from '@/lib/theme/tokens';
 import { AuthFrame } from './auth-frame';
-import { OtpStep } from './otp-step';
+import { OtpStep } from '@/components/ui/otp-step';
 import { policyParts } from './password-rules';
 import { pickDefaultCountry } from './phone';
 import { SignUpForm } from './sign-up-form';

@@ -47,7 +47,18 @@
     "accountLocked": "Bu hesap geçici olarak kilitlendi. Daha sonra yeniden deneyin.",
     "accountSuspended": "Bu hesap askıya alındı.",
     "mfaInvalid": "Bu kod doğru değil. Yeniden deneyin.",
-    "mfaExpired": "Oturum açma süresi doldu. Lütfen baştan başlayın."
+    "mfaExpired": "Oturum açma süresi doldu. Lütfen baştan başlayın.",
+    "phone": {
+      "title": "Telefonunuzla giriş yapın",
+      "subtitle": "Hesabınızdaki cep telefonu numarasına tek kullanımlık bir kod göndereceğiz.",
+      "number": "Cep telefonu numarası",
+      "send": "Kod gönder",
+      "unavailable": "Telefon numarasıyla giriş şu anda kullanılamıyor. E-posta adresinizi ve parolanızı kullanın.",
+      "continueMobile": "Cep telefonuyla devam et",
+      "continueEmail": "E-postayla devam et",
+      "or": "VEYA",
+      "hint": "Burada yalnızca “Profili yönet” bölümünde doğruladığınız numara çalışır."
+    }
   },
   "recovery": {
     "back": "Oturum açmaya dön",
@@ -536,7 +547,14 @@
       "cancel": "İptal",
       "nameRequired": "Adınızı girin.",
       "nameTooLong": "En fazla 120 karakter kullanın.",
-      "phoneInvalid": "Telefon numarasını ülke koduyla girin, örneğin +919876543210."
+      "phoneInvalid": "Telefon numarasını ülke koduyla girin, örneğin +919876543210.",
+      "phoneVerified": "Doğrulandı",
+      "phoneNotVerified": "Doğrulanmadı",
+      "verifyPhone": "Numarayı doğrula",
+      "verifyPhoneHint": "Giriş yapmak için kullanmak üzere numaranızı doğrulayın.",
+      "saveBeforeVerify": "Önce numaranızı kaydedin, sonra doğrulayın.",
+      "verifyUnavailable": "Şu anda kod gönderilemedi. Lütfen daha sonra tekrar deneyin.",
+      "verifiedDone": "Numaranız doğrulandı."
     },
     "appearance": {
       "title": "Görünüm",

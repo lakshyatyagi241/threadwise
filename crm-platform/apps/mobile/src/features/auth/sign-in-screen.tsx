@@ -6,19 +6,23 @@ import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { FadeIn } from '@/components/ui/fade-in';
+import { OrDivider } from '@/components/ui/or-divider';
 import { PasswordField } from '@/components/ui/password-field';
 import { Text } from '@/components/ui/text';
 import { TextField, type TextFieldHandle } from '@/components/ui/text-field';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { AuthFrame } from './auth-frame';
+import { OtpStep } from '@/components/ui/otp-step';
+import { PhoneNumberStep } from './phone-number-step';
+import { pickDefaultCountry } from './phone';
 import { LegalText } from './legal-text';
 import { useRegistrationConfig } from './use-registration-config';
 import { useSignIn } from './use-sign-in';
 
 /**
- * Sign-in (TW-AUTH-001): email and password, then, when the account asks for it, the authenticator code, or the choice of
- * workspace when the same login opens several. Each step is one card that eases in. The "Create an account" line and the terms
+ * Sign-in (TW-AUTH-001): email and password (or a mobile number and the code sent to it, when the platform's code step is on), then,
+ * when the account asks for it, the authenticator code, or the choice of workspace when the same login opens several. Each step is one card that eases in. The "Create an account" line and the terms
  * line come from the platform's public settings, exactly as on the web: no sign-up link while registration is closed, and nothing
  * guessed while the settings are loading.
  */
@@ -26,15 +30,54 @@ export function SignInScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const config = useRegistrationConfig();
-  const { step, pending, error, fieldErrors, submitPassword, submitCode, pickWorkspace, restart } =
-    useSignIn();
+  const {
+    step,
+    pending,
+    resending,
+    resent,
+    error,
+    fieldErrors,
+    submitPassword,
+    submitCode,
+    pickWorkspace,
+    showPhone,
+    submitPhone,
+    submitPhoneCode,
+    resendPhoneCode,
+    restart,
+  } = useSignIn();
+  const defaultCountry = pickDefaultCountry(config.data?.defaultCountryIso);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const passwordInput = useRef<TextFieldHandle>(null);
 
+  // The "New here? Create an account" line and the terms line: under the email form and under the mobile number step, as on the Geta app.
+  const footer = (
+    <FadeIn key="footer" delay={140}>
+      <View style={styles.after}>
+        {config.data?.registrationOpen ? (
+          <View style={styles.footer}>
+            <Text muted>{t('auth.newHere')}</Text>
+            <Button
+              variant="link"
+              label={t('auth.createAccount')}
+              disabled={pending}
+              onPress={() => router.push('/sign-up')}
+            />
+          </View>
+        ) : null}
+        {config.data ? <LegalText i18nKey="auth.legalSignIn" links={config.data.links} /> : null}
+      </View>
+    </FadeIn>
+  );
+
   return (
-    <AuthFrame tagline={t('auth.tagline')} caption={t('auth.taglineCaption')}>
+    <AuthFrame
+      tagline={t('auth.tagline')}
+      caption={t('auth.taglineCaption')}
+      onBack={step.kind === 'phone' ? restart : step.kind === 'phoneCode' ? showPhone : undefined}
+    >
       {step.kind === 'credentials' && (
         <>
           <FadeIn key="credentials">
@@ -91,27 +134,49 @@ export function SignInScreen() {
                 loading={pending}
                 onPress={() => void submitPassword(email, password)}
               />
+              {config.data?.otp.enabled ? (
+                <>
+                  <OrDivider label={t('auth.phone.or')} />
+                  <Button
+                    variant="soft"
+                    label={t('auth.phone.continueMobile')}
+                    testID="sign-in-with-phone"
+                    disabled={pending}
+                    onPress={showPhone}
+                  />
+                </>
+              ) : null}
             </Card>
           </FadeIn>
-          <FadeIn key="credentials-after" delay={140}>
-            <View style={styles.after}>
-              {config.data?.registrationOpen ? (
-                <View style={styles.footer}>
-                  <Text muted>{t('auth.newHere')}</Text>
-                  <Button
-                    variant="link"
-                    label={t('auth.createAccount')}
-                    disabled={pending}
-                    onPress={() => router.push('/sign-up')}
-                  />
-                </View>
-              ) : null}
-              {config.data ? (
-                <LegalText i18nKey="auth.legalSignIn" links={config.data.links} />
-              ) : null}
-            </View>
-          </FadeIn>
+          {footer}
         </>
+      )}
+
+      {step.kind === 'phone' && (
+        <>
+          <PhoneNumberStep
+            defaultCountry={defaultCountry}
+            pending={pending}
+            error={error}
+            fieldError={fieldErrors.phone}
+            onSubmit={(phone) => void submitPhone(phone, defaultCountry)}
+            onBack={restart}
+          />
+          {footer}
+        </>
+      )}
+
+      {step.kind === 'phoneCode' && (
+        <OtpStep
+          step={step}
+          pending={pending}
+          resending={resending}
+          resent={resent}
+          error={error}
+          onVerify={submitPhoneCode}
+          onResend={() => void resendPhoneCode()}
+          onBack={showPhone}
+        />
       )}
 
       {step.kind === 'mfa' && (

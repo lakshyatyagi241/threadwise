@@ -135,6 +135,31 @@ export class TenantDirectory {
     });
   }
 
+  /**
+   * Active people in active organizations whose number is this one AND was verified (a changed number loses its
+   * verification, so only a number proven by a code counts). For sign-in with a phone code. Capped: nobody has more.
+   */
+  async activeAccountsForVerifiedPhone(
+    phoneE164: string,
+  ): Promise<Array<{ orgId: number; userId: number }>> {
+    return this.db.privileged(async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT u.org_id, u.id AS user_id
+        FROM user_profiles p
+        JOIN users u ON u.org_id = p.org_id AND u.id = p.user_id
+        JOIN organizations o ON o.id = u.org_id
+        WHERE p.phone_e164 = ${phoneE164} AND p.phone_verified_at IS NOT NULL
+          AND u.status = 'active' AND o.status = 'active'
+        ORDER BY o.name, o.id
+        LIMIT 20
+      `);
+      return (res.rows as unknown as Array<{ org_id: number; user_id: number }>).map((r) => ({
+        orgId: Number(r.org_id),
+        userId: Number(r.user_id),
+      }));
+    });
+  }
+
   /** What a workspace card shows: the person's role there and how many people are in it. */
   async workspaceCardDetails(
     pairs: Array<{ orgId: number; userId: number }>,

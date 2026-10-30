@@ -47,7 +47,18 @@
     "accountLocked": "To konto jest tymczasowo zablokowane. Spróbuj ponownie później.",
     "accountSuspended": "To konto zostało zawieszone.",
     "mfaInvalid": "Ten kod jest nieprawidłowy. Spróbuj ponownie.",
-    "mfaExpired": "Logowanie wygasło. Zacznij od nowa."
+    "mfaExpired": "Logowanie wygasło. Zacznij od nowa.",
+    "phone": {
+      "title": "Zaloguj się telefonem",
+      "subtitle": "Wyślemy jednorazowy kod na numer telefonu komórkowego przypisany do Twojego konta.",
+      "number": "Numer telefonu komórkowego",
+      "send": "Wyślij kod",
+      "unavailable": "Logowanie numerem telefonu jest teraz niedostępne. Użyj adresu e-mail i hasła.",
+      "continueMobile": "Kontynuuj z telefonem",
+      "continueEmail": "Kontynuuj z e-mailem",
+      "or": "LUB",
+      "hint": "Tutaj działa tylko numer zweryfikowany w „Zarządzaj profilem”."
+    }
   },
   "recovery": {
     "back": "Wróć do logowania",
@@ -556,7 +567,14 @@
       "cancel": "Anuluj",
       "nameRequired": "Podaj swoje imię i nazwisko.",
       "nameTooLong": "Użyj maksymalnie 120 znaków.",
-      "phoneInvalid": "Podaj numer telefonu z numerem kierunkowym kraju, na przykład +919876543210."
+      "phoneInvalid": "Podaj numer telefonu z numerem kierunkowym kraju, na przykład +919876543210.",
+      "phoneVerified": "Zweryfikowany",
+      "phoneNotVerified": "Niezweryfikowany",
+      "verifyPhone": "Zweryfikuj numer",
+      "verifyPhoneHint": "Zweryfikuj numer, aby używać go do logowania.",
+      "saveBeforeVerify": "Najpierw zapisz numer, a potem go zweryfikuj.",
+      "verifyUnavailable": "Nie udało się teraz wysłać kodu. Spróbuj ponownie później.",
+      "verifiedDone": "Twój numer został zweryfikowany."
     },
     "appearance": {
       "title": "Wygląd",

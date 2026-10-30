@@ -5,8 +5,11 @@ import {
   fetchRegistrationConfig,
   requestPasswordReset,
   requestWorkspaceList,
+  resendPhoneSignIn,
   resendSignUpOtp,
   signUp,
+  startPhoneSignIn,
+  verifyPhoneSignIn,
   verifySignUpOtp,
 } from './api';
 
@@ -170,5 +173,59 @@ describe('the public doors of sign-up', () => {
   it('reports a phone with no signal as a connectivity problem, not as a refusal', async () => {
     mockFetch(new TypeError('Network request failed'));
     await expect(signUp(body)).rejects.toMatchObject({ code: 'CLIENT_NETWORK', status: 0 });
+  });
+});
+
+describe('signing in with a mobile number', () => {
+  const challenge = {
+    challengeId: 'c-1',
+    maskedPhone: '+91 •••• ••10',
+    expiresInSeconds: 300,
+    resendCooldownSeconds: 60,
+    codeLength: 6,
+  };
+
+  it('asks for a code without a token, and keeps the number out of the URL', async () => {
+    const http = mockFetch(jsonResponse(200, challenge));
+    expect(await startPhoneSignIn({ phone: '+919876543210', remember: true })).toEqual(challenge);
+    const call = http.calls[0];
+    expect(new URL(call.url).pathname).toBe('/v2/auth/login/phone');
+    expect(new URL(call.url).search).toBe('');
+    expect(call.init.method).toBe('POST');
+    expect(call.headers.Authorization).toBeUndefined();
+    expect(call.body).toEqual({ phone: '+919876543210', remember: true });
+  });
+
+  it('sends the code and reads any of the three answers of a password sign-in', async () => {
+    const http = mockFetch(
+      jsonResponse(200, authenticated),
+      jsonResponse(200, {
+        status: 'mfa_required',
+        challengeToken: 'm-1',
+        expiresInSeconds: 300,
+      }),
+    );
+    const first = await verifyPhoneSignIn({ challengeId: 'c-1', code: '123456' });
+    expect(first.status).toBe('authenticated');
+    const second = await verifyPhoneSignIn({ challengeId: 'c-1', code: '123456' });
+    expect(second.status).toBe('mfa_required');
+    expect(new URL(http.calls[0].url).pathname).toBe('/v2/auth/login/phone/verify');
+    expect(http.calls[0].body).toEqual({ challengeId: 'c-1', code: '123456' });
+  });
+
+  it('asks for a new code for the same challenge', async () => {
+    const http = mockFetch(jsonResponse(200, { expiresInSeconds: 300, resendCooldownSeconds: 60 }));
+    expect(await resendPhoneSignIn({ challengeId: 'c-1' })).toEqual({
+      expiresInSeconds: 300,
+      resendCooldownSeconds: 60,
+    });
+    expect(new URL(http.calls[0].url).pathname).toBe('/v2/auth/login/phone/resend');
+  });
+
+  it('refuses an answer the contract does not know, instead of passing it on', async () => {
+    mockFetch(jsonResponse(200, { challengeId: 'c-1' }));
+    await expect(
+      startPhoneSignIn({ phone: '+919876543210', remember: true }),
+    ).rejects.toBeInstanceOf(ApiError);
   });
 });

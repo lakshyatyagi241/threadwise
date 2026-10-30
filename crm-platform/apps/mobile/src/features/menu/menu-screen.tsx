@@ -217,13 +217,7 @@ export function MenuScreen() {
             faded={faded('record.tasks.read')}
             onPress={() => go('record.tasks.read', '/tasks')}
           />
-          <Row
-            icon="cash-outline"
-            label={t('menu.deals')}
-            faded={faded('record.deals.read')}
-            onPress={() => go('record.deals.read', '/deals')}
-          />
-          {/* Social leads is hidden from the menu for now (the screen and its route, /leads, are still built). */}
+          {/* Deals and Social leads are hidden from the menu for now (the screens and their routes, /deals and /leads, are still built). */}
         </Section>
 
         <Section title={t('menu.sectionAccount')}>
@@ -241,11 +235,7 @@ export function MenuScreen() {
             hint={t(`menu.appearance.${modeOf(user?.theme)}`)}
             onPress={() => router.navigate('/appearance')}
           />
-          <Row
-            icon="notifications-outline"
-            label={t('notificationPrefs.title')}
-            onPress={() => router.navigate('/notification-preferences')}
-          />
+          {/* Notification preferences is hidden from the menu for now (the screen and its route, /notification-preferences, are still built). */}
           {callerIdAvailable() ? (
             <Row
               icon="call-outline"

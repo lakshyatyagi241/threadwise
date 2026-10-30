@@ -4,6 +4,8 @@ import {
   neutralAckSchema,
   passwordLoginResponseSchema,
   passwordPolicyHintSchema,
+  phoneLoginChallengeSchema,
+  phoneLoginResendResponseSchema,
   registrationConfigResponseSchema,
   signupResendOtpResponseSchema,
   signupResponseSchema,
@@ -11,6 +13,9 @@ import {
   type ForgotPasswordRequest,
   type LoginRequest,
   type MfaLoginRequest,
+  type PhoneLoginResendRequest,
+  type PhoneLoginStartRequest,
+  type PhoneLoginVerifyRequest,
   type SelectWorkspaceRequest,
   type SignupRequest,
   type SignupResendOtpRequest,
@@ -36,6 +41,35 @@ export const signInWithMfa = (body: MfaLoginRequest) =>
     method: 'POST',
     body,
     schema: loginResponseSchema,
+    auth: false,
+  });
+
+/**
+ * Sign-in with a mobile number: asks for a code, which goes to the number only when it belongs to an account. The answer is the same
+ * either way, so nothing here says whether a number is known.
+ */
+export const startPhoneSignIn = (body: PhoneLoginStartRequest) =>
+  apiFetch('/v2/auth/login/phone', {
+    method: 'POST',
+    body,
+    schema: phoneLoginChallengeSchema,
+    auth: false,
+  });
+
+export const resendPhoneSignIn = (body: PhoneLoginResendRequest) =>
+  apiFetch('/v2/auth/login/phone/resend', {
+    method: 'POST',
+    body,
+    schema: phoneLoginResendResponseSchema,
+    auth: false,
+  });
+
+/** The code: answers like a password sign-in (a session, a second-factor challenge, or the workspaces to pick from). */
+export const verifyPhoneSignIn = (body: PhoneLoginVerifyRequest) =>
+  apiFetch('/v2/auth/login/phone/verify', {
+    method: 'POST',
+    body,
+    schema: passwordLoginResponseSchema,
     auth: false,
   });
 

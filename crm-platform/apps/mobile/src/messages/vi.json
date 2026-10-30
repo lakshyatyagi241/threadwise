@@ -47,7 +47,18 @@
     "accountLocked": "Tài khoản này tạm thời bị khóa. Vui lòng thử lại sau.",
     "accountSuspended": "Tài khoản này đã bị tạm ngưng.",
     "mfaInvalid": "Mã không đúng. Vui lòng thử lại.",
-    "mfaExpired": "Phiên đăng nhập đã hết hạn. Vui lòng bắt đầu lại."
+    "mfaExpired": "Phiên đăng nhập đã hết hạn. Vui lòng bắt đầu lại.",
+    "phone": {
+      "title": "Đăng nhập bằng điện thoại",
+      "subtitle": "Chúng tôi sẽ gửi mã dùng một lần đến số di động trong tài khoản của bạn.",
+      "number": "Số di động",
+      "send": "Gửi mã",
+      "unavailable": "Hiện chưa thể đăng nhập bằng số điện thoại. Hãy dùng email và mật khẩu của bạn.",
+      "continueMobile": "Tiếp tục với số di động",
+      "continueEmail": "Tiếp tục với email",
+      "or": "HOẶC",
+      "hint": "Ở đây chỉ dùng được số bạn đã xác minh trong “Quản lý hồ sơ”."
+    }
   },
   "recovery": {
     "back": "Quay lại đăng nhập",
@@ -526,7 +537,14 @@
       "cancel": "Hủy",
       "nameRequired": "Nhập tên của bạn.",
       "nameTooLong": "Dùng tối đa 120 ký tự.",
-      "phoneInvalid": "Nhập số điện thoại kèm mã quốc gia, ví dụ +919876543210."
+      "phoneInvalid": "Nhập số điện thoại kèm mã quốc gia, ví dụ +919876543210.",
+      "phoneVerified": "Đã xác minh",
+      "phoneNotVerified": "Chưa xác minh",
+      "verifyPhone": "Xác minh số",
+      "verifyPhoneHint": "Hãy xác minh số của bạn để dùng khi đăng nhập.",
+      "saveBeforeVerify": "Hãy lưu số của bạn trước, rồi xác minh.",
+      "verifyUnavailable": "Hiện chưa thể gửi mã. Vui lòng thử lại sau.",
+      "verifiedDone": "Số của bạn đã được xác minh."
     },
     "appearance": {
       "title": "Giao diện",

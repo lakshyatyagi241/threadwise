@@ -1,4 +1,6 @@
 export * from './login';
+export * from './phone-login';
+export * from './phone-verification';
 export * from './signup';
 export * from './recovery';
 export * from './session';

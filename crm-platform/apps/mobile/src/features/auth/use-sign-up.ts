@@ -1,3 +1,4 @@
+import type { VerifyResult } from '@/components/ui/otp-step';
 import { ERROR_CODES } from '@crm/contracts';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,8 +29,7 @@ export type SignUpStep =
       resendAt: number;
     };
 
-/** What the code field should do after a try: leave the form (`done`), empty itself (`clear`) or keep what was typed (`keep`). */
-export type VerifyResult = 'done' | 'clear' | 'keep';
+export type { VerifyResult };
 
 type FieldMessages = Partial<Record<SignUpField, string>>;
 

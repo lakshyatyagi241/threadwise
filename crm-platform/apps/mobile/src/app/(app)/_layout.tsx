@@ -6,6 +6,7 @@ import { useAccountGate } from '@/features/auth/gates/use-account-gate';
 import { useCallerIdSync } from '@/features/contacts/use-caller-id';
 import { useCallReturn } from '@/features/contacts/use-call-return';
 import { ThemeSync } from '@/features/menu/theme-sync';
+import { LiveAlertHost } from '@/features/notifications/live-alert-host';
 import { RealtimeProvider } from '@/lib/realtime';
 import { useSession } from '@/lib/session/use-session';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -48,6 +49,8 @@ export default function AppLayout() {
         {/* The "Add call" page slides up over whatever is on screen; Back (or the app's Back) returns to it. */}
         <Stack.Screen name="call-summary" options={{ animation: 'slide_from_bottom' }} />
       </Stack>
+      {/* Drops a new chat message down over whatever screen is open (the web's live toast). */}
+      <LiveAlertHost />
     </RealtimeProvider>
   );
 }

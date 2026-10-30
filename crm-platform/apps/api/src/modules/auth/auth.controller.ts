@@ -5,6 +5,12 @@ import {
   loginRequestSchema,
   selectWorkspaceRequestSchema,
   passkeyLoginOptionsRequestSchema,
+  phoneLoginResendRequestSchema,
+  phoneLoginStartRequestSchema,
+  phoneLoginVerifyRequestSchema,
+  type PhoneLoginResendRequest,
+  type PhoneLoginStartRequest,
+  type PhoneLoginVerifyRequest,
   type PasskeyLoginOptionsRequest,
   type SelectWorkspaceRequest,
   mfaLoginRequestSchema,
@@ -22,6 +28,7 @@ import { AccountService } from './account/account.service';
 import { SecurityPolicyService } from './platform/security-policy.service';
 import { AuthService } from './auth.service';
 import { LoginService } from './flows/login.service';
+import { PhoneLoginService } from './flows/phone-login.service';
 import { clientMeta } from './support/client-meta';
 import { WorkspaceSwitchService } from './flows/workspace-switch.service';
 import { AllowWhileGated } from './guards/auth-gates';
@@ -40,6 +47,7 @@ export class AuthController {
   constructor(
     private readonly auth: AuthService,
     private readonly login: LoginService,
+    private readonly phoneLogin: PhoneLoginService,
     private readonly account: AccountService,
     private readonly workspaces: WorkspaceSwitchService,
     private readonly settings: AuthSettingsService,
@@ -105,6 +113,42 @@ export class AuthController {
     @Body(zodPipe(passkeyLoginOptionsRequestSchema)) body: PasskeyLoginOptionsRequest,
   ) {
     return this.login.passkeyLoginOptions(body.challengeToken);
+  }
+
+  @Public()
+  @Throttle('auth')
+  @Post('login/phone')
+  @ApiOperation({
+    summary: 'Start a sign-in with a mobile number: send it a code',
+    description:
+      'Answers the same for a number that has an account and one that has none (the code is only sent to the first), so it cannot be used to look people up. Needs the registration code step to be active.',
+  })
+  async signInPhone(@Body(zodPipe(phoneLoginStartRequestSchema)) body: PhoneLoginStartRequest) {
+    return this.phoneLogin.start(body, clientMeta());
+  }
+
+  @Public()
+  @Throttle('auth')
+  @Post('login/phone/resend')
+  @ApiOperation({ summary: 'Send a new code for a phone sign-in (a cooldown applies)' })
+  async signInPhoneResend(
+    @Body(zodPipe(phoneLoginResendRequestSchema)) body: PhoneLoginResendRequest,
+  ) {
+    return this.phoneLogin.resend(body, clientMeta());
+  }
+
+  @Public()
+  @Throttle('auth')
+  @Post('login/phone/verify')
+  @ApiOperation({
+    summary: 'Finish a phone sign-in with the code',
+    description:
+      'Answers like a password sign-in: a token pair, `mfa_required` when the account has two-factor on, or `workspace_required` when the number is in several workspaces.',
+  })
+  async signInPhoneVerify(
+    @Body(zodPipe(phoneLoginVerifyRequestSchema)) body: PhoneLoginVerifyRequest,
+  ) {
+    return this.phoneLogin.verify(body, clientMeta());
   }
 
   @Public()

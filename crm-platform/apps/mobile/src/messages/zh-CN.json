@@ -47,7 +47,18 @@
     "accountLocked": "此账号已被暂时锁定，请稍后再试。",
     "accountSuspended": "此账号已被停用。",
     "mfaInvalid": "验证码不正确，请重试。",
-    "mfaExpired": "登录已过期，请重新开始。"
+    "mfaExpired": "登录已过期，请重新开始。",
+    "phone": {
+      "title": "使用手机登录",
+      "subtitle": "我们会向您账户中的手机号码发送一次性验证码。",
+      "number": "手机号码",
+      "send": "发送验证码",
+      "unavailable": "暂时无法使用手机号码登录。请使用您的邮箱和密码。",
+      "continueMobile": "使用手机继续",
+      "continueEmail": "使用邮箱继续",
+      "or": "或",
+      "hint": "此处只能使用您在“管理个人资料”中验证过的号码。"
+    }
   },
   "recovery": {
     "back": "返回登录",
@@ -526,7 +537,14 @@
       "cancel": "取消",
       "nameRequired": "请输入您的姓名。",
       "nameTooLong": "最多 120 个字符。",
-      "phoneInvalid": "请输入带国家/地区区号的电话号码，例如 +919876543210。"
+      "phoneInvalid": "请输入带国家/地区区号的电话号码，例如 +919876543210。",
+      "phoneVerified": "已验证",
+      "phoneNotVerified": "未验证",
+      "verifyPhone": "验证号码",
+      "verifyPhoneHint": "验证您的号码，即可用它登录。",
+      "saveBeforeVerify": "请先保存号码，再进行验证。",
+      "verifyUnavailable": "暂时无法发送验证码，请稍后再试。",
+      "verifiedDone": "您的号码已验证。"
     },
     "appearance": {
       "title": "外观",

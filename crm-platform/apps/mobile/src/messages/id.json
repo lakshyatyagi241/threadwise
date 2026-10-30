@@ -47,7 +47,18 @@
     "accountLocked": "Akun ini dikunci sementara. Coba lagi nanti.",
     "accountSuspended": "Akun ini telah ditangguhkan.",
     "mfaInvalid": "Kode tidak benar. Coba lagi.",
-    "mfaExpired": "Sesi masuk telah kedaluwarsa. Silakan mulai lagi."
+    "mfaExpired": "Sesi masuk telah kedaluwarsa. Silakan mulai lagi.",
+    "phone": {
+      "title": "Masuk dengan ponsel Anda",
+      "subtitle": "Kami akan mengirim kode sekali pakai ke nomor ponsel di akun Anda.",
+      "number": "Nomor ponsel",
+      "send": "Kirim kode",
+      "unavailable": "Masuk dengan nomor telepon sedang tidak tersedia. Gunakan email dan kata sandi Anda.",
+      "continueMobile": "Lanjutkan dengan ponsel",
+      "continueEmail": "Lanjutkan dengan email",
+      "or": "ATAU",
+      "hint": "Hanya nomor yang Anda verifikasi di \"Kelola profil\" yang berfungsi di sini."
+    }
   },
   "recovery": {
     "back": "Kembali ke halaman masuk",
@@ -526,7 +537,14 @@
       "cancel": "Batal",
       "nameRequired": "Masukkan nama Anda.",
       "nameTooLong": "Gunakan maksimal 120 karakter.",
-      "phoneInvalid": "Masukkan nomor telepon dengan kode negara, misalnya +919876543210."
+      "phoneInvalid": "Masukkan nomor telepon dengan kode negara, misalnya +919876543210.",
+      "phoneVerified": "Terverifikasi",
+      "phoneNotVerified": "Belum terverifikasi",
+      "verifyPhone": "Verifikasi nomor",
+      "verifyPhoneHint": "Verifikasi nomor Anda untuk dipakai masuk.",
+      "saveBeforeVerify": "Simpan nomor Anda dulu, lalu verifikasi.",
+      "verifyUnavailable": "Kami tidak dapat mengirim kode saat ini. Coba lagi nanti.",
+      "verifiedDone": "Nomor Anda sudah terverifikasi."
     },
     "appearance": {
       "title": "Tampilan",

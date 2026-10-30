@@ -15,6 +15,9 @@ jest.mock('expo-router', () => ({ useRouter: jest.fn() }));
 const signInWithPassword = jest.mocked(api.signInWithPassword);
 const signInWithMfa = jest.mocked(api.signInWithMfa);
 const signInToWorkspace = jest.mocked(api.signInToWorkspace);
+const startPhoneSignIn = jest.mocked(api.startPhoneSignIn);
+const verifyPhoneSignIn = jest.mocked(api.verifyPhoneSignIn);
+const resendPhoneSignIn = jest.mocked(api.resendPhoneSignIn);
 
 const authenticated = {
   status: 'authenticated' as const,
@@ -258,5 +261,163 @@ describe('SignInScreen: what comes from the platform settings', () => {
     await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
     expect(screen.queryByText('New here?')).toBeNull();
     expect(screen.queryByRole('link', { name: 'Terms' })).toBeNull();
+  });
+});
+
+describe('SignInScreen: with a mobile number', () => {
+  const challenge = {
+    challengeId: 'challenge-1',
+    maskedPhone: '+91 •••• ••10',
+    expiresInSeconds: 300,
+    resendCooldownSeconds: 0,
+    codeLength: 6,
+  };
+  const phoneConfig = { ...config, otp: { enabled: true } };
+
+  /** The person opens the number step, types a number and asks for the code. */
+  const askForCode = async () => {
+    await renderScreen();
+    await press('Continue with Mobile');
+    await fill('Mobile number', '9876543210');
+    await press('Send code');
+    await screen.findByText('We sent a code to ⁦+91 •••• ••10⁩');
+  };
+
+  beforeEach(() => {
+    jest.mocked(api.fetchRegistrationConfig).mockResolvedValue(phoneConfig);
+    startPhoneSignIn.mockResolvedValue(challenge);
+  });
+
+  it('offers no phone sign-in while the platform has the code step off', async () => {
+    jest.mocked(api.fetchRegistrationConfig).mockResolvedValue(config);
+    await renderScreen();
+    expect(await screen.findByText('Create an account')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Continue with Mobile' })).toBeNull();
+  });
+
+  it('offers it once the platform settings say the code step is on, and can go back to email', async () => {
+    await renderScreen();
+    await press('Continue with Mobile');
+    expect(screen.getByText('Sign in with your phone')).toBeTruthy();
+    await press('Continue with Email');
+    expect(screen.getByLabelText('Password')).toBeTruthy();
+  });
+
+  it('keeps the sign-up line under the number step, as the email step has it', async () => {
+    await renderScreen();
+    await press('Continue with Mobile');
+    expect(await screen.findByText('New here?')).toBeTruthy();
+    await press('Create an account');
+    expect(router.push).toHaveBeenCalledWith('/sign-up');
+  });
+
+  it('has a back arrow on the number step that returns to the email form', async () => {
+    await renderScreen();
+    await press('Continue with Mobile');
+    await screen.findByText('Sign in with your phone');
+    await press('Back');
+    expect(screen.getByLabelText('Password')).toBeTruthy();
+  });
+
+  it('checks the number before asking the server for a code', async () => {
+    await renderScreen();
+    await press('Continue with Mobile');
+    await fill('Mobile number', '123');
+    await press('Send code');
+    expect(await screen.findByText(/Enter a valid phone number/)).toBeTruthy();
+    expect(startPhoneSignIn).not.toHaveBeenCalled();
+  });
+
+  it('asks for the code with the number as E.164, then signs in with the code', async () => {
+    verifyPhoneSignIn.mockResolvedValue(authenticated);
+    await askForCode();
+    expect(startPhoneSignIn).toHaveBeenCalledWith({ phone: '+919876543210', remember: true });
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
+    await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
+    expect(verifyPhoneSignIn).toHaveBeenCalledWith({ challengeId: 'challenge-1', code: '123456' });
+  });
+
+  it("says so, in the person's language, when the code is wrong, and lets them try again", async () => {
+    verifyPhoneSignIn.mockRejectedValue(new ApiError(400, 'AUTH_OTP_INVALID', 'x'));
+    await askForCode();
+    await fill('Verification code', '000000');
+    await press('Verify and continue');
+    expect(await screen.findByText('That code is not correct. Try again.')).toBeTruthy();
+    expect(getSnapshot().status).not.toBe('signedIn');
+  });
+
+  it('asks for the authenticator code after the phone code when the account has two-step on', async () => {
+    verifyPhoneSignIn.mockResolvedValue({
+      status: 'mfa_required',
+      challengeToken: 'challenge-2',
+      expiresInSeconds: 300,
+    });
+    signInWithMfa.mockResolvedValue(authenticated);
+    await askForCode();
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
+    expect(await screen.findByText('Two-step verification')).toBeTruthy();
+    await fill('Verification code', '654321');
+    await press('Verify');
+    await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
+    expect(signInWithMfa).toHaveBeenCalledWith({ challengeToken: 'challenge-2', code: '654321' });
+  });
+
+  it('lets the person pick a workspace when the number is in several', async () => {
+    verifyPhoneSignIn.mockResolvedValue({
+      status: 'workspace_required',
+      selectionToken: 'select-2',
+      expiresInSeconds: 300,
+      workspaces: [
+        { slug: 'acme', name: 'Acme Ltd', role: 'Admin', memberCount: 4 },
+        { slug: 'globex', name: 'Globex', role: null, memberCount: 9 },
+      ],
+    });
+    signInToWorkspace.mockResolvedValue(authenticated);
+    await askForCode();
+    await fill('Verification code', '123456');
+    await press('Verify and continue');
+    expect(await screen.findByText('Choose a workspace')).toBeTruthy();
+    await press('Acme Ltd');
+    await waitFor(() => expect(getSnapshot().status).toBe('signedIn'));
+    expect(signInToWorkspace).toHaveBeenCalledWith({ selectionToken: 'select-2', orgSlug: 'acme' });
+  });
+
+  it('asks for a new code, for the same challenge', async () => {
+    resendPhoneSignIn.mockResolvedValue({ expiresInSeconds: 300, resendCooldownSeconds: 60 });
+    await askForCode();
+    await press('Resend code');
+    expect(await screen.findByText('A new code is on its way to your WhatsApp.')).toBeTruthy();
+    expect(resendPhoneSignIn).toHaveBeenCalledWith({ challengeId: 'challenge-1' });
+  });
+
+  it('goes back to the number step to fix a wrong number', async () => {
+    await askForCode();
+    await press('Wrong number? Go back');
+    expect(screen.getByLabelText('Mobile number')).toBeTruthy();
+  });
+
+  it('asks for one code only when the send key is pressed twice before the answer comes back', async () => {
+    startPhoneSignIn.mockReturnValue(new Promise(() => undefined));
+    await renderScreen();
+    await press('Continue with Mobile');
+    await fill('Mobile number', '9876543210');
+    await press('Send code');
+    await press('Send code');
+    expect(startPhoneSignIn).toHaveBeenCalledTimes(1);
+  });
+
+  it('says plainly that phone sign-in is not available when the server cannot send codes', async () => {
+    startPhoneSignIn.mockRejectedValue(new ApiError(503, 'AUTH_OTP_SEND_FAILED', 'x'));
+    await renderScreen();
+    await press('Continue with Mobile');
+    await fill('Mobile number', '9876543210');
+    await press('Send code');
+    expect(
+      await screen.findByText(
+        'Signing in with a phone number is not available right now. Use your email and password.',
+      ),
+    ).toBeTruthy();
   });
 });

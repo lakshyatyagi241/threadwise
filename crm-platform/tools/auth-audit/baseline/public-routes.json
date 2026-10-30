@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-26T17:36:50.372Z",
-  "commit": "241f475f3ea1e24fd97a27cee1faac2bcf27c5d7",
+  "recordedAt": "2026-10-30T06:46:56.619Z",
+  "commit": "85dad18a9777ac04e7ea1811517f6725ab1807c4",
   "note": "Snapshot of the @Public routes accepted by a human on recordedAt. Routes under auth/, platform/auth, account and realtime were read individually in the 2026-10-09 analysis; the rest were recorded as found. A NEW public route fails the audit until someone reviews it and re-records this file (pnpm audit:auth -- --update-baseline).",
   "publicRoutes": [
     "GET /api/whatsapp-message-settings",
@@ -28,6 +28,9 @@
     "POST /v2/auth/login",
     "POST /v2/auth/login/mfa",
     "POST /v2/auth/login/mfa/webauthn-options",
+    "POST /v2/auth/login/phone",
+    "POST /v2/auth/login/phone/resend",
+    "POST /v2/auth/login/phone/verify",
     "POST /v2/auth/login/workspace",
     "POST /v2/auth/logout",
     "POST /v2/auth/partner/login",

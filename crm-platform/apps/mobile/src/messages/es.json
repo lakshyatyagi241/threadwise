@@ -47,7 +47,18 @@
     "accountLocked": "Esta cuenta está bloqueada temporalmente. Inténtalo más tarde.",
     "accountSuspended": "Esta cuenta ha sido suspendida.",
     "mfaInvalid": "Ese código no es correcto. Inténtalo de nuevo.",
-    "mfaExpired": "El inicio de sesión caducó. Empieza de nuevo."
+    "mfaExpired": "El inicio de sesión caducó. Empieza de nuevo.",
+    "phone": {
+      "title": "Inicia sesión con tu teléfono",
+      "subtitle": "Enviaremos un código de un solo uso al número de móvil de tu cuenta.",
+      "number": "Número de móvil",
+      "send": "Enviar código",
+      "unavailable": "Iniciar sesión con un número de teléfono no está disponible en este momento. Usa tu correo electrónico y tu contraseña.",
+      "continueMobile": "Continuar con el móvil",
+      "continueEmail": "Continuar con el correo electrónico",
+      "or": "O",
+      "hint": "Aquí solo funciona un número que hayas verificado en «Gestionar perfil»."
+    }
   },
   "recovery": {
     "back": "Volver a iniciar sesión",
@@ -546,7 +557,14 @@
       "cancel": "Cancelar",
       "nameRequired": "Introduce tu nombre.",
       "nameTooLong": "Usa hasta 120 caracteres.",
-      "phoneInvalid": "Introduce el número de teléfono con el prefijo del país, por ejemplo +919876543210."
+      "phoneInvalid": "Introduce el número de teléfono con el prefijo del país, por ejemplo +919876543210.",
+      "phoneVerified": "Verificado",
+      "phoneNotVerified": "Sin verificar",
+      "verifyPhone": "Verificar número",
+      "verifyPhoneHint": "Verifica tu número para usarlo al iniciar sesión.",
+      "saveBeforeVerify": "Guarda primero tu número y luego verifícalo.",
+      "verifyUnavailable": "No pudimos enviar un código ahora. Inténtalo de nuevo más tarde.",
+      "verifiedDone": "Tu número está verificado."
     },
     "appearance": {
       "title": "Apariencia",

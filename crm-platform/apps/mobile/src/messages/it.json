@@ -47,7 +47,18 @@
     "accountLocked": "Questo account è temporaneamente bloccato. Riprova più tardi.",
     "accountSuspended": "Questo account è stato sospeso.",
     "mfaInvalid": "Il codice non è corretto. Riprova.",
-    "mfaExpired": "L'accesso è scaduto. Ricomincia."
+    "mfaExpired": "L'accesso è scaduto. Ricomincia.",
+    "phone": {
+      "title": "Accedi con il tuo telefono",
+      "subtitle": "Invieremo un codice monouso al numero di cellulare del tuo account.",
+      "number": "Numero di cellulare",
+      "send": "Invia codice",
+      "unavailable": "L’accesso con il numero di telefono non è disponibile al momento. Usa la tua email e la tua password.",
+      "continueMobile": "Continua con il cellulare",
+      "continueEmail": "Continua con l’email",
+      "or": "O",
+      "hint": "Qui funziona solo un numero verificato in «Gestisci profilo»."
+    }
   },
   "recovery": {
     "back": "Torna all'accesso",
@@ -546,7 +557,14 @@
       "cancel": "Annulla",
       "nameRequired": "Inserisci il tuo nome.",
       "nameTooLong": "Usa al massimo 120 caratteri.",
-      "phoneInvalid": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +919876543210."
+      "phoneInvalid": "Inserisci il numero di telefono con il prefisso internazionale, ad esempio +919876543210.",
+      "phoneVerified": "Verificato",
+      "phoneNotVerified": "Non verificato",
+      "verifyPhone": "Verifica il numero",
+      "verifyPhoneHint": "Verifica il tuo numero per usarlo per accedere.",
+      "saveBeforeVerify": "Salva prima il tuo numero, poi verificalo.",
+      "verifyUnavailable": "Al momento non è stato possibile inviare un codice. Riprova più tardi.",
+      "verifiedDone": "Il tuo numero è verificato."
     },
     "appearance": {
       "title": "Aspetto",

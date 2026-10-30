@@ -1,6 +1,6 @@
 import type { NotificationResponse } from '@crm/contracts';
 import { useRouter } from 'expo-router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 import { Banner } from '@/components/ui/banner';
@@ -12,6 +12,7 @@ import { SegmentedControl } from '@/components/ui/segmented-control';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
 import { messageForError } from '@/lib/api/error-message';
+import { isHiddenType, visibleRows } from '@/lib/notifications/hidden';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { groupByDay, notificationTarget } from './notification-model';
@@ -22,9 +23,14 @@ import { useDismiss, useMarkAllRead, useMarkRead, useNotificationList } from './
 
 type View_ = 'all' | 'unread';
 
+/** While fewer rows than this are shown and the server has more, the next page is read by itself (a page can be all hidden kinds). */
+const MIN_SHOWN = 12;
+/** ...but never more pages than this on its own: a feed that is almost all hidden kinds is then walked by scrolling, not all at once. */
+const MAX_AUTO_PAGES = 5;
+
 /**
  * The person's own notifications (the web bell and its Notifications page): newest first in day sections, a page at a time, All or
- * Unread. Opening a row marks it read and goes to what it is about (a chat, a task, a contact); the cross dismisses it; the header's
+ * Unread, without the kinds the app hides (`lib/notifications/hidden.ts`). Opening a row marks it read and goes to what it is about (a chat, a task, a contact); the cross dismisses it; the header's
  * tick marks everything read. Every signed-in person has their own feed, so there is no permission gate.
  */
 export function NotificationsScreen() {
@@ -36,9 +42,32 @@ export function NotificationsScreen() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const list = useNotificationList(view === 'unread');
-  const rows = useMemo(() => list.data?.pages.flatMap((page) => page.data) ?? [], [list.data]);
+  const loaded = useMemo(() => list.data?.pages.flatMap((page) => page.data) ?? [], [list.data]);
+  const rows = useMemo(() => visibleRows(loaded), [loaded]);
   const sections = useMemo(() => groupByDay(rows, new Date()), [rows]);
-  const unread = list.data?.pages[0]?.meta.unread ?? 0;
+  // The server's unread total also counts the hidden kinds, and the rows loaded so far may not include the unread ones (the newest
+  // may all be read). So the button shows when the total is more than the hidden unread rows already seen: at worst it offers
+  // "Mark all read" when only hidden kinds are left unread, which is harmless; it never hides the button while visible ones are unread.
+  const unread = useMemo(() => {
+    const total = list.data?.pages[0]?.meta.unread ?? 0;
+    const hiddenUnread = loaded.filter((n) => n.readAt === null && isHiddenType(n.type)).length;
+    const shownUnread = rows.filter((n) => n.readAt === null).length;
+    return Math.max(shownUnread, total - hiddenUnread);
+  }, [list.data, loaded, rows]);
+
+  const { hasNextPage, isFetchingNextPage, fetchNextPage, isError } = list;
+  const pagesLoaded = list.data?.pages.length ?? 0;
+  useEffect(() => {
+    if (
+      hasNextPage &&
+      !isFetchingNextPage &&
+      !isError &&
+      rows.length < MIN_SHOWN &&
+      pagesLoaded < MAX_AUTO_PAGES
+    ) {
+      void fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, isError, fetchNextPage, rows.length, pagesLoaded]);
 
   const markRead = useMarkRead();
   const markAll = useMarkAllRead();

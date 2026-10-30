@@ -11,6 +11,7 @@ import {
   deviceDown,
   feed,
   futureType,
+  newLead,
   newMessage,
   notificationPage,
   taskAssigned,
@@ -57,7 +58,6 @@ describe('NotificationsScreen', () => {
     expect(await screen.findByText('3 new messages from Aarav Sharma')).toBeTruthy();
     expect(screen.getByText('Is the demo on Friday?')).toBeTruthy();
     expect(screen.getByText('Task assigned to you')).toBeTruthy();
-    expect(screen.getByText('Sales line disconnected')).toBeTruthy();
     expect(screen.getAllByRole('header').length).toBeGreaterThan(1);
     expect(listCall).toHaveBeenCalledWith(
       { limit: 30, cursor: undefined, unreadOnly: false },
@@ -74,9 +74,8 @@ describe('NotificationsScreen', () => {
   it('marks unread rows with a dot, and announces them to a screen reader', async () => {
     await show();
     await screen.findByText('Quote expired');
-    expect(screen.getAllByTestId('notification-unread-dot')).toHaveLength(
-      feed.filter((r) => r.readAt === null).length,
-    );
+    // Only the rows that are shown: the lead and the device are hidden kinds.
+    expect(screen.getAllByTestId('notification-unread-dot')).toHaveLength(2);
     expect(screen.getByLabelText(/^Unread\. 3 new messages from Aarav Sharma/)).toBeTruthy();
   });
 
@@ -99,11 +98,61 @@ describe('NotificationsScreen', () => {
   });
 
   it('a row with no screen in the app is only marked read', async () => {
-    readCall.mockResolvedValue({ ...deviceDown, readAt: '2026-10-16T10:00:00.000Z' });
+    readCall.mockResolvedValue({ ...futureType, readAt: '2026-10-16T10:00:00.000Z' });
     await show();
-    await fireEvent.press(await screen.findByLabelText(/Sales line disconnected/));
-    await waitFor(() => expect(readCall).toHaveBeenCalledWith(deviceDown.id, expect.any(String)));
+    await fireEvent.press(await screen.findByLabelText(/Quote expired/));
+    await waitFor(() => expect(readCall).toHaveBeenCalledWith(futureType.id, expect.any(String)));
     expect(router.push).not.toHaveBeenCalled();
+  });
+
+  describe('the kinds the app hides', () => {
+    it('are left out of the list, the rest stays in order', async () => {
+      await show();
+      await screen.findByText('Quote expired');
+      for (const hidden of [newLead, deviceDown]) {
+        expect(screen.queryByText(hidden.title)).toBeNull();
+      }
+      expect(screen.getAllByLabelText('Dismiss this notification')).toHaveLength(3);
+    });
+
+    it('do not make the Mark all read button appear when only they are unread', async () => {
+      // The server counts the two hidden rows as unread; both are on this page, so nothing shown is left to read.
+      listCall.mockResolvedValue(
+        notificationPage([deviceDown, newLead, taskAssigned], { unread: 2 }),
+      );
+      await show();
+      await screen.findByText('Task assigned to you');
+      expect(screen.queryByTestId('notifications-mark-all')).toBeNull();
+    });
+
+    it('keep the Mark all read button when unread rows may be further down than the page that was read', async () => {
+      // The newest page is all read, the server says 3 are unread: they are older, and not hidden kinds as far as we know.
+      listCall.mockResolvedValue(notificationPage([taskAssigned], { unread: 3 }));
+      await show();
+      await screen.findByText('Task assigned to you');
+      expect(screen.getByTestId('notifications-mark-all')).toBeTruthy();
+    });
+
+    it('stop reading pages by themselves after a few, when almost everything is a hidden kind', async () => {
+      listCall.mockResolvedValue(notificationPage([deviceDown], { nextCursor: 'more' }));
+      await show();
+      await waitFor(() => expect(listCall.mock.calls.length).toBeGreaterThanOrEqual(5));
+      await act(async () => new Promise((resolve) => setTimeout(resolve, 300)));
+      expect(listCall).toHaveBeenCalledTimes(5);
+    });
+
+    it('read the next page by themselves when a whole page is hidden, so the list is not left empty', async () => {
+      listCall
+        .mockResolvedValueOnce(notificationPage([deviceDown, newLead], { nextCursor: 'c2' }))
+        .mockResolvedValueOnce(notificationPage([newMessage]));
+      await show();
+      expect(await screen.findByText('Is the demo on Friday?')).toBeTruthy();
+      expect(listCall).toHaveBeenCalledTimes(2);
+      expect(listCall).toHaveBeenLastCalledWith(
+        { limit: 30, cursor: 'c2', unreadOnly: false },
+        expect.anything(),
+      );
+    });
   });
 
   it('removes a row from the list when it is dismissed', async () => {

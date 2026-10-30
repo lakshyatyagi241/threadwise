@@ -47,7 +47,18 @@
     "accountLocked": "Dieses Konto ist vorübergehend gesperrt. Versuchen Sie es später erneut.",
     "accountSuspended": "Dieses Konto wurde gesperrt.",
     "mfaInvalid": "Der Code ist nicht korrekt. Versuchen Sie es erneut.",
-    "mfaExpired": "Die Anmeldung ist abgelaufen. Bitte beginnen Sie von vorn."
+    "mfaExpired": "Die Anmeldung ist abgelaufen. Bitte beginnen Sie von vorn.",
+    "phone": {
+      "title": "Mit Ihrem Handy anmelden",
+      "subtitle": "Wir senden einen Einmalcode an die Mobilnummer Ihres Kontos.",
+      "number": "Mobilnummer",
+      "send": "Code senden",
+      "unavailable": "Die Anmeldung per Telefonnummer ist derzeit nicht verfügbar. Nutzen Sie Ihre E-Mail-Adresse und Ihr Passwort.",
+      "continueMobile": "Mit Mobilnummer fortfahren",
+      "continueEmail": "Mit E-Mail fortfahren",
+      "or": "ODER",
+      "hint": "Hier funktioniert nur eine Nummer, die Sie unter „Profil verwalten“ bestätigt haben."
+    }
   },
   "recovery": {
     "back": "Zurück zur Anmeldung",
@@ -536,7 +547,14 @@
       "cancel": "Abbrechen",
       "nameRequired": "Geben Sie Ihren Namen ein.",
       "nameTooLong": "Verwenden Sie höchstens 120 Zeichen.",
-      "phoneInvalid": "Geben Sie die Telefonnummer mit Ländervorwahl ein, zum Beispiel +919876543210."
+      "phoneInvalid": "Geben Sie die Telefonnummer mit Ländervorwahl ein, zum Beispiel +919876543210.",
+      "phoneVerified": "Bestätigt",
+      "phoneNotVerified": "Nicht bestätigt",
+      "verifyPhone": "Nummer bestätigen",
+      "verifyPhoneHint": "Bestätigen Sie Ihre Nummer, um sich damit anzumelden.",
+      "saveBeforeVerify": "Speichern Sie zuerst Ihre Nummer und bestätigen Sie sie dann.",
+      "verifyUnavailable": "Wir konnten gerade keinen Code senden. Versuchen Sie es später erneut.",
+      "verifiedDone": "Ihre Nummer ist bestätigt."
     },
     "appearance": {
       "title": "Darstellung",

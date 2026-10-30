@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { isApiError } from '@/lib/api';
 import { messageForError } from '@/lib/api/error-message';
-import { useCountdown } from '@/features/auth/use-countdown';
+import { useCountdown } from '@/lib/hooks/use-countdown';
 import { resendVerification } from './gates-api';
 
 /** The API sends one verification mail a minute; a mail that could not be sent costs the person no waiting. */

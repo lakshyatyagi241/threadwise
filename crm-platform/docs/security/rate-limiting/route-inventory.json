@@ -23,14 +23,14 @@
     }
   },
   "summary": {
-    "routes": 2094,
-    "public": 223,
-    "withThrottle": 79,
+    "routes": 2103,
+    "public": 226,
+    "withThrottle": 85,
     "skippedByDesign": 64,
     "byClass": {
       "credential": {
-        "routes": 30,
-        "declared": 18,
+        "routes": 33,
+        "declared": 21,
         "undeclared": 12
       },
       "public-write": {
@@ -49,8 +49,8 @@
         "undeclared": 50
       },
       "costly": {
-        "routes": 140,
-        "declared": 9,
+        "routes": 141,
+        "declared": 10,
         "undeclared": 131
       }
     }
@@ -1450,6 +1450,37 @@
       "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
     },
     {
+      "key": "POST /v2/account/phone/verification",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
+    },
+    {
+      "key": "POST /v2/account/phone/verification/confirm",
+      "class": "other",
+      "public": false,
+      "bodySchema": "phoneVerificationConfirmRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
+    },
+    {
+      "key": "POST /v2/account/phone/verification/resend",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
+    },
+    {
       "key": "POST /v2/ai-crm/message",
       "class": "costly",
       "public": false,
@@ -1588,6 +1619,39 @@
       "class": "credential",
       "public": true,
       "bodySchema": "passkeyLoginOptionsRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/phone",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "phoneLoginStartRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/phone/resend",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "phoneLoginResendRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/phone/verify",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "phoneLoginVerifyRequestSchema",
       "limiter": "throttle",
       "throttle": "auth",
       "effective": "10/60s by ip",

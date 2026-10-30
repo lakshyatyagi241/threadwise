@@ -14,9 +14,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { Badge } from '@/components/ui/badge';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { OtpStep } from '@/components/ui/otp-step';
 import { StackHeader } from '@/components/ui/stack-header';
 import { Text } from '@/components/ui/text';
 import { TextField, type TextFieldHandle } from '@/components/ui/text-field';
@@ -24,6 +26,7 @@ import { isApiError } from '@/lib/api';
 import { messageForError } from '@/lib/api/error-message';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { usePhoneVerification } from './use-phone-verification';
 import { useProfile, useUpdateProfile } from './use-profile';
 
 const NAME_MAX = 120;
@@ -91,6 +94,7 @@ function ProfileForm({
 }) {
   const { t } = useTranslation();
   const update = useUpdateProfile();
+  const verification = usePhoneVerification();
   const [fullName, setFullName] = useState(profile.fullName);
   const [displayName, setDisplayName] = useState(profile.displayName ?? '');
   const [phone, setPhone] = useState(profile.phone ?? '');
@@ -150,9 +154,28 @@ function ProfileForm({
     });
   };
 
+  // Asked to verify: the code step takes the place of the form until it is done or the person goes back to fix the number.
+  if (verification.pending) {
+    return (
+      <OtpStep
+        step={verification.pending}
+        pending={verification.busy}
+        resending={verification.resending}
+        resent={verification.resent}
+        error={verification.error}
+        onVerify={verification.confirm}
+        onResend={() => void verification.resend()}
+        onBack={verification.cancel}
+      />
+    );
+  }
+  // Only the saved number can be verified: one that was typed and not saved yet has to be saved first.
+  const saved = profile.phone !== null && normalisePhone(phone) === profile.phone;
+
   return (
     <View style={styles.stack}>
       {banner ? <Banner tone="danger" message={banner} /> : null}
+      {verification.done ? <Banner tone="info" message={t('menu.profile.verifiedDone')} /> : null}
       <TextField
         label={t('menu.profile.fullName')}
         value={fullName}
@@ -191,6 +214,32 @@ function ProfileForm({
         returnKeyType="done"
         onSubmitEditing={submit}
       />
+      {profile.phoneVerified !== undefined && normalisePhone(phone) !== '' ? (
+        <View style={styles.verify}>
+          {!saved ? (
+            <Text variant="caption" muted>
+              {t('menu.profile.saveBeforeVerify')}
+            </Text>
+          ) : profile.phoneVerified ? (
+            <Badge label={t('menu.profile.phoneVerified')} tone="success" />
+          ) : (
+            <>
+              <Badge label={t('menu.profile.phoneNotVerified')} tone="warning" />
+              <Text variant="caption" muted>
+                {t('menu.profile.verifyPhoneHint')}
+              </Text>
+              {verification.error ? <Banner tone="danger" message={verification.error} /> : null}
+              <Button
+                variant="soft"
+                label={t('menu.profile.verifyPhone')}
+                testID="verify-phone"
+                loading={verification.busy}
+                onPress={() => void verification.start()}
+              />
+            </>
+          )}
+        </View>
+      ) : null}
 
       <ReadOnly label={t('menu.profile.email')} value={profile.email} />
       {profile.pendingEmail ? (
@@ -230,4 +279,5 @@ const styles = StyleSheet.create({
   stack: { gap: spacing.lg },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   readOnly: { gap: spacing.xs },
+  verify: { gap: spacing.sm, alignItems: 'flex-start' },
 });

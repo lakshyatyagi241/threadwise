@@ -52,6 +52,7 @@ interface ProfileRow {
   status: string;
   display_name: string | null;
   phone_e164: string | null;
+  phone_verified_at: Date | null;
   locale: string | null;
   timezone: string | null;
   theme: 'paper' | 'bright' | 'dark' | null;
@@ -126,7 +127,7 @@ export class AccountService {
     const res = await this.db.txAs({ orgId, userId }, async (tx) =>
       tx.execute(sql`
         SELECT u.email, u.full_name, u.uuid, u.status,
-               p.display_name, p.phone_e164, p.locale, p.timezone, p.theme,
+               p.display_name, p.phone_e164, p.phone_verified_at, p.locale, p.timezone, p.theme,
                s.email_verified_at, s.mfa_enabled,
                a.etag AS avatar_etag,
                o.uuid AS org_uuid, o.slug AS org_slug, o.name AS org_name, o.plan AS org_plan,
@@ -257,6 +258,7 @@ export class AccountService {
       emailVerified: Boolean(p.email_verified_at),
       pendingEmail: pending,
       phone: p.phone_e164,
+      phoneVerified: Boolean(p.phone_verified_at),
       locale: p.locale,
       timezone: p.timezone,
       effectiveTimezone: resolveTimezone([p.timezone, settings.timezone]),
@@ -296,14 +298,15 @@ export class AccountService {
           sql`UPDATE users SET full_name = ${body.fullName} WHERE org_id = ${orgId} AND id = ${userId}`,
         );
       }
-      const phoneChanged = body.phone !== undefined && body.phone !== p.phone_e164;
       await tx.execute(sql`
         INSERT INTO user_profiles (org_id, user_id, display_name, phone_e164, locale, timezone, theme)
         VALUES (${orgId}, ${userId}, ${body.displayName ?? null}, ${body.phone ?? null}, ${body.locale ?? null}, ${body.timezone ?? null}, ${body.theme ?? 'paper'})
         ON CONFLICT (org_id, user_id) DO UPDATE SET
           display_name = ${body.displayName === undefined ? sql`user_profiles.display_name` : sql`${body.displayName || null}`},
           phone_e164   = ${body.phone === undefined ? sql`user_profiles.phone_e164` : sql`${body.phone}`},
-          phone_verified_at = ${phoneChanged ? sql`NULL` : sql`user_profiles.phone_verified_at`},
+          -- decided against the row as it is when this statement runs (it is locked here), not against the read at the top of the
+          -- request: a number changed in between must never keep the verification of the old one
+          phone_verified_at = ${body.phone === undefined ? sql`user_profiles.phone_verified_at` : sql`CASE WHEN ${body.phone}::text IS NOT DISTINCT FROM user_profiles.phone_e164 THEN user_profiles.phone_verified_at END`},
           locale       = ${body.locale === undefined ? sql`user_profiles.locale` : sql`${body.locale}`},
           timezone     = ${body.timezone === undefined ? sql`user_profiles.timezone` : sql`${body.timezone}`},
           theme        = ${body.theme === undefined ? sql`user_profiles.theme` : sql`${body.theme}`}

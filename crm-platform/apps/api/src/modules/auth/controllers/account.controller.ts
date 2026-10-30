@@ -42,6 +42,8 @@ import {
   type SessionListQuery,
   type UpdateBrandingRequest,
   type UpdateProfileRequest,
+  phoneVerificationConfirmRequestSchema,
+  type PhoneVerificationConfirmRequest,
 } from '@crm/contracts';
 import { z } from 'zod';
 import { ActorKinds, Public, RequirePermission } from '../../../common/decorators';
@@ -49,11 +51,13 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { AccountService, AVATAR_MAX_BYTES } from '../account/account.service';
+import { PhoneVerificationService } from '../account/phone-verification.service';
 import { UploadTooLargeInterceptor } from '../account/upload-too-large.interceptor';
 import { RecoveryService } from '../flows/recovery.service';
 import { AllowWhileGated } from '../guards/auth-gates';
 import { MfaService } from '../security/mfa.service';
 import { WebAuthnService } from '../security/webauthn.service';
+import { Throttle } from '../../platform-infrastructure';
 
 /** Self-service account screens. Every route acts on the caller; there is no user id in any path. */
 @ApiTags('account')
@@ -65,6 +69,7 @@ export class AccountController {
     private readonly recovery: RecoveryService,
     private readonly mfa: MfaService,
     private readonly webauthn: WebAuthnService,
+    private readonly phoneVerification: PhoneVerificationService,
   ) {}
 
   private actor() {
@@ -86,6 +91,33 @@ export class AccountController {
   })
   async updateProfile(@Body(zodPipe(updateProfileRequestSchema)) body: UpdateProfileRequest) {
     return this.account.updateProfile(body);
+  }
+
+  @Throttle('auth')
+  @Post('phone/verification')
+  @ApiOperation({
+    summary: 'Send a code to the mobile number on my profile, to verify it',
+    description:
+      'A verified number can be used to sign in with a code. Needs the registration code step to be active.',
+  })
+  async startPhoneVerification() {
+    return this.phoneVerification.start();
+  }
+
+  @Throttle('auth')
+  @Post('phone/verification/resend')
+  @ApiOperation({ summary: 'Send a new verification code to my number (a cooldown applies)' })
+  async resendPhoneVerification() {
+    return this.phoneVerification.resend();
+  }
+
+  @Throttle('auth')
+  @Post('phone/verification/confirm')
+  @ApiOperation({ summary: 'Confirm the code: marks the number on my profile as verified' })
+  async confirmPhoneVerification(
+    @Body(zodPipe(phoneVerificationConfirmRequestSchema)) body: PhoneVerificationConfirmRequest,
+  ) {
+    return this.phoneVerification.confirm(body);
   }
 
   @Post('email-change')

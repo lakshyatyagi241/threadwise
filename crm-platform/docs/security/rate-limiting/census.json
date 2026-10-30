@@ -1,7 +1,7 @@
 {
   "generatedBy": "tools/rate-limit/census.mjs",
   "api": "local",
-  "routes": 158,
+  "routes": 161,
   "seconds": 92,
   "results": [
     {
@@ -1904,6 +1904,81 @@
       "firstFiveXX": null,
       "timeouts": 0,
       "ms": 128
+    },
+    {
+      "key": "POST /v2/auth/login/phone",
+      "class": "credential",
+      "declared": "throttle",
+      "bodyKind": "empty",
+      "sent": 11,
+      "cap": 120,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 10,
+      "retryAfter": "8",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "422": 10,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 115
+    },
+    {
+      "key": "POST /v2/auth/login/phone/resend",
+      "class": "credential",
+      "declared": "throttle",
+      "bodyKind": "empty",
+      "sent": 11,
+      "cap": 120,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 10,
+      "retryAfter": "8",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "422": 10,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 97
+    },
+    {
+      "key": "POST /v2/auth/login/phone/verify",
+      "class": "credential",
+      "declared": "throttle",
+      "bodyKind": "empty",
+      "sent": 11,
+      "cap": 120,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 10,
+      "retryAfter": "8",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "422": 10,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 99
     },
     {
       "key": "POST /v2/auth/login/workspace",

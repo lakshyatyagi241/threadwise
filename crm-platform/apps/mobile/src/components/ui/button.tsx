@@ -7,8 +7,8 @@ interface Props extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
   /** What a screen reader says when the visible `label` is not enough alone (a "Delete" inside a list says whose). */
   accessibilityLabel?: string;
-  /** `primary` is the one action of a screen, `secondary` an alternative, `danger` the one that cannot be undone (delete account), `link` a quiet text action (it sits inside a sentence of UI). */
-  variant?: 'primary' | 'secondary' | 'danger' | 'link';
+  /** `primary` is the one action of a screen, `secondary` an alternative, `danger` the one that cannot be undone (delete account), `soft` a quiet grey alternative under an "OR" ("Continue with Mobile"), `link` a quiet text action (it sits inside a sentence of UI). */
+  variant?: 'primary' | 'secondary' | 'danger' | 'soft' | 'link';
   loading?: boolean;
   /** The colour of a `link`'s text: the blue of links, or the indigo of the buttons beside it (a sheet whose Done button is indigo). */
   tone?: 'primary' | 'action';
@@ -30,6 +30,7 @@ export function Button({
   const inactive = Boolean(disabled) || loading;
   const primary = variant === 'primary';
   const danger = variant === 'danger';
+  const soft = variant === 'soft';
   const link = variant === 'link';
   const textColor = primary
     ? colors.onAction
@@ -49,8 +50,20 @@ export function Button({
         link ? styles.link : styles.base,
         link && align === 'start' && styles.linkStart,
         !link && {
-          backgroundColor: primary ? colors.action : danger ? colors.danger : colors.surface,
-          borderColor: primary ? colors.action : danger ? colors.danger : colors.borderStrong,
+          backgroundColor: primary
+            ? colors.action
+            : danger
+              ? colors.danger
+              : soft
+                ? colors.surfaceMuted
+                : colors.surface,
+          borderColor: primary
+            ? colors.action
+            : danger
+              ? colors.danger
+              : soft
+                ? colors.surfaceMuted
+                : colors.borderStrong,
         },
         { opacity: inactive ? 0.5 : pressed ? 0.85 : 1 },
       ]}

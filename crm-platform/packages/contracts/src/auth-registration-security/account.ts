@@ -28,6 +28,11 @@ export const profileResponseSchema = z.object({
   /** Set while an email change awaits confirmation from the new address. */
   pendingEmail: z.string().nullable(),
   phone: z.string().nullable(),
+  /**
+   * The number was confirmed with a one-time code (`phone-verification.ts`), so it can sign in. Absent from an older server, which
+   * means "not known", not "verified".
+   */
+  phoneVerified: z.boolean().optional(),
   locale: z.string().nullable(),
   /** The person's own time zone; null = follow the workspace. */
   timezone: z.string().nullable(),

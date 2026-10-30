@@ -10,6 +10,7 @@ import {
   type LoginResponse,
   type MfaLoginRequest,
   type PasswordLoginResponse,
+  type WorkspaceRequired,
   type SelectWorkspaceRequest,
 } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
@@ -39,7 +40,7 @@ import { LoginAlertService } from './login-alert.service';
 import type { ClientMeta } from '../support/client-meta';
 export type { ClientMeta };
 
-interface UserRow {
+export interface UserRow {
   id: number;
   uuid: string;
   email: string;
@@ -54,7 +55,7 @@ export interface CompleteLoginInput {
   user: { id: number; uuid: string; email: string; fullName: string };
   remember: boolean;
   mfaVerified: boolean;
-  method: 'password' | 'mfa' | 'social' | 'signup' | 'switch' | 'invite';
+  method: 'password' | 'phone' | 'mfa' | 'social' | 'signup' | 'switch' | 'invite';
   meta: ClientMeta;
 }
 
@@ -74,6 +75,8 @@ interface MfaChallenge {
 /** The workspaces a password opened, held while the person picks one. Never leaves the server. */
 interface WorkspaceChoice {
   remember: boolean;
+  /** How the person proved who they are, kept for the session record after the pick. Absent means a password. */
+  method?: 'password' | 'phone';
   options: Array<{ orgId: number; userId: number; slug: string; lockKey: string }>;
 }
 
@@ -171,7 +174,7 @@ export class LoginService {
       throw this.invalid();
     }
 
-    return this.afterPassword(org, row, req.remember && policy.rememberMeEnabled, lockKey, meta);
+    return this.afterCredential(org, row, req.remember && policy.rememberMeEnabled, lockKey, meta);
   }
 
   /**
@@ -244,17 +247,34 @@ export class LoginService {
 
     const remember = req.remember && policy.rememberMeEnabled;
     const only = matches.length === 1 ? matches[0] : undefined;
-    if (only) return this.afterPassword(only.org, only.row, remember, only.lockKey, meta);
+    if (only) return this.afterCredential(only.org, only.row, remember, only.lockKey, meta);
 
+    return this.offerWorkspaces(
+      matches.map((m) => ({ org: m.org, userId: m.row.id, lockKey: m.lockKey })),
+      remember,
+      'password',
+    );
+  }
+
+  /**
+   * The person proved who they are in more than one workspace: keep the options on the server and answer with the cards to
+   * pick from. Only workspaces the credential opened are listed, so the answer never reveals one the visitor could not enter.
+   */
+  async offerWorkspaces(
+    matches: Array<{ org: OrgRef; userId: number; lockKey: string }>,
+    remember: boolean,
+    method: 'password' | 'phone',
+  ): Promise<WorkspaceRequired> {
     const details = await this.tenants.workspaceCardDetails(
-      matches.map((m) => ({ orgId: m.org.id, userId: m.row.id })),
+      matches.map((m) => ({ orgId: m.org.id, userId: m.userId })),
     );
     const token = randomToken(32);
     const pending: WorkspaceChoice = {
       remember,
+      method,
       options: matches.map((m) => ({
         orgId: m.org.id,
-        userId: m.row.id,
+        userId: m.userId,
         slug: m.org.slug,
         lockKey: m.lockKey,
       })),
@@ -290,16 +310,27 @@ export class LoginService {
 
     const loaded = await this.loadOrgAndUser(choice.orgId, choice.userId);
     if (!loaded || loaded.org.status !== 'active') throw this.invalid();
-    return this.afterPassword(loaded.org, loaded.user, pending.remember, choice.lockKey, meta);
+    return this.afterCredential(
+      loaded.org,
+      loaded.user,
+      pending.remember,
+      choice.lockKey,
+      meta,
+      pending.method ?? 'password',
+    );
   }
 
-  /** The password held: ask for the second factor when the account has one, else open the session. */
-  private async afterPassword(
+  /**
+   * The credential held (a password, or a code sent to the person's verified phone): ask for the second factor when the
+   * account has one, else open the session. `method` is what the session record and the audit trail say was used.
+   */
+  async afterCredential(
     org: OrgRef,
     row: UserRow,
     remember: boolean,
     lockKey: string,
     meta: ClientMeta,
+    method: 'password' | 'phone' = 'password',
   ): Promise<LoginResponse> {
     // A suspended person signs in like anyone else and is then held at the
     // suspended screen by the account gate (TW-AUTH-016); refusing them here
@@ -309,7 +340,7 @@ export class LoginService {
         orgId: org.id,
         userId: row.id,
         remember,
-        method: 'password',
+        method,
         lockKey,
       });
     }
@@ -319,7 +350,7 @@ export class LoginService {
       user: { id: row.id, uuid: row.uuid, email: row.email, fullName: row.full_name },
       remember,
       mfaVerified: false,
-      method: 'password',
+      method,
       meta,
     });
   }

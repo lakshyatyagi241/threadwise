@@ -47,7 +47,18 @@
     "accountLocked": "Dit account is tijdelijk vergrendeld. Probeer het later opnieuw.",
     "accountSuspended": "Dit account is geblokkeerd.",
     "mfaInvalid": "Die code is onjuist. Probeer het opnieuw.",
-    "mfaExpired": "De inlogsessie is verlopen. Begin opnieuw."
+    "mfaExpired": "De inlogsessie is verlopen. Begin opnieuw.",
+    "phone": {
+      "title": "Inloggen met je telefoon",
+      "subtitle": "We sturen een eenmalige code naar het mobiele nummer van je account.",
+      "number": "Mobiel nummer",
+      "send": "Code versturen",
+      "unavailable": "Inloggen met een telefoonnummer is nu niet beschikbaar. Gebruik je e-mailadres en wachtwoord.",
+      "continueMobile": "Doorgaan met mobiel",
+      "continueEmail": "Doorgaan met e-mail",
+      "or": "OF",
+      "hint": "Hier werkt alleen een nummer dat je bij \"Profiel beheren\" hebt geverifieerd."
+    }
   },
   "recovery": {
     "back": "Terug naar inloggen",
@@ -536,7 +547,14 @@
       "cancel": "Annuleren",
       "nameRequired": "Voer je naam in.",
       "nameTooLong": "Gebruik maximaal 120 tekens.",
-      "phoneInvalid": "Voer het telefoonnummer in met landcode, bijvoorbeeld +919876543210."
+      "phoneInvalid": "Voer het telefoonnummer in met landcode, bijvoorbeeld +919876543210.",
+      "phoneVerified": "Geverifieerd",
+      "phoneNotVerified": "Niet geverifieerd",
+      "verifyPhone": "Nummer verifiëren",
+      "verifyPhoneHint": "Verifieer je nummer om ermee in te loggen.",
+      "saveBeforeVerify": "Sla eerst je nummer op en verifieer het daarna.",
+      "verifyUnavailable": "We konden nu geen code versturen. Probeer het later opnieuw.",
+      "verifiedDone": "Je nummer is geverifieerd."
     },
     "appearance": {
       "title": "Weergave",

@@ -47,7 +47,18 @@
     "accountLocked": "Ce compte est temporairement verrouillé. Réessayez plus tard.",
     "accountSuspended": "Ce compte a été suspendu.",
     "mfaInvalid": "Ce code est incorrect. Réessayez.",
-    "mfaExpired": "La connexion a expiré. Veuillez recommencer."
+    "mfaExpired": "La connexion a expiré. Veuillez recommencer.",
+    "phone": {
+      "title": "Connectez-vous avec votre téléphone",
+      "subtitle": "Nous enverrons un code à usage unique au numéro de mobile de votre compte.",
+      "number": "Numéro de mobile",
+      "send": "Envoyer le code",
+      "unavailable": "La connexion par numéro de téléphone n’est pas disponible pour le moment. Utilisez votre e-mail et votre mot de passe.",
+      "continueMobile": "Continuer avec le mobile",
+      "continueEmail": "Continuer avec l’e-mail",
+      "or": "OU",
+      "hint": "Seul un numéro vérifié dans « Gérer le profil » fonctionne ici."
+    }
   },
   "recovery": {
     "back": "Retour à la connexion",
@@ -546,7 +557,14 @@
       "cancel": "Annuler",
       "nameRequired": "Saisissez votre nom.",
       "nameTooLong": "Utilisez 120 caractères au maximum.",
-      "phoneInvalid": "Saisissez le numéro de téléphone avec l’indicatif du pays, par exemple +919876543210."
+      "phoneInvalid": "Saisissez le numéro de téléphone avec l’indicatif du pays, par exemple +919876543210.",
+      "phoneVerified": "Vérifié",
+      "phoneNotVerified": "Non vérifié",
+      "verifyPhone": "Vérifier le numéro",
+      "verifyPhoneHint": "Vérifiez votre numéro pour l’utiliser à la connexion.",
+      "saveBeforeVerify": "Enregistrez d’abord votre numéro, puis vérifiez-le.",
+      "verifyUnavailable": "Impossible d’envoyer un code pour le moment. Réessayez plus tard.",
+      "verifiedDone": "Votre numéro est vérifié."
     },
     "appearance": {
       "title": "Apparence",

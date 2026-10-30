@@ -20,6 +20,8 @@ import {
 import { RegistrationController } from './controllers/registration.controller';
 import { LoginAlertService } from './flows/login-alert.service';
 import { LoginService } from './flows/login.service';
+import { PhoneLoginService } from './flows/phone-login.service';
+import { PhoneVerificationService } from './account/phone-verification.service';
 import { OnboardingService } from './flows/onboarding.service';
 import { RecoveryService } from './flows/recovery.service';
 import { SignupService } from './flows/signup.service';
@@ -106,6 +108,8 @@ import { TokenService } from './token.service';
     PartnerAgentStatusService,
     // flows
     LoginService,
+    PhoneLoginService,
+    PhoneVerificationService,
     LoginAlertService,
     SignupService,
     RecoveryService,

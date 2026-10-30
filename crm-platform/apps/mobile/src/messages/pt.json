@@ -47,7 +47,18 @@
     "accountLocked": "Esta conta está bloqueada temporariamente. Tente novamente mais tarde.",
     "accountSuspended": "Esta conta foi suspensa.",
     "mfaInvalid": "Esse código não está correto. Tente novamente.",
-    "mfaExpired": "O login expirou. Comece novamente."
+    "mfaExpired": "O login expirou. Comece novamente.",
+    "phone": {
+      "title": "Entre com seu telefone",
+      "subtitle": "Enviaremos um código de uso único para o número de celular da sua conta.",
+      "number": "Número de celular",
+      "send": "Enviar código",
+      "unavailable": "Entrar com o número de telefone não está disponível no momento. Use seu e-mail e sua senha.",
+      "continueMobile": "Continuar com o celular",
+      "continueEmail": "Continuar com o e-mail",
+      "or": "OU",
+      "hint": "Aqui só funciona um número verificado em “Gerenciar perfil”."
+    }
   },
   "recovery": {
     "back": "Voltar ao login",
@@ -546,7 +557,14 @@
       "cancel": "Cancelar",
       "nameRequired": "Informe seu nome.",
       "nameTooLong": "Use até 120 caracteres.",
-      "phoneInvalid": "Informe o número de telefone com o código do país, por exemplo +919876543210."
+      "phoneInvalid": "Informe o número de telefone com o código do país, por exemplo +919876543210.",
+      "phoneVerified": "Verificado",
+      "phoneNotVerified": "Não verificado",
+      "verifyPhone": "Verificar número",
+      "verifyPhoneHint": "Verifique seu número para usá-lo ao entrar.",
+      "saveBeforeVerify": "Salve seu número primeiro e depois verifique-o.",
+      "verifyUnavailable": "Não foi possível enviar um código agora. Tente novamente mais tarde.",
+      "verifiedDone": "Seu número foi verificado."
     },
     "appearance": {
       "title": "Aparência",

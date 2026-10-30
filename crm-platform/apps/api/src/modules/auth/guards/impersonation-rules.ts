@@ -30,6 +30,10 @@ export const IMPERSONATION_FORBIDDEN: readonly ForbiddenRule[] = [
   },
   { path: /^account\/password$/, why: 'changing the owner password' },
   { path: /^account\/email-change(\/confirm)?$/, why: 'changing the owner email' },
+  {
+    path: /^account\/phone\/verification(\/|$)/,
+    why: 'verifying a number that could then sign in as the owner',
+  },
   { path: /^account\/mfa(\/|$)/, why: 'two-factor setup, disable and recovery codes' },
   { path: /^account\/sessions(\/|$)/, why: "the owner's own sessions" },
   { method: 'DELETE', path: /^account$/, why: 'deleting the owner account' },
