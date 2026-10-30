@@ -35,6 +35,13 @@ export const roleGrantSchema = z.object({
 });
 export type RoleGrant = z.infer<typeof roleGrantSchema>;
 
+/** A grant set to store: one grant per permission key (role_grants is unique on it), else the insert fails as a 500. */
+const roleGrantSetSchema = z
+  .array(roleGrantSchema)
+  .refine((g) => new Set(g.map((x) => x.permissionKey)).size === g.length, {
+    message: 'Each permission can appear only once',
+  });
+
 export const roleResponseSchema = z.object({
   id: uuidSchema,
   name: z.string(),
@@ -64,14 +71,14 @@ export type RoleResponse = z.infer<typeof roleResponseSchema>;
 
 export const createRoleSchema = z.object({
   name: z.string().min(1).max(120),
-  grants: z.array(roleGrantSchema).default([]),
+  grants: roleGrantSetSchema.default([]),
 });
 export type CreateRoleInput = z.infer<typeof createRoleSchema>;
 
 export const updateRoleSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   /** Full replacement of the role's grant set, when present. */
-  grants: z.array(roleGrantSchema).optional(),
+  grants: roleGrantSetSchema.optional(),
   rowVersion: z.int().positive(),
 });
 export type UpdateRoleInput = z.infer<typeof updateRoleSchema>;
