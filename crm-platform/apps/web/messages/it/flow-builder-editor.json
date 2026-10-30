@@ -2484,6 +2484,7 @@
         "buttonNoExit": "«{node}»: il pulsante «{button}» non porta a nessun passaggio.",
         "notConnected": "«{node}» non è collegato a nulla.",
         "wrongChannel": "«{node}» non funziona su {channel} — eliminalo oppure riattiva il canale nel nodo Trigger.",
+        "notBuilt": "\"{node}\" non è ancora disponibile: il flusso lo salta durante l'esecuzione. Eliminalo.",
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
         "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",

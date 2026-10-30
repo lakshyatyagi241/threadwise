@@ -1,5 +1,6 @@
 import {
   FLB_NODE_TYPES,
+  FLB_NODES_NOT_BUILT,
   flbNodeInMode,
   flbAiNodeProblem,
   flbDeadButtons,
@@ -74,6 +75,10 @@ export function validateGraph(
         channel: msg(`contracts.flowTypes.${MODE_TYPE[ctx.mode] ?? 'chat'}`),
       }),
     );
+  }
+  for (const n of nodes) {
+    if (FLB_NODES_NOT_BUILT.has(n.type))
+      items.push(msg('contracts.validation.notBuilt', { node: nodeLabelMsg(n.type) }));
   }
   // The contracts also have a line for an "API (from library)" step with no API; the popup has none for it yet.
   for (const n of nodes) {

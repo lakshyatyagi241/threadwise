@@ -297,9 +297,25 @@ export const flbNodeInMode = (def: FlbNodeTypeDef, mode: FlowType): boolean =>
 export const flbIsFlowType = (v: unknown): v is FlowType =>
   typeof v === 'string' && (FLOW_TYPES as readonly string[]).includes(v);
 
-/** The node types the palette offers for one channel, in catalogue order. Legacy (`hidden`) types are never offered. */
+/**
+ * Social nodes the editor can draw and save but the flow runtime has no executor for (it skips them with a warning). They are not offered
+ * in the palette, and a flow that already holds one is warned at publish. Remove an id here when its executor is built.
+ */
+export const FLB_NODES_NOT_BUILT: ReadonlySet<string> = new Set([
+  'ig_reply_comment',
+  'ig_products',
+  'ig_lead',
+  'fb_reply_comment',
+  'fb_gallery',
+  'fb_products',
+  'fb_lead',
+]);
+
+/** The node types the palette offers for one channel, in catalogue order. Legacy (`hidden`) and not-yet-built types are never offered. */
 export function flbPaletteFor(mode: FlowType): FlbNodeTypeDef[] {
-  return FLB_NODE_TYPE_LIST.filter((d) => !d.hidden && flbNodeInMode(d, mode));
+  return FLB_NODE_TYPE_LIST.filter(
+    (d) => !d.hidden && !FLB_NODES_NOT_BUILT.has(d.id) && flbNodeInMode(d, mode),
+  );
 }
 
 // --- defaults -------------------------------------------------------------------------------------------------------
