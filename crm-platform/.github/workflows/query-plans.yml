@@ -1,7 +1,7 @@
 name: query-plans
 # Sheet: query-plan gate on pull requests (issue #1287). Migrates a throwaway Postgres 16, seeds the dev data, and runs QA task 42
-# (EXPLAIN on every critical query in tools/qa-suite/data/critical-queries.json). Non-blocking for now: the report is uploaded and the
-# job stays green so the team can read the plans for a week before the step is made blocking (remove continue-on-error then).
+# (EXPLAIN on every critical query in tools/qa-suite/data/critical-queries.json). Blocking: --fail exits 1 when a critical query
+# cannot be planned or a Seq Scan hits a table over 5,000 rows. Plan-sort and plan-small stay warnings (see task 42).
 on:
   pull_request:
     paths:
@@ -40,8 +40,7 @@ jobs:
       - name: Seed dev data (plans on an empty table mean nothing)
         run: pnpm db:seed
       - name: Query plans (task 42)
-        continue-on-error: true
-        run: node tools/qa-suite/run.mjs 42
+        run: node tools/qa-suite/run.mjs 42 --fail
       - uses: actions/upload-artifact@v4
         if: always()
         with:
