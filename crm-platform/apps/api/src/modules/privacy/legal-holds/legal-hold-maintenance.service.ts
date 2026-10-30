@@ -68,6 +68,7 @@ export class LegalHoldMaintenanceService {
       const res = await tx.execute(sql`
         SELECT org_id, uuid FROM privacy_requests
          WHERE status = 'in_progress' AND request_type = 'erasure' AND erasure_confirmed_at IS NOT NULL AND restricted_at IS NULL
+           AND legal_hold = false
          ORDER BY erasure_confirmed_at LIMIT ${BATCH}`);
       return (res.rows as Array<{ org_id: number | string; uuid: string }>).map((r) => ({
         orgId: Number(r.org_id),
@@ -107,7 +108,8 @@ export class LegalHoldMaintenanceService {
           row.status !== 'in_progress' ||
           row.requestType !== 'erasure' ||
           row.erasureConfirmedAt === null ||
-          row.restrictedAt !== null
+          row.restrictedAt !== null ||
+          row.legalHold
         ) {
           return null;
         }

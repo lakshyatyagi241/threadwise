@@ -403,6 +403,37 @@ describe('a rights erasure under a hold', () => {
     expect((await detail(a, req.id)).request.proof).not.toHaveProperty('resumedAfterHold');
   });
 
+  it('a request-level hold keeps a confirmed erasure from resuming after the contact hold is released', async () => {
+    const c = await person(a, 'RequestHold');
+    const h = await place(a, { scope: 'contact', subjectId: c.uuid });
+    const req = await erasureRequest(a, c.uuid);
+    expect(req.restricted).toBe(true);
+    await verify(a, req.id);
+    // a confirmed, restricted erasure (the erase endpoint is throttled, so the confirmation is written directly)
+    await p.h.owner.query(
+      `UPDATE privacy_requests SET erasure_confirmed_at = now() WHERE org_id = $1 AND uuid = $2::uuid`,
+      [a.orgId, req.id],
+    );
+
+    // staff set a separate request-level hold while the erasure is confirmed
+    await p.h.owner.query(
+      `UPDATE privacy_requests SET legal_hold = true, legal_hold_reason = 'dispute' WHERE org_id = $1 AND uuid = $2::uuid`,
+      [a.orgId, req.id],
+    );
+    const rel = await p.api
+      .as(a.admin)
+      .post(`/v2/privacy/legal-holds/${h.body.id}/release`)
+      .send({ reason: 'matter closed' });
+    expect(rel.status, JSON.stringify(rel.body)).toBe(200);
+
+    // the worker must not erase data the request hold protects
+    const maintenance = p.h.app.get(LegalHoldMaintenanceService);
+    const out = await maintenance.resumeConfirmed();
+    expect(out).toEqual({ resumed: 0, deferred: 0, failed: 0 });
+    expect(await n(`SELECT count(*)::int AS n FROM contacts WHERE uuid = $1`, [c.uuid])).toBe(1);
+    expect((await detail(a, req.id)).request.status).toBe('in_progress');
+  });
+
   it('shows the requester response text the workspace configured, on a restricted case only', async () => {
     const c = await person(a, 'Notice');
     const set = await p.api
