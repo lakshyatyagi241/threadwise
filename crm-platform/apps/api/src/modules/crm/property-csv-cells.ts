@@ -11,6 +11,8 @@ const TRUE = /^(true|yes|y|1|x|on)$/i;
 const FALSE = /^(false|no|n|0|off)$/i;
 /** A comma is a thousands separator only when it groups digits in threes (1,250.5). */
 const THOUSANDS = /^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/;
+/** Plain decimal only. Number() also reads 0x1F, 0b11, 0o7, 1e3 and Infinity, which a CSV cell does not mean as a number. */
+const DECIMAL = /^[+-]?(\d+\.?\d*|\.\d+)$/;
 
 /**
  * A number cell. "120,000" and "1,250.5" are numbers; any other comma ("12,5") is not a thousands separator, so the cell stays text
@@ -19,8 +21,8 @@ const THOUSANDS = /^[+-]?\d{1,3}(,\d{3})+(\.\d+)?$/;
 export function readNumberCell(text: string): number | string {
   // Number('') is 0, so a blank cell is refused here rather than stored as a number.
   if (text.trim() === '') return text;
-  const n = Number(THOUSANDS.test(text) ? text.replace(/,/g, '') : text);
-  return Number.isFinite(n) ? n : text;
+  const plain = THOUSANDS.test(text) ? text.replace(/,/g, '') : text;
+  return DECIMAL.test(plain.trim()) ? Number(plain) : text;
 }
 
 /** A yes/no cell: true for yes, true, 1, x, on; false for no, false, 0, off. Anything else stays text. */
