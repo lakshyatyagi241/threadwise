@@ -877,9 +877,7 @@ export class ContactsService {
       if (field.rows.length === 0) return false;
       const row = await this.repo.findById(tx, orgId, contactId);
       if (!row) return false;
-      const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
-        data: { ...(row.data ?? {}), [clean]: value },
-      });
+      const done = await this.repo.setDataKey(tx, orgId, contactId, clean, value);
       if (done) {
         await this.audit.record(tx, {
           module: MODULE_KEY,
@@ -931,9 +929,7 @@ export class ContactsService {
           sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true AND is_read_only = false`,
         );
         if (field.rows.length === 0) return null;
-        const done = await this.repo.updateFieldsById(tx, orgId, contactId, {
-          data: { ...(row.data ?? {}), [clean]: stored },
-        });
+        const done = await this.repo.setDataKey(tx, orgId, contactId, clean, stored);
         if (!done) return null;
         delta = { [clean]: { old: (row.data ?? {})[clean] ?? null, new: stored } };
       }

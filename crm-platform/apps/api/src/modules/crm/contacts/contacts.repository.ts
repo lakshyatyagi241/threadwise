@@ -1007,6 +1007,23 @@ export class ContactsRepository {
     return result.length > 0;
   }
 
+  /**
+   * Sets one key of `data` in place. It is a single statement, so two writers of different keys (two flow steps, or a flow and a form)
+   * never overwrite each other the way a read of the whole object followed by a write of the whole object does.
+   */
+  async setDataKey(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    key: string,
+    value: string,
+  ): Promise<boolean> {
+    const result = await tx.execute(sql`
+      UPDATE contacts SET data = data || jsonb_build_object(${key}::text, ${value}::text)
+      WHERE org_id = ${orgId} AND id = ${id} RETURNING id`);
+    return result.rows.length > 0;
+  }
+
   /** Active staff users this org can assign a contact to. */
   async listAssignable(
     tx: Tx,
