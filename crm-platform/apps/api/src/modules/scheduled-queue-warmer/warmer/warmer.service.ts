@@ -93,6 +93,14 @@ export class WarmerService implements WarmerGate {
     const day = opts.isNow || !opts.sendDate ? todayUtc(this.now()) : opts.sendDate;
     const reasons: string[] = [];
     const reserve: Array<{ sender: Sender; n: number }> = [];
+    // The read of the day's count and the reserve below must not interleave with another check of the same number and day, or both
+    // read the same count and both reserve. A transaction lock per number and day, taken in one order, serialises them.
+    const locks = [
+      ...new Set(slices.map((s) => `${s.sender.engine}:${s.sender.id}:${day}`)),
+    ].sort();
+    for (const key of locks) {
+      await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${key}, 0))`);
+    }
     for (const s of slices) {
       const f = await this.facts(tx, s.sender);
       if (!f?.profile.enabled) continue;

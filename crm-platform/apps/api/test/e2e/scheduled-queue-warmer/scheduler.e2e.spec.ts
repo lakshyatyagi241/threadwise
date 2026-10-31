@@ -675,3 +675,44 @@ describe('one run per number', () => {
     expect(await run(t, id)).toBe('finished');
   });
 });
+
+describe('the warmer budget under concurrent checks (TW-SCHED-036)', () => {
+  it('two checks of one number at the same moment cannot both take the last of the day budget', async () => {
+    const t = await arrange('warm-race');
+    const dev = (await h.owner.query(`SELECT id FROM devices WHERE org_id = $1`, [t.orgId]))
+      .rows[0];
+    await h.owner.query(`UPDATE devices SET warmer_config = $2::jsonb WHERE id = $1`, [
+      dev.id,
+      JSON.stringify({
+        enabled: true,
+        daily_base: 50,
+        max_daily: 50,
+        step_pct: 0,
+        step_days: 1,
+        gap_min: 0,
+        gap_max: 0,
+        active_start: 0,
+        active_end: 24,
+        spintax: false,
+        started_at: '2020-01-01',
+      }),
+    ]);
+    const warmer = h.app.get(WarmerService);
+    const db = h.app.get(DatabaseService);
+    const sender = { engine: 'baileys', id: Number(dev.id), label: 'Main' } as never;
+    const check = () =>
+      inContext(t, () =>
+        db.tx((tx) =>
+          warmer.hold(tx, [{ sender, recipients: 50 }], { isNow: true, sendDate: null }),
+        ),
+      );
+    const [a, b] = await Promise.all([check(), check()]);
+    // exactly one of the two gets the whole day; the other is held
+    expect([a.length, b.length].sort()).toEqual([0, 1]);
+    const ledger = await h.owner.query(
+      `SELECT count FROM warmer_daily_sends WHERE org_id = $1 AND device_id = $2`,
+      [t.orgId, dev.id],
+    );
+    expect(Number(ledger.rows[0].count)).toBe(50);
+  });
+});
