@@ -10,7 +10,11 @@ import { AppError } from '../../common/errors/app-error';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
-import { ApiKeyAccessService, effectiveRateLimit } from './api-key-access.service';
+import {
+  ApiKeyAccessService,
+  LAST_USED_EVERY_SECONDS,
+  effectiveRateLimit,
+} from './api-key-access.service';
 
 // Kept exported from here for the code and tests that import it by this path.
 export { effectiveRateLimit };
@@ -94,7 +98,7 @@ export class ApiKeyGuard implements CanActivate {
 
     // Fire and forget: last_used_at is diagnostics, not correctness, and it
     // must not add latency or a failure mode to every API call.
-    void this.access.touchLastUsed(key.org_id, key.id);
+    void this.access.touchLastUsed(key.org_id, key.id, LAST_USED_EVERY_SECONDS);
 
     return true;
   }
