@@ -47,5 +47,9 @@ export type PublicLeadSubmitInput = z.infer<typeof publicLeadSubmitSchema>;
 
 export const publicLeadSubmitResponseSchema = z.object({
   id: uuidSchema,
-  created: z.boolean().describe('false when an existing contact was matched and updated'),
+  created: z
+    .boolean()
+    .describe(
+      'false when an existing contact was matched; its fields are not changed (only consent is recorded)',
+    ),
 });
