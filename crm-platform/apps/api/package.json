@@ -49,18 +49,18 @@
     "@nestjs/config": "^12.0.1",
     "@nestjs/core": "^12.2.0",
     "@nestjs/jwt": "^12.0.3",
-    "@nestjs/platform-express": "^12.2.0",
+    "@nestjs/platform-express": "^12.3.2",
     "@nestjs/platform-socket.io": "^11.2.8",
     "@nestjs/schedule": "^12.0.2",
     "@nestjs/swagger": "^12.0.3",
     "@nestjs/websockets": "^12.2.0",
     "@node-rs/argon2": "^2.2.2",
-    "@sentry/node": "^11.9.0",
+    "@sentry/node": "^11.10.0",
     "@simplewebauthn/server": "14.0.3",
     "@socket.io/redis-adapter": "^8.3.0",
     "@socket.io/redis-emitter": "^5.1.0",
     "baileys": "6.7.24",
-    "bullmq": "^6.4.0",
+    "bullmq": "^6.5.1",
     "compression": "1.8.2",
     "dotenv": "^18.0.9",
     "drizzle-orm": "^0.45.4",
@@ -87,7 +87,7 @@
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",
     "@nestjs/testing": "^12.2.0",
-    "@swc/cli": "^0.8.1",
+    "@swc/cli": "^0.8.2",
     "@swc/core": "^1.16.20",
     "@testcontainers/postgresql": "^12.2.1",
     "@types/compression": "^1.8.1",
@@ -112,6 +112,6 @@
     "typescript": "^6.0.3",
     "unplugin-swc": "^1.5.1",
     "vitest": "^3.2.6",
-    "ws": "8.21.3"
+    "ws": "8.22.0"
   }
 }
