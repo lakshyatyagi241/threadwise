@@ -104,6 +104,7 @@
       "disconnectShopify": "Dies löscht die registrierten Webhooks, die Automatisierungszuordnung sowie die Ereignisse und Protokolle dieses Shops.",
       "disconnectWoo": "Dies entfernt registrierte Webhooks.",
       "disconnectDone": "Store getrennt.",
+      "importIncomplete": "Der letzte Import ist unvollständig. Einige ältere Bestellungen und Kunden wurden nicht importiert, daher fehlen sie möglicherweise in dieser Liste.",
       "healthy": "Webhooks funktionieren",
       "noRecent": "Keine aktuellen Ereignisse",
       "lastEvent": "Letztes Ereignis:",

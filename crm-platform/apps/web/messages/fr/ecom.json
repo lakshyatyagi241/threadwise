@@ -104,6 +104,7 @@
       "disconnectShopify": "Cela supprime les webhooks enregistrés, l’association des automatisations, ainsi que les événements et journaux de cette boutique.",
       "disconnectWoo": "Cela supprime les webhooks enregistrés.",
       "disconnectDone": "Boutique déconnectée.",
+      "importIncomplete": "La dernière importation est incomplète. Certaines anciennes commandes et certains anciens clients n'ont pas été importés et peuvent manquer dans cette liste.",
       "healthy": "Webhooks en bon état",
       "noRecent": "Aucun événement récent",
       "lastEvent": "Dernier événement :",

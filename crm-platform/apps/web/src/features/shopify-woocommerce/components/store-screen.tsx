@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Spinner, useToast } from '@crm/ui';
 import { KEYS, useDashboard, useOverview } from '../api/ecom';
-import { parseTab, type Kind } from '../lib/model';
+import { importIncomplete, parseTab, type Kind } from '../lib/model';
 import { ConnectShopify } from './connect-shopify';
 import { ConnectWoo } from './connect-woo';
 import { StoreShell } from './store-shell';
@@ -85,6 +85,7 @@ export function StoreScreen({ kind }: { kind: Kind }) {
   return (
     <StoreShell kind={kind} store={store} tab={tab} dashboard={d} planVersion={planVersion}>
       {dashboard.isError && <Alert tone="danger">{t('flash.error')}</Alert>}
+      {importIncomplete(store.syncStats) && <Alert tone="warning">{t('importIncomplete')}</Alert>}
       {!d ? (
         !dashboard.isError && (
           <div className="grid min-h-[30vh] place-items-center">

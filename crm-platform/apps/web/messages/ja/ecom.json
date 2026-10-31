@@ -104,6 +104,7 @@
       "disconnectShopify": "登録済みのWebhook、オートメーションの対応付け、このストアのイベントとログが削除されます。",
       "disconnectWoo": "登録済みのWebhookが削除されます。",
       "disconnectDone": "ストアの接続を解除しました。",
+      "importIncomplete": "前回のインポートは完了していません。古い注文と顧客の一部が取り込まれていないため、この一覧に含まれない場合があります。",
       "healthy": "Webhookは正常です",
       "noRecent": "最近のイベントはありません",
       "lastEvent": "最終イベント:",

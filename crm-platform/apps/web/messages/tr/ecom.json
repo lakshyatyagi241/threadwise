@@ -104,6 +104,7 @@
       "disconnectShopify": "Kayıtlı webhook'lar, otomasyon eşlemesi ve bu mağazanın olayları ile günlükleri silinir.",
       "disconnectWoo": "Kayıtlı webhook'lar kaldırılır.",
       "disconnectDone": "Mağazanın bağlantısı kesildi.",
+      "importIncomplete": "Son içe aktarma tamamlanmadı. Bazı eski siparişler ve müşteriler aktarılmadı, bu yüzden bu listede eksik olabilirler.",
       "healthy": "Webhook'lar sağlıklı",
       "noRecent": "Yakın zamanda etkinlik yok",
       "lastEvent": "Son etkinlik:",

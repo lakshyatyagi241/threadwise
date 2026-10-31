@@ -104,6 +104,7 @@
       "disconnectShopify": "Hiermee worden de geregistreerde webhooks, de automatiseringskoppeling en de gebeurtenissen en logs van deze winkel verwijderd.",
       "disconnectWoo": "Hiermee worden de geregistreerde webhooks verwijderd.",
       "disconnectDone": "Winkel ontkoppeld.",
+      "importIncomplete": "De laatste import is onvolledig. Sommige oudere bestellingen en klanten zijn niet geïmporteerd en ontbreken mogelijk in deze lijst.",
       "healthy": "Webhooks werken goed",
       "noRecent": "Geen recente gebeurtenissen",
       "lastEvent": "Laatste gebeurtenis:",

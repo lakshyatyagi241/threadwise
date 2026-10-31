@@ -5,6 +5,7 @@ import {
   autoKey,
   barHeight,
   consentSkipReason,
+  importIncomplete,
   isHealthy,
   missingTemplate,
   money,
@@ -155,5 +156,14 @@ describe('the store screens model (TW-ECOM-004, 009, 023)', () => {
     expect(barHeight(0, 100)).toBe(3);
     expect(barHeight(50, 100)).toBe(50);
     expect(barHeight(5, 0)).toBe(100);
+  });
+});
+
+describe('importIncomplete', () => {
+  it('is true only when the last import recorded a cut-short resource', () => {
+    expect(importIncomplete({ products: 3, orders: 1000, customers: 2, incomplete: 1 })).toBe(true);
+    expect(importIncomplete({ products: 3, orders: 10, customers: 2, incomplete: 0 })).toBe(false);
+    expect(importIncomplete({})).toBe(false);
+    expect(importIncomplete(null)).toBe(false);
   });
 });

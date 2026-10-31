@@ -83,6 +83,10 @@ export function isHealthy(recent: readonly DashboardLog[], nowMs: number): boole
   return last !== undefined && nowMs - new Date(last.createdAt).getTime() < DAY_MS;
 }
 
+/** Whether the last import stopped at the page cap or a store that stopped answering, so older records may be missing. */
+export const importIncomplete = (stats: Record<string, number> | null | undefined): boolean =>
+  (stats?.incomplete ?? 0) > 0;
+
 /** `USD 1,234.50`. */
 export const money = (amount: number, currency: string, digits = 2): string =>
   `${currency} ${amount.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })}`.trim();
