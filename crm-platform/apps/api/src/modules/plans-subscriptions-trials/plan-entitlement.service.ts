@@ -417,6 +417,17 @@ export class PlanEntitlementService {
     return e ? resolveLimit(e, key) : 0;
   }
 
+  /** A flag and a cap from one resolution, for a page that needs both (one `forOrg`, not one per answer). */
+  async featureAndLimit(
+    orgId: number,
+    feature: PlanFeatureKey,
+    limit: PlanLimitKey,
+  ): Promise<{ enabled: boolean; cap: number }> {
+    const e = await this.forOrg(orgId);
+    if (!e) return { enabled: false, cap: 0 };
+    return { enabled: resolveFeature(e, feature), cap: resolveLimit(e, limit) };
+  }
+
   // --- guards (TW-PLAN-017) ----------------------------------------------------------------------------------------------
 
   /** Throws the plan-locked problem (422 PLAN_FEATURE_LOCKED) when the flag is off. */

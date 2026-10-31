@@ -67,8 +67,11 @@ export class DashService {
     custom: CustomDates = {},
   ): Promise<DashWidgets> {
     const { orgId } = RequestContextStore.require();
-    const pipelineOn = await this.plans.featureEnabled(orgId, 'sales_pipeline');
-    const deviceCap = await this.plans.limit(orgId, 'devices');
+    const { enabled: pipelineOn, cap: deviceCap } = await this.plans.featureAndLimit(
+      orgId,
+      'sales_pipeline',
+      'devices',
+    );
     const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
       const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
