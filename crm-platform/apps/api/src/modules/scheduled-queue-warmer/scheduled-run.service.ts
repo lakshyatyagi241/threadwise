@@ -55,6 +55,9 @@ const STALE_CLAIM_MINUTES = 10;
 const HEARTBEAT_MS = 20_000;
 /** When a run stopped by the emergency halt looks again. The halt has no known end, so it polls. */
 const HALT_RETRY_MS = 5 * 60_000;
+/** Attempts to record a result the provider already accepted, and the pause between them. */
+const RECORD_ATTEMPTS = 3;
+const RECORD_RETRY_MS = 250;
 /** When a warming number's daily budget is spent: it resets at midnight UTC, so the run looks again every half hour. */
 const WARMER_RETRY_MS = 30 * 60_000;
 
@@ -350,19 +353,17 @@ export class ScheduledRunService {
               clientReference: `sched-${scheduledId}-${r.id}`,
               screen: { bulk: true, source: 'scheduled' },
             });
-            await this.db.tx((tx) =>
-              this.setRecipient(tx, orgId, Number(r.id), 'sent', {
-                providerMessageId: sent.providerMessageId,
-                report: {
-                  scheduledId,
-                  provider: row.provider,
-                  category: prepared.template?.category ?? null,
-                  templateName: prepared.template?.templateName ?? null,
-                  subjectName: row.schedule_name,
-                  phone: r.phone,
-                },
-              }),
-            );
+            await this.recordSent(orgId, Number(r.id), {
+              providerMessageId: sent.providerMessageId,
+              report: {
+                scheduledId,
+                provider: row.provider,
+                category: prepared.template?.category ?? null,
+                templateName: prepared.template?.templateName ?? null,
+                subjectName: row.schedule_name,
+                phone: r.phone,
+              },
+            });
             counts.sent++;
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
@@ -494,6 +495,42 @@ export class ScheduledRunService {
   }
 
   /** Recipient states only move up (pending, failed, sent), so a late write can never undo a later one (TW-NODE-035 rule 7). */
+  /**
+   * Records a recipient as sent after the provider accepted the message. The send already happened, so a failed write is retried and
+   * then logged, and the recipient is never marked failed for it: a delivered message must not show as failed.
+   */
+  private async recordSent(
+    orgId: number,
+    id: number,
+    extra: {
+      providerMessageId: string | null;
+      report: {
+        scheduledId: number;
+        provider: string | null;
+        category: string | null;
+        templateName: string | null;
+        subjectName: string;
+        phone: string;
+      };
+    },
+  ): Promise<void> {
+    for (let attempt = 1; attempt <= RECORD_ATTEMPTS; attempt++) {
+      try {
+        await this.db.tx((tx) => this.setRecipient(tx, orgId, id, 'sent', extra));
+        return;
+      } catch (err) {
+        if (attempt === RECORD_ATTEMPTS) {
+          this.logger.error(
+            { orgId, id, err: err instanceof Error ? err.message : String(err) },
+            '[SCHED] provider accepted the message but its result could not be recorded',
+          );
+          return;
+        }
+        await this.runtime.sleep(RECORD_RETRY_MS * attempt);
+      }
+    }
+  }
+
   private async setRecipient(
     tx: Parameters<Parameters<DatabaseService['tx']>[0]>[0],
     orgId: number,

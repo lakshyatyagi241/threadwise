@@ -676,6 +676,35 @@ describe('one run per number', () => {
   });
 });
 
+describe('a result the provider already accepted (TW-NODE-033)', () => {
+  it('is recorded sent when the first write of that result fails, and never turned into a failure', async () => {
+    const t = await arrange('sent-write');
+    const id = await schedule(t, 2);
+    // The wallet is not what this test is about: its gate is stubbed for this case and restored after.
+    const wallet = h.app.get<WalletGate>(WALLET_GATE as never, { strict: false });
+    const realPrecheck = wallet.precheckSend.bind(wallet);
+    wallet.precheckSend = () => Promise.resolve();
+    const svc = runService as unknown as { setRecipient: (...a: unknown[]) => Promise<unknown> };
+    const original = svc.setRecipient.bind(runService);
+    let blipped = false;
+    svc.setRecipient = (...args: unknown[]) => {
+      if (!blipped && args[3] === 'sent') {
+        blipped = true;
+        return Promise.reject(new Error('connection reset'));
+      }
+      return original(...args);
+    };
+    try {
+      expect(await run(t, id)).toBe('finished');
+    } finally {
+      svc.setRecipient = original;
+      wallet.precheckSend = realPrecheck;
+    }
+    expect(sent).toHaveLength(2);
+    expect((await contacts(id)).map((c) => c.status)).toEqual(['sent', 'sent']);
+  });
+});
+
 describe('the warmer budget under concurrent checks (TW-SCHED-036)', () => {
   it('two checks of one number at the same moment cannot both take the last of the day budget', async () => {
     const t = await arrange('warm-race');
