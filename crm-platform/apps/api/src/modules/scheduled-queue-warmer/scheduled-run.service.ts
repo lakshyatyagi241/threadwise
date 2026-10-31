@@ -55,6 +55,8 @@ const STALE_CLAIM_MINUTES = 10;
 const HEARTBEAT_MS = 20_000;
 /** When a run stopped by the emergency halt looks again. The halt has no known end, so it polls. */
 const HALT_RETRY_MS = 5 * 60_000;
+/** When a warming number's daily budget is spent: it resets at midnight UTC, so the run looks again every half hour. */
+const WARMER_RETRY_MS = 30 * 60_000;
 
 interface Recipient {
   id: number | string;
@@ -179,6 +181,8 @@ export class ScheduledRunService {
         transport,
         pacing: await this.pacingSettings.get(tx, orgId),
         warm: await this.warmer.gap(tx, sender),
+        // A recurring send counts against a warming number's daily budget, as a one-off reserves its budget when it is made.
+        metered: isRecurring(row) && (await this.warmer.isWarming(tx, sender)),
         spinOn: await this.warmer.spintaxOn(tx, sender),
         prepared,
         pendingTotal,
@@ -186,7 +190,7 @@ export class ScheduledRunService {
     });
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { row, sender, transport, pacing, warm, spinOn, prepared, pendingTotal } = prep;
+    const { row, sender, transport, pacing, warm, spinOn, prepared, pendingTotal, metered } = prep;
 
     let opened: OpenTransport;
     try {
@@ -288,6 +292,7 @@ export class ScheduledRunService {
             }
           }
 
+          let budgetSpent = false;
           const claimed = await this.db.tx(async (tx) => {
             if (!to) {
               await this.setRecipient(tx, orgId, Number(r.id), 'failed', {
@@ -296,11 +301,33 @@ export class ScheduledRunService {
               counts.failed++;
               return false;
             }
+            // Each send of a recurring schedule takes one of the number's budget for the day, or waits for the next day: the warmer
+            // never sees a recurring send otherwise, so it would send the whole audience every day.
+            if (metered) {
+              const reasons = await this.warmer.hold(tx, [{ sender, recipients: 1 }], {
+                isNow: true,
+                sendDate: null,
+              });
+              if (reasons.length > 0) {
+                budgetSpent = true;
+                return false;
+              }
+            }
             const res = await tx.execute(sql`
               UPDATE scheduled_message_contacts SET status = 'processing', held_until = NULL, held_reason = NULL
               WHERE org_id = ${orgId} AND id = ${Number(r.id)} AND status = 'pending' RETURNING id`);
             return res.rows.length > 0;
           });
+          if (budgetSpent) {
+            await this.pause(
+              orgId,
+              scheduledId,
+              counts,
+              new Date(this.runtime.now().getTime() + WARMER_RETRY_MS),
+            );
+            this.logger.warn({ orgId, scheduledId }, '[SCHED] paused: the warmer budget is spent');
+            return 'paused';
+          }
           if (!claimed) {
             processed++;
             continue;
