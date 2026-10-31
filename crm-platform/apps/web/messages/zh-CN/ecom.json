@@ -104,6 +104,7 @@
       "disconnectShopify": "这将删除已注册的 Webhook、自动化映射，以及该店铺的事件和日志。",
       "disconnectWoo": "这将移除已注册的 Webhook。",
       "disconnectDone": "店铺已断开连接。",
+      "importIncomplete": "上次导入未完成。部分较早的订单和客户没有导入，因此此列表可能缺少它们。",
       "healthy": "Webhook 正常",
       "noRecent": "暂无最近事件",
       "lastEvent": "最近事件：",

@@ -104,6 +104,7 @@
       "disconnectShopify": "Ini menghapus webhook yang terdaftar, pemetaan otomatisasi, serta peristiwa dan log toko ini.",
       "disconnectWoo": "Ini menghapus webhook yang terdaftar.",
       "disconnectDone": "Toko berhasil diputuskan.",
+      "importIncomplete": "Impor terakhir belum lengkap. Sebagian pesanan dan pelanggan lama tidak diimpor, sehingga mungkin tidak ada dalam daftar ini.",
       "healthy": "Webhook sehat",
       "noRecent": "Tidak ada peristiwa terbaru",
       "lastEvent": "Peristiwa terakhir:",

@@ -104,6 +104,7 @@
       "disconnectShopify": "To usunie zarejestrowane webhooki, mapowanie automatyzacji oraz zdarzenia i dzienniki tego sklepu.",
       "disconnectWoo": "To usunie zarejestrowane webhooki.",
       "disconnectDone": "Sklep rozłączony.",
+      "importIncomplete": "Ostatni import był niepełny. Niektóre starsze zamówienia i klienci nie zostali zaimportowani, więc mogą brakować na tej liście.",
       "healthy": "Webhooki działają poprawnie",
       "noRecent": "Brak ostatnich zdarzeń",
       "lastEvent": "Ostatnie zdarzenie:",

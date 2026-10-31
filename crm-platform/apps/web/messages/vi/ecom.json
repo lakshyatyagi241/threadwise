@@ -104,6 +104,7 @@
       "disconnectShopify": "Thao tác này xóa các webhook đã đăng ký, ánh xạ tự động hóa, cùng sự kiện và nhật ký của cửa hàng này.",
       "disconnectWoo": "Thao tác này xóa các webhook đã đăng ký.",
       "disconnectDone": "Đã ngắt kết nối cửa hàng.",
+      "importIncomplete": "Lần nhập gần nhất chưa hoàn tất. Một số đơn hàng và khách hàng cũ chưa được nhập, nên danh sách này có thể thiếu chúng.",
       "healthy": "Webhook hoạt động tốt",
       "noRecent": "Chưa có sự kiện gần đây",
       "lastEvent": "Sự kiện gần nhất:",
