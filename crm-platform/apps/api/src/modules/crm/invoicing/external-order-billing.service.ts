@@ -66,7 +66,10 @@ export type ExternalInvoiceOutcome =
       docType: string;
       totalMinor: bigint;
     }
-  | { outcome: 'skipped'; reason: 'plan_limit_reached' | 'nothing_to_invoice' };
+  | {
+      outcome: 'skipped';
+      reason: 'plan_limit_reached' | 'nothing_to_invoice' | 'sales_order_cancelled';
+    };
 
 export interface ExternalPaymentInput {
   /** A stable id for this payment: replaying it records nothing twice (`wa_order:<id>` when the gateway gave none). */
@@ -237,6 +240,15 @@ export class ExternalOrderBillingService {
     } catch (err) {
       if (err instanceof AppError && err.code === ERROR_CODES.SO_NOTHING_TO_INVOICE) {
         return { outcome: 'skipped', reason: 'nothing_to_invoice' };
+      }
+      // A store order reopened after its sales order was cancelled: the cancelled sales order cannot be invoiced, so the order
+      // records that instead of throwing, which would retry the outbox event until it dead-letters.
+      if (err instanceof AppError && err.code === ERROR_CODES.SO_CANCELLED) {
+        this.logger.warn(
+          { orgId, order: input.waOrderId },
+          'sales order is cancelled: no invoice for the reopened store order',
+        );
+        return { outcome: 'skipped', reason: 'sales_order_cancelled' };
       }
       throw err;
     }
