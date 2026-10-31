@@ -76,6 +76,17 @@ export default {
           ...(q.where ? [q.where] : []), // the fixed predicate the real query carries (a partial index only serves a query that states it)
         ].join(' AND ') || 'true';
       const sql = `SELECT * FROM ${q.table} WHERE ${where}${q.orderBy ? ' ORDER BY ' + q.orderBy.join(', ') : ''} LIMIT 50`;
+      // reltuples = -1 means never analysed, and would read as "small" and skip the Seq Scan check. Analyse first. After ANALYZE, -1 is
+      // only an empty table (no pages), which really is small.
+      const relRows = async () =>
+        Number(
+          (
+            await client.query(`SELECT reltuples::bigint n FROM pg_class WHERE relname=$1`, [
+              q.table,
+            ])
+          ).rows[0]?.n ?? 0,
+        );
+      if ((await relRows()) < 0) await client.query(`ANALYZE ${q.table}`);
       let plan;
       try {
         plan = (
@@ -86,12 +97,7 @@ export default {
         continue;
       }
       const nodes = walkPlan(plan.Plan),
-        rows =
-          (
-            await client.query(`SELECT reltuples::bigint n FROM pg_class WHERE relname=$1`, [
-              q.table,
-            ])
-          ).rows[0]?.n ?? 0;
+        rows = Math.max(0, await relRows());
       const sc = nodes.find((n) => n['Node Type'] === 'Seq Scan' && n['Relation Name'] === q.table);
       const so = nodes.find((n) => n['Node Type'] === 'Sort');
       now[q.name] = {
