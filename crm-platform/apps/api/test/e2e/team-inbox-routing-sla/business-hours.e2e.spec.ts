@@ -82,10 +82,10 @@ describe('business hours API', () => {
     );
   });
 
-  it('refuses a closing time not after the opening one, a bad time and an unknown zone', async () => {
+  it('refuses a closing time equal to the opening one, a bad time and an unknown zone', async () => {
     const bad = {
       ...WEEK_OPEN('09:00', '18:00'),
-      tue: { enabled: true, from: '18:00', to: '09:00' },
+      tue: { enabled: true, from: '09:00', to: '09:00' },
     };
     expect((await hoursApi(t.admin).put({ days: bad })).status).toBe(422);
     expect((await hoursApi(t.admin).put({ days: { ...WEEK_OPEN('9:00', '18:00') } })).status).toBe(
