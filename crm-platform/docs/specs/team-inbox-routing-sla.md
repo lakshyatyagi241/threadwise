@@ -2,7 +2,7 @@
 
 Status: describes the code in `crm-platform/apps/api/src/modules/team-inbox-routing-sla/` and the shared code it calls, as read on 2026-10-29. The feature record is `crm-platform/docs/threadwise-port/inventory/team-inbox-routing-sla.md`. Where the code and the inventory differ, this spec follows the code and lists the difference under "Open disagreements". It is not a design proposal.
 
-How proof is cited: each rule names a test file (short path under `crm-platform/apps/api/test/`, `unit/` or `e2e/`) and the start of the test title, so `grep -F` finds it. A rule with no such test is listed under "Not proven by a test" and is not claimed as covered. The spec has 83 rules: 62 with a test, 21 not proven.
+How proof is cited: each rule names a test file (short path under `crm-platform/apps/api/test/`, `unit/` or `e2e/`) and the start of the test title, so `grep -F` finds it. A rule with no such test is listed under "Not proven by a test" and is not claimed as covered. The spec has 120 rules: 99 with a test, 21 not proven (sections 2 to 7 and 10 hold the rules; section 8 lists the ones not proven). Sections 10 covers handoff, bulk actions, team analytics, idle rules, customer language and agent capacity, which were not in the first version.
 
 ## 1. Where the code is
 
@@ -136,3 +136,72 @@ These behaviours are in the code or follow from it, but no test in `apps/api/tes
 - **D11 Availability.** The inventory says away members stay eligible and only offline or busy are skipped. The code also skips people on leave, outside their own hours and on manual away (RT-9 to RT-11).
 - **D12 Round robin order.** The inventory says the next person is the one with the oldest `updated_at` among assigned chats. The code keeps an id cursor on each rule (RT-6).
 - **D13 Test versus schema.** `e2e/team-inbox-routing-sla/business-hours.e2e.spec.ts` (first test in "business hours API") expects 422 for an overnight Tuesday window, 18:00 to 09:00. The contract `packages/contracts/src/team-inbox-routing-sla/business-hours.ts` accepts that window, and `unit/team-inbox-routing-sla/working-hours.spec.ts` asserts it. One of them is stale; this spec does not rely on the e2e expectation.
+
+## 10. Handoff, bulk actions, team analytics, idle rules, language and capacity
+
+Each rule cites the test that asserts it. The behaviour is what the test title says; read the test for the exact setup.
+
+### Handoff and bot muting (`e2e/team-inbox-routing-sla/handoff.e2e.spec.ts`)
+
+- **HO-1 Handoff to a team.** A handoff to a team puts the conversation in its queue (waiting, card, tab and badge). Test: "a handoff to a team puts the conversation in its queue: waiting, the card, the tab and the badge".
+- **HO-2 Claim race.** Of two agents claiming, the first gets it and the second is told it is taken. Test: "claim: the first agent gets it and the second is told it is taken; the card follows".
+- **HO-3 Named person.** A named person takes the conversation at once, and a repeat with the same key writes nothing. Test: "a named person takes it at once (port assigned); a repeat with the same key writes nothing".
+- **HO-4 Assignment rules without the plan.** The "assignment rules" destination waits in the queue and the trace says why. Test: "without the plan the "assignment rules" destination waits in the queue and the trace says why".
+- **HO-5 Return to bot.** Return to bot unassigns and unmutes; resolving clears the handoff state. Test: "return to bot unassigns and unmutes; resolving clears the state".
+- **HO-6 Bot muted while held.** The bot listeners stay muted while the conversation waits or is with a person, and answer again after return to bot. Test: "the bot listeners are muted while the conversation waits or is with a person, and answer again after return to bot".
+- **HO-7 Spam.** Spam mutes the bot listeners and clears the handoff state; once spam is off, they answer again. Test: "spam mutes the bot listeners and clears the handoff state; off spam, they answer again".
+- **HO-8 Spam does not drop a hold.** Spam on a chat a person holds keeps the hold: the bot stays muted through unspam until it goes back to the bot. Test: "spam on a chat a person holds keeps the hold: the bot stays muted through unspam, until it goes back to the bot".
+- **HO-9 Settings by plan.** A Basic plan can set what it has and is refused, with a reason, what it does not. Test: "settings: a Basic plan can set what it has and is refused, with a reason, what it does not".
+- **HO-10 Contact owner.** Claim sets the contact owner only where nobody has ever decided it (the record engine guard). Test: "claim sets the contact owner only where nobody ever decided it (the record engine guard)".
+- **HO-11 Team round robin.** A team with round robin hands the conversation to its members in turn and moves the team's cursor. Test: "a team with round robin hands the conversation to its members in turn, and moves the team's cursor".
+- **HO-12 Closed team.** A closed team keeps the conversation in its queue and answers unavailable. Test: "a team that is closed keeps the conversation in its queue and answers unavailable".
+- **HO-13 Rules at handoff time.** The "assignment rules" destination runs the workspace rules at handoff time. Test: "the destination "assignment rules" runs the workspace rules at handoff time".
+- **HO-14 Automatic assignment off.** With "automatic assignment" off, rules and methods stay out and the queue is the only path. Test: "the switch "automatic assignment" off keeps rules and methods out: the queue only".
+
+### Bulk actions (`e2e/team-inbox-routing-sla/inbox-bulk.e2e.spec.ts`, `unit/team-inbox-routing-sla/bulk-actions.spec.ts`)
+
+- **BU-1 Priority.** Setting priority needs the permission, writes one timeline event and one outbox event, and a repeat is a no-op. Test: "sets the priority with the permission, one timeline event, one outbox event, and a repeat is a no-op".
+- **BU-2 Refusals.** Without the permission 403, a stale version 409, a bad value 422. Test: "refuses without the permission (403), a stale version (409) and a bad value (422)".
+- **BU-3 Snooze.** The sweep wakes a snoozed open thread when due and leaves it alone before that. Test: "snoozes an open thread, the sweep wakes it when due and leaves it alone before that".
+- **BU-4 Snooze resolved threads.** A resolved thread can be snoozed too; a past time is refused 422; no permission is 403. Test: "snoozes a resolved thread too (Reference: any status), refuses a past time (422) and a caller without the permission (403)".
+- **BU-5 Resolve many.** One outcome per row, the state machine per row, one audit row with the counts, and a re-run is unchanged. Test: "resolves many: one outcome each, the state machine per row, one audit row with the counts, and a re-run is unchanged".
+- **BU-6 Both permissions.** A bulk action needs the bulk permission and the action permission; without either, nothing runs. Test: "needs the bulk permission AND the action permission; without either nothing runs".
+- **BU-7 Not visible.** A conversation the caller cannot see is reported as not found, and the rest are reported as done. Test: "hides a conversation the caller cannot see as not found and reports the rest as done".
+- **BU-8 Assign, priority, snooze, read.** Each runs in bulk, and a made-up id is a failure, not a crash. Test: "assigns, sets priority, snoozes and marks read in bulk, and a made-up id is a failure not a crash".
+- **BU-9 Body validation.** Empty, duplicate and oversized selections and an assign with no target are refused. Test: "validates the body: empty, duplicate and oversized selections, an assign with no target".
+- **BU-10 Mark unread (unit).** A read thread can be marked unread and counts as done; an already-unread thread reports unchanged; the read permission is needed even when the caller can resolve. Tests: "marks a read thread unread and counts it done", "reports unchanged when the thread is already unread", "is refused without the read permission, even when the caller can resolve".
+
+### Team analytics (`e2e/team-inbox-routing-sla/team-analytics.e2e.spec.ts`, `unit/team-inbox-routing-sla/team-analytics-contract.spec.ts`)
+
+- **AN-1 Figures.** Human replies per agent, the resolved conversations and the first-reply average are counted. Test: "counts human replies per agent, the resolved conversation and the first-reply average".
+- **AN-2 Range and channel.** An unknown range reads as today, and a channel narrows every figure. Test: "reads an unknown range as today and narrows every figure to one channel".
+- **AN-3 Permission and tenant.** The report needs its permission, and another workspace sees none of it. Test: "needs the report permission, and another workspace sees none of it".
+- **AN-4 Range and channel values (unit).** Today, week and month, and anything else, read as today; a channel is a uuid only. Tests: "reads today, week and month and anything else as today", "takes a channel as a uuid only".
+
+### Idle chats (`unit/team-inbox-routing-sla/chat-idle-rules.spec.ts`)
+
+- **ID-1 Resolve an idle chat.** An idle agent-held chat is resolved, the reason is recorded, and the inbox is told. Test: "resolves an idle agent-held chat, records why, and tells the inbox".
+- **ID-2 New message wins.** The chat stays open when a message arrived after the list was read. Test: "leaves the chat open when a message arrived after the list was read".
+- **ID-3 Closed chats.** A chat that is no longer open is not touched. Test: "does not touch a chat that is no longer open".
+- **ID-4 Plan gate.** A workspace whose plan lacks automatic assignment gets nothing. Test: "does nothing for a workspace whose plan lacks automatic assignment".
+
+### Customer language (`unit/team-inbox-routing-sla/customer-language.spec.ts`)
+
+- **LA-1 Fallback.** When the conversation has no language, the contact's language is used, for rules and for a handoff. Tests: "falls back to the Language of the contact when the conversation has none (rules engine)", "and for a handoff".
+- **LA-2 Match.** A contact language of en matches a rule for en. Test: "a contact language of en matches a rule for en".
+
+### Agent capacity lock (`unit/team-inbox-routing-sla/agent-capacity-lock.spec.ts`)
+
+- **CA-1 One lock per agent.** One advisory lock per agent, taken in id order, once each. Test: "takes one advisory lock per agent, in id order, once each".
+- **CA-2 Scope.** The lock is scoped by workspace, so two workspaces never block each other. Test: "scopes the lock by workspace, so two workspaces never block each other".
+- **CA-3 Empty list.** An empty list locks nothing. Test: "locks nothing for an empty list".
+
+### Inventory items without a decision in this spec
+
+These inventory items (`docs/threadwise-port/inventory/team-inbox-routing-sla.md`) were open. This spec records what the code and tests show, not a new decision.
+
+- **TW-TIB2-021 (assign and claim)** and **TW-TIB2-022 (unassign)**: claim and named-person assignment are covered by HO-2 and HO-3. The unassign path is covered only where "return to bot" unassigns (HO-5).
+- **TW-TIB2-024 (SLA policies JSON API)**: no test named in this section. Not proven here.
+- **TW-TIB2-033 (queue statistics snapshot, partial)**: no test named in this section. Not proven here.
+- **TW-TIB2-034 (team performance analytics)**: covered by AN-1 to AN-4.
+- **TW-TIB2-035 (AI agent performance analytics)**: no test named in this section. Not proven here.
