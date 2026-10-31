@@ -38,6 +38,9 @@ const cache = cacheMetrics('storefront_checkout_idempotency');
 const ITEMS_UNAVAILABLE = 'Those items are no longer available. Please refresh and try again.';
 const IDEM_TTL_SECONDS = 24 * 3600;
 const IN_FLIGHT = '__in_flight__';
+/** Attempts to store the response of a placed order, and the pause between them. */
+const REMEMBER_ATTEMPTS = 3;
+const REMEMBER_RETRY_MS = 100;
 const IDEM_KEY_MAX = 128;
 
 /**
@@ -290,12 +293,23 @@ export class CheckoutService {
     }
   }
 
+  /**
+   * Replaces the in-flight marker with the response. The order is already placed, so a failed write is retried: until it lands, every
+   * retry of this key is refused as in flight for the whole key lifetime.
+   */
   private async remember(key: string, response: CheckoutResponse): Promise<void> {
-    await this.redis
-      .set(key, JSON.stringify(response), 'EX', IDEM_TTL_SECONDS)
-      .catch((err: unknown) =>
-        this.logger.warn({ err: String(err) }, '[STORE] idempotency store failed'),
-      );
+    for (let attempt = 1; attempt <= REMEMBER_ATTEMPTS; attempt++) {
+      try {
+        await this.redis.set(key, JSON.stringify(response), 'EX', IDEM_TTL_SECONDS);
+        return;
+      } catch (err) {
+        if (attempt === REMEMBER_ATTEMPTS) {
+          this.logger.warn({ err: String(err) }, '[STORE] idempotency store failed');
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, REMEMBER_RETRY_MS * attempt));
+      }
+    }
   }
 }
 
