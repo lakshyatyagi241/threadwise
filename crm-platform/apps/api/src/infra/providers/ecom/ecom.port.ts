@@ -47,6 +47,8 @@ export type StoreRecord = Record<string, unknown>;
 export interface StoreRead {
   items: StoreRecord[];
   complete: boolean;
+  /** WooCommerce orders: the page the cap stopped before, to read first next time (an import resumes there). */
+  nextPage?: number;
 }
 
 /** What the store reports as its size. A count that cannot be read is 0. */
@@ -64,7 +66,8 @@ export interface ShopifyStoreApi {
   shop(): Promise<EcomResult<ShopInfo>>;
   counts(): Promise<StoreCounts>;
   products(): Promise<StoreRead>;
-  orders(): Promise<StoreRead>;
+  /** `from` is the first page to read (default 1); only WooCommerce pages from a later one. */
+  orders(from?: number): Promise<StoreRead>;
   customers(): Promise<StoreRead>;
   /** Subscribes each topic to the address; returns topic to the store's webhook id for those that were created. */
   registerWebhooks(address: string, topics: readonly string[]): Promise<Record<string, string>>;
@@ -123,7 +126,8 @@ export interface WooStoreApi {
   products(): Promise<StoreRead>;
   /** The variations of a variable product (`/products/<id>/variations`), read to the end of their pages like the other resources. */
   variations(productId: string): Promise<StoreRead>;
-  orders(): Promise<StoreRead>;
+  /** `from` is the first page to read (default 1); only WooCommerce pages from a later one. */
+  orders(from?: number): Promise<StoreRead>;
   customers(): Promise<StoreRead>;
   registerWebhooks(a: {
     deliveryUrl: string;
