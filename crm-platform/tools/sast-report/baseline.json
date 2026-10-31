@@ -88,5 +88,11 @@
     "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
     "contains": "FROM ${q(t.table)} WHERE ${pending(t)}",
     "reason": "same registry-only identifiers, quoted by the validating q(); pending() is built from them; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "packages/db/src/migrator.ts",
+    "contains": "CREATE TEMP TABLE migration_index_probe",
+    "reason": "the interpolated table is a Postgres-quoted catalog name (ix.indrelid::regclass::text, packages/db/src/index-state.ts), not request data; the index definitions are the repo's own migration files; reviewed 2026-10-31"
   }
 ]
