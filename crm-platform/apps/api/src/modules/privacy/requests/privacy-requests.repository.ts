@@ -312,15 +312,24 @@ export class PrivacyRequestsRepository {
   }
 
   /** Open requests whose clock ran out. */
-  async expireOverdue(tx: Tx, graceDays: number): Promise<Array<{ orgId: number; id: number }>> {
+  async expireOverdue(
+    tx: Tx,
+    graceDays: number,
+  ): Promise<Array<{ orgId: number; id: number; fromStatus: string }>> {
+    // The status before the expiry is read in the same statement, so the event can say what it closed.
     const res = await tx.execute(sql`
-      UPDATE privacy_requests SET status = 'expired', subject_identifier_cipher = NULL
-       WHERE status IN ('received', 'verifying') AND due_at < now() - make_interval(days => ${graceDays})
-       RETURNING org_id, id`);
-    return (res.rows as Array<{ org_id: number | string; id: number | string }>).map((r) => ({
-      orgId: Number(r.org_id),
-      id: Number(r.id),
-    }));
+      WITH due AS (
+        SELECT org_id, id, status FROM privacy_requests
+         WHERE status IN ('received', 'verifying') AND due_at < now() - make_interval(days => ${graceDays})
+         FOR UPDATE
+      )
+      UPDATE privacy_requests p SET status = 'expired', subject_identifier_cipher = NULL
+        FROM due
+       WHERE p.org_id = due.org_id AND p.id = due.id
+       RETURNING p.org_id, p.id, due.status AS from_status`);
+    return (
+      res.rows as Array<{ org_id: number | string; id: number | string; from_status: string }>
+    ).map((r) => ({ orgId: Number(r.org_id), id: Number(r.id), fromStatus: r.from_status }));
   }
 
   // ---- events -----------------------------------------------------------------------------------------------------------------

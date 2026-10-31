@@ -1,7 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { AuditService } from '../../../kernel/audit/audit.service';
+import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PrivacyRequestsRepository } from './privacy-requests.repository';
+
+const MODULE_KEY = 'privacy_requests';
 
 /** An export `running` this long has lost its worker. */
 const STUCK_EXPORT_MS = 60 * 60_000;
@@ -26,6 +30,8 @@ export class PrivacyMaintenanceService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: PrivacyRequestsRepository,
+    private readonly audit: AuditService,
+    private readonly outbox: OutboxService,
   ) {}
 
   @Cron('* * * * *')
@@ -81,9 +87,32 @@ export class PrivacyMaintenanceService {
     const failedExports = await this.db.privileged((tx) =>
       this.repo.failStuckExports(tx, STUCK_EXPORT_MS),
     );
-    const expiredRequests = (
-      await this.db.privileged((tx) => this.repo.expireOverdue(tx, EXPIRE_GRACE_DAYS))
-    ).length;
+    // Every expiry leaves the trail a closure does (event, audit row, outbox event), in the transaction that expires it.
+    const expiredRequests = await this.db.privileged(async (tx) => {
+      const expired = await this.repo.expireOverdue(tx, EXPIRE_GRACE_DAYS);
+      for (const r of expired) {
+        await this.repo.addEvent(tx, r.orgId, r.id, {
+          type: 'expired',
+          from: r.fromStatus,
+          to: 'expired',
+          actorUserId: null,
+          detail: { reason: 'overdue' },
+        });
+        await this.audit.record(tx, {
+          module: MODULE_KEY,
+          recordId: r.id,
+          action: 'update',
+          delta: { status: { old: r.fromStatus, new: 'expired' } },
+        });
+        await this.outbox.emit(tx, {
+          aggregateModule: MODULE_KEY,
+          aggregateId: r.id,
+          eventType: 'privacy_request.expired',
+          payload: { reason: 'overdue' },
+        });
+      }
+      return expired.length;
+    });
     return { expiredExports, failedExports, expiredRequests };
   }
 }
