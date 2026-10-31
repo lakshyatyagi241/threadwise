@@ -457,6 +457,49 @@ describe('pausing by the system', () => {
     expect((await row(id)).status).not.toBe('paused');
   });
 
+  it('a recurring schedule on a warming number stops at the number budget and never sends past it (TW-SCHED-036)', async () => {
+    const t = await arrange('warm-recurring');
+    // The wallet is not what this test is about: its own gate is stubbed for this case and restored after.
+    const wallet = h.app.get<WalletGate>(WALLET_GATE as never, { strict: false });
+    const realPrecheck = wallet.precheckSend.bind(wallet);
+    wallet.precheckSend = () => Promise.resolve();
+    try {
+      await h.owner.query(`UPDATE devices SET warmer_config = $2::jsonb WHERE org_id = $1`, [
+        t.orgId,
+        JSON.stringify({
+          enabled: true,
+          daily_base: 2,
+          max_daily: 2,
+          step_pct: 0,
+          step_days: 1,
+          gap_min: 0,
+          gap_max: 0,
+          active_start: 0,
+          active_end: 24,
+          spintax: false,
+          started_at: '2020-01-01',
+        }),
+      ]);
+      const id = await schedule(t, 5, { schedule_type: 'recurring', repeat_interval: 'daily' });
+      expect(await run(t, id)).toBe('paused');
+      expect(sent).toHaveLength(2);
+      expect(await row(id)).toMatchObject({ status: 'paused' });
+      expect((await contacts(id)).map((c) => c.status)).toEqual([
+        'sent',
+        'sent',
+        'pending',
+        'pending',
+        'pending',
+      ]);
+      // the due poller hands it back once the pause is over; still over budget, so nothing more is sent
+      await h.owner.query(`UPDATE scheduled_messages SET status = 'scheduled' WHERE id = $1`, [id]);
+      expect(await run(t, id)).toBe('paused');
+      expect(sent).toHaveLength(2);
+    } finally {
+      wallet.precheckSend = realPrecheck;
+    }
+  });
+
   it('the emergency halt puts the recipient back and pauses for a retry, nothing lost', async () => {
     const t = await arrange('halt');
     const id = await schedule(t, 3);
