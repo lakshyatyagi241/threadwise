@@ -63,6 +63,18 @@ export class StorageQuotaRepository {
       UPDATE storage_org_state SET reserved_bytes = GREATEST(reserved_bytes - ${num(back.bytes)}::bigint, 0) WHERE org_id = ${orgId}`);
   }
 
+  /**
+   * Locks the workspace's state row. Every writer takes it before its object and usage rows: `commit` and `remove` here, and the nightly
+   * check in `rebuildCounters`. Two orders deadlock (the check holds the state row and wants usage, a commit holds usage and wants the
+   * state row), so the order is the same everywhere. Spec: `storage-counter-lock-order.spec.ts`.
+   */
+  private async lockWorkspace(tx: Tx, orgId: number): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO storage_org_state (org_id, hot_bytes) VALUES (${orgId}, 0)
+      ON CONFLICT (org_id) DO NOTHING`);
+    await tx.execute(sql`SELECT 1 FROM storage_org_state WHERE org_id = ${orgId} FOR UPDATE`);
+  }
+
   /** The registry row of a key, locked for the rest of the transaction. */
   private async lockObject(tx: Tx, orgId: number, key: string): Promise<Row | undefined> {
     return rowsOf(
@@ -88,6 +100,7 @@ export class StorageQuotaRepository {
       reservedBack = num(rowsOf(res)[0]?.bytes);
     }
 
+    await this.lockWorkspace(tx, orgId);
     let existing = await this.lockObject(tx, orgId, input.key);
     let hotDelta = input.bytes;
     let coldDelta = 0;
@@ -159,6 +172,7 @@ export class StorageQuotaRepository {
    * Registry only: the object itself was already deleted by the caller. LEGAL-HOLD INTEGRATION POINT: see `StorageReconcileService`.
    */
   async remove(tx: Tx, orgId: number, key: string): Promise<number> {
+    await this.lockWorkspace(tx, orgId);
     const res = await tx.execute(sql`
       DELETE FROM storage_objects WHERE org_id = ${orgId} AND key = ${key} RETURNING bytes, category, tier`);
     const row = rowsOf(res)[0];
