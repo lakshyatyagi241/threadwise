@@ -10,7 +10,7 @@ keywords: [store, shop, storefront, sales, orders, revenue, bestsellers, shop li
 
 ## What it is for
 
-The Store area is where you sell from your own shop page and from WhatsApp. The overview shows your last 30 days: revenue, orders, average order value, products and storefront visits. Below it are the sales by day, your bestselling products and the newest orders.
+The Store area is where you sell from your own shop page and from WhatsApp. The overview shows your last 30 days: revenue, orders, average order value, products and storefront visits. Below it are the sales by day, your bestselling products and the newest orders. Revenue, orders, average order value and sales by day count only the orders in the shop's own currency, so a workspace with shops in different currencies never adds them together.
 
 ## How to use it
 

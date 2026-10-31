@@ -91,13 +91,14 @@ export interface RecentOrder {
  */
 export interface OrdersGateway {
   create(tx: Tx, orgId: number, order: NewStorefrontOrder): Promise<PlacedOrder>;
-  /** Last `days` days (rolling, from now), every source and status, as the dashboard counts them. */
-  window(tx: Tx, orgId: number, days: number): Promise<DashboardOrders>;
+  /** Last `days` days (rolling, from now), every source and status, in `currency` only: money is never added across currencies. */
+  window(tx: Tx, orgId: number, days: number, currency: string): Promise<DashboardOrders>;
   /** One bucket per calendar day (UTC), oldest first, `days` of them ending today. Revenue is minor units. */
   salesByDay(
     tx: Tx,
     orgId: number,
     days: number,
+    currency: string,
   ): Promise<Array<{ day: string; revenueMinor: number; orders: number }>>;
   /** Item names ranked by units sold over the window; ties keep the order they first appeared in. */
   topProducts(

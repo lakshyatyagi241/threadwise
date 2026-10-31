@@ -105,11 +105,11 @@ export class SqlOrdersGateway implements OrdersGateway {
     return { id: Number(row.id), uuid: row.uuid };
   }
 
-  async window(tx: Tx, orgId: number, days: number): Promise<DashboardOrders> {
+  async window(tx: Tx, orgId: number, days: number, currency: string): Promise<DashboardOrders> {
     const res = await tx.execute(sql`
       SELECT coalesce(sum(total_minor), 0)::bigint AS revenue, count(*)::int AS orders
       FROM wa_orders
-      WHERE org_id = ${orgId} AND created_at >= now() - make_interval(days => ${days})`);
+      WHERE org_id = ${orgId} AND currency_code = ${currency} AND created_at >= now() - make_interval(days => ${days})`);
     const r = res.rows[0] as { revenue: number | string; orders: number | string };
     return { revenueMinor: Number(r.revenue), orders: Number(r.orders) };
   }
@@ -118,6 +118,7 @@ export class SqlOrdersGateway implements OrdersGateway {
     tx: Tx,
     orgId: number,
     days: number,
+    currency: string,
   ): Promise<Array<{ day: string; revenueMinor: number; orders: number }>> {
     const res = await tx.execute(sql`
       WITH buckets AS (
@@ -129,7 +130,7 @@ export class SqlOrdersGateway implements OrdersGateway {
       ), sold AS (
         SELECT (created_at AT TIME ZONE 'UTC')::date AS day, sum(total_minor)::bigint AS revenue, count(*)::int AS orders
         FROM wa_orders
-        WHERE org_id = ${orgId} AND created_at >= now() - make_interval(days => ${days})
+        WHERE org_id = ${orgId} AND currency_code = ${currency} AND created_at >= now() - make_interval(days => ${days})
         GROUP BY 1
       )
       SELECT to_char(b.day, 'YYYY-MM-DD') AS day, coalesce(s.revenue, 0) AS revenue, coalesce(s.orders, 0) AS orders
