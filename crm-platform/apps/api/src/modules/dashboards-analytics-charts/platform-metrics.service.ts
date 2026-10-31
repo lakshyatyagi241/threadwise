@@ -122,20 +122,24 @@ export class PlatformMetricsService {
       const incomePrev = await this.paid(tx, fx, win.prevFrom, win.from);
       const views = await this.outMessages(tx, win.from, win.to);
       const viewsPrev = await this.outMessages(tx, win.prevFrom, win.from);
-      const conv = async (a: Date, b: Date): Promise<number> => {
-        const signups = await this.n(
-          tx,
-          sql`SELECT count(*)::int AS n FROM users WHERE created_at >= ${iso(a)}::timestamptz AND created_at < ${iso(b)}::timestamptz`,
-        );
-        const payers = await this.n(
-          tx,
-          sql`SELECT count(DISTINCT org_id)::int AS n FROM orders WHERE status = 'paid'
-              AND paid_at >= ${iso(a)}::timestamptz AND paid_at < ${iso(b)}::timestamptz`,
-        );
-        return signups > 0 ? (payers / signups) * 100 : 0;
-      };
-      const conversion = await conv(win.from, win.to);
-      const conversionPrev = await conv(win.prevFrom, win.from);
+      // Signups and paying workspaces for both windows: one statement per table, each window a FILTER on it.
+      const signupCounts = await this.counts(
+        tx,
+        sql`SELECT count(*) FILTER (WHERE created_at >= ${iso(win.from)}::timestamptz AND created_at < ${iso(win.to)}::timestamptz)::int AS cur,
+                   count(*) FILTER (WHERE created_at >= ${iso(win.prevFrom)}::timestamptz AND created_at < ${iso(win.from)}::timestamptz)::int AS prev
+            FROM users WHERE created_at >= ${iso(win.prevFrom)}::timestamptz AND created_at < ${iso(win.to)}::timestamptz`,
+      );
+      const payerCounts = await this.counts(
+        tx,
+        sql`SELECT count(DISTINCT org_id) FILTER (WHERE paid_at >= ${iso(win.from)}::timestamptz AND paid_at < ${iso(win.to)}::timestamptz)::int AS cur,
+                   count(DISTINCT org_id) FILTER (WHERE paid_at >= ${iso(win.prevFrom)}::timestamptz AND paid_at < ${iso(win.from)}::timestamptz)::int AS prev
+            FROM orders WHERE status = 'paid'
+              AND paid_at >= ${iso(win.prevFrom)}::timestamptz AND paid_at < ${iso(win.to)}::timestamptz`,
+      );
+      const conversionOf = (signups: number, payers: number): number =>
+        signups > 0 ? (payers / signups) * 100 : 0;
+      const conversion = conversionOf(signupCounts.cur!, payerCounts.cur!);
+      const conversionPrev = conversionOf(signupCounts.prev!, payerCounts.prev!);
 
       // Revenue over time: buckets that cover the whole window, so the header total equals the Total income card.
       const buckets = revenueBuckets(win);
