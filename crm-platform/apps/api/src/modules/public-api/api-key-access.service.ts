@@ -18,6 +18,8 @@ import {
 
 /** Failed authentications one address may make per minute before it is refused with 429 (same number as the bearer-key guard). */
 export const AUTH_FAILURES_PER_MINUTE = 30;
+/** A key's `last_used_at` is written at most this often: one row per busy key would otherwise be rewritten on every request. */
+export const LAST_USED_EVERY_SECONDS = 60;
 
 /**
  * The limit a request is held to: the key's own limit, never above the platform ceiling from the security policy
