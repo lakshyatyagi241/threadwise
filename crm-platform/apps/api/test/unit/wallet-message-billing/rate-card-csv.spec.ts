@@ -43,6 +43,15 @@ describe('parseRateCardCsv (TW-WALLET-006)', () => {
     expect(r.problems).toEqual([{ line: 2, reason: 'Unknown country "Narnia"' }]);
   });
 
+  it('keeps the stored cost for a comma decimal or a negative cost, never reads it as another amount (issue #1533)', () => {
+    const r = parseRateCardCsv(
+      'country_code,category,cost\nUS,marketing,"12,5"\nDE,utility,-0.50\nFR,utility,"1,250.5"\n',
+    );
+    expect(r.rows.find((x) => x.countryCode === 'US')?.costMicros).toBeUndefined();
+    expect(r.rows.find((x) => x.countryCode === 'DE')?.costMicros).toBeUndefined();
+    expect(r.rows.find((x) => x.countryCode === 'FR')?.costMicros).toBe(1_250_500_000);
+  });
+
   it('reads the long shape, keeps 3 decimals of cost, and leaves price untouched when absent', () => {
     const r = parseRateCardCsv('country_code,category,cost\nUS,marketing,0.0250\n,utility,0.004\n');
     expect(r.shape).toBe('long');
