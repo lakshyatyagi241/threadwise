@@ -64,16 +64,8 @@ export class PublicApiService {
   async submitLead(input: PublicLeadSubmitInput): Promise<{ id: string; created: boolean }> {
     const ctx = RequestContextStore.require();
 
-    const before = await this.db.txReplica(async (tx) =>
-      tx.execute(sql`
-        SELECT contact_id FROM contact_identities
-        WHERE org_id = ${ctx.orgId} AND kind = 'email' AND value = ${input.email.toLowerCase()}
-        LIMIT 1
-      `),
-    );
-    const existed = before.rows.length > 0;
-
-    const contact = await this.contacts.create(
+    // `created` comes from the write that decided the match (email or phone), not from a replica read taken before it.
+    const { contact, created } = await this.contacts.createOrMatch(
       {
         name: input.name,
         email: input.email,
@@ -95,7 +87,7 @@ export class PublicApiService {
       },
     );
 
-    return { id: contact.id, created: !existed };
+    return { id: contact.id, created };
   }
 }
 
