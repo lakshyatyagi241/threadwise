@@ -92,6 +92,17 @@ export class PlatformMetricsService {
     return Number((r.rows[0] as { n: number | string }).n);
   }
 
+  /** One scan per table: each figure is a FILTER on the same count, so the page's numbers are the same as one query each. */
+  private async counts(tx: Tx, query: ReturnType<typeof sql>): Promise<Record<string, number>> {
+    const r = await tx.execute(query);
+    return Object.fromEntries(
+      Object.entries(r.rows[0] as Record<string, number | string | null>).map(([k, v]) => [
+        k,
+        Number(v ?? 0),
+      ]),
+    );
+  }
+
   private outMessages(tx: Tx, a: Date, b: Date): Promise<number> {
     return this.n(
       tx,
@@ -327,26 +338,29 @@ export class PlatformMetricsService {
       const fx = await this.fx(tx);
       const end = new Date(now.getTime() + 1);
       const revenue = await this.paid(tx, fx, since, end);
-      const users = await this.n(tx, sql`SELECT count(*)::int AS n FROM users`);
-      const newUsers = await this.n(
+      const people = await this.counts(
         tx,
-        sql`SELECT count(*)::int AS n FROM users WHERE created_at >= ${s}::timestamptz`,
+        sql`SELECT count(*)::int AS users, count(*) FILTER (WHERE created_at >= ${s}::timestamptz)::int AS new_users FROM users`,
       );
-      const workspaces = await this.n(tx, sql`SELECT count(*)::int AS n FROM organizations`);
-      const newWorkspaces = await this.n(
+      const users = people.users!;
+      const newUsers = people.new_users!;
+      const sites = await this.counts(
         tx,
-        sql`SELECT count(*)::int AS n FROM organizations WHERE created_at >= ${s}::timestamptz`,
+        sql`SELECT count(*)::int AS workspaces, count(*) FILTER (WHERE created_at >= ${s}::timestamptz)::int AS new_workspaces FROM organizations`,
       );
+      const workspaces = sites.workspaces!;
+      const newWorkspaces = sites.new_workspaces!;
       const messages = await this.outMessages(tx, since, end);
-      const devicesTotal = await this.n(tx, sql`SELECT count(*)::int AS n FROM devices`);
-      const devicesOnline = await this.n(
+      const fleet = await this.counts(
         tx,
-        sql`SELECT count(*)::int AS n FROM devices WHERE status = 'connected' AND active`,
+        sql`SELECT count(*)::int AS total,
+                   count(*) FILTER (WHERE status = 'connected' AND active)::int AS online,
+                   coalesce(sum(sent_24h), 0)::int AS sends
+            FROM devices`,
       );
-      const openTickets = await this.n(
-        tx,
-        sql`SELECT count(*)::int AS n FROM support_tickets WHERE status IN ('open', 'in_progress', 'pending')`,
-      );
+      const devicesTotal = fleet.total!;
+      const devicesOnline = fleet.online!;
+      const deviceSends = fleet.sends!;
 
       const signupRows = await this.signupRows(tx, since);
       const start = new Date(
@@ -364,10 +378,6 @@ export class PlatformMetricsService {
         GROUP BY 1 ORDER BY count DESC, plan`);
       const dev = await tx.execute(sql`
         SELECT device_name, country_code, phone_number, sent_24h FROM devices ORDER BY active DESC, id DESC LIMIT 8`);
-      const deviceSends = await this.n(
-        tx,
-        sql`SELECT coalesce(sum(sent_24h), 0)::int AS n FROM devices`,
-      );
       const board = await tx.execute(sql`
         SELECT o.slug, o.name, ord.currency, count(*)::int AS orders, sum(coalesce(ord.total_amount, ord.amount))::text AS s
         FROM orders ord JOIN organizations o ON o.id = ord.org_id
@@ -391,6 +401,9 @@ export class PlatformMetricsService {
       const tickets = await tx.execute(
         sql`SELECT status, count(*)::int AS count FROM support_tickets GROUP BY status ORDER BY count DESC, status`,
       );
+      const openTickets = (tickets.rows as Array<{ status: string; count: number | string }>)
+        .filter((r) => ['open', 'in_progress', 'pending'].includes(r.status))
+        .reduce((a, r) => a + Number(r.count), 0);
 
       return {
         days,
