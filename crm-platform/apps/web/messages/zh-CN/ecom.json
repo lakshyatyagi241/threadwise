@@ -101,7 +101,7 @@
       "allIntegrations": "全部集成",
       "disconnect": "断开连接",
       "disconnectTitle": "断开 {name}？",
-      "disconnectShopify": "这将删除已注册的 Webhook，但会保留您的设置。",
+      "disconnectShopify": "这将删除已注册的 Webhook、自动化映射，以及该店铺的事件和日志。",
       "disconnectWoo": "这将移除已注册的 Webhook。",
       "disconnectDone": "店铺已断开连接。",
       "healthy": "Webhook 正常",

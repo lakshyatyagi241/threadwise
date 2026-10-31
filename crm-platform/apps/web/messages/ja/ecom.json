@@ -101,7 +101,7 @@
       "allIntegrations": "すべての連携",
       "disconnect": "接続解除",
       "disconnectTitle": "{name}の接続を解除しますか?",
-      "disconnectShopify": "登録済みのWebhookは削除されますが、設定は保持されます。",
+      "disconnectShopify": "登録済みのWebhook、オートメーションの対応付け、このストアのイベントとログが削除されます。",
       "disconnectWoo": "登録済みのWebhookが削除されます。",
       "disconnectDone": "ストアの接続を解除しました。",
       "healthy": "Webhookは正常です",

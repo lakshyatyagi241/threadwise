@@ -101,7 +101,7 @@
       "allIntegrations": "Alle integraties",
       "disconnect": "Ontkoppelen",
       "disconnectTitle": "{name} ontkoppelen?",
-      "disconnectShopify": "Hiermee worden de geregistreerde webhooks verwijderd, maar blijven je instellingen bewaard.",
+      "disconnectShopify": "Hiermee worden de geregistreerde webhooks, de automatiseringskoppeling en de gebeurtenissen en logs van deze winkel verwijderd.",
       "disconnectWoo": "Hiermee worden de geregistreerde webhooks verwijderd.",
       "disconnectDone": "Winkel ontkoppeld.",
       "healthy": "Webhooks werken goed",

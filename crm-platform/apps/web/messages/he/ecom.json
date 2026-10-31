@@ -101,7 +101,7 @@
       "allIntegrations": "כל האינטגרציות",
       "disconnect": "ניתוק",
       "disconnectTitle": "לנתק את {name}?",
-      "disconnectShopify": "פעולה זו מוחקת את ה־Webhooks הרשומים אך שומרת את ההגדרות שלכם.",
+      "disconnectShopify": "פעולה זו מוחקת את ה־Webhooks הרשומים, את מיפוי האוטומציה ואת האירועים והיומנים של החנות.",
       "disconnectWoo": "פעולה זו מסירה את ה־Webhooks הרשומים.",
       "disconnectDone": "החנות נותקה.",
       "healthy": "ה־Webhooks תקינים",

@@ -101,7 +101,7 @@
       "allIntegrations": "Tất cả tích hợp",
       "disconnect": "Ngắt kết nối",
       "disconnectTitle": "Ngắt kết nối {name}?",
-      "disconnectShopify": "Thao tác này xóa các webhook đã đăng ký nhưng giữ nguyên cài đặt của bạn.",
+      "disconnectShopify": "Thao tác này xóa các webhook đã đăng ký, ánh xạ tự động hóa, cùng sự kiện và nhật ký của cửa hàng này.",
       "disconnectWoo": "Thao tác này xóa các webhook đã đăng ký.",
       "disconnectDone": "Đã ngắt kết nối cửa hàng.",
       "healthy": "Webhook hoạt động tốt",

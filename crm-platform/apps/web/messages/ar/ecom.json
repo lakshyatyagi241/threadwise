@@ -101,7 +101,7 @@
       "allIntegrations": "كل التكاملات",
       "disconnect": "قطع الاتصال",
       "disconnectTitle": "قطع الاتصال بـ {name}؟",
-      "disconnectShopify": "سيحذف هذا Webhooks المسجّلة لكنه يحتفظ بإعداداتك.",
+      "disconnectShopify": "سيحذف هذا Webhooks المسجّلة وربط الأتمتة والأحداث والسجلات الخاصة بهذا المتجر.",
       "disconnectWoo": "سيزيل هذا Webhooks المسجّلة.",
       "disconnectDone": "تم قطع الاتصال بالمتجر.",
       "healthy": "Webhooks سليمة",
