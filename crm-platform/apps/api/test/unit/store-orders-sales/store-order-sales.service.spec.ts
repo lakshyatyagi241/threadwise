@@ -289,6 +289,13 @@ describe('StoreOrderSalesService.createInvoiceForOrder (the manual button)', () 
     });
   });
 
+  it('says there is nothing left to invoice, not that the plan limit is reached', async () => {
+    const done = build({ invoiceOutcome: { outcome: 'skipped', reason: 'nothing_to_invoice' } });
+    const err = await done.svc.createInvoiceForOrder(1, REF.uuid).catch((e: unknown) => e);
+    expect(err).toMatchObject({ code: ERROR_CODES.CONFLICT });
+    expect((err as { code: string }).code).not.toBe(ERROR_CODES.PLAN_LIMIT_REACHED);
+  });
+
   it('refuses a cancelled order with 409 and an unknown order with 404', async () => {
     const cancelled = build({ order: { status: 'cancelled' } });
     await expect(cancelled.svc.createInvoiceForOrder(1, REF.uuid)).rejects.toMatchObject({

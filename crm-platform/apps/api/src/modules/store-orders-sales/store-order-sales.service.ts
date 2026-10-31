@@ -185,6 +185,13 @@ export class StoreOrderSalesService {
         const row = await this.orders.lock(tx, orgId, { id: orderId });
         if (!row) throw AppError.notFound('Order', String(order));
         await this.billOrder(tx, orgId, row, result, { manual: true });
+        if (result.invoice === 'skipped' && result.invoiceSkipReason === 'nothing_to_invoice') {
+          throw new AppError(
+            ERROR_CODES.CONFLICT,
+            'This order has nothing left to invoice.',
+            HttpStatus.CONFLICT,
+          );
+        }
         if (result.invoice === 'skipped') {
           throw new AppError(
             ERROR_CODES.PLAN_LIMIT_REACHED,
