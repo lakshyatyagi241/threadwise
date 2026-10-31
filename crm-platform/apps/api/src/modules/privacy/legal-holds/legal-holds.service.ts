@@ -436,8 +436,11 @@ export class LegalHoldsService {
       if (!req) continue;
       const stored = storedSubjectOf(req, this.crypto);
       if (!stored) continue;
-      const subject = await this.resolver.resolve(tx, orgId, stored);
-      if (!covers(hold, subject)) continue;
+      // A workspace hold covers every subject, so the per-case resolution is skipped (the same outcome, fewer queries under the lock).
+      if (hold.scope !== 'workspace') {
+        const subject = await this.resolver.resolve(tx, orgId, stored);
+        if (!covers(hold, subject)) continue;
+      }
       await this.requests.restrict(tx, orgId, caseId, { holdId: hold.id });
       hit.push({ id: caseId, uuid: req.uuid });
     }

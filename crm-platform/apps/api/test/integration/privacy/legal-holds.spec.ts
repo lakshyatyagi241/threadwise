@@ -549,6 +549,28 @@ describe('legal hold', () => {
       expect(ev2.rows.map((r) => r.event_type)).toContain('restriction_lifted');
     });
 
+    it('a workspace hold restricts an open erasure of a free phone (resolved per case), and no other hold does', async () => {
+      const free = await one(
+        `INSERT INTO privacy_requests (org_id, request_type, status, subject_kind, subject_identifier_kind, subject_identifier_cipher, subject_label, due_at)
+         VALUES ($1, 'erasure', 'in_progress', 'identifier', 'phone', $2, 'R••••', now() + interval '30 days') RETURNING id`,
+        [orgA, 'enc:+919812300777'],
+      );
+      const stateOf = async (id: number) =>
+        (await owner.query(`SELECT restricted_at FROM privacy_requests WHERE id = $1`, [id]))
+          .rows[0];
+      // a contact hold does not cover a free phone that is not a contact of it
+      const c = await contact(orgA);
+      const ch = await place(orgA, userA, { scope: 'contact', subjectId: c.uuid });
+      expect((await stateOf(free)).restricted_at).toBeNull();
+      // the workspace hold covers everyone, so the free phone is restricted too
+      const wh = await place(orgA, userA, { scope: 'workspace' });
+      expect((await stateOf(free)).restricted_at).not.toBeNull();
+      // end both holds again so the later cases of this file see an empty workspace
+      await as(orgA, userA, () => service.release(wh.id, {}));
+      await as(orgA, userA, () => service.release(ch.id, {}));
+      expect((await stateOf(free)).restricted_at).toBeNull();
+    });
+
     it('a case stays restricted while another hold still covers the person', async () => {
       const c = await contact(orgA);
       const caseId = await one(
