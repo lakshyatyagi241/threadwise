@@ -119,18 +119,23 @@ class WooStore implements WooStoreApi {
     return out;
   }
 
-  /** Reads one list page by page (100 a page) until a short page, the last page the store reports, or the page cap. */
-  private async readAll(path: string, orderby: string): Promise<StoreRead> {
+  /**
+   * Reads one list page by page (100 a page) from `startPage` until a short page or the last page the store reports. At most
+   * MAX_PAGES pages are read per call; when the cap or an error stops it, `nextPage` is where the next call should start.
+   */
+  private async readAll(path: string, orderby: string, startPage = 1): Promise<StoreRead> {
     const items: StoreRecord[] = [];
-    for (let page = 1; ; page += 1) {
-      if (page > MAX_PAGES) return { items, complete: false };
+    let read = 0;
+    for (let page = startPage; ; page += 1) {
+      if (read === MAX_PAGES) return { items, complete: false, nextPage: page };
       const r = await this.send(
         'GET',
         `${path}?per_page=100&orderby=${orderby}&order=desc&page=${page}`,
       );
       if ('error' in r || r.status < 200 || r.status >= 300 || !Array.isArray(r.json)) {
-        return { items, complete: false };
+        return { items, complete: false, nextPage: page };
       }
+      read += 1;
       for (const x of r.json) items.push(obj(x));
       if (r.json.length < 100 || (r.pages !== null && page >= r.pages))
         return { items, complete: true };
@@ -145,8 +150,8 @@ class WooStore implements WooStoreApi {
     return this.readAll(`/products/${encodeURIComponent(productId)}/variations`, 'id');
   }
 
-  orders(): Promise<StoreRead> {
-    return this.readAll('/orders', 'date');
+  orders(from = 1): Promise<StoreRead> {
+    return this.readAll('/orders', 'date', Math.max(1, Math.floor(from)));
   }
 
   customers(): Promise<StoreRead> {

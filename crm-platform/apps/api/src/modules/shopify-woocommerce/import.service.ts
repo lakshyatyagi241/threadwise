@@ -36,7 +36,11 @@ export interface ImportJob {
 }
 
 /** What one import brought in. `incomplete` is 1 when a resource was cut short by the page cap or a store that stopped answering. */
-export type ImportStats = Record<'products' | 'orders' | 'customers' | 'incomplete', number>;
+/** `ordersPage` is the cursor for the next import's order read (1 = from the start); it is kept in sync_stats. */
+export type ImportStats = Record<
+  'products' | 'orders' | 'customers' | 'incomplete' | 'ordersPage',
+  number
+>;
 
 interface Source {
   /** The integration's uuid (the consent line is keyed by it). */
@@ -46,15 +50,23 @@ interface Source {
   userId: number | null;
   groupKey: 'shopify_group_id' | 'woo_group_id';
   cachedGroup: number | null;
+  /** The first order page this import reads (WooCommerce resumes past the last cap; Shopify always starts at 1). */
+  ordersPage: number;
   read: {
     products: () => Promise<StoreRead>;
-    orders: () => Promise<StoreRead>;
+    orders: (from?: number) => Promise<StoreRead>;
     customers: () => Promise<StoreRead>;
   };
   product: (r: Record<string, unknown>) => MirrorProduct;
   order: (r: Record<string, unknown>) => MirrorOrder;
   customer: (r: Record<string, unknown>) => MirrorCustomer | null;
 }
+
+/** The order-read cursor kept in sync_stats: a whole page number from 1; anything else starts from the first page. */
+const cursorOf = (syncStats: Record<string, number> | null): number => {
+  const page = syncStats?.ordersPage;
+  return typeof page === 'number' && Number.isFinite(page) && page >= 1 ? Math.floor(page) : 1;
+};
 
 /**
  * Mirrors a connected store into the CRM (TW-ECOM-011): products to the catalog, orders to the checkout orders, customers with a
@@ -103,6 +115,7 @@ export class ImportService {
         userId: row.userId,
         groupKey: 'shopify_group_id',
         cachedGroup: typeof meta?.shopify_group_id === 'number' ? meta.shopify_group_id : null,
+        ordersPage: 1,
         read: {
           products: () => api.products(),
           orders: () => api.orders(),
@@ -129,10 +142,11 @@ export class ImportService {
       userId: row.userId,
       groupKey: 'woo_group_id',
       cachedGroup: typeof meta?.woo_group_id === 'number' ? meta.woo_group_id : null,
+      ordersPage: cursorOf(row.syncStats),
       read: {
         // A variable product's variations are read with it, so each becomes a variant of the product.
         products: () => readWooProducts(api),
-        orders: () => api.orders(),
+        orders: (from) => api.orders(from),
         customers: () => api.customers(),
       },
       product: (r) => wooProduct(r, ctx),
@@ -143,7 +157,13 @@ export class ImportService {
 
   /** Runs one import. A store that is gone or has no credentials left (the app was removed) imports nothing. */
   async run(orgId: number, kind: StoreKind, id: number): Promise<ImportStats> {
-    const stats: ImportStats = { products: 0, orders: 0, customers: 0, incomplete: 0 };
+    const stats: ImportStats = {
+      products: 0,
+      orders: 0,
+      customers: 0,
+      incomplete: 0,
+      ordersPage: 1,
+    };
     const src = await this.source(orgId, kind, id);
     if (!src) return stats;
 
@@ -161,7 +181,9 @@ export class ImportService {
       }
     }
 
-    const orders = await src.read.orders();
+    const orders = await src.read.orders(src.ordersPage);
+    // The next import starts where the cap stopped this one (page 1 once every page has been read).
+    stats.ordersPage = orders.complete ? 1 : (orders.nextPage ?? 1);
     for (const raw of orders.items) {
       try {
         const m = src.order(raw);
