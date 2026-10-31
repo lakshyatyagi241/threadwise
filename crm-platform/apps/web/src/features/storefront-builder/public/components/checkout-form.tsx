@@ -1,9 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { postAbandon, postCheckout, postCoupon, type CallResult } from '../api/client';
 import { cartTotal, toRequestItems } from '../lib/cart';
+import { checkoutAttempt, type CheckoutAttempt } from '../lib/checkout-attempt';
 import { isWaHandoff } from '../lib/links';
 import { formatMinor } from '../lib/money';
 import { useStore } from './store-provider';
@@ -32,6 +33,8 @@ export function CheckoutForm() {
   const [couponLine, setCouponLine] = useState<Line>(null);
   const [status, setStatus] = useState<Line>(null);
   const [busy, setBusy] = useState(false);
+  /** The key of the attempt in flight: a retry of the same order reuses it (see `checkoutAttempt`). */
+  const attempt = useRef<CheckoutAttempt | null>(null);
 
   const digits = (v: string) => v.replace(/\D/g, '').length;
   const itemsLabel = t('checkout.summary', {
@@ -115,19 +118,19 @@ export function CheckoutForm() {
 
     setBusy(true);
     setStatus(null);
-    const res = await postCheckout(
-      shop.slug,
-      {
-        name: trimmedName,
-        phone: trimmedPhone,
-        address: address.trim() || null,
-        note: note.trim() || null,
-        coupon: coupon.trim() || acceptedCode || null,
-        paymentMethod: method,
-        items: toRequestItems(cart),
-      },
+    const body = {
+      name: trimmedName,
+      phone: trimmedPhone,
+      address: address.trim() || null,
+      note: note.trim() || null,
+      coupon: coupon.trim() || acceptedCode || null,
+      paymentMethod: method,
+      items: toRequestItems(cart),
+    };
+    attempt.current = checkoutAttempt(attempt.current, JSON.stringify(body), () =>
       crypto.randomUUID(),
     );
+    const res = await postCheckout(shop.slug, body, attempt.current.key);
     setBusy(false);
     if (!res.ok) {
       refreshOnUnavailable(res);
@@ -135,6 +138,7 @@ export function CheckoutForm() {
       return;
     }
     // Order recorded: the cart is done with, whatever happens to the hand-off.
+    attempt.current = null;
     clearCart();
     const waUrl = isWaHandoff(res.data.waUrl) ? res.data.waUrl : null;
     if (waUrl) {
