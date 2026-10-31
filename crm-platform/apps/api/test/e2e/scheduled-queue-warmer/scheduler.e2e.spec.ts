@@ -457,6 +457,49 @@ describe('pausing by the system', () => {
     expect((await row(id)).status).not.toBe('paused');
   });
 
+  it('a recurring schedule on a warming number stops at the number budget and never sends past it (TW-SCHED-036)', async () => {
+    const t = await arrange('warm-recurring');
+    // The wallet is not what this test is about: its own gate is stubbed for this case and restored after.
+    const wallet = h.app.get<WalletGate>(WALLET_GATE as never, { strict: false });
+    const realPrecheck = wallet.precheckSend.bind(wallet);
+    wallet.precheckSend = () => Promise.resolve();
+    try {
+      await h.owner.query(`UPDATE devices SET warmer_config = $2::jsonb WHERE org_id = $1`, [
+        t.orgId,
+        JSON.stringify({
+          enabled: true,
+          daily_base: 2,
+          max_daily: 2,
+          step_pct: 0,
+          step_days: 1,
+          gap_min: 0,
+          gap_max: 0,
+          active_start: 0,
+          active_end: 24,
+          spintax: false,
+          started_at: '2020-01-01',
+        }),
+      ]);
+      const id = await schedule(t, 5, { schedule_type: 'recurring', repeat_interval: 'daily' });
+      expect(await run(t, id)).toBe('paused');
+      expect(sent).toHaveLength(2);
+      expect(await row(id)).toMatchObject({ status: 'paused' });
+      expect((await contacts(id)).map((c) => c.status)).toEqual([
+        'sent',
+        'sent',
+        'pending',
+        'pending',
+        'pending',
+      ]);
+      // the due poller hands it back once the pause is over; still over budget, so nothing more is sent
+      await h.owner.query(`UPDATE scheduled_messages SET status = 'scheduled' WHERE id = $1`, [id]);
+      expect(await run(t, id)).toBe('paused');
+      expect(sent).toHaveLength(2);
+    } finally {
+      wallet.precheckSend = realPrecheck;
+    }
+  });
+
   it('the emergency halt puts the recipient back and pauses for a retry, nothing lost', async () => {
     const t = await arrange('halt');
     const id = await schedule(t, 3);
@@ -659,5 +702,46 @@ describe('a result the provider already accepted (TW-NODE-033)', () => {
     }
     expect(sent).toHaveLength(2);
     expect((await contacts(id)).map((c) => c.status)).toEqual(['sent', 'sent']);
+  });
+});
+
+describe('the warmer budget under concurrent checks (TW-SCHED-036)', () => {
+  it('two checks of one number at the same moment cannot both take the last of the day budget', async () => {
+    const t = await arrange('warm-race');
+    const dev = (await h.owner.query(`SELECT id FROM devices WHERE org_id = $1`, [t.orgId]))
+      .rows[0];
+    await h.owner.query(`UPDATE devices SET warmer_config = $2::jsonb WHERE id = $1`, [
+      dev.id,
+      JSON.stringify({
+        enabled: true,
+        daily_base: 50,
+        max_daily: 50,
+        step_pct: 0,
+        step_days: 1,
+        gap_min: 0,
+        gap_max: 0,
+        active_start: 0,
+        active_end: 24,
+        spintax: false,
+        started_at: '2020-01-01',
+      }),
+    ]);
+    const warmer = h.app.get(WarmerService);
+    const db = h.app.get(DatabaseService);
+    const sender = { engine: 'baileys', id: Number(dev.id), label: 'Main' } as never;
+    const check = () =>
+      inContext(t, () =>
+        db.tx((tx) =>
+          warmer.hold(tx, [{ sender, recipients: 50 }], { isNow: true, sendDate: null }),
+        ),
+      );
+    const [a, b] = await Promise.all([check(), check()]);
+    // exactly one of the two gets the whole day; the other is held
+    expect([a.length, b.length].sort()).toEqual([0, 1]);
+    const ledger = await h.owner.query(
+      `SELECT count FROM warmer_daily_sends WHERE org_id = $1 AND device_id = $2`,
+      [t.orgId, dev.id],
+    );
+    expect(Number(ledger.rows[0].count)).toBe(50);
   });
 });
