@@ -33,6 +33,15 @@ export class SegmentsRepository {
     ).map((r) => ({ phone: r.phone ?? '', name: r.name, contactId: Number(r.id) }));
   }
 
+  /** Connected stores of one kind in the workspace. `wa_orders` has no store column, so win-back cannot tell their customers apart. */
+  async connectedStores(tx: Tx, orgId: number, kind: StoreKind): Promise<number> {
+    const table = kind === 'shopify' ? sql`shopify_integrations` : sql`woocommerce_integrations`;
+    const res = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM ${table} WHERE org_id = ${orgId} AND connected_at IS NOT NULL`,
+    );
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
   /** The numbers of customers whose orders match: last order older than `days` (0 = any), at least `minOrders` orders and `minSpentMinor` spent. */
   async lapsedPhones(
     tx: Tx,

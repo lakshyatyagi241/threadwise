@@ -269,6 +269,34 @@ describe('win-back (TW-ECOM-015)', () => {
       .send({ templateUuid: s.templateUuid, days: 60 });
     expect(none.body).toEqual({ ok: false, message: 'No customers match this segment.' });
   });
+
+  it('refuses win-back while two stores of that kind are connected, and runs again when one is disconnected (issue #1518)', async () => {
+    const t = await api.signup('ebc9');
+    const first = await setup(t);
+    const second = await setup(t);
+    await order(t, 'm1', '15550200001', 5000, 90);
+    await h.owner.query(`UPDATE shopify_integrations SET connected_at = now() WHERE org_id = $1`, [
+      t.orgId,
+    ]);
+    const refused = await api
+      .http()
+      .post(`/v2/shopify/stores/${first.storeUuid}/winback`)
+      .set(bearer(t.admin))
+      .send({ templateUuid: first.templateUuid, days: 0 });
+    expect(refused.body).toEqual({
+      ok: false,
+      message: 'Win-back is not available while more than one store of this kind is connected.',
+    });
+    await h.owner.query(`UPDATE shopify_integrations SET connected_at = NULL WHERE id = $1`, [
+      second.storeId,
+    ]);
+    const allowed = await api
+      .http()
+      .post(`/v2/shopify/stores/${first.storeUuid}/winback`)
+      .set(bearer(t.admin))
+      .send({ templateUuid: first.templateUuid, days: 0 });
+    expect(allowed.body).toMatchObject({ ok: true, total: 1 });
+  });
 });
 
 describe('BL-191: an offer is held, not denied, in the quiet hours', () => {
