@@ -101,7 +101,7 @@
       "allIntegrations": "Все интеграции",
       "disconnect": "Отключить",
       "disconnectTitle": "Отключить {name}?",
-      "disconnectShopify": "Зарегистрированные webhook будут удалены, но настройки сохранятся.",
+      "disconnectShopify": "Будут удалены зарегистрированные webhook, сопоставление автоматизаций, а также события и журналы этого магазина.",
       "disconnectWoo": "Зарегистрированные webhook будут удалены.",
       "disconnectDone": "Магазин отключён.",
       "healthy": "Webhook работают нормально",

@@ -101,7 +101,7 @@
       "allIntegrations": "Tüm entegrasyonlar",
       "disconnect": "Bağlantıyı kes",
       "disconnectTitle": "{name} bağlantısı kesilsin mi?",
-      "disconnectShopify": "Kayıtlı webhook'lar silinir ancak ayarlarınız korunur.",
+      "disconnectShopify": "Kayıtlı webhook'lar, otomasyon eşlemesi ve bu mağazanın olayları ile günlükleri silinir.",
       "disconnectWoo": "Kayıtlı webhook'lar kaldırılır.",
       "disconnectDone": "Mağazanın bağlantısı kesildi.",
       "healthy": "Webhook'lar sağlıklı",

@@ -101,7 +101,7 @@
       "allIntegrations": "Wszystkie integracje",
       "disconnect": "Rozłącz",
       "disconnectTitle": "Rozłączyć {name}?",
-      "disconnectShopify": "To usunie zarejestrowane webhooki, ale zachowa Twoje ustawienia.",
+      "disconnectShopify": "To usunie zarejestrowane webhooki, mapowanie automatyzacji oraz zdarzenia i dzienniki tego sklepu.",
       "disconnectWoo": "To usunie zarejestrowane webhooki.",
       "disconnectDone": "Sklep rozłączony.",
       "healthy": "Webhooki działają poprawnie",

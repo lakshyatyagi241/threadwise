@@ -101,7 +101,7 @@
       "allIntegrations": "Alle Integrationen",
       "disconnect": "Trennen",
       "disconnectTitle": "{name} trennen?",
-      "disconnectShopify": "Dies löscht registrierte Webhooks, Ihre Einstellungen bleiben erhalten.",
+      "disconnectShopify": "Dies löscht die registrierten Webhooks, die Automatisierungszuordnung sowie die Ereignisse und Protokolle dieses Shops.",
       "disconnectWoo": "Dies entfernt registrierte Webhooks.",
       "disconnectDone": "Store getrennt.",
       "healthy": "Webhooks funktionieren",

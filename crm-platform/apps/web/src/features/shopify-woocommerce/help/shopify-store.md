@@ -27,7 +27,7 @@ The Shopify screen connects your Shopify store to this workspace. Once connected
 - **Products** lets you search, filter by brand and send any product to a customer, or **Offer** it from the Send Offer tab.
 - **Send Offer** sends an approved template to a customer segment, with an optional product and coupon.
 - **Activity** lists webhook deliveries with their status. The side panel shows whether webhooks are healthy.
-- **Settings** shows the store address, the scopes granted and the registered webhooks. **Disconnect** removes the webhooks and keeps your settings.
+- **Settings** shows the store address, the scopes granted and the registered webhooks. **Disconnect** removes the webhooks, your automation mapping, and the events and logs for the store. Reconnecting starts again from nothing.
 - **Invoices** lists the invoices made from this store's orders. Turn on **Invoice this store's orders automatically** and choose when: placed, paid (the default) or fulfilled. Each order is invoiced once, even if the store sends the event again, and the buyer's copy is queued on WhatsApp, or by email without a phone number. It needs the invoicing feature on your plan.
 
 ## Quiet hours

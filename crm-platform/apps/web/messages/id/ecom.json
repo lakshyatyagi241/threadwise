@@ -101,7 +101,7 @@
       "allIntegrations": "Semua integrasi",
       "disconnect": "Putuskan",
       "disconnectTitle": "Putuskan {name}?",
-      "disconnectShopify": "Ini menghapus webhook yang terdaftar tetapi tetap menyimpan pengaturan Anda.",
+      "disconnectShopify": "Ini menghapus webhook yang terdaftar, pemetaan otomatisasi, serta peristiwa dan log toko ini.",
       "disconnectWoo": "Ini menghapus webhook yang terdaftar.",
       "disconnectDone": "Toko berhasil diputuskan.",
       "healthy": "Webhook sehat",

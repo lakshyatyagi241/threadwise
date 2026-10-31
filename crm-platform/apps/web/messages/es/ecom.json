@@ -101,7 +101,7 @@
       "allIntegrations": "Todas las integraciones",
       "disconnect": "Desconectar",
       "disconnectTitle": "¿Desconectar {name}?",
-      "disconnectShopify": "Esto elimina los webhooks registrados pero conserva tus ajustes.",
+      "disconnectShopify": "Esto elimina los webhooks registrados, la asignación de automatizaciones y los eventos y registros de esta tienda.",
       "disconnectWoo": "Esto elimina los webhooks registrados.",
       "disconnectDone": "Tienda desconectada.",
       "healthy": "Webhooks en buen estado",
