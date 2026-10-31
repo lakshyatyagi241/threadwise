@@ -128,6 +128,11 @@ export interface OrdersGateway {
     patch: { paymentLink: string | null; meta: Record<string, unknown> },
   ): Promise<void>;
   deleteByStorefront(tx: Tx, orgId: number, storefrontId: number): Promise<number>;
+  /**
+   * Orders with a sales order, an invoice or a payment (one shop, or every shop when `storefrontId` is null). Their deletion would
+   * orphan the financial history, so a shop delete or a reset is refused while there are any.
+   */
+  countFinancial(tx: Tx, orgId: number, storefrontId: number | null): Promise<number>;
   deleteAll(tx: Tx, orgId: number): Promise<number>;
 }
 export const ORDERS_GATEWAY = Symbol('STORE_ORDERS_GATEWAY');

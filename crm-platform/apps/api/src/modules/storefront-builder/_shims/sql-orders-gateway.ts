@@ -283,6 +283,16 @@ export class SqlOrdersGateway implements OrdersGateway {
       WHERE org_id = ${orgId} AND id = ${orderId}`);
   }
 
+  async countFinancial(tx: Tx, orgId: number, storefrontId: number | null): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM wa_orders o
+      WHERE o.org_id = ${orgId}
+        AND (${storefrontId}::bigint IS NULL OR o.storefront_id = ${storefrontId})
+        AND (o.sales_order_id IS NOT NULL OR o.invoice_id IS NOT NULL
+             OR EXISTS (SELECT 1 FROM payments p WHERE p.org_id = o.org_id AND p.wa_order_id = o.id))`);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
   async deleteByStorefront(tx: Tx, orgId: number, storefrontId: number): Promise<number> {
     const res = await tx.execute(
       sql`DELETE FROM wa_orders WHERE org_id = ${orgId} AND storefront_id = ${storefrontId} RETURNING id`,
