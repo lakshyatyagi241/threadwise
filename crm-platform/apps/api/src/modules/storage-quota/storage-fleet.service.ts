@@ -97,6 +97,15 @@ export class StorageFleetService {
       const level = String(r.level) as StorageLevel;
       if (level in levels) levels[level] = num(r.n);
     }
+    // Reading the whole fleet is a cross-tenant read by a person: it leaves a trace (spec 14).
+    await this.audit.recordStandalone({
+      event: 'platform.storage.fleet_viewed',
+      status: 'success',
+      actorType: 'platform_operator',
+      actorId: RequestContextStore.peek()?.actorId ?? null,
+      payload: {},
+    });
+
     return {
       mode: configured,
       generatedAt: now.toISOString(),
@@ -150,7 +159,17 @@ export class StorageFleetService {
       );
       return { org, state, usage, orphans };
     });
-    if (!found) throw AppError.notFound('Workspace', workspaceUuid);
+    if (!found) {
+      // A lookup that finds nothing is probing too: it is recorded before the 404.
+      await this.audit.recordStandalone({
+        event: 'platform.storage.workspace_viewed',
+        status: 'failure',
+        actorType: 'platform_operator',
+        actorId: RequestContextStore.peek()?.actorId ?? null,
+        payload: { workspace: workspaceUuid, reason: 'not_found' },
+      });
+      throw AppError.notFound('Workspace', workspaceUuid);
+    }
 
     // Reading one workspace's storage is a cross-tenant read by a person: it leaves a trace (spec 14).
     const ctx = RequestContextStore.peek();
