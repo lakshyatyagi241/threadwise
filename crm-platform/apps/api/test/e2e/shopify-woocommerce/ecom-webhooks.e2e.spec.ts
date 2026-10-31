@@ -518,6 +518,43 @@ describe('delivered, uninstall and the privacy webhooks (TW-ECOM-018, 021, 022)'
     ).toHaveLength(0);
     expect(await logs(t, 'shopify', s.id)).toHaveLength(0);
   });
+
+  it('customers/redact matches a formatted phone and the payload customer id, and erases nothing when neither is named (issue #1517)', async () => {
+    const t = await api.signup('ewh16');
+    const s = await store(t, 'shopify');
+    const domain = (
+      await h.owner.query(`SELECT store_url FROM shopify_integrations WHERE id = $1`, [s.id])
+    ).rows[0].store_url as string;
+    await h.owner.query(
+      `INSERT INTO shopify_integration_logs (org_id, integration_id, event_type, status, recipient, payload) VALUES
+         ($1, $2, 'orders/create', 'received', NULL, $3::jsonb),
+         ($1, $2, 'orders/create', 'sent', '15550100', NULL),
+         ($1, $2, 'orders/create', 'received', NULL, $4::jsonb),
+         ($1, $2, 'orders/create', 'sent', '999', NULL)`,
+      [
+        t.orgId,
+        s.id,
+        JSON.stringify({ customer: { id: 42, phone: '+1 555 0100' } }),
+        JSON.stringify({ customer: { id: 43 } }),
+      ],
+    );
+    expect(
+      (
+        await compliance('customers/redact', {
+          shop_domain: domain,
+          customer: { id: 42, phone: '+1 555 0100' },
+        })
+      ).status,
+    ).toBe(200);
+    // the id-matched row and the digits-matched row go; the other customer's null-recipient row and the other number stay
+    expect((await logs(t, 'shopify', s.id)).map((l) => l.recipient)).toEqual([null, '999']);
+
+    // a redact with neither a phone nor an id must not wipe the store's logs
+    expect(
+      (await compliance('customers/redact', { shop_domain: domain, customer: {} })).status,
+    ).toBe(200);
+    expect(await logs(t, 'shopify', s.id)).toHaveLength(2);
+  });
 });
 
 describe('a new store order is announced for the order flow trigger (TW-FLR-006)', () => {

@@ -25,10 +25,20 @@ export class ComplianceService {
       const data = parse(raw);
       const shop = String(data.shop_domain ?? shopHeader ?? '').trim();
       if (topic === 'customers/redact') {
-        const customer = (data.customer ?? {}) as { phone?: unknown };
-        await this.erase(shop, typeof customer.phone === 'string' ? customer.phone : '', false);
+        const customer = (data.customer ?? {}) as { id?: unknown; phone?: unknown };
+        await this.erase(
+          shop,
+          {
+            phone: typeof customer.phone === 'string' ? customer.phone : '',
+            customerId:
+              typeof customer.id === 'number' || typeof customer.id === 'string'
+                ? String(customer.id)
+                : '',
+          },
+          false,
+        );
       } else if (topic === 'shop/redact') {
-        await this.erase(shop, '', true);
+        await this.erase(shop, { phone: '', customerId: '' }, true);
       } else {
         // customers/data_request: only webhook logs are held; the request is recorded and acknowledged.
         this.logger.log({ topic, shop }, '[Shopify-compliance] acknowledged');
@@ -39,8 +49,16 @@ export class ComplianceService {
     return 200;
   }
 
-  /** Erases a customer's log rows (all of the shop's when no phone was given), or the whole shop when `wholeShop`. */
-  private async erase(shop: string, phone: string, wholeShop: boolean): Promise<void> {
+  /**
+   * Erases one customer's log rows, matched by phone digits (recipients are stored digits-only) or by the customer id in the payload,
+   * or the whole shop when `wholeShop`. A redact that names neither the phone nor the id erases nothing.
+   */
+  private async erase(
+    shop: string,
+    subject: { phone: string; customerId: string },
+    wholeShop: boolean,
+  ): Promise<void> {
+    const digits = subject.phone.replace(/\D/g, '');
     if (shop === '') return;
     const found = await this.db.primary.execute(sql`SELECT * FROM ecom_shop_lookup(${shop})`);
     const hits = found.rows as Array<{
@@ -60,9 +78,12 @@ export class ComplianceService {
             sql`DELETE FROM shopify_integrations WHERE org_id = ${orgId} AND id = ${id}`,
           );
         } else {
+          if (digits === '' && subject.customerId === '') return;
           await tx.execute(sql`
             DELETE FROM shopify_integration_logs
-            WHERE org_id = ${orgId} AND integration_id = ${id} AND (${phone} = '' OR recipient = ${phone})`);
+            WHERE org_id = ${orgId} AND integration_id = ${id}
+              AND ((${digits} <> '' AND regexp_replace(recipient, '[^0-9]', '', 'g') = ${digits})
+                OR (${subject.customerId} <> '' AND payload->'customer'->>'id' = ${subject.customerId}))`);
         }
       });
     }
