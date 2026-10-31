@@ -34,6 +34,9 @@ export function effectiveRateLimit(keyLimit: number, platformCeiling: number): n
  * asks for, and note that the key was used. One implementation for the signed partner keys (`/public/v1`) and the bearer keys
  * (`/api/v1`), so the two cannot drift on a number that customers are told about.
  */
+/** `last_used_at` is written at most this often per key, by every guard that passes this interval (issue #1514). */
+export const LAST_USED_EVERY_SECONDS = 60;
+
 @Injectable()
 export class ApiKeyAccessService {
   private readonly logger = new Logger(ApiKeyAccessService.name);
