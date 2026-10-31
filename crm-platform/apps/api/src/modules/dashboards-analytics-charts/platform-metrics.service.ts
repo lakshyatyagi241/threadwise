@@ -177,14 +177,18 @@ export class PlatformMetricsService {
       if (rest > 0) gateways.push({ gateway: 'Other', amount: money2(rest) });
 
       // Registered users: premium = distinct owners of a workspace on a paid plan (by plan slug, not a numeric id).
-      const total = await this.n(tx, sql`SELECT count(*)::int AS n FROM users`);
-      const premium = await this.n(
+      // Both counts in one statement (one round trip); each is still its own scan of its own table.
+      const people = await this.counts(
         tx,
-        sql`SELECT count(DISTINCT ws.owner_user_id)::int AS n
-            FROM workspace_settings ws JOIN organizations o ON o.id = ws.org_id
-            JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
-            WHERE ws.owner_user_id IS NOT NULL AND NOT p.is_free AND p.amount > 0`,
+        sql`SELECT
+              (SELECT count(*)::int FROM users) AS total,
+              (SELECT count(DISTINCT ws.owner_user_id)::int
+                 FROM workspace_settings ws JOIN organizations o ON o.id = ws.org_id
+                 JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
+                WHERE ws.owner_user_id IS NOT NULL AND NOT p.is_free AND p.amount > 0) AS premium`,
       );
+      const total = people.total!;
+      const premium = people.premium!;
 
       // TW-DASH-037: signups in the window by country (the profile's ISO country, or the dial prefix Reference stored).
       const geo = await tx.execute(sql`
