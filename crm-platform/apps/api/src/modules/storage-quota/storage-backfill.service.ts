@@ -58,6 +58,10 @@ export class StorageBackfillService {
   async backfillOrg(orgId: number): Promise<BackfillResult> {
     const result: BackfillResult = { orgId, skipped: false, adopted: {}, missing: 0, deferred: 0 };
     if ((await this.mode.current()) === 'off') return { ...result, skipped: true };
+    // Before any probe: a run that fails part way still moves this workspace behind the others in the pick-up.
+    await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.repo.markBackfillAttempted(tx, orgId, new Date()),
+    );
 
     for (const source of OWNER_SOURCES) {
       result.adopted[source.id] = await this.backfillSource(orgId, source, result);

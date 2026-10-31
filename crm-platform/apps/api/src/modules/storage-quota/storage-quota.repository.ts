@@ -376,6 +376,13 @@ export class StorageQuotaRepository {
     }));
   }
 
+  /** Records that a backfill run started for the workspace, so the pick-up moves it behind the others. */
+  async markBackfillAttempted(tx: Tx, orgId: number, now: Date): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO storage_org_state (org_id, backfill_attempted_at) VALUES (${orgId}, ${now.toISOString()}::timestamptz)
+      ON CONFLICT (org_id) DO UPDATE SET backfill_attempted_at = EXCLUDED.backfill_attempted_at`);
+  }
+
   async markBackfilled(tx: Tx, orgId: number, now: Date): Promise<void> {
     await tx.execute(sql`
       INSERT INTO storage_org_state (org_id, backfilled_at) VALUES (${orgId}, ${now.toISOString()}::timestamptz)
@@ -391,13 +398,16 @@ export class StorageQuotaRepository {
 
   // --- worker scans (privileged) ---------------------------------------------------------------------------------------------
 
-  /** Workspaces still to backfill: no state row or no `backfilled_at`, not deleted. Oldest id first. */
+  /**
+   * Workspaces still to backfill: no state row or no `backfilled_at`, not deleted. Least recently attempted first (never attempted
+   * first), then oldest id, so a workspace that keeps failing does not hold the slots of the ones behind it.
+   */
   async orgsToBackfill(tx: Tx, limit: number): Promise<number[]> {
     const res = await tx.execute(sql`
       SELECT o.id FROM organizations o
       LEFT JOIN storage_org_state s ON s.org_id = o.id
       WHERE o.status <> 'deleted' AND s.backfilled_at IS NULL
-      ORDER BY o.id LIMIT ${limit}`);
+      ORDER BY s.backfill_attempted_at ASC NULLS FIRST, o.id LIMIT ${limit}`);
     return rowsOf(res).map((r) => num(r.id));
   }
 
