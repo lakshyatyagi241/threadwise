@@ -35,6 +35,7 @@ export const storageOrgState = pgTable(
     lastReconciledAt: timestamp('last_reconciled_at', { withTimezone: true }),
     lastDriftBytes: bytes('last_drift_bytes'),
     backfilledAt: timestamp('backfilled_at', { withTimezone: true }),
+    backfillAttemptedAt: timestamp('backfill_attempted_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
