@@ -60,7 +60,7 @@ export class PublicApiController {
   @ApiOperation({
     summary: 'Submit a lead',
     description:
-      'Deduplicated against existing contacts by email/phone. `created: false` means an existing contact was matched and updated rather than a new one created.',
+      'Deduplicated against existing contacts by email/phone. `created: false` means an existing contact was matched: its fields are not changed, and only the consent in the submission is recorded. The submitted name, tag, source and custom values are not stored on a match.',
   })
   async submitLead(@Body(zodPipe(publicLeadSubmitSchema)) body: PublicLeadSubmitInput) {
     return this.publicApi.submitLead(body);
