@@ -107,6 +107,28 @@ export class PlatformStaffService {
       if ((gainsLocked || losesLocked) && !(await this.rbac.isSuperAdmin(ctx.actorId!))) {
         throw privilegedError();
       }
+      // Giving someone a role grants every permission in it: the editor must hold all of them (the workspace rule).
+      const gained = roleRows.filter((r) => !current.some((c) => c.id === r.id)).map((r) => r.id);
+      if (gained.length > 0) {
+        const granted = (
+          await tx.execute(sql`
+            SELECT DISTINCT p.name::text AS name FROM platform_role_permissions rp
+            JOIN platform_permissions p ON p.id = rp.permission_id
+            WHERE rp.role_id IN (${sql.join(
+              gained.map((id) => sql`${id}`),
+              sql`, `,
+            )})
+          `)
+        ).rows as Array<{ name: string }>;
+        if (
+          !(await this.rbac.covers(
+            ctx.actorId!,
+            granted.map((g) => g.name),
+          ))
+        ) {
+          throw privilegedError();
+        }
+      }
       if (losesLocked) {
         const others = (
           await tx.execute(sql`

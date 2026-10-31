@@ -102,6 +102,7 @@ export class PlatformRolesService {
 
   async create(input: CreatePlatformRoleInput): Promise<PlatformRoleDetail> {
     const result = await this.store.tx(async (tx) => {
+      await this.assertCovers(input.permissions);
       const permissionIds = await this.resolvePermissions(tx, input.permissions);
       const created = await this.insertRole(tx, input.name, input.description, false);
       await this.setPermissions(tx, created.id, permissionIds);
@@ -123,6 +124,7 @@ export class PlatformRolesService {
       const permissionIds = await this.resolvePermissions(tx, input.permissions);
       const before = await this.permissionNames(tx, role.id);
       const after = [...new Set(input.permissions)].sort();
+      await this.assertCovers(after.filter((n) => !before.includes(n)));
 
       if (role.is_locked) {
         const stripped = before.filter((n) => !after.includes(n));
@@ -162,6 +164,7 @@ export class PlatformRolesService {
   async duplicate(uuid: string): Promise<PlatformRoleDetail> {
     const result = await this.store.tx(async (tx) => {
       const role = await this.findRole(tx, uuid);
+      await this.assertCovers(await this.permissionNames(tx, role.id));
       const name = await this.freeCopyName(tx, role.name);
       const copy = await this.insertRole(tx, name, role.description, false);
       await tx.execute(sql`
@@ -197,6 +200,7 @@ export class PlatformRolesService {
       // Moving everybody off Super Admin always leaves it empty; moving people onto it is a privileged grant.
       if (from.is_locked) throw lockedError(from.name, 'cannot have its users reassigned');
       if (to.is_locked && !(await this.rbac.isSuperAdmin(ctx.actorId!))) throw privilegedError();
+      await this.assertCovers(await this.permissionNames(tx, to.id));
 
       const moved = await tx.execute(sql`
         DELETE FROM platform_operator_roles WHERE role_id = ${from.id} RETURNING operator_id
@@ -239,6 +243,12 @@ export class PlatformRolesService {
   }
 
   // --- helpers ----------------------------------------------------------------------------------------------------
+
+  /** A role may carry only permissions the editor already holds (the workspace rule, `actorCovers`). */
+  private async assertCovers(names: string[]): Promise<void> {
+    const ctx = RequestContextStore.require();
+    if (!(await this.rbac.covers(ctx.actorId!, names))) throw coverageError();
+  }
 
   private async findRole(tx: Tx, uuid: string): Promise<RoleRow> {
     const res = await tx.execute(sql`${SELECT_ROLE} WHERE r.uuid = ${uuid}`);
@@ -341,6 +351,13 @@ const lockedError = (name: string, what: string) =>
     `${name} role ${what}.`,
     HttpStatus.UNPROCESSABLE_ENTITY,
     [{ path: 'role', message: `${name} role ${what}.` }],
+  );
+
+const coverageError = () =>
+  new AppError(
+    ERROR_CODES.RBAC_PRIVILEGED_ROLE,
+    'You can only grant permissions that you hold yourself.',
+    HttpStatus.FORBIDDEN,
   );
 
 export const privilegedError = () =>

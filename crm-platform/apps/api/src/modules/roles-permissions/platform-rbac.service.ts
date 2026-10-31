@@ -66,6 +66,19 @@ export class PlatformRbacService {
     return (await this.permissionsOf(operatorId)).has(permission);
   }
 
+  /**
+   * A platform role may carry only permissions its editor already holds, the same rule as the workspace side (`actorCovers`).
+   * The Super Admin holds every permission, so it always passes.
+   */
+  async covers(operatorId: number, permissions: Iterable<string>): Promise<boolean> {
+    if (await this.isSuperAdmin(operatorId)) return true;
+    const held = await this.permissionsOf(operatorId);
+    for (const name of permissions) {
+      if (!held.has(name)) return false;
+    }
+    return true;
+  }
+
   /** The caller holds the locked Super Admin role: the tier above every permission (TW-RBAC-018). */
   async isSuperAdmin(operatorId: number): Promise<boolean> {
     return this.store.tx(async (tx) => {
