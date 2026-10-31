@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 import { ConfigService } from '@nestjs/config';
 import {
   type DashWidgets,
@@ -218,67 +219,70 @@ export class DashService {
   }
 
   async analytics(q: AnalyticsQuery, now: Date = new Date()): Promise<AnalyticsResponse> {
+    return this.db.tx((tx) => this.analyticsIn(tx, q, now));
+  }
+
+  /** The analytics payload read on the caller's transaction, so a caller can add reads to the same snapshot. */
+  private async analyticsIn(tx: Tx, q: AnalyticsQuery, now: Date): Promise<AnalyticsResponse> {
     const { orgId } = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
-      const w = resolveAnalyticsWindow(q, tz, now);
-      if (!w) throw tooLong();
-      const [cur, prev] = await this.repo.countsMany(tx, orgId, [
-        { from: w.from, to: w.to },
-        { from: w.prevFrom, to: w.prevTo },
-      ]);
-      const current = totalsOf(cur!);
-      const previous = totalsOf(prev!);
-      const { days, types, heatmap } = foldBreakdown(
-        await this.repo.breakdown(tx, orgId, w.from, w.to, { fromDate: w.fromDate, tz }),
-      );
-      const idx = Array.from({ length: w.days }, (_, i) => i);
-      const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
-      const f = funnelOf(current, previous);
-      const pf = funnelOf(previous);
-      return {
-        range: q.range,
-        window: {
-          from: iso(w.from),
-          to: iso(w.to),
-          prevFrom: iso(w.prevFrom),
-          prevTo: iso(w.prevTo),
-          timezone: tz,
-          days: w.days,
-          fromDate: w.fromDate,
-          toDate: w.toDate,
-        },
-        current,
-        previous,
-        trends: {
-          sentPct: percentChange(current.sent, previous.sent),
-          deliveredPct: percentChange(current.delivered, previous.delivered),
-          failedPct: percentChange(current.failed, previous.failed),
-          queuedPct: percentChange(current.queued, previous.queued),
-          repliesPct: percentChange(current.replies, previous.replies),
-          replyRatePp: deltaPp(current.replyRate, previous.replyRate),
-          replyRateContactPp: deltaPp(f.replyRate, pf.replyRate),
-          endToEndPp: deltaPp(f.endToEnd, pf.endToEnd),
-        },
-        daily: {
-          dates: idx.map((i) => addDays(w.fromDate, i)),
-          sent: idx.map((i) => at(i).sent),
-          delivered: idx.map((i) => at(i).delivered),
-          failed: idx.map((i) => at(i).failed),
-          queued: idx.map((i) => Math.max(0, at(i).sent - at(i).delivered - at(i).failed)),
-        },
-        funnel: f,
-        types: types
-          .map((t) => ({
-            key: t.key as AnalyticsResponse['types'][number]['key'],
-            count: t.count,
-            delivered: t.delivered,
-          }))
-          .sort((a, b) => b.count - a.count),
-        heatmap,
-        conversations: await this.repo.conversationStates(tx, orgId, w.from, w.to),
-      };
-    });
+    const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+    const w = resolveAnalyticsWindow(q, tz, now);
+    if (!w) throw tooLong();
+    const [cur, prev] = await this.repo.countsMany(tx, orgId, [
+      { from: w.from, to: w.to },
+      { from: w.prevFrom, to: w.prevTo },
+    ]);
+    const current = totalsOf(cur!);
+    const previous = totalsOf(prev!);
+    const { days, types, heatmap } = foldBreakdown(
+      await this.repo.breakdown(tx, orgId, w.from, w.to, { fromDate: w.fromDate, tz }),
+    );
+    const idx = Array.from({ length: w.days }, (_, i) => i);
+    const at = (i: number) => days.get(i) ?? { sent: 0, delivered: 0, failed: 0 };
+    const f = funnelOf(current, previous);
+    const pf = funnelOf(previous);
+    return {
+      range: q.range,
+      window: {
+        from: iso(w.from),
+        to: iso(w.to),
+        prevFrom: iso(w.prevFrom),
+        prevTo: iso(w.prevTo),
+        timezone: tz,
+        days: w.days,
+        fromDate: w.fromDate,
+        toDate: w.toDate,
+      },
+      current,
+      previous,
+      trends: {
+        sentPct: percentChange(current.sent, previous.sent),
+        deliveredPct: percentChange(current.delivered, previous.delivered),
+        failedPct: percentChange(current.failed, previous.failed),
+        queuedPct: percentChange(current.queued, previous.queued),
+        repliesPct: percentChange(current.replies, previous.replies),
+        replyRatePp: deltaPp(current.replyRate, previous.replyRate),
+        replyRateContactPp: deltaPp(f.replyRate, pf.replyRate),
+        endToEndPp: deltaPp(f.endToEnd, pf.endToEnd),
+      },
+      daily: {
+        dates: idx.map((i) => addDays(w.fromDate, i)),
+        sent: idx.map((i) => at(i).sent),
+        delivered: idx.map((i) => at(i).delivered),
+        failed: idx.map((i) => at(i).failed),
+        queued: idx.map((i) => Math.max(0, at(i).sent - at(i).delivered - at(i).failed)),
+      },
+      funnel: f,
+      types: types
+        .map((t) => ({
+          key: t.key as AnalyticsResponse['types'][number]['key'],
+          count: t.count,
+          delivered: t.delivered,
+        }))
+        .sort((a, b) => b.count - a.count),
+      heatmap,
+      conversations: await this.repo.conversationStates(tx, orgId, w.from, w.to),
+    };
   }
 
   /**
@@ -291,10 +295,17 @@ export class DashService {
     now: Date = new Date(),
   ): Promise<{ filename: string; body: string }> {
     const { orgId } = RequestContextStore.require();
-    const a = await this.analytics(q, now);
-    const made = await this.db.tx((tx) =>
-      this.panelsRepo.created(tx, orgId, new Date(a.window.from), new Date(a.window.to)),
-    );
+    // One snapshot for the figures and the created counts, so the file's two halves always agree.
+    const { a, made } = await this.db.tx(async (tx) => {
+      const figures = await this.analyticsIn(tx, q, now);
+      const created = await this.panelsRepo.created(
+        tx,
+        orgId,
+        new Date(figures.window.from),
+        new Date(figures.window.to),
+      );
+      return { a: figures, made: created };
+    });
     const rows: string[][] = [
       ['Metric', 'Value'],
       ['Range', `${a.window.fromDate} to ${a.window.toDate}`],
