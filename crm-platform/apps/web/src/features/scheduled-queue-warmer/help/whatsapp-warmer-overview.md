@@ -22,6 +22,7 @@ A new or quiet WhatsApp number that suddenly sends a lot is more likely to be bl
 2. Turn on **Warming** for the number.
 3. Set the ramp: **Start budget/day**, **Ramp +% / step** and **Ramp every (days)**, and the ceiling, **Max budget/day**.
 4. Set the pacing: **Min gap (sec)** and **Max gap (sec)** between two messages, and the hours, **Active from (hr)** and **Active to (hr)**, on a 24-hour clock.
+   The hours are in **UTC**, not in your local time. For example, 09:00 to 18:00 is 14:30 to 23:30 in India (IST). The daily budget also counts UTC days, so a day starts at 00:00 UTC.
 5. Optionally tick **Spintax variety** to send slightly different wording to each person. Write choices like `{Hi|Hello|Hey}` in your messages.
 6. Select **Save warm-up**. Each number saves on its own.
 
