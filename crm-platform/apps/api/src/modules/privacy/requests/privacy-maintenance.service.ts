@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
@@ -98,18 +99,31 @@ export class PrivacyMaintenanceService {
           actorUserId: null,
           detail: { reason: 'overdue' },
         });
-        await this.audit.record(tx, {
-          module: MODULE_KEY,
-          recordId: r.id,
-          action: 'update',
-          delta: { status: { old: r.fromStatus, new: 'expired' } },
-        });
-        await this.outbox.emit(tx, {
-          aggregateModule: MODULE_KEY,
-          aggregateId: r.id,
-          eventType: 'privacy_request.expired',
-          payload: { reason: 'overdue' },
-        });
+        // The cron has no request context, and the audit row and the outbox event are written for the expired request's workspace.
+        await RequestContextStore.run(
+          {
+            requestId: `privacy-expiry-${r.id}`,
+            orgId: r.orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
+          async () => {
+            await this.audit.record(tx, {
+              module: MODULE_KEY,
+              recordId: r.id,
+              action: 'update',
+              delta: { status: { old: r.fromStatus, new: 'expired' } },
+            });
+            await this.outbox.emit(tx, {
+              orgId: r.orgId,
+              aggregateModule: MODULE_KEY,
+              aggregateId: r.id,
+              eventType: 'privacy_request.expired',
+              payload: { reason: 'overdue' },
+            });
+          },
+        );
       }
       return expired.length;
     });
